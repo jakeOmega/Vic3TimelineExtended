@@ -306,9 +306,9 @@ class MapRoomTest(unittest.TestCase):
 
     def test_every_pick_has_a_map_and_a_tooltip(self):
         picks = self.picks()
-        # 2 was literacy, retired (vanilla's literacy map mode shows it): a save holding it shows "Pick a map"
-        # 48-73 the class maps (#1975)
-        self.assertEqual(sorted(picks.values()), [1] + list(range(3, 74)), "one pick per selector, 2 unused")
+        # 2 was literacy, retired in the fifth pass (vanilla's literacy map mode shows it) and back in the first tier
+        # 48-73 the class maps (#1975); 2 literacy again and 74-82 the first tier's (#1976)
+        self.assertEqual(sorted(picks.values()), list(range(1, 83)), "one pick per selector")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -887,8 +887,9 @@ class SecondRoundMapsTest(_RoomBranches, unittest.TestCase):
             inner = enclosing_span(row, at)[0] - 1
             return re.findall(r'text = "te_jmap_pick_(\w+)"', enclosing(row, inner))
 
-        self.assertEqual(row_of("ownership"), ["ownership", "company_hqs"])
-        self.assertEqual(row_of("investment"), ["investment", "trade_capacity", "power_grids"])
+        # Ownership and Investment beside their kind since the first tier joined Economy (#1976)
+        self.assertEqual(row_of("ownership"), ["gini", "dynastic_wealth", "ownership"])
+        self.assertEqual(row_of("investment"), ["company_hqs", "investment", "trade_capacity"])
         self.assertEqual(row_of("armed_forces"), ["armed_forces", "fighting_age_men", "war_dead"])
         self.assertEqual(row_of("population_growth"), ["population_growth", "net_migration", "crowding"])
         self.assertEqual(row_of("health_care"), ["health_care"])
@@ -1172,11 +1173,80 @@ class PopulationDensityMapTest(_RoomBranches, unittest.TestCase):
         row = block(code(PICKS_GUI), "te_jmap_pick_row")
         at = row.index('text = "te_jmap_pick_population_density"')
         inner = enclosing_span(row, at)[0] - 1
+        # beside the people themselves since the first tier (#1976), City Rank on the group's last row
         self.assertEqual(re.findall(r'text = "te_jmap_pick_(\w+)"', enclosing(row, inner)),
-                         ["population_density", "urban_share", "city_rank"])
+                         ["population", "population_density", "urban_share"])
         population = CategoriesTest.CATEGORIES.index("population")
         bodies = [enclosing(row, m.end()) for m in re.finditer(r"\bte_jmap_category\s*=\s*\{", row)]
         self.assertIn('text = "te_jmap_pick_population_density"', bodies[population])
+
+
+class FirstTierMapsTest(_RoomBranches, unittest.TestCase):
+    """Living standards, the economy and politics (owner, 2026-11-23, #1976): ten maps of figures the mod reads
+    elsewhere, each fitted to the world, so Map Options' area and the rest apply to them."""
+
+    # selector -> (the factor its lerp reads, what that figure is, in te_journal_map_values.txt or the engine's)
+    LIVE = {
+        77: ("sol_expected", "te_jmap_sol_expected", "value = average_sol subtract = average_expected_sol"),
+        80: ("gdp", "te_jmap_gdp_value", "value = gdp"),
+        81: ("infra", "te_jmap_infra_balance", "value = infrastructure subtract = infrastructure_usage"),
+        82: ("loyal", "te_jmap_loyal_net", "value = loyalist_fraction subtract = radical_fraction"),
+    }
+
+    def test_each_live_figure_is_the_engine_s(self):
+        values = code(VALUES)
+        for sel, (name, value, body) in self.LIVE.items():
+            with self.subTest(map=name):
+                self.assertEqual(" ".join(block(values, value).split()), body)
+                self.assertTrue(any(f"te_jmap_{name}_factor" in b for _limit, b in self.of(self.colors, sel)))
+        # Literacy and Population read the engine's own figures bare, every state
+        scales = code(SCALES)
+        self.assertIn("value = literacy_rate", block(scales, "te_jmap_literacy_input"))
+        self.assertIn("value = state_population", block(scales, "te_jmap_people_input"))
+
+    def test_wealth_is_the_walk_s_people_weighted_mean(self):
+        effects = code(EFFECTS)
+        self.assertIn("change_local_variable = { name = te_jmap_w_wealth add = te_jmap_pop_wealth }",
+                      " ".join(block(effects, "te_jmap_walk_pop").split()))
+        self.assertEqual(" ".join(block(code(VALUES), "te_jmap_pop_wealth").split()), "value = wealth multiply = total_size")
+        store = " ".join(block(effects, "te_jmap_walk_store").split())
+        self.assertIn("name = te_dg_wealth value = { value = local_var:te_jmap_w_wealth divide = { value = var:te_dg_walk_pop "
+                      "min = 1 } }", store)
+        # and SoL vs Wealth is the walk's two, guarded
+        self.assertIn("value = var:te_dg_sol subtract = var:te_dg_wealth",
+                      " ".join(block(code(VALUES), "te_jmap_sol_wealth").split()))
+
+    def test_unemployment_is_stored_at_the_pick_and_monthly_while_picked(self):
+        # a GUI reads state_unemployment_rate as none (scripting_best_practices.md), so neither the paint nor the
+        # hover reads it: the store does, from an effect, as every other reader of the figure takes it
+        effects = code(EFFECTS)
+        store = " ".join(block(effects, "te_jmap_store_unemp").split())
+        self.assertIn("set_variable = { name = te_jmap_unemp value = te_state_unemployment_share }", store)
+        self.assertIn("global_var:te_jmap_sel ?= 78 } te_jmap_store_unemp = yes",
+                      " ".join(block(effects, "te_jmap_set_selector").split()))
+        self.assertIn("global_var:te_jmap_sel = 78 } te_jmap_store_unemp = yes",
+                      " ".join(block(effects, "te_jmap_monthly_unemp").split()))
+        monthly = block(code(ON_ACTIONS), "te_jmap_monthly_ranges")
+        self.assertLess(monthly.index("te_jmap_monthly_unemp = yes"), monthly.index("te_jmap_refresh_range = yes"))
+        for part in (block(self.room, "map_color"), block(self.room, "map_tooltip"), code(SCALES)):
+            self.assertNotIn("state_unemployment_rate", part)
+            self.assertNotIn("te_state_unemployment_share", part)
+        self.assertNotIn("state_unemployment_rate", loc_values()["te_jmap_tt_unemp"])
+
+    def test_the_hovers_read_the_engine_s_own_figures_where_it_has_them(self):
+        values = loc_values()
+        for key, call in (("te_jmap_tt_sol_expected", "GetExpectedStandardOfLivingAll"),
+                          ("te_jmap_tt_literacy", "GetLiteracy"), ("te_jmap_tt_people", "GetPopulationSize"),
+                          ("te_jmap_tt_infra", "GetInfrastructureBalance"), ("te_jmap_tt_loyal", "GetNumRadicals"),
+                          ("te_jmap_tt_unemp", "GetNumUnemployedWorkingAdults")):
+            self.assertIn(f"THIS.GetState.{call}", values[key], key)
+
+    def test_a_state_with_nobody_is_pale_on_the_two_counts(self):
+        for sel, name, figure in ((79, "people", "state_population > 0"), (80, "gdp", "te_jmap_gdp_value > 0")):
+            colors = self.of(self.colors, sel)
+            self.assertEqual([limit for limit, _ in colors], [f"te_jmap_selector = {sel} {figure}",
+                                                              f"te_jmap_selector = {sel}"])
+            self.assertEqual(colors[1][1], 'value = "te_jmap_none"')
 
 
 class CategoriesTest(unittest.TestCase):
@@ -1184,8 +1254,9 @@ class CategoriesTest(unittest.TestCase):
     2026-11-23, #1974)."""
 
     CATEGORIES = ("population", "families", "living", "classes", "economy", "politics", "military", "land")
-    # the groups whose every map is the census's: their headers hide while it doesn't run
-    GATED = ("families", "living")
+    # the group whose every map is the census's: its header hides while it doesn't run (Living Conditions did too,
+    # until the first tier's living-standard maps joined it, #1976)
+    GATED = ("families",)
 
     def setUp(self):
         self.row = block(code(PICKS_GUI), "te_jmap_pick_row")
@@ -1216,7 +1287,7 @@ class CategoriesTest(unittest.TestCase):
                 self.assertIn("te_jmap_pick_button = {", body)
 
     def test_a_group_of_census_maps_hides_with_the_census(self):
-        # with the census off, Families and Ages and Living Conditions have nothing to open: header and rows go
+        # with the census off, Families and Ages has nothing to open: header and rows go
         shown = "GetScriptedGui('te_jmap_cat_{0}_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )"
         for cat, header, body in zip(self.CATEGORIES, self.headers(), self.bodies()):
             own = re.findall(r'visible = "[^"]*"', re.sub(r'blockoverride\s+"\w+"\s*\{[^{}]*\}', "", header))
@@ -1234,7 +1305,9 @@ class CategoriesTest(unittest.TestCase):
                     pick = block(block(sguis(), name), "is_shown")
                     self.assertEqual("te_demog_cohorts_run = yes" in pick, cat in self.GATED or name in {
                         "te_jmap_pick_net_migration_sgui", "te_jmap_pick_fighting_age_men_sgui",
-                        "te_jmap_pick_war_dead_sgui"}, name)
+                        "te_jmap_pick_war_dead_sgui", "te_jmap_pick_life_expectancy_sgui",
+                        "te_jmap_pick_infant_mortality_sgui", "te_jmap_pick_leading_cause_sgui",
+                        "te_jmap_pick_health_care_sgui"}, name)
 
     def test_every_pick_sits_in_one_category(self):
         seen = []
@@ -1252,15 +1325,16 @@ class CategoriesTest(unittest.TestCase):
             for key in re.findall(r'text = "te_jmap_pick_(\w+)"', body):
                 where[key] = cat
         expected = {
-            "population": ("population_density", "urban_share", "city_rank", "population_growth", "net_migration",
-                           "crowding"),
+            "population": ("population", "population_density", "urban_share", "city_rank", "population_growth",
+                           "net_migration", "crowding"),
             "families": ("birth_rate", "death_rate", "natural_change", "fertility", "family_planning", "median_age",
                          "old_share", "sex_balance"),
-            "living": ("life_expectancy", "infant_mortality", "leading_cause", "health_care"),
+            "living": ("standard_of_living", "wealth", "sol_vs_wealth", "sol_vs_expected", "literacy",
+                       "life_expectancy", "infant_mortality", "leading_cause", "health_care"),
             "classes": tuple(f"class_{c['pop']}_{kind}" for c in class_table().CLASSES for kind in ("count", "share")),
-            "economy": ("gdp_per_capita", "gini", "dynastic_wealth", "ownership", "company_hqs", "investment",
-                        "trade_capacity", "power_grids"),
-            "politics": ("turmoil", "political_models", "united_nations", "colonies"),
+            "economy": ("gdp", "gdp_per_capita", "unemployment", "gini", "dynastic_wealth", "ownership", "company_hqs",
+                        "investment", "trade_capacity", "infrastructure", "power_grids"),
+            "politics": ("turmoil", "radicals_loyalists", "political_models", "united_nations", "colonies"),
             "military": ("armed_forces", "fighting_age_men", "war_dead", "devastation", "nuclear", "networks"),
             "land": ("base_comfort", "current_comfort", "tourism_appeal", "emissions", "ocean_basins", "grandeur"),
         }
@@ -1828,7 +1902,8 @@ class ColorTest(_RoomBranches, unittest.TestCase):
                 self.assertEqual(sorted(self.own_condition(scale)), sorted(self.gen.painted(scale)))
         # where a row's lerp isn't limited by what its range is measured over, the row says so
         differ = sorted(s["name"] for s in self.rows if "paint" in s)
-        self.assertEqual(differ, ["comfort", "gdppc", "gw_room"])
+        # and the first tier's live maps, which paint every state and leave one with no people out of the range (#1976)
+        self.assertEqual(differ, ["comfort", "gdppc", "gw_room", "infra", "literacy", "loyal", "sol_expected"])
         # te_jmap_pick_ramp repeats each: the pick and its has_variable guards, then the rest inside them
         ramp = " ".join(block(self.generated, "te_jmap_pick_ramp").split())
         for scale in self.rows:
@@ -1841,7 +1916,8 @@ class ColorTest(_RoomBranches, unittest.TestCase):
                 self.assertIn(f"if = {{ limit = {{ {limit} }} {inner} }}", ramp)
         self.assertEqual(ramp.count("te_jmap_selector = "), len(self.rows))
         self.assertEqual(sorted(s["name"] for s in self.rows if self.gen.pick_ramp(s) == self.gen.RAMP_DIV),
-                         ["comfort", "comfort_base", "growth", "mig", "natural", "sex", "tfr", "wc"])
+                         ["comfort", "comfort_base", "growth", "infra", "loyal", "mig", "natural", "sex", "sol_expected",
+                          "sol_wealth", "tfr", "wc"])
 
     def test_the_ramp_reads_the_factor_the_map_s_own_lerp_reads(self):
         pick = " ".join(block(self.generated, "te_jmap_pick_factor").split())
@@ -2074,8 +2150,8 @@ class PickTooltipTest(_RoomBranches, unittest.TestCase):
 
     def test_every_pick_has_one_tooltip(self):
         picks = self.picks()
-        # 36 until the class maps (#1975), whose 30 took the four shares' place
-        self.assertEqual(len(picks), 36 - 4 + 30)
+        # 36 until the class maps (#1975), whose 30 took the four shares' place, and the first tier's ten (#1976)
+        self.assertEqual(len(picks), 36 - 4 + 30 + 10)
         for key in sorted(set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))):
             self.assertIn(f'tooltip = "{key}_desc"', self.row, key)
         self.assertNotIn("SelectLocalization", self.row, "a pick's tooltip chooses its own parts")
@@ -2347,15 +2423,14 @@ class LocTest(unittest.TestCase):
         keys = loc_keys()
         gone = {k for k in keys if k.startswith(("te_jmap_strip_", "te_jmap_tt_probe_", "je_te_map_potential_probe"))}
         gone |= keys & {"te_jmap_pick_scope_probe", "te_jmap_pick_scope_probe_desc", "te_jmap_tt_potential_probe",
-                        "mm_te_journal_entry_map",
-                        # literacy, retired: vanilla's literacy map mode shows it
-                        "te_jmap_pick_literacy", "te_jmap_pick_literacy_desc", "te_jmap_tt_literacy"}
+                        "mm_te_journal_entry_map"}
         self.assertEqual(gone, set())
 
-    def test_literacy_is_gone(self):
-        self.assertNotIn("te_jmap_pick_literacy_sgui", sguis())
-        self.assertNotIn("literacy", code(VALUES))
-        self.assertNotIn("literacy", code(COLORS))
+    def test_literacy_is_back_on_its_old_selector(self):
+        # retired in the fifth pass as the twin of vanilla's lens, back in the first tier (#1976) for the Map Room's
+        # options: on 2, so a save that still held the old pick shows it
+        self.assertIn("te_jmap_set_selector = { SEL = 2 }", " ".join(block(sguis(), "te_jmap_pick_literacy_sgui").split()))
+        self.assertIn("te_jmap_literacy_low", code(COLORS))
 
 
 class GuiTest(unittest.TestCase):

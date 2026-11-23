@@ -39,12 +39,12 @@ while its game rule is on; a group with none of its maps to show is hidden.
 
 | Group | Maps |
 |---|---|
-| Population | Population Density, Urban People, City Rank, Population Growth, Net Migration, Crowding Penalty |
+| Population | Population, Population Density, Urban People, Population Growth, Net Migration, Crowding Penalty, City Rank |
 | Families and Ages | Birth Rate, Death Rate, Natural Change, Fertility, Family Planning, Median Age, Aged 65 and Over, Sex Balance |
-| Living Conditions | Life Expectancy, Infant Mortality, Leading Cause, Health Care |
+| Living Conditions | Standard of Living, Wealth, SoL vs Wealth, SoL vs Expected, Literacy, Life Expectancy, Infant Mortality, Leading Cause, Health Care |
 | Classes | Every pop type, from Aristocrats to Soldiers |
-| Economy | GDP per Capita, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Power Grids |
-| Politics | Turmoil, Political Models, United Nations, Colonies |
+| Economy | GDP, GDP per Capita, Unemployment, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Infrastructure, Power Grids |
+| Politics | Turmoil, Radicals/Loyalists, Political Models, United Nations, Colonies |
 | Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Agent Networks |
 | Land and Environment | Base Comfort, Current Comfort, Tourism Appeal, Emissions, Ocean Basins, Grandeur |
 
@@ -60,14 +60,28 @@ type, and leaves a state with none of the class pale; set Map Options' Classes
 row to Share and it colors the class's share of the state's people instead. The
 hover gives both, and the classes are counted once a year.
 
+Standard of Living and Wealth are each state's averages over its people at the
+same yearly count. SoL vs Wealth is the one less the other: what a place adds
+to its people's living standards, or takes from them, beyond what they can
+afford, from pollution, health institutions, laws, rulers, principles and
+events. It is small at the start and grows through the game. SoL vs Expected
+compares the standard of living with the one people expect, the gap that turns
+them radical. Unemployment is the share of a state's workforce without work,
+counted when you pick the map and each month after while it is up.
+Infrastructure is what a state has less what it uses: below the middle it is
+short and loses market access. Radicals/Loyalists is the loyalists' share of
+the people less the radicals'. Literacy, GDP and Population read the game's own
+figures, and a state with no people is pale on the last two.
+
 A map of figures shows how states differ now, not how the world has moved: its
 colors run from the fifth lowest state in the world to the fifth highest, the
 few beyond each end at its colors' limits, unless Map Options (below) sets
 another area or trim. The button's tooltip gives the range and what it was
 measured over. The range is measured when you pick a map and again each month. A map
 with a meaningful middle keeps it: Fertility's is replacement, Natural
-Change's, Net Migration's and Population Growth's none, Sex Balance's even and the
-comfort maps' no penalty, cream in each map's own colors, and each side's colors
+Change's, Net Migration's, Population Growth's, SoL vs Wealth's, SoL vs
+Expected's, Infrastructure's and Radicals/Loyalists' none, Sex Balance's even and
+the comfort maps' no penalty, cream in each map's own colors, and each side's colors
 run to the world's extreme on that side.
 Where every state is on one side, the colors run over the states there, the
 middle's color at the one nearest it. Agent Networks keeps its fixed scale, 0 to 100, and City Rank its ranks.
@@ -102,8 +116,9 @@ of Death chart, full where that cause took 90% of the deaths and paler as its
 share falls toward 30%. Stripes in a second cause's color mark a state where
 that cause took at least half as many deaths as the leader. Leading Cause,
 Birth Rate, Death Rate, Natural Change, Net Migration and War Dead need a
-state's first full census year, and Population Growth its second yearly count,
-so they start gray.
+state's first full census year, Standard of Living, Wealth, SoL vs Wealth and
+the class maps its first yearly count, and Population Growth its second, so they
+start gray.
 
 Map Options, below the groups, changes where the Map Room draws its maps,
 how a map of figures measures its range, the scale its colors run on and the

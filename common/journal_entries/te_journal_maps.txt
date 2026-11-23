@@ -1454,6 +1454,195 @@ je_te_map_room = {
 			}
 			value = "te_jmap_none"
 		}
+		# The first tier of the owner's new maps (2026-11-23, #1976): living standards, the economy and politics.
+		# 74. Standard of Living: the yearly walk's people-weighted mean (te_dg_sol), whatever the Demographics rule.
+		else_if = {
+			limit = {
+				te_jmap_selector = 74
+				has_variable = te_dg_sol
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_sol_low"
+				max_color = "te_jmap_sol_high"
+				factor = te_jmap_sol_factor
+			}
+		}
+		# 75. Wealth: the walk's people-weighted mean wealth (te_dg_wealth, the Map Room's own walk call).
+		else_if = {
+			limit = {
+				te_jmap_selector = 75
+				has_variable = te_dg_wealth
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_wealth_low"
+				max_color = "te_jmap_wealth_high"
+				factor = te_jmap_wealth_factor
+			}
+		}
+		# 76. SoL vs Wealth: the two above, less each other (te_jmap_sol_wealth), diverging at none: what the place adds
+		# to living standards or takes from them beyond its people's wealth.
+		else_if = {
+			limit = {
+				te_jmap_selector = 76
+				has_variable = te_dg_sol
+				has_variable = te_dg_wealth
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+				te_jmap_sol_wealth_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_sol_wealth_low"
+				max_color = "te_jmap_sol_wealth_mid"
+				factor = te_jmap_sol_wealth_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 76
+				has_variable = te_dg_sol
+				has_variable = te_dg_wealth
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_sol_wealth_mid"
+				max_color = "te_jmap_sol_wealth_high"
+				factor = te_jmap_sol_wealth_factor_upper
+			}
+		}
+		# 77. SoL vs Expected: the state's standard of living less the expected one, live (te_jmap_sol_expected),
+		# diverging at none: the gap the engine radicalizes on.
+		else_if = {
+			limit = {
+				te_jmap_selector = 77
+				te_jmap_sol_expected_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_sol_expected_low"
+				max_color = "te_jmap_sol_expected_mid"
+				factor = te_jmap_sol_expected_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 77
+			}
+			lerp = {
+				min_color = "te_jmap_sol_expected_mid"
+				max_color = "te_jmap_sol_expected_high"
+				factor = te_jmap_sol_expected_factor_upper
+			}
+		}
+		# 2. Literacy, live (literacy_rate): retired in the fifth pass as the twin of vanilla's own lens, back because the
+		# Map Room's options are what a vanilla lens lacks.
+		else_if = {
+			limit = {
+				te_jmap_selector = 2
+			}
+			lerp = {
+				min_color = "te_jmap_literacy_low"
+				max_color = "te_jmap_literacy_high"
+				factor = te_jmap_literacy_factor
+			}
+		}
+		# 78. Unemployment: the share of the workforce without work, stored at a pick and monthly while picked
+		# (te_jmap_unemp, te_jmap_store_unemp: a GUI reads the engine's figure as none).
+		else_if = {
+			limit = {
+				te_jmap_selector = 78
+				has_variable = te_jmap_unemp
+			}
+			lerp = {
+				min_color = "te_jmap_unemp_low"
+				max_color = "te_jmap_unemp_high"
+				factor = te_jmap_unemp_factor
+			}
+		}
+		# 79. Population, live (state_population), a doubling at a time; a state with no people pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 79
+				state_population > 0
+			}
+			lerp = {
+				min_color = "te_jmap_people_low"
+				max_color = "te_jmap_people_high"
+				factor = te_jmap_people_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 79
+			}
+			value = "te_jmap_none"
+		}
+		# 80. GDP, live (te_jmap_gdp_value), a doubling at a time; a state with none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 80
+				te_jmap_gdp_value > 0
+			}
+			lerp = {
+				min_color = "te_jmap_gdp_low"
+				max_color = "te_jmap_gdp_high"
+				factor = te_jmap_gdp_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 80
+			}
+			value = "te_jmap_none"
+		}
+		# 81. Infrastructure: what the state has less what it uses, live (te_jmap_infra_balance), diverging at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 81
+				te_jmap_infra_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_infra_low"
+				max_color = "te_jmap_infra_mid"
+				factor = te_jmap_infra_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 81
+			}
+			lerp = {
+				min_color = "te_jmap_infra_mid"
+				max_color = "te_jmap_infra_high"
+				factor = te_jmap_infra_factor_upper
+			}
+		}
+		# 82. Radicals vs Loyalists: loyalists' share of the people less radicals', live (te_jmap_loyal_net), diverging
+		# at none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 82
+				te_jmap_loyal_factor < 0.5
+			}
+			lerp = {
+				min_color = "te_jmap_loyal_low"
+				max_color = "te_jmap_loyal_mid"
+				factor = te_jmap_loyal_factor_lower
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 82
+			}
+			lerp = {
+				min_color = "te_jmap_loyal_mid"
+				max_color = "te_jmap_loyal_high"
+				factor = te_jmap_loyal_factor_upper
+			}
+		}
 		# The class maps (#1975): every pop type by its people and by its share of the people, last in the ladder so
 		# no other map pays for their branches.
 		# BEGIN GENERATED by scripts/generators/gen_journal_map_classes.py (the class maps; edit its table, not these lines): map_color
@@ -2036,6 +2225,10 @@ je_te_map_room = {
 					te_jmap_selector = 38
 					te_jmap_selector = 39
 					te_jmap_selector = 40
+					te_jmap_selector = 74
+					te_jmap_selector = 75
+					te_jmap_selector = 76
+					te_jmap_selector = 78
 				}
 			}
 			value = "te_jmap_no_data"
@@ -2901,6 +3094,92 @@ je_te_map_room = {
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_grid_none
 		}
+		# The first tier (#1976), in the paint's order.
+		else_if = {
+			limit = {
+				te_jmap_selector = 74
+				has_variable = te_dg_sol
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_sol
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 75
+				has_variable = te_dg_wealth
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_wealth
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 76
+				has_variable = te_dg_sol
+				has_variable = te_dg_wealth
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_sol_wealth
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 77
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_sol_expected
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 2
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_literacy
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 78
+				has_variable = te_jmap_unemp
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_unemp
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 79
+				state_population > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_people
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 79
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_density_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 80
+				te_jmap_gdp_value > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gdp
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 80
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_gdp_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 81
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_infra
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 82
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_loyal
+		}
 		# The class maps (#1975), in the paint's order.
 		# BEGIN GENERATED by scripts/generators/gen_journal_map_classes.py (the class maps; edit its table, not these lines): map_tooltip
 		else_if = {
@@ -3301,13 +3580,15 @@ je_te_map_room = {
 			custom_tooltip_no_bullet = te_jmap_tt_no_census
 		}
 		# END GENERATED by scripts/generators/gen_journal_map_classes.py (the class maps; edit its table, not these lines): map_tooltip
-		# The tourism and climate maps before their refresh first runs (a new game's first month, an older save's).
+		# The tourism and climate maps before their refresh first runs (a new game's first month, an older save's), and
+		# Unemployment for a state its store found nobody in (#1976).
 		else_if = {
 			limit = {
 				OR = {
 					te_jmap_selector = 26
 					te_jmap_selector = 27
 					te_jmap_selector = 28
+					te_jmap_selector = 78
 				}
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_figure
@@ -3336,6 +3617,9 @@ je_te_map_room = {
 					te_jmap_selector = 38
 					te_jmap_selector = 39
 					te_jmap_selector = 40
+					te_jmap_selector = 74
+					te_jmap_selector = 75
+					te_jmap_selector = 76
 				}
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_census

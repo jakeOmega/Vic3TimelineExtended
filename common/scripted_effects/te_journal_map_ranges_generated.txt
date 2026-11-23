@@ -1657,6 +1657,406 @@ te_jmap_measure_density = {
 	}
 }
 
+# Standard of Living, the state's people's mean at the yearly walk.
+# The Map Room's range, under its options.
+te_jmap_range_sol = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_lo }
+		remove_global_variable = te_jmap_rng_sol_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_hi }
+		remove_global_variable = te_jmap_rng_sol_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = sol }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_sol = {
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_hi value = te_jmap_sol_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_lo value = te_jmap_sol_input }
+	}
+}
+
+# Wealth, the state's people's mean wealth at the yearly walk.
+# The Map Room's range, under its options.
+te_jmap_range_wealth = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_wealth_lo }
+		remove_global_variable = te_jmap_rng_wealth_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_wealth_hi }
+		remove_global_variable = te_jmap_rng_wealth_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = wealth }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_wealth = {
+	ordered_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_wealth_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_wealth_hi value = te_jmap_wealth_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_wealth_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_wealth_lo value = te_jmap_wealth_input }
+	}
+}
+
+# Standard of Living less Wealth, the yearly walk's, split at none.
+# The Map Room's range, under its options.
+te_jmap_range_sol_wealth = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_wealth_lo }
+		remove_global_variable = te_jmap_rng_sol_wealth_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_wealth_hi }
+		remove_global_variable = te_jmap_rng_sol_wealth_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = sol_wealth }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_sol_wealth = {
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_wealth_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_wealth_hi value = te_jmap_sol_wealth_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_wealth_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_wealth_lo value = te_jmap_sol_wealth_input }
+	}
+}
+
+# Standard of Living against the expected one, live (average_sol less average_expected_sol), split at none.
+# The Map Room's range, under its options.
+te_jmap_range_sol_expected = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_expected_lo }
+		remove_global_variable = te_jmap_rng_sol_expected_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_expected_hi }
+		remove_global_variable = te_jmap_rng_sol_expected_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = sol_expected }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_sol_expected = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_expected_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_expected_hi value = te_jmap_sol_expected_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_expected_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_sol_expected_lo value = te_jmap_sol_expected_input }
+	}
+}
+
+# Literacy, the state's people's, 0-1, live.
+# The Map Room's range, under its options.
+te_jmap_range_literacy = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_literacy_lo }
+		remove_global_variable = te_jmap_rng_literacy_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_literacy_hi }
+		remove_global_variable = te_jmap_rng_literacy_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = literacy }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_literacy = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_literacy_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_literacy_hi value = te_jmap_literacy_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_literacy_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_literacy_lo value = te_jmap_literacy_input }
+	}
+}
+
+# Unemployment, the share of the state's workforce without work: two-thirds of the color by a third of the world's range.
+# The Map Room's range, under its options.
+te_jmap_range_unemp = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unemp_lo }
+		remove_global_variable = te_jmap_rng_unemp_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unemp_hi }
+		remove_global_variable = te_jmap_rng_unemp_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = unemp }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_unemp = {
+	ordered_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		order_by = te_jmap_unemp_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_unemp_hi value = te_jmap_unemp_input }
+	}
+	ordered_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		order_by = te_jmap_unemp_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_unemp_lo value = te_jmap_unemp_input }
+	}
+}
+
+# Population, the state's people: the same share of the color for each doubling from the world's low (at least 100 people) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_people = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_people_lo }
+		remove_global_variable = te_jmap_rng_people_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_people_hi }
+		remove_global_variable = te_jmap_rng_people_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = people }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_people = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_people_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_people_hi value = te_jmap_people_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_people_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_people_lo value = te_jmap_people_input }
+	}
+}
+
+# GDP, the state's yearly GDP in pounds: the same share of the color for each doubling from the world's low (at least 1) to its high.
+# The Map Room's range, under its options.
+te_jmap_range_gdp = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gdp_lo }
+		remove_global_variable = te_jmap_rng_gdp_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gdp_hi }
+		remove_global_variable = te_jmap_rng_gdp_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = gdp }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_gdp = {
+	ordered_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_gdp_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_gdp_hi value = te_jmap_gdp_input }
+	}
+	ordered_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_gdp_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_gdp_lo value = te_jmap_gdp_input }
+	}
+}
+
+# Infrastructure less its usage, live, split at none.
+# The Map Room's range, under its options.
+te_jmap_range_infra = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_infra_lo }
+		remove_global_variable = te_jmap_rng_infra_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_infra_hi }
+		remove_global_variable = te_jmap_rng_infra_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = infra }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_infra = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_infra_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_infra_hi value = te_jmap_infra_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_infra_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_infra_lo value = te_jmap_infra_input }
+	}
+}
+
+# Loyalists less radicals, each a share of the state's people, live, split at none.
+# The Map Room's range, under its options.
+te_jmap_range_loyal = {
+	if = {
+		limit = { has_global_variable = te_jmap_rng_loyal_lo }
+		remove_global_variable = te_jmap_rng_loyal_lo
+	}
+	if = {
+		limit = { has_global_variable = te_jmap_rng_loyal_hi }
+		remove_global_variable = te_jmap_rng_loyal_hi
+	}
+	set_global_variable = { name = te_jmap_n value = 0 }
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		change_global_variable = { name = te_jmap_n add = 1 }
+	}
+	set_global_variable = { name = te_jmap_k value = te_jmap_trim_count }
+	te_jmap_measure_at = { MAP = loyal }
+	# What the Map Room's page says the map was measured over.
+	set_global_variable = { name = te_jmap_shown_n value = te_jmap_states }
+	set_global_variable = { name = te_jmap_shown_k value = te_jmap_cut }
+}
+# Its two ends: the state K places from the top, and from the bottom.
+te_jmap_measure_loyal = {
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_loyal_input
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_loyal_hi value = te_jmap_loyal_input }
+	}
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_loyal_input_neg
+		position = $K$
+		check_range_bounds = no
+		set_global_variable = { name = te_jmap_rng_loyal_lo value = te_jmap_loyal_input }
+	}
+}
+
 # Aristocrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
 # The Map Room's range, under its options.
 te_jmap_range_class_aristocrats = {
@@ -2866,6 +3266,10 @@ te_jmap_refresh_range = {
 		te_jmap_range_turmoil = yes
 	}
 	else_if = {
+		limit = { te_jmap_selector = 2 }
+		te_jmap_range_literacy = yes
+	}
+	else_if = {
 		limit = { te_jmap_selector = 3 }
 		te_jmap_range_e0 = yes
 	}
@@ -3108,6 +3512,42 @@ te_jmap_refresh_range = {
 	else_if = {
 		limit = { te_jmap_selector = 73 }
 		te_jmap_range_class_soldiers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 74 }
+		te_jmap_range_sol = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 75 }
+		te_jmap_range_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 76 }
+		te_jmap_range_sol_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 77 }
+		te_jmap_range_sol_expected = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 78 }
+		te_jmap_range_unemp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 79 }
+		te_jmap_range_people = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 80 }
+		te_jmap_range_gdp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 81 }
+		te_jmap_range_infra = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 82 }
+		te_jmap_range_loyal = yes
 	}
 	# The Scale option's Ranked setting: the pick's places, taken with its range.
 	if = {
@@ -4138,6 +4578,356 @@ te_jmap_rank_density = {
 	}
 }
 
+# Standard of Living, the state's people's mean at the yearly walk.
+te_jmap_rank_sol = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_sol_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Wealth, the state's people's mean wealth at the yearly walk.
+te_jmap_rank_wealth = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_wealth_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_wealth_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_wealth_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Standard of Living less Wealth, the yearly walk's, split at none.
+te_jmap_rank_sol_wealth = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input < 0 }
+		order_by = te_jmap_sol_wealth_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_wealth_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_wealth_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input > 0 }
+		order_by = te_jmap_sol_wealth_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_wealth_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_wealth_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop var:te_dg_walk_pop > 0 te_jmap_in_area = yes te_jmap_sol_wealth_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
+# Standard of Living against the expected one, live (average_sol less average_expected_sol), split at none.
+te_jmap_rank_sol_expected = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input < 0 }
+		order_by = te_jmap_sol_expected_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_expected_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_expected_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input > 0 }
+		order_by = te_jmap_sol_expected_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_sol_expected_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_sol_expected_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_sol_expected_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
+# Literacy, the state's people's, 0-1, live.
+te_jmap_rank_literacy = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_literacy_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_literacy_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_literacy_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Unemployment, the share of the state's workforce without work: two-thirds of the color by a third of the world's range.
+te_jmap_rank_unemp = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes }
+		order_by = te_jmap_unemp_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_unemp_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_unemp_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { has_variable = te_jmap_unemp te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Population, the state's people: the same share of the color for each doubling from the world's low (at least 100 people) to its high.
+te_jmap_rank_people = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_people_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_people_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_people_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# GDP, the state's yearly GDP in pounds: the same share of the color for each doubling from the world's low (at least 1) to its high.
+te_jmap_rank_gdp = {
+	set_global_variable = te_jmap_ranks
+	# From the lowest: 0 to 1.
+	set_global_variable = { name = te_jmap_i value = -1 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes }
+		order_by = te_jmap_gdp_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_gdp_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_gdp_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { te_jmap_gdp_value > 0 te_jmap_in_area = yes has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share }
+	}
+}
+
+# Infrastructure less its usage, live, split at none.
+te_jmap_rank_infra = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input < 0 }
+		order_by = te_jmap_infra_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_infra_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_infra_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input > 0 }
+		order_by = te_jmap_infra_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_infra_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_infra_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_infra_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
+# Loyalists less radicals, each a share of the state's people, live, split at none.
+te_jmap_rank_loyal = {
+	set_global_variable = te_jmap_ranks
+	# Below the midpoint, the nearest first: 0.5 down to 0.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = 1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input < 0 }
+		order_by = te_jmap_loyal_input
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_loyal_input < te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_loyal_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input < 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_low }
+	}
+	# Above it, the nearest first: 0.5 up to 1.
+	set_global_variable = { name = te_jmap_i value = 0 }
+	set_global_variable = { name = te_jmap_prev value = -1000000000 }
+	ordered_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input > 0 }
+		order_by = te_jmap_loyal_input_neg
+		min = 0
+		max = 5000
+		check_range_bounds = no
+		if = {
+			limit = { te_jmap_loyal_input > te_jmap_rank_prev }
+			change_global_variable = { name = te_jmap_i add = 1 }
+			set_global_variable = { name = te_jmap_prev value = te_jmap_loyal_input }
+		}
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_place }
+	}
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input > 0 has_variable = te_jmap_rank }
+		set_variable = { name = te_jmap_rank value = te_jmap_rank_share_up }
+	}
+	# At the midpoint itself: its color.
+	every_state = {
+		limit = { state_population > 0 te_jmap_in_area = yes te_jmap_loyal_input = 0 }
+		set_variable = { name = te_jmap_rank value = 0.5 }
+	}
+}
+
 # Aristocrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
 te_jmap_rank_class_aristocrats = {
 	set_global_variable = te_jmap_ranks
@@ -4895,6 +5685,10 @@ te_jmap_refresh_rank = {
 		te_jmap_rank_turmoil = yes
 	}
 	else_if = {
+		limit = { te_jmap_selector = 2 }
+		te_jmap_rank_literacy = yes
+	}
+	else_if = {
 		limit = { te_jmap_selector = 3 }
 		te_jmap_rank_e0 = yes
 	}
@@ -5137,6 +5931,42 @@ te_jmap_refresh_rank = {
 	else_if = {
 		limit = { te_jmap_selector = 73 }
 		te_jmap_rank_class_soldiers_share = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 74 }
+		te_jmap_rank_sol = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 75 }
+		te_jmap_rank_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 76 }
+		te_jmap_rank_sol_wealth = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 77 }
+		te_jmap_rank_sol_expected = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 78 }
+		te_jmap_rank_unemp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 79 }
+		te_jmap_rank_people = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 80 }
+		te_jmap_rank_gdp = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 81 }
+		te_jmap_rank_infra = yes
+	}
+	else_if = {
+		limit = { te_jmap_selector = 82 }
+		te_jmap_rank_loyal = yes
 	}
 }
 

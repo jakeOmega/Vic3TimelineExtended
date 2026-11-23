@@ -29,8 +29,9 @@ The sixteenth (2026-11-23, #1974, the first of four the owner asked for: "I'd li
 theme than by game system or effect") regroups the picks by theme in eight groups and generates them, with their
 scripted GUIs, from one table (§ Buttons), and retires the Cartographic Survey. The seventeenth (the same day, #1975,
 the second) maps every pop type by its people and by its share of the people, with a Count/Share switch in Map Options,
-all from one table of classes (§ The Class Maps). Two more follow: maps of living standards, the economy and politics
-(#1976), and five more, each with a self-check (#1977).
+all from one table of classes (§ The Class Maps). The eighteenth (the same day, #1976, the third) adds ten maps of
+living standards, the economy and politics, Literacy among them on its old selector (§ The Map Room, "The eighteenth
+pass's ten"). One more follows: five more maps, each with a self-check (#1977).
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -98,7 +99,8 @@ Comfort's two maps share Base Comfort's range (`range_of`), so they still compar
 (0–100, its tiers at 50 and 75 are what it shows), the paleness of the leading cause and of Ownership's leading holder
 (a share on a categorical map) and City Rank (a rank is already a place in the world, and its first 20 are tourism's
 Cities bonus). Population Growth keeps its midpoint at none, as Natural Change does. Armed Forces, Company HQs,
-War Dead, Trade Capacity, Investment and Population Density take GDP per capita's doubling scale, since their counts run over orders of magnitude.
+War Dead, Trade Capacity, Investment, Population Density, every class's count (#1975), Population and GDP (#1976)
+take GDP per capita's doubling scale, since their counts run over orders of magnitude.
 Comfort's and Emissions' green removal, the census's "no data" grey and the categorical maps are unchanged.
 
 **The curves are generated** (`scripts/generators/gen_journal_map_scales.py` →
@@ -164,8 +166,8 @@ entry, in no country's journal.
   names the runner-up where it is striped (a branch, not a `SelectLocalization`, for the reason `map_tooltip`'s header
   gives). The colors aren't mixed: a `lerp` mixes two fixed colors, so a blend of the top two would need a branch per
   pair, and a mixed hue reads as another cause (infection's blue and war's red make a purple near killed by events'
-  lavender). 2 was literacy, retired because vanilla's literacy map mode shows it: a save holding 2 shows
-  the unpainted map and "Pick a map" until the next pick. 18-25 are the systems' maps, each also on its own entry
+  lavender). 2 was literacy, retired in the fifth pass because vanilla's literacy map mode shows it, and is Literacy
+  again since the eighteenth (below). 18-25 are the systems' maps, each also on its own entry
   (below).
 - **The ninth pass's four** (2026-11-08, the owner's ask). 32 **City Rank**, tourism's ranking of the world's cities
   (`var:state_city_size_rank`, which `city_rank_on_action` sets on the 501 largest by `city_size` each month): the 20
@@ -262,6 +264,34 @@ entry, in no country's journal.
   lose `THIS`), then the people and the km². Not the Crowding Penalty's density (`state_population_density`,
   people over arable land and Urban Engineering, which the engine's crowding reads): this is the land itself.
   Play-test check 32.
+- **The eighteenth pass's ten** (2026-11-23, #1976, the owner's first tier: "Several of these mirror vanilla lenses.
+  They earn a place because a Map Room map already has what vanilla's don't: Map Options' Area ..., Outliers, Scale
+  and Color"). Each reads a figure the mod reads as a value elsewhere, is fitted to the world, and has its range in its
+  pick's tooltip. **Living Conditions**: 74 **Standard of Living** and 75 **Wealth**, the yearly walk's people-weighted
+  means (`te_dg_sol`, already stored, and `te_dg_wealth`, a new sum in the Map Room's own walk calls, `te_jmap_walk_*`:
+  each pop's `wealth` times its people over the people), straight, whatever the Demographics rule; 76 **SoL vs
+  Wealth**, the two less each other (`te_jmap_sol_wealth`), what a place adds to living standards or takes from them
+  beyond its people's wealth (pollution, health institutions, laws, ruler traits, principles, events), diverging at
+  none, small in 1836 and growing; 77 **SoL vs Expected**, `average_sol` less `average_expected_sol`, live
+  (`te_jmap_sol_expected`), the gap the engine radicalizes on, diverging at none; and 2 **Literacy**, `literacy_rate`,
+  live, back on its old selector: the Area option is a reason to have it beside vanilla's lens. **Economy**: 78
+  **Unemployment**, the share of the workforce without work (`te_state_unemployment_share`, the mod's one reading of
+  the engine's per-person figure), two-thirds of the color by a third of the range; 80 **GDP** (`gdp`) a doubling at a
+  time, a state with none pale; 81 **Infrastructure**, `infrastructure` less `infrastructure_usage`, live
+  (`te_jmap_infra_balance`), diverging at none: below it a shortfall, which costs market access. **Population**: 79
+  **Population** (`state_population`), a doubling at a time, a state with no people pale. **Politics**: 82
+  **Radicals vs Loyalists**, `loyalist_fraction` less `radical_fraction` (`te_jmap_loyal_net`), diverging at none;
+  its button reads "Radicals/Loyalists", which fits the button's 150 where the full name, three letters longer than
+  any other pick's, may not. Unemployment is the one stored figure: a GUI reads `state_unemployment_rate` as none,
+  even through a script value (`scripting_best_practices.md`, "The op slots accept ..."), so the hover couldn't read
+  it, and the paint, drawn beside the GUI, might not either; `te_jmap_store_unemp` stores it as `te_jmap_unemp` from
+  an effect at a pick of the map and from the global monthly pulse while it is the pick (`te_jmap_monthly_unemp`), as
+  Investment's figures are, so it can be a month old. The live maps paint every state and leave a state with no
+  people out of their range (the row's `paint`, as GDP per Capita's), and their hovers read the state's own data
+  functions where vanilla has one (`GetExpectedStandardOfLivingAll`, `GetLiteracy`, `GetPopulationSize`,
+  `GetInfrastructureBalance`, `GetNumLoyalists`, `GetNumUnemployedWorkingAdults`), so a hover that read a script value
+  as none would still show the engine's figure. Living Conditions now has maps every player sees, so its header no
+  longer hides with the census. Unverified (play-test check 34): every live read in a paint, and the hovers.
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui`
@@ -428,21 +458,22 @@ Ranked.
   Logarithmic needs two for a straight map and four for a midpoint map (two a side). In a paint, one evaluation of
   a factor under Logarithmic runs two of them (a midpoint map only its side's), as GDP per Capita's own curve
   always has. A three-color map's `map_color` evaluates its factor twice a state under every scale, once in the
-  `< 0.5` split and once in `_lower` or `_upper`: so the eleven three-color maps (the eight midpoint maps, Life
+  `< 0.5` split and once in `_lower` or `_upper`: so the fifteen three-color maps (the twelve midpoint maps, Life
   Expectancy, Infant Mortality, Median Age) read four ladders a state under Logarithmic and the other maps two.
 - **Linear**: straight from the range's low to its high; on a map with a meaningful midpoint, straight on each side
   of it, to the range's end on that side, so the midpoint stays the neutral color.
 - **Logarithmic**: the same share of the color for each doubling. A map already on a doubling scale (GDP per
-  Capita, Armed Forces, Company HQs, War Dead, Trade Capacity, Investment) keeps its tree: Logarithmic is its own
+  Capita, Armed Forces, Company HQs, War Dead, Trade Capacity, Investment, Population Density, the class counts,
+  Population, GDP) keeps its tree: Logarithmic is its own
   curve, and its tooltip says so. A straight map starts at its range's low, or at a 64th of its high where the low
   is smaller (`LOG_RATIO`: a low of 0 has no logarithm, and the engine's five decimals can't hold a smaller share
   of the Capitalists' 0.2% range), so it spans six doublings at most; the figure over the start is worked out as
   the smaller of figure / low and figure × 64 / high, never by dividing by the small start. Where the range is
   under one doubling wide (Gini's 0.43 to 0.60, say) Logarithmic is Linear: the log is read in straight pieces
   between powers of two.
-- **Logarithmic around a midpoint** (the owner: "What about symlog?"). The eight maps that run both ways from a
+- **Logarithmic around a midpoint** (the owner: "What about symlog?"). The maps that run both ways from a
   midpoint (Fertility, Natural Change, Net Migration, Sex Balance, Population Growth, the two comfort maps, Dynastic
-  Wealth) are logarithmic on each side of it by the distance from it, and straight within `min_half` of it, where a
+  Wealth; and since #1976 SoL vs Wealth, SoL vs Expected, Infrastructure and Radicals vs Loyalists) are logarithmic on each side of it by the distance from it, and straight within `min_half` of it, where a
   logarithm has no start: the knee is `min_half` / 2 (`LOG_KNEE_PART`), the side's share is 1 + log2 of the
   distance in knees over the same of the side's span, and since the first piece of the log, from one knee to two,
   is straight, the scale is straight from the midpoint to `min_half`. Each doubling of the distance past that takes
@@ -532,8 +563,8 @@ the game (play-test check 31).
   sweep through the hues between.
 - **Colorblind-Safe**: ColorBrewer 2.0's five-class sequential YlOrBr (Brewer, Harrower and the Pennsylvania
   State University, colorbrewer2.org, which marks it colorblind safe), pale yellow at the low end to brown at the
-  high, on the 27 maps that run one way, the three-color ones with no meaningful midpoint among them (Life
-  Expectancy, Infant Mortality, Median Age). On the eight midpoint maps, ColorBrewer's five-class diverging PuOr:
+  high, on every map that runs one way, the three-color ones with no meaningful midpoint among them (Life
+  Expectancy, Infant Mortality, Median Age). On the midpoint maps, ColorBrewer's five-class diverging PuOr:
   orange below the midpoint, near white at it, purple above, two lerps a side, so the midpoint keeps a color of
   its own at exactly factor 0.5. Checked in CIELAB under normal vision and with no L, M or S cones (Machado,
   Oliveira and Fernandes 2009, severity 1): lightness never turns along either ramp, so both keep their order in
@@ -558,7 +589,7 @@ the game (play-test check 31).
 - **Where it doesn't apply.** A map of categories or on a fixed scale keeps its colors: the two buttons are greyed
   there with the reason (`te_jmap_color_no_range_tt`), and Map Default stays. A system's own entry reads neither
   the option nor the shared values, so its page keeps its own colors, as it keeps its own curve.
-- **The tooltips.** Each of the 35 fitted picks' tooltips (`te_jmap_pick_<map>_desc`, one key again; the
+- **The tooltips.** Each fitted pick's tooltip (35 in this pass, 72 since #1976; `te_jmap_pick_<map>_desc`, one key again; the
   thirteenth pass's `_scaled` twins are gone) is four lines, each true whatever is set: what the map shows, with
   no word of a curve, a color or a range (`PickTooltipTest` holds it to that); the range now; the scale, the
   map's own curve under Map Default (`te_jmap_curve_<shape>`, eleven keys shared by the maps of a shape) and the
@@ -585,7 +616,7 @@ the game (play-test check 31).
   at its first false line; if it reads every line, each of the eleven also works out the pick's ramp or factor.
   Nothing has measured which. Off the default: the
   shared branches work `te_jmap_pick_ramp` and the factor out up to four times a state, each a ladder on the
-  pick (35 rows at most) before the map's own factor. The owner's frame reading (below) saw no cost in the
+  pick (35 rows at most then, 72 since #1976) before the map's own factor. The owner's frame reading (below) saw no cost in the
   default paint; this has not been read.
 
 ### A stored factor, weighed and not built
@@ -761,16 +792,18 @@ Every map button clears the see-through flag before it opens a page.
   `section_header_button` at 470 wide) over its rows (`te_jmap_category`), shown while the group's client-side flag
   `te_jmap_cat_<key>_open` is set. Every group starts collapsed, a long list (`gui_style_guide.md` § Sections), and the
   flags outlive a pick's reopen, as the see-through flag does, so a group opened stays open from map to map. Population
-  (Population Density, Urban People, City Rank; Population Growth, Net Migration, Crowding Penalty); Families and Ages
-  (Births, Deaths, Natural Change; Fertility, Family Planning, Median Age; Aged 65 and Over, Sex Balance); Living
-  Conditions (Life Expectancy, Infant Mortality, Leading Cause; Health Care); Classes (every pop type since #1975,
-  five rows of three by theme, each class's two picks in one place: § The Class Maps); Economy (GDP per Capita, Gini, Dynastic Wealth; Ownership, Company HQs; Investment, Trade
-  Capacity, Power Grids); Politics (Turmoil; Political Models, United Nations, Colonies); Military and Security (Armed
+  (Population, Population Density, Urban People; Population Growth, Net Migration, Crowding Penalty; City Rank);
+  Families and Ages (Births, Deaths, Natural Change; Fertility, Family Planning, Median Age; Aged 65 and Over, Sex
+  Balance); Living Conditions (Standard of Living, Wealth, SoL vs Wealth; SoL vs Expected, Literacy; Life Expectancy,
+  Infant Mortality, Leading Cause; Health Care); Classes (every pop type since #1975, five rows of three by theme,
+  each class's two picks in one place: § The Class Maps); Economy (GDP, GDP per Capita, Unemployment; Gini, Dynastic
+  Wealth, Ownership; Company HQs, Investment, Trade Capacity; Infrastructure, Power Grids); Politics (Turmoil,
+  Radicals vs Loyalists; Political Models, United Nations, Colonies); Military and Security (Armed
   Forces, Fighting-Age Men, War Dead; Devastation, Nuclear Weapons, Agent Networks); Land and Environment (Base Comfort,
   Current Comfort, Tourism Appeal; Emissions, Ocean Basins, Grandeur). Each button keeps its own gate, so a census map
   hides while the census doesn't run and a system's map while its rule is off. A group whose every map is gated hides
   with them, header and all (`te_jmap_cat_<key>_sgui`, generated where a group has no map every player sees: today
-  Families and Ages and Living Conditions), and a row whose maps share a gate hides with it, so a closed census leaves
+  Families and Ages, and Living Conditions too until #1976 gave it maps of its own), and a row whose maps share a gate hides with it, so a closed census leaves
   no empty row's spacing. Until #1974 the Census header stayed with nothing under it. `test_journal_map_modes.py`'s
   `CategoriesTest` holds every pick to one group; `test_journal_map_picks.py` holds the generator.
 - `te_jmap_options`: the Map Room's options (2026-11-14, § The Map Room's Options), one more collapsible section in

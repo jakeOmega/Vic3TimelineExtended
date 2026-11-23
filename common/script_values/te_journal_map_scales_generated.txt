@@ -10572,6 +10572,3521 @@ te_jmap_density_factor = {
 	max = 1
 }
 
+# Standard of Living, the state's people's mean at the yearly walk.
+# Fitted to the world; before the first measure, 5 to 25.
+te_jmap_sol_input = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_sol }
+		value = var:te_dg_sol
+	}
+}
+te_jmap_sol_input_neg = {
+	value = te_jmap_sol_input
+	multiply = -1
+}
+te_jmap_sol_lo = {
+	value = 5
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_lo }
+		value = global_var:te_jmap_rng_sol_lo
+	}
+}
+te_jmap_sol_hi = {
+	value = 25
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_hi }
+		value = global_var:te_jmap_rng_sol_hi
+	}
+	min = te_jmap_sol_hi_floor
+}
+te_jmap_sol_hi_floor = {
+	value = te_jmap_sol_lo
+	add = 2
+}
+te_jmap_sol_span = {
+	value = te_jmap_sol_hi
+	subtract = te_jmap_sol_lo
+}
+te_jmap_sol_d0 = {
+	value = te_jmap_sol_span
+	multiply = 1
+}
+te_jmap_sol_lg_min = {
+	value = te_jmap_sol_hi
+	divide = 64
+}
+te_jmap_sol_lg_r = {
+	value = var:te_dg_sol
+	multiply = 64
+	divide = te_jmap_sol_hi
+	if = {
+		limit = { te_jmap_sol_lo > te_jmap_sol_lg_min }
+		value = var:te_dg_sol
+		divide = te_jmap_sol_lo
+	}
+}
+te_jmap_sol_lg_t = {
+	if = {
+		limit = { te_jmap_sol_lg_r < 2 }
+		value = te_jmap_sol_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 4 }
+		value = te_jmap_sol_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 8 }
+		value = te_jmap_sol_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 16 }
+		value = te_jmap_sol_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 32 }
+		value = te_jmap_sol_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 64 }
+		value = te_jmap_sol_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 128 }
+		value = te_jmap_sol_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 256 }
+		value = te_jmap_sol_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 512 }
+		value = te_jmap_sol_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 1024 }
+		value = te_jmap_sol_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 2048 }
+		value = te_jmap_sol_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 4096 }
+		value = te_jmap_sol_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 8192 }
+		value = te_jmap_sol_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 16384 }
+		value = te_jmap_sol_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 32768 }
+		value = te_jmap_sol_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 65536 }
+		value = te_jmap_sol_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 131072 }
+		value = te_jmap_sol_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 262144 }
+		value = te_jmap_sol_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 524288 }
+		value = te_jmap_sol_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_r < 1048576 }
+		value = te_jmap_sol_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_sol_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_sol_lo > te_jmap_sol_lg_min }
+		value = te_jmap_sol_hi
+		divide = te_jmap_sol_lo
+	}
+}
+te_jmap_sol_lg_top = {
+	if = {
+		limit = { te_jmap_sol_lg_span_r < 2 }
+		value = te_jmap_sol_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 4 }
+		value = te_jmap_sol_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 8 }
+		value = te_jmap_sol_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 16 }
+		value = te_jmap_sol_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 32 }
+		value = te_jmap_sol_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 64 }
+		value = te_jmap_sol_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 128 }
+		value = te_jmap_sol_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 256 }
+		value = te_jmap_sol_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 512 }
+		value = te_jmap_sol_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 1024 }
+		value = te_jmap_sol_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 2048 }
+		value = te_jmap_sol_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 4096 }
+		value = te_jmap_sol_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 8192 }
+		value = te_jmap_sol_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 16384 }
+		value = te_jmap_sol_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 32768 }
+		value = te_jmap_sol_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 65536 }
+		value = te_jmap_sol_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 131072 }
+		value = te_jmap_sol_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 262144 }
+		value = te_jmap_sol_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 524288 }
+		value = te_jmap_sol_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_lg_span_r < 1048576 }
+		value = te_jmap_sol_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_sol_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_sol }
+		if = {
+			limit = { te_jmap_scale = 0 }
+			value = var:te_dg_sol subtract = te_jmap_sol_lo divide = te_jmap_sol_d0
+		}
+		else_if = {
+			limit = { te_jmap_scale = 1 }
+			value = var:te_dg_sol
+			subtract = te_jmap_sol_lo
+			divide = te_jmap_sol_span
+		}
+		else_if = {
+			limit = { te_jmap_scale = 2 }
+			value = te_jmap_sol_lg_t
+			divide = te_jmap_sol_lg_top
+		}
+		else = {
+			value = 0
+			if = {
+				limit = { has_variable = te_jmap_rank }
+				value = var:te_jmap_rank
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Wealth, the state's people's mean wealth at the yearly walk.
+# Fitted to the world; before the first measure, 5 to 25.
+te_jmap_wealth_input = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_wealth }
+		value = var:te_dg_wealth
+	}
+}
+te_jmap_wealth_input_neg = {
+	value = te_jmap_wealth_input
+	multiply = -1
+}
+te_jmap_wealth_lo = {
+	value = 5
+	if = {
+		limit = { has_global_variable = te_jmap_rng_wealth_lo }
+		value = global_var:te_jmap_rng_wealth_lo
+	}
+}
+te_jmap_wealth_hi = {
+	value = 25
+	if = {
+		limit = { has_global_variable = te_jmap_rng_wealth_hi }
+		value = global_var:te_jmap_rng_wealth_hi
+	}
+	min = te_jmap_wealth_hi_floor
+}
+te_jmap_wealth_hi_floor = {
+	value = te_jmap_wealth_lo
+	add = 2
+}
+te_jmap_wealth_span = {
+	value = te_jmap_wealth_hi
+	subtract = te_jmap_wealth_lo
+}
+te_jmap_wealth_d0 = {
+	value = te_jmap_wealth_span
+	multiply = 1
+}
+te_jmap_wealth_lg_min = {
+	value = te_jmap_wealth_hi
+	divide = 64
+}
+te_jmap_wealth_lg_r = {
+	value = var:te_dg_wealth
+	multiply = 64
+	divide = te_jmap_wealth_hi
+	if = {
+		limit = { te_jmap_wealth_lo > te_jmap_wealth_lg_min }
+		value = var:te_dg_wealth
+		divide = te_jmap_wealth_lo
+	}
+}
+te_jmap_wealth_lg_t = {
+	if = {
+		limit = { te_jmap_wealth_lg_r < 2 }
+		value = te_jmap_wealth_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 4 }
+		value = te_jmap_wealth_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 8 }
+		value = te_jmap_wealth_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 16 }
+		value = te_jmap_wealth_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 32 }
+		value = te_jmap_wealth_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 64 }
+		value = te_jmap_wealth_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 128 }
+		value = te_jmap_wealth_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 256 }
+		value = te_jmap_wealth_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 512 }
+		value = te_jmap_wealth_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 1024 }
+		value = te_jmap_wealth_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 2048 }
+		value = te_jmap_wealth_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 4096 }
+		value = te_jmap_wealth_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 8192 }
+		value = te_jmap_wealth_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 16384 }
+		value = te_jmap_wealth_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 32768 }
+		value = te_jmap_wealth_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 65536 }
+		value = te_jmap_wealth_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 131072 }
+		value = te_jmap_wealth_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 262144 }
+		value = te_jmap_wealth_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 524288 }
+		value = te_jmap_wealth_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_r < 1048576 }
+		value = te_jmap_wealth_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_wealth_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_wealth_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_wealth_lo > te_jmap_wealth_lg_min }
+		value = te_jmap_wealth_hi
+		divide = te_jmap_wealth_lo
+	}
+}
+te_jmap_wealth_lg_top = {
+	if = {
+		limit = { te_jmap_wealth_lg_span_r < 2 }
+		value = te_jmap_wealth_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 4 }
+		value = te_jmap_wealth_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 8 }
+		value = te_jmap_wealth_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 16 }
+		value = te_jmap_wealth_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 32 }
+		value = te_jmap_wealth_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 64 }
+		value = te_jmap_wealth_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 128 }
+		value = te_jmap_wealth_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 256 }
+		value = te_jmap_wealth_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 512 }
+		value = te_jmap_wealth_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 1024 }
+		value = te_jmap_wealth_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 2048 }
+		value = te_jmap_wealth_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 4096 }
+		value = te_jmap_wealth_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 8192 }
+		value = te_jmap_wealth_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 16384 }
+		value = te_jmap_wealth_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 32768 }
+		value = te_jmap_wealth_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 65536 }
+		value = te_jmap_wealth_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 131072 }
+		value = te_jmap_wealth_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 262144 }
+		value = te_jmap_wealth_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 524288 }
+		value = te_jmap_wealth_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_wealth_lg_span_r < 1048576 }
+		value = te_jmap_wealth_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_wealth_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_wealth_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dg_wealth }
+		if = {
+			limit = { te_jmap_scale = 0 }
+			value = var:te_dg_wealth subtract = te_jmap_wealth_lo divide = te_jmap_wealth_d0
+		}
+		else_if = {
+			limit = { te_jmap_scale = 1 }
+			value = var:te_dg_wealth
+			subtract = te_jmap_wealth_lo
+			divide = te_jmap_wealth_span
+		}
+		else_if = {
+			limit = { te_jmap_scale = 2 }
+			value = te_jmap_wealth_lg_t
+			divide = te_jmap_wealth_lg_top
+		}
+		else = {
+			value = 0
+			if = {
+				limit = { has_variable = te_jmap_rank }
+				value = var:te_jmap_rank
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Standard of Living less Wealth, the yearly walk's, split at none.
+# Fitted to the world on each side of 0; before the first measure, -5 to 5.
+te_jmap_sol_wealth_input = {
+	value = te_jmap_sol_wealth
+}
+te_jmap_sol_wealth_input_neg = {
+	value = te_jmap_sol_wealth_input
+	multiply = -1
+}
+te_jmap_sol_wealth_lo = {
+	value = -5
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_wealth_lo }
+		value = global_var:te_jmap_rng_sol_wealth_lo
+	}
+}
+te_jmap_sol_wealth_hi = {
+	value = 5
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_wealth_hi }
+		value = global_var:te_jmap_rng_sol_wealth_hi
+	}
+	min = te_jmap_sol_wealth_hi_floor
+}
+te_jmap_sol_wealth_hi_floor = {
+	value = te_jmap_sol_wealth_lo
+	add = 1
+}
+te_jmap_sol_wealth_b = {
+	value = te_jmap_sol_wealth_hi
+	max = 0
+}
+te_jmap_sol_wealth_a = {
+	value = te_jmap_sol_wealth_lo
+	min = 0
+}
+te_jmap_sol_wealth_span_low = {
+	value = te_jmap_sol_wealth_b
+	subtract = te_jmap_sol_wealth_lo
+	min = 1
+}
+te_jmap_sol_wealth_span_up = {
+	value = te_jmap_sol_wealth_hi
+	subtract = te_jmap_sol_wealth_a
+	min = 1
+}
+te_jmap_sol_wealth_l_d0 = {
+	value = te_jmap_sol_wealth_span_low
+	multiply = 2
+}
+te_jmap_sol_wealth_u_d0 = {
+	value = te_jmap_sol_wealth_span_up
+	multiply = 2
+}
+te_jmap_sol_wealth_sl_low_r = {
+	value = te_jmap_sol_wealth_b
+	subtract = te_jmap_sol_wealth
+	divide = 0.5
+}
+te_jmap_sol_wealth_sl_low_t = {
+	if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 2 }
+		value = te_jmap_sol_wealth_sl_low_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 4 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 8 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 16 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 32 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 64 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 128 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 256 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 512 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 1024 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 2048 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 4096 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 8192 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 16384 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 32768 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 65536 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 131072 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 262144 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 524288 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_r < 1048576 }
+		value = te_jmap_sol_wealth_sl_low_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_wealth_sl_low_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_sol_wealth_sl_low_span_r = {
+	value = te_jmap_sol_wealth_span_low
+	divide = 0.5
+}
+te_jmap_sol_wealth_sl_low_top = {
+	if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 2 }
+		value = te_jmap_sol_wealth_sl_low_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 4 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 8 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 16 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 32 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 64 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 128 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 256 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 512 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 1024 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 2048 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 4096 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 8192 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 16384 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 32768 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 65536 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 131072 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 262144 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 524288 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_low_span_r < 1048576 }
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_wealth_sl_low_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_sol_wealth_sl_up_r = {
+	value = te_jmap_sol_wealth
+	subtract = te_jmap_sol_wealth_a
+	divide = 0.5
+}
+te_jmap_sol_wealth_sl_up_t = {
+	if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 2 }
+		value = te_jmap_sol_wealth_sl_up_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 4 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 8 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 16 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 32 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 64 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 128 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 256 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 512 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 1024 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 2048 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 4096 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 8192 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 16384 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 32768 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 65536 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 131072 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 262144 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 524288 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_r < 1048576 }
+		value = te_jmap_sol_wealth_sl_up_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_wealth_sl_up_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_sol_wealth_sl_up_span_r = {
+	value = te_jmap_sol_wealth_span_up
+	divide = 0.5
+}
+te_jmap_sol_wealth_sl_up_top = {
+	if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 2 }
+		value = te_jmap_sol_wealth_sl_up_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 4 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 8 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 16 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 32 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 64 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 128 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 256 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 512 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 1024 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 2048 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 4096 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 8192 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 16384 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 32768 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 65536 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 131072 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 262144 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 524288 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_wealth_sl_up_span_r < 1048576 }
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_wealth_sl_up_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_sol_wealth_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		if = {
+			limit = { te_jmap_sol_wealth < 0 }
+			value = te_jmap_sol_wealth subtract = te_jmap_sol_wealth_b divide = te_jmap_sol_wealth_l_d0 add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_sol_wealth subtract = te_jmap_sol_wealth_a divide = te_jmap_sol_wealth_u_d0 add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		if = {
+			limit = { te_jmap_sol_wealth < 0 }
+			value = te_jmap_sol_wealth_b
+			subtract = te_jmap_sol_wealth
+			divide = te_jmap_sol_wealth_span_low
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_sol_wealth
+			subtract = te_jmap_sol_wealth_a
+			divide = te_jmap_sol_wealth_span_up
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		if = {
+			limit = { te_jmap_sol_wealth < 0 }
+			value = te_jmap_sol_wealth_sl_low_t
+			divide = te_jmap_sol_wealth_sl_low_top
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_sol_wealth_sl_up_t
+			divide = te_jmap_sol_wealth_sl_up_top
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else = {
+		value = 0.5
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+te_jmap_sol_wealth_factor_lower = {
+	value = te_jmap_sol_wealth_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_sol_wealth_factor_upper = {
+	value = te_jmap_sol_wealth_factor
+	multiply = 2
+	subtract = 1
+	min = 0
+	max = 1
+}
+
+# Standard of Living against the expected one, live (average_sol less average_expected_sol), split at none.
+# Fitted to the world on each side of 0; before the first measure, -5 to 5.
+te_jmap_sol_expected_input = {
+	value = te_jmap_sol_expected
+}
+te_jmap_sol_expected_input_neg = {
+	value = te_jmap_sol_expected_input
+	multiply = -1
+}
+te_jmap_sol_expected_lo = {
+	value = -5
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_expected_lo }
+		value = global_var:te_jmap_rng_sol_expected_lo
+	}
+}
+te_jmap_sol_expected_hi = {
+	value = 5
+	if = {
+		limit = { has_global_variable = te_jmap_rng_sol_expected_hi }
+		value = global_var:te_jmap_rng_sol_expected_hi
+	}
+	min = te_jmap_sol_expected_hi_floor
+}
+te_jmap_sol_expected_hi_floor = {
+	value = te_jmap_sol_expected_lo
+	add = 1
+}
+te_jmap_sol_expected_b = {
+	value = te_jmap_sol_expected_hi
+	max = 0
+}
+te_jmap_sol_expected_a = {
+	value = te_jmap_sol_expected_lo
+	min = 0
+}
+te_jmap_sol_expected_span_low = {
+	value = te_jmap_sol_expected_b
+	subtract = te_jmap_sol_expected_lo
+	min = 1
+}
+te_jmap_sol_expected_span_up = {
+	value = te_jmap_sol_expected_hi
+	subtract = te_jmap_sol_expected_a
+	min = 1
+}
+te_jmap_sol_expected_l_d0 = {
+	value = te_jmap_sol_expected_span_low
+	multiply = 2
+}
+te_jmap_sol_expected_u_d0 = {
+	value = te_jmap_sol_expected_span_up
+	multiply = 2
+}
+te_jmap_sol_expected_sl_low_r = {
+	value = te_jmap_sol_expected_b
+	subtract = te_jmap_sol_expected
+	divide = 0.5
+}
+te_jmap_sol_expected_sl_low_t = {
+	if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 2 }
+		value = te_jmap_sol_expected_sl_low_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 4 }
+		value = te_jmap_sol_expected_sl_low_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 8 }
+		value = te_jmap_sol_expected_sl_low_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 16 }
+		value = te_jmap_sol_expected_sl_low_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 32 }
+		value = te_jmap_sol_expected_sl_low_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 64 }
+		value = te_jmap_sol_expected_sl_low_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 128 }
+		value = te_jmap_sol_expected_sl_low_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 256 }
+		value = te_jmap_sol_expected_sl_low_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 512 }
+		value = te_jmap_sol_expected_sl_low_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 1024 }
+		value = te_jmap_sol_expected_sl_low_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 2048 }
+		value = te_jmap_sol_expected_sl_low_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 4096 }
+		value = te_jmap_sol_expected_sl_low_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 8192 }
+		value = te_jmap_sol_expected_sl_low_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 16384 }
+		value = te_jmap_sol_expected_sl_low_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 32768 }
+		value = te_jmap_sol_expected_sl_low_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 65536 }
+		value = te_jmap_sol_expected_sl_low_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 131072 }
+		value = te_jmap_sol_expected_sl_low_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 262144 }
+		value = te_jmap_sol_expected_sl_low_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 524288 }
+		value = te_jmap_sol_expected_sl_low_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_r < 1048576 }
+		value = te_jmap_sol_expected_sl_low_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_expected_sl_low_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_sol_expected_sl_low_span_r = {
+	value = te_jmap_sol_expected_span_low
+	divide = 0.5
+}
+te_jmap_sol_expected_sl_low_top = {
+	if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 2 }
+		value = te_jmap_sol_expected_sl_low_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 4 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 8 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 16 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 32 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 64 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 128 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 256 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 512 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 1024 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 2048 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 4096 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 8192 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 16384 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 32768 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 65536 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 131072 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 262144 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 524288 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_low_span_r < 1048576 }
+		value = te_jmap_sol_expected_sl_low_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_expected_sl_low_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_sol_expected_sl_up_r = {
+	value = te_jmap_sol_expected
+	subtract = te_jmap_sol_expected_a
+	divide = 0.5
+}
+te_jmap_sol_expected_sl_up_t = {
+	if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 2 }
+		value = te_jmap_sol_expected_sl_up_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 4 }
+		value = te_jmap_sol_expected_sl_up_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 8 }
+		value = te_jmap_sol_expected_sl_up_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 16 }
+		value = te_jmap_sol_expected_sl_up_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 32 }
+		value = te_jmap_sol_expected_sl_up_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 64 }
+		value = te_jmap_sol_expected_sl_up_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 128 }
+		value = te_jmap_sol_expected_sl_up_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 256 }
+		value = te_jmap_sol_expected_sl_up_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 512 }
+		value = te_jmap_sol_expected_sl_up_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 1024 }
+		value = te_jmap_sol_expected_sl_up_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 2048 }
+		value = te_jmap_sol_expected_sl_up_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 4096 }
+		value = te_jmap_sol_expected_sl_up_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 8192 }
+		value = te_jmap_sol_expected_sl_up_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 16384 }
+		value = te_jmap_sol_expected_sl_up_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 32768 }
+		value = te_jmap_sol_expected_sl_up_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 65536 }
+		value = te_jmap_sol_expected_sl_up_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 131072 }
+		value = te_jmap_sol_expected_sl_up_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 262144 }
+		value = te_jmap_sol_expected_sl_up_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 524288 }
+		value = te_jmap_sol_expected_sl_up_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_r < 1048576 }
+		value = te_jmap_sol_expected_sl_up_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_expected_sl_up_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_sol_expected_sl_up_span_r = {
+	value = te_jmap_sol_expected_span_up
+	divide = 0.5
+}
+te_jmap_sol_expected_sl_up_top = {
+	if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 2 }
+		value = te_jmap_sol_expected_sl_up_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 4 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 8 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 16 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 32 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 64 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 128 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 256 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 512 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 1024 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 2048 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 4096 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 8192 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 16384 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 32768 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 65536 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 131072 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 262144 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 524288 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_sol_expected_sl_up_span_r < 1048576 }
+		value = te_jmap_sol_expected_sl_up_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_sol_expected_sl_up_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_sol_expected_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		if = {
+			limit = { te_jmap_sol_expected < 0 }
+			value = te_jmap_sol_expected subtract = te_jmap_sol_expected_b divide = te_jmap_sol_expected_l_d0 add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_sol_expected subtract = te_jmap_sol_expected_a divide = te_jmap_sol_expected_u_d0 add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		if = {
+			limit = { te_jmap_sol_expected < 0 }
+			value = te_jmap_sol_expected_b
+			subtract = te_jmap_sol_expected
+			divide = te_jmap_sol_expected_span_low
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_sol_expected
+			subtract = te_jmap_sol_expected_a
+			divide = te_jmap_sol_expected_span_up
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		if = {
+			limit = { te_jmap_sol_expected < 0 }
+			value = te_jmap_sol_expected_sl_low_t
+			divide = te_jmap_sol_expected_sl_low_top
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_sol_expected_sl_up_t
+			divide = te_jmap_sol_expected_sl_up_top
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else = {
+		value = 0.5
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+te_jmap_sol_expected_factor_lower = {
+	value = te_jmap_sol_expected_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_sol_expected_factor_upper = {
+	value = te_jmap_sol_expected_factor
+	multiply = 2
+	subtract = 1
+	min = 0
+	max = 1
+}
+
+# Literacy, the state's people's, 0-1, live.
+# Fitted to the world; before the first measure, 0 to 1.
+te_jmap_literacy_input = {
+	value = literacy_rate
+}
+te_jmap_literacy_input_neg = {
+	value = te_jmap_literacy_input
+	multiply = -1
+}
+te_jmap_literacy_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_literacy_lo }
+		value = global_var:te_jmap_rng_literacy_lo
+	}
+}
+te_jmap_literacy_hi = {
+	value = 1
+	if = {
+		limit = { has_global_variable = te_jmap_rng_literacy_hi }
+		value = global_var:te_jmap_rng_literacy_hi
+	}
+	min = te_jmap_literacy_hi_floor
+}
+te_jmap_literacy_hi_floor = {
+	value = te_jmap_literacy_lo
+	add = 0.1
+}
+te_jmap_literacy_span = {
+	value = te_jmap_literacy_hi
+	subtract = te_jmap_literacy_lo
+}
+te_jmap_literacy_d0 = {
+	value = te_jmap_literacy_span
+	multiply = 1
+}
+te_jmap_literacy_lg_min = {
+	value = te_jmap_literacy_hi
+	divide = 64
+}
+te_jmap_literacy_lg_r = {
+	value = literacy_rate
+	multiply = 64
+	divide = te_jmap_literacy_hi
+	if = {
+		limit = { te_jmap_literacy_lo > te_jmap_literacy_lg_min }
+		value = literacy_rate
+		divide = te_jmap_literacy_lo
+	}
+}
+te_jmap_literacy_lg_t = {
+	if = {
+		limit = { te_jmap_literacy_lg_r < 2 }
+		value = te_jmap_literacy_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 4 }
+		value = te_jmap_literacy_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 8 }
+		value = te_jmap_literacy_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 16 }
+		value = te_jmap_literacy_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 32 }
+		value = te_jmap_literacy_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 64 }
+		value = te_jmap_literacy_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 128 }
+		value = te_jmap_literacy_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 256 }
+		value = te_jmap_literacy_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 512 }
+		value = te_jmap_literacy_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 1024 }
+		value = te_jmap_literacy_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 2048 }
+		value = te_jmap_literacy_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 4096 }
+		value = te_jmap_literacy_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 8192 }
+		value = te_jmap_literacy_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 16384 }
+		value = te_jmap_literacy_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 32768 }
+		value = te_jmap_literacy_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 65536 }
+		value = te_jmap_literacy_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 131072 }
+		value = te_jmap_literacy_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 262144 }
+		value = te_jmap_literacy_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 524288 }
+		value = te_jmap_literacy_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_r < 1048576 }
+		value = te_jmap_literacy_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_literacy_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_literacy_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_literacy_lo > te_jmap_literacy_lg_min }
+		value = te_jmap_literacy_hi
+		divide = te_jmap_literacy_lo
+	}
+}
+te_jmap_literacy_lg_top = {
+	if = {
+		limit = { te_jmap_literacy_lg_span_r < 2 }
+		value = te_jmap_literacy_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 4 }
+		value = te_jmap_literacy_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 8 }
+		value = te_jmap_literacy_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 16 }
+		value = te_jmap_literacy_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 32 }
+		value = te_jmap_literacy_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 64 }
+		value = te_jmap_literacy_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 128 }
+		value = te_jmap_literacy_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 256 }
+		value = te_jmap_literacy_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 512 }
+		value = te_jmap_literacy_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 1024 }
+		value = te_jmap_literacy_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 2048 }
+		value = te_jmap_literacy_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 4096 }
+		value = te_jmap_literacy_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 8192 }
+		value = te_jmap_literacy_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 16384 }
+		value = te_jmap_literacy_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 32768 }
+		value = te_jmap_literacy_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 65536 }
+		value = te_jmap_literacy_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 131072 }
+		value = te_jmap_literacy_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 262144 }
+		value = te_jmap_literacy_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 524288 }
+		value = te_jmap_literacy_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_literacy_lg_span_r < 1048576 }
+		value = te_jmap_literacy_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_literacy_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_literacy_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		value = literacy_rate subtract = te_jmap_literacy_lo divide = te_jmap_literacy_d0
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = literacy_rate
+		subtract = te_jmap_literacy_lo
+		divide = te_jmap_literacy_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_literacy_lg_t
+		divide = te_jmap_literacy_lg_top
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Unemployment, the share of the state's workforce without work: two-thirds of the color by a third of the world's range.
+# Fitted to the world; before the first measure, 0 to 0.6.
+te_jmap_unemp_input = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_unemp }
+		value = var:te_jmap_unemp
+	}
+}
+te_jmap_unemp_input_neg = {
+	value = te_jmap_unemp_input
+	multiply = -1
+}
+te_jmap_unemp_lo = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unemp_lo }
+		value = global_var:te_jmap_rng_unemp_lo
+	}
+}
+te_jmap_unemp_hi = {
+	value = 0.6
+	if = {
+		limit = { has_global_variable = te_jmap_rng_unemp_hi }
+		value = global_var:te_jmap_rng_unemp_hi
+	}
+	min = te_jmap_unemp_hi_floor
+}
+te_jmap_unemp_hi_floor = {
+	value = te_jmap_unemp_lo
+	add = 0.05
+}
+te_jmap_unemp_span = {
+	value = te_jmap_unemp_hi
+	subtract = te_jmap_unemp_lo
+}
+te_jmap_unemp_k1 = {
+	value = te_jmap_unemp_span
+	multiply = 0.33333
+	add = te_jmap_unemp_lo
+}
+te_jmap_unemp_d0 = {
+	value = te_jmap_unemp_span
+	multiply = 0.5
+}
+te_jmap_unemp_d1 = {
+	value = te_jmap_unemp_span
+	multiply = 2
+}
+te_jmap_unemp_lg_min = {
+	value = te_jmap_unemp_hi
+	divide = 64
+}
+te_jmap_unemp_lg_r = {
+	value = var:te_jmap_unemp
+	multiply = 64
+	divide = te_jmap_unemp_hi
+	if = {
+		limit = { te_jmap_unemp_lo > te_jmap_unemp_lg_min }
+		value = var:te_jmap_unemp
+		divide = te_jmap_unemp_lo
+	}
+}
+te_jmap_unemp_lg_t = {
+	if = {
+		limit = { te_jmap_unemp_lg_r < 2 }
+		value = te_jmap_unemp_lg_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 4 }
+		value = te_jmap_unemp_lg_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 8 }
+		value = te_jmap_unemp_lg_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 16 }
+		value = te_jmap_unemp_lg_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 32 }
+		value = te_jmap_unemp_lg_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 64 }
+		value = te_jmap_unemp_lg_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 128 }
+		value = te_jmap_unemp_lg_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 256 }
+		value = te_jmap_unemp_lg_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 512 }
+		value = te_jmap_unemp_lg_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 1024 }
+		value = te_jmap_unemp_lg_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 2048 }
+		value = te_jmap_unemp_lg_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 4096 }
+		value = te_jmap_unemp_lg_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 8192 }
+		value = te_jmap_unemp_lg_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 16384 }
+		value = te_jmap_unemp_lg_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 32768 }
+		value = te_jmap_unemp_lg_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 65536 }
+		value = te_jmap_unemp_lg_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 131072 }
+		value = te_jmap_unemp_lg_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 262144 }
+		value = te_jmap_unemp_lg_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 524288 }
+		value = te_jmap_unemp_lg_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_r < 1048576 }
+		value = te_jmap_unemp_lg_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_unemp_lg_r divide = 1048576 add = 19
+	}
+}
+te_jmap_unemp_lg_span_r = {
+	value = 64
+	if = {
+		limit = { te_jmap_unemp_lo > te_jmap_unemp_lg_min }
+		value = te_jmap_unemp_hi
+		divide = te_jmap_unemp_lo
+	}
+}
+te_jmap_unemp_lg_top = {
+	if = {
+		limit = { te_jmap_unemp_lg_span_r < 2 }
+		value = te_jmap_unemp_lg_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 4 }
+		value = te_jmap_unemp_lg_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 8 }
+		value = te_jmap_unemp_lg_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 16 }
+		value = te_jmap_unemp_lg_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 32 }
+		value = te_jmap_unemp_lg_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 64 }
+		value = te_jmap_unemp_lg_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 128 }
+		value = te_jmap_unemp_lg_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 256 }
+		value = te_jmap_unemp_lg_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 512 }
+		value = te_jmap_unemp_lg_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 1024 }
+		value = te_jmap_unemp_lg_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 2048 }
+		value = te_jmap_unemp_lg_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 4096 }
+		value = te_jmap_unemp_lg_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 8192 }
+		value = te_jmap_unemp_lg_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 16384 }
+		value = te_jmap_unemp_lg_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 32768 }
+		value = te_jmap_unemp_lg_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 65536 }
+		value = te_jmap_unemp_lg_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 131072 }
+		value = te_jmap_unemp_lg_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 262144 }
+		value = te_jmap_unemp_lg_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 524288 }
+		value = te_jmap_unemp_lg_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_unemp_lg_span_r < 1048576 }
+		value = te_jmap_unemp_lg_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_unemp_lg_span_r divide = 1048576 add = 19
+	}
+	min = 0.001
+}
+te_jmap_unemp_factor = {
+	value = 0
+	if = {
+		limit = { has_variable = te_jmap_unemp }
+		if = {
+			limit = { te_jmap_scale = 0 }
+			if = {
+				limit = { var:te_jmap_unemp < te_jmap_unemp_k1 }
+				value = var:te_jmap_unemp subtract = te_jmap_unemp_lo divide = te_jmap_unemp_d0
+			}
+			else = {
+				value = var:te_jmap_unemp subtract = te_jmap_unemp_k1 divide = te_jmap_unemp_d1 add = 0.66667
+			}
+		}
+		else_if = {
+			limit = { te_jmap_scale = 1 }
+			value = var:te_jmap_unemp
+			subtract = te_jmap_unemp_lo
+			divide = te_jmap_unemp_span
+		}
+		else_if = {
+			limit = { te_jmap_scale = 2 }
+			value = te_jmap_unemp_lg_t
+			divide = te_jmap_unemp_lg_top
+		}
+		else = {
+			value = 0
+			if = {
+				limit = { has_variable = te_jmap_rank }
+				value = var:te_jmap_rank
+			}
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Population, the state's people: the same share of the color for each doubling from the world's low (at least 100 people) to its high.
+# A doubling at a time, fitted to the world; before the first measure, 16000 to 4096000.
+te_jmap_people_input = {
+	value = state_population
+}
+te_jmap_people_input_neg = {
+	value = te_jmap_people_input
+	multiply = -1
+}
+te_jmap_people_lo = {
+	value = 16000
+	if = {
+		limit = { has_global_variable = te_jmap_rng_people_lo }
+		value = global_var:te_jmap_rng_people_lo
+	}
+	min = 100
+}
+te_jmap_people_hi = {
+	value = 4096000
+	if = {
+		limit = { has_global_variable = te_jmap_rng_people_hi }
+		value = global_var:te_jmap_rng_people_hi
+	}
+	min = te_jmap_people_hi_floor
+}
+te_jmap_people_hi_floor = {
+	value = te_jmap_people_lo
+	multiply = 4
+}
+te_jmap_people_ratio = {
+	value = state_population
+	divide = te_jmap_people_lo
+}
+te_jmap_people_log = {
+	if = {
+		limit = { te_jmap_people_ratio < 2 }
+		value = te_jmap_people_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 4 }
+		value = te_jmap_people_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 8 }
+		value = te_jmap_people_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 16 }
+		value = te_jmap_people_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 32 }
+		value = te_jmap_people_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 64 }
+		value = te_jmap_people_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 128 }
+		value = te_jmap_people_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 256 }
+		value = te_jmap_people_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 512 }
+		value = te_jmap_people_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 1024 }
+		value = te_jmap_people_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 2048 }
+		value = te_jmap_people_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 4096 }
+		value = te_jmap_people_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 8192 }
+		value = te_jmap_people_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 16384 }
+		value = te_jmap_people_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 32768 }
+		value = te_jmap_people_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 65536 }
+		value = te_jmap_people_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 131072 }
+		value = te_jmap_people_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 262144 }
+		value = te_jmap_people_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 524288 }
+		value = te_jmap_people_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_people_ratio < 1048576 }
+		value = te_jmap_people_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_people_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_people_span_ratio = {
+	value = te_jmap_people_hi
+	divide = te_jmap_people_lo
+}
+te_jmap_people_log_span = {
+	if = {
+		limit = { te_jmap_people_span_ratio < 2 }
+		value = te_jmap_people_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 4 }
+		value = te_jmap_people_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 8 }
+		value = te_jmap_people_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 16 }
+		value = te_jmap_people_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 32 }
+		value = te_jmap_people_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 64 }
+		value = te_jmap_people_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 128 }
+		value = te_jmap_people_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 256 }
+		value = te_jmap_people_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 512 }
+		value = te_jmap_people_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 1024 }
+		value = te_jmap_people_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 2048 }
+		value = te_jmap_people_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 4096 }
+		value = te_jmap_people_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 8192 }
+		value = te_jmap_people_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 16384 }
+		value = te_jmap_people_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 32768 }
+		value = te_jmap_people_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 65536 }
+		value = te_jmap_people_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 131072 }
+		value = te_jmap_people_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 262144 }
+		value = te_jmap_people_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 524288 }
+		value = te_jmap_people_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_people_span_ratio < 1048576 }
+		value = te_jmap_people_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_people_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_people_span = {
+	value = te_jmap_people_hi
+	subtract = te_jmap_people_lo
+}
+te_jmap_people_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		value = te_jmap_people_log
+		divide = te_jmap_people_log_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = state_population
+		subtract = te_jmap_people_lo
+		divide = te_jmap_people_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_people_log
+		divide = te_jmap_people_log_span
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# GDP, the state's yearly GDP in pounds: the same share of the color for each doubling from the world's low (at least 1) to its high.
+# A doubling at a time, fitted to the world; before the first measure, 8000 to 8192000.
+te_jmap_gdp_input = {
+	value = te_jmap_gdp_value
+}
+te_jmap_gdp_input_neg = {
+	value = te_jmap_gdp_input
+	multiply = -1
+}
+te_jmap_gdp_lo = {
+	value = 8000
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gdp_lo }
+		value = global_var:te_jmap_rng_gdp_lo
+	}
+	min = 1
+}
+te_jmap_gdp_hi = {
+	value = 8192000
+	if = {
+		limit = { has_global_variable = te_jmap_rng_gdp_hi }
+		value = global_var:te_jmap_rng_gdp_hi
+	}
+	min = te_jmap_gdp_hi_floor
+}
+te_jmap_gdp_hi_floor = {
+	value = te_jmap_gdp_lo
+	multiply = 4
+}
+te_jmap_gdp_ratio = {
+	value = te_jmap_gdp_value
+	divide = te_jmap_gdp_lo
+}
+te_jmap_gdp_log = {
+	if = {
+		limit = { te_jmap_gdp_ratio < 2 }
+		value = te_jmap_gdp_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 4 }
+		value = te_jmap_gdp_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 8 }
+		value = te_jmap_gdp_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 16 }
+		value = te_jmap_gdp_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 32 }
+		value = te_jmap_gdp_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 64 }
+		value = te_jmap_gdp_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 128 }
+		value = te_jmap_gdp_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 256 }
+		value = te_jmap_gdp_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 512 }
+		value = te_jmap_gdp_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 1024 }
+		value = te_jmap_gdp_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 2048 }
+		value = te_jmap_gdp_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 4096 }
+		value = te_jmap_gdp_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 8192 }
+		value = te_jmap_gdp_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 16384 }
+		value = te_jmap_gdp_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 32768 }
+		value = te_jmap_gdp_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 65536 }
+		value = te_jmap_gdp_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 131072 }
+		value = te_jmap_gdp_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 262144 }
+		value = te_jmap_gdp_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 524288 }
+		value = te_jmap_gdp_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_gdp_ratio < 1048576 }
+		value = te_jmap_gdp_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_gdp_ratio divide = 1048576 add = 19
+	}
+}
+te_jmap_gdp_span_ratio = {
+	value = te_jmap_gdp_hi
+	divide = te_jmap_gdp_lo
+}
+te_jmap_gdp_log_span = {
+	if = {
+		limit = { te_jmap_gdp_span_ratio < 2 }
+		value = te_jmap_gdp_span_ratio subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 4 }
+		value = te_jmap_gdp_span_ratio divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 8 }
+		value = te_jmap_gdp_span_ratio divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 16 }
+		value = te_jmap_gdp_span_ratio divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 32 }
+		value = te_jmap_gdp_span_ratio divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 64 }
+		value = te_jmap_gdp_span_ratio divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 128 }
+		value = te_jmap_gdp_span_ratio divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 256 }
+		value = te_jmap_gdp_span_ratio divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 512 }
+		value = te_jmap_gdp_span_ratio divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 1024 }
+		value = te_jmap_gdp_span_ratio divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 2048 }
+		value = te_jmap_gdp_span_ratio divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 4096 }
+		value = te_jmap_gdp_span_ratio divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 8192 }
+		value = te_jmap_gdp_span_ratio divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 16384 }
+		value = te_jmap_gdp_span_ratio divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 32768 }
+		value = te_jmap_gdp_span_ratio divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 65536 }
+		value = te_jmap_gdp_span_ratio divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 131072 }
+		value = te_jmap_gdp_span_ratio divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 262144 }
+		value = te_jmap_gdp_span_ratio divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 524288 }
+		value = te_jmap_gdp_span_ratio divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_gdp_span_ratio < 1048576 }
+		value = te_jmap_gdp_span_ratio divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_gdp_span_ratio divide = 1048576 add = 19
+	}
+	min = 1
+}
+te_jmap_gdp_span = {
+	value = te_jmap_gdp_hi
+	subtract = te_jmap_gdp_lo
+}
+te_jmap_gdp_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		value = te_jmap_gdp_log
+		divide = te_jmap_gdp_log_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		value = te_jmap_gdp_value
+		subtract = te_jmap_gdp_lo
+		divide = te_jmap_gdp_span
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		value = te_jmap_gdp_log
+		divide = te_jmap_gdp_log_span
+	}
+	else = {
+		value = 0
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# Infrastructure less its usage, live, split at none.
+# Fitted to the world on each side of 0; before the first measure, -30 to 60.
+te_jmap_infra_input = {
+	value = te_jmap_infra_balance
+}
+te_jmap_infra_input_neg = {
+	value = te_jmap_infra_input
+	multiply = -1
+}
+te_jmap_infra_lo = {
+	value = -30
+	if = {
+		limit = { has_global_variable = te_jmap_rng_infra_lo }
+		value = global_var:te_jmap_rng_infra_lo
+	}
+}
+te_jmap_infra_hi = {
+	value = 60
+	if = {
+		limit = { has_global_variable = te_jmap_rng_infra_hi }
+		value = global_var:te_jmap_rng_infra_hi
+	}
+	min = te_jmap_infra_hi_floor
+}
+te_jmap_infra_hi_floor = {
+	value = te_jmap_infra_lo
+	add = 5
+}
+te_jmap_infra_b = {
+	value = te_jmap_infra_hi
+	max = 0
+}
+te_jmap_infra_a = {
+	value = te_jmap_infra_lo
+	min = 0
+}
+te_jmap_infra_span_low = {
+	value = te_jmap_infra_b
+	subtract = te_jmap_infra_lo
+	min = 5
+}
+te_jmap_infra_span_up = {
+	value = te_jmap_infra_hi
+	subtract = te_jmap_infra_a
+	min = 5
+}
+te_jmap_infra_l_d0 = {
+	value = te_jmap_infra_span_low
+	multiply = 2
+}
+te_jmap_infra_u_d0 = {
+	value = te_jmap_infra_span_up
+	multiply = 2
+}
+te_jmap_infra_sl_low_r = {
+	value = te_jmap_infra_b
+	subtract = te_jmap_infra_balance
+	divide = 2.5
+}
+te_jmap_infra_sl_low_t = {
+	if = {
+		limit = { te_jmap_infra_sl_low_r < 2 }
+		value = te_jmap_infra_sl_low_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 4 }
+		value = te_jmap_infra_sl_low_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 8 }
+		value = te_jmap_infra_sl_low_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 16 }
+		value = te_jmap_infra_sl_low_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 32 }
+		value = te_jmap_infra_sl_low_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 64 }
+		value = te_jmap_infra_sl_low_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 128 }
+		value = te_jmap_infra_sl_low_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 256 }
+		value = te_jmap_infra_sl_low_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 512 }
+		value = te_jmap_infra_sl_low_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 1024 }
+		value = te_jmap_infra_sl_low_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 2048 }
+		value = te_jmap_infra_sl_low_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 4096 }
+		value = te_jmap_infra_sl_low_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 8192 }
+		value = te_jmap_infra_sl_low_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 16384 }
+		value = te_jmap_infra_sl_low_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 32768 }
+		value = te_jmap_infra_sl_low_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 65536 }
+		value = te_jmap_infra_sl_low_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 131072 }
+		value = te_jmap_infra_sl_low_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 262144 }
+		value = te_jmap_infra_sl_low_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 524288 }
+		value = te_jmap_infra_sl_low_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_r < 1048576 }
+		value = te_jmap_infra_sl_low_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_infra_sl_low_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_infra_sl_low_span_r = {
+	value = te_jmap_infra_span_low
+	divide = 2.5
+}
+te_jmap_infra_sl_low_top = {
+	if = {
+		limit = { te_jmap_infra_sl_low_span_r < 2 }
+		value = te_jmap_infra_sl_low_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 4 }
+		value = te_jmap_infra_sl_low_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 8 }
+		value = te_jmap_infra_sl_low_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 16 }
+		value = te_jmap_infra_sl_low_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 32 }
+		value = te_jmap_infra_sl_low_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 64 }
+		value = te_jmap_infra_sl_low_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 128 }
+		value = te_jmap_infra_sl_low_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 256 }
+		value = te_jmap_infra_sl_low_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 512 }
+		value = te_jmap_infra_sl_low_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 1024 }
+		value = te_jmap_infra_sl_low_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 2048 }
+		value = te_jmap_infra_sl_low_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 4096 }
+		value = te_jmap_infra_sl_low_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 8192 }
+		value = te_jmap_infra_sl_low_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 16384 }
+		value = te_jmap_infra_sl_low_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 32768 }
+		value = te_jmap_infra_sl_low_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 65536 }
+		value = te_jmap_infra_sl_low_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 131072 }
+		value = te_jmap_infra_sl_low_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 262144 }
+		value = te_jmap_infra_sl_low_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 524288 }
+		value = te_jmap_infra_sl_low_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_low_span_r < 1048576 }
+		value = te_jmap_infra_sl_low_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_infra_sl_low_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_infra_sl_up_r = {
+	value = te_jmap_infra_balance
+	subtract = te_jmap_infra_a
+	divide = 2.5
+}
+te_jmap_infra_sl_up_t = {
+	if = {
+		limit = { te_jmap_infra_sl_up_r < 2 }
+		value = te_jmap_infra_sl_up_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 4 }
+		value = te_jmap_infra_sl_up_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 8 }
+		value = te_jmap_infra_sl_up_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 16 }
+		value = te_jmap_infra_sl_up_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 32 }
+		value = te_jmap_infra_sl_up_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 64 }
+		value = te_jmap_infra_sl_up_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 128 }
+		value = te_jmap_infra_sl_up_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 256 }
+		value = te_jmap_infra_sl_up_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 512 }
+		value = te_jmap_infra_sl_up_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 1024 }
+		value = te_jmap_infra_sl_up_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 2048 }
+		value = te_jmap_infra_sl_up_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 4096 }
+		value = te_jmap_infra_sl_up_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 8192 }
+		value = te_jmap_infra_sl_up_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 16384 }
+		value = te_jmap_infra_sl_up_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 32768 }
+		value = te_jmap_infra_sl_up_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 65536 }
+		value = te_jmap_infra_sl_up_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 131072 }
+		value = te_jmap_infra_sl_up_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 262144 }
+		value = te_jmap_infra_sl_up_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 524288 }
+		value = te_jmap_infra_sl_up_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_r < 1048576 }
+		value = te_jmap_infra_sl_up_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_infra_sl_up_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_infra_sl_up_span_r = {
+	value = te_jmap_infra_span_up
+	divide = 2.5
+}
+te_jmap_infra_sl_up_top = {
+	if = {
+		limit = { te_jmap_infra_sl_up_span_r < 2 }
+		value = te_jmap_infra_sl_up_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 4 }
+		value = te_jmap_infra_sl_up_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 8 }
+		value = te_jmap_infra_sl_up_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 16 }
+		value = te_jmap_infra_sl_up_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 32 }
+		value = te_jmap_infra_sl_up_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 64 }
+		value = te_jmap_infra_sl_up_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 128 }
+		value = te_jmap_infra_sl_up_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 256 }
+		value = te_jmap_infra_sl_up_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 512 }
+		value = te_jmap_infra_sl_up_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 1024 }
+		value = te_jmap_infra_sl_up_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 2048 }
+		value = te_jmap_infra_sl_up_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 4096 }
+		value = te_jmap_infra_sl_up_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 8192 }
+		value = te_jmap_infra_sl_up_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 16384 }
+		value = te_jmap_infra_sl_up_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 32768 }
+		value = te_jmap_infra_sl_up_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 65536 }
+		value = te_jmap_infra_sl_up_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 131072 }
+		value = te_jmap_infra_sl_up_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 262144 }
+		value = te_jmap_infra_sl_up_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 524288 }
+		value = te_jmap_infra_sl_up_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_infra_sl_up_span_r < 1048576 }
+		value = te_jmap_infra_sl_up_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_infra_sl_up_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_infra_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		if = {
+			limit = { te_jmap_infra_balance < 0 }
+			value = te_jmap_infra_balance subtract = te_jmap_infra_b divide = te_jmap_infra_l_d0 add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_infra_balance subtract = te_jmap_infra_a divide = te_jmap_infra_u_d0 add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		if = {
+			limit = { te_jmap_infra_balance < 0 }
+			value = te_jmap_infra_b
+			subtract = te_jmap_infra_balance
+			divide = te_jmap_infra_span_low
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_infra_balance
+			subtract = te_jmap_infra_a
+			divide = te_jmap_infra_span_up
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		if = {
+			limit = { te_jmap_infra_balance < 0 }
+			value = te_jmap_infra_sl_low_t
+			divide = te_jmap_infra_sl_low_top
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_infra_sl_up_t
+			divide = te_jmap_infra_sl_up_top
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else = {
+		value = 0.5
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+te_jmap_infra_factor_lower = {
+	value = te_jmap_infra_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_infra_factor_upper = {
+	value = te_jmap_infra_factor
+	multiply = 2
+	subtract = 1
+	min = 0
+	max = 1
+}
+
+# Loyalists less radicals, each a share of the state's people, live, split at none.
+# Fitted to the world on each side of 0; before the first measure, -0.2 to 0.2.
+te_jmap_loyal_input = {
+	value = te_jmap_loyal_net
+}
+te_jmap_loyal_input_neg = {
+	value = te_jmap_loyal_input
+	multiply = -1
+}
+te_jmap_loyal_lo = {
+	value = -0.2
+	if = {
+		limit = { has_global_variable = te_jmap_rng_loyal_lo }
+		value = global_var:te_jmap_rng_loyal_lo
+	}
+}
+te_jmap_loyal_hi = {
+	value = 0.2
+	if = {
+		limit = { has_global_variable = te_jmap_rng_loyal_hi }
+		value = global_var:te_jmap_rng_loyal_hi
+	}
+	min = te_jmap_loyal_hi_floor
+}
+te_jmap_loyal_hi_floor = {
+	value = te_jmap_loyal_lo
+	add = 0.02
+}
+te_jmap_loyal_b = {
+	value = te_jmap_loyal_hi
+	max = 0
+}
+te_jmap_loyal_a = {
+	value = te_jmap_loyal_lo
+	min = 0
+}
+te_jmap_loyal_span_low = {
+	value = te_jmap_loyal_b
+	subtract = te_jmap_loyal_lo
+	min = 0.02
+}
+te_jmap_loyal_span_up = {
+	value = te_jmap_loyal_hi
+	subtract = te_jmap_loyal_a
+	min = 0.02
+}
+te_jmap_loyal_l_d0 = {
+	value = te_jmap_loyal_span_low
+	multiply = 2
+}
+te_jmap_loyal_u_d0 = {
+	value = te_jmap_loyal_span_up
+	multiply = 2
+}
+te_jmap_loyal_sl_low_r = {
+	value = te_jmap_loyal_b
+	subtract = te_jmap_loyal_net
+	divide = 0.01
+}
+te_jmap_loyal_sl_low_t = {
+	if = {
+		limit = { te_jmap_loyal_sl_low_r < 2 }
+		value = te_jmap_loyal_sl_low_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 4 }
+		value = te_jmap_loyal_sl_low_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 8 }
+		value = te_jmap_loyal_sl_low_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 16 }
+		value = te_jmap_loyal_sl_low_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 32 }
+		value = te_jmap_loyal_sl_low_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 64 }
+		value = te_jmap_loyal_sl_low_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 128 }
+		value = te_jmap_loyal_sl_low_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 256 }
+		value = te_jmap_loyal_sl_low_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 512 }
+		value = te_jmap_loyal_sl_low_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 1024 }
+		value = te_jmap_loyal_sl_low_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 2048 }
+		value = te_jmap_loyal_sl_low_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 4096 }
+		value = te_jmap_loyal_sl_low_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 8192 }
+		value = te_jmap_loyal_sl_low_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 16384 }
+		value = te_jmap_loyal_sl_low_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 32768 }
+		value = te_jmap_loyal_sl_low_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 65536 }
+		value = te_jmap_loyal_sl_low_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 131072 }
+		value = te_jmap_loyal_sl_low_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 262144 }
+		value = te_jmap_loyal_sl_low_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 524288 }
+		value = te_jmap_loyal_sl_low_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_r < 1048576 }
+		value = te_jmap_loyal_sl_low_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_loyal_sl_low_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_loyal_sl_low_span_r = {
+	value = te_jmap_loyal_span_low
+	divide = 0.01
+}
+te_jmap_loyal_sl_low_top = {
+	if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 2 }
+		value = te_jmap_loyal_sl_low_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 4 }
+		value = te_jmap_loyal_sl_low_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 8 }
+		value = te_jmap_loyal_sl_low_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 16 }
+		value = te_jmap_loyal_sl_low_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 32 }
+		value = te_jmap_loyal_sl_low_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 64 }
+		value = te_jmap_loyal_sl_low_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 128 }
+		value = te_jmap_loyal_sl_low_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 256 }
+		value = te_jmap_loyal_sl_low_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 512 }
+		value = te_jmap_loyal_sl_low_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 1024 }
+		value = te_jmap_loyal_sl_low_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 2048 }
+		value = te_jmap_loyal_sl_low_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 4096 }
+		value = te_jmap_loyal_sl_low_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 8192 }
+		value = te_jmap_loyal_sl_low_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 16384 }
+		value = te_jmap_loyal_sl_low_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 32768 }
+		value = te_jmap_loyal_sl_low_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 65536 }
+		value = te_jmap_loyal_sl_low_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 131072 }
+		value = te_jmap_loyal_sl_low_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 262144 }
+		value = te_jmap_loyal_sl_low_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 524288 }
+		value = te_jmap_loyal_sl_low_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_low_span_r < 1048576 }
+		value = te_jmap_loyal_sl_low_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_loyal_sl_low_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_loyal_sl_up_r = {
+	value = te_jmap_loyal_net
+	subtract = te_jmap_loyal_a
+	divide = 0.01
+}
+te_jmap_loyal_sl_up_t = {
+	if = {
+		limit = { te_jmap_loyal_sl_up_r < 2 }
+		value = te_jmap_loyal_sl_up_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 4 }
+		value = te_jmap_loyal_sl_up_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 8 }
+		value = te_jmap_loyal_sl_up_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 16 }
+		value = te_jmap_loyal_sl_up_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 32 }
+		value = te_jmap_loyal_sl_up_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 64 }
+		value = te_jmap_loyal_sl_up_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 128 }
+		value = te_jmap_loyal_sl_up_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 256 }
+		value = te_jmap_loyal_sl_up_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 512 }
+		value = te_jmap_loyal_sl_up_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 1024 }
+		value = te_jmap_loyal_sl_up_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 2048 }
+		value = te_jmap_loyal_sl_up_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 4096 }
+		value = te_jmap_loyal_sl_up_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 8192 }
+		value = te_jmap_loyal_sl_up_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 16384 }
+		value = te_jmap_loyal_sl_up_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 32768 }
+		value = te_jmap_loyal_sl_up_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 65536 }
+		value = te_jmap_loyal_sl_up_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 131072 }
+		value = te_jmap_loyal_sl_up_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 262144 }
+		value = te_jmap_loyal_sl_up_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 524288 }
+		value = te_jmap_loyal_sl_up_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_r < 1048576 }
+		value = te_jmap_loyal_sl_up_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_loyal_sl_up_r divide = 1048576 add = 19
+	}
+	add = 1
+}
+te_jmap_loyal_sl_up_span_r = {
+	value = te_jmap_loyal_span_up
+	divide = 0.01
+}
+te_jmap_loyal_sl_up_top = {
+	if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 2 }
+		value = te_jmap_loyal_sl_up_span_r subtract = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 4 }
+		value = te_jmap_loyal_sl_up_span_r divide = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 8 }
+		value = te_jmap_loyal_sl_up_span_r divide = 4 add = 1
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 16 }
+		value = te_jmap_loyal_sl_up_span_r divide = 8 add = 2
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 32 }
+		value = te_jmap_loyal_sl_up_span_r divide = 16 add = 3
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 64 }
+		value = te_jmap_loyal_sl_up_span_r divide = 32 add = 4
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 128 }
+		value = te_jmap_loyal_sl_up_span_r divide = 64 add = 5
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 256 }
+		value = te_jmap_loyal_sl_up_span_r divide = 128 add = 6
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 512 }
+		value = te_jmap_loyal_sl_up_span_r divide = 256 add = 7
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 1024 }
+		value = te_jmap_loyal_sl_up_span_r divide = 512 add = 8
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 2048 }
+		value = te_jmap_loyal_sl_up_span_r divide = 1024 add = 9
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 4096 }
+		value = te_jmap_loyal_sl_up_span_r divide = 2048 add = 10
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 8192 }
+		value = te_jmap_loyal_sl_up_span_r divide = 4096 add = 11
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 16384 }
+		value = te_jmap_loyal_sl_up_span_r divide = 8192 add = 12
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 32768 }
+		value = te_jmap_loyal_sl_up_span_r divide = 16384 add = 13
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 65536 }
+		value = te_jmap_loyal_sl_up_span_r divide = 32768 add = 14
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 131072 }
+		value = te_jmap_loyal_sl_up_span_r divide = 65536 add = 15
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 262144 }
+		value = te_jmap_loyal_sl_up_span_r divide = 131072 add = 16
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 524288 }
+		value = te_jmap_loyal_sl_up_span_r divide = 262144 add = 17
+	}
+	else_if = {
+		limit = { te_jmap_loyal_sl_up_span_r < 1048576 }
+		value = te_jmap_loyal_sl_up_span_r divide = 524288 add = 18
+	}
+	else = {
+		value = te_jmap_loyal_sl_up_span_r divide = 1048576 add = 19
+	}
+	add = 1
+	min = 1
+}
+te_jmap_loyal_factor = {
+	if = {
+		limit = { te_jmap_scale = 0 }
+		if = {
+			limit = { te_jmap_loyal_net < 0 }
+			value = te_jmap_loyal_net subtract = te_jmap_loyal_b divide = te_jmap_loyal_l_d0 add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_loyal_net subtract = te_jmap_loyal_a divide = te_jmap_loyal_u_d0 add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 1 }
+		if = {
+			limit = { te_jmap_loyal_net < 0 }
+			value = te_jmap_loyal_b
+			subtract = te_jmap_loyal_net
+			divide = te_jmap_loyal_span_low
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_loyal_net
+			subtract = te_jmap_loyal_a
+			divide = te_jmap_loyal_span_up
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else_if = {
+		limit = { te_jmap_scale = 2 }
+		if = {
+			limit = { te_jmap_loyal_net < 0 }
+			value = te_jmap_loyal_sl_low_t
+			divide = te_jmap_loyal_sl_low_top
+			multiply = -0.5
+			add = 0.5
+			max = 0.5
+		}
+		else = {
+			value = te_jmap_loyal_sl_up_t
+			divide = te_jmap_loyal_sl_up_top
+			multiply = 0.5
+			add = 0.5
+			min = 0.5
+		}
+	}
+	else = {
+		value = 0.5
+		if = {
+			limit = { has_variable = te_jmap_rank }
+			value = var:te_jmap_rank
+		}
+	}
+	min = 0
+	max = 1
+}
+te_jmap_loyal_factor_lower = {
+	value = te_jmap_loyal_factor
+	multiply = 2
+	min = 0
+	max = 1
+}
+te_jmap_loyal_factor_upper = {
+	value = te_jmap_loyal_factor
+	multiply = 2
+	subtract = 1
+	min = 0
+	max = 1
+}
+
 # Aristocrats, their people (the yearly walk's): the same share of the color for each doubling from the world's low (at least 10 people) to its high.
 # A doubling at a time, fitted to the world; before the first measure, 250 to 32000.
 te_jmap_class_aristocrats_input = {
@@ -18327,6 +21842,7 @@ te_jmap_pick_fitted = {
 		limit = {
 			OR = {
 				te_jmap_selector = 1
+				te_jmap_selector = 2
 				te_jmap_selector = 3
 				te_jmap_selector = 4
 				te_jmap_selector = 5
@@ -18388,6 +21904,15 @@ te_jmap_pick_fitted = {
 				te_jmap_selector = 71
 				te_jmap_selector = 72
 				te_jmap_selector = 73
+				te_jmap_selector = 74
+				te_jmap_selector = 75
+				te_jmap_selector = 76
+				te_jmap_selector = 77
+				te_jmap_selector = 78
+				te_jmap_selector = 79
+				te_jmap_selector = 80
+				te_jmap_selector = 81
+				te_jmap_selector = 82
 			}
 		}
 		value = 1
@@ -18403,6 +21928,10 @@ te_jmap_pick_ramp = {
 	value = 0
 	if = {
 		limit = { te_jmap_selector = 1 }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 2 }
 		value = 1
 	}
 	else_if = {
@@ -18796,6 +22325,57 @@ te_jmap_pick_ramp = {
 			value = 1
 		}
 	}
+	else_if = {
+		limit = { te_jmap_selector = 74 has_variable = te_dg_sol has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 75 has_variable = te_dg_wealth has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 76 has_variable = te_dg_sol has_variable = te_dg_wealth has_variable = te_dg_walk_pop }
+		if = {
+			limit = { var:te_dg_walk_pop > 0 }
+			value = 2
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 77 }
+		value = 2
+	}
+	else_if = {
+		limit = { te_jmap_selector = 78 has_variable = te_jmap_unemp }
+		value = 1
+	}
+	else_if = {
+		limit = { te_jmap_selector = 79 }
+		if = {
+			limit = { state_population > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 80 }
+		if = {
+			limit = { te_jmap_gdp_value > 0 }
+			value = 1
+		}
+	}
+	else_if = {
+		limit = { te_jmap_selector = 81 }
+		value = 2
+	}
+	else_if = {
+		limit = { te_jmap_selector = 82 }
+		value = 2
+	}
 }
 # The picked map's factor, 0-1, under the Scale option as every factor is (each tree guards its own read).
 te_jmap_pick_factor = {
@@ -18803,6 +22383,10 @@ te_jmap_pick_factor = {
 	if = {
 		limit = { te_jmap_selector = 1 }
 		value = te_jmap_turmoil_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 2 }
+		value = te_jmap_literacy_factor
 	}
 	else_if = {
 		limit = { te_jmap_selector = 3 }
@@ -19047,6 +22631,42 @@ te_jmap_pick_factor = {
 	else_if = {
 		limit = { te_jmap_selector = 73 }
 		value = te_jmap_class_soldiers_share_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 74 }
+		value = te_jmap_sol_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 75 }
+		value = te_jmap_wealth_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 76 }
+		value = te_jmap_sol_wealth_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 77 }
+		value = te_jmap_sol_expected_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 78 }
+		value = te_jmap_unemp_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 79 }
+		value = te_jmap_people_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 80 }
+		value = te_jmap_gdp_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 81 }
+		value = te_jmap_infra_factor
+	}
+	else_if = {
+		limit = { te_jmap_selector = 82 }
+		value = te_jmap_loyal_factor
 	}
 }
 # The factor along each of a shared ramp's 4 lerps: the paint takes the first whose end the factor is

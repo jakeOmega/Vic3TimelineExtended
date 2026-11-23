@@ -74,9 +74,9 @@ class TableTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "a row of"):
             gen.validate()
 
-    def test_selector_2_stays_retired(self):
-        # 2 was literacy: a save holding it shows "Pick a map" (te_journal_map_values.txt)
-        self.assertNotIn(2, [m["sel"] for m in gen.MAPS])
+    def test_selector_2_is_literacy_again(self):
+        # 2 was literacy, retired in the fifth pass and back in the first tier (#1976): a save holding it shows it
+        self.assertEqual([m["key"] for m in gen.MAPS if m["sel"] == 2], ["literacy"])
 
 
 class GatesTest(unittest.TestCase):

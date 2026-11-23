@@ -12,9 +12,19 @@
 # as the maps' viewer (te_jmap_set_selector), for the maps drawn for "your" country. Selector numbers:
 # te_journal_map_values.txt. The options' scripted GUIs are hand-written: te_journal_map_sguis.txt.
 
-# Population: where people live and how their numbers move: the people per km², the yearly walk's urban share and
-# tourism's ranking of the cities; the walk's growth, the census's net migration, and the crowding that cuts a state's
-# migration attraction.
+# Population: where people live and how their numbers move: the people, the people per km² and the yearly walk's urban
+# share; the walk's growth, the census's net migration, and the crowding that cuts a state's migration attraction;
+# tourism's ranking of the cities.
+
+te_jmap_pick_population_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 79 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 79 }
+	}
+}
 
 te_jmap_pick_population_density_sgui = {
 	scope = country
@@ -33,16 +43,6 @@ te_jmap_pick_urban_share_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 15 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 15 }
-	}
-}
-
-te_jmap_pick_city_rank_sgui = {
-	scope = country
-	is_shown = { is_player = yes }
-	ai_is_valid = { always = no }
-	is_valid = { NOT = { te_jmap_selector = 32 } }
-	effect = {
-		te_jmap_set_selector = { SEL = 32 }
 	}
 }
 
@@ -76,6 +76,16 @@ te_jmap_pick_crowding_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 30 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 30 }
+	}
+}
+
+te_jmap_pick_city_rank_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 32 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 32 }
 	}
 }
 
@@ -186,8 +196,59 @@ te_jmap_pick_sex_balance_sgui = {
 	}
 }
 
-# Living Conditions: how long people live, what they die of and what medicine reaches (the census's, hidden while it
-# doesn't run).
+# Living Conditions: how people live: the yearly walk's standard of living and wealth and the one less the other, the
+# standard against the one people expect, and literacy; then how long they live, what they die of and what medicine
+# reaches (the census's, hidden while it doesn't run).
+
+te_jmap_pick_standard_of_living_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 74 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 74 }
+	}
+}
+
+te_jmap_pick_wealth_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 75 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 75 }
+	}
+}
+
+te_jmap_pick_sol_vs_wealth_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 76 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 76 }
+	}
+}
+
+te_jmap_pick_sol_vs_expected_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 77 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 77 }
+	}
+}
+
+te_jmap_pick_literacy_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 2 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 2 }
+	}
+}
 
 te_jmap_pick_life_expectancy_sgui = {
 	scope = country
@@ -635,8 +696,19 @@ te_jmap_pick_class_soldiers_share_sgui = {
 	}
 }
 
-# Economy: wealth (GDP per capita, then the walk's Gini and Dynastic Wealth); who owns the capital and where the
-# companies keep their headquarters; what the owners invest, the trade a state can carry and the power grids.
+# Economy: output and work (GDP, GDP per capita, unemployment); how wealth is spread (the walk's Gini and Dynastic
+# Wealth) and who owns the capital; where the companies keep their headquarters, what the owners invest and the trade
+# a state can carry; its infrastructure to spare and the power grids.
+
+te_jmap_pick_gdp_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 80 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 80 }
+	}
+}
 
 te_jmap_pick_gdp_per_capita_sgui = {
 	scope = country
@@ -645,6 +717,16 @@ te_jmap_pick_gdp_per_capita_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 29 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 29 }
+	}
+}
+
+te_jmap_pick_unemployment_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 78 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 78 }
 	}
 }
 
@@ -708,6 +790,16 @@ te_jmap_pick_trade_capacity_sgui = {
 	}
 }
 
+te_jmap_pick_infrastructure_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 81 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 81 }
+	}
+}
+
 te_jmap_pick_power_grids_sgui = {
 	scope = country
 	is_shown = { is_player = yes }
@@ -718,8 +810,8 @@ te_jmap_pick_power_grids_sgui = {
 	}
 }
 
-# Politics: turmoil; then the political models the world follows, the United Nations and the colonial empires, each
-# while its system's rule is on.
+# Politics: turmoil and the loyalists against the radicals; then the political models the world follows, the United
+# Nations and the colonial empires, each while its system's rule is on.
 
 te_jmap_pick_turmoil_sgui = {
 	scope = country
@@ -728,6 +820,16 @@ te_jmap_pick_turmoil_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 1 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 1 }
+	}
+}
+
+te_jmap_pick_radicals_loyalists_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 82 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 82 }
 	}
 }
 
@@ -919,20 +1021,9 @@ te_jmap_pick_grandeur_sgui = {
 }
 
 # A group whose every map is gated shows its header while any of them is shown (the page's te_jmap_pick_row): Families
-# and Ages, Living Conditions.
+# and Ages.
 
 te_jmap_cat_families_sgui = {
-	scope = country
-	is_shown = {
-		is_player = yes
-		te_demog_cohorts_run = yes
-	}
-	ai_is_valid = { always = no }
-	is_valid = { always = no }
-	effect = { }
-}
-
-te_jmap_cat_living_sgui = {
 	scope = country
 	is_shown = {
 		is_player = yes

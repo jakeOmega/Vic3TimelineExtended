@@ -18,9 +18,10 @@
 # walk's), 45 trade capacity (the state's own, its Trade Center's; 2026-11-11), 46 investment (what the state's owners
 # pay into the Investment Pool, estimated; 2026-11-11), 47 population density (people per km² of land; 2026-11-16);
 # 48-62 each class's people and 63-73 the other eleven classes' shares (#1975: journal_map_classes.py names each
-# class's two); 0 none. 2 was literacy, retired because
-# vanilla's own literacy map mode shows it (a save holding 2 shows the unpainted map and "Pick a map" until the next
-# pick); 6 was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
+# class's two); the first tier's (#1976): 2 literacy (retired in the fifth pass as the twin of vanilla's own lens, back
+# because the Map Room's options are what a vanilla lens lacks), 74 standard of living, 75 wealth, 76 SoL vs wealth,
+# 77 SoL vs expected, 78 unemployment, 79 population, 80 GDP, 81 infrastructure, 82 radicals vs loyalists; 0 none. 6
+# was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
 # Root-free, so the Map Room's state roots and the pick buttons' country roots read the same number.
 te_jmap_selector = {
@@ -582,6 +583,59 @@ te_jmap_density = {
 		limit = { te_jmap_density_area < 1 }
 		value = 0
 	}
+}
+
+# The first tier of the owner's new maps (2026-11-23, #1976): living standards, the economy and politics. Each reads
+# a figure the mod reads elsewhere; the curves are te_journal_map_scales_generated.txt's. Standard of Living (74) and
+# Wealth (75) read the yearly walk's te_dg_sol and te_dg_wealth bare, Literacy (2), Population (79) the engine's
+# literacy_rate and state_population, and Unemployment (78) the figure te_jmap_store_unemp stores.
+
+# Pop scope, in the yearly walk (te_jmap_walk_pop): the pop's wealth times its people, so the state's sum over its
+# people is the mean Wealth maps (te_dg_wealth, te_jmap_walk_store), as te_demog_pop_sol is the walk's SoL.
+te_jmap_pop_wealth = {
+	value = wealth
+	multiply = total_size
+}
+
+# SoL vs Wealth (76): the walk's Standard of Living less its Wealth, what the place adds to living standards or takes
+# from them beyond its people's wealth (pollution, health institutions, laws, ruler traits, principles, events). 0
+# for a state without both.
+te_jmap_sol_wealth = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_sol
+			has_variable = te_dg_wealth
+		}
+		value = var:te_dg_sol
+		subtract = var:te_dg_wealth
+	}
+}
+
+# SoL vs Expected (77): the state's mean standard of living less the one its people expect, live: the gap the engine
+# radicalizes on (vanilla's ideologies compare the two, average_sol < average_expected_sol).
+te_jmap_sol_expected = {
+	value = average_sol
+	subtract = average_expected_sol
+}
+
+# GDP (80): the state's yearly GDP, live (gdp_per_capita's numerator, extra_script_values.txt). A script value, so the
+# range's limit and the trees compare a name.
+te_jmap_gdp_value = {
+	value = gdp
+}
+
+# Infrastructure (81): the state's infrastructure less what its buildings and people use, live, so a shortfall is
+# below none and room to grow above it.
+te_jmap_infra_balance = {
+	value = infrastructure
+	subtract = infrastructure_usage
+}
+
+# Radicals vs Loyalists (82): the state's loyalists' share of its people less its radicals', -1 to 1, live.
+te_jmap_loyal_net = {
+	value = loyalist_fraction
+	subtract = radical_fraction
 }
 
 # ---------------------------------------------------------------------------

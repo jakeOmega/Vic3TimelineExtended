@@ -389,6 +389,62 @@ TABLE = [
          where=["te_jmap_density > 0"], world=rel_doubling(0.03125, 256, 4, 0.01), min_span=4,
          note="Population Density, the state's people per km² of land: the same share of the color for each "
               "doubling from the world's low (at least 0.01) to its high"),
+    # The first tier of the owner's new maps (2026-11-23, #1976): living standards, the economy and politics. Several
+    # mirror a vanilla lens; the Map Room's options (Area above all) are what they add.
+    # Standard of Living and Wealth, the yearly walk's people-weighted means (te_dg_sol, and te_dg_wealth from the Map
+    # Room's own walk call), whatever the Demographics rule.
+    dict(name="sol", input="var:te_dg_sol", guards=["te_dg_sol"], three=False, sel=74,
+         where=["has_variable = te_dg_sol", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
+         world=rel(linear(5, 25)), min_span=2,
+         note="Standard of Living, the state's people's mean at the yearly walk"),
+    dict(name="wealth", input="var:te_dg_wealth", guards=["te_dg_wealth"], three=False, sel=75,
+         where=["has_variable = te_dg_wealth", "has_variable = te_dg_walk_pop", "var:te_dg_walk_pop > 0"],
+         world=rel(linear(5, 25)), min_span=2,
+         note="Wealth, the state's people's mean wealth at the yearly walk"),
+    # The two less each other: what a place adds to living standards, or takes from them, beyond its people's wealth
+    # (pollution, health institutions, laws, ruler traits, principles, events). Small in 1836, growing through the game.
+    dict(name="sol_wealth", input="te_jmap_sol_wealth", guards=[], three=True, sel=76,
+         where=["has_variable = te_dg_sol", "has_variable = te_dg_wealth", "has_variable = te_dg_walk_pop",
+                "var:te_dg_walk_pop > 0"],
+         world=rel_mid(diverging(-5, 0, 5), 0, 1), min_span=1,
+         note="Standard of Living less Wealth, the yearly walk's, split at none"),
+    # The gap the engine radicalizes on, live: the state's mean standard of living less its people's expected one.
+    dict(name="sol_expected", input="te_jmap_sol_expected", guards=[], three=True, sel=77,
+         where=["state_population > 0"], paint=[],     # an empty state paints at none, and is left out of the range
+         world=rel_mid(diverging(-5, 0, 5), 0, 1), min_span=1,
+         note="Standard of Living against the expected one, live (average_sol less average_expected_sol), split at "
+              "none"),
+    # Literacy, live (literacy_rate). Selector 2 again: retired in the fifth pass as vanilla's own lens's twin, back
+    # because a Map Room map takes the area and the other options.
+    dict(name="literacy", input="literacy_rate", guards=[], three=False, sel=2,
+         where=["state_population > 0"], paint=[],     # an empty state paints at its 0, and is left out of the range
+         world=rel(linear(0, 1)), min_span=0.1,
+         note="Literacy, the state's people's, 0-1, live"),
+    # Unemployment, the state's workforce without work (te_state_unemployment_share), stored at a pick and monthly while
+    # picked (te_jmap_store_unemp): a GUI reads state_unemployment_rate as none, so the hover couldn't read it live.
+    dict(name="unemp", input="var:te_jmap_unemp", guards=["te_jmap_unemp"], three=False, sel=78,
+         where=["has_variable = te_jmap_unemp"], world=rel(soft_cap(0, 0.2, 0.6)), min_span=0.05,
+         note="Unemployment, the share of the state's workforce without work: two-thirds of the color by a third of "
+              "the world's range"),
+    # Population and GDP, live, each a doubling at a time: the people and the money run over orders of magnitude.
+    dict(name="people", input="state_population", guards=[], three=False, sel=79,
+         where=["state_population > 0"], world=rel_doubling(16000, 4096000, 4, 100), min_span=4,
+         note="Population, the state's people: the same share of the color for each doubling from the world's low "
+              "(at least 100 people) to its high"),
+    dict(name="gdp", input="te_jmap_gdp_value", guards=[], three=False, sel=80,
+         where=["te_jmap_gdp_value > 0"], world=rel_doubling(8000, 8192000, 4, 1), min_span=4,
+         note="GDP, the state's yearly GDP in pounds: the same share of the color for each doubling from the "
+              "world's low (at least 1) to its high"),
+    # Infrastructure to spare, live: the state's infrastructure less what its buildings and people use.
+    dict(name="infra", input="te_jmap_infra_balance", guards=[], three=True, sel=81,
+         where=["state_population > 0"], paint=[],     # every state paints; an empty one is left out of the range
+         world=rel_mid(diverging(-30, 0, 60), 0, 5), min_span=5,
+         note="Infrastructure less its usage, live, split at none"),
+    # Radicals against loyalists, live: the state's loyalists' share of its people less its radicals'.
+    dict(name="loyal", input="te_jmap_loyal_net", guards=[], three=True, sel=82,
+         where=["state_population > 0"], paint=[],     # an empty state paints at none, and is left out of the range
+         world=rel_mid(diverging(-0.2, 0, 0.2), 0, 0.02), min_span=0.02,
+         note="Loyalists less radicals, each a share of the state's people, live, split at none"),
 ]
 
 
