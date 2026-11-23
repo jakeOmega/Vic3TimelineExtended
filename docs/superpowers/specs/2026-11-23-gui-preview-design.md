@@ -1,6 +1,7 @@
 # GUI preview: see a panel in the running game while designing it
 
-Date: 2026-11-23. Status: design, approved by the owner (2026-11-23).
+Date: 2026-11-23. Status: design, approved by the owner (2026-11-23). Plan:
+`docs/superpowers/plans/2026-11-23-gui-preview.md`.
 
 ## 1. Intent
 
@@ -19,8 +20,8 @@ Goals:
 - One verb shows a named GUI type from the repo's working tree, alone, in the running game, and answers with a
   sharp crop of it at the window's own resolution, plus the lines the game logged about it.
 - An edit in the repo is on screen in seconds, with no deploy and no restart.
-- The same verb can draw every widget's box (layout debugging) and render at another UI scale (does it fit a
-  smaller screen).
+- The same verb can draw every widget's box (layout debugging) and render at another UI scale (a player's
+  larger or smaller UI setting).
 
 Non-goals (this version):
 
@@ -103,7 +104,7 @@ D:\vic3te-data\gui-preview-spike-2026-11-23`) holding a wrapper file. Run folder
 
 ```bash
 python3 -m game_qa gui-show TYPE [--context player|je:KEY|none] [--width N] [--var KEY=VALUE]...
-                                 [--outlines] [--scale S | --screen WxH] [--setup NAME] [--keep]
+                                 [--outlines] [--scale S] [--setup NAME] [--keep]
 python3 -m game_qa gui-hide
 ```
 
@@ -121,7 +122,8 @@ fresh save or in an entered game. It types and clicks only what existing verbs d
    rest of the session. A file synced earlier in the session is kept equal to the repo's. Nothing else is
    synced. The overlay module does the
    writing (as `add_setup` does), never a hand copy.
-2. **Wrapper.** The overlay's `gui/te_qa_preview.gui` is rewritten: a top-level widget `te_qa_preview` holding
+2. **Wrapper.** The overlay's `gui/te_qa_preview.gui` is rewritten. `start` writes an empty one (revision 0)
+   into the overlay, so the game has loaded and watches the file from launch: a top-level widget `te_qa_preview` holding
    the magenta backdrop (§ 3.7) and a centred window (`Window_Background`, `Window_Decoration_Spike`) that
    sizes to its content, with the context's `datacontext`, a header line naming the type and the revision, and
    `TYPE = {}`. Context: `player` (the default) is `[GetPlayer]`, for the types that read a `Country`;
@@ -140,27 +142,31 @@ fresh save or in an entered game. It types and clicks only what existing verbs d
    can show a section opened (`*_open`), a tab picked (`te_systems_window_tab`, `te_ni_tab`, `sr_colony_view`) or
    a chart's range (`te_hist_range`); by default a type shows in its default state. The real panels read the
    same values (`com_open_window` opens the Timeline Extended window), so the verb clears every value it set
-   after the shot, `--keep` or not, and `gui-hide` and `stop` clear any left. The wrapper sets them when it
-   shows (a state's `on_start`, untested: 6).
+   after the shot unless `--keep`, and `gui-hide` clears those kept (`stop` needs nothing: the values are
+   the client's, never saved, and go with the game). The wrapper sets them in a `trigger_on_create = yes`
+   state's `on_start` (`GetVariableSystem.Set`), as vanilla panels do; a second widget in the same file,
+   `te_qa_preview_clear`, clears them the same way when created. Untried live (6).
 3. **Reload confirmed.** The wrapper carries a revision token as an unlocalized `text` (§ 3.6), so its reload
-   logs a line naming the token. The verb waits for that line (synced files are written before the wrapper, so
+   logs a line naming the token. The line comes from parsing the file, not from creating the widget: the
+   test session's first one was logged at load (15:15:20), before any `createwidget`. The verb waits for that line (synced files are written before the wrapper, so
    they reload first), up to a limit, then refuses `not_reloaded` with no shot.
 4. **Recreate.** `gui.clearwidgets`, then `gui.createwidget gui/te_qa_preview.gui te_qa_preview` (§ 3.3: an edit
    to a type does not rebuild an open widget).
 5. **Options on.** `--outlines`: `gui.debug` and `gui.debug.drawall`, tracked by their `Enabled`/`Disabled`
-   answers. `--scale S`: `gui.setscale S`; `--screen WxH` works out the scale that gives the window that many
-   UI units.
+   answers. `--scale S`: `gui.setscale S`, the same number the settings menu stores (`GUI.scale` in the user
+   data's `pdx_settings.json`, 1.5 for the owner, which matches § 3.9's reading).
 6. **Cursor parked.** `click --console` (§ 3.10), which also gives the keyboard back.
 7. **Shot and crop.** A shot at the window's own resolution (the `profiler-roots` path, not the 1600 px one),
    cropped to the non-magenta rectangle around the screen's centre with a small margin, saved in the run folder
-   as `gui_<n>_<TYPE>.png` beside the full shot. `px_per_unit` is the crop's width over the window's.
-8. **Options off.** Outlines and scale are put back, so the next verb sees the game as before.
+   as `gui_<n>_<TYPE>.png` beside the full shot.
+8. **Options off.** Outlines are switched off and the scale is set back to the settings file's value, also
+   when a step in between failed, so the next verb sees the game as before.
 9. **Log.** The `error.log` and `debug.log` lines written since the sync that name a synced file or the wrapper,
    or that are the GUI's known failure lines (`Unlocalized text`, `FetchData failed`, `pdx_data_factory`), each
    once with a count (a failing binding logs every frame).
 
-The reply has `crop`, `screenshot`, `box`, `px_per_unit`, `synced`, `problems` (5.4), `log`, `revision`, and
-`stale_script` (5.5). `--keep` leaves the widget up for a later `gui-hide`; otherwise the verb clears it.
+The reply has `crop`, `crop_size`, `screenshot`, `synced`, `log`, `revision` and `stale_script` (5.5); a
+crop that cannot be made (nothing drawn at the centre) is `crop: null` with `crop_error`, never a refusal. `--keep` leaves the widget up for a later `gui-hide`; otherwise the verb clears it.
 
 ### 5.3 Data for the preview
 
@@ -171,8 +177,10 @@ the header says so instead of showing an empty frame.
 
 ### 5.4 Checks before the sync
 
-The game says nothing about a broken file (§ 3.5), so the verb parses each file it would sync with the repo's
-`paradox_file_parser` and refuses `gui_parse_error` (file, line, what) before copying any. It also refuses
+The game says nothing about a broken file (§ 3.5), so the verb checks the braces of each file it would sync
+with the harness's own check (`overlay`'s, which the setups already use: it knows strings and comments) and
+refuses `gui_parse_error` (file, what) before copying any. The repo's `gui_tree` reads a `.gui` file but
+forgives an unclosed brace, so it is no check. It also refuses
 `unknown_type` when `TYPE` is defined in no `.gui` file of the repo or the installed game, since an unknown type
 draws nothing and logs nothing that we know of.
 
@@ -185,9 +193,8 @@ and whether a `.yml` in the overlay overrides the deployed one, is untested (6).
 
 ## 6. Left to the builder
 
-- **Probe first: how the wrapper sets a `--var` value.** A state's `on_start` (`state = { name = _show on_start
-  = "[GetVariableSystem.Set('k','v')]" }`) was not tried. If no route works without a click, `--var` is dropped
-  and the default state is all a preview shows; say so in the docs.
+- **Check live: the `--var` mechanism** (§ 5.2). If the `trigger_on_create` state does not set the value,
+  `--var` is dropped and the default state is all a preview shows; say so in the docs.
 - How the refusals of 5.2 recognise a journal entry's root (the `widget = { gui = ... name = ... }` lines under
   `common/journal_entries/`) and a popup shell (a type derived from `te_ui_popup`), and which inner types each
   hint names.
@@ -195,9 +202,8 @@ and whether a `.yml` in the overlay overrides the deployed one, is untested (6).
   recreate). If it can, sync changed loc files too and drop them from `stale_script`.
 - The reload wait's limit, and whether the game's `filewatcher.notificationdelay` needs a margin after the
   wrapper's line for files written just before it.
-- The default `--width` for a journal-entry widget (measure the vanilla journal panel's content width).
-- How `--screen WxH` finds the current scale: by measuring a known width in a shot (as § 3.9 did) or from the
-  owner's settings file.
+- The default `--width`: 520, the Tax Code's panel (`te_tax_overview_widget.gui`: "Every row is 480 wide ...
+  inside a 520 panel"), until a live run says the journal's is other.
 - The backdrop colour if magenta turns out to clash with something drawn (the outlines are pink-red, far enough
   from pure magenta in the test).
 - Tests against the fakes, as the harness's other verbs have: the wrapper text, the sync's choice of files, the
@@ -220,9 +226,12 @@ Calls made in writing this up (the owner may overrule any):
 - `--var` exists, and every value it sets is cleared after the shot.
 - The sync takes the files the caller's branch changed, against its merge base with `origin/main`.
 - Script and localization are not synced in this version (5.5).
+- `--screen WxH` moved to the later steps, and the reply's `px_per_unit` dropped: neither had a measured basis.
 
 ## 8. Later steps, not in this version
 
 - The real panel in place (approach B).
 - A journal entry's root widget hosted whole.
 - Hover tooltips, through a cursor verb the owner rules on.
+- `--screen WxH` (how a panel fits another resolution): it needs the engine's link between resolution and UI
+  units measured first, which no run has done.
