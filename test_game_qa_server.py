@@ -394,6 +394,16 @@ class GuiVerbsTest(ServerTestCase):
         self.assertEqual(fake.calls[-1], ("gui_show", "te_x", top, "je:je_x", 600, {"a": "b", "c": "d"}, True, 1.25,
                                           "fill", True))
 
+    def test_gui_show_waits_as_long_as_a_verb_and_the_reload(self):
+        seen = {}
+
+        def call(root, verb, body=None, timeout=client.VERB_TIMEOUT_S):
+            seen["timeout"] = timeout
+            return {}, 0
+        with mock.patch.object(client, "call", call):
+            in_process_cli(["gui-show", "te_x"])
+        self.assertGreaterEqual(seen["timeout"], client.VERB_TIMEOUT_S + session.GUI_RELOAD_WAIT_S)
+
     def test_a_var_without_an_equals_sign_is_refused_before_anything_is_sent(self):
         fake, _thread = self.serve()
         reply, code = self.run_cli("gui-show", "te_x", "--var", "ab")

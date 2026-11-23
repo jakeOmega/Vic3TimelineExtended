@@ -82,6 +82,14 @@ class BranchChangesTest(RepoCase):
         self.assertEqual(gui_preview.branch_changes(self.repo).script, [
             "common/script_values/y.txt", "common/scripted_guis/x.txt", "localization/english/z.yml"])
 
+    def test_what_a_gui_leans_on_is_listed_apart_too(self):
+        # a scripted GUI's is_shown/is_valid (triggers), GetCustom text, and a new icon a changed .gui points at
+        for rel in ("common/scripted_triggers/t.txt", "common/customizable_localization/c.txt",
+                    "gfx/interface/icons/i.dds", "gfx/models/m.mesh"):
+            write(self.repo, rel, "changed = {}\n")
+        self.assertEqual(gui_preview.branch_changes(self.repo).script, [
+            "common/customizable_localization/c.txt", "common/scripted_triggers/t.txt", "gfx/interface/icons/i.dds"])
+
     def test_no_upstream_is_not_a_repo(self):
         git(self.repo, "update-ref", "-d", "refs/remotes/origin/main")
         for path in (self.repo, self.plain):

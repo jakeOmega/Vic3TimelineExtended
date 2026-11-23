@@ -20,7 +20,11 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-SCRIPT_DIRS = ("common/scripted_guis/", "common/script_values/", "localization/")
+# What a preview does not sync, though a .gui leans on it: the game reads the deployed versions until a deploy (and
+# the script reload). Scripted GUIs and their triggers (is_shown, is_valid), script values, custom localization
+# (GetCustom), localization, and the interface's textures (a new icon draws nothing).
+SCRIPT_DIRS = ("common/scripted_guis/", "common/scripted_triggers/", "common/script_values/",
+               "common/customizable_localization/", "localization/", "gfx/interface/")
 VANILLA_GUI_DIRS = ("game/gui", "jomini/gui")      # under the install folder; the mod's own gui/ is read after them
 POPUP_SHELL = "te_ui_popup"     # gui/te_widget_library.gui: full-screen, dimmed, gated on te_popup
 POPUP_BODY_BLOCK = "popup_list"

@@ -101,8 +101,8 @@ STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
 ENTER_TIMEOUT_S = 1500.0
 # gui-show builds the installed game's type index on its first call (about 10 s), waits up to
-# session.GUI_RELOAD_WAIT_S for the reload and types a dozen commands.
-GUI_SHOW_TIMEOUT_S = 180.0
+# session.GUI_RELOAD_WAIT_S for the reload and types a dozen commands, any of which may wait as a verb's does.
+GUI_SHOW_TIMEOUT_S = VERB_TIMEOUT_S + session.GUI_RELOAD_WAIT_S + 30.0
 # add-setup waits session.RELOAD_WAIT_S (300 s) for the reload (about 90 s, live), a last look may take a console
 # command's 30 s and LOADED_WAIT_S more, and the debugger is attached again: about 350 s, with room.
 ADD_SETUP_TIMEOUT_S = 600.0
