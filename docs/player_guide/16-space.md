@@ -1160,7 +1160,7 @@ a garrison goes home. AI powers grant a charter, garrison while at war, and let
 a colony go only when they have no Space Program to supply it.
 
 **Revoking a charter.** A chartered colony's page has a Revoke button beside
-Abandon, which asks first and is greyed out while the colony is occupied.
+Abandon, which asks first and is grayed out while the colony is occupied.
 Revoking gives you back the fifth of its output and ends the charter's −0.4 a
 month, at a price:
 
