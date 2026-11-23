@@ -1950,4 +1950,8 @@ Probed on 1.15.2 with `-debug_mode`, in a `game_qa` session on the country-selec
 - **A broken `.gui` file reloads silently**: an unclosed brace logged nothing in `error.log`, `debug.log` or `gui.log`. Parse it yourself (`paradox_file_parser`) before trusting a quiet log.
 - **Each reload logs `Unlocalized text '<text>' at gui/<file>:<line>`** in `error.log` for every `text =` that is not a loc key; `raw_text` takes the same bindings and logs nothing.
 - **`gui.debug`, then `gui.debug.drawall`, outline every widget's box** (each answers `Enabled`; `gui.debug` toggles). `drawall` alone draws nothing.
+- **A `window` does not grow with a `resizeparent` flowcontainer whose content lays out late** (live, 2026-11-23, `gui-show`'s first run): it kept the size the flowcontainer had before an instanced type's autoresized text laid out, and the type drew outside it. A flowcontainer carrying the background itself (`using = Window_Background`) grew round all of its content.
+- **`Window_Background` draws its background 23 by 17 units inside its widget** (`margin = { -23 -17 }` in vanilla's `windows.gui`): pad content by more than that, or it overhangs the background.
+- **A type shown where its bindings have no context logs every frame**: a Country-reading type under a journal entry's datacontext logged `FetchData failed` hundreds of times a second and the window stopped answering for over 10 s.
+- **A `trigger_on_create = yes` state's `on_start = "[GetVariableSystem.Set( 'k', 'v' )]"` works in a created widget**, and a second widget's `Clear` clears it (live, 2026-11-23).
 - **`gui.setscale <s>` rescales the game's UI live** (not the console): at 0.5 a 560-unit window was 258 px on a 3840x2160 screen, and 1.5 restored the owner's scale.
