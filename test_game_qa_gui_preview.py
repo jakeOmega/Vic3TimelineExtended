@@ -91,5 +91,95 @@ class BranchChangesTest(RepoCase):
                 self.assertEqual(caught.exception.code, "not_a_repo")
 
 
+X_GUI = """types x_types {
+	type te_x_section = flowcontainer {}
+	type te_x_table = widget {}
+	type te_x_help_body = widget {}
+	type te_x_wrapper = flowcontainer {}
+	type te_x_inner = widget {}
+	type te_x_help_popup = te_ui_help_popup {
+		blockoverride "popup_title" {
+			text = "x"
+		}
+		blockoverride "popup_list" {
+			vanilla_box = {
+				te_x_help_body = {}
+			}
+		}
+	}
+}
+
+widget = {
+	name = "widget_je_x_status"
+	flowcontainer = {
+		te_x_section = {}
+		textbox = { text = "x" }
+		widget = {
+			te_x_table = {}
+		}
+		te_x_section = {}
+		te_x_wrapper = {
+			te_x_inner = {}
+		}
+	}
+}
+"""
+LIB_GUI = """types lib {
+	type te_ui_popup = widget {}
+	type te_ui_help_popup = te_ui_popup {}
+}
+"""
+JE_X = """je_x = {
+	widget = {
+		gui = "gui/x.gui"
+		name = "widget_je_x_status"
+		container = "custom_widget_container_1"
+	}
+}
+"""
+
+
+class CheckTypeTest(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo, game = Path(tmp.name) / "repo", Path(tmp.name) / "game"
+        write(repo, "gui/x.gui", X_GUI)
+        write(repo, "gui/lib.gui", LIB_GUI)
+        write(repo, "common/journal_entries/je_x.txt", JE_X)
+        write(game, "game/gui/v.gui", "types v {\n\ttype vanilla_only_type = widget {}\n\ttype vanilla_box = widget {}\n}\n")
+        self.idx = gui_preview.gui_index(repo, game)
+
+    def error_of(self, name):
+        with self.assertRaises(gui_preview.PreviewError) as caught:
+            gui_preview.check_type(name, self.idx)
+        return caught.exception
+
+    def test_a_mod_type_passes(self):
+        gui_preview.check_type("te_x_section", self.idx)
+
+    def test_a_vanilla_type_passes(self):
+        gui_preview.check_type("vanilla_only_type", self.idx)
+
+    def test_an_unknown_type_is_refused(self):
+        self.assertEqual(self.error_of("te_nothing").code, "unknown_type")
+
+    def test_a_name_that_cannot_be_typed_is_refused(self):
+        for bad in ("", "a b", "x;y", "x'y", "1abc"):
+            with self.subTest(bad=bad):
+                self.assertEqual(self.error_of(bad).code, "bad_argument")
+
+    def test_a_journal_entrys_root_is_refused_with_its_sections(self):
+        e = self.error_of("widget_je_x_status")
+        self.assertEqual(e.code, "je_root")
+        # an instance's own written content is the root's too (te_je_country = { te_tax_status_sections = {} })
+        self.assertEqual(e.info["hint"], ["te_x_section", "te_x_table", "te_x_wrapper", "te_x_inner"])
+
+    def test_a_popup_shell_is_refused_with_its_body(self):
+        e = self.error_of("te_x_help_popup")
+        self.assertEqual(e.code, "popup_shell")
+        self.assertEqual(e.info["hint"], ["te_x_help_body"])         # the mod's types only, not vanilla_box
+
+
 if __name__ == "__main__":
     unittest.main()
