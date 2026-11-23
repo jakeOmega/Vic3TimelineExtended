@@ -181,5 +181,76 @@ class CheckTypeTest(unittest.TestCase):
         self.assertEqual(e.info["hint"], ["te_x_help_body"])         # the mod's types only, not vanilla_box
 
 
+def code_of(fn, *args):
+    try:
+        fn(*args)
+    except gui_preview.PreviewError as e:
+        return e.code
+    return None
+
+
+class WrapperTest(unittest.TestCase):
+    def test_the_wrapper_holds_the_backdrop_the_window_the_token_and_the_type(self):
+        t = gui_preview.wrapper_text("te_x_section", "player", 520, 7, {})
+        for piece in ('name = "te_qa_preview"', "layer = top", 'texture = "gfx/interface/backgrounds/white.dds"',
+                      "color = { 1 0 1 1 }", "using = Window_Background", 'datacontext = "[GetPlayer]"',
+                      'text = "te_qa_rev_7"', "te_x_section = {}", "minimumsize = { 520 -1 }"):
+            with self.subTest(piece=piece):
+                self.assertIn(piece, t)
+        self.assertEqual(t.count("{"), t.count("}"))              # no brace sits inside a string here
+        self.assertNotIn("    ", t)                               # tabs, never spaces
+        self.assertNotIn("te_qa_preview_clear", t)               # no variables, no clear widget
+
+    def test_contexts(self):
+        self.assertNotIn("datacontext", gui_preview.wrapper_text("t", "none", 520, 1, {}))
+        je = gui_preview.wrapper_text("t", "je:je_x", 520, 1, {})
+        self.assertIn("datacontext = \"[GetPlayerJournalEntry('je_x')]\"", je)
+        self.assertIn('visible = "[JournalEntry.IsActive]"', je)
+        self.assertIn('visible = "[Not( JournalEntry.IsActive )]"', je)
+
+    def test_variables_are_set_on_create_and_cleared_by_the_clear_widget(self):
+        t = gui_preview.wrapper_text("t", "player", 520, 1, {"te_ni_tab": "economy"})
+        self.assertIn("trigger_on_create = yes", t)
+        self.assertIn("on_start = \"[GetVariableSystem.Set( 'te_ni_tab', 'economy' )]\"", t)
+        self.assertIn('name = "te_qa_preview_clear"', t)
+        self.assertIn("on_start = \"[GetVariableSystem.Clear( 'te_ni_tab' )]\"", t)
+
+    def test_the_empty_wrapper_is_revision_0_with_no_type(self):
+        t = gui_preview.wrapper_text(None, "none", 520, 0, {})
+        self.assertIn('text = "te_qa_rev_0"', t)
+        self.assertEqual(t.count("{"), t.count("}"))
+
+    def test_bad_contexts_and_vars(self):
+        for bad in ("je:", "je:a b", "country", "je:x')"):
+            with self.subTest(context=bad):
+                self.assertEqual(code_of(gui_preview.parse_context, bad), "bad_argument")
+        for good in ("player", "none", "je:je_tax_code"):
+            self.assertEqual(gui_preview.parse_context(good), good)
+        for bad in ("k", "=v", "k=", "k=v w", "k='v'", "k=v)"):
+            with self.subTest(var=bad):
+                self.assertEqual(code_of(gui_preview.parse_var, bad), "bad_argument")
+        self.assertEqual(gui_preview.parse_var("te_ni_tab=economy"), ("te_ni_tab", "economy"))
+
+
+class LogTest(unittest.TestCase):
+    TOKEN = ("[15:17:17][pdx_gui_localize.cpp:182]: Unlocalized text 'te_qa_rev_3' at gui/te_qa_preview.gui:31, "
+             "either localize it or use the raw_text property instead of text")
+
+    def test_rev_in_reads_only_the_wrappers_token(self):
+        self.assertEqual(gui_preview.rev_in(self.TOKEN.split("]: ", 1)[1]), 3)
+        self.assertIsNone(gui_preview.rev_in("Unlocalized text 'te_qa_rev_3' at gui/other.gui:1"))
+        self.assertIsNone(gui_preview.rev_in("Unlocalized text 'PREVIEW' at gui/te_qa_preview.gui:1"))
+
+    def test_gui_log_keeps_failures_and_lines_naming_a_synced_file_once_with_counts(self):
+        lines = [self.TOKEN,
+                 "[15:17:18][pdx_gui_data_manager.cpp:233]: FetchData failed for 'X' - gui/x.gui:5",
+                 "[15:17:18][pdx_gui_data_manager.cpp:233]: FetchData failed for 'X' - gui/x.gui:5",
+                 "[15:17:18][jomini_effect_impl.cpp:9]: unrelated",
+                 "[15:17:19][something.cpp:1]: problem in gui/y.gui:2"]
+        self.assertEqual(gui_preview.gui_log(lines, ["gui/y.gui"]), [
+            {"text": "[pdx_gui_data_manager.cpp:233]: FetchData failed for 'X' - gui/x.gui:5", "count": 2},
+            {"text": "[something.cpp:1]: problem in gui/y.gui:2", "count": 1}])
+
+
 if __name__ == "__main__":
     unittest.main()
