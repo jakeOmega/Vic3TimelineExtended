@@ -34,8 +34,9 @@ GEN_TRIGGERS = ROOT / "common/scripted_triggers/te_culture_merges_generated_trig
 GEN_EFFECTS = ROOT / "common/scripted_effects/te_culture_merges_generated_effects.txt"
 JE_FILE = ROOT / "common/journal_entries/te_culture_merges_generated.txt"
 GEN_LOC = ROOT / "localization/english/te_culture_merges_generated_l_english.yml"
+VALUES = ROOT / "common/script_values/te_culture_merge_values.txt"
 
-# The owner's rulings, 2026-11-09: which merge reads which gate, and which optional cultures carry one of their own.
+# The owner's rulings, 2026-11-09 (the schooling gates loosened 2026-11-23): which merge reads which gate, and which optional cultures carry one of their own.
 EXPECTED_MERGE_GATES = {
     "german": "te_cm_gate_formed_germany",
     "italian": "te_cm_gate_formed_italy",
@@ -50,12 +51,12 @@ EXPECTED_MERGE_GATES = {
     "japanese": "te_cm_gate_meiji",
     "american": "te_cm_gate_slavery_settled",
     "anglophone": "te_cm_gate_slavery_banned",
-    "french": "te_cm_gate_public_schools",
-    "chinese": "te_cm_gate_public_schools",
+    "french": "te_cm_gate_schooling",
+    "chinese": "te_cm_gate_schooling",
     "filipino": "te_cm_gate_independent",
     "hindustani": "te_cm_gate_independent",
-    "arab": "te_cm_gate_independent_schools",
-    "east_african": "te_cm_gate_independent_schools",
+    "arab": "te_cm_gate_independent_schooling",
+    "east_african": "te_cm_gate_independent_schooling",
 }
 EXPECTED_PART_GATES = {
     ("american", "afro_american"): "te_cm_gate_slavery_banned",
@@ -67,6 +68,12 @@ MILESTONES = {"te_cm_gate_meiji"} | {g for g in EXPECTED_MERGE_GATES.values() if
 def gate_definitions():
     nodes, _ = parse_text(GATES.read_text(encoding="utf-8-sig"), GATES.name)
     return nodes
+
+
+def script_value(name):
+    """A plain number from te_culture_merge_values.txt."""
+    match = re.search(r"^%s = ([0-9.]+)\s*$" % re.escape(name), VALUES.read_text(encoding="utf-8-sig"), re.M)
+    return float(match.group(1))
 
 
 def loc():
@@ -81,13 +88,15 @@ def loc():
 class Country:
     """What the gate triggers read of one country."""
 
-    def __init__(self, tag="USA", laws=(), entries=(), variables=(), subject=False):
+    def __init__(self, tag="USA", laws=(), entries=(), variables=(), subject=False, literacy=0.0):
         self.tag, self.laws, self.entries, self.variables, self.subject = tag, set(laws), set(entries), set(variables), subject
+        self.literacy = literacy
 
 
 def evaluate(nodes, country):
-    """The gate triggers' forms: OR/AND/NOT/NOR, has_law(_or_variant), has_journal_entry, has_variable, is_subject and
-    c:TAG ?= this (the parser drops the operator). Anything else is a new form this test must learn."""
+    """The gate triggers' forms: OR/AND/NOT/NOR, has_law(_or_variant), has_journal_entry, has_variable, is_subject,
+    c:TAG ?= this and literacy_rate >= <script value> (the parser drops the operator; TriggerFileTest pins each
+    literacy_rate's), and a call of another gate trigger. Anything else is a new form this test must learn."""
     return all(_one(n, country) for n in nodes)
 
 
@@ -111,6 +120,10 @@ def _one(n, country):
         return country.subject == (v == "yes")
     if k.startswith("c:") and v == "this":
         return country.tag == k[2:]
+    if k == "literacy_rate":
+        return country.literacy >= script_value(v)
+    if k.startswith("te_cm_gate_") and v == "yes":
+        return gate(k, country)
     raise KeyError("the gate evaluator does not know %s" % k)
 
 
@@ -140,7 +153,7 @@ class RosterTest(unittest.TestCase):
         self.assertEqual(cfg.validate(cultures), [])
         italian = cfg.merge_by_key("italian")
         others = tuple(m for m in cfg.MERGES if m.key != "italian")
-        bad_core = dataclasses.replace(italian, core=(cfg.Part(("north_italian",), gate=cfg.GATE_PUBLIC_SCHOOLS),) + italian.core[1:])
+        bad_core = dataclasses.replace(italian, core=(cfg.Part(("north_italian",), gate=cfg.GATE_SCHOOLING),) + italian.core[1:])
         bad_part = dataclasses.replace(italian, optional=(cfg.Part(("corsican",), gate=cfg.GATE_FORMED_ITALY),))
         bad_name = dataclasses.replace(italian, gate=dataclasses.replace(cfg.GATE_FORMED_ITALY, trigger="formed_italy"))
         for merge, word in ((bad_core, "core part"), (bad_part, "milestone"), (bad_name, "te_cm_gate_")):
@@ -200,9 +213,32 @@ class TriggerFileTest(unittest.TestCase):
         self.assertTrue(gate("te_cm_gate_formed_andes", Country("FND")))
         self.assertFalse(gate("te_cm_gate_independent", Country("PHI", subject=True)))
         self.assertTrue(gate("te_cm_gate_independent", Country("PHI")))
-        self.assertFalse(gate("te_cm_gate_independent_schools", Country("EGY")))
-        self.assertTrue(gate("te_cm_gate_independent_schools", Country("EGY", laws=["law_public_schools"])))
-        self.assertFalse(gate("te_cm_gate_independent_schools", Country("EGY", laws=["law_public_schools"], subject=True)))
+
+    def test_the_schooling_gate_is_public_schools_or_literacy_under_any_school_law(self):
+        # Owner, 2026-11-23: State Religion disallows Public Schools, so a theocracy's Religious Schools must have a
+        # way in. The bar is vanilla's for the Filipino ethnogenesis (je_filipino_ethnogenesis, literacy_rate >= 0.6).
+        bar = script_value("te_cm_gate_literacy")
+        self.assertEqual(bar, 0.6)
+        cases = [
+            (["law_public_schools"], 0.05, True),  # the law opens it at any literacy
+            (["law_religious_schools", "law_state_religion"], bar - 0.01, False),
+            (["law_religious_schools", "law_state_religion"], bar, True),  # a theocracy that schooled its people
+            (["law_private_schools"], bar, True),
+            (["law_no_schools"], bar - 0.01, False),
+        ]
+        for laws, literacy, expect in cases:
+            self.assertEqual(gate("te_cm_gate_schooling", Country("CHI", laws=laws, literacy=literacy)), expect, (laws, literacy))
+        for name in ("te_cm_gate_schooling", "te_cm_gate_independent_schooling"):
+            self.assertFalse(gate(name, Country("EGY")), name)
+            self.assertTrue(gate(name, Country("EGY", laws=["law_public_schools"])), name)
+            self.assertTrue(gate(name, Country("EGY", laws=["law_religious_schools"], literacy=bar)), name)
+        self.assertFalse(gate("te_cm_gate_independent_schooling", Country("EGY", laws=["law_public_schools"], subject=True)))
+        self.assertTrue(gate("te_cm_gate_schooling", Country("EGY", laws=["law_public_schools"], subject=True)))
+
+    def test_every_literacy_read_is_at_least_a_script_value(self):
+        text = GATES.read_text(encoding="utf-8-sig")
+        reads = re.findall(r"^\s*literacy_rate\s*(\S+)\s*(\S+)", text, re.M)
+        self.assertEqual(reads, [(">=", "te_cm_gate_literacy")])
 
 
 class GeneratedTest(unittest.TestCase):
@@ -260,10 +296,14 @@ class GeneratedTest(unittest.TestCase):
             self.assertIn(part.gate.clause, self.loc["je_te_cm_%s_reason" % key])
 
     def test_the_texts_hold_no_digit_and_no_script(self):
+        # A figure is a script value of te_culture_merge_values.txt, spliced as the other culture merge texts do.
+        figure = r"\[GetPlayer\.MakeScope\.ScriptValue\('(te_cm_\w+)'\)\|%?\d\]"
         gates = {m.gate for m in cfg.MERGES if m.gate} | {p.gate for m in cfg.MERGES for p in m.optional if p.gate}
         for g in gates:
             for text in (g.clause, g.why):
-                plain = re.sub(r"\$[\w.\-]+\$", "", text)
+                for name in re.findall(figure, text):
+                    self.assertGreater(script_value(name), 0, name)
+                plain = re.sub(r"\$[\w.\-]+\$", "", re.sub(figure, "", text))
                 self.assertNotRegex(plain, r"\d|_|=|\bte_cm", text)
 
 
@@ -292,14 +332,14 @@ class ScenarioTest(unittest.TestCase):
         return {a["CULTURE"] for k, a in sim.calls if k == "te_cm_convert_part"}
 
     def test_a_complete_merge_converts_no_late_culture_while_its_standing_gate_fails(self):
-        for gates, expect in (({}, {"catalan"}), ({"te_cm_gate_public_schools": set()}, set())):
+        for gates, expect in (({}, {"catalan"}), ({"te_cm_gate_schooling": set()}, set())):
             sim = french_world(gates=gates)
             sim.globals["te_cm_joined_french_catalan"] = 1
             sim.this = "FRA"
             self.assertEqual(self.converted(sim, "french"), expect, gates)
 
     def test_no_culture_joins_while_a_standing_gate_fails(self):
-        for gates, expect in (({}, True), ({"te_cm_gate_public_schools": set()}, False)):
+        for gates, expect in (({}, True), ({"te_cm_gate_schooling": set()}, False)):
             sim = french_world(gates=gates)
             sim.this = "FRA"
             sim.run(definitions(GEN_EFFECTS)["te_cmg_french_join_ready"].children)

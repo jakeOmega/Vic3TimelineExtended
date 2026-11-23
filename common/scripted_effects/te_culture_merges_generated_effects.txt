@@ -2236,7 +2236,7 @@ te_cmg_census_french_country = {
 # Country scope. Joins every part of the french merge that can join now and isn't waiting on a
 # vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
 # merge's own result has switched into a higher merge's (R33), nor once a higher merge has joined it (R38).
-# Nor while the merge's standing gate (te_cm_gate_public_schools) fails.
+# Nor while the merge's standing gate (te_cm_gate_schooling) fails.
 te_cmg_french_join_ready = {
 	if = {
 		limit = {
@@ -4230,7 +4230,7 @@ te_cmg_census_chinese_country = {
 # Country scope. Joins every part of the chinese merge that can join now and isn't waiting on a
 # vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
 # merge's own result has switched into a higher merge's (R33).
-# Nor while the merge's standing gate (te_cm_gate_public_schools) fails.
+# Nor while the merge's standing gate (te_cm_gate_schooling) fails.
 te_cmg_chinese_join_ready = {
 	if = {
 		limit = {
@@ -4725,7 +4725,7 @@ te_cmg_census_arab_country = {
 # Country scope. Joins every part of the arab merge that can join now and isn't waiting on a
 # vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
 # merge's own result has switched into a higher merge's (R33).
-# Nor while the merge's standing gate (te_cm_gate_independent_schools) fails.
+# Nor while the merge's standing gate (te_cm_gate_independent_schooling) fails.
 te_cmg_arab_join_ready = {
 	if = {
 		limit = {
@@ -8038,7 +8038,7 @@ te_cmg_census_east_african_country = {
 # Country scope. Joins every part of the east_african merge that can join now and isn't waiting on a
 # vanilla entry: when the merge starts, and each census while its starter holds it. Nothing joins once the
 # merge's own result has switched into a higher merge's (R33).
-# Nor while the merge's standing gate (te_cm_gate_independent_schools) fails.
+# Nor while the merge's standing gate (te_cm_gate_independent_schooling) fails.
 te_cmg_east_african_join_ready = {
 	if = {
 		limit = {
