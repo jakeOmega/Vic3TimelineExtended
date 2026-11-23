@@ -62,11 +62,10 @@ annex_subject_peaceful = {
 
 	show_confirmation_box = yes
 
+	# Any power bloc member whose bloc holds Vassalization IV or V, the leader
+	# included: the principle puts the flag in member_modifier.
 	selectable = {
-		is_power_bloc_leader = yes
-		power_bloc ?= {
-			modifier:power_bloc_leader_can_peacefully_annex_bool = yes
-		}
+		modifier:country_can_peacefully_annex_subjects_bool = yes
 	}
 
 	potential = {

@@ -210,15 +210,14 @@ principle_vassalization_4 = {
 		modifier:country_rocketry_pb_principles_bool = yes
 	}
 
-	power_bloc_modifier = {
-		power_bloc_leader_can_peacefully_annex_bool = yes
-	}
-
 	member_modifier = {
 		country_authority_per_subject_add = 20
 		country_subject_income_transfer_mult = 0.25
 
 		country_allow_enacting_decrees_in_subject_bool = yes
+		# Every member, not only the leader, may use Peaceful Integration
+		# (annex_subject_peaceful) on its own subjects.
+		country_can_peacefully_annex_subjects_bool = yes
 	}
 
 	ai_weight = {
@@ -240,15 +239,12 @@ principle_vassalization_5 = {
 		country_radicals_from_conquest_mult = -0.25
 	}
 
-	power_bloc_modifier = {
-		power_bloc_leader_can_peacefully_annex_bool = yes
-	}
-
 	member_modifier = {
 		country_authority_per_subject_add = 30
 		country_subject_income_transfer_mult = 0.25
 
 		country_allow_enacting_decrees_in_subject_bool = yes
+		country_can_peacefully_annex_subjects_bool = yes
 		country_leader_has_law_enactment_success_mult = 0.1
 		# A subject member passes the laws its overlord enacts in it more
 		# easily (1.15; vanilla's Congress Poland carries it on the subject).

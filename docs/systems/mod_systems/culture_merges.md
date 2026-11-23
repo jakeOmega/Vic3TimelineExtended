@@ -111,9 +111,9 @@ Each merge's own historical precondition (owner, 2026-11-09), beyond the gates e
 | Japanese | `japan_restoration_complete` (every outcome of `je_meiji_restoration`), or no Bakufu and no such entry open | milestone |
 | American | not in `je_acw_war`, and Slavery Banned with `je_acw_countdown` closed, or Slave Trade or Debt Slavery (Legacy and Colonial Slavery keep it shut; owner, 2026-11-09) | standing |
 | Anglophone | Slavery Banned | standing |
-| French, Chinese | Public Schools | standing |
+| French, Chinese | Public Schools, or `literacy_rate >= te_cm_gate_literacy` (0.60, the bar of vanilla's `je_filipino_ethnogenesis`) under any school law (owner, 2026-11-23: State Religion disallows Public Schools, so until then a State Religion country, nearly every theocracy among them, could never start these merges; no looser closing value, and the national figure, colonies included) | standing |
 | Hindustani, Filipino | `is_subject = no` | standing |
-| Arab, East African | `is_subject = no` and Public Schools (Arab: in place of an Arabia formation, whose states leave out the Maghreb; owner, 2026-11-09) | standing |
+| Arab, East African | `is_subject = no`, and Public Schools or literacy as for French (Arab: in place of an Arabia formation, whose states leave out the Maghreb; owner, 2026-11-09) | standing |
 | Afro-American (American), Afro-Brazilian (Brazilian) | Slavery Banned, as a part's gate | standing |
 
 No gate, the existing gates already carrying the history: East Slavic (the renaissance waits, Russification), Hungarian (the hold needs Transylvania in Hungary's sphere), Dutch, Finnish, British, Persian, Oghuz Turkic, Nguni, and the four tier-2 merges (components, 50 years, holdings that take a bloc or an empire).
