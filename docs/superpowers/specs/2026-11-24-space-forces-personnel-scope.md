@@ -90,7 +90,7 @@ Read as four requirements, R1 as the owner's answer to call 7 changed it:
 | Attrition, out of supply | `sr_fl_attrition_at` (generated) | 5% of now and full a month |
 | A slot below the minimum strength | `sr_fl_clear_at`, from `sr_fl_month_at` | The slot and the marines aboard are gone |
 | Marines past the carriers' room | the trim at the end of `sr_fl_month_at` | The excess is gone (carriers lost in battle) |
-| A garrison overrun | `sr_site_occupy`, `sr_site_liberate` | `sr_site_marines_<key>` is overwritten with the attacker's landed marines |
+| A garrison overrun | `sr_site_occupy`, `sr_site_liberate` | `sr_site_marines_<key>` is overwritten with the attacker's landed marines; on the Moon and Mars an occupation also removes the holder's marines at its other colonies there, which defended it (`sr_site_lose_shared_marines_<key>`, `space_race.md` *Shared worlds*) |
 | A colony destroyed | `sr_site_destroy` → `sr_site_release_<key>` | Its garrison is removed |
 | Other releases (abandonment, breaking away, a dead holder) | `sr_site_release_<key>` | Not yet traced per path: some may send marines home first |
 | Not losses | `sr_site_end_occupation`, `sr_site_transfer_marines`, Transfer, a slot emptied by a transfer | The marines or hulls move. Nobody dies |
