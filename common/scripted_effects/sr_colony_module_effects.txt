@@ -27,7 +27,7 @@
 # short of it, or up to the queue's first module's price where that is more, so a
 # module queued while the cap was higher is still built (sr_mod_fab_stock_fill_cap;
 # review of #1847); a stock already above them is kept, not cut. Then up
-# to two modules from the head of the queue, each into a free shipment slot, or
+# to sr_mod_fab_per_month (4) modules from the head of the queue, each into a free shipment slot, or
 # for a lunar world into none (the owner, 2026-11-15), and only a head that can
 # go (sr_mq_head_ready, generated): a module for a world with launch windows is
 # built once its window is at most sr_mod_build_lead_months off, so none waits

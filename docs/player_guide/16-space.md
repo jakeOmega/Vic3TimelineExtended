@@ -875,7 +875,8 @@ next module reads "in N mo", counting down to it. Meanwhile the first module
 further down the queue that can launch now, and that your stock covers, is built
 ahead of it, and the modules it passes keep their order. So a module for Mercury
 or the Moon never waits on a Mars window, and the queue needs no reordering for
-it. At two modules a month, about six can be built in time for one window.
+it. At four modules a month, about twelve can be built in time for one window,
+more than the eight shipment slots below can hold.
 
 Eight modules can wait or fly at once, and a slot is free again only when its
 module lands. While all eight are taken the queue waits, and the next module

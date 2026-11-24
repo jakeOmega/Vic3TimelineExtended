@@ -8,14 +8,15 @@
 # ---- Fabrication (design § 5) ------------------------------------------------------
 # Every module's points; at most this many modules a month.
 sr_module_points = { value = 100 }
-sr_mod_fab_per_month = { value = 2 }
+sr_mod_fab_per_month = { value = 4 }
 # A module for a world with launch windows is built only once its window is open
 # or this many months off (sr_mq_head_ready, the generated ready test; the owner,
 # 2026-11-23): until then it waits in the queue, its points in the stock, and a
 # module further down that can go is built ahead of it (sr_mq_promote_ready), so
 # a Mercury module never waits behind a Mars one. A window is three months and a
 # module built in its last month misses it, so at sr_mod_fab_per_month a world
-# takes about (lead + 2) x 2 modules a window: 6 at a lead of 1, 8 at 2.
+# takes about (lead + 2) x 4 modules a window: 12 at a lead of 1, 16 at 2, past
+# the eight shipment slots (sr_ms_<n>_*), which then set the limit.
 sr_mod_build_lead_months = { value = 1 }
 # Country scope. The months until the queue's first module is built for its
 # window (0 once its window is that near, or for a world with none).
