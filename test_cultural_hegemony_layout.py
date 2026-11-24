@@ -416,12 +416,42 @@ class ControlsTest(unittest.TestCase):
                 self.assertIn(f"visible = \"[GetScriptedGui('ch_active_{prog}_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]\"", gui)
 
     def test_the_funding_row_shares_the_programme_rows_columns(self):
+        """2026-11-24: the label in the names' column, then minus, the level and plus across the status and
+        controls columns, so minus starts where the statuses do and plus ends at the buttons' edge."""
         gui = _read(WIDGET)
         row = _type_body(gui, "ch_programme_row")
         progs = _type_body(gui, "te_ch_sec_programmes")
         funding = progs[progs.index("### Funding stepper"):progs.index("ch_programme_row = {")]
         cols = [int(w) for w in re.findall(r"size = \{ (\d+) 2[68] \}", row)] + [112]   # ch_action_button is 112 wide
-        self.assertEqual([int(w) for w in re.findall(r"^\t{4}widget = \{\s*size = \{ (\d+) \d+ \}", funding, re.M)], cols)
+        self.assertEqual(cols, [250, 80, 112])
+        cells = [int(w) for w in re.findall(r"^\t{4}widget = \{\s*size = \{ (\d+) \d+ \}", funding, re.M)]
+        self.assertEqual(cells, [250, 26, 134, 26])
+        self.assertEqual(cells[0], cols[0])
+        self.assertEqual(sum(cells[1:]) + 2 * 6, cols[1] + 6 + cols[2])
+        for body in (row, funding):
+            self.assertIn("spacing = 6", body)
+            self.assertIn("margin = { 6 3 }", body)
+
+    def test_the_funding_stepper_is_the_nuclear_funding_rows_shape(self):
+        """The label at the left, then minus, the level centred in a fixed cell, and plus, each in a slot of
+        its own that stays when its button hides (another country's panel), so nothing moves."""
+        progs = _type_body(_read(WIDGET), "te_ch_sec_programmes")
+        funding = progs[progs.index("### Funding stepper"):progs.index("ch_programme_row = {")]
+        order = [m.group(1) for m in re.finditer(r'(button_icon_minus_action|button_icon_plus_action|'
+                                                 r'text = "je_ch_widget_funding_\w+")', funding)]
+        self.assertEqual(order, ['text = "je_ch_widget_funding_label"', "button_icon_minus_action",
+                                 'text = "je_ch_widget_funding_value"', "button_icon_plus_action"])
+        for button in ("button_icon_minus_action", "button_icon_plus_action"):
+            with self.subTest(button=button):
+                self.assertRegex(funding, rf"widget = \{{\s*size = \{{ 26 28 \}}\s*parentanchor = vcenter\s*"
+                                          rf"widget = \{{\s*size = \{{ 100% 100% \}}\s*using = te_own_country_only\s*"
+                                          rf"{button} = \{{\s*size = \{{ 26 26 \}}\s*parentanchor = center\s*enabled = ")
+                self.assertIn("ScriptedGui.IsValidTooltip(", funding[funding.index(button):][:1200])
+        self.assertRegex(funding, r'widget = \{\s*size = \{ 134 26 \}\s*textbox = \{\s*parentanchor = center\s*'
+                                  r'autoresize = yes\s*max_width = 134\s*elide = right\s*align = nobaseline\s*'
+                                  r'using = ch_fontsize_row\s*text = "je_ch_widget_funding_value"\s*'
+                                  r'tooltip = "je_ch_widget_funding_value_tt"')
+        self.assertIn('text = "je_ch_widget_funding_label"\n\t\t\t\t\t\ttooltip = "ch_policy_funding_step_tt_ni"', funding)
 
 
 class LocTest(unittest.TestCase):
@@ -728,9 +758,9 @@ STATIC_LABELS = (
                                         "je_ch_widget_board_header", "je_ch_widget_models_header",
                                         "je_ch_widget_history_header", "je_ch_how_header")]
     # The board's head (CH-2), in its columns.
-    + [("je_ch_board_head_rank", 26, "row", ()), ("je_ch_board_head_country", 208, "row", ()),
-       ("je_ch_board_head_share", 60, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
-       ("je_ch_board_head_model", 50, "row", ())]
+    + [("je_ch_board_head_rank", 22, "row", ()), ("je_ch_board_head_country", 192, "row", ()),
+       ("je_ch_board_head_share", 58, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
+       ("je_ch_board_head_model", 64, "row", ())]
     # The programs and Hegemony Bonus cells (CH-9): Banking's cell at 234, two
     # to the row, its lines in a 150 column at 16.
     + [("je_ch_ov_prog_label", 150, "overview", ()), ("je_ch_ov_prog_no_ministry", 150, "overview", ())]
@@ -745,7 +775,7 @@ DYNAMIC_LABELS = (
     + [(f"je_ch_ov_model_{m}", 200, "row", ()) for m in MODEL_KEYS]          # the history legend (CH-12)
     + [("je_ch_ov_rank_value", 106, "heading", ("999", "999")),
        ("je_ch_ov_share_label", 156, "overview", ("100.0",)),               # 180 cell less the 20 px arrow and 4 spacing
-       ("je_ch_widget_funding_value", 80, "row", ("10", "10")),
+       ("je_ch_widget_funding_value", 134, "row", ("10", "10")),
        ("je_ch_widget_board_us_ours", 474, "row", ("999", "999")),
        ("je_ch_widget_board_us_theirs", 474, "row", ("999", "999")),
        ("je_ch_widget_bd_art_value", 60, "row", ("150.0",)),
@@ -761,7 +791,7 @@ DYNAMIC_LABELS = (
        ("je_ch_widget_bd_mult_value", 60, "row", ("+999",)),
        ("je_ch_widget_bd_art_mult_value", 60, "row", ("+100",)),
        # The board's rows: rank, share, and the change beside its 16 px arrow.
-       ("ch_board_row_rank", 26, "row", ("10",)), ("ch_board_row_share", 60, "row", ("100.0",)),
+       ("ch_board_row_rank", 22, "row", ("10",)), ("ch_board_row_share", 58, "row", ("100.0",)),
        ("ch_board_row_change", 48, "row", ("+12.3",)),
        # The programs cell's word and funding line.
        ("je_ch_ov_prog_running", 150, "overview", ("4",)), ("je_ch_ov_prog_funding", 150, "overview", ("10", "10")),
@@ -798,14 +828,14 @@ class LabelBudgetTest(unittest.TestCase):
                                  ("ch_bar_subrow", ["348 20", "60 20"]),
                                  ("ch_programme_row", ["250 26", "80 26"]),
                                  ("ch_model_legend_row", ["216 20", "60 20"]),
-                                 ("ch_board_row", ["14 24", "26 24", "28 24", "60 24", "66 24", "50 24"]),
+                                 ("ch_board_row", ["14 24", "22 24", "36 24", "58 24", "66 24", "64 24"]),
                                  ("te_ch_ov_icon_label", ["108 58"]),
                                  ("te_ch_ov_pie", ["180 108"])):
             body = _type_body(gui, type_name)
             for size in sizes:
                 with self.subTest(type=type_name, size=size):
                     self.assertIn(f"size = {{ {size} }}", body)
-        self.assertIn("minimumsize = { 208 -1 }", _type_body(gui, "ch_board_row"))
+        self.assertIn("minimumsize = { 192 -1 }", _type_body(gui, "ch_board_row"))
         self.assertEqual(_read(WIDGET).count("size = { 136 58 }"), 16)   # the model cells and their slot
 
     def test_the_overviews_first_row_fits_its_column(self):
@@ -895,11 +925,15 @@ class BoardTest(unittest.TestCase):
         widths = lambda body: [int(w) for w in re.findall(r"size = \{ (\d+) 24 \}", body)]
         head = [w for w in widths(self.head)]
         head_cells = re.findall(r'blockoverride "cell_size" \{\s*size = \{ (\d+) 24 \}', self.head)
-        self.assertEqual(head_cells, ["26", "208", "66", "50"])
+        self.assertEqual(head_cells, ["22", "192", "58", "66", "64"])
         # the row: marker, rank, flag (and its gated inner widget), share, change, model
-        self.assertEqual(widths(self.row), [14, 26, 28, 28, 60, 66, 50])
+        self.assertEqual(widths(self.row), [14, 22, 36, 36, 58, 66, 64])
         self.assertIn(14, head)
-        self.assertIn(28, head)
+        self.assertIn(36, head)
+        # 2026-11-24: the cells and the rows' 2 between them fill 464 of the 474 column, as before,
+        # so the box keeps its width; the head is the row's cells in the row's order.
+        self.assertEqual(14 + 22 + 36 + 192 + 58 + 66 + 64 + 6 * 2, 464)
+        self.assertEqual([w for w in head], [14, 22, 36, 192, 58, 66, 64])
 
     def test_the_flag_and_name_read_the_stored_capital(self):
         flag = self.row[self.row.index("tiny_flag = {") - 200:self.row.index("tiny_flag = {") + 200]
@@ -1218,7 +1252,7 @@ class PrivateTest(unittest.TestCase):
         # the player's panel keeps them all
         own = self.types["te_ch_sec_programmes"].body
         self.assertEqual(own.count("ScriptedGui.Execute("), 10)
-        self.assertEqual(own.count("using = te_own_country_only"), 5)
+        self.assertEqual(own.count("using = te_own_country_only"), 6)   # four rows' slots, the stepper's two buttons
 
     def test_the_controls_keep_their_slot_for_the_player(self):
         """One 112 x 28 slot per row, under the guard, which one of its two
@@ -1228,9 +1262,11 @@ class PrivateTest(unittest.TestCase):
                            r"parentanchor = vcenter\s*using = te_own_country_only\s*"
                            r"ch_action_button = \{[^{}]*\}\s*ch_action_button = \{[^{}]*\}\s*\}\s*\}", progs)
         self.assertEqual(len(slots), 4)
-        stepper = progs[progs.index('text = "je_ch_widget_funding_value"'):progs.index("button_icon_minus_action")]
-        self.assertRegex(stepper, r"widget = \{\s*size = \{ 112 28 \}\s*parentanchor = vcenter\s*"
-                                  r"using = te_own_country_only\s*flowcontainer = \{")
+        # The stepper's buttons each keep a 26 x 28 slot, whichever shows (2026-11-24).
+        stepper = progs[progs.index('text = "je_ch_widget_funding_label"'):progs.index("ch_programme_row = {")]
+        self.assertEqual(len(re.findall(r"widget = \{\s*size = \{ 26 28 \}\s*parentanchor = vcenter\s*"
+                                        r"widget = \{\s*size = \{ 100% 100% \}\s*using = te_own_country_only\s*"
+                                        r"button_icon_(?:minus|plus)_action = \{", stepper)), 2)
         row = _strip_comments(_type_body(_read(WIDGET), "ch_programme_row"))
         self.assertIn('block "programme_controls" {}', row)
         self.assertNotIn("ch_action_button", row)

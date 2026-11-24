@@ -242,7 +242,9 @@ class RowTest(unittest.TestCase):
     def test_the_rows_are_a_datamodel_over_the_list(self):
         """GW-11: one row type, drawn once per item of the viewer's gw_te_top list,
         its datacontext the item's state; no slot variables, no row blocks."""
-        self.assertTrue(self.row.lstrip().startswith("size = { 480 50 }\n\n\t\tflowcontainer = {"), self.row[:80])
+        # One row of fixed cells (2026-11-24; it was two lines, the name over the figures).
+        self.assertTrue(self.row.lstrip().startswith("direction = horizontal\n\t\tignoreinvisible = yes\n\t\t"
+                                                     'tooltip = "gw_te_row_tt"'), self.row[:80])
         self.assertNotIn('block "', self.row)
         self.assertRegex(self.section, rf'datamodel = "\[{re.escape(LIST)}\]"\s*item = \{{\s*gw_emitter_row = \{{\s*'
                                        r'datacontext = "\[Scope\.GetState\]"\s*\}\s*\}')
@@ -252,22 +254,29 @@ class RowTest(unittest.TestCase):
         # "Our country" is the local player's own row.
         self.assertRegex(self.row, r'visible = "\[State\.GetCountry\.IsLocalPlayer\]"\s*text = "gw_te_ours"')
 
-    def test_the_name_has_the_whole_line(self):
-        self.assertRegex(self.row, r'minimumsize = \{ 480 -1 \}\s*maximumsize = \{ 480 -1 \}\s*autoresize = yes\s*'
-                                   r'elide = right\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
+    def test_the_name_wraps_in_its_cell(self):
+        """A name too long for its cell wraps onto another line rather than end in "..." (style rule 3)."""
+        self.assertRegex(self.row, r'autoresize = yes\s*multiline = yes\s*minimumsize = \{ 190 -1 \}\s*'
+                                   r'maximumsize = \{ 190 -1 \}\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
                                    r'text = "gw_te_row_name"')
 
     def test_cells_fill_the_column_under_their_headings(self):
-        row_line = self.row[self.row.index('text = "gw_te_row_name"') + 1:]
-        widths = [int(w) for w in re.findall(r"^\t{4}widget = \{\s*size = \{ (\d+) \d+ \}", row_line, re.M)]
-        self.assertEqual(widths, [44, 110, 70, 110, 146])   # GW-15: the cells at 17
-        self.assertEqual(sum(widths), 480)
+        # The row's own cells, in order: the flag, the name (a column of the name and "Our country"),
+        # the three figures and the treaty mark.
+        cells = [int(a or b) for a, b in re.findall(r"^\t{2}(?:widget = \{\s*size = \{ (\d+) \d+ \}|"
+                                                    r"flowcontainer = \{[^{}]*?minimumsize = \{ (\d+) -1 \})",
+                                                    self.row, re.M)]
+        self.assertEqual(cells, [34, 190, 86, 50, 96, 24])   # the cells at 17, one row (2026-11-24)
+        self.assertEqual(sum(cells), 480)
         heads = [int(w) for w in re.findall(r"^\t{2}widget = \{\s*size = \{ (\d+) \d+ \}", self.header, re.M)]
-        self.assertEqual(heads, widths)
-        self.assertIn('tiny_flag = {\n\t\t\t\t\t\tparentanchor = left|vcenter\n\t\t\t\t\t\tdatacontext = "[State.GetCountry]"',
-                      row_line)
-        cells = re.findall(r'text = "(gw_te_row_\w+)"', row_line)
-        self.assertEqual(cells, ["gw_te_row_annual", "gw_te_row_share", "gw_te_row_cum"])
+        self.assertEqual(heads, cells)
+        self.assertIn('tiny_flag = {\n\t\t\t\tparentanchor = left|vcenter\n\t\t\t\tdatacontext = "[State.GetCountry]"',
+                      self.row)
+        self.assertLess(self.row.index("tiny_flag = {"), self.row.index('text = "gw_te_row_name"'))
+        figures = self.row[self.row.index('text = "gw_te_row_name"') + 1:]
+        self.assertEqual(re.findall(r'text = "(gw_te_row_\w+)"', figures),
+                         ["gw_te_row_annual", "gw_te_row_share", "gw_te_row_cum"])
+        self.assertLess(self.row.index('text = "gw_te_row_cum"'), self.row.index('tooltip = "gw_te_treaty_tt"'))
         self.assertEqual(re.findall(r'text = "(gw_te_head_\w+)"', self.header),
                          ["gw_te_head_annual", "gw_te_head_share", "gw_te_head_cum"])
 

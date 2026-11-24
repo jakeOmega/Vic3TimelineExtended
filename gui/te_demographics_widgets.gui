@@ -22,7 +22,7 @@
 ###   te_demog_sec_family       open: the Family & Reproductive Policy law and its measures, a row and a button each;
 ###                             the measures other laws allow, dimmed (phase 2 step 3a)
 ###   te_demog_sec_history      open: eight charts by census year, with pips for war, famine and demographic events
-###   te_demog_sec_wealth       open: the Gini beside the strata's incomes (the Census Data window leaves the incomes
+###   te_demog_sec_wealth       open: the Gini, then the strata's incomes (the Census Data window leaves the incomes
 ###                             out), Wealth Concentration as a bar heading for its target, the target's nine terms,
 ###                             the most and least concentrated states
 ###   te_demog_sec_places       open: urban share, primacy, the effective number of cities, the pattern, the largest
@@ -761,16 +761,17 @@ types te_demographics_widgets
 		}
 	}
 
-	### A cell of the Wealth section's first row: a small heading over a figure.
-	### 120 wide for the Gini, 112 for each stratum's income: 120 + 3 x 112 and
-	### three 8 px gaps = 480.
+	### A cell of the Wealth section's strata incomes row: a small heading over a
+	### figure, each centred in the cell. 152 for each stratum's income: 3 x 152
+	### and two 12 px gaps = 480. (The Gini, the row's first cell until
+	### 2026-11-24, is a "Label: value" row above it.)
 	type te_demog_wealth_cell = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		spacing = 1
 		block "cell_size" {
-			minimumsize = { 112 -1 }
-			maximumsize = { 112 -1 }
+			minimumsize = { 152 -1 }
+			maximumsize = { 152 -1 }
 		}
 
 		textbox = {
@@ -2675,15 +2676,19 @@ types te_demographics_widgets
 		}
 	}
 
-	### Wealth: the Gini beside the strata's average incomes (vanilla's own
-	### figures and hovers, in the Population panel only: they read that panel,
-	### so the Census Data window blanks te_demog_wealth_strata_incomes),
-	### Wealth Concentration as a bar heading for its
-	### target, the target's nine terms as pillars, and the most and least
-	### concentrated states. Wealth Concentration's national figures exist once
-	### a state has a score (te_demog_wealth_ready_sgui); until then one line.
-	### The Gini cell has its own gate (te_demog_gini_ready_sgui) and shows a
-	### dash until the country has a Gini.
+	### Wealth: the Gini as a "Label: value" row, on the section's left edge and
+	### value column as Score → Target below it and the state's Wealth's own
+	### Gini row; then the strata's average incomes, a row of three cells
+	### (vanilla's own figures and hovers, in the Population panel only: they
+	### read that panel, so the Census Data window and the Timeline Extended
+	### window blank te_demog_wealth_strata_incomes); Wealth Concentration as a
+	### bar heading for its target, the target's nine terms as pillars, and the
+	### most and least concentrated states. Until 2026-11-24 the Gini was the
+	### first cell of the incomes' row, so where the incomes are blanked it
+	### stood alone, set in from the edge. Wealth Concentration's national
+	### figures exist once a state has a score (te_demog_wealth_ready_sgui);
+	### until then one line. The Gini has its own gate
+	### (te_demog_gini_ready_sgui) and shows a dash until the country has a Gini.
 	type te_demog_sec_wealth = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2719,29 +2724,26 @@ types te_demographics_widgets
 				ignoreinvisible = yes
 				spacing = 3
 
-				flowcontainer = {
-					direction = horizontal
-					ignoreinvisible = yes
-					spacing = 8
-
-					### The dash's note only while the dash shows (2026-10-27 audit, DEM-8), on the value's own gate.
-					te_demog_wealth_cell = {
-						tooltip = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_gini_tt', 'te_demog_gini_pending_tt' )]"
-						blockoverride "cell_size" {
-							minimumsize = { 120 -1 }
-							maximumsize = { 120 -1 }
-						}
-						blockoverride "cell_label" {
-							text = "te_demog_gini_label"
-						}
-						blockoverride "cell_value" {
-							text = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_gini_value', 'te_demog_gini_pending' )]"
-						}
+				### The dash's note only while the dash shows (2026-10-27 audit, DEM-8), on the value's own gate.
+				te_demog_figure_row = {
+					tooltip = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_gini_tt', 'te_demog_gini_pending_tt' )]"
+					blockoverride "row_label" {
+						text = "te_demog_gini_label"
 					}
-					### The strata's incomes are vanilla's figures, which read the Population panel itself (PopsOverviewPanel):
-					### the Census Data window has no such panel in its context, so it blanks this block
-					### (te_demog_browser_sections) and leaves them out, as the state's Wealth does.
-					block "te_demog_wealth_strata_incomes" {
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GetScriptedGui('te_demog_gini_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_gini_value', 'te_demog_gini_pending' )]"
+					}
+				}
+				### The strata's incomes are vanilla's figures, which read the Population panel itself (PopsOverviewPanel):
+				### the Census Data window has no such panel in its context, so it blanks this block
+				### (te_demog_browser_sections) and leaves them out, as the state's Wealth does. The whole row is in the
+				### block, so a host that blanks it leaves no empty row behind.
+				block "te_demog_wealth_strata_incomes" {
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 12
+
 						te_demog_wealth_cell = {
 							tooltip = "POPS_OVERVIEW_AVERAGE_INCOME_LOW_LABEL_TOOLTIP"
 							blockoverride "cell_label" {
