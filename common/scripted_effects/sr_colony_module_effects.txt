@@ -38,6 +38,16 @@
 # fabricates nothing (slice 6 fleets design § 5.1: the Space Program's method
 # still gives its country points from a state it doesn't control); a blockade in
 # orbit doesn't stop fabrication, and the modules wait at Earth.
+#
+# A module for a colony on a world where we have an Orbital Yard (the owner,
+# 2026-11-24: sr_site_yard_builds_<key>, generated) is built there: installed the
+# month it is built, with no shipment slot, launch window or launch, for the same
+# points, and on top of the month's four (sr_mq_head_yard_ready: it doesn't count
+# them). So while launches are barred, or once the four are built, the loop still
+# builds such modules, the first of them moved to the top as above
+# (sr_mq_promote_next, sr_mq_promote_yard), in queue order while the stock covers
+# them. Every pass takes the head out of the queue, so the loop ends within
+# the queue's twenty places.
 sr_mod_month = {
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
@@ -63,20 +73,46 @@ sr_mod_month = {
 			}
 		}
 		set_local_variable = { name = sr_fab_built value = 0 }
-		sr_mq_promote_ready = yes
+		sr_mq_promote_next = yes
 		while = {
 			limit = {
-				local_var:sr_fab_built < sr_mod_fab_per_month
-				NOT = { sr_launch_site_lost = yes }
-				sr_mod_fab_stock_value >= sr_mq_head_cost
-				sr_mq_head_ready = yes
 				has_variable = sr_mq_1_site
 				has_variable = sr_mq_1_type
+				sr_mod_fab_stock_value >= sr_mq_head_cost
+				OR = {
+					sr_mq_head_yard_ready = yes
+					AND = {
+						local_var:sr_fab_built < sr_mod_fab_per_month
+						NOT = { sr_launch_site_lost = yes }
+						sr_mq_head_ready = yes
+					}
+				}
 			}
-			change_local_variable = { name = sr_fab_built add = 1 }
+			if = {
+				limit = { NOT = { sr_mq_head_yard_ready = yes } }
+				change_local_variable = { name = sr_fab_built add = 1 }
+			}
 			sr_mod_fab_head = yes
-			sr_mq_promote_ready = yes
+			sr_mq_promote_next = yes
 		}
+	}
+}
+
+# Country scope, from sr_mod_month before its build loop and after each build:
+# while the month's sr_mod_fab_per_month aren't all built and launches aren't
+# barred, the first module that can go at all moves to the top
+# (sr_mq_promote_ready); otherwise the first built at an Orbital Yard on its
+# world (sr_mq_promote_yard; the owner, 2026-11-24).
+sr_mq_promote_next = {
+	if = {
+		limit = {
+			local_var:sr_fab_built < sr_mod_fab_per_month
+			NOT = { sr_launches_barred = yes }
+		}
+		sr_mq_promote_ready = yes
+	}
+	else = {
+		sr_mq_promote_yard = yes
 	}
 }
 
@@ -85,22 +121,31 @@ sr_mod_month = {
 # INDEX) costs its points (local_var:sr_mq_head_cost_now, the head's price
 # before it left: past the world's slots it costs more, colony management
 # design § 5) and fills a shipment slot; the world counts it on its way at
-# once, so the queue's caps see it the same month.
+# once, so the queue's caps see it the same month. A module for a world with
+# one of our Orbital Yards on it (sr_site_yard_builds_<key>; the owner,
+# 2026-11-24) is built there instead and installed at once, with no slot.
 sr_mod_fab_build = {
-	change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
-	sr_ms_count_add = { VAR = sr_site_ship_$TYPE$_$KEY$ }
-	set_local_variable = { name = sr_ms_new_site value = $INDEX$ }
-	set_local_variable = { name = sr_ms_new_type value = $CODE$ }
-	sr_ms_store_new = yes
+	if = {
+		limit = { sr_site_yard_builds_$KEY$ = yes }
+		sr_mod_fab_install_now = { KEY = $KEY$ CODE = $CODE$ INDEX = $INDEX$ }
+	}
+	else = {
+		change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
+		sr_ms_count_add = { VAR = sr_site_ship_$TYPE$_$KEY$ }
+		set_local_variable = { name = sr_ms_new_site value = $INDEX$ }
+		set_local_variable = { name = sr_ms_new_type value = $CODE$ }
+		sr_ms_store_new = yes
+	}
 }
 
 # Country scope, from sr_mod_fab_head for a lunar world (the owner, 2026-11-15):
 # its module takes no shipment slot. Earth's own Moon is reached the month a
 # module is built (the transit is 0), so while launches aren't barred and the
 # world is neither blockaded nor occupied it is installed at once, through the
-# landing's own install (sr_mod_install_<key>; a full cap loses it, as a landing
-# does). Since the owner's 2026-11-23 rule sr_mod_month builds a lunar head only
-# when these three tests hold (sr_mq_head_ready reads them), so a module for a
+# landing's own install (sr_mod_fab_install_now). Since the owner's 2026-11-23
+# rule sr_mod_month builds a lunar head only when these three tests hold
+# (sr_mq_head_ready reads them), or when an Orbital Yard on the Moon builds it
+# (sr_mq_head_yard_ready, sr_mod_fab_build's first branch), so a module for a
 # blockaded or occupied Moon colony waits in the queue; the slot below is a
 # fallback for any other caller: the module waits there like any other and lands
 # when it would have, lost if the world is still blockaded or occupied then
@@ -112,20 +157,29 @@ sr_mod_fab_build_lunar = {
 			NOT = { has_global_variable = sr_site_blockaded_$KEY$ }
 			NOT = { has_global_variable = sr_site_occupier_$KEY$ }
 		}
-		change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
-		set_local_variable = { name = sr_ms_type_now value = $CODE$ }
-		set_local_variable = { name = sr_ms_installed value = 0 }
-		sr_mod_install_$KEY$ = yes
-		# Lost on a full cap: the console's record, and the log.
-		if = {
-			limit = { local_var:sr_ms_installed = 0 }
-			set_variable = { name = sr_ms_last_lost_site value = $INDEX$ }
-			set_variable = { name = sr_ms_last_lost_type value = $CODE$ }
-			debug_log = "TE_SR_MODULES a module of type $CODE$ for world $INDEX$ was lost on installing (the world's cap full) country=[THIS.GetCountry.GetTagName]"
-		}
+		sr_mod_fab_install_now = { KEY = $KEY$ CODE = $CODE$ INDEX = $INDEX$ }
 	}
 	else = {
 		sr_mod_fab_build = { KEY = $KEY$ TYPE = $TYPE$ CODE = $CODE$ INDEX = $INDEX$ }
+	}
+}
+
+# Country scope: the module of shipment code CODE for the world KEY (index INDEX)
+# is paid for (local_var:sr_mq_head_cost_now) and installed at once through the
+# landing's own install (sr_mod_install_<key>; a full cap loses it, as a landing
+# does), with no shipment slot: a lunar world's (sr_mod_fab_build_lunar) or one
+# built at an Orbital Yard on its world (sr_mod_fab_build).
+sr_mod_fab_install_now = {
+	change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }
+	set_local_variable = { name = sr_ms_type_now value = $CODE$ }
+	set_local_variable = { name = sr_ms_installed value = 0 }
+	sr_mod_install_$KEY$ = yes
+	# Lost on a full cap: the console's record, and the log.
+	if = {
+		limit = { local_var:sr_ms_installed = 0 }
+		set_variable = { name = sr_ms_last_lost_site value = $INDEX$ }
+		set_variable = { name = sr_ms_last_lost_type value = $CODE$ }
+		debug_log = "TE_SR_MODULES a module of type $CODE$ for world $INDEX$ was lost on installing (the world's cap full) country=[THIS.GetCountry.GetTagName]"
 	}
 }
 

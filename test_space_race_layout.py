@@ -1813,7 +1813,20 @@ class QueueNextModuleTest(unittest.TestCase):
         self.assertNotIn("sr_mod_fab_rate", limit)
 
     def test_stopped_only_when_nothing_can_build(self):
-        state = _block(_read(DISPLAY), "sr_disp_mq_next_state")
+        whole = _block(_read(DISPLAY), "sr_disp_mq_next_state")
+        # A module built at an Orbital Yard on its world first (the owner, 2026-11-24):
+        # no slot, window or launch, so only a short stock with nothing adding to it
+        # stops it.
+        yard_at = whole.index("sr_mq_head_yard_ready = yes")
+        rest_at = whole.index("else_if = {", yard_at)
+        yard = whole[yard_at:rest_at]
+        self.assertEqual(re.findall(r"value = (\d)", yard), ["6", "3"])
+        for term in ("sr_mod_fab_stock_value < sr_mq_head_cost", "sr_launch_site_lost = yes",
+                     "NOT = { sr_mod_fab_rate > 0 }"):
+            self.assertIn(term, yard)
+        self.assertNotIn("sr_launches_barred", yard)
+        self.assertNotIn("sr_mq_head_window_months", yard)
+        state = whole[rest_at:]
         lost, barred, no_rate, window, closed, full = (
             state.index("sr_launch_site_lost = yes"), state.index("sr_launches_barred = yes"),
             state.index("NOT = { sr_mod_fab_rate > 0 }"), state.index("sr_mq_head_window_months > 0"),
@@ -1828,7 +1841,7 @@ class QueueNextModuleTest(unittest.TestCase):
         self.assertLess(no_rate, window)
         self.assertLess(window, closed)
         self.assertLess(closed, full)
-        self.assertEqual(re.findall(r"value = (\d)", state), ["0", "1", "3", "5", "3", "4", "5", "2"])
+        self.assertEqual(re.findall(r"value = (\d)", whole), ["0", "1", "6", "3", "3", "5", "3", "4", "5", "2"])
         # Stopped: the stock short of the head's price, with no fabrication.
         self.assertLess(barred, state.index("sr_mod_fab_stock_value < sr_mq_head_cost"))
         self.assertLess(state.index("sr_mod_fab_stock_value < sr_mq_head_cost"), no_rate)
@@ -1852,6 +1865,8 @@ class QueueNextModuleTest(unittest.TestCase):
             self.assertIn(f"'{key}'", row)
         for n in (2, 3, 4, 5):
             self.assertIn(f"ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint){n}' )", row)
+        # A module built at an Orbital Yard reads "in N mo", with its own hover.
+        self.assertIn("ScriptValue('sr_disp_mq_next_state'), '(CFixedPoint)6' ), 'je_space_race_widget_mq_tt_yard'", row)
 
 class TabTest(unittest.TestCase):
     """The colonization status's tabs (UI pass design § 11): a row of four

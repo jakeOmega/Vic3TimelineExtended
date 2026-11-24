@@ -1825,10 +1825,13 @@ class ModulesTest(unittest.TestCase):
         for term in ("NOT = { sr_launches_barred = yes }", "NOT = { has_global_variable = sr_site_blockaded_$KEY$ }",
                      "NOT = { has_global_variable = sr_site_occupier_$KEY$ }"):
             self.assertIn(term, _block(go, "limit"))
-        self.assertIn("change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }", go)
-        self.assertIn("set_local_variable = { name = sr_ms_type_now value = $CODE$ }", go)
-        self.assertLess(go.index("name = sr_ms_installed value = 0"), go.index("sr_mod_install_$KEY$ = yes"))
+        self.assertIn("sr_mod_fab_install_now = { KEY = $KEY$ CODE = $CODE$ INDEX = $INDEX$ }", go)
         self.assertNotIn("sr_ms_store_new", go)
+        now = _block(self.modules[self.modules.index("\nsr_mod_fab_install_now = {"):], "sr_mod_fab_install_now")
+        self.assertIn("change_variable = { name = sr_fab_stock subtract = local_var:sr_mq_head_cost_now }", now)
+        self.assertIn("set_local_variable = { name = sr_ms_type_now value = $CODE$ }", now)
+        self.assertLess(now.index("name = sr_ms_installed value = 0"), now.index("sr_mod_install_$KEY$ = yes"))
+        self.assertNotIn("sr_ms_store_new", now)
         self.assertIn("sr_mod_fab_build = { KEY = $KEY$ TYPE = $TYPE$ CODE = $CODE$ INDEX = $INDEX$ }",
                       build[build.index("else = {"):])
         # The install a landing runs: the world's own blockade and occupation lose it.
@@ -1906,11 +1909,91 @@ class ModulesTest(unittest.TestCase):
         self.assertNotIn("var:sr_mq_1_site", behind)
         for n in range(2, gss.QUEUE_SLOTS + 1):
             self.assertIn(gss.lunar_open_test(f"var:sr_mq_{n}_site"), behind)
-        # Before the first build and after each.
+        # Before the first build and after each, through sr_mq_promote_next: while the
+        # month's four aren't built and launches aren't barred.
         month = _block(self.modules, "sr_mod_month")
-        self.assertLess(month.index("sr_mq_promote_ready = yes"), month.index("while = {"))
+        self.assertLess(month.index("sr_mq_promote_next = yes"), month.index("while = {"))
         loop = _block(month, "while")
-        self.assertLess(loop.index("sr_mod_fab_head = yes"), loop.index("sr_mq_promote_ready = yes"))
+        self.assertLess(loop.index("sr_mod_fab_head = yes"), loop.index("sr_mq_promote_next = yes"))
+        nxt = _block(self.modules, "sr_mq_promote_next")
+        go = nxt[:nxt.index("else = {")]
+        for term in ("local_var:sr_fab_built < sr_mod_fab_per_month", "NOT = { sr_launches_barred = yes }"):
+            self.assertIn(term, _block(go, "limit"))
+        self.assertIn("sr_mq_promote_ready = yes", go)
+        self.assertIn("sr_mq_promote_yard = yes", nxt[nxt.index("else = {"):])
+
+    def test_a_module_for_a_world_with_an_orbital_yard_is_built_there(self):
+        """The owner, 2026-11-24: a module for a colony on a world where we have an
+        Orbital Yard needs no delivery and comes on top of the month's four, for the
+        same points."""
+        mars = [s for s in gss.SITES if gss.world_of(s) == "mars"]
+        self.assertEqual(len(mars), 5)
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                test = _block(self.triggers, f"sr_site_yard_builds_{k}")
+                # The site is ours, neither blockaded nor occupied, and a yard stands
+                # there or at a colony of ours on the same world that serves us.
+                self.assertIn(gss.site_serves(site), test)
+                self.assertIn(f"sr_site_yard_value_{k} >= 1", test)
+                for mate in gss.world_mates(site):
+                    self.assertIn(f"AND = {{ {gss.site_serves(mate)} sr_site_yard_value_{mate.key} >= 1 }}", test)
+                others = [s for s in gss.SITES if s is not site and s not in gss.world_mates(site)]
+                for other in others:
+                    self.assertNotIn(f"sr_site_yard_value_{other.key} ", test)
+        # Jupiter's moons are worlds of their own: Europa's yard builds for Europa alone.
+        self.assertNotIn("sr_site_yard_value_ganymede", _block(self.triggers, "sr_site_yard_builds_europa"))
+        # Ready with no slot and no window, the yard's part first.
+        ready = gss.ready_test("var:sr_mq_3_site", "var:sr_mq_3_type")
+        yard = gss.yard_ready_test("var:sr_mq_3_site", "var:sr_mq_3_type")
+        self.assertTrue(ready.startswith("OR = { " + yard))
+        for site in gss.SITES:
+            self.assertIn(f"AND = {{ var:sr_mq_3_site ?= {site.index} sr_site_yard_builds_{site.key} = yes "
+                          "sr_mod_fab_stock_value >= sr_module_points", yard)
+        self.assertNotIn("sr_ms_has_free_slot", yard)
+        self.assertNotIn("sr_mod_wait_months", yard)
+        head = _block(self.triggers, "sr_mq_head_yard_ready")
+        self.assertEqual(head.strip(), gss.yard_ready_test("var:sr_mq_1_site"))
+        self.assertNotIn("sr_launches_barred", head)
+        # The loop builds a yard head while launches are barred and past the four,
+        # and counts only the others.
+        month = _block(self.modules, "sr_mod_month")
+        loop = _block(month, "while")
+        limit = _block(loop, "limit")
+        gate = _block(limit, "OR")
+        self.assertIn("sr_mq_head_yard_ready = yes", gate)
+        earth = _block(gate, "AND")
+        for term in ("local_var:sr_fab_built < sr_mod_fab_per_month", "NOT = { sr_launch_site_lost = yes }",
+                     "sr_mq_head_ready = yes"):
+            self.assertIn(term, earth)
+            self.assertNotIn(term, gate.replace(earth, ""))
+        self.assertIn("sr_mod_fab_stock_value >= sr_mq_head_cost", limit.replace(gate, ""))
+        count = loop[:loop.index("sr_mod_fab_head = yes")]
+        self.assertRegex(count, r"limit = \{ NOT = \{ sr_mq_head_yard_ready = yes \} \}\s*"
+                                r"change_local_variable = \{ name = sr_fab_built add = 1 \}")
+        # Past the four, or while launches are barred, a yard module further down goes
+        # ahead of a head that isn't one, in queue order and only once the stock covers it.
+        promote = _block(self.effects, "sr_mq_promote_yard")
+        self.assertIn("NOT = { sr_mq_head_yard_ready = yes }", _block(promote, "limit"))
+        moves = re.findall(r"limit = \{ (OR = \{ .*?) \}\s*sr_mq_to_top_(\d+) = yes", promote)
+        self.assertEqual([int(n) for _, n in moves], list(range(2, gss.QUEUE_SLOTS + 1)))
+        for test, n in moves:
+            self.assertEqual(test.strip(), gss.yard_ready_test(f"var:sr_mq_{n}_site", f"var:sr_mq_{n}_type"))
+        # Built there: installed at once, no shipment slot, the same points.
+        build = _block(self.modules, "sr_mod_fab_build")
+        yard_branch = build[:build.index("else = {")]
+        self.assertIn("limit = { sr_site_yard_builds_$KEY$ = yes }", yard_branch)
+        self.assertIn("sr_mod_fab_install_now = { KEY = $KEY$ CODE = $CODE$ INDEX = $INDEX$ }", yard_branch)
+        self.assertNotIn("sr_ms_store_new", yard_branch)
+        self.assertIn("sr_ms_store_new = yes", build[build.index("else = {"):])
+        # Its window never holds it.
+        values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        window = _block(values, "sr_mq_head_window_months")
+        self.assertRegex(window, r"limit = \{ sr_mq_head_yard_ready = yes \}\s*value = 0")
+        # The facility's hover says so.
+        loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
+        tip = re.search(r'^ je_space_race_widget_mod_yard_tt:0 "(.*)"$', loc, re.M).group(1)
+        self.assertIn("no shipment slot, launch window or launch", tip)
 
     def test_past_its_cap_a_habitat_needs_its_price_in_stock(self):
         """No top past the cap (the owner's call 7, colony people design § 4.3):

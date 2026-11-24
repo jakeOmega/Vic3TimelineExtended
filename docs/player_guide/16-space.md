@@ -765,12 +765,12 @@ colonies:
 | Facility | A staffed level gives |
 |---|---|
 | Mining Complex | +50 Extraplanetary Base room at the colony |
-| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month |
+| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month. Modules for your colonies on its world are built at the yard (see below) |
 | Research Station | +2% research speed |
-| Cultural Center | +3% cultural pull, +1% prestige |
+| Cultural Center | +3% cultural pull, +1% prestige, and +1 to the colony's Resort Draw |
 | Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
 | Black Site | +1 intelligence capacity, +3% covert operation efficiency |
-| Training Ground | +4% army experience gain |
+| Training Ground | +4% army experience gain; under Full Colonies, your marines count 5% more, at most +25% (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)) |
 | Nuclear Command Center | +4 nuclear command reliability, at most +12; +2 Command Redundancy against a salvo on the capital, at most +6 |
 | Materials Foundry | +3% advanced materials output |
 | Administration | −0.15 a month to the colony's autonomy, for 25 authority |
@@ -886,12 +886,25 @@ Eight modules can wait or fly at once, and a slot is free again only when its
 module lands. While all eight are taken the queue waits, and the next module
 reads "shipping full"; its hover says when the first can leave and when the
 first lands. A module for the Moon takes no slot: it is installed the month it
-is built. While Earth is blockaded no module is built, and a module for a
+is built. While Earth is blockaded no module is built but those an Orbital Yard
+builds away from the Moon (below), and a module for a
 blockaded or occupied Moon colony waits in the queue until the colony is free;
 the next module reads "on hold".
 A module lands for whoever holds the colony then, and is lost if the site was
 released in the meantime, or its specializations' four levels or a finished
 world's Terraforming leave no room for it.
+
+A module for a colony on a world where you have an Orbital Yard is built at the
+yard instead. It costs the same points, but it is installed the month it is
+built: it takes no shipment slot, waits for no launch window and needs no launch
+from Earth, so a blockade of Earth doesn't hold it, except on the Moon: your
+Moon colonies count as blockaded while Earth is. It also doesn't count toward
+the four a month: once those are built, the first such module in the queue is
+built next, and so on while your stock covers them. The Moon is one world and
+Mars is another, so a yard at any of your colonies there builds for all of them;
+each of Jupiter's moons is a world of its own. The yard must be yours and neither
+blockaded nor occupied, and so must the colony. The next module reads "in N mo"
+as usual, and its hover says it is built at a yard.
 
 Every level past the first needs a crew of 10,000 people (5,000 with Artificial
 General Intelligence), except Habitats, which house the crews. A colony short of
@@ -1053,7 +1066,10 @@ levels that work it, as the grade does for bases:
 | 10 Hygiea, Pluto-Charon, Himalia, Uranus's other moons | −10% to −15% |
 | Proteus, and the Kuiper Belt past Pluto | −25% to −35% |
 
-Your levels fill the best room first, and any past all of it work at −75%. One
+Each staffed level of a colony's Cultural Centers adds 1 to its draw, so
+Valles Marineris with two reads +27%; each site has its own, so the other Mars
+sites don't share it. Your levels fill the best room first, in the order of the
+table above, and any past all of it work at −75%. One
 country modifier, Resort Colony Room, carries the average over all your levels,
 as Extraplanetary Base Room does for bases. The overview's Resort Room cell
 shows your levels, built and queued, against your room and the draw the next
@@ -1465,7 +1481,7 @@ Seize or Destroy button:
 
 | Choice | Needs | What follows | Price |
 |---|---|---|---|
-| Seize | More marines than half again the site's garrison and militia (a battalion for every 20,000 people, at least one) | The site is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more than half again the occupier's garrison | Marines as many as half the garrison and militia die taking it |
+| Seize | More marines than half again the site's garrison and militia (a battalion for every 20,000 people, at least one). Each side's marines count 5% more for each staffed Training Ground level of its colonies, at most +25% | The site is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more than half again the occupier's garrison | Marines as many as half the garrison and militia die taking it |
 | Destroy | Three months closing in with more fire than its Defenses | The colony and everyone in it are lost, and the site lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies of 1,000 people or more and their resentment for ten years |
 
 A free colony can be attacked without a war: closing in costs 10 infamy at

@@ -647,6 +647,14 @@ sr_pers_share_value = {
 	value = 1
 	if = { limit = { has_variable = sr_pers_share } value = var:sr_pers_share }
 }
+# Country scope. What a battalion of ours weighs in a seizure: the crewed share
+# and the Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24). sr_fl_<n>_marines_eff is a fleet's marines at it; sr_site_seize
+# turns what it pays and lands back into battalions by it.
+sr_marine_weight_value = {
+	value = sr_pers_share_value
+	multiply = sr_marine_training_mult
+}
 
 # Country scope. The personnel in hand: capacity less those in service, never
 # below 0. Read live at each gate (a launch, each slot's refill), so each takes

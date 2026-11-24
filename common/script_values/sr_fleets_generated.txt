@@ -141,8 +141,9 @@ sr_fl_1_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_1_marines_eff = { value = sr_fl_1_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_1_marines_eff = { value = sr_fl_1_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_1_marines_room = { value = sr_fl_1_marine_capacity subtract = sr_fl_1_marines_value min = 0 }
 sr_fl_1_fire_fleets = {
 	value = 0
@@ -1188,8 +1189,9 @@ sr_fl_2_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_2_marines_eff = { value = sr_fl_2_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_2_marines_eff = { value = sr_fl_2_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_2_marines_room = { value = sr_fl_2_marine_capacity subtract = sr_fl_2_marines_value min = 0 }
 sr_fl_2_fire_fleets = {
 	value = 0
@@ -2235,8 +2237,9 @@ sr_fl_3_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_3_marines_eff = { value = sr_fl_3_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_3_marines_eff = { value = sr_fl_3_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_3_marines_room = { value = sr_fl_3_marine_capacity subtract = sr_fl_3_marines_value min = 0 }
 sr_fl_3_fire_fleets = {
 	value = 0
@@ -3282,8 +3285,9 @@ sr_fl_4_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_4_marines_eff = { value = sr_fl_4_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_4_marines_eff = { value = sr_fl_4_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_4_marines_room = { value = sr_fl_4_marine_capacity subtract = sr_fl_4_marines_value min = 0 }
 sr_fl_4_fire_fleets = {
 	value = 0
@@ -4329,8 +4333,9 @@ sr_fl_5_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_5_marines_eff = { value = sr_fl_5_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_5_marines_eff = { value = sr_fl_5_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_5_marines_room = { value = sr_fl_5_marine_capacity subtract = sr_fl_5_marines_value min = 0 }
 sr_fl_5_fire_fleets = {
 	value = 0
@@ -5376,8 +5381,9 @@ sr_fl_6_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_6_marines_eff = { value = sr_fl_6_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_6_marines_eff = { value = sr_fl_6_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_6_marines_room = { value = sr_fl_6_marine_capacity subtract = sr_fl_6_marines_value min = 0 }
 sr_fl_6_fire_fleets = {
 	value = 0
@@ -6423,8 +6429,9 @@ sr_fl_7_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_7_marines_eff = { value = sr_fl_7_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_7_marines_eff = { value = sr_fl_7_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_7_marines_room = { value = sr_fl_7_marine_capacity subtract = sr_fl_7_marines_value min = 0 }
 sr_fl_7_fire_fleets = {
 	value = 0
@@ -7470,8 +7477,9 @@ sr_fl_8_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_8_marines_eff = { value = sr_fl_8_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_8_marines_eff = { value = sr_fl_8_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_8_marines_room = { value = sr_fl_8_marine_capacity subtract = sr_fl_8_marines_value min = 0 }
 sr_fl_8_fire_fleets = {
 	value = 0
@@ -8517,8 +8525,9 @@ sr_fl_9_marine_capacity = {
 	multiply = sr_fl_marines_per_carrier
 }
 # Space forces personnel (2026-11-24 design § 4): its marines at the crewed
-# share, as a seizure weighs them, and the carriers' room they don't fill.
-sr_fl_9_marines_eff = { value = sr_fl_9_marines_value multiply = sr_pers_share_value }
+# share and our Training Grounds' weight (sr_marine_training_mult; the owner,
+# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_9_marines_eff = { value = sr_fl_9_marines_value multiply = sr_pers_share_value multiply = sr_marine_training_mult }
 sr_fl_9_marines_room = { value = sr_fl_9_marine_capacity subtract = sr_fl_9_marines_value min = 0 }
 sr_fl_9_fire_fleets = {
 	value = 0

@@ -232,8 +232,10 @@ def render_slot_values(n: int) -> list[str]:
             "\tmultiply = sr_fl_marines_per_carrier",
             "}",
             "# Space forces personnel (2026-11-24 design § 4): its marines at the crewed",
-            "# share, as a seizure weighs them, and the carriers' room they don't fill.",
-            f"{var(n, 'marines_eff')} = {{ value = {var(n, 'marines_value')} multiply = sr_pers_share_value }}",
+            "# share and our Training Grounds' weight (sr_marine_training_mult; the owner,",
+            "# 2026-11-24), as a seizure weighs them, and the carriers' room they don't fill.",
+            f"{var(n, 'marines_eff')} = {{ value = {var(n, 'marines_value')} multiply = sr_pers_share_value "
+            "multiply = sr_marine_training_mult }",
             f"{var(n, 'marines_room')} = {{ value = {var(n, 'marine_capacity')} subtract = {var(n, 'marines_value')} min = 0 }}",
             f"{var(n, 'fire_fleets')} = {{", "\tvalue = 0",
             *[f"\tadd = {{ value = {var(n, r.key + '_value')} multiply = sr_fl_fire_fleets_{r.key} }}" for r in ROLES],

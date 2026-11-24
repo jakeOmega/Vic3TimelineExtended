@@ -19,11 +19,17 @@ sr_mod_fab_per_month = { value = 4 }
 # the eight shipment slots (sr_ms_<n>_*), which then set the limit.
 sr_mod_build_lead_months = { value = 1 }
 # Country scope. The months until the queue's first module is built for its
-# window (0 once its window is that near, or for a world with none).
+# window (0 once its window is that near, for a world with none, or for one
+# built at an Orbital Yard on its world, which waits for no window: the owner,
+# 2026-11-24).
 sr_mq_head_window_months = {
 	value = sr_mq_head_wait_months
 	subtract = sr_mod_build_lead_months
 	min = 0
+	if = {
+		limit = { sr_mq_head_yard_ready = yes }
+		value = 0
+	}
 }
 
 # Country scope. The module stock, the points kept while fabrication stalls (the
@@ -171,6 +177,28 @@ sr_mod_bunker_redundancy = {
 	value = sr_mod_units_bunker
 	multiply = sr_mod_bunker_redundancy_per_level
 	max = sr_mod_bunker_redundancy_max
+}
+# Cultural Center: besides its entry modifier, points of Resort Draw at its
+# own colony, each site its own (sr_site_resort_draw_<key>; the owner, 2026-11-24: "add 1% (point,
+# i.e. 35% -> 36%) to the base's Resort draw").
+sr_mod_culture_draw = { value = 1 }
+# Training Ground: besides its entry modifier, our marines count this much
+# more a staffed level, at most sr_mod_train_marines_max levels (the owner,
+# 2026-11-24: "increase the effectiveness of marines slightly"), wherever a
+# battalion is weighed against another, beside the crewed share: a fleet's
+# marines (sr_fl_<n>_marines_eff, which the seizure's tally and the AI's
+# comparisons read) and the garrison (sr_site_marines_mult_<key> in
+# sr_site_garrison_need_<key>). Country scope; 1 with none. A battalion is
+# still a battalion where it is counted, carried, landed or ordered:
+# sr_site_seize turns the weighed figures back into battalions by
+# sr_marine_weight_value (sr_fleet_values.txt), share x this.
+sr_mod_train_marines_per_level = { value = 0.05 }
+sr_mod_train_marines_max = { value = 5 }
+sr_marine_training_mult = {
+	value = sr_mod_units_train
+	max = sr_mod_train_marines_max
+	multiply = sr_mod_train_marines_per_level
+	add = 1
 }
 # The AI's plan (sr_mod_ai_plan_<key>): an Administration from this autonomy
 # while the colony is still heading for sr_mod_ai_admin_settles_at or more (the

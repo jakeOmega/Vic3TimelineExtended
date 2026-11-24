@@ -515,7 +515,9 @@ def ready_test(var: str, place_type: str | None = None) -> str:
     """A country-scope trigger: `var` (a queue place's site) names a world whose
     module can be built now (the owner, 2026-11-23: a module waiting for a launch
     window stays in the queue, its points in the stock, rather than holding a
-    shipment slot, and the first module that can go is built first). A lunar
+    shipment slot, and the first module that can go is built first). A world
+    with one of our Orbital Yards on it (yard_ready_test: no slot, no window, the
+    owner, 2026-11-24), a lunar
     world that can take it now (lunar_open_test: it needs no slot), or, with a
     shipment slot free, Mercury, or a world whose window is open or opens within
     sr_mod_build_lead_months (sr_mod_wait_months_<key>: 0 while it is open or
@@ -530,8 +532,32 @@ def ready_test(var: str, place_type: str | None = None) -> str:
         if s.body:
             terms.append(f"sr_mod_wait_months_{s.key} <= sr_mod_build_lead_months")
         slot.append("AND = { " + " ".join(terms + _paid_terms(s, place_type)) + " }")
-    return ("OR = { " + lunar_open_test(var, place_type)
+    return ("OR = { " + yard_ready_test(var, place_type) + " " + lunar_open_test(var, place_type)
             + " AND = { sr_ms_has_free_slot = yes OR = { " + " ".join(slot) + " } } }")
+
+
+def yard_builds_test(site: Site) -> str:
+    """A country-scope trigger: a module for `site` is built at an Orbital Yard on
+    its world (the owner, 2026-11-24): THIS holds the site, neither blockaded nor
+    occupied, and has an Orbital Yard level there or at a colony of its own on the
+    same world that serves it (world_mates; site_serves: held, not blockaded, not
+    occupied, as the yard's fabrication points need). Such a module takes no
+    shipment slot, waits for no launch window or launch, and is not one of the
+    month's sr_mod_fab_per_month (sr_mod_month); it costs the same points."""
+    yards = [f"{level_value('yard', site)} >= 1"]
+    yards += [f"AND = {{ {site_serves(m)} {level_value('yard', m)} >= 1 }}"
+              for m in world_mates(site) if "yard" in generic_types(m)]
+    return f"{site_serves(site)} OR = {{ {' '.join(yards)} }}"
+
+
+def yard_ready_test(var: str, place_type: str | None = None) -> str:
+    """A country-scope trigger: `var` (a queue place's site) names a world whose
+    module is built at an Orbital Yard on its world now (sr_site_yard_builds_<key>,
+    yard_builds_test); false while it is unset. With `place_type`, also one the
+    stock can pay for (_paid_terms)."""
+    parts = [" ".join([f"{var} ?= {s.index}", f"sr_site_yard_builds_{s.key} = yes", *_paid_terms(s, place_type)])
+             for s in SITES if "yard" in generic_types(s)]
+    return "OR = { " + " ".join(f"AND = {{ {p} }}" for p in parts) + " }"
 
 # No Spaceport on a lunar world (design § 3.1): fleets dock at Earth, the same
 # location. module_types() and its kin
@@ -2214,6 +2240,12 @@ def _hab_values(site: Site) -> list[str]:
             f"sr_site_resort_room_{k} = {{",
             f"\tvalue = {site.resort_room}",
             f"\tadd = {{ value = sr_site_resort_staffed_{k} multiply = sr_mod_resort_room floor = yes }}",
+            "}",
+            "# Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a",
+            "# staffed Cultural Center level (the owner, 2026-11-24).",
+            f"sr_site_resort_draw_{k} = {{",
+            f"\tvalue = {site.resort_draw}",
+            f"\tadd = {{ value = sr_site_culture_staffed_{k} multiply = sr_mod_culture_draw }}",
             "}"]
     return out
 
@@ -2545,6 +2577,22 @@ def render_module_queue() -> list[str]:
                 f"\t\t\tlimit = {{ {ready_test(f'var:sr_mq_{n}_site', f'var:sr_mq_{n}_type')} }}",
                 f"\t\t\tsr_mq_to_top_{n} = yes",
                 "\t\t}"]
+    out += ["\t}", "}", "",
+            "# Once the month's sr_mod_fab_per_month are built, or while launches are barred,",
+            "# only modules built at an Orbital Yard on their world can still be (the owner,",
+            "# 2026-11-24): while the queue's first module isn't one, the first one further",
+            "# down that is, and that the stock can pay for, moves to the top as above.",
+            "sr_mq_promote_yard = {",
+            "\tif = {",
+            "\t\tlimit = {",
+            "\t\t\thas_variable = sr_mq_1_site",
+            "\t\t\tNOT = { sr_mq_head_yard_ready = yes }",
+            "\t\t}"]
+    for n in range(2, q + 1):
+        out += ["\t\tif = {" if n == 2 else "\t\telse_if = {",
+                f"\t\t\tlimit = {{ {yard_ready_test(f'var:sr_mq_{n}_site', f'var:sr_mq_{n}_type')} }}",
+                f"\t\t\tsr_mq_to_top_{n} = yes",
+                "\t\t}"]
     out += ["\t}", "}"]
     return out
 
@@ -2666,22 +2714,25 @@ def render_resort_fill() -> list[str]:
     would work at (#1948 design § 6.3), over resort_tiers(). It began as the twin of
     the Extraplanetary Base's best-grade-first fill, which gen_ebase.py's month (the
     ground types design § 8) has since replaced."""
-    def tier_parts(tier: Site | None) -> tuple[str, int, str, str]:
+    def tier_parts(tier: Site | None) -> tuple[str, str, str, str]:
         if tier is None:
-            return str(ORBIT_RESORT_ROOM), 0, "Earth orbit", f" has_technology_researched = {RESORT_TECH}"
-        return f"sr_site_resort_room_{tier.key}", tier.resort_draw, tier.name, f" {site_serves(tier)}"
+            return str(ORBIT_RESORT_ROOM), "0", "Earth orbit", f" has_technology_researched = {RESORT_TECH}"
+        return f"sr_site_resort_room_{tier.key}", f"sr_site_resort_draw_{tier.key}", tier.name, f" {site_serves(tier)}"
 
     out = ["# Resort Colony room filled best draw first (#1948 design § 6.3): local_var:sr_rs_left",
-           "# levels to place, local_var:sr_rs_sum the levels x draw so far (percent).",
+           "# levels to place, local_var:sr_rs_sum the levels x draw so far (percent). The order",
+           "# is the table's draws (resort_tiers()); a colony's Cultural Centers add to its draw",
+           "# (sr_site_resort_draw_<key>; the owner, 2026-11-24) but don't move it up the order.",
            "sr_resort_fill = {"]
     for tier in resort_tiers():
         room, draw, name, held = tier_parts(tier)
         size = f"{ORBIT_RESORT_ROOM}" if tier is None else f"{tier.resort_room} and its Off-World Resorts'"
-        out += [f"\t# {name}: room for {size} at {draw:+d}%",
+        at = "+0%" if tier is None else f"{tier.resort_draw:+d}% and its Cultural Centers'"
+        out += [f"\t# {name}: room for {size} at {at}",
                 "\tif = {",
                 f"\t\tlimit = {{ local_var:sr_rs_left > 0{held} }}",
                 f"\t\tset_local_variable = {{ name = sr_rs_take value = {{ value = local_var:sr_rs_left max = {room} }} }}"]
-        if draw:
+        if tier is not None:
             out.append("\t\tset_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take "
                        f"multiply = {draw} add = local_var:sr_rs_sum }} }}")
         out += ["\t\tchange_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }", "\t}"]
@@ -2702,7 +2753,7 @@ def render_resort_fill() -> list[str]:
             f"\tset_variable = {{ name = sr_resort_next_draw value = {RESORT_OVERFLOW_DRAW} }}"]
     for tier in resort_tiers():
         room, draw, name, held = tier_parts(tier)
-        out += [f"\t# {name} at {draw:+d}%",
+        out += [f"\t# {name} at {'+0%' if tier is None else draw}",
                 "\tif = {",
                 f"\t\tlimit = {{ local_var:sr_rs_next_found = 0{held} }}",
                 "\t\tif = {",
@@ -2762,6 +2813,9 @@ def render_module_triggers() -> list[str]:
         if terraformable(site):
             out += [f"# {site.name} has terraforming still to do (any scope).",
                     f"sr_site_terra_open_{k} = {{ sr_site_terra_done_value_{k} < sr_terra_full_months }}"]
+        if "yard" in generic_types(site):
+            out += [f"# A module for {site.name} is built at an Orbital Yard on its world (yard_builds_test).",
+                    f"sr_site_yard_builds_{k} = {{ {yard_builds_test(site)} }}"]
         if site.body:
             out.append(f"sr_mod_departs_{k} = {{ sr_mod_departs = {{ BODY = {site.body} }} }}")
         else:
@@ -2772,10 +2826,15 @@ def render_module_triggers() -> list[str]:
     out += ["", f"# THIS's module queue has a free place (of {QUEUE_SLOTS}).",
             f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{QUEUE_SLOTS}_site }} }}",
             "", "# The queue's first module can be built now (ready_test; sr_mod_month's build loop):",
-            "# a lunar world's needs no slot, any other a free one and, for a world with launch",
-            "# windows, its window open or at most sr_mod_build_lead_months off (the owner,",
-            "# 2026-11-23). Never while launches are barred.",
+            "# one built at an Orbital Yard on its world or a lunar world's needs no slot, any",
+            "# other a free one and, for a world with launch windows, its window open or at most",
+            "# sr_mod_build_lead_months off (the owner, 2026-11-23). Never while launches are",
+            "# barred: the loop asks sr_mq_head_yard_ready on its own for that.",
             f"sr_mq_head_ready = {{ NOT = {{ sr_launches_barred = yes }} {ready_test('var:sr_mq_1_site')} }}",
+            "", "# The queue's first module is built at an Orbital Yard on its world (the owner,",
+            "# 2026-11-24): no slot, window or launch, and not one of the month's",
+            "# sr_mod_fab_per_month, so sr_mod_month builds it while launches are barred too.",
+            f"sr_mq_head_yard_ready = {{ {yard_ready_test('var:sr_mq_1_site')} }}",
             "", "# The queue's first module is for a lunar world blockaded or occupied, where it would",
             "# be lost on landing, so it waits in the queue (the Next Module row's On Hold).",
             "sr_mq_head_lunar_closed = { OR = { " + " ".join(
@@ -3545,12 +3604,15 @@ def render_slice6_values() -> list[str]:
            "#   sr_site_marines_share_<key>    the crewed share of the country whose marines stand there",
            "#                                  (the occupier's while occupied, else the holder's; 1 for",
            "#                                  none): space forces personnel design § 4",
-           "#   sr_site_garrison_need_<key>    the marines a seizure must exceed: those, at that share,",
-           "#                                  and the militia",
+           "#   sr_site_marines_mult_<key>     the Training Grounds' weight on the marines standing there",
+           "#                                  (sr_marine_training_mult of the same country; 1 for none;",
+           "#                                  the owner, 2026-11-24)",
+           "#   sr_site_garrison_need_<key>    the marines a seizure must exceed: those, at that share",
+           "#                                  and that weight, and the militia",
            "#   sr_site_assault_toll_<key>     the attacker's marines a seizure kills: half the need",
            "#                                  (sr_assault_loss_share; design § 5.2)",
            "#   sr_site_assault_need_<key>     the need and the toll: what the closing-in marines, at",
-           "#                                  their own share, must exceed",
+           "#                                  their own share and weight, must exceed",
            "#   sr_site_def_staffed_<key>      its Defences levels at its staffing",
            "#   sr_site_def_others_<key>       ... the holder's at its other colonies on the same world",
            "#   sr_site_def_shared_<key>       ... the two: the Defences that fire for it",
@@ -3601,12 +3663,19 @@ def render_slice6_values() -> list[str]:
                 f"\telse_if = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} global_var:sr_site_holder_{k} = {{ add = sr_pers_share_value }} }}",
                 "\telse = { add = 1 }",
                 "}",
+                f"sr_site_marines_mult_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ exists = global_var:sr_site_occupier_{k} }} global_var:sr_site_occupier_{k} = {{ add = sr_marine_training_mult }} }}",
+                f"\telse_if = {{ limit = {{ exists = global_var:sr_site_holder_{k} }} global_var:sr_site_holder_{k} = {{ add = sr_marine_training_mult }} }}",
+                "\telse = { add = 1 }",
+                "}",
                 "# A seizure must exceed the garrison (shared on the Moon and Mars), at its",
-                "# owner's crewed share, and the militia; a liberation, the occupier's garrison",
-                "# alone (its people are the holder's).",
+                "# owner's crewed share and Training Grounds' weight, and the militia; a",
+                "# liberation, the occupier's garrison alone (its people are the holder's).",
                 f"sr_site_garrison_need_{k} = {{",
                 f"\tvalue = sr_site_shared_marines_{k}",
                 f"\tmultiply = sr_site_marines_share_{k}",
+                f"\tmultiply = sr_site_marines_mult_{k}",
                 f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} }} add = sr_site_militia_value_{k} }}",
                 "}",
                 f"sr_site_assault_toll_{k} = {{ value = sr_site_garrison_need_{k} multiply = sr_assault_loss_share }}",
@@ -4025,6 +4094,8 @@ def render_display() -> str:
                 f"sr_disp_site_hab_people_{k} = {{ value = sr_site_hab_share_value_{k} multiply = sr_site_base_room_{k} }}",
                 f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
                 f"sr_disp_site_resort_room_{k} = {{ value = sr_site_resort_room_{k} }}",
+                # Its draw with its Cultural Centers' points (the owner, 2026-11-24).
+                f"sr_disp_site_resort_draw_{k} = {{ value = sr_site_resort_draw_{k} }}",
                 # Solar System's line under the name: the world's Habitat cap.
                 f"sr_disp_ss_hab_cap_{k} = {{ value = {site.slots} }}",
                 # ... and, where a destination is picked (the owner; colony people
@@ -4384,7 +4455,8 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
     out += _override("site_bases", f'raw_text = "#v {site.ebase_room}#! ({_signed(site.ebase_grade)}%)"')
     out += _override("site_ground", f'text = "sr_ground_{ground}"')
     # Its own Resort Colony room and draw (#1948 design § 9).
-    out += _override("site_resorts", f'raw_text = "#v {site.resort_room}#! ({_signed(site.resort_draw)}%)"')
+    # Its draw is the table's plus its Cultural Centers' points (the owner, 2026-11-24).
+    out += _override("site_resorts", f'raw_text = "#v {site.resort_room}#! ([{_sv(f"sr_disp_site_resort_draw_{k}")}|+0]%)"')
     return out + ["\t\t}"]
 
 
@@ -4544,7 +4616,7 @@ def _colony_blocks(site: Site) -> list[str]:
     # Its Resort Colony room and draw, on the colony's page (#1948 design § 9).
     out += _override("module_resorts_tooltip", 'tooltip = "je_space_race_widget_resorts_tt"')
     out += _override("module_resorts", f'raw_text = "[{_sv(f"sr_disp_site_resort_room_{k}")}|0]"')
-    out += _override("module_draw", f'raw_text = "({_signed(site.resort_draw)}%)"')
+    out += _override("module_draw", f'raw_text = "([{_sv(f"sr_disp_site_resort_draw_{k}")}|+0]%)"')
     spec_tt = {slot: f"je_space_race_widget_colony_{m[len('sr_colony_'):]}_tt"
                for slot, m in zip(("a", "b"), spec_modifiers(site))}
     # A colony's page names its specializations in full (design § 8).
