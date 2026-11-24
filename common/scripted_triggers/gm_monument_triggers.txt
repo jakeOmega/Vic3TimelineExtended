@@ -551,11 +551,14 @@ gm_state_tr_any_takeable = {
 }
 
 # Container scope, a secondary monument. $WHO$ (a country) occupies its state
-# in a war and may carry it off.
+# in a war and may carry it off. The occupation first: it is false at its
+# first line for a monument in our own state, while the other two read the
+# trophies of the world; Carry It Off's is_shown asks this for each row every
+# frame (gm_state_tr_can_take; late_game_performance.md, 2026-11-24).
 gm_mon_tr_can_take = {
 	var:gm_tr_origin ?= {
-		gm_state_tr_takeable_secondary = yes
 		gm_state_tr_occupied_by = { WHO = $WHO$ }
+		gm_state_tr_takeable_secondary = yes
 	}
 	gm_mon_tr_piece_abroad = no
 }

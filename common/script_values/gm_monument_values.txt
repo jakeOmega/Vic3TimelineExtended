@@ -430,13 +430,16 @@ gm_state_disp_clearable = {
 	}
 }
 
-# Container scope, for the same button on a monument beside it.
+# Container scope, for the same button on a monument beside it. The count
+# first: false for nearly every row, while gm_mon_is_least compares every
+# monument of the state, and each row asks this every frame
+# (late_game_performance.md, 2026-11-24).
 gm_mon_disp_clearable = {
 	value = 0
 	if = {
 		limit = {
-			gm_mon_is_least = yes
 			var:gm_tr_origin ?= { gm_state_monument_count >= 6 }
+			gm_mon_is_least = yes
 		}
 		value = 1
 	}

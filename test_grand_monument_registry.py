@@ -4189,10 +4189,10 @@ class PictureTests(unittest.TestCase):
         values = read(VALUES)
         steps = [start + size for start, size in lin_curve_terms(5, 5)]
         self.assertEqual(steps, [5, 15, 30, 50, 75])
-        # From the top step down, stopping at the first reached (late_game_performance.md, 2026-11-24).
-        expected = "value = 0 " + " ".join(f"{'if' if i == len(steps) - 1 else 'else_if'} = {{ limit = {{ "
-                                          f"gm_state_grandeur >= {g} }} value = {i + 1} }}"
-                                          for i, g in reversed(list(enumerate(steps))))
+        # The grandeur read once and saved (late_game_performance.md, 2026-11-24).
+        expected = ("value = gm_state_grandeur save_temporary_value_as = gm_tmp_frame_grandeur value = 0 "
+                    + " ".join(f"if = {{ limit = {{ scope:gm_tmp_frame_grandeur >= {g} }} value = {i + 1} }}"
+                               for i, g in enumerate(steps)))
         self.assertEqual(squash(block(values, "gm_disp_frame_tier")), expected)
 
     def test_frames_draw_over_the_pictures(self):
