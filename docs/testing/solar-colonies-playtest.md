@@ -1280,7 +1280,7 @@ sends them) and `event te_debug_space_race.4` (b fills the stock, c queues one o
 No new self-check: the base room factor reads `country_sr_colony_room_add` through the holder's scope as
 `habitat_marker` already checks for the Habitat share.
 
-1. **Space Colonization.** Research it with a colony held: its tooltip lists +50% Colony Room, and within a month
+1. **Space Colonization.** Research it with a colony held: its tooltip lists +50% Space Colony Room, and within a month
    the People view's room at a world with no Habitats is 1.5 times the table's (Valles Marineris 75,000), each
    Habitat's people in the Modules view's hover half again as many, and Solar System's people at the cap for a
    world we don't hold the same.

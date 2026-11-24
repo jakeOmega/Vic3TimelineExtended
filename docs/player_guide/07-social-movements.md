@@ -20,7 +20,7 @@ countries never get them. The laws are described in
 |---|---|---|---|---|
 | Civil Rights Movement | Civil Rights Movement (era 7), while an incorporated state holds pops below Provisional Acceptance | Movement Support reaches 100, or you enact Affirmative Action, or Universal Citizenship together with Protection | Movement Support falls to 0, or the Civil Rights political movement is gone | None |
 | Human Augmentation Debate | Human Augmentation or Brain-Computer Interfaces (era 11) | Regulated Augmentation Market, Unrestricted Augmentation or Mandatory Augmentation | Human Purity | 20 years |
-| Morphological Freedom Debate | Morphological Freedom (era 12) | Morphological Freedom or Clade Citizenship | Natural Form still in force when time runs out, or Prescribed Form enacted | 20 years |
+| Morphological Freedom Debate | Morphological Freedom (era 12) | Morphological Freedom or Clade Citizenship; or Licensed Modification in force for 10 years of the debate, or when time runs out | Natural Form still in force when time runs out, or Prescribed Form enacted | 20 years |
 | Digital Rights & Surveillance | Automated Surveillance or Cybersecurity (era 9) | Strong Privacy Rights | Intrusive Surveillance System and Ministry of Intelligence and Security Established, both at once | 20 years |
 | Mental Health Crisis | Mental Health Awareness (era 10) | Rehabilitation-Focused Criminal Justice and the Social Security institution at level 4 or higher | Punishment-Focused Criminal Justice or Penal Labor Camps still in force 10 years after the entry opens | 20 years |
 | Post-Scarcity Transition | Post-Work Society (era 12) | Post-Scarcity Economy law | Never | 30 years |
@@ -149,13 +149,15 @@ The other five journal entries share a simpler shape. Each applies a modifier
 while it runs and has up to a one-in-five chance each month (one in nine for
 Digital Rights) of one of its five events (six for Morphological Freedom),
 whose options run from paying for reform to a hard-line response. It ends when
-you enact the settling law, or times out with a penalty.
+you enact the settling law, or times out with a penalty (the Morphological
+Freedom Debate can also be settled by Licensed Modification, with a smaller
+reward of its own).
 Outcome modifiers decay over ten years.
 
 | Journal entry | While active | Success | Failure | Time-out |
 |---|---|---|---|---|
 | Human Augmentation Debate | +5% innovation, +5% turmoil penalties | +10% innovation, +5% prestige | −10% innovation and −2% prestige, or +15% turmoil penalties and −5% prestige (your choice) | +15% turmoil penalties |
-| Morphological Freedom Debate | +5% Cultural Pull from Art, +5% turmoil penalties | +10% Cultural Pull from Art, +5% prestige | −10% Cultural Pull from Art and −5% migration pull, or +10% turmoil penalties and −2% prestige (your choice) | +10% turmoil penalties, under Licensed Modification |
+| Morphological Freedom Debate | +5% Cultural Pull from Art, +5% turmoil penalties | +10% Cultural Pull from Art, +5% prestige; under Licensed Modification, −10% turmoil penalties and +5 legitimacy | −10% Cultural Pull from Art and −5% migration pull, or +10% turmoil penalties and −2% prestige (your choice) | The failure, under Natural Form; the Licensed Modification reward, under that law |
 | Digital Rights & Surveillance | +50 Authority, +5% turmoil penalties | +5% prestige, +5% innovation | +150 Authority, −5% innovation, −5% prestige; or radicals | −25 prestige, +5% turmoil penalties and academic radicals; half that and no radicals under Moderate Data Privacy |
 | Mental Health Crisis | +3% mortality | −3% mortality, +5% prestige | +5% mortality, −5% prestige; or radicals | +5% mortality, −25 prestige |
 | Post-Scarcity Transition | +10% turmoil penalties | +15% prestige, +10% innovation | Can't fail | +15% turmoil penalties, −50 prestige |
@@ -174,14 +176,17 @@ workplace discrimination, augmented crime and religious condemnation.
 
 Every country starts on Natural Form, and the Morphological Freedom technology
 (era 12) unlocks Licensed Modification and Morphological Freedom. Enacting
-Morphological Freedom settles the debate, as does Clade Citizenship if Self-Directed
-Evolution (era 13) arrives while it runs. Licensed Modification is a step on
-the way: held to the end, it leaves the question unsettled. If Natural Form is
+Morphological Freedom settles the debate at once, as does Clade Citizenship if
+Self-Directed Evolution (era 13) arrives while it runs. Licensed Modification
+settles it too, by regulation: once the law has been in force for ten years of
+the debate, or if it is in force when the twenty years run out. The ten years
+need not be unbroken, since months already spent under the law still count
+after a spell under another. If Natural Form is
 still in force when the twenty years run out, the debate is lost, and an event
 asks whether to enforce the law against people already changed or look away.
 Enacting Prescribed Form ends the debate at once as a failure, with no event:
 the state has settled the question.
-The Devout and the Rural Folk oppose both freer laws and the Intelligentsia
+The Devout and the Rural Folk oppose the freer laws and the Intelligentsia
 support them; the laws themselves are in [Rights and society
 laws](06-politics.md#rights-and-society-laws). The events bring the first
 clinics, a television host's transformation, sport and eligibility, a teenager's

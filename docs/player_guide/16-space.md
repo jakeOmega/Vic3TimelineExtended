@@ -703,8 +703,9 @@ progress it cost. Either way an event tells you.
 
 Under Simple Colonies and Full Colonies, colonies hold people. A colony starts as
 an automated outpost with no one in it, so it grows only once settlers arrive:
-then by about 2.4% a year up to its room (3.7% once you have Self-Directed
-Evolution, era 13, whose people are adapted to low gravity and radiation), from 10,000 people on the smallest
+then by about 2.4% a year up to its room (3.7% under the Clade Citizenship
+law, from Self-Directed Evolution in era 13, whose people are born adapted to
+low gravity and radiation), from 10,000 people on the smallest
 moons and the farthest dwarf planets to 50,000 at Valles Marineris and the Hellas
 and Utopia plains. That starting room is 50% larger with Space Colonization and
 50% more with Terraforming, so double with both, and what Habitats and

@@ -5826,6 +5826,41 @@ te_fix_inconsistent_lawgroup_human_augmentation = {
 
 }
 
+te_fix_inconsistent_lawgroup_bodily_autonomy = {
+	# Active: law_clade_citizenship  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_clade_citizenship
+			OR = {
+				has_law = law_type:law_ban_on_genetic_modification
+			}
+		}
+		if = {
+			limit = {
+				has_technology_researched = morphological_freedom
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_morphological_freedom
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = morphological_freedom
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_licensed_modification
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = { always = yes }
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_natural_form
+			remove_variable = te_law_sweep_replacing
+		}
+	}
+
+}
+
 te_fix_inconsistent_lawgroup_genetic_rights = {
 	# Active: law_traditional_heredity  ->  detect violation, cascade replacements
 	if = {
@@ -5855,6 +5890,9 @@ te_fix_inconsistent_lawgroup_genetic_rights = {
 		}
 		else_if = {
 			limit = {
+				NOR = {
+					has_law = law_type:law_clade_citizenship
+				}
 				has_technology_researched = gene_splicing
 			}
 			set_variable = te_law_sweep_replacing
@@ -5867,6 +5905,52 @@ te_fix_inconsistent_lawgroup_genetic_rights = {
 			}
 			set_variable = te_law_sweep_replacing
 			activate_law = law_type:law_open_source_genetics
+			remove_variable = te_law_sweep_replacing
+		}
+	}
+
+	# Active: law_ban_on_genetic_modification  ->  detect violation, cascade replacements
+	if = {
+		limit = {
+			has_law = law_type:law_ban_on_genetic_modification
+			OR = {
+				has_law = law_type:law_clade_citizenship
+			}
+		}
+		if = {
+			limit = {
+				has_technology_researched = gene_splicing
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_open_source_genetics
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = gene_splicing
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_corporate_genetic_licensing
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				NOR = {
+					has_law = law_type:law_ban_on_genetic_modification
+					has_law = law_type:law_corporate_genetic_licensing
+					has_law = law_type:law_open_source_genetics
+				}
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_traditional_heredity
+			remove_variable = te_law_sweep_replacing
+		}
+		else_if = {
+			limit = {
+				has_technology_researched = behaviorism
+			}
+			set_variable = te_law_sweep_replacing
+			activate_law = law_type:law_state_eugenics_program
 			remove_variable = te_law_sweep_replacing
 		}
 	}
@@ -7218,6 +7302,7 @@ te_fix_inconsistent_laws = {
 	te_fix_inconsistent_lawgroup_monetary_policy = yes
 	te_fix_inconsistent_lawgroup_inheritance = yes
 	te_fix_inconsistent_lawgroup_human_augmentation = yes
+	te_fix_inconsistent_lawgroup_bodily_autonomy = yes
 	te_fix_inconsistent_lawgroup_genetic_rights = yes
 	te_fix_inconsistent_lawgroup_language_policy = yes
 	te_fix_inconsistent_lawgroup_antitrust = yes

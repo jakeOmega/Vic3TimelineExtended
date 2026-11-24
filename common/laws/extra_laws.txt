@@ -3216,6 +3216,13 @@ law_ban_on_genetic_modification = {
 
 	unlocking_technologies = { gene_splicing }
 
+	# Clade Citizenship lets a change be inherited, which is genetic
+	# modification: the two bar each other (owner, 2026-11-24;
+	# common/laws/te_bodily_autonomy_laws.txt names this law in turn).
+	disallowing_laws = {
+		law_clade_citizenship
+	}
+
 	modifier = {
 		country_authority_add = 100
 		country_sol_expectations_target_add = -1

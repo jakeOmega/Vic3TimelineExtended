@@ -3,9 +3,14 @@
 # It opens with the Morphological Freedom technology, succeeds on the law of the
 # same name or on Clade Citizenship (Self-Directed Evolution, era 13), and fails
 # on Natural Form held to the end, or at once on Prescribed Form (owner,
-# 2026-11-04: the state settles the question by decree). Licensed Modification at the end leaves the
-# question unsettled. The engine has no "failed at the deadline" hook, so both
-# of those are the timeout's branches.
+# 2026-11-04: the state settles the question by decree). Licensed Modification
+# settles it by regulation (owner, 2026-11-24): a second success outcome once
+# the law has been in force for ten years of the debate in all
+# (te_mf_licensed_months, counted by the monthly pulse and kept if the law
+# lapses, so switching away and back loses nothing), or at the timeout if it
+# is in force then. Both give morphological_freedom_events.300. The engine has
+# no "failed at the deadline" hook, so Natural Form's ending is a branch of
+# the timeout too.
 je_morphological_freedom = {
 	icon = "gfx/interface/icons/event_icons/je_morphological_freedom.dds"
 	group = je_group_te_rights_and_society
@@ -52,6 +57,20 @@ je_morphological_freedom = {
 	# lockout (te_mf_event_recent) and four of them fire once, so a debate that
 	# runs its twenty years brings about eight at most.
 	on_monthly_pulse = {
+		# A month of the debate under Licensed Modification. Country scope; the
+		# settled outcome below reads the count at 120.
+		effect = {
+			if = {
+				limit = { has_law = law_type:law_licensed_modification }
+				if = {
+					limit = { has_variable = te_mf_licensed_months }
+					change_variable = { name = te_mf_licensed_months add = 1 }
+				}
+				else = {
+					set_variable = { name = te_mf_licensed_months value = 1 }
+				}
+			}
+		}
 		random_events = {
 			240 = 0
 			10 = morphological_freedom_events.1
@@ -115,6 +134,28 @@ je_morphological_freedom = {
 		}
 	}
 
+	# Settled by regulation: Licensed Modification in force for ten years of
+	# the debate. After the outcome above, so the tests' first "complete" is
+	# still freedom of form.
+	outcome = {
+		header = je_standard_completion_header
+		effect_header = je_standard_on_completion_header
+		color = "gold_positive"
+		conclusion_desc = je_morphological_freedom_settled_conclusion_desc
+		trigger = {
+			has_law = law_type:law_licensed_modification
+			custom_tooltip = {
+				text = je_morphological_freedom_licensed_ten_years_tt
+				has_variable = te_mf_licensed_months
+				var:te_mf_licensed_months >= 120
+			}
+		}
+		effect = {
+			set_variable = morphological_freedom_resolved
+			trigger_event = { id = morphological_freedom_events.300 popup = yes }
+		}
+	}
+
 	outcome = {
 		header = je_standard_failure_header
 		effect_header = je_standard_on_failure_header
@@ -155,13 +196,13 @@ je_morphological_freedom = {
 				}
 				trigger_event = { id = morphological_freedom_events.100 popup = yes }
 			}
-			else = {
-				# Licensed Modification: a licensing regime nobody quite wanted.
-				add_modifier = {
-					name = morphological_freedom_unsettled_modifier
-					days = long_modifier_time
-					is_decaying = yes
+			else_if = {
+				# Licensed Modification, in force for less than ten years of the
+				# debate: settled by regulation all the same.
+				limit = {
+					has_law = law_type:law_licensed_modification
 				}
+				trigger_event = { id = morphological_freedom_events.300 popup = yes }
 			}
 		}
 	}

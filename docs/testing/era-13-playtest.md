@@ -203,7 +203,24 @@ country runs a sample method; put a Tooling Workshop on Robotic Assembly Lines.
      save).
    - A country released or formed later also holds Natural Form.
    - The three laws show their own icons.
-3. **The acceptance hook.** Under Universal Citizenship with Civil Rights
+3. **The laws' lines** (rebalanced 2026-11-24: four destinations with a cost
+   each, sized for the late game).
+   - Licensed Modification's tooltip lists +200 authority, −50% radicals from
+     political movements, +25% migration pull, +5 acceptance without a shared
+     heritage trait and +10% institution bureaucracy cost.
+   - Morphological Freedom's lists +75% migration pull, +10% services output,
+     +15% Cultural Pull from Art, +10 acceptance without a shared heritage
+     trait, −100% assimilation and +25% Devout attraction.
+   - In a late game, hover a state's assimilation and migration attraction
+     before and after enacting Morphological Freedom, and note the totals: the
+     aim was about a quarter more migration attraction and an eighth less
+     assimilation for a country with the owner's 2039 sums (+194% and +690%).
+   - A country whose assimilation sum is below −100% (one with few
+     assimilation bonuses under Morphological Freedom, most countries under
+     Clade Citizenship's −300%) shows no assimilation at all, and no pop
+     changes culture the wrong way. Record what the state's assimilation hover
+     shows.
+4. **The acceptance hook.** Under Universal Citizenship with Civil Rights
    Movement and Social Justice Movements researched, enact Morphological
    Freedom and read a pop's acceptance breakdown three ways: a culture that
    shares a heritage trait with a primary culture, one that shares only a
@@ -212,22 +229,31 @@ country runs a sample method; put a Tooling Workshop on Robotic Assembly Lines.
    shared-trait pop the higher no-shared figure, and the hook inverts heritage
    under the four citizenship laws that leave little gap (Subjecthood,
    Cultural, Assimilatory, Universal). Record which.
-4. **Interest groups.** With the technology, open Licensed Modification's
+5. **Interest groups.** With the technology, open Licensed Modification's
    enactment: the Devout and the Rural Folk oppose it, the Intelligentsia
    support it. Morphological Freedom: the Devout strongly opposed, the
    Intelligentsia strongly in favor, Industrialists split between their
    ideologies. Natural Form moves no group's approval before the technology.
-5. **The debate.**
+6. **The debate.**
    - It appears with the technology under the Social Movements rule, and not
      for a decentralized country, with Civil Rights' icon until its own.
    - Each law shows its status line.
    - Enacting Morphological Freedom completes it and opens The Chosen Body at
      once (a popup).
    - With Natural Form held for twenty years, The Body as Given opens at once
-     instead; with Licensed Modification held, An Unsettled Question appears
-     and no event.
+     instead.
+   - The entry lists two ways to complete it: freedom of form, and Licensed
+     Modification in force for 10 years of the debate. Enact Licensed
+     Modification and wait ten years: A Matter for the Boards opens (a popup)
+     and gives Settled by Regulation (−10% turmoil penalties, +5 legitimacy,
+     ten years, decaying). Repeal the law for a year partway and enact it
+     again: the months already counted are kept
+     (`te_mf_licensed_months` on the country), so it still settles after ten
+     years under the law in all.
+   - With Licensed Modification enacted late and in force when the twenty
+     years run out, A Matter for the Boards opens then.
    - After a revolution, a finished debate does not start again on the winner.
-6. **Events.** Over a twenty-year debate, count the events: no two within two
+7. **Events.** Over a twenty-year debate, count the events: no two within two
    years, The First Clinics, Fair Play, Old Enough to Choose and Everyone Has
    Ears Now once each, at most eight in all. Old Enough to Choose, The Faithful
    Object and Everyone Has Ears Now never come under Natural Form, and The
@@ -557,19 +583,26 @@ at this month's pace (**i**).
 1. **The tree.** Self-Directed Evolution sits in era 13's society column with
    arrows from Morphological Freedom and Rejuvenation Therapies, on Synthetic
    Biology's icon until its own is painted. Its tooltip names Clade
-   Citizenship and lists Colony Growth a Month +0.1% and, with the
-   Demographics rule, Safer Work +5%.
+   Citizenship and lists no modifiers (its two lines moved onto the law on
+   2026-11-24).
 2. **The law.**
    - Clade Citizenship is the fourth law of Bodily Autonomy, after
      Morphological Freedom, on Unrestricted Augmentation's icon. Its tooltip
-     shows +10 acceptance without a shared heritage trait, +15% migration
-     pull, +5% Cultural Pull from Art and the parity line ("Heritage no longer
-     divides our people").
+     shows Space Colony Growth a Month +0.1%, +50% migration pull, +10
+     acceptance without a shared heritage trait, −300% assimilation, the
+     bureaucracy population cost line, with the Demographics rule Safer Work
+     +5% and Safer Streets and Homes +15%, and the parity line ("Heritage no
+     longer divides our people"). It has no Cultural Pull from Art line.
+   - Under Ban on Genetic Modification the law can't be enacted, and its
+     tooltip names that law as the reason; while it is in force, Ban on
+     Genetic Modification can't be enacted either.
    - Interest groups: on Morphological Freedom, open Clade Citizenship's
      enactment. The Intelligentsia neither back nor oppose it (strongly
      approving of both laws), the Devout and the Rural Folk strongly oppose
-     it, and a group led by a transhumanist backs it. On Natural Form or
-     Licensed Modification the Intelligentsia back it.
+     it, and a group led by a transhumanist backs it, as does one whose leader
+     is technocratic, positivist, meritocratic or a modernizer (they are
+     neutral on Morphological Freedom and approve of Clade Citizenship). On
+     Natural Form or Licensed Modification the Intelligentsia back it.
 3. **The heritage parity.** Under Universal Citizenship with Civil Rights
    Movement and Social Justice Movements, enact Clade Citizenship and wait for
    the month's pulse.
@@ -590,15 +623,21 @@ at this month's pace (**i**).
    Self-Directed Evolution arrives, enacting Clade Citizenship shows its
    status line for a moment and completes the debate with The Chosen Body.
 5. **Colonies** (Simple or Full Colonies). A colony of ours grows by about 0.3%
-   a month after the technology, against 0.2% before (its people, month on
-   month, on the Colonies section's People view); a free colony stays at 0.2%.
-6. **The census** (Demographics rule at Full). A state's Work row in Causes of
-   Death shows Safety ×0.05 after the technology (×0.10 before), and the
-   hover lists Self-Directed Evolution among the technologies.
+   a month under Clade Citizenship, against 0.2% without it, technology or
+   not (its people, month on month, on the Colonies section's People view); a
+   free colony stays at 0.2%.
+6. **The census** (Demographics rule at Full). After the state's next count
+   under Clade Citizenship, its Work row in Causes of Death shows Safety ×0.05
+   (×0.10 before) and its Accidents and Violence row Safety ×0.35 (×0.50 with
+   Autonomous Vehicles), and each hover names the law. Researching
+   Self-Directed Evolution alone changes neither. In the model, a rich state
+   under Biological Immortality dies at 0.52 per 1,000 a year under the law
+   against 0.69 without it.
 7. **Prescribed Form** (owner, 2026-11-04). With Morphological Freedom, the
    law is in the Bodily Autonomy group with Mandatory Augmentation's icon.
-   - Its tooltip lists +50 authority, the bureaucracy population cost line,
-     +25% assimilation, −10% Cultural Pull from Art and −10% migration pull,
+   - Its tooltip lists +400 authority, the bureaucracy population cost line,
+     +200% assimilation, −25% Cultural Pull from Art and −50% migration pull
+     (resized with the group on 2026-11-24),
      and the parity line. Note the bureaucracy cost it adds in the budget at
      era 12 (about 9% of the population part was the aim).
    - Under Universal Citizenship with both technologies, enacting it changes

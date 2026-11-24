@@ -842,10 +842,12 @@ nothing under No Police. Restorative Justice lowers them 4% and
 Rehabilitation-Focused Criminal Justice 8%; Penal Labor Camps raise deaths at
 work. Later technologies make work and everyday life safer whatever the
 laws: Prefabricated Construction, Industrial Robotics, Containerization and
-Knowledge Economy together prevent nine in ten deaths at work, and nineteen in
-twenty with Self-Directed Evolution's bodies built for the work. Modern Urban
+Knowledge Economy together prevent nine in ten deaths at work. Modern Urban
 Planning, Computer-Aided Design and Cellular Networks prevent two in five deaths
-from accidents and violence, half once Autonomous Vehicles is researched. Medicine
+from accidents and violence, half once Autonomous Vehicles is researched. One
+law goes further: under Clade Citizenship, people born to bodies built for the
+work raise those to nineteen in twenty deaths at work and thirteen in twenty
+from accidents and violence. Medicine
 cuts adults' deaths from infection by more than children's, since it cures the
 tuberculosis and pneumonia that killed adults in 1836, so in a rich country
 adults die of infection about as rarely as in the rich world today; Personalized

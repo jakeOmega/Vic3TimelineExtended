@@ -1423,7 +1423,8 @@ IMAGES = {
     "neural_interface_consumer": {
         "prompt": "A patient receiving a small neural implant in a clinical chair.",
         "style": "digital painting, clean light, near-future",
-        "events": ["society_technology_events.16", "society_technology_events.20", "morphological_freedom_events.1"],
+        "events": ["society_technology_events.16", "society_technology_events.20", "morphological_freedom_events.1",
+                   "morphological_freedom_events.300"],
     },
     "augmented_athlete_arena": {
         "prompt": "An augmented athlete sprinting in a futuristic arena.",

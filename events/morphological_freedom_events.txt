@@ -12,8 +12,10 @@
 # events at most. .4 and .6 need clinics working legally, so not under
 # Natural Form.
 #
-# .100 and .200 are the outcomes, fired by the entry's on_timeout (Natural
-# Form held to the end) and on_complete.
+# .100, .200 and .300 are the outcomes, fired by the entry's timeout (Natural
+# Form held to the end), its success outcome, and its settled outcome
+# (Licensed Modification in force for ten years of the debate, or at the
+# timeout).
 
 # Event 1: The First Clinics
 morphological_freedom_events.1 = {
@@ -579,6 +581,40 @@ morphological_freedom_events.200 = {
 		}
 		add_modifier = {
 			name = morphological_freedom_embraced_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# Event 300: The Boards' Settlement (Licensed Modification in force for ten
+# years of the debate, or at its end). One option: the report of an ending,
+# as .200 is.
+morphological_freedom_events.300 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/neural_interface_consumer.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = morphological_freedom_events.300.t
+	desc = morphological_freedom_events.300.d
+	flavor = morphological_freedom_events.300.f
+
+	duration = 3
+
+	option = {
+		name = morphological_freedom_events.300.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_loyalists = {
+			value = small_radicals
+			pop_type = bureaucrats
+		}
+		add_modifier = {
+			name = morphological_freedom_settled_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}

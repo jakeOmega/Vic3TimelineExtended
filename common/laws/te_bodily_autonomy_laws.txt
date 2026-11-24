@@ -1,17 +1,63 @@
 ﻿# ============================================================================
 # BODILY AUTONOMY (era 13 spec § 7.1; docs/systems/mod_systems/social_movements.md)
 # ============================================================================
-# Four laws in lawgroup_bodily_autonomy (Human Rights). The group is about how
+# Five laws in lawgroup_bodily_autonomy (Human Rights). The group is about how
 # a body looks, chosen for self-expression: appearance, sex characteristics,
 # fur, tails, and at the end a body plan of one's own. What a body can do is
 # Human Augmentation's, a separate group, so the interest groups split
-# differently on the two (ideology_modifications.py, BODILY_AUTONOMY_STANCES):
+# differently on the two (ideology_modifications.py, BODILY_AUTONOMY_STANCES).
 #
-#   law_natural_form            the default: no provision for elective change
-#   law_licensed_modification   licensed clinics (Morphological Freedom, era 12)
-#   law_morphological_freedom   a right to change one's body (the same)
-#   law_clade_citizenship       the right to leave the human body plan behind and
-#                               remain a citizen (Self-Directed Evolution, era 13)
+# WHAT EACH LAW ALLOWS (owner, 2026-11-24). Four destinations, not a ladder:
+# each leads on its own axis and pays for it.
+#
+#                             an adult may     a change may be    the state builds
+#                             change their     inherited, or      for more than one
+#                             own body         chosen for a child kind of body
+#   law_natural_form          no               no                 no
+#   law_licensed_modification with a board's   no                 no
+#                             approval
+#   law_morphological_freedom yes              no                 no
+#   law_clade_citizenship     yes              yes                yes
+#   law_prescribed_form       the state's design, required of everyone
+#
+#   Licensed Modification  ORDER. The boards decide, so the state keeps its
+#       hand on the question (authority) and the argument cools (radicals from
+#       movements). Held ten years, or to the debate's end, it settles the debate.
+#   Morphological Freedom  THE PERSON. A liberty: anything that ends with the
+#       person who chose it, while public life stays built for the standard
+#       human. People move to where they can be themselves and a trade grows up
+#       around them (migration pull, services, art). The cost is cohesion
+#       (assimilation) and the backlash (the Devout's attraction: it grows the
+#       one group that strongly opposes the law, morphological_freedom_events.5).
+#   Clade Citizenship      A PEOPLE. Recognition: a lineage can be founded, its
+#       children are born citizens, and schools, workplaces, housing and medicine
+#       are built for them too. People born to a body, in workplaces rebuilt
+#       around them, die less at work and by accident (the census's two safety
+#       shares), and settle worlds the standard body can't (space colony
+#       growth). The costs are the accommodation (the bureaucracy each head of
+#       population costs) and a people that doesn't assimilate. It carries no
+#       art line: that is Morphological Freedom's.
+#   Prescribed Form        CONTROL. Below.
+#
+# SIZES (owner, 2026-11-24, from a 2039 game: New York's assimilation stood at
+# +690%, its migration pull at about +194%, the country's authority at 3,960).
+# A late-game law's percentage adds to a sum of hundreds of percent, so a line
+# sized like an 1836 law's does nothing: +10% assimilation on +690% is 1.3%.
+# These are sized to move such a total by a real fraction. In that game:
+# Morphological Freedom's migration pull +75% is about a quarter more people
+# drawn, its assimilation -100% an eighth less; Clade Citizenship's -300% is
+# three eighths less, and ends assimilation in a country with under +200% of
+# its own. The two safety shares are factors of their own with a cap, so they
+# are not diluted.
+#
+# THE TECHNOLOGY CARRIES NOTHING NOW. Self-Directed Evolution held the work
+# safety and the colony growth until 2026-11-24; both moved here (owner), so the
+# law is what turns the science into a population.
+#
+# CLADE CITIZENSHIP AND THE BAN ON GENETIC MODIFICATION bar each other
+# (disallowing_laws on both; owner, 2026-11-24): a heritable change is genetic
+# modification. A country that comes to hold both (a revolution, a regime
+# change) is moved off one by extra_law_consistency_generated.txt.
 #
 # ORDER MATTERS. law_natural_form comes first in this file: the engine gives a
 # country with no law in a group the group's first law in file order, which is
@@ -36,7 +82,9 @@
 # group, and the bonus lifts it above them. Read in game whether the engine
 # then gives a pop that shares the trait the higher no-shared value
 # (docs/testing/era-13-playtest.md; scripting_best_practices.md, Citizenship
-# Acceptance: Read the Mod's Laws, Not Vanilla's).
+# Acceptance: Read the Mod's Laws, Not Vanilla's). By era 12 most countries
+# accept or assimilate nearly everyone, so these lines are flavor (owner,
+# 2026-11-24); the laws stand on their other lines.
 #
 # CLADE CITIZENSHIP TAKES HERITAGE OUT OF ACCEPTANCE (spec § 7.3). A static
 # bonus can't do it in this engine. Under the mod's citizenship laws, with Civil
@@ -54,7 +102,8 @@
 # pop then reads the same heritage figure, and none ranks above another by it.
 #
 # THE DEBATE. common/journal_entries/je_morphological_freedom.txt succeeds on
-# law_morphological_freedom or law_clade_citizenship and fails on
+# law_morphological_freedom or law_clade_citizenship, is settled by
+# law_licensed_modification held ten years or to its end, and fails on
 # law_natural_form held to its end.
 #
 # PRESCRIBED FORM, the fifth law (owner, 2026-11-04), is the dystopian end
@@ -65,7 +114,8 @@
 # citizenship laws that changes nothing; under Racialized Citizenship it is the
 # fastest end to heritage discrimination there is, equality by erasure. The
 # government chooses the form (authority) and its bureaucracy enforces it in
-# every state (the bureaucracy's cost per head of population).
+# every state (the bureaucracy's cost per head of population). Its other lines
+# were resized with the rest on 2026-11-24.
 #
 # A SIXTH LAW goes last in this file, with a stance in each
 # BODILY_AUTONOMY_LISTS row in ideology_modifications.py and in the
@@ -94,9 +144,13 @@ law_licensed_modification = {
 	progressiveness = 40
 
 	modifier = {
+		# The boards decide which changes are safe: the state keeps the question.
+		country_authority_add = 200
+		# A licensed, counseled, recorded trade gives the argument little to feed on.
+		state_radicals_from_political_movements_mult = -0.5
+		state_migration_pull_mult = 0.25
 		country_acceptance_no_shared_heritage_trait_add = 5
-		state_migration_pull_mult = 0.05
-		country_bureaucracy_investment_cost_factor_mult = 0.05	# the licensing boards
+		country_bureaucracy_investment_cost_factor_mult = 0.1	# the licensing boards
 	}
 }
 
@@ -112,9 +166,15 @@ law_morphological_freedom = {
 	progressiveness = 60
 
 	modifier = {
+		# People move to where they can be themselves.
+		state_migration_pull_mult = 0.75
+		goods_output_services_mult = 0.1	# clinics, studios and salons with no board to ask
+		country_cultural_hegemony_art_mult = 0.15	# expressive freedom (extra_laws.txt's cultural hegemony hooks)
 		country_acceptance_no_shared_heritage_trait_add = 10
-		state_migration_pull_mult = 0.1
-		country_cultural_hegemony_art_mult = 0.05	# expressive freedom (extra_laws.txt's cultural hegemony hooks)
+		# Cohesion: where everyone looks as they choose, fewer take up the majority's ways.
+		state_assimilation_mult = -1
+		# The backlash (morphological_freedom_events.5): the pulpits fill.
+		interest_group_ig_devout_pop_attraction_mult = 0.25
 	}
 }
 
@@ -127,6 +187,12 @@ law_clade_citizenship = {
 		self_directed_evolution
 	}
 
+	# A heritable change is genetic modification (owner, 2026-11-24); the ban
+	# names this law in turn (common/laws/extra_laws.txt).
+	disallowing_laws = {
+		law_ban_on_genetic_modification
+	}
+
 	progressiveness = 80
 
 	# What the parity does, on the law's tooltip: its lines are scaled
@@ -136,12 +202,28 @@ law_clade_citizenship = {
 	}
 
 	modifier = {
+		# People born to a body, in workplaces and streets rebuilt around them.
+		# The census's modern safety (demographics_params.SAFETY_TYPES): work
+		# reaches its cap, SAFETY_MAX 0.95, from the era 7-9 carriers' 0.90, and
+		# accidents and violence 0.65 from the technologies' 0.50. Both were
+		# Self-Directed Evolution's or nobody's until 2026-11-24.
+		state_work_safety_add = 0.05
+		state_external_safety_add = 0.15
+		# Colonists adapted to low gravity and radiation: every space colony we
+		# hold grows by 0.3% a month, not 0.2% (each world's sr_site_growth_<key>,
+		# gen_solar_sites.GROWTH_MODIFIER).
+		country_sr_colony_growth_add = 0.001
+		state_migration_pull_mult = 0.5
 		# Morphological Freedom's line, so no pop is worse off than under it; the
 		# heritage parity on top (te_clade_parity_refresh) lifts every heritage
 		# figure to the highest of the three
 		country_acceptance_no_shared_heritage_trait_add = 10
-		state_migration_pull_mult = 0.15
-		country_cultural_hegemony_art_mult = 0.05	# expressive freedom, as Morphological Freedom's
+		# A people of its own doesn't take up the majority's ways.
+		state_assimilation_mult = -3
+		# Schools, housing, workplaces and medicine for more than one kind of
+		# body, per head of population (Prescribed Form's line, for the opposite
+		# reason: about 9% at era 12).
+		state_bureaucracy_population_base_cost_factor_mult = 1
 	}
 }
 
@@ -164,16 +246,16 @@ law_prescribed_form = {
 	}
 
 	modifier = {
-		# The government chooses the form.
-		country_authority_add = 50
+		# The government chooses the form: twice the licensing boards' hold.
+		country_authority_add = 400
 		# Its bureaucracy enforces it, in proportion to the people it covers.
 		# The technologies add about +10.8 to this factor by era 12, where the
 		# law unlocks, so +1 is about 9% there (owner, 2026-11-04).
 		state_bureaucracy_population_base_cost_factor_mult = 1
 		# Looking alike, people take up the majority's ways faster.
-		state_assimilation_mult = 0.25
+		state_assimilation_mult = 2
 		# What a body may express is set by decree.
-		country_cultural_hegemony_art_mult = -0.1
-		state_migration_pull_mult = -0.1
+		country_cultural_hegemony_art_mult = -0.25
+		state_migration_pull_mult = -0.5
 	}
 }
