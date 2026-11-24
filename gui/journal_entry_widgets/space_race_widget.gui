@@ -7710,7 +7710,7 @@ types space_race_widget_types
 				margin = { 4 1 }
 
 				textbox = {
-					size = { 90 20 }
+					size = { 130 20 }
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
@@ -7747,13 +7747,13 @@ types space_race_widget_types
 				margin = { 4 1 }
 
 				widget = {
-					size = { 90 24 }
+					size = { 130 24 }
 					parentanchor = vcenter
 
 					textbox = {
 						parentanchor = left|vcenter
 						autoresize = yes
-						max_width = 90
+						max_width = 130
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
