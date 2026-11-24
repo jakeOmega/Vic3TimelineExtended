@@ -181,17 +181,30 @@ class WidthTest(unittest.TestCase):
                     self.fits(key, width, "row")
 
     def test_the_value_rows(self):
-        # un_chamber_value_row: a 360 label and a 100 value, single lines.
+        # un_chamber_value_row: a 360 label and a 100 value, single lines;
+        # un_chamber_value_row_wide, for a word rather than a figure, 300 and
+        # 160, the same 460, so its value ends where the figures' do. A value
+        # chosen by SelectLocalization fits at each choice.
         body = _type(self.chamber, "un_chamber_value_row")
         self.assertIn("maximumsize = { 360 -1 }", body)
         self.assertIn("maximumsize = { 100 -1 }", body)
+        wide = _type(self.chamber, "un_chamber_value_row_wide")
+        self.assertRegex(self.chamber, r"\ttype un_chamber_value_row_wide = un_chamber_value_row \{")
+        self.assertRegex(wide, r'blockoverride "label_width" \{\s*minimumsize = \{ 300 -1 \}\s*maximumsize = \{ 300 -1 \}')
+        self.assertRegex(wide, r'blockoverride "value_width" \{\s*minimumsize = \{ 160 -1 \}\s*maximumsize = \{ 160 -1 \}')
+        self.assertEqual(300 + 160, 360 + 100)
         seen = 0
-        for inst in _instances(self.all, "un_chamber_value_row"):
-            for block, width in (("row_label", 360), ("row_value", 100)):
-                for key in re.findall(rf'blockoverride "{block}" \{{\s*text = "(je_\w+)"', inst):
-                    seen += 1
-                    with self.subTest(block=block, key=key):
-                        self.fits(key, width, "row")
+        for name, label_width, value_width in (("un_chamber_value_row", 360, 100),
+                                               ("un_chamber_value_row_wide", 300, 160)):
+            for inst in _instances(self.all, name):
+                for block, width in (("row_label", label_width), ("row_value", value_width)):
+                    keys = re.findall(rf'blockoverride "{block}" \{{\s*text = "(je_\w+)"', inst)
+                    for choice in re.findall(rf'blockoverride "{block}" \{{\s*text = "\[SelectLocalization\((.*?)\)\]"', inst):
+                        keys += re.findall(r"'(je_\w+)'", choice)
+                    for key in keys:
+                        seen += 1
+                        with self.subTest(row=name, block=block, key=key):
+                            self.fits(key, width, "row")
         self.assertGreaterEqual(seen, 10)
 
     def test_single_line_boxes(self):
