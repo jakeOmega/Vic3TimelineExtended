@@ -2347,14 +2347,9 @@ NUMERALS = ("I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
 # Orbit, where there is no colony, the Earth in its orbit ring
 # (space_race_gui_icons.md, "Locations"). te_sr_fleet_row's nine literal
 # textures are these (test_space_race_layout.py holds the two equal).
-_SR_ICONS = "gfx/interface/icons/space_race_icons"
-LOCATION_ICONS = {
-    "earth": f"{_SR_ICONS}/location_earth.dds",
-    "inner": f"{_SR_ICONS}/colony_venus.dds", "mars": f"{_SR_ICONS}/colony_mars.dds",
-    "asteroids": f"{_SR_ICONS}/colony_asteroid.dds", "jupiter": f"{_SR_ICONS}/colony_jovian.dds",
-    "saturn": f"{_SR_ICONS}/colony_saturnian.dds", "uranus": f"{_SR_ICONS}/colony_uranian.dds",
-    "neptune": f"{_SR_ICONS}/colony_neptunian.dds", "kuiper": f"{_SR_ICONS}/colony_dwarf.dds",
-}
+# The table is gen_solar_sites', which draws the same worlds on the system map.
+_SR_ICONS = gss._SR_ICONS
+LOCATION_ICONS = gss.LOCATION_ICONS
 
 
 def _frac(name: str) -> str:
