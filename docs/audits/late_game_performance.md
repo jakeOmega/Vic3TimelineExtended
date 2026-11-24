@@ -1205,8 +1205,22 @@ and after on the 20-year plot (the short ranges add the age test back):
 On the split above the Banking tab would draw about 60 frames a second at 1
 Year (84 items), about 40 at 5 Years (420) and about 18 at 20 Years (still
 1,680 items); the 20-year view stays costly because its cost is the items.
-Not yet measured in game (`docs/testing/perf-fixes-playtest.md`); whether
-the default should become 5 years (`DEFAULT_RANGE` in
+
+**Seen in game, 2026-11-24** (a copy of the same save, the same frame and
+counter, the branch loaded with that night's other branches): `DataModelLast`
+over a script list draws, 12 bars to the right edge at 1 Year, 60 at 5
+Years, every month at 20, the pips on the same charts.
+
+| Banking's History section | Before | After |
+|---|---|---|
+| Open, 1 Year | 23 | 74 |
+| Open, 5 Years | 18 | 47 |
+| Open, 20 Years | 16 | 24 |
+
+The 1-year and 5-year figures are this change's. Part of the 20-year gain
+is another branch's, loaded in the same session: the International
+Arrangements rows stopped evaluating a custom loc per member each frame.
+Whether the default should become 5 years (`DEFAULT_RANGE` in
 `gen_te_history_charts.py`) is the owner's call.
 
 ## The USA of 2024: the Deep-Sea Mine gate, 2026-11-22: 1.15.2
