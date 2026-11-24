@@ -953,9 +953,13 @@ class LabelBudgetTest(unittest.TestCase):
         self._fits(["nd_home_ig_name"], 280, ROW, "At Home group")
         self._fits([f"nd_home_view_{n}" for n in range(1, 11)], 200, ROW, "At Home class")
         table = _type_body(det, "nd_home_term_row")
-        self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 22 \}", table)], [220, 60])
+        # The values end at the group's class's edge (2026-11-24): the indent and the two cells are
+        # the group line's 280 + 200.
+        self.assertEqual([int(w) for w in re.findall(r"size = \{ (\d+) 22 \}", table)], [396, 60])
+        self.assertIn("margin_left = 24", table)
+        self.assertEqual(24 + 396 + 60, 280 + 200)
         terms = ("approval", "doctrine", "readiness", "authority", "strain", "possession", "business", "cap")
-        self._fits([f"nd_home_row_{t}" for t in terms], 220, ROW, "At Home row")
+        self._fits([f"nd_home_row_{t}" for t in terms], 396, ROW, "At Home row")
         self._fits([f"nd_home_row_{t}_value" for t in terms], 60, ROW, "At Home value")
 
 

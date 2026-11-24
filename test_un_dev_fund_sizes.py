@@ -208,11 +208,16 @@ class ButtonsTest(unittest.TestCase):
 
     def test_every_size_has_its_tooltips(self):
         # Raise names the size it moves to (all but Token), Reduce likewise
-        # (all but Generous), and Our Obligations names every size.
+        # (all but Generous), and the Fund section's contribution row names
+        # every size, in its value (je_un_dev_fund_size_<size>) and in its
+        # hover (un_dev_fund_contribution_lines; the position's sentence until
+        # the GUI polish of 2026-11-24).
         effects = _read(ECONOMY_EFFECTS)
         loc = _loc()
         raise_, reduce_ = (_flat(_block(effects, e)) for e in ("un_dev_fund_raise", "un_dev_fund_reduce"))
-        obligations = _flat(_block(effects, "un_economy_obligation_lines"))
+        obligations = _flat(_block(effects, "un_dev_fund_contribution_lines"))
+        with open(_path("gui", "journal_entry_widgets", "un_chamber_widget.gui"), encoding="utf-8-sig") as f:
+            widget = f.read()
         for size in SIZES:
             with self.subTest(size=size):
                 self.assertEqual(size != "token", f"un_dev_fund_to_{size}_tt" in raise_)
@@ -220,6 +225,14 @@ class ButtonsTest(unittest.TestCase):
                 self.assertIn(f"je_un_chamber_dev_fund_contributor_{size}", obligations)
                 self.assertRegex(loc, r"(?m)^ un_dev_fund_to_" + size + r"_tt:0 ")
                 self.assertRegex(loc, r"(?m)^ je_un_chamber_dev_fund_contributor_" + size + r":0 ")
+                for key in (f"je_un_dev_fund_size_{size}", f"je_un_dev_fund_share_{size}"):
+                    self.assertIn(f"'{key}'", widget)
+                    self.assertRegex(loc, r"(?m)^ " + key + r":0 ")
+                # The share row's figure is the size's own (un_dev_fund_pct_<size>).
+                share = re.search(r'(?m)^ je_un_dev_fund_share_' + size + r':0 "#v ([\d.]+)%#!"', loc)
+                self.assertTrue(share, size)
+                self.assertAlmostEqual(float(share.group(1)),
+                                       _constant(_read(ECONOMY), f"un_dev_fund_pct_{size}"))
                 self.assertIn(f"un_disp_dev_fund_cost_{size} = {{", _read(ECONOMY))
 
 

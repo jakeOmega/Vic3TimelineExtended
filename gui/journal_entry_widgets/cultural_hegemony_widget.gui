@@ -374,8 +374,9 @@ types cultural_hegemony_widget_types
 	### One programme: name, running/idle status, and the enable + disable controls.
 	### Exactly one of the two buttons is ever shown, because ch_policy_sgui's
 	### is_shown mirrors the matching scripted_button pair's `visible`. Three
-	### fixed columns (250 / 80 / 112), shared with the funding row above the
-	### programmes, so the four rows and the stepper line up. The name column
+	### fixed columns (250 / 80 / 112). The funding row above the programmes
+	### shares the name column and spans the other two with its stepper
+	### (26 / 134 / 26), so the four rows and the stepper line up. The name column
 	### takes the longest name in the large font ("Cultural Protectionism"), the
 	### status column "Running" / "Idle" (test_cultural_hegemony_layout.py
 	### holds every label to its cell).
@@ -428,8 +429,13 @@ types cultural_hegemony_widget_types
 
 	### The Top Cultural Powers board's columns (CH-2): the "us" marker, rank,
 	### flag, country, share, change and the political model's swatch, at
-	### 14 / 26 / 28 / 208 / 60 / 66 / 50 with 2 between, 464 of the 474
-	### column. The head and every row share them, so they line up.
+	### 14 / 22 / 36 / 192 / 58 / 66 / 64 with 2 between, 464 of the 474
+	### column. The head and every row share them, so they line up. The rank
+	### is right-aligned in its cell and the flag centred in a wider one, so
+	### "10" keeps clear of the flag and the flag of the name; the model's
+	### cell is wider than "Model", so its centred head stands apart from
+	### "Change" (2026-11-24: "1" touched the flag, and the heads read
+	### "Change Model").
 	### One head cell, its hover saying what the column is: a fixed-width cell
 	### holding one textbox, aligned as the column's values are.
 	type ch_board_head_cell = widget {
@@ -459,7 +465,7 @@ types cultural_hegemony_widget_types
 		}
 		ch_board_head_cell = {
 			blockoverride "cell_size" {
-				size = { 26 24 }
+				size = { 22 24 }
 			}
 			blockoverride "cell_text" {
 				text = "je_ch_board_head_rank"
@@ -467,11 +473,11 @@ types cultural_hegemony_widget_types
 			}
 		}
 		widget = {
-			size = { 28 24 }
+			size = { 36 24 }
 		}
 		ch_board_head_cell = {
 			blockoverride "cell_size" {
-				size = { 208 24 }
+				size = { 192 24 }
 			}
 			blockoverride "cell_anchor" {
 				parentanchor = left|vcenter
@@ -482,6 +488,9 @@ types cultural_hegemony_widget_types
 			}
 		}
 		ch_board_head_cell = {
+			blockoverride "cell_size" {
+				size = { 58 24 }
+			}
 			blockoverride "cell_text" {
 				text = "je_ch_board_head_share"
 			}
@@ -497,7 +506,7 @@ types cultural_hegemony_widget_types
 		}
 		ch_board_head_cell = {
 			blockoverride "cell_size" {
-				size = { 50 24 }
+				size = { 64 24 }
 			}
 			blockoverride "cell_anchor" {
 				parentanchor = center
@@ -546,25 +555,27 @@ types cultural_hegemony_widget_types
 			}
 		}
 		widget = {
-			size = { 26 24 }
+			size = { 22 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = right|vcenter
 				align = right|nobaseline
 				autoresize = yes
-				max_width = 26
+				max_width = 22
 				elide = right
 				using = ch_fontsize_row
 				text = "ch_board_row_rank"
 			}
 		}
+		### The flag (27 wide) centred in 36: a gap of about 6 to the rank on
+		### its left and the name on its right, with the rows' 2 between.
 		widget = {
-			size = { 28 24 }
+			size = { 36 24 }
 			parentanchor = vcenter
 
 			widget = {
-				size = { 28 24 }
+				size = { 36 24 }
 				visible = "[ScriptContainer.HasVariable('ch_board_capital')]"
 
 				tiny_flag = {
@@ -578,21 +589,21 @@ types cultural_hegemony_widget_types
 			parentanchor = vcenter
 			autoresize = yes
 			multiline = yes
-			minimumsize = { 208 -1 }
-			maximumsize = { 208 -1 }
+			minimumsize = { 192 -1 }
+			maximumsize = { 192 -1 }
 			align = left|nobaseline
 			using = ch_fontsize_row
 			text = "ch_board_row_name"
 		}
 		widget = {
-			size = { 60 24 }
+			size = { 58 24 }
 			parentanchor = vcenter
 
 			textbox = {
 				parentanchor = right|vcenter
 				align = right|nobaseline
 				autoresize = yes
-				max_width = 60
+				max_width = 58
 				elide = right
 				using = ch_fontsize_row
 				text = "ch_board_row_share"
@@ -640,9 +651,11 @@ types cultural_hegemony_widget_types
 		### The model's swatch: the models pie's own colour (frame 2 of its
 		### texture), its name and laws on hover (ch_model_<model>_tt), as the
 		### models legend pairs them. Codes: ch_set_political_model's 1-15;
-		### none before the country's first census.
+		### none before the country's first census. Centred under the head's
+		### centred "Model", in a cell wide enough to keep that head clear of
+		### "Change".
 		widget = {
-			size = { 50 24 }
+			size = { 64 24 }
 			parentanchor = vcenter
 
 			icon = {
@@ -1674,8 +1687,19 @@ types cultural_hegemony_widget_types
 				margin_bottom = 2
 			}
 
-			### Funding stepper — ops 0 (down) and 1 (up), in the programme rows'
-			### three columns: label, level, controls.
+			### Funding stepper — ops 0 (down) and 1 (up), in the Nuclear
+			### Program funding row's shape (nuclear_program_funding_row) and the
+			### covert one's: the label in the programme names' column, then
+			### minus, the level centred in a fixed cell, and plus, across the
+			### status and controls columns (80 + 6 + 112 = 26 + 6 + 134 + 6 +
+			### 26), so minus starts where the statuses do and plus ends at the
+			### buttons' edge: 6 + 250 + 6 + 26 + 6 + 134 + 6 + 26 + 6 = 466, a
+			### programme row's width. Every slot is fixed, so nothing moves when
+			### the level's width changes ("0 / 11" to "11 / 11"). The buttons
+			### are the player's own (te_own_country_only), each in a slot that
+			### stays when it hides, so another country's row is the label and
+			### the level in the same places (2026-11-24; the level sat in the
+			### status column and both buttons together at the right).
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
@@ -1704,11 +1728,29 @@ types cultural_hegemony_widget_types
 				}
 
 				widget = {
-					size = { 80 26 }
+					size = { 26 28 }
+					parentanchor = vcenter
+
+					widget = {
+						size = { 100% 100% }
+						using = te_own_country_only
+
+						button_icon_minus_action = {
+							size = { 26 26 }
+							parentanchor = center
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
+						}
+					}
+				}
+
+				widget = {
+					size = { 134 26 }
 					textbox = {
-						parentanchor = left|vcenter
+						parentanchor = center
 						autoresize = yes
-						max_width = 80
+						max_width = 134
 						elide = right
 						align = nobaseline
 						using = ch_fontsize_row
@@ -1717,28 +1759,17 @@ types cultural_hegemony_widget_types
 					}
 				}
 
-				### The stepper: the player's own (te_own_country_only), so
-				### another country's row is the label and the level.
 				widget = {
-					size = { 112 28 }
+					size = { 26 28 }
 					parentanchor = vcenter
-					using = te_own_country_only
 
-					flowcontainer = {
-						parentanchor = center
-						direction = horizontal
-						spacing = 12
+					widget = {
+						size = { 100% 100% }
+						using = te_own_country_only
 
-						button_icon_minus_action = {
-							size = { 26 26 }
-							parentanchor = vcenter
-							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
-						}
 						button_icon_plus_action = {
 							size = { 26 26 }
-							parentanchor = vcenter
+							parentanchor = center
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"

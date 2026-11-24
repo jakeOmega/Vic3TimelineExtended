@@ -69,6 +69,12 @@ class LeastGrandTests(unittest.TestCase):
         self.assertIn("gm_state_monument_count >= 6", _squash(_block(VALUES, "gm_state_disp_clearable")))
         self.assertIn("var:gm_tr_origin ?= { gm_state_monument_count >= 6 }",
                       _squash(_block(VALUES, "gm_mon_disp_clearable")))
+        # The count before the comparison of every monument here: each row asks both every
+        # frame, and the count is false for nearly all (late_game_performance.md, 2026-11-24).
+        for name, least in (("gm_state_disp_clearable", "gm_state_primary_is_least"),
+                            ("gm_mon_disp_clearable", "gm_mon_is_least")):
+            body = _squash(_block(VALUES, name))
+            self.assertLess(body.index("gm_state_monument_count >= 6"), body.index(least), name)
 
     def test_the_least_is_read_over_the_eligible(self):
         least = _squash(_block(VALUES, "gm_state_least_grandeur"))

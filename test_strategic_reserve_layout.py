@@ -299,7 +299,8 @@ class HowItWorksTest(unittest.TestCase):
         overview = _type_body(self.widget, "te_st_res_overview_panel")
         for key in ("je_strategic_reserve_ov_cap_tt", "je_strategic_reserve_ov_income_tt"):
             self.assertIn(f'"{key}"', overview, key)
-        self.assertIn("st_res_total_sale_profit", self.loc["je_strategic_reserve_ov_income_tt"])
+        self.assertIn("$je_strategic_reserve_ov_income_fig$", self.loc["je_strategic_reserve_ov_income_tt"])
+        self.assertIn("st_res_total_sale_profit", self.loc["je_strategic_reserve_ov_income_fig"])
         self.assertIn("country_st_res_weekly_rate_cap_add", self.loc["je_strategic_reserve_ov_cap_tt"])
 
 
@@ -519,7 +520,8 @@ class RateButtonTest(unittest.TestCase):
             self.assertNotIn(f"st_res_row_{g}_tooltip", loc, g)
             self.assertIn(f"$st_res_row_{g}_policy$", loc[f"st_res_row_{g}_auto_tooltip"], g)
             self.assertIn(f"country_st_res_{g}_decay_add", loc[f"st_res_row_{g}_decay_tt"], g)
-            self.assertIn(f"st_res_{g}_actual_rate", loc[f"st_res_row_{g}_rate_tt"], g)
+            self.assertIn(f"$st_res_row_{g}_actual_fig$", loc[f"st_res_row_{g}_rate_tt"], g)
+            self.assertIn(f"st_res_{g}_actual_rate", loc[f"st_res_row_{g}_actual_fig"], g)
 
 
 class OverviewCellsTest(unittest.TestCase):
@@ -560,7 +562,8 @@ class OverviewCellsTest(unittest.TestCase):
             body = _body(values, rf"(?m)^st_res_{g}_purchase_cost = \{{")
             self.assertRegex(body, rf"limit = \{{ st_res_{g}_actual_rate_base_applied > 0 \}}\s*"
                                    rf"add = st_res_{g}_actual_rate_base_applied\s*multiply = st_res_{g}_unit_price")
-        self.assertIn("st_res_total_purchase_cost", _loc()["je_strategic_reserve_ov_spend_value"])
+        self.assertIn("$je_strategic_reserve_ov_spend_fig$", _loc()["je_strategic_reserve_ov_spend_value"])
+        self.assertIn("st_res_total_purchase_cost", _loc()["je_strategic_reserve_ov_spend_fig"])
 
 
 class HistoryTest(unittest.TestCase):

@@ -407,6 +407,19 @@ def _tooltip(tab: Tab, root: str = PLAYER_ROOT) -> str:
     return f'tooltip = "[{_tooltip_value(tab, root)}]"'
 
 
+# A tab's name is drawn at most this large (2026-11-24, seen in game). Vanilla's tab text starts at the body size, 17,
+# and shrinks each name until it fits its slot, down to 12. On a strip of five or six that leaves "Nation", "Seabed" and
+# "Banking" at 17 beside "Space Race" at 14 and the two-line names at 12; sixteen tabs side by side in the full-screen
+# frame showed three sizes. Starting at 14 leaves two, 14 and 12. The name's block sits inside vanilla's textbox, so
+# the size goes in with the text; the selected half of a slot gets the same.
+TAB_NAME_SIZE = 14
+
+
+def _name(label: str) -> tuple[str, str]:
+    """A slot's name, the lines of both its "button" and its "button_selected" block."""
+    return f'text = "{label}"', f"fontsize = {TAB_NAME_SIZE}"
+
+
 def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED,
           prefix: str = "te_systems_window", tooltip: str | None = None, enabled: str | None = None) -> list[str]:
     """One tab_buttons slot: the window's (te_systems_window_tab, its
@@ -416,12 +429,12 @@ def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
     click = [] if tab.open_ is None else [f'enabled = "[{enabled or rooted(tab.open_, root)}]"']
     click.append(f"onclick = \"[GetVariableSystem.Set('{stored_key}', '{tab.key}')]\"")
-    return (override("button", f'text = "{tab.label}"')
+    return (override("button", *_name(tab.label))
             + override("button_tooltip", tooltip or _tooltip(tab, root))
             + override("button_click", *click)
             + override("button_visibility", f"using = {prefix}_{tab.key}_selected")
             + override("button_visibility_checked", f"using = {prefix}_{tab.key}_unselected")
-            + override("button_selected", f'text = "{tab.label}"'))
+            + override("button_selected", *_name(tab.label)))
 
 
 # The wide frame's strips keep the narrow slot width: 540, the Census
@@ -955,12 +968,12 @@ def ni_templates() -> list[str]:
 def _ni_pops_slot(slot: str) -> list[str]:
     def override(name, *lines):
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
-    return (override("button", f'text = "{NI_POPS_LABEL}"')
+    return (override("button", *_name(NI_POPS_LABEL))
             + override("button_tooltip", f'tooltip = "{NI_POPS_TOOLTIP}"')
             + override("button_click", f"onclick = \"[GetVariableSystem.Set('{NI_STORED}', '{NI_FALLBACK}')]\"")
             + override("button_visibility", f"using = {NI_PREFIX}_pops_selected")
             + override("button_visibility_checked", f"using = {NI_PREFIX}_pops_unselected")
-            + override("button_selected", f'text = "{NI_POPS_LABEL}"'))
+            + override("button_selected", *_name(NI_POPS_LABEL)))
 
 
 def ni_strips() -> list[str]:

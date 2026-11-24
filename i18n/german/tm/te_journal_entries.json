@@ -7436,8 +7436,8 @@
   "de": "#bold [concept_st_res_flow_cap]:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_weekly_rate_cap_add')] Einheiten pro Woche je Ware"
  },
  "je_strategic_reserve_ov_cap_value": {
-  "en": "Cap [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/wk",
-  "de": "Obergrenze [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/Wo."
+  "en": "Cap $je_strategic_reserve_ov_cap_fig$/wk",
+  "de": "Obergrenze $je_strategic_reserve_ov_cap_fig$/Wo."
  },
  "je_strategic_reserve_ov_held_caption": {
   "en": "Blocked",
@@ -7496,24 +7496,24 @@
   "de": "Verkaufseinnahmen"
  },
  "je_strategic_reserve_ov_income_tt": {
-  "en": "#bold Weekly Sales Income:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]\\nGross revenue this week from the goods the reserve releases, at each good's current market price. Purchases, beside it, is the other side.",
-  "de": "#bold Wöchentliche Verkaufseinnahmen:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]\\nBruttoerlös dieser Woche aus den Waren, die die Reserve freigibt, zum aktuellen Marktpreis jeder Ware. Die Käufe daneben sind die andere Seite."
+  "en": "#bold Weekly Sales Income:#! @money!$je_strategic_reserve_ov_income_fig$\\nGross revenue this week from the goods the reserve releases, at each good's current market price. Purchases, beside it, is the other side.",
+  "de": "#bold Wöchentliche Verkaufseinnahmen:#! @money!$je_strategic_reserve_ov_income_fig$\\nBruttoerlös dieser Woche aus den Waren, die die Reserve freigibt, zum aktuellen Marktpreis jeder Ware. Die Käufe daneben sind die andere Seite."
  },
  "je_strategic_reserve_ov_income_value": {
-  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/wk",
-  "de": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/Wo."
+  "en": "@money!$je_strategic_reserve_ov_income_fig$/wk",
+  "de": "@money!$je_strategic_reserve_ov_income_fig$/Wo."
  },
  "je_strategic_reserve_ov_spend_label": {
   "en": "Purchases",
   "de": "Käufe"
  },
  "je_strategic_reserve_ov_spend_tt": {
-  "en": "#bold Weekly Purchases:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]\\nWhat this week's buying costs at today's prices, decay replacement included. An estimate: the hub pays through its production method, so the bill is under Goods for Government Buildings in the budget panel.",
-  "de": "#bold Wöchentliche Käufe:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]\\nWas der Einkauf dieser Woche zu heutigen Preisen kostet, Ersatz für Verfall eingeschlossen. Eine Schätzung: Der Knoten zahlt über seine Produktionsmethode, daher steht die Rechnung in der Etat-Tafel unter Waren für Regierungsgebäude."
+  "en": "#bold Weekly Purchases:#! @money!$je_strategic_reserve_ov_spend_fig$\\nWhat this week's buying costs at today's prices, decay replacement included. An estimate: the hub pays through its production method, so the bill is under Goods for Government Buildings in the budget panel.",
+  "de": "#bold Wöchentliche Käufe:#! @money!$je_strategic_reserve_ov_spend_fig$\\nWas der Einkauf dieser Woche zu heutigen Preisen kostet, Ersatz für Verfall eingeschlossen. Eine Schätzung: Der Knoten zahlt über seine Produktionsmethode, daher steht die Rechnung in der Etat-Tafel unter Waren für Regierungsgebäude."
  },
  "je_strategic_reserve_ov_spend_value": {
-  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/wk",
-  "de": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/Wo."
+  "en": "@money!$je_strategic_reserve_ov_spend_fig$/wk",
+  "de": "@money!$je_strategic_reserve_ov_spend_fig$/Wo."
  },
  "je_strategic_reserve_reason": {
   "en": "A national stockpile of strategic goods, bought from your own market and released back onto it by hand or with a price-triggered policy for each good.",

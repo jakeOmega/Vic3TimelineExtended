@@ -651,14 +651,18 @@ un_food_reserve_withdraw_pledge = {
 
 # ---- The chamber ----------------------------------------------------------------------
 
-# Our part in the World Development Fund, the first row of its own section
-# (te_un_sec_dev_fund; un_chamber_dev_fund_position_sgui), with the four
-# Development Programs controls under it: the Fund's grant to us, or why there
-# is none; what our Development Programs contribution does for it. It sat under
-# Our Obligations' dues until the 2026-10-27 audit (UN-13), two sections from
-# the Fund it describes. Root-level lines only.
+# Our part in the World Development Fund, the first rows of its own section
+# (te_un_sec_dev_fund), with the four Development Programs controls under them.
+# It sat under Our Obligations' dues until the 2026-10-27 audit (UN-13), two
+# sections from the Fund it describes, and was three sentences until the GUI
+# polish of 2026-11-24: now each figure is a row reading a script value, and
+# these two builders are the hovers of the rows they explain. Root-level lines
+# only.
+#
+# What we receive: the Fund's grant to us and where it goes, or why there is
+# none (the "We receive" row's hover; un_chamber_dev_fund_receipt_sgui).
 # Scope: country
-un_economy_obligation_lines = {
+un_dev_fund_receipt_lines = {
 	if = {
 		limit = { has_global_variable = un_inst_development_fund }
 		# At Moribund no dues are assessed, so the budget is empty and only the
@@ -706,10 +710,19 @@ un_economy_obligation_lines = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_none
 		}
-		# Our Development Programs contribution: its size and what it pays the
-		# grants, or that it would if we paid our dues and held our seat, or
-		# (a member the Fund does not pay, whatever its rank) that it could.
-		# Then what the recipients remember of our money, while they do.
+	}
+}
+
+# Our Development Programs contribution: its size and what it pays the grants,
+# or that it would if we paid our dues and held our seat, or (a member the Fund
+# does not pay, whatever its rank) that it could, or that we make none (the
+# "Our contribution" row's hover; un_chamber_dev_fund_contribution_sgui). What
+# the recipients remember of our money is a row of its own, with its own hover
+# (je_un_dev_fund_goodwill_tt).
+# Scope: country
+un_dev_fund_contribution_lines = {
+	if = {
+		limit = { has_global_variable = un_inst_development_fund }
 		if = {
 			limit = { un_dev_fund_contributor = yes }
 			if = {
@@ -744,19 +757,17 @@ un_economy_obligation_lines = {
 			}
 			custom_tooltip_no_bullet = je_un_chamber_dev_fund_could_contribute
 		}
-		if = {
-			limit = {
-				has_variable = un_dev_fund_patron
-				var:un_dev_fund_patron > 0
-			}
-			custom_tooltip_no_bullet = je_un_chamber_dev_fund_patron
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_dev_fund_no_contribution
 		}
 	}
 }
 
-# Our grain pledge to the World Food Reserve, under Our Obligations' dues
-# (un_chamber_food_reserve_sgui), with Pledge Grain or Withdraw Our Pledge
-# under it. Root-level lines only.
+# Our grain pledge to the World Food Reserve, the hover of the pledge row under
+# its own heading in Our Obligations (un_chamber_food_reserve_sgui; the rows
+# read script values), with Pledge Grain or Withdraw Our Pledge under them:
+# what our pledge lets a mission draw, or why we pledge nothing. Root-level
+# lines only.
 # Scope: country (a member)
 un_food_reserve_obligation_lines = {
 	if = {
@@ -780,7 +791,9 @@ un_food_reserve_obligation_lines = {
 # largest grant first, with the grant and its GDP per head; or, with nobody
 # paid, why. Each recipient prints one line, in its own scope, once (gotcha
 # #27 needs a country to recur before it bites). The reasons mirror
-# un_economy_obligation_lines.
+# un_dev_fund_receipt_lines.
+# Parameters: $MAX$ = the last place listed, from 0: 9 for the ten largest
+# grants (un_chamber_dev_fund_top_sgui), 999 for all (un_chamber_dev_fund_sgui)
 # Scope: country (the viewer)
 un_dev_fund_recipient_lines = {
 	if = {
@@ -789,7 +802,7 @@ un_dev_fund_recipient_lines = {
 			limit = { un_dev_fund_receiving = yes }
 			order_by = un_dev_fund_grant_order
 			min = 0
-			max = 999
+			max = $MAX$
 			check_range_bounds = no
 			if = {
 				limit = { this = root }

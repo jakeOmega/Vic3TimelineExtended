@@ -8,15 +8,28 @@ te_budget_total = { value = scope:total }
 # Ordinal passed by each sorted flow slot; no engine layout vector binding.
 te_budget_row_slot = { value = scope:row_slot }
 
+# The four building sums below run on every frame the tab is open. Each walks
+# the country's states and looks up the one building of its type in each
+# (`b:<type>`), never every building the country has (`every_scope_building`):
+# a state has at most one building of a type, so the sum is the same, and the
+# Imperial Union of America of December 2032 spent 1.76 s of a 13.9 s profile
+# in the four building walks (docs/audits/late_game_performance.md § "The
+# Budget Breakdown tab"). `exists = b:<type>` also finds a queued building of
+# no level, as the building walk did. Each building type named here must be
+# every member of its building group, vanilla's and the mod's:
+# test_budget_breakdown.BuildingLookupTest holds that.
+#
 # Administration produces bureaucracy/tax capacity rather than saleable goods.
 # Its negative weekly profit therefore measures its wages + input goods (and
 # slave upkeep, if any). Do not use ALL government buildings' expenses: that
 # would also allocate universities, ports and construction sites to ministries.
 te_budget_administration_actual = {
 	value = 0
-	every_scope_building = {
-		limit = { is_building_type = building_government_administration }
-		add = { value = weekly_profit multiply = -1 min = 0 }
+	every_scope_state = {
+		limit = { exists = b:building_government_administration }
+		b:building_government_administration = {
+			add = { value = weekly_profit multiply = -1 min = 0 }
+		}
 	}
 }
 
@@ -54,9 +67,11 @@ te_budget_administration_cost = {
 # getters; the Breakdown shows it under Programme Costs, Space Race instead.
 te_budget_space_program_actual = {
 	value = 0
-	every_scope_building = {
-		limit = { is_building_type = building_space_program }
-		add = { value = weekly_profit multiply = -1 min = 0 }
+	every_scope_state = {
+		limit = { exists = b:building_space_program }
+		b:building_space_program = {
+			add = { value = weekly_profit multiply = -1 min = 0 }
+		}
 	}
 }
 
@@ -106,23 +121,30 @@ te_budget_institution_pool = {
 # the logistics-centre deficit; subtracting the branch forecast here wrongly
 # moves those wages into Other Military Costs. Select only support buildings and
 # pass each sum once to the GUI, then add it directly to Materials and Support.
+# Army: bg_army_logistics_center. Navy: bg_naval_fortification and
+# bg_naval_logistics_center, one building type each.
 te_budget_army_support_actual = {
 	value = 0
-	every_scope_building = {
-		limit = { is_building_group = bg_army_logistics_center }
-		add = { value = weekly_profit multiply = -1 min = 0 }
+	every_scope_state = {
+		limit = { exists = b:building_army_logistics_center }
+		b:building_army_logistics_center = {
+			add = { value = weekly_profit multiply = -1 min = 0 }
+		}
 	}
 }
 
 te_budget_navy_support_actual = {
 	value = 0
-	every_scope_building = {
-		limit = {
-			OR = {
-				is_building_group = bg_naval_fortification
-				is_building_group = bg_naval_logistics_center
-			}
+	every_scope_state = {
+		limit = { exists = b:building_naval_fortification }
+		b:building_naval_fortification = {
+			add = { value = weekly_profit multiply = -1 min = 0 }
 		}
-		add = { value = weekly_profit multiply = -1 min = 0 }
+	}
+	every_scope_state = {
+		limit = { exists = b:building_naval_logistics_center }
+		b:building_naval_logistics_center = {
+			add = { value = weekly_profit multiply = -1 min = 0 }
+		}
 	}
 }

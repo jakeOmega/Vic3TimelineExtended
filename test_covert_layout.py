@@ -754,6 +754,21 @@ class FundingTableTest(unittest.TestCase):
                 self.assertIn(f'"je_iw_fund_tbl_stealth_{n}"', row, n)
                 self.assertIn(f'"je_iw_fund_tbl_capacity_{n}"', row, n)
 
+    def test_the_stepper_is_the_nuclear_funding_rows_shape(self):
+        """2026-11-24: the label at the left, then minus, the level centred in a fixed cell, and
+        plus, as the Nuclear panel's Program funding row; as wide as the table under it."""
+        stepper = _type_body(self.gui, "covert_cc_funding_stepper")
+        self.assertNotIn("parentanchor = hcenter", stepper)
+        self.assertIn("margin = { 4 1 }", stepper)
+        self.assertIn("spacing = 4", stepper)
+        kinds = re.findall(r"^\t\t(textbox|button_icon_minus_action|button_icon_plus_action) = \{", stepper, re.M)
+        self.assertEqual(kinds, ["textbox", "button_icon_minus_action", "textbox", "button_icon_plus_action"])
+        sizes = [int(w) for w in re.findall(r"^\t\t\tsize = \{ (\d+) 24 \}", stepper, re.M)]
+        self.assertEqual(sizes, [170, 24, 230, 24])
+        self.assertRegex(stepper, r'text = "je_iw_funding_stepper_label"\s*size = \{ 170 24 \}\s*align = left\|nobaseline')
+        self.assertRegex(stepper, r'text = "je_iw_funding_stepper_value"\s*size = \{ 230 24 \}\s*align = center\|nobaseline')
+        self.assertEqual(4 + sum(sizes) + 3 * 4 + 4, 4 + 170 + 80 + 80 + 130 + 4)   # covert_levels_row's 468
+
     def test_the_tint_is_one_visible_defaulting_to_hidden(self):
         body = _type_body(self.gui, "covert_levels_row")
         tint = body[body.index("icon = {"):body.index("flowcontainer = {")]
@@ -822,7 +837,7 @@ FIXED_CELLS = [
     ("je_iw_ov_tc_label", 108, "overview"), ("je_iw_ov_caught_label", 108, "overview"),
     ("je_iw_capacity_header", 100, "overview"), ("je_iw_tradecraft_header", 100, "overview"),
     ("je_iw_capacity_total", 140, "overview"), ("je_iw_tradecraft_line", 140, "overview"),
-    ("je_iw_funding_stepper_label", 80, "row"), ("je_iw_funding_stepper_value", 180, "row"),
+    ("je_iw_funding_stepper_label", 170, "row"), ("je_iw_funding_stepper_value", 230, "row"),
     ("je_iw_priority_stepper_label", 80, "row"), ("je_iw_stand_down_button", 140, "row"),
     # The Agent Networks table (COV-12): heads and values in their columns.
     ("je_iw_net_head_country", 120, "row"), ("je_iw_net_head_strength", 112, "row"),

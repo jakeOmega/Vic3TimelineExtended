@@ -709,15 +709,18 @@ class WidthBudgetTest(unittest.TestCase):
 
 
     def test_top_emitters(self):
-        """The rows' cells, read from the .gui. The name has the whole 480 line:
-        the longest country name in vanilla is 48 characters (dyn_c_ussr_californias,
-        "United Socialist Council Republics of California")."""
+        """The rows' cells, read from the .gui. One row a country (2026-11-24): the
+        name's cell holds about 25 characters ("Imperial Union of America") on a line
+        at the budget's own estimate and wraps a longer name; the longest country name
+        in vanilla is 48 characters (dyn_c_ussr_californias, "United Socialist
+        Council Republics of California"). The figures are |K numbers, three digits
+        with a sign and a suffix, so "-12.3M" is the widest."""
         gui = _read(GUI)
         row = _type_body(gui, "gw_emitter_row")
-        name = int(re.search(r'minimumsize = \{ (\d+) -1 \}\s*maximumsize = \{ \d+ -1 \}\s*autoresize = yes\s*'
-                             r'elide = right\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
+        name = int(re.search(r'autoresize = yes\s*multiline = yes\s*minimumsize = \{ (\d+) -1 \}\s*'
+                             r'maximumsize = \{ \d+ -1 \}\s*align = left\|nobaseline\s*using = gw_fontsize_row\s*'
                              r'text = "gw_te_row_name"', row).group(1))
-        cell = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
+        cell = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = (?:right|left)\|nobaseline\s*'
                                                  r'using = gw_fontsize_row\s*(?:default_format = "#v"\s*)?'
                                                  r'(?:visible = "[^"]*"\s*)?text = "(\w+)"', row)}
         head = {k: int(w) for w, k in re.findall(r'max_width = (\d+)\s*elide = right\s*align = right\|nobaseline\s*'
@@ -725,17 +728,29 @@ class WidthBudgetTest(unittest.TestCase):
                                                  r'text = "(\w+)"', _type_body(gui, "gw_emitter_header"))}
         self.assertEqual(set(cell), {"gw_te_row_annual", "gw_te_row_share", "gw_te_row_cum", "gw_te_ours"})
         self.assertEqual(set(head), {"gw_te_head_annual", "gw_te_head_share", "gw_te_head_cum"})
-        cases = [
-            ("United Socialist Council Republics of California", "row", name, "the longest country name"),
-            ("-9999.9/yr", "row", cell["gw_te_row_annual"], "a country's annual emissions"),
+        longest = "United Socialist Council Republics of California"
+        cases = [(word, "row", name, "a word of the longest country name") for word in longest.split()] + [
+            ("-12.3M/yr", "row", cell["gw_te_row_annual"], "a country's annual emissions"),
             ("100%", "row", cell["gw_te_row_share"], "a share"),
-            ("-9,999,999", "row", cell["gw_te_row_cum"], "a cumulative total"),
+            ("-12.3M", "row", cell["gw_te_row_cum"], "a cumulative total"),
             (_visible_text(_loc_value("gw_te_ours")), "row", cell["gw_te_ours"], "our country's mark"),
         ]
         for key, width in head.items():
             cases.append((_visible_text(_loc_value(key)), "row", width, key))
         for text, font, width, what in cases:
             self.assertFits(text, font, width, what)
+        # "Imperial Union of America" on one line: it measured 179 units in the same face at 17 in
+        # the Top Cultural Powers table (the 2026-11-24 screenshots, 1.5 px a unit), plus 5%. The
+        # budget's 8.5 a character with 10% is the safe side for a cell that elides; this one wraps.
+        self.assertLessEqual(179 * 1.05, name)
+        # The longest name in three lines at most, by the budget's own estimate.
+        per_line, lines, line = name / (UNITS["row"] * MARGIN), 1, ""
+        for word in longest.split():
+            if line and len(f"{line} {word}") > per_line:
+                lines, line = lines + 1, word
+            else:
+                line = f"{line} {word}".strip()
+        self.assertLessEqual(lines, 3)
 
 
 class LocTest(unittest.TestCase):

@@ -442,11 +442,14 @@ def generated_values():
             key = node.key
             if key not in existing and node.children:
                 out.append(sv(f"te_budget_{side}_{key}", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{child.key}" for child in node.children)))
+            # A leaf reads its amount as the section bound it once a frame
+            # (scope:row_<key>, section() below), never the value again: each
+            # recomputation of Other or Administration re-sums every category.
             positive = ("\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{child.key}_positive" for child in node.children)
-                        if node.children else f"\tvalue = te_budget_{side}_{key}\n\tmin = 0")
+                        if node.children else f"\tvalue = scope:row_{key}\n\tmin = 0")
             out.append(sv(f"te_budget_{side}_{key}_positive", positive))
             active = ("\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{child.key}_active" for child in node.children) + "\n\tmax = 1"
-                      if node.children else f"\tvalue = 0\n\tif = {{ limit = {{ NOT = {{ te_budget_{side}_{key} = 0 }} }} value = 1 }}")
+                      if node.children else f"\tvalue = 0\n\tif = {{ limit = {{ NOT = {{ scope:row_{key} = 0 }} }} value = 1 }}")
             out.append(sv(f"te_budget_{side}_{key}_active", active))
             subtree = f"\tvalue = te_budget_{side}_{key}_active"
             if node.children:
@@ -456,8 +459,12 @@ def generated_values():
             if ancestors:
                 visible = "\tvalue = 0\n\tif = { limit = { " + " ".join(f"scope:open_{parent.key} = 1" for parent in ancestors) + f" }} value = te_budget_{side}_{key}_active }}"
             out.append(sv(f"te_budget_{side}_{key}_visible", visible))
-            out.append(sv(f"te_budget_{side}_{key}_cached_rank", f"\tvalue = scope:rank_{key}"))
-            out.append(sv(f"te_budget_{side}_{key}_cached_active", f"\tvalue = scope:active_{key}"))
+            # The row's amount as bound once a frame, and whether the row fills
+            # the slot being drawn: one read per row and slot, where the GUI
+            # made three (the row's visibility, its rank and the slot).
+            out.append(sv(f"te_budget_{side}_{key}_cached_amount", f"\tvalue = scope:row_{key}"))
+            out.append(sv(f"te_budget_{side}_{key}_in_slot",
+                          f"\tvalue = 0\n\tif = {{\n\t\tlimit = {{ scope:active_{key} > 0 scope:rank_{key} >= scope:row_slot scope:row_slot >= scope:rank_{key} }}\n\t\tvalue = 1\n\t}}"))
             limits = [f"scope:open_{parent.key} = 1" for parent in ancestors]
             if node.children:
                 limits.append(f"scope:open_{key} = 0")
@@ -465,7 +472,7 @@ def generated_values():
             if limits:
                 body = "\tvalue = 0\n\tif = {\n\t\tlimit = { " + " ".join(limits) + f" }}\n\t\tvalue = scope:positive_{side}_{key}\n\t}}"
             out.append(sv(f"te_budget_{side}_{key}_slice", body))
-            out.append(sv(f"te_budget_{side}_{key}_share", f"\tvalue = te_budget_{side}_{key}_positive\n\tdivide = {{ value = scope:positive_total min = 0.001 }}\n\tmin = 0\n\tmax = 1"))
+            out.append(sv(f"te_budget_{side}_{key}_share", f"\tvalue = scope:positive_{side}_{key}\n\tdivide = {{ value = scope:positive_total min = 0.001 }}\n\tmin = 0\n\tmax = 1"))
         out.append(sv(f"te_budget_{side}_positive_total", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{node.key}_positive" for node in tree(side))))
         out.append(sv(f"te_budget_{side}_root_cached_count", "\tvalue = scope:count_root"))
         siblings_by_parent = dict(sibling_sets(side))
@@ -473,7 +480,10 @@ def generated_values():
             # A flat flow slot list preserves preorder without replicating nested
             # child lists once per possible parent slot. Count whole preceding
             # subtrees at each ancestor level, plus the ancestor headers.
-            body = f"\tvalue = {len(ancestors)}"
+            # A row under a closed group is never shown (its visible value is
+            # 0), so its rank is not counted: 0 without reading its siblings.
+            pad = "\t" if ancestors else ""
+            body = f"{pad}\tvalue = {len(ancestors)}"
             for depth, target in enumerate((*ancestors, node)):
                 siblings = siblings_by_parent[ancestors[depth - 1].key if depth else "root"]
                 index = siblings.index(target)
@@ -481,11 +491,24 @@ def generated_values():
                     if other == target:
                         continue
                     op = ">=" if j < index else ">"
-                    body += f"\n\tif = {{ limit = {{ scope:subtree_{other.key} > 0 scope:row_{other.key} {op} scope:row_{target.key} }} add = scope:subtree_{other.key} }}"
+                    body += f"\n{pad}\tif = {{ limit = {{ scope:subtree_{other.key} > 0 scope:row_{other.key} {op} scope:row_{target.key} }} add = scope:subtree_{other.key} }}"
+            if ancestors:
+                body = ("\tvalue = 0\n\tif = {\n\t\tlimit = { " + " ".join(f"scope:open_{parent.key} = 1" for parent in ancestors)
+                        + " }\n" + body + "\n\t}")
             out.append(sv(f"te_budget_{side}_{node.key}_display_rank", body))
         out.append(sv(f"te_budget_{side}_display_count", "\tvalue = 0\n" + "\n".join(f"\tadd = scope:subtree_{node.key}" for node in tree(side))))
-        for i, _ in enumerate(nodes):
-            out.append(sv(f"te_budget_{side}_cum_{i}", "\tvalue = 0\n" + "\n".join(f"\tadd = te_budget_{side}_{node.key}_slice" for node, _ in nodes[:i + 1]) + "\n\tdivide = { value = scope:positive_total min = 0.001 }\n\tmin = 0\n\tmax = 1"))
+        for i, (node, ancestors) in enumerate(nodes):
+            # The slices before node i in preorder, while every group above it
+            # is open (its pie is hidden otherwise, chart() below): the whole
+            # subtrees of the siblings before it and before each of its
+            # groups, each of which shows its positive amount however it is
+            # expanded, then its own slice. Was every slice before it.
+            preceding = []
+            for depth, target in enumerate((*ancestors, node)):
+                siblings = siblings_by_parent[ancestors[depth - 1].key if depth else "root"]
+                preceding += [f"\tadd = scope:positive_{side}_{other.key}" for other in siblings[:siblings.index(target)]]
+            out.append(sv(f"te_budget_{side}_cum_{i}", "\tvalue = 0\n" + "".join(line + "\n" for line in preceding)
+                          + f"\tadd = te_budget_{side}_{node.key}_slice\n\tdivide = {{ value = scope:positive_total min = 0.001 }}\n\tmin = 0\n\tmax = 1"))
     return "\n".join(out)
 
 
@@ -502,20 +525,37 @@ def pie_texture(i):
 def chart(side):
     nodes = list(walk(tree(side)))
     out = [f"\ttype te_budget_{side}_charts = flowcontainer {{", "\t\tparentanchor = hcenter", "\t\twidget = {", "\t\t\tsize = { 176 176 }", '\t\t\ttooltip = "te_budget_chart_pie_tt"', '\t\t\ticon = { size = { 100% 100% } texture = "gfx/interface/backgrounds/round_frame_dec.dds" }', "\t\t\twidget = {", "\t\t\t\tsize = { 75% 75% }", "\t\t\t\tparentanchor = center"]
-    for i in reversed(range(len(nodes))):
-        out += ["\t\t\t\tprogresspie = {", "\t\t\t\t\tsize = { 100% 100% }", "\t\t\t\t\tmin = 0", "\t\t\t\t\tmax = 1", f'\t\t\t\t\tvalue = "[FixedPointToFloat({expression(side, f"{side}_cum_{i}")})]"', f'\t\t\t\t\ttexture = "{pie_texture(i)}"', "\t\t\t\t\tframesize = { 128 128 }", "\t\t\t\t\tframe = 2", "\t\t\t\t}"]
+    position = {node.key: i for i, (node, _) in enumerate(nodes)}
+
+    def pies(siblings, pad):
+        # Reverse preorder, so the first slice is drawn last, on top. A
+        # group's descendants sit under one container shown only while the
+        # group is open: closed, their slices are empty and covered by the
+        # slice before them, and a hidden container's values are not read.
+        lines = []
+        for node in reversed(siblings):
+            if node.children:
+                lines += [f"{pad}widget = {{", f"{pad}\tsize = {{ 100% 100% }}",
+                          f'{pad}\tvisible = "[GetVariableSystem.Exists(\'{flag(side, node.key)}\')]"',
+                          *pies(node.children, pad + "\t"), f"{pad}}}"]
+            i = position[node.key]
+            lines += [f"{pad}progresspie = {{", f"{pad}\tsize = {{ 100% 100% }}", f"{pad}\tmin = 0", f"{pad}\tmax = 1",
+                      f'{pad}\tvalue = "[FixedPointToFloat({expression(side, f"{side}_cum_{i}")})]"', f'{pad}\ttexture = "{pie_texture(i)}"',
+                      f"{pad}\tframesize = {{ 128 128 }}", f"{pad}\tframe = 2", f"{pad}}}"]
+        return lines
+    out += pies(tree(side), "\t\t\t\t")
     out += ["\t\t\t}", "\t\t}", "\t}"]
     for i, (node, ancestors) in enumerate(nodes):
         key, label = node.key, node.label
-        val, share = expression(side, f"{side}_{key}"), expression(side, f"{side}_{key}_share")
-        rank, active = expression(side, f"{side}_{key}_cached_rank"), expression(side, f"{side}_{key}_cached_active")
+        val, share = expression(side, f"{side}_{key}_cached_amount"), expression(side, f"{side}_{key}_share")
+        in_slot = expression(side, f"{side}_{key}_in_slot")
         tooltip = "te_budget_chart_group_tt" if node.children and key != "administration_group" else row_tooltip(side, key)
         template = TOOLTIP_TEMPLATES[side].get(key) if not node.children else None
         depth = len(ancestors)
         swatch_alpha = (f' alpha = "[Select_float(GetVariableSystem.Exists(\'{flag(side, key)}\'), \'(float)0\', \'(float)1\')]"'
                         if node.children else "")
         out += [f"\ttype te_budget_{side}_row_{key} = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes",
-                f'\t\tvisible = "[And(GreaterThan_CFixedPoint({active}, \'(CFixedPoint)0\'), EqualTo_CFixedPoint({rank}, TopScope.ScriptValue(\'te_budget_row_slot\')))]"',
+                f'\t\tvisible = "[GreaterThan_CFixedPoint({in_slot}, \'(CFixedPoint)0\')]"',
                 "\t\tte_budget_chart_row = {", *([f'\t\t\ttooltip = "{tooltip}"'] if tooltip else []),
                 f"\t\t\tblockoverride \"indent\" {{ size = {{ {depth * 14} 1 }} }}",
                 f"\t\t\tblockoverride \"label_width\" {{ minimumsize = {{ {LABEL_WIDTH - depth * 14} 28 }} maximumsize = {{ {LABEL_WIDTH - depth * 14} -1 }} }}",
@@ -531,13 +571,34 @@ def chart(side):
         out += ["\t}"]
     # Flat sorted slots; each row uses a preorder rank that counts preceding
     # visible subtrees. Expansion never requires nested slot instantiation.
+    # A group's rows sit under one container shown only while the group is
+    # open, so a slot tests the rows that can be shown, not every row.
+    def rows(siblings, pad):
+        lines = []
+        for node in siblings:
+            lines.append(f"{pad}te_budget_{side}_row_{node.key} = {{}}")
+            if node.children:
+                lines += [f"{pad}flowcontainer = {{", f"{pad}\tdirection = vertical", f"{pad}\tignoreinvisible = yes",
+                          f'{pad}\tvisible = "[GetVariableSystem.Exists(\'{flag(side, node.key)}\')]"',
+                          *rows(node.children, pad + "\t"), f"{pad}}}"]
+        return lines
     out += [f"\ttype te_budget_{side}_slot_root = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes"]
-    out += [f"\t\tte_budget_{side}_row_{node.key} = {{}}" for node, _ in nodes]
+    out += rows(tree(side), "\t\t")
     out += ["\t}", f"\ttype te_budget_{side}_list_root = flowcontainer {{", "\t\tdirection = vertical", "\t\tignoreinvisible = yes", "\t\tspacing = 1"]
-    for i in range(len(nodes)):
-        out += [f"\t\tte_budget_{side}_slot_root = {{", f'\t\t\tvisible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue(\'te_budget_{side}_root_cached_count\'), \'(CFixedPoint){i}\')]"',
-                f'\t\t\tdatacontext = "[TopScope.AddScope(\'row_slot\', MakeScopeValue(\'(CFixedPoint){i}\'))]"', "\t\t}"]
-    out += ["\t}"]
+
+    def slot(i, pad):
+        return [f"{pad}te_budget_{side}_slot_root = {{", f'{pad}\tvisible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue(\'te_budget_{side}_root_cached_count\'), \'(CFixedPoint){i}\')]"',
+                f'{pad}\tdatacontext = "[TopScope.AddScope(\'row_slot\', MakeScopeValue(\'(CFixedPoint){i}\'))]"', f"{pad}}}"]
+    # Only an open group can list more rows than there are top-level rows:
+    # the slots past those wait behind one test, with the list's own spacing.
+    top = len(tree(side))
+    for i in range(top):
+        out += slot(i, "\t\t")
+    out += ["\t\tflowcontainer = {", "\t\t\tdirection = vertical", "\t\t\tignoreinvisible = yes", "\t\t\tspacing = 1",
+            f'\t\t\tvisible = "[GreaterThan_CFixedPoint(TopScope.ScriptValue(\'te_budget_{side}_root_cached_count\'), \'(CFixedPoint){top}\')]"']
+    for i in range(top, len(nodes)):
+        out += slot(i, "\t\t\t")
+    out += ["\t\t}", "\t}"]
     return "\n".join(out)
 
 

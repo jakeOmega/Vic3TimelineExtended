@@ -533,6 +533,31 @@ class WidthTest(unittest.TestCase):
         self.check_type("te_demog_figure_row", ("row_label",), bodies, 20)
         self.check_type("te_demog_term_row", ("row_label", "row_value"), bodies, 5)
 
+    def test_the_wealth_sections_gini_and_incomes(self):
+        """2026-11-24: Wealth's Gini is a "Label: value" row on the section's own edge and value column, outside the
+        strata incomes' block, so it sits with the section where a host blanks the incomes (it was the first cell of
+        their row, and stood alone, set in from the edge, in the Census Data and Timeline Extended windows). The
+        incomes are a row of three cells, all of it inside the block: 3 x 152 and two 12 gaps = 480."""
+        body = _type_body(self.widgets, "te_demog_sec_wealth")
+        block = body.index('block "te_demog_wealth_strata_incomes"')
+        gini = [i for i in _instances(body, "te_demog_figure_row") if 'text = "te_demog_gini_label"' in i]
+        self.assertEqual(len(gini), 1)
+        self.assertLess(body.index(gini[0]), block)
+        self.assertIn("'te_demog_gini_value', 'te_demog_gini_pending'", _override(gini[0], "row_value"))
+        self.assertIn("'te_demog_gini_tt', 'te_demog_gini_pending_tt'", gini[0])
+        self.assertNotIn("te_demog_wealth_cell", body[:block])
+        incomes = _block_from(body, body.index("{", block))
+        self.assertEqual(_children(incomes[1:-1]), ["flowcontainer"])
+        self.assertEqual(incomes.count("te_demog_wealth_cell = {"), 3)
+        self.assertIn("spacing = 12", incomes)
+        cell = _type_body(self.widgets, "te_demog_wealth_cell")
+        self.assertIn("minimumsize = { 152 -1 }", cell)
+        self.assertIn("maximumsize = { 152 -1 }", cell)
+        self.assertEqual(3 * 152 + 2 * 12, 480)
+        # vanilla's strata names (concept_*_strata) and incomes ("@money!12.3K Income", |v1) at their widest
+        for text in ("Middle Strata", "999.9K Income"):
+            self.fits(text, (152, "row"), "a stratum's income cell")
+
     def test_the_state_link_rows(self):
         """Each list's figure fits the link row's 284 at 17, beside the 184 name (2026-10-27 audit, DEM-6)."""
         row = [self.cell(b) for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_link_row"))]
@@ -741,16 +766,20 @@ class PieTest(unittest.TestCase):
         self.assertIn(f"value = te_demog_dc_share_{SLICES[0][0]}", first)
 
     def test_each_legend_names_the_slices_in_order(self):
-        for section, root in (("te_demog_sec_causes", "Country"), ("te_state_demog_causes", "State")):
+        # The deaths cell reads its cause's figure through the key that prints it whole under 1,000 and
+        # abbreviated from it (`te_demog_cd_dc_<cause>_fig`, `te_demog_st_dc_<cause>_fig`; FigureSwitchTest).
+        loc = _loc()
+        for section, root, pre in (("te_demog_sec_causes", "Country", "te_demog_cd"),
+                                   ("te_state_demog_causes", "State", "te_demog_st")):
             rows = _instances(_type_body(self.widgets, section), "te_demog_cause_row")
             self.assertEqual(len(rows), 7, section)
             for row, (name, tex) in zip(rows, PIE_SLICES):
                 with self.subTest(section=section, slice=name):
                     self.assertIn(f'texture = "{PIE_DIR}pie_{tex}.dds"', _override(row, "swatch"))
                     self.assertIn(f'text = "te_demog_dc_{name}"', _override(row, "cause"))
-                    self.assertIn(f"Var('te_dg_dc_{name}')", _override(row, "deaths"))
+                    self.assertIn(f'text = "{pre}_dc_{name}_fig"', _override(row, "deaths"))
+                    self.assertIn(f"{root}.MakeScope.Var('te_dg_dc_{name}')", loc[f"{pre}_dc_{name}_fig"])
                     self.assertIn(f"te_demog_dc_share_{name}", _override(row, "share"))
-                    self.assertIn(root, _override(row, "deaths"))
 
     def test_the_history_chart_uses_the_pies_colours(self):
         history = _type_body(self.widgets, "te_demog_sec_history")

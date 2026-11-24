@@ -50,30 +50,38 @@ gm_state_built_levels = {
 # one, else what the building holds for it; 0 with no building. Every reader
 # that means "what was built" (rebuild heights, trophy shares, Rededicate's
 # cost, the ceremony's level) reads this, never gm_state_primary_grandeur.
+# The fallback is computed only when there is no record: as `value =` before
+# the ifs it ran the secondaries' list for every row of Our Monuments every
+# frame, record or not (late_game_performance.md, 2026-11-24).
 gm_state_primary_levels = {
-	value = gm_state_built_levels
+	value = 0
 	if = {
-		limit = { has_variable = gm_levels }
-		value = var:gm_levels
-	}
-	if = {
-		limit = { NOT = { has_building = building_grand_monument } }
-		value = 0
+		limit = { has_building = building_grand_monument }
+		if = {
+			limit = { has_variable = gm_levels }
+			value = var:gm_levels
+		}
+		else = {
+			value = gm_state_built_levels
+		}
 	}
 }
 
 # State scope. The primary's starting grandeur (sites spec 2026-10-18 §3.2):
 # its record, else its levels, one a level (an older save's monument, which
-# was counted so); 0 with no building.
+# was counted so); 0 with no building. The levels only without the record,
+# as gm_state_primary_levels' fallback.
 gm_state_primary_start = {
-	value = gm_state_primary_levels
+	value = 0
 	if = {
-		limit = { has_variable = gm_start_grandeur }
-		value = var:gm_start_grandeur
-	}
-	if = {
-		limit = { NOT = { has_building = building_grand_monument } }
-		value = 0
+		limit = { has_building = building_grand_monument }
+		if = {
+			limit = { has_variable = gm_start_grandeur }
+			value = var:gm_start_grandeur
+		}
+		else = {
+			value = gm_state_primary_levels
+		}
 	}
 }
 
@@ -90,10 +98,13 @@ gm_mon_age = {
 # Container scope. Its starting grandeur: the record, else its levels, one a
 # level (an older save's container, which was counted so).
 gm_mon_start = {
-	value = gm_mon_levels
+	value = 0
 	if = {
 		limit = { has_variable = gm_tr_start_grandeur }
 		value = var:gm_tr_start_grandeur
+	}
+	else = {
+		value = gm_mon_levels
 	}
 }
 
@@ -419,13 +430,16 @@ gm_state_disp_clearable = {
 	}
 }
 
-# Container scope, for the same button on a monument beside it.
+# Container scope, for the same button on a monument beside it. The count
+# first: false for nearly every row, while gm_mon_is_least compares every
+# monument of the state, and each row asks this every frame
+# (late_game_performance.md, 2026-11-24).
 gm_mon_disp_clearable = {
 	value = 0
 	if = {
 		limit = {
-			gm_mon_is_least = yes
 			var:gm_tr_origin ?= { gm_state_monument_count >= 6 }
+			gm_mon_is_least = yes
 		}
 		value = 1
 	}
