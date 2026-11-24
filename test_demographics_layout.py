@@ -533,6 +533,31 @@ class WidthTest(unittest.TestCase):
         self.check_type("te_demog_figure_row", ("row_label",), bodies, 20)
         self.check_type("te_demog_term_row", ("row_label", "row_value"), bodies, 5)
 
+    def test_the_wealth_sections_gini_and_incomes(self):
+        """2026-11-24: Wealth's Gini is a "Label: value" row on the section's own edge and value column, outside the
+        strata incomes' block, so it sits with the section where a host blanks the incomes (it was the first cell of
+        their row, and stood alone, set in from the edge, in the Census Data and Timeline Extended windows). The
+        incomes are a row of three cells, all of it inside the block: 3 x 152 and two 12 gaps = 480."""
+        body = _type_body(self.widgets, "te_demog_sec_wealth")
+        block = body.index('block "te_demog_wealth_strata_incomes"')
+        gini = [i for i in _instances(body, "te_demog_figure_row") if 'text = "te_demog_gini_label"' in i]
+        self.assertEqual(len(gini), 1)
+        self.assertLess(body.index(gini[0]), block)
+        self.assertIn("'te_demog_gini_value', 'te_demog_gini_pending'", _override(gini[0], "row_value"))
+        self.assertIn("'te_demog_gini_tt', 'te_demog_gini_pending_tt'", gini[0])
+        self.assertNotIn("te_demog_wealth_cell", body[:block])
+        incomes = _block_from(body, body.index("{", block))
+        self.assertEqual(_children(incomes[1:-1]), ["flowcontainer"])
+        self.assertEqual(incomes.count("te_demog_wealth_cell = {"), 3)
+        self.assertIn("spacing = 12", incomes)
+        cell = _type_body(self.widgets, "te_demog_wealth_cell")
+        self.assertIn("minimumsize = { 152 -1 }", cell)
+        self.assertIn("maximumsize = { 152 -1 }", cell)
+        self.assertEqual(3 * 152 + 2 * 12, 480)
+        # vanilla's strata names (concept_*_strata) and incomes ("@money!12.3K Income", |v1) at their widest
+        for text in ("Middle Strata", "999.9K Income"):
+            self.fits(text, (152, "row"), "a stratum's income cell")
+
     def test_the_state_link_rows(self):
         """Each list's figure fits the link row's 284 at 17, beside the 184 name (2026-10-27 audit, DEM-6)."""
         row = [self.cell(b) for _, b in _textboxes(_type_body(self.widgets, "te_demog_state_link_row"))]

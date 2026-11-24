@@ -508,7 +508,10 @@ types nuclear_deterrence_widget_types
 	### action row: their (CFixedPoint) literals are not op codes.
 
 	### A row of a group's table: the term, and what it does to the group's
-	### approval. Fixed cells (220 + 60), indented under the group's name.
+	### approval. Fixed cells (396 + 60), indented 24 under the group's name,
+	### so 480 in all: the values end at the same edge as the group's class
+	### above them, as the Forces table's values do (2026-11-24; they stood
+	### in a column two thirds of the way across).
 	type nd_home_term_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -516,7 +519,7 @@ types nuclear_deterrence_widget_types
 		block "row_tooltip" {}
 
 		textbox = {
-			size = { 220 22 }
+			size = { 396 22 }
 			align = left|nobaseline
 			using = te_nuclear_fontsize_row
 			parentanchor = vcenter
