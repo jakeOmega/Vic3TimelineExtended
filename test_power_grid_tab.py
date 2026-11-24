@@ -624,7 +624,16 @@ class FigureTest(unittest.TestCase):
 
     def test_every_abbreviated_figure_has_a_plain_twin(self):
         gui, loc = _read(GUI), _all_loc()
-        figures = {k: v for k, v in loc.items() if k.startswith("te_grid_") and "|K]" in v}
+
+        def switched_elsewhere(key):
+            """The `_k` branch of the other figure switch (PR #2001, the state view's Power Grid tile:
+            `<fig>` picks `<fig>_n` or `<fig>_k`), which test_panel_figures.py holds. Found by merging the two
+            branches: each was green alone, and together this test read that form as a bare |K."""
+            base = key[:-2]
+            return key.endswith("_k") and f"{base}_n" in loc and f"'{key}'" in loc.get(base, "")
+
+        figures = {k: v for k, v in loc.items()
+                   if k.startswith("te_grid_") and "|K]" in v and not switched_elsewhere(k)}
         self.assertGreaterEqual(len(figures), 17)
         sources = gui + "\n".join(v for k, v in loc.items() if k.startswith(("te_grid_", "TE_STATE_GRID")))
         for key, text in sorted(figures.items()):
