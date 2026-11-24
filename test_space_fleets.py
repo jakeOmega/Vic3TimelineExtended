@@ -4204,7 +4204,11 @@ class TrainingGroundMarinesTest(unittest.TestCase):
                                 mult.index(f"global_var:sr_site_holder_{k} = {{ add = sr_marine_training_mult }}"))
                 self.assertIn("else = { add = 1 }", mult)
                 need = _block(self.values, f"sr_site_garrison_need_{k}")
-                self.assertRegex(need, rf"value = sr_site_shared_marines_{k}\s*multiply = sr_site_marines_mult_{k}\s*if")
+                # The marines at their owner's crewed share (space forces personnel
+                # design § 4, #2020) and at its Training Grounds' weight, as the
+                # seizer's are (sr_fl_<n>_marines_eff): both before the militia.
+                self.assertRegex(need, rf"value = sr_site_shared_marines_{k}\s*multiply = sr_site_marines_share_{k}\s*"
+                                       rf"multiply = sr_site_marines_mult_{k}\s*if")
                 # The militia is the colony's people, not marines: unweighed.
                 self.assertIn(f"add = sr_site_militia_value_{k}", need)
 
