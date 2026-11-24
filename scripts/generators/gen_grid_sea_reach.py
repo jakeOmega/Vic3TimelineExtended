@@ -17,14 +17,17 @@ landing on that coast as the walk in script did. So no two states are farther
 apart than the old walk put them, and open ocean counts like any other Sea
 Node. The two Southern Ocean nodes are not crossed at all (``UNCROSSABLE``).
 
-**Coastal** means a land state region with a ``naval_exit_id``, as the engine's
-``is_coastal`` reads it: only those are in the table, at either end. Six Arctic
-regions border a sea on the map without one (Kolyma, the Northwest
-Territories, Ob, Upper Yeniseysk, Yakutsk, Yukon). A cable doesn't end there,
-but it may land on their shore to go on to another Sea Node it touches: the
-Northwest Territories join the Chukchi Sea to the Northwest Passage, and
-whether the walk in script stepped through them is unknown, so they keep every
-pair it may have made (Kamchatka to Nunavut at 2).
+**Coastal** means a land state region with a ``naval_exit_id``; only those are
+in the table, and only their coasts carry a cable on. Six Arctic regions
+border a sea on the map without one (Kolyma, the Northwest Territories, Ob,
+Upper Yeniseysk, Yakutsk, Yukon), and every sea they touch is one the game
+marks impassable, so they are assumed not coastal to the engine (unverified:
+``TE_SELF_CHECK grid_sea_table`` reads ``missing=`` if a walk from a state
+beside one finds the engine listing it). A region's Sea Nodes are the ones its
+provinces touch on the map; its ``naval_exit_id`` counts only where they touch
+none (no region today: Lithuania's exit is the Northern Baltic, which it
+doesn't touch, and it stays two Sea Nodes from that sea's coasts, as the walk
+in script had it).
 
 Inputs:
 
@@ -82,7 +85,7 @@ UNCROSSABLE = frozenset({"STATE_SOUTHERN_OCEAN_01", "STATE_SOUTHERN_OCEAN_02"})
 
 _STATE_RE = re.compile(r"^(STATE_\w+)\s*=\s*\{", re.M)
 _PROVINCES_RE = re.compile(r"\bprovinces\s*=\s*\{([^}]*)\}")
-_PROVINCE_RE = re.compile(r"\bx([0-9A-Fa-f]{6})\b")
+_PROVINCE_RE = re.compile(r"\b[xX]([0-9A-Fa-f]{6})\b")
 _ID_RE = re.compile(r"\bid\s*=\s*(\d+)")
 _EXIT_RE = re.compile(r"\bnaval_exit_id\s*=\s*(\d+)")
 
@@ -214,7 +217,7 @@ def sea_map(root: Path = ROOT, borders: dict | None = None) -> tuple[dict[str, s
             sea_of[p] = name
     region_of = {p: name for name, r in land.items() for p in r["provinces"]}
 
-    shore: dict[str, set[str]] = {}
+    region_seas: dict[str, set[str]] = {}
     sea_next: dict[str, set[str]] = {name: set() for name in seas if name not in UNCROSSABLE}
     for p, nbrs in sea_borders.items():
         sea = sea_of.get(p)
@@ -224,17 +227,16 @@ def sea_map(root: Path = ROOT, borders: dict | None = None) -> tuple[dict[str, s
             if n in sea_of:
                 if sea_of[n] != sea and sea_of[n] not in UNCROSSABLE:
                     sea_next[sea].add(sea_of[n])
-            elif n in region_of:
-                shore.setdefault(region_of[n], set()).add(sea)
+            elif n in region_of and land[region_of[n]]["naval_exit"] is not None:
+                region_seas.setdefault(region_of[n], set()).add(sea)
     for name, r in land.items():
         exit_sea = by_id.get(r["naval_exit"])
-        if exit_sea and exit_sea not in UNCROSSABLE:
-            shore.setdefault(name, set()).add(exit_sea)
-    # Landing on a shore: a cable goes on from any Sea Node it touches to any other.
-    for touched in shore.values():
+        if exit_sea and exit_sea not in UNCROSSABLE and not region_seas.get(name):
+            region_seas[name] = {exit_sea}
+    # Landing on a coast: a cable goes on from any Sea Node it touches to any other.
+    for touched in region_seas.values():
         for a in touched:
             sea_next[a] |= touched - {a}
-    region_seas = {name: touched for name, touched in shore.items() if land[name]["naval_exit"] is not None}
     return region_seas, sea_next
 
 

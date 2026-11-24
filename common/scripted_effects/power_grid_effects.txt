@@ -802,17 +802,25 @@ te_grid_sea_reach_clear_effect = {
 #           coastal states the table puts at one that the engine doesn't list:
 #           the borders the generator read aren't the engine's (a vanilla patch
 #           moved a coast: gen_grid_sea_reach.py --refresh), or sharing a Sea
-#           Node means something else to the engine. A split region whose
-#           parts face different seas can give extra=1 on its own.
-# Judged at the first walk from a state the engine finds another coastal state
-# beside, so an island alone on its Sea Node (Bermuda) can't read OK on
-# nothing.
+#           Node means something else to the engine. A TE_GRID sea_table_missing
+#           or sea_table_extra line names each such state.
+# The table goes by state region and the engine by state, so a part of a split
+# region facing another sea is in the table's ring and not the engine's. So
+# the start must hold its region whole, and extra= counts only regions held
+# whole; missing= can't come from a split. Judged at the first such walk from
+# a state the engine finds another coastal state beside, so an island alone on
+# its Sea Node (Bermuda) can't read OK on nothing.
 te_grid_sea_table_selfcheck_effect = {
 	save_scope_as = te_grid_chk_sea_from
 	if = {
 		limit = {
 			NOT = { has_global_variable = te_grid_sea_table_checked }
 			local_var:te_grid_sea_radius >= 1
+			state_region = {
+				NOT = {
+					any_scope_state = { NOT = { this = scope:te_grid_chk_sea_from } }
+				}
+			}
 			any_sea_node_adjacent_state = {
 				is_coastal = yes
 				NOT = { this = scope:te_grid_chk_sea_from }
@@ -837,12 +845,14 @@ te_grid_sea_table_selfcheck_effect = {
 					scope:te_grid_chk_sea_from = {
 						change_variable = { name = te_grid_chk_sea_missing add = 1 }
 					}
+					debug_log = "TE_GRID sea_table_missing state=[THIS.GetState.GetNameNoFormatting] hops=[THIS.Var('te_grid_sea_hops').GetValue|0] (the engine puts it on a Sea Node the walk's start touches)"
 				}
 			}
 			else = {
 				scope:te_grid_chk_sea_from = {
 					change_variable = { name = te_grid_chk_sea_missing add = 1 }
 				}
+				debug_log = "TE_GRID sea_table_missing state=[THIS.GetState.GetNameNoFormatting] hops=none (the engine puts it on a Sea Node the walk's start touches)"
 			}
 		}
 		every_in_global_list = {
@@ -854,6 +864,11 @@ te_grid_sea_table_selfcheck_effect = {
 			save_scope_as = te_grid_chk_sea_to
 			if = {
 				limit = {
+					state_region = {
+						NOT = {
+							any_scope_state = { NOT = { this = scope:te_grid_chk_sea_to } }
+						}
+					}
 					scope:te_grid_chk_sea_from = {
 						NOT = {
 							any_sea_node_adjacent_state = { this = scope:te_grid_chk_sea_to }
@@ -863,6 +878,7 @@ te_grid_sea_table_selfcheck_effect = {
 				scope:te_grid_chk_sea_from = {
 					change_variable = { name = te_grid_chk_sea_extra add = 1 }
 				}
+				debug_log = "TE_GRID sea_table_extra state=[THIS.GetState.GetNameNoFormatting] (the table puts it 1 Sea Node from the walk's start; the engine doesn't list it)"
 			}
 		}
 		if = {

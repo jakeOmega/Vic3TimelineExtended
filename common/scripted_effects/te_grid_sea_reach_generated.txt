@@ -9,7 +9,7 @@
 # game's map: from one Sea Node on to one bordering it, or to one a coast
 # touches beside it. The Southern Ocean is not crossed. A state matching no
 # branch (landlocked, or on no Sea Node but those) reaches nothing.
-# 371 coastal state regions; 20968 ordered pairs within 3 Sea Nodes.
+# 371 coastal state regions; 20950 ordered pairs within 3 Sea Nodes.
 te_grid_sea_reach_table_effect = {
 	if = {
 		limit = { state_region = s:STATE_ABRUZZO }
@@ -368,7 +368,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -384,6 +383,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -975,7 +975,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LUZON HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MINDANAO HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NAURU HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NUNAVUT HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_PYONGYANG HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_RYUKYU_ISLANDS HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SHANDONG HOPS = 3 }
@@ -5282,7 +5281,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -5298,6 +5296,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -8439,7 +8438,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -8455,6 +8453,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -9541,7 +9540,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTHERN_TERRITORY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTH_BORNEO HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTH_ISLAND HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NUNAVUT HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_QUEENSLAND HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SHAOZHOU HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SOLOMON_ISLANDS HOPS = 3 }
@@ -10128,7 +10126,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 2 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 2 }
@@ -10141,6 +10138,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EASTERN_NORWAY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 3 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 3 }
@@ -10778,7 +10776,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_KYOTO HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_KYUSHU HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NAURU HOPS = 2 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NUNAVUT HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SARIWON HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SEOUL HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SHIKOKU HOPS = 2 }
@@ -10806,18 +10803,15 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JIANGSU HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_KANAK HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LUZON HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_MANITOBA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MINDANAO HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MOLUCCAS HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NEWFOUNDLAND HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTHERN_NORWAY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTHERN_TERRITORY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTH_BORNEO HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTH_ISLAND HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_ONTARIO HOPS = 3 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_NUNAVUT HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OREGON HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_PYONGYANG HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_QUEBEC HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_QUEENSLAND HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_RYUKYU_ISLANDS HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SHANDONG HOPS = 3 }
@@ -12220,53 +12214,53 @@ te_grid_sea_reach_table_effect = {
 		if = {
 			limit = { local_var:te_grid_sea_radius >= 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_ALAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_RIGA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCHLESWIG_HOLSTEIN HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_SVEALAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_TALINN HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_TARTU HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_UUSIMAA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_WEST_PRUSSIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ZEALAND HOPS = 1 }
 		}
 		if = {
 			limit = { local_var:te_grid_sea_radius >= 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_ALAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EASTERN_NORWAY HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_ANGLIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ELBE HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_FLANDERS HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_FRENCH_LOW_COUNTRIES HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_FRIESLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_HANNOVER HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_HOLLAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_HOME_COUNTIES HOPS = 2 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MIDLANDS HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_RIGA HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_SVEALAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_TALINN HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_TARTU HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_UUSIMAA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_WESTERN_NORWAY HOPS = 2 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_WEST_KARELIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_YORKSHIRE HOPS = 2 }
 		}
 		if = {
 			limit = { local_var:te_grid_sea_radius >= 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_BRITTANY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_HIGHLANDS HOPS = 3 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LOWLANDS HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORMANDY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTHERN_NORWAY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_PICARDY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_WEST_COUNTRY HOPS = 3 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_WEST_KARELIA HOPS = 3 }
 		}
 	}
 	else_if = {
@@ -13282,7 +13276,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_AZORES HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_BERMUDA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ICELAND HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_KAMCHATKA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MAINE HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MASSACHUSETTS HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NEW_HAMPSHIRE HOPS = 3 }
@@ -15052,7 +15045,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_HAITI HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_HIGHLANDS HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INNER_MOROCCO HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_KAMCHATKA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LANCASHIRE HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LEINSTER HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LIBERIA HOPS = 3 }
@@ -15539,7 +15531,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_RIGA HOPS = 1 }
@@ -15554,6 +15545,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -16322,19 +16314,17 @@ te_grid_sea_reach_table_effect = {
 			limit = { local_var:te_grid_sea_radius >= 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ALASKA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ICELAND HOPS = 2 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_KAMCHATKA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NEW_BRUNSWICK HOPS = 2 }
 		}
 		if = {
 			limit = { local_var:te_grid_sea_radius >= 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_AMUR HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_AZORES HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_BERMUDA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_BRITISH_COLUMBIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_BRITTANY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_CONNAUGHT HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_HIGHLANDS HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_HOKKAIDO HOPS = 3 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_KAMCHATKA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LANCASHIRE HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LEINSTER HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LOWLANDS HOPS = 3 }
@@ -16343,9 +16333,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MUNSTER HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NEW_HAMPSHIRE HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTHERN_NORWAY HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_OKHOTSK HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_OUTER_MANCHURIA HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_SAKHALIN HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ULSTER HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_WALES HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_WASHINGTON HOPS = 3 }
@@ -16462,7 +16449,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_LUZON HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MINDANAO HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NAURU HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NUNAVUT HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_PYONGYANG HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_RYUKYU_ISLANDS HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SHANDONG HOPS = 3 }
@@ -16652,7 +16638,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_AZORES HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_BERMUDA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ICELAND HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_KAMCHATKA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MAINE HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MASSACHUSETTS HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NEW_HAMPSHIRE HOPS = 3 }
@@ -16877,7 +16862,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_RIGA HOPS = 1 }
@@ -16892,6 +16876,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -16927,7 +16912,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_RIGA HOPS = 1 }
@@ -16942,6 +16926,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -17019,7 +17004,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MINDANAO HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NAURU HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTH_BORNEO HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NUNAVUT HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SHAOZHOU HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_TONKIN HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_VISAYAS HOPS = 3 }
@@ -18162,7 +18146,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_DELAWARE HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_DISTRICT_OF_COLUMBIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_ICELAND HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_KAMCHATKA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MARYLAND HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NEW_JERSEY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NEW_YORK HOPS = 3 }
@@ -18314,7 +18297,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -18329,6 +18311,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -18778,7 +18761,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MINDANAO HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NAURU HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORTH_BORNEO HOPS = 3 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_NUNAVUT HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SHAOZHOU HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_TONKIN HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_VISAYAS HOPS = 3 }
@@ -21265,7 +21247,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -21280,6 +21261,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -21378,7 +21360,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -21393,6 +21374,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EASTERN_NORWAY HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -21480,7 +21462,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -21495,6 +21476,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -23030,7 +23012,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_INGRIA HOPS = 1 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 1 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 1 }
@@ -23045,6 +23026,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EASTERN_NORWAY HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 2 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 2 }
@@ -24604,7 +24586,6 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_COURLAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTALAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_GOTLAND HOPS = 2 }
-			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_NORRLAND HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OSTROBOTHNIA HOPS = 2 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_OULU HOPS = 2 }
@@ -24617,6 +24598,7 @@ te_grid_sea_reach_table_effect = {
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EASTERN_NORWAY HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_EAST_PRUSSIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_JUTLAND HOPS = 3 }
+			te_grid_sea_reach_region_effect = { REGION = s:STATE_LITHUANIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_MECKLENBURG HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_POMERANIA HOPS = 3 }
 			te_grid_sea_reach_region_effect = { REGION = s:STATE_SCANIA HOPS = 3 }

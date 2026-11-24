@@ -89,10 +89,18 @@ class ReachTest(unittest.TestCase):
         self.assertEqual(set(self.region_seas), coastal)
         for src, row in self.table.items():
             self.assertEqual(set(row) - coastal, set(), src)
-        # A shore without one still carries a cable on: the Northwest Territories
-        # join the Chukchi Sea to the Northwest Passage.
+        # The six Arctic regions that touch a sea with no naval exit carry no
+        # cable on, so the Northwest Territories don't join the Chukchi Sea to
+        # the Northwest Passage.
         self.assertIsNone(land["STATE_NORTHWEST_TERRITORIES"]["naval_exit"])
-        self.assertEqual(self.hops("STATE_KAMCHATKA", "STATE_NUNAVUT"), 2)
+        self.assertNotIn("STATE_NORTHWEST_TERRITORIES", self.region_seas)
+        self.assertNotIn("STATE_NORTHWEST_PASSAGE", self.sea_next["STATE_CHUCKCHI_SEA"])
+
+    def test_a_naval_exit_counts_only_where_the_map_shows_no_sea(self):
+        # Lithuania's exit is the Northern Baltic, which it doesn't touch on the
+        # map; it stays two Sea Nodes from that sea's coasts, as the old walk had it.
+        self.assertEqual(self.region_seas["STATE_LITHUANIA"], {"STATE_SOUTHERN_BALTIC_SEA"})
+        self.assertEqual(self.hops("STATE_LITHUANIA", "STATE_UUSIMAA"), 2)
 
     def test_distances_are_symmetric_and_a_region_reaches_itself(self):
         for a, row in self.table.items():
@@ -103,10 +111,12 @@ class ReachTest(unittest.TestCase):
 
     def test_no_pair_is_farther_than_the_walk_from_coast_to_coast(self):
         """The walk the table replaced stepped between states sharing a Sea Node
-        (every_sea_node_adjacent_state). Whether the engine counts a shore with no
-        naval exit there is unknown, so the walk is rebuilt both ways from the same
-        borders; the table must put no pair farther apart than either, so no grid
-        that joined before splits."""
+        (every_sea_node_adjacent_state), rebuilt here from the same borders. The
+        table must put no pair farther apart, so no grid that joined before
+        splits. The six regions with no naval exit are taken as the engine is
+        assumed to take them, not coastal; if it counted them, 20 pairs across
+        the Arctic (Kamchatka to Hudson Bay) would be farther now, and a walk the
+        self-check judges beside one would read missing=."""
         borders = gen.load_borders()["sea_borders"]
         seas, land = gen.read_seas(), gen.read_land()
         sea_of = {p: n for n, s in seas.items() for p in s["provinces"]}
@@ -117,7 +127,7 @@ class ReachTest(unittest.TestCase):
                 if n in region_of:
                     touch.setdefault(region_of[n], set()).add(sea_of[p])
         coastal = {r for r, v in land.items() if v["naval_exit"] is not None}
-        for with_shores in (True, False):
+        for with_shores in (False,):
             states = {r: s for r, s in touch.items() if with_shores or r in coastal}
             on = {}
             for r, ss in states.items():
@@ -156,7 +166,7 @@ class RangeCapTest(unittest.TestCase):
                 if name.endswith(".txt"):
                     text = _code(_read(os.path.join(dirpath, name)))
                     total += sum(int(n) for n in
-                                 re.findall(r"\bbuilding_grid_undersea_cable_range_add = (\d+)", text))
+                                 re.findall(r"\bbuilding_grid_undersea_cable_range_add\s*=\s*(\d+)", text))
         self.assertEqual(total, 3)
         self.assertGreaterEqual(gen.MAX_HOPS, total)
 
@@ -212,6 +222,14 @@ class ScriptTest(unittest.TestCase):
         # Never judged on an island alone on its Sea Node, which would read OK on nothing.
         guard = check[:check.index("set_global_variable = te_grid_sea_table_checked")]
         self.assertIn("any_sea_node_adjacent_state", guard)
+        # The table goes by region and the engine by state: the start must hold its
+        # region whole, and extra= counts only whole regions.
+        whole = "any_scope_state = { NOT = { this = scope:te_grid_chk_sea_from } }"
+        self.assertIn(whole, guard)
+        extra = check[check.index("variable = te_grid_sea_reach"):]
+        self.assertIn("any_scope_state = { NOT = { this = scope:te_grid_chk_sea_to } }", extra)
+        self.assertIn("TE_GRID sea_table_missing", check)
+        self.assertIn("TE_GRID sea_table_extra", check)
         self.assertIn("every_sea_node_adjacent_state", check)
         self.assertIn("TE_SELF_CHECK OK grid_sea_table", check)
         self.assertIn("TE_SELF_CHECK BROKEN grid_sea_table", check)
