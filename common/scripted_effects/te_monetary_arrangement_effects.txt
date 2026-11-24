@@ -723,6 +723,13 @@ te_monetary_discover_arrangements = {
 # Rebuilt by every discovery, so a treaty that ends leaves no row. Nothing but
 # the panel reads any of it.
 #
+# A partner whose figure reads at two decimals (te_mon_bs_row_min) has a row of
+# its own, in te_mon_bs_<kind>_to; the rest, whose figure would print as 0.00,
+# are one line of flags, in te_mon_bs_<kind>_flags (GUI pass of 2026-11-24:
+# fourteen receiverships each "+0.00" read as fourteen costs). The leader's
+# Monetary Union members are split the same way, and the flags by where each
+# stands (te_mon_record_union_member, te_monetary_union_effects.txt).
+#
 # Scope: country, ROOT = the country whose discovery this is.
 te_mon_clear_backstop_rows = {
 	if = {
@@ -749,6 +756,46 @@ te_mon_clear_backstop_rows = {
 		limit = { has_variable_list = te_mon_bs_receiver_from }
 		clear_variable_list = te_mon_bs_receiver_from
 	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_swap_flags }
+		clear_variable_list = te_mon_bs_swap_flags
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_lolr_flags }
+		clear_variable_list = te_mon_bs_lolr_flags
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_receivership_flags }
+		clear_variable_list = te_mon_bs_receivership_flags
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_union_to }
+		clear_variable_list = te_mon_bs_union_to
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_union_adopted }
+		clear_variable_list = te_mon_bs_union_adopted
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_union_dormant }
+		clear_variable_list = te_mon_bs_union_dormant
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_union_holdout }
+		clear_variable_list = te_mon_bs_union_holdout
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_union_refuser }
+		clear_variable_list = te_mon_bs_union_refuser
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_union_outside }
+		clear_variable_list = te_mon_bs_union_outside
+	}
+	if = {
+		limit = { has_variable_list = te_mon_bs_union_coop }
+		clear_variable_list = te_mon_bs_union_coop
+	}
 }
 
 # Scope: the partner ROOT backs. $KIND$ swap, lolr or receivership (the list
@@ -756,9 +803,21 @@ te_mon_clear_backstop_rows = {
 # the partner's scope, against ROOT).
 te_mon_record_backstop_partner = {
 	set_variable = { name = te_mon_bs_cost_$KIND$ value = $COST$ }
+	if = {
+		limit = { var:te_mon_bs_cost_$KIND$ >= te_mon_bs_row_min }
+		te_mon_bs_list_capital = { LIST = te_mon_bs_$KIND$_to }
+	}
+	else = {
+		te_mon_bs_list_capital = { LIST = te_mon_bs_$KIND$_flags }
+	}
+}
+
+# Scope: a country. Lists its capital on ROOT's $LIST$ (a GUI reaches a
+# country through its state).
+te_mon_bs_list_capital = {
 	capital ?= {
 		save_temporary_scope_as = te_mon_bs_it
-		root = { add_to_variable_list = { name = te_mon_bs_$KIND$_to target = scope:te_mon_bs_it } }
+		root = { add_to_variable_list = { name = $LIST$ target = scope:te_mon_bs_it } }
 	}
 }
 

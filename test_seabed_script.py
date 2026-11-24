@@ -931,7 +931,8 @@ class NavyMeasureTest(unittest.TestCase):
     def test_loc_names_power_projection(self):
         loc = read("localization/english/te_miscellaneous_l_english.yml")
         for key in ("te_seabed_how_weight", "te_seabed_col_next_tt",
-                    *(f"te_seabed_next_tt_{b}" for b in m.BASINS),
+                    # a form for one license and one for more (2026-11-24)
+                    *(f"te_seabed_next_tt_{b}_{form}" for b in m.BASINS for form in ("one", "many")),
                     *(f"te_seabed_weight_home_{b}" for b in m.BASINS),
                     *(f"te_seabed_weight_far_{b}" for b in m.BASINS)):
             line = re.search(rf"^ {key}:0 \"(.*)\"$", loc, re.M).group(1)

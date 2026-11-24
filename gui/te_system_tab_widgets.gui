@@ -43,140 +43,202 @@ template te_own_country_only {
 
 types te_system_tab_widgets
 {
+	### Vanilla's scripted_progressbar_dynamic (gui/shared/progressbars.gui), the
+	### look a scripted progress bar defines in script, with one change: the
+	### marker's track is 32 px short of the bar at each end (an hbox margin),
+	### half the marker's width, so at either pole the marker stops flush with
+	### the bar's end. On vanilla's full-width track half of it hangs outside
+	### the bar. The type is a copy because vanilla sets the marker in a
+	### blockoverride of its own, which an instance cannot override again
+	### (tried in game, 2026-11-24: the instance's block was ignored).
+	type te_je_progressbar_dynamic = progressbar_properties {
+		blockoverride "progresstexture" {
+			progresstexture = "[ScriptedProgressBar.GetProgressTexture]"
+		}
+		blockoverride "noprogresstexture" {
+			noprogresstexture = "[ScriptedProgressBar.GetBackgroundTexture]"
+		}
+		blockoverride "glow" {
+			texture = "[ScriptedProgressBar.GetGlowTexture]"
+		}
+		blockoverride "glow_line" {
+			texture = "[ScriptedProgressBar.GetGlowLineTexture]"
+		}
+		blockoverride "color" {
+			color = "[ScriptedProgressBar.GetColor]"
+		}
+		blockoverride "values" {
+			value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+			min = 0
+			max = 1
+		}
+
+		blockoverride "on_top_of_the_progressbar" {
+			hbox = {
+				visible = "[ScriptedProgressBar.HasMarker]"
+				margin = { 32 0 }
+
+				progressbar = {
+					layoutpolicy_horizontal = expanding
+					layoutpolicy_vertical = expanding
+					noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+					spriteType = Corneredtiled
+					spriteborder = { 4 4 }
+					texture_density = 2
+					skip_initial_animation = yes
+
+					value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+					min = 0
+					max = 1
+
+					direction = horizontal
+					using = progressbar_changed_animation
+					animate_negative_changes = yes
+
+					marker = {
+						icon = {
+							size = { 65 33 }
+							parentanchor = vcenter
+							widgetanchor = center
+							texture = "gfx/interface/progressbar/progressbar_marker.dds"
+							using = shimmer
+						}
+					}
+				}
+			}
+		}
+	}
+
 	### The entry's scripted progress bars (JournalEntry.GetScriptedProgressBars),
-	### in vanilla 1.15's markup (gui/journal_entry.gui, the item of the
+	### from vanilla 1.15's markup (gui/journal_entry.gui, the item of the
 	### GetScriptedProgressBars block) at 480 px: all four looks, the three
 	### ready-made ones (default, default_bad, default_green) and the one a bar
 	### defines in script (IsDynamic: progress_texture, background_texture, the
 	### glows, color, marker, left_icon/right_icon), so a bar of any look draws
-	### here as it does in the journal. Only the widths are the mod's (504 -> 480;
-	### the IsDynamic row 520 -> 480 and its bar 430 -> 390, the row less two icons).
+	### here. Two things are the mod's, not vanilla's (2026-11-24, seen in game
+	### on Banking's three bars between two poles):
+	### - The bar's texts sit on a line of their own above it, the description
+	###   at the left and the second description at the right, not inside the
+	###   bar. Vanilla prints both inside, where the sliding marker covers them
+	###   whenever the value is near that end ("Banking Cycle Value" under the
+	###   knob; "tight" under it at Very Tight).
+	### - The marker slides on a track 32 px short of the bar at each end, half
+	###   its own width, so at either pole it stops flush with the bar's end.
+	###   On vanilla's full-width track half the knob hung outside the bar, and
+	###   outside the overview's box. The fill still spans the whole bar: the
+	###   two are at most 32 px apart, at the poles, under the knob.
+	### Widths: 504 -> 480; the IsDynamic row 520 -> 480 and its bar 430 -> 390,
+	### the row less two icons (a bar without icons takes the 480).
 	type te_je_scripted_bars = flowcontainer {
 		parentanchor = hcenter
 		direction = vertical
 		visible = "[Not( IsDataModelEmpty( JournalEntry.GetScriptedProgressBars ) )]"
 		datamodel = "[JournalEntry.GetScriptedProgressBars]"
-		spacing = 8
+		spacing = 6
 		margin_bottom = 8
 
 		item = {
-			container = {
+			flowcontainer = {
+				direction = vertical
+				spacing = 1
 
-				# Default
-				default_progressbar_horizontal = {
-					visible = "[ScriptedProgressBar.IsDefault]"
-					block "progressbar_size" {
-						size = { 480 30 }
-					}
-					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
-					blockoverride "values" {
-						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
-						min = 0
-						max = 1
-					}
+				### The texts' line: fixed at the bars' width, so a long
+				### description cannot widen the column.
+				widget = {
+					size = { 480 22 }
+
 					textbox = {
 						text = "[ScriptedProgressBar.GetDesc]"
 						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
-				}
-
-				# Default Bad
-				bad_progressbar_horizontal = {
-					visible = "[ScriptedProgressBar.IsDefaultBad]"
-					block "progressbar_size" {
-						size = { 480 30 }
-					}
-					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
-					blockoverride "values" {
-						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "[ScriptedProgressBar.GetDesc]"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
-				}
-
-				#Default Green
-				green_progressbar_horizontal = {
-					visible = "[ScriptedProgressBar.IsDefaultGreen]"
-					block "progressbar_size" {
-						size = { 480 30 }
-					}
-
-					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
-					blockoverride "values" {
-						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "[ScriptedProgressBar.GetDesc]"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
+						align = left|nobaseline
+						parentanchor = left|vcenter
+						margin_left = 4
 					}
 					textbox = {
 						text = "[ScriptedProgressBar.GetSecondDesc]"
 						autoresize = yes
 						align = right|nobaseline
-						margin_right = 10
 						parentanchor = right|vcenter
+						margin_right = 4
 					}
 				}
 
-				# Look defined in script
-				widget = {
-					size = { 480 45 }
-					parentanchor = center
-					visible = "[ScriptedProgressBar.IsDynamic]"
+				container = {
 
-					hbox = {
-						size = { 100% 100% }
-						spacing = 5
+					# Default
+					default_progressbar_horizontal = {
+						visible = "[ScriptedProgressBar.IsDefault]"
+						block "progressbar_size" {
+							size = { 480 30 }
+						}
+						tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+						blockoverride "values" {
+							value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+							min = 0
+							max = 1
+						}
+					}
 
-						icon = {
-							size = { 40 40 }
-							visible = "[ScriptedProgressBar.HasLeftIcon]"
-							texture = "[ScriptedProgressBar.GetLeftIcon]"
+					# Default Bad
+					bad_progressbar_horizontal = {
+						visible = "[ScriptedProgressBar.IsDefaultBad]"
+						block "progressbar_size" {
+							size = { 480 30 }
+						}
+						tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+						blockoverride "values" {
+							value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+							min = 0
+							max = 1
+						}
+					}
+
+					#Default Green
+					green_progressbar_horizontal = {
+						visible = "[ScriptedProgressBar.IsDefaultGreen]"
+						block "progressbar_size" {
+							size = { 480 30 }
 						}
 
-						scripted_progressbar_dynamic = {
-							layoutpolicy_horizontal = expanding
-							tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
-
-							block "progressbar_size" {
-								size = { 390 30 }
-							}
-
-							textbox = {
-								text = "[ScriptedProgressBar.GetDesc]"
-								autoresize = yes
-								align = nobaseline
-								margin_left = 10
-								parentanchor = vcenter
-							}
-							textbox = {
-								text = "[ScriptedProgressBar.GetSecondDesc]"
-								autoresize = yes
-								align = right|nobaseline
-								margin_right = 10
-								parentanchor = right|vcenter
-							}
+						tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+						blockoverride "values" {
+							value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+							min = 0
+							max = 1
 						}
+					}
 
-						icon = {
-							size = { 40 40 }
-							visible = "[ScriptedProgressBar.HasRightIcon]"
-							texture = "[ScriptedProgressBar.GetRightIcon]"
+					# Look defined in script
+					widget = {
+						size = { 480 36 }
+						parentanchor = center
+						visible = "[ScriptedProgressBar.IsDynamic]"
+
+						hbox = {
+							size = { 100% 100% }
+							spacing = 5
+
+							icon = {
+								size = { 36 36 }
+								visible = "[ScriptedProgressBar.HasLeftIcon]"
+								texture = "[ScriptedProgressBar.GetLeftIcon]"
+							}
+
+							te_je_progressbar_dynamic = {
+								layoutpolicy_horizontal = expanding
+								tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+
+								block "progressbar_size" {
+									size = { 390 30 }
+								}
+							}
+
+							icon = {
+								size = { 36 36 }
+								visible = "[ScriptedProgressBar.HasRightIcon]"
+								texture = "[ScriptedProgressBar.GetRightIcon]"
+							}
 						}
 					}
 				}

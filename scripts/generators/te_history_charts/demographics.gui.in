@@ -18,12 +18,6 @@ te_history_chart = {
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_bd_legend"
 	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
-	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_bd_tt"
 	}
@@ -84,24 +78,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }
@@ -139,12 +116,6 @@ te_history_chart = {
 	}
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_mig_legend"
-	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_mig_tt"
@@ -213,24 +184,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }
@@ -269,12 +223,6 @@ te_history_chart = {
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_e0_legend"
 	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
-	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_e0_tt"
 	}
@@ -310,24 +258,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }
@@ -366,12 +297,6 @@ te_history_chart = {
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_tfr_legend"
 	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
-	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_tfr_tt"
 	}
@@ -407,24 +332,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }
@@ -463,12 +371,6 @@ te_history_chart = {
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_median_legend"
 	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
-	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_median_tt"
 	}
@@ -504,24 +406,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }
@@ -559,12 +444,6 @@ te_history_chart = {
 	}
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_causes_legend"
-	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
 	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_causes_tt"
@@ -692,24 +571,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }
@@ -748,12 +610,6 @@ te_history_chart = {
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_gini_legend"
 	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
-	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_gini_tt"
 	}
@@ -787,24 +643,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }
@@ -843,12 +682,6 @@ te_history_chart = {
 	blockoverride "chart_legend" {
 		text = "te_demog_hist_wc_legend"
 	}
-	blockoverride "sample_datamodel" {
-		datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('te_demog_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('te_demog_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_i') ), '(CFixedPoint)20' ) ) ) )]"
-	}
 	blockoverride "bar_tooltip" {
 		tooltip = "te_demog_hist_wc_tt"
 	}
@@ -882,24 +715,7 @@ te_history_chart = {
 			size = { 100% ${box_h} }
 			parentanchor = bottom
 
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '5')]"
-				blockoverride "bar_size" {
-					size = { ${bars_5} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[GetVariableSystem.HasValue('te_demog_hist_range', '20')]"
-				blockoverride "bar_size" {
-					size = { ${bars_20} ${bar_h} }
-				}
-			}
-			te_history_plot = {
-				visible = "[Not( Or( GetVariableSystem.HasValue('te_demog_hist_range', '5'), GetVariableSystem.HasValue('te_demog_hist_range', '20') ) )]"
-				blockoverride "bar_size" {
-					size = { ${bars_100} ${bar_h} }
-				}
-			}
+			${plots}
 			textbox = {
 				parentanchor = left|top
 				position = { 8 6 }

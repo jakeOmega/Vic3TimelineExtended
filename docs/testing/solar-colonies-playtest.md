@@ -1322,20 +1322,22 @@ No self-check: every input is a variable or a script value the Next Module hover
 The owner's two asks: a colony opens in a window of its own (`te_sr_colony_popup`, `te_popup` = `sr_colony`), and
 the Solar System tab opens on a map (`te_sr_system_map`). Both were drawn in the running game on the owner's
 2031 save through `game_qa gui-show` (the map, the list under a picked location, the window's content on three
-colonies), and the window was also shot in its popup host with its keys set by a probe widget. **No click was
-made**: the harness clicks only the engine's tool windows, so every click below is for a hand. No self-check:
+colonies), and the window was also shot in its popup host with its keys set by a probe widget. No click was
+made then: the harness clicked only the engine's tool windows. **Clicked on 2026-11-24** (a copy of the owner's save
+of December 2032, 20 colonies; the HUD may be clicked since that day, `game-qa` skill): the parts of steps 1, 2,
+3, 6, 7 and 8 marked *seen* below. The rest is still for a hand. No self-check:
 nothing here is script. **Fallback** if the window misbehaves: the page drawn inline under the Colonies list
 again (`te_sr_colony_pages` in `te_sr_sec_colonies`, shown on `sr_colony_focus`).
 
-1. **A base opens its window.** Under Simple or Full Colonies, on the Colonies tab (journal entry and the
+1. **A base opens its window.** *(Seen 2026-11-24: a colony's name opened Our Colonies on it over a dimmed screen, with no scrollbar at 2160p and scale 1.5, and the close button closed it and left the tab as it was. Not tried: the arrow, Escape, a click outside.)* Under Simple or Full Colonies, on the Colonies tab (journal entry and the
    Timeline Extended window), click a colony's name, then another colony's arrow: each opens Our Colonies on that
    colony, over a dimmed screen, with no scrollbar on a 1080p screen at scale 1 for a world without Terraforming.
    Escape, the close button and a click outside each close it and leave the panel behind as it was.
-2. **The list in the window.** Every colony we hold is on a button at the left, in the Colonies tab's order; the
+2. **The list in the window.** *(Seen 2026-11-24: twenty colonies in the tab's order, the one shown greyed; clicking Valles Marineris changed the page and kept the window. Not tried: a name's hover.)* Every colony we hold is on a button at the left, in the Colonies tab's order; the
    one shown is greyed. Click another: the page changes, the window stays. A name's hover is the site's
    specializations with their effects, as in the Colonies list (it reads the player's country, which the popup
    gives itself).
-3. **The page works.** In the window, change a colony's settler priority, queue a module with +, dismantle one
+3. **The page works.** *(Seen 2026-11-24: + on Spaceport queued one, the row reading "0 +1" and the overview's Modules "12 queued" from 11. Not tried: the other controls.)* In the window, change a colony's settler priority, queue a module with +, dismantle one
    with −, assign an Extraplanetary Base level with the Bases + (In-Situ Resource Utilization), press Revoke on a
    chartered colony and cancel the question: each acts as it did on the old page, and each greyed button gives its
    reason on hover.
@@ -1345,15 +1347,15 @@ again (`te_sr_colony_pages` in `te_sr_sec_colonies`, shown on `sr_colony_focus`)
    the list." takes a page's place only when a colony is lost while the window is on it, which the console can't
    do from under a popup; note it if it is ever seen.
 5. **Races Only.** Under Races Only the colonies' names are plain text with no arrow, and nothing opens.
-6. **The map reads.** On the Solar System tab the map shows the Sun, nine icons on their orbits with their
+6. **The map reads.** *(Seen 2026-11-24: the Sun, nine icons with their names on two lines by turns, none cut; gold markers for ours, rings for unclaimed, the dashed ring on our target; the key under it. No other power's flag or inbound dart was on that save.)* On the Solar System tab the map shows the Sun, nine icons on their orbits with their
    names on two lines by turns (none cut, none overlapping), and a marker a site: gold for ours, a flag for
    another power's, a ring for unclaimed, a gold ring round our target, a small dart on a site a colony fleet is
    flying to. The key under the map names them. A flag here is small (20 × 13): say if it can't be told apart.
-7. **A location filters the list.** Click a location's icon or name: its icon is framed, the list below shows
+7. **A location filters the list.** *(Seen 2026-11-24: clicking Mars framed its icon, the list showed Mars's five sites alone and the button read All locations. Not tried: clicking it again, a marker that isn't ours.)* Click a location's icon or name: its icon is framed, the list below shows
    that location's sites alone, every one, the count line reads "One location's sites shown" and the button
    reads All locations. Click the same location again, or All locations: the usual list returns, with Show all
    as before. Click a marker that isn't ours: the same, for its location.
-8. **Our marker opens the window.** Click a gold marker: Our Colonies opens on that colony. The same from the
+8. **Our marker opens the window.** *(Seen 2026-11-24: a gold marker under the Moon opened Our Colonies on Shackleton Crater. Not tried: the list's arrow, the target popup.)* Click a gold marker: Our Colonies opens on that colony. The same from the
    arrow beside "Ours" in the list. The colony target popup's list shows no arrow.
 9. **Another country's panel** (National Info, Space Race tab): the map and the window are the player's own;
    another country's column shows neither, as before.

@@ -41,6 +41,20 @@ te_history_charts/<system>.gui.in, each opened by an "@fragment <name>" line:
                         as many pixels; a + x is a floor above the axis's min a
     ${<param>}          a chart's own params (the Reserve's goods share one
                         fragment through ${good})
+    ${plots}            alone on a line, in a fragment's own plot_layouts: the
+                        three plots (plot_layouts below), at the line's indent
+
+THE PLOTS ARE GENERATED, every chart's at both sizes (plot_layouts): one
+te_history_plot a range, each built only while its range is shown, each with
+the datamodel and the age test it reads. A shorter range's plot reads only the
+store's last samples, DataModelLast( <list>, '(int32)<n>' ), and keeps the age
+test on each (a gap in the store can't let an older one in); the longest
+range's reads the whole store and tests nothing, as the store holds no more
+than it shows. Which range an unset variable means is Range.default, for the
+monthly charts DEFAULT_RANGE, the one place it is decided: the plots' visible
+and every range button's enabled (range_row) follow it. Where the samples live
+and how old one is: the chart's Store (STORES). So no fragment carries
+sample_datamodel, sample_visible or a te_history_plot (_validate).
 
 At SMALL every placeholder gives back the literal it replaced. The generator
 adds the blockoverrides a fragment doesn't carry where the size differs from
@@ -162,25 +176,75 @@ PIP_LANE = 36   # annual_pips: the frame's height over the bars' box. te_demog_h
 class Range:
     """A range variable the charts of a kind share (a GetVariableSystem value).
 
-    values   the three buttons' values, shortest first; unset is the last
+    values   the three buttons' values, shortest first
     samples  how many samples each shows (months or years)
     labels   the three buttons' loc keys
     button_w the buttons' width (te_history_range_button's size)
+    default  the value an unset variable means: the plot shown, the button greyed
     """
     var: str
     values: tuple[str, str, str]
     samples: tuple[int, int, int]
     labels: tuple[str, str, str]
     button_w: int
+    default: str
 
+    def shown(self, value: str) -> str:
+        """The test that the value's range is the one shown: the default's
+        while no other value is set, any other's while it is."""
+        others = [v for v in self.values if v != self.default]
+        if value == self.default:
+            return f"Not( Or( {_has(self.var, others[0])}, {_has(self.var, others[1])} ) )"
+        return _has(self.var, value)
+
+
+# The monthly charts' range while te_hist_range is unset: 5 years (2026-11-24;
+# it was 20, the whole store). With 20 years stored, a History section open on
+# 20 Years drew 24 frames a second and on 5 Years 47 (Banking's tab,
+# docs/audits/late_game_performance.md, "The history charts"). Any of "1", "5",
+# "20"; the sections' hand-written range buttons follow it by hand
+# (test_te_history_charts.ViewerTest holds them to the viewer's row).
+DEFAULT_RANGE = "5"
 
 RANGES = {
     "te_hist_range": Range("te_hist_range", ("1", "5", "20"), (12, 60, 240),
-                           ("te_hist_range_1y", "te_hist_range_5y", "te_hist_range_20y"), 72),
+                           ("te_hist_range_1y", "te_hist_range_5y", "te_hist_range_20y"), 72, DEFAULT_RANGE),
     "te_demog_hist_range": Range("te_demog_hist_range", ("5", "20", "100"), (5, 20, 100),
-                                 ("te_hist_range_5y", "te_hist_range_20y", "te_demog_hist_range_100y"), 96),
+                                 ("te_hist_range_5y", "te_hist_range_20y", "te_demog_hist_range_100y"), 96, "100"),
     "ch_model_hist_range": Range("ch_model_hist_range", ("5", "20", "100"), (5, 20, 100),
-                                 ("ch_model_hist_range_5", "ch_model_hist_range_20", "ch_model_hist_range_100"), 96),
+                                 ("ch_model_hist_range_5", "ch_model_hist_range_20", "ch_model_hist_range_100"), 96,
+                                 "100"),
+}
+
+
+@dataclass(frozen=True)
+class Store:
+    """Where a chart's samples live, oldest first (each store's pruner re-sorts
+    it after an eviction: history_charts.md), and how old one is.
+
+    samples  the list, as a datamodel reads it
+    now      the script value for this month or year, in the index's units
+    index    the container's variable holding its own month or year
+    """
+    samples: str
+    now: str
+    index: str
+
+    def age(self) -> str:
+        return f"Subtract_CFixedPoint( {self.now}, ScriptContainer.GetVariableValue( '{self.index}' ) )"
+
+
+STORES = {
+    # monthly, every country's (te_history_effects.txt): 240 at most, 20 years
+    "te_hist": Store("Country.MakeScope.GetList('te_hist')",
+                     "Country.MakeScope.ScriptValue( 'te_history_month_index' )", "te_hist_i"),
+    # Demographics' yearly census history (te_demog_history_effects.txt): 100 at most
+    "te_dg_hist": Store("Country.MakeScope.GetList('te_dg_hist')",
+                        "Country.MakeScope.ScriptValue( 'te_history_current_year' )", "te_hist_i"),
+    # Cultural Hegemony's world models, once on a global container
+    # (te_history_cultural_hegemony_effects.txt): 100 at most
+    "ch_model_hist": Store("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')",
+                           "Country.MakeScope.ScriptValue( 'te_history_current_year' )", "te_hist_y"),
 }
 
 
@@ -214,6 +278,7 @@ class Chart:
               drawn only for some countries, or None. The section's instance of
               the wrapper carries it as visible = "[<shown>]"; the generator
               doesn't emit it.
+    store     where its samples live (STORES)
     """
     id: str
     system: str
@@ -224,6 +289,7 @@ class Chart:
     range: str
     params: tuple[tuple[str, str], ...] = ()
     shown: str | None = None
+    store: str = "te_hist"
 
 
 def _monthly(system: str, entry: str, gate: str, ids: list[str], shown: dict[str, str] | None = None) -> list[Chart]:
@@ -247,11 +313,12 @@ CHARTS: list[Chart] = (
               "mon_rate_paid", "mon_inflation", "mon_fx"], BANKING_SHOWN)
     + [Chart(f"st_res_{g}", "strategic_reserve", "monthly", "st_res", "je_strategic_reserve",
              "te_market_strategic_reserve_tab_sgui", "te_hist_range", (("good", g),)) for g in ST_RES_GOODS]
-    + [Chart(i, "demographics", "annual_pips", i, None, "te_pops_demog_tab_sgui", "te_demog_hist_range")
+    + [Chart(i, "demographics", "annual_pips", i, None, "te_pops_demog_tab_sgui", "te_demog_hist_range",
+             store="te_dg_hist")
        for i in ["demog_births_deaths", "demog_migration", "demog_e0", "demog_tfr", "demog_median",
                  "demog_causes", "demog_gini", "demog_wc"]]
     + [Chart("ch_models", "cultural_hegemony", "annual", "ch_models", "je_cultural_hegemony",
-             "te_society_ch_tab_sgui", "ch_model_hist_range")]
+             "te_society_ch_tab_sgui", "ch_model_hist_range", store="ch_model_hist")]
     + _monthly("nuclear_weapons", "je_nuclear_program", "te_military_nuclear_tab_sgui", ["nd_taboo", "nd_taboo_tgt"])
     + _monthly("united_nations", "je_united_nations", "te_diplomacy_un_tab_sgui", ["un_auth", "un_target"])
     + _monthly("global_warming", "je_global_warming", "te_market_global_warming_tab_sgui", ["gw_temp", "gw_share"])
@@ -339,9 +406,14 @@ def values(chart: Chart, size: Size) -> dict[str, str]:
     return out
 
 
+PLOTS_LINE = re.compile(r"^(\s*)\$\{plots\}$", re.M)
+
+
 def substitute(text: str, chart: Chart, size: Size) -> str:
     plain = values(chart, size)
     dims, small = size[chart.kind], SMALL[chart.kind]
+    plots = plot_layouts(dims, RANGES[chart.range], STORES[chart.store])
+    text = PLOTS_LINE.sub(lambda m: "\n".join(f"{m.group(1)}{ln}" if ln else "" for ln in plots), text)
     ratio = Decimal(small.bar_h) / Decimal(dims.bar_h)
 
     def one(m: re.Match) -> str:
@@ -371,20 +443,22 @@ def fixed_width(width: int) -> list[str]:
     return [f"minimumsize = {{ {width} -1 }}", f"maximumsize = {{ {width} -1 }}"]
 
 
-def plot_layouts(dims: Dims, rng: Range) -> list[str]:
-    """The three plots of te_history_chart's default plot_layouts at other bar
-    sizes: one a range, the full range's shown while neither shorter one is set."""
+def plot_layouts(dims: Dims, rng: Range, store: Store) -> list[str]:
+    """The chart's three plots (THE PLOTS ARE GENERATED): one a range, shown
+    while it is the range shown (Range.shown), its bars a full range's width.
+    A shorter range's reads the store's last samples and tests each one's age;
+    the longest range's reads the whole store and tests nothing."""
     widths = bars(dims, rng)
-    short, middle, full = rng.values
-
-    def has(v: str) -> str:
-        return f"GetVariableSystem.HasValue( '{rng.var}', '{v}' )"
-
-    tests = {short: has(short), middle: has(middle), full: f"Not( Or( {has(short)}, {has(middle)} ) )"}
     out = []
-    for v in rng.values:
-        out += ["te_history_plot = {", f'\tvisible = "[{tests[v]}]"']
+    for v, n in zip(rng.values, rng.samples):
+        whole = v == rng.values[-1]
+        datamodel = f"[{store.samples}]" if whole else f"[DataModelLast( {store.samples}, '(int32){n}' )]"
+        out += ["te_history_plot = {", f'\tvisible = "[{rng.shown(v)}]"']
         out += [f"\t{ln}" for ln in _override("bar_size", [f"size = {{ {widths[v]} {dims.bar_h} }}"])]
+        out += [f"\t{ln}" for ln in _override("sample_datamodel", [f'datamodel = "{datamodel}"'])]
+        if not whole:
+            out += [f"\t{ln}" for ln in _override(
+                "sample_visible", [f"visible = \"[LessThan_CFixedPoint( {store.age()}, '(CFixedPoint){n}' )]\""])]
         out.append("}")
     return out
 
@@ -417,17 +491,19 @@ def open_overrides(chart: Chart) -> list[str]:
 
 
 def size_overrides(chart: Chart, size: Size, text: str) -> list[str]:
-    """The blockoverrides the chart needs at the size beyond its fragment: each
-    the fragment doesn't carry whose value differs from te_history_chart's
-    defaults (SMALL's monthly row, and TITLE_W), the chart's width among them,
-    and at SMALL the open button beside the title."""
+    """The blockoverrides the chart needs at the size beyond its fragment: its
+    plots, where the fragment has no plot_layouts of its own (one with its own
+    places them with ${plots}), each other the fragment doesn't carry whose
+    value differs from te_history_chart's defaults (SMALL's monthly row, and
+    TITLE_W), the chart's width among them, and at SMALL the open button
+    beside the title."""
     dims, default = size[chart.kind], SMALL["monthly"]
     carried = set(re.findall(r'blockoverride "(\w+)"', text))
     out: list[str] = []
     if "plot_size" not in carried and dims.frame != default.frame:
         out += _override("plot_size", [f"size = {{ {dims.frame[0]} {dims.frame[1]} }}"])
-    if "plot_layouts" not in carried and (dims.plot, dims.bar_h) != (default.plot, default.bar_h):
-        out += _override("plot_layouts", plot_layouts(dims, RANGES[chart.range]))
+    if "plot_layouts" not in carried:
+        out += _override("plot_layouts", plot_layouts(dims, RANGES[chart.range], STORES[chart.store]))
     if "chart_text_width" not in carried and dims.text_w != default.text_w:
         out += _override("chart_text_width", [f"max_width = {dims.text_w}"])
     if "empty_width" not in carried and dims.empty_w != default.empty_w:
@@ -573,13 +649,20 @@ def _has(var: str, value: str) -> str:
     return f"GetVariableSystem.HasValue( '{var}', '{value}' )"
 
 
+def _greyed_not(rng: Range, value: str) -> str:
+    """A range button's enabled: greyed while its range is shown (Range.shown),
+    the default's while no other value is set."""
+    others = [v for v in rng.values if v != rng.default]
+    if value == rng.default:
+        return f"Or( {_has(rng.var, others[0])}, {_has(rng.var, others[1])} )"
+    return f"Not( {_has(rng.var, value)} )"
+
+
 def range_row(rng: Range) -> list[str]:
     """The three range buttons the sections draw for the variable, so the
     viewer and the panel share one range: each greyed while its range is
-    shown, the full range while neither shorter one is set."""
-    short, middle, full = rng.values
-    enabled = {short: f"Not( {_has(rng.var, short)} )", middle: f"Not( {_has(rng.var, middle)} )",
-               full: f"Or( {_has(rng.var, short)}, {_has(rng.var, middle)} )"}
+    shown (Range.default's while no value is set)."""
+    enabled = {v: _greyed_not(rng, v) for v in rng.values}
     out = [f"type {range_row_name(rng.var)} = flowcontainer {{", "\tdirection = horizontal", "\tignoreinvisible = yes",
            "\tparentanchor = hcenter", "\tspacing = 4", "\tmargin = { 4 4 }"]
     for value, label in zip(rng.values, rng.labels):
@@ -705,7 +788,18 @@ def _validate() -> None:
             raise ValueError(f"{c.id}: a monthly chart reads te_hist_range, an annual one its own range")
         if c.fragment not in fragments(c.system):
             raise ValueError(f"{c.id}: no fragment {c.fragment} in {c.system}.gui.in")
+        if c.store not in STORES:
+            raise ValueError(f"{c.id}: store {c.store!r} isn't in STORES")
+        text = fragment(c)
+        if re.search(r'blockoverride "(sample_datamodel|sample_visible)"|\bte_history_plot = \{', text):
+            raise ValueError(f"{c.id}: a fragment leaves its plots to the generator (${{plots}})")
+        carries = 'blockoverride "plot_layouts"' in text
+        if len(PLOTS_LINE.findall(text)) != (1 if carries else 0):
+            raise ValueError(f"{c.id}: a fragment's own plot_layouts places its plots with one ${{plots}} line")
         used[c.system].add(c.fragment)
+    for rng in RANGES.values():
+        if rng.default not in rng.values:
+            raise ValueError(f"{rng.var}: default {rng.default!r} isn't one of {rng.values}")
     for s in SYSTEMS:
         unused = set(fragments(s)) - used[s]
         if unused:

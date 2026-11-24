@@ -336,6 +336,7 @@ types te_systems_window_generated_types
 			### nation
 			blockoverride "first_button" {
 				text = "te_window_tab_nation"
+				fontsize = 14
 			}
 			blockoverride "first_button_tooltip" {
 				tooltip = "te_window_tab_nation_tt"
@@ -351,11 +352,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_nation"
+				fontsize = 14
 			}
 
 			### space_race
 			blockoverride "second_button" {
 				text = "te_window_tab_space_race"
+				fontsize = 14
 			}
 			blockoverride "second_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -372,11 +375,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_space_race"
+				fontsize = 14
 			}
 
 			### grand_monuments
 			blockoverride "third_button" {
 				text = "te_window_tab_grand_monuments"
+				fontsize = 14
 			}
 			blockoverride "third_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -393,11 +398,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "third_button_selected" {
 				text = "te_window_tab_grand_monuments"
+				fontsize = 14
 			}
 
 			### colonial_empire
 			blockoverride "fourth_button" {
 				text = "te_window_tab_colonial_empire"
+				fontsize = 14
 			}
 			blockoverride "fourth_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_readout_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
@@ -414,11 +421,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "fourth_button_selected" {
 				text = "te_window_tab_colonial_empire"
+				fontsize = 14
 			}
 
 			### seabed
 			blockoverride "fifth_button" {
 				text = "te_window_tab_seabed"
+				fontsize = 14
 			}
 			blockoverride "fifth_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -435,11 +444,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "fifth_button_selected" {
 				text = "te_window_tab_seabed"
+				fontsize = 14
 			}
 
 			### power_grids
 			blockoverride "sixth_button" {
 				text = "te_window_tab_power_grids"
+				fontsize = 14
 			}
 			blockoverride "sixth_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_power_grids_tt', SelectLocalization( GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_power_grids_locked_tt' ), GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -456,6 +467,7 @@ types te_systems_window_generated_types
 			}
 			blockoverride "sixth_button_selected" {
 				text = "te_window_tab_power_grids"
+				fontsize = 14
 			}
 		}
 
@@ -463,6 +475,7 @@ types te_systems_window_generated_types
 			### banking
 			blockoverride "first_button" {
 				text = "te_window_tab_banking"
+				fontsize = 14
 			}
 			blockoverride "first_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )]"
@@ -479,11 +492,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_banking"
+				fontsize = 14
 			}
 
 			### tax_code
 			blockoverride "second_button" {
 				text = "te_window_tab_tax_code"
+				fontsize = 14
 			}
 			blockoverride "second_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_tab_tt', SelectLocalization( GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_tax_tab_locked_tt' ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -500,11 +515,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_tax_code"
+				fontsize = 14
 			}
 
 			### budget_breakdown
 			blockoverride "third_button" {
 				text = "te_window_tab_budget_breakdown"
+				fontsize = 14
 			}
 			blockoverride "third_button_tooltip" {
 				tooltip = "te_budget_chart_tab_tt"
@@ -520,11 +537,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "third_button_selected" {
 				text = "te_window_tab_budget_breakdown"
+				fontsize = 14
 			}
 
 			### strategic_reserve
 			blockoverride "fourth_button" {
 				text = "te_window_tab_strategic_reserve"
+				fontsize = 14
 			}
 			blockoverride "fourth_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_strategic_reserve_tt', SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_strategic_reserve_locked_tt' ), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -541,11 +560,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "fourth_button_selected" {
 				text = "te_window_tab_strategic_reserve"
+				fontsize = 14
 			}
 
 			### global_warming
 			blockoverride "fifth_button" {
 				text = "te_window_tab_global_warming"
+				fontsize = 14
 			}
 			blockoverride "fifth_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_global_warming_tt', SelectLocalization( GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_global_warming_locked_tt' ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -562,6 +583,7 @@ types te_systems_window_generated_types
 			}
 			blockoverride "fifth_button_selected" {
 				text = "te_window_tab_global_warming"
+				fontsize = 14
 			}
 		}
 
@@ -569,6 +591,7 @@ types te_systems_window_generated_types
 			### demographics
 			blockoverride "first_button" {
 				text = "te_window_tab_demographics"
+				fontsize = 14
 			}
 			blockoverride "first_button_tooltip" {
 				tooltip = "[SelectLocalization( And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_pops_tab_demog_tt', SelectLocalization( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_pops_tab_demog_locked_tt' ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -585,11 +608,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_demographics"
+				fontsize = 14
 			}
 
 			### cultural_hegemony
 			blockoverride "second_button" {
 				text = "te_window_tab_cultural_hegemony"
+				fontsize = 14
 			}
 			blockoverride "second_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_society_tab_ch_tt', SelectLocalization( GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_cultural_hegemony_locked_tt' ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -606,11 +631,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_cultural_hegemony"
+				fontsize = 14
 			}
 
 			### united_nations
 			blockoverride "third_button" {
 				text = "te_window_tab_united_nations"
+				fontsize = 14
 			}
 			blockoverride "third_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_diplomacy_tab_un_tt', SelectLocalization( GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_united_nations_locked_tt' ), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -627,11 +654,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "third_button_selected" {
 				text = "te_window_tab_united_nations"
+				fontsize = 14
 			}
 
 			### nuclear_weapons
 			blockoverride "fourth_button" {
 				text = "te_window_tab_nuclear_weapons"
+				fontsize = 14
 			}
 			blockoverride "fourth_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_nuclear_tt', SelectLocalization( GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_nuclear_weapons_locked_tt' ), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -648,11 +677,13 @@ types te_systems_window_generated_types
 			}
 			blockoverride "fourth_button_selected" {
 				text = "te_window_tab_nuclear_weapons"
+				fontsize = 14
 			}
 
 			### covert_warfare
 			blockoverride "fifth_button" {
 				text = "te_window_tab_covert_warfare"
+				fontsize = 14
 			}
 			blockoverride "fifth_button_tooltip" {
 				tooltip = "[SelectLocalization( GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_covert_tt', SelectLocalization( GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_covert_warfare_locked_tt' ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -669,6 +700,7 @@ types te_systems_window_generated_types
 			}
 			blockoverride "fifth_button_selected" {
 				text = "te_window_tab_covert_warfare"
+				fontsize = 14
 			}
 		}
 
@@ -945,6 +977,7 @@ types te_systems_window_generated_types
 				### nation
 				blockoverride "first_button" {
 					text = "te_window_tab_nation"
+					fontsize = 14
 				}
 				blockoverride "first_button_tooltip" {
 					tooltip = "te_window_tab_nation_tt"
@@ -960,11 +993,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "first_button_selected" {
 					text = "te_window_tab_nation"
+					fontsize = 14
 				}
 
 				### space_race
 				blockoverride "second_button" {
 					text = "te_window_tab_space_race"
+					fontsize = 14
 				}
 				blockoverride "second_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -981,11 +1016,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "second_button_selected" {
 					text = "te_window_tab_space_race"
+					fontsize = 14
 				}
 
 				### grand_monuments
 				blockoverride "third_button" {
 					text = "te_window_tab_grand_monuments"
+					fontsize = 14
 				}
 				blockoverride "third_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1002,11 +1039,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "third_button_selected" {
 					text = "te_window_tab_grand_monuments"
+					fontsize = 14
 				}
 
 				### colonial_empire
 				blockoverride "fourth_button" {
 					text = "te_window_tab_colonial_empire"
+					fontsize = 14
 				}
 				blockoverride "fourth_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_colonial_empire_readout_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
@@ -1023,11 +1062,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "fourth_button_selected" {
 					text = "te_window_tab_colonial_empire"
+					fontsize = 14
 				}
 
 				### seabed
 				blockoverride "fifth_button" {
 					text = "te_window_tab_seabed"
+					fontsize = 14
 				}
 				blockoverride "fifth_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1044,11 +1085,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_window_tab_seabed"
+					fontsize = 14
 				}
 
 				### power_grids
 				blockoverride "sixth_button" {
 					text = "te_window_tab_power_grids"
+					fontsize = 14
 				}
 				blockoverride "sixth_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_power_grids_tt', SelectLocalization( GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_power_grids_locked_tt' ), GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1065,6 +1108,7 @@ types te_systems_window_generated_types
 				}
 				blockoverride "sixth_button_selected" {
 					text = "te_window_tab_power_grids"
+					fontsize = 14
 				}
 			}
 			tab_buttons = {
@@ -1074,6 +1118,7 @@ types te_systems_window_generated_types
 				### banking
 				blockoverride "first_button" {
 					text = "te_window_tab_banking"
+					fontsize = 14
 				}
 				blockoverride "first_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) )]"
@@ -1090,11 +1135,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "first_button_selected" {
 					text = "te_window_tab_banking"
+					fontsize = 14
 				}
 
 				### tax_code
 				blockoverride "second_button" {
 					text = "te_window_tab_tax_code"
+					fontsize = 14
 				}
 				blockoverride "second_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_tax_tab_tt', SelectLocalization( GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_tax_tab_locked_tt' ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1111,11 +1158,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "second_button_selected" {
 					text = "te_window_tab_tax_code"
+					fontsize = 14
 				}
 
 				### budget_breakdown
 				blockoverride "third_button" {
 					text = "te_window_tab_budget_breakdown"
+					fontsize = 14
 				}
 				blockoverride "third_button_tooltip" {
 					tooltip = "te_budget_chart_tab_tt"
@@ -1131,11 +1180,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "third_button_selected" {
 					text = "te_window_tab_budget_breakdown"
+					fontsize = 14
 				}
 
 				### strategic_reserve
 				blockoverride "fourth_button" {
 					text = "te_window_tab_strategic_reserve"
+					fontsize = 14
 				}
 				blockoverride "fourth_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_strategic_reserve_tt', SelectLocalization( GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_strategic_reserve_locked_tt' ), GetScriptedGui('te_market_strategic_reserve_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1152,11 +1203,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "fourth_button_selected" {
 					text = "te_window_tab_strategic_reserve"
+					fontsize = 14
 				}
 
 				### global_warming
 				blockoverride "fifth_button" {
 					text = "te_window_tab_global_warming"
+					fontsize = 14
 				}
 				blockoverride "fifth_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_market_global_warming_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_window_tab_global_warming_tt', SelectLocalization( GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_global_warming_locked_tt' ), GetScriptedGui('te_market_global_warming_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1173,6 +1226,7 @@ types te_systems_window_generated_types
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_window_tab_global_warming"
+					fontsize = 14
 				}
 			}
 			tab_buttons = {
@@ -1182,6 +1236,7 @@ types te_systems_window_generated_types
 				### demographics
 				blockoverride "first_button" {
 					text = "te_window_tab_demographics"
+					fontsize = 14
 				}
 				blockoverride "first_button_tooltip" {
 					tooltip = "[SelectLocalization( And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ), 'te_pops_tab_demog_tt', SelectLocalization( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_pops_tab_demog_locked_tt' ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1198,11 +1253,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "first_button_selected" {
 					text = "te_window_tab_demographics"
+					fontsize = 14
 				}
 
 				### cultural_hegemony
 				blockoverride "second_button" {
 					text = "te_window_tab_cultural_hegemony"
+					fontsize = 14
 				}
 				blockoverride "second_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_society_tab_ch_tt', SelectLocalization( GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_cultural_hegemony_locked_tt' ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1219,11 +1276,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "second_button_selected" {
 					text = "te_window_tab_cultural_hegemony"
+					fontsize = 14
 				}
 
 				### united_nations
 				blockoverride "third_button" {
 					text = "te_window_tab_united_nations"
+					fontsize = 14
 				}
 				blockoverride "third_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_diplomacy_un_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_diplomacy_tab_un_tt', SelectLocalization( GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_united_nations_locked_tt' ), GetScriptedGui('te_diplomacy_un_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1240,11 +1299,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "third_button_selected" {
 					text = "te_window_tab_united_nations"
+					fontsize = 14
 				}
 
 				### nuclear_weapons
 				blockoverride "fourth_button" {
 					text = "te_window_tab_nuclear_weapons"
+					fontsize = 14
 				}
 				blockoverride "fourth_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_nuclear_tt', SelectLocalization( GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_nuclear_weapons_locked_tt' ), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1261,11 +1322,13 @@ types te_systems_window_generated_types
 				}
 				blockoverride "fourth_button_selected" {
 					text = "te_window_tab_nuclear_weapons"
+					fontsize = 14
 				}
 
 				### covert_warfare
 				blockoverride "fifth_button" {
 					text = "te_window_tab_covert_warfare"
+					fontsize = 14
 				}
 				blockoverride "fifth_button_tooltip" {
 					tooltip = "[SelectLocalization( GetScriptedGui('te_military_covert_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_military_tab_covert_tt', SelectLocalization( GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_covert_warfare_locked_tt' ), GetScriptedGui('te_military_covert_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
@@ -1282,6 +1345,7 @@ types te_systems_window_generated_types
 				}
 				blockoverride "fifth_button_selected" {
 					text = "te_window_tab_covert_warfare"
+					fontsize = 14
 				}
 			}
 			expand = {}

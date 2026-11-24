@@ -896,9 +896,11 @@ un_chamber_budget_lending_sgui = {
 	effect = { }
 }
 
-# Our grain pledge to the World Food Reserve, under our dues, while the Reserve
-# stands (un_food_reserve_obligation_lines, un_economy_effects.txt); Pledge
-# Grain or Withdraw Our Pledge sits under it.
+# Our grain pledge to the World Food Reserve, its rows under a heading of their
+# own in Our Obligations, while the Reserve stands; Pledge Grain or Withdraw
+# Our Pledge sits under them. The effect is the pledge row's hover: what our
+# pledge lets a mission draw, or why we pledge nothing
+# (un_food_reserve_obligation_lines, un_economy_effects.txt).
 un_chamber_food_reserve_sgui = {
 	scope = country
 	is_shown = {
@@ -909,6 +911,19 @@ un_chamber_food_reserve_sgui = {
 	effect = {
 		un_food_reserve_obligation_lines = yes
 	}
+}
+
+# Whether we pledge: the pledge row's value and the rows only a pledger has
+# (the grain in our reserve, the next mission's draw). Reads the root only.
+un_chamber_food_pledged_sgui = {
+	scope = country
+	is_shown = {
+		has_global_variable = un_inst_food_reserve
+		has_variable = un_fr_pledged
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }
 
 # A Binding Ceasefire ordered against us, or protecting us from our enemy
@@ -935,7 +950,7 @@ un_chamber_orders_sgui = {
 # The World Development Fund's section (te_un_sec_dev_fund): is_shown gates the
 # whole section on the Fund standing; the effect renders who it pays and how
 # much, or why nobody is paid (un_dev_fund_recipient_lines,
-# un_economy_effects.txt). Never executed.
+# un_economy_effects.txt): every recipient, under Show All. Never executed.
 un_chamber_dev_fund_sgui = {
 	scope = country
 
@@ -945,19 +960,53 @@ un_chamber_dev_fund_sgui = {
 	ai_is_valid = { always = no }
 
 	effect = {
-		un_dev_fund_recipient_lines = yes
+		un_dev_fund_recipient_lines = { MAX = 999 }
 	}
 }
 
-# Our own position in the Fund, the section's first row, with the four
-# Development Programs controls under it (un_economy_obligation_lines,
-# un_economy_effects.txt; UN-13).
-un_chamber_dev_fund_position_sgui = {
+# The same list cut to the ten largest grants, shown until Show All is pressed
+# (the GUI polish of 2026-11-24: a long list ran off the panel). Never executed.
+un_chamber_dev_fund_top_sgui = {
 	scope = country
 
 	effect = {
-		un_economy_obligation_lines = yes
+		un_dev_fund_recipient_lines = { MAX = 9 }
 	}
+}
+
+# Our own position in the Fund, the section's first rows, with the four
+# Development Programs controls under them (UN-13). Rows since the GUI polish
+# of 2026-11-24, each reading a script value; these are their hovers. What we
+# receive, or why nothing (un_dev_fund_receipt_lines):
+un_chamber_dev_fund_receipt_sgui = {
+	scope = country
+
+	effect = {
+		un_dev_fund_receipt_lines = yes
+	}
+}
+
+# Our Development Programs contribution, its size and what it does, or that we
+# make none (un_dev_fund_contribution_lines):
+un_chamber_dev_fund_contribution_sgui = {
+	scope = country
+
+	effect = {
+		un_dev_fund_contribution_lines = yes
+	}
+}
+
+# Whether our contribution is paid into the Fund: running Development Programs
+# while withholding our dues or without a seat pays nothing in, and the
+# section says so in a row of its own. Reads the root only.
+un_chamber_dev_fund_counted_sgui = {
+	scope = country
+	is_shown = {
+		un_dev_fund_contributor = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
 }
 
 # The section's cutoff row's tooltip: how this month's line was set

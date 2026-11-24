@@ -506,6 +506,21 @@ types te_state_panel_widget_types
 					blockoverride "row_value" {
 						raw_text = "[State.GetModifier.GetValueWithBreakdownFor('goods_output_tourism_mult')]"
 					}
+					### A total of every modifier runs to "+1,415.7%%": 100 px of value, not the
+					### row type's 60, which cut "+415.7%%" to "+415.7 ..." (seen in game,
+					### 2026-11-24). The label gives up the 40: "All modifiers" needs about 95.
+					blockoverride "label_size" {
+						size = { 146 24 }
+					}
+					blockoverride "label_max_width" {
+						max_width = 146
+					}
+					blockoverride "value_size" {
+						size = { 100 24 }
+					}
+					blockoverride "value_max_width" {
+						max_width = 100
+					}
 				}
 
 				te_state_wide_row = {
@@ -517,6 +532,21 @@ types te_state_panel_widget_types
 					}
 					blockoverride "row_value" {
 						raw_text = "[State.GetModifier.GetValueWithBreakdownFor('building_tourism_industry_throughput_add')]"
+					}
+					### A total of every modifier runs to "+1,415.7%%": 100 px of value, not the
+					### row type's 60, which cut "+415.7%%" to "+415.7 ..." (seen in game,
+					### 2026-11-24). The label gives up the 40: "All modifiers" needs about 95.
+					blockoverride "label_size" {
+						size = { 146 24 }
+					}
+					blockoverride "label_max_width" {
+						max_width = 146
+					}
+					blockoverride "value_size" {
+						size = { 100 24 }
+					}
+					blockoverride "value_max_width" {
+						max_width = 100
 					}
 				}
 			}

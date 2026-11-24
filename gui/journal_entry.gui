@@ -18,7 +18,7 @@ types journal_entry_panel_types
 		datacontext = "[JournalEntryPanel.AccessJournalEntryType]"
 
 		### TIMELINE EXTENDED — the see-through page, the third change to this vanilla file (the bars-on-top marker
-		### below is the other two). The eye in the header (top_left_button_*, below) fades the whole page so its
+		### below is the other two; the modifier icons that do not fit the header are the fourth). The eye in the header (top_left_button_*, below) fades the whole page so its
 		### journal map shows through: a journal entry's map shows only while its page is open (journal_map_modes.md).
 		### The faded page still takes clicks (the window's frame is a clickthrough_blocker). The flag outlives a
 		### reopen, so a Map Room pick (which reopens the page to repaint) keeps it faded; the header's close and back
@@ -225,8 +225,15 @@ types journal_entry_panel_types
 						}
 
 						### TIMED AND SCALING MODIFIERS
+						### TIMELINE EXTENDED — the fourth change to this vanilla file: only while the icons fit.
+						### Vanilla stacks them four to a row at the header's right, centred on its 120 px, which
+						### holds two rows. An entry of the mod's with more (the United Nations carried 19 in a
+						### game of 2032, Solar System Colonization 30) ran three rows above the header and
+						### below it, over the page's first lines and its "?". They fit when each list has at
+						### most four, or one is empty and the other has at most eight; otherwise the strip
+						### under the header draws them (TIMED AND SCALING MODIFIERS, WIDE, below).
 						flowcontainer = {
-							visible = "[Or(Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers)), Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers)))]"
+							visible = "[And( Or(Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers)), Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers))), Or( And( LessThan_int32( GetDataModelSize( JournalEntry.GetScalingModifiers ), '(int32)5' ), LessThan_int32( GetDataModelSize( JournalEntry.GetTimedModifiers ), '(int32)5' ) ), Or( And( IsDataModelEmpty( JournalEntry.GetScalingModifiers ), LessThan_int32( GetDataModelSize( JournalEntry.GetTimedModifiers ), '(int32)9' ) ), And( IsDataModelEmpty( JournalEntry.GetTimedModifiers ), LessThan_int32( GetDataModelSize( JournalEntry.GetScalingModifiers ), '(int32)9' ) ) ) ) )]"
 							direction = vertical
 							parentanchor = vcenter|right
 							spacing = 5
@@ -279,6 +286,54 @@ types journal_entry_panel_types
 						tooltip = "JOURNAL_ENTRY_DLC_TOOLTIP"
 						position = { 10 5 }
 						size = { 50 50 }
+					}
+				}
+
+				### TIMED AND SCALING MODIFIERS, WIDE
+				### TIMELINE EXTENDED — the icons the header cannot hold (see TIMED AND SCALING MODIFIERS, above),
+				### twelve to a row across the page, the scaling ones' rows then the timed ones', as the mod's
+				### system tabs draw them (te_je_modifier_strip, gui/te_system_tab_widgets.gui). Not for an entry
+				### with its own header widget: vanilla's ALT block, next, is that entry's.
+				flowcontainer = {
+					visible = "[And3( Not( JournalEntry.HasCustomWidget('custom_widget_container_je_icon') ), Or(Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers)), Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers))), Not( Or( And( LessThan_int32( GetDataModelSize( JournalEntry.GetScalingModifiers ), '(int32)5' ), LessThan_int32( GetDataModelSize( JournalEntry.GetTimedModifiers ), '(int32)5' ) ), Or( And( IsDataModelEmpty( JournalEntry.GetScalingModifiers ), LessThan_int32( GetDataModelSize( JournalEntry.GetTimedModifiers ), '(int32)9' ) ), And( IsDataModelEmpty( JournalEntry.GetTimedModifiers ), LessThan_int32( GetDataModelSize( JournalEntry.GetScalingModifiers ), '(int32)9' ) ) ) ) ) )]"
+					parentanchor = hcenter
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 5
+					### Twelve icons and their gaps: both lists start at the column's left edge, so a
+					### short last row sits under the row above it, not centred on its own.
+					minimumsize = { 475 -1 }
+
+					flowcontainer = {
+						visible = "[Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers))]"
+						spacing = 5
+						wrap_count = 12
+						datamodel = "[JournalEntry.GetScalingModifiers]"
+
+						item = {
+							icon = {
+								size = { 35 35 }
+								using = tooltip_se
+								tooltip = "[ScalingModifier.GetTooltip]"
+								texture = "[ScalingModifier.GetIcon]"
+							}
+						}
+					}
+
+					flowcontainer = {
+						visible = "[Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers))]"
+						spacing = 5
+						wrap_count = 12
+						datamodel = "[JournalEntry.GetTimedModifiers]"
+
+						item = {
+							icon = {
+								size = { 35 35 }
+								using = tooltip_se
+								tooltip = "[TimedModifier.GetTooltip]"
+								texture = "[TimedModifier.GetIcon]"
+							}
+						}
 					}
 				}
 

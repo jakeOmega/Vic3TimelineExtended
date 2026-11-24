@@ -2404,9 +2404,14 @@ un_chamber_dues_lines = {
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_dues_none
 	}
-	# Seats we carry for suspended subjects (§0.8 ruling 4).
+	# Seats we carry for suspended subjects (§0.8 ruling 4): one subject, or
+	# more.
 	if = {
-		limit = { un_carried_seat_count > 0 }
+		limit = { un_carried_seat_count = 1 }
+		custom_tooltip_no_bullet = je_un_chamber_dues_carried_one
+	}
+	else_if = {
+		limit = { un_carried_seat_count > 1 }
 		custom_tooltip_no_bullet = je_un_chamber_dues_carried
 	}
 	# Pay or withhold sits under these lines in the widget (UN-9). Our grain
@@ -2481,6 +2486,8 @@ un_chamber_regime_lines = {
 	un_chamber_convention_line = { CONVENTION = nuclear_ban LINE = je_un_chamber_conv_nuclear_ban }
 	# The ban's ceiling on our arsenal (nd_taboo_refresh_ban_ceiling): its
 	# terms are a variable, not a regime modifier, so the line is its own.
+	# Two "Label: value" lines while it allows any: the ceiling, the treaty
+	# on its hover, and the months to its next step down.
 	if = {
 		limit = {
 			has_variable = un_nuclear_ban_modifier_on
@@ -2489,6 +2496,7 @@ un_chamber_regime_lines = {
 		if = {
 			limit = { var:nd_tpnw_ceiling > 0 }
 			custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_ceiling
+			custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_step
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_none

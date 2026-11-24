@@ -280,19 +280,27 @@ types covert_operations_widget_types
 
 	### ---- FUNDING STEPPER ---------------------------------------------
 
-	### Label, minus, the level and its name, plus; centred under the state
-	### line. Its datacontext is covert_funding_sgui, set on the container, so
-	### both buttons address their action by op code alone.
+	### Label, minus, the level and its name, plus: the Nuclear panel's
+	### Program funding row's shape (nuclear_program_funding_row), the label
+	### at the left, then the buttons either side of the value, which is
+	### centred in a fixed cell, so nothing moves when the level's name
+	### changes length ("0 Dormant" to "3 Covert Network"). 4 + 170 + 4 + 24
+	### + 4 + 230 + 4 + 24 + 4 = 468, the Funding Levels table's width under
+	### it: the label sits over the table's Level column and the plus ends at
+	### its cost column's edge (2026-11-24; the label was right-aligned
+	### against the minus and the row centred). Its datacontext is
+	### covert_funding_sgui, set on the container, so both buttons address
+	### their action by op code alone.
 	type covert_cc_funding_stepper = flowcontainer {
 		direction = horizontal
-		spacing = 3
-		parentanchor = hcenter
+		spacing = 4
+		margin = { 4 1 }
 		datacontext = "[GetScriptedGui('covert_funding_sgui')]"
 
 		textbox = {
 			text = "je_iw_funding_stepper_label"
-			size = { 80 24 }
-			align = right|nobaseline
+			size = { 170 24 }
+			align = left|nobaseline
 			using = covert_fontsize_row
 			parentanchor = vcenter
 			elide = right
@@ -308,7 +316,7 @@ types covert_operations_widget_types
 
 		textbox = {
 			text = "je_iw_funding_stepper_value"
-			size = { 180 24 }
+			size = { 230 24 }
 			align = center|nobaseline
 			using = covert_fontsize_row
 			parentanchor = vcenter

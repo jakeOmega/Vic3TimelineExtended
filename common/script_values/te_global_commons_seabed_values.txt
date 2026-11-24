@@ -2320,15 +2320,12 @@ te_seabed_built_total_disp = {
 	min = 0
 }
 
-# The holding fee on one level a week, and the country's fee in thousands.
+# The holding fee on one level a week. The overview prints the country's fee,
+# te_seabed_fee_disp, through te_seabed_fee_fig: whole under 1,000, abbreviated
+# from it.
 te_seabed_fee_per_level = {
 	value = te_seabed_level_output_value
 	multiply = te_seabed_fee_rate
-}
-
-te_seabed_fee_k_disp = {
-	value = te_seabed_fee_disp
-	divide = 1000
 }
 
 # Country scope: 1 while Sponsor Contractors protects our claims (Sponsor,

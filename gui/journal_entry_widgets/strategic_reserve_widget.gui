@@ -1290,7 +1290,7 @@ types strategic_reserve_widget_types
 						text = "te_hist_range_5y"
 					}
 					blockoverride "range_enabled" {
-						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) )]"
 					}
 					blockoverride "range_onclick" {
 						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
@@ -1301,7 +1301,7 @@ types strategic_reserve_widget_types
 						text = "te_hist_range_20y"
 					}
 					blockoverride "range_enabled" {
-						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '20' ))]"
 					}
 					blockoverride "range_onclick" {
 						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
@@ -1570,7 +1570,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_floor_pct').GetValue|0]"
@@ -1579,7 +1579,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_price_memory').GetValue|0]"
@@ -1673,7 +1673,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_floor_pct').GetValue|0]"
@@ -1682,7 +1682,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_price_memory').GetValue|0]"
@@ -1776,7 +1776,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_floor_pct').GetValue|0]"
@@ -1785,7 +1785,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_price_memory').GetValue|0]"
@@ -1879,7 +1879,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_floor_pct').GetValue|0]"
@@ -1888,7 +1888,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_price_memory').GetValue|0]"
@@ -1982,7 +1982,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_floor_pct').GetValue|0]"
@@ -1991,7 +1991,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_price_memory').GetValue|0]"
@@ -2085,7 +2085,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_floor_pct').GetValue|0]"
@@ -2094,7 +2094,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_price_memory').GetValue|0]"
@@ -2188,7 +2188,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_floor_pct').GetValue|0]"
@@ -2197,7 +2197,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_price_memory').GetValue|0]"
@@ -2291,7 +2291,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_floor_pct').GetValue|0]"
@@ -2300,7 +2300,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_price_memory').GetValue|0]"
@@ -2393,7 +2393,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_sell_thr').GetValue|+0]"
 						}
 						blockoverride "policy_value_max_flow" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_max_flow').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_max_flow').GetValue|D0]"
 						}
 						blockoverride "policy_value_floor_pct" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_floor_pct').GetValue|0]"
@@ -2402,7 +2402,7 @@ types strategic_reserve_widget_types
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_ceil_pct').GetValue|0]"
 						}
 						blockoverride "policy_value_budget" {
-							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_budget').GetValue|0]"
+							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_budget').GetValue|D0]"
 						}
 						blockoverride "policy_value_price_memory" {
 							text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_price_memory').GetValue|0]"

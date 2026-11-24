@@ -1311,24 +1311,28 @@ types global_warming_widget_types
 	### player knows who to target for climate agreements").
 	### ======================================================================
 
-	### The headings over the rows' second line, said once above the rows:
-	### the same fixed cells, 44 (the flag) + 110 + 70 + 110 + 146 (the marks)
-	### = 480, sized for the row type (17) in GW-15: "-9999.9/yr" and
-	### "-9,999,999" fit 110, and "Our country" the marks' 122 beside the
-	### treaty icon. Hover a heading for how its figure is counted.
+	### The headings over the rows, said once above them: the same fixed
+	### cells, 34 (the flag) + 190 (the name) + 86 + 50 + 96 + 24 (the treaty
+	### mark) = 480, sized for the row type (17) in GW-15 and the one-line rows
+	### of 2026-11-24: "-1.23M/yr", the widest a |K figure with its unit
+	### prints, fits 86, "Share" 50 and "Cumulative" 96. Hover a heading for
+	### how its figure is counted.
 	type gw_emitter_header = flowcontainer {
 		direction = horizontal
 
 		widget = {
-			size = { 44 24 }
+			size = { 34 24 }
 		}
 		widget = {
-			size = { 110 24 }
+			size = { 190 24 }
+		}
+		widget = {
+			size = { 86 24 }
 
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 110
+				max_width = 86
 				elide = right
 				align = right|nobaseline
 				using = gw_fontsize_row
@@ -1337,12 +1341,12 @@ types global_warming_widget_types
 			}
 		}
 		widget = {
-			size = { 70 24 }
+			size = { 50 24 }
 
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 70
+				max_width = 50
 				elide = right
 				align = right|nobaseline
 				using = gw_fontsize_row
@@ -1351,12 +1355,12 @@ types global_warming_widget_types
 			}
 		}
 		widget = {
-			size = { 110 24 }
+			size = { 96 24 }
 
 			textbox = {
 				parentanchor = right|vcenter
 				autoresize = yes
-				max_width = 110
+				max_width = 96
 				elide = right
 				align = right|nobaseline
 				using = gw_fontsize_row
@@ -1365,120 +1369,122 @@ types global_warming_widget_types
 			}
 		}
 		widget = {
-			size = { 146 24 }
+			size = { 24 24 }
 		}
 	}
 
-	### One country, on two lines, so a long name (up to
-	### "United Socialist Council Republics of California", 48 characters)
-	### has the whole 480 column. The second line is fixed cells under
-	### gw_emitter_header's headings: the country's flag (vanilla's tiny_flag:
-	### its name on hover, the country on click), the annual figure, the share
-	### of the world's, the cumulative total, and the marks: the treaty icon
-	### while an Enforce Emissions Reduction treaty binds it, and "Our
-	### country". One row per item of the viewer's gw_te_top list, its
-	### datacontext the country's capital (Scope.GetState; GW-11, the
-	### Demographics States table's shape). Its tooltips read State alone: a
-	### datamodel item's tooltip sees nothing above it (gotcha #24). Hover the
-	### row for the country's figures and its market.
-	type gw_emitter_row = widget {
-		size = { 480 50 }
+	### One country, one row of fixed cells under gw_emitter_header's headings
+	### (2026-11-24; it was two lines, the name over the figures): the
+	### country's flag (vanilla's tiny_flag: its name on hover, the country on
+	### click), the name as plain text beside it (GetNameNoFormatting: no
+	### second flag, and no hover of its own over the row's), the annual
+	### figure, the share of the world's, the cumulative total, and the treaty
+	### icon while an Enforce Emissions Reduction treaty binds it. The name's
+	### cell is 190, a line of about 25 characters ("Imperial Union of
+	### America"); a longer name wraps (up to "United Socialist Council
+	### Republics of California", 48 characters) and the row grows with it,
+	### the other cells centred on it. "Our country" is a second line under
+	### the local player's own name. One row per item of the viewer's
+	### gw_te_top list, its datacontext the country's capital
+	### (Scope.GetState; GW-11, the Demographics States table's shape). Its
+	### tooltips read State alone: a datamodel item's tooltip sees nothing
+	### above it (gotcha #24). Hover the row for the country's figures and
+	### its market.
+	type gw_emitter_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		tooltip = "gw_te_row_tt"
 
+		widget = {
+			size = { 34 24 }
+			parentanchor = vcenter
+
+			tiny_flag = {
+				parentanchor = left|vcenter
+				datacontext = "[State.GetCountry]"
+			}
+		}
 		flowcontainer = {
 			direction = vertical
-			spacing = 2
-			tooltip = "gw_te_row_tt"
+			ignoreinvisible = yes
+			parentanchor = vcenter
+			minimumsize = { 190 -1 }
+			maximumsize = { 190 -1 }
 
 			textbox = {
-				minimumsize = { 480 -1 }
-				maximumsize = { 480 -1 }
 				autoresize = yes
-				elide = right
+				multiline = yes
+				minimumsize = { 190 -1 }
+				maximumsize = { 190 -1 }
 				align = left|nobaseline
 				using = gw_fontsize_row
 				text = "gw_te_row_name"
 			}
-			flowcontainer = {
-				direction = horizontal
+			textbox = {
+				autoresize = yes
+				max_width = 190
+				elide = right
+				align = left|nobaseline
+				using = gw_fontsize_row
+				visible = "[State.GetCountry.IsLocalPlayer]"
+				text = "gw_te_ours"
+			}
+		}
+		widget = {
+			size = { 86 24 }
+			parentanchor = vcenter
 
-				widget = {
-					size = { 44 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 86
+				elide = right
+				align = right|nobaseline
+				using = gw_fontsize_row
+				default_format = "#v"
+				text = "gw_te_row_annual"
+			}
+		}
+		widget = {
+			size = { 50 24 }
+			parentanchor = vcenter
 
-					tiny_flag = {
-						parentanchor = left|vcenter
-						datacontext = "[State.GetCountry]"
-					}
-				}
-				widget = {
-					size = { 110 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 50
+				elide = right
+				align = right|nobaseline
+				using = gw_fontsize_row
+				default_format = "#v"
+				text = "gw_te_row_share"
+			}
+		}
+		widget = {
+			size = { 96 24 }
+			parentanchor = vcenter
 
-					textbox = {
-						parentanchor = right|vcenter
-						autoresize = yes
-						max_width = 110
-						elide = right
-						align = right|nobaseline
-						using = gw_fontsize_row
-						default_format = "#v"
-						text = "gw_te_row_annual"
-					}
-				}
-				widget = {
-					size = { 70 24 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 96
+				elide = right
+				align = right|nobaseline
+				using = gw_fontsize_row
+				default_format = "#v"
+				text = "gw_te_row_cum"
+			}
+		}
+		widget = {
+			size = { 24 24 }
+			parentanchor = vcenter
 
-					textbox = {
-						parentanchor = right|vcenter
-						autoresize = yes
-						max_width = 70
-						elide = right
-						align = right|nobaseline
-						using = gw_fontsize_row
-						default_format = "#v"
-						text = "gw_te_row_share"
-					}
-				}
-				widget = {
-					size = { 110 24 }
-
-					textbox = {
-						parentanchor = right|vcenter
-						autoresize = yes
-						max_width = 110
-						elide = right
-						align = right|nobaseline
-						using = gw_fontsize_row
-						default_format = "#v"
-						text = "gw_te_row_cum"
-					}
-				}
-				widget = {
-					size = { 146 24 }
-
-					flowcontainer = {
-						direction = horizontal
-						parentanchor = right|vcenter
-						spacing = 4
-						ignoreinvisible = yes
-
-						icon = {
-							size = { 20 20 }
-							parentanchor = vcenter
-							visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('gw_disp_is_treaty_bound'), '(CFixedPoint)1' )]"
-							texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
-							tooltip = "gw_te_treaty_tt"
-						}
-						textbox = {
-							parentanchor = vcenter
-							autoresize = yes
-							max_width = 122
-							elide = right
-							align = right|nobaseline
-							using = gw_fontsize_row
-							visible = "[State.GetCountry.IsLocalPlayer]"
-							text = "gw_te_ours"
-						}
-					}
-				}
+			icon = {
+				size = { 20 20 }
+				parentanchor = right|vcenter
+				visible = "[EqualTo_CFixedPoint( State.GetCountry.MakeScope.ScriptValue('gw_disp_is_treaty_bound'), '(CFixedPoint)1' )]"
+				texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/enforce_emissions_reduction.dds"
+				tooltip = "gw_te_treaty_tt"
 			}
 		}
 	}
@@ -1633,7 +1639,7 @@ types global_warming_widget_types
 						text = "te_hist_range_5y"
 					}
 					blockoverride "range_enabled" {
-						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) )]"
 					}
 					blockoverride "range_onclick" {
 						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
@@ -1644,7 +1650,7 @@ types global_warming_widget_types
 						text = "te_hist_range_20y"
 					}
 					blockoverride "range_enabled" {
-						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '20' ))]"
 					}
 					blockoverride "range_onclick" {
 						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"

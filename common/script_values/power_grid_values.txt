@@ -1165,11 +1165,12 @@ te_grid_rec_mix_space_solar_share_disp = {
 	}
 }
 
-# State scope, a station: its staffing, 0 to 1, for the Stations table.
+# State scope, a station: its staffing, 0 to 1, for the Stations table. Read
+# through the engine's b: lookup, not a walk of the state's buildings: the
+# table reads it every frame on each row it shows (2026-11-24).
 te_grid_station_staffing_disp = {
 	value = 0
-	every_scope_building = {
-		limit = { is_building_type = building_grid_transfer_station }
+	b:building_grid_transfer_station ?= {
 		add = occupancy
 	}
 }

@@ -128,8 +128,8 @@
 # counted but has no flag). Its size and its supply against its demand are
 # the hub's te_grid_region_size and te_grid_region_ratio, as on every member.
 # Country variable lists: te_grid_hubs, the hubs of the grids its stations
-# are on; te_grid_stations, its built stations, those on a grid first, grid
-# by grid, then those that aren't online (the tile's Offline). Global lists
+# are on; te_grid_stations, its built stations, in the order the tab's
+# Stations table shows them (te_grid_order_stations_effect). Global lists
 # te_grid_record_hubs and te_grid_record_countries name what to clear at the
 # next run's start (te_grid_record_clear_effect), and the dispatch fires while
 # any state still holds a station's figures (power_grid_on_actions.txt): a
@@ -222,19 +222,10 @@ te_grid_world_update_effect = {
 		te_grid_close_region_effect = yes
 	}
 
-	# Each country's stations on no grid this month, those that aren't online
-	# (te_grid_idle_station_effect took their hub), after those on one.
+	# Each country's stations, in the order the Power Grids tab lists them.
 	every_in_global_list = {
 		variable = te_grid_record_countries
-		every_scope_state = {
-			limit = {
-				has_building = building_grid_transfer_station
-				NOT = { has_variable = te_grid_hub }
-			}
-			owner = {
-				add_to_variable_list = { name = te_grid_stations target = prev }
-			}
-		}
+		te_grid_order_stations_effect = yes
 	}
 
 	te_grid_staffing_info_end_effect = yes
@@ -263,6 +254,56 @@ te_grid_record_clear_effect = {
 		clear_variable_list = te_grid_cable_reach
 	}
 	clear_global_variable_list = te_grid_record_countries
+}
+
+# Country scope, at the end of a run, after the last grid: its built stations
+# into te_grid_stations, in the order the Power Grids tab's Stations table
+# shows them. The table shows the first ten and the rest under Show All, so
+# the stations a player checks on come first: those on no grid (the tile's
+# Offline: not online this run, te_grid_idle_station_effect took their hub),
+# then those on a grid that move nothing or aren't fully staffed
+# (te_grid_station_wants_a_look), the largest flow first, then the rest, the
+# largest flow first. The staffing is this run's; the table's Staff is live.
+# Three passes over the country's states and two sorts, once a month: before
+# 2026-11-24 the record listed each member as its grid was balanced and this
+# pass added the offline ones after them.
+te_grid_order_stations_effect = {
+	clear_variable_list = te_grid_stations
+	every_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			NOT = { has_variable = te_grid_hub }
+		}
+		owner = {
+			add_to_variable_list = { name = te_grid_stations target = prev }
+		}
+	}
+	ordered_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			has_variable = te_grid_hub
+			te_grid_station_wants_a_look = yes
+		}
+		order_by = te_grid_electricity_moved_disp
+		max = 1000
+		check_range_bounds = no
+		owner = {
+			add_to_variable_list = { name = te_grid_stations target = prev }
+		}
+	}
+	ordered_scope_state = {
+		limit = {
+			has_building = building_grid_transfer_station
+			has_variable = te_grid_hub
+			NOT = { te_grid_station_wants_a_look = yes }
+		}
+		order_by = te_grid_electricity_moved_disp
+		max = 1000
+		check_range_bounds = no
+		owner = {
+			add_to_variable_list = { name = te_grid_stations target = prev }
+		}
+	}
 }
 
 # State scope, a hub of the last run.
@@ -1115,8 +1156,9 @@ te_grid_map_color_effect = {
 # source (te_grid_rec_mix_<source>, te_grid_rec_mix_total): the sum of every
 # member's split (te_grid_state_mix_<source>, te_grid_mix_store_state_effect),
 # whoever owns it, each member once, since a member is on one grid a run. Each member's owner lists the
-# hub once (te_grid_hubs) and the member (te_grid_stations), and the first
-# member of each owner counts it and lists its capital on the hub. What a
+# hub once (te_grid_hubs), and the first member of each owner counts it and
+# lists its capital on the hub; the stations are listed at the run's end
+# (te_grid_order_stations_effect). What a
 # station moves is the tile's Flow (te_grid_electricity_moved_disp): this
 # month's order, what it is to send or deliver after losses, and nothing for
 # an order under a unit a week; a station with no staff counts in full, as on
@@ -1147,7 +1189,6 @@ te_grid_record_effect = {
 			limit = { var:te_grid_flow < 0 }
 			change_local_variable = { name = te_grid_rec_delivered add = te_grid_electricity_moved_disp }
 		}
-		save_scope_as = te_grid_rec_member
 		owner = {
 			if = {
 				limit = {
@@ -1165,7 +1206,6 @@ te_grid_record_effect = {
 					}
 				}
 			}
-			add_to_variable_list = { name = te_grid_stations target = scope:te_grid_rec_member }
 		}
 	}
 	set_local_variable = {

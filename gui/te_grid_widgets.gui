@@ -6,7 +6,8 @@
 ### six boxes, two to a row, with the country's own generation by source under
 ### them (National Generation); a card for each grid the country's stations
 ### are on, with that grid's generation, every member's; and a table of its
-### stations. The explanations are on the Help page
+### stations, the ten a player checks on first shown and the rest under Show
+### All. The explanations are on the Help page
 ### (gui/te_popups.gui), which the "?" in the tab's header opens. House style:
 ### docs/guides/gui_style_guide.md. System: docs/systems/mod_systems/power_grids.md.
 ###
@@ -31,6 +32,12 @@
 ### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
 ### overview 16 (te_grid_fontsize_*, below; rule 3); test_power_grid_tab.py
 ### holds every fixed cell to its longest text.
+###
+### FIGURES. Electricity a week reads abbreviated from 1,000 ("9.97K",
+### "2.90M") and as a plain number under it, 0 included: |K alone writes 0 as
+### "0.00K" and 80 as "0.08K". So each such figure is a SelectLocalization on
+### the value over 999 between its |K key and a _small twin with |0
+### (test_power_grid_tab.py's FigureTest).
 
 template te_grid_fontsize_row {
 	fontsize = 17
@@ -257,7 +264,7 @@ types te_grid_widget_types
 							text = "te_grid_ov_sent_word"
 						}
 						blockoverride "fig" {
-							text = "te_grid_ov_sent_fig"
+							text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_sent_disp'), '(CFixedPoint)999' ), 'te_grid_ov_sent_fig', 'te_grid_ov_sent_fig_small' )]"
 						}
 					}
 					te_grid_ov_cell = {
@@ -272,7 +279,7 @@ types te_grid_widget_types
 							text = "te_grid_ov_received_word"
 						}
 						blockoverride "fig" {
-							text = "te_grid_ov_received_fig"
+							text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_received_disp'), '(CFixedPoint)999' ), 'te_grid_ov_received_fig', 'te_grid_ov_received_fig_small' )]"
 						}
 					}
 				}
@@ -381,7 +388,7 @@ types te_grid_widget_types
 				align = right|nobaseline
 				using = te_grid_fontsize_row
 				tooltip = "te_grid_mix_total_tt"
-				text = "te_grid_mix_total"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp'), '(CFixedPoint)999' ), 'te_grid_mix_total', 'te_grid_mix_total_small' )]"
 			}
 		}
 		divider_clean = {
@@ -489,7 +496,7 @@ types te_grid_widget_types
 						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_grid_tab_mix_coal_share_disp') )]"
 					}
 					blockoverride "row_amount" {
-						text = "te_grid_mix_coal_amount"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_coal_disp'), '(CFixedPoint)999' ), 'te_grid_mix_coal_amount', 'te_grid_mix_coal_amount_small' )]"
 					}
 					blockoverride "row_share" {
 						text = "te_grid_mix_coal_share"
@@ -512,7 +519,7 @@ types te_grid_widget_types
 						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_grid_tab_mix_oil_share_disp') )]"
 					}
 					blockoverride "row_amount" {
-						text = "te_grid_mix_oil_amount"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_oil_disp'), '(CFixedPoint)999' ), 'te_grid_mix_oil_amount', 'te_grid_mix_oil_amount_small' )]"
 					}
 					blockoverride "row_share" {
 						text = "te_grid_mix_oil_share"
@@ -535,7 +542,7 @@ types te_grid_widget_types
 						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_grid_tab_mix_hydro_share_disp') )]"
 					}
 					blockoverride "row_amount" {
-						text = "te_grid_mix_hydro_amount"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_hydro_disp'), '(CFixedPoint)999' ), 'te_grid_mix_hydro_amount', 'te_grid_mix_hydro_amount_small' )]"
 					}
 					blockoverride "row_share" {
 						text = "te_grid_mix_hydro_share"
@@ -558,7 +565,7 @@ types te_grid_widget_types
 						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_grid_tab_mix_nuclear_share_disp') )]"
 					}
 					blockoverride "row_amount" {
-						text = "te_grid_mix_nuclear_amount"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_nuclear_disp'), '(CFixedPoint)999' ), 'te_grid_mix_nuclear_amount', 'te_grid_mix_nuclear_amount_small' )]"
 					}
 					blockoverride "row_share" {
 						text = "te_grid_mix_nuclear_share"
@@ -581,7 +588,7 @@ types te_grid_widget_types
 						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_grid_tab_mix_renewable_share_disp') )]"
 					}
 					blockoverride "row_amount" {
-						text = "te_grid_mix_renewable_amount"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_renewable_disp'), '(CFixedPoint)999' ), 'te_grid_mix_renewable_amount', 'te_grid_mix_renewable_amount_small' )]"
 					}
 					blockoverride "row_share" {
 						text = "te_grid_mix_renewable_share"
@@ -604,7 +611,7 @@ types te_grid_widget_types
 						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_grid_tab_mix_fusion_share_disp') )]"
 					}
 					blockoverride "row_amount" {
-						text = "te_grid_mix_fusion_amount"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_fusion_disp'), '(CFixedPoint)999' ), 'te_grid_mix_fusion_amount', 'te_grid_mix_fusion_amount_small' )]"
 					}
 					blockoverride "row_share" {
 						text = "te_grid_mix_fusion_share"
@@ -627,7 +634,7 @@ types te_grid_widget_types
 						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_grid_tab_mix_space_solar_share_disp') )]"
 					}
 					blockoverride "row_amount" {
-						text = "te_grid_mix_space_solar_amount"
+						text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_mix_space_solar_disp'), '(CFixedPoint)999' ), 'te_grid_mix_space_solar_amount', 'te_grid_mix_space_solar_amount_small' )]"
 					}
 					blockoverride "row_share" {
 						text = "te_grid_mix_space_solar_share"
@@ -729,13 +736,15 @@ types te_grid_widget_types
 			direction = horizontal
 			spacing = 8
 
+			### Under 1,000 a week a plain number, 0 included (|K writes 0 as
+			### "0.00K").
 			te_grid_cell = {
 				tooltip = "te_grid_card_sent_tt"
-				text = "te_grid_card_sent"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_sent_disp'), '(CFixedPoint)999' ), 'te_grid_card_sent', 'te_grid_card_sent_small' )]"
 			}
 			te_grid_cell = {
 				tooltip = "te_grid_card_delivered_tt"
-				text = "te_grid_card_delivered"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_delivered_disp'), '(CFixedPoint)999' ), 'te_grid_card_delivered', 'te_grid_card_delivered_small' )]"
 			}
 		}
 		### The grid's generation (2026-11-14): every member's own, other
@@ -751,7 +760,7 @@ types te_grid_widget_types
 			align = left|nobaseline
 			using = te_grid_fontsize_row
 			tooltip = "te_grid_card_mix_tt"
-			text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_mix_total_disp'), '(CFixedPoint)0' ), 'te_grid_card_mix', 'te_grid_card_mix_none' )]"
+			text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_mix_total_disp'), '(CFixedPoint)999' ), 'te_grid_card_mix', SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_mix_total_disp'), '(CFixedPoint)0' ), 'te_grid_card_mix_small', 'te_grid_card_mix_none' ) )]"
 		}
 		flowcontainer = {
 			visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_mix_total_disp'), '(CFixedPoint)0' )]"
@@ -860,16 +869,17 @@ types te_grid_widget_types
 		}
 		### Its countries' flags (te_grid_rec_capitals, each read through its
 		### capital), on a grid of more than one country; how many markets it
-		### crosses, on one of more than one.
+		### crosses, on one of more than one. The label is as wide as its text
+		### (up to 110), so the flags start right after it, not under the
+		### half-row cells above; 110, 8 and twelve flags of 30 fit 480.
 		flowcontainer = {
 			visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_rec_countries_disp'), '(CFixedPoint)1' )]"
 			direction = horizontal
 			spacing = 8
 
 			textbox = {
-				minimumsize = { 110 -1 }
-				maximumsize = { 110 -1 }
 				autoresize = yes
+				max_width = 110
 				parentanchor = top
 				align = left|nobaseline
 				using = te_grid_fontsize_row
@@ -944,43 +954,51 @@ types te_grid_widget_types
 
 	### ----------------------------------------------------------------------
 	### The stations (rule 1: live, open): every station of the country's
-	### (te_grid_stations), those on a grid first, grid by grid, then those on
-	### none. Each row is the state panel tile in brief, with the tile's hovers.
-	### State 150, Mode 88, Flow 62, Grid 120, Staff 52, and 2 between: 480.
+	### (te_grid_stations), the ones a player checks on first: those on no
+	### grid, then those that move nothing or aren't fully staffed, then the
+	### rest, the largest flow first (te_grid_order_stations_effect, at the
+	### monthly run). The first ten always show and the rest under Show All
+	### (te_grid_stations_all_open; owner, 2026-11-03, the Demographics tab's
+	### Largest Cities), so 180 stations don't make a 180-row table. Each row is
+	### the state panel tile in brief, with the tile's hovers. State 156, Mode
+	### 40 (an icon, rule 4: its word on hover), Flow 48 (right-aligned, so the
+	### digits line up), a gutter of 12, Grid 156, Staff 48, and 4 between:
+	### 480. A state's or a hub's name wraps rather than elides.
 	### ----------------------------------------------------------------------
 	type te_grid_station_cells = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
-		spacing = 2
+		spacing = 4
 
 		textbox = {
-			minimumsize = { 150 -1 }
-			maximumsize = { 150 -1 }
+			minimumsize = { 156 -1 }
+			maximumsize = { 156 -1 }
 			autoresize = yes
 			multiline = yes
 			align = left|nobaseline
 			using = te_grid_fontsize_row
 			block "cell_state" {}
 		}
-		textbox = {
-			minimumsize = { 88 -1 }
-			maximumsize = { 88 -1 }
-			autoresize = yes
-			align = left|nobaseline
-			using = te_grid_fontsize_row
+		widget = {
+			size = { 40 24 }
 			block "cell_mode" {}
 		}
 		textbox = {
-			minimumsize = { 62 -1 }
-			maximumsize = { 62 -1 }
+			minimumsize = { 48 -1 }
+			maximumsize = { 48 -1 }
 			autoresize = yes
 			align = right|nobaseline
 			using = te_grid_fontsize_row
 			block "cell_flow" {}
 		}
+		### The gutter between a right-aligned figure and a left-aligned
+		### name, so "9.97K" and "New York" don't run together.
+		widget = {
+			size = { 12 1 }
+		}
 		textbox = {
-			minimumsize = { 120 -1 }
-			maximumsize = { 120 -1 }
+			minimumsize = { 156 -1 }
+			maximumsize = { 156 -1 }
 			autoresize = yes
 			multiline = yes
 			align = left|nobaseline
@@ -988,8 +1006,8 @@ types te_grid_widget_types
 			block "cell_grid" {}
 		}
 		textbox = {
-			minimumsize = { 52 -1 }
-			maximumsize = { 52 -1 }
+			minimumsize = { 48 -1 }
+			maximumsize = { 48 -1 }
 			autoresize = yes
 			align = right|nobaseline
 			using = te_grid_fontsize_row
@@ -1003,9 +1021,16 @@ types te_grid_widget_types
 			text = "te_grid_st_col_state"
 		}
 		blockoverride "cell_mode" {
-			default_format = "#grey"
-			tooltip = "TE_STATE_GRID_ROW_MODE_TT"
-			text = "te_grid_st_col_mode"
+			textbox = {
+				minimumsize = { 40 -1 }
+				maximumsize = { 40 -1 }
+				autoresize = yes
+				align = left|nobaseline
+				using = te_grid_fontsize_row
+				default_format = "#grey"
+				tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+				text = "te_grid_st_col_mode"
+			}
 		}
 		blockoverride "cell_flow" {
 			default_format = "#grey"
@@ -1024,6 +1049,16 @@ types te_grid_widget_types
 		}
 	}
 
+	### A station's mode as an icon (rule 4), its word and what it means on
+	### hover (rule 2): the overview's Sent and Received crates for sending
+	### and receiving, vanilla's pause for Idle (on a grid, nothing to move)
+	### and its inactive building's hourglass for Offline (on no grid until the
+	### next balancing). te_grid_mode_disp, one icon shown.
+	type te_grid_station_mode_icon = icon {
+		size = { 24 24 }
+		parentanchor = center
+	}
+
 	### One station: an item of te_grid_stations, its state the datacontext.
 	### The list is as of the last run, so a state that has changed hands since
 	### waits for the next (gotcha #15's last sentence).
@@ -1035,20 +1070,57 @@ types te_grid_widget_types
 			raw_text = "[State.GetNameNoFormatting]"
 		}
 		blockoverride "cell_mode" {
-			tooltip = "TE_STATE_GRID_ROW_MODE_TT"
-			text = "te_grid_st_mode"
+			te_grid_station_mode_icon = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_grid_mode_disp'), '(CFixedPoint)1' )]"
+				texture = "gfx/interface/icons/lens_toolbar_icons/trade_route_export_lens_option.dds"
+				tooltip = "te_grid_st_mode_sending_tt"
+			}
+			te_grid_station_mode_icon = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_grid_mode_disp'), '(CFixedPoint)2' )]"
+				texture = "gfx/interface/icons/lens_toolbar_icons/trade_route_import_lens_option.dds"
+				tooltip = "te_grid_st_mode_receiving_tt"
+			}
+			te_grid_station_mode_icon = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_grid_mode_disp'), '(CFixedPoint)3' )]"
+				texture = "gfx/interface/icons/generic_icons/paused.dds"
+				tooltip = "te_grid_st_mode_idle_tt"
+			}
+			te_grid_station_mode_icon = {
+				visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_grid_mode_disp'), '(CFixedPoint)4' )]"
+				texture = "gfx/interface/icons/generic_icons/inactive_building.dds"
+				tooltip = "te_grid_st_mode_offline_tt"
+			}
 		}
+		### Under 1,000 a week a plain number, 0 included, else abbreviated:
+		### |K writes 0 as "0.00K".
 		blockoverride "cell_flow" {
 			tooltip = "TE_STATE_GRID_ROW_MOVED_TT"
-			text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)0' ), 'te_grid_st_flow', 'te_grid_st_none' )]"
+			text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)999' ), 'te_grid_st_flow', 'te_grid_st_flow_small' )]"
 		}
 		blockoverride "cell_grid" {
 			tooltip = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0' ), 'TE_STATE_GRID_ROW_HUB_TT', 'te_grid_st_no_grid_tt' )]"
 			text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0' ), 'te_grid_st_grid', 'te_grid_st_none' )]"
 		}
+		### A full staff dimmed, a shortfall red, so the exceptions stand out
+		### (te_grid_station_wants_a_look's 99.5%). The full one prints 100%
+		### without reading the staffing again.
 		blockoverride "cell_staff" {
 			tooltip = "te_grid_st_staff_tt"
-			text = "te_grid_st_staff"
+			text = "[SelectLocalization( LessThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_station_staffing_disp'), '(CFixedPoint)0.995' ), 'te_grid_st_staff_short', 'te_grid_st_staff_full' )]"
+		}
+	}
+
+	### The table's rows: a datamodel of te_grid_stations, the slice given.
+	type te_grid_station_rows = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+		block "rows_datamodel" {}
+
+		item = {
+			te_grid_station_row = {
+				datacontext = "[Scope.GetState]"
+			}
 		}
 	}
 
@@ -1081,16 +1153,45 @@ types te_grid_widget_types
 				margin_top = 4
 
 				te_grid_station_head = {}
+				### The first ten, always.
+				te_grid_station_rows = {
+					blockoverride "rows_datamodel" {
+						datamodel = "[DataModelFirst( Country.MakeScope.GetList('te_grid_stations'), '(int32)10' )]"
+					}
+				}
+				### The rest, under Show All: inside the container the flag
+				### shows, so while it is closed none of their rows is built or
+				### read (te_demog_town_rows' form).
 				flowcontainer = {
+					visible = "[GetVariableSystem.Exists('te_grid_stations_all_open')]"
 					direction = vertical
 					ignoreinvisible = yes
-					spacing = 2
-					datamodel = "[Country.MakeScope.GetList('te_grid_stations')]"
 
-					item = {
-						te_grid_station_row = {
-							datacontext = "[Scope.GetState]"
+					te_grid_station_rows = {
+						blockoverride "rows_datamodel" {
+							datamodel = "[DataModelSkipFirst( Country.MakeScope.GetList('te_grid_stations'), '(int32)10' )]"
 						}
+					}
+				}
+				### Show All under the rows, centred (rule 6), while more than
+				### ten are listed. It changes only what this panel shows
+				### (a GetVariableSystem key), so another country's tab has it
+				### too.
+				button = {
+					visible = "[GreaterThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_grid_stations') ), '(int32)10' )]"
+					using = default_button_action
+					size = { 240 28 }
+					parentanchor = hcenter
+					onclick = "[GetVariableSystem.Toggle('te_grid_stations_all_open')]"
+					tooltip = "te_grid_stations_show_tt"
+
+					textbox = {
+						parentanchor = center
+						align = center|nobaseline
+						autoresize = yes
+						max_width = 230
+						using = te_grid_fontsize_row
+						text = "[SelectLocalization( Not( GetVariableSystem.Exists('te_grid_stations_all_open') ), 'te_grid_stations_show_all', 'te_grid_stations_show_first' )]"
 					}
 				}
 			}
@@ -1119,6 +1220,7 @@ types te_grid_widget_types
 			block "row_tooltip" {}
 			block "row_label" {}
 		}
+		### The label's hover on the value too, so hovering either explains it.
 		textbox = {
 			minimumsize = { 280 -1 }
 			maximumsize = { 280 -1 }
@@ -1127,6 +1229,7 @@ types te_grid_widget_types
 			align = left|nobaseline
 			using = te_grid_fontsize_row
 			default_format = "#v"
+			block "row_tooltip" {}
 			block "row_value" {}
 		}
 	}
@@ -1161,7 +1264,7 @@ types te_grid_widget_types
 				text = "TE_STATE_GRID_ROW_MOVED"
 			}
 			blockoverride "row_value" {
-				text = "te_grid_bld_flow"
+				text = "[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)999' ), 'te_grid_bld_flow', 'te_grid_bld_flow_small' )]"
 			}
 		}
 		te_grid_kv_row = {
@@ -1239,8 +1342,9 @@ types te_grid_widget_types
 			blockoverride "row_label" {
 				text = "te_grid_st_col_staff"
 			}
+			### A shortfall red (rule 5), as in the Stations table.
 			blockoverride "row_value" {
-				text = "te_grid_st_staff"
+				text = "[SelectLocalization( LessThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_station_staffing_disp'), '(CFixedPoint)0.995' ), 'te_grid_st_staff_short', 'te_grid_st_staff' )]"
 			}
 		}
 

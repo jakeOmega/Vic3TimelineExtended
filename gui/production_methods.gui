@@ -930,40 +930,65 @@ types production_methods
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 
+				### TIMELINE EXTENDED: the week's cost under the points, where vanilla has it beside them (in the
+				### second half of the row, left of the pause button), and both in the body size. Under the
+				### construction market the points read "238K/654K" and the cost "-703M", and this row has a
+				### third method group, so side by side the two ran into each other (seen in game, 2026-11-24).
 				flowcontainer = {
-					name = "construction_points"
+					direction = vertical
 					parentanchor = center
-					spacing = 10
-					tooltip = "CONSTRUCTION_SPEED_BASE_TOOLTIP"
-					datacontext = "[AccessPlayer]"
+					spacing = 0
 
-					icon = {
-						parentanchor = vcenter
-						size = { 30 30 }
-						texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
-						visible = "[Not(Country.IsConstructionPaused)]"
-					}
+					flowcontainer = {
+						name = "construction_points"
+						parentanchor = hcenter
+						spacing = 10
+						tooltip = "CONSTRUCTION_SPEED_BASE_TOOLTIP"
+						datacontext = "[AccessPlayer]"
 
-					icon = {
-						parentanchor = vcenter
-						size = { 30 30 }
-						texture = "gfx/interface/icons/state_status_icons/has_construction_paused.dds"
-						visible = "[Country.IsConstructionPaused]"
-					}
+						icon = {
+							parentanchor = vcenter
+							size = { 30 30 }
+							texture = "gfx/interface/icons/state_status_icons/has_construction.dds"
+							visible = "[Not(Country.IsConstructionPaused)]"
+						}
 
-					textbox = {
-						parentanchor = vcenter
-						using = fontsize_large
-						text = "CONSTRUCTION_VALUE"
-						autoresize = yes
-						align = nobaseline
-						min_width = 56
+						icon = {
+							parentanchor = vcenter
+							size = { 30 30 }
+							texture = "gfx/interface/icons/state_status_icons/has_construction_paused.dds"
+							visible = "[Country.IsConstructionPaused]"
+						}
 
-						background = {
-							using = dark_area
-							margin = { 20 0 }
+						textbox = {
+							parentanchor = vcenter
+							text = "CONSTRUCTION_VALUE"
+							autoresize = yes
+							align = nobaseline
+							min_width = 56
+
+							background = {
+								using = dark_area
+								margin = { 8 0 }
+							}
 						}
 					}
+
+						textbox = {
+							parentanchor = hcenter
+
+							background = {
+								using = dark_area
+								margin = { 8 0 }
+							}
+
+							autoresize = yes
+							align = nobaseline
+
+							alpha = "[TransparentIfZero(GetPlayer.GetConstructionGoodsExpenses)]"
+							raw_text = "#N @money!-[GetPlayer.GetConstructionGoodsExpenses|D-]"
+							using = construction_goods_expense_tooltip_with_graph
+						}
 				}
 			}
 
@@ -976,24 +1001,6 @@ types production_methods
 					parentanchor = center
 					spacing = 20 #need extra spacing for the tooltips for the text vs the button not to interfere with each other...
 
-
-					textbox = {
-						parentanchor = vcenter
-
-						background = {
-							using = dark_area
-							margin_right = 30
-						}
-
-						autoresize = yes
-						minimumsize = { 0 26 }
-						margin_left = 5
-						align = nobaseline
-
-						alpha = "[TransparentIfZero(GetPlayer.GetConstructionGoodsExpenses)]"
-						raw_text = "#N @money!-[GetPlayer.GetConstructionGoodsExpenses|D-]"
-						using = construction_goods_expense_tooltip_with_graph
-					}
 
 					container = {
 						name = "pause_construction"

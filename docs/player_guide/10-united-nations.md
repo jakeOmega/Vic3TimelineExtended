@@ -788,18 +788,19 @@ contributions, which open only once the Fund stands, to any member that holds it
 seat, pays its dues and draws no grant. A contributor's money pays the grants, as long as it holds its seat and pays its dues. You receive a grant only with a seat in the
 Assembly and your own dues paid. It goes into your investment pool, or into your treasury if your
 laws allow no investment pool or the Banking System game rule is Disabled. The line
-and the grants are worked out each month. Our Obligations shows your grant, and
-the budget line shows what the Fund and the Standing UN Force take. The World
-Development Fund section of the UN panel lists every member the Fund pays this
-month, largest grant first, with its weekly grant and GDP per head, under the
-cutoff, the members' average and what the Fund pays out a week. Hover the cutoff
-to see how it was set.
+and the grants are worked out each month. The World Development Fund section of
+the UN panel shows your grant, or why you get none (hover it), and a table of
+your GDP per head, the cutoff, the members' average and what the Fund pays out a
+week; Our Obligations' budget table shows what the Fund and the Standing UN
+Force take. Under them the section lists the members the Fund pays this month, largest
+grant first, with each one's weekly grant and GDP per head: the ten largest, and
+the rest under Show All. Hover the cutoff to see how it was set.
 
 ### The World Food Reserve and hunger
 
 The World Food Reserve needs no charter reform. While it stands, a member with
 a Strategic Reserve Hub can press Pledge Grain, under the World Food Reserve
-line in Our Obligations, and Withdraw Our Pledge at any time. When a UN aid mission opens, the Reserve
+heading in Our Obligations, and Withdraw Our Pledge at any time. When a UN aid mission opens, the Reserve
 takes grain from the pledgers, other than the mission's host, holding at least 500: up to a quarter of each
 one's grain and no more than 2,500 units from any one, 5,000 in all. The
 mission's state gets up to +0.15 food security and −5% mortality for a year,
@@ -1060,7 +1061,8 @@ influence needs that much available to start.
 
 ### Development Programs sizes
 
-Fund Development, at the top of the World Development Fund section, starts a
+Fund Development, under your position at the top of the World Development Fund
+section, starts a
 Token contribution. Raise and Reduce move it one size at a time, and Withdraw
 ends it; changing size doesn't restart the 24 months before it earns standing.
 
@@ -1082,7 +1084,8 @@ Lobbying Effectiveness with the members the Fund pays. It builds toward the
 figure for your size, about two thirds of the way in a year, and fades over a
 few years after you stop or cut back, so raising your contribution just before
 a vote buys little. The World Development Fund section shows your size, its
-weekly cost and the bonus first.
+share of GDP, its weekly cost and the bonus (Lobbying with recipients) at its
+top.
 
 ## UN dues and Article 19
 
@@ -1164,8 +1167,8 @@ collapsed when they are reference:
 | Missions in the Field | Open | A row for each mission, with its progress bar, its contributors' flags and Send a Contingent or Withdraw Contingent; ended missions below, collapsed. |
 | Programs and Conventions | Open | How many countries take part in each program and convention, whether you do, with Join or Leave for a program, and how many are under sanctions. |
 | Mandates in Force | Open | The mandates in force, and the case a mandate of yours would take, with Propose the Mandate. |
-| Our Obligations | Open | Your dues, with Withhold Our Dues or Pay Our Dues, beside the budget as a table (all members' dues and what the Standing UN Force, the World Development Fund and the lending facility take), your pledge to the World Food Reserve with Pledge Grain or Withdraw Our Pledge, any ceasefire order against you or your enemy, then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
-| World Development Fund | Open | While the Fund stands: your position first (your grant, or your contribution with Fund Development, Raise, Reduce and Withdraw), then the cutoff GDP per head (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week, then each member it pays this month and how much, or why nobody is paid. |
+| Our Obligations | Open | Your dues as a table (paid or withheld, the share of GDP, a week's amount, any arrears, and Seats we carry for subjects with suspended representation), with Withhold Our Dues or Pay Our Dues under them, beside the budget (all members' dues and what the Standing UN Force, the World Development Fund and the lending facility take); any ceasefire order against you or your enemy; under its own World Food Reserve heading, your pledge, the grain in your Strategic Reserve, the most the next aid mission can draw and what has been drawn from you, with Pledge Grain or Withdraw Our Pledge; then each convention you are party to, with your terms under it, and from Strong the UN's reach (shared intelligence, your interest groups' reaction). |
+| World Development Fund | Open | While the Fund stands: your position first (what you receive, hover it for why; your contribution's size, share of GDP and weekly cost, and Lobbying with recipients), with Fund Development, or Raise, Reduce and Withdraw, under it; then your GDP per head, the cutoff (hover it for how it was set), the members' average, how many members qualify (at or below the cutoff, seated and paying their dues) and what the Fund pays out a week; then the members it pays this month and how much, the ten largest first and the rest under Show All, or why nobody is paid. |
 | Our Record | Open | Your case strength and its parts, and whether it would support a condemnation, sanctions or a mandate. |
 | UN Authority History | Open | A chart of authority over time. |
 | Resolutions on the Record | Collapsed | A row for each closed resolution, its title and how it ended, with the rest of its card on hover; Voting Details adds how each member voted. |

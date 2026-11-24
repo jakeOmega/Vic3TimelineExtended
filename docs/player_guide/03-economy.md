@@ -562,7 +562,9 @@ for its hub, gives its stations, its supply against its demand, its price,
 what it sends and delivers a week, its own generation by kind of plant (every
 state on it, a partner's too), and the flags of the countries on it. The
 Stations table lists each of your stations with its mode, flow, grid and
-staffing, those on no grid last. Most figures are the
+staffing: first those on no grid, then those that move nothing or are short of
+staff, then the rest, the largest flow first. It shows ten, and Show All lists
+the rest. Most figures are the
 last monthly balancing's, so a new station joins them on the 1st. A station's
 building panel shows its own grid in brief,
 with a button to the tab, and National Info shows another country's tab. The
@@ -830,7 +832,7 @@ hold.
 
 Once the United Nations has founded the World Food Reserve, a member with a
 Strategic Reserve Hub can press Pledge Grain, under the World Food Reserve
-line in Our Obligations on the UN tab of the Diplomacy panel. When a UN aid mission opens in another country,
+heading in Our Obligations on the UN tab of the Diplomacy panel. When a UN aid mission opens in another country,
 the Reserve takes up to a quarter of your grain, at most 2,500 units, if you
 hold at least 500. The
 grain leaves your reserve through its own bookkeeping, and you gain standing for
