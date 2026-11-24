@@ -1160,6 +1160,55 @@ error logs, the same 1,156 lines each. Each row is one session
 `20261120T110308Z`, `20261120T110737Z`, `20261120T114406Z`,
 `20261120T114842Z`, `20261120T115423Z`).
 
+## The history charts, 2026-11-24: 1.15.2
+
+The owner's save of December 2032, 20 years of monthly history stored, the
+Timeline Extended window's Full Screen frame at 3840x2160, the engine's own
+frame counter, the Banking tab open:
+
+| Banking's History section | Frames a second |
+|---|---|
+| Closed | 75 |
+| Open, 20 Years (the default: every stored sample) | 16 |
+| Open, 5 Years | 18 |
+| Open, 1 Year | 23 |
+
+The script profiler, paused, put little script on the tab (its top root 78 ms
+in 13.7 s), so the cost was the GUI's own (`gui_modding_guide.md` gotcha #42).
+The same section in the window's side panel, scrolled out of sight, cost the
+same; Demographics' eight charts drew 28.
+
+**Why the short ranges cost nearly as much.** Every plot read the whole
+store, up to 240 containers, and cut the range per item: at 1 Year each of
+the seven charts drawn built 240 items to show 12, and each evaluated its
+datacontext and an age test. From the three figures, a rough split (frame
+time over the closed section's 13.3 ms, against items and bindings) gives
+about 13 µs an item, shown or not, and 2 µs a binding: 1 Year was 30 ms of
+1,680 items and about 3,900 bindings, 20 Years 49 ms of the same items and
+about 13,700.
+
+**The change** (`gui/charts-perf`). A shorter range's plot reads only the
+store's newest samples, `DataModelLast( <list>, '(int32)12' )` or 60, and
+keeps the age test on each; the 20-year plot reads the whole store and tests
+nothing; Banking's pips are one test a month instead of two
+(`history_charts.md`, "The chart"). Bindings a shown bar evaluates, before
+and after on the 20-year plot (the short ranges add the age test back):
+
+| Bar | Before | After |
+|---|---|---|
+| Banking's cycle value (`te_history_bar_cycle_phase`, six band tests, with pips) | 13 | 11 |
+| Banking's momentum (`te_history_bar_signed`, with pips) | 9 | 7 |
+| Banking's other five (`te_history_bar_unsigned`, with pips) | 7 | 5 |
+| A chart with no pips (`te_history_bar_unsigned`) | 5 | 4 |
+| Colonial drift (`te_history_bar_signed`, no pips) | 7 | 6 |
+
+On the split above the Banking tab would draw about 60 frames a second at 1
+Year (84 items), about 40 at 5 Years (420) and about 18 at 20 Years (still
+1,680 items); the 20-year view stays costly because its cost is the items.
+Not yet measured in game (`docs/testing/perf-fixes-playtest.md`); whether
+the default should become 5 years (`DEFAULT_RANGE` in
+`gen_te_history_charts.py`) is the owner's call.
+
 ## The USA of 2024: the Deep-Sea Mine gate, 2026-11-22: 1.15.2
 
 The owner's game of "The USA of 1992" above, played on to 2024 with `main`

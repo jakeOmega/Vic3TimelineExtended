@@ -123,3 +123,25 @@ technology nothing changes. Nothing here has been seen in game. Use the 2030 Uni
 | Ships a week | The top bar's supply ship count rises at the same rate as before the technology at the same setting | Faster: throughput was limited by the cap after all; the AI's levels and the yards' goods bill will be higher, so note by how much |
 | Littoral Defense | A Littoral Defense country (the law needs the technology) builds supply ships at 20–25 a week, where the law's −5 may have left it 0 before | Below 20: the law's −5 and the +25% combine another way; raise the add by 5 |
 | Readout tooltip at Very High | Hovering the readout no longer slows the day as it did in 1977 (17 s a day) | Still slow: the tooltip lists every entry, started or not; count the unstarted ones in the save |
+
+## History charts: the 1-year and 5-year ranges build only the bars they show (2026-11-24, `gui/charts-perf`)
+
+Each chart's 1-year and 5-year plots read only the store's newest samples, `DataModelLast( <list>, '(int32)12' )`
+(60, and Demographics' and Cultural Hegemony's 5 and 20 years), and keep an age test on each; the 20-year (and 100-year)
+plot reads the whole store and tests nothing. Banking's marker pips sit in one holder on `te_hist_mk`. `DataModelLast`
+over a script list is not proven in game (`DataModelFirst` and `DataModelSkipFirst` are). Measured before, on the owner's
+save of December 2032 (20 years stored), the Banking tab in the Full Screen frame, 3840x2160: 75 frames a second with
+its History section closed, 16 open at 20 Years, 18 at 5 Years, 23 at 1 Year (`late_game_performance.md`, "The history
+charts").
+
+| Check | Expect | If it fails |
+|---|---|---|
+| Banking, 1 Year | Each chart draws 12 wide bars reaching the right edge, the newest month last, the same values as before | Empty plots: `DataModelLast` doesn't take a script list. Fall back to `DataModelSkipFirst( <list>, <the list's size less 12> )` (a count from `GetDataModelSize`), or to the whole list with the age test (the old cost) |
+| Banking, 5 Years | 60 bars of 8 px, the same as before | Empty, as above; 12 bars or the wrong ones: the count argument reads otherwise |
+| Banking, 20 Years (unset) | Every stored month, as before | Fewer: the whole-list plot reads the wrong store |
+| Frames a second, Banking tab open | 1 Year near the closed figure (about 60 or more), 5 Years about 40, 20 Years a little above 16 | No change at 1 and 5 Years: the plots still build every sample; read the datamodel in the deployed `te_history_charts_generated.gui` |
+| Marker pips | Policy "i" and crash "!" pips on the same months as before, on Banking's charts only | A crash with no "!": a crash recorded without `te_hist_mk`; read the month's container in the save |
+| A short store | A country with fewer samples than the range (a major power newly tracked, or a new save's first year) draws what it has, at the right | Nothing: `DataModelLast` with a count over the list's size returns nothing; clamp the count in the fallback |
+| Demographics, Cultural Hegemony at 5 and 20 years | The same years as before | Empty: as the first row |
+| National Info, another country | Its charts at each range, as for the player | The player's store: the plots read `Country` |
+| The default, 5 years (the coordinator's measurement) | With `DEFAULT_RANGE = "5"` in `gen_te_history_charts.py`, regenerated and deployed (the sections' buttons changed to match, `test_te_history_charts.ViewerTest`), the panel opens at 5 years with its button greyed | 20 years shows: the deployed file is the old one |
