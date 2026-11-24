@@ -1,7 +1,7 @@
 """An overview cell's word must fit its cell: nothing a player reads ends in "..." (gui_style_guide.md § 3).
 
 Every system's overview is a grid of Banking's `te_banking_ov_cell`, whose lines are `te_banking_ov_word` textboxes
-154 px wide that elide on the right. A word that is too long is cut with no log line: on a December 2042 save the
+154 px wide that elide on the right. A word that is too long is cut with no log line: on a December 2032 save the
 United Nations' Membership cell read "Permanent Mem..." for a permanent member (2026-11-24), sixteen characters in
 the bold face the `#v` / `#G` / `#R` / `#Y` formats draw. Measured on that shot, the bold face runs 8 to 10.5 px a
 character, so fourteen characters is what 154 px holds whatever the letters; the plain face holds seventeen.
