@@ -9,6 +9,7 @@ each as two wrapper types into gui/te_history_charts_generated.gui:
 te_hist_<id> at the panel's size (SMALL), which the chart's section instances,
 and te_hist_<id>_large at the full-screen viewer's (LARGE).
 """
+import dataclasses
 import glob
 import os
 import re
@@ -290,12 +291,9 @@ class RegistryTest(unittest.TestCase):
         plot = _type_body(_read(CHART_GUI), "te_history_plot")
         self.assertEqual(re.findall(r'block "plot_size" \{\s*size = \{ (\d+) (\d+) \}', chart), [("496", "96")])
         self.assertEqual(re.findall(r'block "bar_size" \{\s*size = \{ (\d+) (\d+) \}', plot), [("2", "84")])
-        layouts = chart[chart.index('block "plot_layouts"'):]
-        layouts = layouts[:_close(layouts, layouts.index("{")) + 1]
-        widths = re.findall(r'size = \{ (\d+) (\d+) \}', layouts)
-        self.assertEqual(widths, [("40", "84"), ("8", "84")])   # the full range takes te_history_plot's 2 x 84
-        ours = "\n".join(gen.plot_layouts(m, gen.RANGES["te_hist_range"]))
-        self.assertEqual(re.findall(r'visible = "(.*)"', layouts), re.findall(r'visible = "(.*)"', ours))
+        # the type's plot_layouts is empty: every chart's plots are the generator's (PlotTest)
+        self.assertEqual(_block_bodies(chart, "plot_layouts"), [""])
+        ours = "\n".join(gen.plot_layouts(m, gen.RANGES["te_hist_range"], gen.STORES["te_hist"]))
         self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours), [("40", "84"), ("8", "84"), ("2", "84")])
 
     def test_the_small_wrapper_is_its_fragment(self):
@@ -311,13 +309,19 @@ class RegistryTest(unittest.TestCase):
                 width = gen.SMALL[chart.kind].width
                 own = [] if width == gen.SMALL["monthly"].width else ['blockoverride "chart_width" {', f"\tminimumsize = {{ {width} -1 }}",
                                                f"\tmaximumsize = {{ {width} -1 }}", "}"]
-                self.assertEqual(added, own + gen.open_overrides(chart))
+                # a chart without a plot_layouts of its own gets the generated plots
+                plots = [] if 'blockoverride "plot_layouts"' in text else gen._override(
+                    "plot_layouts", gen.plot_layouts(gen.SMALL[chart.kind], gen.RANGES[chart.range],
+                                                     gen.STORES[chart.store]))
+                self.assertEqual(added, plots + own + gen.open_overrides(chart))
                 self.assertEqual(re.findall(r'^blockoverride "(\w+)"', "\n".join(added), re.M),
-                                 (["chart_width"] if own else []) + ["chart_title_width", "chart_open"])
+                                 (["plot_layouts"] if plots else []) + (["chart_width"] if own else [])
+                                 + ["chart_title_width", "chart_open"])
                 rendered = gen.render_chart(chart, gen.SMALL).split("\n")
                 tail = [f"\t{ln}" for ln in added]
                 self.assertEqual(rendered[-1 - len(tail):-1], tail)
                 self.assertEqual("\n".join(rendered[:-1 - len(tail)] + rendered[-1:]), text)
+                self.assertNotIn("${plots}", text)
 
     def test_no_size_literal_in_a_fragment(self):
         """Every size a fragment draws at is a placeholder: no number left in a
@@ -355,7 +359,7 @@ class RegistryTest(unittest.TestCase):
             self.assertNotIn("$", _read(os.path.join(REPO, path)), path)
         for chart in gen.CHARTS:
             text = gen.fragment(chart)
-            known = set(gen.values(chart, gen.SMALL)) | {"thin", "zero_y"}
+            known = set(gen.values(chart, gen.SMALL)) | {"thin", "zero_y", "plots"}
             with self.subTest(chart=chart.id):
                 self.assertEqual(text.count("$"), len(gen.PLACEHOLDER.findall(text)))
                 self.assertLessEqual({m.group(1) for m in gen.PLACEHOLDER.finditer(text)}, known)
@@ -917,6 +921,183 @@ class ChartWidthTest(unittest.TestCase):
                 self.assertEqual(_value(box, "autoresize"), "yes")
                 used = gui_tree.size(icon)[0] + int(row.prop("spacing").value) + int(box.prop("max_width").value)
                 self.assertLessEqual(2 * margin + used, width)
+
+
+def _plots(text):
+    """The body of each te_history_plot instance in text, in order."""
+    return [text[m.end():_close(text, m.end() - 1)] for m in re.finditer(r"\bte_history_plot = \{", text)]
+
+
+def _shown(expr, var, value):
+    """A visible or enabled expression's truth while the range variable holds
+    value (None: unset): GetVariableSystem.HasValue, Not, Or and And only."""
+    py = re.sub(r"GetVariableSystem\.HasValue\(\s*'(\w+)',\s*'(\w+)'\s*\)", r"H('\1', '\2')", expr)
+    if re.sub(r"\b(H|Not|Or|And)\(|'\w+'|[\s,()]", "", py):
+        raise ValueError(f"not a range test: {expr}")
+    names = {"H": lambda v, x: v == var and x == value, "Not": lambda a: not a,
+             "Or": lambda *a: any(a), "And": lambda *a: all(a)}
+    return eval(py, {"__builtins__": {}}, names)  # noqa: S307 (the file's own markup, no builtins)
+
+
+class PlotTest(unittest.TestCase):
+    """The plots are generated (gen_te_history_charts.py, THE PLOTS ARE
+    GENERATED): a shorter range's plot reads only the samples it can show,
+    the longest range's the whole store with no test, and which range an
+    unset variable means is decided once, Range.default (DEFAULT_RANGE for
+    the monthly charts), for the plots and the range buttons alike."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = _strip_comments(_read(GENERATED))
+
+    def check_plots(self, chart_text, chart, size, ranges=None):
+        rng, store = (ranges or gen.RANGES)[chart.range], gen.STORES[chart.store]
+        plots = _plots(chart_text)
+        self.assertEqual(len(plots), 3, "a plot a range")
+        widths = gen.bars(size[chart.kind], rng)
+        for plot, value, n in zip(plots, rng.values, rng.samples):
+            whole = value == rng.values[-1]
+            self.assertEqual(_override_bodies(plot, "bar_size")[0].strip(),
+                             f"size = {{ {widths[value]} {size[chart.kind].bar_h} }}")
+            datamodel = _override_bodies(plot, "sample_datamodel")[0].strip()
+            tests = _override_bodies(plot, "sample_visible")
+            if whole:
+                self.assertEqual(datamodel, f'datamodel = "[{store.samples}]"')
+                self.assertEqual(tests, [], "the longest range tests no sample")
+            else:
+                self.assertEqual(datamodel, f"datamodel = \"[DataModelLast( {store.samples}, '(int32){n}' )]\"")
+                self.assertEqual(tests[0].strip(), f"visible = \"[LessThan_CFixedPoint( {store.age()}, "
+                                                   f"'(CFixedPoint){n}' )]\"")
+        # one plot shows whatever the variable holds: the default's while unset
+        states = [None] + list(rng.values)
+        for state in states:
+            visible = [_shown(re.search(r'^\s*visible = "\[(.*)\]"', p, re.M).group(1), rng.var, state)
+                       for p in plots]
+            self.assertEqual(visible, [v == (state or rng.default) for v in rng.values], state)
+        # and the chart itself reads no store but through its plots
+        outside = chart_text
+        for p in plots:
+            outside = outside.replace(p, "")
+        self.assertNotRegex(outside, r'blockoverride "sample_(datamodel|visible)"')
+
+    def test_every_chart_reads_only_what_its_range_shows(self):
+        for chart in gen.CHARTS:
+            for size in gen.SIZES:
+                with self.subTest(chart=chart.id, size=size.name):
+                    self.check_plots(_type_body(self.text, gen.wrapper_name(chart, size)), chart, size)
+
+    def test_the_type_reads_no_range(self):
+        """The chart type's own plot_layouts is empty and its plot tests no
+        sample, so the default range lives in the generator alone."""
+        chart_gui = _strip_comments(_read(CHART_GUI))
+        self.assertNotIn("te_hist_range", chart_gui)
+        self.assertEqual(_block_bodies(_type_body(chart_gui, "te_history_chart"), "plot_layouts"), [""])
+        self.assertEqual(_block_bodies(_type_body(chart_gui, "te_history_plot"), "sample_visible"), [""])
+
+    def test_the_stores_are_the_ones_their_samplers_write(self):
+        """Each store's list and index are what its pruner keeps oldest first
+        (DataModelLast takes the newest from the end)."""
+        effects = {"te_hist": "te_history_effects.txt", "te_dg_hist": "te_demog_history_effects.txt",
+                   "ch_model_hist": "te_history_cultural_hegemony_effects.txt"}
+        self.assertEqual(set(effects), set(gen.STORES))
+        self.assertEqual({c.store for c in gen.CHARTS}, set(gen.STORES))
+        for name, path in effects.items():
+            text = _read(os.path.join(REPO, "common", "scripted_effects", path))
+            with self.subTest(store=name):
+                self.assertIn(f"GetList('{name}')", gen.STORES[name].samples)
+                self.assertRegex(text, rf"add_to_variable_list = \{{ name = {name} ")
+                self.assertRegex(text, rf"set_variable = \{{ name = {gen.STORES[name].index} ")
+
+    def check_range_row(self, text, rng):
+        row = _type_body(text, gen.range_row_name(rng.var))
+        enabled = re.findall(r'enabled = "\[(.*)\]"', row)
+        self.assertEqual(len(enabled), 3)
+        for state in [None] + list(rng.values):
+            self.assertEqual([_shown(e, rng.var, state) for e in enabled],
+                             [v != (state or rng.default) for v in rng.values], state)
+
+    def test_the_buttons_grey_the_range_shown(self):
+        for rng in gen.RANGES.values():
+            with self.subTest(range=rng.var):
+                self.check_range_row(self.text, rng)
+        self.assertEqual(gen.RANGES["te_hist_range"].default, gen.DEFAULT_RANGE)
+        self.assertEqual(gen.DEFAULT_RANGE, "20", "the owner's call: change it here and in the sections' buttons")
+
+    def test_another_default_regenerates_a_consistent_file(self):
+        """DEFAULT_RANGE = 5 (the candidate the coordinator measures): the
+        5-year plot shows and its button greys while the variable is unset;
+        the 20-year plot still reads the whole store and tests nothing."""
+        five = dataclasses.replace(gen.RANGES["te_hist_range"], default="5")
+        with mock.patch.dict(gen.RANGES, {"te_hist_range": five}):
+            text = _strip_comments(gen.render())
+        self.assertNotEqual(text, self.text)
+        for chart in gen.CHARTS:
+            for size in gen.SIZES:
+                with self.subTest(chart=chart.id, size=size.name):
+                    self.check_plots(_type_body(text, gen.wrapper_name(chart, size)), chart, size,
+                                     dict(gen.RANGES, te_hist_range=five))
+        self.check_range_row(text, five)
+        plot = _plots(_type_body(text, "te_hist_bank_value"))
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[1], re.M).group(1),
+                         "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
+                         "GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]")
+        with mock.patch.dict(gen.RANGES, {"te_hist_range": dataclasses.replace(five, default="10")}):
+            with self.assertRaisesRegex(ValueError, "default"):
+                gen.render()
+
+    def test_a_fragment_leaves_its_plots_to_the_generator(self):
+        for chart in gen.CHARTS:
+            text = gen.fragment(chart)
+            with self.subTest(chart=chart.id):
+                self.assertNotRegex(text, r'blockoverride "sample_(datamodel|visible)"|\bte_history_plot = \{')
+                own = 'blockoverride "plot_layouts"' in text
+                self.assertEqual(len(gen.PLOTS_LINE.findall(text)), 1 if own else 0)
+        bad = gen.fragment(gen.BY_ID["gw_temp"]).replace('blockoverride "bar_tooltip"',
+                                                         'blockoverride "sample_visible" {}\n\tblockoverride "bar_tooltip"')
+        real = gen.fragments
+        with mock.patch.object(gen, "fragments",
+                               lambda system: dict(real(system), gw_temp=bad) if system == "global_warming"
+                               else real(system)):
+            with self.assertRaisesRegex(ValueError, "leaves its plots"):
+                gen._validate()
+
+
+class MarkerPipTest(unittest.TestCase):
+    """The pips cost one test a month: a holder on te_hist_mk, which every
+    marker bumps, a crash's too, and the crash pip's own test inside it."""
+
+    def test_one_test_a_month(self):
+        plot = _type_body(_strip_comments(_read(CHART_GUI)), "te_history_plot")
+        (pips,) = _block_bodies(plot, "marker_pips")
+        holder = re.match(r"\s*widget = \{", pips)
+        self.assertIsNotNone(holder, "one holder")
+        body = pips[holder.end():_close(pips, holder.end() - 1)]
+        self.assertEqual(re.findall(r'^\t*visible = "(.*)"', pips[:holder.end()] + body.split("icon = {")[0], re.M),
+                         ["[ScriptContainer.HasVariable( 'te_hist_mk' )]"])
+        self.assertIn("size = { 100% 100% }", body.split("icon = {")[0])
+        icons = re.findall(r"icon = \{", body)
+        self.assertEqual(len(icons), 2)
+        self.assertEqual(re.findall(r'visible = "(.*)"', body[body.index("icon = {"):]),
+                         ["[Or( ScriptContainer.HasVariable( 'te_hist_mk_crash' ), "
+                          "ScriptContainer.HasVariable( 'te_hist_mk_crash_contagion' ) )]"])
+        # every marker counts in te_hist_mk, so the holder never hides a crash
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "te_history_effects.txt"))
+        for name in ("te_history_record_marker", "te_history_record_global_marker"):
+            body = effects[effects.index(f"{name} = {{"):]
+            body = body[:_close(body, body.index("{")) + 1]
+            self.assertIn("change_variable = { name = te_hist_mk add = 1 }", body)
+            self.assertIn("set_variable = { name = te_hist_mk_$MARK$ value = 1 }", body)
+
+    def test_a_chart_without_markers_draws_no_pips(self):
+        """Banking records and explains the store's markers; every other
+        chart overrides the pips, to nothing or to its own (Demographics')."""
+        for chart in gen.CHARTS:
+            text = gen.fragment(chart)
+            with self.subTest(chart=chart.id):
+                if chart.system == "banking":
+                    self.assertNotIn('blockoverride "marker_pips"', text)
+                else:
+                    self.assertEqual(len(_override_bodies(text, "marker_pips")), 1)
 
 
 class GeneratorTest(unittest.TestCase):

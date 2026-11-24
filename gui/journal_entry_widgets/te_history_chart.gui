@@ -290,6 +290,10 @@ types te_history_chart_types
 		### journal root's te_je_country, the tab's frame, the window's mounts,
 		### the viewer's popup), so a chart draws for whichever country its
 		### panel shows (spec 2026-11-02-charts-help-national-info § 6.6).
+		### Every chart's plots set it, one a range (gen_te_history_charts.py,
+		### plot_layouts): the longest range reads the whole list, a shorter
+		### one only its last samples, DataModelLast( <list>, <its samples> ),
+		### so a plot builds an item for no sample it can't show.
 		block "sample_datamodel" {
 			datamodel = "[Country.MakeScope.GetList('te_hist')]"
 		}
@@ -303,13 +307,14 @@ types te_history_chart_types
 				}
 				datacontext = "[Scope.GetScriptContainer]"
 
-				### Range filter. Unset range = 20 years = every stored
-				### sample, so the default view needs no test at all.
-				### The sample's age in months is "now" minus the month
-				### index stored on the container.
-				block "sample_visible" {
-					visible = "[Or( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) ), Or( And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' ) ), And( GetVariableSystem.HasValue( 'te_hist_range', '5' ), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' ) ) ) )]"
-				}
+				### Range filter: none by default. A shorter range's plot
+				### (the generator's) reads only its last samples and keeps
+				### an age test on each, so a gap in the store can't let an
+				### older month in: the sample's age is "now" minus the
+				### index stored on the container. The longest range's plot
+				### shows the whole store, and is built only while that range
+				### is shown, so it tests nothing.
+				block "sample_visible" {}
 
 				block "bar_tooltip" {}
 				block "bar_body" {}
@@ -322,20 +327,29 @@ types te_history_chart_types
 				### markers of its own (the UN authority charts) overrides
 				### "marker_pips" to nothing, so its bars are not decorated
 				### with another system's events.
+				### ONE TEST A MONTH: every marker, a crash's too, counts in
+				### te_hist_mk (te_history_record_marker), so a month without
+				### it evaluates nothing inside. The holder draws nothing of
+				### its own and puts each pip where it sat as the bar's child.
 				block "marker_pips" {
-					icon = {
+					widget = {
 						visible = "[ScriptContainer.HasVariable( 'te_hist_mk' )]"
-						parentanchor = hcenter
+						size = { 100% 100% }
 						alwaystransparent = yes
-						size = { 9 9 }
-						texture = "gfx/interface/icons/generic_icons/information.dds"
-					}
-					icon = {
-						visible = "[Or( ScriptContainer.HasVariable( 'te_hist_mk_crash' ), ScriptContainer.HasVariable( 'te_hist_mk_crash_contagion' ) )]"
-						parentanchor = hcenter
-						alwaystransparent = yes
-						size = { 11 11 }
-						texture = "gfx/interface/icons/generic_icons/warning.dds"
+
+						icon = {
+							parentanchor = hcenter
+							alwaystransparent = yes
+							size = { 9 9 }
+							texture = "gfx/interface/icons/generic_icons/information.dds"
+						}
+						icon = {
+							visible = "[Or( ScriptContainer.HasVariable( 'te_hist_mk_crash' ), ScriptContainer.HasVariable( 'te_hist_mk_crash_contagion' ) )]"
+							parentanchor = hcenter
+							alwaystransparent = yes
+							size = { 11 11 }
+							texture = "gfx/interface/icons/generic_icons/warning.dds"
+						}
 					}
 				}
 			}
@@ -476,23 +490,13 @@ types te_history_chart_types
 
 			block "zero_axis" {}
 
-			block "plot_layouts" {
-				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
-					blockoverride "bar_size" {
-						size = { 40 84 }
-					}
-				}
-				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '5' )]"
-					blockoverride "bar_size" {
-						size = { 8 84 }
-					}
-				}
-				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) )]"
-				}
-			}
+			### The plots, one a range, each built only while its range is
+			### shown. Every chart's are generated (gen_te_history_charts.py,
+			### plot_layouts), with the datamodel and the age test each range
+			### reads and which range an unset variable means (DEFAULT_RANGE),
+			### so that is decided in one place. No chart is written by hand
+			### (test_te_history_charts.py), so the default is empty.
+			block "plot_layouts" {}
 
 			### Empty state — nothing recorded yet, e.g. an existing save that
 			### has not reached its first monthly pulse since the update; or, for
