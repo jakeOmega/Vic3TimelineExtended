@@ -7996,7 +7996,7 @@
  te_demog_gini_label:0 "Gini"
  te_demog_gini_pending:0 "#grey –#!"
  te_demog_gini_pending_tt:0 "$te_demog_gini_tt$\n#grey A dash means this country has no Gini yet. It comes within a year, at the country's yearly update.#!"
- te_demog_gini_tt:0 "#b Gini Coefficient#!\nHow unequally income is spread over the people of every state together, from 0, everyone alike, towards 1. Beside it, each stratum's average income."
+ te_demog_gini_tt:0 "#b Gini Coefficient#!\nHow unequally income is spread over the people of every state together, from 0, everyone alike, towards 1. Under it, in the Population panel, each stratum's average income."
  te_demog_gini_value:0 "#v [Country.MakeScope.Var('te_dg_gini').GetValue|2]#!"
  te_demog_health_bill_down:0 "Census: Health Care Needs"
  te_demog_health_bill_down_desc:0 "A young people needs less care than the world of 1836: the health system costs a little less bureaucracy."
