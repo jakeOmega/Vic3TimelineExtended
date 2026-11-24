@@ -7871,7 +7871,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_shackleton')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_shackleton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_shackleton')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_shackleton'), '(CFixedPoint)0' )]"
@@ -8272,7 +8272,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_peary')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_peary')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_peary')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_peary'), '(CFixedPoint)0' )]"
@@ -8673,7 +8673,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_tranquility')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_tranquility')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_tranquility')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_tranquility'), '(CFixedPoint)0' )]"
@@ -9074,7 +9074,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_marius_hills')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_marius_hills')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_marius_hills')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_marius_hills'), '(CFixedPoint)0' )]"
@@ -9475,7 +9475,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_daedalus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_daedalus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_daedalus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_daedalus'), '(CFixedPoint)0' )]"
@@ -9876,7 +9876,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_imbrium')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_imbrium')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_imbrium')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_imbrium'), '(CFixedPoint)0' )]"
@@ -10311,7 +10311,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_venus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_venus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_venus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_venus'), '(CFixedPoint)0' )]"
@@ -10715,7 +10715,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_mercury')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_mercury')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_mercury')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mercury'), '(CFixedPoint)0' )]"
@@ -11150,7 +11150,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_valles_marineris')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_valles_marineris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_valles_marineris')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_valles_marineris'), '(CFixedPoint)0' )]"
@@ -11585,7 +11585,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_olympus_mons')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_olympus_mons')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_olympus_mons')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_olympus_mons'), '(CFixedPoint)0' )]"
@@ -12020,7 +12020,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_hellas_planitia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_hellas_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_hellas_planitia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hellas_planitia'), '(CFixedPoint)0' )]"
@@ -12455,7 +12455,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_utopia_planitia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_utopia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_utopia_planitia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_utopia_planitia'), '(CFixedPoint)0' )]"
@@ -12890,7 +12890,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_arcadia_planitia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_arcadia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_arcadia_planitia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_arcadia_planitia'), '(CFixedPoint)0' )]"
@@ -13294,7 +13294,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ceres')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ceres')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_ceres')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ceres'), '(CFixedPoint)0' )]"
@@ -13698,7 +13698,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_vesta')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_vesta')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_vesta')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_vesta'), '(CFixedPoint)0' )]"
@@ -14102,7 +14102,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_psyche')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_psyche')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_psyche')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_psyche'), '(CFixedPoint)0' )]"
@@ -14506,7 +14506,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_pallas')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_pallas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_pallas')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pallas'), '(CFixedPoint)0' )]"
@@ -14910,7 +14910,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_hygiea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_hygiea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_hygiea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hygiea'), '(CFixedPoint)0' )]"
@@ -15314,7 +15314,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_io')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_io')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_io')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_io'), '(CFixedPoint)0' )]"
@@ -15718,7 +15718,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_europa')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_europa')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_europa')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_europa'), '(CFixedPoint)0' )]"
@@ -16153,7 +16153,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ganymede')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ganymede')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_ganymede')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ganymede'), '(CFixedPoint)0' )]"
@@ -16588,7 +16588,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_callisto')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_callisto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_callisto')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_callisto'), '(CFixedPoint)0' )]"
@@ -16992,7 +16992,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_himalia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_himalia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_himalia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_himalia'), '(CFixedPoint)0' )]"
@@ -17396,7 +17396,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_amalthea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_amalthea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_amalthea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_amalthea'), '(CFixedPoint)0' )]"
@@ -17831,7 +17831,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_titan')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_titan')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_titan')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titan'), '(CFixedPoint)0' )]"
@@ -18235,7 +18235,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_enceladus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_enceladus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_enceladus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_enceladus'), '(CFixedPoint)0' )]"
@@ -18639,7 +18639,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_rhea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_rhea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_rhea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_rhea'), '(CFixedPoint)0' )]"
@@ -19043,7 +19043,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_mimas')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_mimas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_mimas')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mimas'), '(CFixedPoint)0' )]"
@@ -19447,7 +19447,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_iapetus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_iapetus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_iapetus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_iapetus'), '(CFixedPoint)0' )]"
@@ -19851,7 +19851,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_titania')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_titania')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_titania')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titania'), '(CFixedPoint)0' )]"
@@ -20255,7 +20255,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_oberon')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_oberon')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_oberon')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_oberon'), '(CFixedPoint)0' )]"
@@ -20659,7 +20659,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_miranda')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_miranda')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_miranda')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_miranda'), '(CFixedPoint)0' )]"
@@ -21063,7 +21063,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ariel')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ariel')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_ariel')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ariel'), '(CFixedPoint)0' )]"
@@ -21467,7 +21467,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_triton')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_triton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_triton')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_triton'), '(CFixedPoint)0' )]"
@@ -21871,7 +21871,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_proteus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_proteus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_proteus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_proteus'), '(CFixedPoint)0' )]"
@@ -22275,7 +22275,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_pluto')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_pluto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_pluto')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pluto'), '(CFixedPoint)0' )]"
@@ -22679,7 +22679,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_eris')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_eris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_eris')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_eris'), '(CFixedPoint)0' )]"
@@ -23083,7 +23083,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_makemake')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_makemake')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_makemake')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_makemake'), '(CFixedPoint)0' )]"
@@ -23487,7 +23487,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_haumea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_haumea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_haumea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_haumea'), '(CFixedPoint)0' )]"
@@ -23891,7 +23891,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_sedna')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_sedna')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_sedna')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_sedna'), '(CFixedPoint)0' )]"
@@ -25073,7 +25073,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_shackleton')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_shackleton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_shackleton')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_shackleton'), '(CFixedPoint)0' )]"
@@ -25648,7 +25648,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_peary')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_peary')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_peary')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_peary'), '(CFixedPoint)0' )]"
@@ -26223,7 +26223,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_tranquility')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_tranquility')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_tranquility')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_tranquility'), '(CFixedPoint)0' )]"
@@ -26798,7 +26798,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_marius_hills')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_marius_hills')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_marius_hills')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_marius_hills'), '(CFixedPoint)0' )]"
@@ -27373,7 +27373,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_daedalus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_daedalus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_daedalus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_daedalus'), '(CFixedPoint)0' )]"
@@ -27948,7 +27948,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_imbrium')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_imbrium')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_imbrium')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_imbrium'), '(CFixedPoint)0' )]"
@@ -28573,7 +28573,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_venus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_venus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_venus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_venus'), '(CFixedPoint)0' )]"
@@ -29156,7 +29156,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_mercury')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_mercury')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_mercury')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mercury'), '(CFixedPoint)0' )]"
@@ -29781,7 +29781,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_valles_marineris')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_valles_marineris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_valles_marineris')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_valles_marineris'), '(CFixedPoint)0' )]"
@@ -30406,7 +30406,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_olympus_mons')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_olympus_mons')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_olympus_mons')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_olympus_mons'), '(CFixedPoint)0' )]"
@@ -31031,7 +31031,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_hellas_planitia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_hellas_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_hellas_planitia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hellas_planitia'), '(CFixedPoint)0' )]"
@@ -31656,7 +31656,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_utopia_planitia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_utopia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_utopia_planitia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_utopia_planitia'), '(CFixedPoint)0' )]"
@@ -32281,7 +32281,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_arcadia_planitia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_arcadia_planitia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_arcadia_planitia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_arcadia_planitia'), '(CFixedPoint)0' )]"
@@ -32864,7 +32864,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ceres')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ceres')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_ceres')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ceres'), '(CFixedPoint)0' )]"
@@ -33447,7 +33447,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_vesta')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_vesta')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_vesta')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_vesta'), '(CFixedPoint)0' )]"
@@ -34030,7 +34030,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_psyche')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_psyche')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_psyche')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_psyche'), '(CFixedPoint)0' )]"
@@ -34613,7 +34613,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_pallas')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_pallas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_pallas')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pallas'), '(CFixedPoint)0' )]"
@@ -35196,7 +35196,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_hygiea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_hygiea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_hygiea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_hygiea'), '(CFixedPoint)0' )]"
@@ -35779,7 +35779,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_io')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_io')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_io')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_io'), '(CFixedPoint)0' )]"
@@ -36362,7 +36362,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_europa')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_europa')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_europa')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_europa'), '(CFixedPoint)0' )]"
@@ -36987,7 +36987,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ganymede')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ganymede')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_ganymede')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ganymede'), '(CFixedPoint)0' )]"
@@ -37612,7 +37612,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_callisto')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_callisto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_callisto')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_callisto'), '(CFixedPoint)0' )]"
@@ -38195,7 +38195,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_himalia')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_himalia')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_himalia')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_himalia'), '(CFixedPoint)0' )]"
@@ -38778,7 +38778,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_amalthea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_amalthea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_amalthea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_amalthea'), '(CFixedPoint)0' )]"
@@ -39403,7 +39403,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_titan')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_titan')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_titan')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titan'), '(CFixedPoint)0' )]"
@@ -39986,7 +39986,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_enceladus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_enceladus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_enceladus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_enceladus'), '(CFixedPoint)0' )]"
@@ -40569,7 +40569,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_rhea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_rhea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_rhea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_rhea'), '(CFixedPoint)0' )]"
@@ -41152,7 +41152,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_mimas')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_mimas')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_mimas')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_mimas'), '(CFixedPoint)0' )]"
@@ -41735,7 +41735,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_iapetus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_iapetus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_iapetus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_iapetus'), '(CFixedPoint)0' )]"
@@ -42318,7 +42318,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_titania')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_titania')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_titania')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_titania'), '(CFixedPoint)0' )]"
@@ -42901,7 +42901,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_oberon')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_oberon')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_oberon')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_oberon'), '(CFixedPoint)0' )]"
@@ -43484,7 +43484,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_miranda')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_miranda')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_miranda')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_miranda'), '(CFixedPoint)0' )]"
@@ -44067,7 +44067,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_ariel')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_ariel')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_ariel')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_ariel'), '(CFixedPoint)0' )]"
@@ -44650,7 +44650,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_triton')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_triton')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_triton')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_triton'), '(CFixedPoint)0' )]"
@@ -45233,7 +45233,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_proteus')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_proteus')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_proteus')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_proteus'), '(CFixedPoint)0' )]"
@@ -45816,7 +45816,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_pluto')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_pluto')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_pluto')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_pluto'), '(CFixedPoint)0' )]"
@@ -46399,7 +46399,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_eris')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_eris')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_eris')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_eris'), '(CFixedPoint)0' )]"
@@ -46982,7 +46982,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_makemake')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_makemake')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_makemake')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_makemake'), '(CFixedPoint)0' )]"
@@ -47565,7 +47565,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_haumea')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_haumea')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_haumea')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_haumea'), '(CFixedPoint)0' )]"
@@ -48148,7 +48148,7 @@ types sr_sites_generated_rows_types
 				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_integrity_sedna')|0]%#!"
 			}
 			blockoverride "def_marines" {
-				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_marines_value_sedna')|0]#!"
+				raw_text = "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_shared_marines_sedna')|0]#!"
 			}
 			blockoverride "def_calm_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_def_status_sedna'), '(CFixedPoint)0' )]"

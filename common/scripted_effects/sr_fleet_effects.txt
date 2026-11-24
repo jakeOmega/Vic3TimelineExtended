@@ -170,7 +170,9 @@ sr_fl_dispatch = {
 # Its landing, from the global monthly step: at its destination, posture by the
 # location (Station where we hold a colony, Stand off elsewhere), contact for
 # our colonies there. The fleet_leg self-check reads the months it flew. The
-# AI lands its marines where a garrison is due.
+# AI lands its marines where it holds a colony; at Earth, where they refill
+# free each month, only for a lunar garrison that is due (owner, 2026-11-24),
+# so a fleet coming home doesn't pile them up on the Moon.
 sr_fl_arrive_at = {
 	if = {
 		limit = {
@@ -193,6 +195,10 @@ sr_fl_arrive_at = {
 			limit = {
 				is_ai = yes
 				sr_fl_$N$_can_land = yes
+				OR = {
+					NOT = { var:sr_fl_$N$_loc = 1 }
+					sr_loc_garrison_due_earth = yes
+				}
 			}
 			sr_fl_land_at = { N = $N$ }
 		}
@@ -707,10 +713,11 @@ sr_fl_upkeep_apply = {
 # ---- Garrisons under Full Colonies (design § 9.6) ----------------------------------------------------
 # Global scope, the world's step: a garrison due at KEY (slice 5's "Garrison
 # it", space_race_events.94) takes effect once two battalions or more stand
-# there; past its month unanswered it lapses, and a player hears it (.107).
+# there, or on the Moon and Mars at any colony of its holder's there (owner,
+# 2026-11-24); past its month unanswered it lapses, and a player hears it (.107).
 sr_site_garrison_due_step = {
 	if = {
-		limit = { sr_site_marines_value_$KEY$ >= sr_garrison_marines_needed }
+		limit = { sr_site_shared_marines_$KEY$ >= sr_garrison_marines_needed }
 		remove_global_variable = sr_site_garrison_due_$KEY$
 		global_var:sr_site_holder_$KEY$ ?= {
 			if = {

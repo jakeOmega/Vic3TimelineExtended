@@ -342,9 +342,17 @@ def render_values() -> str:
             "#   sr_cb_closing_<key>   strength closing in on it, every power's (any scope)",
             "#   sr_cb_fd_total_<key>  the defence fire aimed at it: each power's, shared with",
             "#                         the hostile fleets stationed against it by strength",
-            "#   sr_cb_edge_<key>      a power's: Survey Colony Defences' edge against its holder"]
+            "#   sr_cb_edge_<key>      a power's: Survey Colony Defences' edge against its holder",
+            "#   sr_cb_c_shared_<key>  during the combat pass, the strength closing in on it and",
+            "#                         (the Moon, Mars) on its holder's other colonies there, over",
+            "#                         which its shared Defences' fire is split (owner, 2026-11-24)"]
     for w in gss.SITES:
         k = w.key
+        out += [f"sr_cb_c_shared_{k} = {{", "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_global_variable = sr_cb_c_{k} }} add = global_var:sr_cb_c_{k} }}",
+                *[f"\tif = {{ limit = {{ has_global_variable = sr_cb_c_{t.key} sr_site_shares = {{ A = {k} B = {t.key} }} }} "
+                  f"add = global_var:sr_cb_c_{t.key} }}" for t in gss.world_mates(w)],
+                "}"]
         out += [f"sr_cb_closing_{k} = {{", "\tvalue = 0",
                 "\tif = {", "\t\tlimit = { has_global_variable_list = sr_fleet_powers }",
                 "\t\tevery_in_global_list = {", "\t\t\tvariable = sr_fleet_powers",
@@ -508,19 +516,20 @@ def render_slot_triggers(n: int) -> list[str]:
             f"\t{var(n, 'strength')} >= {{ value = sr_fl_minimum_strength multiply = 4 }}",
             "\tsr_fl_has_free_slot = yes",
             "}",
-            "# Marines aboard, at a location where we hold a colony; room aboard and",
-            "# marines of ours to take back.",
+            "# Marines aboard, at a location where we hold a colony (at Earth, one on the",
+            "# Moon: owner, 2026-11-24); room aboard and marines of ours to take back.",
             f"{var(n, 'can_land')} = {{",
             f"\thas_variable = {loc}",
             f"\t{var(n, 'marines_value')} >= 1",
-            "\tOR = {"]
+            "\tOR = {",
+            f"\t\tAND = {{ var:{loc} = {EARTH} sr_loc_held_lunar = yes }}"]
     out += [f"\t\tAND = {{ var:{loc} = {lc.code} sr_loc_held_{lc.key} = yes }}" for lc in LOCATIONS[1:]]
     out += ["\t}", "}",
             f"{var(n, 'can_embark')} = {{",
             f"\thas_variable = {loc}",
             f"\t{var(n, 'marine_capacity')} > {var(n, 'marines_value')}",
             "\tOR = {"]
-    out += [f"\t\tAND = {{ var:{loc} = {lc.code} sr_loc_our_marines_{lc.key} = yes }}" for lc in LOCATIONS[1:]]
+    out += [f"\t\tAND = {{ var:{loc} = {lc.code} sr_loc_our_marines_{lc.key} = yes }}" for lc in LOCATIONS]
     out += ["\t}", "}",
             "# 6b: a world at its location it may close in on (at war with its holder or",
             "# occupier, or free); its target is one. At Earth, a lunar world (lunar",
@@ -723,15 +732,28 @@ def render_triggers() -> str:
             "sr_loc_held_earth = { always = no }",
             "",
             "# ===== Per location, country scope =====",
-            "#   sr_loc_held_<loc>             we hold a colony there, not occupied",
+            "#   sr_loc_held_<loc>             we hold a colony there, not occupied (at Earth,",
+            "#                                 sr_loc_held_lunar, for Land: owner, 2026-11-24)",
             "#   sr_loc_port_<loc>             ... with a Spaceport",
             "#   sr_loc_propellant_port_<loc>  ... on a propellant world",
             "#   sr_loc_our_marines_<loc>      marines of ours stand at a world of ours there",
-            "#   sr_loc_garrison_due_<loc>     a world of ours there waits for its garrison"]
+            "#   sr_loc_garrison_due_<loc>     a world of ours there waits for its garrison, and",
+            "#                                 our marines on its world don't make one already"]
+    held = lambda s: (f"global_var:sr_site_holder_{s.key} ?= this "  # noqa: E731
+                      f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}")
+
+    def marine_triggers(loc: str, ws: list[gss.Site]) -> list[str]:
+        return [f"sr_loc_our_marines_{loc} = {{", "\tOR = {",
+                *[f"\t\tAND = {{ {held(s)} sr_site_marines_value_{s.key} >= 1 }}" for s in ws], "\t}", "}",
+                f"sr_loc_garrison_due_{loc} = {{", "\tOR = {",
+                *[f"\t\tAND = {{ {held(s)} has_global_variable = sr_site_garrison_due_{s.key} "
+                  f"sr_site_shared_marines_{s.key} < sr_garrison_marines_needed }}" for s in ws], "\t}", "}"]
+
+    out += ["# The Moon's colonies, at Earth: Land and Embark there (owner, 2026-11-24).",
+            "sr_loc_held_lunar = {", "\tOR = {", *[f"\t\tAND = {{ {held(s)} }}" for s in LUNAR], "\t}", "}",
+            *marine_triggers("earth", list(LUNAR))]
     for lc in LOCATIONS[1:]:
         ws = worlds_at(lc.key)
-        held = lambda s: (f"global_var:sr_site_holder_{s.key} ?= this "  # noqa: E731
-                          f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}")
         out += [f"sr_loc_held_{lc.key} = {{", "\tOR = {", *[f"\t\tAND = {{ {held(s)} }}" for s in ws], "\t}", "}",
                 f"sr_loc_port_{lc.key} = {{", "\tOR = {",
                 *[f"\t\tAND = {{ {held(s)} sr_site_port_value_{s.key} >= 1 }}" for s in ws], "\t}", "}"]
@@ -739,10 +761,7 @@ def render_triggers() -> str:
         if prop:
             out += [f"sr_loc_propellant_port_{lc.key} = {{", "\tOR = {",
                     *[f"\t\tAND = {{ {held(s)} sr_site_port_value_{s.key} >= 1 }}" for s in prop], "\t}", "}"]
-        out += [f"sr_loc_our_marines_{lc.key} = {{", "\tOR = {",
-                *[f"\t\tAND = {{ {held(s)} sr_site_marines_value_{s.key} >= 1 }}" for s in ws], "\t}", "}",
-                f"sr_loc_garrison_due_{lc.key} = {{", "\tOR = {",
-                *[f"\t\tAND = {{ {held(s)} has_global_variable = sr_site_garrison_due_{s.key} }}" for s in ws], "\t}", "}",
+        out += [*marine_triggers(lc.key, ws),
                 "# A world of ours there, and an enemy fleet there or on its way (design § 14),",
                 "# or (6c) a fleet interdicting us there.",
                 f"sr_fl_ai_threatened_{lc.key} = {{",
@@ -1277,11 +1296,12 @@ def render_location_effects() -> list[str]:
     out += _chain([(f"var:sr_fl_$N$_dest = {lc.code}", [f"sr_loc_add_inbound = {{ LOC = {lc.key} }}"]) for lc in LOCATIONS], 2)
     out += ["\t}", "}", "",
             "# Land: every marine aboard, at the first world of ours there awaiting its",
-            "# garrison, else the first world of ours there (table order). Embark: ours",
-            "# from every world of ours there, up to the carriers' room."]
+            "# garrison, else the first world of ours there (table order); at Earth, on",
+            "# the Moon (owner, 2026-11-24). Embark: ours from every world of ours there,",
+            "# up to the carriers' room."]
     out += ["sr_fl_land_at = {"]
     cases = []
-    for lc in LOCATIONS[1:]:
+    for lc in LOCATIONS:
         ws = worlds_at(lc.key)
         held = lambda s: (f"global_var:sr_site_holder_{s.key} ?= this "  # noqa: E731
                           f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}")
@@ -1292,7 +1312,7 @@ def render_location_effects() -> list[str]:
     out += _chain(cases)
     out += ["}", "sr_fl_embark_at = {"]
     cases = []
-    for lc in LOCATIONS[1:]:
+    for lc in LOCATIONS:
         body = [f"if = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this sr_site_marines_value_{s.key} > 0 }} "
                 f"sr_fl_embark_marines = {{ N = $N$ KEY = {s.key} }} }}" for s in worlds_at(lc.key)]
         cases.append((f"var:sr_fl_$N$_loc = {lc.code}", body))
@@ -1394,9 +1414,13 @@ def render_ai_effects() -> list[str]:
            "# A garrison due at a world of ours (design § 9.6): a fleet at Earth with",
            "# marines for it leaves for its location, if none of ours is there or on its",
            "# way; not one closing in on a lunar world (lunar colonization § 8.4). One",
-           "# order a month.",
+           "# order a month. One due on the Moon, a fleet at Earth lands (owner, 2026-11-24).",
            "sr_fl_ai_send_garrisons = {"]
-    cases = []
+    landers = _chain([(f"has_variable = {var(n, 'loc')} var:{var(n, 'loc')} = {EARTH} "
+                       f"{var(n, 'marines_value')} >= sr_garrison_marines_needed {var(n, 'can_land')} = yes "
+                       f"NOT = {{ {var(n, 'closing_at_earth')} = yes }}",
+                       [f"sr_fl_land_at = {{ N = {n} }}"]) for n in range(1, SLOTS + 1)], 0)
+    cases = [("sr_loc_garrison_due_earth = yes", landers)]
     for lc in LOCATIONS[1:]:
         k = lc.key
         senders = _chain([(f"has_variable = {var(n, 'loc')} var:{var(n, 'loc')} = {EARTH} "
@@ -1516,13 +1540,14 @@ def render_combat() -> list[str]:
                 for w in ws]
         out += ["}",
                 "# The power's losses to each world's Defences, by its share of the strength",
-                "# closing in on it.",
+                "# closing in on it (on the Moon and Mars, on any colony of its holder's",
+                "# there, whose Defences are shared: sr_cb_c_shared_<key>).",
                 f"sr_cb_def_losses_{k} = {{"]
         for w in ws:
             out += ["\tif = {",
                     f"\t\tlimit = {{ has_variable = sr_cb_s3_{w.key} has_global_variable = sr_cb_c_{w.key} global_var:sr_cb_c_{w.key} > 0 }}",
                     f"\t\tset_variable = {{ name = sr_cb_ld_{w.key} value = {{ value = sr_site_def_fire_{w.key} multiply = sr_fleet_k "
-                    f"multiply = var:sr_cb_s3_{w.key} divide = global_var:sr_cb_c_{w.key} }} }}",
+                    f"multiply = var:sr_cb_s3_{w.key} divide = sr_cb_c_shared_{w.key} }} }}",
                     "\t}"]
         out += ["}", f"sr_cb_worlds_after_{k} = {{"]
         for w in ws:
@@ -1547,6 +1572,15 @@ def render_combat() -> list[str]:
                     "\t\tchange_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }",
                     "\t}"]
         out.append("}")
+    out += ["", "# The holder's marines that defended the world as it falls to an occupier",
+            "# (sr_site_occupy, before the occupier is set): its own and, on the Moon and Mars,",
+            "# those at the holder's other colonies there, which defend it (owner, 2026-11-24)."]
+    for w in gss.SITES:
+        out += [f"sr_site_lose_shared_marines_{w.key} = {{",
+                *[f"\tif = {{ limit = {{ has_global_variable = sr_site_marines_{t.key} sr_site_shares = {{ A = {w.key} B = {t.key} }} }} "
+                  f"remove_global_variable = sr_site_marines_{t.key} }}" for t in gss.world_mates(w)],
+                f"\tif = {{ limit = {{ has_global_variable = sr_site_marines_{w.key} }} remove_global_variable = sr_site_marines_{w.key} }}",
+                "}"]
     return out
 
 
@@ -2137,10 +2171,11 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_occupier_{k} has_variable = sr_ss_occ_{k} }} value = 1 }}",
                 "}"]
     out += ["", "# Each slot's target world (the target button's hover): its Defences, a",
-            "# range low-high (exact when surveyed or ours), integrity and marines."]
+            "# range low-high (exact when surveyed or ours), integrity and marines; on the",
+            "# Moon and Mars, the Defences and marines its holder has there (owner, 2026-11-24)."]
     for n in range(1, SLOTS + 1):
-        for name, fmt in (("def", "sr_site_def_value_{k}"), ("integrity", "sr_disp_def_integrity_{k}"),
-                          ("marines", "sr_site_marines_value_{k}")):
+        for name, fmt in (("def", "sr_site_def_shared_levels_{k}"), ("integrity", "sr_disp_def_integrity_{k}"),
+                          ("marines", "sr_site_shared_marines_{k}")):
             out += [f"sr_disp_fl_{n}_tgt_{name} = {{", "\tvalue = 0",
                     *[f"\tif = {{ limit = {{ has_variable = {var(n, 'target')} var:{var(n, 'target')} = {w.index} }} "
                       f"value = {fmt.format(k=w.key)} }}" for w in gss.SITES],

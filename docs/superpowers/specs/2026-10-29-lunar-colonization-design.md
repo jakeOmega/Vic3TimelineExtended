@@ -728,6 +728,9 @@ only); the stage goals stand as drafted; the AI stays within the cap.
 
 - **Lunar garrisons:** Land and Embark aren't offered at Earth, so a lunar
   colony's garrison is its militia.
+  *Ruled 2026-11-24 (owner):* Land and Embark open on the Moon, uncapped,
+  with marines and Defences shared across a holder's colonies on the Moon
+  and on Mars; a garrison cost is to come (`space_race.md`, *Shared worlds*).
 - **Attackers closing in at Earth** are docked: they repair and refill supply
   and marines every month.
 - **Finished without choosing:** once the race is over

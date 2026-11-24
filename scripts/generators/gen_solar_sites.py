@@ -464,6 +464,28 @@ RESORT_OVERFLOW_DRAW = -75
 LUNAR: tuple[Site, ...] = tuple(s for s in SITES if s.stage == 0)
 
 
+# The worlds with several sites on them (owner, 2026-11-24): a holder's
+# marines on one of its colonies there defend each of its colonies on that
+# world, and its Defences fire for each of them and add half their hardness.
+# The Moon's six sites are its Earth location's, Mars's five its location's;
+# every other site is a world of its own (Jupiter's six are six moons).
+SHARED_WORLDS: dict[str, str] = {"moon": "the Moon", "mars": "Mars"}
+
+
+def world_of(site: Site) -> str:
+    """The world the site stands on: "moon", "mars", or the site's own key."""
+    if site in LUNAR:
+        return "moon"
+    if site.location == "mars":
+        return "mars"
+    return site.key
+
+
+def world_mates(site: Site) -> list[Site]:
+    """The other sites on the same world, in table order (none for most)."""
+    return [s for s in SITES if s is not site and world_of(s) == world_of(site)]
+
+
 def lunar_open_test(var: str, place_type: str | None = None) -> str:
     """A country-scope trigger: `var` (a queue place's site) names a lunar world
     that can take a module now, neither blockaded nor occupied (a module built
@@ -3517,17 +3539,44 @@ def render_slice6_values() -> list[str]:
            "#                                  occupier's while occupied)",
            "#   sr_site_integrity_value_<key>  0-100, 100 while unset",
            "#   sr_site_militia_value_<key>    a battalion a sr_militia_people, at least one",
-           "#   sr_site_garrison_need_<key>    the marines a seizure must exceed: garrison and militia",
-           "#   sr_site_def_fire_<key>         its Defences' fire on fleets closing in: 15 a level x",
+           "#   sr_site_shared_marines_<key>   the marines defending it: its own and, on the Moon and",
+           "#                                  Mars, its holder's at its other colonies there (owner,",
+           "#                                  2026-11-24; sr_site_shares); its own alone while occupied",
+           "#   sr_site_garrison_need_<key>    the marines a seizure must exceed: those and the militia",
+           "#   sr_site_def_staffed_<key>      its Defences levels at its staffing",
+           "#   sr_site_def_others_<key>       ... the holder's at its other colonies on the same world",
+           "#   sr_site_def_shared_<key>       ... the two: the Defences that fire for it",
+           "#   sr_site_def_shared_levels_<key> the same in levels, unstaffed (the panel's)",
+           "#   sr_site_def_fire_<key>         those Defences' fire on fleets closing in: 15 a level x",
            "#                                  1.5 (+25% Orbital Weapon Platforms, its holder's) x",
-           "#                                  integrity; nothing while occupied",
-           "#   sr_site_hardness_<key>         50 + 50 a Defences level",
+           "#                                  its own integrity; nothing while occupied. The combat",
+           "#                                  pass splits it over every colony of the holder's on the",
+           "#                                  world under attack (sr_cb_c_shared_<key>)",
+           "#   sr_site_hardness_<key>         50 + 50 a Defences level of its own, + 50 x",
+           "#                                  sr_def_shared_hardness_share a level of the others'",
            "#   sr_site_target_strength_<key>  what draws a closing-in fleet's defence fire from",
-           "#                                  stationed hostiles: its Defences and its hull",
+           "#                                  stationed hostiles: its own Defences and its hull",
            "#   sr_site_ws_weight_<key>        its weight in war support, 0.1 to 0.25 by its people"]
     for site in SITES:
         k = site.key
+        mates = world_mates(site)
+        shares = {t.key: f"sr_site_shares = {{ A = {k} B = {t.key} }}" for t in mates}
         out += _opt_var(f"sr_site_marines_value_{k}", f"sr_site_marines_{k}")
+        out += [f"sr_site_shared_marines_{k} = {{", f"\tvalue = sr_site_marines_value_{k}",
+                *[f"\tif = {{ limit = {{ {shares[t.key]} }} add = sr_site_marines_value_{t.key} }}" for t in mates],
+                "}",
+                f"sr_site_def_staffed_{k} = {{ value = sr_site_def_value_{k} multiply = sr_site_staffing_{k} }}"]
+        if mates:
+            out += [f"sr_site_def_others_{k} = {{", "\tvalue = 0",
+                    *[f"\tif = {{ limit = {{ {shares[t.key]} }} add = sr_site_def_staffed_{t.key} }}" for t in mates],
+                    "}",
+                    f"sr_site_def_shared_{k} = {{ value = sr_site_def_staffed_{k} add = sr_site_def_others_{k} }}",
+                    f"sr_site_def_shared_levels_{k} = {{", f"\tvalue = sr_site_def_value_{k}",
+                    *[f"\tif = {{ limit = {{ {shares[t.key]} }} add = sr_site_def_value_{t.key} }}" for t in mates],
+                    "}"]
+        else:
+            out += [f"sr_site_def_shared_{k} = {{ value = sr_site_def_staffed_{k} }}",
+                    f"sr_site_def_shared_levels_{k} = {{ value = sr_site_def_value_{k} }}"]
         out += [f"sr_site_integrity_value_{k} = {{",
                 "\tvalue = sr_integrity_full",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_integrity_{k} }} value = global_var:sr_site_integrity_{k} }}",
@@ -3538,21 +3587,24 @@ def render_slice6_values() -> list[str]:
                 "\tfloor = yes",
                 "\tmin = 1",
                 "}",
-                "# A seizure must exceed the garrison and the militia; a liberation, the",
-                "# occupier's garrison alone (its people are the holder's).",
+                "# A seizure must exceed the garrison (shared on the Moon and Mars) and the",
+                "# militia; a liberation, the occupier's garrison alone (its people are the",
+                "# holder's).",
                 f"sr_site_garrison_need_{k} = {{",
-                f"\tvalue = sr_site_marines_value_{k}",
+                f"\tvalue = sr_site_shared_marines_{k}",
                 f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} }} add = sr_site_militia_value_{k} }}",
                 "}",
                 # Defences run at the colony's staffing, as every crewed level does
                 # (colony people design § 4.1; the final review of #1958: with slots
-                # gone, unstaffed Defences at full strength had no limit).
+                # gone, unstaffed Defences at full strength had no limit). The
+                # others' fire falls with this colony's integrity too, so a long
+                # siege of an undefended neighbour under full fire can't cost an
+                # attacker more than the fortress itself (owner, 2026-11-24).
                 f"sr_site_def_fire_{k} = {{",
                 "\tvalue = 0",
                 "\tif = {",
-                f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} sr_site_def_value_{k} > 0 }}",
-                f"\t\tvalue = sr_site_def_value_{k}",
-                f"\t\tmultiply = sr_site_staffing_{k}",
+                f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} sr_site_def_shared_{k} > 0 }}",
+                f"\t\tvalue = sr_site_def_shared_{k}",
                 "\t\tmultiply = sr_def_strength_per_level",
                 "\t\tmultiply = sr_def_fire_factor",
                 f"\t\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_technology_researched = orbital_weapon_platforms }} }} "
@@ -3561,14 +3613,13 @@ def render_slice6_values() -> list[str]:
                 "\t}",
                 "}",
                 f"sr_site_hardness_{k} = {{",
-                f"\tvalue = sr_site_def_value_{k}",
-                f"\tmultiply = sr_site_staffing_{k}",
+                *([f"\tvalue = sr_site_def_others_{k}", "\tmultiply = sr_def_shared_hardness_share",
+                   f"\tadd = sr_site_def_staffed_{k}"] if mates else [f"\tvalue = sr_site_def_staffed_{k}"]),
                 "\tmultiply = sr_def_hardness_per_level",
                 "\tadd = sr_def_hardness_base",
                 "}",
                 f"sr_site_target_strength_{k} = {{",
-                f"\tvalue = sr_site_def_value_{k}",
-                f"\tmultiply = sr_site_staffing_{k}",
+                f"\tvalue = sr_site_def_staffed_{k}",
                 "\tmultiply = sr_def_strength_per_level",
                 "\tadd = sr_def_hull_strength",
                 "}",
@@ -4548,7 +4599,8 @@ def _colony_blocks(site: Site) -> list[str]:
     # Defenses (gen_space_fleets' sr_disp_def_* values)
     out += _override("def_level", f'raw_text = "#v [{_sv(f"sr_site_def_value_{k}")}|0]#!"')
     out += _override("def_integrity", f'raw_text = "#v [{_sv(f"sr_disp_def_integrity_{k}")}|0]%#!"')
-    out += _override("def_marines", f'raw_text = "#v [{_sv(f"sr_site_marines_value_{k}")}|0]#!"')
+    # The marines defending it: on the Moon and Mars, ours at our other colonies there too.
+    out += _override("def_marines", f'raw_text = "#v [{_sv(f"sr_site_shared_marines_{k}")}|0]#!"')
     for code, name in ((0, "calm"), (1, "blockaded"), (2, "assault"), (3, "occupied"), (4, "interdicted")):
         out += _override(f"def_{name}_visible", f'visible = "[{_eq(dstatus, code)}]"')
     out += _override("def_occupier_context",
