@@ -7400,8 +7400,8 @@
   "es": "#bold [concept_st_res_flow_cap]:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_weekly_rate_cap_add')] unidades por semana para cada bien"
  },
  "je_strategic_reserve_ov_cap_value": {
-  "en": "Cap [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/wk",
-  "es": "Tope [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/sem"
+  "en": "Cap $je_strategic_reserve_ov_cap_fig$/wk",
+  "es": "Tope $je_strategic_reserve_ov_cap_fig$/sem"
  },
  "je_strategic_reserve_ov_held_caption": {
   "en": "Blocked",
@@ -7460,24 +7460,24 @@
   "es": "Ingresos por ventas"
  },
  "je_strategic_reserve_ov_income_tt": {
-  "en": "#bold Weekly Sales Income:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]\\nGross revenue this week from the goods the reserve releases, at each good's current market price. Purchases, beside it, is the other side.",
-  "es": "#bold Ingresos semanales por ventas:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]\\nIngreso bruto de esta semana por los bienes que libera la reserva, al precio de mercado actual de cada bien. Compras, a su lado, es la otra cara."
+  "en": "#bold Weekly Sales Income:#! @money!$je_strategic_reserve_ov_income_fig$\\nGross revenue this week from the goods the reserve releases, at each good's current market price. Purchases, beside it, is the other side.",
+  "es": "#bold Ingresos semanales por ventas:#! @money!$je_strategic_reserve_ov_income_fig$\\nIngreso bruto de esta semana por los bienes que libera la reserva, al precio de mercado actual de cada bien. Compras, a su lado, es la otra cara."
  },
  "je_strategic_reserve_ov_income_value": {
-  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/wk",
-  "es": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/sem"
+  "en": "@money!$je_strategic_reserve_ov_income_fig$/wk",
+  "es": "@money!$je_strategic_reserve_ov_income_fig$/sem"
  },
  "je_strategic_reserve_ov_spend_label": {
   "en": "Purchases",
   "es": "Compras"
  },
  "je_strategic_reserve_ov_spend_tt": {
-  "en": "#bold Weekly Purchases:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]\\nWhat this week's buying costs at today's prices, decay replacement included. An estimate: the hub pays through its production method, so the bill is under Goods for Government Buildings in the budget panel.",
-  "es": "#bold Compras semanales:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]\\nLo que cuesta comprar esta semana a los precios de hoy, incluida la reposición de lo deteriorado. Es una estimación: el centro paga a través de su método de producción, así que la factura figura en Bienes para edificios gubernamentales, en el panel Presupuesto."
+  "en": "#bold Weekly Purchases:#! @money!$je_strategic_reserve_ov_spend_fig$\\nWhat this week's buying costs at today's prices, decay replacement included. An estimate: the hub pays through its production method, so the bill is under Goods for Government Buildings in the budget panel.",
+  "es": "#bold Compras semanales:#! @money!$je_strategic_reserve_ov_spend_fig$\\nLo que cuesta comprar esta semana a los precios de hoy, incluida la reposición de lo deteriorado. Es una estimación: el centro paga a través de su método de producción, así que la factura figura en Bienes para edificios gubernamentales, en el panel Presupuesto."
  },
  "je_strategic_reserve_ov_spend_value": {
-  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/wk",
-  "es": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/sem"
+  "en": "@money!$je_strategic_reserve_ov_spend_fig$/wk",
+  "es": "@money!$je_strategic_reserve_ov_spend_fig$/sem"
  },
  "je_strategic_reserve_reason": {
   "en": "A national stockpile of strategic goods, bought from your own market and released back onto it by hand or with a price-triggered policy for each good.",

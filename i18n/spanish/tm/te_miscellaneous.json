@@ -12095,7 +12095,7 @@
   "en": "Held Abroad",
   "es": "Retenidos en el extranjero"
  },
- "gm_je_abroad_summary": {
+ "gm_je_abroad_summary_many": {
   "en": "#v [Country.MakeScope.ScriptValue('gm_tr_disp_abroad_count')|0]#! taken from the country's lands stand abroad",
   "es": "#v [Country.MakeScope.ScriptValue('gm_tr_disp_abroad_count')|0]#! arrebatados de las tierras del país se encuentran en el extranjero"
  },
@@ -12535,7 +12535,7 @@
   "en": "#b Monument Policy#!\\nChoosing one ends the others' effects. National effects change within a few days, each monument's own at the start of next month. After a change the policy is locked for #v 60#! months; a first choice starts no wait.",
   "es": "#b Política de monumentos#!\\nElegir una pone fin a los efectos de las demás. Los efectos nacionales cambian en pocos días, y los de cada monumento al comienzo del mes siguiente. Tras un cambio la política queda bloqueada durante #v 60#! meses; una primera elección no inicia espera."
  },
- "gm_je_tr_summary": {
+ "gm_je_tr_summary_many": {
   "en": "#v [Country.MakeScope.ScriptValue('gm_tr_disp_held_count')|0]#! trophies count for #v [Country.MakeScope.ScriptValue('gm_tr_disp_held_grandeur')|0]#! [concept_grandeur]",
   "es": "#v [Country.MakeScope.ScriptValue('gm_tr_disp_held_count')|0]#! trofeos cuentan por #v [Country.MakeScope.ScriptValue('gm_tr_disp_held_grandeur')|0]#! de [concept_grandeur|l]"
  },
@@ -25188,12 +25188,12 @@
   "es": "Presupuesto semanal de compras (@money!)"
  },
  "st_res_policy_label_budget_down_tooltip": {
-  "en": "#bold Lower the weekly purchase budget#!\\nSpend less on purchases each week.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|0].\\n#italic Estimated: a per-week cap, not a pot that carries over, applied as the units it covers at the current price after replacing this week's decay.#!\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]",
-  "es": "#bold Reducir el presupuesto semanal de compras#!\\nGasta menos en compras cada semana.\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|0].\\n#italic Estimado: un tope por semana, no una bolsa que se acumula, aplicado como las unidades que cubre al precio actual tras reponer el deterioro de esta semana.#!\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+  "en": "#bold Lower the weekly purchase budget#!\\nSpend less on purchases each week.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|D0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|D0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|D0].\\n#italic Estimated: a per-week cap, not a pot that carries over, applied as the units it covers at the current price after replacing this week's decay.#!\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]",
+  "es": "#bold Reducir el presupuesto semanal de compras#!\\nGasta menos en compras cada semana.\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|D0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|D0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|D0].\\n#italic Estimado: un tope por semana, no una bolsa que se acumula, aplicado como las unidades que cubre al precio actual tras reponer el deterioro de esta semana.#!\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
  },
  "st_res_policy_label_budget_up_tooltip": {
-  "en": "#bold Raise the weekly purchase budget#!\\nAllow more spending on purchases each week, up to what a full week at the maximum-flow ceiling costs at today's price, and never less than @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_max_base')|0].\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|0].\\n#italic Estimated: a per-week cap, not a pot that carries over, applied as the units it covers at the current price after replacing this week's decay.#!\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]",
-  "es": "#bold Aumentar el presupuesto semanal de compras#!\\nPermite gastar más en compras cada semana, hasta lo que cuesta una semana completa al tope de flujo máximo al precio de hoy, y nunca menos de @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_max_base')|0].\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|0].\\n#italic Estimado: un tope por semana, no una bolsa que se acumula, aplicado como las unidades que cubre al precio actual tras reponer el deterioro de esta semana.#!\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+  "en": "#bold Raise the weekly purchase budget#!\\nAllow more spending on purchases each week, up to what a full week at the maximum-flow ceiling costs at today's price, and never less than @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_max_base')|D0].\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|D0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|D0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|D0].\\n#italic Estimated: a per-week cap, not a pot that carries over, applied as the units it covers at the current price after replacing this week's decay.#!\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]",
+  "es": "#bold Aumentar el presupuesto semanal de compras#!\\nPermite gastar más en compras cada semana, hasta lo que cuesta una semana completa al tope de flujo máximo al precio de hoy, y nunca menos de @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_max_base')|D0].\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step')|D0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_shift')|D0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_budget_step_ctrl')|D0].\\n#italic Estimado: un tope por semana, no una bolsa que se acumula, aplicado como las unidades que cubre al precio actual tras reponer el deterioro de esta semana.#!\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
  },
  "st_res_policy_label_buy_thr": {
   "en": "Buy below (% of base price)",
@@ -25236,12 +25236,12 @@
   "es": "Flujo semanal máximo (unidades)"
  },
  "st_res_policy_label_max_flow_down_tooltip": {
-  "en": "#bold Lower the maximum weekly flow#!\\nMove fewer units a week. A gentler policy moves the market less and costs less.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|0].\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]",
-  "es": "#bold Reducir el flujo semanal máximo#!\\nMueve menos unidades por semana. Una política más suave mueve menos el mercado y cuesta menos.\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|0].\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
+  "en": "#bold Lower the maximum weekly flow#!\\nMove fewer units a week. A gentler policy moves the market less and costs less.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|D0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|D0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|D0].\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]",
+  "es": "#bold Reducir el flujo semanal máximo#!\\nMueve menos unidades por semana. Una política más suave mueve menos el mercado y cuesta menos.\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|D0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|D0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|D0].\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
  },
  "st_res_policy_label_max_flow_up_tooltip": {
-  "en": "#bold Raise the maximum weekly flow#!\\nMove more units a week, up to [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max')|0]: your hub's weekly flow cap, which Silos raise, or [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max_base')|0] while the cap is lower. The cap itself still applies on top of this.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|0].\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]",
-  "es": "#bold Aumentar el flujo semanal máximo#!\\nMueve más unidades por semana, hasta [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max')|0]: el tope de flujo semanal de tu centro, que los silos elevan, o [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max_base')|0] mientras el tope sea menor. El tope en sí se sigue aplicando además de esto.\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|0].\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
+  "en": "#bold Raise the maximum weekly flow#!\\nMove more units a week, up to [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max')|D0]: your hub's weekly flow cap, which Silos raise, or [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max_base')|D0] while the cap is lower. The cap itself still applies on top of this.\\nSteps by [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|D0]; #bold Shift#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|D0], #bold Ctrl#!-click for [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|D0].\\n#italic Setting it by hand stops it following the preset.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]",
+  "es": "#bold Aumentar el flujo semanal máximo#!\\nMueve más unidades por semana, hasta [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max')|D0]: el tope de flujo semanal de tu centro, que los silos elevan, o [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_max_base')|D0] mientras el tope sea menor. El tope en sí se sigue aplicando además de esto.\\nPaso de [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step')|D0]; #bold Mayús#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_shift')|D0], #bold Ctrl#!+clic para [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_policy_flow_step_ctrl')|D0].\\n#italic Si lo ajustas a mano, deja de seguir el ajuste predefinido.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
  },
  "st_res_policy_label_price_memory": {
   "en": "Price memory (weeks averaged)",
@@ -25508,12 +25508,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_aeroplanes_decay_add')] de las existencias al año"
  },
  "st_res_row_aeroplanes_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_aeroplanes_rate_short$/wk",
+  "es": "$st_res_row_aeroplanes_rate_short$/sem"
  },
  "st_res_row_aeroplanes_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_last_net')|+=1]/sem"
+  "en": "$st_res_row_aeroplanes_last_fig$/wk",
+  "es": "$st_res_row_aeroplanes_last_fig$/sem"
  },
  "st_res_row_aeroplanes_name": {
   "en": "@aeroplanes! #bold Aeroplanes#!",
@@ -25532,16 +25532,16 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_aeroplanes_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_aeroplanes_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_aeroplanes_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_aeroplanes_actual_fig$#! a la semana"
  },
  "st_res_row_aeroplanes_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_aeroplanes_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_aeroplanes_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_aeroplanes_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_aeroplanes_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_aeroplanes_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_aeroplanes_stored_fig$ / $st_res_row_aeroplanes_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_aeroplanes_stored_fig$ / $st_res_row_aeroplanes_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_aeroplanes_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_ammunition_auto_tooltip": {
   "en": "#bold [concept_st_res_policy]:#! $st_res_row_ammunition_policy$\\n$st_res_row_ammunition_policy_reason$\\n#italic Click to show or hide its settings.#!",
@@ -25556,12 +25556,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_ammunition_decay_add')] de las existencias al año"
  },
  "st_res_row_ammunition_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_ammunition_rate_short$/wk",
+  "es": "$st_res_row_ammunition_rate_short$/sem"
  },
  "st_res_row_ammunition_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_last_net')|+=1]/sem"
+  "en": "$st_res_row_ammunition_last_fig$/wk",
+  "es": "$st_res_row_ammunition_last_fig$/sem"
  },
  "st_res_row_ammunition_name": {
   "en": "@ammunition! #bold Ammunition#!",
@@ -25580,16 +25580,16 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_ammunition_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_ammunition_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_ammunition_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_ammunition_actual_fig$#! a la semana"
  },
  "st_res_row_ammunition_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_ammunition_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_ammunition_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_ammunition_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_ammunition_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_ammunition_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_ammunition_stored_fig$ / $st_res_row_ammunition_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_ammunition_stored_fig$ / $st_res_row_ammunition_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_ammunition_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_artillery_auto_tooltip": {
   "en": "#bold [concept_st_res_policy]:#! $st_res_row_artillery_policy$\\n$st_res_row_artillery_policy_reason$\\n#italic Click to show or hide its settings.#!",
@@ -25604,12 +25604,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_artillery_decay_add')] de las existencias al año"
  },
  "st_res_row_artillery_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_artillery_rate_short$/wk",
+  "es": "$st_res_row_artillery_rate_short$/sem"
  },
  "st_res_row_artillery_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_last_net')|+=1]/sem"
+  "en": "$st_res_row_artillery_last_fig$/wk",
+  "es": "$st_res_row_artillery_last_fig$/sem"
  },
  "st_res_row_artillery_name": {
   "en": "@artillery! #bold Artillery#!",
@@ -25628,16 +25628,16 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_artillery_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_artillery_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_artillery_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_artillery_actual_fig$#! a la semana"
  },
  "st_res_row_artillery_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_artillery_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_artillery_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_artillery_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_artillery_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_artillery_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_artillery_stored_fig$ / $st_res_row_artillery_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_artillery_stored_fig$ / $st_res_row_artillery_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_artillery_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_collapse_tooltip": {
   "en": "#bold Expand or Collapse#!\\nClick to show or hide this good's figures and its policy settings. Rows start collapsed, showing only the fill bar, status, policy icon and rate controls.\\n#italic Only changes what you see: the reserve keeps storing, releasing and running any automated policy while the row is collapsed.#!",
@@ -25656,12 +25656,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_copper_decay_add')] de las existencias al año"
  },
  "st_res_row_copper_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_copper_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_copper_rate_short$/wk",
+  "es": "$st_res_row_copper_rate_short$/sem"
  },
  "st_res_row_copper_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_last_net')|+=1]/sem"
+  "en": "$st_res_row_copper_last_fig$/wk",
+  "es": "$st_res_row_copper_last_fig$/sem"
  },
  "st_res_row_copper_name": {
   "en": "@copper! #bold Conductors#!",
@@ -25680,20 +25680,20 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_copper_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_copper_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_copper_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_copper_actual_fig$#! a la semana"
  },
  "st_res_row_copper_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_copper_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_copper_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_copper_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_copper_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_copper_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_copper_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_copper_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_copper_stored_fig$ / $st_res_row_copper_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_copper_stored_fig$ / $st_res_row_copper_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_copper_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_decrease_tooltip": {
-  "en": "#bold Decrease#!\\nLower this good's [concept_st_res_rate_setting] by the [concept_st_res_adjustment_step], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Below 0 the reserve releases stock onto the market.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]\\n#italic Adjusting a rate by hand switches this good to the Manual policy.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]",
-  "es": "#bold Disminuir#!\\nReduce el [concept_st_res_rate_setting|l] de este bien en el [concept_st_res_adjustment_step|l], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Por debajo de 0, la reserva libera existencias al mercado.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]\\n#italic Si ajustas una tasa a mano, este bien pasa a la política Manual.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+  "en": "#bold Decrease#!\\nLower this good's [concept_st_res_rate_setting] by the [concept_st_res_adjustment_step], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|D0]. Below 0 the reserve releases stock onto the market.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]\\n#italic Adjusting a rate by hand switches this good to the Manual policy.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]",
+  "es": "#bold Disminuir#!\\nReduce el [concept_st_res_rate_setting|l] de este bien en el [concept_st_res_adjustment_step|l], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|D0]. Por debajo de 0, la reserva libera existencias al mercado.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]\\n#italic Si ajustas una tasa a mano, este bien pasa a la política Manual.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
  },
  "st_res_row_fertilizer_auto_tooltip": {
   "en": "#bold [concept_st_res_policy]:#! $st_res_row_fertilizer_policy$\\n$st_res_row_fertilizer_policy_reason$\\n#italic Click to show or hide its settings.#!",
@@ -25708,12 +25708,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_fertilizer_decay_add')] de las existencias al año"
  },
  "st_res_row_fertilizer_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_fertilizer_rate_short$/wk",
+  "es": "$st_res_row_fertilizer_rate_short$/sem"
  },
  "st_res_row_fertilizer_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_last_net')|+=1]/sem"
+  "en": "$st_res_row_fertilizer_last_fig$/wk",
+  "es": "$st_res_row_fertilizer_last_fig$/sem"
  },
  "st_res_row_fertilizer_name": {
   "en": "@fertilizer! #bold Chemicals#!",
@@ -25732,16 +25732,16 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_fertilizer_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_fertilizer_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_fertilizer_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_fertilizer_actual_fig$#! a la semana"
  },
  "st_res_row_fertilizer_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_fertilizer_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_fertilizer_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_fertilizer_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_fertilizer_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_fertilizer_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_fertilizer_stored_fig$ / $st_res_row_fertilizer_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_fertilizer_stored_fig$ / $st_res_row_fertilizer_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_fertilizer_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_grain_auto_tooltip": {
   "en": "#bold [concept_st_res_policy]:#! $st_res_row_grain_policy$\\n$st_res_row_grain_policy_reason$\\n#italic Click to show or hide its settings.#!",
@@ -25756,12 +25756,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_grain_decay_add')] de las existencias al año"
  },
  "st_res_row_grain_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_grain_rate_short$/wk",
+  "es": "$st_res_row_grain_rate_short$/sem"
  },
  "st_res_row_grain_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_last_net')|+=1]/sem"
+  "en": "$st_res_row_grain_last_fig$/wk",
+  "es": "$st_res_row_grain_last_fig$/sem"
  },
  "st_res_row_grain_name": {
   "en": "@grain! #bold Grain#!",
@@ -25780,20 +25780,20 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_grain_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_grain_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_grain_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_grain_actual_fig$#! a la semana"
  },
  "st_res_row_grain_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_grain_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_grain_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_grain_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_grain_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_grain_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_grain_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_grain_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_grain_stored_fig$ / $st_res_row_grain_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_grain_stored_fig$ / $st_res_row_grain_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_grain_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_increase_tooltip": {
-  "en": "#bold Increase#!\\nRaise this good's [concept_st_res_rate_setting] by the [concept_st_res_adjustment_step], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Above 0 the reserve buys from the market.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]\\n#italic Adjusting a rate by hand switches this good to the Manual policy.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]",
-  "es": "#bold Aumentar#!\\nSube el [concept_st_res_rate_setting|l] de este bien en el [concept_st_res_adjustment_step|l], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Por encima de 0, la reserva compra al mercado.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]\\n#italic Si ajustas una tasa a mano, este bien pasa a la política Manual.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+  "en": "#bold Increase#!\\nRaise this good's [concept_st_res_rate_setting] by the [concept_st_res_adjustment_step], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|D0]. Above 0 the reserve buys from the market.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]\\n#italic Adjusting a rate by hand switches this good to the Manual policy.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]",
+  "es": "#bold Aumentar#!\\nSube el [concept_st_res_rate_setting|l] de este bien en el [concept_st_res_adjustment_step|l], [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|D0]. Por encima de 0, la reserva compra al mercado.\\n[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]\\n#italic Si ajustas una tasa a mano, este bien pasa a la política Manual.#!\\n\\n[ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
  },
  "st_res_row_label_decay": {
   "en": "Decay",
@@ -25824,12 +25824,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_oil_decay_add')] de las existencias al año"
  },
  "st_res_row_oil_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_oil_rate_short$/wk",
+  "es": "$st_res_row_oil_rate_short$/sem"
  },
  "st_res_row_oil_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_last_net')|+=1]/sem"
+  "en": "$st_res_row_oil_last_fig$/wk",
+  "es": "$st_res_row_oil_last_fig$/sem"
  },
  "st_res_row_oil_name": {
   "en": "@oil! #bold Oil#!",
@@ -25848,16 +25848,16 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_oil_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_oil_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_oil_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_oil_actual_fig$#! a la semana"
  },
  "st_res_row_oil_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_oil_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_oil_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_oil_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_oil_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_oil_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_oil_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_oil_stored_fig$ / $st_res_row_oil_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_oil_stored_fig$ / $st_res_row_oil_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_oil_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_rate_short_tt": {
   "en": "This good's [concept_st_res_rate_setting], in units a week.",
@@ -25880,12 +25880,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_small_arms_decay_add')] de las existencias al año"
  },
  "st_res_row_small_arms_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_small_arms_rate_short$/wk",
+  "es": "$st_res_row_small_arms_rate_short$/sem"
  },
  "st_res_row_small_arms_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_last_net')|+=1]/sem"
+  "en": "$st_res_row_small_arms_last_fig$/wk",
+  "es": "$st_res_row_small_arms_last_fig$/sem"
  },
  "st_res_row_small_arms_name": {
   "en": "@small_arms! #bold Small Arms#!",
@@ -25904,16 +25904,16 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_small_arms_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_small_arms_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_small_arms_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_small_arms_actual_fig$#! a la semana"
  },
  "st_res_row_small_arms_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_small_arms_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_small_arms_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_small_arms_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_small_arms_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_small_arms_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_small_arms_stored_fig$ / $st_res_row_small_arms_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_small_arms_stored_fig$ / $st_res_row_small_arms_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_small_arms_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_row_stock_markers_tt": {
   "en": "#lore The marker on the bar is the target stockpile while the policy can buy, and the protected stockpile while it can sell.#!",
@@ -25936,12 +25936,12 @@
   "es": "#bold Deterioro:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_tanks_decay_add')] de las existencias al año"
  },
  "st_res_row_tanks_flow": {
-  "en": "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_rate').GetValue|+0]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_rate').GetValue|+0]/sem"
+  "en": "$st_res_row_tanks_rate_short$/wk",
+  "es": "$st_res_row_tanks_rate_short$/sem"
  },
  "st_res_row_tanks_last": {
-  "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_last_net')|+=1]/wk",
-  "es": "[JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_last_net')|+=1]/sem"
+  "en": "$st_res_row_tanks_last_fig$/wk",
+  "es": "$st_res_row_tanks_last_fig$/sem"
  },
  "st_res_row_tanks_name": {
   "en": "@tanks! #bold Tanks#!",
@@ -25960,16 +25960,16 @@
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_tanks_rate').GetValue|+0]#! → #v 0#! a la semana"
  },
  "st_res_row_tanks_rate_tt": {
-  "en": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_actual_rate')|+1]#! a week",
-  "es": "#bold [concept_st_res_active_rate]:#! #v [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_actual_rate')|+1]#! a la semana"
+  "en": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_tanks_actual_fig$#! a week",
+  "es": "#bold [concept_st_res_active_rate]:#! #v $st_res_row_tanks_actual_fig$#! a la semana"
  },
  "st_res_row_tanks_rate_up_tt": {
   "en": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_tanks_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_tanks_rate_after_up')|+0]#! a week",
   "es": "[concept_st_res_rate_setting]: #v [THIS.Var('st_res_tanks_rate').GetValue|+0]#! → #v [THIS.ScriptValue('st_res_tanks_rate_after_up')|+0]#! a la semana"
  },
  "st_res_row_tanks_stock_tt": {
-  "en": "#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
-  "es": "#bold Almacenado:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
+  "en": "#bold Stored:#! $st_res_row_tanks_stored_fig$ / $st_res_row_tanks_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$",
+  "es": "#bold Almacenado:#! $st_res_row_tanks_stored_fig$ / $st_res_row_tanks_capacity_fig$ ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_tanks_fill_pct')|0]%)\\n$st_res_row_stock_markers_tt$"
  },
  "st_res_sell_profit_modifier": {
   "en": "Strategic Reserve Sale Revenue",
@@ -27288,64 +27288,64 @@
   "es": " La tasa depende de la edad del cuerpo, y la medicina de la longevidad mantiene jóvenes los cuerpos: en los estados del país que la tienen, el cuerpo medio, contando a los niños y a quienes no reciben esa atención, es #v [Country.MakeScope.ScriptValue('te_demog_lx_body_gap')|1]#! años más joven que su edad."
  },
  "te_demog_cd_dc_chr_deaths": {
-  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_chr').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_cd_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_cd_dc_chr_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [Country.MakeScope.Var('te_dg_dc_chr').GetValue|K]#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_cd_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_cd_dc_chr_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_cd_dc_chr_fig$#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_cd_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_cd_dc_chr_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_cd_dc_chr_fig$#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_cd_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_cd_dc_chr_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_cd_dc_chr_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) spared #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) evitaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#! muertes."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) spared #v $te_demog_cd_dc_chr_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) evitaron #v $te_demog_cd_dc_chr_top_fig$#! muertes."
  },
  "te_demog_cd_dc_chr_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) added #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) sumaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) added #v $te_demog_cd_dc_chr_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) sumaron #v $te_demog_cd_dc_chr_top_fig$#! de ellas."
  },
  "te_demog_cd_dc_chr_tt": {
   "en": "#b Chronic Illness and Old Age#!\\n$te_demog_cd_dc_chr_deaths$\\nDeaths from the illnesses of age, rising from 40. Across the country's states they run at a poor country's rates ×#v [Country.MakeScope.Var('te_dg_m_chr').GetValue|2]#!, by people[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_chr_capital', 'te_tt_blank' )].[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_lx_body_gap'), '(CFixedPoint)0.5' ), 'te_demog_cd_chr_lx', 'te_tt_blank' )]\\n#lore Medicine, a higher [concept_sol] and old-age pensions bring the rate down. Each state's Demographics subtab breaks its own rate into its factors.#!",
   "es": "#b Enfermedad crónica y vejez#!\\n$te_demog_cd_dc_chr_deaths$\\nMuertes por las enfermedades de la edad, que aumentan a partir de los 40. En el conjunto de los estados del país se dan a razón de las tasas de un país pobre ×#v [Country.MakeScope.Var('te_dg_m_chr').GetValue|2]#!, por habitantes[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_chr_capital', 'te_tt_blank' )].[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_lx_body_gap'), '(CFixedPoint)0.5' ), 'te_demog_cd_chr_lx', 'te_tt_blank' )]\\n#lore La medicina, un [concept_sol|l] más alto y las pensiones de jubilación reducen la tasa. La subpestaña Demografía de cada estado desglosa su propia tasa en sus factores.#!"
  },
  "te_demog_cd_dc_ext_deaths": {
-  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_ext').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_cd_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_cd_dc_ext_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [Country.MakeScope.Var('te_dg_dc_ext').GetValue|K]#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_cd_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_cd_dc_ext_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_cd_dc_ext_fig$#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_cd_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_cd_dc_ext_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_cd_dc_ext_fig$#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_cd_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_cd_dc_ext_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_cd_dc_ext_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) spared #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) evitaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#! muertes."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) spared #v $te_demog_cd_dc_ext_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) evitaron #v $te_demog_cd_dc_ext_top_fig$#! muertes."
  },
  "te_demog_cd_dc_ext_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) added #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) sumaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) added #v $te_demog_cd_dc_ext_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) sumaron #v $te_demog_cd_dc_ext_top_fig$#! de ellas."
  },
  "te_demog_cd_dc_ext_tt": {
   "en": "#b Accidents and Violence#!\\n$te_demog_cd_dc_ext_deaths$\\nDeaths from violence, traffic and everyday accidents, most of them young men's. Across the country's states they run at a poor country's rates ×#v [Country.MakeScope.Var('te_dg_m_ext').GetValue|2]#!, by people[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_ext_capital', 'te_tt_blank' )].\\n#lore The $institution_police$, the $institution_ministry_of_consumer_protection$, gentler criminal justice and safer roads and buildings bring the rate down; motor traffic and [concept_turmoil] raise it. Each state's Demographics subtab breaks its own rate into its factors.#!",
   "es": "#b Accidentes y violencia#!\\n$te_demog_cd_dc_ext_deaths$\\nMuertes por violencia, tráfico y accidentes cotidianos, la mayoría de hombres jóvenes. En el conjunto de los estados del país se dan a razón de las tasas de un país pobre ×#v [Country.MakeScope.Var('te_dg_m_ext').GetValue|2]#!, por habitantes[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_ext_capital', 'te_tt_blank' )].\\n#lore El $institution_police$, el $institution_ministry_of_consumer_protection$, una justicia penal más benigna y carreteras y edificios más seguros reducen la tasa; el tráfico motorizado y la [concept_turmoil|l] la aumentan. La subpestaña Demografía de cada estado desglosa su propia tasa en sus factores.#!"
  },
  "te_demog_cd_dc_inf_deaths": {
-  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_inf').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_cd_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_cd_dc_inf_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [Country.MakeScope.Var('te_dg_dc_inf').GetValue|K]#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_cd_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_cd_dc_inf_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_cd_dc_inf_fig$#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_cd_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_cd_dc_inf_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_cd_dc_inf_fig$#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_cd_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_cd_dc_inf_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_cd_dc_inf_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) spared #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) evitaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#! muertes."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) spared #v $te_demog_cd_dc_inf_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) evitaron #v $te_demog_cd_dc_inf_top_fig$#! muertes."
  },
  "te_demog_cd_dc_inf_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) added #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) sumaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) added #v $te_demog_cd_dc_inf_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) sumaron #v $te_demog_cd_dc_inf_top_fig$#! de ellas."
  },
  "te_demog_cd_dc_inf_tt": {
   "en": "#b Infection and Hunger#!\\n$te_demog_cd_dc_inf_deaths$\\nDeaths from infection and hunger, most of them young children's. Across the country's states they run at a poor country's rates ×#v [Country.MakeScope.Var('te_dg_m_inf').GetValue|2]#!, by people[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_inf_capital', 'te_tt_blank' )].\\n#lore Medicine, a higher [concept_sol], literacy, and less poverty and crowding bring the rate down; malaria raises it until $malaria_prevention$. Each state's Demographics subtab breaks its own rate into its factors.#!",
   "es": "#b Infección y hambre#!\\n$te_demog_cd_dc_inf_deaths$\\nMuertes por infección y hambre, la mayoría de niños pequeños. En el conjunto de los estados del país se dan a razón de las tasas de un país pobre ×#v [Country.MakeScope.Var('te_dg_m_inf').GetValue|2]#!, por habitantes[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_inf_capital', 'te_tt_blank' )].\\n#lore La medicina, un [concept_sol|l] más alto, la alfabetización y menos pobreza y hacinamiento reducen la tasa; la malaria la aumenta hasta contar con $malaria_prevention$. La subpestaña Demografía de cada estado desglosa su propia tasa en sus factores.#!"
  },
  "te_demog_cd_dc_kill_deaths": {
-  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_kill').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! of all.",
-  "es": "El año pasado: #v [Country.MakeScope.Var('te_dg_dc_kill').GetValue|K]#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! del total."
+  "en": "Last year: #v $te_demog_cd_dc_kill_fig$#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! of all.",
+  "es": "El año pasado: #v $te_demog_cd_dc_kill_fig$#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! del total."
  },
  "te_demog_cd_dc_kill_tt": {
   "en": "#b Killed by Events#!\\n$te_demog_cd_dc_kill_deaths$\\nPeople killed outright: by nuclear strikes, and in the violent suppression of a culture's uprising. The census takes them from every age.",
   "es": "#b Muertos por eventos#!\\n$te_demog_cd_dc_kill_deaths$\\nPersonas muertas de forma directa: por ataques nucleares y en la represión violenta del levantamiento de una cultura. El censo las toma de todas las edades."
  },
  "te_demog_cd_dc_mat_deaths": {
-  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_mat').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! of all.",
-  "es": "El año pasado: #v [Country.MakeScope.Var('te_dg_dc_mat').GetValue|K]#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! del total."
+  "en": "Last year: #v $te_demog_cd_dc_mat_fig$#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! of all.",
+  "es": "El año pasado: #v $te_demog_cd_dc_mat_fig$#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! del total."
  },
  "te_demog_cd_dc_mat_tt": {
   "en": "#b Childbirth#!\\n$te_demog_cd_dc_mat_deaths$\\nMothers who die in childbirth: #v [Country.MakeScope.Var('te_dg_m_mat').GetValue|0]#! in 100,000 births across the country's states, by births[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_mat_capital', 'te_tt_blank' )], against #v [Country.MakeScope.ScriptValue('te_demog_k_maternal_base')|0]#! without modern medicine.\\n#lore Medicine and family policy bring it down. Each state's Demographics subtab breaks its own into its factors.#!",
@@ -27356,32 +27356,32 @@
   "es": "#lore Las muertes del año pasado por causa aparecerán tras el próximo recuento del censo.#!"
  },
  "te_demog_cd_dc_war_deaths": {
-  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_war').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_cd_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_cd_dc_war_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [Country.MakeScope.Var('te_dg_dc_war').GetValue|K]#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_cd_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_cd_dc_war_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_cd_dc_war_fig$#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_cd_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_cd_dc_war_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_cd_dc_war_fig$#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_cd_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_cd_dc_war_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_cd_dc_war_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_war_what$) spared #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! civilians.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_war_what$) evitaron la muerte de #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! civiles."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_war_what$) spared #v $te_demog_cd_dc_war_top_fig$#! civilians.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_war_what$) evitaron la muerte de #v $te_demog_cd_dc_war_top_fig$#! civiles."
  },
  "te_demog_cd_dc_war_top_more": {
-  "en": "\\n#v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! of them civilians, killed by $te_demog_dc_top_war_what$.",
-  "es": "\\n#v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! de ellos civiles, muertos por $te_demog_dc_top_war_what$."
+  "en": "\\n#v $te_demog_cd_dc_war_top_fig$#! of them civilians, killed by $te_demog_dc_top_war_what$.",
+  "es": "\\n#v $te_demog_cd_dc_war_top_fig$#! de ellos civiles, muertos por $te_demog_dc_top_war_what$."
  },
  "te_demog_cd_dc_war_tt": {
   "en": "#b War and Devastation#!\\n$te_demog_cd_dc_war_deaths$\\nThe dead of the country's wars, shared out to the states by their soldiers. The census takes them from the people of fighting age, 20 to 39, nineteen in twenty of them men. Under the Full setting, the civilians that devastation and war's other harms kill count here too, from people of every age.",
   "es": "#b Guerra y devastación#!\\n$te_demog_cd_dc_war_deaths$\\nLos muertos de las guerras del país, repartidos entre los estados según sus soldados. El censo los toma de la población en edad militar, de 20 a 39 años, diecinueve de cada veinte hombres. Con el ajuste Completo, los civiles que matan la devastación y los demás daños de la guerra también cuentan aquí, de todas las edades."
  },
  "te_demog_cd_dc_work_deaths": {
-  "en": "Last year: #v [Country.MakeScope.Var('te_dg_dc_work').GetValue|K]#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [Country.MakeScope.Var('te_dg_dc_work').GetValue|K]#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_cd_dc_work_fig$#! deaths, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_cd_dc_work_fig$#! muertes, #v [Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_cd_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_cd_dc_work_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_cd_dc_work_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) spared #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) evitaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#! muertes."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) spared #v $te_demog_cd_dc_work_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) evitaron #v $te_demog_cd_dc_work_top_fig$#! muertes."
  },
  "te_demog_cd_dc_work_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) added #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) sumaron #v [Country.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) added #v $te_demog_cd_dc_work_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) sumaron #v $te_demog_cd_dc_work_top_fig$#! de ellas."
  },
  "te_demog_cd_dc_work_tt": {
   "en": "#b Work#!\\n$te_demog_cd_dc_work_deaths$\\nDeaths at work among people aged 15 to 64. Across the country's states they run at a poor country's rates ×#v [Country.MakeScope.Var('te_dg_m_work').GetValue|2]#!, by people[SelectLocalization( GetScriptedGui('te_demog_capital_census_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_work_capital', 'te_tt_blank' )].\\n#lore $law_regulatory_bodies$, $law_worker_protections$ and safer machines bring the rate down; child labor and $law_penal_labor_camps$ raise it. Each state's Demographics subtab breaks its own rate into its factors.#!",
@@ -27404,8 +27404,8 @@
   "es": "\\nCon el ajuste Completo, el juego suma muertes a las del propio censo, que el gráfico circular cuenta bajo sus causas. En los estados del país el año pasado: #v [Country.MakeScope.ScriptValue('te_demog_cdr_all')|1]#! muertes por cada 1 000 habitantes[SelectLocalization( GetScriptedGui('te_demog_um_uploads_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_um_ontop_note', 'te_tt_blank' )], frente a #v [Country.MakeScope.Var('te_dg_cdr_model').GetValue|1]#! con la tasa propia del censo (×#v [Country.MakeScope.ScriptValue('te_demog_country_deaths_on_top')|2]#!)."
  },
  "te_demog_cd_pie_tt": {
-  "en": "#b Causes of Death#!\\nLast year's #v [Country.MakeScope.Var('te_dg_dc_total').GetValue|K]#! deaths in the country's states; the table beside the pie splits them by cause.",
-  "es": "#b Causas de muerte#!\\nLas #v [Country.MakeScope.Var('te_dg_dc_total').GetValue|K]#! muertes del año pasado en los estados del país; la tabla junto al gráfico circular las reparte por causa."
+  "en": "#b Causes of Death#!\\nLast year's #v $te_demog_cd_dc_total_fig$#! deaths in the country's states; the table beside the pie splits them by cause.",
+  "es": "#b Causas de muerte#!\\nLas #v $te_demog_cd_dc_total_fig$#! muertes del año pasado en los estados del país; la tabla junto al gráfico circular las reparte por causa."
  },
  "te_demog_cd_um_line": {
   "en": " Besides them, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
@@ -27548,8 +27548,8 @@
   "es": "#b [State.GetName]#!\\nSu población urbana, contada como una sola ciudad, tal como la cuenta el patrón urbano: todas las personas que están fuera de un lugar de trabajo rural, y los $peasants$ cuentan como rurales. Los estados se ordenan según la clasificación de ciudades del juego, la que fija la bonificación por [concept_tourism_cities|l] del turismo.\\n#lore Haz clic para abrir el estado en su subpestaña Demografía.#!"
  },
  "te_demog_city_row_value": {
-  "en": "#v [State.MakeScope.Var('te_dg_urban').GetValue|K]#! urban people",
-  "es": "#v [State.MakeScope.Var('te_dg_urban').GetValue|K]#! habitantes urbanos"
+  "en": "#v $te_demog_city_urban_fig$#! urban people",
+  "es": "#v $te_demog_city_urban_fig$#! habitantes urbanos"
  },
  "te_demog_dc_chr": {
   "en": "Chronic Illness",
@@ -28284,8 +28284,8 @@
   "es": "#b $te_demog_ms_child_allowance$#!\\n$te_demog_ms_child_allowance_desc$\\n[GetStaticModifier('te_demog_ms_child_allowance').GetDesc]\\nCoste de funcionamiento: medio por ciento del PIB al año, más donde abundan los niños.\\n#lore Se permite con $law_pro_natalist_subsidies$ o $law_communal_child_rearing$.#!"
  },
  "te_demog_ms_child_allowance_upkeep": {
-  "en": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_child_allowance')|K]/wk",
-  "es": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_child_allowance')|K]/sem"
+  "en": "@money!$te_demog_ms_child_allowance_cost_fig$/wk",
+  "es": "@money!$te_demog_ms_child_allowance_cost_fig$/sem"
  },
  "te_demog_ms_crash_campaign": {
   "en": "Crash Campaign",
@@ -28376,8 +28376,8 @@
   "es": "#b $te_demog_ms_family_housing$#!\\n$te_demog_ms_family_housing_desc$\\n[GetStaticModifier('te_demog_ms_family_housing').GetDesc]\\nCoste de funcionamiento: un cuarto del uno por ciento del PIB al año, según la proporción de la población que vive en ciudades.\\n#lore Se permite con $law_pro_natalist_subsidies$, $law_state_sponsored_family_planning$ o $law_communal_child_rearing$.#!"
  },
  "te_demog_ms_family_housing_upkeep": {
-  "en": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_family_housing')|K]/wk",
-  "es": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_family_housing')|K]/sem"
+  "en": "@money!$te_demog_ms_family_housing_cost_fig$/wk",
+  "es": "@money!$te_demog_ms_family_housing_cost_fig$/sem"
  },
  "te_demog_ms_free_contraception": {
   "en": "Free Contraception",
@@ -28416,8 +28416,8 @@
   "es": "#b $te_demog_ms_free_contraception$#!\\n$te_demog_ms_free_contraception_desc$\\n[GetStaticModifier('te_demog_ms_free_contraception').GetDesc]\\nCoste de funcionamiento: 0,1% del PIB al año.\\n#lore Se permite con $law_state_sponsored_family_planning$, $law_population_control_measures$ o $law_communal_child_rearing$.#!"
  },
  "te_demog_ms_free_contraception_upkeep": {
-  "en": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_free_contraception')|K]/wk",
-  "es": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_free_contraception')|K]/sem"
+  "en": "@money!$te_demog_ms_free_contraception_cost_fig$/wk",
+  "es": "@money!$te_demog_ms_free_contraception_cost_fig$/sem"
  },
  "te_demog_ms_head_cost": {
   "en": "Cost",
@@ -28552,8 +28552,8 @@
   "es": "#b $te_demog_ms_parental_leave$#!\\n$te_demog_ms_parental_leave_desc$\\n[GetStaticModifier('te_demog_ms_parental_leave').GetDesc]\\nCoste de funcionamiento: 0,3% del PIB al año si trabajaran todas las mujeres en edad de trabajar, y menos cuantas menos lo hagan.\\n#lore Se permite con $law_state_sponsored_family_planning$ o $law_communal_child_rearing$.#!"
  },
  "te_demog_ms_parental_leave_upkeep": {
-  "en": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_parental_leave')|K]/wk",
-  "es": "@money![Country.MakeScope.ScriptValue('te_demog_ms_cost_parental_leave')|K]/sem"
+  "en": "@money!$te_demog_ms_parental_leave_cost_fig$/wk",
+  "es": "@money!$te_demog_ms_parental_leave_cost_fig$/sem"
  },
  "te_demog_ms_restricted_contraception": {
   "en": "Restricted Contraception",
@@ -28964,8 +28964,8 @@
   "es": "#v [Country.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de las muertes"
  },
  "te_demog_ov_lead_tt": {
-  "en": "#b Leading Cause of Death#!\\nThe cause behind the most of last year's deaths in the country's states: #b $te_demog_ov_lead_value$#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! of #v [Country.MakeScope.Var('te_dg_dc_total').GetValue|K]#! deaths. Causes of Death, below, shows them all.",
-  "es": "#b Causa principal de muerte#!\\nLa causa que explica más muertes del año pasado en los estados del país: #b $te_demog_ov_lead_value$#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de #v [Country.MakeScope.Var('te_dg_dc_total').GetValue|K]#! muertes. Causas de muerte, más abajo, las muestra todas."
+  "en": "#b Leading Cause of Death#!\\nThe cause behind the most of last year's deaths in the country's states: #b $te_demog_ov_lead_value$#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! of #v $te_demog_cd_dc_total_fig$#! deaths. Causes of Death, below, shows them all.",
+  "es": "#b Causa principal de muerte#!\\nLa causa que explica más muertes del año pasado en los estados del país: #b $te_demog_ov_lead_value$#!, #v [Country.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de #v $te_demog_cd_dc_total_fig$#! muertes. Causas de muerte, más abajo, las muestra todas."
  },
  "te_demog_ov_lx_bio_tt": {
   "en": "#b Biological Age#!\\nThe mean age of the country's people by their bodies, beside their mean age by the calendar. In [Country.GetCapital.GetName], the capital, those in care age #v [Country.GetCapital.MakeScope.ScriptValue('te_demog_lx_rate')|2]#! years a year by their bodies.\\nIn longevity care: #v [Country.MakeScope.Var('te_dg_elig').GetValue|%0]#! of the country's people.[SelectLocalization( GetScriptedGui('te_demog_um_shown_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_bio_line', 'te_tt_blank' )]",
@@ -29024,12 +29024,12 @@
   "es": "#b Saldo migratorio#!\\nLas personas que se asentaron en los estados del país menos las que se marcharon durante el último año, más allá de lo que explican los nacimientos, las muertes, los muertos de guerra y las personas muertas por eventos; los traslados entre los propios estados del país se anulan entre sí. Una diferencia pequeña se lee como 0. Se conoce a partir del primer año completo del censo."
  },
  "te_demog_ov_mig_in_k": {
-  "en": "+#v [Country.MakeScope.Var('te_dg_net_migration').GetValue|K]#! people",
-  "es": "+#v [Country.MakeScope.Var('te_dg_net_migration').GetValue|K]#! personas"
+  "en": "+#v $te_demog_ov_mig_fig$#! people",
+  "es": "+#v $te_demog_ov_mig_fig$#! personas"
  },
  "te_demog_ov_mig_out_k": {
-  "en": "#v [Country.MakeScope.Var('te_dg_net_migration').GetValue|K]#! people",
-  "es": "#v [Country.MakeScope.Var('te_dg_net_migration').GetValue|K]#! personas"
+  "en": "#v $te_demog_ov_mig_fig$#! people",
+  "es": "#v $te_demog_ov_mig_fig$#! personas"
  },
  "te_demog_ov_mig_third_rate": {
   "en": "#v [Country.MakeScope.Var('te_dg_mig_rate').GetValue|+1]#! per 1,000",
@@ -29160,8 +29160,8 @@
   "es": ", y #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! cargadas: cuerpos que murieron mientras sus mentes continúan"
  },
  "te_demog_ov_um_tt": {
-  "en": "#b Uploaded Minds#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v [Country.MakeScope.Var('te_dg_um_new').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v [Country.MakeScope.Var('te_dg_um_end').GetValue|K]#!",
-  "es": "#b Mentes cargadas#!\\nLas mentes que alojan los Nexos de carga mental del país, como proporción de la población y las mentes del país en conjunto.\\n Alojadas: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! millones de #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! millones (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! de ocupación)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Cargadas el año pasado: #v [Country.MakeScope.Var('te_dg_um_new').GetValue|K]#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! de quienes podían\\n Eligieron terminar el año pasado: #v [Country.MakeScope.Var('te_dg_um_end').GetValue|K]#!"
+  "en": "#b Uploaded Minds#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v $te_demog_ov_um_end_fig$#!",
+  "es": "#b Mentes cargadas#!\\nLas mentes que alojan los Nexos de carga mental del país, como proporción de la población y las mentes del país en conjunto.\\n Alojadas: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! millones de #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! millones (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! de ocupación)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Cargadas el año pasado: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! de quienes podían\\n Eligieron terminar el año pasado: #v $te_demog_ov_um_end_fig$#!"
  },
  "te_demog_ov_um_value": {
   "en": "#v [Country.MakeScope.Var('te_dg_um_share').GetValue|%1]#! of people",
@@ -29900,64 +29900,64 @@
   "es": " según la edad del cuerpo (la medicina de la longevidad mantiene jóvenes los cuerpos: aquí el cuerpo medio, contando a los niños y a quienes no reciben ese tratamiento, es #v [State.MakeScope.ScriptValue('te_demog_lx_body_gap')|1]#! años más joven que su edad)"
  },
  "te_demog_st_dc_chr_deaths": {
-  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_chr').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_st_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_st_dc_chr_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [State.MakeScope.Var('te_dg_dc_chr').GetValue|K]#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_st_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_st_dc_chr_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_st_dc_chr_fig$#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_st_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_st_dc_chr_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_st_dc_chr_fig$#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)1' ), 'te_demog_st_dc_chr_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_chr'), '(CFixedPoint)2' ), 'te_demog_st_dc_chr_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_st_dc_chr_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) spared #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) evitaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#!."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) spared #v $te_demog_st_dc_chr_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) evitaron #v $te_demog_st_dc_chr_top_fig$#!."
  },
  "te_demog_st_dc_chr_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) added #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) sumaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_chr')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_chr_what$) added #v $te_demog_st_dc_chr_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_chr_what$) sumaron #v $te_demog_st_dc_chr_top_fig$#! de ellas."
  },
  "te_demog_st_dc_chr_tt": {
   "en": "#b Chronic Illness and Old Age#!\\n$te_demog_st_dc_chr_deaths$\\nDeaths from the illnesses of age, rising from 40, run at a poor country's rates ×#v [State.MakeScope.Var('te_dg_m_chr').GetValue|2]#![SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_lx_body_gap'), '(CFixedPoint)0.5' ), 'te_demog_st_chr_lx', 'te_tt_blank' )], the product of:\\n$te_demog_st_med_chr$\\n [concept_sol]: ×#v [State.MakeScope.ScriptValue('te_demog_f_chronic_sol')|2]#!\\n Laws and Institutions: ×#v [State.MakeScope.ScriptValue('te_demog_f_chronic_laws')|2]#!\\n#lore Old-age pensions. The augmentation laws act through treatment, under Medicine.#!",
   "es": "#b Enfermedades crónicas y vejez#!\\n$te_demog_st_dc_chr_deaths$\\nLas muertes por las enfermedades de la edad, que aumentan desde los 40, se sitúan en las tasas de un país pobre ×#v [State.MakeScope.Var('te_dg_m_chr').GetValue|2]#![SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_lx_body_gap'), '(CFixedPoint)0.5' ), 'te_demog_st_chr_lx', 'te_tt_blank' )], producto de:\\n$te_demog_st_med_chr$\\n [concept_sol]: ×#v [State.MakeScope.ScriptValue('te_demog_f_chronic_sol')|2]#!\\n Leyes e instituciones: ×#v [State.MakeScope.ScriptValue('te_demog_f_chronic_laws')|2]#!\\n#lore Pensiones de jubilación. Las leyes de mejora actúan a través del tratamiento, en Medicina.#!"
  },
  "te_demog_st_dc_ext_deaths": {
-  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_ext').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_st_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_st_dc_ext_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [State.MakeScope.Var('te_dg_dc_ext').GetValue|K]#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_st_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_st_dc_ext_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_st_dc_ext_fig$#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_st_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_st_dc_ext_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_st_dc_ext_fig$#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)1' ), 'te_demog_st_dc_ext_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_ext'), '(CFixedPoint)2' ), 'te_demog_st_dc_ext_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_st_dc_ext_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) spared #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) evitaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#!."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) spared #v $te_demog_st_dc_ext_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) evitaron #v $te_demog_st_dc_ext_top_fig$#!."
  },
  "te_demog_st_dc_ext_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) added #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) sumaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_ext')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_ext_what$) added #v $te_demog_st_dc_ext_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_ext_what$) sumaron #v $te_demog_st_dc_ext_top_fig$#! de ellas."
  },
  "te_demog_st_dc_ext_tt": {
   "en": "#b Accidents and Violence#!\\n$te_demog_st_dc_ext_deaths$\\nDeaths from violence, traffic and everyday accidents, most of them young men's, run at a poor country's rates ×#v [State.MakeScope.Var('te_dg_m_ext').GetValue|2]#!, the product of:\\n Laws and Institutions: ×#v [State.MakeScope.ScriptValue('te_demog_f_external_laws')|2]#!\\n#lore Each level of the $institution_police$ (the more under a national police force) and of the $institution_ministry_of_consumer_protection$, and $law_restorative_justice$ or $law_rehabilitation_focused_criminal_justice$, lower it; from the $combustion_engine$, motor traffic raises it.#!\\n Safety: ×#v [State.MakeScope.ScriptValue('te_demog_f_external_safety')|2]#!\\n#lore Safer roads, buildings and cars, and quicker help: $modern_urban_planning$, $computer_aided_design$, $cellular_networks$ and $autonomous_vehicles$.#!\\n [concept_turmoil]: ×#v [State.MakeScope.ScriptValue('te_demog_f_external_turmoil')|2]#!",
   "es": "#b Accidentes y violencia#!\\n$te_demog_st_dc_ext_deaths$\\nLas muertes por violencia, tráfico y accidentes cotidianos, la mayoría de hombres jóvenes, se sitúan en las tasas de un país pobre ×#v [State.MakeScope.Var('te_dg_m_ext').GetValue|2]#!, producto de:\\n Leyes e instituciones: ×#v [State.MakeScope.ScriptValue('te_demog_f_external_laws')|2]#!\\n#lore Cada nivel del $institution_police$ (más con una policía nacional) y del $institution_ministry_of_consumer_protection$, y $law_restorative_justice$ o $law_rehabilitation_focused_criminal_justice$, la reducen; a partir del $combustion_engine$, el tráfico motorizado la aumenta.#!\\n Seguridad: ×#v [State.MakeScope.ScriptValue('te_demog_f_external_safety')|2]#!\\n#lore Carreteras, edificios y coches más seguros, y ayuda más rápida: $modern_urban_planning$, $computer_aided_design$, $cellular_networks$ y $autonomous_vehicles$.#!\\n [concept_turmoil]: ×#v [State.MakeScope.ScriptValue('te_demog_f_external_turmoil')|2]#!"
  },
  "te_demog_st_dc_inf_deaths": {
-  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_inf').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_st_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_st_dc_inf_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [State.MakeScope.Var('te_dg_dc_inf').GetValue|K]#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_st_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_st_dc_inf_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_st_dc_inf_fig$#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_st_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_st_dc_inf_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_st_dc_inf_fig$#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)1' ), 'te_demog_st_dc_inf_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_inf'), '(CFixedPoint)2' ), 'te_demog_st_dc_inf_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_st_dc_inf_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) spared #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) evitaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#!."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) spared #v $te_demog_st_dc_inf_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) evitaron #v $te_demog_st_dc_inf_top_fig$#!."
  },
  "te_demog_st_dc_inf_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) added #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) sumaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_inf')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_inf_what$) added #v $te_demog_st_dc_inf_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_inf_what$) sumaron #v $te_demog_st_dc_inf_top_fig$#! de ellas."
  },
  "te_demog_st_dc_inf_tt": {
   "en": "#b Infection and Hunger#!\\n$te_demog_st_dc_inf_deaths$\\nDeaths from infection and hunger, most of them young children's, run at a poor country's rates ×#v [State.MakeScope.Var('te_dg_m_inf').GetValue|2]#!, the product of:\\n$te_demog_st_med_inf$\\n [concept_sol]: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_sol')|2]#!\\n Poverty: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_poverty')|2]#!\\n Literacy: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_literacy')|2]#!\\n Crowding: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_crowding')|2]#!$te_demog_st_mal_inf$$te_demog_st_inf_adult$\\n#lore Medicine is 1 − [concept_health_care_access] × the share of these deaths treatment prevents.#!",
   "es": "#b Infección y hambre#!\\n$te_demog_st_dc_inf_deaths$\\nLas muertes por infección y hambre, la mayoría de niños pequeños, se sitúan en las tasas de un país pobre ×#v [State.MakeScope.Var('te_dg_m_inf').GetValue|2]#!, producto de:\\n$te_demog_st_med_inf$\\n [concept_sol]: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_sol')|2]#!\\n Pobreza: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_poverty')|2]#!\\n Alfabetización: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_literacy')|2]#!\\n Hacinamiento: ×#v [State.MakeScope.ScriptValue('te_demog_f_infection_crowding')|2]#!$te_demog_st_mal_inf$$te_demog_st_inf_adult$\\n#lore La medicina es 1 − [concept_health_care_access|l] × la proporción de estas muertes que evita el tratamiento.#!"
  },
  "te_demog_st_dc_kill_deaths": {
-  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_kill').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! of all.",
-  "es": "El año pasado: #v [State.MakeScope.Var('te_dg_dc_kill').GetValue|K]#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! del total."
+  "en": "Last year: #v $te_demog_st_dc_kill_fig$#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! of all.",
+  "es": "El año pasado: #v $te_demog_st_dc_kill_fig$#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]#! del total."
  },
  "te_demog_st_dc_kill_tt": {
   "en": "#b Killed by Events#!\\n$te_demog_st_dc_kill_deaths$\\nPeople killed outright here: by nuclear strikes, and in the violent suppression of a culture's uprising. The census takes them from every age.",
   "es": "#b Muertos por eventos#!\\n$te_demog_st_dc_kill_deaths$\\nPersonas muertas en el acto aquí: por ataques nucleares y en la represión violenta del levantamiento de una cultura. El censo las toma de todas las edades."
  },
  "te_demog_st_dc_mat_deaths": {
-  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_mat').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! of all.",
-  "es": "El año pasado: #v [State.MakeScope.Var('te_dg_dc_mat').GetValue|K]#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! del total."
+  "en": "Last year: #v $te_demog_st_dc_mat_fig$#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! of all.",
+  "es": "El año pasado: #v $te_demog_st_dc_mat_fig$#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]#! del total."
  },
  "te_demog_st_dc_mat_tt": {
   "en": "#b Childbirth#!\\n$te_demog_st_dc_mat_deaths$\\nMothers who die in childbirth: #v [State.MakeScope.Var('te_dg_m_mat').GetValue|0]#! in 100,000 births, against #v [State.MakeScope.ScriptValue('te_demog_k_maternal_base')|0]#! without modern medicine.\\n$te_demog_st_med_mat$\\n Family policy: ×#v [State.MakeScope.ScriptValue('te_demog_f_maternal_laws')|2]#!",
@@ -29968,32 +29968,32 @@
   "es": "#lore Las muertes de este estado por causa aparecerán tras su próximo recuento.#!"
  },
  "te_demog_st_dc_war_deaths": {
-  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_war').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_st_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_st_dc_war_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [State.MakeScope.Var('te_dg_dc_war').GetValue|K]#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_st_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_st_dc_war_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_st_dc_war_fig$#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_st_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_st_dc_war_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_st_dc_war_fig$#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)1' ), 'te_demog_st_dc_war_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_war'), '(CFixedPoint)2' ), 'te_demog_st_dc_war_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_st_dc_war_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_war_what$) spared #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! civilians.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_war_what$) salvaron a #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! civiles."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_war_what$) spared #v $te_demog_st_dc_war_top_fig$#! civilians.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_war_what$) salvaron a #v $te_demog_st_dc_war_top_fig$#! civiles."
  },
  "te_demog_st_dc_war_top_more": {
-  "en": "\\n#v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! of them civilians, killed by $te_demog_dc_top_war_what$.",
-  "es": "\\n#v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_war')|K]#! de ellos civiles, muertos por $te_demog_dc_top_war_what$."
+  "en": "\\n#v $te_demog_st_dc_war_top_fig$#! of them civilians, killed by $te_demog_dc_top_war_what$.",
+  "es": "\\n#v $te_demog_st_dc_war_top_fig$#! de ellos civiles, muertos por $te_demog_dc_top_war_what$."
  },
  "te_demog_st_dc_war_tt": {
   "en": "#b War and Devastation#!\\n$te_demog_st_dc_war_deaths$\\nThe state's share of the owner's war dead, by its soldiers. The census takes them from the people of fighting age, 20 to 39, nineteen in twenty of them men. Under the Full setting, the civilians that devastation and war's other harms kill count here too, from people of every age.",
   "es": "#b Guerra y devastación#!\\n$te_demog_st_dc_war_deaths$\\nLa parte del estado en los muertos de guerra del país que lo posee, según sus soldados. El censo los toma de la población en edad militar, de 20 a 39 años, diecinueve de cada veinte hombres. Con el ajuste Completo, los civiles que mueren por la devastación y otros males de la guerra también cuentan aquí, de todas las edades."
  },
  "te_demog_st_dc_work_deaths": {
-  "en": "Last year: #v [State.MakeScope.Var('te_dg_dc_work').GetValue|K]#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_st_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_st_dc_work_top_less', 'te_tt_blank' ) )]",
-  "es": "El año pasado: #v [State.MakeScope.Var('te_dg_dc_work').GetValue|K]#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_st_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_st_dc_work_top_less', 'te_tt_blank' ) )]"
+  "en": "Last year: #v $te_demog_st_dc_work_fig$#! deaths, #v [State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! of all.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_st_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_st_dc_work_top_less', 'te_tt_blank' ) )]",
+  "es": "El año pasado: #v $te_demog_st_dc_work_fig$#! muertes, #v [State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]#! del total.[SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)1' ), 'te_demog_st_dc_work_top_more', SelectLocalization( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_dc_top_code_work'), '(CFixedPoint)2' ), 'te_demog_st_dc_work_top_less', 'te_tt_blank' ) )]"
  },
  "te_demog_st_dc_work_top_less": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) spared #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#!.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) evitaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#!."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) spared #v $te_demog_st_dc_work_top_fig$#!.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) evitaron #v $te_demog_st_dc_work_top_fig$#!."
  },
  "te_demog_st_dc_work_top_more": {
-  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) added #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#! of them.",
-  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) sumaron #v [State.MakeScope.ScriptValue('te_demog_dc_top_abs_work')|K]#! de ellas."
+  "en": "\\nThe game's effects on top of the census ($te_demog_dc_top_work_what$) added #v $te_demog_st_dc_work_top_fig$#! of them.",
+  "es": "\\nLos efectos del juego añadidos al censo ($te_demog_dc_top_work_what$) sumaron #v $te_demog_st_dc_work_top_fig$#! de ellas."
  },
  "te_demog_st_dc_work_tt": {
   "en": "#b Work#!\\n$te_demog_st_dc_work_deaths$\\nDeaths at work among people aged 15 to 64, shared between women and men by their share of the work, run at a poor country's rates ×#v [State.MakeScope.Var('te_dg_m_work').GetValue|2]#!, the product of:\\n Laws: ×#v [State.MakeScope.ScriptValue('te_demog_f_work_laws')|2]#!\\n#lore Child labor and $law_penal_labor_camps$ raise it; $law_regulatory_bodies$ and $law_worker_protections$ lower it.#!\\n Safety: ×#v [State.MakeScope.ScriptValue('te_demog_f_work_safety')|2]#!\\n#lore Safer machines and safer kinds of work, whatever the laws: $prefabricated_construction$, $robotics$, $containerization$, $knowledge_economy$ and $self_directed_evolution$.#!",
@@ -30076,8 +30076,8 @@
   "es": "#v [State.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de las muertes"
  },
  "te_demog_st_lead_tt": {
-  "en": "#b Leading Cause of Death#!\\nThe cause behind the most of last year's deaths in the state: #b $te_demog_st_lead_value$#!, #v [State.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! of #v [State.MakeScope.Var('te_dg_dc_total').GetValue|K]#! deaths. Causes of Death, below, shows them all.",
-  "es": "#b Causa principal de muerte#!\\nLa causa que explica más muertes del año pasado en el estado: #b $te_demog_st_lead_value$#!, #v [State.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de #v [State.MakeScope.Var('te_dg_dc_total').GetValue|K]#! muertes. Causas de muerte, más abajo, las muestra todas."
+  "en": "#b Leading Cause of Death#!\\nThe cause behind the most of last year's deaths in the state: #b $te_demog_st_lead_value$#!, #v [State.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! of #v $te_demog_st_dc_total_fig$#! deaths. Causes of Death, below, shows them all.",
+  "es": "#b Causa principal de muerte#!\\nLa causa que explica más muertes del año pasado en el estado: #b $te_demog_st_lead_value$#!, #v [State.MakeScope.ScriptValue('te_demog_dc_lead_share')|%0]#! de #v $te_demog_st_dc_total_fig$#! muertes. Causas de muerte, más abajo, las muestra todas."
  },
  "te_demog_st_lx_bio_tt": {
   "en": "#b Biological Age#!\\nThe mean age of this state's people by their bodies, beside their mean age by the calendar. Those in care age #v [State.MakeScope.Var('te_dg_age_rate').GetValue|2]#! years a year by their bodies.\\nEver in longevity care: #v [State.MakeScope.Var('te_dg_lx_sbar').GetValue|%0]#! of its adults; the untreated die younger, so the share is highest among the old.[SelectLocalization( GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_um_bio_line', 'te_tt_blank' )]",
@@ -30160,12 +30160,12 @@
   "es": "#b Saldo migratorio#!\\nLas personas que se asentaron en el estado menos las que se marcharon durante el último año, más allá de lo que explican los nacimientos, las muertes, los muertos de guerra y las personas muertas por eventos. Una diferencia pequeña se lee como 0. Se conoce a partir del primer año completo del censo."
  },
  "te_demog_st_mig_in_k": {
-  "en": "+#v [State.MakeScope.Var('te_dg_net_migration').GetValue|K]#! people",
-  "es": "+#v [State.MakeScope.Var('te_dg_net_migration').GetValue|K]#! personas"
+  "en": "+#v $te_demog_st_mig_fig$#! people",
+  "es": "+#v $te_demog_st_mig_fig$#! personas"
  },
  "te_demog_st_mig_out_k": {
-  "en": "#v [State.MakeScope.Var('te_dg_net_migration').GetValue|K]#! people",
-  "es": "#v [State.MakeScope.Var('te_dg_net_migration').GetValue|K]#! personas"
+  "en": "#v $te_demog_st_mig_fig$#! people",
+  "es": "#v $te_demog_st_mig_fig$#! personas"
  },
  "te_demog_st_mig_third_rate": {
   "en": "#v [State.MakeScope.Var('te_dg_mig_rate').GetValue|+1]#! per 1,000",
@@ -30236,8 +30236,8 @@
   "es": "#lore Censo pendiente. Este estado aún no se ha contado. Cada estado se cuenta una vez al año, en un día propio, y sus cifras aparecen aquí tras su primer recuento.#!"
  },
  "te_demog_st_pie_tt": {
-  "en": "#b Causes of Death#!\\nLast year's #v [State.MakeScope.Var('te_dg_dc_total').GetValue|K]#! deaths in the state; the table beside the pie splits them by cause.",
-  "es": "#b Causas de muerte#!\\nLas #v [State.MakeScope.Var('te_dg_dc_total').GetValue|K]#! muertes del año pasado en el estado; la tabla junto al gráfico circular las reparte por causa."
+  "en": "#b Causes of Death#!\\nLast year's #v $te_demog_st_dc_total_fig$#! deaths in the state; the table beside the pie splits them by cause.",
+  "es": "#b Causas de muerte#!\\nLas #v $te_demog_st_dc_total_fig$#! muertes del año pasado en el estado; la tabla junto al gráfico circular las reparte por causa."
  },
  "te_demog_st_pyr_bio_old_tt_0": {
   "en": "#b Bodies aged 85–99#!\\nMen: #v [State.MakeScope.Var('te_dg_bpxm0').GetValue|D]#!\\nWomen: #v [State.MakeScope.Var('te_dg_bpxf0').GetValue|D]#!\\n#lore The bars are drawn per five years of age, to compare with the rows below.#!",
@@ -30552,8 +30552,8 @@
   "es": "#b Cargadas el año pasado#!\\nLas personas de este estado que se cargaron en nuestros Nexos de carga mental en su último censo en lugar de morir. La red del país entero las aloja, así que la pestaña Demografía las cuenta."
  },
  "te_demog_st_um_value": {
-  "en": "#v [State.MakeScope.Var('te_dg_um_new').GetValue|K]#! people",
-  "es": "#v [State.MakeScope.Var('te_dg_um_new').GetValue|K]#! personas"
+  "en": "#v $te_demog_st_um_new_fig$#! people",
+  "es": "#v $te_demog_st_um_new_fig$#! personas"
  },
  "te_demog_st_urban": {
   "en": "Urban People",
@@ -30852,8 +30852,8 @@
   "es": " (los cuerpos de los cargados, entre ellos)"
  },
  "te_demog_um_pyr_line": {
-  "en": "Non-biological: #v [Country.MakeScope.ScriptValue('te_demog_um_women')|K]#! women and #v [Country.MakeScope.ScriptValue('te_demog_um_men')|K]#! men, minds with no body and no age, so no bar.",
-  "es": "No biológicos: #v [Country.MakeScope.ScriptValue('te_demog_um_women')|K]#! mujeres y #v [Country.MakeScope.ScriptValue('te_demog_um_men')|K]#! hombres, mentes sin cuerpo ni edad, así que sin barra."
+  "en": "Non-biological: #v $te_demog_um_women_fig$#! women and #v $te_demog_um_men_fig$#! men, minds with no body and no age, so no bar.",
+  "es": "No biológicos: #v $te_demog_um_women_fig$#! mujeres y #v $te_demog_um_men_fig$#! hombres, mentes sin cuerpo ni edad, así que sin barra."
  },
  "te_demog_um_research": {
   "en": "Empty Hosting",
@@ -35424,24 +35424,24 @@
   "es": "completo"
  },
  "te_seabed_next_tt_arctic": {
-  "en": "One more license in the Arctic at the next sharing: about #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic')|0]#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! licenses.",
-  "es": "Una licencia más en el Ártico en el próximo reparto: unos #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_arctic')|0]#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! licencias."
+  "en": "One more license in the Arctic at the next sharing: about #v +$te_seabed_need_navy_fig_arctic$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! licenses.",
+  "es": "Una licencia más en el Ártico en el próximo reparto: unos #v +$te_seabed_need_navy_fig_arctic$#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! licencias."
  },
  "te_seabed_next_tt_atlantic": {
-  "en": "One more license in the Atlantic at the next sharing: about #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic')|0]#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! licenses.",
-  "es": "Una licencia más en el Atlántico en el próximo reparto: unos #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_atlantic')|0]#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! licencias."
+  "en": "One more license in the Atlantic at the next sharing: about #v +$te_seabed_need_navy_fig_atlantic$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! licenses.",
+  "es": "Una licencia más en el Atlántico en el próximo reparto: unos #v +$te_seabed_need_navy_fig_atlantic$#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! licencias."
  },
  "te_seabed_next_tt_indian": {
-  "en": "One more license in the Indian Ocean at the next sharing: about #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian')|0]#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! licenses.",
-  "es": "Una licencia más en el Océano Índico en el próximo reparto: unos #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_indian')|0]#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! licencias."
+  "en": "One more license in the Indian Ocean at the next sharing: about #v +$te_seabed_need_navy_fig_indian$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! licenses.",
+  "es": "Una licencia más en el Océano Índico en el próximo reparto: unos #v +$te_seabed_need_navy_fig_indian$#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! licencias."
  },
  "te_seabed_next_tt_pacific": {
-  "en": "One more license in the Pacific at the next sharing: about #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific')|0]#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! licenses.",
-  "es": "Una licencia más en el Pacífico en el próximo reparto: unos #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_pacific')|0]#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! licencias."
+  "en": "One more license in the Pacific at the next sharing: about #v +$te_seabed_need_navy_fig_pacific$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! licenses.",
+  "es": "Una licencia más en el Pacífico en el próximo reparto: unos #v +$te_seabed_need_navy_fig_pacific$#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! licencias."
  },
  "te_seabed_next_tt_southern": {
-  "en": "One more license in the Southern Ocean at the next sharing: about #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern')|0]#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! licenses.",
-  "es": "Una licencia más en el Océano Antártico en el próximo reparto: unos #v +[Country.MakeScope.ScriptValue('te_seabed_need_navy_disp_southern')|0]#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! licencias."
+  "en": "One more license in the Southern Ocean at the next sharing: about #v +$te_seabed_need_navy_fig_southern$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! licenses.",
+  "es": "Una licencia más en el Océano Antártico en el próximo reparto: unos #v +$te_seabed_need_navy_fig_southern$#! de proyección de poder naval, o un estado costero incorporado más aquí, equivalente a unas #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! licencias."
  },
  "te_seabed_notification_group": {
   "en": "Seabed Licenses",
@@ -35487,17 +35487,13 @@
   "en": "#v [Country.MakeScope.ScriptValue('te_seabed_queued_total_disp')|0]#! queued",
   "es": "#v [Country.MakeScope.ScriptValue('te_seabed_queued_total_disp')|0]#! en cola"
  },
- "te_seabed_ov_licences_fig_fee": {
-  "en": "#R -@money![Country.MakeScope.ScriptValue('te_seabed_fee_k_disp')|1]k a week#!",
-  "es": "#R -@money![Country.MakeScope.ScriptValue('te_seabed_fee_k_disp')|1]k por semana#!"
- },
  "te_seabed_ov_licences_leased": {
   "en": "\\n#v [Country.MakeScope.ScriptValue('te_seabed_lease_built_disp')|0]#! of them were built on leased claims: they stay with their levels for good, and they count against the lessor's share, not the lessee's, even after the lease ends.",
   "es": "\\n#v [Country.MakeScope.ScriptValue('te_seabed_lease_built_disp')|0]#! de ellas se construyeron sobre reclamaciones arrendadas: permanecen con sus niveles para siempre y computan contra la parte del arrendador, no la del arrendatario, incluso después de que termine el arrendamiento."
  },
  "te_seabed_ov_licences_tt": {
-  "en": "[concept_seabed_licence]s held by Deep-Sea Mine levels: #v [Country.MakeScope.ScriptValue('te_seabed_built_total_disp')|0]#! built and #v [Country.MakeScope.ScriptValue('te_seabed_queued_total_disp')|0]#! queued. A license stays with its level for good and passes with its state.\\n#b Holding fee#!: a license on a level still unbuilt a year after it was queued costs [Country.MakeScope.ScriptValue('te_seabed_fee_rate')|%0] of a level's base output value a week, about @money![Country.MakeScope.ScriptValue('te_seabed_fee_per_level')|0]. #v [Country.MakeScope.ScriptValue('te_seabed_fee_base')|0]#! of the queued licenses pay it, #R @money![Country.MakeScope.ScriptValue('te_seabed_fee_disp')|0]#! a week; #v [Country.MakeScope.ScriptValue('te_seabed_fee_grace_disp')|0]#! are still in their grace.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_lease_built_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_licences_leased', 'te_seabed_ov_none' )]",
-  "es": "[Concept('concept_seabed_licence','licencias del lecho marino')] que tienen los niveles de Mina de aguas profundas: #v [Country.MakeScope.ScriptValue('te_seabed_built_total_disp')|0]#! construidas y #v [Country.MakeScope.ScriptValue('te_seabed_queued_total_disp')|0]#! en cola. Una licencia permanece con su nivel para siempre y pasa con su estado.\\n#b Tasa de mantenimiento#!: una licencia sobre un nivel aún sin construir un año después de ponerse en cola cuesta [Country.MakeScope.ScriptValue('te_seabed_fee_rate')|%0] del valor de producción base de un nivel por semana, unos @money![Country.MakeScope.ScriptValue('te_seabed_fee_per_level')|0]. #v [Country.MakeScope.ScriptValue('te_seabed_fee_base')|0]#! de las licencias en cola la pagan, #R @money![Country.MakeScope.ScriptValue('te_seabed_fee_disp')|0]#! por semana; #v [Country.MakeScope.ScriptValue('te_seabed_fee_grace_disp')|0]#! siguen en periodo de gracia.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_lease_built_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_licences_leased', 'te_seabed_ov_none' )]"
+  "en": "[concept_seabed_licence]s held by Deep-Sea Mine levels: #v [Country.MakeScope.ScriptValue('te_seabed_built_total_disp')|0]#! built and #v [Country.MakeScope.ScriptValue('te_seabed_queued_total_disp')|0]#! queued. A license stays with its level for good and passes with its state.\\n#b Holding fee#!: a license on a level still unbuilt a year after it was queued costs [Country.MakeScope.ScriptValue('te_seabed_fee_rate')|%0] of a level's base output value a week, about @money![Country.MakeScope.ScriptValue('te_seabed_fee_per_level')|0]. #v [Country.MakeScope.ScriptValue('te_seabed_fee_base')|0]#! of the queued licenses pay it, #R @money!$te_seabed_fee_fig$#! a week; #v [Country.MakeScope.ScriptValue('te_seabed_fee_grace_disp')|0]#! are still in their grace.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_lease_built_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_licences_leased', 'te_seabed_ov_none' )]",
+  "es": "[Concept('concept_seabed_licence','licencias del lecho marino')] que tienen los niveles de Mina de aguas profundas: #v [Country.MakeScope.ScriptValue('te_seabed_built_total_disp')|0]#! construidas y #v [Country.MakeScope.ScriptValue('te_seabed_queued_total_disp')|0]#! en cola. Una licencia permanece con su nivel para siempre y pasa con su estado.\\n#b Tasa de mantenimiento#!: una licencia sobre un nivel aún sin construir un año después de ponerse en cola cuesta [Country.MakeScope.ScriptValue('te_seabed_fee_rate')|%0] del valor de producción base de un nivel por semana, unos @money![Country.MakeScope.ScriptValue('te_seabed_fee_per_level')|0]. #v [Country.MakeScope.ScriptValue('te_seabed_fee_base')|0]#! de las licencias en cola la pagan, #R @money!$te_seabed_fee_fig$#! por semana; #v [Country.MakeScope.ScriptValue('te_seabed_fee_grace_disp')|0]#! siguen en periodo de gracia.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_lease_built_disp'), '(CFixedPoint)0' ), 'te_seabed_ov_licences_leased', 'te_seabed_ov_none' )]"
  },
  "te_seabed_ov_licences_word": {
   "en": "#v [Country.MakeScope.ScriptValue('te_seabed_built_total_disp')|0]#! built",
@@ -35788,44 +35784,44 @@
   "es": "Has investigado $abyssal_plain_mining$"
  },
  "te_seabed_weight_far_arctic": {
-  "en": "Far from home: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
-  "es": "Lejos de casa: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
+  "en": "Far from home: #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
+  "es": "Lejos de casa: #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
  },
  "te_seabed_weight_far_atlantic": {
-  "en": "Far from home: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
-  "es": "Lejos de casa: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
+  "en": "Far from home: #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
+  "es": "Lejos de casa: #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
  },
  "te_seabed_weight_far_indian": {
-  "en": "Far from home: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
-  "es": "Lejos de casa: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
+  "en": "Far from home: #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
+  "es": "Lejos de casa: #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
  },
  "te_seabed_weight_far_pacific": {
-  "en": "Far from home: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
-  "es": "Lejos de casa: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
+  "en": "Far from home: #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
+  "es": "Lejos de casa: #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
  },
  "te_seabed_weight_far_southern": {
-  "en": "Far from home: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
-  "es": "Lejos de casa: #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
+  "en": "Far from home: #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy",
+  "es": "Lejos de casa: #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × [Country.MakeScope.ScriptValue('te_seabed_distant_navy_share')|2] × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política"
  },
  "te_seabed_weight_home_arctic": {
-  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_arctic')|0]#! port levels + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
-  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_arctic')|0]#! niveles de puerto + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
+  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_arctic')|0]#! port levels + #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
+  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_arctic')|0]#! niveles de puerto + #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_arctic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
  },
  "te_seabed_weight_home_atlantic": {
-  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_atlantic')|0]#! port levels + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
-  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_atlantic')|0]#! niveles de puerto + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
+  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_atlantic')|0]#! port levels + #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
+  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_atlantic')|0]#! niveles de puerto + #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_atlantic')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
  },
  "te_seabed_weight_home_indian": {
-  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_indian')|0]#! port levels + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
-  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_indian')|0]#! niveles de puerto + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
+  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_indian')|0]#! port levels + #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
+  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_indian')|0]#! niveles de puerto + #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_indian')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
  },
  "te_seabed_weight_home_pacific": {
-  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_pacific')|0]#! port levels + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
-  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_pacific')|0]#! niveles de puerto + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
+  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_pacific')|0]#! port levels + #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
+  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_pacific')|0]#! niveles de puerto + #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_pacific')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
  },
  "te_seabed_weight_home_southern": {
-  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_southern')|0]#! port levels + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
-  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_southern')|0]#! niveles de puerto + #v [Country.MakeScope.ScriptValue('te_seabed_npp_counted_disp')|0]#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
+  "en": "At home: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#! coast + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_southern')|0]#! port levels + #v $te_seabed_npp_fig$#! naval power projection ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! of the country's coast) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! for the policy; an unincorporated coastal state counts half, its ports in full",
+  "es": "En casa: (2 × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#! de costa + #v [Country.MakeScope.ScriptValue('te_seabed_ports_disp_southern')|0]#! niveles de puerto + #v $te_seabed_npp_fig$#! de proyección de poder naval ÷ [Country.MakeScope.ScriptValue('te_seabed_power_projection_scale')|0] × #v [Country.MakeScope.ScriptValue('te_seabed_coast_disp_southern')|1]#!/#v [Country.MakeScope.ScriptValue('te_seabed_coast_all_disp')|1]#! de la costa del país) × #v [Country.MakeScope.ScriptValue('te_seabed_policy_factor')|2]#! por la política; un estado costero no incorporado cuenta la mitad, y sus puertos, íntegramente"
  },
  "te_seabed_weight_tt_arctic": {
   "en": "Claim weight in the Arctic: #v [Country.MakeScope.ScriptValue('te_seabed_w_disp_arctic')|1]#! of the basin's #v [Country.MakeScope.ScriptValue('te_seabed_world_w_disp_arctic')|1]#!, as of the last sharing.\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_seabed_home_disp_arctic'), '(CFixedPoint)0' ), 'te_seabed_weight_home_arctic', 'te_seabed_weight_far_arctic' )]",
