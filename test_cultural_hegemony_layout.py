@@ -728,9 +728,9 @@ STATIC_LABELS = (
                                         "je_ch_widget_board_header", "je_ch_widget_models_header",
                                         "je_ch_widget_history_header", "je_ch_how_header")]
     # The board's head (CH-2), in its columns.
-    + [("je_ch_board_head_rank", 26, "row", ()), ("je_ch_board_head_country", 208, "row", ()),
-       ("je_ch_board_head_share", 60, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
-       ("je_ch_board_head_model", 50, "row", ())]
+    + [("je_ch_board_head_rank", 22, "row", ()), ("je_ch_board_head_country", 192, "row", ()),
+       ("je_ch_board_head_share", 58, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
+       ("je_ch_board_head_model", 64, "row", ())]
     # The programs and Hegemony Bonus cells (CH-9): Banking's cell at 234, two
     # to the row, its lines in a 150 column at 16.
     + [("je_ch_ov_prog_label", 150, "overview", ()), ("je_ch_ov_prog_no_ministry", 150, "overview", ())]
@@ -761,7 +761,7 @@ DYNAMIC_LABELS = (
        ("je_ch_widget_bd_mult_value", 60, "row", ("+999",)),
        ("je_ch_widget_bd_art_mult_value", 60, "row", ("+100",)),
        # The board's rows: rank, share, and the change beside its 16 px arrow.
-       ("ch_board_row_rank", 26, "row", ("10",)), ("ch_board_row_share", 60, "row", ("100.0",)),
+       ("ch_board_row_rank", 22, "row", ("10",)), ("ch_board_row_share", 58, "row", ("100.0",)),
        ("ch_board_row_change", 48, "row", ("+12.3",)),
        # The programs cell's word and funding line.
        ("je_ch_ov_prog_running", 150, "overview", ("4",)), ("je_ch_ov_prog_funding", 150, "overview", ("10", "10")),
@@ -798,14 +798,14 @@ class LabelBudgetTest(unittest.TestCase):
                                  ("ch_bar_subrow", ["348 20", "60 20"]),
                                  ("ch_programme_row", ["250 26", "80 26"]),
                                  ("ch_model_legend_row", ["216 20", "60 20"]),
-                                 ("ch_board_row", ["14 24", "26 24", "28 24", "60 24", "66 24", "50 24"]),
+                                 ("ch_board_row", ["14 24", "22 24", "36 24", "58 24", "66 24", "64 24"]),
                                  ("te_ch_ov_icon_label", ["108 58"]),
                                  ("te_ch_ov_pie", ["180 108"])):
             body = _type_body(gui, type_name)
             for size in sizes:
                 with self.subTest(type=type_name, size=size):
                     self.assertIn(f"size = {{ {size} }}", body)
-        self.assertIn("minimumsize = { 208 -1 }", _type_body(gui, "ch_board_row"))
+        self.assertIn("minimumsize = { 192 -1 }", _type_body(gui, "ch_board_row"))
         self.assertEqual(_read(WIDGET).count("size = { 136 58 }"), 16)   # the model cells and their slot
 
     def test_the_overviews_first_row_fits_its_column(self):
@@ -895,11 +895,15 @@ class BoardTest(unittest.TestCase):
         widths = lambda body: [int(w) for w in re.findall(r"size = \{ (\d+) 24 \}", body)]
         head = [w for w in widths(self.head)]
         head_cells = re.findall(r'blockoverride "cell_size" \{\s*size = \{ (\d+) 24 \}', self.head)
-        self.assertEqual(head_cells, ["26", "208", "66", "50"])
+        self.assertEqual(head_cells, ["22", "192", "58", "66", "64"])
         # the row: marker, rank, flag (and its gated inner widget), share, change, model
-        self.assertEqual(widths(self.row), [14, 26, 28, 28, 60, 66, 50])
+        self.assertEqual(widths(self.row), [14, 22, 36, 36, 58, 66, 64])
         self.assertIn(14, head)
-        self.assertIn(28, head)
+        self.assertIn(36, head)
+        # 2026-11-24: the cells and the rows' 2 between them fill 464 of the 474 column, as before,
+        # so the box keeps its width; the head is the row's cells in the row's order.
+        self.assertEqual(14 + 22 + 36 + 192 + 58 + 66 + 64 + 6 * 2, 464)
+        self.assertEqual([w for w in head], [14, 22, 36, 192, 58, 66, 64])
 
     def test_the_flag_and_name_read_the_stored_capital(self):
         flag = self.row[self.row.index("tiny_flag = {") - 200:self.row.index("tiny_flag = {") + 200]
