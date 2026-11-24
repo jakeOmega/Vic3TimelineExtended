@@ -178,6 +178,14 @@ types banking_dashboard_widget_types
 	### pulse (te_mon_record_backstop_partner, te_mon_record_union_member), so
 	### the grid draws no gaps and reads no trigger per frame. The instance sets
 	### the visible (the list not empty), the label and the datamodel.
+	###
+	### The grid is vanilla's wrapping form, a dynamicgridbox with
+	### datamodel_wrap and flipdirection (journal_entry.gui's involved
+	### countries, eight flags to a line). A fixedgridbox with
+	### maxhorizontalslots drew only its first nine flags in game (2026-11-24,
+	### 26 members: one line, the rest neither drawn nor given room).
+	### test_banking_layout.FlagGroupTest holds the form and no fixed height
+	### above it.
 	type banking_dash_flag_group = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -195,10 +203,8 @@ types banking_dashboard_widget_types
 			using = banking_dash_fontsize_row
 			block "group_label" {}
 		}
-		fixedgridbox = {
-			addcolumn = 30
-			addrow = 24
-			maxhorizontalslots = 9
+		dynamicgridbox = {
+			datamodel_wrap = 9
 			flipdirection = yes
 			block "group_datamodel" {}
 
@@ -216,6 +222,32 @@ types banking_dashboard_widget_types
 					}
 				}
 			}
+		}
+	}
+
+	### A line among the flag groups with a figure, not flags: the power bloc's
+	### "Members backed". Its label on the groups' left edge (16), its value in
+	### the value column (16 + 160 + 4 = 180), as banking_dash_flag_group's.
+	type banking_dash_group_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 16
+
+		textbox = {
+			parentanchor = top
+			autoresize = yes
+			multiline = yes
+			max_width = 160
+			minimumsize = { 160 24 }
+			maximumsize = { 160 -1 }
+			align = left|nobaseline
+			using = banking_dash_fontsize_row
+			block "group_label" {}
+		}
+		banking_dash_condition_value = {
+			multiline = yes
+			block "value" {}
 		}
 	}
 
@@ -3365,9 +3397,9 @@ types banking_dashboard_widget_types
 
 								### A leader's whole bloc, one row: its members are listed under
 								### Monetary Union, each with its share.
-								banking_dash_partner_row = {
+								banking_dash_group_value_row = {
 									visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
-									blockoverride "name" {
+									blockoverride "group_label" {
 										text = "banking_dash_mon_bs_bloc_name"
 									}
 									blockoverride "value" {

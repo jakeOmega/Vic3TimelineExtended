@@ -1479,7 +1479,7 @@ class FlagGroupTest(unittest.TestCase):
     def test_labels_fit_the_label_column(self):
         body = _type_body(self.dash, "banking_dash_flag_group")
         self.assertIn("max_width = 160", body)
-        self.assertIn("maxhorizontalslots = 9", body)
+        self.assertIn("datamodel_wrap = 9", body)
         self.assertLessEqual(16 + 160 + 4 + 9 * 30, 460)
         for key in self.LISTS.values():
             with self.subTest(label=key):
@@ -1493,7 +1493,35 @@ class FlagGroupTest(unittest.TestCase):
                     "banking_dash_mon_bs_receiver_from", "banking_dash_mon_bs_union_from", "banking_dash_mon_bs_union_to"):
             with self.subTest(key=key):
                 self.assertNotRegex(self.loc[key], r"\|2\]", "the figure sits behind a SelectLocalization")
-                self.assertIn("(CFixedPoint)0.005", self.loc[key])
+                # The engine cuts a figure toward zero: 0.007 prints "0.00" (seen in game, 2026-11-24).
+                self.assertIn("(CFixedPoint)0.01'", self.loc[key])
+                self.assertNotIn("(CFixedPoint)0.005", self.loc[key])
+        for key in ("banking_dash_mon_bs_flag_swap_tt", "banking_dash_mon_bs_flag_lolr_tt",
+                    "banking_dash_mon_bs_flag_receivership_tt", "banking_dash_mon_union_flag_tt"):
+            with self.subTest(hover=key):
+                self.assertIn("(CFixedPoint)0.001'", self.loc[key], "three decimals: the first that prints is 0.001")
+
+    def test_the_flags_wrap(self):
+        """In game (2026-11-24) a fixedgridbox with maxhorizontalslots drew only the first nine
+        of 26 flags. The grid is vanilla's wrapping form (journal_entry.gui's involved
+        countries), and nothing above it in the group fixes a height."""
+        body = _type_body(self.dash, "banking_dash_flag_group")
+        self.assertNotIn("fixedgridbox", body)
+        grid = _block_from(body, body.index("dynamicgridbox = ") + len("dynamicgridbox = "))
+        self.assertRegex(grid, r"datamodel_wrap = 9\b")
+        self.assertIn("flipdirection = yes", grid)
+        outer = body[:body.index("dynamicgridbox = ")]
+        self.assertNotRegex(outer, r"\bsize = \{", "a fixed size on the group clips the grid's later lines")
+        self.assertNotRegex(outer, r"maximumsize = \{ \d+ \d+ \}", "a fixed height clips the grid's later lines")
+
+    def test_the_bloc_row_sits_on_the_groups_left_edge(self):
+        dash = _read(DASH)
+        group = _type_body(dash, "banking_dash_flag_group")
+        row = _type_body(dash, "banking_dash_group_value_row")
+        for body in (group, row):
+            self.assertIn("margin_left = 16", body)
+            self.assertIn("minimumsize = { 160 24 }", body)
+        self.assertRegex(self.monetary, r"banking_dash_group_value_row = \{[^}]*?te_mon_bs_union_pts_display")
 
 
 PROGRESS_BARS = os.path.join(REPO, "common", "scripted_progress_bars", "extra_progress_bars.txt")

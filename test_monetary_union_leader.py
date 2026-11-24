@@ -801,15 +801,17 @@ class StepNineBTest(unittest.TestCase):
 
     def test_the_discovery_files_each_member_for_the_panel(self):
         """The leader's Monetary Union lines (GUI pass of 2026-11-24): a member whose backing
-        prints as 0.00 is a flag on its place's line, one that reads at two decimals keeps a
-        row of its own, and every member but the leader is filed once."""
+        prints as 0.00 is a flag on its place's line, one that prints a figure at two decimals
+        keeps a row of its own, and every member but the leader is filed once. The engine cuts
+        a figure toward zero, so the first that prints is 0.01 (an own row at 0.007 read "+0.00")."""
+        self.assertEqual(self.s.values["te_mon_bs_row_min"], [("value", "=", "0.01")])
         leader = union(3, adopters=(2e9, 5e8, 1e7))
         self.discover(leader)
         lists = leader.lists
         self.assertEqual(len(lists["te_mon_bs_union_adopted"]), 3)
         self.assertNotIn("te_mon_bs_union_to", lists)
         self.assertEqual(sum(len(v) for v in lists.values()), len(leader.bloc.members) - 1)
-        self.s.stub_values["te_mon_union_cost_to_root"] = 0.005
+        self.s.stub_values["te_mon_union_cost_to_root"] = 0.01
         del leader.lists
         self.discover_costed(leader)
         self.assertEqual(set(leader.lists), {"te_mon_bs_union_to"})
