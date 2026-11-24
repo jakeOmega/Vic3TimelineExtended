@@ -530,7 +530,7 @@ space_race_colony_events.12 = {
 		ai_chance = { base = 5 }
 		# Subsurface ocean drilling and astrobiology lab
 		sr_site_choose_sr_colony_europa_drilling = yes
-		add_loyalists = { value = large_radicals pop_type = academics }
+		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
 
@@ -539,7 +539,7 @@ space_race_colony_events.12 = {
 		ai_chance = { base = 4 }
 		# Surface-only habitat to minimize contamination risk
 		sr_site_choose_sr_colony_europa_surface = yes
-		add_loyalists = { value = medium_radicals pop_type = academics }
+		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 	}
 }
