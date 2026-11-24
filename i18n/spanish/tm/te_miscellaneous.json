@@ -21315,7 +21315,7 @@
   "en": "#tooltip_header Nuclear Umbrella#!\\n$TOOLTIP_DELIMITER$\\nOur direct subjects count as under our nuclear guarantee without a treaty: our arsenal lifts the nuclear shadow from their war support, weighs in any crisis against them, and we are asked to answer when they are threatened or struck. A nuclear strike on one of them lets us retaliate under any doctrine.\\n\\nWithdrawing it is a diplomatic action on the subject: #R +10#! liberty desire at once, and more every week while it stands.",
   "es": "#tooltip_header Paraguas nuclear#!\\n$TOOLTIP_DELIMITER$\\nNuestros súbditos directos cuentan como bajo nuestra garantía nuclear sin necesidad de tratado: nuestro arsenal libera su respaldo a la guerra de la sombra nuclear, pesa en cualquier crisis contra ellos y se nos pide responder cuando son amenazados o atacados. Un ataque nuclear contra uno de ellos nos permite tomar represalias con cualquier doctrina.\\n\\nRetirarlo es una acción diplomática sobre el súbdito: #R +10#! de deseo de libertad de inmediato, y más cada semana mientras siga en pie."
  },
- "nd_w_umbrella_value": {
+ "nd_w_umbrella_value_many": {
   "en": "#v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! subjects",
   "es": "#v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! súbditos"
  },

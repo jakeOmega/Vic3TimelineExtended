@@ -21495,7 +21495,7 @@
   "en": "#tooltip_header Nuclear Umbrella#!\\n$TOOLTIP_DELIMITER$\\nOur direct subjects count as under our nuclear guarantee without a treaty: our arsenal lifts the nuclear shadow from their war support, weighs in any crisis against them, and we are asked to answer when they are threatened or struck. A nuclear strike on one of them lets us retaliate under any doctrine.\\n\\nWithdrawing it is a diplomatic action on the subject: #R +10#! liberty desire at once, and more every week while it stands.",
   "de": "#tooltip_header Nuklearer Schutzschirm#!\\n$TOOLTIP_DELIMITER$\\nUnsere unmittelbaren Klientelländer gelten ohne Vertrag als unter unserer nuklearen Garantie: Unser Arsenal nimmt ihrem Kriegswillen den nuklearen Schatten, fällt in jeder Krise gegen sie ins Gewicht, und wir werden aufgefordert zu reagieren, wenn sie bedroht oder getroffen werden. Ein Nuklearschlag gegen eines von ihnen erlaubt uns Vergeltung nach jeder Doktrin.\\n\\nIhn aufzukündigen ist eine diplomatische Aktion gegenüber dem Klientelland: sofort #R +10#! Freiheitsdrang, und jede Woche mehr, solange er besteht."
  },
- "nd_w_umbrella_value": {
+ "nd_w_umbrella_value_many": {
   "en": "#v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! subjects",
   "de": "#v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! Klientelländer"
  },

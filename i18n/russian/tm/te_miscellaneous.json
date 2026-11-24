@@ -21259,7 +21259,7 @@
   "en": "#tooltip_header Nuclear Umbrella#!\\n$TOOLTIP_DELIMITER$\\nOur direct subjects count as under our nuclear guarantee without a treaty: our arsenal lifts the nuclear shadow from their war support, weighs in any crisis against them, and we are asked to answer when they are threatened or struck. A nuclear strike on one of them lets us retaliate under any doctrine.\\n\\nWithdrawing it is a diplomatic action on the subject: #R +10#! liberty desire at once, and more every week while it stands.",
   "ru": "#tooltip_header Ядерный зонтик#!\\n$TOOLTIP_DELIMITER$\\nНаши прямые зависимые государства считаются находящимися под нашей ядерной гарантией без договора: наш арсенал снимает ядерную тень с их поддержки войны, учитывается в любом кризисе против них, и от нас ждут ответа, когда им угрожают или по ним наносят удар. Ядерный удар по одному из них позволяет нам нанести ответный удар при любой доктрине.\\n\\nСнять его можно дипломатическим действием в отношении зависимого государства: сразу #R +10#! к стремлению к свободе и ещё больше каждую неделю, пока оно в силе."
  },
- "nd_w_umbrella_value": {
+ "nd_w_umbrella_value_many": {
   "en": "#v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#! subjects",
   "ru": "Зависимых государств: #v [Country.MakeScope.ScriptValue('nd_display_umbrella_count')|0]#!"
  },
