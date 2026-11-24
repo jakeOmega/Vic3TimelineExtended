@@ -1311,3 +1311,31 @@ No self-check: every input is a variable or a script value the Next Module hover
    window holds any.
 7. **An older save.** Load a save with Mars modules waiting in slots: they leave at their window as before, and
    new Mars modules stay in the queue.
+
+## Marines and Defenses shared on the Moon and Mars (2026-11-24)
+
+The owner's rule (`space_race.md`, *Shared worlds*): a holder's marines at any of its colonies on the Moon or Mars
+defend each of them, its Defenses there fire for each in full and add half their hardness, the fire falls with
+the attacked colony's integrity and is split over every colony of the holder's there under attack, and Land and
+Embark work on the Moon. No self-check: the one comparison it adds (`sr_site_shares`, two holders through
+`global_var:… ?= { global_var:… ?= this }`) is built of reads the panel already shows, and the Defenses view and
+the target hover show the shared figures. Full Colonies throughout; the console is `event te_debug_space_race.6`.
+
+1. **Land on the Moon.** Hold two lunar colonies and keep a fleet with marines at Earth: Land is enabled, the
+   marines land at the first of them, and the Defenses view's Marines shows the same figure on both rows. Embark
+   takes them back aboard. Next month the fleet has refilled at Earth (the known gap: Land again and the Moon's
+   marines keep growing; a garrison cost is to come).
+2. **A shared garrison.** With two battalions landed at one lunar colony, answer an autonomy demand at the other
+   with Send a garrison: the garrison takes effect the next month, with no fleet sent.
+3. **The seizure.** As an enemy holding Earth orbit, close in on our undefended lunar colony while our marines
+   stand at the other: the target hover's marines are ours from both, Seize waits for more than those and the
+   militia, and once it lands our marines at the other colony are gone too (its Defenses view row reads 0).
+4. **Shared Defenses on Mars.** Hold two Mars colonies, four Defenses levels at one and none at the other, and
+   close in on the undefended one with a siege fleet: the battle report counts losses to Defenses, and its
+   integrity falls by about 10 × the fleet's fire on defenses ÷ 150 a month (hardness 50 + 50 × 4 × 0.5), not ÷ 50.
+5. **Two attacks at once.** Close in on both Mars colonies with two fleets of the same strength: each loses about
+   half what one fleet alone loses to the Defenses.
+6. **An occupied colony shares nothing.** Once one Mars colony is occupied, the other's Defenses view shows only its
+   own marines, and the occupied one's Defenses fire for no one.
+7. **The AI.** An AI with a lunar colony that orders a garrison lands two battalions from a fleet at Earth within a
+   month; an AI fleet coming home to Earth with no lunar garrison due keeps its marines aboard.

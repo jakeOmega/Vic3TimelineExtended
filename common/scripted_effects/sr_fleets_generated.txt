@@ -1962,10 +1962,62 @@ sr_fl_note_at = {
 }
 
 # Land: every marine aboard, at the first world of ours there awaiting its
-# garrison, else the first world of ours there (table order). Embark: ours
-# from every world of ours there, up to the carriers' room.
+# garrison, else the first world of ours there (table order); at Earth, on
+# the Moon (owner, 2026-11-24). Embark: ours from every world of ours there,
+# up to the carriers' room.
 sr_fl_land_at = {
 	if = {
+		limit = { var:sr_fl_$N$_loc = 1 }
+		if = {
+			limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_garrison_due_shackleton }
+			sr_fl_land_marines = { N = $N$ KEY = shackleton }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_garrison_due_peary }
+			sr_fl_land_marines = { N = $N$ KEY = peary }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_garrison_due_tranquility }
+			sr_fl_land_marines = { N = $N$ KEY = tranquility }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_garrison_due_marius_hills }
+			sr_fl_land_marines = { N = $N$ KEY = marius_hills }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_garrison_due_daedalus }
+			sr_fl_land_marines = { N = $N$ KEY = daedalus }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_garrison_due_imbrium }
+			sr_fl_land_marines = { N = $N$ KEY = imbrium }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+			sr_fl_land_marines = { N = $N$ KEY = shackleton }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+			sr_fl_land_marines = { N = $N$ KEY = peary }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+			sr_fl_land_marines = { N = $N$ KEY = tranquility }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+			sr_fl_land_marines = { N = $N$ KEY = marius_hills }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+			sr_fl_land_marines = { N = $N$ KEY = daedalus }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
+			sr_fl_land_marines = { N = $N$ KEY = imbrium }
+		}
+	}
+	else_if = {
 		limit = { var:sr_fl_$N$_loc = 2 }
 		if = {
 			limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_garrison_due_venus }
@@ -2264,6 +2316,15 @@ sr_fl_land_at = {
 }
 sr_fl_embark_at = {
 	if = {
+		limit = { var:sr_fl_$N$_loc = 1 }
+		if = { limit = { global_var:sr_site_holder_shackleton ?= this sr_site_marines_value_shackleton > 0 } sr_fl_embark_marines = { N = $N$ KEY = shackleton } }
+		if = { limit = { global_var:sr_site_holder_peary ?= this sr_site_marines_value_peary > 0 } sr_fl_embark_marines = { N = $N$ KEY = peary } }
+		if = { limit = { global_var:sr_site_holder_tranquility ?= this sr_site_marines_value_tranquility > 0 } sr_fl_embark_marines = { N = $N$ KEY = tranquility } }
+		if = { limit = { global_var:sr_site_holder_marius_hills ?= this sr_site_marines_value_marius_hills > 0 } sr_fl_embark_marines = { N = $N$ KEY = marius_hills } }
+		if = { limit = { global_var:sr_site_holder_daedalus ?= this sr_site_marines_value_daedalus > 0 } sr_fl_embark_marines = { N = $N$ KEY = daedalus } }
+		if = { limit = { global_var:sr_site_holder_imbrium ?= this sr_site_marines_value_imbrium > 0 } sr_fl_embark_marines = { N = $N$ KEY = imbrium } }
+	}
+	else_if = {
 		limit = { var:sr_fl_$N$_loc = 2 }
 		if = { limit = { global_var:sr_site_holder_venus ?= this sr_site_marines_value_venus > 0 } sr_fl_embark_marines = { N = $N$ KEY = venus } }
 		if = { limit = { global_var:sr_site_holder_mercury ?= this sr_site_marines_value_mercury > 0 } sr_fl_embark_marines = { N = $N$ KEY = mercury } }
@@ -2804,9 +2865,48 @@ sr_loc_refresh_snapshot = {
 # A garrison due at a world of ours (design § 9.6): a fleet at Earth with
 # marines for it leaves for its location, if none of ours is there or on its
 # way; not one closing in on a lunar world (lunar colonization § 8.4). One
-# order a month.
+# order a month. One due on the Moon, a fleet at Earth lands (owner, 2026-11-24).
 sr_fl_ai_send_garrisons = {
 	if = {
+		limit = { sr_loc_garrison_due_earth = yes }
+		if = {
+			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_can_land = yes NOT = { sr_fl_1_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 1 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 sr_fl_2_marines_value >= sr_garrison_marines_needed sr_fl_2_can_land = yes NOT = { sr_fl_2_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 2 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 sr_fl_3_marines_value >= sr_garrison_marines_needed sr_fl_3_can_land = yes NOT = { sr_fl_3_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 3 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 sr_fl_4_marines_value >= sr_garrison_marines_needed sr_fl_4_can_land = yes NOT = { sr_fl_4_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 4 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 sr_fl_5_marines_value >= sr_garrison_marines_needed sr_fl_5_can_land = yes NOT = { sr_fl_5_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 5 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 sr_fl_6_marines_value >= sr_garrison_marines_needed sr_fl_6_can_land = yes NOT = { sr_fl_6_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 6 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 sr_fl_7_marines_value >= sr_garrison_marines_needed sr_fl_7_can_land = yes NOT = { sr_fl_7_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 7 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 sr_fl_8_marines_value >= sr_garrison_marines_needed sr_fl_8_can_land = yes NOT = { sr_fl_8_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 8 }
+		}
+		else_if = {
+			limit = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 sr_fl_9_marines_value >= sr_garrison_marines_needed sr_fl_9_can_land = yes NOT = { sr_fl_9_closing_at_earth = yes } }
+			sr_fl_land_at = { N = 9 }
+		}
+	}
+	else_if = {
 		limit = { sr_loc_garrison_due_inner = yes NOT = { sr_fl_any_at_or_bound = { CODE = 2 } } }
 		if = {
 			limit = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 sr_fl_1_marines_value >= sr_garrison_marines_needed sr_fl_1_may_depart_inner = yes NOT = { sr_fl_1_closing_at_earth = yes } }
@@ -5904,31 +6004,32 @@ sr_cb_world_clear_earth = {
 	if = { limit = { has_global_variable = sr_cb_c_imbrium } remove_global_variable = sr_cb_c_imbrium }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_earth = {
 	if = {
 		limit = { has_variable = sr_cb_s3_shackleton has_global_variable = sr_cb_c_shackleton global_var:sr_cb_c_shackleton > 0 }
-		set_variable = { name = sr_cb_ld_shackleton value = { value = sr_site_def_fire_shackleton multiply = sr_fleet_k multiply = var:sr_cb_s3_shackleton divide = global_var:sr_cb_c_shackleton } }
+		set_variable = { name = sr_cb_ld_shackleton value = { value = sr_site_def_fire_shackleton multiply = sr_fleet_k multiply = var:sr_cb_s3_shackleton divide = sr_cb_c_shared_shackleton } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_peary has_global_variable = sr_cb_c_peary global_var:sr_cb_c_peary > 0 }
-		set_variable = { name = sr_cb_ld_peary value = { value = sr_site_def_fire_peary multiply = sr_fleet_k multiply = var:sr_cb_s3_peary divide = global_var:sr_cb_c_peary } }
+		set_variable = { name = sr_cb_ld_peary value = { value = sr_site_def_fire_peary multiply = sr_fleet_k multiply = var:sr_cb_s3_peary divide = sr_cb_c_shared_peary } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_tranquility has_global_variable = sr_cb_c_tranquility global_var:sr_cb_c_tranquility > 0 }
-		set_variable = { name = sr_cb_ld_tranquility value = { value = sr_site_def_fire_tranquility multiply = sr_fleet_k multiply = var:sr_cb_s3_tranquility divide = global_var:sr_cb_c_tranquility } }
+		set_variable = { name = sr_cb_ld_tranquility value = { value = sr_site_def_fire_tranquility multiply = sr_fleet_k multiply = var:sr_cb_s3_tranquility divide = sr_cb_c_shared_tranquility } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_marius_hills has_global_variable = sr_cb_c_marius_hills global_var:sr_cb_c_marius_hills > 0 }
-		set_variable = { name = sr_cb_ld_marius_hills value = { value = sr_site_def_fire_marius_hills multiply = sr_fleet_k multiply = var:sr_cb_s3_marius_hills divide = global_var:sr_cb_c_marius_hills } }
+		set_variable = { name = sr_cb_ld_marius_hills value = { value = sr_site_def_fire_marius_hills multiply = sr_fleet_k multiply = var:sr_cb_s3_marius_hills divide = sr_cb_c_shared_marius_hills } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_daedalus has_global_variable = sr_cb_c_daedalus global_var:sr_cb_c_daedalus > 0 }
-		set_variable = { name = sr_cb_ld_daedalus value = { value = sr_site_def_fire_daedalus multiply = sr_fleet_k multiply = var:sr_cb_s3_daedalus divide = global_var:sr_cb_c_daedalus } }
+		set_variable = { name = sr_cb_ld_daedalus value = { value = sr_site_def_fire_daedalus multiply = sr_fleet_k multiply = var:sr_cb_s3_daedalus divide = sr_cb_c_shared_daedalus } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_imbrium has_global_variable = sr_cb_c_imbrium global_var:sr_cb_c_imbrium > 0 }
-		set_variable = { name = sr_cb_ld_imbrium value = { value = sr_site_def_fire_imbrium multiply = sr_fleet_k multiply = var:sr_cb_s3_imbrium divide = global_var:sr_cb_c_imbrium } }
+		set_variable = { name = sr_cb_ld_imbrium value = { value = sr_site_def_fire_imbrium multiply = sr_fleet_k multiply = var:sr_cb_s3_imbrium divide = sr_cb_c_shared_imbrium } }
 	}
 }
 sr_cb_worlds_after_earth = {
@@ -5989,15 +6090,16 @@ sr_cb_world_clear_inner = {
 	if = { limit = { has_global_variable = sr_cb_c_mercury } remove_global_variable = sr_cb_c_mercury }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_inner = {
 	if = {
 		limit = { has_variable = sr_cb_s3_venus has_global_variable = sr_cb_c_venus global_var:sr_cb_c_venus > 0 }
-		set_variable = { name = sr_cb_ld_venus value = { value = sr_site_def_fire_venus multiply = sr_fleet_k multiply = var:sr_cb_s3_venus divide = global_var:sr_cb_c_venus } }
+		set_variable = { name = sr_cb_ld_venus value = { value = sr_site_def_fire_venus multiply = sr_fleet_k multiply = var:sr_cb_s3_venus divide = sr_cb_c_shared_venus } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_mercury has_global_variable = sr_cb_c_mercury global_var:sr_cb_c_mercury > 0 }
-		set_variable = { name = sr_cb_ld_mercury value = { value = sr_site_def_fire_mercury multiply = sr_fleet_k multiply = var:sr_cb_s3_mercury divide = global_var:sr_cb_c_mercury } }
+		set_variable = { name = sr_cb_ld_mercury value = { value = sr_site_def_fire_mercury multiply = sr_fleet_k multiply = var:sr_cb_s3_mercury divide = sr_cb_c_shared_mercury } }
 	}
 }
 sr_cb_worlds_after_inner = {
@@ -6071,27 +6173,28 @@ sr_cb_world_clear_mars = {
 	if = { limit = { has_global_variable = sr_cb_c_arcadia_planitia } remove_global_variable = sr_cb_c_arcadia_planitia }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_mars = {
 	if = {
 		limit = { has_variable = sr_cb_s3_valles_marineris has_global_variable = sr_cb_c_valles_marineris global_var:sr_cb_c_valles_marineris > 0 }
-		set_variable = { name = sr_cb_ld_valles_marineris value = { value = sr_site_def_fire_valles_marineris multiply = sr_fleet_k multiply = var:sr_cb_s3_valles_marineris divide = global_var:sr_cb_c_valles_marineris } }
+		set_variable = { name = sr_cb_ld_valles_marineris value = { value = sr_site_def_fire_valles_marineris multiply = sr_fleet_k multiply = var:sr_cb_s3_valles_marineris divide = sr_cb_c_shared_valles_marineris } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_olympus_mons has_global_variable = sr_cb_c_olympus_mons global_var:sr_cb_c_olympus_mons > 0 }
-		set_variable = { name = sr_cb_ld_olympus_mons value = { value = sr_site_def_fire_olympus_mons multiply = sr_fleet_k multiply = var:sr_cb_s3_olympus_mons divide = global_var:sr_cb_c_olympus_mons } }
+		set_variable = { name = sr_cb_ld_olympus_mons value = { value = sr_site_def_fire_olympus_mons multiply = sr_fleet_k multiply = var:sr_cb_s3_olympus_mons divide = sr_cb_c_shared_olympus_mons } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_hellas_planitia has_global_variable = sr_cb_c_hellas_planitia global_var:sr_cb_c_hellas_planitia > 0 }
-		set_variable = { name = sr_cb_ld_hellas_planitia value = { value = sr_site_def_fire_hellas_planitia multiply = sr_fleet_k multiply = var:sr_cb_s3_hellas_planitia divide = global_var:sr_cb_c_hellas_planitia } }
+		set_variable = { name = sr_cb_ld_hellas_planitia value = { value = sr_site_def_fire_hellas_planitia multiply = sr_fleet_k multiply = var:sr_cb_s3_hellas_planitia divide = sr_cb_c_shared_hellas_planitia } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_utopia_planitia has_global_variable = sr_cb_c_utopia_planitia global_var:sr_cb_c_utopia_planitia > 0 }
-		set_variable = { name = sr_cb_ld_utopia_planitia value = { value = sr_site_def_fire_utopia_planitia multiply = sr_fleet_k multiply = var:sr_cb_s3_utopia_planitia divide = global_var:sr_cb_c_utopia_planitia } }
+		set_variable = { name = sr_cb_ld_utopia_planitia value = { value = sr_site_def_fire_utopia_planitia multiply = sr_fleet_k multiply = var:sr_cb_s3_utopia_planitia divide = sr_cb_c_shared_utopia_planitia } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_arcadia_planitia has_global_variable = sr_cb_c_arcadia_planitia global_var:sr_cb_c_arcadia_planitia > 0 }
-		set_variable = { name = sr_cb_ld_arcadia_planitia value = { value = sr_site_def_fire_arcadia_planitia multiply = sr_fleet_k multiply = var:sr_cb_s3_arcadia_planitia divide = global_var:sr_cb_c_arcadia_planitia } }
+		set_variable = { name = sr_cb_ld_arcadia_planitia value = { value = sr_site_def_fire_arcadia_planitia multiply = sr_fleet_k multiply = var:sr_cb_s3_arcadia_planitia divide = sr_cb_c_shared_arcadia_planitia } }
 	}
 }
 sr_cb_worlds_after_mars = {
@@ -6171,27 +6274,28 @@ sr_cb_world_clear_asteroids = {
 	if = { limit = { has_global_variable = sr_cb_c_hygiea } remove_global_variable = sr_cb_c_hygiea }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_asteroids = {
 	if = {
 		limit = { has_variable = sr_cb_s3_ceres has_global_variable = sr_cb_c_ceres global_var:sr_cb_c_ceres > 0 }
-		set_variable = { name = sr_cb_ld_ceres value = { value = sr_site_def_fire_ceres multiply = sr_fleet_k multiply = var:sr_cb_s3_ceres divide = global_var:sr_cb_c_ceres } }
+		set_variable = { name = sr_cb_ld_ceres value = { value = sr_site_def_fire_ceres multiply = sr_fleet_k multiply = var:sr_cb_s3_ceres divide = sr_cb_c_shared_ceres } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_vesta has_global_variable = sr_cb_c_vesta global_var:sr_cb_c_vesta > 0 }
-		set_variable = { name = sr_cb_ld_vesta value = { value = sr_site_def_fire_vesta multiply = sr_fleet_k multiply = var:sr_cb_s3_vesta divide = global_var:sr_cb_c_vesta } }
+		set_variable = { name = sr_cb_ld_vesta value = { value = sr_site_def_fire_vesta multiply = sr_fleet_k multiply = var:sr_cb_s3_vesta divide = sr_cb_c_shared_vesta } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_psyche has_global_variable = sr_cb_c_psyche global_var:sr_cb_c_psyche > 0 }
-		set_variable = { name = sr_cb_ld_psyche value = { value = sr_site_def_fire_psyche multiply = sr_fleet_k multiply = var:sr_cb_s3_psyche divide = global_var:sr_cb_c_psyche } }
+		set_variable = { name = sr_cb_ld_psyche value = { value = sr_site_def_fire_psyche multiply = sr_fleet_k multiply = var:sr_cb_s3_psyche divide = sr_cb_c_shared_psyche } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_pallas has_global_variable = sr_cb_c_pallas global_var:sr_cb_c_pallas > 0 }
-		set_variable = { name = sr_cb_ld_pallas value = { value = sr_site_def_fire_pallas multiply = sr_fleet_k multiply = var:sr_cb_s3_pallas divide = global_var:sr_cb_c_pallas } }
+		set_variable = { name = sr_cb_ld_pallas value = { value = sr_site_def_fire_pallas multiply = sr_fleet_k multiply = var:sr_cb_s3_pallas divide = sr_cb_c_shared_pallas } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_hygiea has_global_variable = sr_cb_c_hygiea global_var:sr_cb_c_hygiea > 0 }
-		set_variable = { name = sr_cb_ld_hygiea value = { value = sr_site_def_fire_hygiea multiply = sr_fleet_k multiply = var:sr_cb_s3_hygiea divide = global_var:sr_cb_c_hygiea } }
+		set_variable = { name = sr_cb_ld_hygiea value = { value = sr_site_def_fire_hygiea multiply = sr_fleet_k multiply = var:sr_cb_s3_hygiea divide = sr_cb_c_shared_hygiea } }
 	}
 }
 sr_cb_worlds_after_asteroids = {
@@ -6278,31 +6382,32 @@ sr_cb_world_clear_jupiter = {
 	if = { limit = { has_global_variable = sr_cb_c_amalthea } remove_global_variable = sr_cb_c_amalthea }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_jupiter = {
 	if = {
 		limit = { has_variable = sr_cb_s3_io has_global_variable = sr_cb_c_io global_var:sr_cb_c_io > 0 }
-		set_variable = { name = sr_cb_ld_io value = { value = sr_site_def_fire_io multiply = sr_fleet_k multiply = var:sr_cb_s3_io divide = global_var:sr_cb_c_io } }
+		set_variable = { name = sr_cb_ld_io value = { value = sr_site_def_fire_io multiply = sr_fleet_k multiply = var:sr_cb_s3_io divide = sr_cb_c_shared_io } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_europa has_global_variable = sr_cb_c_europa global_var:sr_cb_c_europa > 0 }
-		set_variable = { name = sr_cb_ld_europa value = { value = sr_site_def_fire_europa multiply = sr_fleet_k multiply = var:sr_cb_s3_europa divide = global_var:sr_cb_c_europa } }
+		set_variable = { name = sr_cb_ld_europa value = { value = sr_site_def_fire_europa multiply = sr_fleet_k multiply = var:sr_cb_s3_europa divide = sr_cb_c_shared_europa } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_ganymede has_global_variable = sr_cb_c_ganymede global_var:sr_cb_c_ganymede > 0 }
-		set_variable = { name = sr_cb_ld_ganymede value = { value = sr_site_def_fire_ganymede multiply = sr_fleet_k multiply = var:sr_cb_s3_ganymede divide = global_var:sr_cb_c_ganymede } }
+		set_variable = { name = sr_cb_ld_ganymede value = { value = sr_site_def_fire_ganymede multiply = sr_fleet_k multiply = var:sr_cb_s3_ganymede divide = sr_cb_c_shared_ganymede } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_callisto has_global_variable = sr_cb_c_callisto global_var:sr_cb_c_callisto > 0 }
-		set_variable = { name = sr_cb_ld_callisto value = { value = sr_site_def_fire_callisto multiply = sr_fleet_k multiply = var:sr_cb_s3_callisto divide = global_var:sr_cb_c_callisto } }
+		set_variable = { name = sr_cb_ld_callisto value = { value = sr_site_def_fire_callisto multiply = sr_fleet_k multiply = var:sr_cb_s3_callisto divide = sr_cb_c_shared_callisto } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_himalia has_global_variable = sr_cb_c_himalia global_var:sr_cb_c_himalia > 0 }
-		set_variable = { name = sr_cb_ld_himalia value = { value = sr_site_def_fire_himalia multiply = sr_fleet_k multiply = var:sr_cb_s3_himalia divide = global_var:sr_cb_c_himalia } }
+		set_variable = { name = sr_cb_ld_himalia value = { value = sr_site_def_fire_himalia multiply = sr_fleet_k multiply = var:sr_cb_s3_himalia divide = sr_cb_c_shared_himalia } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_amalthea has_global_variable = sr_cb_c_amalthea global_var:sr_cb_c_amalthea > 0 }
-		set_variable = { name = sr_cb_ld_amalthea value = { value = sr_site_def_fire_amalthea multiply = sr_fleet_k multiply = var:sr_cb_s3_amalthea divide = global_var:sr_cb_c_amalthea } }
+		set_variable = { name = sr_cb_ld_amalthea value = { value = sr_site_def_fire_amalthea multiply = sr_fleet_k multiply = var:sr_cb_s3_amalthea divide = sr_cb_c_shared_amalthea } }
 	}
 }
 sr_cb_worlds_after_jupiter = {
@@ -6384,27 +6489,28 @@ sr_cb_world_clear_saturn = {
 	if = { limit = { has_global_variable = sr_cb_c_iapetus } remove_global_variable = sr_cb_c_iapetus }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_saturn = {
 	if = {
 		limit = { has_variable = sr_cb_s3_titan has_global_variable = sr_cb_c_titan global_var:sr_cb_c_titan > 0 }
-		set_variable = { name = sr_cb_ld_titan value = { value = sr_site_def_fire_titan multiply = sr_fleet_k multiply = var:sr_cb_s3_titan divide = global_var:sr_cb_c_titan } }
+		set_variable = { name = sr_cb_ld_titan value = { value = sr_site_def_fire_titan multiply = sr_fleet_k multiply = var:sr_cb_s3_titan divide = sr_cb_c_shared_titan } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_enceladus has_global_variable = sr_cb_c_enceladus global_var:sr_cb_c_enceladus > 0 }
-		set_variable = { name = sr_cb_ld_enceladus value = { value = sr_site_def_fire_enceladus multiply = sr_fleet_k multiply = var:sr_cb_s3_enceladus divide = global_var:sr_cb_c_enceladus } }
+		set_variable = { name = sr_cb_ld_enceladus value = { value = sr_site_def_fire_enceladus multiply = sr_fleet_k multiply = var:sr_cb_s3_enceladus divide = sr_cb_c_shared_enceladus } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_rhea has_global_variable = sr_cb_c_rhea global_var:sr_cb_c_rhea > 0 }
-		set_variable = { name = sr_cb_ld_rhea value = { value = sr_site_def_fire_rhea multiply = sr_fleet_k multiply = var:sr_cb_s3_rhea divide = global_var:sr_cb_c_rhea } }
+		set_variable = { name = sr_cb_ld_rhea value = { value = sr_site_def_fire_rhea multiply = sr_fleet_k multiply = var:sr_cb_s3_rhea divide = sr_cb_c_shared_rhea } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_mimas has_global_variable = sr_cb_c_mimas global_var:sr_cb_c_mimas > 0 }
-		set_variable = { name = sr_cb_ld_mimas value = { value = sr_site_def_fire_mimas multiply = sr_fleet_k multiply = var:sr_cb_s3_mimas divide = global_var:sr_cb_c_mimas } }
+		set_variable = { name = sr_cb_ld_mimas value = { value = sr_site_def_fire_mimas multiply = sr_fleet_k multiply = var:sr_cb_s3_mimas divide = sr_cb_c_shared_mimas } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_iapetus has_global_variable = sr_cb_c_iapetus global_var:sr_cb_c_iapetus > 0 }
-		set_variable = { name = sr_cb_ld_iapetus value = { value = sr_site_def_fire_iapetus multiply = sr_fleet_k multiply = var:sr_cb_s3_iapetus divide = global_var:sr_cb_c_iapetus } }
+		set_variable = { name = sr_cb_ld_iapetus value = { value = sr_site_def_fire_iapetus multiply = sr_fleet_k multiply = var:sr_cb_s3_iapetus divide = sr_cb_c_shared_iapetus } }
 	}
 }
 sr_cb_worlds_after_saturn = {
@@ -6477,23 +6583,24 @@ sr_cb_world_clear_uranus = {
 	if = { limit = { has_global_variable = sr_cb_c_ariel } remove_global_variable = sr_cb_c_ariel }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_uranus = {
 	if = {
 		limit = { has_variable = sr_cb_s3_titania has_global_variable = sr_cb_c_titania global_var:sr_cb_c_titania > 0 }
-		set_variable = { name = sr_cb_ld_titania value = { value = sr_site_def_fire_titania multiply = sr_fleet_k multiply = var:sr_cb_s3_titania divide = global_var:sr_cb_c_titania } }
+		set_variable = { name = sr_cb_ld_titania value = { value = sr_site_def_fire_titania multiply = sr_fleet_k multiply = var:sr_cb_s3_titania divide = sr_cb_c_shared_titania } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_oberon has_global_variable = sr_cb_c_oberon global_var:sr_cb_c_oberon > 0 }
-		set_variable = { name = sr_cb_ld_oberon value = { value = sr_site_def_fire_oberon multiply = sr_fleet_k multiply = var:sr_cb_s3_oberon divide = global_var:sr_cb_c_oberon } }
+		set_variable = { name = sr_cb_ld_oberon value = { value = sr_site_def_fire_oberon multiply = sr_fleet_k multiply = var:sr_cb_s3_oberon divide = sr_cb_c_shared_oberon } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_miranda has_global_variable = sr_cb_c_miranda global_var:sr_cb_c_miranda > 0 }
-		set_variable = { name = sr_cb_ld_miranda value = { value = sr_site_def_fire_miranda multiply = sr_fleet_k multiply = var:sr_cb_s3_miranda divide = global_var:sr_cb_c_miranda } }
+		set_variable = { name = sr_cb_ld_miranda value = { value = sr_site_def_fire_miranda multiply = sr_fleet_k multiply = var:sr_cb_s3_miranda divide = sr_cb_c_shared_miranda } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_ariel has_global_variable = sr_cb_c_ariel global_var:sr_cb_c_ariel > 0 }
-		set_variable = { name = sr_cb_ld_ariel value = { value = sr_site_def_fire_ariel multiply = sr_fleet_k multiply = var:sr_cb_s3_ariel divide = global_var:sr_cb_c_ariel } }
+		set_variable = { name = sr_cb_ld_ariel value = { value = sr_site_def_fire_ariel multiply = sr_fleet_k multiply = var:sr_cb_s3_ariel divide = sr_cb_c_shared_ariel } }
 	}
 }
 sr_cb_worlds_after_uranus = {
@@ -6550,15 +6657,16 @@ sr_cb_world_clear_neptune = {
 	if = { limit = { has_global_variable = sr_cb_c_proteus } remove_global_variable = sr_cb_c_proteus }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_neptune = {
 	if = {
 		limit = { has_variable = sr_cb_s3_triton has_global_variable = sr_cb_c_triton global_var:sr_cb_c_triton > 0 }
-		set_variable = { name = sr_cb_ld_triton value = { value = sr_site_def_fire_triton multiply = sr_fleet_k multiply = var:sr_cb_s3_triton divide = global_var:sr_cb_c_triton } }
+		set_variable = { name = sr_cb_ld_triton value = { value = sr_site_def_fire_triton multiply = sr_fleet_k multiply = var:sr_cb_s3_triton divide = sr_cb_c_shared_triton } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_proteus has_global_variable = sr_cb_c_proteus global_var:sr_cb_c_proteus > 0 }
-		set_variable = { name = sr_cb_ld_proteus value = { value = sr_site_def_fire_proteus multiply = sr_fleet_k multiply = var:sr_cb_s3_proteus divide = global_var:sr_cb_c_proteus } }
+		set_variable = { name = sr_cb_ld_proteus value = { value = sr_site_def_fire_proteus multiply = sr_fleet_k multiply = var:sr_cb_s3_proteus divide = sr_cb_c_shared_proteus } }
 	}
 }
 sr_cb_worlds_after_neptune = {
@@ -6632,27 +6740,28 @@ sr_cb_world_clear_kuiper = {
 	if = { limit = { has_global_variable = sr_cb_c_sedna } remove_global_variable = sr_cb_c_sedna }
 }
 # The power's losses to each world's Defences, by its share of the strength
-# closing in on it.
+# closing in on it (on the Moon and Mars, on any colony of its holder's
+# there, whose Defences are shared: sr_cb_c_shared_<key>).
 sr_cb_def_losses_kuiper = {
 	if = {
 		limit = { has_variable = sr_cb_s3_pluto has_global_variable = sr_cb_c_pluto global_var:sr_cb_c_pluto > 0 }
-		set_variable = { name = sr_cb_ld_pluto value = { value = sr_site_def_fire_pluto multiply = sr_fleet_k multiply = var:sr_cb_s3_pluto divide = global_var:sr_cb_c_pluto } }
+		set_variable = { name = sr_cb_ld_pluto value = { value = sr_site_def_fire_pluto multiply = sr_fleet_k multiply = var:sr_cb_s3_pluto divide = sr_cb_c_shared_pluto } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_eris has_global_variable = sr_cb_c_eris global_var:sr_cb_c_eris > 0 }
-		set_variable = { name = sr_cb_ld_eris value = { value = sr_site_def_fire_eris multiply = sr_fleet_k multiply = var:sr_cb_s3_eris divide = global_var:sr_cb_c_eris } }
+		set_variable = { name = sr_cb_ld_eris value = { value = sr_site_def_fire_eris multiply = sr_fleet_k multiply = var:sr_cb_s3_eris divide = sr_cb_c_shared_eris } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_makemake has_global_variable = sr_cb_c_makemake global_var:sr_cb_c_makemake > 0 }
-		set_variable = { name = sr_cb_ld_makemake value = { value = sr_site_def_fire_makemake multiply = sr_fleet_k multiply = var:sr_cb_s3_makemake divide = global_var:sr_cb_c_makemake } }
+		set_variable = { name = sr_cb_ld_makemake value = { value = sr_site_def_fire_makemake multiply = sr_fleet_k multiply = var:sr_cb_s3_makemake divide = sr_cb_c_shared_makemake } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_haumea has_global_variable = sr_cb_c_haumea global_var:sr_cb_c_haumea > 0 }
-		set_variable = { name = sr_cb_ld_haumea value = { value = sr_site_def_fire_haumea multiply = sr_fleet_k multiply = var:sr_cb_s3_haumea divide = global_var:sr_cb_c_haumea } }
+		set_variable = { name = sr_cb_ld_haumea value = { value = sr_site_def_fire_haumea multiply = sr_fleet_k multiply = var:sr_cb_s3_haumea divide = sr_cb_c_shared_haumea } }
 	}
 	if = {
 		limit = { has_variable = sr_cb_s3_sedna has_global_variable = sr_cb_c_sedna global_var:sr_cb_c_sedna > 0 }
-		set_variable = { name = sr_cb_ld_sedna value = { value = sr_site_def_fire_sedna multiply = sr_fleet_k multiply = var:sr_cb_s3_sedna divide = global_var:sr_cb_c_sedna } }
+		set_variable = { name = sr_cb_ld_sedna value = { value = sr_site_def_fire_sedna multiply = sr_fleet_k multiply = var:sr_cb_s3_sedna divide = sr_cb_c_shared_sedna } }
 	}
 }
 sr_cb_worlds_after_kuiper = {
@@ -8909,6 +9018,180 @@ sr_fl_spend_marines_imbrium = {
 		change_variable = { name = sr_fl_9_marines subtract = local_var:sr_cb_take }
 		change_local_variable = { name = sr_cb_pay subtract = local_var:sr_cb_take }
 	}
+}
+
+# The holder's marines that defended the world as it falls to an occupier
+# (sr_site_occupy, before the occupier is set): its own and, on the Moon and Mars,
+# those at the holder's other colonies there, which defend it (owner, 2026-11-24).
+sr_site_lose_shared_marines_valles_marineris = {
+	if = { limit = { has_global_variable = sr_site_marines_olympus_mons sr_site_shares = { A = valles_marineris B = olympus_mons } } remove_global_variable = sr_site_marines_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia sr_site_shares = { A = valles_marineris B = hellas_planitia } } remove_global_variable = sr_site_marines_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia sr_site_shares = { A = valles_marineris B = utopia_planitia } } remove_global_variable = sr_site_marines_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia sr_site_shares = { A = valles_marineris B = arcadia_planitia } } remove_global_variable = sr_site_marines_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_valles_marineris } remove_global_variable = sr_site_marines_valles_marineris }
+}
+sr_site_lose_shared_marines_olympus_mons = {
+	if = { limit = { has_global_variable = sr_site_marines_valles_marineris sr_site_shares = { A = olympus_mons B = valles_marineris } } remove_global_variable = sr_site_marines_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia sr_site_shares = { A = olympus_mons B = hellas_planitia } } remove_global_variable = sr_site_marines_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia sr_site_shares = { A = olympus_mons B = utopia_planitia } } remove_global_variable = sr_site_marines_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia sr_site_shares = { A = olympus_mons B = arcadia_planitia } } remove_global_variable = sr_site_marines_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_olympus_mons } remove_global_variable = sr_site_marines_olympus_mons }
+}
+sr_site_lose_shared_marines_hellas_planitia = {
+	if = { limit = { has_global_variable = sr_site_marines_valles_marineris sr_site_shares = { A = hellas_planitia B = valles_marineris } } remove_global_variable = sr_site_marines_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_marines_olympus_mons sr_site_shares = { A = hellas_planitia B = olympus_mons } } remove_global_variable = sr_site_marines_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia sr_site_shares = { A = hellas_planitia B = utopia_planitia } } remove_global_variable = sr_site_marines_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia sr_site_shares = { A = hellas_planitia B = arcadia_planitia } } remove_global_variable = sr_site_marines_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia } remove_global_variable = sr_site_marines_hellas_planitia }
+}
+sr_site_lose_shared_marines_utopia_planitia = {
+	if = { limit = { has_global_variable = sr_site_marines_valles_marineris sr_site_shares = { A = utopia_planitia B = valles_marineris } } remove_global_variable = sr_site_marines_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_marines_olympus_mons sr_site_shares = { A = utopia_planitia B = olympus_mons } } remove_global_variable = sr_site_marines_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia sr_site_shares = { A = utopia_planitia B = hellas_planitia } } remove_global_variable = sr_site_marines_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia sr_site_shares = { A = utopia_planitia B = arcadia_planitia } } remove_global_variable = sr_site_marines_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia } remove_global_variable = sr_site_marines_utopia_planitia }
+}
+sr_site_lose_shared_marines_arcadia_planitia = {
+	if = { limit = { has_global_variable = sr_site_marines_valles_marineris sr_site_shares = { A = arcadia_planitia B = valles_marineris } } remove_global_variable = sr_site_marines_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_marines_olympus_mons sr_site_shares = { A = arcadia_planitia B = olympus_mons } } remove_global_variable = sr_site_marines_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia sr_site_shares = { A = arcadia_planitia B = hellas_planitia } } remove_global_variable = sr_site_marines_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia sr_site_shares = { A = arcadia_planitia B = utopia_planitia } } remove_global_variable = sr_site_marines_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia } remove_global_variable = sr_site_marines_arcadia_planitia }
+}
+sr_site_lose_shared_marines_ceres = {
+	if = { limit = { has_global_variable = sr_site_marines_ceres } remove_global_variable = sr_site_marines_ceres }
+}
+sr_site_lose_shared_marines_vesta = {
+	if = { limit = { has_global_variable = sr_site_marines_vesta } remove_global_variable = sr_site_marines_vesta }
+}
+sr_site_lose_shared_marines_psyche = {
+	if = { limit = { has_global_variable = sr_site_marines_psyche } remove_global_variable = sr_site_marines_psyche }
+}
+sr_site_lose_shared_marines_pallas = {
+	if = { limit = { has_global_variable = sr_site_marines_pallas } remove_global_variable = sr_site_marines_pallas }
+}
+sr_site_lose_shared_marines_hygiea = {
+	if = { limit = { has_global_variable = sr_site_marines_hygiea } remove_global_variable = sr_site_marines_hygiea }
+}
+sr_site_lose_shared_marines_io = {
+	if = { limit = { has_global_variable = sr_site_marines_io } remove_global_variable = sr_site_marines_io }
+}
+sr_site_lose_shared_marines_europa = {
+	if = { limit = { has_global_variable = sr_site_marines_europa } remove_global_variable = sr_site_marines_europa }
+}
+sr_site_lose_shared_marines_ganymede = {
+	if = { limit = { has_global_variable = sr_site_marines_ganymede } remove_global_variable = sr_site_marines_ganymede }
+}
+sr_site_lose_shared_marines_callisto = {
+	if = { limit = { has_global_variable = sr_site_marines_callisto } remove_global_variable = sr_site_marines_callisto }
+}
+sr_site_lose_shared_marines_himalia = {
+	if = { limit = { has_global_variable = sr_site_marines_himalia } remove_global_variable = sr_site_marines_himalia }
+}
+sr_site_lose_shared_marines_amalthea = {
+	if = { limit = { has_global_variable = sr_site_marines_amalthea } remove_global_variable = sr_site_marines_amalthea }
+}
+sr_site_lose_shared_marines_venus = {
+	if = { limit = { has_global_variable = sr_site_marines_venus } remove_global_variable = sr_site_marines_venus }
+}
+sr_site_lose_shared_marines_mercury = {
+	if = { limit = { has_global_variable = sr_site_marines_mercury } remove_global_variable = sr_site_marines_mercury }
+}
+sr_site_lose_shared_marines_titan = {
+	if = { limit = { has_global_variable = sr_site_marines_titan } remove_global_variable = sr_site_marines_titan }
+}
+sr_site_lose_shared_marines_enceladus = {
+	if = { limit = { has_global_variable = sr_site_marines_enceladus } remove_global_variable = sr_site_marines_enceladus }
+}
+sr_site_lose_shared_marines_rhea = {
+	if = { limit = { has_global_variable = sr_site_marines_rhea } remove_global_variable = sr_site_marines_rhea }
+}
+sr_site_lose_shared_marines_mimas = {
+	if = { limit = { has_global_variable = sr_site_marines_mimas } remove_global_variable = sr_site_marines_mimas }
+}
+sr_site_lose_shared_marines_iapetus = {
+	if = { limit = { has_global_variable = sr_site_marines_iapetus } remove_global_variable = sr_site_marines_iapetus }
+}
+sr_site_lose_shared_marines_titania = {
+	if = { limit = { has_global_variable = sr_site_marines_titania } remove_global_variable = sr_site_marines_titania }
+}
+sr_site_lose_shared_marines_oberon = {
+	if = { limit = { has_global_variable = sr_site_marines_oberon } remove_global_variable = sr_site_marines_oberon }
+}
+sr_site_lose_shared_marines_miranda = {
+	if = { limit = { has_global_variable = sr_site_marines_miranda } remove_global_variable = sr_site_marines_miranda }
+}
+sr_site_lose_shared_marines_ariel = {
+	if = { limit = { has_global_variable = sr_site_marines_ariel } remove_global_variable = sr_site_marines_ariel }
+}
+sr_site_lose_shared_marines_triton = {
+	if = { limit = { has_global_variable = sr_site_marines_triton } remove_global_variable = sr_site_marines_triton }
+}
+sr_site_lose_shared_marines_proteus = {
+	if = { limit = { has_global_variable = sr_site_marines_proteus } remove_global_variable = sr_site_marines_proteus }
+}
+sr_site_lose_shared_marines_pluto = {
+	if = { limit = { has_global_variable = sr_site_marines_pluto } remove_global_variable = sr_site_marines_pluto }
+}
+sr_site_lose_shared_marines_eris = {
+	if = { limit = { has_global_variable = sr_site_marines_eris } remove_global_variable = sr_site_marines_eris }
+}
+sr_site_lose_shared_marines_makemake = {
+	if = { limit = { has_global_variable = sr_site_marines_makemake } remove_global_variable = sr_site_marines_makemake }
+}
+sr_site_lose_shared_marines_haumea = {
+	if = { limit = { has_global_variable = sr_site_marines_haumea } remove_global_variable = sr_site_marines_haumea }
+}
+sr_site_lose_shared_marines_sedna = {
+	if = { limit = { has_global_variable = sr_site_marines_sedna } remove_global_variable = sr_site_marines_sedna }
+}
+sr_site_lose_shared_marines_shackleton = {
+	if = { limit = { has_global_variable = sr_site_marines_peary sr_site_shares = { A = shackleton B = peary } } remove_global_variable = sr_site_marines_peary }
+	if = { limit = { has_global_variable = sr_site_marines_tranquility sr_site_shares = { A = shackleton B = tranquility } } remove_global_variable = sr_site_marines_tranquility }
+	if = { limit = { has_global_variable = sr_site_marines_marius_hills sr_site_shares = { A = shackleton B = marius_hills } } remove_global_variable = sr_site_marines_marius_hills }
+	if = { limit = { has_global_variable = sr_site_marines_daedalus sr_site_shares = { A = shackleton B = daedalus } } remove_global_variable = sr_site_marines_daedalus }
+	if = { limit = { has_global_variable = sr_site_marines_imbrium sr_site_shares = { A = shackleton B = imbrium } } remove_global_variable = sr_site_marines_imbrium }
+	if = { limit = { has_global_variable = sr_site_marines_shackleton } remove_global_variable = sr_site_marines_shackleton }
+}
+sr_site_lose_shared_marines_peary = {
+	if = { limit = { has_global_variable = sr_site_marines_shackleton sr_site_shares = { A = peary B = shackleton } } remove_global_variable = sr_site_marines_shackleton }
+	if = { limit = { has_global_variable = sr_site_marines_tranquility sr_site_shares = { A = peary B = tranquility } } remove_global_variable = sr_site_marines_tranquility }
+	if = { limit = { has_global_variable = sr_site_marines_marius_hills sr_site_shares = { A = peary B = marius_hills } } remove_global_variable = sr_site_marines_marius_hills }
+	if = { limit = { has_global_variable = sr_site_marines_daedalus sr_site_shares = { A = peary B = daedalus } } remove_global_variable = sr_site_marines_daedalus }
+	if = { limit = { has_global_variable = sr_site_marines_imbrium sr_site_shares = { A = peary B = imbrium } } remove_global_variable = sr_site_marines_imbrium }
+	if = { limit = { has_global_variable = sr_site_marines_peary } remove_global_variable = sr_site_marines_peary }
+}
+sr_site_lose_shared_marines_tranquility = {
+	if = { limit = { has_global_variable = sr_site_marines_shackleton sr_site_shares = { A = tranquility B = shackleton } } remove_global_variable = sr_site_marines_shackleton }
+	if = { limit = { has_global_variable = sr_site_marines_peary sr_site_shares = { A = tranquility B = peary } } remove_global_variable = sr_site_marines_peary }
+	if = { limit = { has_global_variable = sr_site_marines_marius_hills sr_site_shares = { A = tranquility B = marius_hills } } remove_global_variable = sr_site_marines_marius_hills }
+	if = { limit = { has_global_variable = sr_site_marines_daedalus sr_site_shares = { A = tranquility B = daedalus } } remove_global_variable = sr_site_marines_daedalus }
+	if = { limit = { has_global_variable = sr_site_marines_imbrium sr_site_shares = { A = tranquility B = imbrium } } remove_global_variable = sr_site_marines_imbrium }
+	if = { limit = { has_global_variable = sr_site_marines_tranquility } remove_global_variable = sr_site_marines_tranquility }
+}
+sr_site_lose_shared_marines_marius_hills = {
+	if = { limit = { has_global_variable = sr_site_marines_shackleton sr_site_shares = { A = marius_hills B = shackleton } } remove_global_variable = sr_site_marines_shackleton }
+	if = { limit = { has_global_variable = sr_site_marines_peary sr_site_shares = { A = marius_hills B = peary } } remove_global_variable = sr_site_marines_peary }
+	if = { limit = { has_global_variable = sr_site_marines_tranquility sr_site_shares = { A = marius_hills B = tranquility } } remove_global_variable = sr_site_marines_tranquility }
+	if = { limit = { has_global_variable = sr_site_marines_daedalus sr_site_shares = { A = marius_hills B = daedalus } } remove_global_variable = sr_site_marines_daedalus }
+	if = { limit = { has_global_variable = sr_site_marines_imbrium sr_site_shares = { A = marius_hills B = imbrium } } remove_global_variable = sr_site_marines_imbrium }
+	if = { limit = { has_global_variable = sr_site_marines_marius_hills } remove_global_variable = sr_site_marines_marius_hills }
+}
+sr_site_lose_shared_marines_daedalus = {
+	if = { limit = { has_global_variable = sr_site_marines_shackleton sr_site_shares = { A = daedalus B = shackleton } } remove_global_variable = sr_site_marines_shackleton }
+	if = { limit = { has_global_variable = sr_site_marines_peary sr_site_shares = { A = daedalus B = peary } } remove_global_variable = sr_site_marines_peary }
+	if = { limit = { has_global_variable = sr_site_marines_tranquility sr_site_shares = { A = daedalus B = tranquility } } remove_global_variable = sr_site_marines_tranquility }
+	if = { limit = { has_global_variable = sr_site_marines_marius_hills sr_site_shares = { A = daedalus B = marius_hills } } remove_global_variable = sr_site_marines_marius_hills }
+	if = { limit = { has_global_variable = sr_site_marines_imbrium sr_site_shares = { A = daedalus B = imbrium } } remove_global_variable = sr_site_marines_imbrium }
+	if = { limit = { has_global_variable = sr_site_marines_daedalus } remove_global_variable = sr_site_marines_daedalus }
+}
+sr_site_lose_shared_marines_imbrium = {
+	if = { limit = { has_global_variable = sr_site_marines_shackleton sr_site_shares = { A = imbrium B = shackleton } } remove_global_variable = sr_site_marines_shackleton }
+	if = { limit = { has_global_variable = sr_site_marines_peary sr_site_shares = { A = imbrium B = peary } } remove_global_variable = sr_site_marines_peary }
+	if = { limit = { has_global_variable = sr_site_marines_tranquility sr_site_shares = { A = imbrium B = tranquility } } remove_global_variable = sr_site_marines_tranquility }
+	if = { limit = { has_global_variable = sr_site_marines_marius_hills sr_site_shares = { A = imbrium B = marius_hills } } remove_global_variable = sr_site_marines_marius_hills }
+	if = { limit = { has_global_variable = sr_site_marines_daedalus sr_site_shares = { A = imbrium B = daedalus } } remove_global_variable = sr_site_marines_daedalus }
+	if = { limit = { has_global_variable = sr_site_marines_imbrium } remove_global_variable = sr_site_marines_imbrium }
 }
 
 # ===== The AI's defence (6b; sr_fl_ai_defend) =====

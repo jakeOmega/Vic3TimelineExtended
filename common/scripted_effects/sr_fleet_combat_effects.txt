@@ -758,9 +758,12 @@ sr_site_seize = {
 }
 
 # THIS occupies the world KEY: its landed marines are the garrison, the
-# holder's are lost; the world gives its modifiers to no one (the sync), and
+# holder's are lost (on the Moon and Mars, all its marines there, which
+# defended it: sr_site_lose_shared_marines_<key>, generated, before the
+# occupier is set); the world gives its modifiers to no one (the sync), and
 # counts in war support (§ 10).
 sr_site_occupy = {
+	sr_site_lose_shared_marines_$KEY$ = yes
 	set_global_variable = { name = sr_site_occupier_$KEY$ value = this }
 	set_global_variable = { name = sr_site_marines_$KEY$ value = local_var:sr_cb_landed }
 	if = { limit = { has_global_variable = sr_site_bombard_$KEY$ } remove_global_variable = sr_site_bombard_$KEY$ }

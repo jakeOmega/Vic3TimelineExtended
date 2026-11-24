@@ -10810,6 +10810,17 @@ sr_reserve_total = {
 #   sr_cb_fd_total_<key>  the defence fire aimed at it: each power's, shared with
 #                         the hostile fleets stationed against it by strength
 #   sr_cb_edge_<key>      a power's: Survey Colony Defences' edge against its holder
+#   sr_cb_c_shared_<key>  during the combat pass, the strength closing in on it and
+#                         (the Moon, Mars) on its holder's other colonies there, over
+#                         which its shared Defences' fire is split (owner, 2026-11-24)
+sr_cb_c_shared_valles_marineris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_valles_marineris } add = global_var:sr_cb_c_valles_marineris }
+	if = { limit = { has_global_variable = sr_cb_c_olympus_mons sr_site_shares = { A = valles_marineris B = olympus_mons } } add = global_var:sr_cb_c_olympus_mons }
+	if = { limit = { has_global_variable = sr_cb_c_hellas_planitia sr_site_shares = { A = valles_marineris B = hellas_planitia } } add = global_var:sr_cb_c_hellas_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_utopia_planitia sr_site_shares = { A = valles_marineris B = utopia_planitia } } add = global_var:sr_cb_c_utopia_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_arcadia_planitia sr_site_shares = { A = valles_marineris B = arcadia_planitia } } add = global_var:sr_cb_c_arcadia_planitia }
+}
 sr_cb_closing_valles_marineris = {
 	value = 0
 	if = {
@@ -10838,6 +10849,14 @@ sr_cb_edge_valles_marineris = {
 		limit = { sr_cov_surveys_valles_marineris = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_olympus_mons = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_olympus_mons } add = global_var:sr_cb_c_olympus_mons }
+	if = { limit = { has_global_variable = sr_cb_c_valles_marineris sr_site_shares = { A = olympus_mons B = valles_marineris } } add = global_var:sr_cb_c_valles_marineris }
+	if = { limit = { has_global_variable = sr_cb_c_hellas_planitia sr_site_shares = { A = olympus_mons B = hellas_planitia } } add = global_var:sr_cb_c_hellas_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_utopia_planitia sr_site_shares = { A = olympus_mons B = utopia_planitia } } add = global_var:sr_cb_c_utopia_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_arcadia_planitia sr_site_shares = { A = olympus_mons B = arcadia_planitia } } add = global_var:sr_cb_c_arcadia_planitia }
 }
 sr_cb_closing_olympus_mons = {
 	value = 0
@@ -10868,6 +10887,14 @@ sr_cb_edge_olympus_mons = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_hellas_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_hellas_planitia } add = global_var:sr_cb_c_hellas_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_valles_marineris sr_site_shares = { A = hellas_planitia B = valles_marineris } } add = global_var:sr_cb_c_valles_marineris }
+	if = { limit = { has_global_variable = sr_cb_c_olympus_mons sr_site_shares = { A = hellas_planitia B = olympus_mons } } add = global_var:sr_cb_c_olympus_mons }
+	if = { limit = { has_global_variable = sr_cb_c_utopia_planitia sr_site_shares = { A = hellas_planitia B = utopia_planitia } } add = global_var:sr_cb_c_utopia_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_arcadia_planitia sr_site_shares = { A = hellas_planitia B = arcadia_planitia } } add = global_var:sr_cb_c_arcadia_planitia }
+}
 sr_cb_closing_hellas_planitia = {
 	value = 0
 	if = {
@@ -10896,6 +10923,14 @@ sr_cb_edge_hellas_planitia = {
 		limit = { sr_cov_surveys_hellas_planitia = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_utopia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_utopia_planitia } add = global_var:sr_cb_c_utopia_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_valles_marineris sr_site_shares = { A = utopia_planitia B = valles_marineris } } add = global_var:sr_cb_c_valles_marineris }
+	if = { limit = { has_global_variable = sr_cb_c_olympus_mons sr_site_shares = { A = utopia_planitia B = olympus_mons } } add = global_var:sr_cb_c_olympus_mons }
+	if = { limit = { has_global_variable = sr_cb_c_hellas_planitia sr_site_shares = { A = utopia_planitia B = hellas_planitia } } add = global_var:sr_cb_c_hellas_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_arcadia_planitia sr_site_shares = { A = utopia_planitia B = arcadia_planitia } } add = global_var:sr_cb_c_arcadia_planitia }
 }
 sr_cb_closing_utopia_planitia = {
 	value = 0
@@ -10926,6 +10961,14 @@ sr_cb_edge_utopia_planitia = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_arcadia_planitia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_arcadia_planitia } add = global_var:sr_cb_c_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_valles_marineris sr_site_shares = { A = arcadia_planitia B = valles_marineris } } add = global_var:sr_cb_c_valles_marineris }
+	if = { limit = { has_global_variable = sr_cb_c_olympus_mons sr_site_shares = { A = arcadia_planitia B = olympus_mons } } add = global_var:sr_cb_c_olympus_mons }
+	if = { limit = { has_global_variable = sr_cb_c_hellas_planitia sr_site_shares = { A = arcadia_planitia B = hellas_planitia } } add = global_var:sr_cb_c_hellas_planitia }
+	if = { limit = { has_global_variable = sr_cb_c_utopia_planitia sr_site_shares = { A = arcadia_planitia B = utopia_planitia } } add = global_var:sr_cb_c_utopia_planitia }
+}
 sr_cb_closing_arcadia_planitia = {
 	value = 0
 	if = {
@@ -10954,6 +10997,10 @@ sr_cb_edge_arcadia_planitia = {
 		limit = { sr_cov_surveys_arcadia_planitia = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_ceres = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_ceres } add = global_var:sr_cb_c_ceres }
 }
 sr_cb_closing_ceres = {
 	value = 0
@@ -10984,6 +11031,10 @@ sr_cb_edge_ceres = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_vesta = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_vesta } add = global_var:sr_cb_c_vesta }
+}
 sr_cb_closing_vesta = {
 	value = 0
 	if = {
@@ -11012,6 +11063,10 @@ sr_cb_edge_vesta = {
 		limit = { sr_cov_surveys_vesta = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_psyche = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_psyche } add = global_var:sr_cb_c_psyche }
 }
 sr_cb_closing_psyche = {
 	value = 0
@@ -11042,6 +11097,10 @@ sr_cb_edge_psyche = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_pallas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_pallas } add = global_var:sr_cb_c_pallas }
+}
 sr_cb_closing_pallas = {
 	value = 0
 	if = {
@@ -11070,6 +11129,10 @@ sr_cb_edge_pallas = {
 		limit = { sr_cov_surveys_pallas = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_hygiea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_hygiea } add = global_var:sr_cb_c_hygiea }
 }
 sr_cb_closing_hygiea = {
 	value = 0
@@ -11100,6 +11163,10 @@ sr_cb_edge_hygiea = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_io = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_io } add = global_var:sr_cb_c_io }
+}
 sr_cb_closing_io = {
 	value = 0
 	if = {
@@ -11128,6 +11195,10 @@ sr_cb_edge_io = {
 		limit = { sr_cov_surveys_io = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_europa } add = global_var:sr_cb_c_europa }
 }
 sr_cb_closing_europa = {
 	value = 0
@@ -11158,6 +11229,10 @@ sr_cb_edge_europa = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_ganymede } add = global_var:sr_cb_c_ganymede }
+}
 sr_cb_closing_ganymede = {
 	value = 0
 	if = {
@@ -11186,6 +11261,10 @@ sr_cb_edge_ganymede = {
 		limit = { sr_cov_surveys_ganymede = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_callisto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_callisto } add = global_var:sr_cb_c_callisto }
 }
 sr_cb_closing_callisto = {
 	value = 0
@@ -11216,6 +11295,10 @@ sr_cb_edge_callisto = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_himalia = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_himalia } add = global_var:sr_cb_c_himalia }
+}
 sr_cb_closing_himalia = {
 	value = 0
 	if = {
@@ -11244,6 +11327,10 @@ sr_cb_edge_himalia = {
 		limit = { sr_cov_surveys_himalia = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_amalthea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_amalthea } add = global_var:sr_cb_c_amalthea }
 }
 sr_cb_closing_amalthea = {
 	value = 0
@@ -11274,6 +11361,10 @@ sr_cb_edge_amalthea = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_venus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_venus } add = global_var:sr_cb_c_venus }
+}
 sr_cb_closing_venus = {
 	value = 0
 	if = {
@@ -11302,6 +11393,10 @@ sr_cb_edge_venus = {
 		limit = { sr_cov_surveys_venus = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_mercury } add = global_var:sr_cb_c_mercury }
 }
 sr_cb_closing_mercury = {
 	value = 0
@@ -11332,6 +11427,10 @@ sr_cb_edge_mercury = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_titan } add = global_var:sr_cb_c_titan }
+}
 sr_cb_closing_titan = {
 	value = 0
 	if = {
@@ -11360,6 +11459,10 @@ sr_cb_edge_titan = {
 		limit = { sr_cov_surveys_titan = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_enceladus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_enceladus } add = global_var:sr_cb_c_enceladus }
 }
 sr_cb_closing_enceladus = {
 	value = 0
@@ -11390,6 +11493,10 @@ sr_cb_edge_enceladus = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_rhea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_rhea } add = global_var:sr_cb_c_rhea }
+}
 sr_cb_closing_rhea = {
 	value = 0
 	if = {
@@ -11418,6 +11525,10 @@ sr_cb_edge_rhea = {
 		limit = { sr_cov_surveys_rhea = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_mimas = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_mimas } add = global_var:sr_cb_c_mimas }
 }
 sr_cb_closing_mimas = {
 	value = 0
@@ -11448,6 +11559,10 @@ sr_cb_edge_mimas = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_iapetus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_iapetus } add = global_var:sr_cb_c_iapetus }
+}
 sr_cb_closing_iapetus = {
 	value = 0
 	if = {
@@ -11476,6 +11591,10 @@ sr_cb_edge_iapetus = {
 		limit = { sr_cov_surveys_iapetus = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_titania = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_titania } add = global_var:sr_cb_c_titania }
 }
 sr_cb_closing_titania = {
 	value = 0
@@ -11506,6 +11625,10 @@ sr_cb_edge_titania = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_oberon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_oberon } add = global_var:sr_cb_c_oberon }
+}
 sr_cb_closing_oberon = {
 	value = 0
 	if = {
@@ -11534,6 +11657,10 @@ sr_cb_edge_oberon = {
 		limit = { sr_cov_surveys_oberon = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_miranda = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_miranda } add = global_var:sr_cb_c_miranda }
 }
 sr_cb_closing_miranda = {
 	value = 0
@@ -11564,6 +11691,10 @@ sr_cb_edge_miranda = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_ariel = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_ariel } add = global_var:sr_cb_c_ariel }
+}
 sr_cb_closing_ariel = {
 	value = 0
 	if = {
@@ -11592,6 +11723,10 @@ sr_cb_edge_ariel = {
 		limit = { sr_cov_surveys_ariel = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_triton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_triton } add = global_var:sr_cb_c_triton }
 }
 sr_cb_closing_triton = {
 	value = 0
@@ -11622,6 +11757,10 @@ sr_cb_edge_triton = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_proteus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_proteus } add = global_var:sr_cb_c_proteus }
+}
 sr_cb_closing_proteus = {
 	value = 0
 	if = {
@@ -11650,6 +11789,10 @@ sr_cb_edge_proteus = {
 		limit = { sr_cov_surveys_proteus = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_pluto = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_pluto } add = global_var:sr_cb_c_pluto }
 }
 sr_cb_closing_pluto = {
 	value = 0
@@ -11680,6 +11823,10 @@ sr_cb_edge_pluto = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_eris = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_eris } add = global_var:sr_cb_c_eris }
+}
 sr_cb_closing_eris = {
 	value = 0
 	if = {
@@ -11708,6 +11855,10 @@ sr_cb_edge_eris = {
 		limit = { sr_cov_surveys_eris = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_makemake = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_makemake } add = global_var:sr_cb_c_makemake }
 }
 sr_cb_closing_makemake = {
 	value = 0
@@ -11738,6 +11889,10 @@ sr_cb_edge_makemake = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_haumea = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_haumea } add = global_var:sr_cb_c_haumea }
+}
 sr_cb_closing_haumea = {
 	value = 0
 	if = {
@@ -11766,6 +11921,10 @@ sr_cb_edge_haumea = {
 		limit = { sr_cov_surveys_haumea = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_sedna = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_sedna } add = global_var:sr_cb_c_sedna }
 }
 sr_cb_closing_sedna = {
 	value = 0
@@ -11796,6 +11955,15 @@ sr_cb_edge_sedna = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_shackleton } add = global_var:sr_cb_c_shackleton }
+	if = { limit = { has_global_variable = sr_cb_c_peary sr_site_shares = { A = shackleton B = peary } } add = global_var:sr_cb_c_peary }
+	if = { limit = { has_global_variable = sr_cb_c_tranquility sr_site_shares = { A = shackleton B = tranquility } } add = global_var:sr_cb_c_tranquility }
+	if = { limit = { has_global_variable = sr_cb_c_marius_hills sr_site_shares = { A = shackleton B = marius_hills } } add = global_var:sr_cb_c_marius_hills }
+	if = { limit = { has_global_variable = sr_cb_c_daedalus sr_site_shares = { A = shackleton B = daedalus } } add = global_var:sr_cb_c_daedalus }
+	if = { limit = { has_global_variable = sr_cb_c_imbrium sr_site_shares = { A = shackleton B = imbrium } } add = global_var:sr_cb_c_imbrium }
+}
 sr_cb_closing_shackleton = {
 	value = 0
 	if = {
@@ -11824,6 +11992,15 @@ sr_cb_edge_shackleton = {
 		limit = { sr_cov_surveys_shackleton = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_peary } add = global_var:sr_cb_c_peary }
+	if = { limit = { has_global_variable = sr_cb_c_shackleton sr_site_shares = { A = peary B = shackleton } } add = global_var:sr_cb_c_shackleton }
+	if = { limit = { has_global_variable = sr_cb_c_tranquility sr_site_shares = { A = peary B = tranquility } } add = global_var:sr_cb_c_tranquility }
+	if = { limit = { has_global_variable = sr_cb_c_marius_hills sr_site_shares = { A = peary B = marius_hills } } add = global_var:sr_cb_c_marius_hills }
+	if = { limit = { has_global_variable = sr_cb_c_daedalus sr_site_shares = { A = peary B = daedalus } } add = global_var:sr_cb_c_daedalus }
+	if = { limit = { has_global_variable = sr_cb_c_imbrium sr_site_shares = { A = peary B = imbrium } } add = global_var:sr_cb_c_imbrium }
 }
 sr_cb_closing_peary = {
 	value = 0
@@ -11854,6 +12031,15 @@ sr_cb_edge_peary = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_tranquility } add = global_var:sr_cb_c_tranquility }
+	if = { limit = { has_global_variable = sr_cb_c_shackleton sr_site_shares = { A = tranquility B = shackleton } } add = global_var:sr_cb_c_shackleton }
+	if = { limit = { has_global_variable = sr_cb_c_peary sr_site_shares = { A = tranquility B = peary } } add = global_var:sr_cb_c_peary }
+	if = { limit = { has_global_variable = sr_cb_c_marius_hills sr_site_shares = { A = tranquility B = marius_hills } } add = global_var:sr_cb_c_marius_hills }
+	if = { limit = { has_global_variable = sr_cb_c_daedalus sr_site_shares = { A = tranquility B = daedalus } } add = global_var:sr_cb_c_daedalus }
+	if = { limit = { has_global_variable = sr_cb_c_imbrium sr_site_shares = { A = tranquility B = imbrium } } add = global_var:sr_cb_c_imbrium }
+}
 sr_cb_closing_tranquility = {
 	value = 0
 	if = {
@@ -11882,6 +12068,15 @@ sr_cb_edge_tranquility = {
 		limit = { sr_cov_surveys_tranquility = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_marius_hills } add = global_var:sr_cb_c_marius_hills }
+	if = { limit = { has_global_variable = sr_cb_c_shackleton sr_site_shares = { A = marius_hills B = shackleton } } add = global_var:sr_cb_c_shackleton }
+	if = { limit = { has_global_variable = sr_cb_c_peary sr_site_shares = { A = marius_hills B = peary } } add = global_var:sr_cb_c_peary }
+	if = { limit = { has_global_variable = sr_cb_c_tranquility sr_site_shares = { A = marius_hills B = tranquility } } add = global_var:sr_cb_c_tranquility }
+	if = { limit = { has_global_variable = sr_cb_c_daedalus sr_site_shares = { A = marius_hills B = daedalus } } add = global_var:sr_cb_c_daedalus }
+	if = { limit = { has_global_variable = sr_cb_c_imbrium sr_site_shares = { A = marius_hills B = imbrium } } add = global_var:sr_cb_c_imbrium }
 }
 sr_cb_closing_marius_hills = {
 	value = 0
@@ -11912,6 +12107,15 @@ sr_cb_edge_marius_hills = {
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
 }
+sr_cb_c_shared_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_daedalus } add = global_var:sr_cb_c_daedalus }
+	if = { limit = { has_global_variable = sr_cb_c_shackleton sr_site_shares = { A = daedalus B = shackleton } } add = global_var:sr_cb_c_shackleton }
+	if = { limit = { has_global_variable = sr_cb_c_peary sr_site_shares = { A = daedalus B = peary } } add = global_var:sr_cb_c_peary }
+	if = { limit = { has_global_variable = sr_cb_c_tranquility sr_site_shares = { A = daedalus B = tranquility } } add = global_var:sr_cb_c_tranquility }
+	if = { limit = { has_global_variable = sr_cb_c_marius_hills sr_site_shares = { A = daedalus B = marius_hills } } add = global_var:sr_cb_c_marius_hills }
+	if = { limit = { has_global_variable = sr_cb_c_imbrium sr_site_shares = { A = daedalus B = imbrium } } add = global_var:sr_cb_c_imbrium }
+}
 sr_cb_closing_daedalus = {
 	value = 0
 	if = {
@@ -11940,6 +12144,15 @@ sr_cb_edge_daedalus = {
 		limit = { sr_cov_surveys_daedalus = yes has_variable = sr_cov_survey_mult }
 		add = { value = var:sr_cov_survey_mult multiply = sr_cov_survey_edge }
 	}
+}
+sr_cb_c_shared_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_cb_c_imbrium } add = global_var:sr_cb_c_imbrium }
+	if = { limit = { has_global_variable = sr_cb_c_shackleton sr_site_shares = { A = imbrium B = shackleton } } add = global_var:sr_cb_c_shackleton }
+	if = { limit = { has_global_variable = sr_cb_c_peary sr_site_shares = { A = imbrium B = peary } } add = global_var:sr_cb_c_peary }
+	if = { limit = { has_global_variable = sr_cb_c_tranquility sr_site_shares = { A = imbrium B = tranquility } } add = global_var:sr_cb_c_tranquility }
+	if = { limit = { has_global_variable = sr_cb_c_marius_hills sr_site_shares = { A = imbrium B = marius_hills } } add = global_var:sr_cb_c_marius_hills }
+	if = { limit = { has_global_variable = sr_cb_c_daedalus sr_site_shares = { A = imbrium B = daedalus } } add = global_var:sr_cb_c_daedalus }
 }
 sr_cb_closing_imbrium = {
 	value = 0

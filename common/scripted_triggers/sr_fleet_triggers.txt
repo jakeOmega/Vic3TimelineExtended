@@ -232,16 +232,30 @@ sr_cb_holds_orbit = {
 	sr_cb_hold_value > 0
 }
 
+# Any scope. The sites A and B, two on one world (the Moon or Mars:
+# gen_solar_sites.world_mates), share marines and Defences: one holder holds
+# both and neither is occupied (owner, 2026-11-24). A free colony has no holder
+# and shares nothing.
+sr_site_shares = {
+	NOT = { has_global_variable = sr_site_occupier_$A$ }
+	NOT = { has_global_variable = sr_site_occupier_$B$ }
+	global_var:sr_site_holder_$A$ ?= {
+		global_var:sr_site_holder_$B$ ?= this
+	}
+}
+
 # It closes in to destroy the world KEY with its fire on defences above the
-# Defences' own, and no hostile fleet is stationed against it (§ 9.3).
+# Defences' own (on the Moon and Mars, every Defences level its holder has
+# there), and no hostile fleet is stationed against it (§ 9.3).
 sr_cb_destroys = {
 	has_variable = sr_cb_dfd_$KEY$
 	var:sr_cb_dfd_$KEY$ > sr_site_def_fire_$KEY$
 	sr_cb_hs_value <= 0
 }
 
-# It closes in to seize the world KEY with marines above its garrison and
-# militia, and no hostile fleet is stationed against it (§ 9.1).
+# It closes in to seize the world KEY with marines above its garrison (on the
+# Moon and Mars, its holder's marines there) and militia, and no hostile fleet
+# is stationed against it (§ 9.1).
 sr_cb_seizes = {
 	has_variable = sr_cb_mar_$KEY$
 	var:sr_cb_mar_$KEY$ > sr_site_garrison_need_$KEY$

@@ -17171,17 +17171,50 @@ sr_garrison_count = {
 #                                  occupier's while occupied)
 #   sr_site_integrity_value_<key>  0-100, 100 while unset
 #   sr_site_militia_value_<key>    a battalion a sr_militia_people, at least one
-#   sr_site_garrison_need_<key>    the marines a seizure must exceed: garrison and militia
-#   sr_site_def_fire_<key>         its Defences' fire on fleets closing in: 15 a level x
+#   sr_site_shared_marines_<key>   the marines defending it: its own and, on the Moon and
+#                                  Mars, its holder's at its other colonies there (owner,
+#                                  2026-11-24; sr_site_shares); its own alone while occupied
+#   sr_site_garrison_need_<key>    the marines a seizure must exceed: those and the militia
+#   sr_site_def_staffed_<key>      its Defences levels at its staffing
+#   sr_site_def_others_<key>       ... the holder's at its other colonies on the same world
+#   sr_site_def_shared_<key>       ... the two: the Defences that fire for it
+#   sr_site_def_shared_levels_<key> the same in levels, unstaffed (the panel's)
+#   sr_site_def_fire_<key>         those Defences' fire on fleets closing in: 15 a level x
 #                                  1.5 (+25% Orbital Weapon Platforms, its holder's) x
-#                                  integrity; nothing while occupied
-#   sr_site_hardness_<key>         50 + 50 a Defences level
+#                                  its own integrity; nothing while occupied. The combat
+#                                  pass splits it over every colony of the holder's on the
+#                                  world under attack (sr_cb_c_shared_<key>)
+#   sr_site_hardness_<key>         50 + 50 a Defences level of its own, + 50 x
+#                                  sr_def_shared_hardness_share a level of the others'
 #   sr_site_target_strength_<key>  what draws a closing-in fleet's defence fire from
-#                                  stationed hostiles: its Defences and its hull
+#                                  stationed hostiles: its own Defences and its hull
 #   sr_site_ws_weight_<key>        its weight in war support, 0.1 to 0.25 by its people
 sr_site_marines_value_valles_marineris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_valles_marineris } value = global_var:sr_site_marines_valles_marineris }
+}
+sr_site_shared_marines_valles_marineris = {
+	value = sr_site_marines_value_valles_marineris
+	if = { limit = { sr_site_shares = { A = valles_marineris B = olympus_mons } } add = sr_site_marines_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = hellas_planitia } } add = sr_site_marines_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = utopia_planitia } } add = sr_site_marines_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = arcadia_planitia } } add = sr_site_marines_value_arcadia_planitia }
+}
+sr_site_def_staffed_valles_marineris = { value = sr_site_def_value_valles_marineris multiply = sr_site_staffing_valles_marineris }
+sr_site_def_others_valles_marineris = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = valles_marineris B = olympus_mons } } add = sr_site_def_staffed_olympus_mons }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = hellas_planitia } } add = sr_site_def_staffed_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = utopia_planitia } } add = sr_site_def_staffed_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = arcadia_planitia } } add = sr_site_def_staffed_arcadia_planitia }
+}
+sr_site_def_shared_valles_marineris = { value = sr_site_def_staffed_valles_marineris add = sr_site_def_others_valles_marineris }
+sr_site_def_shared_levels_valles_marineris = {
+	value = sr_site_def_value_valles_marineris
+	if = { limit = { sr_site_shares = { A = valles_marineris B = olympus_mons } } add = sr_site_def_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = hellas_planitia } } add = sr_site_def_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = utopia_planitia } } add = sr_site_def_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = arcadia_planitia } } add = sr_site_def_value_arcadia_planitia }
 }
 sr_site_integrity_value_valles_marineris = {
 	value = sr_integrity_full
@@ -17193,18 +17226,18 @@ sr_site_militia_value_valles_marineris = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_valles_marineris = {
-	value = sr_site_marines_value_valles_marineris
+	value = sr_site_shared_marines_valles_marineris
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_militia_value_valles_marineris }
 }
 sr_site_def_fire_valles_marineris = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_def_value_valles_marineris > 0 }
-		value = sr_site_def_value_valles_marineris
-		multiply = sr_site_staffing_valles_marineris
+		limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_def_shared_valles_marineris > 0 }
+		value = sr_site_def_shared_valles_marineris
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17212,14 +17245,14 @@ sr_site_def_fire_valles_marineris = {
 	}
 }
 sr_site_hardness_valles_marineris = {
-	value = sr_site_def_value_valles_marineris
-	multiply = sr_site_staffing_valles_marineris
+	value = sr_site_def_others_valles_marineris
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_valles_marineris
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_valles_marineris = {
-	value = sr_site_def_value_valles_marineris
-	multiply = sr_site_staffing_valles_marineris
+	value = sr_site_def_staffed_valles_marineris
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17234,6 +17267,29 @@ sr_site_marines_value_olympus_mons = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_olympus_mons } value = global_var:sr_site_marines_olympus_mons }
 }
+sr_site_shared_marines_olympus_mons = {
+	value = sr_site_marines_value_olympus_mons
+	if = { limit = { sr_site_shares = { A = olympus_mons B = valles_marineris } } add = sr_site_marines_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = hellas_planitia } } add = sr_site_marines_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = utopia_planitia } } add = sr_site_marines_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = arcadia_planitia } } add = sr_site_marines_value_arcadia_planitia }
+}
+sr_site_def_staffed_olympus_mons = { value = sr_site_def_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
+sr_site_def_others_olympus_mons = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = olympus_mons B = valles_marineris } } add = sr_site_def_staffed_valles_marineris }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = hellas_planitia } } add = sr_site_def_staffed_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = utopia_planitia } } add = sr_site_def_staffed_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = arcadia_planitia } } add = sr_site_def_staffed_arcadia_planitia }
+}
+sr_site_def_shared_olympus_mons = { value = sr_site_def_staffed_olympus_mons add = sr_site_def_others_olympus_mons }
+sr_site_def_shared_levels_olympus_mons = {
+	value = sr_site_def_value_olympus_mons
+	if = { limit = { sr_site_shares = { A = olympus_mons B = valles_marineris } } add = sr_site_def_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = hellas_planitia } } add = sr_site_def_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = utopia_planitia } } add = sr_site_def_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = arcadia_planitia } } add = sr_site_def_value_arcadia_planitia }
+}
 sr_site_integrity_value_olympus_mons = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_olympus_mons } value = global_var:sr_site_integrity_olympus_mons }
@@ -17244,18 +17300,18 @@ sr_site_militia_value_olympus_mons = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_olympus_mons = {
-	value = sr_site_marines_value_olympus_mons
+	value = sr_site_shared_marines_olympus_mons
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_militia_value_olympus_mons }
 }
 sr_site_def_fire_olympus_mons = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_def_value_olympus_mons > 0 }
-		value = sr_site_def_value_olympus_mons
-		multiply = sr_site_staffing_olympus_mons
+		limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_def_shared_olympus_mons > 0 }
+		value = sr_site_def_shared_olympus_mons
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17263,14 +17319,14 @@ sr_site_def_fire_olympus_mons = {
 	}
 }
 sr_site_hardness_olympus_mons = {
-	value = sr_site_def_value_olympus_mons
-	multiply = sr_site_staffing_olympus_mons
+	value = sr_site_def_others_olympus_mons
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_olympus_mons
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_olympus_mons = {
-	value = sr_site_def_value_olympus_mons
-	multiply = sr_site_staffing_olympus_mons
+	value = sr_site_def_staffed_olympus_mons
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17285,6 +17341,29 @@ sr_site_marines_value_hellas_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia } value = global_var:sr_site_marines_hellas_planitia }
 }
+sr_site_shared_marines_hellas_planitia = {
+	value = sr_site_marines_value_hellas_planitia
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = valles_marineris } } add = sr_site_marines_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = olympus_mons } } add = sr_site_marines_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = utopia_planitia } } add = sr_site_marines_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = arcadia_planitia } } add = sr_site_marines_value_arcadia_planitia }
+}
+sr_site_def_staffed_hellas_planitia = { value = sr_site_def_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
+sr_site_def_others_hellas_planitia = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = valles_marineris } } add = sr_site_def_staffed_valles_marineris }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = olympus_mons } } add = sr_site_def_staffed_olympus_mons }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = utopia_planitia } } add = sr_site_def_staffed_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = arcadia_planitia } } add = sr_site_def_staffed_arcadia_planitia }
+}
+sr_site_def_shared_hellas_planitia = { value = sr_site_def_staffed_hellas_planitia add = sr_site_def_others_hellas_planitia }
+sr_site_def_shared_levels_hellas_planitia = {
+	value = sr_site_def_value_hellas_planitia
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = valles_marineris } } add = sr_site_def_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = olympus_mons } } add = sr_site_def_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = utopia_planitia } } add = sr_site_def_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = arcadia_planitia } } add = sr_site_def_value_arcadia_planitia }
+}
 sr_site_integrity_value_hellas_planitia = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_hellas_planitia } value = global_var:sr_site_integrity_hellas_planitia }
@@ -17295,18 +17374,18 @@ sr_site_militia_value_hellas_planitia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_hellas_planitia = {
-	value = sr_site_marines_value_hellas_planitia
+	value = sr_site_shared_marines_hellas_planitia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_militia_value_hellas_planitia }
 }
 sr_site_def_fire_hellas_planitia = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_def_value_hellas_planitia > 0 }
-		value = sr_site_def_value_hellas_planitia
-		multiply = sr_site_staffing_hellas_planitia
+		limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_def_shared_hellas_planitia > 0 }
+		value = sr_site_def_shared_hellas_planitia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17314,14 +17393,14 @@ sr_site_def_fire_hellas_planitia = {
 	}
 }
 sr_site_hardness_hellas_planitia = {
-	value = sr_site_def_value_hellas_planitia
-	multiply = sr_site_staffing_hellas_planitia
+	value = sr_site_def_others_hellas_planitia
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_hellas_planitia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_hellas_planitia = {
-	value = sr_site_def_value_hellas_planitia
-	multiply = sr_site_staffing_hellas_planitia
+	value = sr_site_def_staffed_hellas_planitia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17336,6 +17415,29 @@ sr_site_marines_value_utopia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia } value = global_var:sr_site_marines_utopia_planitia }
 }
+sr_site_shared_marines_utopia_planitia = {
+	value = sr_site_marines_value_utopia_planitia
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = valles_marineris } } add = sr_site_marines_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = olympus_mons } } add = sr_site_marines_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = hellas_planitia } } add = sr_site_marines_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = arcadia_planitia } } add = sr_site_marines_value_arcadia_planitia }
+}
+sr_site_def_staffed_utopia_planitia = { value = sr_site_def_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
+sr_site_def_others_utopia_planitia = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = valles_marineris } } add = sr_site_def_staffed_valles_marineris }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = olympus_mons } } add = sr_site_def_staffed_olympus_mons }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = hellas_planitia } } add = sr_site_def_staffed_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = arcadia_planitia } } add = sr_site_def_staffed_arcadia_planitia }
+}
+sr_site_def_shared_utopia_planitia = { value = sr_site_def_staffed_utopia_planitia add = sr_site_def_others_utopia_planitia }
+sr_site_def_shared_levels_utopia_planitia = {
+	value = sr_site_def_value_utopia_planitia
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = valles_marineris } } add = sr_site_def_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = olympus_mons } } add = sr_site_def_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = hellas_planitia } } add = sr_site_def_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = arcadia_planitia } } add = sr_site_def_value_arcadia_planitia }
+}
 sr_site_integrity_value_utopia_planitia = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_utopia_planitia } value = global_var:sr_site_integrity_utopia_planitia }
@@ -17346,18 +17448,18 @@ sr_site_militia_value_utopia_planitia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_utopia_planitia = {
-	value = sr_site_marines_value_utopia_planitia
+	value = sr_site_shared_marines_utopia_planitia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_militia_value_utopia_planitia }
 }
 sr_site_def_fire_utopia_planitia = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_def_value_utopia_planitia > 0 }
-		value = sr_site_def_value_utopia_planitia
-		multiply = sr_site_staffing_utopia_planitia
+		limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_def_shared_utopia_planitia > 0 }
+		value = sr_site_def_shared_utopia_planitia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17365,14 +17467,14 @@ sr_site_def_fire_utopia_planitia = {
 	}
 }
 sr_site_hardness_utopia_planitia = {
-	value = sr_site_def_value_utopia_planitia
-	multiply = sr_site_staffing_utopia_planitia
+	value = sr_site_def_others_utopia_planitia
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_utopia_planitia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_utopia_planitia = {
-	value = sr_site_def_value_utopia_planitia
-	multiply = sr_site_staffing_utopia_planitia
+	value = sr_site_def_staffed_utopia_planitia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17387,6 +17489,29 @@ sr_site_marines_value_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia } value = global_var:sr_site_marines_arcadia_planitia }
 }
+sr_site_shared_marines_arcadia_planitia = {
+	value = sr_site_marines_value_arcadia_planitia
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = valles_marineris } } add = sr_site_marines_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = olympus_mons } } add = sr_site_marines_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = hellas_planitia } } add = sr_site_marines_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = utopia_planitia } } add = sr_site_marines_value_utopia_planitia }
+}
+sr_site_def_staffed_arcadia_planitia = { value = sr_site_def_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
+sr_site_def_others_arcadia_planitia = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = valles_marineris } } add = sr_site_def_staffed_valles_marineris }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = olympus_mons } } add = sr_site_def_staffed_olympus_mons }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = hellas_planitia } } add = sr_site_def_staffed_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = utopia_planitia } } add = sr_site_def_staffed_utopia_planitia }
+}
+sr_site_def_shared_arcadia_planitia = { value = sr_site_def_staffed_arcadia_planitia add = sr_site_def_others_arcadia_planitia }
+sr_site_def_shared_levels_arcadia_planitia = {
+	value = sr_site_def_value_arcadia_planitia
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = valles_marineris } } add = sr_site_def_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = olympus_mons } } add = sr_site_def_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = hellas_planitia } } add = sr_site_def_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = utopia_planitia } } add = sr_site_def_value_utopia_planitia }
+}
 sr_site_integrity_value_arcadia_planitia = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_arcadia_planitia } value = global_var:sr_site_integrity_arcadia_planitia }
@@ -17397,18 +17522,18 @@ sr_site_militia_value_arcadia_planitia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_arcadia_planitia = {
-	value = sr_site_marines_value_arcadia_planitia
+	value = sr_site_shared_marines_arcadia_planitia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_militia_value_arcadia_planitia }
 }
 sr_site_def_fire_arcadia_planitia = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_def_value_arcadia_planitia > 0 }
-		value = sr_site_def_value_arcadia_planitia
-		multiply = sr_site_staffing_arcadia_planitia
+		limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_def_shared_arcadia_planitia > 0 }
+		value = sr_site_def_shared_arcadia_planitia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17416,14 +17541,14 @@ sr_site_def_fire_arcadia_planitia = {
 	}
 }
 sr_site_hardness_arcadia_planitia = {
-	value = sr_site_def_value_arcadia_planitia
-	multiply = sr_site_staffing_arcadia_planitia
+	value = sr_site_def_others_arcadia_planitia
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_arcadia_planitia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_arcadia_planitia = {
-	value = sr_site_def_value_arcadia_planitia
-	multiply = sr_site_staffing_arcadia_planitia
+	value = sr_site_def_staffed_arcadia_planitia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17438,6 +17563,12 @@ sr_site_marines_value_ceres = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_ceres } value = global_var:sr_site_marines_ceres }
 }
+sr_site_shared_marines_ceres = {
+	value = sr_site_marines_value_ceres
+}
+sr_site_def_staffed_ceres = { value = sr_site_def_value_ceres multiply = sr_site_staffing_ceres }
+sr_site_def_shared_ceres = { value = sr_site_def_staffed_ceres }
+sr_site_def_shared_levels_ceres = { value = sr_site_def_value_ceres }
 sr_site_integrity_value_ceres = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_ceres } value = global_var:sr_site_integrity_ceres }
@@ -17448,18 +17579,18 @@ sr_site_militia_value_ceres = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_ceres = {
-	value = sr_site_marines_value_ceres
+	value = sr_site_shared_marines_ceres
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_militia_value_ceres }
 }
 sr_site_def_fire_ceres = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_ceres } sr_site_def_value_ceres > 0 }
-		value = sr_site_def_value_ceres
-		multiply = sr_site_staffing_ceres
+		limit = { NOT = { has_global_variable = sr_site_occupier_ceres } sr_site_def_shared_ceres > 0 }
+		value = sr_site_def_shared_ceres
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_ceres ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17467,14 +17598,12 @@ sr_site_def_fire_ceres = {
 	}
 }
 sr_site_hardness_ceres = {
-	value = sr_site_def_value_ceres
-	multiply = sr_site_staffing_ceres
+	value = sr_site_def_staffed_ceres
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_ceres = {
-	value = sr_site_def_value_ceres
-	multiply = sr_site_staffing_ceres
+	value = sr_site_def_staffed_ceres
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17489,6 +17618,12 @@ sr_site_marines_value_vesta = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_vesta } value = global_var:sr_site_marines_vesta }
 }
+sr_site_shared_marines_vesta = {
+	value = sr_site_marines_value_vesta
+}
+sr_site_def_staffed_vesta = { value = sr_site_def_value_vesta multiply = sr_site_staffing_vesta }
+sr_site_def_shared_vesta = { value = sr_site_def_staffed_vesta }
+sr_site_def_shared_levels_vesta = { value = sr_site_def_value_vesta }
 sr_site_integrity_value_vesta = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_vesta } value = global_var:sr_site_integrity_vesta }
@@ -17499,18 +17634,18 @@ sr_site_militia_value_vesta = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_vesta = {
-	value = sr_site_marines_value_vesta
+	value = sr_site_shared_marines_vesta
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_militia_value_vesta }
 }
 sr_site_def_fire_vesta = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_vesta } sr_site_def_value_vesta > 0 }
-		value = sr_site_def_value_vesta
-		multiply = sr_site_staffing_vesta
+		limit = { NOT = { has_global_variable = sr_site_occupier_vesta } sr_site_def_shared_vesta > 0 }
+		value = sr_site_def_shared_vesta
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_vesta ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17518,14 +17653,12 @@ sr_site_def_fire_vesta = {
 	}
 }
 sr_site_hardness_vesta = {
-	value = sr_site_def_value_vesta
-	multiply = sr_site_staffing_vesta
+	value = sr_site_def_staffed_vesta
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_vesta = {
-	value = sr_site_def_value_vesta
-	multiply = sr_site_staffing_vesta
+	value = sr_site_def_staffed_vesta
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17540,6 +17673,12 @@ sr_site_marines_value_psyche = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_psyche } value = global_var:sr_site_marines_psyche }
 }
+sr_site_shared_marines_psyche = {
+	value = sr_site_marines_value_psyche
+}
+sr_site_def_staffed_psyche = { value = sr_site_def_value_psyche multiply = sr_site_staffing_psyche }
+sr_site_def_shared_psyche = { value = sr_site_def_staffed_psyche }
+sr_site_def_shared_levels_psyche = { value = sr_site_def_value_psyche }
 sr_site_integrity_value_psyche = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_psyche } value = global_var:sr_site_integrity_psyche }
@@ -17550,18 +17689,18 @@ sr_site_militia_value_psyche = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_psyche = {
-	value = sr_site_marines_value_psyche
+	value = sr_site_shared_marines_psyche
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_militia_value_psyche }
 }
 sr_site_def_fire_psyche = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_psyche } sr_site_def_value_psyche > 0 }
-		value = sr_site_def_value_psyche
-		multiply = sr_site_staffing_psyche
+		limit = { NOT = { has_global_variable = sr_site_occupier_psyche } sr_site_def_shared_psyche > 0 }
+		value = sr_site_def_shared_psyche
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_psyche ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17569,14 +17708,12 @@ sr_site_def_fire_psyche = {
 	}
 }
 sr_site_hardness_psyche = {
-	value = sr_site_def_value_psyche
-	multiply = sr_site_staffing_psyche
+	value = sr_site_def_staffed_psyche
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_psyche = {
-	value = sr_site_def_value_psyche
-	multiply = sr_site_staffing_psyche
+	value = sr_site_def_staffed_psyche
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17591,6 +17728,12 @@ sr_site_marines_value_pallas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_pallas } value = global_var:sr_site_marines_pallas }
 }
+sr_site_shared_marines_pallas = {
+	value = sr_site_marines_value_pallas
+}
+sr_site_def_staffed_pallas = { value = sr_site_def_value_pallas multiply = sr_site_staffing_pallas }
+sr_site_def_shared_pallas = { value = sr_site_def_staffed_pallas }
+sr_site_def_shared_levels_pallas = { value = sr_site_def_value_pallas }
 sr_site_integrity_value_pallas = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_pallas } value = global_var:sr_site_integrity_pallas }
@@ -17601,18 +17744,18 @@ sr_site_militia_value_pallas = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_pallas = {
-	value = sr_site_marines_value_pallas
+	value = sr_site_shared_marines_pallas
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_militia_value_pallas }
 }
 sr_site_def_fire_pallas = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_pallas } sr_site_def_value_pallas > 0 }
-		value = sr_site_def_value_pallas
-		multiply = sr_site_staffing_pallas
+		limit = { NOT = { has_global_variable = sr_site_occupier_pallas } sr_site_def_shared_pallas > 0 }
+		value = sr_site_def_shared_pallas
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_pallas ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17620,14 +17763,12 @@ sr_site_def_fire_pallas = {
 	}
 }
 sr_site_hardness_pallas = {
-	value = sr_site_def_value_pallas
-	multiply = sr_site_staffing_pallas
+	value = sr_site_def_staffed_pallas
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_pallas = {
-	value = sr_site_def_value_pallas
-	multiply = sr_site_staffing_pallas
+	value = sr_site_def_staffed_pallas
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17642,6 +17783,12 @@ sr_site_marines_value_hygiea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_hygiea } value = global_var:sr_site_marines_hygiea }
 }
+sr_site_shared_marines_hygiea = {
+	value = sr_site_marines_value_hygiea
+}
+sr_site_def_staffed_hygiea = { value = sr_site_def_value_hygiea multiply = sr_site_staffing_hygiea }
+sr_site_def_shared_hygiea = { value = sr_site_def_staffed_hygiea }
+sr_site_def_shared_levels_hygiea = { value = sr_site_def_value_hygiea }
 sr_site_integrity_value_hygiea = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_hygiea } value = global_var:sr_site_integrity_hygiea }
@@ -17652,18 +17799,18 @@ sr_site_militia_value_hygiea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_hygiea = {
-	value = sr_site_marines_value_hygiea
+	value = sr_site_shared_marines_hygiea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_militia_value_hygiea }
 }
 sr_site_def_fire_hygiea = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } sr_site_def_value_hygiea > 0 }
-		value = sr_site_def_value_hygiea
-		multiply = sr_site_staffing_hygiea
+		limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } sr_site_def_shared_hygiea > 0 }
+		value = sr_site_def_shared_hygiea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_hygiea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17671,14 +17818,12 @@ sr_site_def_fire_hygiea = {
 	}
 }
 sr_site_hardness_hygiea = {
-	value = sr_site_def_value_hygiea
-	multiply = sr_site_staffing_hygiea
+	value = sr_site_def_staffed_hygiea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_hygiea = {
-	value = sr_site_def_value_hygiea
-	multiply = sr_site_staffing_hygiea
+	value = sr_site_def_staffed_hygiea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17693,6 +17838,12 @@ sr_site_marines_value_io = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_io } value = global_var:sr_site_marines_io }
 }
+sr_site_shared_marines_io = {
+	value = sr_site_marines_value_io
+}
+sr_site_def_staffed_io = { value = sr_site_def_value_io multiply = sr_site_staffing_io }
+sr_site_def_shared_io = { value = sr_site_def_staffed_io }
+sr_site_def_shared_levels_io = { value = sr_site_def_value_io }
 sr_site_integrity_value_io = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_io } value = global_var:sr_site_integrity_io }
@@ -17703,18 +17854,18 @@ sr_site_militia_value_io = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_io = {
-	value = sr_site_marines_value_io
+	value = sr_site_shared_marines_io
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_militia_value_io }
 }
 sr_site_def_fire_io = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_io } sr_site_def_value_io > 0 }
-		value = sr_site_def_value_io
-		multiply = sr_site_staffing_io
+		limit = { NOT = { has_global_variable = sr_site_occupier_io } sr_site_def_shared_io > 0 }
+		value = sr_site_def_shared_io
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_io ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17722,14 +17873,12 @@ sr_site_def_fire_io = {
 	}
 }
 sr_site_hardness_io = {
-	value = sr_site_def_value_io
-	multiply = sr_site_staffing_io
+	value = sr_site_def_staffed_io
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_io = {
-	value = sr_site_def_value_io
-	multiply = sr_site_staffing_io
+	value = sr_site_def_staffed_io
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17744,6 +17893,12 @@ sr_site_marines_value_europa = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_europa } value = global_var:sr_site_marines_europa }
 }
+sr_site_shared_marines_europa = {
+	value = sr_site_marines_value_europa
+}
+sr_site_def_staffed_europa = { value = sr_site_def_value_europa multiply = sr_site_staffing_europa }
+sr_site_def_shared_europa = { value = sr_site_def_staffed_europa }
+sr_site_def_shared_levels_europa = { value = sr_site_def_value_europa }
 sr_site_integrity_value_europa = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_europa } value = global_var:sr_site_integrity_europa }
@@ -17754,18 +17909,18 @@ sr_site_militia_value_europa = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_europa = {
-	value = sr_site_marines_value_europa
+	value = sr_site_shared_marines_europa
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_militia_value_europa }
 }
 sr_site_def_fire_europa = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_europa } sr_site_def_value_europa > 0 }
-		value = sr_site_def_value_europa
-		multiply = sr_site_staffing_europa
+		limit = { NOT = { has_global_variable = sr_site_occupier_europa } sr_site_def_shared_europa > 0 }
+		value = sr_site_def_shared_europa
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_europa ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17773,14 +17928,12 @@ sr_site_def_fire_europa = {
 	}
 }
 sr_site_hardness_europa = {
-	value = sr_site_def_value_europa
-	multiply = sr_site_staffing_europa
+	value = sr_site_def_staffed_europa
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_europa = {
-	value = sr_site_def_value_europa
-	multiply = sr_site_staffing_europa
+	value = sr_site_def_staffed_europa
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17795,6 +17948,12 @@ sr_site_marines_value_ganymede = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_ganymede } value = global_var:sr_site_marines_ganymede }
 }
+sr_site_shared_marines_ganymede = {
+	value = sr_site_marines_value_ganymede
+}
+sr_site_def_staffed_ganymede = { value = sr_site_def_value_ganymede multiply = sr_site_staffing_ganymede }
+sr_site_def_shared_ganymede = { value = sr_site_def_staffed_ganymede }
+sr_site_def_shared_levels_ganymede = { value = sr_site_def_value_ganymede }
 sr_site_integrity_value_ganymede = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_ganymede } value = global_var:sr_site_integrity_ganymede }
@@ -17805,18 +17964,18 @@ sr_site_militia_value_ganymede = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_ganymede = {
-	value = sr_site_marines_value_ganymede
+	value = sr_site_shared_marines_ganymede
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_militia_value_ganymede }
 }
 sr_site_def_fire_ganymede = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_def_value_ganymede > 0 }
-		value = sr_site_def_value_ganymede
-		multiply = sr_site_staffing_ganymede
+		limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_def_shared_ganymede > 0 }
+		value = sr_site_def_shared_ganymede
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_ganymede ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17824,14 +17983,12 @@ sr_site_def_fire_ganymede = {
 	}
 }
 sr_site_hardness_ganymede = {
-	value = sr_site_def_value_ganymede
-	multiply = sr_site_staffing_ganymede
+	value = sr_site_def_staffed_ganymede
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_ganymede = {
-	value = sr_site_def_value_ganymede
-	multiply = sr_site_staffing_ganymede
+	value = sr_site_def_staffed_ganymede
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17846,6 +18003,12 @@ sr_site_marines_value_callisto = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_callisto } value = global_var:sr_site_marines_callisto }
 }
+sr_site_shared_marines_callisto = {
+	value = sr_site_marines_value_callisto
+}
+sr_site_def_staffed_callisto = { value = sr_site_def_value_callisto multiply = sr_site_staffing_callisto }
+sr_site_def_shared_callisto = { value = sr_site_def_staffed_callisto }
+sr_site_def_shared_levels_callisto = { value = sr_site_def_value_callisto }
 sr_site_integrity_value_callisto = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_callisto } value = global_var:sr_site_integrity_callisto }
@@ -17856,18 +18019,18 @@ sr_site_militia_value_callisto = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_callisto = {
-	value = sr_site_marines_value_callisto
+	value = sr_site_shared_marines_callisto
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_militia_value_callisto }
 }
 sr_site_def_fire_callisto = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_def_value_callisto > 0 }
-		value = sr_site_def_value_callisto
-		multiply = sr_site_staffing_callisto
+		limit = { NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_def_shared_callisto > 0 }
+		value = sr_site_def_shared_callisto
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_callisto ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17875,14 +18038,12 @@ sr_site_def_fire_callisto = {
 	}
 }
 sr_site_hardness_callisto = {
-	value = sr_site_def_value_callisto
-	multiply = sr_site_staffing_callisto
+	value = sr_site_def_staffed_callisto
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_callisto = {
-	value = sr_site_def_value_callisto
-	multiply = sr_site_staffing_callisto
+	value = sr_site_def_staffed_callisto
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17897,6 +18058,12 @@ sr_site_marines_value_himalia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_himalia } value = global_var:sr_site_marines_himalia }
 }
+sr_site_shared_marines_himalia = {
+	value = sr_site_marines_value_himalia
+}
+sr_site_def_staffed_himalia = { value = sr_site_def_value_himalia multiply = sr_site_staffing_himalia }
+sr_site_def_shared_himalia = { value = sr_site_def_staffed_himalia }
+sr_site_def_shared_levels_himalia = { value = sr_site_def_value_himalia }
 sr_site_integrity_value_himalia = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_himalia } value = global_var:sr_site_integrity_himalia }
@@ -17907,18 +18074,18 @@ sr_site_militia_value_himalia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_himalia = {
-	value = sr_site_marines_value_himalia
+	value = sr_site_shared_marines_himalia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_militia_value_himalia }
 }
 sr_site_def_fire_himalia = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_def_value_himalia > 0 }
-		value = sr_site_def_value_himalia
-		multiply = sr_site_staffing_himalia
+		limit = { NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_def_shared_himalia > 0 }
+		value = sr_site_def_shared_himalia
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_himalia ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17926,14 +18093,12 @@ sr_site_def_fire_himalia = {
 	}
 }
 sr_site_hardness_himalia = {
-	value = sr_site_def_value_himalia
-	multiply = sr_site_staffing_himalia
+	value = sr_site_def_staffed_himalia
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_himalia = {
-	value = sr_site_def_value_himalia
-	multiply = sr_site_staffing_himalia
+	value = sr_site_def_staffed_himalia
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17948,6 +18113,12 @@ sr_site_marines_value_amalthea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_amalthea } value = global_var:sr_site_marines_amalthea }
 }
+sr_site_shared_marines_amalthea = {
+	value = sr_site_marines_value_amalthea
+}
+sr_site_def_staffed_amalthea = { value = sr_site_def_value_amalthea multiply = sr_site_staffing_amalthea }
+sr_site_def_shared_amalthea = { value = sr_site_def_staffed_amalthea }
+sr_site_def_shared_levels_amalthea = { value = sr_site_def_value_amalthea }
 sr_site_integrity_value_amalthea = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_amalthea } value = global_var:sr_site_integrity_amalthea }
@@ -17958,18 +18129,18 @@ sr_site_militia_value_amalthea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_amalthea = {
-	value = sr_site_marines_value_amalthea
+	value = sr_site_shared_marines_amalthea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_militia_value_amalthea }
 }
 sr_site_def_fire_amalthea = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_def_value_amalthea > 0 }
-		value = sr_site_def_value_amalthea
-		multiply = sr_site_staffing_amalthea
+		limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_def_shared_amalthea > 0 }
+		value = sr_site_def_shared_amalthea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_amalthea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -17977,14 +18148,12 @@ sr_site_def_fire_amalthea = {
 	}
 }
 sr_site_hardness_amalthea = {
-	value = sr_site_def_value_amalthea
-	multiply = sr_site_staffing_amalthea
+	value = sr_site_def_staffed_amalthea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_amalthea = {
-	value = sr_site_def_value_amalthea
-	multiply = sr_site_staffing_amalthea
+	value = sr_site_def_staffed_amalthea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -17999,6 +18168,12 @@ sr_site_marines_value_venus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_venus } value = global_var:sr_site_marines_venus }
 }
+sr_site_shared_marines_venus = {
+	value = sr_site_marines_value_venus
+}
+sr_site_def_staffed_venus = { value = sr_site_def_value_venus multiply = sr_site_staffing_venus }
+sr_site_def_shared_venus = { value = sr_site_def_staffed_venus }
+sr_site_def_shared_levels_venus = { value = sr_site_def_value_venus }
 sr_site_integrity_value_venus = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_venus } value = global_var:sr_site_integrity_venus }
@@ -18009,18 +18184,18 @@ sr_site_militia_value_venus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_venus = {
-	value = sr_site_marines_value_venus
+	value = sr_site_shared_marines_venus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_militia_value_venus }
 }
 sr_site_def_fire_venus = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_venus } sr_site_def_value_venus > 0 }
-		value = sr_site_def_value_venus
-		multiply = sr_site_staffing_venus
+		limit = { NOT = { has_global_variable = sr_site_occupier_venus } sr_site_def_shared_venus > 0 }
+		value = sr_site_def_shared_venus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_venus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18028,14 +18203,12 @@ sr_site_def_fire_venus = {
 	}
 }
 sr_site_hardness_venus = {
-	value = sr_site_def_value_venus
-	multiply = sr_site_staffing_venus
+	value = sr_site_def_staffed_venus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_venus = {
-	value = sr_site_def_value_venus
-	multiply = sr_site_staffing_venus
+	value = sr_site_def_staffed_venus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18050,6 +18223,12 @@ sr_site_marines_value_mercury = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_mercury } value = global_var:sr_site_marines_mercury }
 }
+sr_site_shared_marines_mercury = {
+	value = sr_site_marines_value_mercury
+}
+sr_site_def_staffed_mercury = { value = sr_site_def_value_mercury multiply = sr_site_staffing_mercury }
+sr_site_def_shared_mercury = { value = sr_site_def_staffed_mercury }
+sr_site_def_shared_levels_mercury = { value = sr_site_def_value_mercury }
 sr_site_integrity_value_mercury = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_mercury } value = global_var:sr_site_integrity_mercury }
@@ -18060,18 +18239,18 @@ sr_site_militia_value_mercury = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_mercury = {
-	value = sr_site_marines_value_mercury
+	value = sr_site_shared_marines_mercury
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_militia_value_mercury }
 }
 sr_site_def_fire_mercury = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_mercury } sr_site_def_value_mercury > 0 }
-		value = sr_site_def_value_mercury
-		multiply = sr_site_staffing_mercury
+		limit = { NOT = { has_global_variable = sr_site_occupier_mercury } sr_site_def_shared_mercury > 0 }
+		value = sr_site_def_shared_mercury
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_mercury ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18079,14 +18258,12 @@ sr_site_def_fire_mercury = {
 	}
 }
 sr_site_hardness_mercury = {
-	value = sr_site_def_value_mercury
-	multiply = sr_site_staffing_mercury
+	value = sr_site_def_staffed_mercury
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_mercury = {
-	value = sr_site_def_value_mercury
-	multiply = sr_site_staffing_mercury
+	value = sr_site_def_staffed_mercury
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18101,6 +18278,12 @@ sr_site_marines_value_titan = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_titan } value = global_var:sr_site_marines_titan }
 }
+sr_site_shared_marines_titan = {
+	value = sr_site_marines_value_titan
+}
+sr_site_def_staffed_titan = { value = sr_site_def_value_titan multiply = sr_site_staffing_titan }
+sr_site_def_shared_titan = { value = sr_site_def_staffed_titan }
+sr_site_def_shared_levels_titan = { value = sr_site_def_value_titan }
 sr_site_integrity_value_titan = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_titan } value = global_var:sr_site_integrity_titan }
@@ -18111,18 +18294,18 @@ sr_site_militia_value_titan = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_titan = {
-	value = sr_site_marines_value_titan
+	value = sr_site_shared_marines_titan
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_militia_value_titan }
 }
 sr_site_def_fire_titan = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_titan } sr_site_def_value_titan > 0 }
-		value = sr_site_def_value_titan
-		multiply = sr_site_staffing_titan
+		limit = { NOT = { has_global_variable = sr_site_occupier_titan } sr_site_def_shared_titan > 0 }
+		value = sr_site_def_shared_titan
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_titan ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18130,14 +18313,12 @@ sr_site_def_fire_titan = {
 	}
 }
 sr_site_hardness_titan = {
-	value = sr_site_def_value_titan
-	multiply = sr_site_staffing_titan
+	value = sr_site_def_staffed_titan
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_titan = {
-	value = sr_site_def_value_titan
-	multiply = sr_site_staffing_titan
+	value = sr_site_def_staffed_titan
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18152,6 +18333,12 @@ sr_site_marines_value_enceladus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_enceladus } value = global_var:sr_site_marines_enceladus }
 }
+sr_site_shared_marines_enceladus = {
+	value = sr_site_marines_value_enceladus
+}
+sr_site_def_staffed_enceladus = { value = sr_site_def_value_enceladus multiply = sr_site_staffing_enceladus }
+sr_site_def_shared_enceladus = { value = sr_site_def_staffed_enceladus }
+sr_site_def_shared_levels_enceladus = { value = sr_site_def_value_enceladus }
 sr_site_integrity_value_enceladus = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_enceladus } value = global_var:sr_site_integrity_enceladus }
@@ -18162,18 +18349,18 @@ sr_site_militia_value_enceladus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_enceladus = {
-	value = sr_site_marines_value_enceladus
+	value = sr_site_shared_marines_enceladus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_militia_value_enceladus }
 }
 sr_site_def_fire_enceladus = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_def_value_enceladus > 0 }
-		value = sr_site_def_value_enceladus
-		multiply = sr_site_staffing_enceladus
+		limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_def_shared_enceladus > 0 }
+		value = sr_site_def_shared_enceladus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_enceladus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18181,14 +18368,12 @@ sr_site_def_fire_enceladus = {
 	}
 }
 sr_site_hardness_enceladus = {
-	value = sr_site_def_value_enceladus
-	multiply = sr_site_staffing_enceladus
+	value = sr_site_def_staffed_enceladus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_enceladus = {
-	value = sr_site_def_value_enceladus
-	multiply = sr_site_staffing_enceladus
+	value = sr_site_def_staffed_enceladus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18203,6 +18388,12 @@ sr_site_marines_value_rhea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_rhea } value = global_var:sr_site_marines_rhea }
 }
+sr_site_shared_marines_rhea = {
+	value = sr_site_marines_value_rhea
+}
+sr_site_def_staffed_rhea = { value = sr_site_def_value_rhea multiply = sr_site_staffing_rhea }
+sr_site_def_shared_rhea = { value = sr_site_def_staffed_rhea }
+sr_site_def_shared_levels_rhea = { value = sr_site_def_value_rhea }
 sr_site_integrity_value_rhea = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_rhea } value = global_var:sr_site_integrity_rhea }
@@ -18213,18 +18404,18 @@ sr_site_militia_value_rhea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_rhea = {
-	value = sr_site_marines_value_rhea
+	value = sr_site_shared_marines_rhea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_militia_value_rhea }
 }
 sr_site_def_fire_rhea = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_def_value_rhea > 0 }
-		value = sr_site_def_value_rhea
-		multiply = sr_site_staffing_rhea
+		limit = { NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_def_shared_rhea > 0 }
+		value = sr_site_def_shared_rhea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_rhea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18232,14 +18423,12 @@ sr_site_def_fire_rhea = {
 	}
 }
 sr_site_hardness_rhea = {
-	value = sr_site_def_value_rhea
-	multiply = sr_site_staffing_rhea
+	value = sr_site_def_staffed_rhea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_rhea = {
-	value = sr_site_def_value_rhea
-	multiply = sr_site_staffing_rhea
+	value = sr_site_def_staffed_rhea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18254,6 +18443,12 @@ sr_site_marines_value_mimas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_mimas } value = global_var:sr_site_marines_mimas }
 }
+sr_site_shared_marines_mimas = {
+	value = sr_site_marines_value_mimas
+}
+sr_site_def_staffed_mimas = { value = sr_site_def_value_mimas multiply = sr_site_staffing_mimas }
+sr_site_def_shared_mimas = { value = sr_site_def_staffed_mimas }
+sr_site_def_shared_levels_mimas = { value = sr_site_def_value_mimas }
 sr_site_integrity_value_mimas = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_mimas } value = global_var:sr_site_integrity_mimas }
@@ -18264,18 +18459,18 @@ sr_site_militia_value_mimas = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_mimas = {
-	value = sr_site_marines_value_mimas
+	value = sr_site_shared_marines_mimas
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_militia_value_mimas }
 }
 sr_site_def_fire_mimas = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_def_value_mimas > 0 }
-		value = sr_site_def_value_mimas
-		multiply = sr_site_staffing_mimas
+		limit = { NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_def_shared_mimas > 0 }
+		value = sr_site_def_shared_mimas
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_mimas ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18283,14 +18478,12 @@ sr_site_def_fire_mimas = {
 	}
 }
 sr_site_hardness_mimas = {
-	value = sr_site_def_value_mimas
-	multiply = sr_site_staffing_mimas
+	value = sr_site_def_staffed_mimas
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_mimas = {
-	value = sr_site_def_value_mimas
-	multiply = sr_site_staffing_mimas
+	value = sr_site_def_staffed_mimas
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18305,6 +18498,12 @@ sr_site_marines_value_iapetus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_iapetus } value = global_var:sr_site_marines_iapetus }
 }
+sr_site_shared_marines_iapetus = {
+	value = sr_site_marines_value_iapetus
+}
+sr_site_def_staffed_iapetus = { value = sr_site_def_value_iapetus multiply = sr_site_staffing_iapetus }
+sr_site_def_shared_iapetus = { value = sr_site_def_staffed_iapetus }
+sr_site_def_shared_levels_iapetus = { value = sr_site_def_value_iapetus }
 sr_site_integrity_value_iapetus = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_iapetus } value = global_var:sr_site_integrity_iapetus }
@@ -18315,18 +18514,18 @@ sr_site_militia_value_iapetus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_iapetus = {
-	value = sr_site_marines_value_iapetus
+	value = sr_site_shared_marines_iapetus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } } add = sr_site_militia_value_iapetus }
 }
 sr_site_def_fire_iapetus = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_def_value_iapetus > 0 }
-		value = sr_site_def_value_iapetus
-		multiply = sr_site_staffing_iapetus
+		limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_def_shared_iapetus > 0 }
+		value = sr_site_def_shared_iapetus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_iapetus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18334,14 +18533,12 @@ sr_site_def_fire_iapetus = {
 	}
 }
 sr_site_hardness_iapetus = {
-	value = sr_site_def_value_iapetus
-	multiply = sr_site_staffing_iapetus
+	value = sr_site_def_staffed_iapetus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_iapetus = {
-	value = sr_site_def_value_iapetus
-	multiply = sr_site_staffing_iapetus
+	value = sr_site_def_staffed_iapetus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18356,6 +18553,12 @@ sr_site_marines_value_titania = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_titania } value = global_var:sr_site_marines_titania }
 }
+sr_site_shared_marines_titania = {
+	value = sr_site_marines_value_titania
+}
+sr_site_def_staffed_titania = { value = sr_site_def_value_titania multiply = sr_site_staffing_titania }
+sr_site_def_shared_titania = { value = sr_site_def_staffed_titania }
+sr_site_def_shared_levels_titania = { value = sr_site_def_value_titania }
 sr_site_integrity_value_titania = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_titania } value = global_var:sr_site_integrity_titania }
@@ -18366,18 +18569,18 @@ sr_site_militia_value_titania = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_titania = {
-	value = sr_site_marines_value_titania
+	value = sr_site_shared_marines_titania
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titania } } add = sr_site_militia_value_titania }
 }
 sr_site_def_fire_titania = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_titania } sr_site_def_value_titania > 0 }
-		value = sr_site_def_value_titania
-		multiply = sr_site_staffing_titania
+		limit = { NOT = { has_global_variable = sr_site_occupier_titania } sr_site_def_shared_titania > 0 }
+		value = sr_site_def_shared_titania
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_titania ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18385,14 +18588,12 @@ sr_site_def_fire_titania = {
 	}
 }
 sr_site_hardness_titania = {
-	value = sr_site_def_value_titania
-	multiply = sr_site_staffing_titania
+	value = sr_site_def_staffed_titania
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_titania = {
-	value = sr_site_def_value_titania
-	multiply = sr_site_staffing_titania
+	value = sr_site_def_staffed_titania
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18407,6 +18608,12 @@ sr_site_marines_value_oberon = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_oberon } value = global_var:sr_site_marines_oberon }
 }
+sr_site_shared_marines_oberon = {
+	value = sr_site_marines_value_oberon
+}
+sr_site_def_staffed_oberon = { value = sr_site_def_value_oberon multiply = sr_site_staffing_oberon }
+sr_site_def_shared_oberon = { value = sr_site_def_staffed_oberon }
+sr_site_def_shared_levels_oberon = { value = sr_site_def_value_oberon }
 sr_site_integrity_value_oberon = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_oberon } value = global_var:sr_site_integrity_oberon }
@@ -18417,18 +18624,18 @@ sr_site_militia_value_oberon = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_oberon = {
-	value = sr_site_marines_value_oberon
+	value = sr_site_shared_marines_oberon
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_oberon } } add = sr_site_militia_value_oberon }
 }
 sr_site_def_fire_oberon = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_def_value_oberon > 0 }
-		value = sr_site_def_value_oberon
-		multiply = sr_site_staffing_oberon
+		limit = { NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_def_shared_oberon > 0 }
+		value = sr_site_def_shared_oberon
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_oberon ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18436,14 +18643,12 @@ sr_site_def_fire_oberon = {
 	}
 }
 sr_site_hardness_oberon = {
-	value = sr_site_def_value_oberon
-	multiply = sr_site_staffing_oberon
+	value = sr_site_def_staffed_oberon
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_oberon = {
-	value = sr_site_def_value_oberon
-	multiply = sr_site_staffing_oberon
+	value = sr_site_def_staffed_oberon
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18458,6 +18663,12 @@ sr_site_marines_value_miranda = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_miranda } value = global_var:sr_site_marines_miranda }
 }
+sr_site_shared_marines_miranda = {
+	value = sr_site_marines_value_miranda
+}
+sr_site_def_staffed_miranda = { value = sr_site_def_value_miranda multiply = sr_site_staffing_miranda }
+sr_site_def_shared_miranda = { value = sr_site_def_staffed_miranda }
+sr_site_def_shared_levels_miranda = { value = sr_site_def_value_miranda }
 sr_site_integrity_value_miranda = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_miranda } value = global_var:sr_site_integrity_miranda }
@@ -18468,18 +18679,18 @@ sr_site_militia_value_miranda = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_miranda = {
-	value = sr_site_marines_value_miranda
+	value = sr_site_shared_marines_miranda
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_miranda } } add = sr_site_militia_value_miranda }
 }
 sr_site_def_fire_miranda = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_def_value_miranda > 0 }
-		value = sr_site_def_value_miranda
-		multiply = sr_site_staffing_miranda
+		limit = { NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_def_shared_miranda > 0 }
+		value = sr_site_def_shared_miranda
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_miranda ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18487,14 +18698,12 @@ sr_site_def_fire_miranda = {
 	}
 }
 sr_site_hardness_miranda = {
-	value = sr_site_def_value_miranda
-	multiply = sr_site_staffing_miranda
+	value = sr_site_def_staffed_miranda
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_miranda = {
-	value = sr_site_def_value_miranda
-	multiply = sr_site_staffing_miranda
+	value = sr_site_def_staffed_miranda
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18509,6 +18718,12 @@ sr_site_marines_value_ariel = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_ariel } value = global_var:sr_site_marines_ariel }
 }
+sr_site_shared_marines_ariel = {
+	value = sr_site_marines_value_ariel
+}
+sr_site_def_staffed_ariel = { value = sr_site_def_value_ariel multiply = sr_site_staffing_ariel }
+sr_site_def_shared_ariel = { value = sr_site_def_staffed_ariel }
+sr_site_def_shared_levels_ariel = { value = sr_site_def_value_ariel }
 sr_site_integrity_value_ariel = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_ariel } value = global_var:sr_site_integrity_ariel }
@@ -18519,18 +18734,18 @@ sr_site_militia_value_ariel = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_ariel = {
-	value = sr_site_marines_value_ariel
+	value = sr_site_shared_marines_ariel
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_militia_value_ariel }
 }
 sr_site_def_fire_ariel = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_def_value_ariel > 0 }
-		value = sr_site_def_value_ariel
-		multiply = sr_site_staffing_ariel
+		limit = { NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_def_shared_ariel > 0 }
+		value = sr_site_def_shared_ariel
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_ariel ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18538,14 +18753,12 @@ sr_site_def_fire_ariel = {
 	}
 }
 sr_site_hardness_ariel = {
-	value = sr_site_def_value_ariel
-	multiply = sr_site_staffing_ariel
+	value = sr_site_def_staffed_ariel
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_ariel = {
-	value = sr_site_def_value_ariel
-	multiply = sr_site_staffing_ariel
+	value = sr_site_def_staffed_ariel
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18560,6 +18773,12 @@ sr_site_marines_value_triton = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_triton } value = global_var:sr_site_marines_triton }
 }
+sr_site_shared_marines_triton = {
+	value = sr_site_marines_value_triton
+}
+sr_site_def_staffed_triton = { value = sr_site_def_value_triton multiply = sr_site_staffing_triton }
+sr_site_def_shared_triton = { value = sr_site_def_staffed_triton }
+sr_site_def_shared_levels_triton = { value = sr_site_def_value_triton }
 sr_site_integrity_value_triton = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_triton } value = global_var:sr_site_integrity_triton }
@@ -18570,18 +18789,18 @@ sr_site_militia_value_triton = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_triton = {
-	value = sr_site_marines_value_triton
+	value = sr_site_shared_marines_triton
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_militia_value_triton }
 }
 sr_site_def_fire_triton = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_triton } sr_site_def_value_triton > 0 }
-		value = sr_site_def_value_triton
-		multiply = sr_site_staffing_triton
+		limit = { NOT = { has_global_variable = sr_site_occupier_triton } sr_site_def_shared_triton > 0 }
+		value = sr_site_def_shared_triton
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_triton ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18589,14 +18808,12 @@ sr_site_def_fire_triton = {
 	}
 }
 sr_site_hardness_triton = {
-	value = sr_site_def_value_triton
-	multiply = sr_site_staffing_triton
+	value = sr_site_def_staffed_triton
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_triton = {
-	value = sr_site_def_value_triton
-	multiply = sr_site_staffing_triton
+	value = sr_site_def_staffed_triton
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18611,6 +18828,12 @@ sr_site_marines_value_proteus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_proteus } value = global_var:sr_site_marines_proteus }
 }
+sr_site_shared_marines_proteus = {
+	value = sr_site_marines_value_proteus
+}
+sr_site_def_staffed_proteus = { value = sr_site_def_value_proteus multiply = sr_site_staffing_proteus }
+sr_site_def_shared_proteus = { value = sr_site_def_staffed_proteus }
+sr_site_def_shared_levels_proteus = { value = sr_site_def_value_proteus }
 sr_site_integrity_value_proteus = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_proteus } value = global_var:sr_site_integrity_proteus }
@@ -18621,18 +18844,18 @@ sr_site_militia_value_proteus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_proteus = {
-	value = sr_site_marines_value_proteus
+	value = sr_site_shared_marines_proteus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_militia_value_proteus }
 }
 sr_site_def_fire_proteus = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_proteus } sr_site_def_value_proteus > 0 }
-		value = sr_site_def_value_proteus
-		multiply = sr_site_staffing_proteus
+		limit = { NOT = { has_global_variable = sr_site_occupier_proteus } sr_site_def_shared_proteus > 0 }
+		value = sr_site_def_shared_proteus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_proteus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18640,14 +18863,12 @@ sr_site_def_fire_proteus = {
 	}
 }
 sr_site_hardness_proteus = {
-	value = sr_site_def_value_proteus
-	multiply = sr_site_staffing_proteus
+	value = sr_site_def_staffed_proteus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_proteus = {
-	value = sr_site_def_value_proteus
-	multiply = sr_site_staffing_proteus
+	value = sr_site_def_staffed_proteus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18662,6 +18883,12 @@ sr_site_marines_value_pluto = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_pluto } value = global_var:sr_site_marines_pluto }
 }
+sr_site_shared_marines_pluto = {
+	value = sr_site_marines_value_pluto
+}
+sr_site_def_staffed_pluto = { value = sr_site_def_value_pluto multiply = sr_site_staffing_pluto }
+sr_site_def_shared_pluto = { value = sr_site_def_staffed_pluto }
+sr_site_def_shared_levels_pluto = { value = sr_site_def_value_pluto }
 sr_site_integrity_value_pluto = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_pluto } value = global_var:sr_site_integrity_pluto }
@@ -18672,18 +18899,18 @@ sr_site_militia_value_pluto = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_pluto = {
-	value = sr_site_marines_value_pluto
+	value = sr_site_shared_marines_pluto
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_militia_value_pluto }
 }
 sr_site_def_fire_pluto = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_pluto } sr_site_def_value_pluto > 0 }
-		value = sr_site_def_value_pluto
-		multiply = sr_site_staffing_pluto
+		limit = { NOT = { has_global_variable = sr_site_occupier_pluto } sr_site_def_shared_pluto > 0 }
+		value = sr_site_def_shared_pluto
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_pluto ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18691,14 +18918,12 @@ sr_site_def_fire_pluto = {
 	}
 }
 sr_site_hardness_pluto = {
-	value = sr_site_def_value_pluto
-	multiply = sr_site_staffing_pluto
+	value = sr_site_def_staffed_pluto
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_pluto = {
-	value = sr_site_def_value_pluto
-	multiply = sr_site_staffing_pluto
+	value = sr_site_def_staffed_pluto
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18713,6 +18938,12 @@ sr_site_marines_value_eris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_eris } value = global_var:sr_site_marines_eris }
 }
+sr_site_shared_marines_eris = {
+	value = sr_site_marines_value_eris
+}
+sr_site_def_staffed_eris = { value = sr_site_def_value_eris multiply = sr_site_staffing_eris }
+sr_site_def_shared_eris = { value = sr_site_def_staffed_eris }
+sr_site_def_shared_levels_eris = { value = sr_site_def_value_eris }
 sr_site_integrity_value_eris = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_eris } value = global_var:sr_site_integrity_eris }
@@ -18723,18 +18954,18 @@ sr_site_militia_value_eris = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_eris = {
-	value = sr_site_marines_value_eris
+	value = sr_site_shared_marines_eris
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_militia_value_eris }
 }
 sr_site_def_fire_eris = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_eris } sr_site_def_value_eris > 0 }
-		value = sr_site_def_value_eris
-		multiply = sr_site_staffing_eris
+		limit = { NOT = { has_global_variable = sr_site_occupier_eris } sr_site_def_shared_eris > 0 }
+		value = sr_site_def_shared_eris
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_eris ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18742,14 +18973,12 @@ sr_site_def_fire_eris = {
 	}
 }
 sr_site_hardness_eris = {
-	value = sr_site_def_value_eris
-	multiply = sr_site_staffing_eris
+	value = sr_site_def_staffed_eris
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_eris = {
-	value = sr_site_def_value_eris
-	multiply = sr_site_staffing_eris
+	value = sr_site_def_staffed_eris
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18764,6 +18993,12 @@ sr_site_marines_value_makemake = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_makemake } value = global_var:sr_site_marines_makemake }
 }
+sr_site_shared_marines_makemake = {
+	value = sr_site_marines_value_makemake
+}
+sr_site_def_staffed_makemake = { value = sr_site_def_value_makemake multiply = sr_site_staffing_makemake }
+sr_site_def_shared_makemake = { value = sr_site_def_staffed_makemake }
+sr_site_def_shared_levels_makemake = { value = sr_site_def_value_makemake }
 sr_site_integrity_value_makemake = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_makemake } value = global_var:sr_site_integrity_makemake }
@@ -18774,18 +19009,18 @@ sr_site_militia_value_makemake = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_makemake = {
-	value = sr_site_marines_value_makemake
+	value = sr_site_shared_marines_makemake
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_makemake } } add = sr_site_militia_value_makemake }
 }
 sr_site_def_fire_makemake = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_makemake } sr_site_def_value_makemake > 0 }
-		value = sr_site_def_value_makemake
-		multiply = sr_site_staffing_makemake
+		limit = { NOT = { has_global_variable = sr_site_occupier_makemake } sr_site_def_shared_makemake > 0 }
+		value = sr_site_def_shared_makemake
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_makemake ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18793,14 +19028,12 @@ sr_site_def_fire_makemake = {
 	}
 }
 sr_site_hardness_makemake = {
-	value = sr_site_def_value_makemake
-	multiply = sr_site_staffing_makemake
+	value = sr_site_def_staffed_makemake
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_makemake = {
-	value = sr_site_def_value_makemake
-	multiply = sr_site_staffing_makemake
+	value = sr_site_def_staffed_makemake
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18815,6 +19048,12 @@ sr_site_marines_value_haumea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_haumea } value = global_var:sr_site_marines_haumea }
 }
+sr_site_shared_marines_haumea = {
+	value = sr_site_marines_value_haumea
+}
+sr_site_def_staffed_haumea = { value = sr_site_def_value_haumea multiply = sr_site_staffing_haumea }
+sr_site_def_shared_haumea = { value = sr_site_def_staffed_haumea }
+sr_site_def_shared_levels_haumea = { value = sr_site_def_value_haumea }
 sr_site_integrity_value_haumea = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_haumea } value = global_var:sr_site_integrity_haumea }
@@ -18825,18 +19064,18 @@ sr_site_militia_value_haumea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_haumea = {
-	value = sr_site_marines_value_haumea
+	value = sr_site_shared_marines_haumea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_haumea } } add = sr_site_militia_value_haumea }
 }
 sr_site_def_fire_haumea = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_haumea } sr_site_def_value_haumea > 0 }
-		value = sr_site_def_value_haumea
-		multiply = sr_site_staffing_haumea
+		limit = { NOT = { has_global_variable = sr_site_occupier_haumea } sr_site_def_shared_haumea > 0 }
+		value = sr_site_def_shared_haumea
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_haumea ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18844,14 +19083,12 @@ sr_site_def_fire_haumea = {
 	}
 }
 sr_site_hardness_haumea = {
-	value = sr_site_def_value_haumea
-	multiply = sr_site_staffing_haumea
+	value = sr_site_def_staffed_haumea
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_haumea = {
-	value = sr_site_def_value_haumea
-	multiply = sr_site_staffing_haumea
+	value = sr_site_def_staffed_haumea
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18866,6 +19103,12 @@ sr_site_marines_value_sedna = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_sedna } value = global_var:sr_site_marines_sedna }
 }
+sr_site_shared_marines_sedna = {
+	value = sr_site_marines_value_sedna
+}
+sr_site_def_staffed_sedna = { value = sr_site_def_value_sedna multiply = sr_site_staffing_sedna }
+sr_site_def_shared_sedna = { value = sr_site_def_staffed_sedna }
+sr_site_def_shared_levels_sedna = { value = sr_site_def_value_sedna }
 sr_site_integrity_value_sedna = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_sedna } value = global_var:sr_site_integrity_sedna }
@@ -18876,18 +19119,18 @@ sr_site_militia_value_sedna = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_sedna = {
-	value = sr_site_marines_value_sedna
+	value = sr_site_shared_marines_sedna
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_sedna } } add = sr_site_militia_value_sedna }
 }
 sr_site_def_fire_sedna = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_sedna } sr_site_def_value_sedna > 0 }
-		value = sr_site_def_value_sedna
-		multiply = sr_site_staffing_sedna
+		limit = { NOT = { has_global_variable = sr_site_occupier_sedna } sr_site_def_shared_sedna > 0 }
+		value = sr_site_def_shared_sedna
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_sedna ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18895,14 +19138,12 @@ sr_site_def_fire_sedna = {
 	}
 }
 sr_site_hardness_sedna = {
-	value = sr_site_def_value_sedna
-	multiply = sr_site_staffing_sedna
+	value = sr_site_def_staffed_sedna
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_sedna = {
-	value = sr_site_def_value_sedna
-	multiply = sr_site_staffing_sedna
+	value = sr_site_def_staffed_sedna
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18917,6 +19158,32 @@ sr_site_marines_value_shackleton = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_shackleton } value = global_var:sr_site_marines_shackleton }
 }
+sr_site_shared_marines_shackleton = {
+	value = sr_site_marines_value_shackleton
+	if = { limit = { sr_site_shares = { A = shackleton B = peary } } add = sr_site_marines_value_peary }
+	if = { limit = { sr_site_shares = { A = shackleton B = tranquility } } add = sr_site_marines_value_tranquility }
+	if = { limit = { sr_site_shares = { A = shackleton B = marius_hills } } add = sr_site_marines_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = shackleton B = daedalus } } add = sr_site_marines_value_daedalus }
+	if = { limit = { sr_site_shares = { A = shackleton B = imbrium } } add = sr_site_marines_value_imbrium }
+}
+sr_site_def_staffed_shackleton = { value = sr_site_def_value_shackleton multiply = sr_site_staffing_shackleton }
+sr_site_def_others_shackleton = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = shackleton B = peary } } add = sr_site_def_staffed_peary }
+	if = { limit = { sr_site_shares = { A = shackleton B = tranquility } } add = sr_site_def_staffed_tranquility }
+	if = { limit = { sr_site_shares = { A = shackleton B = marius_hills } } add = sr_site_def_staffed_marius_hills }
+	if = { limit = { sr_site_shares = { A = shackleton B = daedalus } } add = sr_site_def_staffed_daedalus }
+	if = { limit = { sr_site_shares = { A = shackleton B = imbrium } } add = sr_site_def_staffed_imbrium }
+}
+sr_site_def_shared_shackleton = { value = sr_site_def_staffed_shackleton add = sr_site_def_others_shackleton }
+sr_site_def_shared_levels_shackleton = {
+	value = sr_site_def_value_shackleton
+	if = { limit = { sr_site_shares = { A = shackleton B = peary } } add = sr_site_def_value_peary }
+	if = { limit = { sr_site_shares = { A = shackleton B = tranquility } } add = sr_site_def_value_tranquility }
+	if = { limit = { sr_site_shares = { A = shackleton B = marius_hills } } add = sr_site_def_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = shackleton B = daedalus } } add = sr_site_def_value_daedalus }
+	if = { limit = { sr_site_shares = { A = shackleton B = imbrium } } add = sr_site_def_value_imbrium }
+}
 sr_site_integrity_value_shackleton = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_shackleton } value = global_var:sr_site_integrity_shackleton }
@@ -18927,18 +19194,18 @@ sr_site_militia_value_shackleton = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_shackleton = {
-	value = sr_site_marines_value_shackleton
+	value = sr_site_shared_marines_shackleton
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_shackleton } } add = sr_site_militia_value_shackleton }
 }
 sr_site_def_fire_shackleton = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_def_value_shackleton > 0 }
-		value = sr_site_def_value_shackleton
-		multiply = sr_site_staffing_shackleton
+		limit = { NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_def_shared_shackleton > 0 }
+		value = sr_site_def_shared_shackleton
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_shackleton ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18946,14 +19213,14 @@ sr_site_def_fire_shackleton = {
 	}
 }
 sr_site_hardness_shackleton = {
-	value = sr_site_def_value_shackleton
-	multiply = sr_site_staffing_shackleton
+	value = sr_site_def_others_shackleton
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_shackleton
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_shackleton = {
-	value = sr_site_def_value_shackleton
-	multiply = sr_site_staffing_shackleton
+	value = sr_site_def_staffed_shackleton
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -18968,6 +19235,32 @@ sr_site_marines_value_peary = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_peary } value = global_var:sr_site_marines_peary }
 }
+sr_site_shared_marines_peary = {
+	value = sr_site_marines_value_peary
+	if = { limit = { sr_site_shares = { A = peary B = shackleton } } add = sr_site_marines_value_shackleton }
+	if = { limit = { sr_site_shares = { A = peary B = tranquility } } add = sr_site_marines_value_tranquility }
+	if = { limit = { sr_site_shares = { A = peary B = marius_hills } } add = sr_site_marines_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = peary B = daedalus } } add = sr_site_marines_value_daedalus }
+	if = { limit = { sr_site_shares = { A = peary B = imbrium } } add = sr_site_marines_value_imbrium }
+}
+sr_site_def_staffed_peary = { value = sr_site_def_value_peary multiply = sr_site_staffing_peary }
+sr_site_def_others_peary = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = peary B = shackleton } } add = sr_site_def_staffed_shackleton }
+	if = { limit = { sr_site_shares = { A = peary B = tranquility } } add = sr_site_def_staffed_tranquility }
+	if = { limit = { sr_site_shares = { A = peary B = marius_hills } } add = sr_site_def_staffed_marius_hills }
+	if = { limit = { sr_site_shares = { A = peary B = daedalus } } add = sr_site_def_staffed_daedalus }
+	if = { limit = { sr_site_shares = { A = peary B = imbrium } } add = sr_site_def_staffed_imbrium }
+}
+sr_site_def_shared_peary = { value = sr_site_def_staffed_peary add = sr_site_def_others_peary }
+sr_site_def_shared_levels_peary = {
+	value = sr_site_def_value_peary
+	if = { limit = { sr_site_shares = { A = peary B = shackleton } } add = sr_site_def_value_shackleton }
+	if = { limit = { sr_site_shares = { A = peary B = tranquility } } add = sr_site_def_value_tranquility }
+	if = { limit = { sr_site_shares = { A = peary B = marius_hills } } add = sr_site_def_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = peary B = daedalus } } add = sr_site_def_value_daedalus }
+	if = { limit = { sr_site_shares = { A = peary B = imbrium } } add = sr_site_def_value_imbrium }
+}
 sr_site_integrity_value_peary = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_peary } value = global_var:sr_site_integrity_peary }
@@ -18978,18 +19271,18 @@ sr_site_militia_value_peary = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_peary = {
-	value = sr_site_marines_value_peary
+	value = sr_site_shared_marines_peary
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_peary } } add = sr_site_militia_value_peary }
 }
 sr_site_def_fire_peary = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_peary } sr_site_def_value_peary > 0 }
-		value = sr_site_def_value_peary
-		multiply = sr_site_staffing_peary
+		limit = { NOT = { has_global_variable = sr_site_occupier_peary } sr_site_def_shared_peary > 0 }
+		value = sr_site_def_shared_peary
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_peary ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -18997,14 +19290,14 @@ sr_site_def_fire_peary = {
 	}
 }
 sr_site_hardness_peary = {
-	value = sr_site_def_value_peary
-	multiply = sr_site_staffing_peary
+	value = sr_site_def_others_peary
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_peary
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_peary = {
-	value = sr_site_def_value_peary
-	multiply = sr_site_staffing_peary
+	value = sr_site_def_staffed_peary
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -19019,6 +19312,32 @@ sr_site_marines_value_tranquility = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_tranquility } value = global_var:sr_site_marines_tranquility }
 }
+sr_site_shared_marines_tranquility = {
+	value = sr_site_marines_value_tranquility
+	if = { limit = { sr_site_shares = { A = tranquility B = shackleton } } add = sr_site_marines_value_shackleton }
+	if = { limit = { sr_site_shares = { A = tranquility B = peary } } add = sr_site_marines_value_peary }
+	if = { limit = { sr_site_shares = { A = tranquility B = marius_hills } } add = sr_site_marines_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = tranquility B = daedalus } } add = sr_site_marines_value_daedalus }
+	if = { limit = { sr_site_shares = { A = tranquility B = imbrium } } add = sr_site_marines_value_imbrium }
+}
+sr_site_def_staffed_tranquility = { value = sr_site_def_value_tranquility multiply = sr_site_staffing_tranquility }
+sr_site_def_others_tranquility = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = tranquility B = shackleton } } add = sr_site_def_staffed_shackleton }
+	if = { limit = { sr_site_shares = { A = tranquility B = peary } } add = sr_site_def_staffed_peary }
+	if = { limit = { sr_site_shares = { A = tranquility B = marius_hills } } add = sr_site_def_staffed_marius_hills }
+	if = { limit = { sr_site_shares = { A = tranquility B = daedalus } } add = sr_site_def_staffed_daedalus }
+	if = { limit = { sr_site_shares = { A = tranquility B = imbrium } } add = sr_site_def_staffed_imbrium }
+}
+sr_site_def_shared_tranquility = { value = sr_site_def_staffed_tranquility add = sr_site_def_others_tranquility }
+sr_site_def_shared_levels_tranquility = {
+	value = sr_site_def_value_tranquility
+	if = { limit = { sr_site_shares = { A = tranquility B = shackleton } } add = sr_site_def_value_shackleton }
+	if = { limit = { sr_site_shares = { A = tranquility B = peary } } add = sr_site_def_value_peary }
+	if = { limit = { sr_site_shares = { A = tranquility B = marius_hills } } add = sr_site_def_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = tranquility B = daedalus } } add = sr_site_def_value_daedalus }
+	if = { limit = { sr_site_shares = { A = tranquility B = imbrium } } add = sr_site_def_value_imbrium }
+}
 sr_site_integrity_value_tranquility = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_tranquility } value = global_var:sr_site_integrity_tranquility }
@@ -19029,18 +19348,18 @@ sr_site_militia_value_tranquility = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_tranquility = {
-	value = sr_site_marines_value_tranquility
+	value = sr_site_shared_marines_tranquility
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_tranquility } } add = sr_site_militia_value_tranquility }
 }
 sr_site_def_fire_tranquility = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_def_value_tranquility > 0 }
-		value = sr_site_def_value_tranquility
-		multiply = sr_site_staffing_tranquility
+		limit = { NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_def_shared_tranquility > 0 }
+		value = sr_site_def_shared_tranquility
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_tranquility ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -19048,14 +19367,14 @@ sr_site_def_fire_tranquility = {
 	}
 }
 sr_site_hardness_tranquility = {
-	value = sr_site_def_value_tranquility
-	multiply = sr_site_staffing_tranquility
+	value = sr_site_def_others_tranquility
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_tranquility
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_tranquility = {
-	value = sr_site_def_value_tranquility
-	multiply = sr_site_staffing_tranquility
+	value = sr_site_def_staffed_tranquility
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -19070,6 +19389,32 @@ sr_site_marines_value_marius_hills = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_marius_hills } value = global_var:sr_site_marines_marius_hills }
 }
+sr_site_shared_marines_marius_hills = {
+	value = sr_site_marines_value_marius_hills
+	if = { limit = { sr_site_shares = { A = marius_hills B = shackleton } } add = sr_site_marines_value_shackleton }
+	if = { limit = { sr_site_shares = { A = marius_hills B = peary } } add = sr_site_marines_value_peary }
+	if = { limit = { sr_site_shares = { A = marius_hills B = tranquility } } add = sr_site_marines_value_tranquility }
+	if = { limit = { sr_site_shares = { A = marius_hills B = daedalus } } add = sr_site_marines_value_daedalus }
+	if = { limit = { sr_site_shares = { A = marius_hills B = imbrium } } add = sr_site_marines_value_imbrium }
+}
+sr_site_def_staffed_marius_hills = { value = sr_site_def_value_marius_hills multiply = sr_site_staffing_marius_hills }
+sr_site_def_others_marius_hills = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = marius_hills B = shackleton } } add = sr_site_def_staffed_shackleton }
+	if = { limit = { sr_site_shares = { A = marius_hills B = peary } } add = sr_site_def_staffed_peary }
+	if = { limit = { sr_site_shares = { A = marius_hills B = tranquility } } add = sr_site_def_staffed_tranquility }
+	if = { limit = { sr_site_shares = { A = marius_hills B = daedalus } } add = sr_site_def_staffed_daedalus }
+	if = { limit = { sr_site_shares = { A = marius_hills B = imbrium } } add = sr_site_def_staffed_imbrium }
+}
+sr_site_def_shared_marius_hills = { value = sr_site_def_staffed_marius_hills add = sr_site_def_others_marius_hills }
+sr_site_def_shared_levels_marius_hills = {
+	value = sr_site_def_value_marius_hills
+	if = { limit = { sr_site_shares = { A = marius_hills B = shackleton } } add = sr_site_def_value_shackleton }
+	if = { limit = { sr_site_shares = { A = marius_hills B = peary } } add = sr_site_def_value_peary }
+	if = { limit = { sr_site_shares = { A = marius_hills B = tranquility } } add = sr_site_def_value_tranquility }
+	if = { limit = { sr_site_shares = { A = marius_hills B = daedalus } } add = sr_site_def_value_daedalus }
+	if = { limit = { sr_site_shares = { A = marius_hills B = imbrium } } add = sr_site_def_value_imbrium }
+}
 sr_site_integrity_value_marius_hills = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_marius_hills } value = global_var:sr_site_integrity_marius_hills }
@@ -19080,18 +19425,18 @@ sr_site_militia_value_marius_hills = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_marius_hills = {
-	value = sr_site_marines_value_marius_hills
+	value = sr_site_shared_marines_marius_hills
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_militia_value_marius_hills }
 }
 sr_site_def_fire_marius_hills = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_def_value_marius_hills > 0 }
-		value = sr_site_def_value_marius_hills
-		multiply = sr_site_staffing_marius_hills
+		limit = { NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_def_shared_marius_hills > 0 }
+		value = sr_site_def_shared_marius_hills
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -19099,14 +19444,14 @@ sr_site_def_fire_marius_hills = {
 	}
 }
 sr_site_hardness_marius_hills = {
-	value = sr_site_def_value_marius_hills
-	multiply = sr_site_staffing_marius_hills
+	value = sr_site_def_others_marius_hills
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_marius_hills
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_marius_hills = {
-	value = sr_site_def_value_marius_hills
-	multiply = sr_site_staffing_marius_hills
+	value = sr_site_def_staffed_marius_hills
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -19121,6 +19466,32 @@ sr_site_marines_value_daedalus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_daedalus } value = global_var:sr_site_marines_daedalus }
 }
+sr_site_shared_marines_daedalus = {
+	value = sr_site_marines_value_daedalus
+	if = { limit = { sr_site_shares = { A = daedalus B = shackleton } } add = sr_site_marines_value_shackleton }
+	if = { limit = { sr_site_shares = { A = daedalus B = peary } } add = sr_site_marines_value_peary }
+	if = { limit = { sr_site_shares = { A = daedalus B = tranquility } } add = sr_site_marines_value_tranquility }
+	if = { limit = { sr_site_shares = { A = daedalus B = marius_hills } } add = sr_site_marines_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = daedalus B = imbrium } } add = sr_site_marines_value_imbrium }
+}
+sr_site_def_staffed_daedalus = { value = sr_site_def_value_daedalus multiply = sr_site_staffing_daedalus }
+sr_site_def_others_daedalus = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = daedalus B = shackleton } } add = sr_site_def_staffed_shackleton }
+	if = { limit = { sr_site_shares = { A = daedalus B = peary } } add = sr_site_def_staffed_peary }
+	if = { limit = { sr_site_shares = { A = daedalus B = tranquility } } add = sr_site_def_staffed_tranquility }
+	if = { limit = { sr_site_shares = { A = daedalus B = marius_hills } } add = sr_site_def_staffed_marius_hills }
+	if = { limit = { sr_site_shares = { A = daedalus B = imbrium } } add = sr_site_def_staffed_imbrium }
+}
+sr_site_def_shared_daedalus = { value = sr_site_def_staffed_daedalus add = sr_site_def_others_daedalus }
+sr_site_def_shared_levels_daedalus = {
+	value = sr_site_def_value_daedalus
+	if = { limit = { sr_site_shares = { A = daedalus B = shackleton } } add = sr_site_def_value_shackleton }
+	if = { limit = { sr_site_shares = { A = daedalus B = peary } } add = sr_site_def_value_peary }
+	if = { limit = { sr_site_shares = { A = daedalus B = tranquility } } add = sr_site_def_value_tranquility }
+	if = { limit = { sr_site_shares = { A = daedalus B = marius_hills } } add = sr_site_def_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = daedalus B = imbrium } } add = sr_site_def_value_imbrium }
+}
 sr_site_integrity_value_daedalus = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_daedalus } value = global_var:sr_site_integrity_daedalus }
@@ -19131,18 +19502,18 @@ sr_site_militia_value_daedalus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_daedalus = {
-	value = sr_site_marines_value_daedalus
+	value = sr_site_shared_marines_daedalus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_militia_value_daedalus }
 }
 sr_site_def_fire_daedalus = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_def_value_daedalus > 0 }
-		value = sr_site_def_value_daedalus
-		multiply = sr_site_staffing_daedalus
+		limit = { NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_def_shared_daedalus > 0 }
+		value = sr_site_def_shared_daedalus
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_daedalus ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -19150,14 +19521,14 @@ sr_site_def_fire_daedalus = {
 	}
 }
 sr_site_hardness_daedalus = {
-	value = sr_site_def_value_daedalus
-	multiply = sr_site_staffing_daedalus
+	value = sr_site_def_others_daedalus
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_daedalus
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_daedalus = {
-	value = sr_site_def_value_daedalus
-	multiply = sr_site_staffing_daedalus
+	value = sr_site_def_staffed_daedalus
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }
@@ -19172,6 +19543,32 @@ sr_site_marines_value_imbrium = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_marines_imbrium } value = global_var:sr_site_marines_imbrium }
 }
+sr_site_shared_marines_imbrium = {
+	value = sr_site_marines_value_imbrium
+	if = { limit = { sr_site_shares = { A = imbrium B = shackleton } } add = sr_site_marines_value_shackleton }
+	if = { limit = { sr_site_shares = { A = imbrium B = peary } } add = sr_site_marines_value_peary }
+	if = { limit = { sr_site_shares = { A = imbrium B = tranquility } } add = sr_site_marines_value_tranquility }
+	if = { limit = { sr_site_shares = { A = imbrium B = marius_hills } } add = sr_site_marines_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = imbrium B = daedalus } } add = sr_site_marines_value_daedalus }
+}
+sr_site_def_staffed_imbrium = { value = sr_site_def_value_imbrium multiply = sr_site_staffing_imbrium }
+sr_site_def_others_imbrium = {
+	value = 0
+	if = { limit = { sr_site_shares = { A = imbrium B = shackleton } } add = sr_site_def_staffed_shackleton }
+	if = { limit = { sr_site_shares = { A = imbrium B = peary } } add = sr_site_def_staffed_peary }
+	if = { limit = { sr_site_shares = { A = imbrium B = tranquility } } add = sr_site_def_staffed_tranquility }
+	if = { limit = { sr_site_shares = { A = imbrium B = marius_hills } } add = sr_site_def_staffed_marius_hills }
+	if = { limit = { sr_site_shares = { A = imbrium B = daedalus } } add = sr_site_def_staffed_daedalus }
+}
+sr_site_def_shared_imbrium = { value = sr_site_def_staffed_imbrium add = sr_site_def_others_imbrium }
+sr_site_def_shared_levels_imbrium = {
+	value = sr_site_def_value_imbrium
+	if = { limit = { sr_site_shares = { A = imbrium B = shackleton } } add = sr_site_def_value_shackleton }
+	if = { limit = { sr_site_shares = { A = imbrium B = peary } } add = sr_site_def_value_peary }
+	if = { limit = { sr_site_shares = { A = imbrium B = tranquility } } add = sr_site_def_value_tranquility }
+	if = { limit = { sr_site_shares = { A = imbrium B = marius_hills } } add = sr_site_def_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = imbrium B = daedalus } } add = sr_site_def_value_daedalus }
+}
 sr_site_integrity_value_imbrium = {
 	value = sr_integrity_full
 	if = { limit = { has_global_variable = sr_site_integrity_imbrium } value = global_var:sr_site_integrity_imbrium }
@@ -19182,18 +19579,18 @@ sr_site_militia_value_imbrium = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison and the militia; a liberation, the
-# occupier's garrison alone (its people are the holder's).
+# A seizure must exceed the garrison (shared on the Moon and Mars) and the
+# militia; a liberation, the occupier's garrison alone (its people are the
+# holder's).
 sr_site_garrison_need_imbrium = {
-	value = sr_site_marines_value_imbrium
+	value = sr_site_shared_marines_imbrium
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_militia_value_imbrium }
 }
 sr_site_def_fire_imbrium = {
 	value = 0
 	if = {
-		limit = { NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_def_value_imbrium > 0 }
-		value = sr_site_def_value_imbrium
-		multiply = sr_site_staffing_imbrium
+		limit = { NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_def_shared_imbrium > 0 }
+		value = sr_site_def_shared_imbrium
 		multiply = sr_def_strength_per_level
 		multiply = sr_def_fire_factor
 		if = { limit = { global_var:sr_site_holder_imbrium ?= { has_technology_researched = orbital_weapon_platforms } } multiply = 1.25 }
@@ -19201,14 +19598,14 @@ sr_site_def_fire_imbrium = {
 	}
 }
 sr_site_hardness_imbrium = {
-	value = sr_site_def_value_imbrium
-	multiply = sr_site_staffing_imbrium
+	value = sr_site_def_others_imbrium
+	multiply = sr_def_shared_hardness_share
+	add = sr_site_def_staffed_imbrium
 	multiply = sr_def_hardness_per_level
 	add = sr_def_hardness_base
 }
 sr_site_target_strength_imbrium = {
-	value = sr_site_def_value_imbrium
-	multiply = sr_site_staffing_imbrium
+	value = sr_site_def_staffed_imbrium
 	multiply = sr_def_strength_per_level
 	add = sr_def_hull_strength
 }

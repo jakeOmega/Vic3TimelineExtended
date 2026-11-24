@@ -749,7 +749,7 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 | Habitat | Adds half of the colony's starting room for people, more with five technologies (see below) | A cap by the colony's size: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets; past it each costs more |
 | Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | Up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
 | Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | None on the Moon |
-| Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down. Under Simple Colonies, nothing | None |
+| Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down, and on the Moon and Mars your other colonies there too (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)). Under Simple Colonies, nothing | None |
 | Facilities | See the table below | None |
 
 Every module but the Habitat needs a crew (see below), so a colony's people are
@@ -1154,7 +1154,8 @@ years at most, and you choose:
 A charter settles a colony at a fifth of its output for as long as it stands; a
 garrison buys ten years and costs Launch Capacity. Under Full Colonies a garrison is real
 troops: it takes effect only once a fleet lands two marine battalions at the
-colony, within a year of the order, or the order lapses. A colony that reaches 100 declares itself
+colony, within a year of the order, or the order lapses. On the Moon and Mars,
+your marines at any of your colonies there count. A colony that reaches 100 declares itself
 free whatever you chose. A charter stays with the colony when it changes hands;
 a garrison goes home. AI powers grant a charter, garrison while at war, and let
 a colony go only when they have no Space Program to supply it.
@@ -1325,7 +1326,7 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 | The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
 | Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
 | Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
-| Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard | <!-- style: allow ai-vocab -->
+| Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard. At Earth, at your colony on the Moon | <!-- style: allow ai-vocab -->
 
 Your fleets take orders only while you have a Space Command level in a state
 you control. Without one, none can leave, change posture or target, start a
@@ -1413,6 +1414,25 @@ closing in on a free one. Seizing a colony at war costs a party no more than
 anyone else. Without Survey Colony
 Defenses against its holder, the target's hover gives a site's Defenses only
 roughly, and its integrity and marines not at all.
+
+On the Moon and Mars, where several sites share a world, a holder's colonies
+there defend one another:
+
+- **Marines.** Your marines at any of your colonies there are the garrison of
+  each, so seizing one takes more marines than all of them and the colony's
+  militia, and an enemy that seizes one kills them all. A garrison you order
+  for one of them needs its two battalions anywhere on that world.
+- **Defenses.** Your Defenses at one colony fire at full strength on enemies
+  closing in on any other of yours there, and add half their hardness to it, so
+  it wears down more slowly. Their fire falls with the integrity of the colony
+  under attack. Attacking two of your colonies there at once splits the fire
+  between the attackers rather than doubling it.
+
+So the colony with the most Defenses stays the hardest to take, and a colony
+with none of its own still holds out longer than it would alone. An occupied
+colony shares nothing: its occupier's garrison defends it alone, and its
+Defenses fire for no one. The Defenses view's Marines and the target's hover
+give the shared figures.
 
 ### Interdiction
 

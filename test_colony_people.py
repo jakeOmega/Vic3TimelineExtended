@@ -788,10 +788,16 @@ class ReviewFixesTest(unittest.TestCase):
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
-                for name in (f"sr_site_def_fire_{k}", f"sr_site_hardness_{k}", f"sr_site_target_strength_{k}"):
-                    body = _block(self.values, name)
-                    self.assertIn(f"value = sr_site_def_value_{k}\n", body.replace("\t", ""), name)
-                    self.assertIn(f"multiply = sr_site_staffing_{k}", body, name)
+                staffed = _block(self.values, f"sr_site_def_staffed_{k}")
+                self.assertIn(f"value = sr_site_def_value_{k}", staffed)
+                self.assertIn(f"multiply = sr_site_staffing_{k}", staffed)
+                # Every reader goes through the staffed levels (shared ones too, on the
+                # Moon and Mars: test_solar_sites.SharedWorldTest).
+                self.assertIn(f"value = sr_site_def_staffed_{k}", _block(self.values, f"sr_site_def_shared_{k}"))
+                self.assertIn(f"value = sr_site_def_shared_{k}", _block(self.values, f"sr_site_def_fire_{k}"))
+                for name in (f"sr_site_hardness_{k}", f"sr_site_target_strength_{k}"):
+                    self.assertIn(f"sr_site_def_staffed_{k}\n", _block(self.values, name), name)
+                    self.assertNotIn(f"sr_site_def_value_{k}", _block(self.values, name), name)
 
     def test_the_crew_line_counts_the_modules_on_their_way(self):
         spare = _block(self.triggers, "sr_mod_scope_crew_spare")

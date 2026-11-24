@@ -1514,14 +1514,15 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertIn("sr_site_ai_attack_target = { KEY = $KEY$ }", target)
         self.assertIn("global_var:sr_site_holder_$KEY$ ?= { sr_earth_blockaded = yes }", target)
         self.assertIn("global_var:sr_site_occupier_$KEY$ ?= { sr_earth_blockaded = yes }", target)
-        # The offence's dispatch and the garrisons leave a fleet closing in at Earth where it is.
+        # The offence's dispatch and the garrisons leave a fleet closing in at Earth where it is
+        # (the garrisons: one departure a location away from Earth, and the Moon's landing).
         attack_all = _block(self.generated, "sr_fl_ai_attack_all")
         garrisons = _block(self.generated, "sr_fl_ai_send_garrisons")
         for n in range(1, gsf.SLOTS + 1):
             with self.subTest(slot=n):
                 self.assertEqual(attack_all.count(f"NOT = {{ sr_fl_{n}_closing_at_earth = yes }}"), len(gsf.LOCATIONS) - 1)
                 self.assertEqual(garrisons.count(f"sr_fl_{n}_may_depart_"), len(gsf.LOCATIONS) - 1)
-                self.assertEqual(garrisons.count(f"NOT = {{ sr_fl_{n}_closing_at_earth = yes }}"), len(gsf.LOCATIONS) - 1)
+                self.assertEqual(garrisons.count(f"NOT = {{ sr_fl_{n}_closing_at_earth = yes }}"), len(gsf.LOCATIONS))
                 self.assertEqual(_block(self.gen_triggers, f"sr_fl_{n}_closing_at_earth").strip(),
                                  f"sr_fl_{n}_at_earth = yes sr_fl_{n}_posture_value = 3")
 
@@ -1562,6 +1563,173 @@ class LunarAtEarthTest(unittest.TestCase):
         values = _strip(_raw(FLEET_VALUES))
         self.assertIn("value = sr_fl_at_earth_ready", _block(values, "sr_orbital_superiority_margin"))
         self.assertIn("value = var:sr_fl_at_earth", _block(values, "sr_fl_at_earth_ready"))
+
+
+class SharedWorldTest(unittest.TestCase):
+    """Marines and Defences shared on one world (owner, 2026-11-24): a holder's
+    marines on the Moon or Mars defend each of its colonies there, its Defences
+    there fire for each of them and add half their hardness, the fire falls with
+    the attacked colony's integrity and is split over every colony of the
+    holder's there under attack, and marines land on the Moon."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(gss.ROOT / gss.VALUES_OUT))
+        cls.fleet_values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        cls.triggers = _strip(_raw(FLEET_TRIGGERS))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.effects = _strip(_raw(FLEET_EFFECTS))
+        cls.gui = _raw(gss.ROOT / gss.GUI_OUT)
+
+    @staticmethod
+    def _shares(a, b):
+        return f"sr_site_shares = {{ A = {a} B = {b} }}"
+
+    def test_the_moon_and_mars_are_the_shared_worlds(self):
+        lunar = [s.key for s in gss.SITES if s.stage == 0]
+        mars = [s.key for s in gss.SITES if s.location == "mars"]
+        self.assertEqual(len(lunar), 6)
+        self.assertEqual(len(mars), 5)
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                mates = [t.key for t in gss.world_mates(site)]
+                if site.key in lunar:
+                    self.assertEqual(mates, [k for k in lunar if k != site.key])
+                elif site.key in mars:
+                    self.assertEqual(mates, [k for k in mars if k != site.key])
+                else:
+                    # Jupiter's six, Saturn's five and the rest are each a world of their own.
+                    self.assertEqual(mates, [])
+                # A world's sites share a location, so one combat pass holds them all.
+                self.assertTrue(all(t.location == site.location for t in gss.world_mates(site)))
+
+    def test_two_sites_share_with_one_holder_and_neither_occupied(self):
+        shares = _block(self.triggers, "sr_site_shares")
+        self.assertIn("NOT = { has_global_variable = sr_site_occupier_$A$ }", shares)
+        self.assertIn("NOT = { has_global_variable = sr_site_occupier_$B$ }", shares)
+        self.assertRegex(shares, r"global_var:sr_site_holder_\$A\$ \?= \{\s*global_var:sr_site_holder_\$B\$ \?= this\s*\}")
+
+    def test_the_marines_a_seizure_must_beat_are_the_world_s(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                shared = _block(self.values, f"sr_site_shared_marines_{k}")
+                self.assertIn(f"value = sr_site_marines_value_{k}", shared)
+                self.assertEqual(shared.count("add = "), len(gss.world_mates(site)))
+                for t in gss.world_mates(site):
+                    self.assertIn(f"if = {{ limit = {{ {self._shares(k, t.key)} }} add = sr_site_marines_value_{t.key} }}",
+                                  shared)
+                self.assertIn(f"value = sr_site_shared_marines_{k}", _block(self.values, f"sr_site_garrison_need_{k}"))
+        # Slice 5's garrison takes effect on the world's marines too.
+        self.assertIn("limit = { sr_site_shared_marines_$KEY$ >= sr_garrison_marines_needed }",
+                      _block(self.effects, "sr_site_garrison_due_step"))
+
+    def test_the_world_s_defences_fire_for_each_colony_and_add_half_their_hardness(self):
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_def_shared_hardness_share"), 0.5)
+        for site in gss.SITES:
+            k, mates = site.key, gss.world_mates(site)
+            with self.subTest(site=k):
+                shared = _block(self.values, f"sr_site_def_shared_{k}")
+                self.assertIn(f"value = sr_site_def_staffed_{k}", shared)
+                fire = _block(self.values, f"sr_site_def_fire_{k}")
+                self.assertIn(f"value = sr_site_def_shared_{k}", fire)
+                # Scaled by this colony's integrity alone, so the others' guns fall as it
+                # is worn down: a long siege of a neighbour under full fire would cost an
+                # attacker more than storming the fortress.
+                self.assertEqual(re.findall(r"sr_site_integrity_value_(\w+)", fire), [k])
+                hardness = _block(self.values, f"sr_site_hardness_{k}")
+                strength = _block(self.values, f"sr_site_target_strength_{k}")
+                # The fire's share of stationed hostiles is the colony's own guns and hull.
+                self.assertNotIn("others", strength)
+                if mates:
+                    self.assertIn(f"add = sr_site_def_others_{k}", shared)
+                    others = _block(self.values, f"sr_site_def_others_{k}")
+                    for t in mates:
+                        self.assertIn(f"if = {{ limit = {{ {self._shares(k, t.key)} }} add = sr_site_def_staffed_{t.key} }}",
+                                      others)
+                    self.assertRegex(hardness, rf"value = sr_site_def_others_{k}\s*multiply = sr_def_shared_hardness_share\s*"
+                                               rf"add = sr_site_def_staffed_{k}\s*multiply = sr_def_hardness_per_level")
+                else:
+                    self.assertNotIn("add", shared)
+                    self.assertNotIn("others", hardness)
+
+    def test_the_shared_fire_is_split_over_every_colony_under_attack(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                total = _block(self.fleet_values, f"sr_cb_c_shared_{k}")
+                self.assertIn(f"if = {{ limit = {{ has_global_variable = sr_cb_c_{k} }} add = global_var:sr_cb_c_{k} }}", total)
+                for t in gss.world_mates(site):
+                    self.assertIn(f"has_global_variable = sr_cb_c_{t.key} {self._shares(k, t.key)} }} add = global_var:sr_cb_c_{t.key}",
+                                  total)
+                losses = _block(self.generated, f"sr_cb_def_losses_{site.location}")
+                self.assertIn(f"multiply = var:sr_cb_s3_{k} divide = sr_cb_c_shared_{k} }}", losses)
+                self.assertNotIn(f"divide = global_var:sr_cb_c_{k}", losses)
+
+    def test_an_occupation_takes_the_holder_s_marines_on_the_world(self):
+        occupy = _block(self.combat, "sr_site_occupy")
+        # Before the occupier is set, while the world still shares.
+        self.assertLess(occupy.index("sr_site_lose_shared_marines_$KEY$ = yes"),
+                        occupy.index("set_global_variable = { name = sr_site_occupier_$KEY$"))
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                lose = _block(self.generated, f"sr_site_lose_shared_marines_{k}")
+                self.assertIn(f"remove_global_variable = sr_site_marines_{k}", lose)
+                for t in gss.world_mates(site):
+                    self.assertIn(f"has_global_variable = sr_site_marines_{t.key} {self._shares(k, t.key)} }} "
+                                  f"remove_global_variable = sr_site_marines_{t.key}", lose)
+                self.assertEqual(lose.count("remove_global_variable"), len(gss.world_mates(site)) + 1)
+
+    def test_marines_land_and_embark_on_the_moon(self):
+        held = _block(self.gen_triggers, "sr_loc_held_lunar")
+        self.assertEqual(sorted(re.findall(r"sr_site_holder_(\w+) \?= this", held)), sorted(s.key for s in gsf.LUNAR))
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                self.assertIn(f"AND = {{ var:sr_fl_{n}_loc = {gsf.EARTH} sr_loc_held_lunar = yes }}",
+                              _block(self.gen_triggers, f"sr_fl_{n}_can_land"))
+                self.assertIn(f"AND = {{ var:sr_fl_{n}_loc = {gsf.EARTH} sr_loc_our_marines_earth = yes }}",
+                              _block(self.gen_triggers, f"sr_fl_{n}_can_embark"))
+        for name in ("sr_fl_land_at", "sr_fl_embark_at"):
+            body = _block(self.generated, name)
+            with self.subTest(effect=name):
+                self.assertIn(f"var:sr_fl_$N$_loc = {gsf.EARTH}", body)
+                for w in gsf.LUNAR:
+                    self.assertIn(f"KEY = {w.key} }}", body)
+
+    def test_the_ai_lands_on_the_moon_only_for_a_garrison_due(self):
+        due = _block(self.gen_triggers, "sr_loc_garrison_due_earth")
+        for w in gsf.LUNAR:
+            self.assertIn(f"has_global_variable = sr_site_garrison_due_{w.key} "
+                          f"sr_site_shared_marines_{w.key} < sr_garrison_marines_needed", due)
+        # A garrison the world's marines already make sends no fleet anywhere.
+        for lc in gsf.LOCATIONS[1:]:
+            for w in gsf.worlds_at(lc.key):
+                self.assertIn(f"sr_site_shared_marines_{w.key} < sr_garrison_marines_needed",
+                              _block(self.gen_triggers, f"sr_loc_garrison_due_{lc.key}"))
+        send = _block(self.generated, "sr_fl_ai_send_garrisons")
+        self.assertLess(send.index("limit = { sr_loc_garrison_due_earth = yes }"), send.index("sr_fl_dispatch"))
+        for n in range(1, gsf.SLOTS + 1):
+            self.assertIn(f"sr_fl_{n}_can_land = yes NOT = {{ sr_fl_{n}_closing_at_earth = yes }} }}\n"
+                          f"\t\t\tsr_fl_land_at = {{ N = {n} }}", send)
+        # A fleet coming home lands at Earth only for one, so the free refill there
+        # doesn't pile marines up on the Moon.
+        self.assertRegex(_block(self.effects, "sr_fl_arrive_at"),
+                         r"is_ai = yes\s*sr_fl_\$N\$_can_land = yes\s*OR = \{\s*NOT = \{ var:sr_fl_\$N\$_loc = 1 \}\s*"
+                         r"sr_loc_garrison_due_earth = yes\s*\}\s*\}\s*sr_fl_land_at = \{ N = \$N\$ \}")
+
+    def test_the_panel_shows_the_world_s_marines_and_defences(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(f"ScriptValue('sr_site_shared_marines_{k}')", self.gui)
+        for n in range(1, gsf.SLOTS + 1):
+            with self.subTest(slot=n):
+                self.assertIn("value = sr_site_def_shared_levels_", _block(self.display, f"sr_disp_fl_{n}_tgt_def"))
+                self.assertIn("value = sr_site_shared_marines_", _block(self.display, f"sr_disp_fl_{n}_tgt_marines"))
 
 
 class EarthAlertTest(unittest.TestCase):

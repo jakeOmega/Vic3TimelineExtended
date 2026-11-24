@@ -174,7 +174,8 @@ sr_sc_levels = {
 
 # ---- Marines and garrisons (design § 9.6) ---------------------------------------------
 # A garrison under Full Colonies takes effect once this many battalions stand
-# at the world, and lapses after this many months unanswered.
+# at the world (on the Moon and Mars, at any colony of the holder's there:
+# sr_site_shared_marines_<key>), and lapses after this many months unanswered.
 sr_garrison_marines_needed = { value = 2 }
 sr_garrison_due_months = { value = 12 }
 
@@ -212,6 +213,10 @@ sr_def_strength_per_level = { value = 15 }
 sr_def_fire_factor = { value = 1.5 }
 sr_def_hardness_base = { value = 50 }
 sr_def_hardness_per_level = { value = 50 }
+# On the Moon and Mars, a Defences level at another colony of the same holder
+# there adds this share of a level's hardness (its fire it adds in full; owner,
+# 2026-11-24): the guns reach, the bunkers mostly don't.
+sr_def_shared_hardness_share = { value = 0.5 }
 sr_integrity_regain = { value = 5 }
 sr_integrity_regain_port = { value = 10 }
 sr_integrity_module_landing = { value = 25 }
