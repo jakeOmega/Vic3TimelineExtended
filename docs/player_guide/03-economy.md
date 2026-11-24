@@ -829,7 +829,7 @@ hold.
 
 Once the United Nations has founded the World Food Reserve, a member with a
 Strategic Reserve Hub can press Pledge Grain, under the World Food Reserve
-line in Our Obligations on the UN tab of the Diplomacy panel. When a UN aid mission opens in another country,
+heading in Our Obligations on the UN tab of the Diplomacy panel. When a UN aid mission opens in another country,
 the Reserve takes up to a quarter of your grain, at most 2,500 units, if you
 hold at least 500. The
 grain leaves your reserve through its own bookkeeping, and you gain standing for

@@ -515,6 +515,116 @@ class ObligationsTest(unittest.TestCase):
         self.assertNotIn("Until we pay", _loc("je_un_chamber_dues_article_19"))
 
 
+ECONOMY_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "un_economy_effects.txt")
+
+
+def _row_values(gui):
+    """Every script value a row of `gui` reads, directly or through its loc."""
+    found = set(re.findall(r"ScriptValue\('(\w+)'\)", gui))
+    for key in re.findall(r'"(je_un_\w+)"|\'(je_un_\w+)\'', gui):
+        value = _loc_or_none(key[0] or key[1])
+        if value:
+            found |= set(re.findall(r"ScriptValue\('(\w+)'\)", value))
+    return found
+
+
+class RowsNotParagraphsTest(unittest.TestCase):
+    """Our Obligations' dues and grain pledge, and the World Development Fund's
+    own position, are rows of their tables, not sentences (gui_style_guide.md
+    rules 3 and 5; GUI polish of 2026-11-24). Every figure the sentences gave
+    is a row's, and every sentence is a hover, so nothing is lost (rule 2)."""
+
+    @classmethod
+    def setUpClass(cls):
+        chamber = _read(CHAMBER)
+        cls.obligations = _type_body(chamber, "te_un_sec_obligations")
+        cls.fund = _type_body(chamber, "te_un_sec_dev_fund")
+
+    def test_our_dues_are_rows_with_their_sentence_on_hover(self):
+        gui = self.obligations
+        dues = gui[:gui.index("GetScriptedGui('un_act_withhold_dues_sgui')")]
+        self.assertNotIn("text = \"[GetScriptedGui('un_chamber_dues_sgui').ExecuteTooltip", gui)
+        self.assertIn("tooltip = \"[GetScriptedGui('un_chamber_dues_sgui').ExecuteTooltip", dues)
+        for sv in ("un_disp_dues_code", "un_disp_dues_rate_pct", "un_dues_weekly_value",
+                   "un_disp_arrears_months", "un_disp_arrears_owed", "un_disp_article_19_months_left",
+                   "un_carried_seat_count"):
+            self.assertIn(sv, _row_values(dues), sv)
+        for code in "12345":
+            self.assertIn(f"'je_un_ov_dues_{code}'", dues, code)
+        # One subject, or several: the count's own word.
+        self.assertIn("'je_un_dues_carried_one', 'je_un_dues_carried_many'", dues)
+        self.assertNotIn("subjects", _loc("je_un_dues_carried_one"))
+        lines = _block(_read(CHAMBER_EFFECTS), "un_chamber_dues_lines")
+        self.assertIn("je_un_chamber_dues_carried_one", lines)
+        self.assertIn("subject with", _loc("je_un_chamber_dues_carried_one"))
+        # Withhold / Pay sit under the rows they act on, over the budget.
+        self.assertLess(gui.index("GetScriptedGui('un_act_withhold_dues_sgui')"), gui.index("je_un_budget_dues_label"))
+
+    def test_the_grain_pledge_is_a_subheaded_group_of_rows(self):
+        gui = self.obligations
+        head = gui.index('text = "je_un_chamber_sub_food_reserve"')
+        buttons = gui.index("GetScriptedGui('un_act_food_reserve_pledge_sgui')")
+        group = gui[head:buttons]
+        self.assertIn("concept_un_food_reserve", _loc("je_un_chamber_sub_food_reserve"))
+        self.assertNotIn("text = \"[GetScriptedGui('un_chamber_food_reserve_sgui').ExecuteTooltip", gui)
+        self.assertIn("tooltip = \"[GetScriptedGui('un_chamber_food_reserve_sgui').ExecuteTooltip", group)
+        for sv in ("un_disp_food_pledge_pct", "un_disp_food_our_grain", "un_disp_food_our_offer",
+                   "un_disp_food_drawn_total"):
+            self.assertIn(sv, _row_values(group), sv)
+        self.assertIn("GetScriptedGui('un_act_food_reserve_withdraw_sgui')", gui[buttons:])
+        # The ceasefire order stays in the dues' group, not under the Reserve.
+        self.assertLess(gui.index("un_chamber_orders_sgui"), head)
+
+    def test_the_funds_position_is_rows_with_the_buttons_under_them(self):
+        gui = self.fund
+        self.assertNotIn("un_chamber_dev_fund_position_sgui", gui)
+        self.assertNotIn("un_chamber_dev_fund_position_sgui", _read(CHAMBER_SGUIS))
+        controls = gui.index("GetScriptedGui('un_act_fund_development_sgui')")
+        position, table = gui[:controls], gui[controls:]
+        for sv in ("un_disp_dev_fund_our_grant", "un_dev_fund_size_value", "un_disp_dev_fund_our_contribution",
+                   "un_disp_dev_fund_patron_pct"):
+            self.assertIn(sv, _row_values(position), sv)
+        for sgui in ("un_chamber_dev_fund_receipt_sgui", "un_chamber_dev_fund_contribution_sgui"):
+            self.assertIn(f"tooltip = \"[GetScriptedGui('{sgui}').ExecuteTooltip", position, sgui)
+        for sgui in ("un_act_reduce_development_sgui", "un_act_raise_development_sgui", "un_act_defund_development_sgui"):
+            self.assertIn(f"GetScriptedGui('{sgui}')", table[:table.index("je_un_dev_fund_line_label")], sgui)
+        # Our GDP per head sits over the cutoff it is held against.
+        self.assertIn("un_disp_dev_fund_our_gdp_ph", _row_values(table[:table.index("je_un_dev_fund_line_label")]))
+        effects = _read(ECONOMY_EFFECTS)
+        receipt = _block(effects, "un_dev_fund_receipt_lines")
+        for reason in ("moribund", "pool", "treasury", "no_contributors", "next_month", "withholding",
+                       "above_line", "none"):
+            self.assertIn(f"je_un_chamber_dev_fund_{reason}\n", receipt, reason)
+        contribution = _block(effects, "un_dev_fund_contribution_lines")
+        for line in ("contributor_not_counted", "could_contribute", "no_contribution"):
+            self.assertIn(f"je_un_chamber_dev_fund_{line}", contribution)
+
+    def test_the_recipients_start_with_the_ten_largest(self):
+        gui = self.fund
+        recipients = gui[gui.index("je_un_dev_fund_sub_recipients"):]
+        self.assertIn("GetScriptedGui('un_chamber_dev_fund_top_sgui').ExecuteTooltip", recipients)
+        self.assertIn("GetScriptedGui('un_chamber_dev_fund_sgui').ExecuteTooltip", recipients)
+        self.assertIn("GetVariableSystem.Toggle('un_chamber_dev_fund_all_open')", recipients)
+        sguis = _read(CHAMBER_SGUIS)
+        self.assertIn("un_dev_fund_recipient_lines = { MAX = 9 }", sguis)
+        self.assertIn("un_dev_fund_recipient_lines = { MAX = 999 }", sguis)
+        self.assertIn("max = $MAX$", _block(_read(ECONOMY_EFFECTS), "un_dev_fund_recipient_lines"))
+
+    def test_a_term_that_states_a_figure_reads_label_value(self):
+        royalty = _loc("je_un_chamber_seabed_royalty")
+        self.assertIn("te_seabed_royalty_cached').GetValue|D]", royalty)
+        for key in ("je_un_chamber_seabed_royalty", "je_un_chamber_seabed_cooling",
+                    "je_un_chamber_regime_nuclear_ban_ceiling"):
+            with self.subTest(key=key):
+                value = _loc(key)
+                self.assertTrue(_tooltip_key(value), key)
+                self.assertTrue(_loc_or_none(_tooltip_key(value)), key)
+                self.assertFalse(value.rstrip().endswith("."), key)
+        regimes = _block(_read(CHAMBER_EFFECTS), "un_chamber_regime_lines")
+        self.assertIn("custom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_ceiling\n"
+                      "\t\t\tcustom_tooltip_no_bullet = je_un_chamber_regime_nuclear_ban_step", regimes)
+
+
 RECORD_TERMS = ("un_case_infamy_term", "un_disp_dos_aggression", "un_disp_dos_defiance",
                 "un_disp_dos_violation", "un_disp_dos_covert", "un_disp_dos_nuclear",
                 "un_disp_dos_asat")

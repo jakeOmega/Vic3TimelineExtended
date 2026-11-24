@@ -174,8 +174,10 @@ types un_chamber_widget_types
 
 		textbox = {
 			autoresize = yes
-			minimumsize = { 360 -1 }
-			maximumsize = { 360 -1 }
+			block "label_width" {
+				minimumsize = { 360 -1 }
+				maximumsize = { 360 -1 }
+			}
 			align = left|nobaseline
 			using = un_fontsize_row
 			elide = right
@@ -183,12 +185,29 @@ types un_chamber_widget_types
 		}
 		textbox = {
 			autoresize = yes
-			minimumsize = { 100 -1 }
-			maximumsize = { 100 -1 }
+			block "value_width" {
+				minimumsize = { 100 -1 }
+				maximumsize = { 100 -1 }
+			}
 			align = right|nobaseline
 			using = un_fontsize_row
 			default_format = "#v"
 			block "row_value" {}
+		}
+	}
+
+	### The same row for a word rather than a figure (a status, a size:
+	### "Overlord pays", "Substantial"), which runs past the figure column's
+	### 100: 300 of label and 160 of value, the same 460 in all, so its value
+	### ends where the figures under and over it end.
+	type un_chamber_value_row_wide = un_chamber_value_row {
+		blockoverride "label_width" {
+			minimumsize = { 300 -1 }
+			maximumsize = { 300 -1 }
+		}
+		blockoverride "value_width" {
+			minimumsize = { 160 -1 }
+			maximumsize = { 160 -1 }
 		}
 	}
 
@@ -3990,9 +4009,99 @@ types un_chamber_widget_types
 					text = "je_un_chamber_sub_dues"
 				}
 			}
-			un_chamber_text = {
+			# A member's own dues as rows of the dues table (gui_style_guide.md
+			# rule 5; GUI polish 2026-11-24: they were a sentence). What they
+			# stand at reads the overview's Dues cell's code (un_disp_dues_code:
+			# 1 our overlord pays, 2 none assessed, 3 paid, 4 withheld, 5 vote
+			# lost), its word coloured as the cell's, and hovers the sentence
+			# un_chamber_dues_lines builds, the cell's hover too. Under it the
+			# assessment while we are assessed, the arrears while we withhold,
+			# and the suspended subjects whose seats ours include.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
 				visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				text = "[GetScriptedGui('un_chamber_dues_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+
+				un_chamber_value_row_wide = {
+					blockoverride "row_label" {
+						text = "je_un_dues_ours_label"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)3' ), 'je_un_ov_dues_3', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)4' ), 'je_un_ov_dues_4', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)5' ), 'je_un_ov_dues_5', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)1' ), 'je_un_ov_dues_1', 'je_un_ov_dues_2' ) ) ) )]"
+						tooltip = "[GetScriptedGui('un_chamber_dues_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					}
+				}
+				# Assessed (paid or withheld): the rate and a week's amount.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)3' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_rate_pct'), '(CFixedPoint)0' ) )]"
+
+					un_chamber_value_row = {
+						blockoverride "row_label" {
+							text = "je_un_dues_rate_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_dues_rate_value"
+						}
+					}
+					un_chamber_value_row = {
+						blockoverride "row_label" {
+							text = "je_un_dues_weekly_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_dues_weekly_value"
+						}
+					}
+				}
+				# Withheld: the arrears, and (while dues are assessed) the
+				# months left before Article 19 takes our vote.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)4' )]"
+
+					un_chamber_value_row = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_arrears_months'), '(CFixedPoint)0' )]"
+						blockoverride "row_label" {
+							text = "je_un_dues_arrears_months_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_dues_arrears_months_value"
+						}
+					}
+					un_chamber_value_row = {
+						visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_arrears_owed'), '(CFixedPoint)0' )]"
+						blockoverride "row_label" {
+							text = "je_un_dues_owed_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_dues_owed_value"
+						}
+					}
+					un_chamber_value_row = {
+						visible = "[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_code'), '(CFixedPoint)4' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dues_rate_pct'), '(CFixedPoint)0' ) )]"
+						tooltip = "je_un_dues_vote_lost_in_tt"
+						blockoverride "row_label" {
+							text = "je_un_dues_vote_lost_in_label"
+						}
+						blockoverride "row_value" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_article_19_months_left'), '(CFixedPoint)1' ), 'je_un_dues_vote_lost_in_one', 'je_un_dues_vote_lost_in_many' )]"
+						}
+					}
+				}
+				# The suspended subjects whose seats our dues include (§0.8
+				# ruling 4), only when there are any.
+				un_chamber_value_row_wide = {
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_carried_seat_count'), '(CFixedPoint)0' )]"
+					tooltip = "je_un_dues_carried_tt"
+					blockoverride "row_label" {
+						text = "je_un_dues_carried_label"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_carried_seat_count'), '(CFixedPoint)1' ), 'je_un_dues_carried_one', 'je_un_dues_carried_many' )]"
+					}
+				}
 			}
 			# Withhold or pay, under the dues they act on (UN-9), taking turns
 			# in one slot.
@@ -4079,12 +4188,74 @@ types un_chamber_widget_types
 				}
 			}
 
-			# A member: our grain pledge to the World Food Reserve, with Pledge
-			# Grain or Withdraw Our Pledge under it (UN-9; the line used to send
-			# the player to a button elsewhere).
+			# A Binding Ceasefire that binds or protects us: a line of its own,
+			# self-named, under the dues (it sat after the grain pledge, which
+			# has a heading of its own since 2026-11-24).
 			un_chamber_text = {
+				visible = "[And( GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_orders_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				text = "[GetScriptedGui('un_chamber_orders_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+
+			# A member: our grain pledge to the World Food Reserve, under its
+			# own heading (the concept: what the Reserve is), as rows (GUI
+			# polish 2026-11-24: it was a sentence), with Pledge Grain or
+			# Withdraw Our Pledge under them (UN-9). The pledge row hovers what
+			# un_food_reserve_obligation_lines says: what our pledge lets a
+			# mission draw, or why we pledge nothing. The rest read script
+			# values; the grain in the reserve and the next draw only while we
+			# pledge, what was drawn from us whenever there is any.
+			un_chamber_subheader = {
 				visible = "[And( GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_food_reserve_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				text = "[GetScriptedGui('un_chamber_food_reserve_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+				blockoverride "subheader_text" {
+					text = "je_un_chamber_sub_food_reserve"
+				}
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[And( GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_food_reserve_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+
+				un_chamber_value_row = {
+					tooltip = "[GetScriptedGui('un_chamber_food_reserve_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					blockoverride "row_label" {
+						text = "je_un_food_pledge_label"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( GetScriptedGui('un_chamber_food_pledged_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_food_pledge_value', 'je_un_food_pledge_none' )]"
+					}
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					visible = "[GetScriptedGui('un_chamber_food_pledged_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+					un_chamber_value_row = {
+						blockoverride "row_label" {
+							text = "je_un_food_grain_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_food_grain_value"
+						}
+					}
+					un_chamber_value_row = {
+						tooltip = "je_un_food_offer_tt"
+						blockoverride "row_label" {
+							text = "je_un_food_offer_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_food_offer_value"
+						}
+					}
+				}
+				un_chamber_value_row = {
+					visible = "[Or( GetScriptedGui('un_chamber_food_pledged_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_food_drawn_total'), '(CFixedPoint)0' ) )]"
+					blockoverride "row_label" {
+						text = "je_un_food_drawn_label"
+					}
+					blockoverride "row_value" {
+						text = "je_un_food_drawn_value"
+					}
+				}
 			}
 			un_act_row = {
 				visible = "[Or( GetScriptedGui('un_act_food_reserve_pledge_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_food_reserve_withdraw_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
@@ -4108,11 +4279,6 @@ types un_chamber_widget_types
 						}
 					}
 				}
-			}
-			# A Binding Ceasefire that binds or protects us.
-			un_chamber_text = {
-				visible = "[And( GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_chamber_orders_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-				text = "[GetScriptedGui('un_chamber_orders_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 
 			# A member: each convention we are party to, and its terms for us,
@@ -4178,9 +4344,83 @@ types un_chamber_widget_types
 
 			# Our own position first, with the Development Programs controls
 			# under it (the 2026-10-27 audit, UN-9 and UN-13: it sat under Our
-			# Obligations' dues, and the buttons in the Actions grid).
-			un_chamber_text = {
-				text = "[GetScriptedGui('un_chamber_dev_fund_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			# Obligations' dues, and the buttons in the Actions grid). Rows of
+			# the section's table since the GUI polish of 2026-11-24 (it was
+			# three sentences): what we receive, why on hover
+			# (un_dev_fund_receipt_lines); our contribution's size, its share
+			# and a week's amount, the sentence on hover
+			# (un_dev_fund_contribution_lines); whether it is paid in; the
+			# recipients' goodwill. Each reads a script value, not a sweep.
+			un_chamber_value_row = {
+				blockoverride "row_label" {
+					text = "je_un_dev_fund_receive_label"
+				}
+				blockoverride "row_value" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_our_grant'), '(CFixedPoint)0' ), 'je_un_dev_fund_receive_value', 'je_un_dev_fund_receive_none' )]"
+					tooltip = "[GetScriptedGui('un_chamber_dev_fund_receipt_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+				}
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				# un_dev_fund_size_value: 0 none, 1 Token to 5 Generous.
+				un_chamber_value_row_wide = {
+					blockoverride "row_label" {
+						text = "je_un_dev_fund_ours_label"
+					}
+					blockoverride "row_value" {
+						text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)0' ), 'je_un_dev_fund_size_none', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)1' ), 'je_un_dev_fund_size_token', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)2' ), 'je_un_dev_fund_size_small', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)3' ), 'je_un_dev_fund_size_modest', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)4' ), 'je_un_dev_fund_size_substantial', 'je_un_dev_fund_size_generous' ) ) ) ) )]"
+						tooltip = "[GetScriptedGui('un_chamber_dev_fund_contribution_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+					}
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)0' )]"
+
+					un_chamber_value_row = {
+						blockoverride "row_label" {
+							text = "je_un_dev_fund_share_label"
+						}
+						blockoverride "row_value" {
+							text = "[SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)1' ), 'je_un_dev_fund_share_token', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)2' ), 'je_un_dev_fund_share_small', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)3' ), 'je_un_dev_fund_share_modest', SelectLocalization( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_dev_fund_size_value'), '(CFixedPoint)4' ), 'je_un_dev_fund_share_substantial', 'je_un_dev_fund_share_generous' ) ) ) )]"
+						}
+					}
+					un_chamber_value_row = {
+						blockoverride "row_label" {
+							text = "je_un_dev_fund_ours_weekly_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_dev_fund_ours_weekly_value"
+						}
+					}
+					# Running, but paying nothing into the Fund: we withhold our
+					# dues or hold no seat (un_dev_fund_contributor fails).
+					un_chamber_value_row = {
+						visible = "[Not( GetScriptedGui('un_chamber_dev_fund_counted_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+						tooltip = "je_un_dev_fund_paid_in_tt"
+						blockoverride "row_label" {
+							text = "je_un_dev_fund_paid_in_label"
+						}
+						blockoverride "row_value" {
+							text = "je_un_dev_fund_paid_in_no"
+						}
+					}
+				}
+			}
+			# What the recipients remember of our money, while they do: it
+			# fades over years once the money stops, inside the UN or out.
+			un_chamber_value_row = {
+				visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_patron_pct'), '(CFixedPoint)0' )]"
+				tooltip = "je_un_dev_fund_goodwill_tt"
+				blockoverride "row_label" {
+					text = "je_un_dev_fund_goodwill_label"
+				}
+				blockoverride "row_value" {
+					text = "je_un_dev_fund_goodwill_value"
+				}
 			}
 			# Fund while we don't contribute; once we do, Reduce, Raise and Defund
 			# in a row of their own (116 + 4 + 116 + 4 + 116 = 356). A control is
@@ -4248,6 +4488,17 @@ types un_chamber_widget_types
 				}
 			}
 
+			# Our GDP per head over the line it is held against (this month's
+			# figure; a member without a seat has none).
+			un_chamber_value_row = {
+				visible = "[GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_our_gdp_ph'), '(CFixedPoint)0' )]"
+				blockoverride "row_label" {
+					text = "je_un_dev_fund_our_gdp_ph_label"
+				}
+				blockoverride "row_value" {
+					text = "je_un_dev_fund_our_gdp_ph_value"
+				}
+			}
 			# The line, with how it was set this month on hover.
 			un_chamber_value_row = {
 				tooltip = "[GetScriptedGui('un_chamber_dev_fund_line_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -4284,13 +4535,45 @@ types un_chamber_widget_types
 				}
 			}
 
+			# The members the Fund pays, largest grant first: a live list, so
+			# open, but it runs to every qualifying member (81 on a 2042 save),
+			# so the ten largest show and the rest wait behind Show All, as
+			# the Demographics tab's Largest Cities do (GUI polish 2026-11-24).
+			# Each list is one ExecuteTooltip of the same builder
+			# (un_dev_fund_recipient_lines, MAX 9 or 999), so the shorter one
+			# costs no more than the list did. Show All shows while more than
+			# ten qualify and the Fund has money to pay them; a fixed-size
+			# button, so centring it is safe.
 			un_chamber_subheader = {
 				blockoverride "subheader_text" {
 					text = "je_un_dev_fund_sub_recipients"
 				}
 			}
 			un_chamber_text = {
+				visible = "[Not( GetVariableSystem.Exists('un_chamber_dev_fund_all_open') )]"
+				text = "[GetScriptedGui('un_chamber_dev_fund_top_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+			un_chamber_text = {
+				visible = "[GetVariableSystem.Exists('un_chamber_dev_fund_all_open')]"
 				text = "[GetScriptedGui('un_chamber_dev_fund_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			}
+			button = {
+				visible = "[And( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_recipients'), '(CFixedPoint)10' ), GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_pot'), '(CFixedPoint)0' ) )]"
+				using = default_button_action
+				size = { 236 30 }
+				parentanchor = hcenter
+				onclick = "[GetVariableSystem.Toggle('un_chamber_dev_fund_all_open')]"
+				tooltip = "je_un_dev_fund_show_tt"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 226
+					elide = right
+					using = un_fontsize_row
+					text = "[SelectLocalization( GetVariableSystem.Exists('un_chamber_dev_fund_all_open'), 'je_un_dev_fund_show_top', 'je_un_dev_fund_show_all' )]"
+				}
 			}
 		}
 	}
