@@ -3557,7 +3557,7 @@
  je_un_ov_member_1:0 "#v Cannot Join#!"
  je_un_ov_member_2:0 "#v Not a Member#!"
  je_un_ov_member_3:0 "#G Member#!"
- je_un_ov_member_4:0 "#G Permanent Member#!"
+ je_un_ov_member_4:0 "#G Permanent Seat#!"
  je_un_ov_member_5:0 "#Y Seat Carried#!"
  je_un_ov_member_6:0 "#R Suspended#!"
  je_un_ov_member_caption:0 "[Concept('concept_un_general_assembly','Membership')]"
