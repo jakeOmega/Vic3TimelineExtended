@@ -1,0 +1,40 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — Spacers' social class, one in each hierarchy
+# ============================================================================
+# Design: docs/superpowers/specs/2026-11-24-space-forces-personnel-design.md § 2.
+# A pop type belongs to a class of each social hierarchy, which gives its
+# strata. Spacers (te_spacers.txt) get a class of their own, lower strata,
+# in vanilla's three hierarchies, rather than an INJECT into vanilla's
+# lower_class, shudras or the Edo commoners: an INJECT of a block vanilla
+# already declares adds a second block instead of merging into it
+# (scripting_best_practices.md, the ideology read of 2026-10-04), and whether
+# the engine reads two allowed_professions lists is unread. A class of one
+# profession has vanilla's precedent (the Edo system's strata_religious).
+# ============================================================================
+
+te_spacers_class = {
+	social_hierarchy = default_social_hierarchy
+	strata = lower
+
+	allowed_professions = {
+		spacers
+	}
+}
+
+te_spacers_class_caste = {
+	social_hierarchy = british_indian_caste_system
+	strata = lower
+
+	allowed_professions = {
+		spacers
+	}
+}
+
+te_spacers_class_edo = {
+	social_hierarchy = edo_system
+	strata = lower
+
+	allowed_professions = {
+		spacers
+	}
+}

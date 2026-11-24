@@ -258,6 +258,23 @@ te_jmap_share_soldiers = {
 	max = 1
 }
 
+te_jmap_share_spacers = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_cls_spacers
+			has_variable = te_dg_walk_pop
+		}
+		value = var:te_dg_cls_spacers
+		divide = {
+			value = var:te_dg_walk_pop
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
 # 1 while the pick is a class map, either kind: Map Options' Count/Share switch is greyed on any other
 # (te_jmap_classes_count_sgui, te_journal_map_sguis.txt). Any scope: the selector is a global.
 te_jmap_pick_class = {
@@ -295,6 +312,8 @@ te_jmap_pick_class = {
 				te_jmap_selector = 71
 				te_jmap_selector = 72
 				te_jmap_selector = 73
+				te_jmap_selector = 88
+				te_jmap_selector = 89
 			}
 		}
 		value = 1

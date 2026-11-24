@@ -47,4 +47,7 @@ colors = {
 	# Soldiers: pale lilac to plum.
 	te_jmap_class_soldiers_low = hsv360 { 288 10 94 }
 	te_jmap_class_soldiers_high = hsv360 { 286 48 40 }
+	# Spacers: pale periwinkle to indigo.
+	te_jmap_class_spacers_low = hsv360 { 255 10 94 }
+	te_jmap_class_spacers_high = hsv360 { 252 60 46 }
 }

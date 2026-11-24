@@ -10293,7 +10293,7 @@ te_demog_absorbed_walk_pop = {
 			else_if = { limit = { is_pop_type = machinists } change_local_variable = { name = te_dg_w_edl add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_w_lq_machinists } } }
 			else_if = { limit = { is_pop_type = peasants } change_local_variable = { name = te_dg_w_edl add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_w_lq_peasants } } }
 			if = {
-				limit = { OR = { is_pop_type = officers is_pop_type = soldiers } }
+				limit = { OR = { is_pop_type = officers is_pop_type = soldiers is_pop_type = spacers } }
 				change_local_variable = { name = te_dg_w_odq add = { value = local_var:te_dg_p_ed multiply = local_var:te_dg_p_oc } }
 			}
 			else = {

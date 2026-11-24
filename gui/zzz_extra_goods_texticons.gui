@@ -148,3 +148,24 @@ texticon = {
 		fontsize = 18
 	}
 }
+
+# Spacers, the mod's pop type (common/pop_types/te_spacers.txt): @spacers! in
+# loc, at vanilla's two pop-icon sizes. The art is vanilla's soldiers' until
+# Spacers get their own (the pop type's texture is the same placeholder).
+texticon = {
+	icon = spacers
+	iconsize = {
+		offset = { 0 50 }
+		fontsize = 250
+		texture = "gfx/interface/icons/pops_icons/soldiers.dds"
+	}
+}
+
+texticon = {
+	icon = spacers
+	iconsize = {
+		offset = { 0 5 }
+		fontsize = 30
+		texture = "gfx/interface/icons/pops_icons/soldiers_15.dds"
+	}
+}

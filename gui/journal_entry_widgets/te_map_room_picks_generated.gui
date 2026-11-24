@@ -382,7 +382,7 @@ types te_map_room_picks_generated
 
 		# Classes: every pop type, the yearly walk's (whatever the Demographics rule), by its people or by its share
 		# of the people as Map Options' Count/Share switch says (the header's right names it): property, learning and
-		# the state, industry, the land, offices and the army.
+		# the state, industry, the land, offices and the army, and the space forces.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_classes"
@@ -706,6 +706,31 @@ types te_map_room_picks_generated
 					visible = "[GetScriptedGui('te_jmap_pick_class_soldiers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_class_soldiers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_class_soldiers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_spacers_count"
+					tooltip = "te_jmap_pick_class_spacers_count_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_spacers_count_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_spacers_count_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_spacers_count_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_class_spacers_share"
+					tooltip = "te_jmap_pick_class_spacers_share_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_class_spacers_share_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_class_spacers_share_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_class_spacers_share_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}

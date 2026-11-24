@@ -308,8 +308,8 @@ class MapRoomTest(unittest.TestCase):
         picks = self.picks()
         # 2 was literacy, retired in the fifth pass (vanilla's literacy map mode shows it) and back in the first tier
         # 48-73 the class maps (#1975); 2 literacy again and 74-82 the first tier's (#1976); 83-87 the second tier's
-        # (#1977)
-        self.assertEqual(sorted(picks.values()), list(range(1, 88)), "one pick per selector")
+        # (#1977); 88-89 the class maps' Spacers, the mod's own pop type (space forces personnel, 2026-11-24)
+        self.assertEqual(sorted(picks.values()), list(range(1, 90)), "one pick per selector")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -919,9 +919,15 @@ class ClassMapsTest(_RoomBranches, unittest.TestCase):
         import json
         with open(os.path.join(REPO, "vanilla_parsed", "common", "pop_types.json"), encoding="utf-8") as f:
             vanilla = set(json.load(f))
+        import re
+        mod_types = set()
         mod = os.path.join(REPO, "common", "pop_types")
-        self.assertFalse(os.path.isdir(mod) and os.listdir(mod), "the mod adds pop types: give each a row")
-        self.assertEqual({c["pop"] for c in self.cls.CLASSES}, vanilla)
+        for name in sorted(os.listdir(mod)) if os.path.isdir(mod) else []:
+            with open(os.path.join(mod, name), encoding="utf-8-sig") as f:
+                mod_types |= set(re.findall(r"^(\w+) = \{", f.read(), re.M))
+        # the mod's own: Spacers (space forces personnel, 2026-11-24)
+        self.assertEqual(mod_types, {"spacers"})
+        self.assertEqual({c["pop"] for c in self.cls.CLASSES}, vanilla | mod_types, "every pop type, the mod's too, has a row")
         self.assertEqual(len(vanilla), 15)
         # the tenth pass's four shares keep their selectors, so a save holding one shows it
         shares = {c["pop"]: c["share_sel"] for c in self.cls.CLASSES}
@@ -2246,8 +2252,8 @@ class PickTooltipTest(_RoomBranches, unittest.TestCase):
     def test_every_pick_has_one_tooltip(self):
         picks = self.picks()
         # 36 until the class maps (#1975), whose 30 took the four shares' place, the first tier's ten (#1976) and the
-        # second tier's five (#1977)
-        self.assertEqual(len(picks), 36 - 4 + 30 + 10 + 5)
+        # second tier's five (#1977), and Spacers' two (2026-11-24)
+        self.assertEqual(len(picks), 36 - 4 + 30 + 10 + 5 + 2)
         for key in sorted(set(re.findall(r'text = "(te_jmap_pick_\w+)"', self.row))):
             self.assertIn(f'tooltip = "{key}_desc"', self.row, key)
         self.assertNotIn("SelectLocalization", self.row, "a pick's tooltip chooses its own parts")

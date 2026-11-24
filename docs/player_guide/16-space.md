@@ -1324,6 +1324,54 @@ month after builds. A month is built in one go, so it is built only if the
 yards bought their inputs all month. Pausing costs the inputs bought since the
 last month's construction, so pause just after Built a month changes.
 
+### Space Forces Personnel
+
+Every ship needs a crew and every marine is a person. The Space Forces Base, a
+government building unlocked by Space Militarization and built in any state,
+employs Spacers, the mod's own pop type, 1,000 a level, hired as barracks hire
+soldiers. It uses no goods. Each level gives 1,000 Space Forces Personnel,
+scaled by staffing, and a base in a state an enemy occupies still counts. Each
+staffed level also makes the state's people 1% more drawn to the Armed Forces.
+What
+is in service needs them:
+
+| In service | Personnel |
+|---|---|
+| A point of fleet strength at full, in a fleet (not the reserve on the ground) | 100, or 50 with Artificial General Intelligence |
+| A marine battalion, aboard or landed as a garrison | 1,000 |
+
+Space Command's Personnel cell gives those in service out of what your bases
+give. Personnel to spare are what launches the reserve and fills marines:
+
+- **Launches.** Launch and Auto send up as much of the reserve as the spare
+  personnel crew, the same share of each role, and the rest waits on the
+  ground; with none to spare, nothing launches. The Reserve cell's hover gives
+  the points awaiting crews.
+- **Marines.** Marines come aboard at Earth only as far as personnel are spare.
+- **Hulls or Marines.** The button beside Pause decides which takes the
+  month's spare personnel first: the reserve's launch (Hulls, the default) or
+  the marines of your fleets at Earth (Marines).
+
+With more in service than your bases give, as after a base loses staff, a level
+is demolished or the reserve went up during an old game's grace (below), your
+forces are short of personnel. The Crewed cell gives the share crewed, and a
+note above your fleets says so. Every fleet fires at that share, and marines,
+aboard or landed, count only at that share when a seizure is weighed, until
+the bases hire again or the forces shrink.
+
+People die with what is lost. Ships destroyed in battle, the strength lost
+away from supply, a fleet all but destroyed, marines aboard assault carriers
+destroyed in battle, marines lost when their colony is seized, freed or
+destroyed, and those killed taking a colony (see
+[Blockade, seizure and destruction](#blockade-seizure-and-destruction)) kill as
+many Spacers in your bases' states, each state by its share of the personnel.
+The census counts them as war dead. The battle report and the occupation
+notice give the dead, and the Personnel hover the year's. The bases rehire.
+
+In a game already under way, a country whose fleets need more personnel than
+its bases give gets the base levels they lack, in Space Command's state, and
+for six months its forces count fully crewed while the new levels hire.
+
 ### Moving fleets
 
 The Space Fleets section shows your fleets, up to nine, each as a card: where it
@@ -1355,7 +1403,8 @@ your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
 propellant only on a site that makes it, such as Utopia Planitia, Ceres, Europa
 or Titan), damage is repaired, and a fleet on an older drive refits to your best
 in three months. Away from a dock supply runs down, and a fleet without it loses
-5% of its strength a month. Marines fill up at Earth only. A fleet that arrives
+5% of its strength a month. Marines fill up at Earth only, as far as your
+Space Forces Personnel allow. A fleet that arrives
 where you hold a colony counts as contact for the colony's autonomy. When an
 enemy fleet sets out for a location where you hold a colony, you are warned
 with the months until it arrives.
@@ -1416,7 +1465,7 @@ Seize or Destroy button:
 
 | Choice | Needs | What follows | Price |
 |---|---|---|---|
-| Seize | More marines than the site's garrison and militia (a battalion for every 20,000 people, at least one) | The site is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more marines than the occupier's garrison | None |
+| Seize | More marines than half again the site's garrison and militia (a battalion for every 20,000 people, at least one) | The site is occupied: it gives its holder nothing, counts as Colonies occupied in space in the war support breakdown, and goes back at the peace unless a Cede Colony article takes it. Its holder, or anyone at war with the occupier, frees it the same way, with more than half again the occupier's garrison | Marines as many as half the garrison and militia die taking it |
 | Destroy | Three months closing in with more fire than its Defenses | The colony and everyone in it are lost, and the site lies ruined for 25 years | 20 infamy, 20 on your UN record of hostile acts in space, +10 autonomy at each of your colonies of 1,000 people or more and their resentment for ten years |
 
 A free colony can be attacked without a war: closing in costs 10 infamy at
@@ -1432,8 +1481,8 @@ On the Moon and Mars, where several sites share a world, a holder's colonies
 there defend one another:
 
 - **Marines.** Your marines at any of your colonies there are the garrison of
-  each, so seizing one takes more marines than all of them and the colony's
-  militia, and an enemy that seizes one kills them all. A garrison you order
+  each, so seizing one takes more marines than half again all of them and the
+  colony's militia, and an enemy that seizes one kills them all. A garrison you order
   for one of them needs its two battalions anywhere on that world.
 - **Defenses.** Your Defenses at one colony fire at full strength on enemies
   closing in on any other of yours there, and add half their hardness to it, so
@@ -1485,10 +1534,12 @@ don't lift the blockade: only a fleet of yours at Earth does.
 That fleet comes from the reserve. Space Command's construction waits on the
 ground there, in the five roles, and its Reserve row gives the strength (hover
 it for the roles). With Auto on, the default, it joins your home fleet at Earth
-each month while no enemy fleet is there, so in peace the reserve stays empty.
-While an enemy fleet is at Earth it stays on the ground, and Launch sends all of
-it up together as one fleet at Earth, with full propellant, supply and marines,
-blockade or not. A blockade therefore faces everything you have built since it
+each month while no enemy fleet is there, so in peace, with the
+[personnel](#space-forces-personnel) to crew it, the reserve stays empty.
+While an enemy fleet is at Earth it stays on the ground, and Launch sends it up
+together as one fleet at Earth, as much of it as your personnel crew, with full
+propellant and supply and as many marines as personnel allow, blockade or not.
+A blockade therefore faces everything you have built and can crew since it
 began, not a month's worth at a time. Turn Auto off to keep a reserve in peace
 and launch it when you choose; it costs the same upkeep on the ground.
 
@@ -1546,18 +1597,24 @@ once a month, an AI sends one fleet from a dock to the nearest enemy location
 within a year's flight, when the fleet is at least half again as strong as the
 enemy's fleets and its colonies' Defenses there and can fly home again or dock
 there. It closes in on the enemy colony with the most people and modules,
-to seize it when its marines outnumber the garrison and militia, and otherwise
+to seize it when its marines outnumber half again the garrison and militia, and otherwise
 stands off to blockade. It comes home once the enemy's fleets there outmatch
 its own. At Earth, while no enemy fleet is there, the AI picks the enemy lunar
 colony with the most people and modules, and its strongest fleet there whose
-marines outnumber that colony's garrison and militia closes in on it. Its other
+marines outnumber half again that colony's garrison and militia closes in on it. Its other
 fleets at Earth stay stationed. An AI never destroys a colony, never attacks a free one and never
-interdicts. With an enemy fleet at Earth, it launches its reserve once the
-reserve and its fleets at Earth match the enemy's there. It builds batteries
+interdicts. With an enemy fleet at Earth, it launches its reserve once the part
+of it that it can crew and its fleets at Earth match the enemy's there. It
+builds Space Forces Bases while its fleets, its reserve and its carriers'
+empty room need more personnel than its built and queued base levels give,
+with a fifth to spare, and
+puts marines first at war and hulls first in peace. It builds batteries
 only while at war with a country that has fleets, up to five levels, and runs
 Ground Lasers at war, and in peace once debris is Cluttered. An AI in default,
 or in deficit while at peace, pauses Space Command's construction, and resumes
-once out of default with a surplus, or at war, after six months at least.
+once out of default with a surplus, or at war, after six months at least. It
+also pauses while more than six months' construction waits for crews with no
+base level queued.
 
 ## After the space race
 

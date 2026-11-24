@@ -97,10 +97,15 @@ CLASSES = [
          about="Barracks and naval bases employ them; Armed Forces counts them with their Officers.",
          count=(500, 64000), share=("linear", 0.04), share_min=0.005,
          hue=288, high=(286, 48, 40), words=("pale lilac", "plum"), walk=8),
+    # Space forces: the mod's own pop type (common/pop_types/te_spacers.txt; space forces personnel design § 2).
+    dict(pop="spacers", name="Spacers", count_sel=88, share_sel=89,
+         about="Only Space Forces Bases employ them, to crew the fleets and fight as marines, so few states hold any.",
+         count=(100, 25600), share=("linear", 0.01), share_min=0.002,
+         hue=255, high=(252, 60, 46), words=("pale periwinkle", "indigo"), walk=16),
 ]
 
 # The class maps' rows in the Classes group (gen_journal_map_picks.py), three to a row, by theme as the table runs:
-# property, learning and the state, industry, the land, offices and the army.
+# property, learning and the state, industry, the land, offices and the army; then the space forces, a row of one.
 ROWS = [[c["pop"] for c in CLASSES[i:i + 3]] for i in range(0, len(CLASSES), 3)]
 
 # The state variables the tenth pass's four share maps read, until #1975 renamed every class's te_dg_cls_<pop>

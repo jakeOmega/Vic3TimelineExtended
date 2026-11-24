@@ -314,7 +314,7 @@ te_jmap_pick_health_care_sgui = {
 
 # Classes: every pop type, the yearly walk's (whatever the Demographics rule), by its people or by its share of the
 # people as Map Options' Count/Share switch says (the header's right names it): property, learning and the state,
-# industry, the land, offices and the army.
+# industry, the land, offices and the army, and the space forces.
 
 te_jmap_pick_class_aristocrats_count_sgui = {
 	scope = country
@@ -703,6 +703,32 @@ te_jmap_pick_class_soldiers_share_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 73 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 73 }
+	}
+}
+
+te_jmap_pick_class_spacers_count_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 88 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 88 }
+	}
+}
+
+te_jmap_pick_class_spacers_share_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		te_jmap_class_mode = 1
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 89 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 89 }
 	}
 }
 

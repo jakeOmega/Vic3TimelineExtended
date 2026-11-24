@@ -6096,3 +6096,30 @@ An event has no `INJECT:`, and a second definition of its id logs `Duplicated ev
 ## Recognized and Unrecognized Ranks Interleave: "Below Minor Power" Is `country_rank <= rank_value:insignificant_power`
 
 The rank values (`common/country_ranks/`) put each unrecognized rank between two recognized ones: Great Power 7, Major Power 6, Unrecognized Major Power 5, Minor Power 4, Unrecognized Regional Power 3, Insignificant Power 2, Unrecognized Power 1, Decentralized 0. An Unrecognized Regional Power has a Minor Power's prestige thresholds (0.6 average, 0.15 relative), and an Unrecognized Major Power a Major Power's, so a gate meant for "below Minor Power" written as `NOT = { country_rank >= rank_value:minor_power }` also passes an Unrecognized Regional Power, and `country_rank >= rank_value:major_power` leaves out an Unrecognized Major Power. Engine-silent. Operation Polo (`te_operation_polo_target`) shipped the first form, and with a border its only place test, an AI India annexed an unrecognized Persia whole, without a war, in game after game (2026-11-20). Write `country_rank <= rank_value:insignificant_power` for the small countries of both kinds, or test `is_country_type = unrecognized` where the split is the point.
+
+## A Mod Pop Type Needs a Social Class in Every Social Hierarchy, and organize_loc Must Be Told Its Keys (1.15, Unverified in Game)
+
+Since 1.15 a pop type takes its strata from its social class (`common/social_classes/`), and every hierarchy
+(`common/social_hierarchies/`: `default_social_hierarchy`, `british_indian_caste_system`, `edo_system`) must place
+each type in exactly one of its classes, so a new type needs one class per hierarchy. Give it classes of its own
+(`te_spacers_class`, `_caste`, `_edo`, each `strata = lower`, `allowed_professions = { spacers }`; vanilla's Edo
+`strata_religious` is a class of one profession) rather than an `INJECT:` into vanilla's `lower_class`: an `INJECT`
+of a block vanilla declares adds a second block instead of merging, and whether the engine reads two
+`allowed_professions` lists is unread. The engine reads `<type>`, `<type>_no_icon`, `<type>_only_icon` and
+`<type>_desc` (and a class's `<class>` and `<class>_desc`) with no script reference, so organize_loc filed them to
+`te_unused_l_english.yml` until `find_pop_type_keys` (2026-11-24). Every table keyed by pop type then needs the new
+one: the Map Room's class maps (`journal_map_classes.py`), the census generator (`gen_demographics.py` took vanilla's
+types only), `DEATH_CAUSE_WAR_CLASSES`, the save series' professions. A strata kill (`kill_population_in_state` by
+`pop_strata`) takes it too. Whether the type loads, hires and dies by `kill_population_in_state` with its `pop_type`
+is the `pers_pop_type` and `pers_kill` self-checks' question (`docs/testing/solar-colonies-playtest.md`).
+
+## Share Whole Units Among States One After Another, or Rounding Each Share Drops or Doubles Small Totals
+
+When N whole units (hundreds of people to kill, levels to place) are shared among states by weight, rounding
+each state's `weight ÷ total × N` on its own loses them or makes extra ones: one unit among three equal states
+rounds to 0 in each and is never placed; one among two rounds to 1 in each and is placed twice. The space forces
+kill did both until its review (#2020). Share them in one pass instead, each state taking its share of the units
+still to place by its share of the weight still to share, `round(weight ÷ weight_left × left)`, then taking
+both off (`change_local_variable` on the two locals, which run on through an `every_scope_state`). The shares
+then add up to N, and the last state takes what is left (`sr_pers_kill_step`). A state's cap (its pops) passes
+what it can't take on to the states after it.

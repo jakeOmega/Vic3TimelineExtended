@@ -114,7 +114,9 @@ from scripts.analysis import save_country_probe, save_world_report  # noqa: E402
 FX_SCALE = 100_000
 SUPPORTED_VERSION = "1.14.5"
 PROFESSIONS = ("academics", "aristocrats", "bureaucrats", "capitalists", "clergymen", "clerks", "engineers",
-               "farmers", "laborers", "machinists", "officers", "peasants", "shopkeepers", "slaves", "soldiers")
+               "farmers", "laborers", "machinists", "officers", "peasants", "shopkeepers", "slaves", "soldiers",
+               # the mod's own, loaded after vanilla's (common/pop_types/te_spacers.txt)
+               "spacers")
 
 KEY_DEF, KEY_BUDGET, KEY_POP_STATS, KEY_STATES = 0x07DD, 0x3171, 0x330D, 0x09CD
 KEY_GDP_TREND, KEY_TREND_COUNT, KEY_TREND_CHANNELS = 0x3F16, 0x045A, 0x3F15

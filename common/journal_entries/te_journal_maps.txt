@@ -2231,6 +2231,40 @@ je_te_map_room = {
 				factor = te_jmap_class_soldiers_share_factor
 			}
 		}
+		# 88. Spacers, their people: a doubling at a time; a state with none pale.
+		else_if = {
+			limit = {
+				te_jmap_selector = 88
+				has_variable = te_dg_cls_spacers
+				var:te_dg_cls_spacers > 0
+			}
+			lerp = {
+				min_color = "te_jmap_class_spacers_low"
+				max_color = "te_jmap_class_spacers_high"
+				factor = te_jmap_class_spacers_factor
+			}
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 88
+				has_variable = te_dg_cls_spacers
+			}
+			value = "te_jmap_none"
+		}
+		# 89. Spacers, their share of the people.
+		else_if = {
+			limit = {
+				te_jmap_selector = 89
+				has_variable = te_dg_cls_spacers
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			lerp = {
+				min_color = "te_jmap_class_spacers_low"
+				max_color = "te_jmap_class_spacers_high"
+				factor = te_jmap_class_spacers_share_factor
+			}
+		}
 		# A state the yearly walk hasn't counted yet: grey.
 		else_if = {
 			limit = {
@@ -2265,6 +2299,8 @@ je_te_map_room = {
 					te_jmap_selector = 71
 					te_jmap_selector = 72
 					te_jmap_selector = 73
+					te_jmap_selector = 88
+					te_jmap_selector = 89
 				}
 			}
 			value = "te_jmap_no_data"
@@ -3668,6 +3704,30 @@ je_te_map_room = {
 		}
 		else_if = {
 			limit = {
+				te_jmap_selector = 88
+				has_variable = te_dg_cls_spacers
+				var:te_dg_cls_spacers > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_class_spacers
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 88
+				has_variable = te_dg_cls_spacers
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_class_spacers_none
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 89
+				has_variable = te_dg_cls_spacers
+				has_variable = te_dg_walk_pop
+				var:te_dg_walk_pop > 0
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_class_spacers
+		}
+		else_if = {
+			limit = {
 				OR = {
 					te_jmap_selector = 41
 					te_jmap_selector = 42
@@ -3699,6 +3759,8 @@ je_te_map_room = {
 					te_jmap_selector = 71
 					te_jmap_selector = 72
 					te_jmap_selector = 73
+					te_jmap_selector = 88
+					te_jmap_selector = 89
 				}
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_no_census

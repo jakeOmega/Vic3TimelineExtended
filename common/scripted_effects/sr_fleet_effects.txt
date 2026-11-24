@@ -95,8 +95,11 @@ sr_fl_add_role_part = {
 }
 
 # A battle's cut of ROLE (local_var:sr_fl_cut, at most its strength now): now
-# falls by all of it, full by the destroyed share (design § 4).
+# falls by all of it, full by the destroyed share (design § 4). The fall in full
+# strength is the hulls destroyed, and their crews die (space forces personnel
+# design § 5.1); damage kills nobody.
 sr_fl_cut_role = {
+	set_local_variable = { name = sr_pers_full_was value = sr_fl_$N$_$ROLE$_full_value }
 	set_variable = {
 		name = sr_fl_$N$_$ROLE$
 		value = {
@@ -115,6 +118,16 @@ sr_fl_cut_role = {
 			min = sr_fl_$N$_$ROLE$_value
 		}
 	}
+	set_local_variable = {
+		name = sr_pers_lost
+		value = {
+			value = local_var:sr_pers_full_was
+			subtract = sr_fl_$N$_$ROLE$_full_value
+			min = 0
+			multiply = sr_pers_per_point
+		}
+	}
+	sr_pers_note_lost = yes
 }
 
 # Propellant and supply to capacity (a new fleet; the console).
@@ -216,6 +229,20 @@ sr_fl_month_at = {
 		limit = { has_variable = sr_fl_$N$_loc }
 		if = {
 			limit = { sr_fl_$N$_strength < sr_fl_minimum_strength }
+			# The slot's last crews and the marines aboard die with it (space
+			# forces personnel design § 5.1).
+			set_local_variable = {
+				name = sr_pers_lost
+				value = {
+					value = sr_fl_$N$_strength_full
+					multiply = sr_pers_per_point
+					add = {
+						value = sr_fl_$N$_marines_value
+						multiply = sr_pers_per_battalion
+					}
+				}
+			}
+			sr_pers_note_lost = yes
 			sr_fl_clear_at = { N = $N$ }
 		}
 		else_if = {
@@ -272,9 +299,11 @@ sr_fl_month_at = {
 				limit = { local_var:sr_fl_share > 0 sr_sc_operational = yes }
 				sr_fl_repair_roles_at = { N = $N$ }
 			}
+			# Marines come aboard at Earth up to the carriers' room, and only as far
+			# as the personnel allow (space forces personnel design § 4).
 			if = {
 				limit = { var:sr_fl_$N$_loc = 1 }
-				set_variable = { name = sr_fl_$N$_marines value = sr_fl_$N$_marine_capacity }
+				sr_fl_marines_refill_at = { N = $N$ }
 			}
 		}
 		else = {
@@ -288,21 +317,66 @@ sr_fl_month_at = {
 			}
 			if = {
 				limit = { sr_fl_$N$_supply_value <= 0 }
+				set_local_variable = {
+					name = sr_pers_lost
+					value = {
+						value = sr_fl_$N$_strength_full
+						multiply = sr_fl_attrition_share
+						multiply = sr_pers_per_point
+					}
+				}
+				sr_pers_note_lost = yes
 				sr_fl_attrition_at = { N = $N$ }
 			}
 		}
-		# Marines past the carriers' room are lost (a carrier lost in battle).
+		# Marines past the carriers' room are lost. Those past the room of the
+		# carriers at full strength went down with destroyed carriers and die;
+		# those a damaged carrier can't hold leave service, as damage kills no
+		# crew (sr_fl_cut_role; space forces personnel design § 5.1, review of
+		# #2020).
 		if = {
 			limit = {
 				sr_fl_$N$_exists = yes
 				sr_fl_$N$_marines_value > sr_fl_$N$_marine_capacity
 			}
+			set_local_variable = {
+				name = sr_pers_lost
+				value = {
+					value = sr_fl_$N$_marines_value
+					subtract = {
+						value = sr_fl_$N$_carrier_full_value
+						multiply = sr_fl_marines_per_carrier
+					}
+					min = 0
+					multiply = sr_pers_per_battalion
+				}
+			}
+			sr_pers_note_lost = yes
 			set_variable = { name = sr_fl_$N$_marines value = sr_fl_$N$_marine_capacity }
 		}
 	}
 }
 
 # ---- Marines (design § 9.6) ------------------------------------------------------------------
+# Marines come aboard slot N at Earth (the month docked there, a launch): up to
+# the carriers' room, and only as far as the personnel in hand allow
+# (sr_pers_room_battalions, read live, so each slot's refill leaves the next
+# what is left; space forces personnel design § 4). A slot past its room is
+# left to the month's trim, which counts its dead.
+sr_fl_marines_refill_at = {
+	if = {
+		limit = { sr_fl_$N$_marines_value < sr_fl_$N$_marine_capacity }
+		set_variable = {
+			name = sr_fl_$N$_marines
+			value = {
+				value = sr_fl_$N$_marines_value
+				add = sr_pers_room_battalions
+				max = sr_fl_$N$_marine_capacity
+			}
+		}
+	}
+}
+
 # Every battalion aboard lands at the world KEY (ours), as its garrison.
 sr_fl_land_marines = {
 	set_global_variable = {
@@ -370,8 +444,11 @@ sr_fl_embark_some = {
 }
 
 # Country scope. AMOUNT battalions come home to Earth, aboard our first fleet
-# there (a cession to a non-ally, an occupation's end); with none at Earth
-# they are lost. The month caps them at its carriers' room.
+# there (a cession to a non-ally, an occupation's end), as many as its
+# carriers have room for; the rest, and all of them with no fleet at Earth,
+# leave service. None die: coming home is no loss (space forces personnel
+# design § 5.1; the month's trim would otherwise count them dead, review of
+# #2020).
 sr_fl_marines_home = {
 	set_local_variable = { name = sr_fl_marines_in value = $AMOUNT$ }
 	sr_fl_find_at_earth = yes
@@ -382,11 +459,15 @@ sr_fl_marines_home = {
 }
 
 sr_fl_take_marines_at = {
-	set_variable = {
-		name = sr_fl_$N$_marines
-		value = {
-			value = sr_fl_$N$_marines_value
-			add = local_var:sr_fl_marines_in
+	if = {
+		limit = { sr_fl_$N$_marines_value < sr_fl_$N$_marine_capacity }
+		set_variable = {
+			name = sr_fl_$N$_marines
+			value = {
+				value = sr_fl_$N$_marines_value
+				add = local_var:sr_fl_marines_in
+				max = sr_fl_$N$_marine_capacity
+			}
 		}
 	}
 }
@@ -465,14 +546,27 @@ sr_fl_global_month = {
 
 # ---- The country's month (space_race_on_actions.txt) ----------------------------------------------
 # Country scope, a fleet power under Full Colonies: one Space Command a nation,
-# Space Command's construction, every slot's month, the upkeep, war support's
-# records, orbital fire support (6d), the AI's review and its pause, a
+# an old save's personnel (once), Space Command's construction, then the
+# ground reserve's Auto launch and every slot's month in the order the
+# personnel toggle sets (space forces personnel design § 4: hulls first, the
+# default, launches before the slots refill their marines; marines first the
+# other way round), the upkeep, war support's records, orbital fire support
+# (6d), the AI's review and its pause, the crewed share and the dead, a
 # player's Locations snapshot.
 sr_fl_country_month = {
 	sr_sc_one_per_nation = yes
 	sr_fl_join_powers = yes
+	sr_pers_migrate_once = yes
 	sr_sc_month = yes
-	sr_fl_each_slot = { DO = month }
+	if = {
+		limit = { sr_pers_marines_first_on = yes }
+		sr_fl_each_slot = { DO = month }
+		sr_reserve_auto_step = yes
+	}
+	else = {
+		sr_reserve_auto_step = yes
+		sr_fl_each_slot = { DO = month }
+	}
 	sr_fl_upkeep_refresh = yes
 	sr_fl_ws_refresh = yes
 	sr_orbital_superiority_refresh = yes
@@ -480,7 +574,9 @@ sr_fl_country_month = {
 		limit = { is_ai = yes }
 		sr_fl_ai_review = yes
 		sr_sc_ai_pause_review = yes
+		sr_pers_ai_priority = yes
 	}
+	sr_pers_close = yes
 	if = {
 		limit = { is_player = yes }
 		sr_loc_refresh_snapshot = yes
@@ -528,10 +624,12 @@ sr_sc_one_per_nation = {
 }
 
 # Country scope. The month's construction (sr_sc_rate) into the ground reserve
-# (6d, sr_reserve_<role>), shared by the build mix; then, with the toggle on
-# and no hostile fleet at Earth, the reserve launches itself into the home
-# fleet (sr_reserve_auto_step, sr_earth_orbit_effects.txt), which is 6a's
-# behaviour. Otherwise it waits on the ground for Launch. While construction
+# (6d, sr_reserve_<role>), shared by the build mix. The fleets' month then
+# runs Auto (sr_reserve_auto_step, sr_earth_orbit_effects.txt: with the toggle
+# on and no hostile fleet at Earth, the reserve launches itself into the home
+# fleet, 6a's behaviour, as far as the personnel crew it), before or after the
+# slots' month by the personnel toggle (sr_fl_country_month). Otherwise it
+# waits on the ground for Launch. While construction
 # is paused (sr_sc_is_paused, owner, 2026-10-31) nothing is built, neither
 # Space Command's nor the colonies' Orbital Yards' strength, and the yards
 # buy none of their inputs (sr_sc_pause_apply); the reserve, Auto and the
@@ -568,7 +666,6 @@ sr_sc_month = {
 	}
 	# 3. The cut follows the variables (and reaches a building built since).
 	sr_sc_pause_apply = yes
-	sr_reserve_auto_step = yes
 }
 
 # Country scope: the pause's building modifier, derived from sr_sc_paused.

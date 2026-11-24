@@ -139,3 +139,98 @@ sr_disp_launch_site_lost = {
 	value = 0
 	if = { limit = { sr_launch_site_lost = yes } value = 1 }
 }
+
+# Space forces personnel (2026-11-24 design § 7): the Personnel and Crewed
+# cells, their hovers, the priority button and Space Fleets' note.
+sr_disp_pers_in_service = {
+	value = sr_pers_in_service
+}
+sr_disp_pers_capacity = {
+	value = sr_pers_capacity
+}
+sr_disp_pers_capacity_bases = {
+	value = sr_pers_capacity_bases
+}
+sr_disp_pers_crews = {
+	value = sr_pers_crews
+}
+sr_disp_pers_marines_aboard = {
+	value = sr_pers_marines_aboard
+	multiply = sr_pers_per_battalion
+}
+sr_disp_pers_marines_garrison = {
+	value = sr_pers_marines_garrison
+	multiply = sr_pers_per_battalion
+}
+sr_disp_pers_per_point = {
+	value = sr_pers_per_point
+}
+# The crewed share in percent, as combat reads it (stored at the month's end).
+sr_disp_pers_share_pct = {
+	value = sr_pers_share_value
+	multiply = 100
+}
+# 1 while the crewed share is below 1: the Crewed cell reads red and Space
+# Fleets' note shows.
+sr_disp_pers_short = {
+	value = 0
+	if = { limit = { sr_pers_short = yes } value = 1 }
+}
+# 1 while an old save's grace runs (design § 8).
+sr_disp_pers_grace = {
+	value = 0
+	if = { limit = { sr_pers_in_grace = yes } value = 1 }
+}
+sr_disp_pers_grace_months = {
+	value = 0
+	if = {
+		limit = { sr_pers_in_grace = yes }
+		value = var:sr_pers_grace_until
+		subtract = te_history_month_index
+	}
+}
+# The ground reserve's points the personnel can't crew yet.
+sr_disp_pers_reserve_waiting = {
+	value = sr_pers_reserve_waiting
+}
+# The Space Forces Bases' levels, and the Spacers killed in the last year.
+sr_disp_pers_levels = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_space_forces_base }
+		every_scope_building = {
+			limit = { is_building_type = building_space_forces_base }
+			add = level
+		}
+	}
+}
+sr_disp_pers_killed_year = {
+	value = 0
+	# The count's year began within the last twelve months; an older one reads 0,
+	# as the next kill would start it again (review of #2020).
+	if = {
+		limit = {
+			has_variable = sr_pers_killed_year
+			has_variable = sr_pers_killed_year_from
+			var:sr_pers_killed_year_from >= {
+				value = te_history_month_index
+				subtract = 11
+			}
+		}
+		value = var:sr_pers_killed_year
+	}
+}
+# 1 marines first, 0 hulls first (the priority button's label).
+sr_disp_pers_marines_first = {
+	value = 0
+	if = { limit = { sr_pers_marines_first_on = yes } value = 1 }
+}
+# The battle report (.101) and the occupation notice (.102): our people killed.
+sr_disp_battle_dead = {
+	value = 0
+	if = { limit = { has_variable = sr_battle_dead } value = var:sr_battle_dead }
+}
+sr_disp_occ_dead = {
+	value = 0
+	if = { limit = { has_variable = sr_occ_dead } value = var:sr_occ_dead }
+}

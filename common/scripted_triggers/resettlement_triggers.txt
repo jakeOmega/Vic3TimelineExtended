@@ -60,8 +60,11 @@ resettlement_state_runs_voluntary = {
 # Pop scope, with scope:rs_country (the owner) and scope:rs_destination (the
 # state whose var:rs_programme holds the program's code) saved. Culture and
 # religion are never tested. Slaves never: move_partial_pop would free them.
+# Spacers never: a Space Forces Base's people serve the fleets (space forces
+# personnel design § 2), and only the base may hire or lose them.
 resettlement_pop_eligible = {
 	NOT = { is_pop_type = slaves }
+	NOT = { is_pop_type = spacers }
 	OR = {
 		AND = {
 			scope:rs_destination.var:rs_programme = 0

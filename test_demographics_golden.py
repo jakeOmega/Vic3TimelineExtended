@@ -347,6 +347,13 @@ CLASS_PAIR_DIGESTS = {
     ("generated_effects", "te_demog_absorbed_walk_init"): "d55951aa65b56203c04529399901e75f843a9c8241dc1d8c88e4340219cc2b3d",
     ("generated_effects", "te_demog_absorbed_walk_pop"): "56dc6fbc4c5dd04fd655ae60386e607e3cae29cb53a2653eca85978a34e7a0b3",
 }
+# Spacers (space forces personnel, 2026-11-24), the mod's first pop type: the generator now takes the mod's pop types
+# too, so a Spacer's workplace mortality has its branch, and their class line counts under war beside soldiers' and
+# officers' (DEATH_CAUSE_WAR_CLASSES); no recorded case holds a Spacer, so no number changes.
+SPACERS_DIGESTS = {
+    ("generated_values", "te_demog_pop_death_mult"): "756a7c9fe186cecfc7dec4040babd9a40c3448d75edaa259f36e8d1ed6d29ca6",
+    ("generated_effects", "te_demog_absorbed_walk_pop"): "8b60aca2108b772cfcc6125c8ab770efe0b1dc8b5029ccca95d823e78171c89d",
+}
 
 
 def _ring300(name):
@@ -556,6 +563,7 @@ class TestStepOneChangesNoNumber(unittest.TestCase):
                 want = OLDSAVE_DIGESTS.get((key, name), want)
                 want = GUARDS_DIGESTS.get((key, name), want)
                 want = CLASS_PAIR_DIGESTS.get((key, name), want)
+                want = SPACERS_DIGESTS.get((key, name), want)
                 self.assertEqual(self.now["blocks"][key][name], want, f"{key}: {name} changed")
 
     def test_the_walk_changes_only_by_its_three_calls(self):

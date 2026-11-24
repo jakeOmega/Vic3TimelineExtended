@@ -228,7 +228,8 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 20)
+        # 21 since the personnel priority (sr_pers_priority_sgui, 2026-11-24)
+        self.assertEqual(len(names), 21)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -693,8 +694,9 @@ class PauseTest(unittest.TestCase):
 
     def test_the_ai_pauses_under_fiscal_stress(self):
         should = _block(self.triggers, "sr_sc_ai_should_pause")
+        # ... and hulls nobody can crew (space forces personnel design § 6).
         self.assertRegex(should, r"^\s*OR = \{\s*in_default = yes\s*AND = \{\s*net_fixed_income < 0\s*"
-                                 r"is_at_war = no\s*\}\s*\}\s*$")
+                                 r"is_at_war = no\s*\}\s*sr_pers_ai_hulls_uncrewed = yes\s*\}\s*$")
         # The same fiscal terms the AI builds Space Command on, turned round.
         build = _block(self.triggers, "sr_sc_may_build_government")
         self.assertIn("in_default = no", build)
@@ -703,7 +705,8 @@ class PauseTest(unittest.TestCase):
     def test_the_ai_resumes_out_of_it_six_months_on(self):
         resume = _block(self.triggers, "sr_sc_ai_may_resume")
         self.assertRegex(resume, r"^\s*in_default = no\s*OR = \{\s*net_fixed_income > 0\s*is_at_war = yes\s*\}\s*"
-                                 r"NOT = \{ has_variable = sr_sc_pause_hold \}\s*$")
+                                 r"NOT = \{ has_variable = sr_sc_pause_hold \}\s*"
+                                 r"NOT = \{ sr_pers_ai_hulls_uncrewed = yes \}\s*$")
         review = _block(self.effects, "sr_sc_ai_pause_review")
         self.assertRegex(review, r"limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*sr_has_space_command = yes\s*"
                                  r"sr_sc_ai_should_pause = yes\s*\}\s*"
@@ -717,7 +720,8 @@ class PauseTest(unittest.TestCase):
         self.assertEqual(everything.count("name = sr_sc_pause_hold"), 1)
         # In the AI branch of the country's month, after its construction.
         month = _block(self.effects, "sr_fl_country_month")
-        self.assertRegex(month, r"limit = \{ is_ai = yes \}\s*sr_fl_ai_review = yes\s*sr_sc_ai_pause_review = yes\s*\}")
+        self.assertRegex(month, r"limit = \{ is_ai = yes \}\s*sr_fl_ai_review = yes\s*sr_sc_ai_pause_review = yes\s*"
+                                r"sr_pers_ai_priority = yes\s*\}")
         self.assertLess(month.index("sr_sc_month = yes"), month.index("sr_sc_ai_pause_review = yes"))
 
     def test_orders_the_reserve_and_auto_are_untouched(self):
@@ -735,10 +739,15 @@ class PauseTest(unittest.TestCase):
             with self.subTest(name=name):
                 self.assertNotIn("sr_sc_paused", body)
                 self.assertNotIn("sr_sc_is_paused", body)
-        # Auto's step runs every month, paused or not.
-        month = _block(self.effects, "sr_sc_month")
-        self.assertTrue(month.rstrip().endswith("\n\tsr_sc_pause_apply = yes\n\tsr_reserve_auto_step = yes"))
-        for lim in _enclosing_limits(month, month.index("sr_reserve_auto_step = yes")):
+        # Auto's step runs every month, paused or not: the fleets' month runs it after
+        # Space Command's, before or after the slots' month by the personnel toggle
+        # (space forces personnel design § 4).
+        self.assertTrue(_block(self.effects, "sr_sc_month").rstrip().endswith("\n\tsr_sc_pause_apply = yes"))
+        country = _block(self.effects, "sr_fl_country_month")
+        self.assertRegex(country, r"sr_sc_month = yes\s*if = \{\s*limit = \{ sr_pers_marines_first_on = yes \}\s*"
+                                  r"sr_fl_each_slot = \{ DO = month \}\s*sr_reserve_auto_step = yes\s*\}\s*"
+                                  r"else = \{\s*sr_reserve_auto_step = yes\s*sr_fl_each_slot = \{ DO = month \}\s*\}")
+        for lim in _enclosing_limits(country, country.index("sr_reserve_auto_step = yes")):
             self.assertNotIn("sr_sc_is_paused", lim)
         # Only Space Command's own month, its panel, its button and the AI read it.
         readers = set()
@@ -1022,7 +1031,9 @@ class AiOffenceTest(unittest.TestCase):
 
     def test_it_closes_in_to_seize_only_with_the_marines_for_it(self):
         assault = _block(self.generated, "sr_fl_ai_assault_at")
-        self.assertRegex(assault, r"limit = \{ sr_fl_\$N\$_marines_value > local_var:sr_ai_need \}\s*"
+        # its marines at the crewed share, against the need and the assault's toll
+        # (space forces personnel design § 5.2)
+        self.assertRegex(assault, r"limit = \{ sr_fl_\$N\$_marines_eff > local_var:sr_ai_need \}\s*"
                                   r"set_variable = \{ name = sr_fl_\$N\$_posture value = 3 \}")
         self.assertRegex(assault, r"else = \{\s*set_variable = \{ name = sr_fl_\$N\$_posture value = 2 \}")
 
@@ -1056,7 +1067,9 @@ class GroundReserveTest(unittest.TestCase):
     def test_construction_joins_the_reserve(self):
         month = _block(self.fleet, "sr_sc_month")
         self.assertRegex(month, r"limit = \{ local_var:sr_sc_points > 0 \}\s*sr_reserve_build = yes")
-        self.assertTrue(month.rstrip().endswith("sr_reserve_auto_step = yes"))
+        # Auto runs from the fleets' month now (space forces personnel design § 4).
+        self.assertNotIn("sr_reserve_auto_step", month)
+        self.assertIn("sr_reserve_auto_step = yes", _block(self.fleet, "sr_fl_country_month"))
         self.assertNotIn("sr_fl_find_home", month)
         build = _block(self.generated, "sr_reserve_build")
         for role in gsf.ROLES:
@@ -1066,13 +1079,23 @@ class GroundReserveTest(unittest.TestCase):
         total = _block(self.values, "sr_reserve_total")
         self.assertEqual(len(re.findall(r"add = sr_reserve_\w+_value", total)), len(gsf.ROLES))
 
-    def test_a_launch_takes_the_whole_reserve(self):
+    def test_a_launch_takes_what_the_personnel_crew(self):
+        # Space forces personnel design § 4: the share the room crews, read once
+        # before anything moves, of every role; the rest stays on the ground.
         body = _block(self.generated, "sr_fl_reserve_in_at")
+        self.assertTrue(body.lstrip().startswith("set_local_variable = { name = sr_rs_share value = sr_pers_reserve_share }"))
         for role in gsf.ROLES:
             with self.subTest(role=role.key):
-                self.assertIn(f"sr_fl_add_role = {{ N = $N$ ROLE = {role.key} AMOUNT = var:sr_reserve_{role.key} }}", body)
-                self.assertIn(f"remove_variable = sr_reserve_{role.key}", body)
+                self.assertIn(f"set_local_variable = {{ name = sr_rs_take value = {{ value = var:sr_reserve_{role.key} "
+                              "multiply = local_var:sr_rs_share } }", body)
+                self.assertIn(f"sr_fl_add_role = {{ N = $N$ ROLE = {role.key} AMOUNT = local_var:sr_rs_take }}", body)
+                self.assertIn(f"change_variable = {{ name = sr_reserve_{role.key} subtract = local_var:sr_rs_take }}", body)
+                self.assertIn(f"var:sr_reserve_{role.key} <= 0.0001 }} remove_variable = sr_reserve_{role.key}", body)
         self.assertIn("sr_fl_fill_at = { N = $N$ }", body)
+        self.assertTrue(body.rstrip().endswith("sr_fl_marines_refill_at = { N = $N$ }"))
+        # Every launch is gated on a crew for some of it.
+        self.assertIn("sr_pers_can_crew_launch = yes", _block(self.earth, "sr_reserve_auto_step"))
+        self.assertIn("sr_pers_can_crew_launch = yes", _block(self.earth, "sr_reserve_launch"))
 
     def test_it_launches_itself_only_with_no_hostile_fleet_at_earth(self):
         auto = _block(self.earth, "sr_reserve_auto_step")
@@ -1490,7 +1513,7 @@ class LunarAtEarthTest(unittest.TestCase):
             with self.subTest(site=w.key):
                 self.assertIn(f"sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best",
                               guarded)
-                self.assertIn(f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }}", guarded)
+                self.assertIn(f"set_local_variable = {{ name = sr_ai_need value = sr_site_assault_need_{w.key} }}", guarded)
         self.assertEqual(len(re.findall(r"sr_site_ai_lunar_target = \{ KEY = (\w+) \}", lunar)), len(self.lunar))
         self.assertIn("sr_cb_hs_value <= 0", _block(self.triggers, "sr_cb_seizes"))
         # Then the fleet: the strongest at Earth whose marines exceed that world's
@@ -1499,7 +1522,7 @@ class LunarAtEarthTest(unittest.TestCase):
         self.assertLess(lunar.index(gate), lunar.index("limit = { local_var:sr_ai_tgt > 0 }"))
         for n in range(1, gsf.SLOTS + 1):
             with self.subTest(slot=n):
-                self.assertIn(f"limit = {{ sr_fl_{n}_at_earth = yes sr_fl_{n}_marines_value > local_var:sr_ai_need "
+                self.assertIn(f"limit = {{ sr_fl_{n}_at_earth = yes sr_fl_{n}_marines_eff > local_var:sr_ai_need "
                               f"sr_fl_{n}_strength > local_var:sr_fl_best }}", pick)
                 self.assertRegex(lunar, rf"limit = \{{ local_var:sr_fl_n = {n} \}}\s*"
                                         rf"set_variable = \{{ name = sr_fl_{n}_posture value = 3 \}}\s*"
@@ -1958,8 +1981,9 @@ class ReadinessTest(unittest.TestCase):
     def test_the_value(self):
         self.assertEqual(_number(_raw(FLEET_VALUES), "sr_fleet_readiness_grounded"), 0.5)
         body = _block(self.values, "sr_fleet_readiness")
+        # ... times the crewed share (space forces personnel design § 4)
         self.assertRegex(body, r"^\s*value = 1\s*if = \{\s*limit = \{ NOT = \{ sr_sc_operational = yes \} \}\s*"
-                               r"value = sr_fleet_readiness_grounded\s*\}\s*$")
+                               r"value = sr_fleet_readiness_grounded\s*\}\s*multiply = sr_pers_share_value\s*$")
 
     def test_both_fire_locals_take_it_beside_quality(self):
         gather = _block(self.combat, "sr_fl_gather_at")

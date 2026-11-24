@@ -33,3 +33,26 @@ state_orbital_debris_sweep_add = {
 	decimals = 2
 	script_only = yes
 }
+
+# Space forces personnel (2026-11-24 design § 3): the people a Space Forces
+# Base trains (sr_space_forces_base_pms.txt), read by sr_pers_capacity
+# (sr_fleet_values.txt), over every state the country owns. Workforce-scaled:
+# staffing is in it.
+state_sr_space_personnel_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+}
+
+# The base's jobs for the mod's own pop type (common/pop_types/te_spacers.txt).
+# The engine makes a building_employment_<type>_add field for every pop type;
+# vanilla registers its own fifteen this way (99_todo_sort_into_other_files.txt),
+# so the method's tooltip renders the jobs.
+building_employment_spacers_add = {
+	decimals = 0
+	color = neutral
+	game_data = {
+		ai_value = 0
+	}
+}

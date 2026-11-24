@@ -677,9 +677,11 @@ Seventeenth pass (2026-11-23, #1975, the second of the owner's four Map Room cha
 headcount, not share", "A Count/Share switch in Map Options"). Until then four classes had a map each, their share
 of the state's people (the tenth pass).
 
-- **Every pop type, two maps each.** The fifteen pop types vanilla defines (`common/pop_types`; the mod adds none,
-  which `ClassMapsTest` checks against `vanilla_parsed/`), each by its people (the count: 48 to 62) and by its share
-  of the state's people (the share: 41 to 44 kept, so a save holding one shows it, and 63 to 73).
+- **Every pop type, two maps each.** The fifteen pop types vanilla defines (`common/pop_types`), each by its people
+  (the count: 48 to 62) and by its share of the state's people (the share: 41 to 44 kept, so a save holding one shows
+  it, and 63 to 73), and the mod's one, Spacers (2026-11-24, space forces personnel: 88 and 89, a short last row in
+  Map Options). `test_every_pop_type_has_two_maps` checks vanilla's against `vanilla_parsed/` and the mod's against
+  `common/pop_types`.
 - **The count is the default** (the owner's reasoning: headcounts don't just repeat the population map; a developed
   country has few peasants, an urban state few farmers, an automated late economy fewer laborers). It runs on the
   doubling scale Armed Forces uses (`rel_doubling`), from the world's low (at least 10 people, `COUNT_FLOOR`) to its

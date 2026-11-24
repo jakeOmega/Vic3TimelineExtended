@@ -231,6 +231,10 @@ def render_slot_values(n: int) -> list[str]:
             f"\tvalue = {var(n, 'carrier_value')}",
             "\tmultiply = sr_fl_marines_per_carrier",
             "}",
+            "# Space forces personnel (2026-11-24 design § 4): its marines at the crewed",
+            "# share, as a seizure weighs them, and the carriers' room they don't fill.",
+            f"{var(n, 'marines_eff')} = {{ value = {var(n, 'marines_value')} multiply = sr_pers_share_value }}",
+            f"{var(n, 'marines_room')} = {{ value = {var(n, 'marine_capacity')} subtract = {var(n, 'marines_value')} min = 0 }}",
             f"{var(n, 'fire_fleets')} = {{", "\tvalue = 0",
             *[f"\tadd = {{ value = {var(n, r.key + '_value')} multiply = sr_fl_fire_fleets_{r.key} }}" for r in ROLES],
             "}",
@@ -319,6 +323,19 @@ def render_values() -> str:
             *[f"\tadd = {var(n, 'strength_full')}" for n in range(1, SLOTS + 1)], "}",
             "sr_fl_count = {", "\tvalue = 0",
             *[f"\tif = {{ limit = {{ {var(n, 'exists')} = yes }} add = 1 }}" for n in range(1, SLOTS + 1)], "}",
+            "# Space forces personnel (2026-11-24 design § 4): every slot's marines aboard,",
+            "# the carriers' room they leave, and the battalions in every garrison of ours,",
+            "# a world we hold unoccupied or one we occupy (sr_site_marines_<key> is its",
+            "# holder's, or its occupier's while occupied).",
+            "sr_pers_marines_aboard = {", "\tvalue = 0",
+            *[f"\tadd = {var(n, 'marines_value')}" for n in range(1, SLOTS + 1)], "}",
+            "sr_pers_marines_room = {", "\tvalue = 0",
+            *[f"\tadd = {var(n, 'marines_room')}" for n in range(1, SLOTS + 1)], "}",
+            "sr_pers_marines_garrison = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ has_global_variable = sr_site_marines_{w.key} "
+              f"OR = {{ global_var:sr_site_occupier_{w.key} ?= this "
+              f"AND = {{ global_var:sr_site_holder_{w.key} ?= this NOT = {{ has_global_variable = sr_site_occupier_{w.key} }} }} }} }} "
+              f"add = sr_site_marines_value_{w.key} }}" for w in gss.SITES], "}",
             "",
             "# ===== The build mix (design § 5), country scope: each role's weight (its start",
             "# weight while unset) and its share of the month's construction; with every",
@@ -856,18 +873,27 @@ def render_role_effects() -> list[str]:
                 f"\t\tchange_variable = {{ name = sr_reserve_{r.key} add = local_var:sr_sc_share }}",
                 "\t}"]
     out += ["}", "",
-            "# The whole reserve into the slot at Earth (a launch: sr_earth_orbit_effects.txt),",
-            "# at full, then its propellant, supply and marines to capacity, as a month",
-            "# docked at Earth would give it.",
-            "sr_fl_reserve_in_at = {"]
+            "# The reserve into the slot at Earth (a launch: sr_earth_orbit_effects.txt), at",
+            "# full, as far as the personnel crew it (2026-11-24 design § 4): the share",
+            "# sr_pers_reserve_share of each role, read once before anything moves (the",
+            "# room follows the slot's strength), the rest staying on the ground; then its",
+            "# propellant and supply to capacity, and marines aboard as far as the room",
+            "# then left allows (sr_fl_marines_refill_at), as a month docked at Earth",
+            "# would give it. The caller has checked sr_pers_can_crew_launch.",
+            "sr_fl_reserve_in_at = {",
+            "\tset_local_variable = { name = sr_rs_share value = sr_pers_reserve_share }"]
     for r in ROLES:
         out += ["\tif = {",
                 f"\t\tlimit = {{ sr_reserve_{r.key}_value > 0 }}",
-                f"\t\tsr_fl_add_role = {{ N = $N$ ROLE = {r.key} AMOUNT = var:sr_reserve_{r.key} }}",
+                f"\t\tset_local_variable = {{ name = sr_rs_take value = {{ value = var:sr_reserve_{r.key} "
+                "multiply = local_var:sr_rs_share } }",
+                f"\t\tsr_fl_add_role = {{ N = $N$ ROLE = {r.key} AMOUNT = local_var:sr_rs_take }}",
+                f"\t\tchange_variable = {{ name = sr_reserve_{r.key} subtract = local_var:sr_rs_take }}",
                 "\t}",
-                f"\tif = {{ limit = {{ has_variable = sr_reserve_{r.key} }} remove_variable = sr_reserve_{r.key} }}"]
+                f"\tif = {{ limit = {{ has_variable = sr_reserve_{r.key} var:sr_reserve_{r.key} <= 0.0001 }} "
+                f"remove_variable = sr_reserve_{r.key} }}"]
     out += ["\tsr_fl_fill_at = { N = $N$ }",
-            "\tset_variable = { name = sr_fl_$N$_marines value = sr_fl_$N$_marine_capacity }",
+            "\tsr_fl_marines_refill_at = { N = $N$ }",
             "}", "",
             "# Console: 100 strength of each role into the reserve (te_debug_space_race.6).",
             "sr_reserve_debug_fill = {"]
@@ -1722,14 +1748,14 @@ def render_ai_attack() -> list[str]:
         out += [f"\t\tif = {{ limit = {{ sr_site_ai_lunar_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best }} "
                 f"set_local_variable = {{ name = sr_ai_best value = sr_site_ai_worth_{w.key} }} "
                 f"set_local_variable = {{ name = sr_ai_tgt value = {w.index} }} "
-                f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }} }}"]
+                f"set_local_variable = {{ name = sr_ai_need value = sr_site_assault_need_{w.key} }} }}"]
     out += ["\t}",
             "\tset_local_variable = { name = sr_fl_best value = 0 }",
             "\tset_local_variable = { name = sr_fl_n value = 0 }",
             "\tif = {",
             "\t\tlimit = { local_var:sr_ai_tgt > 0 }"]
     for n in range(1, SLOTS + 1):
-        out += [f"\t\tif = {{ limit = {{ {var(n, 'at_earth')} = yes {var(n, 'marines_value')} > local_var:sr_ai_need "
+        out += [f"\t\tif = {{ limit = {{ {var(n, 'at_earth')} = yes {var(n, 'marines_eff')} > local_var:sr_ai_need "
                 f"{var(n, 'strength')} > local_var:sr_fl_best }} "
                 f"set_local_variable = {{ name = sr_fl_best value = {var(n, 'strength')} }} "
                 f"set_local_variable = {{ name = sr_fl_n value = {n} }} }}"]
@@ -1766,14 +1792,14 @@ def render_ai_attack() -> list[str]:
             body += [f"if = {{ limit = {{ sr_site_ai_attack_target = {{ KEY = {w.key} }} sr_site_ai_worth_{w.key} > local_var:sr_ai_best }} "
                      f"set_local_variable = {{ name = sr_ai_best value = sr_site_ai_worth_{w.key} }} "
                      f"set_local_variable = {{ name = sr_ai_tgt value = {w.index} }} "
-                     f"set_local_variable = {{ name = sr_ai_need value = sr_site_garrison_need_{w.key} }} }}"]
+                     f"set_local_variable = {{ name = sr_ai_need value = sr_site_assault_need_{w.key} }} }}"]
         cases.append((f"var:sr_fl_$N$_loc = {lc.code} NOT = {{ sr_fl_ai_threatened_{lc.key} = yes }}", body))
     out += _chain(cases, 2)
     out += ["\t\tif = {",
             "\t\t\tlimit = { local_var:sr_ai_tgt > 0 }",
             "\t\t\tif = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }",
             "\t\t\tif = {",
-            "\t\t\t\tlimit = { sr_fl_$N$_marines_value > local_var:sr_ai_need }",
+            "\t\t\t\tlimit = { sr_fl_$N$_marines_eff > local_var:sr_ai_need }",
             "\t\t\t\tset_variable = { name = sr_fl_$N$_posture value = 3 }",
             "\t\t\t\tset_variable = { name = sr_fl_$N$_target value = local_var:sr_ai_tgt }",
             "\t\t\t}",
