@@ -308,7 +308,7 @@ The Power Grids tab's Stations table shows its first ten rows and the rest under
 sets (`te_grid_order_stations_effect`); Mode is an icon, Flow and Grid are two columns, a full Staff is grey and a short
 one red; every figure of Electricity a week reads plain under 1,000 (`power_grids.md` § Power Grids tab, § The record).
 `te_grid_station_online` and `te_grid_station_staffing_disp` read the station through `b:` instead of walking the
-state's buildings. Look at the owner's December 2042 save (180 stations on three grids).
+state's buildings. Look at the owner's December 2032 save (180 stations on three grids).
 
 | Check | Expect | If it fails |
 |---|---|---|
