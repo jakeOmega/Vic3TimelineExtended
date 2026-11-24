@@ -315,14 +315,43 @@ sr_fl_land_marines = {
 	set_variable = { name = sr_fl_$N$_marines value = 0 }
 }
 
-# Ours at the world KEY back aboard, up to the carriers' room.
-sr_fl_embark_marines = {
+# The Marines popup's Land: up to the amount (sr_fl_$N$_ld_amount) of the
+# marines aboard land at the world KEY (ours), as its garrison.
+sr_fl_land_some = {
+	set_local_variable = {
+		name = sr_fl_put
+		value = {
+			value = sr_fl_$N$_ld_amount
+			max = sr_fl_$N$_marines_value
+			min = 0
+		}
+	}
+	set_global_variable = {
+		name = sr_site_marines_$KEY$
+		value = {
+			value = sr_site_marines_value_$KEY$
+			add = local_var:sr_fl_put
+		}
+	}
+	set_variable = {
+		name = sr_fl_$N$_marines
+		value = {
+			value = sr_fl_$N$_marines_value
+			subtract = local_var:sr_fl_put
+		}
+	}
+}
+
+# The Marines popup's Embark: ours at the world KEY back aboard, up to the
+# amount and the carriers' room.
+sr_fl_embark_some = {
 	set_local_variable = {
 		name = sr_fl_take
 		value = {
 			value = sr_fl_$N$_marine_capacity
 			subtract = sr_fl_$N$_marines_value
 			max = sr_site_marines_value_$KEY$
+			max = sr_fl_$N$_ld_amount
 			min = 0
 		}
 	}

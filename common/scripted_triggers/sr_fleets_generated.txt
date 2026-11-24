@@ -547,6 +547,56 @@ sr_fl_1_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_1_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_1_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_1_has_marine_room = { sr_fl_1_marine_capacity > sr_fl_1_marines_value }
+sr_fl_1_ld_some = { sr_fl_1_ld_amount >= 1 }
+sr_fl_1_ld_fewer = { sr_fl_1_ld_amount > 0 }
+sr_fl_1_ld_more = { sr_fl_1_ld_amount < sr_fl_1_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_1_closing_at_earth = { sr_fl_1_at_earth = yes sr_fl_1_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -1304,6 +1354,56 @@ sr_fl_2_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_2_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_2_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_2_has_marine_room = { sr_fl_2_marine_capacity > sr_fl_2_marines_value }
+sr_fl_2_ld_some = { sr_fl_2_ld_amount >= 1 }
+sr_fl_2_ld_fewer = { sr_fl_2_ld_amount > 0 }
+sr_fl_2_ld_more = { sr_fl_2_ld_amount < sr_fl_2_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_2_closing_at_earth = { sr_fl_2_at_earth = yes sr_fl_2_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -2061,6 +2161,56 @@ sr_fl_3_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_3_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_3_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_3_has_marine_room = { sr_fl_3_marine_capacity > sr_fl_3_marines_value }
+sr_fl_3_ld_some = { sr_fl_3_ld_amount >= 1 }
+sr_fl_3_ld_fewer = { sr_fl_3_ld_amount > 0 }
+sr_fl_3_ld_more = { sr_fl_3_ld_amount < sr_fl_3_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_3_closing_at_earth = { sr_fl_3_at_earth = yes sr_fl_3_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -2818,6 +2968,56 @@ sr_fl_4_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_4_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_4_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_4_has_marine_room = { sr_fl_4_marine_capacity > sr_fl_4_marines_value }
+sr_fl_4_ld_some = { sr_fl_4_ld_amount >= 1 }
+sr_fl_4_ld_fewer = { sr_fl_4_ld_amount > 0 }
+sr_fl_4_ld_more = { sr_fl_4_ld_amount < sr_fl_4_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_4_closing_at_earth = { sr_fl_4_at_earth = yes sr_fl_4_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -3575,6 +3775,56 @@ sr_fl_5_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_5_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_5_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_5_has_marine_room = { sr_fl_5_marine_capacity > sr_fl_5_marines_value }
+sr_fl_5_ld_some = { sr_fl_5_ld_amount >= 1 }
+sr_fl_5_ld_fewer = { sr_fl_5_ld_amount > 0 }
+sr_fl_5_ld_more = { sr_fl_5_ld_amount < sr_fl_5_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_5_closing_at_earth = { sr_fl_5_at_earth = yes sr_fl_5_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -4332,6 +4582,56 @@ sr_fl_6_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_6_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_6_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_6_has_marine_room = { sr_fl_6_marine_capacity > sr_fl_6_marines_value }
+sr_fl_6_ld_some = { sr_fl_6_ld_amount >= 1 }
+sr_fl_6_ld_fewer = { sr_fl_6_ld_amount > 0 }
+sr_fl_6_ld_more = { sr_fl_6_ld_amount < sr_fl_6_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_6_closing_at_earth = { sr_fl_6_at_earth = yes sr_fl_6_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -5089,6 +5389,56 @@ sr_fl_7_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_7_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_7_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_7_has_marine_room = { sr_fl_7_marine_capacity > sr_fl_7_marines_value }
+sr_fl_7_ld_some = { sr_fl_7_ld_amount >= 1 }
+sr_fl_7_ld_fewer = { sr_fl_7_ld_amount > 0 }
+sr_fl_7_ld_more = { sr_fl_7_ld_amount < sr_fl_7_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_7_closing_at_earth = { sr_fl_7_at_earth = yes sr_fl_7_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -5846,6 +6196,56 @@ sr_fl_8_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_8_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_8_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_8_has_marine_room = { sr_fl_8_marine_capacity > sr_fl_8_marines_value }
+sr_fl_8_ld_some = { sr_fl_8_ld_amount >= 1 }
+sr_fl_8_ld_fewer = { sr_fl_8_ld_amount > 0 }
+sr_fl_8_ld_more = { sr_fl_8_ld_amount < sr_fl_8_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_8_closing_at_earth = { sr_fl_8_at_earth = yes sr_fl_8_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -6603,6 +7003,56 @@ sr_fl_9_pick_ours_here = {
 		AND = { scope:pick = 40 var:sr_fl_9_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
+# The Marines popup's Embark: marines of ours stand at the picked world.
+sr_fl_9_pick_has_marines = {
+	OR = {
+		AND = { scope:pick = 1 sr_site_marines_value_valles_marineris > 0 }
+		AND = { scope:pick = 2 sr_site_marines_value_olympus_mons > 0 }
+		AND = { scope:pick = 3 sr_site_marines_value_hellas_planitia > 0 }
+		AND = { scope:pick = 4 sr_site_marines_value_utopia_planitia > 0 }
+		AND = { scope:pick = 5 sr_site_marines_value_arcadia_planitia > 0 }
+		AND = { scope:pick = 6 sr_site_marines_value_ceres > 0 }
+		AND = { scope:pick = 7 sr_site_marines_value_vesta > 0 }
+		AND = { scope:pick = 8 sr_site_marines_value_psyche > 0 }
+		AND = { scope:pick = 9 sr_site_marines_value_pallas > 0 }
+		AND = { scope:pick = 10 sr_site_marines_value_hygiea > 0 }
+		AND = { scope:pick = 11 sr_site_marines_value_io > 0 }
+		AND = { scope:pick = 12 sr_site_marines_value_europa > 0 }
+		AND = { scope:pick = 13 sr_site_marines_value_ganymede > 0 }
+		AND = { scope:pick = 14 sr_site_marines_value_callisto > 0 }
+		AND = { scope:pick = 15 sr_site_marines_value_himalia > 0 }
+		AND = { scope:pick = 16 sr_site_marines_value_amalthea > 0 }
+		AND = { scope:pick = 17 sr_site_marines_value_venus > 0 }
+		AND = { scope:pick = 18 sr_site_marines_value_mercury > 0 }
+		AND = { scope:pick = 19 sr_site_marines_value_titan > 0 }
+		AND = { scope:pick = 20 sr_site_marines_value_enceladus > 0 }
+		AND = { scope:pick = 21 sr_site_marines_value_rhea > 0 }
+		AND = { scope:pick = 22 sr_site_marines_value_mimas > 0 }
+		AND = { scope:pick = 23 sr_site_marines_value_iapetus > 0 }
+		AND = { scope:pick = 24 sr_site_marines_value_titania > 0 }
+		AND = { scope:pick = 25 sr_site_marines_value_oberon > 0 }
+		AND = { scope:pick = 26 sr_site_marines_value_miranda > 0 }
+		AND = { scope:pick = 27 sr_site_marines_value_ariel > 0 }
+		AND = { scope:pick = 28 sr_site_marines_value_triton > 0 }
+		AND = { scope:pick = 29 sr_site_marines_value_proteus > 0 }
+		AND = { scope:pick = 30 sr_site_marines_value_pluto > 0 }
+		AND = { scope:pick = 31 sr_site_marines_value_eris > 0 }
+		AND = { scope:pick = 32 sr_site_marines_value_makemake > 0 }
+		AND = { scope:pick = 33 sr_site_marines_value_haumea > 0 }
+		AND = { scope:pick = 34 sr_site_marines_value_sedna > 0 }
+		AND = { scope:pick = 35 sr_site_marines_value_shackleton > 0 }
+		AND = { scope:pick = 36 sr_site_marines_value_peary > 0 }
+		AND = { scope:pick = 37 sr_site_marines_value_tranquility > 0 }
+		AND = { scope:pick = 38 sr_site_marines_value_marius_hills > 0 }
+		AND = { scope:pick = 39 sr_site_marines_value_daedalus > 0 }
+		AND = { scope:pick = 40 sr_site_marines_value_imbrium > 0 }
+	}
+}
+# ... room aboard; the amount is at least one; its - and + (none, the most).
+sr_fl_9_has_marine_room = { sr_fl_9_marine_capacity > sr_fl_9_marines_value }
+sr_fl_9_ld_some = { sr_fl_9_ld_amount >= 1 }
+sr_fl_9_ld_fewer = { sr_fl_9_ld_amount > 0 }
+sr_fl_9_ld_more = { sr_fl_9_ld_amount < sr_fl_9_ld_most }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_9_closing_at_earth = { sr_fl_9_at_earth = yes sr_fl_9_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here

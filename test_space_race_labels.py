@@ -690,16 +690,21 @@ CELLS = {
     "the target popup's Target and Targeted (te_sr_ftarget_row)": (
         ("te_sr_ftarget_row", 'text = "je_space_race_widget_ss_target_button"'),
         r"je_space_race_widget_(ss_target_button|ft_targeted)"),
-    # The Land popup: the marines aboard, the columns' heads, Due and Land.
-    "the Land popup's marines aboard (te_sr_land_slot)": (
+    # The Marines popup: the marines aboard, the amount, the columns' heads,
+    # Due, Land and Embark.
+    "the Marines popup's marines aboard (te_sr_land_slot)": (
         ("te_sr_land_slot", 'text = "je_space_race_widget_ld_aboard"'), r"je_space_race_widget_ld_aboard"),
-    **{f"the Land popup's {col} column head (te_sr_land_slot)": (
+    **{f"the Marines popup's {col} column head (te_sr_land_slot)": (
         ("te_sr_land_slot", f'text = "je_space_race_widget_ld_col_{col}"'), f"je_space_race_widget_ld_col_{col}")
        for col in ("colony", "marines", "garrison")},
-    "the Land popup's garrison order (te_sr_land_row)": (
+    "the Marines popup's garrison order (te_sr_land_row)": (
         ("te_sr_land_row", 'text = "je_space_race_widget_ld_due"'), r"je_space_race_widget_ld_due"),
-    "the Land popup's Land (te_sr_land_row)": (
+    "the Marines popup's Land (te_sr_land_row)": (
         ("te_sr_land_row", 'text = "je_space_race_widget_ld_button"'), r"je_space_race_widget_ld_button"),
+    "the Marines popup's Embark (te_sr_land_row)": (
+        ("te_sr_land_row", 'text = "je_space_race_widget_ld_embark_button"'), r"je_space_race_widget_ld_embark_button"),
+    "the Marines popup's amount label (te_sr_land_slot)": (
+        ("te_sr_land_slot", 'text = "je_space_race_widget_ld_amount"'), r"je_space_race_widget_ld_amount"),
     "a destination's Choose and Chosen (te_sr_dest_row)": (
         ("te_sr_dest_row", 'text = "je_space_race_widget_dp_choose"'),
         r"je_space_race_widget_dp_(choose|chosen)"),
@@ -1201,9 +1206,9 @@ class FigureBudgetTest(unittest.TestCase):
                 self.assertLessEqual(len(_render(_loc(key))) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
 
     def test_the_land_popup(self):
-        """Every world's name fits the Land row's name cell; the marines (aboard
-        and at a colony) fit theirs; the row's cells sum to the slot's width and
-        its heads match them."""
+        """Every world's name fits the Marines row's name cell; the marines
+        (aboard of the room, the amount, at a colony) fit theirs; the row's cells
+        sum to no more than the slot's width and its heads match them."""
         gui = _read(GUI)
         row = _type_body(gui, "te_sr_land_row")
         box = _textbox_with(row, 'block "lr_name"')
@@ -1213,9 +1218,9 @@ class FigureBudgetTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertLessEqual(len(_render(_loc(key))) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
         self._check("te_sr_land_row", {"lr_marines": "99999"})
-        self._check("te_sr_land_slot", {"ld_aboard": "99999"})
+        self._check("te_sr_land_slot", {"ld_aboard": "9999/9999", "ld_amount": "99999"})
         cells = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\n\t\t\tsize = \{ (\d+) 24 \}", row)]
-        self.assertEqual(cells, [24, 180, 80, 80, 80])
+        self.assertEqual(cells, [24, 180, 80, 80, 80, 80])
         slot = _type_body(gui, "te_sr_land_slot")
         self.assertLessEqual(sum(cells) + 3 * (len(cells) - 1) + 2 * 4,
                              int(re.search(r"minimumsize = \{ (\d+) -1 \}", slot).group(1)))

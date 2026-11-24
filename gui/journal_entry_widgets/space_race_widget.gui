@@ -8315,11 +8315,11 @@ types space_race_widget_types
 	}
 
 	### ======================================================================
-	### LAND: the colony a fleet's marines land at
+	### MARINES: where a fleet's marines land, and where they embark from
 	### ======================================================================
 
-	### A fleet's Land popup, opened by Land on its card in Space Fleets (te_popup
-	### sr_land_<n>); instanced in te_popups. The bodies are
+	### A fleet's Marines popup, opened by Land or Embark on its card in Space
+	### Fleets (te_popup sr_land_<n>); instanced in te_popups. The bodies are
 	### te_sr_land_popup_body's, one a slot (sr_fleets_generated_rows.gui), under
 	### the entry's scope-free gate and its GetPlayerJournalEntry datacontext, as
 	### the target popup's.
@@ -8330,10 +8330,10 @@ types space_race_widget_types
 		blockoverride "popup_title" {
 			text = "je_space_race_widget_ld_title"
 		}
-		### The note's 480, plus the window's margins (2 × 35), the list's
-		### (2 × 10) and a scrollbar: 608.
+		### The slot's 560, plus the window's margins (2 × 35), the list's
+		### (2 × 10) and a scrollbar: 688.
 		blockoverride "popup_size" {
-			size = { 608 420 }
+			size = { 688 460 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -8356,14 +8356,15 @@ types space_race_widget_types
 		}
 	}
 
-	### One slot's body in the Land popup (instances in te_sr_land_popup_body):
-	### while the fleet is at a location, what landing does, the marines aboard,
+	### One slot's body in the Marines popup (instances in te_sr_land_popup_body):
+	### while the fleet is at a location, what Land and Embark do, the marines
+	### aboard of the carriers' room, the amount with - and + (Transfer's keys),
 	### the columns' heads and our colonies there; otherwise the destination
 	### popup's line.
 	type te_sr_land_slot = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		minimumsize = { 480 -1 }
+		minimumsize = { 560 -1 }
 		spacing = 2
 		block "ld_visible" {}
 
@@ -8392,11 +8393,51 @@ types space_race_widget_types
 				}
 				textbox = {
 					autoresize = yes
-					max_width = 80
+					max_width = 120
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
 					block "ld_aboard" {}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+				margin = { 4 1 }
+
+				textbox = {
+					size = { 180 26 }
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_ld_amount"
+					tooltip = "je_space_race_widget_ld_amount_tt"
+				}
+				widget = {
+					size = { 28 26 }
+
+					button_icon_minus_action = {
+						size = { 26 26 }
+						parentanchor = center
+						block "ld_less" {}
+					}
+				}
+				textbox = {
+					size = { 64 26 }
+					align = center|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					block "ld_amount" {}
+				}
+				widget = {
+					size = { 28 26 }
+
+					button_icon_plus_action = {
+						size = { 26 26 }
+						parentanchor = center
+						block "ld_more" {}
+					}
 				}
 			}
 			### The heads, te_sr_land_row's widths.
@@ -8441,10 +8482,12 @@ types space_race_widget_types
 		}
 	}
 
-	### One colony of ours in a fleet's Land popup: its icon and name (Solar
+	### One colony of ours in a fleet's Marines popup: its icon and name (Solar
 	### System's hover), our marines there, Due while its garrison order waits
-	### for marines, and Land, which lands every marine aboard there and closes
-	### the popup. 24 + 180 + 80 + 80 + 80 + 4 × 3 + 2 × 4 = 464.
+	### for marines, then Land (up to the amount of the marines aboard land
+	### there) and Embark (up to the amount of ours there come aboard, within
+	### the carriers' room); the popup stays open.
+	### 24 + 180 + 80 + 80 + 80 + 80 + 5 × 3 + 2 × 4 = 547.
 	type te_sr_land_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -8525,6 +8568,26 @@ types space_race_widget_types
 					elide = right
 					using = te_sr_fontsize_row
 					text = "je_space_race_widget_ld_button"
+				}
+			}
+		}
+		widget = {
+			size = { 80 24 }
+			parentanchor = vcenter
+
+			button = {
+				using = default_button_action
+				size = { 100% 100% }
+				block "lr_embark_button" {}
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 76
+					elide = right
+					using = te_sr_fontsize_row
+					text = "je_space_race_widget_ld_embark_button"
 				}
 			}
 		}
