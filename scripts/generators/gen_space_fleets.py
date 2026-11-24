@@ -2516,8 +2516,11 @@ def _fleet_row(n: int) -> list[str]:
     # The bars: now of full, the figure under each.
     out += _override("fl_strength", strength)
     out += _override("fl_strength_frac", _frac(f"sr_disp_fl_{n}_strength_frac"))
-    out += _override("fl_drive", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_drive_name')]\"")
-    out += _override("fl_refit_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}_refit_left", 1)}]"')
+    # The drive, or while a refit runs, "Refit" and its months in its place.
+    refitting = _ge(f"sr_disp_fl_{n}_refit_left", 1)
+    out += _override("fl_drive", f'visible = "[Not( {refitting} )]"',
+                     f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_drive_name')]\"")
+    out += _override("fl_refit_visible", f'visible = "[{refitting}]"')
     out += _override("fl_refit", f'raw_text = "[{_sv(f"sr_disp_fl_{n}_refit_left")}|0]"')
     for name, now, full in (("dv", "dv_value", "dv_capacity"), ("supply", "supply_value", "endurance"),
                             ("marines", "marines_value", "marine_capacity")):
