@@ -976,7 +976,7 @@ The owner's game of "The USA of 1977" above, played on through 15 years on
 country holds it in the save; a heuristic match of the token to its country
 reads the United States at Very Low) and the resettlement fix (#1906) in.
 Their own `dedicated_server.log` files, no harness attached, played at
-speed 4: 6.5 s a day over 1977–1979, 3–4 s from late 1981, and 3.94 s over
+speed 5 (the log's `Changing game speed to: 4` counts from 0): 6.5 s a day over 1977–1979, 3–4 s from late 1981, and 3.94 s over
 1985.7–1992.2. Of that last stretch, by the frame each
 gap starts at:
 
@@ -1246,6 +1246,97 @@ read of the slot modifier, which the count implies, and the count is in
 `can_build_government`, so the receivers and antimatter buildings leave
 the lens only while every free slot is queued.
 
+## The USA of 2030: the ship construction readout, 2026-11-23: 1.15.2
+
+The owner's game of "The USA of 2024" above, played on to 2030. Their own
+play of September 2029 to March 2030 (speed 5, `-disable_renderframeifneeded`,
+no panels open) took 21–30 s a week, about half of it outside the tick
+tasks, and neither zooming in nor lowering the graphics quality moved it
+much.
+
+**The harness reproduces it.** Every session loaded the owner's
+`autosave_exit.v3` of 9 April 2030 as the USA (`--playset current`,
+`--game-arg disable_renderframeifneeded`, `--unresponsive-s 120`), ran
+`advance 35` at speed 5 and was timed from 10 April to 13 May (34 days) with
+pauses taken out (`wallday.py`). Runs vary by about ±1 s a week. Each variant
+was an `--add-mod` folder of the changed files at their paths.
+
+| Run | Session | Seconds a week |
+|---|---|---|
+| Baseline | `20261124T013318Z` | 23.4 |
+| Script profiler never enabled | `20261124T014525Z` | 23.4 |
+| `GUI.Draw`, `Draw.Map`, `Draw.MapObjects` off (second half of the baseline session) | `20261124T013318Z` | no change in any frame kind |
+| `AUTONOMOUS_INVESTMENT_CONSTRUCTION_ENABLED = no` | `20261124T015209Z` | 23.2 |
+| Every mod `gui/` file replaced by vanilla's, or emptied | `20261124T015802Z` | 24.2 |
+| Every mod `common/on_actions/` file emptied | `20261124T020443Z` | 24.4 |
+| The top bar's three supply ship calls replaced by constants | `20261124T045427Z` | 25.1 |
+| `ingame_hud` emptied except `timemanip` (no top bar, outliner, lens bar, side bar) | `20261124T052206Z` | 24.2 |
+| **`timemanip.gui`'s `text = "SHIP_CONSTRUCTION_VALUE"` replaced by `raw_text = "#v 0#!/0"`** | `20261124T053316Z` | **12.4** |
+
+A first try of the last row (`20261124T052829Z`) read 12.8, but lost the
+window's focus partway (#1963). `ingame_hud` emptied whole stalled at once:
+the harness pauses with Space, which only `timemanip`'s speed buttons bind.
+
+| Frame kind | Baseline runs | Readout replaced |
+|---|---|---|
+| Sub-tick | 0.26–0.45 s | 0.11 s |
+| Hour 0 of an ordinary day | 0.93–1.48 s | 0.39 s |
+| Hour 0 of the weekly day | 7–9.3 s | 6.7 s (tasks 6.6) |
+| Weekly hour 12 | 1.5–3.0 s | 2.0 s |
+| Time outside the tick tasks, a day | about 1.9 s | about 0.35 s |
+
+**What the time was.** The tick tasks were 1.4 of the 3.3 s a day. The rest
+was serial work on the main thread, found by sampling the game process from
+the Windows side (read-only; tools below):
+
+- Per-thread CPU (`threadcpu.py`): the main thread, the process's oldest,
+  ran at 50–90% of a core between weekly bursts while every other thread
+  idled; in the weekly burst 13–20 cores ran and the main thread waited.
+- Its instruction pointer (`stacksample.py`, the thread suspended for
+  microseconds every 4 ms): 80% of sub-tick samples in `victoria3.exe`.
+  Functions are named by the `.pdata` table and the strings the code
+  references (`name_rvas.py`, using `crash_stack_strings.exe_strings_near`).
+  About 60% of sub-tick and 40–46% of hour-0 samples sat under the GUI's
+  data-call evaluator (`pdx_data_callstack.cpp`), in a country routine that
+  calls the code holding `SHIP_CONSTRUCTION_MAINTENANCE_DEMAND_DESC` and
+  `SUPPLY_SHIP_CONSTRUCTION_MAINTENANCE_DEMAND_DESC`.
+- The text its stack points at (`stackstrings.py`, 32 KB of stack read while
+  suspended, each slot followed to text and through one more pointer): on
+  100% of those samples, `[Country.GetShipConstruction|0]`,
+  `GetShipConstructionUsage` and `SHIP_CONSTRUCTION_VALUE_WITHOUT_ICON`. That
+  is the readout under the date: `SHIP_CONSTRUCTION_VALUE` in vanilla
+  `gui/timemanip.gui` (line 487, inside the construction widget with
+  `max_update_rate = 8`), `#v [Country.GetShipConstructionUsage|0]#!/[Country.GetShipConstruction|0]`.
+  The mod doesn't override the file.
+
+Earlier knockouts missed it because drawing off leaves the GUI's updates
+running, and the vanilla-GUI swap keeps vanilla's `timemanip.gui`. Paused, a
+frame took 8.4 ms; running, 27–31 ms on average. This is the readout whose
+tooltip made the 1977 Very High backlog worse ("The step of April 1976"
+above); here the readout alone costs about 1.5 s of every game day. Not yet
+split: which of the two calls costs it, and whether it scales with the
+supply ships (the owner's guess) or the fleet.
+
+**The week once it is gone:** 12.4 s, of which the weekly hour 0 is 6.7 s
+(`HandleAutonomousInvestment` 3.05 s, `UpdateStateTrades` 2.1 s,
+`UpdateEmployment` 0.6 s), the weekly hour 12 2.0 s
+(`ProcessEconomicMigration` 1.7 s), and every other frame about 3.7 s
+together.
+
+**The fix is open (#1984).** The owner's two ideas: supply ships that cost
+ten times as much while every requirement for them is a tenth (always, from
+the start of a game), which shrinks whatever the routine walks and has other
+effects they want; or a readout that doesn't run live (cached, or moved to
+the tooltip). Either way the mod overrides `timemanip.gui` or changes the
+supply ship defines.
+
+Data: `/mnt/d/vic3te-data/perf-2026-11-23/` (`variants/<name>/`,
+`runs/<name>/` with each session's split and samples, `run_variant.sh` for
+one session, `wallday.py`, `runsplit.py`; the samplers, run with the Windows
+`python.exe`, and their readers in `tools/`). The write-up for the owner,
+with the super-building question it began from: claude.ai artifact
+`VZ94FSnuTPtDo1kPJB2nCK`.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
@@ -1354,6 +1445,13 @@ All are exact: they change no result unless a line says otherwise.
   external-pressure walk was cached monthly on the reasoning that it was
   one of three `any_country` walks per call; AFU's `possible` did not move.
   The two ROOT-dependent walks are the cost (#1720).
+- **Sample the main thread when the time is outside the tick tasks.**
+  Knockouts of whole areas (drawing, the mod's GUI, its pulses, the
+  investment pass) moved nothing in 2030, while a read-only sampler named
+  the cost in one run: per-thread CPU, the main thread's instruction pointer
+  mapped to functions by `.pdata` and their strings, and the text its stack
+  points at. `GUI.Draw` off doesn't stop the GUI's data updates, so a costly
+  readout survives every drawing knockout ("The USA of 2030" above).
 - **The doubled BOM.** A rewrite script decoded a file as `utf-8`, keeping
   its BOM, and wrote another BOM in front. The engine dropped the whole file:
   all 323 company buildings were gone, with `Duplicated key = will not be

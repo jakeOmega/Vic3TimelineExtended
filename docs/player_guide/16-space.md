@@ -875,7 +875,8 @@ next module reads "in N mo", counting down to it. Meanwhile the first module
 further down the queue that can launch now, and that your stock covers, is built
 ahead of it, and the modules it passes keep their order. So a module for Mercury
 or the Moon never waits on a Mars window, and the queue needs no reordering for
-it. At two modules a month, about six can be built in time for one window.
+it. At four modules a month, about twelve can be built in time for one window,
+more than the eight shipment slots below can hold.
 
 Eight modules can wait or fly at once, and a slot is free again only when its
 module lands. While all eight are taken the queue waits, and the next module
@@ -1325,7 +1326,7 @@ Saturn, Uranus, Neptune and the Kuiper Belt.
 |---|---|
 | The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
 | Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
-| Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
+| Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. The marines stay within what the assault carriers on each side can hold, so moving carriers can change them too. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
 | Land, Embark | Puts the fleet's marines at your colony there, or takes them back aboard. At Earth, at your colony on the Moon | <!-- style: allow ai-vocab -->
 
 Your fleets take orders only while you have a Space Command level in a state

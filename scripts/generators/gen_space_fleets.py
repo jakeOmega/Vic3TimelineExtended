@@ -928,39 +928,71 @@ def _others(n: int) -> list[int]:
     return [m for m in range(1, SLOTS + 1) if m != n]
 
 
+def _xf_stay_there(n: int, k: str, moved: str) -> list[str]:
+    """What of key k stays with slot n, and what the fleet it goes into then has."""
+    return [f"{var(n, f'xf_stay_{k}')} = {{ value = {var(n, f'{k}_value')} subtract = {moved} }}",
+            f"{var(n, f'xf_there_{k}')} = {{", f"\tvalue = {moved}",
+            *[f"\tif = {{ limit = {{ sr_det_to_value = {m} }} add = {var(m, f'{k}_value')} }}" for m in _others(n)],
+            "}"]
+
+
 def render_transfer_values(n: int) -> list[str]:
     """Slot n's transfer: each amount held to 0 and what the slot has of it, so
     a battle or a repair under an open popup can't make it move more; what then
     stays, what the fleet it goes into carries, and their carriers' room. The
-    effects read these, never sr_det_amt_<key> raw."""
+    marines are held as well to what both sides' carriers leave room for, so the
+    popup offers only amounts the room allows (xf_marines_least, _most). The
+    effects read these, never sr_det_amt_<key> raw. Each value follows those it
+    reads."""
     out = [f"# Slot {n}'s transfer (UI pass design § 6): each amount held to 0 and what the",
            "# slot has, what stays, and what the fleet it goes into then carries."]
-    for k in XF_KEYS:
+    for r in ROLES:
+        k = r.key
         out += [f"{var(n, f'xf_{k}')} = {{", "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = sr_det_amt_{k} }} value = var:sr_det_amt_{k} }}",
                 f"\tmax = {var(n, f'{k}_value')}", "\tmin = 0", "}"]
     out += [f"{var(n, 'xf_strength')} = {{", "\tvalue = 0", *[f"\tadd = {var(n, f'xf_{r.key}')}" for r in ROLES], "}",
-            f"{var(n, 'xf_left')} = {{ value = {var(n, 'strength')} subtract = {var(n, 'xf_strength')} }}",
-            "# Nothing of its strength stays: its marines all go too (the fleet is cleared).",
-            f"{var(n, 'xf_marines_moved')} = {{",
-            f"\tvalue = {var(n, 'xf_marines')}",
-            f"\tif = {{ limit = {{ {var(n, 'xf_left')} <= 0 }} value = {var(n, 'marines_value')} }}",
-            "}"]
-    for k in XF_KEYS:
-        moved = var(n, "xf_marines_moved") if k == "marines" else var(n, f"xf_{k}")
-        out += [f"{var(n, f'xf_stay_{k}')} = {{ value = {var(n, f'{k}_value')} subtract = {moved} }}",
-                f"{var(n, f'xf_there_{k}')} = {{", f"\tvalue = {moved}",
-                *[f"\tif = {{ limit = {{ sr_det_to_value = {m} }} add = {var(m, f'{k}_value')} }}" for m in _others(n)],
-                "}"]
+            f"{var(n, 'xf_left')} = {{ value = {var(n, 'strength')} subtract = {var(n, 'xf_strength')} }}"]
+    for r in ROLES:
+        out += _xf_stay_there(n, r.key, var(n, f"xf_{r.key}"))
     out += [f"{var(n, 'xf_there_strength')} = {{", f"\tvalue = {var(n, 'xf_strength')}",
             *[f"\tif = {{ limit = {{ sr_det_to_value = {m} }} add = {var(m, 'strength')} }}" for m in _others(n)],
             "}",
             f"{var(n, 'xf_stay_room')} = {{ value = {var(n, 'xf_stay_carrier')} multiply = sr_fl_marines_per_carrier }}",
             f"{var(n, 'xf_there_room')} = {{ value = {var(n, 'xf_there_carrier')} multiply = sr_fl_marines_per_carrier }}",
-            "# How far past its carriers' room the fleet would be, and is now (carriers",
-            "# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).",
-            f"{var(n, 'xf_stay_over')} = {{ value = {var(n, 'xf_stay_marines')} subtract = {var(n, 'xf_stay_room')} min = 0 }}",
-            f"{var(n, 'xf_now_over')} = {{ value = {var(n, 'marines_value')} subtract = {var(n, 'marine_capacity')} min = 0 }}"]
+            "# How far past its carriers' room the fleet is now (carriers lost in battle):",
+            "# a transfer may leave it no further past (owner, 2026-10-31).",
+            f"{var(n, 'xf_now_over')} = {{ value = {var(n, 'marines_value')} subtract = {var(n, 'marine_capacity')} min = 0 }}",
+            "# The marines the room allows to move, so the popup offers no amount Transfer",
+            "# would refuse for it: at most the room left on the carriers there (the",
+            "# fleet it goes into has its own marines aboard), at least what the carriers",
+            "# that stay can't hold past how far over the fleet is now. Where the two",
+            "# fleets together have too little room (the one it goes into is over its",
+            "# own), the least is held to the most and the room refusal stands.",
+            f"{var(n, 'xf_marines_most')} = {{",
+            f"\tvalue = {var(n, 'xf_there_room')}",
+            *[f"\tif = {{ limit = {{ sr_det_to_value = {m} }} subtract = {var(m, 'marines_value')} }}" for m in _others(n)],
+            f"\tmax = {var(n, 'marines_value')}",
+            "\tmin = 0",
+            "}",
+            f"{var(n, 'xf_marines_least')} = {{",
+            f"\tvalue = {var(n, 'marines_value')}",
+            f"\tsubtract = {var(n, 'xf_stay_room')}",
+            f"\tsubtract = {var(n, 'xf_now_over')}",
+            "\tmin = 0",
+            f"\tmax = {var(n, 'xf_marines_most')}",
+            "}",
+            f"{var(n, 'xf_marines')} = {{", "\tvalue = 0",
+            "\tif = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }",
+            f"\tmax = {var(n, 'xf_marines_most')}", f"\tmin = {var(n, 'xf_marines_least')}", "}",
+            "# Nothing of its strength stays: its marines all go too (the fleet is cleared).",
+            f"{var(n, 'xf_marines_moved')} = {{",
+            f"\tvalue = {var(n, 'xf_marines')}",
+            f"\tif = {{ limit = {{ {var(n, 'xf_left')} <= 0 }} value = {var(n, 'marines_value')} }}",
+            "}",
+            *_xf_stay_there(n, "marines", var(n, "xf_marines_moved")),
+            "# How far past its carriers' room the fleet would be after.",
+            f"{var(n, 'xf_stay_over')} = {{ value = {var(n, 'xf_stay_marines')} subtract = {var(n, 'xf_stay_room')} min = 0 }}"]
     return out
 
 
@@ -984,6 +1016,12 @@ def render_transfer_triggers(n: int) -> list[str]:
             "# Some of its strength stays: else every marine goes with the last ship, and",
             "# the marines' - and + grey (sr_fleet_xfer_step_sgui).",
             f"{var(n, 'xf_some_stays')} = {{ {var(n, 'xf_left')} > 0 }}",
+            "# The marines' - and + grey where the carriers' room holds the amount, not",
+            "# at none or every marine, where the roles' keys don't grey either.",
+            f"{var(n, 'xf_marines_fewer')} = {{ OR = {{ {var(n, 'xf_marines')} > {var(n, 'xf_marines_least')} "
+            f"{var(n, 'xf_marines_least')} <= 0 }} }}",
+            f"{var(n, 'xf_marines_more')} = {{ OR = {{ {var(n, 'xf_marines')} < {var(n, 'xf_marines_most')} "
+            f"{var(n, 'xf_marines_most')} >= {var(n, 'marines_value')} }} }}",
             f"{var(n, 'xf_keeps')} = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength }}",
             f"{var(n, 'xf_keeps_or_all')} = {{ OR = {{ {var(n, 'xf_left')} >= sr_fl_minimum_strength "
             f"{var(n, 'xf_left')} <= 0 }} }}",
