@@ -106,3 +106,20 @@ Solar Collector or Antimatter Containment Facility levels.
 | Understaffed Engine | Right after a level finishes, the state panel's antimatter slot row already counts it as taken | The count rises again while it hires: the PM's `level_scaled` block is not read for country modifiers; move the −1 to `unscaled` |
 | AI uptake | AI governments with slots still build receivers and Engines | None queued over ten years with slots free: the AI's planner skips a building whose `can_build_government` holds a walk, or needs `ai_value`; compare with the mine |
 | Profile | With slots free, the receiver's `possible` row (`trigger common/buildings/extra_buildings.txt:<its possible line>`) costs well under 0.01 ms a read | Higher: something else in the block walks |
+
+## Supply ships in a week with Naval Convoy Defense (2026-11-24, #1984)
+
+Naval Convoy Defense (era 6) adds 20 to the weekly cap on a supply ship's construction, so with vanilla's 5 it is the
+ship's cost, 25: a ship is built in one week, not five, and a fifth as many are in progress. Whether that shortens the
+work behind the time controls' ship construction readout is the owner's reading of #1984 and is not measured. Before the
+technology nothing changes. Nothing here has been seen in game. Use the 2030 United States save
+(`late_game_performance.md` § "The USA of 2030") for the timing, and any save with the technology for the rest.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The week, 2030 save, speed 5 | Timed as in #1984 from the second week (the old entries finish in the first): well below 23.4 s, toward 12.4 s (the readout replaced by a constant) | Little change: the readout's cost doesn't follow the supply ships in progress. Run the plan's V1 and V2 (`docs/superpowers/plans/2026-11-24-supply-ship-scale.md` § Stage 0) and take the tooltip route (option 2) |
+| The construction panel's supply ship tab | Each ship in progress takes 25 a week (31 with the technology's +25%) and shows one week left | Still 5 a week: the country add doesn't reach the type's cap; put the cap on the type with a `REPLACE:ship_type_supply_ship` (the plan's Stage 1). Two weeks left at 25 a week: a designed ship costs more than 25 (`SHIP_CONSTRUCTION_COST_MODIFICATION_LEVEL_FACTOR`), which still leaves a fifth as many in progress |
+| Before the technology | A country without it still takes 5 a week, five weeks a ship | Faster: another source of the add; `test_supply_ship_progress_cap.py` should have caught it |
+| Ships a week | The top bar's supply ship count rises at the same rate as before the technology at the same setting | Faster: throughput was limited by the cap after all; the AI's levels and the yards' goods bill will be higher, so note by how much |
+| Littoral Defense | A Littoral Defense country (the law needs the technology) builds supply ships at 20–25 a week, where the law's −5 may have left it 0 before | Below 20: the law's −5 and the +25% combine another way; raise the add by 5 |
+| Readout tooltip at Very High | Hovering the readout no longer slows the day as it did in 1977 (17 s a day) | Still slow: the tooltip lists every entry, started or not; count the unstarted ones in the save |

@@ -621,6 +621,23 @@ naval_convoy_defense = {
 	modifier = {
 		country_ship_group_supply_ships_construction_efficiency_add = 0.5
 		country_supply_ship_construction_progress_max_mult = 0.25
+		# A supply ship built in one week, not five (#1984). Vanilla's type
+		# carries a weekly cap of 5 points a ship (ship_type_supply_ship's
+		# ship_construction_progress_max_add) against a cost of 25, so five
+		# times as many were in progress as the week's points could finish.
+		# The time controls' ship construction readout, worked out eight times
+		# a second, was half of the 2030 United States' week, and its cost is
+		# thought to follow that queue (docs/audits/late_game_performance.md).
+		# At 25 a fifth as many are in progress; ships a week are unchanged, the
+		# points allocated over the cost. On a late technology, not
+		# base_values, so the early game keeps vanilla's pace (owner,
+		# 2026-11-24): the readout reads only the player's own queue, and
+		# the slowdown is a late-game one. 5 + 20 is the cost before this
+		# block's +25%, in case that applies only to the add.
+		# test_supply_ship_progress_cap.py holds it to vanilla's type. The full
+		# rescale, if this isn't enough:
+		# docs/superpowers/plans/2026-11-24-supply-ship-scale.md.
+		country_supply_ship_construction_progress_max_add = 20
 	}
 
 	unlocking_technologies = {
