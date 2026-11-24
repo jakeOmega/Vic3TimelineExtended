@@ -745,6 +745,8 @@ types banking_dashboard_widget_types
 	### (blue on gold with the sliding marker, the bar's own textures, in
 	### vanilla 1.15's scripted_progressbar_dynamic markup; the cycle value
 	### since #1434, default_green before), bubble pressure (default_bad).
+	### As there, each bar's texts sit on a line above it and the marker's
+	### track is 32 px short of the bar at each end (2026-11-24).
 	### Each value is a banking_disp_bar_* script value, 0 to 1 along the bar
 	### (banking_overview_display_values.txt). No tooltip: the entry's bar
 	### carried only the engine's periodic-progress breakdown, which a bar set
@@ -752,46 +754,54 @@ types banking_dashboard_widget_types
 	type te_banking_bars = flowcontainer {
 		parentanchor = hcenter
 		direction = vertical
-		spacing = 8
+		spacing = 6
 		margin_bottom = 8
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
 			widget = {
-				size = { 480 34 }
+				size = { 480 22 }
 
-				default_progressbar_horizontal = {
-					parentanchor = center
-					size = { 480 30 }
+				textbox = {
+					text = "banking_cycle_value_bar_desc"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+				textbox = {
+					text = "banking_cycle_value_bar_second"
+					autoresize = yes
+					align = right|nobaseline
+					parentanchor = right|vcenter
+					margin_right = 4
+				}
+			}
 
-					blockoverride "noprogresstexture" {
-						noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
-					}
+			default_progressbar_horizontal = {
+				size = { 480 30 }
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_value') )]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "banking_cycle_value_bar_desc"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
-					textbox = {
-						text = "banking_cycle_value_bar_second"
-						autoresize = yes
-						align = right|nobaseline
-						margin_right = 10
-						parentanchor = right|vcenter
-					}
+				blockoverride "noprogresstexture" {
+					noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+				}
 
-					blockoverride "on_top_of_the_progressbar" {
+				blockoverride "values" {
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_value') )]"
+					min = 0
+					max = 1
+				}
+
+				blockoverride "on_top_of_the_progressbar" {
+					hbox = {
+						margin = { 32 0 }
+
 						progressbar = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
 							spriteType = Corneredtiled
 							spriteborder = { 4 4 }
 							texture_density = 2
@@ -820,36 +830,44 @@ types banking_dashboard_widget_types
 			}
 		}
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
 			widget = {
-				size = { 480 34 }
+				size = { 480 22 }
 
-				default_progressbar_horizontal = {
-					parentanchor = center
-					size = { 480 30 }
+				textbox = {
+					text = "banking_cycle_momentum_bar_name"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+			}
 
-					blockoverride "noprogresstexture" {
-						noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
-					}
+			default_progressbar_horizontal = {
+				size = { 480 30 }
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_momentum') )]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "banking_cycle_momentum_bar_name"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
+				blockoverride "noprogresstexture" {
+					noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+				}
 
-					blockoverride "on_top_of_the_progressbar" {
+				blockoverride "values" {
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_momentum') )]"
+					min = 0
+					max = 1
+				}
+
+				blockoverride "on_top_of_the_progressbar" {
+					hbox = {
+						margin = { 32 0 }
+
 						progressbar = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
 							spriteType = Corneredtiled
 							spriteborder = { 4 4 }
 							texture_density = 2
@@ -878,43 +896,51 @@ types banking_dashboard_widget_types
 			}
 		}
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
 			widget = {
-				size = { 480 34 }
+				size = { 480 22 }
 
-				default_progressbar_horizontal = {
-					parentanchor = center
-					size = { 480 30 }
+				textbox = {
+					text = "banking_policy_stance_bar_name"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+				textbox = {
+					text = "banking_policy_stance_bar_second"
+					autoresize = yes
+					align = right|nobaseline
+					parentanchor = right|vcenter
+					margin_right = 4
+				}
+			}
 
-					blockoverride "noprogresstexture" {
-						noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
-					}
+			default_progressbar_horizontal = {
+				size = { 480 30 }
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_stance') )]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "banking_policy_stance_bar_name"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
-					textbox = {
-						text = "banking_policy_stance_bar_second"
-						autoresize = yes
-						align = right|nobaseline
-						margin_right = 10
-						parentanchor = right|vcenter
-					}
+				blockoverride "noprogresstexture" {
+					noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+				}
 
-					blockoverride "on_top_of_the_progressbar" {
+				blockoverride "values" {
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_stance') )]"
+					min = 0
+					max = 1
+				}
+
+				blockoverride "on_top_of_the_progressbar" {
+					hbox = {
+						margin = { 32 0 }
+
 						progressbar = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
 							spriteType = Corneredtiled
 							spriteborder = { 4 4 }
 							texture_density = 2
@@ -943,20 +969,28 @@ types banking_dashboard_widget_types
 			}
 		}
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
+			widget = {
+				size = { 480 22 }
+
+				textbox = {
+					text = "banking_bubble_pressure_bar_name"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+			}
+
 			bad_progressbar_horizontal = {
 				size = { 480 30 }
 				blockoverride "values" {
 					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_bubble') )]"
 					min = 0
 					max = 1
-				}
-				textbox = {
-					text = "banking_bubble_pressure_bar_name"
-					autoresize = yes
-					align = nobaseline
-					margin_left = 10
-					parentanchor = vcenter
 				}
 			}
 		}
