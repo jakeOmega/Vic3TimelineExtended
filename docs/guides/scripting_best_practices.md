@@ -2860,7 +2860,7 @@ Victoria 3 uses a **proportional font** (not monospace) for all text rendering. 
 
 ## `|K` Abbreviates Every Figure, Zero Included: Switch to `|0` Below 1,000
 
-A script value or variable printed `|K` comes out abbreviated whatever its size: the running game drew a zero rate as `0.00K` and 80 deaths as `0.08K` (Strategic Reserve and Demographics, 2026-11-24). A figure that can be small takes a key of its own that picks the format, `[SelectLocalization( LessThan_CFixedPoint( Abs_CFixedPoint( x ), '(CFixedPoint)999.5' ), '<fig>_n', '<fig>_k' )]` over `[x|0]` and `[x|K]`, spliced as `$<fig>$`. Its branches must reach their data from the widget's datacontext: in a tooltip a script prints (`THIS`, `ROOT`, `SCOPE`) a named key renders without it, so print a large figure there with `|D0`. The recipe and the test that holds it: `gui_modding_guide.md` § "Format Specifiers".
+A script value or variable printed `|K` comes out abbreviated whatever its size: the running game drew a zero rate as `0.00K` and 80 deaths as `0.08K` (Strategic Reserve and Demographics, 2026-11-24). A figure that can be small takes a key of its own that picks the format, `[SelectLocalization( LessThan_CFixedPoint( Abs_CFixedPoint( x ), '(CFixedPoint)1000' ), '<fig>_n', '<fig>_k' )]` over `[x|0]` and `[x|K]`, spliced as `$<fig>$`. `|K` truncates (255,600 printed `255K`), so the cut is 1,000 itself, not 999.5. Its branches must reach their data from the widget's datacontext: in a tooltip a script prints (`THIS`, `ROOT`, `SCOPE`) a named key renders without it, so print a large figure there with `|D0`. The recipe and the test that holds it: `gui_modding_guide.md` § "Format Specifiers".
 
 ## AI Diplomatic Action Best Practices
 

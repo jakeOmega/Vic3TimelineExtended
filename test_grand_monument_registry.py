@@ -7859,7 +7859,9 @@ class SitesFinalReviewTests(unittest.TestCase):
         self.assertIn("ScriptValue('gm_disp_com_target')|1]#! [concept_grandeur]", head)
         self.assertNotIn("levels of monuments", head)
         build = L["gm_com_accept_build_line"]
-        self.assertIn("ScriptValue('gm_disp_com_target_levels')|0]#! levels", build)
+        # "1 level ... is queued" for one (2026-11-24): the noun and the verb follow the count
+        self.assertIn("ScriptValue('gm_disp_com_target_levels')|0]#! $gm_com_accept_build_levels_word$", build)
+        self.assertIn("'gm_word_level', 'gm_word_levels'", L["gm_com_accept_build_levels_word"])
         progress = L["gm_je_com_progress_tt"]
         self.assertNotIn("Levels raised", progress)
         self.assertIn("ScriptValue('gm_disp_com_progress')|1]", progress)

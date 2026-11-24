@@ -5,15 +5,19 @@ Monuments panels (GUI wave, 2026-11-24).
 "0.00K" and 80 as "0.08K" (the Reserve's rates, the Causes of Death table).
 So a figure that can be small is printed through a switch,
 `<fig>` = `[SelectLocalization( LessThan_CFixedPoint( Abs_CFixedPoint( x ),
-'(CFixedPoint)999.5' ), '<fig>_n', '<fig>_k' )]`: whole below 1,000,
-abbreviated from it. A figure that can pass 9,999 is not printed raw
-("+255600" in the Seabed's +1 license column) but through the same switch,
-or delimited where the player sets it (`|D0`). And a count reads "1 level",
-not "1 levels": the count's line has a `_one` and a `_many` form (the
-`_many` the old text, so its translations keep shipping), split off into
-`<key>_count` when the count sits in one line of a longer tooltip. A tooltip
-a script prints (THIS) picks the noun instead (gm_word_level): a key named
-in SelectLocalization renders without THIS, so its forms could not read it.
+'(CFixedPoint)1000' ), '<fig>_n', '<fig>_k' )]`: whole below 1,000,
+abbreviated from it. `|K` truncates (255,600 printed "255K"), so the cut is
+1,000 itself: a figure from 999.5 would otherwise print "0.99K". A figure
+that can pass 9,999 is not printed raw ("+255600" in the Seabed's +1 license
+column) but through the same switch, or delimited where the player sets it
+(`|D0`). And a count reads "1 level", not "1 levels": the count's line has a
+`_one` and a `_many` form (the `_many` the old text, so its translations keep
+shipping), split off into `<key>_count` when the count sits in one line of a
+longer tooltip. A line a script prints (THIS, SCOPE) picks the noun instead
+(gm_word_level): a key named in SelectLocalization renders without THIS or
+SCOPE, so its forms could not read them. Where the count sits mid-sentence
+in a long line, the pick goes in a splice of its own (`$x_word$`), which
+changes no number in the line, so its translations keep shipping too.
 """
 import os
 import re
@@ -35,8 +39,13 @@ GM_PANELS = PANELS[4:]
 
 FIG_K = re.compile(r"\[([^\[\]]*)\|([A-Za-z0-9%+=*\-]*K[A-Za-z0-9%+=*\-]*)\]")
 SWITCH = re.compile(r"^\[SelectLocalization\( LessThan_CFixedPoint\( Abs_CFixedPoint\( (.+) \), "
-                    r"'\(CFixedPoint\)999\.5' \), '(\w+)', '(\w+)' \)\]$")
-NOUNS = {"level": "levels"}
+                    r"'\(CFixedPoint\)1000' \), '(\w+)', '(\w+)' \)\]$")
+NOUNS = {"level": "levels", "is": "are"}
+# A noun picked in a splice of its own, for a line that reads SCOPE or THIS (a
+# key named in SelectLocalization renders without either; a `$key$` splice
+# renders in the line's context): `#v [count|0]#! $word$`, where word picks
+# gm_word_level / gm_word_levels by that same count.
+SPLICED_PICK = re.compile(r"\[([^\[\]]*)\|0\]#! \$(\w+_word)\$")
 COUNTED = re.compile(r"\|[+=\-]*0\](?:#! | )(?:more |missing )?(levels|months|monuments|digs|sites|trophies|mines|"
                      r"licenses)\b")
 NOUN_PICK = re.compile(r"\[([^\[\]]*)\|0\]#! (?:more |missing )?\[SelectLocalization\( EqualTo_CFixedPoint\( "
@@ -110,6 +119,21 @@ class FigureSwitchTest(unittest.TestCase):
         self.assertIn("$te_seabed_fee_fig$", loc["te_seabed_ov_licences_fig_fee"])
         self.assertNotIn("fee_k_disp", loc["te_seabed_ov_licences_fig_fee"])
 
+    def test_the_state_panels_grid_tile(self):
+        """Flow, the market flow and the pass-through on the state panel's Power Grid tile (2026-11-24 follow-up):
+        three bindings of the vanilla copy, nothing else of it."""
+        states = h._read(os.path.join(REPO, "gui/states_panel.gui"))
+        for name, sv in (("moved", "te_grid_electricity_moved_disp"), ("market", "te_grid_market_flow_disp"),
+                         ("pass", "te_grid_import_disp")):
+            self.assertNotIn(f"ScriptValue('{sv}')|K]", states)
+            self.assertEqual(states.count(f'text = "te_grid_tile_{name}_value"'), 1, name)
+            self.assertEqual(self.loc[f"te_grid_tile_{name}_value"], f"#v $te_grid_tile_{name}_fig$#!")
+            x = f"State.MakeScope.ScriptValue('{sv}')"
+            sw = SWITCH.match(self.loc[f"te_grid_tile_{name}_fig"])
+            self.assertEqual(sw.groups(), (x, f"te_grid_tile_{name}_fig_n", f"te_grid_tile_{name}_fig_k"))
+            self.assertEqual(self.loc[f"te_grid_tile_{name}_fig_n"], f"[{x}|0]")
+            self.assertEqual(self.loc[f"te_grid_tile_{name}_fig_k"], f"[{x}|K]")
+
     def test_the_settings_the_player_sets_stay_exact(self):
         """The adjustment step (to 10,000) and the weekly budget (past 100,000) are the player's: exact, with
         their thousands delimited."""
@@ -158,6 +182,39 @@ class SingularTest(unittest.TestCase):
                     self.assertEqual(count, tested)
                     self.assertEqual(NOUNS.get(one), many)
         self.assertGreaterEqual(seen, 4)
+
+    def test_a_spliced_pick_reads_its_own_count(self):
+        """The state panel's Grand Monument card and the commission's accept option (2026-11-24 follow-up)."""
+        seen = 0
+        for key in ("gm_state_grandeur_tt_one", "gm_state_grandeur_tt_many", "gm_com_accept_build_line"):
+            text = self.loc[key]
+            self.assertNotRegex(text, r"\|0\]#! levels\b", key)
+            for m in SPLICED_PICK.finditer(text):
+                seen += 1
+                count, word = m.groups()
+                with self.subTest(key=key, word=word):
+                    pk = re.fullmatch(r"\[SelectLocalization\( EqualTo_CFixedPoint\( (.*), '\(CFixedPoint\)1' \), "
+                                      r"'gm_word_(\w+)', 'gm_word_(\w+)' \)\]", self.loc[word])
+                    self.assertIsNotNone(pk, self.loc[word])
+                    self.assertEqual(pk.group(1), count)
+                    self.assertEqual(NOUNS.get(pk.group(2)), pk.group(3))
+        self.assertEqual(seen, 3)
+        # "The 1 level ... is queued": the verb follows the same count
+        line = self.loc["gm_com_accept_build_line"]
+        self.assertIn("takes at today's rate $gm_com_accept_build_are_word$ queued", line)
+        self.assertIn("'gm_word_is', 'gm_word_are'", self.loc["gm_com_accept_build_are_word"])
+        self.assertIn("SCOPE.GetRootScope.ScriptValue('gm_disp_com_target_levels')",
+                      self.loc["gm_com_accept_build_are_word"])
+        for word in ("is", "are"):
+            self.assertEqual(self.loc[f"gm_word_{word}"], word)
+
+    def test_the_umbrella(self):
+        """The Nuclear Weapons tab's Forces table, Under our umbrella (2026-11-24 follow-up)."""
+        loc = self.loc
+        self.assertIn("'(CFixedPoint)1' ), 'nd_w_umbrella_value_one', 'nd_w_umbrella_value_many'",
+                      loc["nd_w_umbrella_value"])
+        self.assertEqual(loc["nd_w_umbrella_value_one"], "#v 1#! subject")
+        self.assertTrue(loc["nd_w_umbrella_value_many"].endswith("#! subjects"))
 
     def test_the_named_lines(self):
         """Item 4: "1 levels carried off" was the coordinator's; Finished, the summaries and Carry It Off with it."""
