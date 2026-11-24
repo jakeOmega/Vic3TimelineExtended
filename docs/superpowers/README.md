@@ -71,6 +71,12 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 |-----|--------|-------------|
 | [specs/2026-11-16-power-bloc-identities-design.md](specs/2026-11-16-power-bloc-identities-design.md): three new power bloc identities from the owner's brainstorm: Creditors' Consortium (the leader stands behind members' debts and rescues a defaulter on terms: receivership, imposed economic law, concessions and monopolies), Research Commons (members stop researching and send most of their innovation to the leader, and every member is granted what any member knows) and Dynastic Compact (crowned members joined to the leader in Personal Union by consent or by succession); their requirements, primary principle groups and the parts each identity touches; the build order is its § 9 | Design only (2026-11-16): the owner's rulings in its § 12 | All three identities, one PR each (§ 9); thirteen engine facts to verify (§ 11); Producers' Cartel and Climate Club tabled (§ 2) |
 
+### Military and performance
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [plans/2026-11-24-supply-ship-scale.md](plans/2026-11-24-supply-ship-scale.md): issue #1984's first fix scoped: supply ships ten times the size (cost, goods, capacity, hit points and, the part that shortens the readout's list, the weekly cap per ship), the defines to scale by a rule, the battle size and additive cap modifiers, running games (no script read of a pool; a player-only button), and a Stage 0 that settles whether it helps: one grep, one save read, three timed variants, one of them a one-line cap raise that may do on its own | Scoping, nothing built (2026-11-24) | Stage 0 on the owner's machine, then Stages 1–5 |
+
 ### Interface
 
 | Doc | Status | What's left |
