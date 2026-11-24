@@ -3065,8 +3065,8 @@ covert_tech_steal_military = {
 		limit = {
 			is_researching_technology = autonomous_weapons
 			NOT = { has_technology_researched = autonomous_weapons }
-			has_technology_researched = swarm_technology
 			has_technology_researched = jadc2
+			has_technology_researched = unmanned_aerial_vehicles
 			scope:iw_theft_target ?= { has_technology_researched = autonomous_weapons }
 		}
 		covert_tech_grant_era_11 = { TECH = autonomous_weapons IDX = 31 }
@@ -3969,8 +3969,8 @@ covert_tech_steal_military = {
 		limit = {
 			is_researching_technology = swarm_technology
 			NOT = { has_technology_researched = swarm_technology }
+			has_technology_researched = autonomous_weapons
 			has_technology_researched = rapid_deployment_forces
-			has_technology_researched = unmanned_aerial_vehicles
 			scope:iw_theft_target ?= { has_technology_researched = swarm_technology }
 		}
 		covert_tech_grant_era_11 = { TECH = swarm_technology IDX = 223 }
@@ -5376,8 +5376,8 @@ covert_tech_selfcheck_research_tally = {
 		limit = { is_researching_technology = autonomous_weapons }
 		if = {
 			limit = {
-				has_technology_researched = swarm_technology
 				has_technology_researched = jadc2
+				has_technology_researched = unmanned_aerial_vehicles
 			}
 			covert_tech_selfcheck_held = { TECH = autonomous_weapons }
 		}
@@ -7718,8 +7718,8 @@ covert_tech_selfcheck_research_tally = {
 		limit = { is_researching_technology = swarm_technology }
 		if = {
 			limit = {
+				has_technology_researched = autonomous_weapons
 				has_technology_researched = rapid_deployment_forces
-				has_technology_researched = unmanned_aerial_vehicles
 			}
 			covert_tech_selfcheck_held = { TECH = swarm_technology }
 		}

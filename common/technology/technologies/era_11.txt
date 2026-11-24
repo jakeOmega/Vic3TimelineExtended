@@ -291,14 +291,15 @@ space_militarization = {
 
 swarm_technology = {
 	# Swarm-Coordinated Tanks PM for Automotive Industries, Swarm Bots and
-	# Swarm Coordination Vessel units
+	# Swarm Coordination Vessel units. After Autonomous Weapons (2026-11-24), so
+	# Robotic Soldiers come before the Swarm Bots that succeed them
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/swarm_technology.dds"
 	category = military
 
 	unlocking_technologies = {
+		autonomous_weapons
 		rapid_deployment_forces
-		unmanned_aerial_vehicles
 	}
 
 	modifier = {
@@ -433,14 +434,16 @@ fusion_power = {
 }
 
 autonomous_weapons = {
-	# Weapons that select and engage targets on their own (era 13 spec § 6.4): Robotic Soldiers unit (from JADC2)
+	# Weapons that select and engage targets on their own (era 13 spec § 6.4): Robotic Soldiers unit (from JADC2).
+	# Leads to Swarm Technology, whose Swarm Bots succeed Robotic Soldiers; it followed Swarm Technology until
+	# 2026-11-24, which put the weaker infantry after the stronger
 	era = era_11
 	texture = "gfx/interface/icons/invention_icons/autonomous_weapons.dds"
 	category = military
 
 	unlocking_technologies = {
-		swarm_technology
 		jadc2
+		unmanned_aerial_vehicles
 	}
 
 	modifier = {
