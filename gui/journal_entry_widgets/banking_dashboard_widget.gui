@@ -3176,11 +3176,20 @@ types banking_dashboard_widget_types
 								}
 							}
 
-							banking_dash_mon_meter = {
+							### In a flowed slot of the block's width, the meter centred in it: the
+							### Monetary Anchor line above can wrap, and an anchored child of this
+							### flowcontainer keeps its first place when a line above grows (the
+							### union buttons' fault, below).
+							widget = {
+								size = { 460 16 }
 								visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								tooltip = "banking_dash_mon_anchorpeg_tt"
-								blockoverride "meter_value" {
-									value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+
+								banking_dash_mon_meter = {
+									visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+									tooltip = "banking_dash_mon_anchorpeg_tt"
+									blockoverride "meter_value" {
+										value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+									}
 								}
 							}
 
@@ -3588,11 +3597,17 @@ types banking_dashboard_widget_types
 
 							### Stacked, not side by side: two can show at once (Leave and Press for
 							### Convergence), and at 231 each the large type does not fit both in 460.
+							### Each button is centred in a slot of the block's full width, and the
+							### slots and their wrappers flow with no parentanchor of their own: an
+							### anchored child of a vertical flowcontainer keeps the place it was
+							### given at the first layout, so when the line above grew a line
+							### afterwards (a wrapped head line, a second line of flags) the button
+							### was drawn over it, with the gap left below (in game, 2026-11-24).
+							### test_banking_layout.FlagGroupTest.test_the_union_buttons_flow.
 							flowcontainer = {
 								direction = vertical
 								ignoreinvisible = yes
 								spacing = 2
-								parentanchor = hcenter
 								visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 								### The player's own country only: another country sees the Monetary
@@ -3602,46 +3617,69 @@ types banking_dashboard_widget_types
 									direction = vertical
 									ignoreinvisible = yes
 									spacing = 2
-									parentanchor = hcenter
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_adopt"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
+											visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_adopt"
+										}
 									}
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_leave"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
+											visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_leave"
+										}
 									}
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_press"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
+											visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_press"
+										}
 									}
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_press_off"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
+											visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_press_off"
+										}
 									}
 								}
 							}

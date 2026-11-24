@@ -1514,6 +1514,31 @@ class FlagGroupTest(unittest.TestCase):
         self.assertNotRegex(outer, r"\bsize = \{", "a fixed size on the group clips the grid's later lines")
         self.assertNotRegex(outer, r"maximumsize = \{ \d+ \d+ \}", "a fixed height clips the grid's later lines")
 
+    def test_the_union_buttons_flow(self):
+        """In game (2026-11-24) the union buttons were drawn a line too high, over the second
+        line of whatever came before them (a wrapped head line, a second line of flags), with
+        the gap left below: their wrappers were anchored (parentanchor = hcenter) children of
+        a vertical flowcontainer, which keep the place the first layout gave them when a line
+        above grows afterwards. Each button is centred in a fixed slot of the block's width,
+        and the slot and its wrappers flow."""
+        from gui_test_helpers import own_props
+        start = self.monetary.index("banking_dash_mon_btn_union_adopt")
+        start = self.monetary.rindex("IsLocalPlayer, GetScriptedGui('banking_mon_shows_union')", 0, start)
+        outer = _block_from(self.monetary, self.monetary.rindex("flowcontainer = {", 0, start) + len("flowcontainer = "))
+        self.assertNotIn("parentanchor", own_props(outer[1:-1]))
+        inner = _block_from(outer, outer.index("flowcontainer = {") + len("flowcontainer = "))
+        self.assertIn("using = te_own_country_only", own_props(inner[1:-1]))
+        self.assertNotIn("parentanchor", own_props(inner[1:-1]))
+        slots = [_block_from(inner, m.start() + len("widget = ")) for m in re.finditer(r"\bwidget = \{", inner)]
+        self.assertEqual(len(slots), 4)
+        for slot, sgui in zip(slots, ("adopt", "leave", "press_on", "press_off")):
+            with self.subTest(button=sgui):
+                props = own_props(slot[1:-1])
+                self.assertRegex(slot, r"^\{\s*size = \{ 460 28 \}", "a fixed slot the button centres in")
+                self.assertIn("GetScriptedGui('banking_mon_union_%s').IsShown" % sgui, props)
+                self.assertNotIn("parentanchor", props)
+                self.assertIn("banking_dash_mon_button = {", slot)
+
     def test_the_bloc_row_sits_on_the_groups_left_edge(self):
         dash = _read(DASH)
         group = _type_body(dash, "banking_dash_flag_group")
