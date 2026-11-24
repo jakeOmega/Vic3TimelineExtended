@@ -1453,3 +1453,43 @@ point), o puts an enemy fleet at Earth.
    appear in Space Command's state (`TE_SR_PERS migrate`), and Crewed reads 100% for six months while they hire.
 9. **The AI.** In an observer run, AI fleet powers build Space Forces Bases (the census or the Map Room's Spacers
    map shows where), and none pauses Space Command for crews while it has a base level queued.
+
+## Orbital Yards build on their world; Cultural Centers draw guests; Training Grounds train marines (2026-11-24)
+
+Three facility changes the owner asked for together (`space_race.md`, *Colony modules*: *Shipments*, *Facilities*,
+*Resort Colony room*; *Seizure, occupation, destruction*). No self-check: none rests on an engine behaviour nobody has
+seen. The build loop is script logic (`test_solar_sites.py`), the draw a script value the fill already multiplies, and
+the marines' weight a script value in two comparisons. Simple or Full Colonies; the marine rows need Full. The console
+is `event te_debug_space_race.4` (modules) and `.6` (marines).
+
+1. **A yard builds for its world.** Hold Ceres with an Orbital Yard level and queue two modules there, first in the
+   queue: the next module reads "in N mo" and its hover is *Built at an Orbital Yard*. At the next month's pulse both
+   are built and installed at once (the Ceres levels rise, the Shipments count doesn't), each for 100 points from the
+   stock. Queued behind a Mars module whose window is months off, they are built ahead of it the same way (the row
+   shows the Mars module's *Waiting for Its Window* until then: the queue reorders only at the pulse).
+2. **On top of the four.** With a stock of 1,000 or more, queue four modules for Mercury, then three for a colony
+   whose world has our yard: all seven are built in one month (four into shipment slots, three installed at once).
+   Queue the yard's three first instead: the same seven.
+3. **A shared world.** A yard at Valles Marineris builds for our Olympus Mons too (the Moon's six sites the same);
+   one at Europa doesn't build for our Ganymede.
+4. **A blockade.** Blockade Earth: Mercury's modules wait ("on hold"), the yard world's are still built from the
+   stock, except the Moon's (its colonies are blockaded while Earth is). Lose the launch site under Full Colonies:
+   Mercury's read "stopped", and the yard world's are built while the stock lasts (the month adds no points). A
+   hostile fleet blockading the yard's own world stops it: that
+   world's modules go back to shipping (they wait for a slot and the window), and so do they when the yard's colony
+   is occupied.
+5. **No yard, no change.** Dismantle the yard (its level comes down after a year): the world's next module ships
+   again.
+6. **Cultural Center draw.** At Valles Marineris (+25% Resort Draw), build a Cultural Center: its Solar System line
+   and its page's Resort Room tile read +26% once the level is staffed, +27% with two. With Resort Colony levels
+   filling Valles Marineris's room, Resort Colony Room's average and the overview's next-level draw rise by about
+   the same share. A colony short of crews adds its staffing share (a level at half staffing reads +25.5, shown +26
+   or +25).
+7. **Training Grounds weigh marines.** With full crews and five staffed Training Ground levels (+25%), close in on
+   an enemy colony with an untrained garrison of 4 and militia 1: the need is 5 and the toll 2.5, so the seizure
+   needs more than 7.5. Six of our battalions (7.5 weighed) aren't enough, seven (8.75) seize it: 6.8 battalions are
+   spent, 2,000 Spacers die (the toll over our weight) and 4.8 battalions land. Untrained, it takes eight, and 2,500
+   die. The other way, give the defender the five levels (need 6, toll 3): our untrained nine battalions don't take
+   it, ten do.
+8. **The AI.** An AI with Training Grounds closes in with fewer battalions than one without, against the same
+   garrison; one facing a trained garrison waits for more.

@@ -4167,5 +4167,72 @@ class ButtonGateTest(unittest.TestCase):
                 self.assertIn(f"{name} = {{ N = $N$ }}", _block(texts["combat"], "sr_fl_set_posture_at"))
 
 
+class TrainingGroundMarinesTest(unittest.TestCase):
+    """The owner, 2026-11-24: a Training Ground makes marines slightly more
+    effective. Each side's battalions are weighed at its own
+    sr_marine_training_mult (+5% a staffed level, at most +25%) wherever a
+    seizure weighs them, and what the seizer pays goes back into its
+    battalions."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(gss.ROOT / gss.VALUES_OUT))
+        cls.hand = _strip(_raw(ROOT / "common/script_values/sr_colony_module_values.txt"))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+
+    def test_the_weight(self):
+        mult = _block(self.hand, "sr_marine_training_mult")
+        self.assertRegex(mult, r"value = sr_mod_units_train\s*max = sr_mod_train_marines_max\s*"
+                               r"multiply = sr_mod_train_marines_per_level\s*add = 1")
+        per, top = _number(self.hand, "sr_mod_train_marines_per_level"), _number(self.hand, "sr_mod_train_marines_max")
+        self.assertEqual((per, top), (0.05, 5))
+        # The hovers state the same figures.
+        for path, key in (("localization/english/te_journal_entries_l_english.yml", "je_space_race_widget_mod_train_tt"),
+                          ("localization/english/te_concepts_l_english.yml", "concept_sr_marines_desc")):
+            text = re.search(rf'^ {key}:0 "(.*)"$', _raw(ROOT / path), re.M).group(1)
+            with self.subTest(key=key):
+                self.assertIn(f"#v {per:.0%}#! more", text)
+                self.assertIn(f"at most #v +{per * top:.0%}#!", text)
+
+    def test_the_garrison_at_its_owners_weight(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                mult = _block(self.values, f"sr_site_marines_mult_{k}")
+                self.assertLess(mult.index(f"global_var:sr_site_occupier_{k} = {{ add = sr_marine_training_mult }}"),
+                                mult.index(f"global_var:sr_site_holder_{k} = {{ add = sr_marine_training_mult }}"))
+                self.assertIn("else = { add = 1 }", mult)
+                need = _block(self.values, f"sr_site_garrison_need_{k}")
+                self.assertRegex(need, rf"value = sr_site_shared_marines_{k}\s*multiply = sr_site_marines_mult_{k}\s*if")
+                # The militia is the colony's people, not marines: unweighed.
+                self.assertIn(f"add = sr_site_militia_value_{k}", need)
+
+    def test_the_seizers_marines_at_ours_and_paid_in_battalions(self):
+        # A fleet's marines at the crewed share and our weight: what the seizure's
+        # tally and the AI's comparisons read.
+        fleet_values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+        for n in range(1, gsf.SLOTS + 1):
+            self.assertIn(f"sr_fl_{n}_marines_eff = {{ value = sr_fl_{n}_marines_value multiply = sr_pers_share_value "
+                          "multiply = sr_marine_training_mult }", fleet_values)
+        target = _block(self.combat, "sr_cb_add_target")
+        self.assertIn("sr_cb_add = { VAR = sr_cb_mar_$KEY$ AMOUNT = sr_fl_$N$_marines_eff }", target)
+        weight = _block(_strip(_raw(ROOT / "common/script_values/sr_fleet_values.txt")), "sr_marine_weight_value")
+        self.assertRegex(weight, r"value = sr_pers_share_value\s*multiply = sr_marine_training_mult")
+        # Pay and landing back to battalions at the share and the weight, after the
+        # toll is split off; the toll's dead over the weight alone (they were
+        # counted at the share already).
+        seize = _block(self.combat, "sr_site_seize")
+        back = seize.index("divide = sr_marine_weight_value")
+        self.assertLess(seize.index("subtract = local_var:sr_cb_toll"), back)
+        self.assertIn("set_local_variable = { name = sr_cb_landed value = { value = local_var:sr_cb_landed "
+                      "divide = sr_marine_weight_value } }", seize)
+        self.assertLess(back, seize.index("sr_fl_spend_marines_$KEY$ = yes"))
+        lost = seize[seize.index("name = sr_pers_lost"):]
+        self.assertRegex(lost, r"value = local_var:sr_cb_toll\s*multiply = sr_pers_per_battalion\s*"
+                               r"divide = sr_marine_training_mult")
+        self.assertNotIn("divide = sr_pers_share_value", seize)
+
+
 if __name__ == "__main__":
     unittest.main()

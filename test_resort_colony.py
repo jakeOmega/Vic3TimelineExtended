@@ -113,12 +113,34 @@ class ResortRoomTest(unittest.TestCase):
                 self.assertEqual(fill.count(f"max = sr_site_resort_room_{site.key} "), 1)
         self.assertEqual(fill.count("max = 10 "), 1)
         self.assertIn("multiply = -75 add = local_var:sr_rs_sum", fill)
-        # A tier's levels x draw join the sum; a draw of 0 adds nothing.
-        self.assertIn("multiply = 30 add = local_var:sr_rs_sum", fill)
+        # A colony's levels x its draw, with its Cultural Centers' points (the owner,
+        # 2026-11-24), join the sum, a table draw of 0 too; Earth orbit's 0 adds nothing.
+        for site in gss.SITES:
+            with self.subTest(site=site.key):
+                self.assertEqual(fill.count(f"multiply = sr_site_resort_draw_{site.key} add = local_var:sr_rs_sum"), 1)
+        self.assertEqual(fill.count("add = local_var:sr_rs_sum"), len(gss.SITES) + 1)  # and the overflow
         nxt = _block(effects, "sr_resort_next_fill")
         self.assertIn("value = sr_resort_queued_levels", nxt)
         self.assertIn("set_variable = { name = sr_resort_next_draw value = -75 }", nxt)
-        self.assertIn("set_variable = { name = sr_resort_next_draw value = 30 }", nxt)
+        self.assertIn("set_variable = { name = sr_resort_next_draw value = 0 }", nxt)
+        for site in gss.SITES:
+            self.assertIn(f"set_variable = {{ name = sr_resort_next_draw value = sr_site_resort_draw_{site.key} }}", nxt)
+
+    def test_cultural_centers_add_to_the_draw(self):
+        """The owner, 2026-11-24: a Cultural Center adds 1% (a point) to its
+        world's Resort Draw, a staffed level at a time."""
+        values = _strip(_raw(*gss.VALUES_OUT.parts))
+        hand = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        self.assertRegex(hand, r"(?m)^sr_mod_culture_draw = \{ value = 1 \}")
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                draw = _block(values, f"sr_site_resort_draw_{k}")
+                self.assertIn(f"value = {site.resort_draw}\n", draw)
+                self.assertIn(f"add = {{ value = sr_site_culture_staffed_{k} multiply = sr_mod_culture_draw }}", draw)
+        loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
+        tip = re.search(r'^ je_space_race_widget_mod_culture_tt:0 "(.*)"$', loc, re.M).group(1)
+        self.assertIn("#v +1#! point of [concept_sr_resort_draw]", tip)
 
     def test_hand_values(self):
         values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
@@ -139,6 +161,8 @@ class ResortRoomTest(unittest.TestCase):
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(f"sr_disp_site_resort_room_{site.key} = {{ value = sr_site_resort_room_{site.key} }}",
+                              display)
+                self.assertIn(f"sr_disp_site_resort_draw_{site.key} = {{ value = sr_site_resort_draw_{site.key} }}",
                               display)
 
 
@@ -559,7 +583,8 @@ class ResortPanelTest(unittest.TestCase):
             k = site.key
             with self.subTest(site=k):
                 self.assertRegex(self.rows, rf"sr_disp_site_resort_room_{k}'\)\|0\]")
-                draw = gss._signed(site.resort_draw)
+                # The draw with its Cultural Centers' points, read live (the owner, 2026-11-24).
+                draw = f"[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_{k}')|+0]"
                 self.assertIn(f'raw_text = "({draw}%)"', self.rows)
                 self.assertIn(f'raw_text = "#v {site.resort_room}#! ({draw}%)"', self.rows)
         self.assertIn('block "module_resorts"', self.gui)

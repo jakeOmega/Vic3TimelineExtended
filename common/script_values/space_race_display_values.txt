@@ -1153,6 +1153,11 @@ sr_disp_free_trade_influence = {
 sr_disp_fab_rate = {
 	value = sr_mod_fab_rate
 }
+# The modules built a month at Earth (sr_mod_fab_per_month); those built at an
+# Orbital Yard on their world come on top (the owner, 2026-11-24).
+sr_disp_fab_per_month = {
+	value = sr_mod_fab_per_month
+}
 sr_disp_fab_stock = {
 	value = 0
 	if = { limit = { has_variable = sr_fab_stock } value = var:sr_fab_stock }
@@ -1167,7 +1172,14 @@ sr_disp_fab_stock = {
 # hold: Earth blockaded, or its Moon colony blockaded or occupied
 # (sr_disp_launches_barred says which). 4 and 5 are the owner's 2026-11-23 rule
 # (sr_mq_head_ready): such a head isn't built, and one further down that can be
-# goes ahead of it (sr_mq_promote_ready). A price past the stock's cap doesn't
+# goes ahead of it (sr_mq_promote_ready). 6 built at an Orbital Yard on its
+# world (sr_mq_head_yard_ready; the owner, 2026-11-24), in sr_disp_mq_next_months:
+# no slot, window or launch, so neither a blockade of Earth nor a window holds
+# it (a Moon yard does stop with Earth's blockade: sr_site_lunar_blockade_step
+# blockades the Moon's colonies with Earth, so sr_site_yard_builds_<key> fails
+# there and the head reads 5), and it is stopped (3) only while the stock is short and nothing adds to it
+# (no fabrication, or the launch site lost, which stops the month's points).
+# A price past the stock's cap doesn't
 # stop it: the stock fills to the head's price (sr_mod_fab_stock_fill_cap). The
 # month's pulse adds the rate and then builds (sr_mod_month), whose build loop
 # asks only the launch site, the stock, whether the head can go and the queue,
@@ -1179,6 +1191,20 @@ sr_disp_mq_next_state = {
 		limit = { has_variable = sr_mq_1_site }
 		value = 1
 		if = {
+			limit = { sr_mq_head_yard_ready = yes }
+			value = 6
+			if = {
+				limit = {
+					sr_mod_fab_stock_value < sr_mq_head_cost
+					OR = {
+						sr_launch_site_lost = yes
+						NOT = { sr_mod_fab_rate > 0 }
+					}
+				}
+				value = 3
+			}
+		}
+		else_if = {
 			limit = { sr_launch_site_lost = yes }
 			value = 3
 		}

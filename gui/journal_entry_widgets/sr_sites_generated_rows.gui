@@ -114,7 +114,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (+15%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_shackleton')|+0]%)"
 			}
 		}
 
@@ -192,7 +192,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (+10%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_peary')|+0]%)"
 			}
 		}
 
@@ -270,7 +270,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+30%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_tranquility')|+0]%)"
 			}
 		}
 
@@ -348,7 +348,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+15%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_marius_hills')|+0]%)"
 			}
 		}
 
@@ -426,7 +426,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (+0%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_daedalus')|+0]%)"
 			}
 		}
 
@@ -504,7 +504,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (+10%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_imbrium')|+0]%)"
 			}
 		}
 
@@ -589,7 +589,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 30#! (+15%)"
+				raw_text = "#v 30#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_venus')|+0]%)"
 			}
 		}
 
@@ -667,7 +667,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (−5%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_mercury')|+0]%)"
 			}
 		}
 
@@ -752,7 +752,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 50#! (+25%)"
+				raw_text = "#v 50#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_valles_marineris')|+0]%)"
 			}
 		}
 
@@ -830,7 +830,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+25%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_olympus_mons')|+0]%)"
 			}
 		}
 
@@ -908,7 +908,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 50#! (+5%)"
+				raw_text = "#v 50#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_hellas_planitia')|+0]%)"
 			}
 		}
 
@@ -986,7 +986,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 50#! (+0%)"
+				raw_text = "#v 50#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_utopia_planitia')|+0]%)"
 			}
 		}
 
@@ -1064,7 +1064,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+0%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_arcadia_planitia')|+0]%)"
 			}
 		}
 
@@ -1149,7 +1149,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+5%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ceres')|+0]%)"
 			}
 		}
 
@@ -1227,7 +1227,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (+10%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_vesta')|+0]%)"
 			}
 		}
 
@@ -1305,7 +1305,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_metallic"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+0%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_psyche')|+0]%)"
 			}
 		}
 
@@ -1383,7 +1383,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−5%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_pallas')|+0]%)"
 			}
 		}
 
@@ -1461,7 +1461,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (−10%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_hygiea')|+0]%)"
 			}
 		}
 
@@ -1546,7 +1546,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (−5%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_io')|+0]%)"
 			}
 		}
 
@@ -1624,7 +1624,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 30#! (+0%)"
+				raw_text = "#v 30#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_europa')|+0]%)"
 			}
 		}
 
@@ -1702,7 +1702,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+0%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ganymede')|+0]%)"
 			}
 		}
 
@@ -1780,7 +1780,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+10%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_callisto')|+0]%)"
 			}
 		}
 
@@ -1858,7 +1858,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−15%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_himalia')|+0]%)"
 			}
 		}
 
@@ -1936,7 +1936,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−5%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_amalthea')|+0]%)"
 			}
 		}
 
@@ -2021,7 +2021,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+10%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_titan')|+0]%)"
 			}
 		}
 
@@ -2099,7 +2099,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+15%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_enceladus')|+0]%)"
 			}
 		}
 
@@ -2177,7 +2177,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+5%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_rhea')|+0]%)"
 			}
 		}
 
@@ -2255,7 +2255,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (+5%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_mimas')|+0]%)"
 			}
 		}
 
@@ -2333,7 +2333,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (+15%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_iapetus')|+0]%)"
 			}
 		}
 
@@ -2418,7 +2418,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−15%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_titania')|+0]%)"
 			}
 		}
 
@@ -2496,7 +2496,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−15%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_oberon')|+0]%)"
 			}
 		}
 
@@ -2574,7 +2574,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (+0%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_miranda')|+0]%)"
 			}
 		}
 
@@ -2652,7 +2652,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (−15%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ariel')|+0]%)"
 			}
 		}
 
@@ -2737,7 +2737,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−5%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_triton')|+0]%)"
 			}
 		}
 
@@ -2815,7 +2815,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−25%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_proteus')|+0]%)"
 			}
 		}
 
@@ -2900,7 +2900,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−10%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_pluto')|+0]%)"
 			}
 		}
 
@@ -2978,7 +2978,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−30%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_eris')|+0]%)"
 			}
 		}
 
@@ -3056,7 +3056,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−30%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_makemake')|+0]%)"
 			}
 		}
 
@@ -3134,7 +3134,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−25%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_haumea')|+0]%)"
 			}
 		}
 
@@ -3212,7 +3212,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−35%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_sedna')|+0]%)"
 			}
 		}
 	}
@@ -3330,7 +3330,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (+15%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_shackleton')|+0]%)"
 			}
 		}
 
@@ -3435,7 +3435,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (+10%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_peary')|+0]%)"
 			}
 		}
 
@@ -3540,7 +3540,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+30%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_tranquility')|+0]%)"
 			}
 		}
 
@@ -3645,7 +3645,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+15%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_marius_hills')|+0]%)"
 			}
 		}
 
@@ -3750,7 +3750,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (+0%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_daedalus')|+0]%)"
 			}
 		}
 
@@ -3855,7 +3855,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (+10%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_imbrium')|+0]%)"
 			}
 		}
 
@@ -3969,7 +3969,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 30#! (+15%)"
+				raw_text = "#v 30#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_venus')|+0]%)"
 			}
 		}
 
@@ -4074,7 +4074,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (−5%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_mercury')|+0]%)"
 			}
 		}
 
@@ -4188,7 +4188,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 50#! (+25%)"
+				raw_text = "#v 50#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_valles_marineris')|+0]%)"
 			}
 		}
 
@@ -4295,7 +4295,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+25%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_olympus_mons')|+0]%)"
 			}
 		}
 
@@ -4402,7 +4402,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 50#! (+5%)"
+				raw_text = "#v 50#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_hellas_planitia')|+0]%)"
 			}
 		}
 
@@ -4509,7 +4509,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 50#! (+0%)"
+				raw_text = "#v 50#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_utopia_planitia')|+0]%)"
 			}
 		}
 
@@ -4616,7 +4616,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+0%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_arcadia_planitia')|+0]%)"
 			}
 		}
 
@@ -4730,7 +4730,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+5%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ceres')|+0]%)"
 			}
 		}
 
@@ -4837,7 +4837,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_rocky"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 25#! (+10%)"
+				raw_text = "#v 25#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_vesta')|+0]%)"
 			}
 		}
 
@@ -4944,7 +4944,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_metallic"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+0%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_psyche')|+0]%)"
 			}
 		}
 
@@ -5051,7 +5051,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−5%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_pallas')|+0]%)"
 			}
 		}
 
@@ -5158,7 +5158,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (−10%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_hygiea')|+0]%)"
 			}
 		}
 
@@ -5272,7 +5272,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (−5%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_io')|+0]%)"
 			}
 		}
 
@@ -5379,7 +5379,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 30#! (+0%)"
+				raw_text = "#v 30#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_europa')|+0]%)"
 			}
 		}
 
@@ -5486,7 +5486,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+0%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ganymede')|+0]%)"
 			}
 		}
 
@@ -5593,7 +5593,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+10%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_callisto')|+0]%)"
 			}
 		}
 
@@ -5700,7 +5700,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−15%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_himalia')|+0]%)"
 			}
 		}
 
@@ -5807,7 +5807,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_sulfurous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−5%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_amalthea')|+0]%)"
 			}
 		}
 
@@ -5921,7 +5921,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 40#! (+10%)"
+				raw_text = "#v 40#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_titan')|+0]%)"
 			}
 		}
 
@@ -6028,7 +6028,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_carbonaceous"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+15%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_enceladus')|+0]%)"
 			}
 		}
 
@@ -6135,7 +6135,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (+5%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_rhea')|+0]%)"
 			}
 		}
 
@@ -6242,7 +6242,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (+5%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_mimas')|+0]%)"
 			}
 		}
 
@@ -6349,7 +6349,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (+15%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_iapetus')|+0]%)"
 			}
 		}
 
@@ -6463,7 +6463,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−15%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_titania')|+0]%)"
 			}
 		}
 
@@ -6570,7 +6570,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−15%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_oberon')|+0]%)"
 			}
 		}
 
@@ -6677,7 +6677,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (+0%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_miranda')|+0]%)"
 			}
 		}
 
@@ -6784,7 +6784,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 15#! (−15%)"
+				raw_text = "#v 15#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ariel')|+0]%)"
 			}
 		}
 
@@ -6898,7 +6898,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−5%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_triton')|+0]%)"
 			}
 		}
 
@@ -7005,7 +7005,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−25%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_proteus')|+0]%)"
 			}
 		}
 
@@ -7119,7 +7119,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 20#! (−10%)"
+				raw_text = "#v 20#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_pluto')|+0]%)"
 			}
 		}
 
@@ -7226,7 +7226,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−30%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_eris')|+0]%)"
 			}
 		}
 
@@ -7333,7 +7333,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−30%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_makemake')|+0]%)"
 			}
 		}
 
@@ -7440,7 +7440,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_icy"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−25%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_haumea')|+0]%)"
 			}
 		}
 
@@ -7547,7 +7547,7 @@ types sr_sites_generated_rows_types
 				text = "sr_ground_hydrocarbon"
 			}
 			blockoverride "site_resorts" {
-				raw_text = "#v 10#! (−35%)"
+				raw_text = "#v 10#! ([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_sedna')|+0]%)"
 			}
 		}
 	}
@@ -24661,7 +24661,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_shackleton')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_shackleton')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_shackleton_depot"
@@ -25236,7 +25236,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_peary')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+10%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_peary')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_peary_solar"
@@ -25811,7 +25811,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_tranquility')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+30%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_tranquility')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_tranquility_heritage"
@@ -26386,7 +26386,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_marius_hills')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_marius_hills')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_marius_lavatubes"
@@ -26961,7 +26961,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_daedalus')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+0%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_daedalus')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_daedalus_telescope"
@@ -27536,7 +27536,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_imbrium')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+10%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_imbrium')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_imbrium_massdriver"
@@ -28111,7 +28111,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_venus')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_venus')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_venus_atmospheric"
@@ -28736,7 +28736,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_mercury')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_mercury')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_mercury_solar"
@@ -29319,7 +29319,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_valles_marineris')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+25%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_valles_marineris')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_valles_marineris_research"
@@ -29944,7 +29944,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_olympus_mons')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+25%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_olympus_mons')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_olympus_mons_atmospheric"
@@ -30569,7 +30569,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_hellas_planitia')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_hellas_planitia')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_hellas_settlement"
@@ -31194,7 +31194,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_utopia_planitia')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+0%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_utopia_planitia')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_utopia_ice"
@@ -31819,7 +31819,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_arcadia_planitia')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+0%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_arcadia_planitia')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_arcadia_civilian"
@@ -32444,7 +32444,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_ceres')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ceres')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_ceres_waystation"
@@ -33027,7 +33027,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_vesta')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+10%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_vesta')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_vesta_mining"
@@ -33610,7 +33610,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_psyche')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+0%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_psyche')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_psyche_industrial"
@@ -34193,7 +34193,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_pallas')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_pallas')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_pallas_composites"
@@ -34776,7 +34776,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_hygiea')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−10%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_hygiea')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_hygiea_volatiles"
@@ -35359,7 +35359,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_io')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_io')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_io_mining"
@@ -35942,7 +35942,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_europa')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+0%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_europa')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_europa_drilling"
@@ -36525,7 +36525,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_ganymede')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+0%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ganymede')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_ganymede_settlement"
@@ -37150,7 +37150,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_callisto')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+10%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_callisto')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_callisto_gateway"
@@ -37775,7 +37775,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_himalia')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_himalia')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_himalia_telescope"
@@ -38358,7 +38358,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_amalthea')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_amalthea')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_amalthea_physics"
@@ -38941,7 +38941,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_titan')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+10%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_titan')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_titan_hydrocarbons"
@@ -39566,7 +39566,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_enceladus')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_enceladus')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_enceladus_astrobiology"
@@ -40149,7 +40149,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_rhea')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_rhea')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_rhea_propellant"
@@ -40732,7 +40732,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_mimas')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_mimas')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_mimas_installation"
@@ -41315,7 +41315,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_iapetus')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_iapetus')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_iapetus_ridge"
@@ -41898,7 +41898,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_titania')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_titania')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_titania_mining"
@@ -42481,7 +42481,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_oberon')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_oberon')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_oberon_relay"
@@ -43064,7 +43064,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_miranda')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(+0%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_miranda')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_miranda_rupes"
@@ -43647,7 +43647,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_ariel')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−15%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_ariel')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_ariel_cryovolcanic"
@@ -44230,7 +44230,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_triton')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−5%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_triton')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_triton_geyser"
@@ -44813,7 +44813,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_proteus')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−25%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_proteus')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_proteus_probe"
@@ -45396,7 +45396,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_pluto')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−10%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_pluto')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_pluto_research"
@@ -45979,7 +45979,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_eris')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−30%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_eris')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_eris_selfsufficiency"
@@ -46562,7 +46562,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_makemake')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−30%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_makemake')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_makemake_chemistry"
@@ -47145,7 +47145,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_haumea')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−25%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_haumea')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_haumea_dynamics"
@@ -47728,7 +47728,7 @@ types sr_sites_generated_rows_types
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_room_sedna')|0]"
 			}
 			blockoverride "module_draw" {
-				raw_text = "(−35%)"
+				raw_text = "([JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_resort_draw_sedna')|+0]%)"
 			}
 			blockoverride "page_name_a" {
 				text = "sr_colony_sedna_outpost"

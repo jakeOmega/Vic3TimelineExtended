@@ -333,8 +333,9 @@ class TollTest(unittest.TestCase):
                      "max = var:sr_cb_mar_$KEY$"):
             self.assertIn(line, pay)
         self.assertIn("subtract = local_var:sr_cb_toll", seize)
-        # Effective marines back into battalions before they are spent.
-        self.assertLess(seize.index("divide = sr_pers_share_value"), seize.index("sr_fl_spend_marines_$KEY$ = yes"))
+        # Effective marines back into battalions before they are spent: at the crewed
+        # share and the Training Grounds' weight (sr_marine_weight_value, 2026-11-24).
+        self.assertLess(seize.index("divide = sr_marine_weight_value"), seize.index("sr_fl_spend_marines_$KEY$ = yes"))
 
     def test_the_ai_weighs_it(self):
         generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
