@@ -1227,8 +1227,14 @@ PAGE_KEPT = {f"gfx/interface/icons/{p}" for p in (
 # In page order: the caption or module name that follows each icon, its file in
 # SR_ICONS, and the placeholder it replaced. The Defenses icon is on the module
 # row and the Defenses tile.
+# In the page's order: the left column (People, Autonomy, Defenses), then Modules.
 PAGE_ICONS = (
     ("je_space_race_widget_ch_crews", "page_crews.dds", "character_trait_icons/engineer.dds"),
+    ("je_space_race_widget_ch_autonomy", "page_autonomy.dds", "diplomatic_action_icons/liberty_desire.dds"),
+    ("je_space_race_widget_page_status", "page_aut_status.dds", "ai_strategy_icons/subject_maintain_autonomy.dds"),
+    ("je_space_race_widget_ch_defences", "module_def.dds", "building_icons/building_naval_fortification.dds"),
+    ("je_space_race_widget_ch_integrity", "page_integrity.dds", "state_status_icons/has_devastation.dds"),
+    ("je_space_race_widget_page_status", "page_def_status.dds", "state_status_icons/colony.dds"),
     ("je_space_race_widget_page_staffing", "page_crewed.dds", "generic_icons/employment_not_full.dds"),
     ("je_space_race_widget_mod_name_hab", "module_hab.dds", "building_icons/urban_center.dds"),
     ("je_space_race_widget_mod_name_port", "module_port.dds", "building_icons/building_port.dds"),
@@ -1237,11 +1243,6 @@ PAGE_ICONS = (
     ("je_space_race_widget_mod_name_culture", "module_culture.dds", "building_icons/building_arts_academy.dds"),
     ("je_space_race_widget_mod_name_train", "module_train.dds", "building_icons/building_barracks.dds"),
     ("je_space_race_widget_mod_name_bunker", "module_bunker.dds", "building_icons/building_nuclear_plant.dds"),
-    ("je_space_race_widget_ch_autonomy", "page_autonomy.dds", "diplomatic_action_icons/liberty_desire.dds"),
-    ("je_space_race_widget_page_status", "page_aut_status.dds", "ai_strategy_icons/subject_maintain_autonomy.dds"),
-    ("je_space_race_widget_ch_defences", "module_def.dds", "building_icons/building_naval_fortification.dds"),
-    ("je_space_race_widget_ch_integrity", "page_integrity.dds", "state_status_icons/has_devastation.dds"),
-    ("je_space_race_widget_page_status", "page_def_status.dds", "state_status_icons/colony.dds"),
 )
 
 
@@ -1316,7 +1317,7 @@ class SpaceRaceIconsTest(unittest.TestCase):
         """Icon batch 8: each tile and module row on a colony's page draws its own
         icon (the caption or module name after it says which), and the placeholder
         it replaced is gone from the page."""
-        page = _type_body(self.gui, "te_sr_colony_row")
+        page = _type_body(self.gui, "te_sr_colony_page")
         pairs, icon = [], None
         for line in page.splitlines():
             m = re.search(rf'texture = "{re.escape(SR_ICONS)}((?:page|module)_\w+\.dds)"', line)
