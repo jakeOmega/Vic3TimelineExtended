@@ -51,7 +51,7 @@ toggle.
   soldiers; the bases rehire. The tactical nuclear strike halves soldiers and
   officers only, so it spares them.
 
-### 2.1 Armed Forces (not built: an owner call)
+### 2.1 Armed Forces (owner, 2026-11-24: a minor attraction instead)
 
 Vanilla's Armed Forces draws soldiers and officers by name in its
 `pop_weight`; spacers reach it only as any pop does, through an acceptance
@@ -59,7 +59,12 @@ term of 25 (12.5 under Professional Army). Adding them needs vanilla's whole
 `pop_weight` restated: a `REPLACE` would wipe the mod's female-chance
 `INJECT`s into the same interest group, and an `INJECT` of a block vanilla
 declares adds a second block. A few tens of thousands of people don't move a
-nation's politics, so the build leaves it; the PR asks the owner.
+nation's politics, so the build leaves it. The owner agreed ("probably not
+worth it") and asked for a minor `interest_group_ig_armed_forces_pop_attraction_mult`
+instead: the method's workforce-scaled state modifiers carry +1% a staffed
+level. It reaches every pop in the base's state, a garrison town's lean, since
+the state and the country are the scopes the game is known to read pop
+attraction from; whether pops read it from their workplace is unread.
 
 ## 3. The building
 
@@ -69,8 +74,11 @@ nation's politics, so the build leaves it; the PR asks the owner.
 reads `sr_pers_may_build_government`), any state and any number of levels.
 One group (`pmg_space_forces_base`), one method (`pm_space_forces_training`):
 `level_scaled` `building_employment_spacers_add = 1000`, and
-`state_modifiers.workforce_scaled` `state_sr_space_personnel_add = 1000`. No
-goods. The modifier type `state_sr_space_personnel_add` joins
+`state_modifiers.workforce_scaled` `state_sr_space_personnel_add = 1000` and
+`interest_group_ig_armed_forces_pop_attraction_mult = 0.01` (§ 2.1). No
+goods. Workforce-scaled modifiers follow the building's throughput as well as
+its staff, so an unincorporated state (−10%), economies of scale or a new
+capital (+10%) move a level's personnel too. The modifier type `state_sr_space_personnel_add` joins
 `sr_fleet_modifier_types.txt` (script-only, 0 decimals, good).
 
 ## 4. Personnel: the values and the month
@@ -104,7 +112,8 @@ each role, read once before anything moves, and the reserve keeps the rest;
 marines come aboard at the launch and at Earth's monthly refill
 (`sr_fl_marines_refill_at`) only up to room ÷ 1,000. A gate only stops
 growth: none takes anything away. Launch, its button and Auto all need
-`sr_pers_can_crew_launch` (some room). The AI's launch match
+`sr_pers_can_crew_launch`: room for a fleet's minimum strength at least, or the
+slot a launch makes would be cleared the same month. The AI's launch match
 (`sr_earth_reserve_and_ours`) counts only the reserve the room can crew.
 
 **The order.** `sr_pers_marines_first` (a country variable, absent = hulls
@@ -135,13 +144,20 @@ loser's share at the time (`sr_pers_note_dead`, reading `local_var:sr_pers_lost`
 | Battle, the destroyed half | `sr_fl_cut_role` (hand-written) | the fall in full strength × per point |
 | Attrition | `sr_fl_month_at`, before `sr_fl_attrition_at` | full strength × 5% × per point |
 | A slot cleared below the minimum | `sr_fl_month_at`, before `sr_fl_clear_at` | full strength × per point + marines × 1,000 |
-| Marines past the carriers' room | the trim in `sr_fl_month_at` | the excess × 1,000 |
+| Marines past the carriers' room at full strength (carriers destroyed) | the trim in `sr_fl_month_at` | that excess × 1,000; those past a damaged carrier's room leave service alive, as damage kills no crew |
 | A garrison overrun | `sr_site_occupy` (the holder's defending marines, shared on the Moon and Mars), `sr_site_liberate` (the occupier's) | battalions × 1,000 |
-| A colony destroyed | `sr_site_destroy`, before the release | its garrison × 1,000, to whoever holds it |
+| A colony destroyed | `sr_site_destroy`, before the release (`sr_site_note_destroyed_dead`) | its own battalions × 1,000, to whoever holds it; on the Moon and Mars the holder's others there stay in service |
 | The assault's toll | `sr_site_seize` | § 5.2 |
 
-Not deaths: marines home, Transfer, Land and Embark, a cession, an
-occupation's end, a release by abandonment or breaking away.
+Not deaths: marines home (`sr_fl_take_marines_at` takes them aboard up to the
+carriers' room, and the rest leave service, so the trim never sees them),
+Transfer, Land and Embark, a cession, an occupation's end, a release by
+abandonment or breaking away.
+
+The battle report's dead (`sr_battle_dead`) is what the cuts booked that month
+(`local_var:sr_pers_noted`, which `sr_pers_note_people` adds to), so the
+Orbital Battlestation's share of the losses and the full-strength floor are
+left out.
 
 ### 5.2 The assault's toll
 
@@ -155,11 +171,15 @@ doesn't give the price yet (a follow-up); Seize's hover names the toll.
 ### 5.3 The kill
 
 `sr_pers_kill_step`, in `sr_pers_close`: while the due holds whole hundreds,
-each state with bases takes its share of them by its capacity, in steps of
-`kill_population_in_state = { value = 100 pop_type = spacers }`, at most the
-state's spacers; the remainder (under 100) is carried, and what no state
-could pay is dropped. At most 2,000 steps a month (`sr_pers_kill_max_steps`);
-the rest waits. Each state books what it killed as war dead
+the states with bases share them one after another, each taking its share of
+the hundreds still to place by its share of the capacity still to share, so
+the shares add up to the month's and the last state takes what is left
+(rounding each state's share of the whole alone dropped a small due among
+three states and doubled it between two). Each kills in steps of
+`kill_population_in_state = { value = 100 pop_type = spacers }`, at most its
+spacers; the remainder (under 100) is carried, and what no state could pay is
+dropped. At most 1,000 steps a month (`sr_pers_kill_max_steps`, the engine's
+`while` cap); the rest waits. Each state books what it killed as war dead
 (`te_demog_note_war_dead`, the census's `te_dg_war_in`, with
 `te_demog_note_kills`' guards). The year's dead go on `sr_pers_killed_year`
 for the hover.
@@ -168,8 +188,10 @@ for the hover.
 
 - **Bases**: `sr_pers_may_build_government`: a player's government always
   may; an AI while the demand × 1.2 (in service, the reserve's crews, the
-  carriers' unfilled room × 1,000) is above capacity plus queued levels ×
-  1,000, out of default.
+  carriers' unfilled room × 1,000) is above 1,000 a level built and queued
+  (`sr_pers_planned_levels`, through `b:`, which sees a base whose levels are
+  all queued), out of default. Levels, not staffed capacity: a level still
+  hiring, or emptied by a kill, is already paid for.
 - **Pause**: `sr_sc_ai_should_pause` gains the reserve awaiting crews above
   six months' construction with no base queued; `sr_sc_ai_may_resume` waits
   for it to clear.
@@ -178,8 +200,9 @@ for the hover.
 ## 7. The panel and notices
 
 - Space Command: a third row of cells, Personnel (in service of capacity) and
-  Crewed (the share), and a button beside Resuming, Hulls first / Marines
-  first, the two taking turns as Auto's do.
+  Crewed (the share, red below 100%), and a button beside Resuming reading
+  Hulls or Marines (the order in force; its hover says so), the two taking
+  turns as Auto's do.
 - The reserve cell and the Launch hover name the points awaiting crews.
 - While the share is below 1, a note above the fleet rows says so, rather than
   a Crewed N% on each card: the share is the country's, the same on every
@@ -190,21 +213,25 @@ for the hover.
 ## 8. Existing saves
 
 `sr_pers_migrate_once`, once a country (`sr_pers_migrated`), at its first fleets
-month: with personnel in service above the bases' capacity it creates the base levels
+month: with personnel in service and the ground reserve's crews
+(`sr_pers_migrate_need`) above the bases' capacity it creates the base levels
 the gap needs, rounded up, in Space Command's state, else the capital
 (`extended_timeline_build_specified_building_level`, at most 100), and sets
-`sr_pers_grace_until` six months on with `sr_pers_grace_capacity` at the
-personnel in service, so the share stays 1 and the gates have that much room
-while the levels hire.
+`sr_pers_grace_until` six months on with `sr_pers_grace_capacity` at that
+need, so the share stays 1 and the gates have that much room while the levels
+hire.
 
 ## 9. Self-checks
 
 `docs/testing/solar-colonies-playtest.md`'s table:
 
-- `pers_pop_type` (scope § 9.1 and 9.5): a base a month old at half staff or
-  more (armed on its country): OK when the state holds spacers and its
-  capacity sum is within 2% of 1,000 × its levels × its staffing; BROKEN
-  otherwise.
-- `pers_kill` (§ 9.2): the first kill of 100 or more in a state, read a week
-  on by a hidden event: OK when the state's spacers fell by at least half the
-  count (a week's rehiring can't refill it), BROKEN when they didn't fall.
+- `pers_pop_type` (scope § 9.1 and 9.5): armed on its country the first month
+  it has a base of a level or more, whatever its staff, and read three months
+  on: BROKEN with no spacers in the state; re-armed while the base is under
+  half staff; else OK when its capacity sum is 0.75 to 1.5 times 1,000 × its
+  levels × its staffing (throughput moves it, and the sum lags the live staff a
+  tick), BROKEN outside that.
+- `pers_kill` (§ 9.2): the first kill of 100 or more in a state, read a day on
+  by a hidden event, before the base's weekly hiring most likely refills it: OK
+  when the state's spacers fell by at least half the count, BROKEN when they
+  didn't.

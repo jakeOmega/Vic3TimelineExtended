@@ -9256,8 +9256,15 @@ types space_race_widget_types
 						}
 					}
 					blockoverride "word" {
+						# Red while short of personnel (sr_disp_pers_short), as the base
+						# room cell reads red past its room.
 						te_banking_ov_word = {
+							visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_short'), '(CFixedPoint)1' ) )]"
 							text = "je_space_race_widget_ovc_sc_crewed_word"
+						}
+						te_banking_ov_word = {
+							visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_short'), '(CFixedPoint)1' )]"
+							text = "je_space_race_widget_ovc_sc_crewed_word_short"
 						}
 					}
 				}

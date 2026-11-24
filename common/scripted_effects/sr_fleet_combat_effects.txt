@@ -112,6 +112,9 @@ sr_combat_at = {
 			}
 			change_local_variable = { name = sr_cb_kinetic add = var:sr_cb_kf }
 		}
+		# The crews the cuts book die (sr_pers_note_people adds them), for the
+		# battle report; reset for each power, as a local runs on through the list.
+		set_local_variable = { name = sr_pers_noted value = 0 }
 		if = {
 			limit = { var:sr_cb_lost > 0 }
 			set_local_variable = { name = sr_cb_battle value = 1 }
@@ -643,16 +646,10 @@ sr_cb_battle_record = {
 			set_variable = { name = sr_battle_dealt value = sr_cb_enemy_lost }
 			set_variable = { name = sr_battle_left value = { value = var:sr_cb_before subtract = var:sr_cb_lost min = 0 } }
 			# The crews that died with the destroyed half (space forces personnel
-			# design § 7), at our crewed share, as sr_fl_cut_role counts them.
-			set_variable = {
-				name = sr_battle_dead
-				value = {
-					value = var:sr_cb_lost
-					multiply = sr_fl_loss_destroyed_share
-					multiply = sr_pers_per_point
-					multiply = sr_pers_share_value
-				}
-			}
+			# design § 7): what sr_fl_cut_role booked this month's battle, so the
+			# Orbital Battlestation's share of the losses (no crew) and the
+			# full-strength floor are left out (review of #2020).
+			set_variable = { name = sr_battle_dead value = local_var:sr_pers_noted }
 			trigger_event = { id = space_race_events.101 days = 1 }
 		}
 	}
@@ -914,7 +911,7 @@ sr_site_destroy = {
 		}
 	}
 	# The garrison dies with the colony (space forces personnel design § 5.1).
-	sr_site_note_garrison_dead = { KEY = $KEY$ }
+	sr_site_note_destroyed_dead = { KEY = $KEY$ }
 	sr_site_release_$KEY$ = yes
 	set_global_variable = { name = sr_site_ruined_$KEY$ value = yes days = 9125 }
 	sr_sites_recompute_stage = yes

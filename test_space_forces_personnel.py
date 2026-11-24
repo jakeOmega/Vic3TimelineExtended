@@ -141,7 +141,8 @@ class BuildingTest(unittest.TestCase):
                          r"production_methods = \{\s*pm_space_forces_training\s*\}")
         pm = _block(_strip(_raw(PMS)), "pm_space_forces_training")
         self.assertRegex(pm, r"level_scaled = \{\s*building_employment_spacers_add = 1000\s*\}")
-        self.assertRegex(pm, r"workforce_scaled = \{\s*state_sr_space_personnel_add = 1000\s*\}")
+        self.assertRegex(pm, r"workforce_scaled = \{\s*state_sr_space_personnel_add = 1000\s*"
+                             r"interest_group_ig_armed_forces_pop_attraction_mult = 0.01\s*\}")
         self.assertNotIn("goods_input", pm)
         self.assertNotIn("goods_output", pm)
         types = _strip(_raw(MODIFIER_TYPES))
@@ -282,11 +283,16 @@ class LossesTest(unittest.TestCase):
         for name in ("sr_site_occupy", "sr_site_liberate"):
             with self.subTest(effect=name):
                 self.assertTrue(_block(self.combat, name).lstrip().startswith("sr_site_note_garrison_dead = { KEY = $KEY$ }"))
+        # A destroyed world charges its own marines only: on the Moon and Mars its
+        # holder's others there stay in service (review of #2020).
         destroy = _block(self.combat, "sr_site_destroy")
-        self.assertLess(destroy.index("sr_site_note_garrison_dead = { KEY = $KEY$ }"),
+        self.assertLess(destroy.index("sr_site_note_destroyed_dead = { KEY = $KEY$ }"),
                         destroy.index("sr_site_release_$KEY$"))
-        note = _block(self.pers, "sr_site_note_garrison_dead")
-        self.assertIn("sr_site_shared_marines_$KEY$", note)
+        self.assertNotIn("sr_site_note_garrison_dead", destroy)
+        self.assertIn("MARINES = sr_site_shared_marines_$KEY$ NOTICE = yes", _block(self.pers, "sr_site_note_garrison_dead"))
+        self.assertIn("MARINES = sr_site_marines_value_$KEY$ NOTICE = no", _block(self.pers, "sr_site_note_destroyed_dead"))
+        note = _block(self.pers, "sr_site_note_marines_dead")
+        self.assertIn("value = $MARINES$", note)
         self.assertIn("sr_pers_note_people = yes", note)
 
     def test_the_share_applies_once(self):
@@ -374,17 +380,91 @@ class KillTest(unittest.TestCase):
         self.assertIn("change_variable = { name = te_dg_war_in add = $VALUE$ }", book)
 
 
+class ReviewFixesTest(unittest.TestCase):
+    """The independent review of #2020: each fix held in place."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.fleet = _strip(_raw(FLEET_EFFECTS))
+        cls.combat = _strip(_raw(COMBAT_EFFECTS))
+        cls.pers = _strip(_raw(PERS_EFFECTS))
+        cls.values = _strip(_raw(VALUES))
+        cls.triggers = _strip(_raw(TRIGGERS))
+
+    def test_marines_coming_home_stay_within_the_room(self):
+        # Coming home is no loss: uncapped, the month's trim counted them dead.
+        take = _block(self.fleet, "sr_fl_take_marines_at")
+        self.assertIn("max = sr_fl_$N$_marine_capacity", take)
+
+    def test_only_marines_past_the_full_room_die(self):
+        # Damage kills no crew: a damaged carrier's marines leave service alive.
+        month = _block(self.fleet, "sr_fl_month_at")
+        trim = month[month.index("sr_fl_$N$_marines_value > sr_fl_$N$_marine_capacity"):]
+        self.assertLess(trim.index("sr_fl_$N$_carrier_full_value"), trim.index("sr_pers_note_lost = yes"))
+        self.assertIn("multiply = sr_fl_marines_per_carrier", trim[:trim.index("sr_pers_note_lost = yes")])
+
+    def test_the_kill_shares_add_up(self):
+        kill = _block(self.pers, "sr_pers_kill_step")
+        self.assertIn("divide = local_var:sr_pk_cap_left", kill)
+        self.assertIn("multiply = local_var:sr_pk_left", kill)
+        self.assertIn("change_local_variable = { name = sr_pk_left subtract = local_var:sr_pk_here }", kill)
+        self.assertIn("change_local_variable = { name = sr_pk_cap_left subtract = modifier:state_sr_space_personnel_add }", kill)
+        # A while loop runs at most 1,000 times.
+        cap = float(re.search(r"(?m)^sr_pers_kill_max_steps = \{ value = (\d+) \}", _raw(VALUES)).group(1))
+        self.assertLessEqual(cap, 1000)
+
+    def test_the_ai_counts_levels_built_and_queued(self):
+        wanted = _block(self.values, "sr_pers_ai_wanted")
+        self.assertIn("value = sr_pers_planned_levels", wanted)
+        self.assertNotIn("sr_pers_capacity", wanted)
+        for name in ("sr_pers_planned_levels", "sr_pers_queued_levels"):
+            with self.subTest(value=name):
+                body = _block(self.values, name)
+                self.assertIn("exists = b:building_space_forces_base", body)
+                self.assertNotIn("has_building", body)
+
+    def test_a_launch_is_at_least_a_fleet(self):
+        self.assertIn("sr_pers_room_points >= sr_fl_minimum_strength", _block(self.triggers, "sr_pers_can_crew_launch"))
+
+    def test_the_battle_report_gives_what_was_booked(self):
+        record = _block(self.combat, "sr_cb_battle_record")
+        self.assertIn("set_variable = { name = sr_battle_dead value = local_var:sr_pers_noted }", record)
+        self.assertIn("change_local_variable = { name = sr_pers_noted add = local_var:sr_pers_lost }",
+                      _block(self.pers, "sr_pers_note_people"))
+        step = self.combat[:self.combat.index("sr_cb_battle_record = { CODE = $CODE$ }")]
+        self.assertLess(step.rindex("set_local_variable = { name = sr_pers_noted value = 0 }"),
+                        step.rindex("sr_fl_each_slot = { DO = apply_losses }"))
+
+    def test_the_year_s_dead_go_stale(self):
+        shown = _block(_strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt")), "sr_disp_pers_killed_year")
+        self.assertIn("var:sr_pers_killed_year_from >=", shown)
+
+    def test_the_migration_crews_the_reserve(self):
+        need = _block(self.values, "sr_pers_migrate_need")
+        self.assertIn("value = sr_pers_in_service", need)
+        self.assertIn("sr_reserve_total", need)
+        self.assertIn("value = sr_pers_migrate_need", _block(self.values, "sr_pers_migrate_levels"))
+        self.assertIn("name = sr_pers_grace_capacity value = sr_pers_migrate_need", _block(self.pers, "sr_pers_migrate_once"))
+
+
 class SelfChecksTest(unittest.TestCase):
     def test_the_kill_check_s_event(self):
         events = _strip(_raw(EVENTS))
         body = _block(events, "space_race_events.140")
         self.assertIn("hidden = yes", body)
         self.assertIn("sr_pers_kill_self_check = yes", body)
-        self.assertIn("trigger_event = { id = space_race_events.140 days = 7 }",
+        self.assertIn("trigger_event = { id = space_race_events.140 days = 1 }",
                       _block(_strip(_raw(PERS_EFFECTS)), "sr_pers_kill_check_arm"))
 
     def test_the_pop_type_check_arms_on_its_country(self):
         check = _block(_strip(_raw(PERS_EFFECTS)), "sr_pers_pop_type_self_check")
+        # Armed on a base of a level or more, whatever its staff, so a pop type that
+        # never hires still gets a line; read three months on, with room for
+        # throughput (review of #2020).
+        self.assertIn("sr_pers_has_base_level = yes", check)
+        self.assertIn("add = 3", check)
+        self.assertIn("multiply = 0.75", check)
+        self.assertIn("multiply = 1.5", check)
         # A global arm is cleared by any fleet power without a staffed base that runs first.
         self.assertNotIn("has_global_variable = sr_pers_pop_type_armed", check)
         self.assertIn("set_variable = { name = sr_pers_pop_type_armed value = te_history_month_index }", check)

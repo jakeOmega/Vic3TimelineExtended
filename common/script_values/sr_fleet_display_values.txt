@@ -206,7 +206,19 @@ sr_disp_pers_levels = {
 }
 sr_disp_pers_killed_year = {
 	value = 0
-	if = { limit = { has_variable = sr_pers_killed_year } value = var:sr_pers_killed_year }
+	# The count's year began within the last twelve months; an older one reads 0,
+	# as the next kill would start it again (review of #2020).
+	if = {
+		limit = {
+			has_variable = sr_pers_killed_year
+			has_variable = sr_pers_killed_year_from
+			var:sr_pers_killed_year_from >= {
+				value = te_history_month_index
+				subtract = 11
+			}
+		}
+		value = var:sr_pers_killed_year
+	}
 }
 # 1 marines first, 0 hulls first (the priority button's label).
 sr_disp_pers_marines_first = {

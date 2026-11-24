@@ -111,7 +111,8 @@ sr_sc_ai_should_pause = {
 
 # Country scope (sr_sc_ai_should_pause): the reserve waiting for crews passes
 # sr_pers_ai_pause_months of construction, with no Space Forces Base level
-# queued. Reads the room the month left (sr_pers_room).
+# queued (sr_pers_queued_levels finds a first base queued, through b:). The
+# reserve waiting reads the live room.
 sr_pers_ai_hulls_uncrewed = {
 	sr_sc_rate > 0
 	sr_pers_queued_levels <= 0
@@ -503,8 +504,8 @@ sr_pers_marines_first_on = {
 
 # Country scope, the Space Forces Base's can_build_government: a player's
 # government always may; an AI's while its demand for personnel, with a fifth
-# more, is above its capacity and the levels it has queued (sr_pers_ai_wanted),
-# out of default.
+# more, is above 1,000 a level of the bases it has built and queued
+# (sr_pers_ai_wanted), out of default.
 sr_pers_may_build_government = {
 	OR = {
 		is_ai = no
@@ -522,17 +523,19 @@ sr_pers_short = {
 }
 
 # Country scope. The pers_pop_type self-check's subject (design § 9): a Space
-# Forces Base at half staff or more.
-sr_pers_qualifies = {
+# Forces Base of a level or more, whatever its staff.
+sr_pers_has_base_level = {
 	any_scope_building = {
 		is_building_type = building_space_forces_base
 		level >= 1
-		occupancy >= 0.5
 	}
 }
 
 # Country scope. The personnel in hand crew some of the ground reserve: a launch
-# (Auto, Launch, the AI's) puts that share of it up (sr_pers_reserve_share).
+# (Auto, Launch, the AI's) puts that share of it up (sr_pers_reserve_share). At
+# least a fleet's minimum strength of it, or the slot it makes would be cleared
+# the same month and its few crews counted dead (review of #2020).
 sr_pers_can_crew_launch = {
 	sr_pers_reserve_share > 0
+	sr_pers_room_points >= sr_fl_minimum_strength
 }

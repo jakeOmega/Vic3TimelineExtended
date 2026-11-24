@@ -329,8 +329,11 @@ sr_fl_month_at = {
 				sr_fl_attrition_at = { N = $N$ }
 			}
 		}
-		# Marines past the carriers' room are lost (a carrier lost in battle), and
-		# die (space forces personnel design § 5.1).
+		# Marines past the carriers' room are lost. Those past the room of the
+		# carriers at full strength went down with destroyed carriers and die;
+		# those a damaged carrier can't hold leave service, as damage kills no
+		# crew (sr_fl_cut_role; space forces personnel design § 5.1, review of
+		# #2020).
 		if = {
 			limit = {
 				sr_fl_$N$_exists = yes
@@ -340,7 +343,11 @@ sr_fl_month_at = {
 				name = sr_pers_lost
 				value = {
 					value = sr_fl_$N$_marines_value
-					subtract = sr_fl_$N$_marine_capacity
+					subtract = {
+						value = sr_fl_$N$_carrier_full_value
+						multiply = sr_fl_marines_per_carrier
+					}
+					min = 0
 					multiply = sr_pers_per_battalion
 				}
 			}
@@ -437,8 +444,11 @@ sr_fl_embark_some = {
 }
 
 # Country scope. AMOUNT battalions come home to Earth, aboard our first fleet
-# there (a cession to a non-ally, an occupation's end); with none at Earth
-# they are lost. The month caps them at its carriers' room.
+# there (a cession to a non-ally, an occupation's end), as many as its
+# carriers have room for; the rest, and all of them with no fleet at Earth,
+# leave service. None die: coming home is no loss (space forces personnel
+# design § 5.1; the month's trim would otherwise count them dead, review of
+# #2020).
 sr_fl_marines_home = {
 	set_local_variable = { name = sr_fl_marines_in value = $AMOUNT$ }
 	sr_fl_find_at_earth = yes
@@ -449,11 +459,15 @@ sr_fl_marines_home = {
 }
 
 sr_fl_take_marines_at = {
-	set_variable = {
-		name = sr_fl_$N$_marines
-		value = {
-			value = sr_fl_$N$_marines_value
-			add = local_var:sr_fl_marines_in
+	if = {
+		limit = { sr_fl_$N$_marines_value < sr_fl_$N$_marine_capacity }
+		set_variable = {
+			name = sr_fl_$N$_marines
+			value = {
+				value = sr_fl_$N$_marines_value
+				add = local_var:sr_fl_marines_in
+				max = sr_fl_$N$_marine_capacity
+			}
 		}
 	}
 }

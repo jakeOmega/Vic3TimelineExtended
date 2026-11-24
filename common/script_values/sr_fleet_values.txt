@@ -698,26 +698,34 @@ sr_pers_demand = {
 	}
 }
 
-# The AI builds Space Force Bases while its demand x this is above its capacity
-# and the levels it has queued (design § 6).
+# The AI builds Space Forces Bases while its demand x this is above 1,000 a
+# level of the bases it has built and queued (design § 6). Levels, not the
+# staffed capacity: a level still hiring, or one a kill has just emptied, is
+# already paid for, and counting only staffed levels kept the AI building
+# while they hired (review of #2020). A queued base exists at once as a level-0
+# building, which b: finds and has_building doesn't
+# (scripting_best_practices.md, "has_building Doesn't See a Queued Building").
 sr_pers_ai_margin = { value = 1.2 }
+sr_pers_planned_levels = {
+	value = 0
+	every_scope_state = {
+		limit = { exists = b:building_space_forces_base }
+		add = b:building_space_forces_base.level_after_queued_constructions
+	}
+}
 sr_pers_queued_levels = {
 	value = 0
 	every_scope_state = {
-		limit = { has_building = building_space_forces_base }
-		every_scope_building = {
-			limit = { is_building_type = building_space_forces_base }
-			add = level_after_queued_constructions
-			subtract = level
-		}
+		limit = { exists = b:building_space_forces_base }
+		add = b:building_space_forces_base.level_after_queued_constructions
+		subtract = b:building_space_forces_base.level
 	}
 }
 sr_pers_ai_wanted = {
 	value = sr_pers_demand
 	multiply = sr_pers_ai_margin
-	subtract = sr_pers_capacity
 	subtract = {
-		value = sr_pers_queued_levels
+		value = sr_pers_planned_levels
 		multiply = sr_pers_per_level
 	}
 }
@@ -735,10 +743,20 @@ sr_assault_loss_share = { value = 0.5 }
 
 # Old saves (design § 8): the grace a migration gives, in months.
 sr_pers_grace_months = { value = 6 }
-# Country scope. The base levels the gap between personnel in service and the
-# bases' capacity needs, rounded up, at most 100 (the level helper's range).
-sr_pers_migrate_levels = {
+# Country scope. What an old save's forces need: the personnel in service and
+# the crews of the ground reserve, which would otherwise wait on the ground
+# after the migration (review of #2020).
+sr_pers_migrate_need = {
 	value = sr_pers_in_service
+	add = {
+		value = sr_reserve_total
+		multiply = sr_pers_per_point
+	}
+}
+# Country scope. The base levels the gap between that need and the bases'
+# capacity needs, rounded up, at most 100 (the level helper's range).
+sr_pers_migrate_levels = {
+	value = sr_pers_migrate_need
 	subtract = sr_pers_capacity_bases
 	divide = sr_pers_per_level
 	ceiling = yes
@@ -748,9 +766,10 @@ sr_pers_migrate_levels = {
 
 # The kill (design § 5.3): people in one step, as Internal Resettlement's
 # (kill_population_in_state takes a constant), and at most this many steps a
-# month, the rest carried.
+# month, the rest carried: a while loop runs at most 1,000 times (the engine's
+# cap; a count past it killed less than it booked, review of #2020).
 sr_pers_kill_batch = { value = 100 }
-sr_pers_kill_max_steps = { value = 2000 }
+sr_pers_kill_max_steps = { value = 1000 }
 
 # State scope: its Spacers, dependents included (kill_population_in_state takes
 # from the whole pop), and the whole hundreds of them a kill can take here.

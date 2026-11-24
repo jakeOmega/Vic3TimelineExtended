@@ -41,7 +41,8 @@ sr_pers_note_lost = {
 }
 
 # Country scope, the loser. local_var:sr_pers_lost people, already at the share:
-# owed to the month's kill, and counted for the month and the year.
+# owed to the month's kill. Also added to local_var:sr_pers_noted where a caller
+# has set it, so the battle report gives what was booked (sr_cb_battle_record).
 sr_pers_note_people = {
 	if = {
 		limit = { local_var:sr_pers_lost > 0 }
@@ -50,20 +51,40 @@ sr_pers_note_people = {
 			set_variable = { name = sr_pers_dead_due value = 0 }
 		}
 		change_variable = { name = sr_pers_dead_due add = local_var:sr_pers_lost }
+		if = {
+			limit = { has_local_variable = sr_pers_noted }
+			change_local_variable = { name = sr_pers_noted add = local_var:sr_pers_lost }
+		}
 	}
 }
 
-# Any scope, the world KEY as its garrison falls (an occupation, a liberation,
-# a destruction; before the record is overwritten): the battalions that defended
+# Any scope, the world KEY as its garrison falls in an occupation or a
+# liberation (before the record is overwritten): the battalions that defended
 # it (sr_site_shared_marines_<key>: on the Moon and Mars, its holder's there
-# too) die, at their owner's crewed share (sr_site_marines_share_<key>), and
-# their owner (the occupier while occupied, else the holder) owes them. The
-# owner keeps the figure for its notice (.102, sr_occ_dead).
+# too, all of which the fall removes) die, and their owner keeps the figure for
+# its notice (.102, sr_occ_dead).
 sr_site_note_garrison_dead = {
+	sr_site_note_marines_dead = { KEY = $KEY$ MARINES = sr_site_shared_marines_$KEY$ NOTICE = yes }
+}
+
+# Any scope, the world KEY destroyed, before its release: only its own
+# battalions die (sr_site_marines_value_<key>). On the Moon and Mars the
+# holder's marines at its other colonies there stay in service, since the
+# release removes this world's alone (review of #2020). No .102 follows, so
+# no notice figure (the destruction has its own, .103).
+sr_site_note_destroyed_dead = {
+	sr_site_note_marines_dead = { KEY = $KEY$ MARINES = sr_site_marines_value_$KEY$ NOTICE = no }
+}
+
+# The two above: MARINES battalions of the world KEY die, at their owner's
+# crewed share (sr_site_marines_share_<key>), and their owner (the occupier
+# while occupied, else the holder) owes them; with NOTICE = yes it keeps the
+# figure for .102.
+sr_site_note_marines_dead = {
 	set_local_variable = {
 		name = sr_pers_lost
 		value = {
-			value = sr_site_shared_marines_$KEY$
+			value = $MARINES$
 			multiply = sr_site_marines_share_$KEY$
 			multiply = sr_pers_per_battalion
 		}
@@ -74,14 +95,20 @@ sr_site_note_garrison_dead = {
 			limit = { exists = global_var:sr_site_occupier_$KEY$ }
 			global_var:sr_site_occupier_$KEY$ = {
 				sr_pers_note_people = yes
-				sr_pers_note_occ_dead = yes
+				if = {
+					limit = { always = $NOTICE$ }
+					sr_pers_note_occ_dead = yes
+				}
 			}
 		}
 		else_if = {
 			limit = { exists = global_var:sr_site_holder_$KEY$ }
 			global_var:sr_site_holder_$KEY$ = {
 				sr_pers_note_people = yes
-				sr_pers_note_occ_dead = yes
+				if = {
+					limit = { always = $NOTICE$ }
+					sr_pers_note_occ_dead = yes
+				}
 			}
 		}
 	}
@@ -138,22 +165,34 @@ sr_pers_kill_step = {
 				max = sr_pers_kill_max_steps
 			}
 		}
-		set_local_variable = { name = sr_pk_cap value = sr_pers_capacity_bases }
+		# State by state, each takes its share of the hundreds still to place by
+		# its share of the capacity still to share, so the states' hundreds add
+		# up to the month's and the last takes what is left. Rounding each
+		# state's share of the whole alone dropped a small due among three
+		# states or more and doubled it between two (review of #2020).
+		set_local_variable = { name = sr_pk_left value = local_var:sr_pk_steps }
+		set_local_variable = { name = sr_pk_cap_left value = sr_pers_capacity_bases }
 		set_local_variable = { name = sr_pk_killed value = 0 }
-		if = {
-			limit = { local_var:sr_pk_cap > 0 }
-			every_scope_state = {
-				limit = { modifier:state_sr_space_personnel_add > 0 }
+		every_scope_state = {
+			limit = { modifier:state_sr_space_personnel_add > 0 }
+			if = {
+				limit = {
+					local_var:sr_pk_left > 0
+					local_var:sr_pk_cap_left > 0
+				}
 				set_local_variable = {
 					name = sr_pk_here
 					value = {
 						value = modifier:state_sr_space_personnel_add
-						divide = local_var:sr_pk_cap
-						multiply = local_var:sr_pk_steps
+						divide = local_var:sr_pk_cap_left
+						max = 1
+						multiply = local_var:sr_pk_left
 						round = yes
 						max = sr_pers_state_spacer_steps
 					}
 				}
+				change_local_variable = { name = sr_pk_cap_left subtract = modifier:state_sr_space_personnel_add }
+				change_local_variable = { name = sr_pk_left subtract = local_var:sr_pk_here }
 				if = {
 					limit = { local_var:sr_pk_here > 0 }
 					sr_pers_kill_check_arm = yes
@@ -173,8 +212,9 @@ sr_pers_kill_step = {
 				}
 			}
 		}
-		# The planned hundreds leave the due whether killed or not: the fraction
-		# and anything past the cap stay.
+		# The month's hundreds leave the due, killed or, where a state's Spacers
+		# ran out, dropped (nobody is left there to die); the fraction and
+		# anything past the cap stay.
 		change_variable = {
 			name = sr_pers_dead_due
 			subtract = {
@@ -245,11 +285,12 @@ sr_pers_ai_priority = {
 # ---- Old saves (design § 8) ------------------------------------------------------------------------
 # Country scope, first in the fleets' month, once a country (sr_pers_migrated):
 # a save from before the bases has fleets and marines and no personnel, which
-# would wake with a crewed share of 0. With personnel in service above the
-# bases' capacity, it creates the levels the gap needs, rounded up (at most
-# 100), government owned, in Space Command's state, else the capital; and for
-# six months (sr_pers_grace_until) the share holds at 1 and the capacity at what
-# was in service (sr_pers_grace_capacity), while the new levels hire, which
+# would wake with a crewed share of 0. With personnel in service and the
+# reserve's crews (sr_pers_migrate_need) above the bases' capacity, it creates
+# the levels the gap needs, rounded up (at most 100), government owned, in
+# Space Command's state, else the capital; and for six months
+# (sr_pers_grace_until) the share holds at 1 and the capacity at that need
+# (sr_pers_grace_capacity), while the new levels hire, which
 # takes about ten weeks at a tenth of the jobs a week. A new game's fleet
 # powers pass with nothing in service and only take the mark. A revolution's
 # winner inherits it, as it inherits the fleets.
@@ -258,8 +299,8 @@ sr_pers_migrate_once = {
 		limit = { NOT = { has_variable = sr_pers_migrated } }
 		set_variable = { name = sr_pers_migrated value = yes }
 		if = {
-			limit = { sr_pers_in_service > sr_pers_capacity_bases }
-			set_variable = { name = sr_pers_grace_capacity value = sr_pers_in_service }
+			limit = { sr_pers_migrate_need > sr_pers_capacity_bases }
+			set_variable = { name = sr_pers_grace_capacity value = sr_pers_migrate_need }
 			set_variable = {
 				name = sr_pers_grace_until
 				value = {
@@ -305,73 +346,92 @@ sr_pers_migrate_once = {
 
 # ---- Self-checks (design § 9; docs/testing/solar-colonies-playtest.md) -----------------------------
 # TE_SELF_CHECK pers_pop_type (scope § 9.1, 9.5): the mod's first pop type
-# loads, the base hires it, and the capacity sum is the base's own. Armed the
-# first month a Space Forces Base of a level or more is at half staff or more
-# (sr_pers_qualifies), on that country (a global arm would be cleared every
-# month by a fleet power with no staffed base that runs first); read a month
-# later, if one still qualifies (else re-armed), in that base's state: OK when the state holds Spacers and its
-# Space Forces Personnel is 1,000 x its levels x the building's occupancy, to
-# within 2% (no country-level copy in it); BROKEN otherwise. The figures go
-# through global variables: a debug line reads no local variable. Once a game.
+# loads, the base hires it, and the capacity sum is the base's own. Armed, on
+# the country (a global arm would be cleared every month by a fleet power with
+# no base that runs first), the first month it has a Space Forces Base of a
+# level or more (sr_pers_has_base_level), whatever its staff, so a pop type that
+# never hires still gets a line; read three months later, in such a base's
+# state (more than a new base's hiring needs, at a tenth of its jobs a week):
+# BROKEN when the state holds no Spacers; re-armed while the base is under half
+# staff; else OK when the state's Space Forces Personnel is 0.75 to 1.5 times
+# 1,000 x the base's levels x its occupancy (a workforce-scaled modifier follows
+# throughput too, which an unincorporated state, economies of scale or a new
+# capital move by a tenth or more, and the sum lags the live staff a tick;
+# review of #2020), BROKEN outside it. The figures go through global
+# variables: a debug line reads no local variable. Once a game.
 sr_pers_pop_type_self_check = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_pers_pop_type_checked } }
 		if = {
 			limit = {
 				has_variable = sr_pers_pop_type_armed
-				te_history_month_index > var:sr_pers_pop_type_armed
-				sr_pers_qualifies = yes
-			}
-			set_global_variable = { name = sr_pers_pop_type_checked value = yes }
-			remove_variable = sr_pers_pop_type_armed
-			random_scope_state = {
-				limit = {
-					any_scope_building = {
-						is_building_type = building_space_forces_base
-						level >= 1
-						occupancy >= 0.5
-					}
-				}
-				set_global_variable = { name = sr_pers_log_spacers value = sr_pers_state_spacers }
-				set_global_variable = { name = sr_pers_log_cap value = modifier:state_sr_space_personnel_add }
-				random_scope_building = {
-					limit = { is_building_type = building_space_forces_base }
-					set_global_variable = {
-						name = sr_pers_log_want
-						value = {
-							value = level
-							multiply = occupancy
-							multiply = sr_pers_per_level
-						}
-					}
+				te_history_month_index >= {
+					value = var:sr_pers_pop_type_armed
+					add = 3
 				}
 			}
 			if = {
-				limit = {
-					global_var:sr_pers_log_spacers > 0
-					global_var:sr_pers_log_cap > { value = global_var:sr_pers_log_want multiply = 0.98 }
-					global_var:sr_pers_log_cap < { value = global_var:sr_pers_log_want multiply = 1.02 add = 1 }
-				}
-				debug_log = "TE_SELF_CHECK OK pers_pop_type country=[THIS.GetCountry.GetTagName] spacers=[GetGlobalVariable('sr_pers_log_spacers').GetValue|0] personnel=[GetGlobalVariable('sr_pers_log_cap').GetValue|0] want=[GetGlobalVariable('sr_pers_log_want').GetValue|0] (the base hires Spacers and its state's Space Forces Personnel is 1,000 a staffed level) date=[TimeKeeper.GetCurrentDate.GetString]"
+				limit = { NOT = { sr_pers_has_base_level = yes } }
+				remove_variable = sr_pers_pop_type_armed
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK BROKEN pers_pop_type country=[THIS.GetCountry.GetTagName] spacers=[GetGlobalVariable('sr_pers_log_spacers').GetValue|0] personnel=[GetGlobalVariable('sr_pers_log_cap').GetValue|0] want=[GetGlobalVariable('sr_pers_log_want').GetValue|0] (no Spacers in a staffed base's state, or its personnel isn't 1,000 a staffed level: the pop type, its class or the method's state modifier; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				random_scope_state = {
+					limit = {
+						any_scope_building = {
+							is_building_type = building_space_forces_base
+							level >= 1
+						}
+					}
+					set_global_variable = { name = sr_pers_log_spacers value = sr_pers_state_spacers }
+					set_global_variable = { name = sr_pers_log_cap value = modifier:state_sr_space_personnel_add }
+					random_scope_building = {
+						limit = { is_building_type = building_space_forces_base }
+						set_global_variable = { name = sr_pers_log_occ value = occupancy }
+						set_global_variable = {
+							name = sr_pers_log_want
+							value = {
+								value = level
+								multiply = occupancy
+								multiply = sr_pers_per_level
+							}
+						}
+					}
+				}
+				if = {
+					limit = { global_var:sr_pers_log_spacers <= 0 }
+					set_global_variable = { name = sr_pers_pop_type_checked value = yes }
+					debug_log = "TE_SELF_CHECK BROKEN pers_pop_type country=[THIS.GetCountry.GetTagName] spacers=0 occupancy=[GetGlobalVariable('sr_pers_log_occ').GetValue|2] personnel=[GetGlobalVariable('sr_pers_log_cap').GetValue|0] (no Spacers in a Space Forces Base's state three months after it was built: the pop type or its social class doesn't load or doesn't hire; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else_if = {
+					limit = { global_var:sr_pers_log_occ < 0.5 }
+					set_variable = { name = sr_pers_pop_type_armed value = te_history_month_index }
+				}
+				else_if = {
+					limit = {
+						global_var:sr_pers_log_cap >= { value = global_var:sr_pers_log_want multiply = 0.75 }
+						global_var:sr_pers_log_cap <= { value = global_var:sr_pers_log_want multiply = 1.5 }
+					}
+					set_global_variable = { name = sr_pers_pop_type_checked value = yes }
+					debug_log = "TE_SELF_CHECK OK pers_pop_type country=[THIS.GetCountry.GetTagName] spacers=[GetGlobalVariable('sr_pers_log_spacers').GetValue|0] occupancy=[GetGlobalVariable('sr_pers_log_occ').GetValue|2] personnel=[GetGlobalVariable('sr_pers_log_cap').GetValue|0] want=[GetGlobalVariable('sr_pers_log_want').GetValue|0] (the base hires Spacers and its state's Space Forces Personnel follows its staffed levels) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					set_global_variable = { name = sr_pers_pop_type_checked value = yes }
+					debug_log = "TE_SELF_CHECK BROKEN pers_pop_type country=[THIS.GetCountry.GetTagName] spacers=[GetGlobalVariable('sr_pers_log_spacers').GetValue|0] occupancy=[GetGlobalVariable('sr_pers_log_occ').GetValue|2] personnel=[GetGlobalVariable('sr_pers_log_cap').GetValue|0] want=[GetGlobalVariable('sr_pers_log_want').GetValue|0] (the state's Space Forces Personnel is far from 1,000 a staffed level: 0 means the method's state modifier doesn't reach the state; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				if = {
+					limit = { has_global_variable = sr_pers_pop_type_checked }
+					remove_variable = sr_pers_pop_type_armed
+				}
+				remove_global_variable = sr_pers_log_spacers
+				remove_global_variable = sr_pers_log_cap
+				remove_global_variable = sr_pers_log_want
+				remove_global_variable = sr_pers_log_occ
 			}
-			remove_global_variable = sr_pers_log_spacers
-			remove_global_variable = sr_pers_log_cap
-			remove_global_variable = sr_pers_log_want
-		}
-		else_if = {
-			limit = {
-				has_variable = sr_pers_pop_type_armed
-				te_history_month_index > var:sr_pers_pop_type_armed
-			}
-			remove_variable = sr_pers_pop_type_armed
 		}
 		else_if = {
 			limit = {
 				NOT = { has_variable = sr_pers_pop_type_armed }
-				sr_pers_qualifies = yes
+				sr_pers_has_base_level = yes
 			}
 			set_variable = { name = sr_pers_pop_type_armed value = te_history_month_index }
 		}
@@ -381,8 +441,10 @@ sr_pers_pop_type_self_check = {
 # TE_SELF_CHECK pers_kill (scope § 9.2): kill_population_in_state with the mod's
 # pop type takes the people. State scope, the first state that kills a hundred
 # or more (sr_pers_kill_step, before its kill): its Spacers and the count are
-# kept on it, and a week on a hidden event (space_race_events.140, the
-# country's) reads them again, since a state's figures lag a tick.
+# kept on it, and a day on a hidden event (space_race_events.140, the
+# country's) reads them again: soon enough that the base's weekly hiring, which
+# refills a small kill within a week, has most likely not run (a week let it,
+# review of #2020).
 sr_pers_kill_check_arm = {
 	if = {
 		limit = { NOT = { has_global_variable = sr_pers_kill_armed } }
@@ -398,7 +460,7 @@ sr_pers_kill_check_arm = {
 		save_scope_as = sr_pk_check_state
 		owner = {
 			set_variable = { name = sr_pk_check_state value = scope:sr_pk_check_state }
-			trigger_event = { id = space_race_events.140 days = 7 }
+			trigger_event = { id = space_race_events.140 days = 1 }
 		}
 	}
 }
@@ -429,10 +491,10 @@ sr_pers_kill_self_check = {
 					add = global_var:sr_pers_log_before
 				}
 			}
-			debug_log = "TE_SELF_CHECK OK pers_kill country=[THIS.GetCountry.GetTagName] spacers_before=[GetGlobalVariable('sr_pers_log_before').GetValue|0] killed=[GetGlobalVariable('sr_pers_log_count').GetValue|0] spacers_week_on=[GetGlobalVariable('sr_pers_log_after').GetValue|0] (kill_population_in_state with pop_type = spacers took the people) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK OK pers_kill country=[THIS.GetCountry.GetTagName] spacers_before=[GetGlobalVariable('sr_pers_log_before').GetValue|0] killed=[GetGlobalVariable('sr_pers_log_count').GetValue|0] spacers_day_on=[GetGlobalVariable('sr_pers_log_after').GetValue|0] (kill_population_in_state with pop_type = spacers took the people) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN pers_kill country=[THIS.GetCountry.GetTagName] spacers_before=[GetGlobalVariable('sr_pers_log_before').GetValue|0] killed=[GetGlobalVariable('sr_pers_log_count').GetValue|0] spacers_week_on=[GetGlobalVariable('sr_pers_log_after').GetValue|0] (the state's Spacers fell by less than half the count a week on: the kill doesn't reach the mod's pop type; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN pers_kill country=[THIS.GetCountry.GetTagName] spacers_before=[GetGlobalVariable('sr_pers_log_before').GetValue|0] killed=[GetGlobalVariable('sr_pers_log_count').GetValue|0] spacers_day_on=[GetGlobalVariable('sr_pers_log_after').GetValue|0] (the state's Spacers fell by less than half the count a day on: the kill doesn't reach the mod's pop type; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		remove_global_variable = sr_pers_log_before
 		remove_global_variable = sr_pers_log_count

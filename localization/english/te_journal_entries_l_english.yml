@@ -2032,6 +2032,7 @@
  je_space_race_widget_ovc_resort_word_split_past:0 "#R [Country.MakeScope.ScriptValue('sr_disp_resort_levels')|0] +[Country.MakeScope.ScriptValue('sr_disp_resort_queued')|0] / [Country.MakeScope.ScriptValue('sr_disp_resort_room')|0]#!"
  je_space_race_widget_ovc_sc_crewed_cap:0 "Crewed"
  je_space_race_widget_ovc_sc_crewed_word:0 "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_share_pct')|0]%#!"
+ je_space_race_widget_ovc_sc_crewed_word_short:0 "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_share_pct')|0]%#!"
  je_space_race_widget_ovc_sc_personnel_cap:0 "Personnel"
  je_space_race_widget_ovc_sc_personnel_word:0 "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_in_service')|K]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_capacity')|K]"
  je_space_race_widget_ovc_sc_rate_cap:0 "Built a month"

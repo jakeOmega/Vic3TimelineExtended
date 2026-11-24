@@ -1330,7 +1330,9 @@ Every ship needs a crew and every marine is a person. The Space Forces Base, a
 government building unlocked by Space Militarization and built in any state,
 employs Spacers, the mod's own pop type, 1,000 a level, hired as barracks hire
 soldiers. It uses no goods. Each level gives 1,000 Space Forces Personnel,
-scaled by staffing, and a base in a state an enemy occupies still counts. What
+scaled by staffing, and a base in a state an enemy occupies still counts. Each
+staffed level also makes the state's people 1% more drawn to the Armed Forces.
+What
 is in service needs them:
 
 | In service | Personnel |
@@ -1358,8 +1360,9 @@ aboard or landed, count only at that share when a seizure is weighed, until
 the bases hire again or the forces shrink.
 
 People die with what is lost. Ships destroyed in battle, the strength lost
-away from supply, a fleet all but destroyed, marines lost when their colony
-is seized, freed or destroyed, and those killed taking a colony (see
+away from supply, a fleet all but destroyed, marines aboard assault carriers
+destroyed in battle, marines lost when their colony is seized, freed or
+destroyed, and those killed taking a colony (see
 [Blockade, seizure and destruction](#blockade-seizure-and-destruction)) kill as
 many Spacers in your bases' states, each state by its share of the personnel.
 The census counts them as war dead. The battle report and the occupation
@@ -1603,7 +1606,8 @@ fleets at Earth stay stationed. An AI never destroys a colony, never attacks a f
 interdicts. With an enemy fleet at Earth, it launches its reserve once the part
 of it that it can crew and its fleets at Earth match the enemy's there. It
 builds Space Forces Bases while its fleets, its reserve and its carriers'
-empty room need more personnel than its bases give, with a fifth to spare, and
+empty room need more personnel than its built and queued base levels give,
+with a fifth to spare, and
 puts marines first at war and hulls first in peace. It builds batteries
 only while at war with a country that has fleets, up to five levels, and runs
 Ground Lasers at war, and in peace once debris is Cluttered. An AI in default,
