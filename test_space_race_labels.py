@@ -161,7 +161,8 @@ _LOC = {}
 def _loc(key):
     if not _LOC:
         for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
-            for k, v in re.findall(r'^ ([\w.]+):\d* "(.*)"\s*$', _read(path), re.M):
+            # A line may end in a comment (a loc_style REVIEWED note) that holds no quote.
+            for k, v in re.findall(r'^ ([\w.]+):\d* "(.*)"\s*(?:#[^"\n]*)?$', _read(path), re.M):
                 _LOC[k] = v
     assert key in _LOC, f"no loc {key}"
     return _LOC[key]
