@@ -1624,6 +1624,26 @@ te_demog_note_kills = {
 	}
 }
 
+# THIS = a state: people the mod's own script killed here as war dead (the Space
+# Forces Base's Spacers who died with their ships and as marines, space forces
+# personnel design § 5.3). The next step takes them from the conscription pool's
+# ages (te_dg_fam, te_dg_faw), as it takes the country's war dead that
+# te_demog_share_war_dead hands out, rather than from every age as known kills.
+# The same guards as te_demog_note_kills.
+te_demog_note_war_dead = {
+	if = {
+		limit = {
+			te_demog_cohorts_run = yes
+			te_demog_has_census = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = te_dg_war_in } }
+			set_variable = { name = te_dg_war_in value = 0 }
+		}
+		change_variable = { name = te_dg_war_in add = $VALUE$ }
+	}
+}
+
 # THIS = a state at a census a year on (te_demog_state_census, before it seeds or steps): the known kills the step's
 # window holds (te_dg_kills_in, every kill te_demog_note_kills noted since the last count, Internal Resettlement's
 # transit dead among them) over the people at that count (te_dg_pop_last), into the local te_dg_kill_share for the

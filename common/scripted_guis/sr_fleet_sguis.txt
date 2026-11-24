@@ -929,6 +929,11 @@ sr_reserve_launch_sgui = {
 			text = sr_reserve_no_slot_tt
 			sr_reserve_may_launch = yes
 		}
+		# Space forces personnel (design § 4): a hull needs its crew.
+		custom_tooltip = {
+			text = sr_reserve_no_crews_tt
+			sr_pers_can_crew_launch = yes
+		}
 	}
 
 	effect = {
@@ -967,6 +972,38 @@ sr_reserve_auto_sgui = {
 		}
 		hidden_effect = {
 			sr_reserve_toggle_auto = yes
+		}
+	}
+}
+
+# Space forces personnel (design § 4): who takes the personnel first each
+# month, the ground reserve's hulls (the default) or the marines at Earth.
+sr_pers_priority_sgui = {
+	scope = country
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = yes
+	}
+
+	effect = {
+		if = {
+			limit = { sr_pers_marines_first_on = yes }
+			custom_tooltip = sr_pers_priority_to_hulls_tt
+		}
+		else = {
+			custom_tooltip = sr_pers_priority_to_marines_tt
+		}
+		hidden_effect = {
+			sr_pers_toggle_priority = yes
 		}
 	}
 }

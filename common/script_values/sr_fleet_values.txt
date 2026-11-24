@@ -198,12 +198,15 @@ sr_fleet_quality = {
 # losses, the battlestation, the batteries, the panel's strengths and the AI's
 # estimates don't change. Country scope.
 sr_fleet_readiness_grounded = { value = 0.5 }
+# ... times the crewed share (space forces personnel design § 4): a fleet short
+# of personnel fires at the share it can crew, wherever readiness is read.
 sr_fleet_readiness = {
 	value = 1
 	if = {
 		limit = { NOT = { sr_sc_operational = yes } }
 		value = sr_fleet_readiness_grounded
 	}
+	multiply = sr_pers_share_value
 }
 
 # Colony Defences (design § 7.3): strength a level, its fire factor (+25%
@@ -459,9 +462,11 @@ sr_free_assault_dossier_cost = {
 
 # ---- Earth orbit (design §§ 14-15, 6d), country scope ----------------------------------------------
 # The ground reserve and our fleets at Earth: what a Launch would put up
-# against the enemy there (the AI's launch rule, sr_fl_ai_reserve).
+# against the enemy there (the AI's launch rule, sr_fl_ai_reserve): the reserve
+# as far as the personnel crew it (space forces personnel design § 4).
 sr_earth_reserve_and_ours = {
 	value = sr_reserve_total
+	max = sr_pers_room_points
 	if = { limit = { has_variable = sr_fl_at_earth } add = var:sr_fl_at_earth }
 }
 
@@ -568,4 +573,196 @@ sr_fl_at_earth_ready = {
 sr_earth_hostile_total = {
 	value = sr_loc_hostile_inbound_strength_earth
 	add = sr_loc_ai_enemy_fleets_earth
+}
+
+# ---- Space forces personnel (2026-11-24 design §§ 4-6) ------------------------------------
+# A point of fleet strength at full needs this many personnel to crew it, any
+# role, halved with Artificial Intelligence (as colony crews are); a marine
+# battalion needs a vanilla battalion's manpower. The ground reserve needs no
+# crew until it launches.
+sr_pers_per_point_base = { value = 100 }
+sr_pers_per_battalion = { value = 1000 }
+# Country scope.
+sr_pers_per_point = {
+	value = sr_pers_per_point_base
+	if = { limit = { has_technology_researched = artificial_intelligence } multiply = 0.5 }
+}
+
+# Country scope. Space Forces Personnel: the Space Force Bases' workforce-scaled
+# state modifier, summed over every state the country owns, an occupied one
+# included (owner, 2026-11-24: the people they supply are already in orbit),
+# unlike Space Command's sr_sc_rate_buildings. Never grant the type from a
+# country-level source: a state's modifier: read includes the country's, so it
+# would count once a state. While an old save's grace runs (design § 8), at
+# least the personnel the migration found in service.
+sr_pers_capacity_bases = {
+	value = 0
+	every_scope_state = {
+		add = modifier:state_sr_space_personnel_add
+	}
+}
+sr_pers_capacity = {
+	value = sr_pers_capacity_bases
+	if = {
+		limit = { sr_pers_in_grace = yes }
+		min = var:sr_pers_grace_capacity
+	}
+}
+
+# Country scope. Personnel in service: the crews of every slot at full (a
+# damaged hull keeps its crew), and every marine battalion aboard and in a
+# garrison of ours, as holder or occupier (sr_pers_marines_aboard,
+# sr_pers_marines_garrison, generated).
+sr_pers_crews = {
+	value = sr_fl_strength_full_total
+	multiply = sr_pers_per_point
+}
+sr_pers_marines_in_service = {
+	value = sr_pers_marines_aboard
+	add = sr_pers_marines_garrison
+}
+sr_pers_in_service = {
+	value = sr_pers_marines_in_service
+	multiply = sr_pers_per_battalion
+	add = sr_pers_crews
+}
+
+# Country scope. The crewed share, stored at the end of the fleets' month
+# (sr_pers_close): capacity / in service, at most 1; 1 with nothing in service,
+# and with no record (a country that has never run the month).
+sr_pers_share_calc = {
+	value = 1
+	if = {
+		limit = {
+			NOT = { sr_pers_in_grace = yes }
+			sr_pers_in_service > 0
+		}
+		value = sr_pers_capacity
+		divide = sr_pers_in_service
+		max = 1
+		min = 0
+	}
+}
+sr_pers_share_value = {
+	value = 1
+	if = { limit = { has_variable = sr_pers_share } value = var:sr_pers_share }
+}
+
+# Country scope. The personnel in hand: capacity less those in service, never
+# below 0. Read live at each gate (a launch, each slot's refill), so each takes
+# what the one before left.
+sr_pers_room_value = {
+	value = sr_pers_capacity
+	subtract = sr_pers_in_service
+	min = 0
+}
+# ... in points of fleet strength and in battalions.
+sr_pers_room_points = {
+	value = sr_pers_room_value
+	divide = sr_pers_per_point
+}
+sr_pers_room_battalions = {
+	value = sr_pers_room_value
+	divide = sr_pers_per_battalion
+}
+# The share of the ground reserve a launch can crew now, 0 to 1.
+sr_pers_reserve_share = {
+	value = 0
+	if = {
+		limit = { sr_reserve_total > 0 }
+		value = sr_pers_room_points
+		divide = sr_reserve_total
+		max = 1
+	}
+}
+
+# Country scope. The ground reserve that waits for crews: its points beyond what
+# the room crews. The panel's, and the AI's pause.
+sr_pers_reserve_waiting = {
+	value = sr_reserve_total
+	subtract = sr_pers_room_points
+	min = 0
+}
+
+# Country scope. The carriers' room no marines fill: battalions every slot
+# could take on and doesn't hold (sr_fl_<n>_marine_capacity less its marines).
+sr_pers_demand = {
+	value = sr_pers_in_service
+	add = {
+		value = sr_reserve_total
+		multiply = sr_pers_per_point
+	}
+	add = {
+		value = sr_pers_marines_room
+		multiply = sr_pers_per_battalion
+	}
+}
+
+# The AI builds Space Force Bases while its demand x this is above its capacity
+# and the levels it has queued (design § 6).
+sr_pers_ai_margin = { value = 1.2 }
+sr_pers_queued_levels = {
+	value = 0
+	every_scope_state = {
+		limit = { has_building = building_space_forces_base }
+		every_scope_building = {
+			limit = { is_building_type = building_space_forces_base }
+			add = level_after_queued_constructions
+			subtract = level
+		}
+	}
+}
+sr_pers_ai_wanted = {
+	value = sr_pers_demand
+	multiply = sr_pers_ai_margin
+	subtract = sr_pers_capacity
+	subtract = {
+		value = sr_pers_queued_levels
+		multiply = sr_pers_per_level
+	}
+}
+# Personnel a level of the base grants at full staff (its method's figure).
+sr_pers_per_level = { value = 1000 }
+
+# The AI pauses Space Command while the reserve waiting for crews passes this
+# many months of construction and no base is queued.
+sr_pers_ai_pause_months = { value = 6 }
+
+# The assault's toll (design § 5.2): a seizure loses this share of the defence
+# it overcomes (the garrison at its holder's crewed share, plus the militia),
+# from the landing force. The militia take no losses.
+sr_assault_loss_share = { value = 0.5 }
+
+# Old saves (design § 8): the grace a migration gives, in months.
+sr_pers_grace_months = { value = 6 }
+# Country scope. The base levels the gap between personnel in service and the
+# bases' capacity needs, rounded up, at most 100 (the level helper's range).
+sr_pers_migrate_levels = {
+	value = sr_pers_in_service
+	subtract = sr_pers_capacity_bases
+	divide = sr_pers_per_level
+	ceiling = yes
+	min = 0
+	max = 100
+}
+
+# The kill (design § 5.3): people in one step, as Internal Resettlement's
+# (kill_population_in_state takes a constant), and at most this many steps a
+# month, the rest carried.
+sr_pers_kill_batch = { value = 100 }
+sr_pers_kill_max_steps = { value = 2000 }
+
+# State scope: its Spacers, dependents included (kill_population_in_state takes
+# from the whole pop), and the whole hundreds of them a kill can take here.
+sr_pers_state_spacers = {
+	value = 0
+	every_scope_pop = {
+		limit = { is_pop_type = spacers }
+		add = total_size
+	}
+}
+sr_pers_state_spacer_steps = {
+	value = sr_pers_state_spacers
+	divide = sr_pers_kill_batch
+	floor = yes
 }

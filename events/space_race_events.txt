@@ -5143,9 +5143,18 @@ space_race_events.101 = {
 		name = space_race_events.101.a
 		default_option = yes
 		custom_tooltip = sr_battle_report_tt
+		# Space forces personnel (design § 7): the crews that died with their ships.
+		if = {
+			limit = {
+				has_variable = sr_battle_dead
+				var:sr_battle_dead >= 1
+			}
+			custom_tooltip = sr_battle_dead_tt
+		}
 	}
 
 	after = {
+		if = { limit = { has_variable = sr_battle_dead } remove_variable = sr_battle_dead }
 		if = { limit = { has_variable = sr_battle_loc } remove_variable = sr_battle_loc }
 		if = { limit = { has_variable = sr_battle_lost } remove_variable = sr_battle_lost }
 		if = { limit = { has_variable = sr_battle_dealt } remove_variable = sr_battle_dealt }
@@ -5205,11 +5214,21 @@ space_race_events.102 = {
 		name = space_race_events.102.a
 		default_option = yes
 		custom_tooltip = sr_occ_notice_tt
+		# Space forces personnel (design § 7): our marines who died taking or
+		# holding the world (sr_pers_note_occ_dead).
+		if = {
+			limit = {
+				has_variable = sr_occ_dead
+				var:sr_occ_dead >= 1
+			}
+			custom_tooltip = sr_occ_dead_tt
+		}
 	}
 
 	after = {
 		sr_site_clear_event_var = { VAR = sr_occ_site }
 		if = { limit = { has_variable = sr_occ_kind } remove_variable = sr_occ_kind }
+		if = { limit = { has_variable = sr_occ_dead } remove_variable = sr_occ_dead }
 	}
 }
 
@@ -5552,5 +5571,18 @@ space_race_events.113 = {
 
 	after = {
 		sr_site_clear_event_var = { VAR = sr_revoke_site }
+	}
+}
+
+# TE_SELF_CHECK pers_kill's read, a week after the first kill of the bases'
+# Spacers (sr_pers_kill_check_arm, sr_space_forces_effects.txt): a state's
+# figures lag a tick, so the count is read again here. Hidden; no trigger, so
+# the queue can't drop it.
+space_race_events.140 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		sr_pers_kill_self_check = yes
 	}
 }

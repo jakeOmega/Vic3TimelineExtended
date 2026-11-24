@@ -1,0 +1,14 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the Space Forces Base's training (space forces personnel)
+# ============================================================================
+# The one group of building_space_forces_base (05_zz_te_sr_space_forces_base.txt),
+# with one method to start (sr_space_forces_base_pms.txt).
+# ============================================================================
+
+pmg_space_forces_base = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+	production_methods = {
+		pm_space_forces_training
+	}
+}

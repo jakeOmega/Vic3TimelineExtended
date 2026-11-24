@@ -18,11 +18,15 @@
 # ============================================================================
 
 # ---- The ground reserve (design § 15) ------------------------------------------------------
-# Country scope, from sr_sc_month after the month's construction joined the
-# reserve: with the toggle on (sr_reserve_auto, on by default), no hostile
-# fleet at Earth and the launch site held, the whole reserve joins the home
+# Country scope, from the fleets' month after the month's construction joined
+# the reserve (sr_fl_country_month, before or after the slots' month by the
+# personnel toggle): with the toggle on (sr_reserve_auto, on by default), no
+# hostile fleet at Earth and the launch site held, the reserve joins the home
 # fleet, the lowest slot at Earth not refitting, else a new slot there: 6a's
-# behaviour. With all nine slots away from Earth it waits on the ground.
+# behaviour. With all nine slots away from Earth it waits on the ground. Only
+# as much goes up as the personnel crew (sr_fl_reserve_in_at; space forces
+# personnel design § 4): the rest waits, awaiting crews, and Space Command
+# goes on building into it.
 sr_reserve_auto_step = {
 	if = {
 		limit = {
@@ -30,6 +34,7 @@ sr_reserve_auto_step = {
 			sr_reserve_auto_on = yes
 			NOT = { sr_earth_hostile_present = yes }
 			NOT = { sr_launch_site_lost = yes }
+			sr_pers_can_crew_launch = yes
 		}
 		sr_fl_find_home = yes
 		if = {
@@ -40,10 +45,19 @@ sr_reserve_auto_step = {
 }
 
 # Country scope. Launch (sr_reserve_launch_sgui; the AI, sr_fl_ai_reserve): the
-# whole reserve into orbit as one fleet, any month, blockade or not: the lowest
-# empty slot, created at Earth, else our first fleet at Earth. The caller has
-# checked sr_reserve_may_launch (only the launch site's occupation stops it).
+# reserve into orbit as one fleet, any month, blockade or not, as far as the
+# personnel crew it (space forces personnel design § 4): the lowest empty slot,
+# created at Earth, else our first fleet at Earth. The caller has checked
+# sr_reserve_may_launch (only the launch site's occupation stops it); with no
+# personnel to crew a hull nothing goes up.
 sr_reserve_launch = {
+	if = {
+		limit = { sr_pers_can_crew_launch = yes }
+		sr_reserve_launch_crewed = yes
+	}
+}
+
+sr_reserve_launch_crewed = {
 	sr_fl_find_empty = yes
 	if = {
 		limit = { local_var:sr_fl_n > 0 }

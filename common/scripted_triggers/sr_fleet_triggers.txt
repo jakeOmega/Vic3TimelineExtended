@@ -35,6 +35,9 @@ sr_fleet_power = {
 		# 6d: hulls in its ground reserve, or a ground-to-orbit battery.
 		sr_reserve_total > 0
 		sr_has_battery = yes
+		# Space forces personnel: a Space Forces Base, so its crewed share and
+		# its dead are kept with no fleet left.
+		sr_has_space_forces_base = yes
 	}
 }
 
@@ -99,6 +102,22 @@ sr_sc_ai_should_pause = {
 			net_fixed_income < 0
 			is_at_war = no
 		}
+		# Space forces personnel (design § 6): hulls nobody can crew. The reserve
+		# waiting for crews passes six months' construction and no base is
+		# queued, so the bill would buy hulls that stay on the ground.
+		sr_pers_ai_hulls_uncrewed = yes
+	}
+}
+
+# Country scope (sr_sc_ai_should_pause): the reserve waiting for crews passes
+# sr_pers_ai_pause_months of construction, with no Space Forces Base level
+# queued. Reads the room the month left (sr_pers_room).
+sr_pers_ai_hulls_uncrewed = {
+	sr_sc_rate > 0
+	sr_pers_queued_levels <= 0
+	sr_pers_reserve_waiting > {
+		value = sr_sc_rate
+		multiply = sr_pers_ai_pause_months
 	}
 }
 
@@ -114,6 +133,7 @@ sr_sc_ai_may_resume = {
 		is_at_war = yes
 	}
 	NOT = { has_variable = sr_sc_pause_hold }
+	NOT = { sr_pers_ai_hulls_uncrewed = yes }
 }
 
 # Country scope. The ship_construction self-check's subject (design § 18): a
@@ -258,7 +278,7 @@ sr_cb_destroys = {
 # is stationed against it (§ 9.1).
 sr_cb_seizes = {
 	has_variable = sr_cb_mar_$KEY$
-	var:sr_cb_mar_$KEY$ > sr_site_garrison_need_$KEY$
+	var:sr_cb_mar_$KEY$ > sr_site_assault_need_$KEY$
 	sr_cb_hs_value <= 0
 }
 
@@ -457,4 +477,62 @@ sr_earth_alert_loud = {
 			sr_earth_hostile_total > sr_fl_at_earth_ready
 		}
 	}
+}
+
+# ---- Space forces personnel (2026-11-24 design) -----------------------------------------------
+# Country scope. A Space Forces Base, of any level.
+sr_has_space_forces_base = {
+	any_scope_building = {
+		is_building_type = building_space_forces_base
+	}
+}
+
+# Country scope. An old save's grace (design § 8): six months from the
+# migration, the crewed share holds at 1 and capacity at the personnel then in
+# service, while the new levels hire.
+sr_pers_in_grace = {
+	has_variable = sr_pers_grace_until
+	has_variable = sr_pers_grace_capacity
+	var:sr_pers_grace_until > te_history_month_index
+}
+
+# Country scope. Marines first (the toggle, design § 4; absent is hulls first).
+sr_pers_marines_first_on = {
+	has_variable = sr_pers_marines_first
+}
+
+# Country scope, the Space Forces Base's can_build_government: a player's
+# government always may; an AI's while its demand for personnel, with a fifth
+# more, is above its capacity and the levels it has queued (sr_pers_ai_wanted),
+# out of default.
+sr_pers_may_build_government = {
+	OR = {
+		is_ai = no
+		custom_tooltip = {
+			text = sr_pers_ai_cap_tt
+			in_default = no
+			sr_pers_ai_wanted > 0
+		}
+	}
+}
+
+# Country scope. The crewed share is below 1 (the panel's Crewed and its note).
+sr_pers_short = {
+	sr_pers_share_value < 1
+}
+
+# Country scope. The pers_pop_type self-check's subject (design § 9): a Space
+# Forces Base at half staff or more.
+sr_pers_qualifies = {
+	any_scope_building = {
+		is_building_type = building_space_forces_base
+		level >= 1
+		occupancy >= 0.5
+	}
+}
+
+# Country scope. The personnel in hand crew some of the ground reserve: a launch
+# (Auto, Launch, the AI's) puts that share of it up (sr_pers_reserve_share).
+sr_pers_can_crew_launch = {
+	sr_pers_reserve_share > 0
 }

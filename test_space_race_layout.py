@@ -1606,12 +1606,13 @@ class SpaceCommandCellsTest(unittest.TestCase):
         cls.gui = _read(GUI)
         cls.sec = _type_body(cls.gui, "te_sr_sec_space_command")
 
-    def test_four_readings_two_to_a_row(self):
+    def test_six_readings_two_to_a_row(self):
         caps = re.findall(r'text = "je_space_race_widget_ovc_sc_(\w+)_cap"', self.sec)
-        self.assertEqual(caps, ["rate", "rate", "strength", "upkeep", "reserve"])   # Built a month, and it paused, share a slot
-        self.assertEqual(self.sec.count("te_banking_ov_cell = {"), 5)
+        # Built a month, and it paused, share a slot; Personnel and Crewed (space forces personnel, 2026-11-24)
+        self.assertEqual(caps, ["rate", "rate", "strength", "upkeep", "reserve", "personnel", "crewed"])
+        self.assertEqual(self.sec.count("te_banking_ov_cell = {"), 7)
         self.assertNotIn("te_sr_value_row", self.sec)
-        for hover in ("rate_tt", "rate_paused_tt", "strength_tt", "upkeep_tt", "reserve_tt"):
+        for hover in ("rate_tt", "rate_paused_tt", "strength_tt", "upkeep_tt", "reserve_tt", "personnel_tt", "crewed_tt"):
             self.assertEqual(self.sec.count(f'tooltip = "je_space_race_widget_sc_{hover}"'), 1, hover)
         cell = _type_body(_read(os.path.join(REPO, "gui", "journal_entry_widgets", "banking_dashboard_widget.gui")), "te_banking_ov_cell")
         self.assertIn("size = { 238 70 }", cell)

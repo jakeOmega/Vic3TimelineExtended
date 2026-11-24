@@ -232,8 +232,9 @@ sr_fl_gather_at = {
 
 # The slot's target world KEY (it closes in on it): its strength, its fire on
 # defences (x quality, x readiness, half without a Space Command, x Survey
-# Colony Defences' edge against the holder), and its marines to seize or its
-# fire to destroy.
+# Colony Defences' edge against the holder), and its marines to seize (at the
+# crewed share, sr_fl_<n>_marines_eff: space forces personnel design § 4) or
+# its fire to destroy.
 sr_cb_add_target = {
 	sr_cb_add = { VAR = sr_cb_s3_$KEY$ AMOUNT = local_var:sr_cb_s }
 	set_local_variable = {
@@ -252,7 +253,7 @@ sr_cb_add_target = {
 	}
 	else_if = {
 		limit = { sr_fl_$N$_marines_value > 0 }
-		sr_cb_add = { VAR = sr_cb_mar_$KEY$ AMOUNT = sr_fl_$N$_marines_value }
+		sr_cb_add = { VAR = sr_cb_mar_$KEY$ AMOUNT = sr_fl_$N$_marines_eff }
 	}
 }
 
@@ -641,6 +642,17 @@ sr_cb_battle_record = {
 			set_variable = { name = sr_battle_lost value = var:sr_cb_lost }
 			set_variable = { name = sr_battle_dealt value = sr_cb_enemy_lost }
 			set_variable = { name = sr_battle_left value = { value = var:sr_cb_before subtract = var:sr_cb_lost min = 0 } }
+			# The crews that died with the destroyed half (space forces personnel
+			# design § 7), at our crewed share, as sr_fl_cut_role counts them.
+			set_variable = {
+				name = sr_battle_dead
+				value = {
+					value = var:sr_cb_lost
+					multiply = sr_fl_loss_destroyed_share
+					multiply = sr_pers_per_point
+					multiply = sr_pers_share_value
+				}
+			}
 			trigger_event = { id = space_race_events.101 days = 1 }
 		}
 	}
@@ -727,16 +739,62 @@ sr_site_assault_step = {
 # and the world is taken. A free colony is ours at once (§ 9.4); an occupied
 # world taken by its holder or one not at war with the holder is liberated
 # (§ 9.2); any other is occupied.
+#
+# Space forces personnel (design §§ 4, 5.2): the figures compared are at the
+# crewed share (sr_cb_mar_<key> holds the closing-in marines at our share, the
+# garrison need its defenders' at theirs), and the defence costs the attacker
+# the assault's toll (sr_site_assault_toll_<key>, half the need) on top: the
+# seizure pays the need, one more and the toll, the toll dies, the rest land.
+# The marines spent and landed go back to battalions at our share, since an
+# uncrewed battalion fights for nothing and lands all the same.
 sr_site_seize = {
 	set_local_variable = {
 		name = sr_cb_pay
 		value = {
 			value = sr_site_garrison_need_$KEY$
 			add = 1
+			add = sr_site_assault_toll_$KEY$
 			max = var:sr_cb_mar_$KEY$
 		}
 	}
-	set_local_variable = { name = sr_cb_landed value = local_var:sr_cb_pay }
+	set_local_variable = {
+		name = sr_cb_toll
+		value = {
+			value = sr_site_assault_toll_$KEY$
+			max = local_var:sr_cb_pay
+		}
+	}
+	set_local_variable = {
+		name = sr_cb_landed
+		value = {
+			value = local_var:sr_cb_pay
+			subtract = local_var:sr_cb_toll
+		}
+	}
+	set_local_variable = {
+		name = sr_pers_lost
+		value = {
+			value = local_var:sr_cb_toll
+			multiply = sr_pers_per_battalion
+		}
+	}
+	sr_pers_note_people = yes
+	# The occupation notice (.102) names them; a free colony's seizure has its own (.104).
+	if = {
+		limit = {
+			local_var:sr_pers_lost > 0
+			NOT = { has_global_variable = sr_site_free_$KEY$ }
+		}
+		sr_pers_note_occ_dead = yes
+	}
+	if = {
+		limit = {
+			sr_pers_share_value < 1
+			sr_pers_share_value > 0
+		}
+		set_local_variable = { name = sr_cb_pay value = { value = local_var:sr_cb_pay divide = sr_pers_share_value } }
+		set_local_variable = { name = sr_cb_landed value = { value = local_var:sr_cb_landed divide = sr_pers_share_value } }
+	}
 	sr_fl_spend_marines_$KEY$ = yes
 	if = {
 		limit = { has_global_variable = sr_site_free_$KEY$ }
@@ -763,6 +821,7 @@ sr_site_seize = {
 # occupier is set); the world gives its modifiers to no one (the sync), and
 # counts in war support (§ 10).
 sr_site_occupy = {
+	sr_site_note_garrison_dead = { KEY = $KEY$ }
 	sr_site_lose_shared_marines_$KEY$ = yes
 	set_global_variable = { name = sr_site_occupier_$KEY$ value = this }
 	set_global_variable = { name = sr_site_marines_$KEY$ value = local_var:sr_cb_landed }
@@ -776,8 +835,10 @@ sr_site_occupy = {
 }
 
 # THIS (the holder, or one not at war with it) frees the world KEY: the
-# occupier's garrison is gone, the liberators' marines stand there.
+# occupier's garrison is gone, and dies (space forces personnel design § 5.1),
+# the liberators' marines stand there.
 sr_site_liberate = {
+	sr_site_note_garrison_dead = { KEY = $KEY$ }
 	sr_site_occupation_notice = { KEY = $KEY$ INDEX = $INDEX$ KIND = 3 }
 	remove_global_variable = sr_site_occupier_$KEY$
 	set_global_variable = { name = sr_site_marines_$KEY$ value = local_var:sr_cb_landed }
@@ -852,6 +913,8 @@ sr_site_destroy = {
 			add = 120
 		}
 	}
+	# The garrison dies with the colony (space forces personnel design § 5.1).
+	sr_site_note_garrison_dead = { KEY = $KEY$ }
 	sr_site_release_$KEY$ = yes
 	set_global_variable = { name = sr_site_ruined_$KEY$ value = yes days = 9125 }
 	sr_sites_recompute_stage = yes

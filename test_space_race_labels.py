@@ -83,6 +83,9 @@ FREE_TRADE_RESEARCH = 5   # sr_disp_free_trade_research: sr_free_trade_max_units
 SC_RATE_CEILING = 99.9    # sr_disp_sc_rate: 2 a level a month at most; ten levels for an AI, more for a player
 FLEET_STRENGTH = 99_999   # sr_disp_fl_strength / _full: every fleet's, unbounded by script; five digits
 FLEET_UPKEEP_PCT = 9999 * 900   # sr_disp_sc_upkeep_pct: +900% a unit of full strength / 10 (sr_fleet_upkeep_points)
+# sr_disp_pers_in_service / _capacity (space forces personnel): 100 a point of strength and 1,000 a battalion, five-digit
+# strength and two battalions a carrier point; |K shows three figures, so the longest is any value past 100M.
+PERSONNEL = 999_000_000
 MIX_WEIGHT = 3            # sr_disp_sc_mix_<role>: sr_sc_mix_max
 QUEUE_PLACES = 20         # sr_disp_mq_count: gen_solar_sites.QUEUE_SLOTS
 WINDOW_MONTHS = 999       # sr_window_disp_next: capped at 999 (the cell reads "No site left" there)
@@ -283,6 +286,7 @@ def _longest_figure(name):
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
+             "sr_disp_pers_in_service": PERSONNEL, "sr_disp_pers_capacity": PERSONNEL, "sr_disp_pers_share_pct": 100,
              "sr_disp_earth_hostile_total": FLEET_STRENGTH, "sr_disp_loc_ours_earth": FLEET_STRENGTH,
              # the colonization overview's cells (audit SPC-6)
              "sr_disp_aut_restless_more": WORLDS - 1, "sr_disp_mq_count": QUEUE_PLACES,
@@ -405,7 +409,7 @@ BOUNDED_WORDS = {"je_space_race_widget_ovc_ebase_word_split": _ebase_split_bound
 # Every loc key the panel shows, by the cell it shows in. Keys in more than one
 # cell are measured against each.
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_(?:brief_)?empty|solar_system_note"
-             r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
+             r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc|space_fleets_short"
              r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro"
              r"|eb_no_gain|cw_gone|ld_intro)")
 CELLS = {
@@ -755,9 +759,9 @@ CELLS = {
     "a destination's transit and its head (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_transit"'),
         r"je_space_race_widget_win_(col_transit|transit_\w+)"),
-    "Launch, Auto and Pause (te_sr_sc_mix_button)": (
+    "Launch, Auto, Pause and the personnel priority (te_sr_sc_mix_button)": (
         ("te_sr_sc_mix_button", 'block "mix_label"'),
-        r"je_space_race_widget_sc_(launch|auto_on|auto_off|pause|resume|resuming)"),
+        r"je_space_race_widget_sc_(launch|auto_on|auto_off|pause|resume|resuming|hulls_first|marines_first)"),
     "the build mix, a role's word and weight under its icon (te_sr_sc_role_button)": (
         ("te_sr_sc_role_button", 'block "mix_label"'),
         r"je_space_race_widget_sc_mix_(war|rapid|siege|carrier|tender)"),

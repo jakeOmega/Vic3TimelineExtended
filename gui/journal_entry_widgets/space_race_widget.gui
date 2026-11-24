@@ -9023,10 +9023,12 @@ types space_race_widget_types
 		}
 	}
 
-	### Space Command (Full Colonies; slice 6 design § 5): four overview cells
+	### Space Command (Full Colonies; slice 6 design § 5): six overview cells
 	### (what it builds a month, the fleets' strength, its upkeep and the
-	### reserve), then Launch, Auto and Pause / Resume / Resuming
-	### (sr_sc_pause_sgui; owner, 2026-10-31), then the build mix, five buttons
+	### reserve; then, space forces personnel design § 7, Personnel and Crewed),
+	### then Launch, Auto, Pause / Resume / Resuming (sr_sc_pause_sgui; owner,
+	### 2026-10-31) and Hulls first / Marines first (sr_pers_priority_sgui), then
+	### the build mix, five buttons
 	### (te_sr_sc_role_button) each stepping a role's weight 0 → 3
 	### (sr_sc_mix_sgui, scope:op the role). Open by default; the flag is
 	### sr_panel_space_command_closed.
@@ -9218,6 +9220,48 @@ types space_race_widget_types
 					}
 				}
 			}
+			### Space forces personnel (design § 7): the personnel in service of the
+			### Space Forces Bases' capacity, and the share of the fleets they crew,
+			### red while it is below full.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
+
+				te_banking_ov_cell = {
+					tooltip = "je_space_race_widget_sc_personnel_tt"
+					blockoverride "caption" {
+						text = "je_space_race_widget_ovc_sc_personnel_cap"
+					}
+					blockoverride "icons" {
+						icon = {
+							size = { 100% 100% }
+							texture = "gfx/interface/icons/space_race_icons/module_train.dds"
+						}
+					}
+					blockoverride "word" {
+						te_banking_ov_word = {
+							text = "je_space_race_widget_ovc_sc_personnel_word"
+						}
+					}
+				}
+				te_banking_ov_cell = {
+					tooltip = "je_space_race_widget_sc_crewed_tt"
+					blockoverride "caption" {
+						text = "je_space_race_widget_ovc_sc_crewed_cap"
+					}
+					blockoverride "icons" {
+						icon = {
+							size = { 100% 100% }
+							texture = "gfx/interface/icons/space_race_icons/page_crewed.dds"
+						}
+					}
+					blockoverride "word" {
+						te_banking_ov_word = {
+							text = "je_space_race_widget_ovc_sc_crewed_word"
+						}
+					}
+				}
+			}
 			flowcontainer = {
 				direction = horizontal
 				ignoreinvisible = yes
@@ -9288,6 +9332,30 @@ types space_race_widget_types
 					}
 					blockoverride "mix_label" {
 						text = "je_space_race_widget_sc_resuming"
+					}
+				}
+				### Space forces personnel (design § 4): who takes the personnel first,
+				### Hulls first (the default) or Marines first; a click switches.
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_first'), '(CFixedPoint)0' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_pers_priority_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_pers_priority_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_pers_priority_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_pers_priority_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_hulls_first"
+					}
+				}
+				te_sr_sc_mix_button = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_first'), '(CFixedPoint)1' )]"
+					blockoverride "mix_button" {
+						enabled = "[GetScriptedGui('sr_pers_priority_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetScriptedGui('sr_pers_priority_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_pers_priority_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_pers_priority_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+					}
+					blockoverride "mix_label" {
+						text = "je_space_race_widget_sc_marines_first"
 					}
 				}
 			}
@@ -9458,6 +9526,12 @@ types space_race_widget_types
 			te_sr_text = {
 				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ) )]"
 				text = "je_space_race_widget_space_fleets_no_sc"
+			}
+			# Short of personnel (space forces personnel design § 7): every fleet fires,
+			# and its marines fight, at the share the personnel crew.
+			te_sr_text = {
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_short'), '(CFixedPoint)1' ) )]"
+				text = "je_space_race_widget_space_fleets_short"
 			}
 			te_sr_fleet_rows = {}
 		}

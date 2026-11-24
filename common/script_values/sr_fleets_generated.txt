@@ -140,6 +140,10 @@ sr_fl_1_marine_capacity = {
 	value = sr_fl_1_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_1_marines_eff = { value = sr_fl_1_marines_value multiply = sr_pers_share_value }
+sr_fl_1_marines_room = { value = sr_fl_1_marine_capacity subtract = sr_fl_1_marines_value min = 0 }
 sr_fl_1_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_1_war_value multiply = sr_fl_fire_fleets_war }
@@ -1183,6 +1187,10 @@ sr_fl_2_marine_capacity = {
 	value = sr_fl_2_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_2_marines_eff = { value = sr_fl_2_marines_value multiply = sr_pers_share_value }
+sr_fl_2_marines_room = { value = sr_fl_2_marine_capacity subtract = sr_fl_2_marines_value min = 0 }
 sr_fl_2_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_2_war_value multiply = sr_fl_fire_fleets_war }
@@ -2226,6 +2234,10 @@ sr_fl_3_marine_capacity = {
 	value = sr_fl_3_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_3_marines_eff = { value = sr_fl_3_marines_value multiply = sr_pers_share_value }
+sr_fl_3_marines_room = { value = sr_fl_3_marine_capacity subtract = sr_fl_3_marines_value min = 0 }
 sr_fl_3_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_3_war_value multiply = sr_fl_fire_fleets_war }
@@ -3269,6 +3281,10 @@ sr_fl_4_marine_capacity = {
 	value = sr_fl_4_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_4_marines_eff = { value = sr_fl_4_marines_value multiply = sr_pers_share_value }
+sr_fl_4_marines_room = { value = sr_fl_4_marine_capacity subtract = sr_fl_4_marines_value min = 0 }
 sr_fl_4_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_4_war_value multiply = sr_fl_fire_fleets_war }
@@ -4312,6 +4328,10 @@ sr_fl_5_marine_capacity = {
 	value = sr_fl_5_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_5_marines_eff = { value = sr_fl_5_marines_value multiply = sr_pers_share_value }
+sr_fl_5_marines_room = { value = sr_fl_5_marine_capacity subtract = sr_fl_5_marines_value min = 0 }
 sr_fl_5_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_5_war_value multiply = sr_fl_fire_fleets_war }
@@ -5355,6 +5375,10 @@ sr_fl_6_marine_capacity = {
 	value = sr_fl_6_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_6_marines_eff = { value = sr_fl_6_marines_value multiply = sr_pers_share_value }
+sr_fl_6_marines_room = { value = sr_fl_6_marine_capacity subtract = sr_fl_6_marines_value min = 0 }
 sr_fl_6_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_6_war_value multiply = sr_fl_fire_fleets_war }
@@ -6398,6 +6422,10 @@ sr_fl_7_marine_capacity = {
 	value = sr_fl_7_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_7_marines_eff = { value = sr_fl_7_marines_value multiply = sr_pers_share_value }
+sr_fl_7_marines_room = { value = sr_fl_7_marine_capacity subtract = sr_fl_7_marines_value min = 0 }
 sr_fl_7_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_7_war_value multiply = sr_fl_fire_fleets_war }
@@ -7441,6 +7469,10 @@ sr_fl_8_marine_capacity = {
 	value = sr_fl_8_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_8_marines_eff = { value = sr_fl_8_marines_value multiply = sr_pers_share_value }
+sr_fl_8_marines_room = { value = sr_fl_8_marine_capacity subtract = sr_fl_8_marines_value min = 0 }
 sr_fl_8_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_8_war_value multiply = sr_fl_fire_fleets_war }
@@ -8484,6 +8516,10 @@ sr_fl_9_marine_capacity = {
 	value = sr_fl_9_carrier_value
 	multiply = sr_fl_marines_per_carrier
 }
+# Space forces personnel (2026-11-24 design § 4): its marines at the crewed
+# share, as a seizure weighs them, and the carriers' room they don't fill.
+sr_fl_9_marines_eff = { value = sr_fl_9_marines_value multiply = sr_pers_share_value }
+sr_fl_9_marines_room = { value = sr_fl_9_marine_capacity subtract = sr_fl_9_marines_value min = 0 }
 sr_fl_9_fire_fleets = {
 	value = 0
 	add = { value = sr_fl_9_war_value multiply = sr_fl_fire_fleets_war }
@@ -11043,6 +11079,77 @@ sr_fl_count = {
 	if = { limit = { sr_fl_7_exists = yes } add = 1 }
 	if = { limit = { sr_fl_8_exists = yes } add = 1 }
 	if = { limit = { sr_fl_9_exists = yes } add = 1 }
+}
+# Space forces personnel (2026-11-24 design § 4): every slot's marines aboard,
+# the carriers' room they leave, and the battalions in every garrison of ours,
+# a world we hold unoccupied or one we occupy (sr_site_marines_<key> is its
+# holder's, or its occupier's while occupied).
+sr_pers_marines_aboard = {
+	value = 0
+	add = sr_fl_1_marines_value
+	add = sr_fl_2_marines_value
+	add = sr_fl_3_marines_value
+	add = sr_fl_4_marines_value
+	add = sr_fl_5_marines_value
+	add = sr_fl_6_marines_value
+	add = sr_fl_7_marines_value
+	add = sr_fl_8_marines_value
+	add = sr_fl_9_marines_value
+}
+sr_pers_marines_room = {
+	value = 0
+	add = sr_fl_1_marines_room
+	add = sr_fl_2_marines_room
+	add = sr_fl_3_marines_room
+	add = sr_fl_4_marines_room
+	add = sr_fl_5_marines_room
+	add = sr_fl_6_marines_room
+	add = sr_fl_7_marines_room
+	add = sr_fl_8_marines_room
+	add = sr_fl_9_marines_room
+}
+sr_pers_marines_garrison = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_marines_valles_marineris OR = { global_var:sr_site_occupier_valles_marineris ?= this AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } } } } add = sr_site_marines_value_valles_marineris }
+	if = { limit = { has_global_variable = sr_site_marines_olympus_mons OR = { global_var:sr_site_occupier_olympus_mons ?= this AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } } } } add = sr_site_marines_value_olympus_mons }
+	if = { limit = { has_global_variable = sr_site_marines_hellas_planitia OR = { global_var:sr_site_occupier_hellas_planitia ?= this AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } } } add = sr_site_marines_value_hellas_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_utopia_planitia OR = { global_var:sr_site_occupier_utopia_planitia ?= this AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } } } add = sr_site_marines_value_utopia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_arcadia_planitia OR = { global_var:sr_site_occupier_arcadia_planitia ?= this AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } } } add = sr_site_marines_value_arcadia_planitia }
+	if = { limit = { has_global_variable = sr_site_marines_ceres OR = { global_var:sr_site_occupier_ceres ?= this AND = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } } } } add = sr_site_marines_value_ceres }
+	if = { limit = { has_global_variable = sr_site_marines_vesta OR = { global_var:sr_site_occupier_vesta ?= this AND = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } } } } add = sr_site_marines_value_vesta }
+	if = { limit = { has_global_variable = sr_site_marines_psyche OR = { global_var:sr_site_occupier_psyche ?= this AND = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } } } } add = sr_site_marines_value_psyche }
+	if = { limit = { has_global_variable = sr_site_marines_pallas OR = { global_var:sr_site_occupier_pallas ?= this AND = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } } } } add = sr_site_marines_value_pallas }
+	if = { limit = { has_global_variable = sr_site_marines_hygiea OR = { global_var:sr_site_occupier_hygiea ?= this AND = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } } } } add = sr_site_marines_value_hygiea }
+	if = { limit = { has_global_variable = sr_site_marines_io OR = { global_var:sr_site_occupier_io ?= this AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } } } } add = sr_site_marines_value_io }
+	if = { limit = { has_global_variable = sr_site_marines_europa OR = { global_var:sr_site_occupier_europa ?= this AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } } } } add = sr_site_marines_value_europa }
+	if = { limit = { has_global_variable = sr_site_marines_ganymede OR = { global_var:sr_site_occupier_ganymede ?= this AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } } } } add = sr_site_marines_value_ganymede }
+	if = { limit = { has_global_variable = sr_site_marines_callisto OR = { global_var:sr_site_occupier_callisto ?= this AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } } } } add = sr_site_marines_value_callisto }
+	if = { limit = { has_global_variable = sr_site_marines_himalia OR = { global_var:sr_site_occupier_himalia ?= this AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } } } } add = sr_site_marines_value_himalia }
+	if = { limit = { has_global_variable = sr_site_marines_amalthea OR = { global_var:sr_site_occupier_amalthea ?= this AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } } } } add = sr_site_marines_value_amalthea }
+	if = { limit = { has_global_variable = sr_site_marines_venus OR = { global_var:sr_site_occupier_venus ?= this AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } } } } add = sr_site_marines_value_venus }
+	if = { limit = { has_global_variable = sr_site_marines_mercury OR = { global_var:sr_site_occupier_mercury ?= this AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } } } } add = sr_site_marines_value_mercury }
+	if = { limit = { has_global_variable = sr_site_marines_titan OR = { global_var:sr_site_occupier_titan ?= this AND = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } } } } add = sr_site_marines_value_titan }
+	if = { limit = { has_global_variable = sr_site_marines_enceladus OR = { global_var:sr_site_occupier_enceladus ?= this AND = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } } } } add = sr_site_marines_value_enceladus }
+	if = { limit = { has_global_variable = sr_site_marines_rhea OR = { global_var:sr_site_occupier_rhea ?= this AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } } } } add = sr_site_marines_value_rhea }
+	if = { limit = { has_global_variable = sr_site_marines_mimas OR = { global_var:sr_site_occupier_mimas ?= this AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } } } } add = sr_site_marines_value_mimas }
+	if = { limit = { has_global_variable = sr_site_marines_iapetus OR = { global_var:sr_site_occupier_iapetus ?= this AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } } } } add = sr_site_marines_value_iapetus }
+	if = { limit = { has_global_variable = sr_site_marines_titania OR = { global_var:sr_site_occupier_titania ?= this AND = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } } } } add = sr_site_marines_value_titania }
+	if = { limit = { has_global_variable = sr_site_marines_oberon OR = { global_var:sr_site_occupier_oberon ?= this AND = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } } } } add = sr_site_marines_value_oberon }
+	if = { limit = { has_global_variable = sr_site_marines_miranda OR = { global_var:sr_site_occupier_miranda ?= this AND = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } } } } add = sr_site_marines_value_miranda }
+	if = { limit = { has_global_variable = sr_site_marines_ariel OR = { global_var:sr_site_occupier_ariel ?= this AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } } } } add = sr_site_marines_value_ariel }
+	if = { limit = { has_global_variable = sr_site_marines_triton OR = { global_var:sr_site_occupier_triton ?= this AND = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } } } } add = sr_site_marines_value_triton }
+	if = { limit = { has_global_variable = sr_site_marines_proteus OR = { global_var:sr_site_occupier_proteus ?= this AND = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } } } } add = sr_site_marines_value_proteus }
+	if = { limit = { has_global_variable = sr_site_marines_pluto OR = { global_var:sr_site_occupier_pluto ?= this AND = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } } } } add = sr_site_marines_value_pluto }
+	if = { limit = { has_global_variable = sr_site_marines_eris OR = { global_var:sr_site_occupier_eris ?= this AND = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } } } } add = sr_site_marines_value_eris }
+	if = { limit = { has_global_variable = sr_site_marines_makemake OR = { global_var:sr_site_occupier_makemake ?= this AND = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } } } } add = sr_site_marines_value_makemake }
+	if = { limit = { has_global_variable = sr_site_marines_haumea OR = { global_var:sr_site_occupier_haumea ?= this AND = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } } } } add = sr_site_marines_value_haumea }
+	if = { limit = { has_global_variable = sr_site_marines_sedna OR = { global_var:sr_site_occupier_sedna ?= this AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } } } } add = sr_site_marines_value_sedna }
+	if = { limit = { has_global_variable = sr_site_marines_shackleton OR = { global_var:sr_site_occupier_shackleton ?= this AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } } } } add = sr_site_marines_value_shackleton }
+	if = { limit = { has_global_variable = sr_site_marines_peary OR = { global_var:sr_site_occupier_peary ?= this AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } } } } add = sr_site_marines_value_peary }
+	if = { limit = { has_global_variable = sr_site_marines_tranquility OR = { global_var:sr_site_occupier_tranquility ?= this AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } } } } add = sr_site_marines_value_tranquility }
+	if = { limit = { has_global_variable = sr_site_marines_marius_hills OR = { global_var:sr_site_occupier_marius_hills ?= this AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } } } } add = sr_site_marines_value_marius_hills }
+	if = { limit = { has_global_variable = sr_site_marines_daedalus OR = { global_var:sr_site_occupier_daedalus ?= this AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } } } add = sr_site_marines_value_daedalus }
+	if = { limit = { has_global_variable = sr_site_marines_imbrium OR = { global_var:sr_site_occupier_imbrium ?= this AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } } } add = sr_site_marines_value_imbrium }
 }
 
 # ===== The build mix (design § 5), country scope: each role's weight (its start

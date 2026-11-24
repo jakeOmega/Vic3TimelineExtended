@@ -1,0 +1,62 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the Space Forces Base (space forces personnel)
+# ============================================================================
+# Design: docs/superpowers/specs/2026-11-24-space-forces-personnel-design.md
+# (scope: 2026-11-24-space-forces-personnel-scope.md). A government building,
+# under Full Colonies, in any state and at any number of levels: the people
+# who crew the fleets and serve as marines. A level employs 1,000 Spacers, a
+# pop type nothing else employs (common/pop_types/te_spacers.txt), so a kill by
+# pop type reaches only them; its method (sr_space_forces_base_pms.txt) grants
+# +1,000 Space Forces Personnel (state_sr_space_personnel_add, script-only,
+# workforce-scaled), which sr_pers_capacity sums over every state the country
+# owns, an occupied one included (owner, 2026-11-24: the people are already
+# in orbit). A point of fleet strength needs 100 personnel (50 with Artificial
+# Intelligence) and a marine battalion 1,000 (sr_fleet_values.txt).
+#
+# bg_government for the reason Space Command gives (05_zz_te_sr_space_command.txt).
+# A barracks, not a shipyard, so its construction is low; no goods (owner,
+# 2026-11-24): its cost is its wages and the people it takes out of the
+# workforce, as vanilla's Naval Administration's is. An AI government builds no
+# further than sr_pers_may_build_government allows.
+# ============================================================================
+
+building_space_forces_base = {
+	building_group = bg_government
+	icon = "gfx/interface/icons/building_icons/building_barracks.dds"
+	city_type = city
+	levels_per_mesh = -1
+
+	unlocking_technologies = {
+		space_militarization
+	}
+
+	production_method_groups = {
+		pmg_space_forces_base
+	}
+
+	potential = {
+		sr_colonies_full_enabled = yes
+	}
+
+	required_construction = construction_cost_low
+
+	can_build_government = {
+		owner ?= { sr_pers_may_build_government = yes }
+	}
+
+	can_build_private = {
+		always = no
+	}
+
+	ai_value = {
+		value = 2000
+		if = {
+			limit = {
+				owner ?= { is_at_war = yes }
+			}
+			add = 2000
+		}
+	}
+
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds"
+}

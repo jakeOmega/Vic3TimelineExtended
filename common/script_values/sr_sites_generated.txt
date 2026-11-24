@@ -17174,7 +17174,15 @@ sr_garrison_count = {
 #   sr_site_shared_marines_<key>   the marines defending it: its own and, on the Moon and
 #                                  Mars, its holder's at its other colonies there (owner,
 #                                  2026-11-24; sr_site_shares); its own alone while occupied
-#   sr_site_garrison_need_<key>    the marines a seizure must exceed: those and the militia
+#   sr_site_marines_share_<key>    the crewed share of the country whose marines stand there
+#                                  (the occupier's while occupied, else the holder's; 1 for
+#                                  none): space forces personnel design § 4
+#   sr_site_garrison_need_<key>    the marines a seizure must exceed: those, at that share,
+#                                  and the militia
+#   sr_site_assault_toll_<key>     the attacker's marines a seizure kills: half the need
+#                                  (sr_assault_loss_share; design § 5.2)
+#   sr_site_assault_need_<key>     the need and the toll: what the closing-in marines, at
+#                                  their own share, must exceed
 #   sr_site_def_staffed_<key>      its Defences levels at its staffing
 #   sr_site_def_others_<key>       ... the holder's at its other colonies on the same world
 #   sr_site_def_shared_<key>       ... the two: the Defences that fire for it
@@ -17226,13 +17234,22 @@ sr_site_militia_value_valles_marineris = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_valles_marineris = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_valles_marineris } global_var:sr_site_occupier_valles_marineris = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_valles_marineris = {
 	value = sr_site_shared_marines_valles_marineris
+	multiply = sr_site_marines_share_valles_marineris
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_militia_value_valles_marineris }
 }
+sr_site_assault_toll_valles_marineris = { value = sr_site_garrison_need_valles_marineris multiply = sr_assault_loss_share }
+sr_site_assault_need_valles_marineris = { value = sr_site_garrison_need_valles_marineris add = sr_site_assault_toll_valles_marineris }
 sr_site_def_fire_valles_marineris = {
 	value = 0
 	if = {
@@ -17300,13 +17317,22 @@ sr_site_militia_value_olympus_mons = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_olympus_mons = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_olympus_mons } global_var:sr_site_occupier_olympus_mons = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_olympus_mons } global_var:sr_site_holder_olympus_mons = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_olympus_mons = {
 	value = sr_site_shared_marines_olympus_mons
+	multiply = sr_site_marines_share_olympus_mons
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_militia_value_olympus_mons }
 }
+sr_site_assault_toll_olympus_mons = { value = sr_site_garrison_need_olympus_mons multiply = sr_assault_loss_share }
+sr_site_assault_need_olympus_mons = { value = sr_site_garrison_need_olympus_mons add = sr_site_assault_toll_olympus_mons }
 sr_site_def_fire_olympus_mons = {
 	value = 0
 	if = {
@@ -17374,13 +17400,22 @@ sr_site_militia_value_hellas_planitia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_hellas_planitia = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_hellas_planitia } global_var:sr_site_occupier_hellas_planitia = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_hellas_planitia } global_var:sr_site_holder_hellas_planitia = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_hellas_planitia = {
 	value = sr_site_shared_marines_hellas_planitia
+	multiply = sr_site_marines_share_hellas_planitia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_militia_value_hellas_planitia }
 }
+sr_site_assault_toll_hellas_planitia = { value = sr_site_garrison_need_hellas_planitia multiply = sr_assault_loss_share }
+sr_site_assault_need_hellas_planitia = { value = sr_site_garrison_need_hellas_planitia add = sr_site_assault_toll_hellas_planitia }
 sr_site_def_fire_hellas_planitia = {
 	value = 0
 	if = {
@@ -17448,13 +17483,22 @@ sr_site_militia_value_utopia_planitia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_utopia_planitia = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_utopia_planitia } global_var:sr_site_occupier_utopia_planitia = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_utopia_planitia } global_var:sr_site_holder_utopia_planitia = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_utopia_planitia = {
 	value = sr_site_shared_marines_utopia_planitia
+	multiply = sr_site_marines_share_utopia_planitia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_militia_value_utopia_planitia }
 }
+sr_site_assault_toll_utopia_planitia = { value = sr_site_garrison_need_utopia_planitia multiply = sr_assault_loss_share }
+sr_site_assault_need_utopia_planitia = { value = sr_site_garrison_need_utopia_planitia add = sr_site_assault_toll_utopia_planitia }
 sr_site_def_fire_utopia_planitia = {
 	value = 0
 	if = {
@@ -17522,13 +17566,22 @@ sr_site_militia_value_arcadia_planitia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_arcadia_planitia = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_arcadia_planitia } global_var:sr_site_occupier_arcadia_planitia = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_arcadia_planitia } global_var:sr_site_holder_arcadia_planitia = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_arcadia_planitia = {
 	value = sr_site_shared_marines_arcadia_planitia
+	multiply = sr_site_marines_share_arcadia_planitia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_militia_value_arcadia_planitia }
 }
+sr_site_assault_toll_arcadia_planitia = { value = sr_site_garrison_need_arcadia_planitia multiply = sr_assault_loss_share }
+sr_site_assault_need_arcadia_planitia = { value = sr_site_garrison_need_arcadia_planitia add = sr_site_assault_toll_arcadia_planitia }
 sr_site_def_fire_arcadia_planitia = {
 	value = 0
 	if = {
@@ -17579,13 +17632,22 @@ sr_site_militia_value_ceres = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_ceres = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_ceres } global_var:sr_site_occupier_ceres = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_ceres } global_var:sr_site_holder_ceres = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_ceres = {
 	value = sr_site_shared_marines_ceres
+	multiply = sr_site_marines_share_ceres
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_militia_value_ceres }
 }
+sr_site_assault_toll_ceres = { value = sr_site_garrison_need_ceres multiply = sr_assault_loss_share }
+sr_site_assault_need_ceres = { value = sr_site_garrison_need_ceres add = sr_site_assault_toll_ceres }
 sr_site_def_fire_ceres = {
 	value = 0
 	if = {
@@ -17634,13 +17696,22 @@ sr_site_militia_value_vesta = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_vesta = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_vesta } global_var:sr_site_occupier_vesta = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_vesta } global_var:sr_site_holder_vesta = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_vesta = {
 	value = sr_site_shared_marines_vesta
+	multiply = sr_site_marines_share_vesta
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_militia_value_vesta }
 }
+sr_site_assault_toll_vesta = { value = sr_site_garrison_need_vesta multiply = sr_assault_loss_share }
+sr_site_assault_need_vesta = { value = sr_site_garrison_need_vesta add = sr_site_assault_toll_vesta }
 sr_site_def_fire_vesta = {
 	value = 0
 	if = {
@@ -17689,13 +17760,22 @@ sr_site_militia_value_psyche = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_psyche = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_psyche } global_var:sr_site_occupier_psyche = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_psyche } global_var:sr_site_holder_psyche = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_psyche = {
 	value = sr_site_shared_marines_psyche
+	multiply = sr_site_marines_share_psyche
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_militia_value_psyche }
 }
+sr_site_assault_toll_psyche = { value = sr_site_garrison_need_psyche multiply = sr_assault_loss_share }
+sr_site_assault_need_psyche = { value = sr_site_garrison_need_psyche add = sr_site_assault_toll_psyche }
 sr_site_def_fire_psyche = {
 	value = 0
 	if = {
@@ -17744,13 +17824,22 @@ sr_site_militia_value_pallas = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_pallas = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_pallas } global_var:sr_site_occupier_pallas = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_pallas } global_var:sr_site_holder_pallas = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_pallas = {
 	value = sr_site_shared_marines_pallas
+	multiply = sr_site_marines_share_pallas
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_militia_value_pallas }
 }
+sr_site_assault_toll_pallas = { value = sr_site_garrison_need_pallas multiply = sr_assault_loss_share }
+sr_site_assault_need_pallas = { value = sr_site_garrison_need_pallas add = sr_site_assault_toll_pallas }
 sr_site_def_fire_pallas = {
 	value = 0
 	if = {
@@ -17799,13 +17888,22 @@ sr_site_militia_value_hygiea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_hygiea = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_hygiea } global_var:sr_site_occupier_hygiea = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_hygiea } global_var:sr_site_holder_hygiea = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_hygiea = {
 	value = sr_site_shared_marines_hygiea
+	multiply = sr_site_marines_share_hygiea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_militia_value_hygiea }
 }
+sr_site_assault_toll_hygiea = { value = sr_site_garrison_need_hygiea multiply = sr_assault_loss_share }
+sr_site_assault_need_hygiea = { value = sr_site_garrison_need_hygiea add = sr_site_assault_toll_hygiea }
 sr_site_def_fire_hygiea = {
 	value = 0
 	if = {
@@ -17854,13 +17952,22 @@ sr_site_militia_value_io = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_io = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_io } global_var:sr_site_occupier_io = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_io } global_var:sr_site_holder_io = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_io = {
 	value = sr_site_shared_marines_io
+	multiply = sr_site_marines_share_io
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_militia_value_io }
 }
+sr_site_assault_toll_io = { value = sr_site_garrison_need_io multiply = sr_assault_loss_share }
+sr_site_assault_need_io = { value = sr_site_garrison_need_io add = sr_site_assault_toll_io }
 sr_site_def_fire_io = {
 	value = 0
 	if = {
@@ -17909,13 +18016,22 @@ sr_site_militia_value_europa = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_europa = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_europa } global_var:sr_site_occupier_europa = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_europa } global_var:sr_site_holder_europa = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_europa = {
 	value = sr_site_shared_marines_europa
+	multiply = sr_site_marines_share_europa
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_militia_value_europa }
 }
+sr_site_assault_toll_europa = { value = sr_site_garrison_need_europa multiply = sr_assault_loss_share }
+sr_site_assault_need_europa = { value = sr_site_garrison_need_europa add = sr_site_assault_toll_europa }
 sr_site_def_fire_europa = {
 	value = 0
 	if = {
@@ -17964,13 +18080,22 @@ sr_site_militia_value_ganymede = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_ganymede = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_ganymede } global_var:sr_site_occupier_ganymede = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_ganymede } global_var:sr_site_holder_ganymede = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_ganymede = {
 	value = sr_site_shared_marines_ganymede
+	multiply = sr_site_marines_share_ganymede
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_militia_value_ganymede }
 }
+sr_site_assault_toll_ganymede = { value = sr_site_garrison_need_ganymede multiply = sr_assault_loss_share }
+sr_site_assault_need_ganymede = { value = sr_site_garrison_need_ganymede add = sr_site_assault_toll_ganymede }
 sr_site_def_fire_ganymede = {
 	value = 0
 	if = {
@@ -18019,13 +18144,22 @@ sr_site_militia_value_callisto = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_callisto = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_callisto } global_var:sr_site_occupier_callisto = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_callisto } global_var:sr_site_holder_callisto = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_callisto = {
 	value = sr_site_shared_marines_callisto
+	multiply = sr_site_marines_share_callisto
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_militia_value_callisto }
 }
+sr_site_assault_toll_callisto = { value = sr_site_garrison_need_callisto multiply = sr_assault_loss_share }
+sr_site_assault_need_callisto = { value = sr_site_garrison_need_callisto add = sr_site_assault_toll_callisto }
 sr_site_def_fire_callisto = {
 	value = 0
 	if = {
@@ -18074,13 +18208,22 @@ sr_site_militia_value_himalia = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_himalia = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_himalia } global_var:sr_site_occupier_himalia = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_himalia } global_var:sr_site_holder_himalia = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_himalia = {
 	value = sr_site_shared_marines_himalia
+	multiply = sr_site_marines_share_himalia
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_militia_value_himalia }
 }
+sr_site_assault_toll_himalia = { value = sr_site_garrison_need_himalia multiply = sr_assault_loss_share }
+sr_site_assault_need_himalia = { value = sr_site_garrison_need_himalia add = sr_site_assault_toll_himalia }
 sr_site_def_fire_himalia = {
 	value = 0
 	if = {
@@ -18129,13 +18272,22 @@ sr_site_militia_value_amalthea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_amalthea = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_amalthea } global_var:sr_site_occupier_amalthea = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_amalthea } global_var:sr_site_holder_amalthea = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_amalthea = {
 	value = sr_site_shared_marines_amalthea
+	multiply = sr_site_marines_share_amalthea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_militia_value_amalthea }
 }
+sr_site_assault_toll_amalthea = { value = sr_site_garrison_need_amalthea multiply = sr_assault_loss_share }
+sr_site_assault_need_amalthea = { value = sr_site_garrison_need_amalthea add = sr_site_assault_toll_amalthea }
 sr_site_def_fire_amalthea = {
 	value = 0
 	if = {
@@ -18184,13 +18336,22 @@ sr_site_militia_value_venus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_venus = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_venus } global_var:sr_site_occupier_venus = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_venus } global_var:sr_site_holder_venus = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_venus = {
 	value = sr_site_shared_marines_venus
+	multiply = sr_site_marines_share_venus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_militia_value_venus }
 }
+sr_site_assault_toll_venus = { value = sr_site_garrison_need_venus multiply = sr_assault_loss_share }
+sr_site_assault_need_venus = { value = sr_site_garrison_need_venus add = sr_site_assault_toll_venus }
 sr_site_def_fire_venus = {
 	value = 0
 	if = {
@@ -18239,13 +18400,22 @@ sr_site_militia_value_mercury = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_mercury = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_mercury } global_var:sr_site_occupier_mercury = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_mercury } global_var:sr_site_holder_mercury = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_mercury = {
 	value = sr_site_shared_marines_mercury
+	multiply = sr_site_marines_share_mercury
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_militia_value_mercury }
 }
+sr_site_assault_toll_mercury = { value = sr_site_garrison_need_mercury multiply = sr_assault_loss_share }
+sr_site_assault_need_mercury = { value = sr_site_garrison_need_mercury add = sr_site_assault_toll_mercury }
 sr_site_def_fire_mercury = {
 	value = 0
 	if = {
@@ -18294,13 +18464,22 @@ sr_site_militia_value_titan = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_titan = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_titan } global_var:sr_site_occupier_titan = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_titan } global_var:sr_site_holder_titan = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_titan = {
 	value = sr_site_shared_marines_titan
+	multiply = sr_site_marines_share_titan
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_militia_value_titan }
 }
+sr_site_assault_toll_titan = { value = sr_site_garrison_need_titan multiply = sr_assault_loss_share }
+sr_site_assault_need_titan = { value = sr_site_garrison_need_titan add = sr_site_assault_toll_titan }
 sr_site_def_fire_titan = {
 	value = 0
 	if = {
@@ -18349,13 +18528,22 @@ sr_site_militia_value_enceladus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_enceladus = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_enceladus } global_var:sr_site_occupier_enceladus = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_enceladus } global_var:sr_site_holder_enceladus = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_enceladus = {
 	value = sr_site_shared_marines_enceladus
+	multiply = sr_site_marines_share_enceladus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_militia_value_enceladus }
 }
+sr_site_assault_toll_enceladus = { value = sr_site_garrison_need_enceladus multiply = sr_assault_loss_share }
+sr_site_assault_need_enceladus = { value = sr_site_garrison_need_enceladus add = sr_site_assault_toll_enceladus }
 sr_site_def_fire_enceladus = {
 	value = 0
 	if = {
@@ -18404,13 +18592,22 @@ sr_site_militia_value_rhea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_rhea = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_rhea } global_var:sr_site_occupier_rhea = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_rhea } global_var:sr_site_holder_rhea = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_rhea = {
 	value = sr_site_shared_marines_rhea
+	multiply = sr_site_marines_share_rhea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_militia_value_rhea }
 }
+sr_site_assault_toll_rhea = { value = sr_site_garrison_need_rhea multiply = sr_assault_loss_share }
+sr_site_assault_need_rhea = { value = sr_site_garrison_need_rhea add = sr_site_assault_toll_rhea }
 sr_site_def_fire_rhea = {
 	value = 0
 	if = {
@@ -18459,13 +18656,22 @@ sr_site_militia_value_mimas = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_mimas = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_mimas } global_var:sr_site_occupier_mimas = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_mimas } global_var:sr_site_holder_mimas = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_mimas = {
 	value = sr_site_shared_marines_mimas
+	multiply = sr_site_marines_share_mimas
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_militia_value_mimas }
 }
+sr_site_assault_toll_mimas = { value = sr_site_garrison_need_mimas multiply = sr_assault_loss_share }
+sr_site_assault_need_mimas = { value = sr_site_garrison_need_mimas add = sr_site_assault_toll_mimas }
 sr_site_def_fire_mimas = {
 	value = 0
 	if = {
@@ -18514,13 +18720,22 @@ sr_site_militia_value_iapetus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_iapetus = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_iapetus } global_var:sr_site_occupier_iapetus = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_iapetus } global_var:sr_site_holder_iapetus = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_iapetus = {
 	value = sr_site_shared_marines_iapetus
+	multiply = sr_site_marines_share_iapetus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } } add = sr_site_militia_value_iapetus }
 }
+sr_site_assault_toll_iapetus = { value = sr_site_garrison_need_iapetus multiply = sr_assault_loss_share }
+sr_site_assault_need_iapetus = { value = sr_site_garrison_need_iapetus add = sr_site_assault_toll_iapetus }
 sr_site_def_fire_iapetus = {
 	value = 0
 	if = {
@@ -18569,13 +18784,22 @@ sr_site_militia_value_titania = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_titania = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_titania } global_var:sr_site_occupier_titania = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_titania } global_var:sr_site_holder_titania = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_titania = {
 	value = sr_site_shared_marines_titania
+	multiply = sr_site_marines_share_titania
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titania } } add = sr_site_militia_value_titania }
 }
+sr_site_assault_toll_titania = { value = sr_site_garrison_need_titania multiply = sr_assault_loss_share }
+sr_site_assault_need_titania = { value = sr_site_garrison_need_titania add = sr_site_assault_toll_titania }
 sr_site_def_fire_titania = {
 	value = 0
 	if = {
@@ -18624,13 +18848,22 @@ sr_site_militia_value_oberon = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_oberon = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_oberon } global_var:sr_site_occupier_oberon = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_oberon } global_var:sr_site_holder_oberon = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_oberon = {
 	value = sr_site_shared_marines_oberon
+	multiply = sr_site_marines_share_oberon
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_oberon } } add = sr_site_militia_value_oberon }
 }
+sr_site_assault_toll_oberon = { value = sr_site_garrison_need_oberon multiply = sr_assault_loss_share }
+sr_site_assault_need_oberon = { value = sr_site_garrison_need_oberon add = sr_site_assault_toll_oberon }
 sr_site_def_fire_oberon = {
 	value = 0
 	if = {
@@ -18679,13 +18912,22 @@ sr_site_militia_value_miranda = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_miranda = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_miranda } global_var:sr_site_occupier_miranda = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_miranda } global_var:sr_site_holder_miranda = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_miranda = {
 	value = sr_site_shared_marines_miranda
+	multiply = sr_site_marines_share_miranda
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_miranda } } add = sr_site_militia_value_miranda }
 }
+sr_site_assault_toll_miranda = { value = sr_site_garrison_need_miranda multiply = sr_assault_loss_share }
+sr_site_assault_need_miranda = { value = sr_site_garrison_need_miranda add = sr_site_assault_toll_miranda }
 sr_site_def_fire_miranda = {
 	value = 0
 	if = {
@@ -18734,13 +18976,22 @@ sr_site_militia_value_ariel = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_ariel = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_ariel } global_var:sr_site_occupier_ariel = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_ariel } global_var:sr_site_holder_ariel = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_ariel = {
 	value = sr_site_shared_marines_ariel
+	multiply = sr_site_marines_share_ariel
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_militia_value_ariel }
 }
+sr_site_assault_toll_ariel = { value = sr_site_garrison_need_ariel multiply = sr_assault_loss_share }
+sr_site_assault_need_ariel = { value = sr_site_garrison_need_ariel add = sr_site_assault_toll_ariel }
 sr_site_def_fire_ariel = {
 	value = 0
 	if = {
@@ -18789,13 +19040,22 @@ sr_site_militia_value_triton = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_triton = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_triton } global_var:sr_site_occupier_triton = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_triton } global_var:sr_site_holder_triton = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_triton = {
 	value = sr_site_shared_marines_triton
+	multiply = sr_site_marines_share_triton
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_militia_value_triton }
 }
+sr_site_assault_toll_triton = { value = sr_site_garrison_need_triton multiply = sr_assault_loss_share }
+sr_site_assault_need_triton = { value = sr_site_garrison_need_triton add = sr_site_assault_toll_triton }
 sr_site_def_fire_triton = {
 	value = 0
 	if = {
@@ -18844,13 +19104,22 @@ sr_site_militia_value_proteus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_proteus = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_proteus } global_var:sr_site_occupier_proteus = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_proteus } global_var:sr_site_holder_proteus = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_proteus = {
 	value = sr_site_shared_marines_proteus
+	multiply = sr_site_marines_share_proteus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_militia_value_proteus }
 }
+sr_site_assault_toll_proteus = { value = sr_site_garrison_need_proteus multiply = sr_assault_loss_share }
+sr_site_assault_need_proteus = { value = sr_site_garrison_need_proteus add = sr_site_assault_toll_proteus }
 sr_site_def_fire_proteus = {
 	value = 0
 	if = {
@@ -18899,13 +19168,22 @@ sr_site_militia_value_pluto = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_pluto = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_pluto } global_var:sr_site_occupier_pluto = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_pluto } global_var:sr_site_holder_pluto = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_pluto = {
 	value = sr_site_shared_marines_pluto
+	multiply = sr_site_marines_share_pluto
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_militia_value_pluto }
 }
+sr_site_assault_toll_pluto = { value = sr_site_garrison_need_pluto multiply = sr_assault_loss_share }
+sr_site_assault_need_pluto = { value = sr_site_garrison_need_pluto add = sr_site_assault_toll_pluto }
 sr_site_def_fire_pluto = {
 	value = 0
 	if = {
@@ -18954,13 +19232,22 @@ sr_site_militia_value_eris = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_eris = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_eris } global_var:sr_site_occupier_eris = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_eris } global_var:sr_site_holder_eris = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_eris = {
 	value = sr_site_shared_marines_eris
+	multiply = sr_site_marines_share_eris
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_militia_value_eris }
 }
+sr_site_assault_toll_eris = { value = sr_site_garrison_need_eris multiply = sr_assault_loss_share }
+sr_site_assault_need_eris = { value = sr_site_garrison_need_eris add = sr_site_assault_toll_eris }
 sr_site_def_fire_eris = {
 	value = 0
 	if = {
@@ -19009,13 +19296,22 @@ sr_site_militia_value_makemake = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_makemake = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_makemake } global_var:sr_site_occupier_makemake = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_makemake } global_var:sr_site_holder_makemake = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_makemake = {
 	value = sr_site_shared_marines_makemake
+	multiply = sr_site_marines_share_makemake
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_makemake } } add = sr_site_militia_value_makemake }
 }
+sr_site_assault_toll_makemake = { value = sr_site_garrison_need_makemake multiply = sr_assault_loss_share }
+sr_site_assault_need_makemake = { value = sr_site_garrison_need_makemake add = sr_site_assault_toll_makemake }
 sr_site_def_fire_makemake = {
 	value = 0
 	if = {
@@ -19064,13 +19360,22 @@ sr_site_militia_value_haumea = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_haumea = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_haumea } global_var:sr_site_occupier_haumea = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_haumea } global_var:sr_site_holder_haumea = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_haumea = {
 	value = sr_site_shared_marines_haumea
+	multiply = sr_site_marines_share_haumea
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_haumea } } add = sr_site_militia_value_haumea }
 }
+sr_site_assault_toll_haumea = { value = sr_site_garrison_need_haumea multiply = sr_assault_loss_share }
+sr_site_assault_need_haumea = { value = sr_site_garrison_need_haumea add = sr_site_assault_toll_haumea }
 sr_site_def_fire_haumea = {
 	value = 0
 	if = {
@@ -19119,13 +19424,22 @@ sr_site_militia_value_sedna = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_sedna = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_sedna } global_var:sr_site_occupier_sedna = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_sedna } global_var:sr_site_holder_sedna = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_sedna = {
 	value = sr_site_shared_marines_sedna
+	multiply = sr_site_marines_share_sedna
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_sedna } } add = sr_site_militia_value_sedna }
 }
+sr_site_assault_toll_sedna = { value = sr_site_garrison_need_sedna multiply = sr_assault_loss_share }
+sr_site_assault_need_sedna = { value = sr_site_garrison_need_sedna add = sr_site_assault_toll_sedna }
 sr_site_def_fire_sedna = {
 	value = 0
 	if = {
@@ -19194,13 +19508,22 @@ sr_site_militia_value_shackleton = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_shackleton = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_shackleton } global_var:sr_site_occupier_shackleton = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_shackleton } global_var:sr_site_holder_shackleton = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_shackleton = {
 	value = sr_site_shared_marines_shackleton
+	multiply = sr_site_marines_share_shackleton
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_shackleton } } add = sr_site_militia_value_shackleton }
 }
+sr_site_assault_toll_shackleton = { value = sr_site_garrison_need_shackleton multiply = sr_assault_loss_share }
+sr_site_assault_need_shackleton = { value = sr_site_garrison_need_shackleton add = sr_site_assault_toll_shackleton }
 sr_site_def_fire_shackleton = {
 	value = 0
 	if = {
@@ -19271,13 +19594,22 @@ sr_site_militia_value_peary = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_peary = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_peary } global_var:sr_site_occupier_peary = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_peary } global_var:sr_site_holder_peary = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_peary = {
 	value = sr_site_shared_marines_peary
+	multiply = sr_site_marines_share_peary
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_peary } } add = sr_site_militia_value_peary }
 }
+sr_site_assault_toll_peary = { value = sr_site_garrison_need_peary multiply = sr_assault_loss_share }
+sr_site_assault_need_peary = { value = sr_site_garrison_need_peary add = sr_site_assault_toll_peary }
 sr_site_def_fire_peary = {
 	value = 0
 	if = {
@@ -19348,13 +19680,22 @@ sr_site_militia_value_tranquility = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_tranquility = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_tranquility } global_var:sr_site_occupier_tranquility = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_tranquility } global_var:sr_site_holder_tranquility = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_tranquility = {
 	value = sr_site_shared_marines_tranquility
+	multiply = sr_site_marines_share_tranquility
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_tranquility } } add = sr_site_militia_value_tranquility }
 }
+sr_site_assault_toll_tranquility = { value = sr_site_garrison_need_tranquility multiply = sr_assault_loss_share }
+sr_site_assault_need_tranquility = { value = sr_site_garrison_need_tranquility add = sr_site_assault_toll_tranquility }
 sr_site_def_fire_tranquility = {
 	value = 0
 	if = {
@@ -19425,13 +19766,22 @@ sr_site_militia_value_marius_hills = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_marius_hills = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_marius_hills } global_var:sr_site_occupier_marius_hills = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_marius_hills } global_var:sr_site_holder_marius_hills = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_marius_hills = {
 	value = sr_site_shared_marines_marius_hills
+	multiply = sr_site_marines_share_marius_hills
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_militia_value_marius_hills }
 }
+sr_site_assault_toll_marius_hills = { value = sr_site_garrison_need_marius_hills multiply = sr_assault_loss_share }
+sr_site_assault_need_marius_hills = { value = sr_site_garrison_need_marius_hills add = sr_site_assault_toll_marius_hills }
 sr_site_def_fire_marius_hills = {
 	value = 0
 	if = {
@@ -19502,13 +19852,22 @@ sr_site_militia_value_daedalus = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_daedalus = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_daedalus } global_var:sr_site_occupier_daedalus = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_daedalus } global_var:sr_site_holder_daedalus = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_daedalus = {
 	value = sr_site_shared_marines_daedalus
+	multiply = sr_site_marines_share_daedalus
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_militia_value_daedalus }
 }
+sr_site_assault_toll_daedalus = { value = sr_site_garrison_need_daedalus multiply = sr_assault_loss_share }
+sr_site_assault_need_daedalus = { value = sr_site_garrison_need_daedalus add = sr_site_assault_toll_daedalus }
 sr_site_def_fire_daedalus = {
 	value = 0
 	if = {
@@ -19579,13 +19938,22 @@ sr_site_militia_value_imbrium = {
 	floor = yes
 	min = 1
 }
-# A seizure must exceed the garrison (shared on the Moon and Mars) and the
-# militia; a liberation, the occupier's garrison alone (its people are the
-# holder's).
+sr_site_marines_share_imbrium = {
+	value = 0
+	if = { limit = { exists = global_var:sr_site_occupier_imbrium } global_var:sr_site_occupier_imbrium = { add = sr_pers_share_value } }
+	else_if = { limit = { exists = global_var:sr_site_holder_imbrium } global_var:sr_site_holder_imbrium = { add = sr_pers_share_value } }
+	else = { add = 1 }
+}
+# A seizure must exceed the garrison (shared on the Moon and Mars), at its
+# owner's crewed share, and the militia; a liberation, the occupier's garrison
+# alone (its people are the holder's).
 sr_site_garrison_need_imbrium = {
 	value = sr_site_shared_marines_imbrium
+	multiply = sr_site_marines_share_imbrium
 	if = { limit = { NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_militia_value_imbrium }
 }
+sr_site_assault_toll_imbrium = { value = sr_site_garrison_need_imbrium multiply = sr_assault_loss_share }
+sr_site_assault_need_imbrium = { value = sr_site_garrison_need_imbrium add = sr_site_assault_toll_imbrium }
 sr_site_def_fire_imbrium = {
 	value = 0
 	if = {
