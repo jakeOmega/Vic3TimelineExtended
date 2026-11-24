@@ -1342,6 +1342,100 @@ one session, `wallday.py`, `runsplit.py`; the samplers, run with the Windows
 with the super-building question it began from: claude.ai artifact
 `VZ94FSnuTPtDo1kPJB2nCK`.
 
+## The Budget Breakdown tab, 2026-11-24: 1.15.2
+
+The owner's game of December 2032 as the Imperial Union of America,
+3840x2160. With the Budget Breakdown tab open the game drew 16 frames a
+second in the Timeline Extended window's Full Screen frame; in the side panel
+under the script profiler (the game paused, so every sample is a binding's
+script) 137 frames in 13.9 s, 10 a second, against 47 for the Nation tab
+under the same profiler. Inclusive times, lines of the deployed build
+(`8d5f81bca`):
+
+| Root | ms | What it was |
+|---|---|---|
+| `te_budget_values.txt:119`, `:17`, `:111`, `:57` | 642, 436, 349, 336 | The four building sums (naval support, Government Administration, army support, the Space Program): an `every_scope_building` over every building of the country, once a frame each |
+| `te_budget_generated_values.txt:1832` | 187 | General Administration's `allocated_institutions` (thirty institutions), recomputed by each value that read Administration |
+| `te_budget_generated_values.txt:4902`, `:2011` | 112, 81 | Other Expenses (the total less every category), recomputed by its positive, active, visible, share and amount values |
+| `te_budget_generated_values.txt:4940`, `:4953`, `:3234`, `:2134` | 42 to 64 each | the positive total and the Administration group's positives, re-summing the same |
+
+The section bound every amount once a frame already (`row_<key>`), but each
+row's positive, active, share and amount values computed it again from the
+getters, so Other Expenses and Administration ran about seven times a frame.
+
+**What changed** (branch `gui/budget-perf`; no figure, row, slice, hover or
+button changes):
+
+- **The building sums look up, not walk.** Each walks the country's states
+  and reads the one building of its type with `b:<type>`
+  (`te_budget_values.txt`); a state has at most one, so the sum is the
+  walk's. `test_budget_breakdown.BuildingLookupTest` holds each list of
+  types to every member of the building group the walk selected.
+- **Each amount is computed once a frame.** A leaf's positive and active
+  values, every share and every row's amount read the bound `row_<key>` or
+  `positive_<side>_<key>`; `PerFrameWorkTest` fails on a per-row value that
+  names an amount.
+- **A row tests one value per slot** (`_in_slot`), where the GUI read three
+  script values (visibility, rank, slot); a row under a closed group gets no
+  rank.
+- **A pie's cumulative value** adds its preceding siblings' bound positives
+  at each level, where it re-summed every slice before it (a quadratic
+  2,556 slices a frame on the expense side).
+- **What a closed group hides is not read.** A group's pies and rows sit
+  under one container shown only while it is open (`gui_modding_guide.md`
+  gotcha #42), and the slots past the top-level rows wait behind one test.
+
+Counted offline on the test fixture's expense side with every group closed
+(`count_frame.py` in the data folder below): 1,808 script values the GUI asks
+a frame became 463, and about 56,800 script operations about 6,000, before
+the building sums, which went from one step per building of the country to
+one per state and type. Left: the amounts themselves (Other Expenses re-sums
+every category, Administration its thirty institutions) are still computed
+in full once a frame in the section's list context; binding the leaves in a
+context of their own and the groups and Other from them would cut that too.
+Nothing is stored at a pulse: the panel's figures stay live.
+
+**Measured again in the running game, the same day** (the same save, this
+branch loaded from a side mod at launch). Every figure and both pies read as
+before. The script profiler, the tab open in the Full Screen frame: 6,274
+samples and 246 frames in 13.5 s, against 16,139 samples and 137 frames in
+13.9 s; the four building walks are gone from the roots, the heaviest root is
+65 ms (`te_budget_values.txt:28`), and the first fourteen sum to about 1.5 ms
+a frame, from about 17.
+
+**The frame counter moved much less than the script: 19 frames a second,
+from 16, and what is left is the engine's, not the mod's.** A side mod's copy
+of the generated file with a client-side switch on each part showed where the
+frame goes (the Full Screen frame; the Nation tab in the same window draws at
+76):
+
+| Shown | frames a second |
+|---|---|
+| Both pies and both lists | 18 to 19 |
+| The pies only | 20 |
+| The lists only | 19 |
+| Neither (the two headers and their totals) | 20 |
+| Nothing under the headers, the sections' root contexts still bound | 23 |
+| Vanilla's own Budget panel, Overview tab | 16 |
+
+So the pies and lists together cost about 9 ms of the tab's 53 ms a frame,
+and about 30 ms is spent with nothing drawn at all: the two sections' root
+`datacontext`, which reads the engine's budget figures once a frame (twelve
+getters for income, about thirty for expenses: `PredictWeeklyIncome`,
+`PredictConsumptionTaxes`, `PredictDividendsTaxes`, `PredictTariffs`,
+`PredictGovernmentWagesExpenses`, `PredictMilitaryWagesExpenses`,
+`PredictTotalArmyExpenses` and the rest). Vanilla's Budget overview reads the
+same kind of figure a line and pays 49 ms a frame for it on this economy. The
+tab cannot read them less often (a binding is evaluated every frame) and
+script cannot read them at all, so a weekly copy in variables is not
+available. What could still help, not tried: finding which getters carry the
+cost (a switch on each, as above; the `Predict…` ones are the likely ones)
+and showing those figures on a hover or behind a "Show" button instead of
+in the open tab.
+
+Data: `/mnt/d/vic3te-data/gui-eval-2026-11-24/` (`perf/side_roots_budget_breakdown.png`, `perf/after_roots_budget_breakdown.png`, `perf/bud_experiment.png`,
+`shots/before/fs_budget_breakdown.png`, `agents/budget-perf/count_frame.py`).
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
