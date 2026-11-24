@@ -2476,8 +2476,11 @@ types state_panel_types
 							blockoverride "row_label" {
 								text = "TE_STATE_POINTS_ROW_AVAILABLE"
 							}
+							### TIMELINE EXTENDED: a figure by its sign (TE_STATE_SOLAR_AVAILABLE). The slots
+							### are a sum of fractions (a part-staffed level gives part of its
+							### slots), and "|0" printed a remainder of -0.2 as a green "-0".
 							blockoverride "row_value" {
-								raw_text = "#G [State.GetOwner.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#!"
+								text = "TE_STATE_SOLAR_AVAILABLE"
 							}
 						}
 
@@ -2517,8 +2520,11 @@ types state_panel_types
 							blockoverride "row_label" {
 								text = "TE_STATE_POINTS_ROW_AVAILABLE"
 							}
+							### TIMELINE EXTENDED: a figure by its sign (TE_STATE_ANTIMATTER_AVAILABLE). The slots
+							### are a sum of fractions (a part-staffed level gives part of its
+							### slots), and "|0" printed a remainder of -0.2 as a green "-0".
 							blockoverride "row_value" {
-								raw_text = "#G [State.GetOwner.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!"
+								text = "TE_STATE_ANTIMATTER_AVAILABLE"
 							}
 						}
 

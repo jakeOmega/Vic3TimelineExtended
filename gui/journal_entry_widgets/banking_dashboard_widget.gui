@@ -166,6 +166,91 @@ types banking_dashboard_widget_types
 		}
 	}
 
+	### Partners that say the same thing, one line (GUI pass of 2026-11-24): the
+	### fourteen receiverships a monetary anchor held each read "Receivership
+	### held: +0.00", a row apiece. Indented 16 under its row, the label and its
+	### count in the rest of the label column (16 + 160 + 4 = 180, where the
+	### value column starts), then the countries' flags in the value column,
+	### nine to a line (9 x 30 = 270 of its 280), wrapping onto more lines. Each
+	### flag is vanilla's tiny_flag (the country on click), its hover what the
+	### row said: the instance's "flag_tooltip", read in the flag's country.
+	### The list holds capitals (gui_modding_guide.md gotcha #15), filled at the
+	### pulse (te_mon_record_backstop_partner, te_mon_record_union_member), so
+	### the grid draws no gaps and reads no trigger per frame. The instance sets
+	### the visible (the list not empty), the label and the datamodel.
+	###
+	### The grid is vanilla's wrapping form, a dynamicgridbox with
+	### datamodel_wrap and flipdirection (journal_entry.gui's involved
+	### countries, eight flags to a line). A fixedgridbox with
+	### maxhorizontalslots drew only its first nine flags in game (2026-11-24,
+	### 26 members: one line, the rest neither drawn nor given room).
+	### test_banking_layout.FlagGroupTest holds the form and no fixed height
+	### above it.
+	type banking_dash_flag_group = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 16
+
+		textbox = {
+			parentanchor = top
+			autoresize = yes
+			multiline = yes
+			max_width = 160
+			minimumsize = { 160 24 }
+			maximumsize = { 160 -1 }
+			align = left|nobaseline
+			using = banking_dash_fontsize_row
+			block "group_label" {}
+		}
+		dynamicgridbox = {
+			datamodel_wrap = 9
+			flipdirection = yes
+			block "group_datamodel" {}
+
+			item = {
+				widget = {
+					datacontext = "[Scope.GetState]"
+					size = { 30 24 }
+
+					tiny_flag = {
+						datacontext = "[State.GetCountry]"
+						parentanchor = center
+						blockoverride "tooltip" {
+							block "flag_tooltip" {}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### A line among the flag groups with a figure, not flags: the power bloc's
+	### "Members backed". Its label on the groups' left edge (16), its value in
+	### the value column (16 + 160 + 4 = 180), as banking_dash_flag_group's.
+	type banking_dash_group_value_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 16
+
+		textbox = {
+			parentanchor = top
+			autoresize = yes
+			multiline = yes
+			max_width = 160
+			minimumsize = { 160 24 }
+			maximumsize = { 160 -1 }
+			align = left|nobaseline
+			using = banking_dash_fontsize_row
+			block "group_label" {}
+		}
+		banking_dash_condition_value = {
+			multiline = yes
+			block "value" {}
+		}
+	}
+
 	### The left reading of a two-column pair row: label 176 + 4 + value 66 =
 	### 246. With banking_dash_pair_right (144 + 4 + 66 = 214) it fills the
 	### block's 460. Only for short readings (a percentage or a signed figure,
@@ -745,6 +830,8 @@ types banking_dashboard_widget_types
 	### (blue on gold with the sliding marker, the bar's own textures, in
 	### vanilla 1.15's scripted_progressbar_dynamic markup; the cycle value
 	### since #1434, default_green before), bubble pressure (default_bad).
+	### As there, each bar's texts sit on a line above it and the marker's
+	### track is 32 px short of the bar at each end (2026-11-24).
 	### Each value is a banking_disp_bar_* script value, 0 to 1 along the bar
 	### (banking_overview_display_values.txt). No tooltip: the entry's bar
 	### carried only the engine's periodic-progress breakdown, which a bar set
@@ -752,46 +839,54 @@ types banking_dashboard_widget_types
 	type te_banking_bars = flowcontainer {
 		parentanchor = hcenter
 		direction = vertical
-		spacing = 8
+		spacing = 6
 		margin_bottom = 8
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
 			widget = {
-				size = { 480 34 }
+				size = { 480 22 }
 
-				default_progressbar_horizontal = {
-					parentanchor = center
-					size = { 480 30 }
+				textbox = {
+					text = "banking_cycle_value_bar_desc"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+				textbox = {
+					text = "banking_cycle_value_bar_second"
+					autoresize = yes
+					align = right|nobaseline
+					parentanchor = right|vcenter
+					margin_right = 4
+				}
+			}
 
-					blockoverride "noprogresstexture" {
-						noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
-					}
+			default_progressbar_horizontal = {
+				size = { 480 30 }
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_value') )]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "banking_cycle_value_bar_desc"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
-					textbox = {
-						text = "banking_cycle_value_bar_second"
-						autoresize = yes
-						align = right|nobaseline
-						margin_right = 10
-						parentanchor = right|vcenter
-					}
+				blockoverride "noprogresstexture" {
+					noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+				}
 
-					blockoverride "on_top_of_the_progressbar" {
+				blockoverride "values" {
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_value') )]"
+					min = 0
+					max = 1
+				}
+
+				blockoverride "on_top_of_the_progressbar" {
+					hbox = {
+						margin = { 32 0 }
+
 						progressbar = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
 							spriteType = Corneredtiled
 							spriteborder = { 4 4 }
 							texture_density = 2
@@ -820,36 +915,44 @@ types banking_dashboard_widget_types
 			}
 		}
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
 			widget = {
-				size = { 480 34 }
+				size = { 480 22 }
 
-				default_progressbar_horizontal = {
-					parentanchor = center
-					size = { 480 30 }
+				textbox = {
+					text = "banking_cycle_momentum_bar_name"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+			}
 
-					blockoverride "noprogresstexture" {
-						noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
-					}
+			default_progressbar_horizontal = {
+				size = { 480 30 }
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_momentum') )]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "banking_cycle_momentum_bar_name"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
+				blockoverride "noprogresstexture" {
+					noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+				}
 
-					blockoverride "on_top_of_the_progressbar" {
+				blockoverride "values" {
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_momentum') )]"
+					min = 0
+					max = 1
+				}
+
+				blockoverride "on_top_of_the_progressbar" {
+					hbox = {
+						margin = { 32 0 }
+
 						progressbar = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
 							spriteType = Corneredtiled
 							spriteborder = { 4 4 }
 							texture_density = 2
@@ -878,43 +981,51 @@ types banking_dashboard_widget_types
 			}
 		}
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
 			widget = {
-				size = { 480 34 }
+				size = { 480 22 }
 
-				default_progressbar_horizontal = {
-					parentanchor = center
-					size = { 480 30 }
+				textbox = {
+					text = "banking_policy_stance_bar_name"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+				textbox = {
+					text = "banking_policy_stance_bar_second"
+					autoresize = yes
+					align = right|nobaseline
+					parentanchor = right|vcenter
+					margin_right = 4
+				}
+			}
 
-					blockoverride "noprogresstexture" {
-						noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
-					}
+			default_progressbar_horizontal = {
+				size = { 480 30 }
 
-					blockoverride "values" {
-						value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_stance') )]"
-						min = 0
-						max = 1
-					}
-					textbox = {
-						text = "banking_policy_stance_bar_name"
-						autoresize = yes
-						align = nobaseline
-						margin_left = 10
-						parentanchor = vcenter
-					}
-					textbox = {
-						text = "banking_policy_stance_bar_second"
-						autoresize = yes
-						align = right|nobaseline
-						margin_right = 10
-						parentanchor = right|vcenter
-					}
+				blockoverride "noprogresstexture" {
+					noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+				}
 
-					blockoverride "on_top_of_the_progressbar" {
+				blockoverride "values" {
+					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_stance') )]"
+					min = 0
+					max = 1
+				}
+
+				blockoverride "on_top_of_the_progressbar" {
+					hbox = {
+						margin = { 32 0 }
+
 						progressbar = {
+							layoutpolicy_horizontal = expanding
+							layoutpolicy_vertical = expanding
 							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
 							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-							size = { 100% 100% }
 							spriteType = Corneredtiled
 							spriteborder = { 4 4 }
 							texture_density = 2
@@ -943,20 +1054,28 @@ types banking_dashboard_widget_types
 			}
 		}
 
-		container = {
+		flowcontainer = {
+			direction = vertical
+			spacing = 1
+
+			widget = {
+				size = { 480 22 }
+
+				textbox = {
+					text = "banking_bubble_pressure_bar_name"
+					autoresize = yes
+					align = left|nobaseline
+					parentanchor = left|vcenter
+					margin_left = 4
+				}
+			}
+
 			bad_progressbar_horizontal = {
 				size = { 480 30 }
 				blockoverride "values" {
 					value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('banking_disp_bar_bubble') )]"
 					min = 0
 					max = 1
-				}
-				textbox = {
-					text = "banking_bubble_pressure_bar_name"
-					autoresize = yes
-					align = nobaseline
-					margin_left = 10
-					parentanchor = vcenter
 				}
 			}
 		}
@@ -3057,11 +3176,20 @@ types banking_dashboard_widget_types
 								}
 							}
 
-							banking_dash_mon_meter = {
+							### In a flowed slot of the block's width, the meter centred in it: the
+							### Monetary Anchor line above can wrap, and an anchored child of this
+							### flowcontainer keeps its first place when a line above grows (the
+							### union buttons' fault, below).
+							widget = {
+								size = { 460 16 }
 								visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								tooltip = "banking_dash_mon_anchorpeg_tt"
-								blockoverride "meter_value" {
-									value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+
+								banking_dash_mon_meter = {
+									visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+									tooltip = "banking_dash_mon_anchorpeg_tt"
+									blockoverride "meter_value" {
+										value = "[FixedPointToFloat( Country.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+									}
 								}
 							}
 
@@ -3079,10 +3207,13 @@ types banking_dashboard_widget_types
 							}
 
 							### The partners behind the two sums (GUI audit BNK-13): who backs us
-							### and whom we back, a row each, from the lists the arrangement
-							### discovery keeps (te_mon_record_backstop_* in
-							### te_monetary_arrangement_effects.txt): a partner's capital, since
-							### a GUI reaches a country through its state.
+							### and whom we back, from the lists the arrangement discovery keeps
+							### (te_mon_record_backstop_* in te_monetary_arrangement_effects.txt):
+							### a partner's capital, since a GUI reaches a country through its
+							### state. A backer has a row each (one of each kind at most). Whom we
+							### back (GUI pass of 2026-11-24): a row each where its figure reads
+							### at two decimals, and the rest one line a kind, their flags, each
+							### flag's hover what its row said.
 							flowcontainer = {
 								direction = vertical
 								ignoreinvisible = yes
@@ -3097,6 +3228,7 @@ types banking_dashboard_widget_types
 									item = {
 										banking_dash_partner_row = {
 											datacontext = "[Scope.GetState]"
+											tooltip = "banking_dash_mon_bs_backer_tt"
 											blockoverride "flag" {
 												tiny_flag = {
 													parentanchor = center
@@ -3122,6 +3254,7 @@ types banking_dashboard_widget_types
 									item = {
 										banking_dash_partner_row = {
 											datacontext = "[Scope.GetState]"
+											tooltip = "banking_dash_mon_bs_backer_tt"
 											blockoverride "flag" {
 												tiny_flag = {
 													parentanchor = center
@@ -3147,6 +3280,7 @@ types banking_dashboard_widget_types
 									item = {
 										banking_dash_partner_row = {
 											datacontext = "[Scope.GetState]"
+											tooltip = "banking_dash_mon_bs_backer_tt"
 											blockoverride "flag" {
 												tiny_flag = {
 													parentanchor = center
@@ -3171,6 +3305,7 @@ types banking_dashboard_widget_types
 								### spec § 6.3, the one row whose country shadows the panel's).
 								banking_dash_partner_row = {
 									visible = "[And( Country.IsInPowerBloc, GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' ) )]"
+									tooltip = "banking_dash_mon_bs_backer_tt"
 									blockoverride "flag" {
 										tiny_flag = {
 											parentanchor = center
@@ -3211,6 +3346,20 @@ types banking_dashboard_widget_types
 									}
 								}
 
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_swap_flags') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_grp_swap_tt"
+										text = "banking_dash_mon_bs_grp_swap"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_flags')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_bs_flag_swap_tt"
+									}
+								}
+
 								flowcontainer = {
 									direction = vertical
 									ignoreinvisible = yes
@@ -3233,6 +3382,20 @@ types banking_dashboard_widget_types
 												text = "banking_dash_mon_bs_lolr_to"
 											}
 										}
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_lolr_flags') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_grp_lolr_tt"
+										text = "banking_dash_mon_bs_grp_lolr"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_flags')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_bs_flag_lolr_tt"
 									}
 								}
 
@@ -3261,11 +3424,25 @@ types banking_dashboard_widget_types
 									}
 								}
 
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_receivership_flags') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_grp_receivership_tt"
+										text = "banking_dash_mon_bs_grp_receivership"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_receivership_flags')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_bs_flag_receivership_tt"
+									}
+								}
+
 								### A leader's whole bloc, one row: its members are listed under
 								### Monetary Union, each with its share.
-								banking_dash_partner_row = {
+								banking_dash_group_value_row = {
 									visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
-									blockoverride "name" {
+									blockoverride "group_label" {
 										text = "banking_dash_mon_bs_bloc_name"
 									}
 									blockoverride "value" {
@@ -3290,46 +3467,147 @@ types banking_dashboard_widget_types
 								}
 							}
 
-							### A leader's members, a row each (GUI audit BNK-13): whether each
-							### has adopted, holds out or would refuse if pressed, and what
-							### backing it costs us. The leader is left out, as vanilla's own
-							### member list leaves it out (power_bloc_panel.gui).
+							### A leader's members (GUI audit BNK-13; grouped in the GUI pass of
+							### 2026-11-24): whether each has adopted, holds out or would refuse
+							### if pressed, and what backing it costs us. A member whose backing
+							### reads at two decimals keeps a row of its own, its place and its
+							### figure; the rest are one line of flags for each place a member can
+							### stand, in te_mon_union_member_status's order, each flag's hover its
+							### place and figure. The leader's discovery files each member
+							### (te_mon_record_union_member), with the head line's holdout counts,
+							### so the lines and the counts agree. The leader is left out, as
+							### vanilla's own member list leaves it out (power_bloc_panel.gui).
 							flowcontainer = {
-								### In a bloc first, as vanilla gates a GetPowerBloc datacontext
-								### (00_te_country_panel_information.gui's power bloc entry).
-								visible = "[And( Country.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-								datacontext = "[Country.GetPowerBloc]"
-								datamodel = "[PowerBloc.GetMembers]"
+								visible = "[GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 								direction = vertical
 								ignoreinvisible = yes
 								spacing = 2
 
-								item = {
-									banking_dash_partner_row = {
-										visible = "[Not( PowerBloc.IsLeader( Country.Self ) )]"
-										tooltip = "banking_dash_mon_union_member_tt"
-										blockoverride "flag" {
-											tiny_flag = {
-												parentanchor = center
+								### A row each, read in the member: its datacontext is the
+								### member, which every read on the row means.
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_to')]"
+
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState.GetCountry]"
+											tooltip = "banking_dash_mon_union_member_tt"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_country_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_union_member_value"
 											}
 										}
-										blockoverride "name" {
-											text = "banking_dash_mon_bs_country_name"
-										}
-										blockoverride "value" {
-											text = "banking_dash_mon_union_member_value"
-										}
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_adopted') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_adopted_tt"
+										text = "banking_dash_mon_union_grp_adopted"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_adopted')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_dormant') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_dormant_tt"
+										text = "banking_dash_mon_union_grp_dormant"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_dormant')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_holdout') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_holdout_tt"
+										text = "banking_dash_mon_union_grp_holdout"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_holdout')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_refuser') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_refuser_tt"
+										text = "banking_dash_mon_union_grp_refuser"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_refuser')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_outside') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_outside_tt"
+										text = "banking_dash_mon_union_grp_outside"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_outside')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_coop') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_coop_tt"
+										text = "banking_dash_mon_union_grp_coop"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_coop')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
 									}
 								}
 							}
 
 							### Stacked, not side by side: two can show at once (Leave and Press for
 							### Convergence), and at 231 each the large type does not fit both in 460.
+							### Each button is centred in a slot of the block's full width, and the
+							### slots and their wrappers flow with no parentanchor of their own: an
+							### anchored child of a vertical flowcontainer keeps the place it was
+							### given at the first layout, so when the line above grew a line
+							### afterwards (a wrapped head line, a second line of flags) the button
+							### was drawn over it, with the gap left below (in game, 2026-11-24).
+							### test_banking_layout.FlagGroupTest.test_the_union_buttons_flow.
 							flowcontainer = {
 								direction = vertical
 								ignoreinvisible = yes
 								spacing = 2
-								parentanchor = hcenter
 								visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 
 								### The player's own country only: another country sees the Monetary
@@ -3339,46 +3617,69 @@ types banking_dashboard_widget_types
 									direction = vertical
 									ignoreinvisible = yes
 									spacing = 2
-									parentanchor = hcenter
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_adopt"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
+											visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_adopt"
+										}
 									}
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_leave"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
+											visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_leave"
+										}
 									}
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_press"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
+											visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_press"
+										}
 									}
 
-									banking_dash_mon_button = {
-										datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
+									widget = {
+										size = { 460 28 }
 										visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
-										tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
-										size = { 240 28 }
-										text = "banking_dash_mon_btn_union_press_off"
+
+										banking_dash_mon_button = {
+											parentanchor = hcenter
+											datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
+											visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( Country.MakeScope ).End )]"
+											tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+											size = { 240 28 }
+											text = "banking_dash_mon_btn_union_press_off"
+										}
 									}
 								}
 							}

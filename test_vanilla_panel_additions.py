@@ -42,6 +42,9 @@ MARGIN = 1.1
 # thousands separator, a sum at |1* ("123.4M"), a share at "100%".
 QUANTITY = "12,345.6"
 MONEY = "123.4M"
+# A construction-market figure since 2026-11-24 (test_construction_figures.py): one decimal below 1,000 and the
+# abbreviated form from there ("999.9", "1.69M"), spliced into its row as $TE_CM_FIG_<name>$.
+FIGURE = "999.9"
 ICON = 20  # an @money! icon, in units
 
 
@@ -99,6 +102,7 @@ class ConstructionMarketTableTest(unittest.TestCase):
         v = self.loc[key]
         v = re.sub(r"\[SelectLocalization\([^\]]*'(\w+)', '' \)\]", lambda m: self.loc[m.group(1)], v)
         icons = len(re.findall(r"@\w+!", v))
+        v = re.sub(r"\$TE_CM_FIG_\w+\$", FIGURE, v)
         v = re.sub(r"\[[^\[\]]*\|1\*\]", MONEY, v)
         v = re.sub(r"\[[^\[\]]*\|0\]#?!?%", "100%", v)
         v = re.sub(r"\[[^\[\]]*\]", QUANTITY, v)

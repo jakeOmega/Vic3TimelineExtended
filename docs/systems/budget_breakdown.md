@@ -27,9 +27,11 @@ existing totals are subdivided into new leaves.
 Branch wages are the engine's predicted branch total minus its goods expense.
 The native branch getters can omit logistics-centre and naval-fortification
 upkeep even though the main military goods total includes it. Read support
-building deficits once using `every_scope_building`, selecting only Army
+building deficits once a frame, selecting only Army
 Logistics Centers for Army, and Naval Logistics Centers plus Naval Fortifications
-for Navy. Barracks, conscription centers and Naval Administration are excluded:
+for Navy: each sum walks the country's states and reads the one building of its
+type with `b:<type>`, never every building of the country (2026-11-24,
+`docs/audits/late_game_performance.md` § "The Budget Breakdown tab"). Barracks, conscription centers and Naval Administration are excluded:
 the native branch amounts already cover their costs. Private industry and other
 government buildings are also excluded. Nonnegative profits contribute zero.
 
@@ -212,6 +214,11 @@ and Space Program building sums, military support-building deficits, total insti
 allocated pool and positive chart total are passed as value scopes before the charts are drawn, so nested cumulative
 values do not scan buildings or repeatedly recalculate the whole denominator.
 There are no effects, saved variables, pulse hooks or journal-entry dependencies.
+Every amount is computed once a frame, where the list's outermost context binds
+it (`row_<key>`); every value read per row, slice or slot reads that binding
+(`test_budget_breakdown.PerFrameWorkTest`). A group's rows and pie slices sit
+under one container shown only while the group is open, so a closed group's
+are not read.
 
 The list binds every signed amount once, then caches each subtree's visible row
 count. Each row's display rank counts preceding sibling subtrees at every
