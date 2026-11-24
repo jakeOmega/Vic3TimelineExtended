@@ -45,6 +45,9 @@ class BudgetHarness:
                           *((key, -Decimal(cost)) for key, cost in military_buildings)]
         if space_program:
             self.buildings.append(("building_space_program", -Decimal(space_program)))
+        # A state holds at most one building of a type; here each building
+        # stands in a state of its own, which is what `b:<type>` reads.
+        self.states = [{key: profit} for key, profit in self.buildings]
         self.scopes["administration_actual"] = self("administration_actual")
         self.scopes["space_program_actual"] = self("space_program_actual")
         self.scopes["institution_levels"] = self("institution_levels")
@@ -80,6 +83,8 @@ class BudgetHarness:
         for key, op, value in entries(node):
             if key == "has_institution":
                 results.append(value in self.levels)
+            elif key == "exists" and value.startswith("b:"):
+                results.append(value[2:] in context)  # context: a state
             elif key == "exists":
                 assert value.startswith("scope:"), value
                 results.append(value[6:] in self.scopes)
@@ -106,11 +111,13 @@ class BudgetHarness:
                 limit = next(v for k, _, v in entries(value) if k == "limit")
                 if self.limit(limit, context):
                     acc = self.block(value, acc, context)
-            elif key == "every_scope_building":
+            elif key == "every_scope_state":
                 limit = next(v for k, _, v in entries(value) if k == "limit")
-                for building in self.buildings:
-                    if self.limit(limit, building):
-                        acc = self.block(value, acc, building)
+                for state in self.states:
+                    if self.limit(limit, state):
+                        acc = self.block(value, acc, state)
+            elif key.startswith("b:"):
+                acc = self.block(value, acc, (key[2:], context[key[2:]]))
             elif key.startswith("institution:"):
                 acc = self.block(value, acc, key[12:])
             else:
@@ -583,6 +590,84 @@ class BudgetWiringTests(unittest.TestCase):
         for branch in ("army", "navy"):
             self.assertIn(f"AddScope('{branch}_support_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_{branch}_support_actual')))", gen.scope("expense"))
             self.assertTrue(f"add = scope:{branch}_support_actual" in values, f"{branch} support must use its cached sum")
+
+
+class BuildingLookupTest(unittest.TestCase):
+    """The four building sums look up each type in each state (`b:<type>`)
+    instead of walking every building of the country, which cost 1.76 s of a
+    13.9 s profile of the tab (late_game_performance.md § "The Budget
+    Breakdown tab"). The lookup is the walk's sum only while its types are
+    every member of the group the walk selected."""
+
+    SELECTED = {
+        "te_budget_administration_actual": {"building_government_administration"},
+        "te_budget_space_program_actual": {"building_space_program"},
+        "te_budget_army_support_actual": {"group:bg_army_logistics_center"},
+        "te_budget_navy_support_actual": {"group:bg_naval_fortification", "group:bg_naval_logistics_center"},
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        parser = ParadoxFileParser()
+        text = (ROOT / "common/script_values/te_budget_values.txt").read_text(encoding="utf-8-sig")
+        cls.values = {key: val for key, _, val in entries(parser.parse_object(parser.tokenize("{" + text + "}"))[0])}
+        groups = {key: body[1]["building_group"][1] for key, body in
+                  json.loads((ROOT / "vanilla_parsed/common/buildings.json").read_text()).items()
+                  if isinstance(body[1], dict) and "building_group" in body[1]}
+        for path in sorted((ROOT / "common/buildings").glob("*.txt")):
+            obj = parser.parse_object(parser.tokenize("{" + path.read_text(encoding="utf-8-sig") + "}"))[0]
+            for key, _, body in entries(obj):
+                if isinstance(body, dict) and "building_group" in body:
+                    groups[key.split(":")[-1]] = body["building_group"][1]
+        parents = {}
+        for path in sorted((ROOT / "common/building_groups").glob("*.txt")):
+            obj = parser.parse_object(parser.tokenize("{" + path.read_text(encoding="utf-8-sig") + "}"))[0]
+            for key, _, body in entries(obj):
+                if isinstance(body, dict) and "parent_group" in body:
+                    parents[key.split(":")[-1]] = body["parent_group"][1]
+        for key, body in json.loads((ROOT / "vanilla_parsed/common/building_groups.json").read_text()).items():
+            if isinstance(body[1], dict) and "parent_group" in body[1]:
+                parents.setdefault(key, body[1]["parent_group"][1])
+        cls.groups, cls.parents = groups, parents
+
+    def members(self, group):
+        def within(g):
+            while g:
+                if g == group:
+                    return True
+                g = self.parents.get(g)
+            return False
+        return {key for key, g in self.groups.items() if within(g)}
+
+    def looked_up(self, name):
+        text = json.dumps(self.values[name])
+        self.assertNotIn("every_scope_building", text)
+        return set(re.findall(r'"b:(building_\w+)"', text))
+
+    def test_each_sum_looks_up_every_building_of_its_selection(self):
+        for name, selected in self.SELECTED.items():
+            with self.subTest(name=name):
+                expected = set()
+                for item in selected:
+                    expected |= self.members(item[6:]) if item.startswith("group:") else {item}
+                self.assertTrue(expected)
+                self.assertEqual(self.looked_up(name), expected)
+
+    def test_a_state_walk_sums_each_buildings_deficit_once(self):
+        h = BudgetHarness(administration=0, military_buildings=(("building_naval_fortification", 300),
+                                                                ("building_naval_logistics_center", 200),
+                                                                ("building_naval_fortification", 100),
+                                                                ("building_army_logistics_center", 50),
+                                                                ("building_army_logistics_center", -40)))
+        h.states = [{"building_government_administration": Decimal(-1000), "building_naval_fortification": Decimal(-300),
+                     "building_naval_logistics_center": Decimal(-200), "building_army_logistics_center": Decimal(-50)},
+                    {"building_government_administration": Decimal(-500), "building_naval_fortification": Decimal(-100),
+                     "building_army_logistics_center": Decimal(40), "building_university": Decimal(-9000)},
+                    {}]
+        self.assertEqual(h("administration_actual"), 1500)
+        self.assertEqual(h("navy_support_actual"), 600)
+        self.assertEqual(h("army_support_actual"), 50)
+        self.assertEqual(h("space_program_actual"), 0)
 
 
 LAYOUT = ROOT / "gui/te_budget_breakdown.gui"
