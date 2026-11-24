@@ -143,6 +143,11 @@ Shipyards gain a Production Focus group that trades civilian hulls for naval
 construction; its strongest setting, Wartime Mobilization, needs the Total War
 law.
 
+Naval Convoy Defense, an era 6 technology, has supply ships built in one week
+instead of the base game's five. Their cost is unchanged, and so is the share of
+ship construction your supply ship setting gives them, so you get as many a week
+as before, each one sooner.
+
 ## Mobilization options
 
 The mod adds 27 mobilization options, some in a new Training group. The new
