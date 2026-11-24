@@ -1318,7 +1318,8 @@ class AgeingPanelTests(unittest.TestCase):
             self.assertIn("ScriptValue('gm_state_disp_frozen')", body)
             self.assertIn('tooltip = "gm_row_frozen_tt"', body)
             self.assertIn('text = "gm_row_frozen"', body)
-        self.assertIn("gm_state_primary_age", loc["gm_row_frozen"])
+        for form in ("gm_row_frozen_one", "gm_row_frozen_many"):  # "1 level" and "5 levels" (2026-11-24)
+            self.assertIn("gm_state_primary_age", loc[form])
         self.assertIn("2% of its starting grandeur a year", loc["gm_row_frozen_tt"])
         self.assertIn("gm_state_primary_age", loc["gm_state_grandeur_tt_one"])
 

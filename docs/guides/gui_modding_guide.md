@@ -1334,8 +1334,8 @@ Appended after `|` in data binding expressions. Combinable.
 
 | Spec | Meaning | Example |
 |---|---|---|
-| `D` | Thousands delimiter | `1,234,567` |
-| `K` | K/M abbreviation | `12.3K` |
+| `D` | Thousands delimiter; keeps a fraction (`80.7`), so `D0` for a whole number | `1,234,567` |
+| `K` | K/M abbreviation, at any size: a script value or variable of 80 prints `0.08K`, and 0 `0.00K` (in game, 2026-11-24) | `12.3K` |
 | `v` | Value formatting | Standard number format |
 | `0` | 0 decimal places | `42` |
 | `1` | 1 decimal place | `42.3` |
@@ -1358,6 +1358,8 @@ Appended after `|` in data binding expressions. Combinable.
 | `\|0+=` | Signed integer | `+42` |
 
 **Prefer `|K` for money and other large amounts, in tooltips above all.** A bare `|0` or `|D` amount (`1,234,567`) takes reading digit by digit, and a tooltip full of them is hard to take in; `|K` reads at a glance (`1.23M`). Use it for money, GDP, treasury and investment figures and for scaled indices such as emissions. Keep `|D` or `|0` where the exact figure matters: a count the player plans around, or a quantity the player sets. The mod uses `|D` in 102 loc values and `|K` in 28 (2026-10-03). Convert the money amounts among the `|D` ones when their file is next touched.
+
+**`|K` never prints a small figure whole, so a figure that can be under 1,000 goes through a switch.** The Strategic Reserve's rates read `0.00K` at zero and the Causes of Death table `0.08K` for 80 deaths (2026-11-24). The fix is a key per figure, `<fig>` = `[SelectLocalization( LessThan_CFixedPoint( Abs_CFixedPoint( x ), '(CFixedPoint)999.5' ), '<fig>_n', '<fig>_k' )]`, with `<fig>_n` = `[x|0]` and `<fig>_k` = `[x|K]` (the same sign flags on both, `+0`/`+K`), spliced where the figure was (`$<fig>$`) or named by a cell's `text`. It prints `0`, `80`, `999`, then `1.00K`. A raw figure that can pass 9,999 (`+255600`) takes the same switch, or `|D0` where the player sets it and the exact figure matters (a stepper's value). The switch works where a widget's datacontext (`Country`, `State`, `JournalEntry`, `ScriptContainer`) reaches its branches; a key named in `SelectLocalization` renders without `THIS`, `ROOT` or `SCOPE`, so a script-printed tooltip keeps `|D0` (§ "String Operations"). `test_panel_figures.py` holds the switch over every key the Strategic Reserve, Demographics, Seabed and Grand Monuments panels reach.
 
 ---
 

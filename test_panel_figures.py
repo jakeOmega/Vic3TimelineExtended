@@ -9,8 +9,11 @@ So a figure that can be small is printed through a switch,
 abbreviated from it. A figure that can pass 9,999 is not printed raw
 ("+255600" in the Seabed's +1 license column) but through the same switch,
 or delimited where the player sets it (`|D0`). And a count reads "1 level",
-not "1 levels": its noun is picked by the count (gm_word_*), or the line has a
-`_one` and a `_many` form.
+not "1 levels": the count's line has a `_one` and a `_many` form (the
+`_many` the old text, so its translations keep shipping), split off into
+`<key>_count` when the count sits in one line of a longer tooltip. A tooltip
+a script prints (THIS) picks the noun instead (gm_word_level): a key named
+in SelectLocalization renders without THIS, so its forms could not read it.
 """
 import os
 import re
@@ -33,7 +36,7 @@ GM_PANELS = PANELS[4:]
 FIG_K = re.compile(r"\[([^\[\]]*)\|([A-Za-z0-9%+=*\-]*K[A-Za-z0-9%+=*\-]*)\]")
 SWITCH = re.compile(r"^\[SelectLocalization\( LessThan_CFixedPoint\( Abs_CFixedPoint\( (.+) \), "
                     r"'\(CFixedPoint\)999\.5' \), '(\w+)', '(\w+)' \)\]$")
-NOUNS = {"level": "levels", "month": "months", "monument": "monuments", "dig": "digs", "site": "sites"}
+NOUNS = {"level": "levels"}
 COUNTED = re.compile(r"\|[+=\-]*0\]#! (?:more |missing )?(levels|months|monuments|digs|sites|trophies)\b")
 NOUN_PICK = re.compile(r"\[([^\[\]]*)\|0\]#! (?:more |missing )?\[SelectLocalization\( EqualTo_CFixedPoint\( "
                        r"([^\[\]]*?), '\(CFixedPoint\)1' \), 'gm_word_(\w+)', 'gm_word_(\w+)' \)\]")
@@ -142,22 +145,29 @@ class SingularTest(unittest.TestCase):
 
     def test_each_noun_is_picked_by_its_own_count(self):
         seen = 0
-        for key in sorted(self.keys):
+        for key in sorted(k for k in self.loc if k.startswith("gm_")):
             for m in NOUN_PICK.finditer(self.loc[key]):
                 seen += 1
                 with self.subTest(key=key):
                     count, tested, one, many = m.groups()
                     self.assertEqual(count, tested)
                     self.assertEqual(NOUNS.get(one), many)
-        self.assertGreaterEqual(seen, 40)
+        self.assertGreaterEqual(seen, 4)
 
-    def test_the_trophy_row(self):
-        """Item 4: "1 levels carried off" was the coordinator's."""
-        self.assertRegex(self.loc["gm_tr_row_value"], NOUN_PICK)
-        for key in ("gm_je_tr_summary", "gm_je_abroad_summary"):
-            self.assertIn(f"'{key}_one', '{key}_many'", self.loc[key])
-        self.assertIn("trophy counts", self.loc["gm_je_tr_summary_one"])
-        self.assertIn("stands abroad", self.loc["gm_je_abroad_summary_one"])
+    def test_the_named_lines(self):
+        """Item 4: "1 levels carried off" was the coordinator's; Finished, the summaries and Carry It Off with it."""
+        loc = self.loc
+        for key in ("gm_tr_row_value", "gm_row_frozen", "gm_site_row_detail", "gm_je_tr_summary",
+                    "gm_je_abroad_summary"):
+            self.assertIn(f"'{key}_one', '{key}_many'", loc[key])
+            self.assertIn("#v 1#!", loc[f"{key}_one"])
+        self.assertTrue(loc["gm_tr_row_value_one"].startswith("#v 1#! level carried off"))
+        self.assertTrue(loc["gm_row_frozen_one"].startswith("Finished: #v 1#! level ·"))
+        self.assertIn("trophy counts", loc["gm_je_tr_summary_one"])
+        self.assertIn("stands abroad", loc["gm_je_abroad_summary_one"])
+        for key in ("gm_tr_take_occupation_tt", "gm_tr_take_own_tt"):
+            self.assertRegex(loc[key], NOUN_PICK)
+        self.assertEqual(loc["gm_je_arch_summary"], "$gm_je_arch_summary_digs$, $gm_je_arch_summary_sites$")
 
 
 if __name__ == "__main__":
