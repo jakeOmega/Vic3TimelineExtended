@@ -57,6 +57,8 @@ class BudgetHarness:
         self.scopes["positive_total"] = self("expense_positive_total")
 
     def __call__(self, name):
+        if name.startswith(("income_", "expense_")):
+            self.side = name.split("_")[0]
         return self.block(self.values["te_budget_" + name])
 
     def operand(self, item, context=None):
@@ -66,6 +68,10 @@ class BudgetHarness:
             key = item[6:]
             if key.startswith("positive_") and key != "positive_total":
                 return self(key[9:] + "_positive")
+            if key.startswith("row_") and key not in self.scopes and key != "row_slot":
+                # The amount the section binds once a frame, before every
+                # value that reads it (section()'s outermost list context).
+                return self(f"{self.side}_{key[4:]}")
             return self.scopes[key]
         if item == "produced_bureaucracy":
             return self.production
@@ -194,12 +200,18 @@ class BudgetAllocationTests(unittest.TestCase):
             h = BudgetHarness(civil=civil, total=total)
             keys = [key for key, _ in gen.categories("expense")]
             self.assertAlmostEqual(sum(h("expense_" + k) for k in keys), total)
-            last = Decimal(0)
-            for i, (node, _) in enumerate(gen.walk(gen.tree("expense"))):
+            # Every group closed: only the top-level pies can be drawn (the
+            # rest sit under their group's hidden container), and between two
+            # of them lie only the closed group's empty slices.
+            last, running = Decimal(0), Decimal(0)
+            for i, (node, ancestors) in enumerate(gen.walk(gen.tree("expense"))):
+                running += h(f"expense_{node.key}_slice")
+                if ancestors:
+                    continue
                 cumulative = h(f"expense_cum_{i}")
                 self.assertGreaterEqual(cumulative, last)
                 self.assertLessEqual(cumulative, 1)
-                self.assertAlmostEqual(cumulative - last, h(f"expense_{node.key}_slice") / max(h.scopes["positive_total"], Decimal("0.001")))
+                self.assertAlmostEqual(cumulative, running / max(h.scopes["positive_total"], Decimal("0.001")))
                 last = cumulative
             self.assertEqual(last, 1 if h("expense_positive_total") else 0)
 
@@ -399,6 +411,8 @@ class BudgetAllocationTests(unittest.TestCase):
         h.scopes.update({key: Decimal(100) for key, _, _ in gen.INCOME})
         for side in ("income", "expense"):
             nodes = list(gen.walk(gen.tree(side)))
+            # The other side's bound amounts share some keys (pacts, other).
+            h.scopes = {key: value for key, value in h.scopes.items() if not key.startswith(("row_", "subtree_", "rank_", "active_"))}
             groups = [node for node, _ in nodes if node.children]
             total = h(side + "_positive_total")
             h.scopes["positive_total"] = total
@@ -419,8 +433,14 @@ class BudgetAllocationTests(unittest.TestCase):
                 ordered = list(sorted_visible(gen.tree(side)))
                 self.assertEqual(h(side + "_display_count"), len(ordered))
                 h.scopes.update({"rank_" + node.key: h(side + "_" + node.key + "_display_rank") for node, _ in nodes})
+                h.scopes.update({"active_" + node.key: h(side + "_" + node.key + "_visible") for node, _ in nodes})
                 for rank, key in enumerate(ordered):
-                    self.assertEqual(h(side + "_" + key + "_cached_rank"), rank)
+                    # Exactly the row of that rank fills each slot.
+                    h.scopes["row_slot"] = Decimal(rank)
+                    self.assertEqual([node.key for node, _ in nodes if h(side + "_" + node.key + "_in_slot")], [key])
+                    self.assertEqual(h(side + "_" + key + "_cached_amount"), h(side + "_" + key))
+                h.scopes["row_slot"] = Decimal(len(ordered))
+                self.assertEqual([node.key for node, _ in nodes if h(side + "_" + node.key + "_in_slot")], [])
                 self.assertEqual({node.key for node, _ in nodes if h(side + "_" + node.key + "_visible")}, set(ordered))
                 slices = []
                 for node, ancestors in nodes:
@@ -431,6 +451,15 @@ class BudgetAllocationTests(unittest.TestCase):
                     slices.append(actual)
                 self.assertAlmostEqual(sum(slices), total)
                 self.assertEqual(h(side + "_cum_" + str(len(nodes) - 1)), 1)
+                # A pie whose groups are all open draws to the sum of every
+                # slice up to it, as when each pie re-summed them; another's
+                # container is hidden (test_hidden_pies_and_rows_sit_under_their_group).
+                running = Decimal(0)
+                for i, (node, ancestors) in enumerate(nodes):
+                    running += slices[i]
+                    if all(h.scopes["open_" + p.key] for p in ancestors):
+                        expected = min(max(running / max(total, Decimal("0.001")), Decimal(0)), Decimal(1))
+                        self.assertAlmostEqual(h(side + "_cum_" + str(i)), expected)
 
     def test_zero_net_group_keeps_cost_and_refund_accessible(self):
         h = BudgetHarness(civil=0, administration=0, total=0, charges={"banking": -1000, "covert": 1000})
@@ -555,7 +584,7 @@ class BudgetWiringTests(unittest.TestCase):
             self.assertEqual(slots, [str(i) for i in range(len(keys))])
             for key in keys:
                 self.assertIn(f"te_budget_{side}_row_{key} = {{}}", chart)
-                self.assertIn(f"te_budget_{side}_{key}_cached_rank", chart)
+                self.assertIn(f"te_budget_{side}_{key}_in_slot", chart)
                 self.assertIn(f"te_budget_{side}_{key}_display_rank", gen.section(side))
 
     def test_expansion_controls_and_cached_visibility_share_the_same_state(self):
@@ -590,6 +619,58 @@ class BudgetWiringTests(unittest.TestCase):
         for branch in ("army", "navy"):
             self.assertIn(f"AddScope('{branch}_support_actual', MakeScopeValue(GetPlayer.MakeScope.ScriptValue('te_budget_{branch}_support_actual')))", gen.scope("expense"))
             self.assertTrue(f"add = scope:{branch}_support_actual" in values, f"{branch} support must use its cached sum")
+
+
+class PerFrameWorkTest(unittest.TestCase):
+    """What the tab reads every frame (late_game_performance.md § "The Budget
+    Breakdown tab"): each amount once, in the section's list context; every
+    value read per row, per slice or per slot reads that bound amount."""
+
+    PER_ROW = ("_positive", "_active", "_share", "_cached_amount", "_in_slot", "_display_rank", "_slice", "_visible", "_subtree_rows")
+
+    def test_no_per_row_value_recomputes_an_amount(self):
+        parser = ParadoxFileParser()
+        values = {key: json.dumps(val) for key, _, val in entries(parser.parse_object(parser.tokenize("{" + gen.generated_values() + "}"))[0])}
+        for side in ("income", "expense"):
+            amounts = {f"te_budget_{side}_{node.key}" for node, _ in gen.walk(gen.tree(side))}
+            for name, body in values.items():
+                if not name.startswith(f"te_budget_{side}_"):
+                    continue
+                if name.endswith(self.PER_ROW) or re.search(r"_cum_\d+$", name):
+                    with self.subTest(name=name):
+                        self.assertEqual(set(re.findall(r'"(te_budget_\w+)"', body)) & amounts, set())
+
+    def test_hidden_pies_and_rows_sit_under_their_group(self):
+        for side in ("income", "expense"):
+            chart = gen.chart(side)
+            pie = _type_body(chart, f"te_budget_{side}_charts")
+            slot = _type_body(chart, f"te_budget_{side}_slot_root")
+            position = {node.key: i for i, (node, _) in enumerate(gen.walk(gen.tree(side)))}
+            for node, ancestors in gen.walk(gen.tree(side)):
+                with self.subTest(side=side, key=node.key):
+                    for body, mark in ((pie, f"ScriptValue('te_budget_{side}_cum_{position[node.key]}')"),
+                                       (slot, f"te_budget_{side}_row_{node.key} = {{}}")):
+                        at = body.index(mark)
+                        # The flags of the containers still open at the mark,
+                        # outermost first, are exactly its groups'.
+                        opened = []
+                        for match in re.finditer(r"[{}]|GetVariableSystem\.Exists\('(\w+)'\)", body[:at]):
+                            if match.group(0) == "{":
+                                opened.append(None)
+                            elif match.group(0) == "}":
+                                opened.pop()
+                            elif opened and opened[-1] is None and re.search(r"visible = \"\[$", body[:match.start()]):
+                                opened[-1] = match.group(1)
+                        self.assertEqual([f for f in opened if f], [gen.flag(side, p.key) for p in ancestors])
+
+    def test_slots_past_the_top_level_rows_wait_behind_one_test(self):
+        for side in ("income", "expense"):
+            body = _type_body(gen.chart(side), f"te_budget_{side}_list_root")
+            top = len(gen.tree(side))
+            gate = f"visible = \"[GreaterThan_CFixedPoint(TopScope.ScriptValue('te_budget_{side}_root_cached_count'), '(CFixedPoint){top}')]\""
+            self.assertEqual(body.count(gate), 2)  # the slot of rank `top`, and the container around it and the rest
+            self.assertLess(body.index("flowcontainer = {"), body.index(f"MakeScopeValue('(CFixedPoint){top}')"))
+            self.assertGreater(body.index("flowcontainer = {"), body.index(f"MakeScopeValue('(CFixedPoint){top - 1}')"))
 
 
 class BuildingLookupTest(unittest.TestCase):
