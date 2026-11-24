@@ -2121,8 +2121,14 @@ class TransferPopupTest(unittest.TestCase):
             for k in gsf.XF_KEYS:
                 with self.subTest(slot=n, key=k):
                     body = _block(self.values, f"sr_fl_{n}_xf_{k}")
+                    # The marines between the room's bounds, which lie within 0 and all.
+                    most, least = ((f"sr_fl_{n}_xf_marines_most", f"sr_fl_{n}_xf_marines_least") if k == "marines"
+                                   else (f"sr_fl_{n}_{k}_value", "0"))
                     self.assertRegex(body, rf"if = \{{ limit = \{{ has_variable = sr_det_amt_{k} \}} value = var:sr_det_amt_{k} \}}"
-                                           rf"\s*max = sr_fl_{n}_{k}_value\s*min = 0\s*$")
+                                           rf"\s*max = {most}\s*min = {least}\s*$")
+                    if k == "marines":
+                        self.assertRegex(_block(self.values, most), rf"\s*max = sr_fl_{n}_marines_value\s*min = 0\s*$")
+                        self.assertRegex(_block(self.values, least), rf"\s*min = 0\s*max = {most}\s*$")
                     disp = _raw(gsf.ROOT / gsf.DISPLAY_OUT)
                     moved = "xf_marines_moved" if k == "marines" else f"xf_{k}"
                     self.assertIn(f"sr_disp_fl_{n}_xf_{k} = {{ value = sr_fl_{n}_{moved} }}", disp)
@@ -2133,8 +2139,8 @@ class TransferPopupTest(unittest.TestCase):
         fx = _Fx(op=1, pick=6, step=1)
         fx.fleet(1, loc=2, marines=4, war=(2, 2), carrier=(2, 2))
         fx.fleet(3, loc=2, carrier=(2, 2))
-        fx.choose(3, war=1, carrier=2, marines=1)
-        self.assertEqual([fx.num(f"sr_disp_fl_1_xf_{c}marines") for c in ("", "stay_", "there_")], [_fxn(1), _fxn(3), _fxn(1)])
+        fx.choose(3, war=1, carrier=1, marines=3)   # the room allows 2 to 4
+        self.assertEqual([fx.num(f"sr_disp_fl_1_xf_{c}marines") for c in ("", "stay_", "there_")], [_fxn(3), _fxn(1), _fxn(3)])
         self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), [])
         fx.choose(3, war=2, carrier=2, marines=1)
         self.assertEqual([fx.num(f"sr_disp_fl_1_xf_{c}marines") for c in ("", "stay_", "there_")], [_fxn(4), 0, _fxn(4)])
@@ -2879,26 +2885,85 @@ class TransferRunTest(unittest.TestCase):
         """There: the other fleet's own marines and carriers count; here: the
         carriers that stay. A fleet already past its room (carriers lost in
         battle) may still move marines out, or ships with no carriers; it can't
-        move carriers away from its marines (owner, 2026-10-31)."""
+        move carriers away from its marines (owner, 2026-10-31). The amount is
+        held to that room, so a choice past it moves what the room allows, and
+        the refusal is left for two fleets that together lack the room."""
         def room(**amounts):
             fx = _Fx(op=1)
             fx.fleet(1, loc=2, marines=2, war=(2, 2), carrier=(1, 1))
             fx.fleet(3, loc=2, marines=3, carrier=(2, 2))
             fx.choose(3, **amounts)
-            return "sr_fl_xf_room_tt" not in fx.refusals("sr_fleet_transfer_sgui")
-        self.assertFalse(room(marines=2))             # 5 there, room for 4
-        self.assertTrue(room(marines=2, carrier=1))   # 5 there, room for 6; none here
-        self.assertFalse(room(carrier=1))             # 2 here, room for none
+            return fx.num("sr_fl_1_xf_marines"), "sr_fl_xf_room_tt" not in fx.refusals("sr_fleet_transfer_sgui")
+        self.assertEqual(room(marines=2), (_fxn(1), True))             # room for 4 there, 3 aboard
+        self.assertEqual(room(marines=2, carrier=1), (_fxn(2), True))  # room for 6 there; none here
+        self.assertEqual(room(carrier=1), (_fxn(2), True))             # none here: both go along
 
         def over(**amounts):
             fx = _Fx(op=1)
             fx.fleet(1, loc=2, marines=4, war=(2, 2), carrier=(1, 1))   # room for 2: 2 over
             fx.fleet(3, loc=2, carrier=(3, 3))
             fx.choose(3, **amounts)
-            return "sr_fl_xf_room_tt" not in fx.refusals("sr_fleet_transfer_sgui")
-        self.assertTrue(over(marines=1))     # 3 here, 1 over
-        self.assertTrue(over(war=1))         # still 2 over, no worse
-        self.assertFalse(over(carrier=1))    # 4 over
+            return fx.num("sr_fl_1_xf_marines"), "sr_fl_xf_room_tt" not in fx.refusals("sr_fleet_transfer_sgui")
+        self.assertEqual(over(marines=1), (_fxn(1), True))   # 3 here, 1 over
+        self.assertEqual(over(war=1), (0, True))             # still 2 over, no worse
+        self.assertEqual(over(carrier=1), (_fxn(2), True))   # 2 go along: 2 here, still 2 over
+
+        # The fleet it goes into already past its room: none can go, and the
+        # refusal stands, + saying why.
+        fx = _Fx(op=1, pick=6, step=6)
+        fx.fleet(1, loc=2, marines=2, war=(2, 2), carrier=(1, 1))
+        fx.fleet(3, loc=2, marines=7, carrier=(3, 3))
+        fx.choose(3, war=1, marines=2)
+        self.assertEqual(fx.num("sr_fl_1_xf_marines"), 0)
+        self.assertIn("sr_fl_xf_room_tt", fx.refusals("sr_fleet_transfer_sgui"))
+        self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), ["sr_fl_xf_marines_more_tt"])
+
+    def test_the_marines_offered_are_those_the_room_allows(self):
+        """The fleet the owner reported (2026-11-24): 199 warships, 99 assault
+        carriers (room for 198 marines), 99 tenders and 199 marines, 5 of each
+        role chosen into a new fleet. The 5 carriers that go hold 10 and the 94
+        that stay 188 of the 189 left, 1 over as now: 10 is the only amount, so
+        the marines show it whatever was chosen, Transfer takes it, and − and +
+        grey, each with its reason."""
+        def fleet(**scopes):
+            fx = _Fx(op=1, **scopes)
+            fx.fleet(1, loc=2, marines=199, war=(199, 199), carrier=(99, 99), tender=(99, 99))
+            return fx
+        for chosen in (0, 5, 10, 100, 199):
+            with self.subTest(marines=chosen):
+                fx = fleet()
+                fx.choose(0, war=5, carrier=5, tender=5, marines=chosen)
+                self.assertEqual([fx.num(f"sr_disp_fl_1_xf_{c}marines") for c in ("", "stay_", "there_")],
+                                 [_fxn(10), _fxn(189), _fxn(10)])
+                self.assertEqual(fx.refusals("sr_fleet_transfer_sgui"), [])
+        for step, why in ((1, "sr_fl_xf_marines_fewer_tt"), (6, "sr_fl_xf_marines_more_tt")):
+            with self.subTest(step=step):
+                fx = fleet(pick=6, step=step)
+                fx.choose(0, war=5, carrier=5, tender=5, marines=5)
+                self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), [why])
+        # With room to spare both ways, a step moves the amount within it.
+        fx = fleet(pick=6, step=6)
+        fx.choose(0, war=5, carrier=50, tender=5, marines=100)   # room for 100 there, 98 here, 1 over now: 100 only
+        self.assertEqual(fx.num("sr_fl_1_xf_marines"), _fxn(100))
+        fx.choose(0, war=5, carrier=60, tender=5, marines=100)   # room for 120 there, 78 here: 120 only
+        self.assertEqual(fx.num("sr_fl_1_xf_marines"), _fxn(120))
+        fx.vars["sr_fl_1_marines"] = _fxn(150)                   # under its room: 72 to 120
+        fx.choose(0, war=5, carrier=60, tender=5, marines=100)
+        self.assertEqual((fx.num("sr_fl_1_xf_marines_least"), fx.num("sr_fl_1_xf_marines_most")), (_fxn(72), _fxn(120)))
+        self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), [])
+        fx.effect("sr_fl_by_op", DO="xfer_step")
+        self.assertEqual(fx.num("sr_fl_1_xf_marines"), _fxn(101))
+        fx.scopes["step"] = _fxn(gsf.XF_ALL)
+        fx.effect("sr_fl_by_op", DO="xfer_step")
+        self.assertEqual(fx.num("sr_fl_1_xf_marines"), _fxn(120))
+        self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), ["sr_fl_xf_marines_more_tt"])
+        fx.scopes["step"] = _fxn(gsf.XF_NONE)
+        fx.effect("sr_fl_by_op", DO="xfer_step")
+        self.assertEqual(fx.num("sr_fl_1_xf_marines"), _fxn(72))
+        fx.scopes["step"] = _fxn(1)
+        self.assertEqual(fx.refusals("sr_fleet_xfer_step_sgui"), ["sr_fl_xf_marines_fewer_tt"])
+        self.go(fx, 1)
+        self.assertEqual((fx.slot(1)["marines"], fx.slot(2)["marines"]), (78, 72))
 
     def test_the_fleet_it_goes_into_must_still_be_here(self):
         fx = _Fx(op=1)

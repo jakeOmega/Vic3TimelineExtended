@@ -887,16 +887,21 @@ scripted GUI: one scripted GUI per step size, as the construction market has.
    up to the old figures, now and at full. A fleet closing in or interdicting splits off a new fleet at Stand off
    (it has no target).
 7. **The refusals.** Transfer greys, with the reason on hover: everything at 0; all of a fleet into a new fleet (it
-   would keep nothing); marines moved into a fleet whose assault carriers can't hold them, or carriers moved away from
-   the marines they carry; the other fleet destroyed before the click (a battle, or `event te_debug_space_race.6`'s
+   would keep nothing); the other fleet destroyed before the click (a battle, or `event te_debug_space_race.6`'s
    "Run this month's combat now" with a stronger enemy there: its Into button goes, and Transfer says the fleet it goes
-   into isn't here). A fleet already past its carriers' room (carriers lost in battle) can still move marines out.
+   into isn't here); into a fleet already past its own carriers' room, the room line, and the marines' + says why.
    With every ship chosen, the marines row shows all of them and its − and + grey.
-8. **The fleet gone.** With the popup open, let a battle destroy the fleet (a stronger enemy fleet there, then
+8. **The marines follow the carriers' room** (owner, 2026-11-24). On a fleet of 199 warships, 99 assault carriers,
+   99 tenders and 199 marines (1 past its room), choose 5 of each role into a new fleet: the marines read 10 whatever
+   was chosen, Stays 189, Other fleet 10, Transfer is clickable, and the marines' − and + grey, each with its reason.
+   Move more carriers and the marines move with them; with room to spare both ways, − and + step within it and a
+   right-click sets the fewest or the most the room allows. A fleet already past its carriers' room (carriers lost in
+   battle) can still move marines out.
+9. **The fleet gone.** With the popup open, let a battle destroy the fleet (a stronger enemy fleet there, then
    `event te_debug_space_race.6`'s "Run this month's combat now"; the popup's dim covers every other window, so the
    fleet can't be sent away from under it): the popup says "This fleet has left, or is gone." and nothing in it acts.
    Transfer closes the popup.
-9. **No Space Command.** Transfer still works without one (Merge and Detach did); the owner may want it gated.
+10. **No Space Command.** Transfer still works without one (Merge and Detach did); the owner may want it gated.
 
 ## The owner's UI pass: the fleet popups and posture buttons (PR 3, 2026-10-31)
 

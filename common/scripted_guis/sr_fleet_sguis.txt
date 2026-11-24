@@ -171,7 +171,9 @@ sr_fleet_xfer_open_sgui = {
 # 10 all), the construction market's keys. The amount is then held to 0 and
 # what the slot has (sr_fl_xfer_step_role). Three chained AddScopes: unproven
 # in game (TE_SELF_CHECK xfer_step_scope). The marines' grey while every ship
-# goes, since every marine then goes too.
+# goes, since every marine then goes too, and each at the bound the assault
+# carriers' room sets (sr_fl_<n>_xf_marines_least, _most), which the amount is
+# held to.
 sr_fleet_xfer_step_sgui = {
 	scope = country
 	saved_scopes = { op pick step }
@@ -197,6 +199,31 @@ sr_fleet_xfer_step_sgui = {
 			custom_tooltip = {
 				text = sr_fl_xf_marines_follow_tt
 				sr_fl_op_check = { TEST = xf_some_stays }
+			}
+		}
+		# Else − at the fewest the carriers that stay leave room for, + at the
+		# most the fleet it goes into has room for. The button's greyed state
+		# and hover are its plain click's (step 1 or 6).
+		trigger_if = {
+			limit = {
+				scope:pick = 6
+				scope:step < 6
+				sr_fl_op_check = { TEST = xf_some_stays }
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_marines_fewer_tt
+				sr_fl_op_check = { TEST = xf_marines_fewer }
+			}
+		}
+		trigger_if = {
+			limit = {
+				scope:pick = 6
+				scope:step > 5
+				sr_fl_op_check = { TEST = xf_some_stays }
+			}
+			custom_tooltip = {
+				text = sr_fl_xf_marines_more_tt
+				sr_fl_op_check = { TEST = xf_marines_more }
 			}
 		}
 	}
@@ -280,7 +307,9 @@ sr_fleet_xfer_to_sgui = {
 # left; the fleet would keep less than sr_fl_minimum_strength (all of it into
 # another fleet excepted) or a new fleet get less; the fleet it goes into would
 # carry more marines than its assault carriers hold, or this one be further past
-# its room than it is now. Not gated by Space Command, as Merge and Detach
+# its room than it is now (the marines' amount is held to that room, so this
+# refuses only where the two fleets together lack it: the fleet it goes into
+# is already over its own). Not gated by Space Command, as Merge and Detach
 # weren't (UI pass design § 10; an open owner's call).
 sr_fleet_transfer_sgui = {
 	scope = country
