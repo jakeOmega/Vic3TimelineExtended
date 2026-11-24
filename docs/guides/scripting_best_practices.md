@@ -2835,7 +2835,8 @@ The loader reads a loc file's language from its `_l_<language>.yml` suffix, and 
 | `[value\|1]` | 1 decimal place |
 | `[value\|2]` | 2 decimal places |
 | `[value\|+=0%]` | Signed percentage (+5%, -3%) |
-| `[value\|D]` | Detailed format |
+| `[value\|D]` | Thousands delimiter, keeping a fraction (`80.7`); `[value\|D0]` for a whole number |
+| `[value\|K]` | K/M abbreviation at any size: `0.00K` at zero (next section) |
 | `[value\|=v]` | Equals-prefixed value format |
 
 ### Breakdown Display Pattern (Vanilla Convention)
@@ -2856,6 +2857,10 @@ Victoria 3 uses a **proportional font** (not monospace) for all text rendering. 
 - There is **no tab-stop or two-column grid mechanism** in the loc system.
 - The best approach for structured data is `#variable VALUE#! label` (value-first) with newlines, not label-then-value with alignment padding.
 - `#indent_newline:N` provides visual structure but doesn't enable column alignment.
+
+## `|K` Abbreviates Every Figure, Zero Included: Switch to `|0` Below 1,000
+
+A script value or variable printed `|K` comes out abbreviated whatever its size: the running game drew a zero rate as `0.00K` and 80 deaths as `0.08K` (Strategic Reserve and Demographics, 2026-11-24). A figure that can be small takes a key of its own that picks the format, `[SelectLocalization( LessThan_CFixedPoint( Abs_CFixedPoint( x ), '(CFixedPoint)999.5' ), '<fig>_n', '<fig>_k' )]` over `[x|0]` and `[x|K]`, spliced as `$<fig>$`. Its branches must reach their data from the widget's datacontext: in a tooltip a script prints (`THIS`, `ROOT`, `SCOPE`) a named key renders without it, so print a large figure there with `|D0`. The recipe and the test that holds it: `gui_modding_guide.md` § "Format Specifiers".
 
 ## AI Diplomatic Action Best Practices
 

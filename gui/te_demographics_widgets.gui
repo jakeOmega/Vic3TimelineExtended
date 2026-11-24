@@ -608,7 +608,7 @@ types te_demographics_widgets
 				align = right|nobaseline
 				using = te_demog_fontsize_row
 				default_format = "#v"
-				text = "[State.MakeScope.Var('te_dg_people').GetValue|K]"
+				text = "te_demog_states_people_fig"
 			}
 			textbox = {
 				autoresize = yes
@@ -1386,7 +1386,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_inf"
 						}
 						blockoverride "deaths" {
-							text = "[Country.MakeScope.Var('te_dg_dc_inf').GetValue|K]"
+							text = "te_demog_cd_dc_inf_fig"
 						}
 						blockoverride "share" {
 							text = "[Country.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]"
@@ -1401,7 +1401,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_chr"
 						}
 						blockoverride "deaths" {
-							text = "[Country.MakeScope.Var('te_dg_dc_chr').GetValue|K]"
+							text = "te_demog_cd_dc_chr_fig"
 						}
 						blockoverride "share" {
 							text = "[Country.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]"
@@ -1416,7 +1416,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_ext"
 						}
 						blockoverride "deaths" {
-							text = "[Country.MakeScope.Var('te_dg_dc_ext').GetValue|K]"
+							text = "te_demog_cd_dc_ext_fig"
 						}
 						blockoverride "share" {
 							text = "[Country.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]"
@@ -1431,7 +1431,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_work"
 						}
 						blockoverride "deaths" {
-							text = "[Country.MakeScope.Var('te_dg_dc_work').GetValue|K]"
+							text = "te_demog_cd_dc_work_fig"
 						}
 						blockoverride "share" {
 							text = "[Country.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]"
@@ -1446,7 +1446,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_mat"
 						}
 						blockoverride "deaths" {
-							text = "[Country.MakeScope.Var('te_dg_dc_mat').GetValue|K]"
+							text = "te_demog_cd_dc_mat_fig"
 						}
 						blockoverride "share" {
 							text = "[Country.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]"
@@ -1461,7 +1461,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_kill"
 						}
 						blockoverride "deaths" {
-							text = "[Country.MakeScope.Var('te_dg_dc_kill').GetValue|K]"
+							text = "te_demog_cd_dc_kill_fig"
 						}
 						blockoverride "share" {
 							text = "[Country.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]"
@@ -1476,7 +1476,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_war"
 						}
 						blockoverride "deaths" {
-							text = "[Country.MakeScope.Var('te_dg_dc_war').GetValue|K]"
+							text = "te_demog_cd_dc_war_fig"
 						}
 						blockoverride "share" {
 							text = "[Country.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]"
@@ -4833,7 +4833,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_inf"
 						}
 						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_inf').GetValue|K]"
+							text = "te_demog_st_dc_inf_fig"
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_inf')|%0]"
@@ -4848,7 +4848,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_chr"
 						}
 						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_chr').GetValue|K]"
+							text = "te_demog_st_dc_chr_fig"
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_chr')|%0]"
@@ -4863,7 +4863,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_ext"
 						}
 						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_ext').GetValue|K]"
+							text = "te_demog_st_dc_ext_fig"
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_ext')|%0]"
@@ -4878,7 +4878,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_work"
 						}
 						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_work').GetValue|K]"
+							text = "te_demog_st_dc_work_fig"
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_work')|%0]"
@@ -4893,7 +4893,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_mat"
 						}
 						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_mat').GetValue|K]"
+							text = "te_demog_st_dc_mat_fig"
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_mat')|%0]"
@@ -4908,7 +4908,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_kill"
 						}
 						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_kill').GetValue|K]"
+							text = "te_demog_st_dc_kill_fig"
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_kill')|%0]"
@@ -4923,7 +4923,7 @@ types te_demographics_widgets
 							text = "te_demog_dc_war"
 						}
 						blockoverride "deaths" {
-							text = "[State.MakeScope.Var('te_dg_dc_war').GetValue|K]"
+							text = "te_demog_st_dc_war_fig"
 						}
 						blockoverride "share" {
 							text = "[State.MakeScope.ScriptValue('te_demog_dc_share_war')|%0]"

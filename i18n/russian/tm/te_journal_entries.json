@@ -7312,8 +7312,8 @@
   "ru": "#bold [concept_st_res_flow_cap]:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_weekly_rate_cap_add')] ед. в неделю на каждый товар"
  },
  "je_strategic_reserve_ov_cap_value": {
-  "en": "Cap [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/wk",
-  "ru": "Предел [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0]/нед."
+  "en": "Cap $je_strategic_reserve_ov_cap_fig$/wk",
+  "ru": "Предел $je_strategic_reserve_ov_cap_fig$/нед."
  },
  "je_strategic_reserve_ov_held_caption": {
   "en": "Blocked",
@@ -7372,24 +7372,24 @@
   "ru": "Доход от продаж"
  },
  "je_strategic_reserve_ov_income_tt": {
-  "en": "#bold Weekly Sales Income:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]\\nGross revenue this week from the goods the reserve releases, at each good's current market price. Purchases, beside it, is the other side.",
-  "ru": "#bold Недельный доход от продаж:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]\\nВаловая выручка за эту неделю от товаров, которые резерв выпускает, по текущей рыночной цене каждого товара. Рядом «Закупки» — другая сторона."
+  "en": "#bold Weekly Sales Income:#! @money!$je_strategic_reserve_ov_income_fig$\\nGross revenue this week from the goods the reserve releases, at each good's current market price. Purchases, beside it, is the other side.",
+  "ru": "#bold Недельный доход от продаж:#! @money!$je_strategic_reserve_ov_income_fig$\\nВаловая выручка за эту неделю от товаров, которые резерв выпускает, по текущей рыночной цене каждого товара. Рядом «Закупки» — другая сторона."
  },
  "je_strategic_reserve_ov_income_value": {
-  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/wk",
-  "ru": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_sale_profit')|D]/нед."
+  "en": "@money!$je_strategic_reserve_ov_income_fig$/wk",
+  "ru": "@money!$je_strategic_reserve_ov_income_fig$/нед."
  },
  "je_strategic_reserve_ov_spend_label": {
   "en": "Purchases",
   "ru": "Закупки"
  },
  "je_strategic_reserve_ov_spend_tt": {
-  "en": "#bold Weekly Purchases:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]\\nWhat this week's buying costs at today's prices, decay replacement included. An estimate: the hub pays through its production method, so the bill is under Goods for Government Buildings in the budget panel.",
-  "ru": "#bold Недельные закупки:#! @money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]\\nСтоимость закупок этой недели по сегодняшним ценам, включая замену убыли. Оценка: узел платит через свой метод производства, поэтому счёт указан в «Товарах для государственных зданий» на панели бюджета."
+  "en": "#bold Weekly Purchases:#! @money!$je_strategic_reserve_ov_spend_fig$\\nWhat this week's buying costs at today's prices, decay replacement included. An estimate: the hub pays through its production method, so the bill is under Goods for Government Buildings in the budget panel.",
+  "ru": "#bold Недельные закупки:#! @money!$je_strategic_reserve_ov_spend_fig$\\nСтоимость закупок этой недели по сегодняшним ценам, включая замену убыли. Оценка: узел платит через свой метод производства, поэтому счёт указан в «Товарах для государственных зданий» на панели бюджета."
  },
  "je_strategic_reserve_ov_spend_value": {
-  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/wk",
-  "ru": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_total_purchase_cost')|D]/нед."
+  "en": "@money!$je_strategic_reserve_ov_spend_fig$/wk",
+  "ru": "@money!$je_strategic_reserve_ov_spend_fig$/нед."
  },
  "je_strategic_reserve_reason": {
   "en": "A national stockpile of strategic goods, bought from your own market and released back onto it by hand or with a price-triggered policy for each good.",

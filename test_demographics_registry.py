@@ -7214,7 +7214,8 @@ class TestCausesSection(unittest.TestCase):
             self.assertIn(f"ScriptValue('te_demog_dc_top_code_{c}')", deaths)
             self.assertIn(f"'te_demog_st_dc_{c}_top_more'", deaths)
             self.assertIn(f"'te_demog_st_dc_{c}_top_less'", deaths)
-            self.assertIn(f"te_demog_dc_top_abs_{c}", self.loc[f"te_demog_st_dc_{c}_top_more"])
+            self.assertIn(f"$te_demog_st_dc_{c}_top_fig$", self.loc[f"te_demog_st_dc_{c}_top_more"])
+            self.assertIn(f"te_demog_dc_top_abs_{c}", self.loc[f"te_demog_st_dc_{c}_top_fig"])
 
     def test_names_are_spliced(self):
         """The review of #916 (panel I1): laws, institutions and techs by their loc keys, never typed (the game says
