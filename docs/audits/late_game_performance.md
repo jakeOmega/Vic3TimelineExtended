@@ -1395,7 +1395,45 @@ in full once a frame in the section's list context; binding the leaves in a
 context of their own and the groups and Other from them would cut that too.
 Nothing is stored at a pulse: the panel's figures stay live.
 
-Data: `/mnt/d/vic3te-data/gui-eval-2026-11-24/` (`perf/side_roots_budget_breakdown.png`,
+**Measured again in the running game, the same day** (the same save, this
+branch loaded from a side mod at launch). Every figure and both pies read as
+before. The script profiler, the tab open in the Full Screen frame: 6,274
+samples and 246 frames in 13.5 s, against 16,139 samples and 137 frames in
+13.9 s; the four building walks are gone from the roots, the heaviest root is
+65 ms (`te_budget_values.txt:28`), and the first fourteen sum to about 1.5 ms
+a frame, from about 17.
+
+**The frame counter moved much less than the script: 19 frames a second,
+from 16, and what is left is the engine's, not the mod's.** A side mod's copy
+of the generated file with a client-side switch on each part showed where the
+frame goes (the Full Screen frame; the Nation tab in the same window draws at
+76):
+
+| Shown | frames a second |
+|---|---|
+| Both pies and both lists | 18 to 19 |
+| The pies only | 20 |
+| The lists only | 19 |
+| Neither (the two headers and their totals) | 20 |
+| Nothing under the headers, the sections' root contexts still bound | 23 |
+| Vanilla's own Budget panel, Overview tab | 16 |
+
+So the pies and lists together cost about 9 ms of the tab's 53 ms a frame,
+and about 30 ms is spent with nothing drawn at all: the two sections' root
+`datacontext`, which reads the engine's budget figures once a frame (twelve
+getters for income, about thirty for expenses: `PredictWeeklyIncome`,
+`PredictConsumptionTaxes`, `PredictDividendsTaxes`, `PredictTariffs`,
+`PredictGovernmentWagesExpenses`, `PredictMilitaryWagesExpenses`,
+`PredictTotalArmyExpenses` and the rest). Vanilla's Budget overview reads the
+same kind of figure a line and pays 49 ms a frame for it on this economy. The
+tab cannot read them less often (a binding is evaluated every frame) and
+script cannot read them at all, so a weekly copy in variables is not
+available. What could still help, not tried: finding which getters carry the
+cost (a switch on each, as above; the `Predict…` ones are the likely ones)
+and showing those figures on a hover or behind a "Show" button instead of
+in the open tab.
+
+Data: `/mnt/d/vic3te-data/gui-eval-2026-11-24/` (`perf/side_roots_budget_breakdown.png`, `perf/after_roots_budget_breakdown.png`, `perf/bud_experiment.png`,
 `shots/before/fs_budget_breakdown.png`, `agents/budget-perf/count_frame.py`).
 
 ## Measurements, 2026-10-03: 2072
