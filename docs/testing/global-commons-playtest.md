@@ -44,6 +44,13 @@ what only the game can show.
    Material Science and don't switch back. Mines that never move mean `most_productive` with `ai_value` 1000 / 3000
    doesn't rank cost-only methods as `pmg_emissions_control` assumes (record it there too); mines flipping back and
    forth mean the stickiness doesn't hold them.
+8. Building Registry (2026-11-24): with every Deep-Sea Mine on Deep-Sea Mining and Advanced Nanofabrication researched,
+   click the Deep-Sea Mine group in the mine's Registry row. A dropdown opens that offers Advanced Deep-Sea Mining,
+   and picking it switches every mine. Before the fix the group showed no dropdown until one mine had switched from
+   its own panel. Do it with a mine in a state without Digital Access too: the method is offered there as well. If
+   the dropdown still doesn't open, the cause isn't `required_input_goods` (`scripting_best_practices.md` § "A Method
+   That Hides When Unavailable Can't Require a Local Good"). The next thing to try is the other family's methods,
+   disabled by the game rule.
 
 ## Seabed licences (§ 2)
 

@@ -430,6 +430,15 @@ class RuleOffKeepsTheOldMine(unittest.TestCase):
             with self.subTest(method=pm):
                 self.assertEqual(str(_unwrap(self.d.pms[pm].get("is_hidden_when_unavailable"))), "yes")
 
+    def test_no_method_requires_a_good(self):
+        # A hidden method that requires Digital Access (a local good) can't be found by
+        # a check made for the whole country. The Building Registry's switch-all
+        # control makes that check, so it listed only the method in use and showed
+        # no dropdown (owner, 2026-11-24). Each method buys the good all the same.
+        for pm in self.on + self.off:
+            with self.subTest(method=pm):
+                self.assertNotIn("required_input_goods", self.d.pms[pm])
+
 
 class ExtraplanetaryBaseLogistics(unittest.TestCase):
     """§ 1.2: two groups, one cut each, and the order flips only with both."""

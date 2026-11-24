@@ -1853,6 +1853,32 @@ scope:some_state = {
 At state scope this targets the buildings of that type in that state, which is per-building
 control for any building that can only exist once per state.
 
+## A Method That Hides When Unavailable Can't Require a Local Good
+
+The Building Registry's switch-all control (`gui/building_browser_panel.gui` and
+`gui/production_methods.gui`, `BuildingBrowserBuildingTypeItem.ToggleSwitchProductionMethodMenu`)
+shows its dropdown only while `ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self )`
+holds more than one method. That list is built for the whole country, with no state. A method
+with `required_input_goods` on a local good (Digital Access, Electricity) seems to fail that
+check, since a local good is only on sale in a state. With `is_hidden_when_unavailable = yes` the
+method is then left out of the list until some building of the type already runs it.
+
+The Deep-Sea Mine showed it (owner, 2026-11-24): every method took
+`required_input_goods = digital_access` and hid when unavailable, and the Global Commons rule
+disabled the other family, so with every mine on Deep-Sea Mining the list held that one method.
+The group showed no dropdown, though its badge (`GetNumAvailableOptionsForBuildingType`) read 2
+and each mine's own panel offered Advanced Deep-Sea Mining. Once one mine had switched there,
+the list held both and the dropdown came back. The fix dropped the requirement from all six
+methods (`test_deep_sea_rebalance.py`, `test_no_method_requires_a_good`); it guarded no switch,
+since every method in the group had it. The cause is inferred from the screenshots, not read
+from the engine.
+
+Give a hidden method no `required_input_goods`, or make sure a visible method in its group
+offers the same choice. Other methods in the mod combine the two, in groups where other methods
+keep the dropdown: the AI-managed power and industry methods, 3D-Printed Buildings and two of the
+Construction Site's direct tiers. In the switch-all menu they may be missing until a building
+runs them (unverified).
+
 ## Country-Scope Modifiers on Repeatable Per-State Buildings Stack Nationally
 
 A building that can be built in **every** state applies its `country_modifiers` once per
