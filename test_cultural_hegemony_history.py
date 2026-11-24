@@ -255,14 +255,21 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         # the chart is its generated wrapper's (gen_te_history_charts.py), instanced once
         self.assertEqual(history.count("te_hist_ch_models = {}"), 1)
         chart = history_charts(history)[0]
-        plot = chart[chart.index('blockoverride "sample_datamodel"'):chart.index('blockoverride "plot_layouts"')]
-        self.assertIn("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')", plot)
+        plot = chart[:chart.index('blockoverride "plot_layouts"')]
+        layouts = chart[chart.index('blockoverride "plot_layouts"'):]
         # The plot blocks sit on the te_history_chart instance, as in every
         # other chart. #633 put them in a type derived from te_history_plot,
         # which drew nothing in game, even on its own (GUI guide gotcha #37).
-        for block in ("sample_visible", "bar_tooltip", "marker_pips", "bar_body"):
+        for block in ("bar_tooltip", "marker_pips", "bar_body"):
             self.assertIn(f'blockoverride "{block}"', plot)
+        # The store and the age test are each plot's, the generator's
+        # (gen_te_history_charts.plot_layouts): the 5 and 20 years read the
+        # store's last 5 and 20 years, the 100 the whole store.
         self.assertEqual(chart.count("te_history_plot = {"), 3)
+        self.assertEqual(layouts.count("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')"), 3)
+        self.assertEqual(re.findall(r"DataModelLast\( GetGlobalVariable\('ch_model_hist_store'\)"
+                                    r"\.GetList\('ch_model_hist'\), '\(int32\)(\d+)' \)", layouts), ["5", "20"])
+        self.assertEqual(layouts.count("GetVariableValue( 'te_hist_y' )"), 2)
         for path in sorted(ROOT.glob("gui/**/*.gui")):
             self.assertIsNone(re.search(r"\btype\s+\w+\s*=\s*te_history_plot\b", read(path.relative_to(ROOT))), path)
         self.assertEqual(re.findall(r"GetVariableValue\('ch_model_hist_cum_(\w+)'\)", plot), list(reversed(MODELS)))
@@ -296,7 +303,7 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         frame = re.search(r'blockoverride "plot_size" \{ size = \{ (\d+) (\d+) \} \}', chart)
         self.assertIsNotNone(frame, "the chart no longer sizes its frame to its 400px of bars")
         width, height = map(int, frame.groups())
-        bars = [tuple(map(int, b)) for b in re.findall(r'blockoverride "bar_size" \{ size = \{ (\d+) (\d+) \} \}', chart)]
+        bars = [tuple(map(int, b)) for b in re.findall(r'blockoverride "bar_size" \{\s*size = \{ (\d+) (\d+) \}\s*\}', chart)]
         label_column, right_margin = 48, 8
         self.assertEqual(len(bars), 3)
         for years, (bar_width, bar_height) in zip((5, 20, 100), bars):
