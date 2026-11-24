@@ -75,7 +75,7 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 
 | Doc | Status | What's left |
 |-----|--------|-------------|
-| [plans/2026-11-24-supply-ship-scale.md](plans/2026-11-24-supply-ship-scale.md): issue #1984's first fix scoped: supply ships ten times the size (cost, goods, capacity, hit points and, the part that shortens the readout's list, the weekly cap per ship), the defines to scale by a rule, the battle size and additive cap modifiers, running games (no script read of a pool; a player-only button), and a Stage 0 that settles whether it helps: one grep, one save read, three timed variants, one of them a one-line cap raise that may do on its own | Scoping, nothing built (2026-11-24) | Stage 0 on the owner's machine, then Stages 1–5 |
+| [plans/2026-11-24-supply-ship-scale.md](plans/2026-11-24-supply-ship-scale.md): issue #1984's first fix scoped: supply ships ten times the size (cost, goods, capacity, hit points and, the part that shortens the readout's list, the weekly cap per ship), the three defines that change (the 1.15.2 files read), the battle size and additive cap modifiers, running games (no script read of a pool; a player-only button), and a Stage 0 that times the quick fix first | Quick fix built 2026-11-24: Naval Convoy Defense raises a supply ship's weekly cap from 5 to its cost, 25 (`test_supply_ship_progress_cap.py`); the rescale is not started | Stage 0's timing on the owner's machine; Stages 1–5 only if the quick fix isn't enough |
 
 ### Interface
 

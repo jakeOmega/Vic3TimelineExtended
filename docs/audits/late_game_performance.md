@@ -1328,11 +1328,12 @@ ten times as much while every requirement for them is a tenth (always, from
 the start of a game), which shrinks whatever the routine walks and has other
 effects they want; or a readout that doesn't run live (cached, or moved to
 the tooltip). Either way the mod overrides `timemanip.gui` or changes the
-supply ship defines. The first is scoped in
-`docs/superpowers/plans/2026-11-24-supply-ship-scale.md`: the weekly cap per
-ship, not the cost, sets how many supply ships are in progress, so the cap
-must scale with the cost, and a one-line cap raise (its variant V3) tests the
-owner's guess first.
+supply ship defines. The weekly cap per ship, not the cost, sets how many
+supply ships are in progress, so a quick fix went first (2026-11-24): Naval
+Convoy Defense (era 6) raises the cap from 5 to the cost, 25, so a ship is
+built in a week and a fifth as many are in progress. It is not timed yet
+(`docs/testing/perf-fixes-playtest.md`). The rescale, if that isn't enough, is
+`docs/superpowers/plans/2026-11-24-supply-ship-scale.md`.
 
 Data: `/mnt/d/vic3te-data/perf-2026-11-23/` (`variants/<name>/`,
 `runs/<name>/` with each session's split and samples, `run_variant.sh` for
