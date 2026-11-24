@@ -2349,7 +2349,7 @@
  je_space_race_widget_windows_header:0 "Next Windows"
  je_space_race_widget_windows_header_tt:0 "#header Next Windows#!\nWhere a colony fleet of ours can go now: each destination with a world we may target and within our drive's reach, its next [concept_sr_launch_window] and how long the fleet takes to get there."
  je_space_race_widget_xf_col_move:0 "Move"
- je_space_race_widget_xf_col_move_tt:0 "#header Move#!\nHow much of each role, and how many marines, move. Each button's hover lists its keys. An amount never goes past what the fleet has. When every ship goes, every marine goes with them."
+ je_space_race_widget_xf_col_move_tt:0 "#header Move#!\nHow much of each role, and how many marines, move. Each button's hover lists its keys. An amount never goes past what the fleet has. The marines never go past what the assault carriers on either side have room for, so moving more or fewer carriers can change them. When every ship goes, every marine goes with them."
  je_space_race_widget_xf_col_now:0 "Now"
  je_space_race_widget_xf_col_stay:0 "Stays"
  je_space_race_widget_xf_col_stay_tt:0 "#header Stays#!\nWhat this fleet keeps after the transfer. With nothing of its strength left, it is gone."

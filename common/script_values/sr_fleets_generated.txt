@@ -9431,12 +9431,6 @@ sr_fl_1_xf_tender = {
 	max = sr_fl_1_tender_value
 	min = 0
 }
-sr_fl_1_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_1_marines_value
-	min = 0
-}
 sr_fl_1_xf_strength = {
 	value = 0
 	add = sr_fl_1_xf_war
@@ -9446,11 +9440,6 @@ sr_fl_1_xf_strength = {
 	add = sr_fl_1_xf_tender
 }
 sr_fl_1_xf_left = { value = sr_fl_1_strength subtract = sr_fl_1_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_1_xf_marines_moved = {
-	value = sr_fl_1_xf_marines
-	if = { limit = { sr_fl_1_xf_left <= 0 } value = sr_fl_1_marines_value }
-}
 sr_fl_1_xf_stay_war = { value = sr_fl_1_war_value subtract = sr_fl_1_xf_war }
 sr_fl_1_xf_there_war = {
 	value = sr_fl_1_xf_war
@@ -9511,18 +9500,6 @@ sr_fl_1_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_1_xf_stay_marines = { value = sr_fl_1_marines_value subtract = sr_fl_1_xf_marines_moved }
-sr_fl_1_xf_there_marines = {
-	value = sr_fl_1_xf_marines_moved
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_1_xf_there_strength = {
 	value = sr_fl_1_xf_strength
 	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_strength }
@@ -9536,10 +9513,60 @@ sr_fl_1_xf_there_strength = {
 }
 sr_fl_1_xf_stay_room = { value = sr_fl_1_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_1_xf_there_room = { value = sr_fl_1_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_1_xf_stay_over = { value = sr_fl_1_xf_stay_marines subtract = sr_fl_1_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_1_xf_now_over = { value = sr_fl_1_marines_value subtract = sr_fl_1_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_1_xf_marines_most = {
+	value = sr_fl_1_xf_there_room
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_1_marines_value
+	min = 0
+}
+sr_fl_1_xf_marines_least = {
+	value = sr_fl_1_marines_value
+	subtract = sr_fl_1_xf_stay_room
+	subtract = sr_fl_1_xf_now_over
+	min = 0
+	max = sr_fl_1_xf_marines_most
+}
+sr_fl_1_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_1_xf_marines_most
+	min = sr_fl_1_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_1_xf_marines_moved = {
+	value = sr_fl_1_xf_marines
+	if = { limit = { sr_fl_1_xf_left <= 0 } value = sr_fl_1_marines_value }
+}
+sr_fl_1_xf_stay_marines = { value = sr_fl_1_marines_value subtract = sr_fl_1_xf_marines_moved }
+sr_fl_1_xf_there_marines = {
+	value = sr_fl_1_xf_marines_moved
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_1_xf_stay_over = { value = sr_fl_1_xf_stay_marines subtract = sr_fl_1_xf_stay_room min = 0 }
 
 # Slot 2's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9573,12 +9600,6 @@ sr_fl_2_xf_tender = {
 	max = sr_fl_2_tender_value
 	min = 0
 }
-sr_fl_2_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_2_marines_value
-	min = 0
-}
 sr_fl_2_xf_strength = {
 	value = 0
 	add = sr_fl_2_xf_war
@@ -9588,11 +9609,6 @@ sr_fl_2_xf_strength = {
 	add = sr_fl_2_xf_tender
 }
 sr_fl_2_xf_left = { value = sr_fl_2_strength subtract = sr_fl_2_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_2_xf_marines_moved = {
-	value = sr_fl_2_xf_marines
-	if = { limit = { sr_fl_2_xf_left <= 0 } value = sr_fl_2_marines_value }
-}
 sr_fl_2_xf_stay_war = { value = sr_fl_2_war_value subtract = sr_fl_2_xf_war }
 sr_fl_2_xf_there_war = {
 	value = sr_fl_2_xf_war
@@ -9653,18 +9669,6 @@ sr_fl_2_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_2_xf_stay_marines = { value = sr_fl_2_marines_value subtract = sr_fl_2_xf_marines_moved }
-sr_fl_2_xf_there_marines = {
-	value = sr_fl_2_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_2_xf_there_strength = {
 	value = sr_fl_2_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -9678,10 +9682,60 @@ sr_fl_2_xf_there_strength = {
 }
 sr_fl_2_xf_stay_room = { value = sr_fl_2_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_2_xf_there_room = { value = sr_fl_2_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_2_xf_stay_over = { value = sr_fl_2_xf_stay_marines subtract = sr_fl_2_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_2_xf_now_over = { value = sr_fl_2_marines_value subtract = sr_fl_2_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_2_xf_marines_most = {
+	value = sr_fl_2_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_2_marines_value
+	min = 0
+}
+sr_fl_2_xf_marines_least = {
+	value = sr_fl_2_marines_value
+	subtract = sr_fl_2_xf_stay_room
+	subtract = sr_fl_2_xf_now_over
+	min = 0
+	max = sr_fl_2_xf_marines_most
+}
+sr_fl_2_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_2_xf_marines_most
+	min = sr_fl_2_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_2_xf_marines_moved = {
+	value = sr_fl_2_xf_marines
+	if = { limit = { sr_fl_2_xf_left <= 0 } value = sr_fl_2_marines_value }
+}
+sr_fl_2_xf_stay_marines = { value = sr_fl_2_marines_value subtract = sr_fl_2_xf_marines_moved }
+sr_fl_2_xf_there_marines = {
+	value = sr_fl_2_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_2_xf_stay_over = { value = sr_fl_2_xf_stay_marines subtract = sr_fl_2_xf_stay_room min = 0 }
 
 # Slot 3's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9715,12 +9769,6 @@ sr_fl_3_xf_tender = {
 	max = sr_fl_3_tender_value
 	min = 0
 }
-sr_fl_3_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_3_marines_value
-	min = 0
-}
 sr_fl_3_xf_strength = {
 	value = 0
 	add = sr_fl_3_xf_war
@@ -9730,11 +9778,6 @@ sr_fl_3_xf_strength = {
 	add = sr_fl_3_xf_tender
 }
 sr_fl_3_xf_left = { value = sr_fl_3_strength subtract = sr_fl_3_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_3_xf_marines_moved = {
-	value = sr_fl_3_xf_marines
-	if = { limit = { sr_fl_3_xf_left <= 0 } value = sr_fl_3_marines_value }
-}
 sr_fl_3_xf_stay_war = { value = sr_fl_3_war_value subtract = sr_fl_3_xf_war }
 sr_fl_3_xf_there_war = {
 	value = sr_fl_3_xf_war
@@ -9795,18 +9838,6 @@ sr_fl_3_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_3_xf_stay_marines = { value = sr_fl_3_marines_value subtract = sr_fl_3_xf_marines_moved }
-sr_fl_3_xf_there_marines = {
-	value = sr_fl_3_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_3_xf_there_strength = {
 	value = sr_fl_3_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -9820,10 +9851,60 @@ sr_fl_3_xf_there_strength = {
 }
 sr_fl_3_xf_stay_room = { value = sr_fl_3_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_3_xf_there_room = { value = sr_fl_3_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_3_xf_stay_over = { value = sr_fl_3_xf_stay_marines subtract = sr_fl_3_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_3_xf_now_over = { value = sr_fl_3_marines_value subtract = sr_fl_3_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_3_xf_marines_most = {
+	value = sr_fl_3_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_3_marines_value
+	min = 0
+}
+sr_fl_3_xf_marines_least = {
+	value = sr_fl_3_marines_value
+	subtract = sr_fl_3_xf_stay_room
+	subtract = sr_fl_3_xf_now_over
+	min = 0
+	max = sr_fl_3_xf_marines_most
+}
+sr_fl_3_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_3_xf_marines_most
+	min = sr_fl_3_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_3_xf_marines_moved = {
+	value = sr_fl_3_xf_marines
+	if = { limit = { sr_fl_3_xf_left <= 0 } value = sr_fl_3_marines_value }
+}
+sr_fl_3_xf_stay_marines = { value = sr_fl_3_marines_value subtract = sr_fl_3_xf_marines_moved }
+sr_fl_3_xf_there_marines = {
+	value = sr_fl_3_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_3_xf_stay_over = { value = sr_fl_3_xf_stay_marines subtract = sr_fl_3_xf_stay_room min = 0 }
 
 # Slot 4's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9857,12 +9938,6 @@ sr_fl_4_xf_tender = {
 	max = sr_fl_4_tender_value
 	min = 0
 }
-sr_fl_4_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_4_marines_value
-	min = 0
-}
 sr_fl_4_xf_strength = {
 	value = 0
 	add = sr_fl_4_xf_war
@@ -9872,11 +9947,6 @@ sr_fl_4_xf_strength = {
 	add = sr_fl_4_xf_tender
 }
 sr_fl_4_xf_left = { value = sr_fl_4_strength subtract = sr_fl_4_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_4_xf_marines_moved = {
-	value = sr_fl_4_xf_marines
-	if = { limit = { sr_fl_4_xf_left <= 0 } value = sr_fl_4_marines_value }
-}
 sr_fl_4_xf_stay_war = { value = sr_fl_4_war_value subtract = sr_fl_4_xf_war }
 sr_fl_4_xf_there_war = {
 	value = sr_fl_4_xf_war
@@ -9937,18 +10007,6 @@ sr_fl_4_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_4_xf_stay_marines = { value = sr_fl_4_marines_value subtract = sr_fl_4_xf_marines_moved }
-sr_fl_4_xf_there_marines = {
-	value = sr_fl_4_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_4_xf_there_strength = {
 	value = sr_fl_4_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -9962,10 +10020,60 @@ sr_fl_4_xf_there_strength = {
 }
 sr_fl_4_xf_stay_room = { value = sr_fl_4_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_4_xf_there_room = { value = sr_fl_4_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_4_xf_stay_over = { value = sr_fl_4_xf_stay_marines subtract = sr_fl_4_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_4_xf_now_over = { value = sr_fl_4_marines_value subtract = sr_fl_4_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_4_xf_marines_most = {
+	value = sr_fl_4_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_4_marines_value
+	min = 0
+}
+sr_fl_4_xf_marines_least = {
+	value = sr_fl_4_marines_value
+	subtract = sr_fl_4_xf_stay_room
+	subtract = sr_fl_4_xf_now_over
+	min = 0
+	max = sr_fl_4_xf_marines_most
+}
+sr_fl_4_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_4_xf_marines_most
+	min = sr_fl_4_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_4_xf_marines_moved = {
+	value = sr_fl_4_xf_marines
+	if = { limit = { sr_fl_4_xf_left <= 0 } value = sr_fl_4_marines_value }
+}
+sr_fl_4_xf_stay_marines = { value = sr_fl_4_marines_value subtract = sr_fl_4_xf_marines_moved }
+sr_fl_4_xf_there_marines = {
+	value = sr_fl_4_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_4_xf_stay_over = { value = sr_fl_4_xf_stay_marines subtract = sr_fl_4_xf_stay_room min = 0 }
 
 # Slot 5's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9999,12 +10107,6 @@ sr_fl_5_xf_tender = {
 	max = sr_fl_5_tender_value
 	min = 0
 }
-sr_fl_5_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_5_marines_value
-	min = 0
-}
 sr_fl_5_xf_strength = {
 	value = 0
 	add = sr_fl_5_xf_war
@@ -10014,11 +10116,6 @@ sr_fl_5_xf_strength = {
 	add = sr_fl_5_xf_tender
 }
 sr_fl_5_xf_left = { value = sr_fl_5_strength subtract = sr_fl_5_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_5_xf_marines_moved = {
-	value = sr_fl_5_xf_marines
-	if = { limit = { sr_fl_5_xf_left <= 0 } value = sr_fl_5_marines_value }
-}
 sr_fl_5_xf_stay_war = { value = sr_fl_5_war_value subtract = sr_fl_5_xf_war }
 sr_fl_5_xf_there_war = {
 	value = sr_fl_5_xf_war
@@ -10079,18 +10176,6 @@ sr_fl_5_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_5_xf_stay_marines = { value = sr_fl_5_marines_value subtract = sr_fl_5_xf_marines_moved }
-sr_fl_5_xf_there_marines = {
-	value = sr_fl_5_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_5_xf_there_strength = {
 	value = sr_fl_5_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -10104,10 +10189,60 @@ sr_fl_5_xf_there_strength = {
 }
 sr_fl_5_xf_stay_room = { value = sr_fl_5_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_5_xf_there_room = { value = sr_fl_5_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_5_xf_stay_over = { value = sr_fl_5_xf_stay_marines subtract = sr_fl_5_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_5_xf_now_over = { value = sr_fl_5_marines_value subtract = sr_fl_5_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_5_xf_marines_most = {
+	value = sr_fl_5_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_5_marines_value
+	min = 0
+}
+sr_fl_5_xf_marines_least = {
+	value = sr_fl_5_marines_value
+	subtract = sr_fl_5_xf_stay_room
+	subtract = sr_fl_5_xf_now_over
+	min = 0
+	max = sr_fl_5_xf_marines_most
+}
+sr_fl_5_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_5_xf_marines_most
+	min = sr_fl_5_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_5_xf_marines_moved = {
+	value = sr_fl_5_xf_marines
+	if = { limit = { sr_fl_5_xf_left <= 0 } value = sr_fl_5_marines_value }
+}
+sr_fl_5_xf_stay_marines = { value = sr_fl_5_marines_value subtract = sr_fl_5_xf_marines_moved }
+sr_fl_5_xf_there_marines = {
+	value = sr_fl_5_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_5_xf_stay_over = { value = sr_fl_5_xf_stay_marines subtract = sr_fl_5_xf_stay_room min = 0 }
 
 # Slot 6's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10141,12 +10276,6 @@ sr_fl_6_xf_tender = {
 	max = sr_fl_6_tender_value
 	min = 0
 }
-sr_fl_6_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_6_marines_value
-	min = 0
-}
 sr_fl_6_xf_strength = {
 	value = 0
 	add = sr_fl_6_xf_war
@@ -10156,11 +10285,6 @@ sr_fl_6_xf_strength = {
 	add = sr_fl_6_xf_tender
 }
 sr_fl_6_xf_left = { value = sr_fl_6_strength subtract = sr_fl_6_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_6_xf_marines_moved = {
-	value = sr_fl_6_xf_marines
-	if = { limit = { sr_fl_6_xf_left <= 0 } value = sr_fl_6_marines_value }
-}
 sr_fl_6_xf_stay_war = { value = sr_fl_6_war_value subtract = sr_fl_6_xf_war }
 sr_fl_6_xf_there_war = {
 	value = sr_fl_6_xf_war
@@ -10221,18 +10345,6 @@ sr_fl_6_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_6_xf_stay_marines = { value = sr_fl_6_marines_value subtract = sr_fl_6_xf_marines_moved }
-sr_fl_6_xf_there_marines = {
-	value = sr_fl_6_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_6_xf_there_strength = {
 	value = sr_fl_6_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -10246,10 +10358,60 @@ sr_fl_6_xf_there_strength = {
 }
 sr_fl_6_xf_stay_room = { value = sr_fl_6_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_6_xf_there_room = { value = sr_fl_6_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_6_xf_stay_over = { value = sr_fl_6_xf_stay_marines subtract = sr_fl_6_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_6_xf_now_over = { value = sr_fl_6_marines_value subtract = sr_fl_6_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_6_xf_marines_most = {
+	value = sr_fl_6_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_6_marines_value
+	min = 0
+}
+sr_fl_6_xf_marines_least = {
+	value = sr_fl_6_marines_value
+	subtract = sr_fl_6_xf_stay_room
+	subtract = sr_fl_6_xf_now_over
+	min = 0
+	max = sr_fl_6_xf_marines_most
+}
+sr_fl_6_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_6_xf_marines_most
+	min = sr_fl_6_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_6_xf_marines_moved = {
+	value = sr_fl_6_xf_marines
+	if = { limit = { sr_fl_6_xf_left <= 0 } value = sr_fl_6_marines_value }
+}
+sr_fl_6_xf_stay_marines = { value = sr_fl_6_marines_value subtract = sr_fl_6_xf_marines_moved }
+sr_fl_6_xf_there_marines = {
+	value = sr_fl_6_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_6_xf_stay_over = { value = sr_fl_6_xf_stay_marines subtract = sr_fl_6_xf_stay_room min = 0 }
 
 # Slot 7's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10283,12 +10445,6 @@ sr_fl_7_xf_tender = {
 	max = sr_fl_7_tender_value
 	min = 0
 }
-sr_fl_7_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_7_marines_value
-	min = 0
-}
 sr_fl_7_xf_strength = {
 	value = 0
 	add = sr_fl_7_xf_war
@@ -10298,11 +10454,6 @@ sr_fl_7_xf_strength = {
 	add = sr_fl_7_xf_tender
 }
 sr_fl_7_xf_left = { value = sr_fl_7_strength subtract = sr_fl_7_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_7_xf_marines_moved = {
-	value = sr_fl_7_xf_marines
-	if = { limit = { sr_fl_7_xf_left <= 0 } value = sr_fl_7_marines_value }
-}
 sr_fl_7_xf_stay_war = { value = sr_fl_7_war_value subtract = sr_fl_7_xf_war }
 sr_fl_7_xf_there_war = {
 	value = sr_fl_7_xf_war
@@ -10363,18 +10514,6 @@ sr_fl_7_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_7_xf_stay_marines = { value = sr_fl_7_marines_value subtract = sr_fl_7_xf_marines_moved }
-sr_fl_7_xf_there_marines = {
-	value = sr_fl_7_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_7_xf_there_strength = {
 	value = sr_fl_7_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -10388,10 +10527,60 @@ sr_fl_7_xf_there_strength = {
 }
 sr_fl_7_xf_stay_room = { value = sr_fl_7_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_7_xf_there_room = { value = sr_fl_7_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_7_xf_stay_over = { value = sr_fl_7_xf_stay_marines subtract = sr_fl_7_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_7_xf_now_over = { value = sr_fl_7_marines_value subtract = sr_fl_7_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_7_xf_marines_most = {
+	value = sr_fl_7_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_7_marines_value
+	min = 0
+}
+sr_fl_7_xf_marines_least = {
+	value = sr_fl_7_marines_value
+	subtract = sr_fl_7_xf_stay_room
+	subtract = sr_fl_7_xf_now_over
+	min = 0
+	max = sr_fl_7_xf_marines_most
+}
+sr_fl_7_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_7_xf_marines_most
+	min = sr_fl_7_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_7_xf_marines_moved = {
+	value = sr_fl_7_xf_marines
+	if = { limit = { sr_fl_7_xf_left <= 0 } value = sr_fl_7_marines_value }
+}
+sr_fl_7_xf_stay_marines = { value = sr_fl_7_marines_value subtract = sr_fl_7_xf_marines_moved }
+sr_fl_7_xf_there_marines = {
+	value = sr_fl_7_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_7_xf_stay_over = { value = sr_fl_7_xf_stay_marines subtract = sr_fl_7_xf_stay_room min = 0 }
 
 # Slot 8's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10425,12 +10614,6 @@ sr_fl_8_xf_tender = {
 	max = sr_fl_8_tender_value
 	min = 0
 }
-sr_fl_8_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_8_marines_value
-	min = 0
-}
 sr_fl_8_xf_strength = {
 	value = 0
 	add = sr_fl_8_xf_war
@@ -10440,11 +10623,6 @@ sr_fl_8_xf_strength = {
 	add = sr_fl_8_xf_tender
 }
 sr_fl_8_xf_left = { value = sr_fl_8_strength subtract = sr_fl_8_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_8_xf_marines_moved = {
-	value = sr_fl_8_xf_marines
-	if = { limit = { sr_fl_8_xf_left <= 0 } value = sr_fl_8_marines_value }
-}
 sr_fl_8_xf_stay_war = { value = sr_fl_8_war_value subtract = sr_fl_8_xf_war }
 sr_fl_8_xf_there_war = {
 	value = sr_fl_8_xf_war
@@ -10505,18 +10683,6 @@ sr_fl_8_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
 	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_tender_value }
 }
-sr_fl_8_xf_stay_marines = { value = sr_fl_8_marines_value subtract = sr_fl_8_xf_marines_moved }
-sr_fl_8_xf_there_marines = {
-	value = sr_fl_8_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
-}
 sr_fl_8_xf_there_strength = {
 	value = sr_fl_8_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -10530,10 +10696,60 @@ sr_fl_8_xf_there_strength = {
 }
 sr_fl_8_xf_stay_room = { value = sr_fl_8_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_8_xf_there_room = { value = sr_fl_8_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_8_xf_stay_over = { value = sr_fl_8_xf_stay_marines subtract = sr_fl_8_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_8_xf_now_over = { value = sr_fl_8_marines_value subtract = sr_fl_8_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_8_xf_marines_most = {
+	value = sr_fl_8_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 9 } subtract = sr_fl_9_marines_value }
+	max = sr_fl_8_marines_value
+	min = 0
+}
+sr_fl_8_xf_marines_least = {
+	value = sr_fl_8_marines_value
+	subtract = sr_fl_8_xf_stay_room
+	subtract = sr_fl_8_xf_now_over
+	min = 0
+	max = sr_fl_8_xf_marines_most
+}
+sr_fl_8_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_8_xf_marines_most
+	min = sr_fl_8_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_8_xf_marines_moved = {
+	value = sr_fl_8_xf_marines
+	if = { limit = { sr_fl_8_xf_left <= 0 } value = sr_fl_8_marines_value }
+}
+sr_fl_8_xf_stay_marines = { value = sr_fl_8_marines_value subtract = sr_fl_8_xf_marines_moved }
+sr_fl_8_xf_there_marines = {
+	value = sr_fl_8_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 9 } add = sr_fl_9_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_8_xf_stay_over = { value = sr_fl_8_xf_stay_marines subtract = sr_fl_8_xf_stay_room min = 0 }
 
 # Slot 9's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10567,12 +10783,6 @@ sr_fl_9_xf_tender = {
 	max = sr_fl_9_tender_value
 	min = 0
 }
-sr_fl_9_xf_marines = {
-	value = 0
-	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
-	max = sr_fl_9_marines_value
-	min = 0
-}
 sr_fl_9_xf_strength = {
 	value = 0
 	add = sr_fl_9_xf_war
@@ -10582,11 +10792,6 @@ sr_fl_9_xf_strength = {
 	add = sr_fl_9_xf_tender
 }
 sr_fl_9_xf_left = { value = sr_fl_9_strength subtract = sr_fl_9_xf_strength }
-# Nothing of its strength stays: its marines all go too (the fleet is cleared).
-sr_fl_9_xf_marines_moved = {
-	value = sr_fl_9_xf_marines
-	if = { limit = { sr_fl_9_xf_left <= 0 } value = sr_fl_9_marines_value }
-}
 sr_fl_9_xf_stay_war = { value = sr_fl_9_war_value subtract = sr_fl_9_xf_war }
 sr_fl_9_xf_there_war = {
 	value = sr_fl_9_xf_war
@@ -10647,18 +10852,6 @@ sr_fl_9_xf_there_tender = {
 	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_tender_value }
 	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_tender_value }
 }
-sr_fl_9_xf_stay_marines = { value = sr_fl_9_marines_value subtract = sr_fl_9_xf_marines_moved }
-sr_fl_9_xf_there_marines = {
-	value = sr_fl_9_xf_marines_moved
-	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
-	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
-	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
-	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
-	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
-	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
-	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
-	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
-}
 sr_fl_9_xf_there_strength = {
 	value = sr_fl_9_xf_strength
 	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_strength }
@@ -10672,10 +10865,60 @@ sr_fl_9_xf_there_strength = {
 }
 sr_fl_9_xf_stay_room = { value = sr_fl_9_xf_stay_carrier multiply = sr_fl_marines_per_carrier }
 sr_fl_9_xf_there_room = { value = sr_fl_9_xf_there_carrier multiply = sr_fl_marines_per_carrier }
-# How far past its carriers' room the fleet would be, and is now (carriers
-# lost in battle): a transfer may leave it no further past (owner, 2026-10-31).
-sr_fl_9_xf_stay_over = { value = sr_fl_9_xf_stay_marines subtract = sr_fl_9_xf_stay_room min = 0 }
+# How far past its carriers' room the fleet is now (carriers lost in battle):
+# a transfer may leave it no further past (owner, 2026-10-31).
 sr_fl_9_xf_now_over = { value = sr_fl_9_marines_value subtract = sr_fl_9_marine_capacity min = 0 }
+# The marines the room allows to move, so the popup offers no amount Transfer
+# would refuse for it: at most the room left on the carriers there (the
+# fleet it goes into has its own marines aboard), at least what the carriers
+# that stay can't hold past how far over the fleet is now. Where the two
+# fleets together have too little room (the one it goes into is over its
+# own), the least is held to the most and the room refusal stands.
+sr_fl_9_xf_marines_most = {
+	value = sr_fl_9_xf_there_room
+	if = { limit = { sr_det_to_value = 1 } subtract = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } subtract = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } subtract = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } subtract = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } subtract = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } subtract = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } subtract = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } subtract = sr_fl_8_marines_value }
+	max = sr_fl_9_marines_value
+	min = 0
+}
+sr_fl_9_xf_marines_least = {
+	value = sr_fl_9_marines_value
+	subtract = sr_fl_9_xf_stay_room
+	subtract = sr_fl_9_xf_now_over
+	min = 0
+	max = sr_fl_9_xf_marines_most
+}
+sr_fl_9_xf_marines = {
+	value = 0
+	if = { limit = { has_variable = sr_det_amt_marines } value = var:sr_det_amt_marines }
+	max = sr_fl_9_xf_marines_most
+	min = sr_fl_9_xf_marines_least
+}
+# Nothing of its strength stays: its marines all go too (the fleet is cleared).
+sr_fl_9_xf_marines_moved = {
+	value = sr_fl_9_xf_marines
+	if = { limit = { sr_fl_9_xf_left <= 0 } value = sr_fl_9_marines_value }
+}
+sr_fl_9_xf_stay_marines = { value = sr_fl_9_marines_value subtract = sr_fl_9_xf_marines_moved }
+sr_fl_9_xf_there_marines = {
+	value = sr_fl_9_xf_marines_moved
+	if = { limit = { sr_det_to_value = 1 } add = sr_fl_1_marines_value }
+	if = { limit = { sr_det_to_value = 2 } add = sr_fl_2_marines_value }
+	if = { limit = { sr_det_to_value = 3 } add = sr_fl_3_marines_value }
+	if = { limit = { sr_det_to_value = 4 } add = sr_fl_4_marines_value }
+	if = { limit = { sr_det_to_value = 5 } add = sr_fl_5_marines_value }
+	if = { limit = { sr_det_to_value = 6 } add = sr_fl_6_marines_value }
+	if = { limit = { sr_det_to_value = 7 } add = sr_fl_7_marines_value }
+	if = { limit = { sr_det_to_value = 8 } add = sr_fl_8_marines_value }
+}
+# How far past its carriers' room the fleet would be after.
+sr_fl_9_xf_stay_over = { value = sr_fl_9_xf_stay_marines subtract = sr_fl_9_xf_stay_room min = 0 }
 
 # Where a transfer goes (sr_det_to): 0 a new fleet, else that slot.
 sr_det_to_value = {
