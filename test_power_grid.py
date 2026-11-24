@@ -1472,9 +1472,9 @@ class ConnectionTest(unittest.TestCase):
         self.assertIn("modifier:state_power_grid_connection_bool = yes", connected)
         online = _top_level(triggers, "te_grid_station_online")
         self.assertIn("te_grid_state_connected = yes", online)
-        # The station still moves the power, so it must be built as well.
-        self.assertIn("is_building_type = building_grid_transfer_station", online)
-        self.assertIn("level >= 1", online)
+        # The station still moves the power, so it must be built as well (read by b:, not a walk of
+        # the state's buildings, since the Power Grids tab reads this every frame: 2026-11-24).
+        self.assertIn("b:building_grid_transfer_station ?= { level >= 1 }", online)
 
     def test_its_name_links_the_concept(self):
         loc = {}
@@ -2077,9 +2077,8 @@ class RecordTest(unittest.TestCase):
         self.assertIn("NOT = { is_target_in_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state } }", owner)
         once = _sub(owner, "if")
         self.assertIn("add_to_variable_list = { name = te_grid_hubs target = scope:te_grid_hub_state }", once)
-        # Every member is listed, not only each owner's first.
-        self.assertNotIn("te_grid_stations", once)
-        self.assertIn("add_to_variable_list = { name = te_grid_stations target = scope:te_grid_rec_member }", owner)
+        # The stations are listed at the run's end, in the tab's order (te_grid_order_stations_effect).
+        self.assertNotIn("te_grid_stations", record)
         self.assertIn("change_local_variable = { name = te_grid_rec_countries add = 1 }", once)
         # A country with no capital lists no flag (an empty target would fail the add).
         self.assertIn("exists = capital", once)
@@ -2100,14 +2099,33 @@ class RecordTest(unittest.TestCase):
         settle = _top_level(self.effects, "te_grid_settle_market_effect")
         self.assertEqual(settle.count("change_local_variable = { name = te_grid_rec_markets add = 1 }"), 1)
 
-    def test_stations_on_no_grid_follow_those_on_one(self):
+    def test_the_stations_are_listed_in_the_tabs_order(self):
+        """After the last grid, each country's built stations in the order the Power Grids tab's
+        Stations table shows them, its first ten on view (2026-11-24): on no grid; then on a grid
+        and moving nothing or short of staff, the largest flow first; then the rest, the same."""
         after = self.run_block[self.run_block.index("te_grid_close_region_effect = yes"):]
         self.assertIn("variable = te_grid_record_countries", after)
-        limit = _sub(_sub(after, "every_scope_state"), "limit")
-        self.assertIn("has_building = building_grid_transfer_station", limit)
-        self.assertIn("NOT = { has_variable = te_grid_hub }", limit)
-        self.assertIn("add_to_variable_list = { name = te_grid_stations target = prev }", after)
-        # The idle station loses its hub, so it is listed here and only here.
+        self.assertIn("te_grid_order_stations_effect = yes", after)
+        order = _top_level(self.effects, "te_grid_order_stations_effect")
+        self.assertTrue(order.lstrip().startswith("clear_variable_list = te_grid_stations"))
+        passes = list(re.finditer(r"\b(every_scope_state|ordered_scope_state) = \{", order))
+        self.assertEqual([m.group(1) for m in passes], ["every_scope_state", "ordered_scope_state", "ordered_scope_state"])
+        offline, look, rest = (_block_from(order, m.end()) for m in passes)
+        for block in (offline, look, rest):
+            self.assertIn("has_building = building_grid_transfer_station", _sub(block, "limit"))
+            self.assertIn("add_to_variable_list = { name = te_grid_stations target = prev }", block)
+        self.assertIn("NOT = { has_variable = te_grid_hub }", _sub(offline, "limit"))
+        for block, wants in ((look, "te_grid_station_wants_a_look = yes"),
+                             (rest, "NOT = { te_grid_station_wants_a_look = yes }")):
+            limit = _sub(block, "limit")
+            self.assertIn("has_variable = te_grid_hub", limit)
+            self.assertIn(wants, limit)
+            self.assertIn("order_by = te_grid_electricity_moved_disp", block)
+            self.assertIn("check_range_bounds = no", block)
+        wants = _code(_top_level(_read(TRIGGERS), "te_grid_station_wants_a_look"))
+        self.assertIn("NOT = { te_grid_electricity_moved_disp > 0 }", wants)
+        self.assertIn("te_grid_station_staffing_disp < 0.995", wants)
+        # The idle station loses its hub, so it is listed in the first pass and only there.
         self.assertIn("remove_variable = te_grid_hub", _top_level(self.effects, "te_grid_idle_station_effect"))
 
 
