@@ -9,6 +9,14 @@
 # One field, no building-scoped copy, which the game would list a second time.
 # No goods: its cost is its wages (owner, 2026-11-24).
 #
+# A garrison town leans to the Armed Forces: +1% Armed Forces attraction a
+# staffed level for every pop in the base's state (owner, 2026-11-24: "a minor
+# interest_group_ig_armed_forces_pop_attraction_mult boost", in place of a
+# restatement of vanilla's whole Armed Forces pop_weight). On the state, the
+# scope the game reads pop attraction from (vanilla's Hagia Sophia gives it the
+# country, the mod's religious headquarters the state); whether pops read it
+# from the building they work in is unread, so it doesn't go there.
+#
 # Never grant state_sr_space_personnel_add from a country-level source: a
 # state's modifier: read includes the country's modifiers, so a law or a
 # technology carrying it would be counted once for every state. A later boost
@@ -31,6 +39,7 @@ pm_space_forces_training = {
 	state_modifiers = {
 		workforce_scaled = {
 			state_sr_space_personnel_add = 1000
+			interest_group_ig_armed_forces_pop_attraction_mult = 0.01
 		}
 	}
 }
