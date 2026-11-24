@@ -174,13 +174,21 @@ gm_state_tr_own_takeable_by = {
 	gm_state_built_by_owner = no
 }
 
-# State scope. Either route (spec §2.1, §2.2).
+# State scope. Either route (spec §2.1, §2.2). The route first: it is false at
+# its first line or two for a monument in our own incorporated state, nearly
+# every row of Our Monuments, while gm_state_tr_takeable reads every trophy in
+# the world (gm_state_tr_piece_abroad). Carry It Off's is_shown asks this for
+# each row every frame (late_game_performance.md, 2026-11-24). The building
+# before it, which gm_state_tr_takeable implies (gm_state_is_dedicated), so a
+# state with none (a merged one with no owner) is ruled out before the route
+# reads its owner, as it was when gm_state_tr_takeable came first.
 gm_state_tr_can_take = {
-	gm_state_tr_takeable = yes
+	has_building = building_grand_monument
 	OR = {
 		gm_state_tr_occupied_by = { WHO = $WHO$ }
 		gm_state_tr_own_takeable_by = { WHO = $WHO$ }
 	}
+	gm_state_tr_takeable = yes
 }
 
 # State scope, the scripted GUI's check: the same, each part with its reason.
