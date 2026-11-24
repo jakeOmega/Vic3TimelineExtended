@@ -45,6 +45,7 @@ POST_LOAD_REGENERATORS = [
     ("gen_covert_tech_theft",         "scripts.generators.gen_covert_tech_theft"),
     ("gen_research_commons_sync",     "scripts.generators.gen_research_commons_sync"),
     ("gen_seabed_basins",             "scripts.generators.gen_seabed_basins"),
+    ("gen_grid_sea_reach",            "scripts.generators.gen_grid_sea_reach"),
     ("gen_launch_windows",            "scripts.generators.gen_launch_windows"),
     ("gen_solar_sites",               "scripts.generators.gen_solar_sites"),
     ("gen_ebase",                     "scripts.generators.gen_ebase"),

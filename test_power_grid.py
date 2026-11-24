@@ -1100,18 +1100,16 @@ class CableRangeTest(unittest.TestCase):
         self.assertIn("remove_global_variable = te_grid_cable_range_max", clear)
         self.assertIn("te_grid_sea_reach_clear_effect = yes", clear)
 
-    def test_the_walk_marks_each_state_once_and_clears_after_itself(self):
+    def test_the_walk_reads_the_table_and_no_trigger_walks_the_sea(self):
+        # The walk reads a table measured offline from the map (test_grid_sea_reach.py
+        # holds its shape and distances), so it crosses open ocean no coast touches.
         effects = _code(_read(EFFECTS))
         walk = _top_level(effects, "te_grid_sea_reach_effect")
         self.assertTrue(walk.lstrip().startswith("te_grid_sea_reach_clear_effect = yes"))
-        self.assertIn("local_var:te_grid_sea_hop < local_var:te_grid_sea_radius", _sub(walk, "while"))
-        hop = _sub(_sub(walk, "while"), "every_sea_node_adjacent_state")
-        self.assertIn("NOT = { has_variable = te_grid_sea_hops }", hop)
-        self.assertIn("name = te_grid_sea_hops value = local_var:te_grid_sea_hop", hop)
+        self.assertIn("te_grid_sea_reach_table_effect = yes", walk)
         clear = _top_level(effects, "te_grid_sea_reach_clear_effect")
         self.assertIn("remove_variable = te_grid_sea_hops", clear)
-        for name in ("te_grid_sea_reach", "te_grid_sea_layer", "te_grid_sea_next"):
-            self.assertIn(f"clear_global_variable_list = {name}", clear)
+        self.assertIn("clear_global_variable_list = te_grid_sea_reach", clear)
         # No trigger walks the sea by nesting any_sea_node_adjacent_state, which grows as 30^k.
         # The one that looks a single Sea Node out is the AI's site rule for a station.
         triggers = _code(_read(TRIGGERS))

@@ -508,7 +508,8 @@ Undersea Cable Range of 1 Sea Node. Smart Grids and Quantum Materials add 1
 each, but only to interconnectors: a station without one has no cable. Two
 cables join their grids when either one's range reaches the other: at 1,
 states on the same Sea Node. Each point of range more crosses one more Sea
-Node, landing on a coast that touches both on the way. The cable joins your
+Node, open ocean included, so a cable reaches an island alone in mid-ocean
+(Bermuda, at 2). No cable crosses the Southern Ocean. The cable joins your
 own grids across the sea, such as a mainland and a colony in your market, or
 a partner's under a Grid Interconnection Agreement. It needs a cable at both
 ends, and it joins nothing once its state's station is gone.
