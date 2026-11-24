@@ -198,10 +198,13 @@ class Range:
         return _has(self.var, value)
 
 
-# The monthly charts' range while te_hist_range is unset: 20 years, the whole
-# store (owner's choice to make, 5 being the other candidate; measured in game,
-# docs/audits/late_game_performance.md). Any of "1", "5", "20".
-DEFAULT_RANGE = "20"
+# The monthly charts' range while te_hist_range is unset: 5 years (2026-11-24;
+# it was 20, the whole store). With 20 years stored, a History section open on
+# 20 Years drew 24 frames a second and on 5 Years 47 (Banking's tab,
+# docs/audits/late_game_performance.md, "The history charts"). Any of "1", "5",
+# "20"; the sections' hand-written range buttons follow it by hand
+# (test_te_history_charts.ViewerTest holds them to the viewer's row).
+DEFAULT_RANGE = "5"
 
 RANGES = {
     "te_hist_range": Range("te_hist_range", ("1", "5", "20"), (12, 60, 240),
