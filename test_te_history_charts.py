@@ -944,7 +944,8 @@ class PlotTest(unittest.TestCase):
     GENERATED): a shorter range's plot reads only the samples it can show,
     the longest range's the whole store with no test, and which range an
     unset variable means is decided once, Range.default (DEFAULT_RANGE for
-    the monthly charts), for the plots and the range buttons alike."""
+    the monthly charts, 5 years since 2026-11-24), for the plots and the
+    range buttons alike."""
 
     @classmethod
     def setUpClass(cls):
@@ -1021,27 +1022,40 @@ class PlotTest(unittest.TestCase):
             with self.subTest(range=rng.var):
                 self.check_range_row(self.text, rng)
         self.assertEqual(gen.RANGES["te_hist_range"].default, gen.DEFAULT_RANGE)
-        self.assertEqual(gen.DEFAULT_RANGE, "20", "the owner's call: change it here and in the sections' buttons")
+        self.assertEqual(gen.DEFAULT_RANGE, "5", "the owner's call: change it here and in the sections' buttons")
+
+    def test_the_monthly_charts_open_on_five_years(self):
+        """While te_hist_range is unset the 5-year plot shows and its button
+        greys; the 20-year plot still reads the whole store and tests nothing.
+        Demographics and Cultural Hegemony keep their own default, 100 years."""
+        plot = _plots(_type_body(self.text, "te_hist_bank_value"))
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[1], re.M).group(1),
+                         "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
+                         "GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]")
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[2], re.M).group(1),
+                         "[GetVariableSystem.HasValue( 'te_hist_range', '20' )]")
+        self.assertEqual({gen.RANGES["te_demog_hist_range"].default, gen.RANGES["ch_model_hist_range"].default},
+                         {"100"})
 
     def test_another_default_regenerates_a_consistent_file(self):
-        """DEFAULT_RANGE = 5 (the candidate the coordinator measures): the
-        5-year plot shows and its button greys while the variable is unset;
-        the 20-year plot still reads the whole store and tests nothing."""
-        five = dataclasses.replace(gen.RANGES["te_hist_range"], default="5")
-        with mock.patch.dict(gen.RANGES, {"te_hist_range": five}):
+        """DEFAULT_RANGE = 20 (the default before 2026-11-24): the 20-year
+        plot shows and its button greys while the variable is unset, and it
+        still reads the whole store and tests nothing."""
+        other = dataclasses.replace(gen.RANGES["te_hist_range"], default="20")
+        with mock.patch.dict(gen.RANGES, {"te_hist_range": other}):
             text = _strip_comments(gen.render())
         self.assertNotEqual(text, self.text)
         for chart in gen.CHARTS:
             for size in gen.SIZES:
                 with self.subTest(chart=chart.id, size=size.name):
                     self.check_plots(_type_body(text, gen.wrapper_name(chart, size)), chart, size,
-                                     dict(gen.RANGES, te_hist_range=five))
-        self.check_range_row(text, five)
+                                     dict(gen.RANGES, te_hist_range=other))
+        self.check_range_row(text, other)
         plot = _plots(_type_body(text, "te_hist_bank_value"))
-        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[1], re.M).group(1),
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[2], re.M).group(1),
                          "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
-                         "GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]")
-        with mock.patch.dict(gen.RANGES, {"te_hist_range": dataclasses.replace(five, default="10")}):
+                         "GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) )]")
+        with mock.patch.dict(gen.RANGES, {"te_hist_range": dataclasses.replace(other, default="10")}):
             with self.assertRaisesRegex(ValueError, "default"):
                 gen.render()
 

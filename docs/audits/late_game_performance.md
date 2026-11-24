@@ -1220,8 +1220,10 @@ Years, every month at 20, the pips on the same charts.
 The 1-year and 5-year figures are this change's. Part of the 20-year gain
 is another branch's, loaded in the same session: the International
 Arrangements rows stopped evaluating a custom loc per member each frame.
-Whether the default should become 5 years (`DEFAULT_RANGE` in
-`gen_te_history_charts.py`) is the owner's call.
+**The default became 5 years** (`DEFAULT_RANGE` in
+`gen_te_history_charts.py`, branch `gui/charts-default-5y`, the owner's to
+take or leave): a History section is open by default and costs the same
+scrolled out of sight, so the view it opens on is what every visit pays.
 
 ## The USA of 2024: the Deep-Sea Mine gate, 2026-11-22: 1.15.2
 
