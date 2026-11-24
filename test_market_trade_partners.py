@@ -120,10 +120,24 @@ class LocTest(unittest.TestCase):
         "units/wk" ran past it (play-test, 2026-10-28)."""
         loc = _loc()
         for d, value in (("export", "gui_exports_to_target"), ("import", "gui_imports_from_target")):
-            self.assertIn(value, loc[f"te_market_{d}_partner_units"])
-            self.assertTrue(loc[f"te_market_{d}_partner_units"].endswith(f"ScriptValue('{value}')|v0]"))
+            self.assertEqual(loc[f"te_market_{d}_partner_units"],
+                             f"[Scope.GetMarket.GetOwner.GetFlagTextIcon] $te_market_{d}_partner_fig$")
             self.assertIn("units a week", loc[f"te_market_{d}_partners_tt"])
             self.assertIn("by value", loc[f"te_market_{d}_partners_tt"])
+
+    def test_the_partner_figures_abbreviate_from_a_thousand(self):
+        """The legends printed seven raw digits ("4132218") beside vanilla's own charts' "3.19M" in the same tab
+        (seen in game, 2026-11-24). The figure switches at 1,000 between a whole number and the abbreviated form,
+        since `|K` alone prints 520 as "0.52K"; both forms read the same value, which the switch tests."""
+        loc = _loc()
+        for d, value in (("export", "gui_exports_to_target"), ("import", "gui_imports_from_target")):
+            read = ("GuiScope.SetRoot( MarketPanel.GetMarket.MakeScope ).AddScope('base_market', "
+                    f"Scope.GetMarket.MakeScope).ScriptValue('{value}')")
+            self.assertEqual(loc[f"te_market_{d}_partner_fig"],
+                             f"[SelectLocalization( LessThan_CFixedPoint( {read}, '(CFixedPoint)1000' ), "
+                             f"'te_market_{d}_partner_fig_n', 'te_market_{d}_partner_fig_k' )]")
+            self.assertEqual(loc[f"te_market_{d}_partner_fig_n"], f"[{read}|v0]")
+            self.assertEqual(loc[f"te_market_{d}_partner_fig_k"], f"[{read}|vK]")
 
     def test_the_hover_opens_with_the_tables_figure(self):
         """MKT-2: the partner hover reconciles with the row: its yearly figure

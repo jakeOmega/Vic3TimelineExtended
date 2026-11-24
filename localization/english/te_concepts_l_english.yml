@@ -3319,7 +3319,7 @@
  un_asat_refusal_modifier_desc:0 "This country refused to table the Moratorium on Destructive Anti-Satellite Tests and cannot propose it while this penalty lasts."
  un_authority_bar_desc:0 "UN Authority (0–100): moving toward the target shown below"
  un_authority_crisis_modifier_desc:0 "The United Nations is in crisis, and incremental reforms are underway."
- un_authority_progress_desc:0 "[concept_un_authority] represents the [concept_legitimacy] and enforcement power of the United Nations. Higher authority means resolutions carry more weight and members gain greater benefits."
+ un_authority_progress_desc:0 "[concept_un_authority]: #v [ROOT.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! of 100"
  un_authority_restored_modifier_desc:0 "This country has successfully rallied support to restore the United Nations' authority and [concept_legitimacy]."
  un_bloc_vacuum_modifier_desc:0 "The United Nations is moribund or gone. Power blocs fill the vacuum it leaves: their members cling closer and their leaders' word carries further."
  un_champion_order_cost_desc:0 "Actively championing the United Nations international order. Uses 500 [concept_influence] while the stance holds."

@@ -8,12 +8,6 @@
 te_history_chart = {
 	blockoverride "chart_title" { text = "ch_model_hist_title" }
 	blockoverride "chart_legend" { text = "ch_model_hist_note" }
-	blockoverride "sample_datamodel" {
-		datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
-	}
-	blockoverride "sample_visible" {
-		visible = "[Or( Not( Or( GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20') ) ), Or( And( GetVariableSystem.HasValue('ch_model_hist_range', '5'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)5' ) ), And( GetVariableSystem.HasValue('ch_model_hist_range', '20'), LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue('te_history_current_year'), ScriptContainer.GetVariableValue('te_hist_y') ), '(CFixedPoint)20' ) ) ) )]"
-	}
 	blockoverride "bar_tooltip" { tooltip = "ch_model_hist_tt" }
 	blockoverride "marker_pips" {} # world models have no policy/crash markers
 	blockoverride "bar_body" {
@@ -226,18 +220,7 @@ te_history_chart = {
 	### level with the two axis labels.
 	blockoverride "plot_size" { size = { ${frame} } }
 	blockoverride "plot_layouts" {
-		te_history_plot = {
-			visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '5')]"
-			blockoverride "bar_size" { size = { ${bars_5} ${bar_h} } }
-		}
-		te_history_plot = {
-			visible = "[GetVariableSystem.HasValue('ch_model_hist_range', '20')]"
-			blockoverride "bar_size" { size = { ${bars_20} ${bar_h} } }
-		}
-		te_history_plot = {
-			visible = "[Not(Or(GetVariableSystem.HasValue('ch_model_hist_range', '5'), GetVariableSystem.HasValue('ch_model_hist_range', '20')))]"
-			blockoverride "bar_size" { size = { ${bars_100} ${bar_h} } }
-		}
+		${plots}
 		textbox = {
 			parentanchor = left|top
 			position = { 8 6 }

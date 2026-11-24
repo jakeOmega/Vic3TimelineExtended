@@ -1417,6 +1417,138 @@ class BlocLeaderRowTest(unittest.TestCase):
         self.assertIn("banking_dash_mon_bs_union_from", value)
 
 
+
+class FlagGroupTest(unittest.TestCase):
+    """International Arrangements groups its partners (GUI pass of 2026-11-24): the
+    fourteen receiverships an anchor held read "Receivership held: +0.00" a row
+    apiece. A partner whose figure prints as 0.00 is a flag on one line per kind or
+    place, the list filled at the pulse; one that reads at two decimals keeps its row.
+    Every list the discovery fills is drawn, and every label fits its cell."""
+
+    LISTS = {
+        "te_mon_bs_swap_flags": "banking_dash_mon_bs_grp_swap",
+        "te_mon_bs_lolr_flags": "banking_dash_mon_bs_grp_lolr",
+        "te_mon_bs_receivership_flags": "banking_dash_mon_bs_grp_receivership",
+        "te_mon_bs_union_adopted": "banking_dash_mon_union_grp_adopted",
+        "te_mon_bs_union_dormant": "banking_dash_mon_union_grp_dormant",
+        "te_mon_bs_union_holdout": "banking_dash_mon_union_grp_holdout",
+        "te_mon_bs_union_refuser": "banking_dash_mon_union_grp_refuser",
+        "te_mon_bs_union_outside": "banking_dash_mon_union_grp_outside",
+        "te_mon_bs_union_coop": "banking_dash_mon_union_grp_coop",
+    }
+    ROWS = ["te_mon_bs_swap_to", "te_mon_bs_lolr_to", "te_mon_bs_receivership_to", "te_mon_bs_union_to",
+            "te_mon_bs_swap_from", "te_mon_bs_lolr_from", "te_mon_bs_receiver_from"]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dash = _strip_comments(_read(DASH))
+        cls.monetary = _type_body(cls.dash, "te_banking_sec_monetary")
+        cls.groups = [_block_from(cls.monetary, m.start() + len("banking_dash_flag_group = "))
+                      for m in re.finditer(r"\bbanking_dash_flag_group = \{", cls.monetary)]
+        cls.loc = _all_loc()
+
+    def test_every_list_is_drawn_once(self):
+        drawn = {}
+        for g in self.groups:
+            lists = set(re.findall(r"GetList\('(\w+)'\)", g))
+            self.assertEqual(len(lists), 1, "a group's visible and datamodel read one list")
+            drawn[lists.pop()] = re.search(r'text = "(\w+)"', g).group(1)
+        self.assertEqual(drawn, self.LISTS)
+        for name in self.ROWS:
+            with self.subTest(rows=name):
+                self.assertEqual(self.monetary.count("GetList('%s')" % name), 1)
+
+    def test_each_list_is_cleared_and_filled(self):
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "te_monetary_arrangement_effects.txt"))
+        union = _read(os.path.join(REPO, "common", "scripted_effects", "te_monetary_union_effects.txt"))
+        clear = _block_from(effects, effects.index("\nte_mon_clear_backstop_rows = {") + len("\nte_mon_clear_backstop_rows = "))
+        for name in list(self.LISTS) + self.ROWS:
+            with self.subTest(list=name):
+                self.assertRegex(clear, r"clear_variable_list = %s\s" % name)
+        for status in ("to", "coop", "adopted", "dormant", "refuser", "holdout", "outside"):
+            self.assertIn("LIST = te_mon_bs_union_%s }" % status, union)
+
+    def test_every_flag_says_what_its_row_said(self):
+        for g in self.groups:
+            tip = re.search(r'blockoverride "flag_tooltip" \{\s*tooltip = "(\w+)"', g)
+            self.assertIsNotNone(tip, g[:80])
+            text = self.loc[tip.group(1)]
+            self.assertIn("GetNameNoFlag", text)
+            self.assertIn("points", self.loc[re.search(r"'(banking_dash_mon_bs_fig_\w+)'", text).group(1)])
+
+    def test_labels_fit_the_label_column(self):
+        body = _type_body(self.dash, "banking_dash_flag_group")
+        self.assertIn("max_width = 160", body)
+        self.assertIn("datamodel_wrap = 9", body)
+        self.assertLessEqual(16 + 160 + 4 + 9 * 30, 460)
+        for key in self.LISTS.values():
+            with self.subTest(label=key):
+                text = re.sub(r"\[[^\[\]]*\]", "99", self.loc[key])
+                text = re.sub(r"#[A-Za-z_]+ ", "", text).replace("#!", "")
+                self.assertLessEqual(len(text) * UNITS["row"] * MARGIN, 160, text)
+
+    def test_no_figure_prints_as_zero(self):
+        """A row's figure shows only where it reads at two decimals; under that, words."""
+        for key in ("banking_dash_mon_backstops_value", "banking_dash_mon_bs_swap_from", "banking_dash_mon_bs_lolr_from",
+                    "banking_dash_mon_bs_receiver_from", "banking_dash_mon_bs_union_from", "banking_dash_mon_bs_union_to"):
+            with self.subTest(key=key):
+                self.assertNotRegex(self.loc[key], r"\|2\]", "the figure sits behind a SelectLocalization")
+                # The engine cuts a figure toward zero: 0.007 prints "0.00" (seen in game, 2026-11-24).
+                self.assertIn("(CFixedPoint)0.01'", self.loc[key])
+                self.assertNotIn("(CFixedPoint)0.005", self.loc[key])
+        for key in ("banking_dash_mon_bs_flag_swap_tt", "banking_dash_mon_bs_flag_lolr_tt",
+                    "banking_dash_mon_bs_flag_receivership_tt", "banking_dash_mon_union_flag_tt"):
+            with self.subTest(hover=key):
+                self.assertIn("(CFixedPoint)0.001'", self.loc[key], "three decimals: the first that prints is 0.001")
+
+    def test_the_flags_wrap(self):
+        """In game (2026-11-24) a fixedgridbox with maxhorizontalslots drew only the first nine
+        of 26 flags. The grid is vanilla's wrapping form (journal_entry.gui's involved
+        countries), and nothing above it in the group fixes a height."""
+        body = _type_body(self.dash, "banking_dash_flag_group")
+        self.assertNotIn("fixedgridbox", body)
+        grid = _block_from(body, body.index("dynamicgridbox = ") + len("dynamicgridbox = "))
+        self.assertRegex(grid, r"datamodel_wrap = 9\b")
+        self.assertIn("flipdirection = yes", grid)
+        outer = body[:body.index("dynamicgridbox = ")]
+        self.assertNotRegex(outer, r"\bsize = \{", "a fixed size on the group clips the grid's later lines")
+        self.assertNotRegex(outer, r"maximumsize = \{ \d+ \d+ \}", "a fixed height clips the grid's later lines")
+
+    def test_the_union_buttons_flow(self):
+        """In game (2026-11-24) the union buttons were drawn a line too high, over the second
+        line of whatever came before them (a wrapped head line, a second line of flags), with
+        the gap left below: their wrappers were anchored (parentanchor = hcenter) children of
+        a vertical flowcontainer, which keep the place the first layout gave them when a line
+        above grows afterwards. Each button is centred in a fixed slot of the block's width,
+        and the slot and its wrappers flow."""
+        from gui_test_helpers import own_props
+        start = self.monetary.index("banking_dash_mon_btn_union_adopt")
+        start = self.monetary.rindex("IsLocalPlayer, GetScriptedGui('banking_mon_shows_union')", 0, start)
+        outer = _block_from(self.monetary, self.monetary.rindex("flowcontainer = {", 0, start) + len("flowcontainer = "))
+        self.assertNotIn("parentanchor", own_props(outer[1:-1]))
+        inner = _block_from(outer, outer.index("flowcontainer = {") + len("flowcontainer = "))
+        self.assertIn("using = te_own_country_only", own_props(inner[1:-1]))
+        self.assertNotIn("parentanchor", own_props(inner[1:-1]))
+        slots = [_block_from(inner, m.start() + len("widget = ")) for m in re.finditer(r"\bwidget = \{", inner)]
+        self.assertEqual(len(slots), 4)
+        for slot, sgui in zip(slots, ("adopt", "leave", "press_on", "press_off")):
+            with self.subTest(button=sgui):
+                props = own_props(slot[1:-1])
+                self.assertRegex(slot, r"^\{\s*size = \{ 460 28 \}", "a fixed slot the button centres in")
+                self.assertIn("GetScriptedGui('banking_mon_union_%s').IsShown" % sgui, props)
+                self.assertNotIn("parentanchor", props)
+                self.assertIn("banking_dash_mon_button = {", slot)
+
+    def test_the_bloc_row_sits_on_the_groups_left_edge(self):
+        dash = _read(DASH)
+        group = _type_body(dash, "banking_dash_flag_group")
+        row = _type_body(dash, "banking_dash_group_value_row")
+        for body in (group, row):
+            self.assertIn("margin_left = 16", body)
+            self.assertIn("minimumsize = { 160 24 }", body)
+        self.assertRegex(self.monetary, r"banking_dash_group_value_row = \{[^}]*?te_mon_bs_union_pts_display")
+
+
 PROGRESS_BARS = os.path.join(REPO, "common", "scripted_progress_bars", "extra_progress_bars.txt")
 BAR_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "banking_cycle_effects.txt")
 # The entry's bar look -> the progress bar te_banking_bars draws it with: a ready-made

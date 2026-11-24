@@ -135,6 +135,10 @@ types te_systems_window_types
 		### window's own systems' strip holds six since Power Grids (owner,
 		### 2026-11-05), on te_tab_buttons_six: a slot of 87.3, a name 67.3,
 		### and still every word fits one line at fontsize_min.
+		### A name starts at 14, not vanilla's 17 (2026-11-24, seen in game): vanilla
+		### shrinks each name until it fits, which left three sizes on one strip
+		### ("Nation" 17, "Space Race" 14, the two-line names 12). The generator
+		### writes the size into each slot's name (TAB_NAME_SIZE).
 		blockoverride "fixed_top" {
 			vbox = {
 				layoutpolicy_horizontal = expanding

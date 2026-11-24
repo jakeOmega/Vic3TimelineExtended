@@ -739,6 +739,14 @@ te_mon_bs_union_pts_display = {
 	}
 }
 
+# The least figure a partner's row is kept for (te_mon_record_backstop_partner,
+# te_mon_record_union_member): the first that prints as a figure at the two
+# decimals the rows show. The engine's number formats cut toward zero, they do
+# not round, so 0.007 prints "0.00" (seen in game, 2026-11-24: an own row of
+# 0.005 or more read "+0.00"). A partner under it is one flag in a line of
+# them, its figure in the flag's hover to three decimals. Display only.
+te_mon_bs_row_min = { value = 0.01 }
+
 # A member's share of what its leader pays (the Monetary Union member rows).
 te_mon_bs_union_cost_display = {
 	value = 0

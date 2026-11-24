@@ -153,6 +153,7 @@ te_monetary_discover_union = {
 				root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_union_cost_to_root } }
 				root = { change_variable = { name = te_mon_bs_union_pts add = scope:te_mon_arr_party.te_mon_union_cost_to_root } }
 				set_variable = { name = te_mon_bs_cost_union value = te_mon_union_cost_to_root }
+				te_mon_record_union_member = yes
 				if = {
 					limit = { te_mon_is_union_adopter = yes }
 					# GDP in millions through the named value the global anchored-GDP
@@ -184,6 +185,48 @@ te_monetary_discover_union = {
 			}
 		}
 		set_variable = { name = te_mon_union_pressing value = 0 }
+	}
+}
+
+
+# The leader's Monetary Union rows (GUI pass of 2026-11-24): a member whose
+# backing reads at two decimals keeps a row of its own (te_mon_bs_union_to);
+# the rest are flags, one line for each place a member can stand, in
+# te_mon_union_member_status's order (banking_dash_custom_loc.txt), so a line
+# and the flag's hover agree on the pulse. Cleared with the Backstops rows
+# (te_mon_clear_backstop_rows). Display only.
+#
+# Scope: a member of ROOT's bloc, ROOT its leader, te_mon_bs_cost_union set.
+te_mon_record_union_member = {
+	if = {
+		limit = { var:te_mon_bs_cost_union >= te_mon_bs_row_min }
+		te_mon_bs_list_capital = { LIST = te_mon_bs_union_to }
+	}
+	else_if = {
+		limit = { te_mon_bloc_union_tier_2_plus = no }
+		te_mon_bs_list_capital = { LIST = te_mon_bs_union_coop }
+	}
+	else_if = {
+		limit = { te_mon_is_union_adopter = yes }
+		te_mon_bs_list_capital = { LIST = te_mon_bs_union_adopted }
+	}
+	else_if = {
+		limit = { te_mon_is_union_member = yes }
+		te_mon_bs_list_capital = { LIST = te_mon_bs_union_dormant }
+	}
+	else_if = {
+		limit = {
+			te_mon_union_is_holdout = yes
+			te_mon_union_adopt_score <= 0
+		}
+		te_mon_bs_list_capital = { LIST = te_mon_bs_union_refuser }
+	}
+	else_if = {
+		limit = { te_mon_union_is_holdout = yes }
+		te_mon_bs_list_capital = { LIST = te_mon_bs_union_holdout }
+	}
+	else = {
+		te_mon_bs_list_capital = { LIST = te_mon_bs_union_outside }
 	}
 }
 

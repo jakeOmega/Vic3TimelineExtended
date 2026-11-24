@@ -1290,7 +1290,7 @@ types strategic_reserve_widget_types
 						text = "te_hist_range_5y"
 					}
 					blockoverride "range_enabled" {
-						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) )]"
 					}
 					blockoverride "range_onclick" {
 						onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
@@ -1301,7 +1301,7 @@ types strategic_reserve_widget_types
 						text = "te_hist_range_20y"
 					}
 					blockoverride "range_enabled" {
-						enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+						enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '20' ))]"
 					}
 					blockoverride "range_onclick" {
 						onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"

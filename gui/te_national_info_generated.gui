@@ -129,6 +129,7 @@ types te_national_info_generated_types
 			### pops
 			blockoverride "first_button" {
 				text = "te_pop_browser_tab_pops"
+				fontsize = 14
 			}
 			blockoverride "first_button_tooltip" {
 				tooltip = "te_pop_browser_tab_pops_tt"
@@ -144,11 +145,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "first_button_selected" {
 				text = "te_pop_browser_tab_pops"
+				fontsize = 14
 			}
 
 			### demographics
 			blockoverride "second_button" {
 				text = "te_window_tab_demographics"
+				fontsize = 14
 			}
 			blockoverride "second_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( And( GetScriptedGui('te_pops_demog_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_pops_tab_demog_tt', SelectLocalization( GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_pops_tab_demog_locked_tt' ), GetScriptedGui('te_pops_demog_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -165,11 +168,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_demographics"
+				fontsize = 14
 			}
 
 			### nation
 			blockoverride "third_button" {
 				text = "te_window_tab_nation"
+				fontsize = 14
 			}
 			blockoverride "third_button_tooltip" {
 				tooltip = "[SelectLocalization( Country.IsLocalPlayer, 'te_window_tab_nation_tt', 'te_ni_tab_other_tt' )]"
@@ -185,11 +190,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "third_button_selected" {
 				text = "te_window_tab_nation"
+				fontsize = 14
 			}
 
 			### banking
 			blockoverride "fourth_button" {
 				text = "te_window_tab_banking"
+				fontsize = 14
 			}
 			blockoverride "fourth_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), Or( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_budget_tab_banking_tt', SelectLocalization( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_budget_tab_banking_readout_tt', 'te_budget_tab_banking_locked_tt' ) ) ) )]"
@@ -206,11 +213,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "fourth_button_selected" {
 				text = "te_window_tab_banking"
+				fontsize = 14
 			}
 
 			### tax_code
 			blockoverride "fifth_button" {
 				text = "te_window_tab_tax_code"
+				fontsize = 14
 			}
 			blockoverride "fifth_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_budget_tax_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_tax_tab_tt', SelectLocalization( GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_tax_tab_locked_tt' ), GetScriptedGui('te_budget_tax_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -227,6 +236,7 @@ types te_national_info_generated_types
 			}
 			blockoverride "fifth_button_selected" {
 				text = "te_window_tab_tax_code"
+				fontsize = 14
 			}
 		}
 		tab_buttons = {
@@ -236,6 +246,7 @@ types te_national_info_generated_types
 			### grand_monuments
 			blockoverride "first_button" {
 				text = "te_window_tab_grand_monuments"
+				fontsize = 14
 			}
 			blockoverride "first_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_grand_monuments_tt', SelectLocalization( GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_grand_monuments_locked_tt' ), GetScriptedGui('te_window_grand_monuments_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -252,11 +263,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_grand_monuments"
+				fontsize = 14
 			}
 
 			### colonial_empire
 			blockoverride "second_button" {
 				text = "te_window_tab_colonial_empire"
+				fontsize = 14
 			}
 			blockoverride "second_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), Or( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_colonial_empire_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_colonial_empire_readout_tt', SelectLocalization( GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_colonial_empire_locked_tt' ), GetScriptedGui('te_window_colonial_empire_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) ) )]"
@@ -273,11 +286,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_colonial_empire"
+				fontsize = 14
 			}
 
 			### seabed
 			blockoverride "third_button" {
 				text = "te_window_tab_seabed"
+				fontsize = 14
 			}
 			blockoverride "third_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_seabed_tt', SelectLocalization( GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_seabed_met_tt', Concatenate( Localize( 'te_window_tab_seabed_locked_tt' ), GetScriptedGui('te_window_seabed_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -294,11 +309,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "third_button_selected" {
 				text = "te_window_tab_seabed"
+				fontsize = 14
 			}
 
 			### cultural_hegemony
 			blockoverride "fourth_button" {
 				text = "te_window_tab_cultural_hegemony"
+				fontsize = 14
 			}
 			blockoverride "fourth_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_society_tab_ch_tt', SelectLocalization( GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_cultural_hegemony_locked_tt' ), GetScriptedGui('te_society_ch_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -315,11 +332,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "fourth_button_selected" {
 				text = "te_window_tab_cultural_hegemony"
+				fontsize = 14
 			}
 
 			### space_race
 			blockoverride "fifth_button" {
 				text = "te_window_tab_space_race"
+				fontsize = 14
 			}
 			blockoverride "fifth_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_space_race_tt', SelectLocalization( GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_space_race_locked_tt' ), GetScriptedGui('te_window_space_race_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -336,6 +355,7 @@ types te_national_info_generated_types
 			}
 			blockoverride "fifth_button_selected" {
 				text = "te_window_tab_space_race"
+				fontsize = 14
 			}
 		}
 		tab_buttons = {
@@ -345,6 +365,7 @@ types te_national_info_generated_types
 			### nuclear_weapons
 			blockoverride "first_button" {
 				text = "te_window_tab_nuclear_weapons"
+				fontsize = 14
 			}
 			blockoverride "first_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_ni_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_public_tt', SelectLocalization( GetScriptedGui('te_military_nuclear_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_military_tab_nuclear_tt', SelectLocalization( GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_nuclear_weapons_locked_tt' ), GetScriptedGui('te_military_nuclear_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -361,11 +382,13 @@ types te_national_info_generated_types
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_nuclear_weapons"
+				fontsize = 14
 			}
 
 			### power_grids
 			blockoverride "second_button" {
 				text = "te_window_tab_power_grids"
+				fontsize = 14
 			}
 			blockoverride "second_button_tooltip" {
 				tooltip = "[SelectLocalization( And( Not( Country.IsLocalPlayer ), GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ), 'te_ni_tab_other_tt', SelectLocalization( Not( Country.IsLocalPlayer ), 'te_ni_tab_not_running_tt', SelectLocalization( GetScriptedGui('te_window_power_grids_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_window_tab_power_grids_tt', SelectLocalization( GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_system_tab_met_tt', Concatenate( Localize( 'te_window_tab_power_grids_locked_tt' ), GetScriptedGui('te_window_power_grids_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) ) ) )]"
@@ -382,6 +405,7 @@ types te_national_info_generated_types
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_power_grids"
+				fontsize = 14
 			}
 		}
 		expand = {}

@@ -1160,6 +1160,71 @@ error logs, the same 1,156 lines each. Each row is one session
 `20261120T110308Z`, `20261120T110737Z`, `20261120T114406Z`,
 `20261120T114842Z`, `20261120T115423Z`).
 
+## The history charts, 2026-11-24: 1.15.2
+
+The owner's save of December 2032, 20 years of monthly history stored, the
+Timeline Extended window's Full Screen frame at 3840x2160, the engine's own
+frame counter, the Banking tab open:
+
+| Banking's History section | Frames a second |
+|---|---|
+| Closed | 75 |
+| Open, 20 Years (the default: every stored sample) | 16 |
+| Open, 5 Years | 18 |
+| Open, 1 Year | 23 |
+
+The script profiler, paused, put little script on the tab (its top root 78 ms
+in 13.7 s), so the cost was the GUI's own (`gui_modding_guide.md` gotcha #42).
+The same section in the window's side panel, scrolled out of sight, cost the
+same; Demographics' eight charts drew 28.
+
+**Why the short ranges cost nearly as much.** Every plot read the whole
+store, up to 240 containers, and cut the range per item: at 1 Year each of
+the seven charts drawn built 240 items to show 12, and each evaluated its
+datacontext and an age test. From the three figures, a rough split (frame
+time over the closed section's 13.3 ms, against items and bindings) gives
+about 13 µs an item, shown or not, and 2 µs a binding: 1 Year was 30 ms of
+1,680 items and about 3,900 bindings, 20 Years 49 ms of the same items and
+about 13,700.
+
+**The change** (`gui/charts-perf`). A shorter range's plot reads only the
+store's newest samples, `DataModelLast( <list>, '(int32)12' )` or 60, and
+keeps the age test on each; the 20-year plot reads the whole store and tests
+nothing; Banking's pips are one test a month instead of two
+(`history_charts.md`, "The chart"). Bindings a shown bar evaluates, before
+and after on the 20-year plot (the short ranges add the age test back):
+
+| Bar | Before | After |
+|---|---|---|
+| Banking's cycle value (`te_history_bar_cycle_phase`, six band tests, with pips) | 13 | 11 |
+| Banking's momentum (`te_history_bar_signed`, with pips) | 9 | 7 |
+| Banking's other five (`te_history_bar_unsigned`, with pips) | 7 | 5 |
+| A chart with no pips (`te_history_bar_unsigned`) | 5 | 4 |
+| Colonial drift (`te_history_bar_signed`, no pips) | 7 | 6 |
+
+On the split above the Banking tab would draw about 60 frames a second at 1
+Year (84 items), about 40 at 5 Years (420) and about 18 at 20 Years (still
+1,680 items); the 20-year view stays costly because its cost is the items.
+
+**Seen in game, 2026-11-24** (a copy of the same save, the same frame and
+counter, the branch loaded with that night's other branches): `DataModelLast`
+over a script list draws, 12 bars to the right edge at 1 Year, 60 at 5
+Years, every month at 20, the pips on the same charts.
+
+| Banking's History section | Before | After |
+|---|---|---|
+| Open, 1 Year | 23 | 74 |
+| Open, 5 Years | 18 | 47 |
+| Open, 20 Years | 16 | 24 |
+
+The 1-year and 5-year figures are this change's. Part of the 20-year gain
+is another branch's, loaded in the same session: the International
+Arrangements rows stopped evaluating a custom loc per member each frame.
+**The default became 5 years** (`DEFAULT_RANGE` in
+`gen_te_history_charts.py`, branch `gui/charts-default-5y`, the owner's to
+take or leave): a History section is open by default and costs the same
+scrolled out of sight, so the view it opens on is what every visit pays.
+
 ## The USA of 2024: the Deep-Sea Mine gate, 2026-11-22: 1.15.2
 
 The owner's game of "The USA of 1992" above, played on to 2024 with `main`
@@ -1341,6 +1406,100 @@ one session, `wallday.py`, `runsplit.py`; the samplers, run with the Windows
 `python.exe`, and their readers in `tools/`). The write-up for the owner,
 with the super-building question it began from: claude.ai artifact
 `VZ94FSnuTPtDo1kPJB2nCK`.
+
+## The Budget Breakdown tab, 2026-11-24: 1.15.2
+
+The owner's game of December 2032 as the Imperial Union of America,
+3840x2160. With the Budget Breakdown tab open the game drew 16 frames a
+second in the Timeline Extended window's Full Screen frame; in the side panel
+under the script profiler (the game paused, so every sample is a binding's
+script) 137 frames in 13.9 s, 10 a second, against 47 for the Nation tab
+under the same profiler. Inclusive times, lines of the deployed build
+(`8d5f81bca`):
+
+| Root | ms | What it was |
+|---|---|---|
+| `te_budget_values.txt:119`, `:17`, `:111`, `:57` | 642, 436, 349, 336 | The four building sums (naval support, Government Administration, army support, the Space Program): an `every_scope_building` over every building of the country, once a frame each |
+| `te_budget_generated_values.txt:1832` | 187 | General Administration's `allocated_institutions` (thirty institutions), recomputed by each value that read Administration |
+| `te_budget_generated_values.txt:4902`, `:2011` | 112, 81 | Other Expenses (the total less every category), recomputed by its positive, active, visible, share and amount values |
+| `te_budget_generated_values.txt:4940`, `:4953`, `:3234`, `:2134` | 42 to 64 each | the positive total and the Administration group's positives, re-summing the same |
+
+The section bound every amount once a frame already (`row_<key>`), but each
+row's positive, active, share and amount values computed it again from the
+getters, so Other Expenses and Administration ran about seven times a frame.
+
+**What changed** (branch `gui/budget-perf`; no figure, row, slice, hover or
+button changes):
+
+- **The building sums look up, not walk.** Each walks the country's states
+  and reads the one building of its type with `b:<type>`
+  (`te_budget_values.txt`); a state has at most one, so the sum is the
+  walk's. `test_budget_breakdown.BuildingLookupTest` holds each list of
+  types to every member of the building group the walk selected.
+- **Each amount is computed once a frame.** A leaf's positive and active
+  values, every share and every row's amount read the bound `row_<key>` or
+  `positive_<side>_<key>`; `PerFrameWorkTest` fails on a per-row value that
+  names an amount.
+- **A row tests one value per slot** (`_in_slot`), where the GUI read three
+  script values (visibility, rank, slot); a row under a closed group gets no
+  rank.
+- **A pie's cumulative value** adds its preceding siblings' bound positives
+  at each level, where it re-summed every slice before it (a quadratic
+  2,556 slices a frame on the expense side).
+- **What a closed group hides is not read.** A group's pies and rows sit
+  under one container shown only while it is open (`gui_modding_guide.md`
+  gotcha #42), and the slots past the top-level rows wait behind one test.
+
+Counted offline on the test fixture's expense side with every group closed
+(`count_frame.py` in the data folder below): 1,808 script values the GUI asks
+a frame became 463, and about 56,800 script operations about 6,000, before
+the building sums, which went from one step per building of the country to
+one per state and type. Left: the amounts themselves (Other Expenses re-sums
+every category, Administration its thirty institutions) are still computed
+in full once a frame in the section's list context; binding the leaves in a
+context of their own and the groups and Other from them would cut that too.
+Nothing is stored at a pulse: the panel's figures stay live.
+
+**Measured again in the running game, the same day** (the same save, this
+branch loaded from a side mod at launch). Every figure and both pies read as
+before. The script profiler, the tab open in the Full Screen frame: 6,274
+samples and 246 frames in 13.5 s, against 16,139 samples and 137 frames in
+13.9 s; the four building walks are gone from the roots, the heaviest root is
+65 ms (`te_budget_values.txt:28`), and the first fourteen sum to about 1.5 ms
+a frame, from about 17.
+
+**The frame counter moved much less than the script: 19 frames a second,
+from 16, and what is left is the engine's, not the mod's.** A side mod's copy
+of the generated file with a client-side switch on each part showed where the
+frame goes (the Full Screen frame; the Nation tab in the same window draws at
+76):
+
+| Shown | frames a second |
+|---|---|
+| Both pies and both lists | 18 to 19 |
+| The pies only | 20 |
+| The lists only | 19 |
+| Neither (the two headers and their totals) | 20 |
+| Nothing under the headers, the sections' root contexts still bound | 23 |
+| Vanilla's own Budget panel, Overview tab | 16 |
+
+So the pies and lists together cost about 9 ms of the tab's 53 ms a frame,
+and about 30 ms is spent with nothing drawn at all: the two sections' root
+`datacontext`, which reads the engine's budget figures once a frame (twelve
+getters for income, about thirty for expenses: `PredictWeeklyIncome`,
+`PredictConsumptionTaxes`, `PredictDividendsTaxes`, `PredictTariffs`,
+`PredictGovernmentWagesExpenses`, `PredictMilitaryWagesExpenses`,
+`PredictTotalArmyExpenses` and the rest). Vanilla's Budget overview reads the
+same kind of figure a line and pays 49 ms a frame for it on this economy. The
+tab cannot read them less often (a binding is evaluated every frame) and
+script cannot read them at all, so a weekly copy in variables is not
+available. What could still help, not tried: finding which getters carry the
+cost (a switch on each, as above; the `Predict…` ones are the likely ones)
+and showing those figures on a hover or behind a "Show" button instead of
+in the open tab.
+
+Data: `/mnt/d/vic3te-data/gui-eval-2026-11-24/` (`perf/side_roots_budget_breakdown.png`, `perf/after_roots_budget_breakdown.png`, `perf/bud_experiment.png`,
+`shots/before/fs_budget_breakdown.png`, `agents/budget-perf/count_frame.py`).
 
 ## The Grand Monuments tab, 2026-11-24: 1.15.2
 
