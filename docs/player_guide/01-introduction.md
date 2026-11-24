@@ -42,7 +42,7 @@ while its game rule is on; a group with none of its maps to show is hidden.
 | Population | Population, Population Density, Urban People, Population Growth, Net Migration, Crowding Penalty, City Rank |
 | Families and Ages | Birth Rate, Death Rate, Natural Change, Fertility, Family Planning, Median Age, Aged 65 and Over, Sex Balance |
 | Living Conditions | Standard of Living, Wealth, SoL vs Wealth, SoL vs Expected, Below Expected SoL, Literacy, Life Expectancy, Infant Mortality, Leading Cause, Health Care |
-| Classes | Every pop type, from Aristocrats to Soldiers |
+| Classes | Every pop type, from Aristocrats to Soldiers and the mod's Spacers |
 | Economy | GDP, GDP per Capita, Unemployment, Vacant Jobs, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Infrastructure, Market Access, Power Grids |
 | Politics | Turmoil, Radicals/Loyalists, Discrimination, Political Models, United Nations, Colonies |
 | Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Agent Networks |

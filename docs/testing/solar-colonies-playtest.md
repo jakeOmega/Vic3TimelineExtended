@@ -1416,3 +1416,40 @@ unproven: `xfer_step_scope`). Full Colonies; the console is `event te_debug_spac
 7. **A fleet that is gone.** Leave Marines open, unpaused, while the fleet is destroyed in battle: the popup reads
    "This fleet has left, or is gone."
 8. **The AI.** An AI with a garrison due still lands every marine aboard at that colony (it never sees the popup).
+
+## Space forces personnel (2026-11-24)
+
+Design: `docs/superpowers/specs/2026-11-24-space-forces-personnel-design.md` (the scope, PR #1990, beside it). Full
+Colonies. Spacers are the mod's first pop type, so the first two rows ask whether the engine takes one at all. The
+console's `event te_debug_space_race.6` option n fills the reserve (100 of each role: 50,000 personnel at 100 a
+point), o puts an enemy fleet at Earth.
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK OK/BROKEN pers_pop_type country=… spacers=… personnel=… want=…` | once a game, a month after a Space Forces Base of a level or more first runs at half staff or more | the base's state holds Spacers and its `state_sr_space_personnel_add` is 1,000 × the base's levels × its occupancy, within 2% | `spacers=0`: the pop type, or its social class (`te_spacers_classes.txt`, one per hierarchy), doesn't load or doesn't hire (also look for a pop-type or social-class error in `error.log`); `personnel` off `want`: the method's workforce-scaled state modifier doesn't reach the state as the batteries' does | for the pop type, put Spacers in vanilla's lower class by a full restatement of `lower_class` (and the caste and Edo classes) rather than classes of their own; for the figure, compute capacity in script, level × occupancy × 1,000 by `is_building_type`, as `ship_construction`'s fallback does |
+| `TE_SELF_CHECK OK/BROKEN pers_kill country=… spacers_before=… killed=… spacers_week_on=…` | once a game, a week after the first state kills a hundred or more Spacers (`space_race_events.140`) | the state's Spacers fell by at least half the count: `kill_population_in_state` with `pop_type = spacers` takes the mod's pop type | they fell by less (a week's rehiring can't refill them) | kill by `every_scope_pop = { limit = { is_pop_type = spacers } }` with `kill_population_percent` scaled to the count |
+| `TE_SR_PERS migrate country=… in_service=… grace_until_month=…` | once a country, its first fleets month, only when an old save's fleets need more personnel than its bases give | (a record, not a check) the levels the migration built, in Space Command's state or the capital | | |
+
+1. **The building.** With Space Militarization under Full Colonies, the build menu offers Space Forces Base in any
+   state, as a government building only. Its method's tooltip shows 1,000 Spacers a level and +1,000 Space Forces
+   Personnel. A level hires Spacers (the state's pops list shows them, with the placeholder soldiers icon), and the
+   Map Room's Classes row has Spacers' two maps.
+2. **The cells.** Space Command's Personnel cell reads in service of capacity (the base's 1,000 a staffed level);
+   its hover gives crews, marines aboard, marines landed and the year's dead. Crewed reads 100% while capacity
+   covers what's in service.
+3. **The launch gate.** With one staffed base level (1,000 personnel) and no fleets, fill the reserve (option n, 500
+   points): Launch sends up 10 points, 2% of each role, and the rest waits. The Reserve hover names the
+   points awaiting crews. With no room, Launch greys with its reason, and Auto launches nothing.
+4. **Marines.** At Earth, a fleet with empty carrier room takes on marines only as far as personnel are spare (a
+   battalion for each 1,000). Click Hulls (it reads Marines) and fill the reserve again: next month the marines
+   fill before the reserve goes up.
+5. **Short of personnel.** Demolish the base level: Crewed falls below 100%, Space Fleets shows the note, and the
+   battle report's losses dealt read lower by the share.
+6. **The dead.** Lose ships in a battle: the battle report names the people killed, and the base's state's
+   Spacers fall by about that many (whole hundreds) at the month's end. The census's War Dead map counts them.
+7. **The toll.** Seize an enemy colony with marines to spare: the marines aboard fall by the garrison need plus
+   half again, the landed garrison is the need plus one, and the occupation notice names the dead.
+8. **An old save.** Load a save from before this change with fleets: in the first month Space Forces Base levels
+   appear in Space Command's state (`TE_SR_PERS migrate`), and Crewed reads 100% for six months while they hire.
+9. **The AI.** In an observer run, AI fleet powers build Space Forces Bases (the census or the Map Room's Spacers
+   map shows where), and none pauses Space Command for crews while it has a base level queued.
