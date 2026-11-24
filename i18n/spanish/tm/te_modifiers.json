@@ -1276,8 +1276,8 @@
   "es": "Cupos disponibles de receptor solar"
  },
  "country_solar_receiver_max_level_add_desc": {
-  "en": "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot.",
-  "es": "El número de Receptores de energía solar adicionales que se pueden construir. Cada nivel de Colector solar orbital añade 10 cupos, y cada nivel de Receptor de energía solar usa 1 cupo."
+  "en": "The number of additional Solar Power Receivers that can be constructed. Each fully staffed level of Orbital Solar Collector adds 3 slots, and each level of Solar Power Receiver uses 1 slot.",
+  "es": "El número de Receptores de energía solar adicionales que se pueden construir. Cada nivel de Colector solar orbital con la plantilla completa añade 3 cupos, y cada nivel de Receptor de energía solar usa 1 cupo."
  },
  "country_space_race_max_funding_add": {
   "en": "[concept_space_race] Funding Cap",
