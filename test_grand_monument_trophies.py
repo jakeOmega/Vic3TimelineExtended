@@ -1114,11 +1114,17 @@ class LootingASecondaryTests(unittest.TestCase):
         self.assertNotIn("gm_state_is_dedicated", body)
         can = squash(block(read(MON_TRIGGERS), "gm_mon_tr_can_take"))
         # The occupation first, cheap and false for our own rows (late_game_performance.md, 2026-11-24).
-        self.assertIn("var:gm_tr_origin ?= { gm_state_tr_occupied_by = { WHO = $WHO$ } "
+        # The building first, which takeable_secondary implies (no owner read on a merged state).
+        self.assertIn("var:gm_tr_origin ?= { has_building = building_grand_monument "
+                      "gm_state_tr_occupied_by = { WHO = $WHO$ } "
                       "gm_state_tr_takeable_secondary = yes } gm_mon_tr_piece_abroad = no", can)
         self.assertEqual(squash(block(read(TR_TRIGGERS), "gm_state_tr_can_take")),
+                         "has_building = building_grand_monument "
                          "OR = { gm_state_tr_occupied_by = { WHO = $WHO$ } gm_state_tr_own_takeable_by = { WHO = $WHO$ } } "
                          "gm_state_tr_takeable = yes", "the route first, before the world's trophies")
+        self.assertIn("has_building = building_grand_monument",
+                      squash(block(read(TR_TRIGGERS), "gm_state_is_dedicated")) or
+                      squash(block(read(TRIGGERS), "gm_state_is_dedicated")), "the building is implied")
 
     def test_the_hidden_event_gates_the_target_by_its_own_rule_and_forgets_it(self):
         ev = squash(raw_block_at(strip_comments(read(TR_EVENTS)), r"(?m)^monument_trophy_events\.10\s*=\s*\{"))
