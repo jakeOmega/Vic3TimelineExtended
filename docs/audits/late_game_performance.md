@@ -1501,6 +1501,67 @@ in the open tab.
 Data: `/mnt/d/vic3te-data/gui-eval-2026-11-24/` (`perf/side_roots_budget_breakdown.png`, `perf/after_roots_budget_breakdown.png`, `perf/bud_experiment.png`,
 `shots/before/fs_budget_breakdown.png`, `agents/budget-perf/count_frame.py`).
 
+## The Grand Monuments tab, 2026-11-24: 1.15.2
+
+The owner's game of December 2032 as the Imperial Union of America: 27
+monuments of its own and 24 trophies, 3840x2160. With the Grand Monuments
+tab open the game drew 16 frames a second in the Timeline Extended window's
+Full Screen frame and about 10 in its side panel with the script profiler
+on, against 120 for a light tab and 47 for the Nation tab under the same
+profiler. The profiler (`Script.Profiling.Start` / `Stop`, the game paused,
+so every sample is a binding's script) over 14.7 s and 116 frames, inclusive
+times:
+
+| Root | ms | What it was |
+|---|---|---|
+| `gm_values.txt:322`, `:321` | 511, 82 | `gm_disp_picture_code`: a has_variable, asked by each of `gm_picture`'s 238 icons (one per picture code) in each row |
+| `gm_trophy_values.txt:328`, `:327` | 505, 161 | `gm_tr_disp_picture_code`, the same in `gm_tr_picture`, for the trophies and the monuments beside another |
+| `gm_monument_values.txt:199`, `:200` | 479, 105 | `gm_state_primary_grandeur`, from each row's detail line and the frame |
+| `gm_values.txt:311`–`:315` | about 150 each | `gm_disp_frame_tier`: five ifs on `gm_state_grandeur`, asked by each of the five frame icons |
+| `gm_monument_values.txt:54`, `:55` | 259, 51 | `gm_state_primary_levels`' `value = gm_state_built_levels`, the fallback computed (with the secondaries' list) before the record overrode it |
+| `gm_trophy_values.txt:339`, `:338` | 240, 73 | `gm_tr_disp_trophy_picture_code`, asked by each of `gm_tr_trophy_picture`'s 158 icons in each trophy row |
+| `gm_trophy_sguis.txt:19`, `gm_monument_sguis.txt:15` | 181, 112 | Carry It Off's `is_shown`, twice a row, which read every trophy in the world before the route |
+| `gm_values.txt:2017`, `:1813`, `:1864`, `:1872`, `:1935` | 51 to 113 each | the overview's counts, each an `every_scope_state`, about sixteen reads a frame |
+
+**What changed** (branch `gui/gm-perf`; no figure, picture or button
+changes):
+
+- **The pictures are grouped.** The three picture types put their icons in
+  group widgets by code range (a hundred codes a group below 1,000,000,
+  twenty from there: `picture_group` in `test_grand_monument_registry.py`),
+  each group shown on the stored variable's range, inside one wrapper shown
+  while the display value is above its floor, so the variable is read only
+  once it is set. A row reads its display value twice and the variable about
+  forty times, where it asked a script value 238 times (a trophy's row 396).
+  This rests on a widget in a hidden container not being evaluated
+  (`gui_modding_guide.md` gotcha #42, seen in game 2026-10-18).
+- **The fallbacks are lazy.** `gm_state_primary_levels`,
+  `gm_state_primary_start` and `gm_mon_start` compute their fallback in an
+  `else`, only without the record, where `value = <fallback>` before the
+  `if` computed it on every call.
+- **The frame tier reads the grandeur once** and saves it
+  (`save_temporary_value_as`, vanilla's form in `command_values.txt`).
+- **The cheap test first.** `gm_state_tr_can_take` tests the route before
+  `gm_state_tr_takeable`, and `gm_mon_tr_can_take` the occupation before the
+  rest, so a monument in our own incorporated state is ruled out at a line or
+  two; `gm_mon_disp_clearable` counts the state's monuments before comparing
+  them.
+
+What each view of Our Monuments and Trophies costs now: Full draws each row's
+picture (two display values, about forty variable reads), its frame (five
+frame tiers, one grandeur each), its status (`gm_status_code` about eight
+times a row with the sections' own `visible`s) and its controls' values;
+Short draws no picture and no frame, only the line's values and Carry It
+Off's now cheap `is_shown`; Collapsed draws no rows. Full still draws every
+row; the Demographics tab's Show All (`te_demog_town_rows`) would cap it, and
+which view opens is the owner's call.
+
+**Left:** the overview's counts walk every state of the country, about
+sixteen walks a frame (roughly 400 ms of the 14.7 s). Iterating `gm_states`
+instead would agree with the rows but lag a conquest or a new site by up to a
+month, as the rows do; storing them in the country refresh would lag a site
+finishing. Neither is done. Not yet remeasured in game.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.

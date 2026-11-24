@@ -18,7 +18,8 @@ from collections import namedtuple
 
 from test_grand_monument_registry import (
     BUILDING_FORMS, BUILT, DEDICATIONS, FORMS, HISTORIC, LANDMARKS, NAMESAKES, PICTURES, TROPHY_CODE_BASE,
-    TROPHY_PICTURES, block, committed, declaration, loc, picture_key, raw_block_at, read, squash, strip_comments,
+    TROPHY_PICTURES, assert_grouped_pictures, block, committed, declaration, loc, picture_key, raw_block_at, read,
+    squash, strip_comments,
 )
 
 TR_EFFECTS = "common/scripted_effects/gm_trophy_effects.txt"
@@ -760,11 +761,13 @@ class PictureTests(unittest.TestCase):
         raw = raw_block_at(read(TR_GUI), r"(?m)^\ttype gm_tr_picture = widget \{")
         self.assertIsNotNone(raw)
         body = squash(strip_comments(raw))
-        self.assertTrue(body.startswith("size = { 96 96 } icon = {"), body[:80])
-        for code in PICTURES:
-            self.assertIn(f"icon = {{ visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue("
-                          f"'gm_tr_disp_picture_code'), '(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
-                          f"texture = \"gfx/interface/icons/gm_pictures/{picture_key(code)}.dds\" }}", body, code)
+        self.assertTrue(body.startswith("size = { 96 96 } icon = { visible = \"[EqualTo_CFixedPoint( "
+                                        "ScriptContainer.MakeScope.ScriptValue('gm_tr_disp_picture_code'), "
+                                        "'(CFixedPoint)1' )]\" size = { 100% 100% } "
+                                        "texture = \"gfx/interface/icons/gm_pictures/undedicated.dds\" }"), body[:200])
+        # Grouped as gm_picture's, read from the stored code (late_game_performance.md, 2026-11-24).
+        assert_grouped_pictures(self, body, "ScriptContainer", "gm_tr_disp_picture_code", "gm_tr_picture_code", 1,
+                                {code: picture_key(code) for code in PICTURES if code != 1})
         self.assertEqual(body.count("icon = {"), len(PICTURES))
         self.assertNotIn("frame_tier", body, "the grandeur frame is a standing monument's")
 
@@ -811,10 +814,10 @@ class TrophyOwnPictureTests(unittest.TestCase):
     def test_widget_draws_it_over_the_monuments(self):
         body = squash(strip_comments(raw_block_at(read(TR_GUI), r"(?m)^\ttype gm_tr_trophy_picture = widget \{")))
         self.assertTrue(body.startswith("size = { 96 96 } gm_tr_picture = {}"), body[:80])
+        # Grouped as gm_picture's, read from the stored code once above 0 (late_game_performance.md, 2026-11-24).
+        assert_grouped_pictures(self, body, "ScriptContainer", "gm_tr_disp_trophy_picture_code",
+                                "gm_tr_trophy_picture_code", 0, TROPHY_PICTURES)
         for code, key in TROPHY_PICTURES.items():
-            self.assertIn(f"icon = {{ visible = \"[EqualTo_CFixedPoint( ScriptContainer.MakeScope.ScriptValue("
-                          f"'gm_tr_disp_trophy_picture_code'), '(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
-                          f"texture = \"gfx/interface/icons/gm_pictures/{key}.dds\" }}", body, code)
             self.assertTrue(committed(f"gfx/interface/icons/gm_pictures/{key}.dds"), key)
         self.assertEqual(body.count("icon = {"), len(TROPHY_PICTURES))
 
@@ -1110,8 +1113,18 @@ class LootingASecondaryTests(unittest.TestCase):
             self.assertIn(line, body)
         self.assertNotIn("gm_state_is_dedicated", body)
         can = squash(block(read(MON_TRIGGERS), "gm_mon_tr_can_take"))
-        self.assertIn("var:gm_tr_origin ?= { gm_state_tr_takeable_secondary = yes "
-                      "gm_state_tr_occupied_by = { WHO = $WHO$ } } gm_mon_tr_piece_abroad = no", can)
+        # The occupation first, cheap and false for our own rows (late_game_performance.md, 2026-11-24).
+        # The building first, which takeable_secondary implies (no owner read on a merged state).
+        self.assertIn("var:gm_tr_origin ?= { has_building = building_grand_monument "
+                      "gm_state_tr_occupied_by = { WHO = $WHO$ } "
+                      "gm_state_tr_takeable_secondary = yes } gm_mon_tr_piece_abroad = no", can)
+        self.assertEqual(squash(block(read(TR_TRIGGERS), "gm_state_tr_can_take")),
+                         "has_building = building_grand_monument "
+                         "OR = { gm_state_tr_occupied_by = { WHO = $WHO$ } gm_state_tr_own_takeable_by = { WHO = $WHO$ } } "
+                         "gm_state_tr_takeable = yes", "the route first, before the world's trophies")
+        self.assertIn("has_building = building_grand_monument",
+                      squash(block(read(TR_TRIGGERS), "gm_state_is_dedicated")) or
+                      squash(block(read(TRIGGERS), "gm_state_is_dedicated")), "the building is implied")
 
     def test_the_hidden_event_gates_the_target_by_its_own_rule_and_forgets_it(self):
         ev = squash(raw_block_at(strip_comments(read(TR_EVENTS)), r"(?m)^monument_trophy_events\.10\s*=\s*\{"))
