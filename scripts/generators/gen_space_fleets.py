@@ -122,7 +122,7 @@ SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marine
                 "land", "embark", "fill", "debug_strength", "debug_land", "ai_home",
                 "gather", "apply_losses", "toggle_destroy", "ai_recall", "debug_drive",
                 "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick", "set_posture", "set_target",
-                "xfer_open", "xfer_step", "transfer")
+                "xfer_open", "xfer_step", "transfer", "land_pick")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
 # per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
@@ -576,6 +576,16 @@ def render_slot_triggers(n: int) -> list[str]:
             f"\thas_variable = {loc}",
             "\tOR = {",
             *[f"\t\tAND = {{ scope:pick = {w.index} var:{loc} = {CODE[w.location]} }}" for w in gss.SITES],
+            "\t}",
+            "}",
+            "# The Land popup's pick (scope:pick, a world's index) is a world where it is",
+            "# that we hold and no enemy occupies.",
+            f"{var(n, 'pick_ours_here')} = {{",
+            f"\thas_variable = {loc}",
+            "\tOR = {",
+            *[f"\t\tAND = {{ scope:pick = {w.index} var:{loc} = {CODE[w.location]} "
+              f"global_var:sr_site_holder_{w.key} ?= this NOT = {{ has_global_variable = sr_site_occupier_{w.key} }} }}"
+              for w in gss.SITES],
             "\t}",
             "}",
             "# At Earth, closing in on a lunar world (the AI's offence leaves it there).",
@@ -1295,10 +1305,11 @@ def render_location_effects() -> list[str]:
             "\t\tset_local_variable = { name = sr_fl_arr value = var:sr_fl_$N$_arrive }"]
     out += _chain([(f"var:sr_fl_$N$_dest = {lc.code}", [f"sr_loc_add_inbound = {{ LOC = {lc.key} }}"]) for lc in LOCATIONS], 2)
     out += ["\t}", "}", "",
-            "# Land: every marine aboard, at the first world of ours there awaiting its",
-            "# garrison, else the first world of ours there (table order); at Earth, on",
-            "# the Moon (owner, 2026-11-24). Embark: ours from every world of ours there,",
-            "# up to the carriers' room."]
+            "# The AI's Land: every marine aboard, at the first world of ours there awaiting",
+            "# its garrison, else the first world of ours there (table order); at Earth, on",
+            "# the Moon (owner, 2026-11-24). A player picks the world in the Land popup",
+            "# (sr_fl_land_pick_at). Embark: ours from every world of ours there, up to the",
+            "# carriers' room."]
     out += ["sr_fl_land_at = {"]
     cases = []
     for lc in LOCATIONS:
@@ -1310,6 +1321,13 @@ def render_location_effects() -> list[str]:
         inner += [(held(s), [f"sr_fl_land_marines = {{ N = $N$ KEY = {s.key} }}"]) for s in ws]
         cases.append((f"var:sr_fl_$N$_loc = {lc.code}", _chain(inner, 0)))
     out += _chain(cases)
+    out += ["}",
+            "# The Land popup's choice (a player's Land): every marine aboard, at the world",
+            "# whose index is scope:pick, if it is ours there and no enemy occupies it.",
+            "sr_fl_land_pick_at = {"]
+    out += _chain([(f"scope:pick = {s.index} var:sr_fl_$N$_loc = {CODE[s.location]} global_var:sr_site_holder_{s.key} ?= this "
+                    f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}",
+                    [f"sr_fl_land_marines = {{ N = $N$ KEY = {s.key} }}"]) for s in gss.SITES])
     out += ["}", "sr_fl_embark_at = {"]
     cases = []
     for lc in LOCATIONS:
@@ -2170,6 +2188,10 @@ def render_display() -> str:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_occupier_{k} has_variable = sr_ss_occ_{k} }} value = 1 }}",
                 "}"]
+    out += ["", "# The Land popup's Garrison cell, per world: 1 while it is ours and its garrison",
+            "# order waits for marines (sr_site_garrison_due_<key>)."]
+    out += [f"sr_disp_ld_due_{s.key} = {{ value = 0 if = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this "
+            f"has_global_variable = sr_site_garrison_due_{s.key} }} value = 1 }} }}" for s in gss.SITES]
     out += ["", "# Each slot's target world (the target button's hover): its Defences, a",
             "# range low-high (exact when surveyed or ours), integrity and marines; on the",
             "# Moon and Mars, the Defences and marines its holder has there (owner, 2026-11-24)."]
@@ -2455,7 +2477,11 @@ def _fleet_row(n: int) -> list[str]:
                      f'onclick = "{_op("sr_fleet_xfer_open_sgui", "Execute", n)}"',
                      f"onclick = \"[GetVariableSystem.Set('te_popup', 'sr_xfer_{n}')]\"",
                      f'tooltip = "{_reasoned("sr_fleet_xfer_open_sgui", n)}"')
-    out += _button("fl_land_button", "sr_fleet_land_sgui", n)
+    # Land opens the slot's Land popup (te_popup sr_land_<n>), greyed on
+    # sr_fleet_land_sgui's is_valid, a gate whose effect is its description.
+    out += _override("fl_land_button", f'enabled = "{_op("sr_fleet_land_sgui", "IsValid", n)}"',
+                     f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('land', n)}')]\"",
+                     f'tooltip = "{_reasoned("sr_fleet_land_sgui", n)}"')
     out += _button("fl_embark_button", "sr_fleet_embark_sgui", n)
     # 6b: posture, target, seize or destroy; at Earth, where everything else is
     # stationed, only while a lunar world may be closed in on (lunar colonization § 8.1).
@@ -2746,6 +2772,37 @@ def _ftarget_slot(n: int) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _land_row(n: int, w: gss.Site) -> list[str]:
+    """Slot n's row for the world w in its Land popup: shown while the fleet is at
+    w's location and w is ours, not occupied; the world, our marines there, its
+    garrison order if one waits, and Land."""
+    k = w.key
+    shown = f"And( {_eq(var(n, 'loc_value'), CODE[w.location])}, {_eq(f'sr_disp_site_{k}', 1)} )"
+    rows = _override("lr_visible", f'visible = "[{shown}]"')
+    rows += _override("lr_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{w.kind}.dds"')
+    rows += _override("lr_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_ss_site_tt_{k}"')
+    rows += _override("lr_marines", f'raw_text = "#v [{_sv(f"sr_site_marines_value_{k}")}|0]#!"')
+    rows += _override("lr_due_visible", f'visible = "[{_eq(f"sr_disp_ld_due_{k}", 1)}]"')
+    rows += _pick_button("lr_button", "sr_fleet_land_on_sgui", n, w.index)
+    return ["\t\t\t\tte_sr_land_row = {", *["\t\t" + line for line in rows], "\t\t\t\t}"]
+
+
+def _land_slot(n: int) -> list[str]:
+    """Slot n's body in the Land popup: shown on te_popup sr_land_<n>; while the
+    fleet is at a location, our colonies there; else one line."""
+    here = _eq(f"sr_disp_fl_{n}", 1)
+    out = ["\t\tte_sr_land_slot = {"]
+    out += _override("ld_visible", f"visible = \"[GetVariableSystem.HasValue('te_popup', '{_popup_key('land', n)}')]\"")
+    out += _override("ld_here_visible", f'visible = "[{here}]"')
+    out += _override("ld_aboard", f'raw_text = "#v [{_sv(var(n, "marines_value"))}|0]#!"')
+    out += ['\t\t\tblockoverride "ld_rows" {']
+    for w in gss.panel_order():
+        out += _land_row(n, w)
+    out += ["\t\t\t}"]
+    out += _override("ld_gone_visible", f'visible = "[Not( {here} )]"')
+    return out + ["\t\t}"]
+
+
 def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's Fleets and Locations rows, from",
@@ -2756,7 +2813,8 @@ def render_gui() -> str:
            "### value of sr_fleets_display_generated.txt; the scripted GUIs are in",
            "### sr_fleet_sguis.txt and take the slot as scope:op. Then the popups'",
            "### bodies: Transfer's (te_sr_xfer_popup_body), the destination's",
-           "### (te_sr_dest_popup_body) and the target's (te_sr_ftarget_popup_body).",
+           "### (te_sr_dest_popup_body), the target's (te_sr_ftarget_popup_body) and",
+           "### Land's (te_sr_land_popup_body).",
            "### The colonies' Defenses",
            "### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).",
            "",
@@ -2807,6 +2865,16 @@ def render_gui() -> str:
             "\t\tignoreinvisible = yes"]
     for n in range(1, SLOTS + 1):
         out += [""] + _ftarget_slot(n)
+    out += ["\t}", "",
+            "\t### The Land popup's slots (te_sr_land_popup in space_race_widget.gui,",
+            "\t### te_popup sr_land_<n>): one body a slot, each a row per world (Solar",
+            "\t### System's order), our colonies at the fleet's location shown, passing its",
+            "\t### slot and the world's index to sr_fleet_land_on_sgui (scope:op, scope:pick).",
+            "\ttype te_sr_land_popup_body = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _land_slot(n)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

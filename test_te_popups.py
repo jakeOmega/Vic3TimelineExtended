@@ -200,7 +200,8 @@ class PopupHostTest(unittest.TestCase):
         slot's (sr_fleets_generated_rows.gui)."""
         rows = _strip_comments(_read(SR_FLEET_ROWS))
         for popup, key, title in (("te_sr_dest_popup", "sr_dest", "dp_title"),
-                                  ("te_sr_ftarget_popup", "sr_ftarget", "ft_title")):
+                                  ("te_sr_ftarget_popup", "sr_ftarget", "ft_title"),
+                                  ("te_sr_land_popup", "sr_land", "ld_title")):
             body = self.popups[popup]
             with self.subTest(popup=popup):
                 visible = re.search(r'blockoverride "popup_visible" \{\s*visible = "(.*)"\s*\}', body).group(1)

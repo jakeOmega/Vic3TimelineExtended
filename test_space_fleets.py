@@ -228,7 +228,7 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        self.assertEqual(len(names), 17)
+        self.assertEqual(len(names), 18)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -3813,6 +3813,102 @@ class HandWrittenWiringTest(unittest.TestCase):
         # ... and the else arm is reached only by Stand off
         self.assertRegex(body, r"OR = \{\s*scope:pick = 1\s*scope:pick = 2\s*\}")
         self.assertEqual(len(re.findall(r"name = sr_fl_\$N\$_posture value = \d", body)), 4)
+
+
+class LandPopupTest(unittest.TestCase):
+    """Land opens a list of our colonies at the fleet's location (owner,
+    2026-11-24: Mercury and Venus share a location, and Land always chose
+    Venus); the row's Land puts every marine aboard on that colony."""
+
+    @classmethod
+    def setUpClass(cls):
+        rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        cls.fleet_rows = _gui_blocks(rows[rows.index("type te_sr_fleet_rows"):rows.index("type te_sr_location_cells")],
+                                     "te_sr_fleet_row")
+        cls.slots = _gui_blocks(rows[rows.index("type te_sr_land_popup_body"):], "te_sr_land_slot")
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.gen_triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        sguis = _strip(_raw(SGUIS))
+        cls.gate = _block(sguis, "sr_fleet_land_sgui")
+        cls.sgui = _block(sguis, "sr_fleet_land_on_sgui")
+
+    def test_land_opens_the_colony_list(self):
+        for n, row in enumerate(self.fleet_rows, 1):
+            button = _override_body(row, "fl_land_button")
+            with self.subTest(slot=n):
+                self.assertEqual(re.findall(r'onclick = "(.*)"', button), [f"[GetVariableSystem.Set('te_popup', 'sr_land_{n}')]"])
+                self.assertIn("GetScriptedGui('sr_fleet_land_sgui').IsValid(", button)
+                self.assertNotIn("Execute(", button)
+        # The card's gate lands nothing: its effect is the hover's description.
+        self.assertNotIn("sr_fl_by_op", self.gate)
+        self.assertIn("sr_fl_op_check = { TEST = can_land }", self.gate)
+
+    def test_a_row_per_world_shown_where_it_is_ours(self):
+        self.assertEqual(len(self.slots), gsf.SLOTS)
+        for n, slot in enumerate(self.slots, 1):
+            with self.subTest(slot=n):
+                self.assertEqual(_override_body(slot, "ld_visible").strip(),
+                                 f"visible = \"[GetVariableSystem.HasValue('te_popup', 'sr_land_{n}')]\"")
+                rows = _gui_blocks(slot, "te_sr_land_row")
+                self.assertEqual([re.search(r'text = "sr_site_name_(\w+)"', r).group(1) for r in rows],
+                                 [w.key for w in gss.panel_order()])
+                for w, r in zip(gss.panel_order(), rows):
+                    self.assertEqual(_override_body(r, "lr_visible").strip(),
+                                     f"visible = \"[And( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                     f"'sr_fl_{n}_loc_value'), '(CFixedPoint){gsf.CODE[w.location]}' ), "
+                                     f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_{w.key}'), "
+                                     f"'(CFixedPoint)1' ) )]\"")
+
+    def test_each_row_passes_its_slot_and_world_and_closes(self):
+        for n, slot in enumerate(self.slots, 1):
+            for w, r in zip(gss.panel_order(), _gui_blocks(slot, "te_sr_land_row")):
+                button = _override_body(r, "lr_button")
+                onclicks = re.findall(r'(?m)^\s*onclick = "(.*)"$', button)
+                with self.subTest(slot=n, world=w.key):
+                    self.assertEqual(set(re.findall(r"AddScope\( 'op', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)),
+                                     {str(n)})
+                    self.assertEqual(set(re.findall(r"AddScope\( 'pick', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \) \)", button)),
+                                     {str(w.index)})
+                    self.assertEqual(len(onclicks), 2)
+                    self.assertTrue(onclicks[0].startswith("[GetScriptedGui('sr_fleet_land_on_sgui').Execute("))
+                    self.assertEqual(onclicks[1], "[GetVariableSystem.Clear('te_popup')]")
+
+    def test_a_body_for_a_fleet_away_shows_only_its_note(self):
+        for n, (slot, row) in enumerate(zip(self.slots, self.fleet_rows), 1):
+            with self.subTest(slot=n):
+                here = re.search(r'visible = "\[(.*)\]"', _override_body(row, "fl_orders_visible")).group(1)
+                self.assertEqual(_override_body(slot, "ld_here_visible").strip(), f'visible = "[{here}]"')
+                self.assertEqual(_override_body(slot, "ld_gone_visible").strip(), f'visible = "[Not( {here} )]"')
+
+    def test_the_pick_lands_every_marine_on_that_world_alone(self):
+        self.assertIn("sr_fl_op_check = { TEST = can_land }", self.sgui)
+        self.assertIn("sr_fl_op_check = { TEST = pick_ours_here }", self.sgui)
+        self.assertIn("sr_fl_by_op = { DO = land_pick }", self.sgui)
+        effect = _block(self.generated, "sr_fl_land_pick_at")
+        for w in gss.SITES:
+            held = (f"global_var:sr_site_holder_{w.key} ?= this "
+                    f"NOT = {{ has_global_variable = sr_site_occupier_{w.key} }}")
+            with self.subTest(world=w.key):
+                self.assertRegex(effect, rf"limit = \{{ scope:pick = {w.index} var:sr_fl_\$N\$_loc = {gsf.CODE[w.location]} "
+                                         rf"{re.escape(held)} \}}\s*sr_fl_land_marines = \{{ N = \$N\$ KEY = {w.key} \}}")
+        self.assertEqual(effect.count("sr_fl_land_marines"), len(gss.SITES))
+        for n in range(1, gsf.SLOTS + 1):
+            pick = _block(self.gen_triggers, f"sr_fl_{n}_pick_ours_here")
+            for w in gss.SITES:
+                with self.subTest(slot=n, world=w.key):
+                    self.assertIn(f"AND = {{ scope:pick = {w.index} var:sr_fl_{n}_loc = {gsf.CODE[w.location]} "
+                                  f"global_var:sr_site_holder_{w.key} ?= this "
+                                  f"NOT = {{ has_global_variable = sr_site_occupier_{w.key} }} }}", pick)
+
+    def test_mercury_and_venus_can_each_be_picked_at_their_shared_location(self):
+        sites = {w.key: w for w in gss.SITES}
+        inner = gsf.CODE["inner"]
+        effect = _block(self.generated, "sr_fl_land_pick_at")
+        for key in ("mercury", "venus"):
+            w = sites[key]
+            with self.subTest(world=key):
+                self.assertEqual(w.location, "inner")
+                self.assertIn(f"scope:pick = {w.index} var:sr_fl_$N$_loc = {inner} ", effect)
 
 
 class TargetPopupTest(unittest.TestCase):

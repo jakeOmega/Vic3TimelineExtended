@@ -1986,6 +1986,49 @@ sr_disp_def_occupier_imbrium = {
 	if = { limit = { has_global_variable = sr_site_occupier_imbrium has_variable = sr_ss_occ_imbrium } value = 1 }
 }
 
+# The Land popup's Garrison cell, per world: 1 while it is ours and its garrison
+# order waits for marines (sr_site_garrison_due_<key>).
+sr_disp_ld_due_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_garrison_due_valles_marineris } value = 1 } }
+sr_disp_ld_due_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_garrison_due_olympus_mons } value = 1 } }
+sr_disp_ld_due_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_garrison_due_hellas_planitia } value = 1 } }
+sr_disp_ld_due_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_garrison_due_utopia_planitia } value = 1 } }
+sr_disp_ld_due_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_garrison_due_arcadia_planitia } value = 1 } }
+sr_disp_ld_due_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_garrison_due_ceres } value = 1 } }
+sr_disp_ld_due_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_garrison_due_vesta } value = 1 } }
+sr_disp_ld_due_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_garrison_due_psyche } value = 1 } }
+sr_disp_ld_due_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_garrison_due_pallas } value = 1 } }
+sr_disp_ld_due_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_garrison_due_hygiea } value = 1 } }
+sr_disp_ld_due_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_garrison_due_io } value = 1 } }
+sr_disp_ld_due_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_garrison_due_europa } value = 1 } }
+sr_disp_ld_due_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_garrison_due_ganymede } value = 1 } }
+sr_disp_ld_due_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_garrison_due_callisto } value = 1 } }
+sr_disp_ld_due_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_garrison_due_himalia } value = 1 } }
+sr_disp_ld_due_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_garrison_due_amalthea } value = 1 } }
+sr_disp_ld_due_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_garrison_due_venus } value = 1 } }
+sr_disp_ld_due_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_garrison_due_mercury } value = 1 } }
+sr_disp_ld_due_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_garrison_due_titan } value = 1 } }
+sr_disp_ld_due_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_garrison_due_enceladus } value = 1 } }
+sr_disp_ld_due_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_garrison_due_rhea } value = 1 } }
+sr_disp_ld_due_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_garrison_due_mimas } value = 1 } }
+sr_disp_ld_due_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_garrison_due_iapetus } value = 1 } }
+sr_disp_ld_due_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_garrison_due_titania } value = 1 } }
+sr_disp_ld_due_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_garrison_due_oberon } value = 1 } }
+sr_disp_ld_due_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_garrison_due_miranda } value = 1 } }
+sr_disp_ld_due_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_garrison_due_ariel } value = 1 } }
+sr_disp_ld_due_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_garrison_due_triton } value = 1 } }
+sr_disp_ld_due_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_garrison_due_proteus } value = 1 } }
+sr_disp_ld_due_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_garrison_due_pluto } value = 1 } }
+sr_disp_ld_due_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_garrison_due_eris } value = 1 } }
+sr_disp_ld_due_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_garrison_due_makemake } value = 1 } }
+sr_disp_ld_due_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_garrison_due_haumea } value = 1 } }
+sr_disp_ld_due_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_garrison_due_sedna } value = 1 } }
+sr_disp_ld_due_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_garrison_due_shackleton } value = 1 } }
+sr_disp_ld_due_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_garrison_due_peary } value = 1 } }
+sr_disp_ld_due_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_garrison_due_tranquility } value = 1 } }
+sr_disp_ld_due_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_garrison_due_marius_hills } value = 1 } }
+sr_disp_ld_due_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_garrison_due_daedalus } value = 1 } }
+sr_disp_ld_due_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_garrison_due_imbrium } value = 1 } }
+
 # Each slot's target world (the target button's hover): its Defences, a
 # range low-high (exact when surveyed or ours), integrity and marines; on the
 # Moon and Mars, the Defences and marines its holder has there (owner, 2026-11-24).

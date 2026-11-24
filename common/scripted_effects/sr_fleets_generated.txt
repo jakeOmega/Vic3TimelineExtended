@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, embark, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer, land_pick:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -1961,10 +1961,11 @@ sr_fl_note_at = {
 	}
 }
 
-# Land: every marine aboard, at the first world of ours there awaiting its
-# garrison, else the first world of ours there (table order); at Earth, on
-# the Moon (owner, 2026-11-24). Embark: ours from every world of ours there,
-# up to the carriers' room.
+# The AI's Land: every marine aboard, at the first world of ours there awaiting
+# its garrison, else the first world of ours there (table order); at Earth, on
+# the Moon (owner, 2026-11-24). A player picks the world in the Land popup
+# (sr_fl_land_pick_at). Embark: ours from every world of ours there, up to the
+# carriers' room.
 sr_fl_land_at = {
 	if = {
 		limit = { var:sr_fl_$N$_loc = 1 }
@@ -2312,6 +2313,170 @@ sr_fl_land_at = {
 			limit = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
 			sr_fl_land_marines = { N = $N$ KEY = sedna }
 		}
+	}
+}
+# The Land popup's choice (a player's Land): every marine aboard, at the world
+# whose index is scope:pick, if it is ours there and no enemy occupies it.
+sr_fl_land_pick_at = {
+	if = {
+		limit = { scope:pick = 1 var:sr_fl_$N$_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		sr_fl_land_marines = { N = $N$ KEY = valles_marineris }
+	}
+	else_if = {
+		limit = { scope:pick = 2 var:sr_fl_$N$_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		sr_fl_land_marines = { N = $N$ KEY = olympus_mons }
+	}
+	else_if = {
+		limit = { scope:pick = 3 var:sr_fl_$N$_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		sr_fl_land_marines = { N = $N$ KEY = hellas_planitia }
+	}
+	else_if = {
+		limit = { scope:pick = 4 var:sr_fl_$N$_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		sr_fl_land_marines = { N = $N$ KEY = utopia_planitia }
+	}
+	else_if = {
+		limit = { scope:pick = 5 var:sr_fl_$N$_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		sr_fl_land_marines = { N = $N$ KEY = arcadia_planitia }
+	}
+	else_if = {
+		limit = { scope:pick = 6 var:sr_fl_$N$_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		sr_fl_land_marines = { N = $N$ KEY = ceres }
+	}
+	else_if = {
+		limit = { scope:pick = 7 var:sr_fl_$N$_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		sr_fl_land_marines = { N = $N$ KEY = vesta }
+	}
+	else_if = {
+		limit = { scope:pick = 8 var:sr_fl_$N$_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		sr_fl_land_marines = { N = $N$ KEY = psyche }
+	}
+	else_if = {
+		limit = { scope:pick = 9 var:sr_fl_$N$_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		sr_fl_land_marines = { N = $N$ KEY = pallas }
+	}
+	else_if = {
+		limit = { scope:pick = 10 var:sr_fl_$N$_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		sr_fl_land_marines = { N = $N$ KEY = hygiea }
+	}
+	else_if = {
+		limit = { scope:pick = 11 var:sr_fl_$N$_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		sr_fl_land_marines = { N = $N$ KEY = io }
+	}
+	else_if = {
+		limit = { scope:pick = 12 var:sr_fl_$N$_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		sr_fl_land_marines = { N = $N$ KEY = europa }
+	}
+	else_if = {
+		limit = { scope:pick = 13 var:sr_fl_$N$_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		sr_fl_land_marines = { N = $N$ KEY = ganymede }
+	}
+	else_if = {
+		limit = { scope:pick = 14 var:sr_fl_$N$_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		sr_fl_land_marines = { N = $N$ KEY = callisto }
+	}
+	else_if = {
+		limit = { scope:pick = 15 var:sr_fl_$N$_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		sr_fl_land_marines = { N = $N$ KEY = himalia }
+	}
+	else_if = {
+		limit = { scope:pick = 16 var:sr_fl_$N$_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		sr_fl_land_marines = { N = $N$ KEY = amalthea }
+	}
+	else_if = {
+		limit = { scope:pick = 17 var:sr_fl_$N$_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		sr_fl_land_marines = { N = $N$ KEY = venus }
+	}
+	else_if = {
+		limit = { scope:pick = 18 var:sr_fl_$N$_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		sr_fl_land_marines = { N = $N$ KEY = mercury }
+	}
+	else_if = {
+		limit = { scope:pick = 19 var:sr_fl_$N$_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		sr_fl_land_marines = { N = $N$ KEY = titan }
+	}
+	else_if = {
+		limit = { scope:pick = 20 var:sr_fl_$N$_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		sr_fl_land_marines = { N = $N$ KEY = enceladus }
+	}
+	else_if = {
+		limit = { scope:pick = 21 var:sr_fl_$N$_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		sr_fl_land_marines = { N = $N$ KEY = rhea }
+	}
+	else_if = {
+		limit = { scope:pick = 22 var:sr_fl_$N$_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		sr_fl_land_marines = { N = $N$ KEY = mimas }
+	}
+	else_if = {
+		limit = { scope:pick = 23 var:sr_fl_$N$_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		sr_fl_land_marines = { N = $N$ KEY = iapetus }
+	}
+	else_if = {
+		limit = { scope:pick = 24 var:sr_fl_$N$_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		sr_fl_land_marines = { N = $N$ KEY = titania }
+	}
+	else_if = {
+		limit = { scope:pick = 25 var:sr_fl_$N$_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		sr_fl_land_marines = { N = $N$ KEY = oberon }
+	}
+	else_if = {
+		limit = { scope:pick = 26 var:sr_fl_$N$_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		sr_fl_land_marines = { N = $N$ KEY = miranda }
+	}
+	else_if = {
+		limit = { scope:pick = 27 var:sr_fl_$N$_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		sr_fl_land_marines = { N = $N$ KEY = ariel }
+	}
+	else_if = {
+		limit = { scope:pick = 28 var:sr_fl_$N$_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		sr_fl_land_marines = { N = $N$ KEY = triton }
+	}
+	else_if = {
+		limit = { scope:pick = 29 var:sr_fl_$N$_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		sr_fl_land_marines = { N = $N$ KEY = proteus }
+	}
+	else_if = {
+		limit = { scope:pick = 30 var:sr_fl_$N$_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		sr_fl_land_marines = { N = $N$ KEY = pluto }
+	}
+	else_if = {
+		limit = { scope:pick = 31 var:sr_fl_$N$_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		sr_fl_land_marines = { N = $N$ KEY = eris }
+	}
+	else_if = {
+		limit = { scope:pick = 32 var:sr_fl_$N$_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		sr_fl_land_marines = { N = $N$ KEY = makemake }
+	}
+	else_if = {
+		limit = { scope:pick = 33 var:sr_fl_$N$_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		sr_fl_land_marines = { N = $N$ KEY = haumea }
+	}
+	else_if = {
+		limit = { scope:pick = 34 var:sr_fl_$N$_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		sr_fl_land_marines = { N = $N$ KEY = sedna }
+	}
+	else_if = {
+		limit = { scope:pick = 35 var:sr_fl_$N$_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		sr_fl_land_marines = { N = $N$ KEY = shackleton }
+	}
+	else_if = {
+		limit = { scope:pick = 36 var:sr_fl_$N$_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		sr_fl_land_marines = { N = $N$ KEY = peary }
+	}
+	else_if = {
+		limit = { scope:pick = 37 var:sr_fl_$N$_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		sr_fl_land_marines = { N = $N$ KEY = tranquility }
+	}
+	else_if = {
+		limit = { scope:pick = 38 var:sr_fl_$N$_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		sr_fl_land_marines = { N = $N$ KEY = marius_hills }
+	}
+	else_if = {
+		limit = { scope:pick = 39 var:sr_fl_$N$_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		sr_fl_land_marines = { N = $N$ KEY = daedalus }
+	}
+	else_if = {
+		limit = { scope:pick = 40 var:sr_fl_$N$_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
+		sr_fl_land_marines = { N = $N$ KEY = imbrium }
 	}
 }
 sr_fl_embark_at = {

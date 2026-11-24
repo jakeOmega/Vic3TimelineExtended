@@ -372,7 +372,11 @@ sr_fleet_transfer_sgui = {
 	}
 }
 
-# Land the marines aboard at a colony of ours here; take ours back aboard.
+# Land: the fleet card's button opens the slot's Land popup (te_popup
+# sr_land_<n>), and reads only this gate, for its greyed state and its hover:
+# marines aboard, at a location where we hold a colony. Its effect is the
+# hover's description alone; the popup's Land (sr_fleet_land_on_sgui) lands
+# them, at the colony the player picks (the AI lands through sr_fl_land_at).
 sr_fleet_land_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -394,9 +398,45 @@ sr_fleet_land_sgui = {
 	}
 
 	effect = {
+		custom_tooltip = sr_fl_land_open_tt
+	}
+}
+
+# The Land popup's row: every marine aboard lands at the colony whose index is
+# scope:pick, as its garrison.
+sr_fleet_land_on_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		# True wherever the popup shows the button (its rows show only for our
+		# colonies where the fleet is): checked, not listed.
+		hidden_trigger = {
+			sr_fl_op_check = { TEST = at_location }
+		}
+		custom_tooltip = {
+			text = sr_fl_no_land_tt
+			sr_fl_op_check = { TEST = can_land }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_land_ours_tt
+			sr_fl_op_check = { TEST = pick_ours_here }
+		}
+	}
+
+	effect = {
 		custom_tooltip = sr_fl_land_tt
 		hidden_effect = {
-			sr_fl_by_op = { DO = land }
+			sr_fl_by_op = { DO = land_pick }
 		}
 	}
 }

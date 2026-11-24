@@ -263,8 +263,8 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
    Titan, Enceladus, Rhea, Triton, Pluto). Away from a dock, supply counts down; at zero the fleet loses 5% a month.
 7. **Transfer, marines.** Move all of one fleet into another at its location, then part of one into a new fleet, in
    the Transfer popup (the PR 4 section below, which took in Merge and Detach). At Earth the
-   carriers fill with marines (2 battalions a point of carrier strength); Land puts them at our colony there (Colony
-   Defences shows them), Embark takes them back.
+   carriers fill with marines (2 battalions a point of carrier strength); Land opens a list of our colonies there and
+   its Land puts them at the one picked (Colony Defences shows them), Embark takes them back.
 8. **Garrisons under Full.** Answer a demand for self-government (`.94`, option b of `te_debug_space_race.5`) with a
    garrison: nothing changes until a fleet lands 2 battalions there within a year, then the garrison takes effect as in
    slice 5. Without one, "Garrison for <World> Never Came" after a year.
@@ -1367,8 +1367,8 @@ Embark work on the Moon. No self-check: the one comparison it adds (`sr_site_sha
 `global_var:… ?= { global_var:… ?= this }`) is built of reads the panel already shows, and the Defenses view and
 the target hover show the shared figures. Full Colonies throughout; the console is `event te_debug_space_race.6`.
 
-1. **Land on the Moon.** Hold two lunar colonies and keep a fleet with marines at Earth: Land is enabled, the
-   marines land at the first of them, and the Defenses view's Marines shows the same figure on both rows. Embark
+1. **Land on the Moon.** Hold two lunar colonies and keep a fleet with marines at Earth: Land is enabled, its
+   popup lists both, and the marines land at the one picked, and the Defenses view's Marines shows the same figure on both rows. Embark
    takes them back aboard. Next month the fleet has refilled at Earth (the known gap: Land again and the Moon's
    marines keep growing; a garrison cost is to come).
 2. **A shared garrison.** With two battalions landed at one lunar colony, answer an autonomy demand at the other
@@ -1385,3 +1385,24 @@ the target hover show the shared figures. Full Colonies throughout; the console 
    own marines, and the occupied one's Defenses fire for no one.
 7. **The AI.** An AI with a lunar colony that orders a garrison lands two battalions from a fleet at Earth within a
    month; an AI fleet coming home to Earth with no lunar garrison due keeps its marines aboard.
+
+## Land picks the colony (2026-11-24)
+
+Mercury and Venus share a fleet location, and Land put every marine aboard at Venus whenever we held both (the
+owner, 2026-11-24). Land now opens a popup listing our colonies at the fleet's location (`space_race.md`, *Land picks
+the colony*). No self-check: the popup's rows and its button are the target popup's pattern, two scopes passed
+(`op`, `pick`), which `xfer_step_scope` and the target popup already showed working. Full Colonies; the console
+is `event te_debug_space_race.6`.
+
+1. **The label.** Choose Mercury & Venus in Fleet Destination: the fleet card's button reads "Merc./Venus", and
+   "→ Merc./Venus" in flight, neither cut off. The popup's Where column shows "Merc./Venus" in full.
+2. **The list.** Hold Mercury and Venus, with a fleet carrying marines at their location: Land on the card opens
+   Land Marines, with "Marines aboard" and a row for each, Mercury and Venus, with our marines at each. Land on
+   Mercury's row puts every marine aboard there, closes the popup, and the card's Marines bar reads 0.
+3. **Due.** Answer a demand for self-government at Mercury with a garrison: its row reads Due (yellow), and the
+   hover says two battalions within a year. Land there: the garrison takes effect the next month.
+4. **Only ours, not occupied.** An enemy occupies one of our colonies at a location: its row is gone from the
+   list. A free colony or another power's has no row.
+5. **A fleet that is gone.** Leave Land open, unpaused, while the fleet is destroyed in battle: the popup reads
+   "This fleet has left, or is gone."
+6. **The AI.** An AI with a garrison due still lands at that colony (it never sees the popup).

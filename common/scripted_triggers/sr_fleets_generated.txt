@@ -500,6 +500,53 @@ sr_fl_1_pick_world_here = {
 		AND = { scope:pick = 40 var:sr_fl_1_loc = 1 }
 	}
 }
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_1_pick_ours_here = {
+	has_variable = sr_fl_1_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_1_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_1_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_1_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_1_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_1_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_1_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_1_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_1_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_1_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_1_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_1_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_1_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_1_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_1_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_1_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_1_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_1_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_1_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_1_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_1_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_1_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_1_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_1_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_1_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_1_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_1_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_1_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_1_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_1_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_1_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_1_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_1_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_1_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_1_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_1_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_1_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_1_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_1_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_1_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_1_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_1_closing_at_earth = { sr_fl_1_at_earth = yes sr_fl_1_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -1208,6 +1255,53 @@ sr_fl_2_pick_world_here = {
 		AND = { scope:pick = 38 var:sr_fl_2_loc = 1 }
 		AND = { scope:pick = 39 var:sr_fl_2_loc = 1 }
 		AND = { scope:pick = 40 var:sr_fl_2_loc = 1 }
+	}
+}
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_2_pick_ours_here = {
+	has_variable = sr_fl_2_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_2_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_2_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_2_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_2_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_2_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_2_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_2_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_2_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_2_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_2_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_2_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_2_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_2_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_2_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_2_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_2_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_2_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_2_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_2_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_2_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_2_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_2_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_2_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_2_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_2_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_2_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_2_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_2_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_2_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_2_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_2_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_2_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_2_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_2_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_2_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_2_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_2_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_2_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_2_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_2_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
@@ -1920,6 +2014,53 @@ sr_fl_3_pick_world_here = {
 		AND = { scope:pick = 40 var:sr_fl_3_loc = 1 }
 	}
 }
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_3_pick_ours_here = {
+	has_variable = sr_fl_3_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_3_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_3_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_3_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_3_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_3_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_3_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_3_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_3_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_3_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_3_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_3_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_3_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_3_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_3_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_3_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_3_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_3_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_3_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_3_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_3_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_3_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_3_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_3_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_3_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_3_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_3_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_3_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_3_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_3_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_3_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_3_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_3_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_3_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_3_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_3_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_3_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_3_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_3_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_3_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_3_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_3_closing_at_earth = { sr_fl_3_at_earth = yes sr_fl_3_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -2628,6 +2769,53 @@ sr_fl_4_pick_world_here = {
 		AND = { scope:pick = 38 var:sr_fl_4_loc = 1 }
 		AND = { scope:pick = 39 var:sr_fl_4_loc = 1 }
 		AND = { scope:pick = 40 var:sr_fl_4_loc = 1 }
+	}
+}
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_4_pick_ours_here = {
+	has_variable = sr_fl_4_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_4_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_4_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_4_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_4_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_4_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_4_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_4_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_4_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_4_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_4_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_4_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_4_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_4_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_4_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_4_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_4_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_4_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_4_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_4_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_4_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_4_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_4_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_4_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_4_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_4_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_4_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_4_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_4_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_4_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_4_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_4_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_4_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_4_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_4_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_4_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_4_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_4_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_4_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_4_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_4_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
@@ -3340,6 +3528,53 @@ sr_fl_5_pick_world_here = {
 		AND = { scope:pick = 40 var:sr_fl_5_loc = 1 }
 	}
 }
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_5_pick_ours_here = {
+	has_variable = sr_fl_5_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_5_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_5_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_5_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_5_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_5_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_5_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_5_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_5_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_5_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_5_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_5_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_5_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_5_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_5_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_5_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_5_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_5_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_5_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_5_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_5_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_5_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_5_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_5_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_5_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_5_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_5_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_5_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_5_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_5_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_5_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_5_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_5_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_5_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_5_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_5_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_5_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_5_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_5_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_5_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_5_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_5_closing_at_earth = { sr_fl_5_at_earth = yes sr_fl_5_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -4048,6 +4283,53 @@ sr_fl_6_pick_world_here = {
 		AND = { scope:pick = 38 var:sr_fl_6_loc = 1 }
 		AND = { scope:pick = 39 var:sr_fl_6_loc = 1 }
 		AND = { scope:pick = 40 var:sr_fl_6_loc = 1 }
+	}
+}
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_6_pick_ours_here = {
+	has_variable = sr_fl_6_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_6_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_6_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_6_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_6_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_6_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_6_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_6_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_6_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_6_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_6_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_6_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_6_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_6_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_6_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_6_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_6_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_6_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_6_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_6_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_6_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_6_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_6_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_6_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_6_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_6_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_6_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_6_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_6_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_6_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_6_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_6_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_6_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_6_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_6_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_6_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_6_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_6_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_6_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_6_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_6_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
@@ -4760,6 +5042,53 @@ sr_fl_7_pick_world_here = {
 		AND = { scope:pick = 40 var:sr_fl_7_loc = 1 }
 	}
 }
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_7_pick_ours_here = {
+	has_variable = sr_fl_7_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_7_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_7_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_7_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_7_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_7_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_7_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_7_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_7_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_7_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_7_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_7_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_7_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_7_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_7_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_7_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_7_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_7_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_7_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_7_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_7_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_7_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_7_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_7_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_7_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_7_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_7_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_7_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_7_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_7_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_7_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_7_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_7_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_7_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_7_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_7_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_7_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_7_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_7_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_7_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_7_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_7_closing_at_earth = { sr_fl_7_at_earth = yes sr_fl_7_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -5470,6 +5799,53 @@ sr_fl_8_pick_world_here = {
 		AND = { scope:pick = 40 var:sr_fl_8_loc = 1 }
 	}
 }
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_8_pick_ours_here = {
+	has_variable = sr_fl_8_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_8_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_8_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_8_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_8_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_8_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_8_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_8_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_8_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_8_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_8_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_8_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_8_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_8_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_8_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_8_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_8_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_8_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_8_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_8_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_8_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_8_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_8_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_8_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_8_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_8_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_8_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_8_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_8_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_8_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_8_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_8_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_8_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_8_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_8_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_8_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_8_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_8_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_8_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_8_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_8_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
+	}
+}
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
 sr_fl_8_closing_at_earth = { sr_fl_8_at_earth = yes sr_fl_8_posture_value = 3 }
 # The target button's gate (sr_fleet_target_sgui): interdicting, a world here
@@ -6178,6 +6554,53 @@ sr_fl_9_pick_world_here = {
 		AND = { scope:pick = 38 var:sr_fl_9_loc = 1 }
 		AND = { scope:pick = 39 var:sr_fl_9_loc = 1 }
 		AND = { scope:pick = 40 var:sr_fl_9_loc = 1 }
+	}
+}
+# The Land popup's pick (scope:pick, a world's index) is a world where it is
+# that we hold and no enemy occupies.
+sr_fl_9_pick_ours_here = {
+	has_variable = sr_fl_9_loc
+	OR = {
+		AND = { scope:pick = 1 var:sr_fl_9_loc = 3 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
+		AND = { scope:pick = 2 var:sr_fl_9_loc = 3 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
+		AND = { scope:pick = 3 var:sr_fl_9_loc = 3 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
+		AND = { scope:pick = 4 var:sr_fl_9_loc = 3 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
+		AND = { scope:pick = 5 var:sr_fl_9_loc = 3 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
+		AND = { scope:pick = 6 var:sr_fl_9_loc = 4 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } }
+		AND = { scope:pick = 7 var:sr_fl_9_loc = 4 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } }
+		AND = { scope:pick = 8 var:sr_fl_9_loc = 4 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } }
+		AND = { scope:pick = 9 var:sr_fl_9_loc = 4 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } }
+		AND = { scope:pick = 10 var:sr_fl_9_loc = 4 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } }
+		AND = { scope:pick = 11 var:sr_fl_9_loc = 5 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } }
+		AND = { scope:pick = 12 var:sr_fl_9_loc = 5 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } }
+		AND = { scope:pick = 13 var:sr_fl_9_loc = 5 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } }
+		AND = { scope:pick = 14 var:sr_fl_9_loc = 5 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } }
+		AND = { scope:pick = 15 var:sr_fl_9_loc = 5 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } }
+		AND = { scope:pick = 16 var:sr_fl_9_loc = 5 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } }
+		AND = { scope:pick = 17 var:sr_fl_9_loc = 2 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } }
+		AND = { scope:pick = 18 var:sr_fl_9_loc = 2 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } }
+		AND = { scope:pick = 19 var:sr_fl_9_loc = 6 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } }
+		AND = { scope:pick = 20 var:sr_fl_9_loc = 6 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } }
+		AND = { scope:pick = 21 var:sr_fl_9_loc = 6 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } }
+		AND = { scope:pick = 22 var:sr_fl_9_loc = 6 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } }
+		AND = { scope:pick = 23 var:sr_fl_9_loc = 6 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } }
+		AND = { scope:pick = 24 var:sr_fl_9_loc = 7 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } }
+		AND = { scope:pick = 25 var:sr_fl_9_loc = 7 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } }
+		AND = { scope:pick = 26 var:sr_fl_9_loc = 7 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } }
+		AND = { scope:pick = 27 var:sr_fl_9_loc = 7 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } }
+		AND = { scope:pick = 28 var:sr_fl_9_loc = 8 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } }
+		AND = { scope:pick = 29 var:sr_fl_9_loc = 8 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } }
+		AND = { scope:pick = 30 var:sr_fl_9_loc = 9 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } }
+		AND = { scope:pick = 31 var:sr_fl_9_loc = 9 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } }
+		AND = { scope:pick = 32 var:sr_fl_9_loc = 9 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } }
+		AND = { scope:pick = 33 var:sr_fl_9_loc = 9 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } }
+		AND = { scope:pick = 34 var:sr_fl_9_loc = 9 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } }
+		AND = { scope:pick = 35 var:sr_fl_9_loc = 1 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } }
+		AND = { scope:pick = 36 var:sr_fl_9_loc = 1 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } }
+		AND = { scope:pick = 37 var:sr_fl_9_loc = 1 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } }
+		AND = { scope:pick = 38 var:sr_fl_9_loc = 1 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } }
+		AND = { scope:pick = 39 var:sr_fl_9_loc = 1 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } }
+		AND = { scope:pick = 40 var:sr_fl_9_loc = 1 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } }
 	}
 }
 # At Earth, closing in on a lunar world (the AI's offence leaves it there).
