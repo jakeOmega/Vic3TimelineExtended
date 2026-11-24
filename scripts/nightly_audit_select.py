@@ -73,6 +73,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/on_actions/te_ai_probe_on_actions.txt",
     "events/te_debug_ai_probe_events.txt",
     "common/scripted_effects/te_seabed_basins_generated.txt",
+    "common/scripted_effects/te_grid_sea_reach_generated.txt",
     "common/scripted_triggers/sr_launch_windows_generated.txt",
     "common/script_values/tourism_heritage_generated.txt",
     "common/script_values/local_climate_generated.txt",

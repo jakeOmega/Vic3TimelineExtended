@@ -220,6 +220,7 @@ python3 scripts/generators/gen_capital_bloc_names.py # capital-city power bloc n
 python3 scripts/generators/gen_planned_capital.py    # common/scripted_effects/te_demog_capital_generated.txt, one branch per state (after resources.py)
 python3 scripts/analysis/demographics_adjacency.py --check  # the demographics harness's state adjacency; --refresh when it says stale
 python3 scripts/generators/gen_seabed_basins.py     # common/scripted_effects/te_seabed_basins_generated.txt (coastal states by sea exit; update the counts its test and scripting_best_practices.md quote)
+python3 scripts/generators/gen_grid_sea_reach.py --check-map  # scripts/generators/grid_sea_borders.json, the Sea Nodes' borders in provinces.png; --refresh when it says stale, which also rewrites te_grid_sea_reach_generated.txt (the undersea cables' reach)
 python3 scripts/generators/gen_local_climate.py     # common/script_values/local_climate_generated.txt, from local_climate.csv (one row per land state: add, rename or drop rows first)
 python3 scripts/generators/gen_demog_towns.py       # common/scripted_triggers/te_demog_town_triggers_generated.txt (Largest Cities' named towns, from vanilla's hubs; after resources.py and any change to building_copper_mine)
 python3 scripts/generators/culture_merge_primary_reads.py --write  # scripts/generators/culture_merge_primary_reads.json (vanilla's primary-culture reads of the merge parts); then `culture_merge_primary_ledger.py` names any new row with no disposition (1.15.1: `dp_secession` reads Polish), and `gen_culture_merges.py` reruns
