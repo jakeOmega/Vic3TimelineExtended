@@ -372,7 +372,13 @@ sr_fleet_transfer_sgui = {
 	}
 }
 
-# Land the marines aboard at a colony of ours here; take ours back aboard.
+# Land and Embark: the fleet card's buttons open the slot's Marines popup
+# (te_popup sr_land_<n>), as Transfer opens its own: the click sets the
+# amount, Land's to every marine aboard and Embark's to the room aboard, then
+# the popup opens. Greyed: Land with no marines aboard or no colony of ours
+# here, Embark with no room aboard or none of ours at a colony here. The
+# popup's rows land and embark (sr_fleet_land_on_sgui, sr_fleet_embark_from_sgui);
+# the AI lands through sr_fl_land_at.
 sr_fleet_land_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -394,9 +400,9 @@ sr_fleet_land_sgui = {
 	}
 
 	effect = {
-		custom_tooltip = sr_fl_land_tt
+		custom_tooltip = sr_fl_land_open_tt
 		hidden_effect = {
-			sr_fl_by_op = { DO = land }
+			sr_fl_by_op = { DO = ld_open_land }
 		}
 	}
 }
@@ -422,9 +428,142 @@ sr_fleet_embark_sgui = {
 	}
 
 	effect = {
+		custom_tooltip = sr_fl_embark_open_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = ld_open_embark }
+		}
+	}
+}
+
+# The Marines popup's row: up to the amount of the marines aboard land at the
+# colony whose index is scope:pick, as its garrison. The popup stays open, so
+# the rest can land at the next colony.
+sr_fleet_land_on_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		# True wherever the popup shows the button (its rows show only for our
+		# colonies where the fleet is): checked, not listed.
+		hidden_trigger = {
+			sr_fl_op_check = { TEST = at_location }
+			sr_fl_op_check = { TEST = pick_ours_here }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_marines_aboard_tt
+			sr_fl_op_check = { TEST = can_land }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_ld_amount_tt
+			sr_fl_op_check = { TEST = ld_some }
+		}
+	}
+
+	effect = {
+		custom_tooltip = sr_fl_land_tt
+		hidden_effect = {
+			sr_fl_by_op = { DO = land_pick }
+		}
+	}
+}
+
+# ... and up to the amount of ours there back aboard, within the carriers' room.
+sr_fleet_embark_from_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		hidden_trigger = {
+			sr_fl_op_check = { TEST = at_location }
+			sr_fl_op_check = { TEST = pick_ours_here }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_colony_marines_tt
+			sr_fl_op_check = { TEST = pick_has_marines }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_marine_room_tt
+			sr_fl_op_check = { TEST = has_marine_room }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_ld_amount_tt
+			sr_fl_op_check = { TEST = ld_some }
+		}
+	}
+
+	effect = {
 		custom_tooltip = sr_fl_embark_tt
 		hidden_effect = {
-			sr_fl_by_op = { DO = embark }
+			sr_fl_by_op = { DO = embark_pick }
+		}
+	}
+}
+
+# The amount's - and + in the Marines popup: scope:pick the step code
+# (gen_space_fleets.XF_STEPS: 1-4 fewer by 1, 10, 100, 1,000, 5 none; 6-9 more,
+# 10 the most), Transfer's keys with two scopes, the slot and the code. - greys
+# at none, + at the most (the marines aboard or the room aboard, whichever is
+# more).
+sr_fleet_ld_step_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		hidden_trigger = {
+			sr_fl_op_check = { TEST = at_location }
+		}
+		trigger_if = {
+			limit = { scope:pick < 6 }
+			custom_tooltip = {
+				text = sr_fl_ld_fewer_tt
+				sr_fl_op_check = { TEST = ld_fewer }
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = sr_fl_ld_more_tt
+				sr_fl_op_check = { TEST = ld_more }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:pick < 6 }
+			custom_tooltip = sr_fl_xf_less_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_xf_more_tt
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = ld_step }
 		}
 	}
 }

@@ -9567,6 +9567,15 @@ sr_fl_1_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_1_xf_stay_over = { value = sr_fl_1_xf_stay_marines subtract = sr_fl_1_xf_stay_room min = 0 }
+# Slot 1's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_1_ld_most = { value = sr_fl_1_marines_value min = sr_fl_1_marine_capacity }
+sr_fl_1_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_1_ld_most
+	min = 0
+}
 
 # Slot 2's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9736,6 +9745,15 @@ sr_fl_2_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_2_xf_stay_over = { value = sr_fl_2_xf_stay_marines subtract = sr_fl_2_xf_stay_room min = 0 }
+# Slot 2's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_2_ld_most = { value = sr_fl_2_marines_value min = sr_fl_2_marine_capacity }
+sr_fl_2_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_2_ld_most
+	min = 0
+}
 
 # Slot 3's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -9905,6 +9923,15 @@ sr_fl_3_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_3_xf_stay_over = { value = sr_fl_3_xf_stay_marines subtract = sr_fl_3_xf_stay_room min = 0 }
+# Slot 3's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_3_ld_most = { value = sr_fl_3_marines_value min = sr_fl_3_marine_capacity }
+sr_fl_3_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_3_ld_most
+	min = 0
+}
 
 # Slot 4's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10074,6 +10101,15 @@ sr_fl_4_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_4_xf_stay_over = { value = sr_fl_4_xf_stay_marines subtract = sr_fl_4_xf_stay_room min = 0 }
+# Slot 4's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_4_ld_most = { value = sr_fl_4_marines_value min = sr_fl_4_marine_capacity }
+sr_fl_4_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_4_ld_most
+	min = 0
+}
 
 # Slot 5's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10243,6 +10279,15 @@ sr_fl_5_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_5_xf_stay_over = { value = sr_fl_5_xf_stay_marines subtract = sr_fl_5_xf_stay_room min = 0 }
+# Slot 5's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_5_ld_most = { value = sr_fl_5_marines_value min = sr_fl_5_marine_capacity }
+sr_fl_5_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_5_ld_most
+	min = 0
+}
 
 # Slot 6's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10412,6 +10457,15 @@ sr_fl_6_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_6_xf_stay_over = { value = sr_fl_6_xf_stay_marines subtract = sr_fl_6_xf_stay_room min = 0 }
+# Slot 6's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_6_ld_most = { value = sr_fl_6_marines_value min = sr_fl_6_marine_capacity }
+sr_fl_6_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_6_ld_most
+	min = 0
+}
 
 # Slot 7's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10581,6 +10635,15 @@ sr_fl_7_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_7_xf_stay_over = { value = sr_fl_7_xf_stay_marines subtract = sr_fl_7_xf_stay_room min = 0 }
+# Slot 7's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_7_ld_most = { value = sr_fl_7_marines_value min = sr_fl_7_marine_capacity }
+sr_fl_7_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_7_ld_most
+	min = 0
+}
 
 # Slot 8's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10750,6 +10813,15 @@ sr_fl_8_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_8_xf_stay_over = { value = sr_fl_8_xf_stay_marines subtract = sr_fl_8_xf_stay_room min = 0 }
+# Slot 8's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_8_ld_most = { value = sr_fl_8_marines_value min = sr_fl_8_marine_capacity }
+sr_fl_8_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_8_ld_most
+	min = 0
+}
 
 # Slot 9's transfer (UI pass design § 6): each amount held to 0 and what the
 # slot has, what stays, and what the fleet it goes into then carries.
@@ -10919,6 +10991,15 @@ sr_fl_9_xf_there_marines = {
 }
 # How far past its carriers' room the fleet would be after.
 sr_fl_9_xf_stay_over = { value = sr_fl_9_xf_stay_marines subtract = sr_fl_9_xf_stay_room min = 0 }
+# Slot 9's Marines popup: the amount to land or embark, held to 0 and the
+# marines aboard or the carriers' room, whichever is more.
+sr_fl_9_ld_most = { value = sr_fl_9_marines_value min = sr_fl_9_marine_capacity }
+sr_fl_9_ld_amount = {
+	value = 0
+	if = { limit = { has_variable = sr_ld_amt } value = var:sr_ld_amt }
+	max = sr_fl_9_ld_most
+	min = 0
+}
 
 # Where a transfer goes (sr_det_to): 0 a new fleet, else that slot.
 sr_det_to_value = {

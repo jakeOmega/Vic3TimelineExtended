@@ -263,8 +263,8 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
    Titan, Enceladus, Rhea, Triton, Pluto). Away from a dock, supply counts down; at zero the fleet loses 5% a month.
 7. **Transfer, marines.** Move all of one fleet into another at its location, then part of one into a new fleet, in
    the Transfer popup (the PR 4 section below, which took in Merge and Detach). At Earth the
-   carriers fill with marines (2 battalions a point of carrier strength); Land puts them at our colony there (Colony
-   Defences shows them), Embark takes them back.
+   carriers fill with marines (2 battalions a point of carrier strength); Land opens a list of our colonies there and
+   its Land puts them at the one picked (Colony Defences shows them), Embark takes them back.
 8. **Garrisons under Full.** Answer a demand for self-government (`.94`, option b of `te_debug_space_race.5`) with a
    garrison: nothing changes until a fleet lands 2 battalions there within a year, then the garrison takes effect as in
    slice 5. Without one, "Garrison for <World> Never Came" after a year.
@@ -1367,8 +1367,8 @@ Embark work on the Moon. No self-check: the one comparison it adds (`sr_site_sha
 `global_var:… ?= { global_var:… ?= this }`) is built of reads the panel already shows, and the Defenses view and
 the target hover show the shared figures. Full Colonies throughout; the console is `event te_debug_space_race.6`.
 
-1. **Land on the Moon.** Hold two lunar colonies and keep a fleet with marines at Earth: Land is enabled, the
-   marines land at the first of them, and the Defenses view's Marines shows the same figure on both rows. Embark
+1. **Land on the Moon.** Hold two lunar colonies and keep a fleet with marines at Earth: Land is enabled, its
+   popup lists both, and the marines land at the one picked, and the Defenses view's Marines shows the same figure on both rows. Embark
    takes them back aboard. Next month the fleet has refilled at Earth (the known gap: Land again and the Moon's
    marines keep growing; a garrison cost is to come).
 2. **A shared garrison.** With two battalions landed at one lunar colony, answer an autonomy demand at the other
@@ -1385,3 +1385,32 @@ the target hover show the shared figures. Full Colonies throughout; the console 
    own marines, and the occupied one's Defenses fire for no one.
 7. **The AI.** An AI with a lunar colony that orders a garrison lands two battalions from a fleet at Earth within a
    month; an AI fleet coming home to Earth with no lunar garrison due keeps its marines aboard.
+
+## Marines: Land and Embark pick the colony and the amount (2026-11-24)
+
+Mercury and Venus share a fleet location, and Land put every marine aboard at Venus whenever we held both, while
+Embark took from Venus first (the owner, 2026-11-24). Land and Embark now open a Marines popup listing our colonies at
+the fleet's location, with an amount (`space_race.md`, *Marines*). No self-check: every button passes two scopes
+(`op`, and `pick` a world or a step code), as the target popup's Target and the colony module buttons do; the
+amount's keys are Transfer's `click_modifiers` with no third scope (Transfer's own, three scopes, are still
+unproven: `xfer_step_scope`). Full Colonies; the console is `event te_debug_space_race.6`.
+
+1. **The label.** Choose Mercury & Venus in Fleet Destination: the fleet card's button reads "Merc./Venus", and
+   "→ Merc./Venus" in flight, neither cut off. The popup's Where column shows "Merc./Venus" in full.
+2. **Land opens it.** Hold Mercury and Venus, with a fleet carrying marines at their location: Land on the card
+   opens Marines with "Marines aboard" (aboard / the carriers' room), "Marines to move" at every marine aboard, and a
+   row each for Mercury and Venus with our marines at each.
+3. **Split them.** Click − on the amount (Shift, Ctrl and Alt take 10, 100 and 1,000; right-click none; + adds,
+   right-click the most): it moves and stops at none and at the most. Set it to half, Land on Mercury: half the
+   marines go there, the popup stays open, and Land on Venus puts down up to the amount of the rest. The card's
+   Marines bar falls by each.
+4. **Embark from one.** Close it, then Embark on the card: the amount starts at the room aboard. Embark on
+   Venus's row takes up to the amount of ours there, no more than the carriers hold; Mercury's stay. Embark greys,
+   with its reason, on a colony with none of ours, and once the carriers are full.
+5. **Due.** Answer a demand for self-government at Mercury with a garrison: its row reads Due (yellow), and the
+   hover says two battalions within a year. Land two there: the garrison takes effect the next month.
+6. **Only ours, not occupied.** An enemy occupies one of our colonies at a location: its row is gone. A free
+   colony or another power's has no row.
+7. **A fleet that is gone.** Leave Marines open, unpaused, while the fleet is destroyed in battle: the popup reads
+   "This fleet has left, or is gone."
+8. **The AI.** An AI with a garrison due still lands every marine aboard at that colony (it never sees the popup).

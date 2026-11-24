@@ -23712,8 +23712,8 @@
   "ru": "→ Земля"
  },
  "sr_loc_bound_inner": {
-  "en": "→ Venus",
-  "ru": "→ Венера"
+  "en": "→ Merc./Venus",
+  "ru": "→ Мерк./Венера"
  },
  "sr_loc_bound_jupiter": {
   "en": "→ Jupiter",
@@ -23784,8 +23784,8 @@
   "ru": "Земля"
  },
  "sr_loc_short_inner": {
-  "en": "Venus",
-  "ru": "Венера"
+  "en": "Merc./Venus",
+  "ru": "Мерк./Венера"
  },
  "sr_loc_short_jupiter": {
   "en": "Jupiter",

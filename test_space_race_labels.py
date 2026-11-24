@@ -161,7 +161,8 @@ _LOC = {}
 def _loc(key):
     if not _LOC:
         for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
-            for k, v in re.findall(r'^ ([\w.]+):\d* "(.*)"\s*$', _read(path), re.M):
+            # A line may end in a comment (a loc_style REVIEWED note) that holds no quote.
+            for k, v in re.findall(r'^ ([\w.]+):\d* "(.*)"\s*(?:#[^"\n]*)?$', _read(path), re.M):
                 _LOC[k] = v
     assert key in _LOC, f"no loc {key}"
     return _LOC[key]
@@ -406,7 +407,7 @@ BOUNDED_WORDS = {"je_space_race_widget_ovc_ebase_word_split": _ebase_split_bound
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_(?:brief_)?empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
              r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro"
-             r"|eb_no_gain|cw_gone)")
+             r"|eb_no_gain|cw_gone|ld_intro)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -690,6 +691,21 @@ CELLS = {
     "the target popup's Target and Targeted (te_sr_ftarget_row)": (
         ("te_sr_ftarget_row", 'text = "je_space_race_widget_ss_target_button"'),
         r"je_space_race_widget_(ss_target_button|ft_targeted)"),
+    # The Marines popup: the marines aboard, the amount, the columns' heads,
+    # Due, Land and Embark.
+    "the Marines popup's marines aboard (te_sr_land_slot)": (
+        ("te_sr_land_slot", 'text = "je_space_race_widget_ld_aboard"'), r"je_space_race_widget_ld_aboard"),
+    **{f"the Marines popup's {col} column head (te_sr_land_slot)": (
+        ("te_sr_land_slot", f'text = "je_space_race_widget_ld_col_{col}"'), f"je_space_race_widget_ld_col_{col}")
+       for col in ("colony", "marines", "garrison")},
+    "the Marines popup's garrison order (te_sr_land_row)": (
+        ("te_sr_land_row", 'text = "je_space_race_widget_ld_due"'), r"je_space_race_widget_ld_due"),
+    "the Marines popup's Land (te_sr_land_row)": (
+        ("te_sr_land_row", 'text = "je_space_race_widget_ld_button"'), r"je_space_race_widget_ld_button"),
+    "the Marines popup's Embark (te_sr_land_row)": (
+        ("te_sr_land_row", 'text = "je_space_race_widget_ld_embark_button"'), r"je_space_race_widget_ld_embark_button"),
+    "the Marines popup's amount label (te_sr_land_slot)": (
+        ("te_sr_land_slot", 'text = "je_space_race_widget_ld_amount"'), r"je_space_race_widget_ld_amount"),
     "a destination's Choose and Chosen (te_sr_dest_row)": (
         ("te_sr_dest_row", 'text = "je_space_race_widget_dp_choose"'),
         r"je_space_race_widget_dp_(choose|chosen)"),
@@ -752,7 +768,7 @@ CELLS = {
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
-                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title|cw_title)")
+                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title|cw_title|ld_title)")
 
 
 # The Bases move area's lines that name a place, through the controls' custom
@@ -1189,6 +1205,28 @@ class FigureBudgetTest(unittest.TestCase):
         for key in names:
             with self.subTest(key=key):
                 self.assertLessEqual(len(_render(_loc(key))) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
+
+    def test_the_land_popup(self):
+        """Every world's name fits the Marines row's name cell; the marines
+        (aboard of the room, the amount, at a colony) fit theirs; the row's cells
+        sum to no more than the slot's width and its heads match them."""
+        gui = _read(GUI)
+        row = _type_body(gui, "te_sr_land_row")
+        box = _textbox_with(row, 'block "lr_name"')
+        names = set(re.findall(r'text = "(sr_site_name_\w+)"', _type_body(_read(FLEET_ROWS), "te_sr_land_popup_body")))
+        self.assertEqual(len(names), 40)
+        for key in names:
+            with self.subTest(key=key):
+                self.assertLessEqual(len(_render(_loc(key))) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), key)
+        self._check("te_sr_land_row", {"lr_marines": "99999"})
+        self._check("te_sr_land_slot", {"ld_aboard": "9999/9999", "ld_amount": "99999"})
+        cells = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\n\t\t\tsize = \{ (\d+) 24 \}", row)]
+        self.assertEqual(cells, [24, 180, 80, 80, 80, 80])
+        slot = _type_body(gui, "te_sr_land_slot")
+        self.assertLessEqual(sum(cells) + 3 * (len(cells) - 1) + 2 * 4,
+                             int(re.search(r"minimumsize = \{ (\d+) -1 \}", slot).group(1)))
+        heads = [int(w) for w in re.findall(r"size = \{ (\d+) 20 \}", slot)]
+        self.assertEqual(heads, cells[:4])
 
     def test_the_fleet_names(self):
         """A fleet's where, drive and target are custom loc: their longest option."""
