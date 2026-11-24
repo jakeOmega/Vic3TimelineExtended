@@ -1344,7 +1344,7 @@ with the super-building question it began from: claude.ai artifact
 
 ## The Grand Monuments tab, 2026-11-24: 1.15.2
 
-The owner's game of December 2042 as the Imperial Union of America: 27
+The owner's game of December 2032 as the Imperial Union of America: 27
 monuments of its own and 24 trophies, 3840x2160. With the Grand Monuments
 tab open the game drew 16 frames a second in the Timeline Extended window's
 Full Screen frame and about 10 in its side panel with the script profiler
