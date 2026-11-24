@@ -17904,6 +17904,15 @@ pm_self_replicating_miners = {
 # building has Space Colonization and Fusion Tugs (te_global_commons_logistics_pms.txt;
 # both logistics upgrades before the deposit mix), or Self-Replicating Miners (era 13)
 # with or without them. test_deep_sea_rebalance.py holds the orderings at base prices.
+# No method in the group takes required_input_goods, though each buys Digital Access
+# (removed 2026-11-24). Every method here is is_hidden_when_unavailable, as the game rule
+# needs. The Building Registry's switch-all control checks the methods for the whole
+# country, with no state, so a method whose required local good can't be found that way
+# is hidden from it unless a mine already runs it. With the rule's other family disabled,
+# only the method in use was left, and the control showed no dropdown at all. The
+# requirement was the same for every method, so it guarded no switch
+# (scripting_best_practices.md § "A Method That Hides When Unavailable Can't Require a
+# Local Good").
 pm_ocean_mine = {
 	texture = "gfx/interface/icons/production_method_icons/pm_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
@@ -17940,8 +17949,6 @@ pm_ocean_mine = {
 			building_employment_academics_add = 100
 		}
 	}
-
-	required_input_goods = digital_access
 }
 
 pm_advanced_ocean_mine  = {
@@ -17984,8 +17991,6 @@ pm_advanced_ocean_mine  = {
 			building_employment_academics_add = 200
 		}
 	}
-
-	required_input_goods = digital_access
 }
 
 pm_automated_ocean_mine  = {
@@ -18037,15 +18042,14 @@ pm_automated_ocean_mine  = {
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
-
-	required_input_goods = digital_access
 }
 
 # Deep-Sea Mine with the Global Commons rule off (global_commons_disabled): the
 # methods as they were before § 1.1's rebalance, since an uncapped mine keeps
 # today's output (spec § 2.9: "uncapped as today"). The rule's settings switch
 # the two families with disable_pm_ flags (extra_game_rules.txt), so a building
-# shows one family only. pm_costs.py owns the cost comments.
+# shows one family only. No required_input_goods, as above. pm_costs.py owns the cost
+# comments.
 pm_ocean_mine_uncapped = {
 	texture = "gfx/interface/icons/production_method_icons/pm_ocean_mine.dds"
 	is_hidden_when_unavailable = yes
@@ -18082,8 +18086,6 @@ pm_ocean_mine_uncapped = {
 			building_employment_academics_add = 200
 		}
 	}
-
-	required_input_goods = digital_access
 }
 
 pm_advanced_ocean_mine_uncapped = {
@@ -18126,8 +18128,6 @@ pm_advanced_ocean_mine_uncapped = {
 			building_employment_academics_add = 200
 		}
 	}
-
-	required_input_goods = digital_access
 }
 
 pm_automated_ocean_mine_uncapped = {
@@ -18179,8 +18179,6 @@ pm_automated_ocean_mine_uncapped = {
 			building_robotic_or_ai_managed_bool = yes
 		}
 	}
-
-	required_input_goods = digital_access
 }
 
 # Deep-Sea Mine support vessels (pmg_support_vessels_building_ocean_mine), shared by both
