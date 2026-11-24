@@ -1521,6 +1521,31 @@ class IconsTest(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertIn(f"`{path}`", doc)
 
+class TabNameSizeTest(unittest.TestCase):
+    """A tab's name starts at 14, not vanilla's 17 (seen in game, 2026-11-24): vanilla shrinks each name until it
+    fits its slot, which left three sizes on one strip ("Nation" at 17, "Space Race" at 14, "Grand Monuments" at
+    12). Both halves of every slot carry the size, in the Timeline Extended window's strips and National Info's."""
+
+    def test_every_slot_names_its_size(self):
+        import re
+        from pathlib import Path
+        root = Path(__file__).resolve().parent
+        sys_path = str(root / "scripts" / "generators")
+        import sys
+        if sys_path not in sys.path:
+            sys.path.insert(0, sys_path)
+        import gen_te_systems_window as gen
+        self.assertEqual(gen.TAB_NAME_SIZE, 14)
+        slot = re.compile(r'blockoverride "(?:first|second|third|fourth|fifth|sixth)_button(?:_selected)?" \{\s*'
+                          r'text = "(te_(?:window|ni)_tab_\w+|\w+)"\s*(fontsize = (\d+))?\s*\}')
+        for name, least in (("te_systems_window_generated.gui", 60), ("te_national_info_generated.gui", 20)):
+            text = (root / "gui" / name).read_text(encoding="utf-8-sig")
+            found = [m for m in slot.finditer(text) if m.group(1) != "te_tp_tab"]     # the tax probes' debug tab
+            self.assertGreaterEqual(len(found), least, name)
+            for m in found:
+                with self.subTest(file=name, tab=m.group(1)):
+                    self.assertEqual(m.group(3), str(gen.TAB_NAME_SIZE))
+
 
 if __name__ == "__main__":
     unittest.main()
