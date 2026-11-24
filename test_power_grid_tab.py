@@ -142,6 +142,7 @@ class WidthTest(_Budget, unittest.TestCase):
             with self.subTest(source=src):
                 self.fits(f"te_grid_mix_{src}", label)
                 self.fits(f"te_grid_mix_{src}_amount", amount, KILO)
+                self.fits(f"te_grid_mix_{src}_amount_small", amount, "999")
                 self.fits(f"te_grid_mix_{src}_share", share, SHARE)
         panel = _type_body(self.gui, "te_grid_mix_panel")
         self.assertIn("te_grid_national_heading = {}", panel)
@@ -150,12 +151,13 @@ class WidthTest(_Budget, unittest.TestCase):
         # The flag reads the tab's Country, as every other figure in the panel does.
         self.assertNotIn("datacontext", heading)
         self.fits("te_grid_mix_header", self.box(heading, '"te_grid_mix_header"'))
-        self.fits("te_grid_mix_total", self.box(heading, '"te_grid_mix_total"'), KILO)
+        self.fits("te_grid_mix_total", self.box(heading, "'te_grid_mix_total'"), KILO)
+        self.fits("te_grid_mix_total_small", self.box(heading, "'te_grid_mix_total'"), "999")
         # Flag (vanilla's tiny_flag is 27 by 18, gui/shared/flags.gui), a gap of 7, the
         # heading and the total fill the 480 row, as te_grid_heading's do.
         flag = 27
         x = int(re.search(r"position = \{ (\d+) 0 \}", heading).group(1))
-        name, total = self.box(heading, '"te_grid_mix_header"')[0], self.box(heading, '"te_grid_mix_total"')[0]
+        name, total = self.box(heading, '"te_grid_mix_header"')[0], self.box(heading, "'te_grid_mix_total'")[0]
         self.assertEqual(x - flag, 7)
         self.assertEqual(x + name + total, 480)
 
@@ -166,22 +168,36 @@ class WidthTest(_Budget, unittest.TestCase):
         half = (int(re.search(r"maximumsize = \{ (\d+) -1 \}", _type_body(self.gui, "te_grid_cell")).group(1)), "row")
         for key, number in (("te_grid_card_supply", SHARE), ("te_grid_card_supply_no_demand", NUMBER),
                             ("te_grid_card_price", SHARE), ("te_grid_card_sent", KILO),
-                            ("te_grid_card_delivered", KILO)):
+                            ("te_grid_card_delivered", KILO), ("te_grid_card_sent_small", "999"),
+                            ("te_grid_card_delivered_small", "999")):
             with self.subTest(key=key):
                 self.assertRegex(card, rf"['\"]{key}['\"]")
                 self.fits(key, half, number)
-        self.fits("te_grid_card_countries", self.box(card, '"te_grid_card_countries"'))
+        countries = self.box(card, '"te_grid_card_countries"')
+        self.fits("te_grid_card_countries", countries)
         self.fits("te_grid_card_markets", self.box(card, '"te_grid_card_markets"'))
         # two halves and their spacing fill the row
         self.assertEqual(2 * half[0] + 8, 480)
+        # The flags follow the Countries label directly: the label is as wide as its text (no
+        # minimumsize), not a half-row cell (2026-11-24: the flags started a third of the way
+        # across). Its widest, the spacing and twelve flags fit the row.
+        label = _block_from(card, card.rindex("textbox = {", 0, card.index('"te_grid_card_countries"')) + len("textbox = "))
+        self.assertNotIn("minimumsize", label)
+        self.assertIn("autoresize = yes", label)
+        row = card[card.rindex("flowcontainer = {", 0, card.index('"te_grid_card_countries"')):]
+        gap = int(re.search(r"spacing = (\d+)", row).group(1))
+        slot = int(re.search(r"addcolumn = (\d+)", row).group(1))
+        slots = int(re.search(r"maxhorizontalslots = (\d+)", row).group(1))
+        self.assertLessEqual(countries[0] + gap + slot * slots, 480)
 
     def test_grid_card_generation(self):
         """The grid's generation: its total on a 480 line, then a chip a source (icon and
         share) on one row: seven chips and their spacing fill 480."""
         card = _type_body(self.gui, "te_grid_card")
-        line = self.box(card, "'te_grid_card_mix', 'te_grid_card_mix_none'")
+        line = self.box(card, "'te_grid_card_mix_small', 'te_grid_card_mix_none'")
         self.assertEqual(line, (480, "row"))
         self.fits("te_grid_card_mix", line, KILO)
+        self.fits("te_grid_card_mix_small", line, "999")
         self.fits("te_grid_card_mix_none", line)
         chip = _type_body(self.gui, "te_grid_card_mix_chip")
         icon = int(re.search(r"icon = \{\s*size = \{ (\d+) \d+ \}", chip).group(1))
@@ -196,24 +212,48 @@ class WidthTest(_Budget, unittest.TestCase):
                 self.fits(f"te_grid_card_mix_{src}_share", share, SHARE)
 
     def test_station_columns(self):
+        """State, Mode (an icon in a fixed cell), Flow, a gutter, Grid and Staff fill the 480 row
+        (2026-11-24: Flow and Grid were one column, "9.97K New York")."""
         cells = _type_body(self.gui, "te_grid_station_cells")
         widths = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", cells)]
-        self.assertEqual(sum(widths) + 2 * (len(widths) - 1), 480)
-        head = {"state": "te_grid_st_col_state", "mode": "te_grid_st_col_mode", "flow": "te_grid_st_col_flow",
+        fixed = [int(w) for w in re.findall(r"widget = \{\s*size = \{ (\d+) \d+ \}", cells)]
+        spacing = int(re.search(r"spacing = (\d+)", cells).group(1))
+        self.assertEqual(len(widths) + len(fixed), 6)
+        self.assertEqual(sum(widths) + sum(fixed) + spacing * 5, 480)
+        mode, gutter = fixed
+        head = {"state": "te_grid_st_col_state", "flow": "te_grid_st_col_flow",
                 "grid": "te_grid_st_col_grid", "staff": "te_grid_st_col_staff"}
         for col, key in head.items():
             with self.subTest(head=col):
                 self.fits(key, self.type_box("te_grid_station_cells", f"cell_{col}"))
-        for key in ("te_grid_mode_sending", "te_grid_mode_receiving", "te_grid_mode_idle", "te_grid_mode_offline"):
-            self.fits(key, self.type_box("te_grid_station_cells", "cell_mode"))
-        self.fits("te_grid_st_flow", self.type_box("te_grid_station_cells", "cell_flow"), KILO)
-        self.fits("te_grid_st_staff", self.type_box("te_grid_station_cells", "cell_staff"), SHARE)
+        # The Mode heading fills the icon's cell, no wider.
+        head_mode = self.box(_type_body(self.gui, "te_grid_station_head"), '"te_grid_st_col_mode"')
+        self.assertEqual(head_mode[0], mode)
+        self.fits("te_grid_st_col_mode", head_mode)
+        icon = _type_body(self.gui, "te_grid_station_mode_icon")
+        self.assertLessEqual(int(re.search(r"size = \{ (\d+) \d+ \}", icon).group(1)), mode)
+        flow = self.type_box("te_grid_station_cells", "cell_flow")
+        self.fits("te_grid_st_flow", flow, KILO)
+        self.fits("te_grid_st_flow_small", flow, "999")
+        staff = self.type_box("te_grid_station_cells", "cell_staff")
+        for key in ("te_grid_st_staff_full", "te_grid_st_staff_short"):
+            self.fits(key, staff, SHARE)
         self.fits("te_grid_st_none", self.type_box("te_grid_station_cells", "cell_grid"))
+        # The figures are right-aligned, so their digits line up, and the name after them is
+        # left-aligned past a gutter, so the two never run together.
+        def box(col):
+            return _block_from(cells, cells.rindex("textbox = {", 0, cells.index(f'block "cell_{col}"')) + len("textbox = "))
+        for col in ("flow", "staff"):
+            self.assertIn("align = right|nobaseline", box(col))
+        for col in ("state", "grid"):
+            self.assertIn("align = left|nobaseline", box(col))
+        self.assertGreaterEqual(gutter + 2 * spacing, 16)
+        self.assertLess(cells.index('block "cell_flow"'), cells.index(f"size = {{ {gutter} 1 }}"))
+        self.assertLess(cells.index(f"size = {{ {gutter} 1 }}"), cells.index('block "cell_grid"'))
         # A state's or a hub's name wraps rather than elides.
         for col in ("state", "grid"):
-            box = _block_from(cells, cells.rindex("textbox = {", 0, cells.index(f'block "cell_{col}"')) + len("textbox = "))
-            self.assertIn("multiline = yes", box)
-            self.assertNotIn("elide", box)
+            self.assertIn("multiline = yes", box(col))
+            self.assertNotIn("elide", box(col))
 
     def test_building_rows(self):
         row = _type_body(self.gui, "te_grid_kv_row")
@@ -225,10 +265,13 @@ class WidthTest(_Budget, unittest.TestCase):
                     "te_grid_st_col_staff"):
             with self.subTest(key=key):
                 self.fits(key, label)
-        for key, number in (("te_grid_bld_flow", KILO), ("te_grid_bld_supply", SHARE), ("te_grid_bld_price", SHARE),
-                            ("te_grid_bld_efficiency", SHARE)):
+        for key, number in (("te_grid_bld_flow", KILO), ("te_grid_bld_flow_small", "999"), ("te_grid_bld_supply", SHARE),
+                            ("te_grid_bld_price", SHARE), ("te_grid_bld_efficiency", SHARE),
+                            ("te_grid_st_staff", SHARE), ("te_grid_st_staff_short", SHARE)):
             with self.subTest(key=key):
                 self.fits(key, value, number)
+        # The label's hover is on the value too.
+        self.assertEqual(row.count('block "row_tooltip"'), 2)
 
 
 class StructureTest(unittest.TestCase):
@@ -354,8 +397,12 @@ class StructureTest(unittest.TestCase):
         self.assertIn("datamodel = \"[Country.MakeScope.GetList('te_grid_hubs')]\"", grids)
         self.assertRegex(grids, r'te_grid_card = \{\s*datacontext = "\[Scope\.GetState\]"')
         stations = _type_body(self.gui, "te_grid_stations_panel")
-        self.assertIn("datamodel = \"[Country.MakeScope.GetList('te_grid_stations')]\"", stations)
-        self.assertRegex(stations, r'te_grid_station_row = \{\s*datacontext = "\[Scope\.GetState\]"')
+        for form in ("DataModelFirst", "DataModelSkipFirst"):
+            self.assertIn(f"datamodel = \"[{form}( Country.MakeScope.GetList('te_grid_stations'), '(int32)10' )]\"",
+                          stations)
+        self.assertEqual(stations.count("te_grid_station_rows = {"), 2)
+        self.assertRegex(_type_body(self.gui, "te_grid_station_rows"),
+                         r'item = \{\s*te_grid_station_row = \{\s*datacontext = "\[Scope\.GetState\]"')
         # A row whose state changed hands since the last run waits for the next one.
         row = _type_body(self.gui, "te_grid_station_row")
         self.assertIn('visible = "[ObjectsEqual( State.GetOwner, Country.Self )]"', row)
@@ -386,7 +433,8 @@ class StructureTest(unittest.TestCase):
         self.assertIn("text = \"[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_region_demand_disp'), "
                       "'(CFixedPoint)0' ), 'te_grid_bld_supply', 'te_grid_bld_supply_no_demand' )]\"", section)
         row = _type_body(self.gui, "te_grid_station_row")
-        self.assertIn("'(CFixedPoint)0' ), 'te_grid_st_flow', 'te_grid_st_none' )", row)
+        self.assertIn("ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)999' ), 'te_grid_st_flow', "
+                      "'te_grid_st_flow_small' )", row)
         self.assertIn("ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0' ), 'te_grid_st_grid', 'te_grid_st_none' )", row)
         self.assertIn("'(CFixedPoint)0' ), 'TE_STATE_GRID_ROW_HUB_TT', 'te_grid_st_no_grid_tt' )", row)
         overview = _type_body(self.gui, "te_grid_overview_panel")
@@ -416,8 +464,10 @@ class StructureTest(unittest.TestCase):
         for cond in ("has_building = building_grid_transfer_station", "has_variable = te_grid_hub"):
             self.assertIn(cond, on_grid)
         staffing = _txt_block(values, "te_grid_station_staffing_disp")
-        self.assertIn("is_building_type = building_grid_transfer_station", staffing)
-        self.assertIn("add = occupancy", staffing)
+        # The station by the engine's lookup, not a walk of the state's buildings: every row reads it
+        # every frame (2026-11-24).
+        self.assertRegex(staffing, r"b:building_grid_transfer_station \?= \{\s*add = occupancy\s*\}")
+        self.assertNotIn("every_scope_building", staffing)
         # Agreements live from the treaties, not the run's list (refreshed only while the country has a station).
         partners = _txt_block(values, "te_grid_tab_partners_disp")
         self.assertIn("every_scope_treaty", partners)
@@ -464,14 +514,129 @@ class StructureTest(unittest.TestCase):
 
     def test_no_control_in_the_tab(self):
         """The tab shows another country all of it (National Info), so it has
-        no control: no scripted GUI's Execute, no onclick but the "?"."""
+        no control: no scripted GUI's Execute, no onclick but the "?" and the
+        Stations table's Show All, which only toggles what the panel shows (a
+        GetVariableSystem key, client-side)."""
         for name in ("te_grid_overview_panel", "te_grid_mix_panel", "te_grid_national_heading", "te_grid_mix_row",
                      "te_grid_grids_panel", "te_grid_stations_panel", "te_grid_card", "te_grid_card_mix_chip",
-                     "te_grid_station_row", "te_grid_station_cells"):
+                     "te_grid_station_row", "te_grid_station_rows", "te_grid_station_cells"):
             with self.subTest(type=name):
                 body = _type_body(self.gui, name)
                 self.assertNotIn("Execute", body)
-                self.assertNotIn("onclick", body)
+                clicks = re.findall(r'onclick = "([^"]*)"', body)
+                if name == "te_grid_stations_panel":
+                    self.assertEqual(clicks, ["[GetVariableSystem.Toggle('te_grid_stations_all_open')]"])
+                else:
+                    self.assertEqual(clicks, [])
+
+
+class StationsTableTest(unittest.TestCase):
+    """The Stations table (2026-11-24): the first ten rows and the rest under Show All, as the
+    Demographics tab's Largest Cities (owner, 2026-11-03); the mode an icon with its word on hover;
+    a full staff dimmed and a shortfall red."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.gui = _read(GUI)
+        cls.loc = _all_loc()
+        cls.panel = _type_body(cls.gui, "te_grid_stations_panel")
+
+    def test_ten_shown_and_the_rest_under_show_all(self):
+        counts = re.findall(r"DataModel(?:First|SkipFirst)\( Country\.MakeScope\.GetList\('te_grid_stations'\), "
+                            r"'\(int32\)(\d+)' \)", self.panel)
+        self.assertEqual(len(counts), 2)
+        n = counts[0]
+        self.assertEqual(counts, [n, n])
+        # Show All shows while more than n are listed, says how many there are, and its other
+        # face says n.
+        self.assertIn(f"GreaterThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_grid_stations') ), "
+                      f"'(int32){n}' )", self.panel)
+        self.assertIn("GetDataModelSize( Country.MakeScope.GetList('te_grid_stations') )",
+                      self.loc["te_grid_stations_show_all"])
+        self.assertRegex(self.loc["te_grid_stations_show_first"], rf"\b{n}\b")
+        self.assertRegex(self.loc["te_grid_stations_show_tt"], rf"\b{n}\b")
+        # Rule 7: the flag is named for its default, and the rest start hidden: _open.
+        flag = "te_grid_stations_all_open"
+        self.assertIn(f"onclick = \"[GetVariableSystem.Toggle('{flag}')]\"", self.panel)
+        self.assertIn(f"SelectLocalization( Not( GetVariableSystem.Exists('{flag}') ), 'te_grid_stations_show_all', "
+                      "'te_grid_stations_show_first' )", self.panel)
+        # The first n stand outside the flag's container; the rest's datamodel inside it, so
+        # while it is closed none of their rows is built or read.
+        first, rest = self.panel.index("DataModelFirst("), self.panel.index("DataModelSkipFirst(")
+        start = self.panel.rindex("flowcontainer = {", 0, rest)
+        container = _block_from(self.panel, start)
+        self.assertLess(first, start)
+        own = container[:container.index("te_grid_station_rows = {")]
+        self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", own)
+        self.assertIn("DataModelSkipFirst(", container)
+        # The button under the rows, centred (rule 6), its order on hover.
+        at = self.panel.index("button = {")
+        self.assertGreater(at, start + len(container))
+        button = _block_from(self.panel, at)
+        self.assertIn("parentanchor = hcenter", button)
+        self.assertIn('tooltip = "te_grid_stations_show_tt"', button)
+
+    def test_the_mode_is_an_icon_with_its_word_on_hover(self):
+        row = _type_body(self.gui, "te_grid_station_row")
+        mode = _block_from(row, row.index('blockoverride "cell_mode"'))
+        icons = [_block_from(mode, m.start()) for m in re.finditer(r"te_grid_station_mode_icon = \{", mode)]
+        words = ("sending", "receiving", "idle", "offline")
+        self.assertEqual(len(icons), len(words))
+        # Every mode te_grid_mode_disp returns has its icon, shown on that mode alone.
+        modes = sorted({int(v) for v in re.findall(r"\bvalue = (\d+)",
+                                                     _no_comments(_txt_block(_read(VALUES), "te_grid_mode_disp")))})
+        self.assertEqual(modes, [1, 2, 3, 4])
+        for n, (icon, word) in enumerate(zip(icons, words), start=1):
+            with self.subTest(mode=word):
+                self.assertIn(f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_grid_mode_disp'), "
+                              f"'(CFixedPoint){n}' )]\"", icon)
+                tooltip = re.search(r'tooltip = "(\w+)"', icon).group(1)
+                self.assertEqual(tooltip, f"te_grid_st_mode_{word}_tt")
+                # Rule 2: the word the row used to print heads the icon's hover.
+                self.assertTrue(self.loc[tooltip].startswith(f"#b $te_grid_mode_{word}$#!\\n"), self.loc[tooltip])
+        textures = [re.search(r'texture = "([^"]+)"', icon).group(1) for icon in icons]
+        self.assertEqual(len(set(textures)), len(words))
+        # Sending and receiving are the overview's Sent and Received crates.
+        overview = _type_body(self.gui, "te_grid_overview_panel")
+        for texture in textures[:2]:
+            self.assertIn(f'texture = "{texture}"', overview)
+        # The header keeps every mode's explanation.
+        self.assertIn('tooltip = "TE_STATE_GRID_ROW_MODE_TT"', _type_body(self.gui, "te_grid_station_head"))
+
+    def test_staff_reads_its_exceptions(self):
+        row = _type_body(self.gui, "te_grid_station_row")
+        threshold = "0.995"
+        self.assertIn(f"LessThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_station_staffing_disp'), "
+                      f"'(CFixedPoint){threshold}' ), 'te_grid_st_staff_short', 'te_grid_st_staff_full' )", row)
+        self.assertEqual(self.loc["te_grid_st_staff_full"], "#grey 100%#!")
+        self.assertEqual(self.loc["te_grid_st_staff_short"],
+                         "#R [State.MakeScope.ScriptValue('te_grid_station_staffing_disp')|%0]#!")
+        # The run's order lists a station short of staff first at the same line.
+        wants = _no_comments(_txt_block(_read(TRIGGERS), "te_grid_station_wants_a_look"))
+        self.assertIn(f"te_grid_station_staffing_disp < {threshold}", wants)
+        section = _type_body(self.gui, "te_grid_building_section")
+        self.assertIn(f"'(CFixedPoint){threshold}' ), 'te_grid_st_staff_short', 'te_grid_st_staff' )", section)
+
+
+class FigureTest(unittest.TestCase):
+    """Electricity a week reads abbreviated from 1,000 and as a plain number under it, 0 included:
+    |K alone writes 0 as "0.00K" (the Bermuda card's Sent and Delivered, 2026-11-24)."""
+
+    def test_every_abbreviated_figure_has_a_plain_twin(self):
+        gui, loc = _read(GUI), _all_loc()
+        figures = {k: v for k, v in loc.items() if k.startswith("te_grid_") and "|K]" in v}
+        self.assertGreaterEqual(len(figures), 17)
+        sources = gui + "\n".join(v for k, v in loc.items() if k.startswith(("te_grid_", "TE_STATE_GRID")))
+        for key, text in sorted(figures.items()):
+            with self.subTest(key=key):
+                self.assertEqual(loc.get(f"{key}_small"), text.replace("|K]", "|0]"))
+                read = re.search(r"\[(\w+\.MakeScope\.ScriptValue\('\w+'\))\|K\]", text).group(1)
+                choice = f"GreaterThan_CFixedPoint( {read}, '(CFixedPoint)999' ), '{key}', "
+                self.assertIn(choice, sources)
+                after = sources[sources.index(choice) + len(choice):]
+                self.assertIn(f"'{key}_small'", after[:after.index(")")+200])
+                # Never shown bare.
+                self.assertNotIn(f'text = "{key}"', gui)
 
 
 def _unwrap(value):
@@ -620,7 +785,7 @@ class GenerationTableTest(unittest.TestCase):
         self.assertEqual(tuple(re.findall(r"name = te_grid_mix_w_(\w+) value = 0", clear)), SOURCES)
         self.assertEqual(tuple(re.findall(r"local_var:te_grid_mix_w_(\w+)", weights)), SOURCES)
         panel = _type_body(gui, "te_grid_mix_panel")
-        self.assertEqual(tuple(re.findall(r'text = "te_grid_mix_(\w+)_amount"', panel)), SOURCES)
+        self.assertEqual(tuple(re.findall(r"'\(CFixedPoint\)999' \), 'te_grid_mix_(\w+)_amount', ", panel)), SOURCES)
         for src in SOURCES:
             with self.subTest(source=src):
                 self.assertIn(f"te_grid_tab_mix_{src}_disp = {{", values)
