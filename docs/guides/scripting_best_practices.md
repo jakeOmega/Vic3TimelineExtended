@@ -6112,3 +6112,14 @@ one: the Map Room's class maps (`journal_map_classes.py`), the census generator 
 types only), `DEATH_CAUSE_WAR_CLASSES`, the save series' professions. A strata kill (`kill_population_in_state` by
 `pop_strata`) takes it too. Whether the type loads, hires and dies by `kill_population_in_state` with its `pop_type`
 is the `pers_pop_type` and `pers_kill` self-checks' question (`docs/testing/solar-colonies-playtest.md`).
+
+## Share Whole Units Among States One After Another, or Rounding Each Share Drops or Doubles Small Totals
+
+When N whole units (hundreds of people to kill, levels to place) are shared among states by weight, rounding
+each state's `weight ÷ total × N` on its own loses them or makes extra ones: one unit among three equal states
+rounds to 0 in each and is never placed; one among two rounds to 1 in each and is placed twice. The space forces
+kill did both until its review (#2020). Share them in one pass instead, each state taking its share of the units
+still to place by its share of the weight still to share, `round(weight ÷ weight_left × left)`, then taking
+both off (`change_local_variable` on the two locals, which run on through an `every_scope_state`). The shares
+then add up to N, and the last state takes what is left (`sr_pers_kill_step`). A state's cap (its pops) passes
+what it can't take on to the states after it.
