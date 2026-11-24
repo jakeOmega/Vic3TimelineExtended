@@ -337,7 +337,8 @@ class QueueTest(unittest.TestCase):
 
 class PanelTest(unittest.TestCase):
     def test_the_widget_hides_it_by_default(self):
-        row = _type_body(WIDGET, "te_sr_colony_row")
+        # the list's row (its Modules line) and the colony's page (its tile and its module row)
+        row = _type_body(WIDGET, "te_sr_colony_row") + _type_body(WIDGET, "te_sr_colony_page")
         self.assertEqual(_squash(row).count('block "terra_visible" { visible = no }'), 3)
         for block in ("mod_terra_level", "mod_terra_pending", "mod_terra_button", "mod_terra_dismantle_button",
                       "terra_pct", "terra_years", "terra_idle_visible", "terra_under_way_visible",
@@ -373,7 +374,7 @@ class PanelTest(unittest.TestCase):
     def test_the_icon_is_kept_art(self):
         """The page's row and tile show the Mars colony's icon, art the panel
         already has (space_race_gui_icons.md, Kept)."""
-        row = _type_body(WIDGET, "te_sr_colony_row")
+        row = _type_body(WIDGET, "te_sr_colony_page")
         page = row[row.index('block "terra_visible" {', row.index("te_sr_page_tile")):]
         self.assertIn('texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"', page)
         self.assertIn("Terraforming", _read("docs/systems/space_race_gui_icons.md"))
