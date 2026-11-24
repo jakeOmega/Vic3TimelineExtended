@@ -29067,7 +29067,7 @@
   "en": "#b Longevity Gap#!\\nHow much likelier those in longevity care are to live to 100 than those outside it, in percentage points: #v [Country.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! against #v [Country.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!.",
   "ru": "#b Разрыв долголетия#!\\nНасколько охваченные медициной долголетия чаще доживают до 100 лет, чем остальные, в процентных пунктах: #v [Country.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! против #v [Country.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!."
  },
- "te_demog_ov_lx_gap_value": {
+ "te_demog_ov_lx_gap_value_many": {
   "en": "#v [Country.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! points",
   "ru": "#v [Country.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! пп."
  },
@@ -30183,7 +30183,7 @@
   "en": "#b Longevity Gap#!\\nHow much likelier those in longevity care are to live to 100 than those outside it, in percentage points: #v [State.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! against #v [State.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!.",
   "ru": "#b Разрыв долголетия#!\\nНасколько охваченные медициной долголетия чаще доживают до 100 лет, чем остальные, в процентных пунктах: #v [State.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! против #v [State.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!."
  },
- "te_demog_st_lx_gap_value": {
+ "te_demog_st_lx_gap_value_many": {
   "en": "#v [State.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! points",
   "ru": "#v [State.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! пп."
  },
@@ -35499,23 +35499,23 @@
   "en": "full",
   "ru": "полно"
  },
- "te_seabed_next_tt_arctic": {
+ "te_seabed_next_tt_arctic_many": {
   "en": "One more license in the Arctic at the next sharing: about #v +$te_seabed_need_navy_fig_arctic$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! licenses.",
   "ru": "Ещё одна лицензия в Северном Ледовитом океане при следующем разделе: примерно #v +$te_seabed_need_navy_fig_arctic$#! проекции военно-морской мощи или ещё одна включённая прибрежная область здесь, что даёт примерно #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! лицензий."
  },
- "te_seabed_next_tt_atlantic": {
+ "te_seabed_next_tt_atlantic_many": {
   "en": "One more license in the Atlantic at the next sharing: about #v +$te_seabed_need_navy_fig_atlantic$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! licenses.",
   "ru": "Ещё одна лицензия в Атлантическом океане при следующем разделе: примерно #v +$te_seabed_need_navy_fig_atlantic$#! проекции военно-морской мощи или ещё одна включённая прибрежная область здесь, что даёт примерно #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! лицензий."
  },
- "te_seabed_next_tt_indian": {
+ "te_seabed_next_tt_indian_many": {
   "en": "One more license in the Indian Ocean at the next sharing: about #v +$te_seabed_need_navy_fig_indian$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! licenses.",
   "ru": "Ещё одна лицензия в Индийском океане при следующем разделе: примерно #v +$te_seabed_need_navy_fig_indian$#! проекции военно-морской мощи или ещё одна включённая прибрежная область здесь, что даёт примерно #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! лицензий."
  },
- "te_seabed_next_tt_pacific": {
+ "te_seabed_next_tt_pacific_many": {
   "en": "One more license in the Pacific at the next sharing: about #v +$te_seabed_need_navy_fig_pacific$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! licenses.",
   "ru": "Ещё одна лицензия в Тихом океане при следующем разделе: примерно #v +$te_seabed_need_navy_fig_pacific$#! проекции военно-морской мощи или ещё одна включённая прибрежная область здесь, что даёт примерно #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! лицензий."
  },
- "te_seabed_next_tt_southern": {
+ "te_seabed_next_tt_southern_many": {
   "en": "One more license in the Southern Ocean at the next sharing: about #v +$te_seabed_need_navy_fig_southern$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! licenses.",
   "ru": "Ещё одна лицензия в Южном океане при следующем разделе: примерно #v +$te_seabed_need_navy_fig_southern$#! проекции военно-морской мощи или ещё одна включённая прибрежная область здесь, что даёт примерно #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! лицензий."
  },
@@ -35539,11 +35539,11 @@
   "en": "Jan: re-divided",
   "ru": "Янв.: делятся заново"
  },
- "te_seabed_ov_claims_lent_ours": {
+ "te_seabed_ov_claims_lent_ours_many": {
   "en": "We lease #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! of our claims to other countries, and #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! licenses they built on claims we leased or passed them count against our share at each sharing, even after the lease or arrangement ends. Each sharing tops a lease back up from our new share.",
   "ru": "Мы сдаём другим странам в аренду #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! наших претензий, и #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! лицензий, которые они построили на претензиях, сданных или переданных им нами, учитываются в нашей доле при каждом разделе, даже после окончания аренды или соглашения. Каждый раздел восполняет аренду из нашей новой доли."
  },
- "te_seabed_ov_claims_lent_theirs": {
+ "te_seabed_ov_claims_lent_theirs_many": {
   "en": "The country leases #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! of its claims to other countries, and #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! licenses they built on claims it leased or passed them count against its share at each sharing, even after the lease or arrangement ends. Each sharing tops a lease back up from its new share.",
   "ru": "Страна сдаёт другим странам в аренду #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! своих претензий, и #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! лицензий, которые они построили на претензиях, сданных или переданных им ею, учитываются в её доле при каждом разделе, даже после окончания аренды или соглашения. Каждый раздел восполняет аренду из её новой доли."
  },
@@ -35587,7 +35587,7 @@
   "en": "Levels working on another basin's license because their own basin's claims were used up: #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! throughput (Long-Haul Seabed Operations). Each swaps to a local license as soon as a local claim is free.",
   "ru": "Уровни, работающие по лицензии другого бассейна, потому что претензии их собственного бассейна исчерпаны: #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! пропускной способности (Дальние операции на морском дне). Каждый переходит на местную лицензию, как только освобождается местная претензия."
  },
- "te_seabed_ov_longhaul_word": {
+ "te_seabed_ov_longhaul_word_many": {
   "en": "#R [Country.MakeScope.ScriptValue('te_seabed_distant_total')|0] mines#!",
   "ru": "#R шахт: [Country.MakeScope.ScriptValue('te_seabed_distant_total')|0]#!"
  },
@@ -35671,7 +35671,7 @@
   "en": "Deep-Sea Mine levels that can still be queued: unused [concept_seabed_claim]s in every basin, less levels queued past them. #v [Country.MakeScope.ScriptValue('te_seabed_room_home_disp')|0]#! of the claims are in basins with home coast, where a level works at full throughput; on the others it works at #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#!.\\nUnused claims: Pacific #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]#!, Atlantic #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]#!, Indian #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]#!, Arctic #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]#!, Southern #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]#!",
   "ru": "Уровни «Глубоководной шахты», которые ещё можно поставить в очередь: неиспользованные [Concept('concept_seabed_claim','претензии на морское дно')] во всех бассейнах за вычетом уровней, уже стоящих в очереди сверх них. #v [Country.MakeScope.ScriptValue('te_seabed_room_home_disp')|0]#! претензий находятся в бассейнах со своим побережьем, где уровень работает с полной пропускной способностью; в остальных он работает на #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#!.\\nНеиспользованные претензии: Тихий #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]#!, Атлантический #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]#!, Индийский #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]#!, Северный Ледовитый #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]#!, Южный #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]#!"
  },
- "te_seabed_ov_room_word": {
+ "te_seabed_ov_room_word_many": {
   "en": "#v [Country.MakeScope.ScriptValue('te_seabed_room_shown')|0]#! mines",
   "ru": "шахт: #v [Country.MakeScope.ScriptValue('te_seabed_room_shown')|0]#!"
  },

@@ -29371,7 +29371,7 @@
   "en": "#b Longevity Gap#!\\nHow much likelier those in longevity care are to live to 100 than those outside it, in percentage points: #v [Country.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! against #v [Country.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!.",
   "de": "#b Langlebigkeitslücke#!\\nWie viel wahrscheinlicher Menschen in Langlebigkeitsmedizin 100 Jahre alt werden als Menschen außerhalb davon, in Prozentpunkten: #v [Country.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! gegenüber #v [Country.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!."
  },
- "te_demog_ov_lx_gap_value": {
+ "te_demog_ov_lx_gap_value_many": {
   "en": "#v [Country.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! points",
   "de": "#v [Country.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! Prozentpunkte"
  },
@@ -30487,7 +30487,7 @@
   "en": "#b Longevity Gap#!\\nHow much likelier those in longevity care are to live to 100 than those outside it, in percentage points: #v [State.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! against #v [State.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!.",
   "de": "#b Langlebigkeitslücke#!\\nWie viel wahrscheinlicher Menschen in Langlebigkeitsmedizin 100 Jahre alt werden als Menschen außerhalb davon, in Prozentpunkten: #v [State.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#! gegenüber #v [State.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!."
  },
- "te_demog_st_lx_gap_value": {
+ "te_demog_st_lx_gap_value_many": {
   "en": "#v [State.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! points",
   "de": "#v [State.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! Prozentpunkte"
  },
@@ -35807,23 +35807,23 @@
   "en": "full",
   "de": "voll"
  },
- "te_seabed_next_tt_arctic": {
+ "te_seabed_next_tt_arctic_many": {
   "en": "One more license in the Arctic at the next sharing: about #v +$te_seabed_need_navy_fig_arctic$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! licenses.",
   "de": "Eine weitere Lizenz in der Arktis bei der nächsten Aufteilung: etwa #v +$te_seabed_need_navy_fig_arctic$#! Marine-Machtprojektion oder ein weiterer inkorporierter Küstenstaat hier, der etwa #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_arctic')|0]#! Lizenzen wert ist."
  },
- "te_seabed_next_tt_atlantic": {
+ "te_seabed_next_tt_atlantic_many": {
   "en": "One more license in the Atlantic at the next sharing: about #v +$te_seabed_need_navy_fig_atlantic$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! licenses.",
   "de": "Eine weitere Lizenz im Atlantik bei der nächsten Aufteilung: etwa #v +$te_seabed_need_navy_fig_atlantic$#! Marine-Machtprojektion oder ein weiterer inkorporierter Küstenstaat hier, der etwa #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_atlantic')|0]#! Lizenzen wert ist."
  },
- "te_seabed_next_tt_indian": {
+ "te_seabed_next_tt_indian_many": {
   "en": "One more license in the Indian Ocean at the next sharing: about #v +$te_seabed_need_navy_fig_indian$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! licenses.",
   "de": "Eine weitere Lizenz im Indischen Ozean bei der nächsten Aufteilung: etwa #v +$te_seabed_need_navy_fig_indian$#! Marine-Machtprojektion oder ein weiterer inkorporierter Küstenstaat hier, der etwa #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_indian')|0]#! Lizenzen wert ist."
  },
- "te_seabed_next_tt_pacific": {
+ "te_seabed_next_tt_pacific_many": {
   "en": "One more license in the Pacific at the next sharing: about #v +$te_seabed_need_navy_fig_pacific$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! licenses.",
   "de": "Eine weitere Lizenz im Pazifik bei der nächsten Aufteilung: etwa #v +$te_seabed_need_navy_fig_pacific$#! Marine-Machtprojektion oder ein weiterer inkorporierter Küstenstaat hier, der etwa #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_pacific')|0]#! Lizenzen wert ist."
  },
- "te_seabed_next_tt_southern": {
+ "te_seabed_next_tt_southern_many": {
   "en": "One more license in the Southern Ocean at the next sharing: about #v +$te_seabed_need_navy_fig_southern$#! naval power projection, or one more incorporated coastal state here, worth about #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! licenses.",
   "de": "Eine weitere Lizenz im Südpolarmeer bei der nächsten Aufteilung: etwa #v +$te_seabed_need_navy_fig_southern$#! Marine-Machtprojektion oder ein weiterer inkorporierter Küstenstaat hier, der etwa #v +[Country.MakeScope.ScriptValue('te_seabed_coast_gain_southern')|0]#! Lizenzen wert ist."
  },
@@ -35851,11 +35851,11 @@
   "en": "\\nWe lease #v [GetPlayer.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! of our claims to other countries, and #v [GetPlayer.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! licences they built on claims we leased or passed them count against our share at each sharing, even after the lease or arrangement ends. Each sharing tops a lease back up from our new share.",
   "de": "\\nWir verpachten #v [GetPlayer.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! unserer Ansprüche an andere Länder, und #v [GetPlayer.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! Lizenzen, die sie auf von uns verpachteten oder ihnen überlassenen Ansprüchen gebaut haben, zählen bei jeder Aufteilung gegen unseren Anteil, auch nachdem die Pacht oder Vereinbarung endet. Jede Aufteilung füllt eine Pacht aus unserem neuen Anteil wieder auf."
  },
- "te_seabed_ov_claims_lent_ours": {
+ "te_seabed_ov_claims_lent_ours_many": {
   "en": "We lease #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! of our claims to other countries, and #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! licenses they built on claims we leased or passed them count against our share at each sharing, even after the lease or arrangement ends. Each sharing tops a lease back up from our new share.",
   "de": "Wir verpachten #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! unserer Ansprüche an andere Länder, und #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! Lizenzen, die sie auf von uns verpachteten oder an sie weitergegebenen Ansprüchen gebaut haben, zählen bei jeder Aufteilung gegen unseren Anteil, auch nachdem die Pacht oder Vereinbarung endet. Jede Aufteilung füllt eine Pacht aus unserem neuen Anteil wieder auf."
  },
- "te_seabed_ov_claims_lent_theirs": {
+ "te_seabed_ov_claims_lent_theirs_many": {
   "en": "The country leases #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! of its claims to other countries, and #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! licenses they built on claims it leased or passed them count against its share at each sharing, even after the lease or arrangement ends. Each sharing tops a lease back up from its new share.",
   "de": "Das Land verpachtet #v [Country.MakeScope.ScriptValue('te_seabed_leased_out_disp')|0]#! seiner Ansprüche an andere Länder, und #v [Country.MakeScope.ScriptValue('te_seabed_charged_disp')|0]#! Lizenzen, die sie auf von ihm verpachteten oder an sie weitergegebenen Ansprüchen gebaut haben, zählen bei jeder Aufteilung gegen seinen Anteil, auch nachdem die Pacht oder Vereinbarung endet. Jede Aufteilung füllt eine Pacht aus seinem neuen Anteil wieder auf."
  },
@@ -35899,7 +35899,7 @@
   "en": "Levels working on another basin's license because their own basin's claims were used up: #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! throughput (Long-Haul Seabed Operations). Each swaps to a local license as soon as a local claim is free.",
   "de": "Stufen, die mit der Lizenz eines anderen Beckens arbeiten, weil die Ansprüche ihres eigenen Beckens aufgebraucht waren: #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#! Durchsatz (Tiefseebergbau in fernen Becken). Jede wechselt auf eine lokale Lizenz, sobald ein lokaler Anspruch frei ist."
  },
- "te_seabed_ov_longhaul_word": {
+ "te_seabed_ov_longhaul_word_many": {
   "en": "#R [Country.MakeScope.ScriptValue('te_seabed_distant_total')|0] mines#!",
   "de": "#R [Country.MakeScope.ScriptValue('te_seabed_distant_total')|0] Minen#!"
  },
@@ -35987,7 +35987,7 @@
   "en": "Deep-Sea Mine levels that can still be queued: unused [concept_seabed_claim]s in every basin, less levels queued past them. #v [Country.MakeScope.ScriptValue('te_seabed_room_home_disp')|0]#! of the claims are in basins with home coast, where a level works at full throughput; on the others it works at #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#!.\\nUnused claims: Pacific #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]#!, Atlantic #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]#!, Indian #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]#!, Arctic #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]#!, Southern #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]#!",
   "de": "Stufen der Tiefseemine, die noch in die Warteschlange gestellt werden können: ungenutzte [Concept('concept_seabed_claim','Meeresbodenansprüche')] in allen Becken, abzüglich der über sie hinaus eingereihten Stufen. #v [Country.MakeScope.ScriptValue('te_seabed_room_home_disp')|0]#! der Ansprüche liegen in Becken mit eigener Küste, in denen eine Stufe mit vollem Durchsatz arbeitet; in den übrigen arbeitet sie mit #R -[Country.MakeScope.ScriptValue('te_seabed_long_haul_penalty_pct')|0]%#!.\\nUngenutzte Ansprüche: Pazifik #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_pacific')|0]#!, Atlantik #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_atlantic')|0]#!, Indik #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_indian')|0]#!, Arktis #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_arctic')|0]#!, Südpolarmeer #v [Country.MakeScope.ScriptValue('te_seabed_unbuilt_disp_southern')|0]#!"
  },
- "te_seabed_ov_room_word": {
+ "te_seabed_ov_room_word_many": {
   "en": "#v [Country.MakeScope.ScriptValue('te_seabed_room_shown')|0]#! mines",
   "de": "#v [Country.MakeScope.ScriptValue('te_seabed_room_shown')|0]#! Minen"
  },

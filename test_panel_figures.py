@@ -37,7 +37,8 @@ FIG_K = re.compile(r"\[([^\[\]]*)\|([A-Za-z0-9%+=*\-]*K[A-Za-z0-9%+=*\-]*)\]")
 SWITCH = re.compile(r"^\[SelectLocalization\( LessThan_CFixedPoint\( Abs_CFixedPoint\( (.+) \), "
                     r"'\(CFixedPoint\)999\.5' \), '(\w+)', '(\w+)' \)\]$")
 NOUNS = {"level": "levels"}
-COUNTED = re.compile(r"\|[+=\-]*0\]#! (?:more |missing )?(levels|months|monuments|digs|sites|trophies)\b")
+COUNTED = re.compile(r"\|[+=\-]*0\](?:#! | )(?:more |missing )?(levels|months|monuments|digs|sites|trophies|mines|"
+                     r"licenses)\b")
 NOUN_PICK = re.compile(r"\[([^\[\]]*)\|0\]#! (?:more |missing )?\[SelectLocalization\( EqualTo_CFixedPoint\( "
                        r"([^\[\]]*?), '\(CFixedPoint\)1' \), 'gm_word_(\w+)', 'gm_word_(\w+)' \)\]")
 # Counts that are never 1: a dig takes 100 / (rate x size factor) months, at
@@ -101,7 +102,8 @@ class FigureSwitchTest(unittest.TestCase):
                 self.assertIn(f"${pre}_dc_{c}_fig$", loc[f"{pre}_dc_{c}_deaths"])
         for b in ("pacific", "atlantic", "indian", "arctic", "southern"):
             self.assertEqual(loc[f"te_seabed_next_{b}"], f"+$te_seabed_need_navy_fig_{b}$")
-            self.assertIn(f"+$te_seabed_need_navy_fig_{b}$", loc[f"te_seabed_next_tt_{b}"])
+            for form in ("one", "many"):
+                self.assertIn(f"+$te_seabed_need_navy_fig_{b}$", loc[f"te_seabed_next_tt_{b}_{form}"])
             for key in (f"te_seabed_weight_far_{b}", f"te_seabed_weight_home_{b}"):
                 self.assertIn("$te_seabed_npp_fig$", loc[key])
                 self.assertNotIn("te_seabed_npp_counted_disp')|0]", loc[key])
@@ -123,7 +125,7 @@ class SingularTest(unittest.TestCase):
     def setUpClass(cls):
         cls.loc = h.load_loc()
         cls.keys = set()
-        for p in GM_PANELS:
+        for p in PANELS:
             cls.keys |= _closure(p, cls.loc)[1]
 
     def test_the_noun_words(self):
@@ -140,8 +142,11 @@ class SingularTest(unittest.TestCase):
                         continue
                     self.assertRegex(key, r"_(many|n)$")
                     parent = key.rsplit("_", 1)[0]
-                    self.assertRegex(self.loc[parent], r"EqualTo_CFixedPoint\(.*'\(CFixedPoint\)1' \), "
-                                                       rf"'{parent}_one', '{key}'")
+                    self.assertIn(f"{parent}_one", self.loc)
+                    # picked against its `_one` by a count: the line's own switch, or a nested one
+                    # (te_demog_st_census_next picks te_demog_st_next_now / _one / _n)
+                    pick = f"'{parent}_one', '{key}' )"
+                    self.assertTrue(any(pick in v for v in self.loc.values()), pick)
 
     def test_each_noun_is_picked_by_its_own_count(self):
         seen = 0
@@ -168,6 +173,13 @@ class SingularTest(unittest.TestCase):
         for key in ("gm_tr_take_occupation_tt", "gm_tr_take_own_tt"):
             self.assertRegex(loc[key], NOUN_PICK)
         self.assertEqual(loc["gm_je_arch_summary"], "$gm_je_arch_summary_digs$, $gm_je_arch_summary_sites$")
+        # the Seabed's counts and the Longevity Gap's points, which print a fraction whole
+        for key in ("te_seabed_ov_room_word", "te_seabed_ov_longhaul_word", "te_seabed_next_tt_indian",
+                    "te_seabed_ov_claims_lent_ours", "te_seabed_ov_claims_lent_theirs"):
+            self.assertIn(f"'(CFixedPoint)1' ), '{key}_one', '{key}_many'", loc[key])
+        for key in ("te_demog_ov_lx_gap_value", "te_demog_st_lx_gap_value"):
+            self.assertIn("'(CFixedPoint)0.5' ), LessThan_CFixedPoint(", loc[key])
+            self.assertTrue(loc[f"{key}_one"].endswith("#v 1#! point"))
 
 
 if __name__ == "__main__":
