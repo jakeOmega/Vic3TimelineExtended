@@ -100,8 +100,9 @@ country_sr_colony_room_add = {
 }
 
 # Growth a month at every colony we hold, beside the 0.2% every colony grows by
-# (slices 2-3 design § 10.2): Self-Directed Evolution carries +0.1%, people
-# adapted to low gravity and radiation (era 13 spec § 7.3), and each world's
+# (slices 2-3 design § 10.2): the Clade Citizenship law carries +0.1%, people
+# born adapted to low gravity and radiation (era 13 spec § 7.3; its technology
+# carried it until 2026-11-24), and each world's
 # sr_site_growth_<key> adds its holder's. The engine consumes nothing.
 country_sr_colony_growth_add = {
 	color = good

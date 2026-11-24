@@ -273,6 +273,20 @@ Pick a representative vanilla number, then size your value relative to it. The `
 
 `/validate/engine-coverage` does NOT catch this — values pass validation as long as the modifier name is registered. The bug surfaces only at runtime in the player's tooltip, so it can sit undetected for a long time.
 
+
+## Size a Late-Game Percentage Against the Sum It Joins
+
+A `_mult` line adds to every other source's line before it multiplies, so its real effect is its value over (1 + the sum already there). By era 12 that sum is in the hundreds of percent: in the owner's 2039 game (2026-11-24) a state's assimilation stood at +690% (Cultural Hegemony +433%, the Ministries of Education and Culture +272%), its migration pull at about +194%, and the country generated 3,960 authority. A law sized like an 1836 law's does nothing there: +10% assimilation is 1.3%, +25 authority 0.6%. The Bodily Autonomy laws shipped that way and read as flavor.
+
+For a law, institution or technology that arrives late:
+
+- **Prefer a lever nothing dilutes.** A factor of its own with a cap (the census's `state_work_safety_add` and `state_external_safety_add`), a flat add on a bounded scale (acceptance and legitimacy run 0 to 100), or a script-read type (`country_sr_colony_growth_add`).
+- **Otherwise size against the sum.** Decide the relative change you want (a quarter more, an eighth less) and multiply by 1 + the sum a country of that era holds: Morphological Freedom's migration pull is +75% for about a quarter more, its assimilation −100% for an eighth less. `/modifier-grants/<name>` lists the carriers to add up; a state's hover in a late save is better, since scaled modifiers such as Cultural Hegemony's show only there.
+- **Say what a large negative does to a small sum.** −300% assimilation is three eighths off the owner's total and all of a country's with under +200%. That can be the point (a people that doesn't assimilate), but write it in the law's header and the player guide, and put the below-zero case on the play-test list: whether the engine holds a rate's sum at zero is not verified for every type.
+- **Authority is spent in fixed prices** (100 a consumption tax, 50 a decree), so it is diluted less than a percentage, but +25 is still a quarter of one tax; the mod's authority laws give 100 to 200.
+
+Worked example: `common/laws/te_bodily_autonomy_laws.txt`, the header's SIZES paragraph; `test_bodily_autonomy.py`, `FourDestinationsTest.test_sized_for_the_late_game`.
+
 ## Devastation: The Trigger Reads 0–1, `add_devastation` Takes Percent
 
 A state's `devastation` (and the country's `average_devastation`) reads as a **0–1 fraction**. Vanilla compares it with `0.1`, `0.2` and `0.5` (`decree_emergency_relief`, `je_grand_exhibition`, `cultural_community_creation_weight`), its `TRIGGER_DEVASTATION` tooltip formats the number with `|%`, and `state_region_devastation` (−100% infrastructure) is scaled by it. The engine's `triggers.log` example `devastation > 5` is misleading. A threshold of 5 or 10 can never be met, and the UN's aid, peacekeeping and docket checks sat dead behind it until 2026-10-09. The effects `add_devastation` / `set_devastation` take **percentage points** instead (`= 25` is 25%), going by their tooltips: `ADD_DEVASTATION_POSITIVE_EFFECT` prints `$VALUE|-0$%`, the raw number plus a literal "%". Fraction-taking effects use the `%` formatter instead (`ADD_RADICALS` prints `$VALUE|-=1%$`). So `add_devastation = 0.25` adds a quarter of a point. To weigh devastation against a 0–100 quantity in a script value, multiply it by 100 (`un_mission_sol_need_order`).

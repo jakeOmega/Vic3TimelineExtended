@@ -6026,10 +6026,11 @@ morphological_freedom_embraced_modifier = {
 	country_prestige_mult = 0.05
 }
 
-# JE timeout under Licensed Modification
-morphological_freedom_unsettled_modifier = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	state_turmoil_effects_mult = 0.1
+# Licensed Modification in force for ten years of the debate, or at its timeout (.300)
+morphological_freedom_settled_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_turmoil_effects_mult = -0.1
+	country_legitimacy_base_add = 5
 }
 
 # JE timeout under Natural Form (.100): enforce the law, or look away

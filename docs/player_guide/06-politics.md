@@ -38,7 +38,7 @@ with it Anarchy, Collectivized Agriculture and Possession by Use.
 | Family & Reproductive Policy | Traditional Family Structure, Pro-Natalist Policy, State-Sponsored Family Planning, Population Control Measures, Communal Child-Rearing | Birth rates, dependents and the working-age share. |
 | Language Policy | Local Vernacular, Civic Monolingualism, Multilingual Federalism, Linguistic Purity, State-Led Language Reform, Ubiquitous Translation | Assimilation, separatism and acceptance by language. |
 | Human Augmentation | No Augmentation, Human Purity, Medical Augmentation Only, Unrestricted Augmentation, Regulated Augmentation Market, Mandatory Augmentation | Cybernetic and genetic implants, from Brain-Computer Interfaces on. |
-| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom, Clade Citizenship, Prescribed Form | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on, and from Self-Directed Evolution (era 13) whether someone who leaves the human body plan behind is still a citizen; or a standard body the state imposes on everyone. |
+| Bodily Autonomy | Natural Form, Licensed Modification, Morphological Freedom, Clade Citizenship, Prescribed Form | Changing how your body looks (skin, sex characteristics, fur, tails), from Morphological Freedom (era 12) on, and from Self-Directed Evolution (era 13) whether a change may be passed on to children who are born citizens; or a standard body the state imposes on everyone. |
 
 The mod renames the base game's six Citizenship laws and changes their effects.
 This guide, like the game, uses the new names:
@@ -83,35 +83,59 @@ debate](07-social-movements.md#the-augmentation-debate).
 
 Bodily Autonomy is about how a body looks; what it can do is Human
 Augmentation's. Every country holds Natural Form until Morphological Freedom
-opens the next two laws. They raise the acceptance of pops whose culture shares
-no heritage trait with your primary cultures, Licensed Modification by 5 and
-Morphological Freedom by 10, on top of your Citizenship law, and pull more
-migrants. The Devout and the Rural Folk oppose both, and the Intelligentsia
-support them. The group drives [the morphological freedom
-debate](07-social-movements.md#the-morphological-freedom-debate).
+opens Licensed Modification, Morphological Freedom and Prescribed Form, and
+Self-Directed Evolution (era 13) opens Clade Citizenship. The three freer laws
+are different answers, not steps of one ladder: each gains something the
+others lack and pays for it.
 
-Clade Citizenship, with Self-Directed Evolution (era 13), keeps every right of
-people who have left the human body plan behind, and takes heritage out of
-acceptance. Each month it raises the acceptance from a shared heritage trait, a
-shared heritage trait group and no shared heritage to the highest of the three,
-so your Citizenship law's heritage figures rank no pop above another (language,
-religion and homeland still count). Every pop gets at least what a shared
-heritage trait gives, 60 under Racialized Citizenship, and pops with no shared
-heritage at least Morphological Freedom's 10 more than your Citizenship law
-gives them. It also pulls 15% more migrants. The Devout, the
-Rural Folk and most groups that only tolerate Licensed Modification strongly
-oppose it. The groups that strongly support Morphological Freedom are content
-with either law, so the push from Morphological Freedom to Clade Citizenship
-comes from transhumanist leaders and the Transhumanist movement.
+| Law | What it allows | You gain | You pay |
+|---|---|---|---|
+| Licensed Modification | Adults may change their bodies with a licensing board's approval | 200 authority, half the radicals from political movements, 25% more migration pull | 10% more institution bureaucracy cost |
+| Morphological Freedom | Adults may change their own bodies as they choose; nothing is passed on to a child, and public life stays built for the body people are born with | 75% more migration pull, 10% more services output, 15% more Cultural Pull from Art | −100% assimilation, and 25% more attraction to the Devout, who strongly oppose the law |
+| Clade Citizenship | A change may be passed to children, who are born citizens, and the state builds its schools, workplaces and housing for them too | Half the remaining deaths at work and three in ten of those from accidents and violence prevented, 50% more migration pull, space colonies that grow 0.3% a month instead of 0.2%, heritage taken out of acceptance | −300% assimilation, and about 9% more bureaucracy for each state's population |
+
+These figures are large because by era 12 each adds to a sum of several
+hundred percent from your institutions, technologies and other laws. With
++700% assimilation from elsewhere, Morphological Freedom takes away an eighth
+of it and Clade Citizenship three eighths; a country with little from
+elsewhere loses most or all of its assimilation. Choose Licensed Modification
+for a quiet country and spare authority, Morphological Freedom to draw people
+and for cultural hegemony, and Clade Citizenship for longer lives and space
+colonies, if you can do without assimilation.
+
+Licensed Modification and Morphological Freedom also raise the acceptance of
+pops whose culture shares no heritage trait with your primary cultures, by 5
+and 10, on top of your Citizenship law. The Devout and the Rural Folk oppose
+all three laws and the Intelligentsia support them. The group drives [the
+morphological freedom
+debate](07-social-movements.md#the-morphological-freedom-debate), which
+Licensed Modification settles as well as Morphological Freedom does.
+
+Clade Citizenship can't be enacted under Ban on Genetic Modification, and that
+law can't be enacted under it. The safety it gives works through the
+Demographics census: with aging slowed or ended, deaths at work and from
+accidents and violence are most of what still kills people. It also takes
+heritage out of acceptance. Each month it raises the acceptance from a shared
+heritage trait, a shared heritage trait group and no shared heritage to the
+highest of the three, so your Citizenship law's heritage figures rank no pop
+above another (language, religion and homeland still count). Every pop gets at
+least what a shared heritage trait gives, 60 under Racialized Citizenship, and
+pops with no shared heritage at least Morphological Freedom's 10 more than
+your Citizenship law gives them. The Devout, the Rural Folk and most groups
+that only tolerate Licensed Modification strongly oppose it. The groups that
+strongly support Morphological Freedom are content with either law, so the
+push from Morphological Freedom to Clade Citizenship comes from transhumanist
+leaders, the Transhumanist movement, and technocratic, positivist,
+meritocratic and modernizer leaders.
 
 Prescribed Form, also from Morphological Freedom, is the state's answer: it
 sets a standard body and requires it, so no one can be told apart by looks.
 Each month it raises the three heritage figures to the highest of them, as
 Clade Citizenship does but with nothing added. Under the inclusive Citizenship
 laws that changes little; under Racialized Citizenship every pop gets the 60 a
-shared heritage trait gives. The law also gives 50 authority, raises the
-bureaucracy each state's population costs (about 9% more at era 12), speeds
-assimilation by 25%, and takes 10% off Cultural Pull from Art and migration
+shared heritage trait gives. The law also gives 400 authority, raises the
+bureaucracy each state's population costs (about 9% more at era 12), adds 200%
+to assimilation, and takes 25% off Cultural Pull from Art and 50% off migration
 pull. Enacting it ends the morphological freedom debate as a failure. The
 fascist and ethno-nationalist ideologies strongly support it and the statist
 ones support it; the Devout and every group that values self-expression oppose

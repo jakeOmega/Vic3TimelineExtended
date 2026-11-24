@@ -1739,7 +1739,7 @@ sr_cf_target_goal = {
 # THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when
 # unset) and its emigration weight, priority x free room, 0 unless THIS holds it.
 # Any scope: its growth a month, sr_site_growth_<key>, 1 + 0.002 and its
-# holder's country_sr_colony_growth_add (Self-Directed Evolution, era 13 spec § 7.3).
+# holder's country_sr_colony_growth_add (the Clade Citizenship law, era 13 spec § 7.3).
 sr_site_room_mult_now_valles_marineris = {
 	value = 1
 	if = { limit = { exists = global_var:sr_site_holder_valles_marineris } global_var:sr_site_holder_valles_marineris = { add = modifier:country_sr_colony_room_add } }

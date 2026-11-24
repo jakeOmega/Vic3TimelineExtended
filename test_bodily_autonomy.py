@@ -5,7 +5,9 @@ group's default first and seeded at game start, Natural Form neutral for every
 ideology (every country holds it for two centuries before anything can replace
 it), every stance list naming every law, the debate on the augmentation
 debate's pattern (the game rule, the resolved-variable guard for revolutions,
-the twenty-year timer and the outcome branches), and the events' pool and art.
+the twenty-year timer and the outcome branches), the events' pool and art, and
+the 2026-11-24 rebalance: four destinations with a cost each, Licensed
+Modification as an ending of its own.
 
 Run: python3 test_bodily_autonomy.py
 """
@@ -15,7 +17,7 @@ import re
 import unittest
 
 import ideology_modifications as im
-from je_test_helpers import entry_text, old_block
+from je_test_helpers import entry_text, old_block, outcome_part
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 ERA_12 = os.path.join(REPO, "common", "technology", "technologies", "era_12.txt")
@@ -27,13 +29,16 @@ MODIFIED = os.path.join(REPO, "common", "ideologies", "modified.txt")
 JE = os.path.join(REPO, "common", "journal_entries", "je_morphological_freedom.txt")
 EVENTS = os.path.join(REPO, "events", "morphological_freedom_events.txt")
 LAW_CONSISTENCY = os.path.join(REPO, "gen_law_consistency.py")
+STATIC_MODIFIERS = os.path.join(REPO, "common", "static_modifiers", "extra_modifiers.txt")
+OTHER_LAWS = os.path.join(REPO, "common", "laws", "extra_laws.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
 # Clade Citizenship (Self-Directed Evolution, era 13 spec § 7.3) is last: test_self_directed_evolution.py.
 LAW_ORDER = ["law_natural_form", "law_licensed_modification", "law_morphological_freedom", "law_clade_citizenship",
              "law_prescribed_form"]
 POOLED = [f"morphological_freedom_events.{n}" for n in range(1, 7)]
-OUTCOMES = ["morphological_freedom_events.100", "morphological_freedom_events.200"]
+OUTCOMES = ["morphological_freedom_events.100", "morphological_freedom_events.200",
+            "morphological_freedom_events.300"]
 
 
 def _read(path):
@@ -193,7 +198,32 @@ class DebateTest(unittest.TestCase):
         failed = _sub(timeout, "if")
         self.assertIn("has_law = law_type:law_natural_form", failed)
         self.assertIn("morphological_freedom_events.100", failed)
-        self.assertIn("morphological_freedom_unsettled_modifier", _sub(timeout, "else"))
+        # Licensed Modification at the timeout settles the debate too (owner, 2026-11-24): no penalty.
+        settled = _sub(timeout, "else_if")
+        self.assertIn("has_law = law_type:law_licensed_modification", settled)
+        self.assertIn("morphological_freedom_events.300", settled)
+        self.assertNotIn("unsettled", self.je)
+
+    def test_licensed_modification_settles_it_after_ten_years_in_force(self):
+        """Owner, 2026-11-24: ten years of the debate under the law, or the timeout. The months are counted by the
+        entry's pulse and kept when the law lapses, so switching away and back loses nothing."""
+        pulse = _sub(_sub(self.je, "on_monthly_pulse"), "effect")
+        self.assertIn("has_law = law_type:law_licensed_modification", pulse)
+        self.assertIn("change_variable = { name = te_mf_licensed_months add = 1 }", pulse)
+        self.assertIn("set_variable = { name = te_mf_licensed_months value = 1 }", pulse)
+        self.assertNotIn("remove_variable", self.je)
+        entry = entry_text(_read(JE), "je_morphological_freedom")
+        trigger = outcome_part(entry, "complete", "trigger", index=1)
+        self.assertIn("has_law = law_type:law_licensed_modification", trigger)
+        # the guard before the read, in one AND
+        self.assertRegex(trigger, r"has_variable = te_mf_licensed_months\s+var:te_mf_licensed_months >= 120\b")
+        effect = outcome_part(entry, "complete", "effect", index=1)
+        self.assertIn("set_variable = morphological_freedom_resolved", effect)
+        self.assertIn("morphological_freedom_events.300", effect)
+        event = _top_level(_code(_read(EVENTS)), "morphological_freedom_events.300")
+        self.assertIn("name = morphological_freedom_settled_modifier", event)
+        settled = _top_level(_code(_read(STATIC_MODIFIERS)), "morphological_freedom_settled_modifier")
+        self.assertRegex(settled, r"state_turmoil_effects_mult = -0\.1\b")
 
     def test_pool_names_the_six_events(self):
         pool = _sub(_sub(self.je, "on_monthly_pulse"), "random_events")
@@ -243,15 +273,115 @@ class LocalizationTest(unittest.TestCase):
         wanted = ["morphological_freedom", "lawgroup_bodily_autonomy", "je_morphological_freedom",
                   "je_morphological_freedom_reason", "je_morphological_freedom_status_natural",
                   "je_morphological_freedom_status_licensed", "je_morphological_freedom_status_free",
-                  "je_morphological_freedom_status_clade", "je_morphological_freedom_status_prescribed"]
+                  "je_morphological_freedom_status_clade", "je_morphological_freedom_status_prescribed",
+                  "je_morphological_freedom_settled_conclusion_desc",
+                  "je_morphological_freedom_licensed_ten_years_tt", "morphological_freedom_settled_modifier"]
         wanted += LAW_ORDER
         for key in wanted:
             with self.subTest(key=key):
                 self.assertIn(key, keys)
                 # A journal entry's text is its _reason; nothing reads a _desc (#1212).
-                if not key.startswith("je_morphological_freedom"):
+                if key.endswith("_modifier") or not key.startswith("je_morphological_freedom"):
                     self.assertIn(f"{key}_desc", keys)
 
+
+
+def _lines(law):
+    """{modifier: value} of a Bodily Autonomy law's own modifier block."""
+    block = _sub(_top_level(_code(_read(LAWS)), law), "modifier")
+    return {k: float(v) for k, v in re.findall(r"(?m)^\s*(\w+) = (-?[\d.]+)\s*$", block)}
+
+
+class FourDestinationsTest(unittest.TestCase):
+    """Owner, 2026-11-24: the group was a ladder (each law the one below it and more, at no cost), so nobody had a reason
+    to hold Licensed Modification, and Clade Citizenship was Morphological Freedom with +5% migration pull. Now each of
+    the three leads on something the others lack and pays for it."""
+
+    LICENSED, FREEDOM, CLADE = "law_licensed_modification", "law_morphological_freedom", "law_clade_citizenship"
+    # A higher value of these is worse for the country that holds the law.
+    HIGHER_IS_WORSE = {"interest_group_ig_devout_pop_attraction_mult",
+                       "country_bureaucracy_investment_cost_factor_mult",
+                       "state_bureaucracy_population_base_cost_factor_mult",
+                       "state_radicals_from_political_movements_mult"}
+
+    def _better_on(self, a, b):
+        """The modifiers on which law a is strictly better for its holder than law b."""
+        la, lb = _lines(a), _lines(b)
+        out = set()
+        for key in set(la) | set(lb):
+            sign = -1 if key in self.HIGHER_IS_WORSE else 1
+            if sign * la.get(key, 0.0) > sign * lb.get(key, 0.0):
+                out.add(key)
+        return out
+
+    def test_no_law_is_another_and_more(self):
+        for a, b in ((self.LICENSED, self.FREEDOM), (self.FREEDOM, self.LICENSED), (self.FREEDOM, self.CLADE),
+                     (self.CLADE, self.FREEDOM), (self.LICENSED, self.CLADE), (self.CLADE, self.LICENSED)):
+            with self.subTest(law=a, against=b):
+                self.assertTrue(self._better_on(a, b), f"{a} is better than {b} on nothing")
+
+    def test_what_each_leads_on(self):
+        licensed, freedom, clade = _lines(self.LICENSED), _lines(self.FREEDOM), _lines(self.CLADE)
+        # order: authority and a cooled argument, which neither freer law has
+        self.assertGreaterEqual(licensed["country_authority_add"], 100)
+        self.assertLess(licensed["state_radicals_from_political_movements_mult"], 0)
+        for other in (freedom, clade):
+            self.assertNotIn("country_authority_add", other)
+            self.assertNotIn("state_radicals_from_political_movements_mult", other)
+        # the person: the most migration pull, the trade and the art
+        self.assertGreater(freedom["state_migration_pull_mult"], clade["state_migration_pull_mult"])
+        self.assertGreater(clade["state_migration_pull_mult"], licensed["state_migration_pull_mult"])
+        self.assertGreater(freedom["goods_output_services_mult"], 0)
+        self.assertGreater(freedom["country_cultural_hegemony_art_mult"], 0)
+        self.assertNotIn("country_cultural_hegemony_art_mult", clade)
+        # a people: the census's safety and the space colonies, the technology's lines until 2026-11-24
+        for key in ("state_work_safety_add", "state_external_safety_add", "country_sr_colony_growth_add"):
+            self.assertGreater(clade[key], 0, key)
+            self.assertNotIn(key, freedom)
+            self.assertNotIn(key, licensed)
+
+    def test_each_freer_law_pays(self):
+        licensed, freedom, clade = _lines(self.LICENSED), _lines(self.FREEDOM), _lines(self.CLADE)
+        self.assertGreater(licensed["country_bureaucracy_investment_cost_factor_mult"], 0)
+        # cohesion: less assimilation under freedom, far less where a people of its own is recognized
+        self.assertLess(freedom["state_assimilation_mult"], 0)
+        self.assertLess(clade["state_assimilation_mult"], freedom["state_assimilation_mult"])
+        self.assertNotIn("state_assimilation_mult", licensed)
+        # the backlash grows the group that strongly opposes the law
+        self.assertGreater(freedom["interest_group_ig_devout_pop_attraction_mult"], 0)
+        self.assertEqual(dict(im.modifications["ideology_moralist"]["lawgroup_bodily_autonomy"])[self.FREEDOM],
+                         "strongly_disapprove")
+        # accommodation: Prescribed Form's line, for the opposite reason
+        self.assertEqual(clade["state_bureaucracy_population_base_cost_factor_mult"],
+                         _lines("law_prescribed_form")["state_bureaucracy_population_base_cost_factor_mult"])
+
+    def test_sized_for_the_late_game(self):
+        """A late-game percentage adds to a sum of hundreds of percent (the owner's 2039 game: assimilation +690%,
+        migration pull about +194%), so these lines are far larger than an early law's."""
+        freedom, clade = _lines(self.FREEDOM), _lines(self.CLADE)
+        self.assertGreaterEqual(freedom["state_migration_pull_mult"], 0.5)
+        self.assertLessEqual(freedom["state_assimilation_mult"], -0.5)
+        self.assertLessEqual(clade["state_assimilation_mult"], -2)
+        self.assertGreaterEqual(_lines("law_prescribed_form")["state_assimilation_mult"], 1)
+
+    def test_clade_citizenship_and_the_genetic_ban_bar_each_other(self):
+        clade = _top_level(_code(_read(LAWS)), self.CLADE)
+        self.assertEqual(_sub(clade, "disallowing_laws").split(), ["law_ban_on_genetic_modification"])
+        ban = _top_level(_code(_read(OTHER_LAWS)), "law_ban_on_genetic_modification")
+        self.assertEqual(_sub(ban, "disallowing_laws").split(), [self.CLADE])
+        sweep = _read(os.path.join(REPO, "common", "scripted_effects", "extra_law_consistency_generated.txt"))
+        self.assertIn("te_fix_inconsistent_lawgroup_bodily_autonomy = {", sweep, "run gen_law_consistency.py")
+
+    def test_the_developmental_ideologies_back_clade_citizenship(self):
+        lists = {name: dict(stances) for name, stances in im.BODILY_AUTONOMY_LISTS.items()}
+        self.assertEqual(lists["developmental"][self.CLADE], "approve")
+        self.assertEqual(lists["regulated"][self.CLADE], "disapprove")
+        for law in LAW_ORDER:
+            if law != self.CLADE:
+                self.assertEqual(lists["developmental"][law], lists["regulated"][law], law)
+        for ideology in ("ideology_technocratic", "ideology_positivist", "ideology_meritocratic",
+                         "ideology_modernizer"):
+            self.assertEqual(im.BODILY_AUTONOMY_STANCES[ideology], "developmental")
 
 
 PARITY_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "te_bodily_autonomy_effects.txt")
@@ -273,9 +403,10 @@ class PrescribedFormTest(unittest.TestCase):
 
     def test_the_state_chooses_and_its_bureaucracy_enforces(self):
         block = _sub(self.law, "modifier")
-        for line in ("country_authority_add = 50", "state_bureaucracy_population_base_cost_factor_mult = 1",
-                     "state_assimilation_mult = 0.25", "country_cultural_hegemony_art_mult = -0.1",
-                     "state_migration_pull_mult = -0.1"):
+        # Resized with the group on 2026-11-24 (the sizes in the laws file's header).
+        for line in ("country_authority_add = 400", "state_bureaucracy_population_base_cost_factor_mult = 1",
+                     "state_assimilation_mult = 2", "country_cultural_hegemony_art_mult = -0.25",
+                     "state_migration_pull_mult = -0.5"):
             self.assertRegex(block, re.escape(line) + r"\b")
         # No static heritage line: the parity alone, lifting to the highest and no further.
         self.assertNotIn("heritage", block)
