@@ -312,10 +312,11 @@ class LeasePanelTest(unittest.TestCase):
         branches = re.findall(r"'(te_seabed_ov_claims_lent_\w+)'", lent)
         self.assertEqual(branches, ["te_seabed_ov_claims_lent_ours", "te_seabed_ov_claims_lent_theirs"])
         self.assertIn("SelectLocalization( Country.IsLocalPlayer, ", lent)
-        for key in branches:
+        # each with a form for one license charged and one for more (2026-11-24)
+        for key in (f"{b}_{form}" for b in branches for form in ("one", "many")):
             text = re.search(rf"(?m)^ {key}:0 \"(.*)\"$", loc).group(1)
             self.assertIn("te_seabed_leased_out_disp", text)
-            self.assertIn("te_seabed_charged_disp", text)
+            self.assertIn("te_seabed_charged_disp" if key.endswith("_many") else "#v 1#! license", text)
         values = read(VALUES)
         for b in m.BASINS:
             self.assertIn(f"te_seabed_leased_out_{b}", block(values, "te_seabed_leased_out_disp"))

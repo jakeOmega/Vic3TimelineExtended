@@ -741,16 +741,20 @@ class PieTest(unittest.TestCase):
         self.assertIn(f"value = te_demog_dc_share_{SLICES[0][0]}", first)
 
     def test_each_legend_names_the_slices_in_order(self):
-        for section, root in (("te_demog_sec_causes", "Country"), ("te_state_demog_causes", "State")):
+        # The deaths cell reads its cause's figure through the key that prints it whole under 1,000 and
+        # abbreviated from it (`te_demog_cd_dc_<cause>_fig`, `te_demog_st_dc_<cause>_fig`; FigureSwitchTest).
+        loc = _loc()
+        for section, root, pre in (("te_demog_sec_causes", "Country", "te_demog_cd"),
+                                   ("te_state_demog_causes", "State", "te_demog_st")):
             rows = _instances(_type_body(self.widgets, section), "te_demog_cause_row")
             self.assertEqual(len(rows), 7, section)
             for row, (name, tex) in zip(rows, PIE_SLICES):
                 with self.subTest(section=section, slice=name):
                     self.assertIn(f'texture = "{PIE_DIR}pie_{tex}.dds"', _override(row, "swatch"))
                     self.assertIn(f'text = "te_demog_dc_{name}"', _override(row, "cause"))
-                    self.assertIn(f"Var('te_dg_dc_{name}')", _override(row, "deaths"))
+                    self.assertIn(f'text = "{pre}_dc_{name}_fig"', _override(row, "deaths"))
+                    self.assertIn(f"{root}.MakeScope.Var('te_dg_dc_{name}')", loc[f"{pre}_dc_{name}_fig"])
                     self.assertIn(f"te_demog_dc_share_{name}", _override(row, "share"))
-                    self.assertIn(root, _override(row, "deaths"))
 
     def test_the_history_chart_uses_the_pies_colours(self):
         history = _type_body(self.widgets, "te_demog_sec_history")

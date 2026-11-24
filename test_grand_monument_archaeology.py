@@ -705,9 +705,11 @@ class EntryTests(unittest.TestCase):
     def test_an_open_row_names_no_state(self):
         # One variable on a container shared by every country that may dig it: the
         # last listed would name its state in everyone's row.
-        self.assertNotIn("gm_site_view_state", loc()["gm_arch_row_open_detail"])
-        # Its levels and what they count for, at the 1836 rate (owner, 2026-10-19).
-        self.assertIn("ScriptValue('gm_arch_disp_grandeur')|0]#! [concept_grandeur]", loc()["gm_arch_row_open_detail"])
+        # The row has a form for one level and one for more (2026-11-24); neither names the state.
+        for form in ("gm_arch_row_open_detail_one", "gm_arch_row_open_detail_many"):
+            self.assertNotIn("gm_site_view_state", loc()[form])
+            # Its levels and what they count for, at the 1836 rate (owner, 2026-10-19).
+            self.assertIn("ScriptValue('gm_arch_disp_grandeur')|0]#! [concept_grandeur]", loc()[form])
         self.assertEqual(squash(block(read(VALUES), "gm_arch_disp_grandeur")),
                          "value = gm_arch_disp_levels multiply = gm_level_grandeur_1836")
         pass_ = squash(block(read(EFFECTS), "gm_arch_list_one"))

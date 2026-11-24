@@ -557,7 +557,12 @@ class ChoicePreviewTest(unittest.TestCase):
                 self.assertEqual(shown, "_".join([key, *(f.split("_")[1] for f in want), "tt"]), (key, want))
                 if want:
                     self.assertEqual(loc[shown], f"${key}_tt$" + "".join(f"${line}{f}_line$" for f in want), shown)
-                self.assertNotIn("SelectLocalization", _spliced(shown, loc), shown)
+                # A key named in SelectLocalization renders without THIS, so the only one allowed here is a
+                # fixed word, picked by the parent's own read: a level's noun, singular or plural (gm_word_*).
+                for named in re.findall(r"SelectLocalization\(.*?, '(\w+)', '(\w+)' \)", _spliced(shown, loc)):
+                    for k in named:
+                        self.assertRegex(k, r"^gm_word_\w+$", shown)
+                        self.assertNotIn("[", loc[k], k)
             self.assertEqual(len(cases), len(wanted), key)
             self.assertEqual(body.count("hidden_effect = {"), 1, f"{key}: the work runs once, whatever the case")
 
@@ -1313,7 +1318,8 @@ class AgeingPanelTests(unittest.TestCase):
             self.assertIn("ScriptValue('gm_state_disp_frozen')", body)
             self.assertIn('tooltip = "gm_row_frozen_tt"', body)
             self.assertIn('text = "gm_row_frozen"', body)
-        self.assertIn("gm_state_primary_age", loc["gm_row_frozen"])
+        for form in ("gm_row_frozen_one", "gm_row_frozen_many"):  # "1 level" and "5 levels" (2026-11-24)
+            self.assertIn("gm_state_primary_age", loc[form])
         self.assertIn("2% of its starting grandeur a year", loc["gm_row_frozen_tt"])
         self.assertIn("gm_state_primary_age", loc["gm_state_grandeur_tt_one"])
 

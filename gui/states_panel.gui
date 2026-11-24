@@ -2713,7 +2713,7 @@ types state_panel_types
 								text = "TE_STATE_GRID_ROW_MOVED"
 							}
 							blockoverride "row_value" {
-								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|K]#!"
+								text = "te_grid_tile_moved_value"
 							}
 						}
 
@@ -2781,7 +2781,7 @@ types state_panel_types
 								text = "TE_STATE_GRID_ROW_MARKET"
 							}
 							blockoverride "row_value" {
-								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_market_flow_disp')|K]#!"
+								text = "te_grid_tile_market_value"
 							}
 						}
 
@@ -2798,7 +2798,7 @@ types state_panel_types
 								text = "TE_STATE_GRID_ROW_PASS"
 							}
 							blockoverride "row_value" {
-								raw_text = "#v [State.MakeScope.ScriptValue('te_grid_import_disp')|K]#!"
+								text = "te_grid_tile_pass_value"
 							}
 						}
 
