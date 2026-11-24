@@ -3216,6 +3216,16 @@ te_rc_sync_all = {
 	}
 	if = {
 		limit = {
+			any_power_bloc_member = { has_technology_researched = autonomous_weapons }
+			any_power_bloc_member = { NOT = { has_technology_researched = autonomous_weapons } }
+		}
+		every_power_bloc_member = {
+			limit = { NOT = { has_technology_researched = autonomous_weapons } }
+			te_rc_grant = { TECH = autonomous_weapons }
+		}
+	}
+	if = {
+		limit = {
 			any_power_bloc_member = { has_technology_researched = brain_computer_interfaces }
 			any_power_bloc_member = { NOT = { has_technology_researched = brain_computer_interfaces } }
 		}
@@ -3382,16 +3392,6 @@ te_rc_sync_all = {
 		every_power_bloc_member = {
 			limit = { NOT = { has_technology_researched = swarm_technology } }
 			te_rc_grant = { TECH = swarm_technology }
-		}
-	}
-	if = {
-		limit = {
-			any_power_bloc_member = { has_technology_researched = autonomous_weapons }
-			any_power_bloc_member = { NOT = { has_technology_researched = autonomous_weapons } }
-		}
-		every_power_bloc_member = {
-			limit = { NOT = { has_technology_researched = autonomous_weapons } }
-			te_rc_grant = { TECH = autonomous_weapons }
 		}
 	}
 	if = {

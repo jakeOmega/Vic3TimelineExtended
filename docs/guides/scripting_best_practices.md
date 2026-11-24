@@ -4598,6 +4598,20 @@ the old technology without the new one is legitimate. Whether the engine moves
 a building off such a method at the load, before that month's repair, is
 unread (`docs/testing/solar-colonies-playtest.md`).
 
+### Moving a unit's technology can put it behind its successor
+
+A combat unit type's place in its group's upgrade line rests on the tree, not on
+its own block: moving a unit to another technology, or giving that technology a
+new prerequisite, can leave a stronger type of the same group reachable first,
+and every check of eras and keys still passes. The era 13 rework (#1281) moved
+Robotic Soldiers to a new Autonomous Weapons that followed Swarm Technology, so
+Swarm Bots (offense 540, defense 1,675) came strictly before the Robotic
+Soldiers (240, 585) they succeed; fixed 2026-11-24 by reversing the edge.
+`test_combat_unit_tier_order.py` fails when a stronger land type's technologies,
+with all their prerequisites, are a proper subset of a weaker one's, or sit an
+era earlier. Production method groups are not held to this, as many mix tiers
+with side options (`pmg_training`); check a moved method's group by hand.
+
 ### Polarity hints from `modifier_type_definitions/`
 
 For mod-only modifier names that vanilla declares but doesn't use,

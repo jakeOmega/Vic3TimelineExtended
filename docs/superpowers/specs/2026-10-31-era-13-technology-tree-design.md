@@ -107,13 +107,13 @@ proposals; display names are in parentheses where they differ.
 | `humanoid_robotics` (Humanoid Robotics) | production | `ai_agents`, `autonomous_vehicles` | new, phase 2 (§ 6.3) |
 | `directed_energy_weapons` | military | unchanged | stays |
 | `space_militarization` | military | unchanged | stays |
-| `swarm_technology` | military | unchanged | stays |
+| `swarm_technology` | military | `autonomous_weapons`, `rapid_deployment_forces` (was `rapid_deployment_forces`, `unmanned_aerial_vehicles`) | stays; prerequisites change (2026-11-24, § 6.4) |
 | `quantum_communications` | military | unchanged | stays |
 | `augmented_reality_warfare` | military | unchanged | stays (call 17) |
 | `asteroid_mining` | military | unchanged | stays (call 3) |
 | `nuclear_thermal_propulsion` | military | unchanged | stays |
 | `fusion_power` | military | unchanged | stays (call 3) |
-| `autonomous_weapons` (Autonomous Weapons) | military | `swarm_technology`, `jadc2` | new, phase 2 (§ 6.4) |
+| `autonomous_weapons` (Autonomous Weapons) | military | `jadc2`, `unmanned_aerial_vehicles` (`swarm_technology`, `jadc2` until 2026-11-24) | new, phase 2 (§ 6.4) |
 | `advanced_fission` (Advanced Fission) | military | `nuclear_energy` | new, phase 3 (§ 7.7) |
 | `brain_computer_interfaces` | society | unchanged | stays |
 | `personalized_medicine` | society | unchanged | stays |
@@ -466,6 +466,16 @@ Automation Policy law group (§ 7.1).
 
 Weapons that select and engage targets on their own. It takes the Robotic
 Soldiers battalion from JADC2, which keeps Networked Marines.
+
+**Fixed 2026-11-24: Autonomous Weapons leads to Swarm Technology, not the
+reverse.** As first built it followed Swarm Technology and JADC2, so Swarm Bots
+(offense 540, defense 1,675) unlocked strictly before the Robotic Soldiers
+(240, 585) they succeed in the infantry line. It now follows JADC2 and Unmanned
+Aerial Vehicles (drones that pick their own targets), and Swarm Technology
+follows it and Rapid Deployment Forces: autonomous weapons first, then swarms of
+them. Swarm Technology's ships, its Drone Complement module, its two methods and
+Bioenhanced Soldiers (12) now wait for JADC2 and Autonomous Weapons as well.
+`test_combat_unit_tier_order.py` holds every land unit group to this order.
 
 ## 7. New content (phase 3)
 

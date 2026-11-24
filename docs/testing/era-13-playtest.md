@@ -52,7 +52,9 @@ The old-save repair (`TE_ERA13_TECH_REPAIR`) was retired in the vanilla 1.15 mig
 
 1. **The tree.** Era 11 lists 24 technologies. AI Agents follows Generative
    AI. Self-Driving Laboratories and Humanoid Robotics follow AI Agents.
-   Autonomous Weapons follows Swarm Technology and JADC2. Artificial General
+   Autonomous Weapons follows JADC2 and Unmanned Aerial Vehicles, and Swarm
+   Technology follows Autonomous Weapons and Rapid Deployment Forces (since
+   2026-11-24: Robotic Soldiers before Swarm Bots). Artificial General
    Intelligence's arrows come from Self-Driving Laboratories and Humanoid
    Robotics. The four new technologies show their own icons.
 2. **The moved unlocks.**

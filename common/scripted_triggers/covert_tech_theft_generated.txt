@@ -1570,8 +1570,8 @@ covert_tech_stealable_military = {
 				can_research = autonomous_weapons
 				AND = {
 					is_researching_technology = autonomous_weapons
-					has_technology_researched = swarm_technology
 					has_technology_researched = jadc2
+					has_technology_researched = unmanned_aerial_vehicles
 				}
 			}
 			$TARGET$ ?= { has_technology_researched = autonomous_weapons }
@@ -2658,8 +2658,8 @@ covert_tech_stealable_military = {
 				can_research = swarm_technology
 				AND = {
 					is_researching_technology = swarm_technology
+					has_technology_researched = autonomous_weapons
 					has_technology_researched = rapid_deployment_forces
-					has_technology_researched = unmanned_aerial_vehicles
 				}
 			}
 			$TARGET$ ?= { has_technology_researched = swarm_technology }
