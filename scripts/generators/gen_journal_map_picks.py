@@ -142,7 +142,7 @@ GROUPS = [
     dict(key="classes", name="Classes",
          note="every pop type, the yearly walk's (whatever the Demographics rule), by its people or by its share of "
               "the people as Map Options' Count/Share switch says (the header's right names it): property, learning "
-              "and the state, industry, the land, offices and the army",
+              "and the state, industry, the land, offices and the army, and the space forces",
          rows=[[classes.slot(c) for c in classes.CLASSES if c["pop"] in row] for row in classes.ROWS],
          right="te_jmap_classes_now"),
     dict(key="economy", name="Economy",

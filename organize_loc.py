@@ -155,6 +155,33 @@ def find_law_keys(project_directory):
     return law_keys
 
 
+def find_pop_type_keys(project_directory):
+    """Finds the engine's implicit keys for the mod's pop types and social classes.
+
+    A pop type is named by `<type>`, `<type>_no_icon`, `<type>_only_icon` and
+    `<type>_desc`, and one with qualifications by `<TYPE>_QUALIFICATIONS_DESC`
+    (vanilla's `pop_types_l_english.yml`); a social class by `<class>` and
+    `<class>_desc` (`social_hierarchy_l_english.yml`). No script names them, so
+    the mod's first pop type (Spacers, 2026-11-24) and its classes were filed to
+    te_unused_l_english.yml.
+    """
+    keys = set()
+    for sub, suffixes in (("pop_types", ("", "_no_icon", "_only_icon", "_desc")),
+                          ("social_classes", ("", "_desc"))):
+        path = os.path.join(project_directory, "common", sub)
+        if not os.path.isdir(path):
+            continue
+        for file in sorted(os.listdir(path)):
+            if not file.endswith(".txt"):
+                continue
+            with open(os.path.join(path, file), "r", encoding="utf-8-sig") as f:
+                for base_key in re.findall(r"^([\w\.-]+)\s*=\s*{", f.read(), re.MULTILINE):
+                    keys.update(f"{base_key}{suffix}" for suffix in suffixes)
+                    if sub == "pop_types":
+                        keys.add(f"{base_key.upper()}_QUALIFICATIONS_DESC")
+    return keys
+
+
 def find_diplo_action_keys(project_directory):
     """Finds implicit key suites for diplomatic actions.
 
@@ -1028,6 +1055,7 @@ def build_output_plan(project_directory):
         find_country_keys,
         find_law_keys,
         find_diplo_action_keys,
+        find_pop_type_keys,
         find_treaty_article_keys,
         find_political_movement_keys,
         find_journal_entry_keys,

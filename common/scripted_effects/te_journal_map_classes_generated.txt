@@ -22,6 +22,7 @@ te_jmap_class_walk_init = {
 	set_local_variable = { name = te_jmap_w_engineers value = 0 }
 	set_local_variable = { name = te_jmap_w_academics value = 0 }
 	set_local_variable = { name = te_jmap_w_capitalists value = 0 }
+	set_local_variable = { name = te_jmap_w_spacers value = 0 }
 }
 
 # Pop scope, in the walk's pop loop: one class each, the classes with the most pops asked first.
@@ -86,6 +87,10 @@ te_jmap_class_walk_pop = {
 		limit = { is_pop_type = capitalists }
 		change_local_variable = { name = te_jmap_w_capitalists add = total_size }
 	}
+	else_if = {
+		limit = { is_pop_type = spacers }
+		change_local_variable = { name = te_jmap_w_spacers add = total_size }
+	}
 }
 
 # State scope, after the walk's pop loop. The tenth pass's four share maps read other names until #1975
@@ -107,6 +112,7 @@ te_jmap_class_walk_store = {
 	set_variable = { name = te_dg_cls_engineers value = local_var:te_jmap_w_engineers }
 	set_variable = { name = te_dg_cls_academics value = local_var:te_jmap_w_academics }
 	set_variable = { name = te_dg_cls_capitalists value = local_var:te_jmap_w_capitalists }
+	set_variable = { name = te_dg_cls_spacers value = local_var:te_jmap_w_spacers }
 	if = {
 		limit = { has_variable = te_dg_capitalists }
 		remove_variable = te_dg_capitalists
@@ -247,5 +253,13 @@ te_jmap_class_flip = {
 	else_if = {
 		limit = { te_jmap_selector = 73 te_jmap_class_mode = 0 }
 		te_jmap_set_selector = { SEL = 62 }
+	}
+	else_if = {
+		limit = { te_jmap_selector = 88 te_jmap_class_mode = 1 }
+		te_jmap_set_selector = { SEL = 89 }
+	}
+	else_if = {
+		limit = { te_jmap_selector = 89 te_jmap_class_mode = 0 }
+		te_jmap_set_selector = { SEL = 88 }
 	}
 }

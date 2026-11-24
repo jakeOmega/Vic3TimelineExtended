@@ -129,8 +129,10 @@ class SlotTest(unittest.TestCase):
     def test_a_row_counts_its_slots_not_its_buttons(self):
         rows = next(g["rows"] for g in gen.GROUPS if g["key"] == "classes")
         self.assertEqual(rows, [[f"class_{p}" for p in row] for row in gen.classes.ROWS])
-        self.assertTrue(all(len(row) == gen.ROW_WIDTH for row in rows))
-        self.assertTrue(all(len(gen.row_maps(row)) == 2 * gen.ROW_WIDTH for row in rows))
+        # full rows, but for the last (the space forces' Spacers, a row of one)
+        self.assertTrue(all(len(row) == gen.ROW_WIDTH for row in rows[:-1]))
+        self.assertTrue(0 < len(rows[-1]) <= gen.ROW_WIDTH)
+        self.assertTrue(all(len(gen.row_maps(row)) == 2 * len(row) for row in rows))
 
     def test_a_class_pick_asks_the_switch(self):
         body = gen.render_sguis()

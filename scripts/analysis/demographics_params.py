@@ -815,7 +815,7 @@ ENGINE_FIELDS_ON_TOP = frozenset(f for fam, f in ENGINE_LINE_TYPES if fam == "on
 DEATH_CAUSES = ("inf", "chr", "ext", "work", "war")
 DEATH_CAUSE_TYPES = {c: f"state_death_cause_{c}_mult" for c in DEATH_CAUSES}
 # the pop types whose class line counts under war (the rest: accidents and violence)
-DEATH_CAUSE_WAR_CLASSES = ("officers", "soldiers")
+DEATH_CAUSE_WAR_CLASSES = ("officers", "soldiers", "spacers")
 # The step places each natural cause's deaths on top on its own ages (demographics_model.cause_scales): a cause the
 # model gives under CAUSE_SCALE_MIN_DEATHS deaths a step can't take its own, which join the rest; and the panel divides
 # each cause's estimate by its scale, at least CAUSE_SCALE_MIN, to recover the model's own deaths.

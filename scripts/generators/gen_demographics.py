@@ -1594,7 +1594,8 @@ def engine_rate_terms(o, root):
     absorbed_terms(o, root, literacy, mild)
     conditions = static_modifier(root, "working_conditions")
     parents = building_group_parents(root)
-    types = sorted(_snapshot(root, "pop_types"))
+    # vanilla's types and the mod's own (Spacers, common/pop_types/te_spacers.txt)
+    types = sorted(set(_snapshot(root, "pop_types")) | set(_mod_entries(root, "pop_types")))
     pairs = set()   # (group, pop type or None) for every registered building-group mortality key the walk reads
     for key in sorted(reg):
         m = re.fullmatch(r"building_group_(\w+?)_mortality_mult", key)
