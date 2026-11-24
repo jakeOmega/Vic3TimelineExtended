@@ -305,14 +305,17 @@ gm_disp_is_landmark = {
 
 # The picture's grandeur frame (spec 2026-10-11 §3.5): the step the monument's
 # own effects have reached, 0 (plain) to 5 (five steps and more), read from the
-# live level on the first five ends of gm_curve_steps_lin_f5.
+# live level on the first five ends of gm_curve_steps_lin_f5. From the top
+# step down, stopping at the first reached: each of the row's five frame icons
+# reads this every frame, and five ifs read the grandeur five times each
+# (late_game_performance.md, 2026-11-24).
 gm_disp_frame_tier = {
 	value = 0
-	if = { limit = { gm_state_grandeur >= 5 } value = 1 }
-	if = { limit = { gm_state_grandeur >= 15 } value = 2 }
-	if = { limit = { gm_state_grandeur >= 30 } value = 3 }
-	if = { limit = { gm_state_grandeur >= 50 } value = 4 }
 	if = { limit = { gm_state_grandeur >= 75 } value = 5 }
+	else_if = { limit = { gm_state_grandeur >= 50 } value = 4 }
+	else_if = { limit = { gm_state_grandeur >= 30 } value = 3 }
+	else_if = { limit = { gm_state_grandeur >= 15 } value = 2 }
+	else_if = { limit = { gm_state_grandeur >= 5 } value = 1 }
 }
 
 # The monument's picture (gm_picture_effects.txt), for the gm_picture type: the

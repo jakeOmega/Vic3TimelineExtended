@@ -4004,6 +4004,47 @@ def picture_key(code):
     return "undedicated" if skin == "undedicated" else f"{skin}__{form}"
 
 
+def picture_group(code):
+    """The range of the group widget a picture code's icon sits in, in the three picture types
+    (gm_picture, gm_tr_picture, gm_tr_trophy_picture; 2026-11-24, late_game_performance.md):
+    a hundred codes a group below 1,000,000 (a block of PICTURES each), twenty from there. A row
+    tests its code against each group's range and then only its own group's icons, where one
+    script value per picture ran every icon of every row each frame."""
+    if code < 1_000_000:
+        lo = code // 100 * 100
+        return lo, lo + 100
+    base = code // 1_000_000 * 1_000_000
+    lo = base + (code - base) // 20 * 20
+    return lo, lo + 20
+
+
+def assert_grouped_pictures(case, body, obj, value, var, floor, codes):
+    """Hold a picture type's squashed, comment-free body to its grouped shape: the floor code's
+    icon (or none) on the display value; one wrapper shown while the value is above the floor; in
+    it, each group widget on its range of the stored variable (read only once the wrapper says it
+    is set), holding exactly the icons of the codes in that range, each on the variable. `codes`
+    maps each code above the floor to its texture key."""
+    read_ = f"{obj}.MakeScope.Var('{var}').GetValue"
+    wrapper = (f"widget = {{ size = {{ 100% 100% }} visible = \"[GreaterThan_CFixedPoint( "
+               f"{obj}.MakeScope.ScriptValue('{value}'), '(CFixedPoint){floor}' )]\"")
+    case.assertEqual(body.count(wrapper), 1, f"one wrapper on {value} above {floor}")
+    # The display value is read only by the floor's icon and the wrapper: the rest read the variable.
+    case.assertEqual(body.count(f"ScriptValue('{value}')"), 2 if floor else 1, value)
+    groups = {}
+    for code in codes:
+        groups.setdefault(picture_group(code), []).append(code)
+    for (lo, hi), members in groups.items():
+        head = (f"widget = {{ size = {{ 100% 100% }} visible = \"[And( GreaterThanOrEqualTo_CFixedPoint( {read_}, "
+                f"'(CFixedPoint){lo}' ), LessThan_CFixedPoint( {read_}, '(CFixedPoint){hi}' ) )]\" ")
+        icons = "".join(f"icon = {{ visible = \"[EqualTo_CFixedPoint( {read_}, '(CFixedPoint){code}' )]\" "
+                        f"size = {{ 100% 100% }} texture = \"gfx/interface/icons/gm_pictures/{codes[code]}.dds\" }} "
+                        for code in members)
+        case.assertIn(head + icons + "}", body, f"group {lo}-{hi}: a new code goes in the group whose range holds it")
+    case.assertEqual(body.count("And( GreaterThanOrEqualTo_CFixedPoint("), len(groups), "no group outside the rule")
+    case.assertEqual(body.count(f"\"[EqualTo_CFixedPoint( {read_}, "), len(codes), "one icon a code")
+    case.assertLess(body.index(wrapper), body.index(f"Var('{var}')"), "no read of the variable before its guard")
+
+
 def committed(rel):
     """Whether a texture is on disk or tracked by git. CI checks out without
     gfx/ (sparse), so a committed texture can be absent from the working tree
@@ -4114,11 +4155,11 @@ class PictureTests(unittest.TestCase):
         raw = raw_block_at(gui, r"(?m)^\ttype gm_picture = widget \{")
         self.assertIsNotNone(raw)
         body = squash(strip_comments(raw))
-        for code in PICTURES:
-            self.assertIn(f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_picture_code'), "
-                          f"'(CFixedPoint){code}' )]\" size = {{ 100% 100% }} "
-                          f"texture = \"gfx/interface/icons/gm_pictures/{picture_key(code)}.dds\"", body, code)
-        self.assertEqual(body.count("ScriptValue('gm_disp_picture_code')"), len(PICTURES))
+        self.assertTrue(body.startswith("icon = { visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue("
+                                        "'gm_disp_picture_code'), '(CFixedPoint)1' )]\" size = { 100% 100% } "
+                                        "texture = \"gfx/interface/icons/gm_pictures/undedicated.dds\" }"), body[:200])
+        assert_grouped_pictures(self, body, "State", "gm_disp_picture_code", "gm_picture_code", 1,
+                                {code: picture_key(code) for code in PICTURES if code != 1})
 
     def test_every_picture_has_its_art(self):
         import importlib
@@ -4148,14 +4189,16 @@ class PictureTests(unittest.TestCase):
         values = read(VALUES)
         steps = [start + size for start, size in lin_curve_terms(5, 5)]
         self.assertEqual(steps, [5, 15, 30, 50, 75])
-        expected = "value = 0 " + " ".join(f"if = {{ limit = {{ gm_state_grandeur >= {g} }} value = {i + 1} }}"
-                                          for i, g in enumerate(steps))
+        # From the top step down, stopping at the first reached (late_game_performance.md, 2026-11-24).
+        expected = "value = 0 " + " ".join(f"{'if' if i == len(steps) - 1 else 'else_if'} = {{ limit = {{ "
+                                          f"gm_state_grandeur >= {g} }} value = {i + 1} }}"
+                                          for i, g in reversed(list(enumerate(steps))))
         self.assertEqual(squash(block(values, "gm_disp_frame_tier")), expected)
 
     def test_frames_draw_over_the_pictures(self):
         raw = raw_block_at(read(WIDGET), r"(?m)^\ttype gm_picture = widget \{")
         body = squash(strip_comments(raw))
-        last_picture = body.rindex("ScriptValue('gm_disp_picture_code')")
+        last_picture = body.rindex("Var('gm_picture_code')")
         for tier in range(1, 6):
             frame = (f"visible = \"[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('gm_disp_frame_tier'), "
                      f"'(CFixedPoint){tier}' )]\" size = {{ 100% 100% }} "
@@ -4997,23 +5040,25 @@ class LevelsApartTests(unittest.TestCase):
         self.assertEqual(squash(block(mon, "gm_state_built_levels")),
                          "value = gm_state_level subtract = gm_state_secondary_levels min = 1 "
                          "if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }")
-        # The size is the record once there is one.
+        # The size is the record once there is one; the building's share only
+        # without one (computed in the else, not before: late_game_performance.md).
         self.assertEqual(squash(block(mon, "gm_state_primary_levels")),
-                         "value = gm_state_built_levels "
+                         "value = 0 if = { limit = { has_building = building_grand_monument } "
                          "if = { limit = { has_variable = gm_levels } value = var:gm_levels } "
-                         "if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }")
+                         "else = { value = gm_state_built_levels } }")
 
     def test_starting_grandeur(self):
         """Sites spec 2026-10-18 §3.2: grandeur is starting grandeur + age; a
         missing record reads as the levels (old saves, trophies, digs)."""
         mon = read(MON_VALUES)
         self.assertEqual(squash(block(mon, "gm_state_primary_start")),
-                         "value = gm_state_primary_levels "
+                         "value = 0 if = { limit = { has_building = building_grand_monument } "
                          "if = { limit = { has_variable = gm_start_grandeur } value = var:gm_start_grandeur } "
-                         "if = { limit = { NOT = { has_building = building_grand_monument } } value = 0 }")
+                         "else = { value = gm_state_primary_levels } }")
         self.assertEqual(squash(block(mon, "gm_mon_start")),
-                         "value = gm_mon_levels "
-                         "if = { limit = { has_variable = gm_tr_start_grandeur } value = var:gm_tr_start_grandeur }")
+                         "value = 0 "
+                         "if = { limit = { has_variable = gm_tr_start_grandeur } value = var:gm_tr_start_grandeur } "
+                         "else = { value = gm_mon_levels }")
         self.assertEqual(squash(block(mon, "gm_state_primary_grandeur")),
                          "value = gm_state_primary_start add = gm_state_primary_age")
         self.assertEqual(squash(block(mon, "gm_mon_grandeur")), "value = gm_mon_start add = gm_mon_age")
