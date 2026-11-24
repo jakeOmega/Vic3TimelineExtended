@@ -406,7 +406,7 @@ BOUNDED_WORDS = {"je_space_race_widget_ovc_ebase_word_split": _ebase_split_bound
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_(?:brief_)?empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc"
              r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro"
-             r"|eb_no_gain)")
+             r"|eb_no_gain|cw_gone)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -600,6 +600,23 @@ CELLS = {
     "show all or fewer worlds (te_sr_sec_solar_system)": (
         ("te_sr_sec_solar_system", 'text = "je_space_race_widget_ss_show_all"'),
         r"je_space_race_widget_ss_show_(all|fewer)"),
+    # The system map (the owner, 2026-11-23) and what it adds to Solar System.
+    "back to every location (te_sr_sec_solar_system)": (
+        ("te_sr_sec_solar_system", 'text = "je_space_race_widget_ss_all_locations"'),
+        r"je_space_race_widget_ss_all_locations"),
+    "a location's short name on the map (te_sr_map_location)": (
+        ("te_sr_map_location", 'block "loc_name"'),
+        r"je_space_race_widget_map_loc_(?!tt_|hint$)\w+"),
+    "a word of the map's key (te_sr_map_key)": (
+        ("te_sr_map_key", 'block "key_text"'),
+        r"je_space_race_widget_(map_key_(?:other|target|inbound)|ss_ours|ss_unclaimed|ss_free)"),
+    # The Colonies window (the owner, 2026-11-23): the count over its list.
+    "the window's count, its label (te_sr_colony_popup_body)": (
+        ("te_sr_colony_popup_body", 'text = "je_space_race_widget_colonies_held_label"'),
+        r"je_space_race_widget_colonies_held_label"),
+    "the window's count, its figure (te_sr_colony_popup_body)": (
+        ("te_sr_colony_popup_body", 'text = "je_space_race_widget_cw_held_figure"'),
+        r"je_space_race_widget_cw_held_figure"),
     "the overview cells' captions (te_banking_ov_cell)": (
         ("te_banking_ov_cell", None),
         r"je_space_race_widget_ovc_\w+_cap"),
@@ -735,7 +752,7 @@ CELLS = {
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
-                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title)")
+                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title|cw_title)")
 
 
 # The Bases move area's lines that name a place, through the controls' custom
@@ -760,7 +777,10 @@ def _cell(gui, type_name, marker):
         assert re.search(rf"type {type_name} = textbox \{{", gui), type_name
         box = _type_body(gui, type_name)
         return _width(box), _font(box)
-    boxes = [b for b in _textboxes(_type_body(gui, type_name)) if marker in b]
+    body = _type_body(gui, type_name)
+    if type_name == "te_sr_colony_row":  # and its page in the Colonies window, filled from the row's blocks
+        body += _type_body(gui, "te_sr_colony_page")
+    boxes = [b for b in _textboxes(body) if marker in b]
     assert boxes, f"no textbox holds {marker}"
     # A label shown twice (a colony's list row and its page) is held to the narrower cell.
     box = boxes[0] if len(boxes) == 1 else min(boxes, key=_width)
@@ -963,11 +983,11 @@ class FigureBudgetTest(unittest.TestCase):
                 self.assertLessEqual(need, width, f"{figure!r}: {need:.0f} units in a {width}-wide cell")
 
     def test_a_colony_page_s_figures(self):
-        """A colony's page shows the list's figures again, in its tiles'
-        te_sr_page_value (colony management design § 8), and the specialization
-        names in full in its module rows."""
+        """A colony's page (te_sr_colony_page, in the Colonies window) shows the
+        list's figures again, in its tiles' te_sr_page_value (colony management
+        design § 8), and the specialization names in full in its module rows."""
         gui = _read(GUI)
-        row = _type_body(gui, "te_sr_colony_row")
+        row = _type_body(gui, "te_sr_colony_page")
         width, font = _width(_type_body(gui, "te_sr_page_value")), _font(_type_body(gui, "te_sr_page_value"))
         shown = re.findall(r'te_sr_page_value = \{[^{}]*block "(\w+)"', row)
         self.assertGreaterEqual(len(shown), 12)
@@ -1091,7 +1111,7 @@ class FigureBudgetTest(unittest.TestCase):
         gui, rows = _read(GUI), _read(ROWS)
         box = _textbox_with(_type_body(gui, "te_sr_eb_ground_part"), 'block "ebg_ground"')
         words = re.findall(r'blockoverride "eb_ground" \{\s*text = "(sr_ground_\w+)"', rows)
-        self.assertEqual(len(words), 41)   # the 40 colonies' rows and the near-Earth box
+        self.assertEqual(len(words), 81)   # the 40 colonies' rows, their pages and the near-Earth box
         for key in sorted(set(words)):
             with self.subTest(key=key):
                 self.assertLessEqual(len(_loc(key)) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), _loc(key))
@@ -1183,8 +1203,9 @@ class FigureBudgetTest(unittest.TestCase):
 
     def test_the_solar_system_count(self):
         """The count line is a SelectLocalization of two keys (not a text = key):
-        Solar System's, and the colony target popup's (UI pass design § 5)."""
-        for type_name, keys in (("te_sr_sec_solar_system", ("ss_filtered", "ss_all")),
+        Solar System's (with a third while the map has a location picked), and
+        the colony target popup's (UI pass design § 5)."""
+        for type_name, keys in (("te_sr_sec_solar_system", ("ss_filtered", "ss_all", "ss_one_location")),
                                 ("te_sr_target_popup_body", ("tp_count", "tp_all"))):
             sec = _type_body(_read(GUI), type_name)
             box = _textbox_with(sec, f"'je_space_race_widget_{keys[0]}'")

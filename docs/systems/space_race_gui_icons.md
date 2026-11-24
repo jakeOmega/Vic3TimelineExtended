@@ -194,6 +194,23 @@ A picture heads Space Fleets (`te_sr_fleet_banner`, 480 × 110; owner, 2026-11-1
 
 The exhaust carries the drive (owner, 2026-11-14): orange for chemical, blue for fusion, white for the torch, violet for antimatter. The first chemical and torch pictures were redone for it: white shuttles over a blue Earth with no flame, and plumes run back in a steep perspective that read as odd depth. The banners are the registry's `space_banner` category. Each is rendered wide (1792 × 416) and written at 960 × 220, twice the slot and exactly its shape, so the game has nothing to crop and the scene is composed for the shape: the ships sit in a band across the middle. Both sides are multiples of 4, which block compression needs.
 
+## Solar System: the system map (2026-11-23)
+
+The Solar System tab opens on a map (`te_sr_system_map`; owner, 2026-11-23: "some kind of schematic view of the solar system"): the Sun, the nine locations on their orbits and a marker for each of the 40 sites. A location's icon is its world's from "Colonies: the kind of world" and "Locations", as the fleets' Locations strip draws it. The backdrop and the markers are a diagram's parts, so they are drawn by code, not rendered (`scripts/image_pipeline/gen_space_map_art.py`, deterministic; `--check` in `test_space_race_map.py`), as the fleet cards' order signs are. Another power's colony whose holder we know is that power's flag, drawn small, so it has no file here.
+
+| Where | Shows | File |
+|---|---|---|
+| Behind the map's nine columns (480 × 148) | the Sun at the left edge, an orbit through each column's center on the icons' line, the asteroid belt and the Kuiper belt as bands of specks, a few faint stars (drawn) | `map_backdrop.dds` |
+| A site of ours (14 px, as every marker) | a gold disc, the Sites pie's color for ours (drawn) | `map_pip_ours.dds` |
+| A site another power holds, while we have not learned whose | a red disc, the pie's color for claimed (drawn) | `map_pip_other.dds` |
+| An unclaimed site | a pale ring (drawn) | `map_pip_unclaimed.dds` |
+| A free colony | a teal disc (drawn) | `map_pip_free.dds` |
+| An occupied colony | the red disc with a pale bar across it (drawn) | `map_pip_occupied.dds` |
+| A ruined site | a grey cross (drawn) | `map_pip_ruined.dds` |
+| Round our colony fleets' target (20 px, the marker inside it) | a gold ring in four arcs (drawn) | `map_target.dds` |
+
+A colony fleet on its way to a site is the transit track's dart (`track_ship.dds`, 9 px at the marker's corner). The map's key under it shows the same files at 14 px.
+
 ## Kept as they are
 
 The pie's frame (`gfx/interface/backgrounds/round_frame_dec.dds`) is vanilla's decoration, used as vanilla uses it. So are the Rivals rows' band marker (`gfx/interface/progressbar/progressbar_marker.dds`) and the transparent track under it (`generic_icons/transparent.dds`), drawn as the UN's authority bar draws them. The rows have no icons of their own.

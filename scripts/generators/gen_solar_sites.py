@@ -56,6 +56,7 @@ A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -4267,7 +4268,9 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
     if picker:
         out += _override("site_visible", f'visible = "[Or( GetVariableSystem.Exists(\'{TP_ALL}\'), {_eq(f"sr_disp_tp_shown_{k}", 1)} )]"')
     else:
-        out += _override("site_visible", f'visible = "[Or( GetVariableSystem.Exists(\'{SS_ALL}\'), {_eq(f"sr_disp_ss_shown_{k}", 1)} )]"')
+        out += _override("site_visible", f'visible = "[{_ss_listed(site.location, _eq(f"sr_disp_ss_shown_{k}", 1))}]"')
+        # Ours: the arrow beside the word opens the colony's window (the owner, 2026-11-23).
+        out += _override("site_open", f'visible = "[And( {_CONTESTED}, {_eq(disp, 1)} )]"', *_open_colony(k))
     out += _override("site_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
     out += _override("site_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_ss_site_tt_{k}"')
     out += _override("site_ours_visible", f'visible = "[{_eq(disp, 1)}]"')
@@ -4321,7 +4324,6 @@ def _site_row(site: Site, *, picker: bool) -> list[str]:
 _CONTESTED = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_contested'), '(CFixedPoint)1' )"
 _FULL = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_colonies_full'), '(CFixedPoint)1' )"
 _VIEW_DEFENCES = f"And( {_FULL}, GetVariableSystem.HasValue('sr_colony_view', 'defences') )"
-_VIEW_DETAIL = "GetVariableSystem.HasValue('sr_colony_view', 'detail')"
 # The Bases view (ground types design § 9.1), with In-Situ Resource Utilization.
 _EBASE_SHOWN = "EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_shown'), '(CFixedPoint)1' )"
 _VIEW_BASES = f"And( {_EBASE_SHOWN}, GetVariableSystem.HasValue('sr_colony_view', 'bases') )"
@@ -4331,6 +4333,27 @@ def _FOCUS(k: str) -> str:
     return f"GetVariableSystem.HasValue('sr_colony_focus', '{k}')"
 SS_ALL = "sr_panel_solar_system_all_open"
 TP_ALL = "sr_panel_target_popup_all_open"   # the colony target popup's Show all (UI pass design § 5)
+SS_LOC = "sr_ss_loc"                        # the location picked on the system map, absent for none
+
+
+def _ss_listed(loc: str, usual: str) -> str:
+    """Whether Solar System's list shows a row or a heading of `loc`: with a location
+    picked on the map, that location's alone, every site of it; with none, `usual`
+    (the row's or heading's own test) or everything under Show all."""
+    return (f"Or( GetVariableSystem.HasValue('{SS_LOC}', '{loc}'), And( Not( GetVariableSystem.Exists('{SS_LOC}') ), "
+            f"Or( GetVariableSystem.Exists('{SS_ALL}'), {usual} ) ) )")
+
+
+def _open_colony(k: str) -> tuple[str, str]:
+    """The click that opens the Colonies window on colony `k` (te_sr_colony_popup): the
+    colony shown, then the popup's key."""
+    return (f"onclick = \"[GetVariableSystem.Set('sr_colony_focus', '{k}')]\"",
+            "onclick = \"[GetVariableSystem.Set('te_popup', 'sr_colony')]\"")
+
+
+def _ours(k: str) -> str:
+    """A colony of ours, occupied or not: what the Colonies window lists and shows."""
+    return f"Or( {_eq(f'sr_disp_def_{k}', 1)}, {_eq(f'sr_disp_site_{k}', 1)} )"
 
 
 def _colony_row(site: Site) -> list[str]:
@@ -4339,19 +4362,80 @@ def _colony_row(site: Site) -> list[str]:
     while it is ours at all (sr_disp_def_<key>, gen_space_fleets), so an
     occupied colony shows there with its occupier, or with its levels away."""
     k = site.key
-    prio, status, dstatus = f"sr_disp_site_prio_{k}", f"sr_disp_site_aut_status_{k}", f"sr_disp_def_status_{k}"
     out = ["\t\tte_sr_colony_row = {"]
-    # A colony's page shows this row alone (colony management design § 8).
     held_all = f"Or( {_VIEW_DEFENCES}, {_VIEW_BASES} )"
     listed = (f"Or( And( {held_all}, {_eq(f'sr_disp_def_{k}', 1)} ), "
               f"And( Not( {held_all} ), {_eq(f'sr_disp_site_{k}', 1)} ) )")
-    paged = (f"And( {_FOCUS(k)}, Or( {_eq(f'sr_disp_def_{k}', 1)}, {_eq(f'sr_disp_site_{k}', 1)} ) )")
-    out += _override("colony_visible",
-                     f'visible = "[Or( And( Not( {_VIEW_DETAIL} ), {listed} ), And( {_VIEW_DETAIL}, {paged} ) )]"')
-    out += _override("colony_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
-    out += _override("colony_focus",
+    out += _override("colony_visible", f'visible = "[{listed}]"')
+    # The name and its arrow open the Colonies window on this colony (the owner, 2026-11-23).
+    out += _override("colony_focus", *_open_colony(k))
+    return out + _without(_colony_blocks(site), _PAGE_ONLY) + ["\t\t}"]
+
+
+def _colony_page(site: Site) -> list[str]:
+    """One colony's page in the Colonies window (te_sr_colony_page), filled from the
+    list row's own blocks: shown while the window is on this colony and it is ours."""
+    k = site.key
+    out = ["\t\tte_sr_colony_page = {"]
+    out += _override("page_visible", f'visible = "[And( {_FOCUS(k)}, {_ours(k)} )]"')
+    out += _override("page_place", f'text = "je_space_race_widget_ss_loc_{site.location}"')
+    return out + _without(_colony_blocks(site), _ROW_ONLY) + ["\t\t}"]
+
+
+def _colony_gone(site: Site) -> list[str]:
+    """The line the Colonies window shows in a page's place when the colony it was
+    opened on is no longer ours (lost, ceded or abandoned with the window open)."""
+    k = site.key
+    return ["\t\tte_sr_note = {",
+            f'\t\t\tvisible = "[And( {_FOCUS(k)}, Not( {_ours(k)} ) )]"',
+            '\t\t\ttext = "je_space_race_widget_cw_gone"',
+            "\t\t}"]
+
+
+def _switch_row(site: Site) -> list[str]:
+    """One colony in the Colonies window's list (te_sr_colony_switch_row): shown while
+    ours, greyed while it is the colony shown, a click showing it."""
+    k = site.key
+    out = ["\t\tte_sr_colony_switch_row = {"]
+    out += _override("switch_row",
+                     f'visible = "[{_ours(k)}]"',
+                     f'enabled = "[Not( {_FOCUS(k)} )]"',
                      f"onclick = \"[GetVariableSystem.Set('sr_colony_focus', '{k}')]\"",
-                     "onclick = \"[GetVariableSystem.Set('sr_colony_view', 'detail')]\"")
+                     f'tooltip = "je_space_race_widget_colony_site_tt_{k}"')
+    out += _override("switch_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
+    out += _override("switch_name", f'text = "sr_site_name_{k}"')
+    return out + ["\t\t}"]
+
+
+# The blocks only one of the two has (test_solar_sites.py holds both to the types):
+# a module's dismantling, Revoke, the Resort Colony room and the specializations'
+# full names are the page's; the crews cell in its three colors is the list's.
+_PAGE_ONLY = re.compile(r"mod_\w+_dismantl\w+|aut_revoke_button|module_(?:draw|resorts|resorts_tooltip)|page_name_[ab]")
+_ROW_ONLY = re.compile(r"settler_crews(?:_exact|_short)?")
+
+
+def _without(lines: list[str], names: re.Pattern) -> list[str]:
+    """`lines` (an instance's blockoverrides, as _override writes them) less the
+    blocks whose name matches `names` whole."""
+    out, skipping = [], False
+    for line in lines:
+        opened = re.fullmatch(r'\t\t\tblockoverride "(\w+)" \{', line)
+        if opened:
+            skipping = bool(names.fullmatch(opened.group(1)))
+        if not skipping:
+            out.append(line)
+        elif line == "\t\t\t}":
+            skipping = False
+    return out
+
+
+def _colony_blocks(site: Site) -> list[str]:
+    """A colony's blocks, for its row in the list (te_sr_colony_row) and its page in
+    the Colonies window (te_sr_colony_page): each instance takes the ones its type
+    has (_without)."""
+    k = site.key
+    prio, status, dstatus = f"sr_disp_site_prio_{k}", f"sr_disp_site_aut_status_{k}", f"sr_disp_def_status_{k}"
+    out = _override("colony_icon", f'texture = "gfx/interface/icons/space_race_icons/colony_{site.kind}.dds"')
     out += _override("colony_name", f'text = "sr_site_name_{k}"', f'tooltip = "je_space_race_widget_colony_site_tt_{k}"')
     # People
     out += _override("priority_button",
@@ -4472,6 +4556,89 @@ def _colony_row(site: Site) -> list[str]:
                      f'visible = "[{_eq(f"sr_disp_def_occupier_{k}", 1)}]"')
     # Bases (gen_ebase.colony_row_overrides; ground types design § 9.1)
     out += _ebase_view().colony_row_overrides(k)
+    return out
+
+
+# --- The system map (te_sr_system_map; the owner, 2026-11-23) ----------------
+# A location's world, on the map and in the fleets' Locations strip
+# (gen_space_fleets.LOCATION_ICONS is this table): the colonies' kind-of-world
+# icons, by the worlds found there, and for the Moon's location the Earth in
+# its orbit ring (space_race_gui_icons.md, "Locations").
+_SR_ICONS = "gfx/interface/icons/space_race_icons"
+LOCATION_ICONS = {
+    "earth": f"{_SR_ICONS}/location_earth.dds",
+    "inner": f"{_SR_ICONS}/colony_venus.dds", "mars": f"{_SR_ICONS}/colony_mars.dds",
+    "asteroids": f"{_SR_ICONS}/colony_asteroid.dds", "jupiter": f"{_SR_ICONS}/colony_jovian.dds",
+    "saturn": f"{_SR_ICONS}/colony_saturnian.dds", "uranus": f"{_SR_ICONS}/colony_uranian.dds",
+    "neptune": f"{_SR_ICONS}/colony_neptunian.dds", "kuiper": f"{_SR_ICONS}/colony_dwarf.dds",
+}
+# The map is of sites, and the first location's are on the Moon, so there it
+# draws the Moon (the lunar colonies' own icon) where the fleets' strip, which
+# is of places a fleet can be, draws the Earth it orbits.
+MAP_ICONS = {**LOCATION_ICONS, "earth": f"{_SR_ICONS}/colony_moon.dds"}
+# A marker's place in its location's column (te_sr_map_location, 50 wide): two
+# abreast from 80 down, 20 apart, the pair centred; an odd one out centred alone.
+MAP_PIP, MAP_PIPS_TOP, MAP_COLUMN = 20, 80, 50
+# A location's short name, 100 wide and centred on its column, on one of two
+# lines by turns so that neighbours never share one (the type's comment).
+MAP_NAME_WIDTH, MAP_NAME_LINES = 100, (40, 58)
+
+
+def map_pip_position(i: int, n: int) -> tuple[int, int]:
+    """Marker `i` of a location's `n`, as (x, y) in the column."""
+    row, col = divmod(i, 2)
+    alone = n % 2 == 1 and i == n - 1
+    x = (MAP_COLUMN - MAP_PIP) // 2 if alone else (MAP_COLUMN - 2 * MAP_PIP) // 2 + col * MAP_PIP
+    return x, MAP_PIPS_TOP + row * MAP_PIP
+
+
+def _map_pip(site: Site, i: int, n: int) -> list[str]:
+    """One site's marker on the map, as lines of its location's loc_pips block."""
+    k = site.key
+    disp = f"sr_disp_site_{k}"
+    x, y = map_pip_position(i, n)
+    ours = f"And( {_CONTESTED}, {_eq(disp, 1)} )"
+    hover = f'tooltip = "je_space_race_widget_ss_site_tt_{k}"'
+    blocks = [("pip_position", [f"position = {{ {x} {y} }}"]),
+              ("pip_target_visible", [f'visible = "[{_eq(f"sr_disp_site_target_{k}", 2)}]"']),
+              ("pip_unclaimed_visible", [f'visible = "[{_eq(disp, 0)}]"']),
+              ("pip_ours_visible", [f'visible = "[{_eq(disp, 1)}]"']),
+              ("pip_other_visible", [f'visible = "[{_eq(disp, 2)}]"']),
+              ("pip_context", [f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ss_cap_{k}').GetState]\""]),
+              ("pip_unknown_visible", [f'visible = "[{_eq(disp, 3)}]"']),
+              ("pip_free_visible", [f'visible = "[{_eq(disp, 4)}]"']),
+              ("pip_occupied_visible", [f'visible = "[{_eq(disp, 5)}]"']),
+              ("pip_ruined_visible", [f'visible = "[{_eq(disp, 6)}]"']),
+              ("pip_inbound_visible", [f'visible = "[{_ge(f"sr_disp_site_inbound_{k}", 1)}]"']),
+              # Ours opens the colony's window; any other lists its location.
+              ("pip_open", [f'visible = "[{ours}]"', *_open_colony(k), hover]),
+              ("pip_select", [f'visible = "[Not( {ours} )]"',
+                              f"onclick = \"[GetVariableSystem.Set('{SS_LOC}', '{site.location}')]\"", hover])]
+    out = ["te_sr_map_pip = {"]
+    for name, lines in blocks:
+        out += [f'\tblockoverride "{name}" {{', *[f"\t\t{line}" for line in lines], "\t}"]
+    return out + ["}"]
+
+
+def _map_location(loc: str) -> list[str]:
+    """One location's column on the map: its icon and short name, a button that lists
+    its sites below the map (and back), and its sites' markers."""
+    picked = f"GetVariableSystem.HasValue('{SS_LOC}', '{loc}')"
+    hover = f'tooltip = "je_space_race_widget_map_loc_tt_{loc}"'
+    sites = [s for s in SITES if s.location == loc]
+    pips: list[str] = []
+    for i, site in enumerate(sites):
+        pips += _map_pip(site, i, len(sites))
+    out = ["\t\tte_sr_map_location = {"]
+    out += _override("loc_selected_visible", f'visible = "[{picked}]"')
+    out += _override("loc_icon", f'texture = "{MAP_ICONS[loc]}"')
+    out += _override("loc_name",
+                     f"position = {{ {(MAP_COLUMN - MAP_NAME_WIDTH) // 2} {MAP_NAME_LINES[LOCATIONS.index(loc) % 2]} }}",
+                     f'text = "je_space_race_widget_map_loc_{loc}"')
+    out += _override("loc_select", f'visible = "[Not( {picked} )]"',
+                     f"onclick = \"[GetVariableSystem.Set('{SS_LOC}', '{loc}')]\"", hover)
+    out += _override("loc_clear", f'visible = "[{picked}]"', f"onclick = \"[GetVariableSystem.Clear('{SS_LOC}')]\"", hover)
+    out += _override("loc_pips", *pips)
     return out + ["\t\t}"]
 
 
@@ -4611,7 +4778,13 @@ def render_gui() -> str:
            "### Target button and people room, filtered to the worlds we can target by default.",
            "### te_sr_colony_brief_rows is another country's Colonies (National Info):",
            "### every world, shown while the shown Country holds it, read on Country,",
-           "### with nothing to press (te_sr_colony_brief_row).",
+           "### with nothing to press (te_sr_colony_brief_row). The Colonies window",
+           "### (te_sr_colony_popup; the owner, 2026-11-23) takes te_sr_colony_switch_rows,",
+           "### its list of our colonies, and te_sr_colony_pages, a page a world",
+           "### (te_sr_colony_page) filled from its row's blocks. te_sr_map_locations is the",
+           "### system map's nine columns (te_sr_map_location), each with its sites'",
+           "### markers (te_sr_map_pip); a location picked there (sr_ss_loc) lists that",
+           "### location alone in te_sr_solar_system_rows.",
            "",
            "types sr_sites_generated_rows_types",
            "{",
@@ -4621,7 +4794,7 @@ def render_gui() -> str:
            "\t\tspacing = 2"]
     for loc in LOCATIONS:
         out += ["", "\t\tte_sr_subheader = {",
-                f'\t\t\tvisible = "[Or( GetVariableSystem.Exists(\'{SS_ALL}\'), {_ge(f"sr_disp_ss_filtered_{loc}", 1)} )]"',
+                f'\t\t\tvisible = "[{_ss_listed(loc, _ge(f"sr_disp_ss_filtered_{loc}", 1))}]"',
                 '\t\t\tblockoverride "subheader_text" {',
                 f'\t\t\t\ttext = "je_space_race_widget_ss_loc_{loc}"',
                 "\t\t\t}",
@@ -4651,6 +4824,24 @@ def render_gui() -> str:
             "\t\tspacing = 4"]
     for site in panel_order():
         out += [""] + _colony_row(site)
+    out += ["\t}", "",
+            "\ttype te_sr_colony_switch_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for site in panel_order():
+        out += [""] + _switch_row(site)
+    out += ["\t}", "",
+            "\ttype te_sr_colony_pages = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    for site in panel_order():
+        out += [""] + _colony_page(site) + _colony_gone(site)
+    out += ["\t}", "",
+            "\ttype te_sr_map_locations = flowcontainer {",
+            "\t\tdirection = horizontal"]
+    for loc in LOCATIONS:
+        out += [""] + _map_location(loc)
     out += ["\t}", ""]
     # The near-Earth asteroids' box in the Bases view (gen_ebase.near_earth_row).
     out += _ebase_view().near_earth_row()
