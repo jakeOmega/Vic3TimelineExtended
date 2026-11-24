@@ -1417,6 +1417,85 @@ class BlocLeaderRowTest(unittest.TestCase):
         self.assertIn("banking_dash_mon_bs_union_from", value)
 
 
+
+class FlagGroupTest(unittest.TestCase):
+    """International Arrangements groups its partners (GUI pass of 2026-11-24): the
+    fourteen receiverships an anchor held read "Receivership held: +0.00" a row
+    apiece. A partner whose figure prints as 0.00 is a flag on one line per kind or
+    place, the list filled at the pulse; one that reads at two decimals keeps its row.
+    Every list the discovery fills is drawn, and every label fits its cell."""
+
+    LISTS = {
+        "te_mon_bs_swap_flags": "banking_dash_mon_bs_grp_swap",
+        "te_mon_bs_lolr_flags": "banking_dash_mon_bs_grp_lolr",
+        "te_mon_bs_receivership_flags": "banking_dash_mon_bs_grp_receivership",
+        "te_mon_bs_union_adopted": "banking_dash_mon_union_grp_adopted",
+        "te_mon_bs_union_dormant": "banking_dash_mon_union_grp_dormant",
+        "te_mon_bs_union_holdout": "banking_dash_mon_union_grp_holdout",
+        "te_mon_bs_union_refuser": "banking_dash_mon_union_grp_refuser",
+        "te_mon_bs_union_outside": "banking_dash_mon_union_grp_outside",
+        "te_mon_bs_union_coop": "banking_dash_mon_union_grp_coop",
+    }
+    ROWS = ["te_mon_bs_swap_to", "te_mon_bs_lolr_to", "te_mon_bs_receivership_to", "te_mon_bs_union_to",
+            "te_mon_bs_swap_from", "te_mon_bs_lolr_from", "te_mon_bs_receiver_from"]
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dash = _strip_comments(_read(DASH))
+        cls.monetary = _type_body(cls.dash, "te_banking_sec_monetary")
+        cls.groups = [_block_from(cls.monetary, m.start() + len("banking_dash_flag_group = "))
+                      for m in re.finditer(r"\bbanking_dash_flag_group = \{", cls.monetary)]
+        cls.loc = _all_loc()
+
+    def test_every_list_is_drawn_once(self):
+        drawn = {}
+        for g in self.groups:
+            lists = set(re.findall(r"GetList\('(\w+)'\)", g))
+            self.assertEqual(len(lists), 1, "a group's visible and datamodel read one list")
+            drawn[lists.pop()] = re.search(r'text = "(\w+)"', g).group(1)
+        self.assertEqual(drawn, self.LISTS)
+        for name in self.ROWS:
+            with self.subTest(rows=name):
+                self.assertEqual(self.monetary.count("GetList('%s')" % name), 1)
+
+    def test_each_list_is_cleared_and_filled(self):
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "te_monetary_arrangement_effects.txt"))
+        union = _read(os.path.join(REPO, "common", "scripted_effects", "te_monetary_union_effects.txt"))
+        clear = _block_from(effects, effects.index("\nte_mon_clear_backstop_rows = {") + len("\nte_mon_clear_backstop_rows = "))
+        for name in list(self.LISTS) + self.ROWS:
+            with self.subTest(list=name):
+                self.assertRegex(clear, r"clear_variable_list = %s\s" % name)
+        for status in ("to", "coop", "adopted", "dormant", "refuser", "holdout", "outside"):
+            self.assertIn("LIST = te_mon_bs_union_%s }" % status, union)
+
+    def test_every_flag_says_what_its_row_said(self):
+        for g in self.groups:
+            tip = re.search(r'blockoverride "flag_tooltip" \{\s*tooltip = "(\w+)"', g)
+            self.assertIsNotNone(tip, g[:80])
+            text = self.loc[tip.group(1)]
+            self.assertIn("GetNameNoFlag", text)
+            self.assertIn("points", self.loc[re.search(r"'(banking_dash_mon_bs_fig_\w+)'", text).group(1)])
+
+    def test_labels_fit_the_label_column(self):
+        body = _type_body(self.dash, "banking_dash_flag_group")
+        self.assertIn("max_width = 160", body)
+        self.assertIn("maxhorizontalslots = 9", body)
+        self.assertLessEqual(16 + 160 + 4 + 9 * 30, 460)
+        for key in self.LISTS.values():
+            with self.subTest(label=key):
+                text = re.sub(r"\[[^\[\]]*\]", "99", self.loc[key])
+                text = re.sub(r"#[A-Za-z_]+ ", "", text).replace("#!", "")
+                self.assertLessEqual(len(text) * UNITS["row"] * MARGIN, 160, text)
+
+    def test_no_figure_prints_as_zero(self):
+        """A row's figure shows only where it reads at two decimals; under that, words."""
+        for key in ("banking_dash_mon_backstops_value", "banking_dash_mon_bs_swap_from", "banking_dash_mon_bs_lolr_from",
+                    "banking_dash_mon_bs_receiver_from", "banking_dash_mon_bs_union_from", "banking_dash_mon_bs_union_to"):
+            with self.subTest(key=key):
+                self.assertNotRegex(self.loc[key], r"\|2\]", "the figure sits behind a SelectLocalization")
+                self.assertIn("(CFixedPoint)0.005", self.loc[key])
+
+
 PROGRESS_BARS = os.path.join(REPO, "common", "scripted_progress_bars", "extra_progress_bars.txt")
 BAR_EFFECTS = os.path.join(REPO, "common", "scripted_effects", "banking_cycle_effects.txt")
 # The entry's bar look -> the progress bar te_banking_bars draws it with: a ready-made

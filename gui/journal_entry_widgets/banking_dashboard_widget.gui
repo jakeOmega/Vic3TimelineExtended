@@ -166,6 +166,59 @@ types banking_dashboard_widget_types
 		}
 	}
 
+	### Partners that say the same thing, one line (GUI pass of 2026-11-24): the
+	### fourteen receiverships a monetary anchor held each read "Receivership
+	### held: +0.00", a row apiece. Indented 16 under its row, the label and its
+	### count in the rest of the label column (16 + 160 + 4 = 180, where the
+	### value column starts), then the countries' flags in the value column,
+	### nine to a line (9 x 30 = 270 of its 280), wrapping onto more lines. Each
+	### flag is vanilla's tiny_flag (the country on click), its hover what the
+	### row said: the instance's "flag_tooltip", read in the flag's country.
+	### The list holds capitals (gui_modding_guide.md gotcha #15), filled at the
+	### pulse (te_mon_record_backstop_partner, te_mon_record_union_member), so
+	### the grid draws no gaps and reads no trigger per frame. The instance sets
+	### the visible (the list not empty), the label and the datamodel.
+	type banking_dash_flag_group = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+		margin_left = 16
+
+		textbox = {
+			parentanchor = top
+			autoresize = yes
+			multiline = yes
+			max_width = 160
+			minimumsize = { 160 24 }
+			maximumsize = { 160 -1 }
+			align = left|nobaseline
+			using = banking_dash_fontsize_row
+			block "group_label" {}
+		}
+		fixedgridbox = {
+			addcolumn = 30
+			addrow = 24
+			maxhorizontalslots = 9
+			flipdirection = yes
+			block "group_datamodel" {}
+
+			item = {
+				widget = {
+					datacontext = "[Scope.GetState]"
+					size = { 30 24 }
+
+					tiny_flag = {
+						datacontext = "[State.GetCountry]"
+						parentanchor = center
+						blockoverride "tooltip" {
+							block "flag_tooltip" {}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	### The left reading of a two-column pair row: label 176 + 4 + value 66 =
 	### 246. With banking_dash_pair_right (144 + 4 + 66 = 214) it fills the
 	### block's 460. Only for short readings (a percentage or a signed figure,
@@ -3113,10 +3166,13 @@ types banking_dashboard_widget_types
 							}
 
 							### The partners behind the two sums (GUI audit BNK-13): who backs us
-							### and whom we back, a row each, from the lists the arrangement
-							### discovery keeps (te_mon_record_backstop_* in
-							### te_monetary_arrangement_effects.txt): a partner's capital, since
-							### a GUI reaches a country through its state.
+							### and whom we back, from the lists the arrangement discovery keeps
+							### (te_mon_record_backstop_* in te_monetary_arrangement_effects.txt):
+							### a partner's capital, since a GUI reaches a country through its
+							### state. A backer has a row each (one of each kind at most). Whom we
+							### back (GUI pass of 2026-11-24): a row each where its figure reads
+							### at two decimals, and the rest one line a kind, their flags, each
+							### flag's hover what its row said.
 							flowcontainer = {
 								direction = vertical
 								ignoreinvisible = yes
@@ -3131,6 +3187,7 @@ types banking_dashboard_widget_types
 									item = {
 										banking_dash_partner_row = {
 											datacontext = "[Scope.GetState]"
+											tooltip = "banking_dash_mon_bs_backer_tt"
 											blockoverride "flag" {
 												tiny_flag = {
 													parentanchor = center
@@ -3156,6 +3213,7 @@ types banking_dashboard_widget_types
 									item = {
 										banking_dash_partner_row = {
 											datacontext = "[Scope.GetState]"
+											tooltip = "banking_dash_mon_bs_backer_tt"
 											blockoverride "flag" {
 												tiny_flag = {
 													parentanchor = center
@@ -3181,6 +3239,7 @@ types banking_dashboard_widget_types
 									item = {
 										banking_dash_partner_row = {
 											datacontext = "[Scope.GetState]"
+											tooltip = "banking_dash_mon_bs_backer_tt"
 											blockoverride "flag" {
 												tiny_flag = {
 													parentanchor = center
@@ -3205,6 +3264,7 @@ types banking_dashboard_widget_types
 								### spec § 6.3, the one row whose country shadows the panel's).
 								banking_dash_partner_row = {
 									visible = "[And( Country.IsInPowerBloc, GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_received_display'), '(CFixedPoint)0' ) )]"
+									tooltip = "banking_dash_mon_bs_backer_tt"
 									blockoverride "flag" {
 										tiny_flag = {
 											parentanchor = center
@@ -3245,6 +3305,20 @@ types banking_dashboard_widget_types
 									}
 								}
 
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_swap_flags') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_grp_swap_tt"
+										text = "banking_dash_mon_bs_grp_swap"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_swap_flags')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_bs_flag_swap_tt"
+									}
+								}
+
 								flowcontainer = {
 									direction = vertical
 									ignoreinvisible = yes
@@ -3270,6 +3344,20 @@ types banking_dashboard_widget_types
 									}
 								}
 
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_lolr_flags') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_grp_lolr_tt"
+										text = "banking_dash_mon_bs_grp_lolr"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_lolr_flags')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_bs_flag_lolr_tt"
+									}
+								}
+
 								flowcontainer = {
 									direction = vertical
 									ignoreinvisible = yes
@@ -3292,6 +3380,20 @@ types banking_dashboard_widget_types
 												text = "banking_dash_mon_bs_receivership_to"
 											}
 										}
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_receivership_flags') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_grp_receivership_tt"
+										text = "banking_dash_mon_bs_grp_receivership"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_receivership_flags')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_bs_flag_receivership_tt"
 									}
 								}
 
@@ -3324,35 +3426,130 @@ types banking_dashboard_widget_types
 								}
 							}
 
-							### A leader's members, a row each (GUI audit BNK-13): whether each
-							### has adopted, holds out or would refuse if pressed, and what
-							### backing it costs us. The leader is left out, as vanilla's own
-							### member list leaves it out (power_bloc_panel.gui).
+							### A leader's members (GUI audit BNK-13; grouped in the GUI pass of
+							### 2026-11-24): whether each has adopted, holds out or would refuse
+							### if pressed, and what backing it costs us. A member whose backing
+							### reads at two decimals keeps a row of its own, its place and its
+							### figure; the rest are one line of flags for each place a member can
+							### stand, in te_mon_union_member_status's order, each flag's hover its
+							### place and figure. The leader's discovery files each member
+							### (te_mon_record_union_member), with the head line's holdout counts,
+							### so the lines and the counts agree. The leader is left out, as
+							### vanilla's own member list leaves it out (power_bloc_panel.gui).
 							flowcontainer = {
-								### In a bloc first, as vanilla gates a GetPowerBloc datacontext
-								### (00_te_country_panel_information.gui's power bloc entry).
-								visible = "[And( Country.IsInPowerBloc, GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-								datacontext = "[Country.GetPowerBloc]"
-								datamodel = "[PowerBloc.GetMembers]"
+								visible = "[GetScriptedGui('banking_mon_shows_union_members').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 								direction = vertical
 								ignoreinvisible = yes
 								spacing = 2
 
-								item = {
-									banking_dash_partner_row = {
-										visible = "[Not( PowerBloc.IsLeader( Country.Self ) )]"
-										tooltip = "banking_dash_mon_union_member_tt"
-										blockoverride "flag" {
-											tiny_flag = {
-												parentanchor = center
+								### A row each, read in the member: its datacontext is the
+								### member, which every read on the row means.
+								flowcontainer = {
+									direction = vertical
+									ignoreinvisible = yes
+									spacing = 2
+									datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_to')]"
+
+									item = {
+										banking_dash_partner_row = {
+											datacontext = "[Scope.GetState.GetCountry]"
+											tooltip = "banking_dash_mon_union_member_tt"
+											blockoverride "flag" {
+												tiny_flag = {
+													parentanchor = center
+												}
+											}
+											blockoverride "name" {
+												text = "banking_dash_mon_bs_country_name"
+											}
+											blockoverride "value" {
+												text = "banking_dash_mon_union_member_value"
 											}
 										}
-										blockoverride "name" {
-											text = "banking_dash_mon_bs_country_name"
-										}
-										blockoverride "value" {
-											text = "banking_dash_mon_union_member_value"
-										}
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_adopted') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_adopted_tt"
+										text = "banking_dash_mon_union_grp_adopted"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_adopted')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_dormant') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_dormant_tt"
+										text = "banking_dash_mon_union_grp_dormant"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_dormant')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_holdout') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_holdout_tt"
+										text = "banking_dash_mon_union_grp_holdout"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_holdout')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_refuser') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_refuser_tt"
+										text = "banking_dash_mon_union_grp_refuser"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_refuser')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_outside') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_outside_tt"
+										text = "banking_dash_mon_union_grp_outside"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_outside')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
+									}
+								}
+
+								banking_dash_flag_group = {
+									visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_mon_bs_union_coop') ) )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_union_grp_coop_tt"
+										text = "banking_dash_mon_union_grp_coop"
+									}
+									blockoverride "group_datamodel" {
+										datamodel = "[Country.MakeScope.GetList('te_mon_bs_union_coop')]"
+									}
+									blockoverride "flag_tooltip" {
+										tooltip = "banking_dash_mon_union_flag_tt"
 									}
 								}
 							}
