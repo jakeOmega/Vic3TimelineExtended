@@ -23948,8 +23948,8 @@
   "de": "→ Erde"
  },
  "sr_loc_bound_inner": {
-  "en": "→ Venus",
-  "de": "→ Venus"
+  "en": "→ Merc./Venus",
+  "de": "→ Merk./Venus"
  },
  "sr_loc_bound_jupiter": {
   "en": "→ Jupiter",
@@ -24020,8 +24020,8 @@
   "de": "Erde"
  },
  "sr_loc_short_inner": {
-  "en": "Venus",
-  "de": "Venus"
+  "en": "Merc./Venus",
+  "de": "Merk./Venus"
  },
  "sr_loc_short_jupiter": {
   "en": "Jupiter",
