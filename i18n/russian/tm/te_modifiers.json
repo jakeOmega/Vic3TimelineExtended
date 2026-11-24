@@ -1276,8 +1276,8 @@
   "ru": "Доступные ячейки приёмников солнечной энергии"
  },
  "country_solar_receiver_max_level_add_desc": {
-  "en": "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot.",
-  "ru": "Число дополнительных приёмников солнечной энергии, которые можно построить. Каждый уровень орбитального солнечного коллектора добавляет 10 ячеек, а каждый уровень приёмника солнечной энергии занимает 1 ячейку."
+  "en": "The number of additional Solar Power Receivers that can be constructed. Each fully staffed level of Orbital Solar Collector adds 3 slots, and each level of Solar Power Receiver uses 1 slot.",
+  "ru": "Число дополнительных приёмников солнечной энергии, которые можно построить. Каждый полностью укомплектованный уровень орбитального солнечного коллектора добавляет 3 ячейки, а каждый уровень приёмника солнечной энергии занимает 1 ячейку."
  },
  "country_space_race_max_funding_add": {
   "en": "[concept_space_race] Funding Cap",

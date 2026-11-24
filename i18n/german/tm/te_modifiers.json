@@ -1276,8 +1276,8 @@
   "de": "Verfügbare Solarempfänger-Plätze"
  },
  "country_solar_receiver_max_level_add_desc": {
-  "en": "The number of additional Solar Power Receivers that can be constructed. Each level of Orbital Solar Collector adds 10 slots, and each level of Solar Power Receiver uses 1 slot.",
-  "de": "Die Anzahl zusätzlicher Solarempfänger, die gebaut werden können. Jede Stufe des Orbitalen Sonnenkollektors fügt 10 Plätze hinzu, und jede Stufe des Solarempfängers verbraucht 1 Platz."
+  "en": "The number of additional Solar Power Receivers that can be constructed. Each fully staffed level of Orbital Solar Collector adds 3 slots, and each level of Solar Power Receiver uses 1 slot.",
+  "de": "Die Anzahl zusätzlicher Solarempfänger, die gebaut werden können. Jede voll besetzte Stufe des Orbitalen Sonnenkollektors fügt 3 Plätze hinzu, und jede Stufe des Solarempfängers verbraucht 1 Platz."
  },
  "country_space_race_max_funding_add": {
   "en": "[concept_space_race] Funding Cap",
