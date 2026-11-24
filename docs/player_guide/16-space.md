@@ -241,13 +241,17 @@ Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
 dwarf planet). Hovering its name shows the colony's permanent effects, and
-clicking it, or the arrow beside it, opens the colony's page. The page sets out
-People, Modules, Autonomy and (under Full Colonies) Defenses one under another,
+clicking it, or the arrow beside it, opens the colony's page in a window of its
+own, Our Colonies. The page sets out People, Autonomy, (under Full Colonies)
+Defenses and, with In-Situ Resource Utilization, the colony's Extraplanetary Base
+levels on the left, and Modules on the right,
 each with its control beside its heading (the settler priority, Clear, Abandon,
 and Revoke while the colony has a charter),
 its figures in tiles and every module on a line of its own with its full name,
 with buttons to queue one more level or take one down.
-Back returns to the list. The buttons above the rows switch what each box
+Every colony you hold is listed down the window's left side: click one to see
+its page without closing the window. Escape, the close button or a click outside
+the window closes it. Back in the list, the buttons above the rows switch what each box
 shows:
 
 | View | Shows | Above the rows |
@@ -1069,8 +1073,16 @@ building in the state, such as devastation, slows it too.
 ### Who holds a colony
 
 Every site records which country holds it. Solar System Colonization's Solar
-System section, with Show all, lists all 40 under their places in the solar
-system: Ours, the holder's flag (hover it for the country's name, click it to
+System section opens on a map: the Sun, the nine locations from the Moon out to
+the Kuiper Belt, and under each a marker for every site there. A gold marker is
+yours, a flag is the power that holds the site, a ring is unclaimed, a gold ring
+circles your colony fleets' target, and a small dart marks a site a colony fleet
+is flying to. Click a location to list only its sites below the map (click it
+again, or All locations, to go back); click one of your own markers to open that
+colony's window. The list under the map, with Show all, has all 40 under their
+places in the solar
+system: Ours (with an arrow that opens the colony's window), the holder's flag
+(hover it for the country's name, click it to
 open the country), Another power, or Unclaimed.
 
 A colony stays with its holder until the holder is gone, or, under Simple

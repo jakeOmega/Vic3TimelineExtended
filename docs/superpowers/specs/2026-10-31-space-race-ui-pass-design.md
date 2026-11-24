@@ -509,6 +509,12 @@ shows its colonies by holder (ours, allies, at war, neutral, free), fleets
 present and inbound with their owner's side, and launch windows. Not a priority
 (owner). Not scoped further here.
 
+**Built 2026-11-23**, on the owner's ask, in the Solar System tab's 480 column
+rather than a full-page window: `te_sr_system_map`, with each site a marker by
+its holder, our target and the colony fleets in flight. War fleets by location
+stay in the Fleets tab's Locations strip, and launch windows in Mission Control's
+Next Windows. `docs/systems/mod_systems/space_race.md`, "The system map".
+
 ## 13. Reusable widgets (separate project)
 
 Evidence: about a dozen systems each define their own `*_section_header`,
