@@ -297,11 +297,12 @@ class HiddenStateModifierTest(unittest.TestCase):
         terms = _count_terms(WEALTH_COUNT)
         self.assertEqual(set(terms), set(SHOWN_ON_A_CARD_NAMES))
         self.assertEqual(set(terms.values()), {"1"})
-        with open(os.path.join(GUI, "states_panel.gui"), encoding="utf-8-sig") as f:
+        # The tile stands among the mod's tiles (te_state_tiles), a te_state_tile.
+        with open(os.path.join(GUI, "te_state_panel_widgets.gui"), encoding="utf-8-sig") as f:
             panel = _strip_comments(f.read())
         tile = panel.index("te_state_wealth_tile = {}")
-        opener, start, end = _block_around(panel, panel.rfind('blockoverride "extra_widget"', 0, tile) - 1)
-        self.assertEqual(opener, "state_panel_status_item_small")
+        opener, start, end = _block_around(panel, panel.rfind('blockoverride "rows"', 0, tile) - 1)
+        self.assertEqual(opener, "te_state_tile")
         own = _own_lines(panel[start:end])
         gates = re.findall(r'visible\s*=\s*"([^"]*)"', own)
         self.assertEqual(gates, [f"[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('{WEALTH_COUNT}'), '(CFixedPoint)0')]"])

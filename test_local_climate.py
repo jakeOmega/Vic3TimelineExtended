@@ -253,11 +253,14 @@ def gui_type(text, name):
 
 
 class Tile(unittest.TestCase):
-    def test_tile_instance_in_status_grid(self):
-        panel = PANEL.read_text(encoding="utf-8-sig")
-        m = re.search(r'text = "TE_STATE_CLIMATE_STATUS"', panel)
+    def test_tile_instance_in_the_mods_tiles(self):
+        # The mod's tiles stand in te_state_tiles (gui/te_state_panel_widgets.gui), which
+        # states_panel.gui mounts once after vanilla's grid (test_state_tiles.py).
+        tiles = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_tiles")
+        m = re.search(r'text = "TE_STATE_CLIMATE_STATUS"', tiles)
         self.assertIsNotNone(m)
-        self.assertIn("te_state_climate_tile = {}", panel[m.end():m.end() + 400])
+        self.assertIn("te_state_climate_tile = {}", tiles[m.end():m.end() + 400])
+        self.assertIn("te_state_tiles = {}", PANEL.read_text(encoding="utf-8-sig"))
 
     def test_tile_reads_the_record(self):
         body = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_climate_tile")
@@ -287,7 +290,7 @@ class Tile(unittest.TestCase):
     def test_rows_wait_for_a_record(self):
         """Every reading row hides when the region has no row, so the no-data line shows alone."""
         body = gui_type(WIDGETS.read_text(encoding="utf-8-sig"), "te_state_climate_tile")
-        rows = body.split("te_state_climate_row = {")[1:]
+        rows = body.split("te_state_tile_row = {")[1:]
         self.assertEqual(len(rows), 10)  # six readings and Comfort's four (cost, bonus, none, pending)
         for row in rows:
             self.assertIn("row_visible", row)

@@ -113,8 +113,6 @@
  DESELECT_MUSLIM:0 "@red_cross! Muslim"
  DESELECT_MUSLIM_DESC:0 "Remove Islamic beliefs and traditions from our new religion."
  DESELECT_NAME_DESC:0 "Deselect this name for your custom religion."
- GDPPERCAPITA:0 "$GDP_SHORT$ per Capita:\n     Local/National\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!"
- GDP_per_capita:0 "[State.MakeScope.ScriptValue('gdp_per_capita')|2*]"
  GM_ARCH_SUBJECT:0 "from being their subject"
  GOVERNMENT_CONSTRUCTION_BOUGHT:0 "@construction! Construction the government buys each week:"
  GW_AEROSOL_INJECTION:0 "Inject Stratospheric Aerosols"

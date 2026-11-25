@@ -1283,10 +1283,13 @@ class StateCardTest(unittest.TestCase):
         cls.goto = _squash(_match_brace(cls.card, goto.end()))
         cls.rest = _squash(_strip_comments(cls.card[:goto.start()]))
 
-    def test_instanced_under_the_tourism_card(self):
+    def test_instanced_after_the_mods_tiles_above_the_tourism_card(self):
+        # gui/state-tiles: the mod's tiles, then its full-width cards, after vanilla's whole
+        # Overview; the monument's cards sit over the tourism card, whose Monuments row they feed.
         panel = _squash(_strip_comments(_read(STATES_PANEL)))
         self.assertEqual(panel.count("te_state_gm_card = {}"), 1)
-        self.assertIn("te_state_tourism_card = {} te_state_gm_card = {}", panel)
+        self.assertIn("te_state_tiles = {} te_state_gm_card = {} te_state_gm_site_card = {} "
+                      "te_state_gm_trophy_card = {} te_state_tourism_card = {}", panel)
 
     def test_shown_only_while_a_monument_stands(self):
         self.assertTrue(self.flat.startswith(
