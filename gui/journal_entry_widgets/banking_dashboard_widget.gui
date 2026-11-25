@@ -541,11 +541,13 @@ types banking_dashboard_widget_types
 	### Collapsible section header. The flag lives in the GUI variable system
 	### only — it is presentation state and is never written to the save — and
 	### is named for the section's default: banking_dash_<section>_closed exists
-	### while the player has closed a section that starts open.
+	### while the player has closed a section that starts open. 520 wide, the
+	### overview's width and the other systems' section headers' (500 until
+	### 2026-11-24, with the overview at 500).
 	type banking_dash_category_header = section_header_button {
 		blockoverride "layout" {
 			parentanchor = hcenter
-			size = { 500 32 }
+			size = { 520 32 }
 		}
 		blockoverride "left_text_alignment" {
 			align = left|nobaseline
@@ -1093,8 +1095,15 @@ types banking_dashboard_widget_types
 		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
-		# 10 + the bars' 480 + 10 = 500, the width of the section headers below.
-		margin = { 10 8 }
+		# 20 + the bars' 480 + 20 = 520, the column every system tab's overview
+		# fills (te_system_tab_frame's 520; the UN's, Global Warming's and Power
+		# Grids' panels are 20 + 480 + 20) and the section headers below. It was
+		# 10 + 480 + 10 until 2026-11-24, 20 narrower than the newer tabs'
+		# overviews in the same column (from #2016). Fixed at 520, so the dormant
+		# entry's one Not Started cell keeps the box its full width, its cell in
+		# the left column (style guide rule 8: every root a fixed width).
+		minimumsize = { 520 -1 }
+		margin = { 20 8 }
 
 		background = {
 			using = entry_bg_fancy_dark
@@ -3972,14 +3981,15 @@ types banking_dashboard_widget_types
 	### read the entry and this GetPlayer). Its row gates are the dashboard's
 	### own scripted GUIs, with Country as the root. National Info draws it for
 	### another country without the entry (PR F1).
-	### 20 + 460 + 20 = 500, the width of the entry's sections.
+	### 30 + 460 + 30 = 520, the width of the entry's sections (20 + 460 + 20 =
+	### 500 until 2026-11-24, when the sections grew to the tab column's 520).
 	type te_banking_mon_readout = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
-		minimumsize = { 500 -1 }
-		margin = { 20 8 }
+		minimumsize = { 520 -1 }
+		margin = { 30 8 }
 
 		background = {
 			using = entry_bg_fancy_dark

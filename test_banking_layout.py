@@ -510,9 +510,18 @@ class OverviewTest(unittest.TestCase):
         without 50."""
         dash = _read(DASH)
         body = _type_body(dash, "te_banking_overview_panel")
-        self.assertRegex(body, r"(?m)^\t\tmargin = \{ 10 8 \}")   # 10 + 480 bars + 10 = 500
+        # 20 + 480 bars + 20 = 520, the tab column's width and the newer
+        # tabs' overviews' (from #2016: it was 10 + 480 + 10 = 500, narrower
+        # than Global Warming's and the UN's in the same column), fixed so the
+        # dormant entry's single cell keeps the box its width.
+        self.assertRegex(body, r"(?m)^\t\tmargin = \{ 20 8 \}")
+        self.assertRegex(body, r"(?m)^\t\tminimumsize = \{ 520 -1 \}")
         header = _type_body(dash, "banking_dash_category_header")
-        self.assertIn("size = { 500 32 }", header)
+        self.assertIn("size = { 520 32 }", header)
+        # the readout for a country without the entry: 30 + its 460 rows + 30
+        readout = _type_body(dash, "te_banking_mon_readout")
+        self.assertRegex(readout, r"(?m)^\t\tminimumsize = \{ 520 -1 \}")
+        self.assertRegex(readout, r"(?m)^\t\tmargin = \{ 30 8 \}")
         rows = []
         for m in re.finditer(r"flowcontainer = \{\s*(?:visible = [^\n]*\s*)?direction = horizontal", body):
             row = _block_from(body, m.start())

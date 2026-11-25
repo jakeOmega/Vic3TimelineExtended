@@ -761,23 +761,24 @@ STATIC_LABELS = (
     + [("je_ch_board_head_rank", 22, "row", ()), ("je_ch_board_head_country", 192, "row", ()),
        ("je_ch_board_head_share", 58, "row", ()), ("je_ch_board_head_change", 66, "row", ()),
        ("je_ch_board_head_model", 64, "row", ())]
-    # The programs and Hegemony Bonus cells (CH-9): Banking's cell at 234, two
-    # to the row, its lines in a 150 column at 16.
-    + [("je_ch_ov_prog_label", 150, "overview", ()), ("je_ch_ov_prog_no_ministry", 150, "overview", ())]
-    + [(f"je_ch_ov_bonus_{k}", 150, "overview", ()) for k in ("label", "active", "none", "from")]
+    # The programs and Hegemony Bonus cells (CH-9): Banking's cell at 238, two
+    # to the row, its lines in a 154 column at 16 (234 and 150 until the panel
+    # took the tab column's 520, 2026-11-24).
+    + [("je_ch_ov_prog_label", 154, "overview", ()), ("je_ch_ov_prog_no_ministry", 154, "overview", ())]
+    + [(f"je_ch_ov_bonus_{k}", 154, "overview", ()) for k in ("label", "active", "none", "from")]
 )
 # Dynamic text, at its longest: the political models' short names (the longest are
 # "Constitutional", "Military Junta" and "Technocratic"; the full names, up to
 # "Liberal / Progressive Democratic", are on hover), and numbers at their widest.
 DYNAMIC_LABELS = (
-    [(f"je_ch_ov_model_{m}", 134, "overview", ()) for m in MODEL_KEYS]       # the overview's model cell
+    [(f"je_ch_ov_model_{m}", 142, "overview", ()) for m in MODEL_KEYS]       # the overview's model cell
     + [(f"je_ch_ov_model_{m}", 216, "row", ()) for m in MODEL_KEYS]          # the models legend
     + [(f"je_ch_ov_model_{m}", 200, "row", ()) for m in MODEL_KEYS]          # the history legend (CH-12)
     + [("je_ch_ov_rank_value", 106, "heading", ("999", "999")),
        ("je_ch_ov_share_label", 156, "overview", ("100.0",)),               # 180 cell less the 20 px arrow and 4 spacing
        ("je_ch_widget_funding_value", 134, "row", ("10", "10")),
-       ("je_ch_widget_board_us_ours", 474, "row", ("999", "999")),
-       ("je_ch_widget_board_us_theirs", 474, "row", ("999", "999")),
+       ("je_ch_widget_board_us_ours", 480, "row", ("999", "999")),
+       ("je_ch_widget_board_us_theirs", 480, "row", ("999", "999")),
        ("je_ch_widget_bd_art_value", 60, "row", ("150.0",)),
        ("je_ch_widget_bd_prestige_value", 60, "row", ("100.0",)),
        ("je_ch_widget_bd_sol_value", 60, "row", ("-5.0",)),
@@ -794,8 +795,8 @@ DYNAMIC_LABELS = (
        ("ch_board_row_rank", 22, "row", ("10",)), ("ch_board_row_share", 58, "row", ("100.0",)),
        ("ch_board_row_change", 48, "row", ("+12.3",)),
        # The programs cell's word and funding line.
-       ("je_ch_ov_prog_running", 150, "overview", ("4",)), ("je_ch_ov_prog_funding", 150, "overview", ("10", "10")),
-       ("je_ch_ov_bonus_strength", 150, "overview", ("100.0",))]
+       ("je_ch_ov_prog_running", 154, "overview", ("4",)), ("je_ch_ov_prog_funding", 154, "overview", ("10", "10")),
+       ("je_ch_ov_bonus_strength", 154, "overview", ("100.0",))]
     + [(f"je_ch_widget_models_share_{m}", 60, "row", ("100.0",)) for m in MODEL_KEYS]
 )
 
@@ -836,14 +837,15 @@ class LabelBudgetTest(unittest.TestCase):
                 with self.subTest(type=type_name, size=size):
                     self.assertIn(f"size = {{ {size} }}", body)
         self.assertIn("minimumsize = { 192 -1 }", _type_body(gui, "ch_board_row"))
-        self.assertEqual(_read(WIDGET).count("size = { 136 58 }"), 16)   # the model cells and their slot
+        self.assertEqual(_read(WIDGET).count("size = { 144 58 }"), 16)   # the model cells and their slot
 
     def test_the_overviews_first_row_fits_its_column(self):
-        # tier, rank and benchmark at 108, the model cell at 136, 4 between: 472 of 474.
+        # tier, rank and benchmark at 108, the model cell at 144, 4 between: the 480 column.
         ov = _type_body(_read(WIDGET), "te_ch_overview_panel")
         row = ov[ov.index("### Row 1:"):ov.index("### The influence tier")]
         self.assertIn("spacing = 4", row)
-        self.assertLessEqual(108 * 3 + 136 + 3 * 4, 474)
+        self.assertEqual(108 * 3 + 144 + 3 * 4, 480)
+        self.assertIn("minimumsize = { 480 -1 }", ov[:ov.index("### Row 1:")])
 
     def test_the_overviews_first_row_keeps_its_width_whichever_cells_show(self):
         # The row is centred, so it must be one width whatever shows (gotcha
@@ -867,8 +869,26 @@ class LabelBudgetTest(unittest.TestCase):
                 if cell.kind == "widget":
                     self.assertEqual(gui_tree.size(cell), gui_tree.size(slot))
                 widths.append(gui_tree.size(slot)[0])
-        self.assertEqual(widths, [108, 108, 136, 108])
-        self.assertEqual(sum(widths) + 4 * 3, 472)
+        self.assertEqual(widths, [108, 108, 144, 108])
+        self.assertEqual(sum(widths) + 4 * 3, 480)
+
+
+class PanelWidthTest(unittest.TestCase):
+    """From #2016: the panels were 14 + 474 + 14 and sized by their content
+    (494 to 502 in game), narrower than the newer tabs' 520 in the same column.
+    Every box is now 20 + a 480 column + 20, fixed at 520 whatever shows."""
+
+    def test_every_panel_is_the_tab_columns_width(self):
+        gui = _read(WIDGET)
+        panel = _type_body(gui, "ch_panel")
+        self.assertIn("minimumsize = { 520 -1 }", panel)
+        self.assertIn("margin = { 20 8 }", panel)
+        self.assertIn("maximumsize = { 480 -1 }", _type_body(gui, "ch_subheader"))
+        self.assertIn("size = { 480 2 }", _type_body(gui, "ch_subheader"))
+        note = _type_body(gui, "ch_note")
+        self.assertIn("minimumsize = { 480 -1 }", note)
+        self.assertIn("maximumsize = { 480 -1 }", note)
+        self.assertNotRegex(gui, r"(?m)^[^#\n]*\b474\b", "a width left at the old column")
 
 
 class TypeSizeTest(unittest.TestCase):
@@ -930,7 +950,7 @@ class BoardTest(unittest.TestCase):
         self.assertEqual(widths(self.row), [14, 22, 36, 36, 58, 66, 64])
         self.assertIn(14, head)
         self.assertIn(36, head)
-        # 2026-11-24: the cells and the rows' 2 between them fill 464 of the 474 column, as before,
+        # 2026-11-24: the cells and the rows' 2 between them fill 464 of the column (474, now 480), as before,
         # so the box keeps its width; the head is the row's cells in the row's order.
         self.assertEqual(14 + 22 + 36 + 192 + 58 + 66 + 64 + 6 * 2, 464)
         self.assertEqual([w for w in head], [14, 22, 36, 192, 58, 66, 64])
@@ -1152,9 +1172,9 @@ class HegemonyBonusTest(unittest.TestCase):
         self.assertEqual([c.prop("tooltip").value for c in cells], ["je_ch_ov_prog_tt", "je_ch_ov_bonus_tt"])
         for cell in cells:
             self.assertIsNone(cell.prop("visible"))   # both always show: one width (gotcha #43)
-            self.assertEqual(gui_tree.size(cell), (234, 70))
+            self.assertEqual(gui_tree.size(cell), (238, 70))
         self.assertEqual(row.prop("spacing").value, "4")
-        self.assertLessEqual(234 * 2 + 4, 474)
+        self.assertEqual(238 * 2 + 4, 480)
 
     def test_the_cells_states_are_gated_on_the_strength(self):
         cell = self.ov[self.ov.index('tooltip = "je_ch_ov_bonus_tt"'):]
