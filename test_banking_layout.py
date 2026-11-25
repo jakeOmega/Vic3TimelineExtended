@@ -555,7 +555,14 @@ class MandateGridTest(unittest.TestCase):
                    and "banking_mon_mandate_by_choice" in n.prop("visible").value]
         (guard,) = gui_tree.widgets(gate)
         self.assertIn(("using", "te_own_country_only"), [(p.key, p.value) for p in guard.props])
-        rows = gui_tree.widgets(guard)
+        # Each row centred in a fixed slot of the block's 460, the slots and their
+        # wrappers flowed with no anchor (gotcha #52, the union buttons' form; from #2016).
+        for wrapper in (gate, guard):
+            self.assertIsNone(wrapper.prop("parentanchor"))
+        slots = gui_tree.widgets(guard)
+        self.assertEqual([(s.kind, gui_tree.size(s), s.prop("parentanchor")) for s in slots],
+                         [("widget", (460, 28), None)] * 2)
+        rows = [r for s in slots for r in gui_tree.widgets(s)]
         self.assertEqual(len(rows), 2)
         for row, ops in zip(rows, (["14", "4"], ["5", "6"]), strict=True):
             with self.subTest(ops=ops):
@@ -1627,6 +1634,102 @@ class FlagGroupTest(unittest.TestCase):
             self.assertIn("margin_left = 16", body)
             self.assertIn("minimumsize = { 160 24 }", body)
         self.assertRegex(self.monetary, r"banking_dash_group_value_row = \{[^}]*?te_mon_bs_union_pts_display")
+
+
+class FlowedSlotTest(unittest.TestCase):
+    """gui_modding_guide.md gotcha #52 (from #2016): a child placed by parentanchor
+    in a vertical flowcontainer keeps the place its first layout gave it when a
+    sibling above grows, which drew the union buttons over the line above them.
+    The meters, the policy rows and Recapitalise flow instead: each a fixed slot
+    with no anchor, the bar, row or button centred inside it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dash = _read(DASH)
+        cls.tree = gui_tree.parse(cls.dash)
+        cls.types = {n.name: n for n in cls.tree.walk() if n.kind == "type"}
+
+    def test_the_meter_is_a_slot_with_the_bar_centred(self):
+        meter = self.types["banking_dash_mon_meter"]
+        self.assertEqual(meter.base, "widget")
+        self.assertIsNone(meter.prop("parentanchor"))
+        self.assertEqual(gui_tree.size(meter), (460, 16))
+        (bar,) = gui_tree.widgets(meter)
+        self.assertEqual(bar.kind, "default_progressbar_horizontal")
+        self.assertEqual(bar.prop("parentanchor").value, "hcenter")
+        self.assertEqual(gui_tree.size(bar), (440, 16))
+        instances = [n for n in self.tree.walk() if n.kind == "banking_dash_mon_meter"]
+        self.assertEqual(len(instances), 5)
+        for n in instances:
+            with self.subTest(line=n.line):
+                self.assertIsNone(n.prop("tooltip"), "the hover goes on the bar, in meter_tooltip")
+                self.assertIn("meter_tooltip", [c.name for c in n.children if c.kind == "blockoverride"])
+                self.assertIsNone(n.prop("parentanchor"))
+                self.assertNotEqual(n.parent.kind, "widget", "the type is the slot now; no second one round it")
+
+    def test_the_policy_row_is_a_slot_with_the_row_centred(self):
+        row = self.types["banking_dash_policy_row"]
+        self.assertEqual(row.base, "widget")
+        self.assertIsNone(row.prop("parentanchor"))
+        slot = next(c for c in row.children if c.kind == "block" and c.name == "policy_slot_size")
+        self.assertEqual(gui_tree.size(slot), (520, 32), "the sections' width, their headers'")
+        self.assertIn("size = { 520 32 }", _type_body(self.dash, "banking_dash_category_header"))
+        (inner,) = gui_tree.widgets(row)
+        self.assertEqual(inner.kind, "flowcontainer")
+        self.assertEqual(inner.prop("parentanchor").value, "hcenter")
+        self.assertIn("row_tooltip", [c.name for c in inner.children if c.kind == "block"])
+        # 4 + 320 + 4 + 34 + 4 + 90 + 4: the row is 460, its height 28 + 2 + 2
+        cells = [gui_tree.size(w) for w in gui_tree.widgets(inner) if w.kind == "widget"]
+        self.assertEqual(cells, [(320, 28), (34, 28), (90, 28)])
+        instances = [n for n in self.tree.walk() if n.kind == "banking_dash_policy_row"]
+        self.assertEqual(len(instances), 79)
+        narrow = []
+        for n in instances:
+            with self.subTest(line=n.line):
+                self.assertIsNone(n.prop("tooltip"), "the hover goes on the row, in row_tooltip")
+                self.assertIn("row_tooltip", [c.name for c in n.children if c.kind == "blockoverride"])
+                sizes = [c for c in n.children if c.kind == "blockoverride" and c.name == "policy_slot_size"]
+                if sizes:
+                    narrow.append(gui_tree.size(sizes[0]))
+        self.assertEqual(narrow, [(460, 32)], "the Monetary Policy block's open-market operations row")
+
+    def test_no_policy_row_container_is_anchored(self):
+        """A container sized by its rows and anchored was centred at its first width,
+        none at all when every row was hidden; with the rows in full-width slots, the
+        containers flow too."""
+        containers = {n.parent for n in self.tree.walk() if n.kind == "banking_dash_policy_row"}
+        checked = 0
+        for c in containers:
+            kids = {w.kind for w in gui_tree.widgets(c)}
+            if kids <= {"banking_dash_policy_row", "textbox"}:
+                checked += 1
+                with self.subTest(line=c.line):
+                    self.assertIsNone(c.prop("parentanchor"))
+                    for tb in (w for w in gui_tree.widgets(c) if w.kind == "textbox"):
+                        self.assertEqual(gui_tree.size(tb, "minimumsize"), (520, -1))
+        self.assertEqual(checked, 14, "Active Policies, the open-market fallback and the twelve categories")
+        # ...and the categories themselves, each the section's 520 (header and slots)
+        sec = self.types["te_banking_sec_interventions"]
+        categories = [c for c in gui_tree.widgets(sec) if c.kind == "flowcontainer"]
+        self.assertEqual(len(categories), 12)
+        for c in categories:
+            with self.subTest(category=c.line):
+                self.assertEqual(gui_tree.widgets(c)[0].kind, "banking_dash_category_header")
+                self.assertIsNone(c.prop("parentanchor"))
+
+    def test_recapitalise_flows(self):
+        text = self.dash
+        at = text.index('text = "banking_dash_mon_btn_recapitalise"')
+        line = text[:at].count("\n") + 1
+        button = next(n for n in self.tree.walk() if n.kind == "banking_dash_mon_button"
+                      and n.line <= line <= n.end_line)
+        slot, wrapper = button.parent, button.parent.parent
+        self.assertEqual(slot.kind, "widget")
+        self.assertEqual(gui_tree.size(slot), (460, 28))
+        self.assertEqual(slot.prop("using").value, "te_own_country_only")
+        self.assertIsNone(slot.prop("parentanchor"))
+        self.assertIsNone(wrapper.prop("parentanchor"))
+        self.assertEqual(button.prop("parentanchor").value, "hcenter")
 
 
 PROGRESS_BARS = os.path.join(REPO, "common", "scripted_progress_bars", "extra_progress_bars.txt")
