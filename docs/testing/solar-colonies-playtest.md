@@ -371,7 +371,7 @@ us put a fleet of 100 of each role at Earth (with none of ours there, a blockade
 | `TE_SELF_CHECK OK/BROKEN battery_sweep sweep=… low_before=… low_after=… high_before=… high_after=…` | once a game, a month after a country at peace first runs Ground Lasers at half staff or more in a state it controls | the world's debris step took a sweep, the low pool fell by all of it (or to 0) and the high pool didn't move | the low pool fell by less, the high pool moved, or (`sweep=0`) nothing was swept: the method's state modifier doesn't reach the state | compute the sweep in script, level × occupancy × 0.01 by `has_active_production_method`, as `ship_construction`'s fallback does |
 
 1. **The reserve.** With a Space Command running and no enemy fleet at Earth, Space Command's Reserve row stays near
-   0 and the home fleet grows each month, as before (Auto: on). Switch Auto off: the Reserve grows a month at a time,
+   0 and the home fleet grows each month, as before (Auto-launch: On). Switch Auto-launch off: the Reserve grows a month at a time,
    its hover gives the roles, and the home fleet stops growing. Launch puts it all up as one fleet at Earth, with
    full propellant, supply and marines. The upkeep figure counts the reserve too.
 2. **The reserve against a blockade.** At war, console option o (our fleets away from Earth): the Locations row for
@@ -808,13 +808,14 @@ Pause and Resume, the AI's fiscal pause, one Space Command a nation and half fir
 (`docs/systems/mod_systems/space_race.md` § *Fleets, Space Command and combat*: the Pause, One Space Command a nation
 and No Space Command bullets). All under Full Colonies. No self-check line: each rests on a read below.
 
-1. **Pause.** With a Space Command running Fusion Yards and a fleet, press Pause: the button turns to Resume, Built a
+1. **Pause.** (Since 2026-11-25 Paused is one of Construction's three modes; "Space Command's Construction table"
+   below.) With a Space Command running Fusion Yards and a fleet, choose Paused: it is drawn selected, Built a
    month reads Paused at once, and the building's modifiers list Construction Paused. At the next monthly step
-   nothing is built: Fleet strength at full doesn't rise, nor the Reserve with Auto off. A fleet still takes Go,
-   posture and target orders, Launch still sends a reserve up, and with Auto on a reserve built before the pause still
-   launches itself. Resume: the button reads Resuming, the inputs stay cut, and the next step builds nothing (Built a
-   month still Paused); then Construction Paused comes off, and the step after builds the full month's figure again.
-   A click on Resuming before the step cancels it: still paused after the step.
+   nothing is built: Fleet strength at full doesn't rise, nor the Reserve with Auto-launch off. A fleet still takes Go,
+   posture and target orders, Launch still sends a reserve up, and with Auto-launch on a reserve built before the pause
+   still launches itself. Choose Full: it is drawn selected, Built a month reads Resuming, the inputs stay cut, and the
+   next step builds nothing; then Construction Paused comes off, and the step after builds the full month's figure
+   again. Choosing Paused before the step cancels the resume: still paused after the step.
 2. **The inputs' tooltip read (unverified engine fact).** Paused, the building's input tooltip shows Launch Capacity
    and Advanced Materials at 0, each with a −100% Construction Paused line, while the six maintenance goods keep
    their lines and Fleet Upkeep. **Fallback** if a −100% sum doesn't zero an input (it shows a small figure, or
@@ -855,6 +856,43 @@ and No Space Command bullets). All under Full Colonies. No self-check line: each
    and only the step after builds. Pausing mid-month bills the days since the last step for nothing, at most a
    month's inputs. **The owner's alternative** (zero waste, a slower crisis pause): both a pause and a resume wait
    for the step.
+
+## Space Command's Construction table: orders, the mix and the three modes (2026-11-25)
+
+The build mix's five buttons and the Pause button became a table and three modes
+(`docs/systems/mod_systems/space_race.md` § *Fleets, Space Command and combat*: the Orders and the modes bullet).
+All under Full Colonies, with a Space Command building at a known rate (Built a month). No self-check line: every
+engine fact it rests on is in use elsewhere in the panel (two chained scopes on a scripted GUI: the module buttons;
+`click_modifiers`: the Transfer popup; the selected-tab look: the Strategic Reserve's policies). Console option n of
+`event te_debug_space_race.6` fills the reserve, to tell built hulls from launched ones.
+
+1. **The layout.** Under the six cells: Launch, Auto-launch: On and Crews first: Hulls in one row, none cut short;
+   the Construction heading; Full (drawn selected), Orders Only and Paused; then the table, its five heads each over
+   its column and the rows not wider than the cells above; then Hulls on order: 0. Nothing ends in "...", and the −,
+   + and cross buttons sit level with their figures. A click on Auto-launch and on Crews first changes its value in
+   place, the row not moving.
+2. **The mix.** − and + step a weight by one, between 0 and 3: at 3 the + is greyed ("Its weight is below 3",
+   crossed), at 0 the −. The share beside each weight follows at once and the five sum to 100%. With every weight at
+   0, Warships reads 100% and the month's construction is all warships.
+3. **An order's clicks.** On one role: a click on + adds 1, shift-click 10, ctrl-click 100; the same three on − take
+   them off, stopping at 0; the cross withdraws the order. − and the cross are greyed with no order ("It has hulls on
+   order", crossed). Hulls on order follows the sum.
+4. **Orders first, in Full.** With a rate of R a month, order fewer than R hulls of a role with weight 0 (Siege, say):
+   after the next step the Reserve column (Auto-launch off) shows them, the order is back to 0, and the rest of the
+   month went to the mix's roles. Then order more than R, of two roles, one twice the other: each month the two
+   orders come down in that proportion, Months to build them reads the sum over R rounded up, nothing goes to the
+   mix's other roles, and both reach 0 in the same month.
+5. **Orders Only.** With an order under way, choose Orders Only: nothing changes until the order is filled. The step
+   that fills it leaves Built a month reading Idle, the building's modifiers list Construction Paused, and the
+   yards buy no Launch Capacity, Advanced Materials or electricity. Place an order: Built a month reads Resuming; the
+   next step builds nothing, the one after builds. Withdraw that order before the step: back to Idle.
+6. **No month lost to rearranging.** In Orders Only with the yards building, withdraw the only order and place
+   another the same day: Built a month keeps its figure (not Idle), and the next step builds the new order in full.
+7. **Switching modes.** Full to Orders Only and back while the yards build: no Resuming, no missed month. From
+   Paused, Orders Only with nothing on order reads Idle and stays cut; with an order it reads Resuming.
+8. **The AI (observer).** An AI fleet power's table is not ours to see, but its reserve and fleets grow in its mix
+   as before (warships, carriers and tenders in peace). Tag over to one mid-game: its mode reads Full, or Paused
+   under its fiscal pause, and Hulls on order 0.
 
 ## The owner's UI pass: Transfer (PR 4, 2026-10-31)
 

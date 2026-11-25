@@ -22,13 +22,51 @@ sr_disp_sc_rate = {
 	value = 0
 	if = { limit = { has_variable = sr_sc_built_last } value = var:sr_sc_built_last }
 }
-# 1 while construction is paused, 2 while a resume waits for the next step:
-# Built a month reads Paused for both (that step builds nothing), and the
-# button reads Pause, Resume, then Resuming.
+# The yards (the owner, 2026-11-25): 0 building; 1 paused; 2 while a resume
+# waits for the next step, which builds nothing; 3 idle, Orders Only with
+# nothing on order. Built a month reads Paused, Resuming or Idle from 1.
 sr_disp_sc_paused = {
 	value = 0
 	if = { limit = { sr_sc_is_paused = yes } value = 1 }
 	if = { limit = { sr_sc_is_resuming = yes } value = 2 }
+	else_if = {
+		limit = {
+			sr_sc_is_paused = yes
+			sr_sc_orders_only = yes
+		}
+		value = 3
+	}
+}
+# The mode in force, which the panel draws selected (sr_sc_mode_sgui's codes):
+# 1 Full, 2 Orders Only, 3 Paused. A pause with a resume asked for is already
+# the mode it resumes into.
+sr_disp_sc_mode = {
+	value = 1
+	if = { limit = { sr_sc_orders_only = yes } value = 2 }
+	else_if = {
+		limit = {
+			sr_sc_is_paused = yes
+			NOT = { sr_sc_is_resuming = yes }
+		}
+		value = 3
+	}
+}
+# The months the orders take at last month's pace, rounded up; 0 with nothing
+# on order, while the yards don't build, and in a first month back, when last
+# month built nothing: the panel shows the line from 1. Three digits at most.
+sr_disp_sc_order_months = {
+	value = 0
+	if = {
+		limit = {
+			NOT = { sr_sc_is_paused = yes }
+			sr_sc_order_total > 0
+			sr_disp_sc_rate > 0
+		}
+		value = sr_sc_order_total
+		divide = sr_disp_sc_rate
+	}
+	ceiling = yes
+	max = 999
 }
 sr_disp_sc_levels = {
 	value = sr_sc_levels

@@ -624,7 +624,8 @@ sr_sc_one_per_nation = {
 }
 
 # Country scope. The month's construction (sr_sc_rate) into the ground reserve
-# (6d, sr_reserve_<role>), shared by the build mix. The fleets' month then
+# (6d, sr_reserve_<role>): the orders first, then, in Full, the rest by the
+# build mix (sr_reserve_build; the owner, 2026-11-25). The fleets' month then
 # runs Auto (sr_reserve_auto_step, sr_earth_orbit_effects.txt: with the toggle
 # on and no hostile fleet at Earth, the reserve launches itself into the home
 # fleet, 6a's behaviour, as far as the personnel crew it), before or after the
@@ -641,9 +642,20 @@ sr_sc_one_per_nation = {
 # last step to this one. A pause cuts the inputs at once and holds until a
 # step clears it; a resume (sr_sc_resume_pending) waits for this step, which
 # builds nothing (1, the build check, before 2, the resume), and the cut comes
-# off here (3), so the month after is bought in full before it is built.
+# off here (4), so the month after is bought in full before it is built.
 # Clearing the resume first would let a resume the day before the step build
 # a month the inputs never paid for.
+#
+# Orders Only (the owner, 2026-11-25) idles the yards by the same pause, and
+# only here (3): once a step leaves nothing on order, the cut goes on, so no
+# month is bought that no order would use. An order placed while they idle
+# asks to resume like any other (sr_sc_orders_sync), so it too waits out a
+# step that builds nothing. While the yards build, emptying the order book
+# changes nothing until the step, so withdrawing one order and placing
+# another in the same month loses none of it; a book still empty at the step
+# has bought that month for nothing, at most a month's inputs, as a pause
+# mid-month does. In Orders Only what a month has left after the last order
+# is lost (sr_reserve_build), and Built a month reads what was built.
 sr_sc_month = {
 	sr_sc_self_check = yes
 	# 1. The build: nothing while paused, a resume pending or not.
@@ -653,18 +665,28 @@ sr_sc_month = {
 	}
 	else = {
 		set_local_variable = { name = sr_sc_points value = sr_sc_rate }
-		set_variable = { name = sr_sc_built_last value = local_var:sr_sc_points }
+		set_local_variable = { name = sr_sc_built value = 0 }
 		if = {
 			limit = { local_var:sr_sc_points > 0 }
 			sr_reserve_build = yes
 		}
+		set_variable = { name = sr_sc_built_last value = local_var:sr_sc_built }
 	}
 	# 2. A pending resume takes effect.
 	if = {
 		limit = { sr_sc_is_resuming = yes }
 		sr_sc_clear_pause = yes
 	}
-	# 3. The cut follows the variables (and reaches a building built since).
+	# 3. Orders Only with nothing on order: the yards idle from here.
+	if = {
+		limit = {
+			sr_sc_orders_only = yes
+			NOT = { sr_sc_is_paused = yes }
+			sr_sc_order_total <= 0
+		}
+		set_variable = { name = sr_sc_paused value = yes }
+	}
+	# 4. The cut follows the variables (and reaches a building built since).
 	sr_sc_pause_apply = yes
 }
 
@@ -672,7 +694,7 @@ sr_sc_month = {
 # Its one apply site (a same-name add_modifier stacks, so removed first), on
 # each Space Command building of a level or more, wherever it stands, an
 # occupied state's included: the monthly step (sr_sc_month, which also
-# reaches a building built since), the toggle (sr_sc_toggle_pause), so a
+# reaches a building built since), Paused (sr_sc_mode_paused), so a
 # pause reaches the yards' inputs and the building's tooltip at once, and the
 # AI's resume (sr_sc_ai_pause_review).
 sr_sc_pause_apply = {
@@ -695,26 +717,102 @@ sr_sc_pause_apply = {
 	}
 }
 
-# Country scope: Pause, Resume and Resuming (sr_sc_pause_sgui; the AI's
-# pause, sr_sc_ai_pause_review). Building, a click pauses at once (sr_sc_paused,
-# yes; building is its absence) and cuts the inputs. Paused, a click asks to
-# resume (sr_sc_resume_pending): the inputs stay cut and the next step, which
-# builds nothing, ends the pause (sr_sc_month). Resuming, a click cancels it.
-# No cost: a pause mid-month bills the days since the last step for nothing,
-# at most a month's inputs a pause.
-sr_sc_toggle_pause = {
+# Country scope: the yards' three modes (sr_sc_mode_sgui; the owner,
+# 2026-11-25; one Pause / Resume / Resuming button until then). Full, the
+# default: a month's construction fills the orders, then the build mix takes
+# the rest. Orders Only (sr_sc_orders_only): the orders and nothing else, the
+# yards idling while nothing is on order (sr_sc_month, 3). Paused
+# (sr_sc_paused, yes; building is its absence): nothing is built and the
+# inputs are cut at once. No mode ends a pause itself: leaving one asks to
+# resume (sr_sc_resume_pending), the inputs stay cut, and the next step,
+# which builds nothing, ends it (sr_sc_month). Choosing Paused while a resume
+# waits calls it off. Between Full and Orders Only, while the yards build, a
+# switch costs nothing. No cost to pausing either: a pause mid-month bills
+# the days since the last step for nothing, at most a month's inputs a pause.
+sr_sc_mode_full = {
+	if = {
+		limit = { sr_sc_orders_only = yes }
+		remove_variable = sr_sc_orders_only
+	}
+	if = {
+		limit = {
+			sr_sc_is_paused = yes
+			NOT = { sr_sc_is_resuming = yes }
+		}
+		set_variable = { name = sr_sc_resume_pending value = yes }
+	}
+}
+
+sr_sc_mode_orders = {
+	set_variable = { name = sr_sc_orders_only value = yes }
+	sr_sc_orders_sync = yes
+}
+
+# The player's Paused, and the AI's pause (sr_sc_ai_pause_review).
+sr_sc_mode_paused = {
+	if = {
+		limit = { sr_sc_orders_only = yes }
+		remove_variable = sr_sc_orders_only
+	}
 	if = {
 		limit = { sr_sc_is_resuming = yes }
 		remove_variable = sr_sc_resume_pending
 	}
-	else_if = {
-		limit = { sr_sc_is_paused = yes }
-		set_variable = { name = sr_sc_resume_pending value = yes }
-	}
-	else = {
+	if = {
+		limit = { NOT = { sr_sc_is_paused = yes } }
 		set_variable = { name = sr_sc_paused value = yes }
 	}
 	sr_sc_pause_apply = yes
+}
+
+# Country scope, after the mode or the order book changed (sr_sc_mode_orders;
+# sr_sc_order_step, generated). In Orders Only with the yards idle, the first
+# order asks to resume, as leaving Paused does, and with the last order
+# withdrawn before the step the resume is called off. While the yards build
+# it does nothing: they go idle only at a step (sr_sc_month, 3).
+sr_sc_orders_sync = {
+	if = {
+		limit = {
+			sr_sc_orders_only = yes
+			sr_sc_is_paused = yes
+		}
+		if = {
+			limit = {
+				sr_sc_order_total > 0
+				NOT = { sr_sc_is_resuming = yes }
+			}
+			set_variable = { name = sr_sc_resume_pending value = yes }
+		}
+		else_if = {
+			limit = {
+				sr_sc_order_total <= 0
+				sr_sc_is_resuming = yes
+			}
+			remove_variable = sr_sc_resume_pending
+		}
+	}
+}
+
+# Country scope: AMOUNT hulls of ROLE on order or off it (sr_sc_order_step,
+# generated: the table's + and -, a click 1, shift 10, ctrl 100, and its
+# withdraw). An order is hulls still to build (sr_sc_order_<role>, absent at
+# none), held to sr_sc_order_max. Placing one costs nothing and withdrawing
+# one loses nothing: the hulls it built are in the reserve. Each compares
+# before it writes, never a variable it has just set, since the buttons'
+# tooltips walk these and write nothing.
+sr_sc_order_add = {
+	set_variable = { name = sr_sc_order_$ROLE$ value = { value = sr_sc_order_$ROLE$_value add = $AMOUNT$ max = sr_sc_order_max } }
+}
+
+sr_sc_order_cut = {
+	if = {
+		limit = { sr_sc_order_$ROLE$_value > $AMOUNT$ }
+		set_variable = { name = sr_sc_order_$ROLE$ value = { value = sr_sc_order_$ROLE$_value subtract = $AMOUNT$ } }
+	}
+	else_if = {
+		limit = { has_variable = sr_sc_order_$ROLE$ }
+		remove_variable = sr_sc_order_$ROLE$
+	}
 }
 
 # Country scope: the pause ends (the step's pending resume, sr_sc_month; the
@@ -928,13 +1026,20 @@ sr_fl_ai_review = {
 # Country scope, an AI fleet power's month, after its construction (sr_sc_month)
 # and beside its review (owner, 2026-10-31): it pauses Space Command under
 # fiscal stress (sr_sc_ai_should_pause) and resumes once out of it, not before
-# six months (sr_sc_ai_may_resume). The toggle applies the inputs' cut at
+# six months (sr_sc_ai_may_resume). Paused applies the inputs' cut at
 # once, so a pause decided this month saves the coming month's inputs and the
 # next month's step builds nothing. A resume ends the pause directly, not
 # through the pending resume a player's waits on: this runs at the step,
 # after the month's build (nothing, while paused), so the inputs are bought
-# again from now and the next step builds a month they paid for.
+# again from now and the next step builds a month they paid for. The AI
+# places no orders, so it never builds in Orders Only: one that inherits the
+# mode from a player drops it here, or its yards would idle for good (any
+# orders left with it are still built first).
 sr_sc_ai_pause_review = {
+	if = {
+		limit = { sr_sc_orders_only = yes }
+		remove_variable = sr_sc_orders_only
+	}
 	if = {
 		limit = {
 			NOT = { sr_sc_is_paused = yes }
@@ -944,7 +1049,7 @@ sr_sc_ai_pause_review = {
 			sr_has_space_command = yes
 			sr_sc_ai_should_pause = yes
 		}
-		sr_sc_toggle_pause = yes
+		sr_sc_mode_paused = yes
 		set_variable = { name = sr_sc_pause_hold value = yes months = 6 }
 	}
 	else_if = {
@@ -1042,18 +1147,6 @@ sr_fl_leg_self_check = {
 		}
 		set_global_variable = { name = sr_fl_leg_ok_logged value = yes }
 		debug_log = "TE_SELF_CHECK OK fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] country=[THIS.GetCountry.GetTagName] (a fleet landed in its month; flown should equal leg, the months docs/engine/launch_windows_report.md gives the leg) date=[TimeKeeper.GetCurrentDate.GetString]"
-	}
-}
-
-# ---- The build mix (sr_sc_mix_sgui) -----------------------------------------------------------------
-# Country scope: ROLE's weight steps 0 to sr_sc_mix_max, then back to 0.
-sr_sc_mix_step = {
-	if = {
-		limit = { sr_sc_mix_$ROLE$_value >= sr_sc_mix_max }
-		set_variable = { name = sr_sc_mix_$ROLE$ value = 0 }
-	}
-	else = {
-		set_variable = { name = sr_sc_mix_$ROLE$ value = { value = sr_sc_mix_$ROLE$_value add = 1 } }
 	}
 }
 

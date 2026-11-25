@@ -1670,8 +1670,9 @@ class LocationsStripTest(unittest.TestCase):
 
 
 class SpaceCommandCellsTest(unittest.TestCase):
-    """Space Command's four readings are overview cells, two to a row, and the
-    build mix wears the fleet cards' role icons (owner, 2026-11-14)."""
+    """Space Command's readings are overview cells, two to a row (owner,
+    2026-11-14), and its Construction table has a row a role, wearing the fleet
+    cards' role icons (the owner, 2026-11-25; five build-mix buttons until then)."""
 
     @classmethod
     def setUpClass(cls):
@@ -1680,24 +1681,63 @@ class SpaceCommandCellsTest(unittest.TestCase):
 
     def test_six_readings_two_to_a_row(self):
         caps = re.findall(r'text = "je_space_race_widget_ovc_sc_(\w+)_cap"', self.sec)
-        # Built a month, and it paused, share a slot; Personnel and Crewed (space forces personnel, 2026-11-24)
-        self.assertEqual(caps, ["rate", "rate", "strength", "upkeep", "reserve", "personnel", "crewed"])
-        self.assertEqual(self.sec.count("te_banking_ov_cell = {"), 7)
-        self.assertNotIn("te_sr_value_row", self.sec)
-        for hover in ("rate_tt", "rate_paused_tt", "strength_tt", "upkeep_tt", "reserve_tt", "personnel_tt", "crewed_tt"):
+        # Built a month and the yards' three states (paused, resuming, idle) share a slot;
+        # Personnel and Crewed (space forces personnel, 2026-11-24)
+        self.assertEqual(caps, ["rate"] * 4 + ["strength", "upkeep", "reserve", "personnel", "crewed"])
+        self.assertEqual(self.sec.count("te_banking_ov_cell = {"), 9)
+        # The readings are cells; the only label-and-value rows are the two under the table.
+        self.assertEqual(re.findall(r'te_sr_value_row = \{[^{}]*blockoverride "row_label" \{\s*text = "je_space_race_widget_(\w+)"', self.sec),
+                         ["sc_orders_label", "sc_order_months_label"])
+        for hover in ("rate_tt", "rate_paused_tt", "rate_resuming_tt", "rate_idle_tt", "strength_tt", "upkeep_tt", "reserve_tt",
+                      "personnel_tt", "crewed_tt"):
             self.assertEqual(self.sec.count(f'tooltip = "je_space_race_widget_sc_{hover}"'), 1, hover)
         cell = _type_body(_read(os.path.join(REPO, "gui", "journal_entry_widgets", "banking_dashboard_widget.gui")), "te_banking_ov_cell")
         self.assertIn("size = { 238 70 }", cell)
-        self.assertIn("widget = {\n\t\t\t\t\tsize = { 238 70 }", self.sec)   # the slot the two rate cells share
+        self.assertIn("widget = {\n\t\t\t\t\tsize = { 238 70 }", self.sec)   # the slot the four rate cells share
 
-    def test_the_build_mix_wears_the_roles_icons(self):
-        button = _type_body(self.gui, "te_sr_sc_role_button")
-        width = int(re.search(r"size = \{ (\d+) \d+ \}", button).group(1))
-        self.assertLessEqual(5 * width + 4 * 4, 480)
-        pairs = re.findall(r'blockoverride "mix_icon" \{\s*texture = "' + re.escape(SR_ICONS) + r'role_(\w+)\.dds"\s*\}\s*'
-                           r'blockoverride "mix_label" \{\s*text = "je_space_race_widget_sc_mix_(\w+)"', self.sec)
-        self.assertEqual(pairs, [(r, r) for r in ("war", "rapid", "siege", "carrier", "tender")])
-        self.assertEqual(self.sec.count("te_sr_sc_role_button = {"), 5)
+    def test_the_table_s_rows_wear_the_roles_icons(self):
+        rows = _type_body(_read(FLEETS_ROWS), "te_sr_sc_build_rows")
+        pairs = re.findall(r'blockoverride "br_icon" \{\s*texture = "' + re.escape(SR_ICONS) + r'role_(\w+)\.dds"\s*\}\s*'
+                           r'blockoverride "br_role" \{\s*tooltip = "je_space_race_widget_sc_role_(\w+)_tt"\s*\}\s*'
+                           r'blockoverride "br_name" \{\s*text = "je_space_race_widget_fl_role_(\w+)"', rows)
+        self.assertEqual(pairs, [(r, r, r) for r in ("war", "rapid", "siege", "carrier", "tender")])
+        self.assertEqual(self.sec.count("te_sr_sc_build_rows = {}"), 1)
+        self.assertNotIn("te_sr_sc_role_button", self.gui)
+
+    def test_the_table_fits_the_panel(self):
+        """Every cell has a fixed width (style guide rule 8), the heads stand over
+        their cells, and a row is no wider than the panel's 480."""
+        def cells(type_name):
+            return [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\n\t\t\tsize = \{ (\d+) \d+ \}", _type_body(self.gui, type_name))]
+        row, heads = cells("te_sr_sc_build_row"), cells("te_sr_sc_build_heads")
+        self.assertEqual(len(row), 5)
+        self.assertEqual(heads, row)
+        self.assertLessEqual(sum(row) + 4 * (len(row) - 1), 480)
+        body = _type_body(self.gui, "te_sr_sc_build_row")
+        # A stepper is its two buttons, the figure between them and the gaps;
+        # the Mix cell adds the share, the Order cell the withdraw button.
+        figures = {name: int(w) for w, name in re.findall(
+            r"widget = \{\s*size = \{ (\d+) 26 \}\s*parentanchor = vcenter\s*(?:block \"\w+\" \{\}\s*)?textbox = \{[^{}]*block \"(\w+)\"", body)}
+        self.assertEqual(set(figures), {"br_mix_weight", "br_mix_share", "br_order"})
+        self.assertLessEqual(26 + figures["br_mix_weight"] + 26 + figures["br_mix_share"] + 3 * 2, row[3])
+        self.assertLessEqual(26 + figures["br_order"] + 26 + 26 + 3 * 2, row[4])
+        self.assertEqual(body.count("button_icon_minus_action = {"), 2)
+        self.assertEqual(body.count("button_icon_plus_action = {"), 2)
+        self.assertEqual(body.count("button_icon_cancel = {"), 1)
+
+    def test_launch_and_the_two_toggles_fit_their_row(self):
+        widths = [int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, t)).group(1))
+                  for t in ("te_sr_sc_button", "te_sr_sc_button_mid", "te_sr_sc_button_wide")]
+        self.assertLessEqual(sum(widths) + 2 * 4 + 2 * 4, 480)   # the gaps, and the row's margin
+        # A toggle is two buttons taking turns in one slot of their size (rule 8).
+        for typ, width in zip(("te_sr_sc_button_mid", "te_sr_sc_button_wide"), widths[1:]):
+            with self.subTest(toggle=typ):
+                slot = re.search(r"widget = \{\s*size = \{ " + str(width) + r" 26 \}\s*parentanchor = vcenter\s*"
+                                 + typ + r" = \{\s*visible = ", self.sec)
+                self.assertIsNotNone(slot)
+                self.assertEqual(self.sec.count(f"{typ} = {{"), 2)
+        modes = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_sc_mode_choice")).group(1))
+        self.assertLessEqual(3 * modes + 2 * 4 + 2 * 4, 480)
 
 
 class ColonyFleetTrackTest(unittest.TestCase):

@@ -92,6 +92,8 @@ FLEET_UPKEEP_PCT = 9999 * 900   # sr_disp_sc_upkeep_pct: +900% a unit of full st
 # strength and two battalions a carrier point; |K shows three figures, so the longest is any value past 100M.
 PERSONNEL = 999_000_000
 MIX_WEIGHT = 3            # sr_disp_sc_mix_<role>: sr_sc_mix_max
+ORDER_HULLS = 5 * 9999    # sr_disp_sc_order_total: sr_sc_order_max a role, five roles
+ORDER_MONTHS = 999        # sr_disp_sc_order_months: its own max
 QUEUE_PLACES = 20         # sr_disp_mq_count: gen_solar_sites.QUEUE_SLOTS
 WINDOW_MONTHS = 999       # sr_window_disp_next: capped at 999 (the cell reads "No site left" there)
 WINDOW_WAIT = 99          # sr_window_wait_months_<body>: the longest wait is Mars's synodic period, 26 months
@@ -268,8 +270,16 @@ def _longest_figure(name):
         return TRANSIT_CEILING
     if re.fullmatch(r"sr_disp_win_premium_\w+", name):
         return WINDOW_PREMIUM_SHOWN
+    if re.fullmatch(r"sr_disp_sc_mix_pct_\w+", name):
+        return 100  # a share, in percent
+    if re.fullmatch(r"sr_disp_sc_mix_rate_\w+", name):
+        return SC_RATE_CEILING  # a share of sr_disp_sc_rate
     if re.fullmatch(r"sr_disp_sc_mix_\w+", name):
         return MIX_WEIGHT
+    if re.fullmatch(r"sr_disp_sc_order_(?!total|months)\w+", name):
+        return ORDER_HULLS // 5
+    if re.fullmatch(r"sr_disp_fl_role_\w+", name):
+        return FLEET_STRENGTH
     if re.fullmatch(r"sr_disp_cf_slot_\d_year", name):
         return END_YEAR
     if re.fullmatch(r"sr_fl_\d_strength", name):  # the Transfer popup's Into buttons, "Antimatter 99999"
@@ -296,6 +306,7 @@ def _longest_figure(name):
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
              "sr_disp_fl_count": SPACE_FLEETS,
+             "sr_disp_sc_order_total": ORDER_HULLS, "sr_disp_sc_order_months": ORDER_MONTHS,
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
              "sr_disp_pers_in_service": PERSONNEL, "sr_disp_pers_capacity": PERSONNEL, "sr_disp_pers_share_pct": 100,
              "sr_disp_earth_hostile_total": FLEET_STRENGTH, "sr_disp_loc_ours_earth": FLEET_STRENGTH,
@@ -451,6 +462,7 @@ CELLS = {
         r"je_space_race_widget_(setbacks_label|eta_label|colonies_held_label|cf_in_flight_label"
         r"|emig_sent_label|emig_bill_label|offworld_label|orbit_\w+_label|fab_label|shipments_label|mod_upkeep_label"
         r"|ebase_label|ebase_queued_label|eb_unassigned_label|resort_label|resort_queued_label|free_trade_label|sc_rate_label|sc_strength_label|sc_upkeep_label|sc_reserve_label"
+        r"|sc_orders_label|sc_order_months_label"
         r"|cf_drive_label|mq_next_label)"),
     "value-row figure (te_sr_value_row)": (
         ("te_sr_value_row", 'block "row_value"'),
@@ -459,6 +471,7 @@ CELLS = {
         r"|eb_unassigned_figure"
         r"|resort_figure|resort_queued_figure"
         r"|free_trade_figure|sc_rate_figure|sc_rate_paused|sc_strength_figure|sc_upkeep_figure|sc_reserve_figure"
+        r"|sc_orders_figure|sc_order_months_figure"
         r"|cf_drive_value|mq_next_(?:months|full|none|held))"),
     "approach label (te_sr_sec_control)": (
         ("te_sr_sec_control", 'text = "je_space_race_widget_approach_label"'),
@@ -480,7 +493,7 @@ CELLS = {
         r"je_space_race_widget_rival_range_\w+"),
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
-        r"je_space_race_widget_(ss_loc_\w+|powers_others|mq_header|free_header|sc_mix_header|howc_sub_\w+"
+        r"je_space_race_widget_(ss_loc_\w+|powers_others|mq_header|free_header|sc_build_header|howc_sub_\w+"
         r"|windows_header|eb_totals_header|effects_header)"),
     "Program Effects' group captions (te_sr_program_effects)": (
         ("te_sr_program_effects", 'text = "je_space_race_widget_effects_ongoing"'),
@@ -794,12 +807,22 @@ CELLS = {
     "a destination's transit and its head (te_sr_window_row)": (
         ("te_sr_window_row", 'block "win_transit"'),
         r"je_space_race_widget_win_(col_transit|transit_\w+)"),
-    "Launch, Auto, Pause and the personnel priority (te_sr_sc_mix_button)": (
-        ("te_sr_sc_mix_button", 'block "mix_label"'),
-        r"je_space_race_widget_sc_(launch|auto_on|auto_off|pause|resume|resuming|hulls_first|marines_first)"),
-    "the build mix, a role's word and weight under its icon (te_sr_sc_role_button)": (
-        ("te_sr_sc_role_button", 'block "mix_label"'),
-        r"je_space_race_widget_sc_mix_(war|rapid|siege|carrier|tender)"),
+    # Space Command (the owner, 2026-11-25): Launch, the two toggles as "Label:
+    # value", each in a button of its width, the yards' three modes, and the
+    # Construction table's heads and role words.
+    "Launch (te_sr_sc_button)": (
+        ("te_sr_sc_button", 'block "sc_label"'), r"je_space_race_widget_sc_launch"),
+    "Auto-launch (te_sr_sc_button_mid)": (
+        ("te_sr_sc_button_mid", 'block "sc_label"'), r"je_space_race_widget_sc_auto_(on|off)"),
+    "the personnel priority (te_sr_sc_button_wide)": (
+        ("te_sr_sc_button_wide", 'block "sc_label"'), r"je_space_race_widget_sc_(hulls|marines)_first"),
+    "the yards' modes (te_sr_sc_mode_choice)": (
+        ("te_sr_sc_mode_choice", 'block "mode_label"'), r"je_space_race_widget_sc_mode_(full|orders|paused)"),
+    **{f"the Construction table's {col} head (te_sr_sc_build_heads)": (
+        ("te_sr_sc_build_heads", f'text = "je_space_race_widget_sc_col_{col}"'), f"je_space_race_widget_sc_col_{col}")
+       for col in ("role", "fleets", "reserve", "mix", "order")},
+    "a role's word in the Construction table (te_sr_sc_build_row)": (
+        ("te_sr_sc_build_row", 'block "br_name"'), r"je_space_race_widget_fl_role_(war|rapid|siege|carrier|tender)"),
     # Dismantling (owner, 2026-10-31): a module level coming down, under its name.
     "a module coming down on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'text = "je_space_race_widget_mod_coming_down"'),
@@ -1034,6 +1057,10 @@ class FigureBudgetTest(unittest.TestCase):
     # its list; on its page a role now of full, its fire to a tenth and, in the
     # drive's tile, a refit's months.
     FLEET_SWITCH = {"switch_number": "VIII", "switch_strength": "9999"}
+    # Space Command's Construction table (the owner, 2026-11-25): every fleet's
+    # strength in a role and the reserve's, five digits as the overview's; a
+    # weight (sr_sc_mix_max), its share, and an order (sr_sc_order_max).
+    BUILD = {"br_fleets": "99999", "br_reserve": "99999", "br_mix_weight": "3", "br_mix_share": "100%", "br_order": "9999"}
     FLEET_PAGE = {"fp_role_war": "9999 / 9999", "fp_role_rapid": "9999 / 9999", "fp_role_siege": "9999 / 9999",
                   "fp_role_carrier": "9999 / 9999", "fp_role_tender": "9999 / 9999",
                   "fp_fire_fleets": "99999.9", "fp_fire_defences": "99999.9", "fl_refit": "3", "fp_repair": "100%"}
@@ -1222,6 +1249,7 @@ class FigureBudgetTest(unittest.TestCase):
         self._check("te_sr_fleet_row", self.FLEET)
         self._check("te_sr_fl_gauge", self.GAUGE)
         self._check("te_sr_fl_role_cell", self.ROLE)
+        self._check("te_sr_sc_build_row", self.BUILD)
         self._check("te_sr_xf_role_row", self.TRANSFER)
         self._check("te_sr_location_cell", self.LOCATION)
 

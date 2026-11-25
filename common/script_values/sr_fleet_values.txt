@@ -69,6 +69,9 @@ sr_sc_mix_start_siege = { value = 0 }
 sr_sc_mix_start_carrier = { value = 1 }
 sr_sc_mix_start_tender = { value = 1 }
 sr_sc_mix_max = { value = 3 }
+# The most hulls of one role on order at once (sr_sc_order_<role>; the owner,
+# 2026-11-25): four digits, which is what the table's Order cell holds.
+sr_sc_order_max = { value = 9999 }
 
 # Country scope. Fleet strength Space Command builds a month: the methods'
 # workforce-scaled state modifier, summed over the states the country controls

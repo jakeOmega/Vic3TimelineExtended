@@ -91,6 +91,15 @@ sr_sc_is_resuming = {
 	has_variable = sr_sc_resume_pending
 }
 
+# Country scope. Orders Only (sr_sc_mode_sgui; the owner, 2026-11-25): the
+# yards build what is on order (sr_sc_order_<role>) and nothing by the build
+# mix; with nothing on order they stand idle, paused by the monthly step
+# (sr_sc_month) until an order asks to resume (sr_sc_orders_sync). Its absence
+# is Full, the default: orders first, the rest of the month by the mix.
+sr_sc_orders_only = {
+	has_variable = sr_sc_orders_only
+}
+
 # Country scope, an AI's pause: in default, or in deficit at peace. At war only
 # default pauses it: a war puts most countries in deficit, and a deficit pause
 # would stop the fleets being built for the space war. The fiscal terms of
