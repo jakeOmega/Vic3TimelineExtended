@@ -506,6 +506,15 @@ def _token(value: str) -> str:
     return f'"{value}"'
 
 
+# The vanilla readers and the token writer under public names, for gen_assimilation_cultures, which reads its
+# reference cultures and writes its hybrids the way this generator does.
+culture_fields = _fields
+single = _single
+name_list = _list
+ethnicities = _ethnicities
+token = _token
+
+
 def render_name_list(list_name: str, names: list[str]) -> str:
     """A tab-indented ``list_name = { ... }`` block, wrapped at WRAP characters. "" for no names."""
     if not names:
@@ -527,14 +536,23 @@ def _part_names(parts) -> str:
 
 
 def render_culture(entry: Built) -> str:
-    merge, fields = entry.merge, entry.fields
-    r, g, b = merge.new.color
+    merge = entry.merge
     comment = f"# {merge.new.name}: {_part_names(merge.core)}"
     if merge.optional:
         comment += f" (optional: {_part_names(merge.optional)})"
+    return render_culture_block(merge.result, comment, merge.new.color, entry.fields)
+
+
+def render_culture_block(key: str, comment: str, color: tuple[int, int, int], fields: dict) -> str:
+    """One culture definition, ``comment`` its first line; ``fields`` in ``Built.fields``' shape.
+
+    gen_assimilation_cultures writes its hybrids through this too, so both
+    families of generated culture keep one field order.
+    """
+    r, g, b = color
     out = [
         comment + "\n",
-        f"{merge.result} = {{\n",
+        f"{key} = {{\n",
         f"\tcolor = rgb{{ {r} {g} {b} }}\n",
         f"\treligion = {fields['religion']}\n",
         f"\theritage = {fields['heritage']}\n",
@@ -609,12 +627,16 @@ def culture_static_modifier_keys(culture: str) -> list[str]:
 
 def render_static_modifiers(plan: list[Built]) -> str:
     """Each new result's six expected static modifiers, in vanilla's shape (vanilla's three files, one section each)."""
-    out = [HEADER, "", "# The static modifiers the engine expects of every culture; vanilla's live in three files, named in each section.",
+    return render_static_modifiers_for([entry.merge.result for entry in plan], HEADER)
+
+
+def render_static_modifiers_for(cultures: list[str], header: str) -> str:
+    """The six expected static modifiers of each of ``cultures``, in vanilla's shape, under ``header``."""
+    out = [header, "", "# The static modifiers the engine expects of every culture; vanilla's live in three files, named in each section.",
            "# The engine logs `Missing expected culture static modifier <key>` at load for a culture without them."]
     for vanilla_file, kind, pattern, _ in CULTURE_STATIC_MODIFIER_KINDS:
         out += ["", "# ---- as vanilla's %s ----" % vanilla_file]
-        for entry in plan:
-            culture = entry.merge.result
+        for culture in cultures:
             for sign in CULTURE_STATIC_MODIFIER_SIGNS:
                 out += [
                     "",
@@ -628,16 +650,24 @@ def render_static_modifiers(plan: list[Built]) -> str:
 
 def render_modifier_types(plan: list[Built]) -> str:
     """Each new result's three culture modifier types, in vanilla's shape (one section per vanilla file)."""
-    out = [HEADER, "", "# The modifier types the engine expects of every culture, which its static modifiers",
-           "# (te_merged_culture_static_modifiers.txt) use; vanilla's live in three files, named in each section.",
+    return render_modifier_types_for([entry.merge.result for entry in plan], HEADER, STATIC_MODIFIERS_OUT.name)
+
+
+def render_modifier_types_for(cultures: list[str], header: str, static_file: str) -> str:
+    """The three culture modifier types of each of ``cultures``, in vanilla's shape, under ``header``.
+
+    ``static_file`` is the name of the file whose static modifiers use them, which the comment cites.
+    """
+    out = [header, "", "# The modifier types the engine expects of every culture, which its static modifiers",
+           "# (%s) use; vanilla's live in three files, named in each section." % static_file,
            "# Without them each static modifier logs `Unknown modifier type` at load and does nothing.",
            "# The engine names them from the culture, so they carry no loc key, as vanilla's don't."]
     for _, kind, pattern, _ in CULTURE_STATIC_MODIFIER_KINDS:
         out += ["", "# ---- as vanilla's %s ----" % CULTURE_MODIFIER_TYPE_FILES[kind]]
-        for entry in plan:
+        for culture in cultures:
             out += [
                 "",
-                "%s = {" % pattern.format(c=entry.merge.result),
+                "%s = {" % pattern.format(c=culture),
                 "\tdecimals = 1",
                 "\tcolor = good",
                 "\tgame_data = {",
@@ -650,9 +680,13 @@ def render_modifier_types(plan: list[Built]) -> str:
 
 def static_modifier_loc(plan: list[Built]) -> dict[str, str]:
     """Display names of the expected static modifiers (vanilla's carry none; the mod's are named so none shows raw)."""
+    return static_modifier_loc_for([entry.merge.result for entry in plan])
+
+
+def static_modifier_loc_for(cultures: list[str]) -> dict[str, str]:
+    """Display names of the expected static modifiers of each of ``cultures``: the culture spliced, then the kind."""
     out = {}
-    for entry in plan:
-        culture = entry.merge.result
+    for culture in cultures:
         for _, kind, _, label in CULTURE_STATIC_MODIFIER_KINDS:
             for sign in CULTURE_STATIC_MODIFIER_SIGNS:
                 out["%s_%s_modifier_%s" % (culture, kind, sign)] = "$%s$ %s" % (culture, label)
