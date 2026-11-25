@@ -39,7 +39,8 @@ common/scripted_effects/sr_fleet_effects.txt and sr_fleet_combat_effects.txt):
   Locations rows (the colonies' Defenses are a view of gen_solar_sites' Colonies rows),
   the Transfer popup's bodies, one a slot (UI pass design § 6), and the Fleets
   window's list and pages (te_sr_fleet_popup; the owner, 2026-11-25), a page a
-  slot filled from its card's own blocks.
+  slot filled from its card's own blocks, and Space Command's table
+  (te_sr_sc_build_rows; the owner, 2026-11-25), a row a role.
 
 Transfer (UI pass design § 6) took in Merge and Detach on the panel: the amounts
 are country variables (``sr_det_amt_<key>``, ``sr_det_to``) read only through
@@ -101,7 +102,15 @@ ROLES: tuple[Role, ...] = (
     Role("carrier", "Assault carriers", 0.25, 0.25, 12, False, 2),
     Role("tender", "Tenders", 0.1, 0.1, 36, False, 0),
 )
-ROLE_CODE = {r.key: i for i, r in enumerate(ROLES, start=1)}  # the build mix's scope:op
+ROLE_CODE = {r.key: i for i, r in enumerate(ROLES, start=1)}  # Space Command's table: a role's scope:op
+# Space Command's table (the owner, 2026-11-25): scope:op the role, scope:pick
+# the step. The build mix's weight goes a step down or up (sr_sc_mix_sgui); an
+# order takes hulls off or adds them, a click 1, shift 10, ctrl 100, as the
+# construction panel's levels do, and ORDER_CLEAR withdraws it (sr_sc_order_sgui).
+MIX_STEPS = {1: -1, 2: 1}
+ORDER_STEPS = {1: -1, 2: -10, 3: -100, 4: 1, 5: 10, 6: 100}
+ORDER_CLEAR = 7
+ORDER_HANDLERS = ("ondefault", "onshift", "onctrl")
 DRIVES = tuple(d.key for d in glw.DRIVES)
 # A fleet's pace: its drive, or one ahead for rapid response hulls alone; 4 is
 # antimatter's rapid response, at three quarters of antimatter's months.
@@ -357,6 +366,17 @@ def render_values() -> str:
         if r.key == "war":
             out.append("\telse = { value = 1 }")
         out.append("}")
+    out += ["", "# ===== Orders (the owner, 2026-11-25), country scope: each role's hulls still on",
+            "# order (sr_sc_order_<role>), which a month's construction fills before the build",
+            "# mix takes the rest (sr_reserve_build), and their sum. =====",
+            *[line for r in ROLES for line in _opt(f"sr_sc_order_{r.key}_value", f"sr_sc_order_{r.key}")],
+            "sr_sc_order_total = {", "\tvalue = 0", *[f"\tadd = sr_sc_order_{r.key}_value" for r in ROLES], "}",
+            "", "# Space Command's table (sr_sc_mix_sgui, sr_sc_order_sgui): the weight and the order",
+            "# of scope:op's role (" + ", ".join(f"{c} {k}" for k, c in ROLE_CODE.items()) + "), for the buttons' checks.",
+            "sr_sc_mix_op_value = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ scope:op = {c} }} value = sr_sc_mix_{k}_value }}" for k, c in ROLE_CODE.items()], "}",
+            "sr_sc_order_op_value = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ scope:op = {c} }} value = sr_sc_order_{k}_value }}" for k, c in ROLE_CODE.items()], "}"]
     out += ["", "# ===== The ground reserve (6d, design § 15), country scope: each role's strength",
             "# built and not yet launched (sr_reserve_<role>), all at full, and their sum. =====",
             *[line for r in ROLES for line in _opt(f"sr_reserve_{r.key}_value", f"sr_reserve_{r.key}")],
@@ -872,18 +892,94 @@ def render_role_effects() -> list[str]:
             for x in SLOT_LISTS]
     out += ["}", "",
             "# The month's construction (local_var:sr_sc_points) into the ground reserve (6d,",
-            "# design § 15), shared by the build mix; it reaches orbit at full when launched.",
-            "sr_reserve_build = {"]
+            "# design § 15). Orders first (the owner, 2026-11-25; sr_sc_order_<role>). A",
+            "# month that covers every order moves each whole, an amount and not a share:",
+            "# a share of a small remainder cuts to 0 in fixed point (0.002 x 0.002), and",
+            "# the order would stay on the books for good (the review of #2063). Orders that",
+            "# want more than the month take all of it, each in proportion to what it still",
+            "# wants, so they finish together, and each comes down by what it got. What the",
+            "# orders leave is shared by the build mix, unless the yards build orders only",
+            "# (sr_sc_orders_only), when it is lost. local_var:sr_sc_built is what was built,",
+            "# for Built a month. A hull reaches orbit at full when launched.",
+            "sr_reserve_build = {",
+            "\tset_local_variable = { name = sr_sc_built value = 0 }",
+            "\tset_local_variable = { name = sr_sc_order_left value = sr_sc_order_total }",
+            "\tif = {",
+            "\t\tlimit = {",
+            "\t\t\tlocal_var:sr_sc_order_left > 0",
+            "\t\t\tlocal_var:sr_sc_points >= local_var:sr_sc_order_left",
+            "\t\t}"]
     for r in ROLES:
-        out += ["\tif = {",
-                f"\t\tlimit = {{ sr_sc_mix_share_{r.key} > 0 }}",
-                f"\t\tset_local_variable = {{ name = sr_sc_share value = {{ value = local_var:sr_sc_points "
-                f"multiply = sr_sc_mix_share_{r.key} }} }}",
-                f"\t\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ has_variable = sr_sc_order_{r.key} }}",
+                f"\t\t\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
                 f"set_variable = {{ name = sr_reserve_{r.key} value = 0 }} }}",
-                f"\t\tchange_variable = {{ name = sr_reserve_{r.key} add = local_var:sr_sc_share }}",
-                "\t}"]
-    out += ["}", "",
+                f"\t\t\tchange_variable = {{ name = sr_reserve_{r.key} add = var:sr_sc_order_{r.key} }}",
+                f"\t\t\tremove_variable = sr_sc_order_{r.key}",
+                "\t\t}"]
+    out += ["\t\tchange_local_variable = { name = sr_sc_built add = local_var:sr_sc_order_left }",
+            "\t\tchange_local_variable = { name = sr_sc_points subtract = local_var:sr_sc_order_left }",
+            "\t}",
+            "\telse_if = {",
+            "\t\tlimit = { local_var:sr_sc_order_left > 0 }"]
+    for r in ROLES:
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ sr_sc_order_{r.key}_value > 0 }}",
+                f"\t\t\tset_local_variable = {{ name = sr_sc_share value = {{ value = var:sr_sc_order_{r.key} "
+                "multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left } }",
+                f"\t\t\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
+                f"set_variable = {{ name = sr_reserve_{r.key} value = 0 }} }}",
+                f"\t\t\tchange_variable = {{ name = sr_reserve_{r.key} add = local_var:sr_sc_share }}",
+                f"\t\t\tchange_variable = {{ name = sr_sc_order_{r.key} subtract = local_var:sr_sc_share }}",
+                "\t\t\tchange_local_variable = { name = sr_sc_built add = local_var:sr_sc_share }",
+                "\t\t}",
+                f"\t\tif = {{ limit = {{ has_variable = sr_sc_order_{r.key} var:sr_sc_order_{r.key} <= 0.0001 }} "
+                f"remove_variable = sr_sc_order_{r.key} }}"]
+    out += ["\t\tset_local_variable = { name = sr_sc_points value = 0 }",
+            "\t}",
+            "\tif = {",
+            "\t\tlimit = {",
+            "\t\t\tlocal_var:sr_sc_points > 0.0001",
+            "\t\t\tNOT = { sr_sc_orders_only = yes }",
+            "\t\t}"]
+    for r in ROLES:
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ sr_sc_mix_share_{r.key} > 0 }}",
+                f"\t\t\tset_local_variable = {{ name = sr_sc_share value = {{ value = local_var:sr_sc_points "
+                f"multiply = sr_sc_mix_share_{r.key} }} }}",
+                f"\t\t\tif = {{ limit = {{ NOT = {{ has_variable = sr_reserve_{r.key} }} }} "
+                f"set_variable = {{ name = sr_reserve_{r.key} value = 0 }} }}",
+                f"\t\t\tchange_variable = {{ name = sr_reserve_{r.key} add = local_var:sr_sc_share }}",
+                "\t\t}"]
+    out += ["\t\tchange_local_variable = { name = sr_sc_built add = local_var:sr_sc_points }",
+            "\t}",
+            "}", "",
+            "# Space Command's table (the owner, 2026-11-25): scope:op the role ("
+            + ", ".join(f"{c} {k}" for k, c in ROLE_CODE.items()) + "),",
+            "# scope:pick the step. The build mix (sr_sc_mix_sgui): pick 1 takes a step off the",
+            "# role's weight, 2 adds one, held to 0 and sr_sc_mix_max.",
+            "sr_sc_mix_by_op = {",
+            *_chain([(f"scope:op = {c}", [f"sr_sc_mix_step = {{ ROLE = {k} }}"]) for k, c in ROLE_CODE.items()]),
+            "}",
+            "sr_sc_mix_step = {",
+            *_chain([(f"scope:pick = {code} sr_sc_mix_$ROLE$_value " + ("> 0" if step < 0 else "< sr_sc_mix_max"),
+                      ["set_variable = { name = sr_sc_mix_$ROLE$ value = { value = sr_sc_mix_$ROLE$_value "
+                       f"add = {step} }} }}"]) for code, step in MIX_STEPS.items()]),
+            "}", "",
+            "# An order (sr_sc_order_sgui): pick "
+            + ", ".join(f"{c} {s:+d}" for c, s in ORDER_STEPS.items()) + f" hulls, {ORDER_CLEAR} withdraws it;",
+            "# the order is held to 0 and sr_sc_order_max (sr_sc_order_add, sr_sc_order_cut:",
+            "# sr_fleet_effects.txt), and the yards hear of it (sr_sc_orders_sync).",
+            "sr_sc_order_by_op = {",
+            *_chain([(f"scope:op = {c}", [f"sr_sc_order_step = {{ ROLE = {k} }}"]) for k, c in ROLE_CODE.items()]),
+            "}",
+            "sr_sc_order_step = {",
+            *_chain([(f"scope:pick = {code}",
+                      [f"sr_sc_order_{'add' if step > 0 else 'cut'} = {{ ROLE = $ROLE$ AMOUNT = {abs(step)} }}"])
+                     for code, step in ORDER_STEPS.items()]
+                    + [(f"scope:pick = {ORDER_CLEAR}", ["sr_sc_order_cut = { ROLE = $ROLE$ AMOUNT = sr_sc_order_max }"])]),
+            "\tsr_sc_orders_sync = yes",
+            "}", "",
             "# The reserve into the slot at Earth (a launch: sr_earth_orbit_effects.txt), at",
             "# full, as far as the personnel crew it (2026-11-24 design § 4): the share",
             "# sr_pers_reserve_share of each role, read once before anything moves (the",
@@ -2314,8 +2410,25 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ NOT = {{ {var(n, 'target_known')} = yes }} }} add = 1 }}", "}"]
     out += ["", "# Our fleets, for the section's empty note.",
             "sr_disp_fl_count = { value = sr_fl_count }",
-            "", "# The build mix's weights (Space Command).",
+            "", "# The build mix's weights (Space Command's table), each role's share of what a",
+            "# month's construction has left after the orders, in percent, and that share of",
+            "# the yards' pace (sr_disp_sc_pace: what the mix builds a month with nothing on",
+            "# order; the share's hover).",
             *[f"sr_disp_sc_mix_{r.key} = {{ value = sr_sc_mix_{r.key}_value }}" for r in ROLES],
+            *[f"sr_disp_sc_mix_pct_{r.key} = {{ value = sr_sc_mix_share_{r.key} multiply = 100 }}" for r in ROLES],
+            *[f"sr_disp_sc_mix_rate_{r.key} = {{ value = sr_disp_sc_pace multiply = sr_sc_mix_share_{r.key} }}" for r in ROLES],
+            "", "# Orders (the owner, 2026-11-25): each role's hulls still on order, rounded up,",
+            "# so an order under way never reads 0, and the rows' sum, so Hulls on order is",
+            "# what the table's rows add up to.",
+            *[f"sr_disp_sc_order_{r.key} = {{ value = sr_sc_order_{r.key}_value ceiling = yes }}" for r in ROLES],
+            "sr_disp_sc_order_total = {", "\tvalue = 0", *[f"\tadd = sr_disp_sc_order_{r.key}" for r in ROLES], "}",
+            "", "# Our fleets' strength by role, now and at full (the table's Fleets column and its",
+            "# hover).",
+            *[line for r in ROLES for line in (
+                f"sr_disp_fl_role_{r.key} = {{", "\tvalue = 0",
+                *[f"\tadd = {var(n, r.key + '_value')}" for n in range(1, SLOTS + 1)], "}",
+                f"sr_disp_fl_role_{r.key}_full = {{", "\tvalue = 0",
+                *[f"\tadd = {var(n, r.key + '_full_value')}" for n in range(1, SLOTS + 1)], "}")],
             "", "# The ground reserve by role (6d; Space Command's Reserve hover).",
             *[f"sr_disp_reserve_{r.key} = {{ value = sr_reserve_{r.key}_value }}" for r in ROLES]]
     # The Hostile Fleet cell's hover (UI pass design § 9): one line a power at
@@ -3038,6 +3151,51 @@ def _land_slot(n: int) -> list[str]:
     return out + ["\t\t}"]
 
 
+def _sc_scope(op: int, pick: int) -> str:
+    """Space Command's table: the role (op) and the step (pick), each a literal."""
+    return (f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){op}' ) )"
+            f".AddScope( 'pick', MakeScopeValue( '(CFixedPoint){pick}' ) ).End")
+
+
+def _sc_button(sgui: str, op: int, pick: int, shifted: tuple[int, ...] = ()) -> list[str]:
+    """A table button: greyed and explained by its plain click's code; with
+    `shifted`, shift-click and ctrl-click send those codes instead."""
+    scope = _sc_scope(op, pick)
+    out = [f'enabled = "{_xf_call(sgui, "IsValid", scope)}"', f'tooltip = "{_xf_reasoned(sgui, scope)}"']
+    if not shifted:
+        return out + [f'onclick = "{_xf_call(sgui, "Execute", scope)}"']
+    out += ["click_modifiers = {"]
+    out += [f'\t{handler} = "{_xf_call(sgui, "Execute", _sc_scope(op, code))}"'
+            for handler, code in zip(ORDER_HANDLERS, (pick, *shifted))]
+    return out + ["}"]
+
+
+def _sc_build_row(r: Role) -> list[str]:
+    """A role's row in Space Command's table (te_sr_sc_build_row)."""
+    op = ROLE_CODE[r.key]
+    mix_down = next(code for code, step in MIX_STEPS.items() if step < 0)
+    mix_up = next(code for code, step in MIX_STEPS.items() if step > 0)
+    less = [code for code, step in sorted(ORDER_STEPS.items(), key=lambda cs: -cs[1]) if step < 0]
+    more = [code for code, step in sorted(ORDER_STEPS.items(), key=lambda cs: cs[1]) if step > 0]
+    out = ["\t\tte_sr_sc_build_row = {"]
+    out += _override("br_icon", f'texture = "gfx/interface/icons/space_race_icons/role_{r.key}.dds"')
+    out += _override("br_role", f'tooltip = "je_space_race_widget_sc_role_{r.key}_tt"')
+    out += _override("br_name", f'text = "je_space_race_widget_fl_role_{r.key}"')
+    out += _override("br_fleets_tooltip", f'tooltip = "je_space_race_widget_sc_fleets_{r.key}_tt"')
+    out += _override("br_fleets", f'raw_text = "[{_sv(f"sr_disp_fl_role_{r.key}")}|0]"')
+    out += _override("br_reserve", f'raw_text = "[{_sv(f"sr_disp_reserve_{r.key}")}|0]"')
+    out += _override("br_mix_down", *_sc_button("sr_sc_mix_sgui", op, mix_down))
+    out += _override("br_mix_weight", f'raw_text = "[{_sv(f"sr_disp_sc_mix_{r.key}")}|0]"')
+    out += _override("br_mix_up", *_sc_button("sr_sc_mix_sgui", op, mix_up))
+    out += _override("br_mix_share_tooltip", f'tooltip = "je_space_race_widget_sc_share_{r.key}_tt"')
+    out += _override("br_mix_share", f'raw_text = "[{_sv(f"sr_disp_sc_mix_pct_{r.key}")}|0]%"')
+    out += _override("br_order_down", *_sc_button("sr_sc_order_sgui", op, less[0], tuple(less[1:])))
+    out += _override("br_order", f'raw_text = "[{_sv(f"sr_disp_sc_order_{r.key}")}|0]"')
+    out += _override("br_order_up", *_sc_button("sr_sc_order_sgui", op, more[0], tuple(more[1:])))
+    out += _override("br_order_clear", *_sc_button("sr_sc_order_sgui", op, ORDER_CLEAR))
+    return out + ["\t\t}"]
+
+
 def render_gui() -> str:
     out = [HEADER.rstrip("\n"),
            "### Solar System Colonization's Fleets and Locations rows, from",
@@ -3053,6 +3211,8 @@ def render_gui() -> str:
            "### (te_sr_fleet_popup; the owner, 2026-11-25): te_sr_fleet_switch_rows, its",
            "### list of our fleets, and te_sr_fleet_pages, a page a slot (te_sr_fleet_page)",
            "### filled from its card's own blocks, shown on the client-side sr_fleet_focus.",
+           "### And Space Command's table (te_sr_sc_build_rows; the owner, 2026-11-25), a row a",
+           "### role: its build-mix weight and its order.",
            "### The colonies' Defenses",
            "### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).",
            "",
@@ -3132,6 +3292,17 @@ def render_gui() -> str:
             "\t\tignoreinvisible = yes"]
     for n in range(1, SLOTS + 1):
         out += [""] + _fleet_page(n) + _fleet_gone(n)
+    out += ["\t}", "",
+            "\t### Space Command's table (te_sr_sec_space_command in space_race_widget.gui; the",
+            "\t### owner, 2026-11-25): a row a role (te_sr_sc_build_row), what we hold of it,",
+            "\t### its weight in the build mix with - and + (sr_sc_mix_sgui) and its order with",
+            "\t### -, + and withdraw (sr_sc_order_sgui: a click 1 hull, shift-click 10,",
+            "\t### ctrl-click 100), passing the role as scope:op and the step as scope:pick.",
+            "\ttype te_sr_sc_build_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tspacing = 2"]
+    for r in ROLES:
+        out += [""] + _sc_build_row(r)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

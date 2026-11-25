@@ -3503,12 +3503,165 @@ sr_disp_fl_9_tgt_def_high = {
 # Our fleets, for the section's empty note.
 sr_disp_fl_count = { value = sr_fl_count }
 
-# The build mix's weights (Space Command).
+# The build mix's weights (Space Command's table), each role's share of what a
+# month's construction has left after the orders, in percent, and that share of
+# the yards' pace (sr_disp_sc_pace: what the mix builds a month with nothing on
+# order; the share's hover).
 sr_disp_sc_mix_war = { value = sr_sc_mix_war_value }
 sr_disp_sc_mix_rapid = { value = sr_sc_mix_rapid_value }
 sr_disp_sc_mix_siege = { value = sr_sc_mix_siege_value }
 sr_disp_sc_mix_carrier = { value = sr_sc_mix_carrier_value }
 sr_disp_sc_mix_tender = { value = sr_sc_mix_tender_value }
+sr_disp_sc_mix_pct_war = { value = sr_sc_mix_share_war multiply = 100 }
+sr_disp_sc_mix_pct_rapid = { value = sr_sc_mix_share_rapid multiply = 100 }
+sr_disp_sc_mix_pct_siege = { value = sr_sc_mix_share_siege multiply = 100 }
+sr_disp_sc_mix_pct_carrier = { value = sr_sc_mix_share_carrier multiply = 100 }
+sr_disp_sc_mix_pct_tender = { value = sr_sc_mix_share_tender multiply = 100 }
+sr_disp_sc_mix_rate_war = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_war }
+sr_disp_sc_mix_rate_rapid = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_rapid }
+sr_disp_sc_mix_rate_siege = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_siege }
+sr_disp_sc_mix_rate_carrier = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_carrier }
+sr_disp_sc_mix_rate_tender = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_tender }
+
+# Orders (the owner, 2026-11-25): each role's hulls still on order, rounded up,
+# so an order under way never reads 0, and the rows' sum, so Hulls on order is
+# what the table's rows add up to.
+sr_disp_sc_order_war = { value = sr_sc_order_war_value ceiling = yes }
+sr_disp_sc_order_rapid = { value = sr_sc_order_rapid_value ceiling = yes }
+sr_disp_sc_order_siege = { value = sr_sc_order_siege_value ceiling = yes }
+sr_disp_sc_order_carrier = { value = sr_sc_order_carrier_value ceiling = yes }
+sr_disp_sc_order_tender = { value = sr_sc_order_tender_value ceiling = yes }
+sr_disp_sc_order_total = {
+	value = 0
+	add = sr_disp_sc_order_war
+	add = sr_disp_sc_order_rapid
+	add = sr_disp_sc_order_siege
+	add = sr_disp_sc_order_carrier
+	add = sr_disp_sc_order_tender
+}
+
+# Our fleets' strength by role, now and at full (the table's Fleets column and its
+# hover).
+sr_disp_fl_role_war = {
+	value = 0
+	add = sr_fl_1_war_value
+	add = sr_fl_2_war_value
+	add = sr_fl_3_war_value
+	add = sr_fl_4_war_value
+	add = sr_fl_5_war_value
+	add = sr_fl_6_war_value
+	add = sr_fl_7_war_value
+	add = sr_fl_8_war_value
+	add = sr_fl_9_war_value
+}
+sr_disp_fl_role_war_full = {
+	value = 0
+	add = sr_fl_1_war_full_value
+	add = sr_fl_2_war_full_value
+	add = sr_fl_3_war_full_value
+	add = sr_fl_4_war_full_value
+	add = sr_fl_5_war_full_value
+	add = sr_fl_6_war_full_value
+	add = sr_fl_7_war_full_value
+	add = sr_fl_8_war_full_value
+	add = sr_fl_9_war_full_value
+}
+sr_disp_fl_role_rapid = {
+	value = 0
+	add = sr_fl_1_rapid_value
+	add = sr_fl_2_rapid_value
+	add = sr_fl_3_rapid_value
+	add = sr_fl_4_rapid_value
+	add = sr_fl_5_rapid_value
+	add = sr_fl_6_rapid_value
+	add = sr_fl_7_rapid_value
+	add = sr_fl_8_rapid_value
+	add = sr_fl_9_rapid_value
+}
+sr_disp_fl_role_rapid_full = {
+	value = 0
+	add = sr_fl_1_rapid_full_value
+	add = sr_fl_2_rapid_full_value
+	add = sr_fl_3_rapid_full_value
+	add = sr_fl_4_rapid_full_value
+	add = sr_fl_5_rapid_full_value
+	add = sr_fl_6_rapid_full_value
+	add = sr_fl_7_rapid_full_value
+	add = sr_fl_8_rapid_full_value
+	add = sr_fl_9_rapid_full_value
+}
+sr_disp_fl_role_siege = {
+	value = 0
+	add = sr_fl_1_siege_value
+	add = sr_fl_2_siege_value
+	add = sr_fl_3_siege_value
+	add = sr_fl_4_siege_value
+	add = sr_fl_5_siege_value
+	add = sr_fl_6_siege_value
+	add = sr_fl_7_siege_value
+	add = sr_fl_8_siege_value
+	add = sr_fl_9_siege_value
+}
+sr_disp_fl_role_siege_full = {
+	value = 0
+	add = sr_fl_1_siege_full_value
+	add = sr_fl_2_siege_full_value
+	add = sr_fl_3_siege_full_value
+	add = sr_fl_4_siege_full_value
+	add = sr_fl_5_siege_full_value
+	add = sr_fl_6_siege_full_value
+	add = sr_fl_7_siege_full_value
+	add = sr_fl_8_siege_full_value
+	add = sr_fl_9_siege_full_value
+}
+sr_disp_fl_role_carrier = {
+	value = 0
+	add = sr_fl_1_carrier_value
+	add = sr_fl_2_carrier_value
+	add = sr_fl_3_carrier_value
+	add = sr_fl_4_carrier_value
+	add = sr_fl_5_carrier_value
+	add = sr_fl_6_carrier_value
+	add = sr_fl_7_carrier_value
+	add = sr_fl_8_carrier_value
+	add = sr_fl_9_carrier_value
+}
+sr_disp_fl_role_carrier_full = {
+	value = 0
+	add = sr_fl_1_carrier_full_value
+	add = sr_fl_2_carrier_full_value
+	add = sr_fl_3_carrier_full_value
+	add = sr_fl_4_carrier_full_value
+	add = sr_fl_5_carrier_full_value
+	add = sr_fl_6_carrier_full_value
+	add = sr_fl_7_carrier_full_value
+	add = sr_fl_8_carrier_full_value
+	add = sr_fl_9_carrier_full_value
+}
+sr_disp_fl_role_tender = {
+	value = 0
+	add = sr_fl_1_tender_value
+	add = sr_fl_2_tender_value
+	add = sr_fl_3_tender_value
+	add = sr_fl_4_tender_value
+	add = sr_fl_5_tender_value
+	add = sr_fl_6_tender_value
+	add = sr_fl_7_tender_value
+	add = sr_fl_8_tender_value
+	add = sr_fl_9_tender_value
+}
+sr_disp_fl_role_tender_full = {
+	value = 0
+	add = sr_fl_1_tender_full_value
+	add = sr_fl_2_tender_full_value
+	add = sr_fl_3_tender_full_value
+	add = sr_fl_4_tender_full_value
+	add = sr_fl_5_tender_full_value
+	add = sr_fl_6_tender_full_value
+	add = sr_fl_7_tender_full_value
+	add = sr_fl_8_tender_full_value
+	add = sr_fl_9_tender_full_value
+}
 
 # The ground reserve by role (6d; Space Command's Reserve hover).
 sr_disp_reserve_war = { value = sr_reserve_war_value }

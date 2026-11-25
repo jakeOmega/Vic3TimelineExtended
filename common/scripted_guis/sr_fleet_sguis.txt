@@ -827,8 +827,156 @@ sr_fleet_destroy_sgui = {
 	}
 }
 
-# Space Command's build mix: a role's weight steps 0, 1, 2, 3, 0.
+# Space Command's build mix (the owner, 2026-11-25: - and + in the table's Mix
+# column; one button a role until then, stepping 0, 1, 2, 3, 0): scope:op the
+# role (gen_space_fleets.ROLE_CODE), scope:pick 1 a step off its weight, 2 a
+# step on (MIX_STEPS), held to 0 and sr_sc_mix_max. is_shown reads no saved
+# scope (gotcha #22).
 sr_sc_mix_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:pick = 2 }
+			custom_tooltip = {
+				text = sr_sc_mix_below_max_tt
+				sr_sc_mix_op_value < sr_sc_mix_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:pick = 1 }
+			custom_tooltip = {
+				text = sr_sc_mix_above_zero_tt
+				sr_sc_mix_op_value > 0
+			}
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	# Each role's tooltip names it, its weight and its share; the roles' rules
+	# are the concept's (concept_sr_ship_role).
+	effect = {
+		if = { limit = { scope:op = 1 } custom_tooltip = sr_sc_mix_step_war_tt }
+		else_if = { limit = { scope:op = 2 } custom_tooltip = sr_sc_mix_step_rapid_tt }
+		else_if = { limit = { scope:op = 3 } custom_tooltip = sr_sc_mix_step_siege_tt }
+		else_if = { limit = { scope:op = 4 } custom_tooltip = sr_sc_mix_step_carrier_tt }
+		else = { custom_tooltip = sr_sc_mix_step_tender_tt }
+		if = {
+			limit = { scope:pick = 2 }
+			custom_tooltip = sr_sc_mix_up_tt
+		}
+		else = {
+			custom_tooltip = sr_sc_mix_down_tt
+		}
+		if = {
+			limit = { sr_sc_orders_only = yes }
+			custom_tooltip = sr_sc_mix_unused_tt
+		}
+		hidden_effect = {
+			sr_sc_mix_by_op = yes
+		}
+	}
+}
+
+# Space Command's orders (the owner, 2026-11-25; the table's Order column):
+# scope:op the role, scope:pick the step (gen_space_fleets.ORDER_STEPS: 1 to 3
+# take 1, 10 or 100 hulls off its order, 4 to 6 add them; ORDER_CLEAR, 7,
+# withdraws it). A click is the plain step, shift-click ten, ctrl-click a
+# hundred, which share the plain step's check (the button's enabled and hover
+# are its plain click's), the effect holding the order to 0 and sr_sc_order_max.
+sr_sc_order_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = {
+				scope:pick >= 4
+				scope:pick <= 6
+			}
+			custom_tooltip = {
+				text = sr_sc_order_below_max_tt
+				sr_sc_order_op_value < sr_sc_order_max
+			}
+		}
+		trigger_else_if = {
+			limit = {
+				scope:pick >= 1
+				scope:pick <= 7
+			}
+			custom_tooltip = {
+				text = sr_sc_order_some_tt
+				sr_sc_order_op_value > 0
+			}
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = { limit = { scope:op = 1 } custom_tooltip = sr_sc_order_war_tt }
+		else_if = { limit = { scope:op = 2 } custom_tooltip = sr_sc_order_rapid_tt }
+		else_if = { limit = { scope:op = 3 } custom_tooltip = sr_sc_order_siege_tt }
+		else_if = { limit = { scope:op = 4 } custom_tooltip = sr_sc_order_carrier_tt }
+		else = { custom_tooltip = sr_sc_order_tender_tt }
+		if = {
+			limit = { scope:pick = 7 }
+			custom_tooltip = sr_sc_order_clear_tt
+		}
+		else_if = {
+			limit = { scope:pick >= 4 }
+			custom_tooltip = sr_sc_order_more_tt
+			# Idle in Orders Only: the order asks to resume (sr_sc_orders_sync), so
+			# its first month builds nothing; said where the order is placed.
+			if = {
+				limit = {
+					sr_sc_orders_only = yes
+					sr_sc_is_paused = yes
+					NOT = { sr_sc_is_resuming = yes }
+				}
+				custom_tooltip = sr_sc_order_restarts_tt
+			}
+		}
+		else = {
+			custom_tooltip = sr_sc_order_less_tt
+		}
+		hidden_effect = {
+			sr_sc_order_by_op = yes
+		}
+	}
+}
+
+# Space Command's three modes (the owner, 2026-11-25; one Pause / Resume /
+# Resuming button until 2026-10-31's): scope:op 1 Full, 2 Orders Only, 3
+# Paused. The panel draws the mode in force selected, not as a button
+# (sr_disp_sc_mode), so a click always changes the mode; choosing Paused while
+# a resume waits calls it off. Paused, the yards build no fleet strength and
+# buy no inputs; fleets, the reserve and Auto-launch carry on. Leaving a pause
+# waits for the next monthly step, which builds nothing (sr_sc_month). The AI
+# pauses through Paused's effect (sr_sc_ai_pause_review).
+sr_sc_mode_sgui = {
 	scope = country
 	saved_scopes = { op }
 
@@ -845,59 +993,42 @@ sr_sc_mix_sgui = {
 		always = yes
 	}
 
-	# Each role's tooltip names it and its weight; the roles' rules are the
-	# concept's (concept_sr_ship_role).
-	effect = {
-		if = { limit = { scope:op = 1 } custom_tooltip = sr_sc_mix_step_war_tt }
-		else_if = { limit = { scope:op = 2 } custom_tooltip = sr_sc_mix_step_rapid_tt }
-		else_if = { limit = { scope:op = 3 } custom_tooltip = sr_sc_mix_step_siege_tt }
-		else_if = { limit = { scope:op = 4 } custom_tooltip = sr_sc_mix_step_carrier_tt }
-		else = { custom_tooltip = sr_sc_mix_step_tender_tt }
-		hidden_effect = {
-			if = { limit = { scope:op = 1 } sr_sc_mix_step = { ROLE = war } }
-			else_if = { limit = { scope:op = 2 } sr_sc_mix_step = { ROLE = rapid } }
-			else_if = { limit = { scope:op = 3 } sr_sc_mix_step = { ROLE = siege } }
-			else_if = { limit = { scope:op = 4 } sr_sc_mix_step = { ROLE = carrier } }
-			else_if = { limit = { scope:op = 5 } sr_sc_mix_step = { ROLE = tender } }
-		}
-	}
-}
-
-# Space Command's Pause, Resume and Resuming (owner, 2026-10-31): paused, it
-# builds no fleet strength and its yards buy no inputs; fleets, the reserve
-# and Auto carry on. A resume waits for the next monthly step, which builds
-# nothing (sr_sc_month); a click while it waits cancels it. The AI pauses
-# through the same effect (sr_sc_ai_pause_review).
-sr_sc_pause_sgui = {
-	scope = country
-
-	is_shown = {
-		has_journal_entry = je_space_race_solar_colonization
-		sr_colonies_full_enabled = yes
-	}
-
-	ai_is_valid = {
-		always = no
-	}
-
-	is_valid = {
-		always = yes
-	}
-
 	effect = {
 		if = {
-			limit = { sr_sc_is_resuming = yes }
-			custom_tooltip = sr_sc_resume_cancel_tt
+			limit = { scope:op = 1 }
+			custom_tooltip = sr_sc_mode_full_tt
+			if = {
+				limit = { sr_sc_is_paused = yes }
+				custom_tooltip = sr_sc_mode_resume_tt
+			}
+			hidden_effect = {
+				sr_sc_mode_full = yes
+			}
 		}
 		else_if = {
-			limit = { sr_sc_is_paused = yes }
-			custom_tooltip = sr_sc_resume_tt
+			limit = { scope:op = 2 }
+			custom_tooltip = sr_sc_mode_orders_tt
+			if = {
+				limit = {
+					sr_sc_is_paused = yes
+					sr_sc_order_total > 0
+				}
+				custom_tooltip = sr_sc_mode_resume_tt
+			}
+			else_if = {
+				limit = { sr_sc_is_paused = yes }
+				custom_tooltip = sr_sc_mode_orders_stopped_tt
+			}
+			hidden_effect = {
+				sr_sc_mode_orders = yes
+			}
 		}
-		else = {
-			custom_tooltip = sr_sc_pause_tt
-		}
-		hidden_effect = {
-			sr_sc_toggle_pause = yes
+		else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = sr_sc_mode_paused_tt
+			hidden_effect = {
+				sr_sc_mode_paused = yes
+			}
 		}
 	}
 }

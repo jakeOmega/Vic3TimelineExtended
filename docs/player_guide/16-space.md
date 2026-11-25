@@ -1378,9 +1378,26 @@ first. Each level builds fleet strength every month, by its production method:
 
 The figure is scaled by staffing, and the method's tooltip shows it as Fleet
 Strength Built a Month. A Space Command in a state you don't control builds
-nothing. The month's strength is shared among five roles by the build mix,
-whose buttons step each role's weight from 0 to 3, and waits on the ground in
-the reserve until it is launched (see [Holding Earth orbit](#holding-earth-orbit)):
+nothing. What a month builds is set in Space Command's Construction table,
+which has a row for each of five roles: your fleets' strength in it, what waits
+in the reserve, its weight in the build mix and its order.
+
+- **Orders.** An order is a number of hulls of one role. Click − or + for 1
+  hull, shift-click for 10 and ctrl-click for 100; the cross withdraws the
+  order. Each month's construction goes to the orders first, shared in
+  proportion to their size so that they finish together, and an order counts
+  down as its hulls are built. An order costs nothing to place, and the hulls
+  an order has built stay in the reserve when you withdraw it. Under the
+  table, Hulls on order gives the total and Months to build them how long that
+  takes at the yards' last pace.
+- **The build mix.** Each role has a weight from 0 to 3, set with − and +, with
+  its share beside it. The mix shares out what a month has left once the
+  orders are filled. With every weight at 0, warships take it all.
+
+Use an order when you need a set number of something, such as carriers for a
+landing, and leave the mix to keep the fleet's shape the rest of the time. New
+hulls wait on the ground in the reserve until they are launched (see
+[Holding Earth orbit](#holding-earth-orbit)). The five roles:
 
 | Role | Fire on fleets | Fire on colony defenses | Months of supply | Also |
 |---|---|---|---|---|
@@ -1404,16 +1421,38 @@ bought.
 Directed Energy Weapons, Orbital Weapon Platforms and Antimatter Production each
 raise your fleets' fire by a quarter.
 
-Pause, beside Launch and Auto, stops construction at once: neither Space
-Command nor your colonies' Orbital Yards build fleet strength, Built a month
-reads Paused, and the yards buy no Launch Capacity, Advanced Materials or
-electricity. The maintenance line and the upkeep are still paid, and your
-fleets, Launch and Auto work as before. Resume waits for the next month's
-construction, which builds nothing; the button reads Resuming until then, and a
-click cancels it. From that month the yards buy their inputs again, and the
-month after builds. A month is built in one go, so it is built only if the
-yards bought their inputs all month. Pausing costs the inputs bought since the
-last month's construction, so pause just after Built a month changes.
+Three buttons above the table set what the yards do, and the mode in force is
+drawn selected:
+
+| Mode | What the yards build |
+|---|---|
+| Full | The orders first, then the rest of the month by the build mix. The default. |
+| Orders Only | The orders and nothing else. What a month has left after the last order is lost, and once nothing is on order the yards stand idle. |
+| Paused | Nothing. |
+
+Paused stops construction at once: neither Space Command nor your colonies'
+Orbital Yards build fleet strength, Built a month reads Paused, and the yards
+buy no Launch Capacity, Advanced Materials or electricity. The maintenance line
+and the upkeep are still paid, your orders are kept, and your fleets, Launch
+and Auto-launch work as before. Choosing Full or Orders Only again waits for
+the next month's construction, which builds nothing; Built a month reads
+Resuming until then, and choosing Paused cancels it. From that month the yards
+buy their inputs again, and the month after builds. A month is built in one go,
+so it is built only if the yards bought their inputs all month. Pausing costs
+the inputs bought since the last month's construction, so pause just after
+Built a month changes.
+
+Orders Only idles the yards the same way. Once a month's construction leaves
+nothing on order, Built a month reads Idle and the yards buy none of those
+three inputs. A new order starts them again as leaving a pause does: the next
+month's construction builds nothing, and the one after builds. So Orders Only
+suits a fleet you top up now and then. If you order often, place the next order
+before the last one is finished, or use Full. Switching between Full and Orders
+Only doesn't interrupt yards that are building, but the yards go idle only at a
+month's construction: if you switch to Orders Only, or withdraw your last
+order, and nothing is on order when the month turns, that month's inputs were
+bought and nothing is built. Place the order before then, or choose Paused to
+stop the yards at once.
 
 ### Space Forces Personnel
 
@@ -1444,14 +1483,14 @@ need none.
 Space Command's Personnel cell gives those in service out of what your bases
 give. Personnel to spare are what launches the reserve and fills marines:
 
-- **Launches.** Launch and Auto send up as much of the reserve as the spare
+- **Launches.** Launch and Auto-launch send up as much of the reserve as the spare
   personnel crew, the same share of each role, and the rest waits on the
   ground; with none to spare, nothing launches. The Reserve cell's hover gives
   the points awaiting crews.
 - **Marines.** Marines come aboard at Earth only as far as personnel are spare.
-- **Hulls or Marines.** The button beside Pause decides which takes the
-  month's spare personnel first: the reserve's launch (Hulls, the default) or
-  the marines of your fleets at Earth (Marines).
+- **Hulls or Marines.** The Crews first button, beside Auto-launch, decides
+  which takes the month's spare personnel first: the reserve's launch (Hulls,
+  the default) or the marines of your fleets at Earth (Marines).
 
 With more in service than your bases give, as after a base loses staff, a level
 is demolished or the reserve went up during an old game's grace (below), your
@@ -1654,14 +1693,14 @@ don't lift the blockade: only a fleet of yours at Earth does.
 
 That fleet comes from the reserve. Space Command's construction waits on the
 ground there, in the five roles, and its Reserve row gives the strength (hover
-it for the roles). With Auto on, the default, it joins your home fleet at Earth
+it for the roles). With Auto-launch on, the default, it joins your home fleet at Earth
 each month while no enemy fleet is there, so in peace, with the
 [personnel](#space-forces-personnel) to crew it, the reserve stays empty.
 While an enemy fleet is at Earth it stays on the ground, and Launch sends it up
 together as one fleet at Earth, as much of it as your personnel crew, with full
 propellant and supply and as many marines as personnel allow, blockade or not.
 A blockade therefore faces everything you have built and can crew since it
-began, not a month's worth at a time. Turn Auto off to keep a reserve in peace
+began, not a month's worth at a time. Turn Auto-launch off to keep a reserve in peace
 and launch it when you choose; it costs the same upkeep on the ground.
 
 You hear of each fleet of a country at war with you that is on its way to
@@ -1735,7 +1774,7 @@ Ground Lasers at war, and in peace once debris is Cluttered. An AI in default,
 or in deficit while at peace, pauses Space Command's construction, and resumes
 once out of default with a surplus, or at war, after six months at least. It
 also pauses while more than six months' construction waits for crews with no
-base level queued.
+base level queued. It places no orders: it builds in Full by the mix alone.
 
 ## After the space race
 

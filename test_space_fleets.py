@@ -11,6 +11,7 @@ Run: python3 -m unittest test_space_fleets -v
 """
 
 import math
+import random
 import re
 import sys
 import unittest
@@ -228,8 +229,9 @@ class FullColoniesGateTest(unittest.TestCase):
     def test_every_scripted_gui_and_the_survey(self):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
-        # 21 since the personnel priority (sr_pers_priority_sgui, 2026-11-24)
-        self.assertEqual(len(names), 21)
+        # 21 since the personnel priority (sr_pers_priority_sgui, 2026-11-24); 22 since
+        # orders and the modes took the pause's place (sr_sc_order_sgui, sr_sc_mode_sgui, 2026-11-25)
+        self.assertEqual(len(names), 22)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -522,7 +524,9 @@ class OneSpaceCommandTest(unittest.TestCase):
 class PauseTest(unittest.TestCase):
     """Pausing Space Command (owner, 2026-10-31): paused, a country builds no
     fleet strength and its yards buy none of their inputs; fleets, the reserve
-    and Auto carry on. The AI pauses in default, or in deficit at peace."""
+    and Auto carry on. The AI pauses in default, or in deficit at peace. Since
+    2026-11-25 Paused is one of the yards' three modes (sr_sc_mode_sgui), with
+    Full and Orders Only, which idles the yards by the same pause."""
 
     INPUTS = ("launch_capacity", "advanced_materials", "electricity")
 
@@ -533,28 +537,51 @@ class PauseTest(unittest.TestCase):
         cls.sguis = _strip(_raw(SGUIS))
         cls.earth = _strip(_raw(EARTH_EFFECTS))
 
-    def test_the_toggle_and_its_variable(self):
+    MODES = ("sr_sc_mode_full", "sr_sc_mode_orders", "sr_sc_mode_paused")
+
+    def test_the_modes_and_their_variables(self):
         self.assertRegex(_block(self.triggers, "sr_sc_is_paused"), r"^\s*has_variable = sr_sc_paused\s*$")
         self.assertRegex(_block(self.triggers, "sr_sc_is_resuming"), r"^\s*has_variable = sr_sc_resume_pending\s*$")
-        toggle = _block(self.effects, "sr_sc_toggle_pause")
-        # Resuming, a click cancels; paused, it asks to resume; building, it
-        # pauses at once. Paused is yes; building is the variable's absence.
-        self.assertRegex(toggle, r"^\s*if = \{\s*limit = \{ sr_sc_is_resuming = yes \}\s*remove_variable = sr_sc_resume_pending\s*\}\s*"
-                                 r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*"
-                                 r"set_variable = \{ name = sr_sc_resume_pending value = yes \}\s*\}\s*"
-                                 r"else = \{\s*set_variable = \{ name = sr_sc_paused value = yes \}\s*\}\s*"
-                                 r"sr_sc_pause_apply = yes\s*$")
-        # A click never ends the pause itself: only the step (or the AI's
-        # resume, at its step) clears sr_sc_paused.
-        self.assertNotIn("remove_variable = sr_sc_paused", toggle)
-        self.assertNotIn("sr_sc_clear_pause", toggle)
-        sgui = _block(self.sguis, "sr_sc_pause_sgui")
+        self.assertRegex(_block(self.triggers, "sr_sc_orders_only"), r"^\s*has_variable = sr_sc_orders_only\s*$")
+        # Full: out of Orders Only, and from a pause a resume is asked for.
+        self.assertRegex(_block(self.effects, "sr_sc_mode_full"),
+                         r"^\s*if = \{\s*limit = \{ sr_sc_orders_only = yes \}\s*remove_variable = sr_sc_orders_only\s*\}\s*"
+                         r"if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*NOT = \{ sr_sc_is_resuming = yes \}\s*\}\s*"
+                         r"set_variable = \{ name = sr_sc_resume_pending value = yes \}\s*\}\s*$")
+        # Orders Only: the flag, then the yards hear of the order book.
+        self.assertRegex(_block(self.effects, "sr_sc_mode_orders"),
+                         r"^\s*set_variable = \{ name = sr_sc_orders_only value = yes \}\s*sr_sc_orders_sync = yes\s*$")
+        # Paused: out of Orders Only, a waiting resume called off, the pause at
+        # once, and the cut. Paused is yes; building is the variable's absence.
+        self.assertRegex(_block(self.effects, "sr_sc_mode_paused"),
+                         r"^\s*if = \{\s*limit = \{ sr_sc_orders_only = yes \}\s*remove_variable = sr_sc_orders_only\s*\}\s*"
+                         r"if = \{\s*limit = \{ sr_sc_is_resuming = yes \}\s*remove_variable = sr_sc_resume_pending\s*\}\s*"
+                         r"if = \{\s*limit = \{ NOT = \{ sr_sc_is_paused = yes \} \}\s*"
+                         r"set_variable = \{ name = sr_sc_paused value = yes \}\s*\}\s*sr_sc_pause_apply = yes\s*$")
+        # A click never ends a pause itself: only the step (or the AI's resume,
+        # at its step) clears sr_sc_paused.
+        for name in (*self.MODES, "sr_sc_orders_sync", "sr_sc_order_add", "sr_sc_order_cut"):
+            with self.subTest(effect=name):
+                body = _block(self.effects, name)
+                self.assertNotIn("remove_variable = sr_sc_paused", body)
+                self.assertNotIn("sr_sc_clear_pause", body)
+        sgui = _block(self.sguis, "sr_sc_mode_sgui")
         self.assertIn("always = no", _block("x = {" + sgui.split("ai_is_valid = {", 1)[1], "x"))
-        # The tooltip says what each state's click does; the variable is set out of sight.
-        self.assertRegex(sgui, r"limit = \{ sr_sc_is_resuming = yes \}\s*custom_tooltip = sr_sc_resume_cancel_tt\s*\}\s*"
-                               r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*custom_tooltip = sr_sc_resume_tt\s*\}\s*"
-                               r"else = \{\s*custom_tooltip = sr_sc_pause_tt\s*\}\s*"
-                               r"hidden_effect = \{\s*sr_sc_toggle_pause = yes\s*\}")
+        self.assertIn("saved_scopes = { op }", sgui)
+        # Each mode's tooltip says what it does; leaving a pause adds the wait;
+        # the variables are set out of sight.
+        self.assertRegex(sgui, r"limit = \{ scope:op = 1 \}\s*custom_tooltip = sr_sc_mode_full_tt\s*"
+                               r"if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*custom_tooltip = sr_sc_mode_resume_tt\s*\}\s*"
+                               r"hidden_effect = \{\s*sr_sc_mode_full = yes\s*\}")
+        self.assertRegex(sgui, r"limit = \{ scope:op = 2 \}\s*custom_tooltip = sr_sc_mode_orders_tt\s*"
+                               r"if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_order_total > 0\s*\}\s*"
+                               r"custom_tooltip = sr_sc_mode_resume_tt\s*\}\s*"
+                               # ... or, stopped with nothing on order, that they stay idle
+                               r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*"
+                               r"custom_tooltip = sr_sc_mode_orders_stopped_tt\s*\}\s*"
+                               r"hidden_effect = \{\s*sr_sc_mode_orders = yes\s*\}")
+        self.assertRegex(sgui, r"limit = \{ scope:op = 3 \}\s*custom_tooltip = sr_sc_mode_paused_tt\s*"
+                               r"hidden_effect = \{\s*sr_sc_mode_paused = yes\s*\}")
         clear = _block(self.effects, "sr_sc_clear_pause")
         for var in ("sr_sc_resume_pending", "sr_sc_paused"):
             with self.subTest(var=var):
@@ -573,6 +600,14 @@ class PauseTest(unittest.TestCase):
         apply = month.index("sr_sc_pause_apply = yes")
         self.assertLess(build, resume.start())
         self.assertLess(resume.end(), apply)
+        # Orders Only's idle (2026-11-25) is the same pause, set only here,
+        # after the resume and before the cut: once a step leaves nothing on
+        # order, the coming month's inputs aren't bought.
+        idle = re.search(r"if = \{\s*limit = \{\s*sr_sc_orders_only = yes\s*NOT = \{ sr_sc_is_paused = yes \}\s*"
+                         r"sr_sc_order_total <= 0\s*\}\s*set_variable = \{ name = sr_sc_paused value = yes \}\s*\}", month)
+        self.assertIsNotNone(idle, "the step doesn't idle the yards in Orders Only")
+        self.assertLess(resume.end(), idle.start())
+        self.assertLess(idle.end(), apply)
         # The build reads the variable alone, never the pending resume.
         self.assertEqual(month.count("sr_sc_is_resuming"), 1)
         self.assertEqual(month.count("sr_sc_clear_pause = yes"), 1)
@@ -580,6 +615,17 @@ class PauseTest(unittest.TestCase):
         everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
         self.assertEqual(everything.count("sr_sc_clear_pause = yes"), 2)
         self.assertEqual(everything.count("remove_variable = sr_sc_paused"), 1)
+        # Two things start one: Paused (a player's, the AI's) and the step's idle.
+        self.assertEqual(everything.count("set_variable = { name = sr_sc_paused value = yes }"), 2)
+        # And a resume is asked for in two places, each only from a pause with no
+        # resume waiting: leaving it for Full, and an order placed while idle.
+        self.assertEqual(everything.count("set_variable = { name = sr_sc_resume_pending value = yes }"), 2)
+        for name in ("sr_sc_mode_full", "sr_sc_orders_sync"):
+            with self.subTest(asks=name):
+                self.assertRegex(_block(self.effects, name),
+                                 r"sr_sc_is_paused = yes\s*(?:\}\s*if = \{\s*limit = \{\s*sr_sc_order_total > 0\s*)?"
+                                 r"NOT = \{ sr_sc_is_resuming = yes \}\s*\}\s*"
+                                 r"set_variable = \{ name = sr_sc_resume_pending value = yes \}")
 
     def test_the_month_builds_nothing_while_paused(self):
         month = _block(self.effects, "sr_sc_month")
@@ -600,9 +646,17 @@ class PauseTest(unittest.TestCase):
         self.assertRegex(_block(_strip(_raw(FLEET_VALUES)), "sr_sc_rate"), r"add = \{\s*value = sr_mod_units_yard")
 
     def test_the_panel_reads_paused(self):
-        shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_paused")
+        display = _raw(ROOT / "common/script_values/sr_fleet_display_values.txt")
+        shown = _block(display, "sr_disp_sc_paused")
+        # 1 paused, 2 resuming, 3 idle: Orders Only with nothing on order.
         self.assertRegex(shown, r"if = \{ limit = \{ sr_sc_is_paused = yes \} value = 1 \}\s*"
-                                r"if = \{ limit = \{ sr_sc_is_resuming = yes \} value = 2 \}")
+                                r"if = \{ limit = \{ sr_sc_is_resuming = yes \} value = 2 \}\s*"
+                                r"else_if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_orders_only = yes\s*\}\s*value = 3\s*\}")
+        # The mode drawn selected: Full, Orders Only whatever the yards do, and
+        # Paused only with no resume waiting (a resume is already its mode).
+        self.assertRegex(_block(display, "sr_disp_sc_mode"),
+                         r"^\s*value = 1\s*if = \{ limit = \{ sr_sc_orders_only = yes \} value = 2 \}\s*"
+                         r"else_if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*NOT = \{ sr_sc_is_resuming = yes \}\s*\}\s*value = 3\s*\}\s*$")
         gui = _raw(ROOT / "gui/journal_entry_widgets/space_race_widget.gui")
         section = _block(gui.replace("\ttype te_sr_sec_space_command = flowcontainer", "te_sr_sec_space_command ="),
                          "te_sr_sec_space_command")
@@ -611,17 +665,33 @@ class PauseTest(unittest.TestCase):
         # Built a month is an overview cell (owner, 2026-11-14): its word sits in
         # the cell's "word" override, so the cell is three blocks out.
         for key, shown_on, depth in (("je_space_race_widget_ovc_sc_rate_word", state("EqualTo", 0), 3),
-                                     ("je_space_race_widget_ovc_sc_rate_word_paused", state("GreaterThanOrEqualTo", 1), 3),
-                                     ("je_space_race_widget_sc_pause", state("EqualTo", 0), 2),
-                                     ("je_space_race_widget_sc_resume", state("EqualTo", 1), 2),
-                                     ("je_space_race_widget_sc_resuming", state("EqualTo", 2), 2)):
+                                     ("je_space_race_widget_ovc_sc_rate_word_paused", state("EqualTo", 1), 3),
+                                     ("je_space_race_widget_ovc_sc_rate_word_resuming", state("EqualTo", 2), 3),
+                                     ("je_space_race_widget_ovc_sc_rate_word_idle", state("EqualTo", 3), 3)):
             with self.subTest(key=key):
                 i = section.index(f'text = "{key}"')
                 self.assertIn(shown_on, _block_around(section, i, depth))
-        self.assertEqual(section.count("GetScriptedGui('sr_sc_pause_sgui').Execute("), 3)
+        # The three modes: a button each, and the one in force drawn selected instead.
+        self.assertNotIn("sr_sc_pause_sgui", gui)
+        self.assertEqual(section.count("te_sr_sc_mode_choice = {"), 3)
+        for op, key in ((1, "full"), (2, "orders"), (3, "paused")):
+            with self.subTest(mode=key):
+                on = f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mode'), '(CFixedPoint){op}' )"
+                scope = f"GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){op}' ) ).End"
+                choice = _block_around(section, section.index(f'text = "je_space_race_widget_sc_mode_{key}"'), 2)
+                self.assertRegex(choice, r'blockoverride "mode_button" \{\s*visible = "\[Not\( ' + re.escape(on) + r' \)\]"')
+                self.assertIn(f"onclick = \"[GetScriptedGui('sr_sc_mode_sgui').Execute( {scope} )]\"", choice)
+                self.assertIn(f"GetScriptedGui('sr_sc_mode_sgui').IsValidTooltip( {scope} )", choice)
+                self.assertRegex(choice, r'blockoverride "mode_selected" \{\s*visible = "\[' + re.escape(on) + r'\]"\s*'
+                                         rf'tooltip = "je_space_race_widget_sc_mode_{key}_on_tt"')
+        choice = _block(gui.replace("\ttype te_sr_sc_mode_choice = widget", "te_sr_sc_mode_choice ="), "te_sr_sc_mode_choice")
+        self.assertIn("using = selected_tabs", choice)   # not a greyed button, which reads as unavailable
+        self.assertEqual(choice.count('block "mode_label" {}'), 2)
         # Each cell's hover is its own (review of #1287, M6).
         for figure, hover in (("je_space_race_widget_ovc_sc_rate_word", "je_space_race_widget_sc_rate_tt"),
-                              ("je_space_race_widget_ovc_sc_rate_word_paused", "je_space_race_widget_sc_rate_paused_tt")):
+                              ("je_space_race_widget_ovc_sc_rate_word_paused", "je_space_race_widget_sc_rate_paused_tt"),
+                              ("je_space_race_widget_ovc_sc_rate_word_resuming", "je_space_race_widget_sc_rate_resuming_tt"),
+                              ("je_space_race_widget_ovc_sc_rate_word_idle", "je_space_race_widget_sc_rate_idle_tt")):
             with self.subTest(row=figure):
                 row = _block_around(section, section.index(f'text = "{figure}"'), 3)
                 self.assertIn(f'tooltip = "{hover}"', row)
@@ -655,14 +725,15 @@ class PauseTest(unittest.TestCase):
         self.assertLess(apply.index("remove_modifier = sr_space_command_paused"), apply.index("add_modifier"))
         self.assertRegex(apply, r"limit = \{\s*level >= 1\s*root = \{ sr_sc_is_paused = yes \}\s*\}\s*"
                                 r"add_modifier = \{ name = sr_space_command_paused \}")
-        # Three callers: the monthly step, the toggle and the AI's resume.
+        # Three callers: the monthly step, Paused and the AI's resume.
         self.assertEqual(everything.count("sr_sc_pause_apply = yes"), 3)
-        for caller in ("sr_sc_month", "sr_sc_toggle_pause", "sr_sc_ai_pause_review"):
+        for caller in ("sr_sc_month", "sr_sc_mode_paused", "sr_sc_ai_pause_review"):
             with self.subTest(caller=caller):
                 self.assertEqual(_block(self.effects, caller).count("sr_sc_pause_apply = yes"), 1)
-        # The toggle's callers: the button and the AI's pause.
-        self.assertEqual(everything.count("sr_sc_toggle_pause = yes"), 2)
-        self.assertEqual(_block(self.effects, "sr_sc_ai_pause_review").count("sr_sc_toggle_pause = yes"), 1)
+        # Paused's callers: the button and the AI's pause.
+        self.assertEqual(everything.count("sr_sc_mode_paused = yes"), 2)
+        self.assertEqual(_block(self.effects, "sr_sc_ai_pause_review").count("sr_sc_mode_paused = yes"), 1)
+        self.assertNotIn("sr_sc_toggle_pause", everything)
         # A building modifier, never the country's.
         self.assertIn('"sr_space_command_paused": "a Space Command building"',
                       _raw(ROOT / "scripts/generators/gen_nation_tab.py"))
@@ -680,17 +751,44 @@ class PauseTest(unittest.TestCase):
         """Review of #1287, M6: the hovers and the modifier's description,
         each with text (loc_coverage doesn't read custom tooltips' keys)."""
         loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
-        for key in ("sr_sc_pause_tt", "sr_sc_resume_tt", "sr_sc_resume_cancel_tt", "sr_space_command_paused",
-                    "sr_space_command_paused_desc", "je_space_race_widget_sc_rate_paused_tt",
-                    "je_space_race_widget_sc_pause", "je_space_race_widget_sc_resume", "je_space_race_widget_sc_resuming"):
+        for key in ("sr_sc_mode_full_tt", "sr_sc_mode_orders_tt", "sr_sc_mode_paused_tt", "sr_sc_mode_resume_tt",
+                    "sr_space_command_paused", "sr_space_command_paused_desc", "je_space_race_widget_sc_rate_paused_tt",
+                    "je_space_race_widget_sc_rate_resuming_tt", "je_space_race_widget_sc_rate_idle_tt",
+                    "je_space_race_widget_sc_mode_full", "je_space_race_widget_sc_mode_orders", "je_space_race_widget_sc_mode_paused",
+                    "je_space_race_widget_sc_mode_full_on_tt", "je_space_race_widget_sc_mode_orders_on_tt",
+                    "je_space_race_widget_sc_mode_paused_on_tt"):
             with self.subTest(key=key):
                 m = re.search(rf'(?m)^ {key}:0 "(.*)"$', loc)
                 self.assertIsNotNone(m, f"no {key}")
                 self.assertTrue(m.group(1).strip(), f"{key} is empty")
-        # The resume's hover says it waits and a click cancels.
-        resume = re.search(r'(?m)^ sr_sc_resume_tt:0 "(.*)"$', loc).group(1)
+        # Leaving a pause: the hover says it waits and that Paused cancels.
+        resume = re.search(r'(?m)^ sr_sc_mode_resume_tt:0 "(.*)"$', loc).group(1)
         self.assertIn("next month's construction", resume)
         self.assertIn("cancels", resume)
+        # Orders Only says the yards idle without an order and what that costs.
+        orders = re.search(r'(?m)^ sr_sc_mode_orders_tt:0 "(.*)"$', loc).group(1)
+        self.assertIn("idle", orders)
+        self.assertIn("is lost", orders)
+        # ... and that a month which finds nothing on order was bought for
+        # nothing, with Paused the way to stop at once (the review of #2063).
+        self.assertIn("though its inputs were bought", orders)
+        self.assertIn("choose Paused", orders)
+        self.assertIn("sr_sc_mode_orders_stopped_tt", loc)
+        # The idle comes first and without a lost month: the step that fills the
+        # last order idles the yards (the owner, 2026-11-25: Orders Only is right
+        # as built "as long as the tooltips describe it correctly"; the first
+        # wording read as if a month always went for nothing first).
+        self.assertLess(orders.index("leaves nothing on order, the yards stand idle"), orders.index("though its inputs were bought"))
+        # And an order's + says, while the yards are idle, that it waits a month.
+        order = _block(self.sguis, "sr_sc_order_sgui")
+        self.assertRegex(order, r"limit = \{ scope:pick >= 4 \}\s*custom_tooltip = sr_sc_order_more_tt\s*"
+                                r"if = \{\s*limit = \{\s*sr_sc_orders_only = yes\s*sr_sc_is_paused = yes\s*"
+                                r"NOT = \{ sr_sc_is_resuming = yes \}\s*\}\s*custom_tooltip = sr_sc_order_restarts_tt\s*\}")
+        restarts = re.search(r'(?m)^ sr_sc_order_restarts_tt:0 "(.*)"$', loc).group(1)
+        self.assertIn("builds nothing", restarts)
+        # A weight's - and + say when the mix is not in use.
+        self.assertRegex(_block(self.sguis, "sr_sc_mix_sgui"),
+                         r"if = \{\s*limit = \{ sr_sc_orders_only = yes \}\s*custom_tooltip = sr_sc_mix_unused_tt\s*\}")
 
     def test_the_ai_pauses_under_fiscal_stress(self):
         should = _block(self.triggers, "sr_sc_ai_should_pause")
@@ -708,9 +806,18 @@ class PauseTest(unittest.TestCase):
                                  r"NOT = \{ has_variable = sr_sc_pause_hold \}\s*"
                                  r"NOT = \{ sr_pers_ai_hulls_uncrewed = yes \}\s*$")
         review = _block(self.effects, "sr_sc_ai_pause_review")
+        # The AI places no orders, so it drops Orders Only (a player's country it
+        # inherits), or its yards would idle for good: at the step, before the
+        # month's build, not here after it (the review of #2063: that month went
+        # unbuilt).
+        self.assertNotIn("sr_sc_orders_only", review)
+        step = _block(self.effects, "sr_sc_month")
+        drop = re.search(r"if = \{\s*limit = \{\s*is_ai = yes\s*sr_sc_orders_only = yes\s*\}\s*remove_variable = sr_sc_orders_only\s*\}", step)
+        self.assertIsNotNone(drop)
+        self.assertLess(drop.end(), step.index("limit = { sr_sc_is_paused = yes }"))
         self.assertRegex(review, r"limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*sr_has_space_command = yes\s*"
                                  r"sr_sc_ai_should_pause = yes\s*\}\s*"
-                                 r"sr_sc_toggle_pause = yes\s*"
+                                 r"sr_sc_mode_paused = yes\s*"
                                  r"set_variable = \{ name = sr_sc_pause_hold value = yes months = 6 \}\s*\}\s*"
                                  r"else_if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_ai_may_resume = yes\s*\}\s*"
                                  r"sr_sc_clear_pause = yes\s*sr_sc_pause_apply = yes\s*\}\s*$")
@@ -755,6 +862,293 @@ class PauseTest(unittest.TestCase):
             if "sr_sc_is_paused = yes" in _strip(_raw(path)):
                 readers.add(path.name)
         self.assertEqual(readers, {"sr_fleet_effects.txt", "sr_fleet_sguis.txt", "sr_fleet_display_values.txt"})
+
+
+class OrdersTest(unittest.TestCase):
+    """Space Command's orders and its table (the owner, 2026-11-25): a role's
+    order is hulls still to build, a month's construction fills the orders
+    before the build mix, and in Orders Only nothing else is built. The modes
+    and the idle pause are PauseTest's."""
+
+    GUI = ROOT / "gui/journal_entry_widgets/space_race_widget.gui"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _strip(_raw(FLEET_EFFECTS))
+        cls.sguis = _strip(_raw(SGUIS))
+        cls.generated = _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT))
+        cls.values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+        cls.display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        cls.rows = _raw(gsf.ROOT / gsf.GUI_OUT)
+        cls.loc = "\n".join(_raw(p) for p in (ROOT / "localization/english").glob("*.yml"))
+
+    def test_the_steps_are_one_ten_and_a_hundred(self):
+        # A click, shift-click and ctrl-click, as the construction panel's levels.
+        self.assertEqual(gsf.ORDER_STEPS, {1: -1, 2: -10, 3: -100, 4: 1, 5: 10, 6: 100})
+        self.assertEqual(gsf.ORDER_HANDLERS, ("ondefault", "onshift", "onctrl"))
+        self.assertNotIn(gsf.ORDER_CLEAR, gsf.ORDER_STEPS)
+        self.assertEqual(gsf.MIX_STEPS, {1: -1, 2: 1})
+
+    def test_an_order_is_a_variable_a_role(self):
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                self.assertRegex(_block(self.values, f"sr_sc_order_{role.key}_value"),
+                                 rf"^\s*value = 0\s*if = \{{ limit = \{{ has_variable = sr_sc_order_{role.key} \}} "
+                                 rf"value = var:sr_sc_order_{role.key} \}}\s*$")
+        total = _block(self.values, "sr_sc_order_total")
+        self.assertEqual(re.findall(r"add = sr_sc_order_(\w+)_value", total), [r.key for r in gsf.ROLES])
+        self.assertEqual(_block(_strip(_raw(FLEET_VALUES)), "sr_sc_order_max").split(), ["value", "=", "9999"])
+
+    def test_the_month_fills_orders_before_the_mix(self):
+        build = _block(self.generated, "sr_reserve_build")
+        whole = re.search(r"if = \{\s*limit = \{\s*local_var:sr_sc_order_left > 0\s*"
+                          r"local_var:sr_sc_points >= local_var:sr_sc_order_left\s*\}", build)
+        shared = re.search(r"else_if = \{\s*limit = \{ local_var:sr_sc_order_left > 0 \}", build)
+        mix = re.search(r"if = \{\s*limit = \{\s*local_var:sr_sc_points > 0\.0001\s*NOT = \{ sr_sc_orders_only = yes \}\s*\}", build)
+        self.assertIsNotNone(whole, "no branch for a month that covers every order")
+        self.assertIsNotNone(shared, "no branch for orders that want more than the month")
+        self.assertIsNotNone(mix, "the mix isn't shut out of Orders Only")
+        self.assertLess(whole.start(), shared.start())
+        self.assertLess(shared.start(), mix.start())
+        # The orders' sum is read once, before any order moves.
+        self.assertLess(build.index("name = sr_sc_order_left value = sr_sc_order_total"), whole.start())
+        moved, split = build[whole.start():shared.start()], build[shared.start():mix.start()]
+        # A month that covers the orders moves each whole: an amount, never a
+        # share, which cuts a small remainder to 0 and leaves it on order for
+        # good (the review of #2063; OrdersRunTest runs it).
+        self.assertNotIn("multiply", moved)
+        self.assertNotIn("sr_sc_share", moved)
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                k = role.key
+                self.assertRegex(moved, rf"limit = \{{ has_variable = sr_sc_order_{k} \}}\s*"
+                                        rf"if = \{{ limit = \{{ NOT = \{{ has_variable = sr_reserve_{k} \}} \}} "
+                                        rf"set_variable = \{{ name = sr_reserve_{k} value = 0 \}} \}}\s*"
+                                        rf"change_variable = \{{ name = sr_reserve_{k} add = var:sr_sc_order_{k} \}}\s*"
+                                        rf"remove_variable = sr_sc_order_{k}\s*\}}")
+                # Orders that want more: its share of the month, in proportion to
+                # its order; into the reserve, off the order and onto what was
+                # built by the same amount.
+                self.assertRegex(split, rf"limit = \{{ sr_sc_order_{k}_value > 0 \}}\s*"
+                                        rf"set_local_variable = \{{ name = sr_sc_share value = \{{ value = var:sr_sc_order_{k} "
+                                        r"multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left \} \}\s*"
+                                        rf"if = \{{ limit = \{{ NOT = \{{ has_variable = sr_reserve_{k} \}} \}} "
+                                        rf"set_variable = \{{ name = sr_reserve_{k} value = 0 \}} \}}\s*"
+                                        rf"change_variable = \{{ name = sr_reserve_{k} add = local_var:sr_sc_share \}}\s*"
+                                        rf"change_variable = \{{ name = sr_sc_order_{k} subtract = local_var:sr_sc_share \}}\s*"
+                                        r"change_local_variable = \{ name = sr_sc_built add = local_var:sr_sc_share \}")
+                # No dust left on order (its guard and its read in one limit, not under a NOT).
+                self.assertIn(f"if = {{ limit = {{ has_variable = sr_sc_order_{k} var:sr_sc_order_{k} <= 0.0001 }} "
+                              f"remove_variable = sr_sc_order_{k} }}", split)
+                self.assertNotIn(f"sr_sc_order_{k}", build[mix.start():])
+        # What the orders took comes off the month: their whole sum, or all of it.
+        self.assertRegex(moved, r"change_local_variable = \{ name = sr_sc_built add = local_var:sr_sc_order_left \}\s*"
+                                r"change_local_variable = \{ name = sr_sc_points subtract = local_var:sr_sc_order_left \}\s*\}\s*$")
+        self.assertRegex(split, r"set_local_variable = \{ name = sr_sc_points value = 0 \}\s*\}\s*$")
+        # Built a month counts what was built: the orders' take, then the mix's
+        # rest, never the points Orders Only lost.
+        self.assertTrue(build.rstrip().endswith("change_local_variable = { name = sr_sc_built add = local_var:sr_sc_points }\n\t}"))
+        month = _block(self.effects, "sr_sc_month")
+        self.assertRegex(month, r"sr_reserve_build = yes\s*\}\s*set_variable = \{ name = sr_sc_built_last value = local_var:sr_sc_built \}")
+        self.assertNotIn("sr_sc_built_last value = local_var:sr_sc_points", month)
+
+    def test_an_order_placed_while_idle_asks_to_resume(self):
+        sync = _block(self.effects, "sr_sc_orders_sync")
+        # Only in Orders Only and only while paused: while the yards build, the
+        # order book changes nothing until the step.
+        self.assertRegex(sync, r"^\s*if = \{\s*limit = \{\s*sr_sc_orders_only = yes\s*sr_sc_is_paused = yes\s*\}")
+        self.assertRegex(sync, r"limit = \{\s*sr_sc_order_total > 0\s*NOT = \{ sr_sc_is_resuming = yes \}\s*\}\s*"
+                               r"set_variable = \{ name = sr_sc_resume_pending value = yes \}")
+        # The last order withdrawn before the step calls the resume off.
+        self.assertRegex(sync, r"else_if = \{\s*limit = \{\s*sr_sc_order_total <= 0\s*sr_sc_is_resuming = yes\s*\}\s*"
+                               r"remove_variable = sr_sc_resume_pending")
+        self.assertNotIn("sr_sc_paused", sync.replace("sr_sc_is_paused", ""))   # it never starts or ends a pause
+        # Its callers: choosing Orders Only, and every step of an order.
+        everything = "\n".join(_strip(_raw(p)) for d in ("common", "events") for p in (ROOT / d).rglob("*.txt"))
+        self.assertEqual(everything.count("sr_sc_orders_sync = yes"), 2)
+        self.assertTrue(_block(self.generated, "sr_sc_order_step").rstrip().endswith("sr_sc_orders_sync = yes"))
+
+    def test_a_step_moves_the_order_within_its_bounds(self):
+        step = _block(self.generated, "sr_sc_order_step")
+        for code, amount in gsf.ORDER_STEPS.items():
+            with self.subTest(code=code):
+                effect = "sr_sc_order_add" if amount > 0 else "sr_sc_order_cut"
+                self.assertRegex(step, rf"limit = \{{ scope:pick = {code} \}}\s*{effect} = \{{ ROLE = \$ROLE\$ AMOUNT = {abs(amount)} \}}")
+        self.assertRegex(step, rf"limit = \{{ scope:pick = {gsf.ORDER_CLEAR} \}}\s*"
+                               r"sr_sc_order_cut = \{ ROLE = \$ROLE\$ AMOUNT = sr_sc_order_max \}")
+        by_op = _block(self.generated, "sr_sc_order_by_op")
+        for role in gsf.ROLES:
+            with self.subTest(role=role.key):
+                self.assertRegex(by_op, rf"limit = \{{ scope:op = {gsf.ROLE_CODE[role.key]} \}}\s*"
+                                        rf"sr_sc_order_step = \{{ ROLE = {role.key} \}}")
+        # Held to the most, and to none: a cut past the order removes it.
+        self.assertRegex(_block(self.effects, "sr_sc_order_add"),
+                         r"^\s*set_variable = \{ name = sr_sc_order_\$ROLE\$ value = \{ value = sr_sc_order_\$ROLE\$_value "
+                         r"add = \$AMOUNT\$ max = sr_sc_order_max \} \}\s*$")
+        self.assertRegex(_block(self.effects, "sr_sc_order_cut"),
+                         r"^\s*if = \{\s*limit = \{ sr_sc_order_\$ROLE\$_value > \$AMOUNT\$ \}\s*"
+                         r"set_variable = \{ name = sr_sc_order_\$ROLE\$ value = \{ value = sr_sc_order_\$ROLE\$_value "
+                         r"subtract = \$AMOUNT\$ \} \}\s*\}\s*"
+                         r"else_if = \{\s*limit = \{ has_variable = sr_sc_order_\$ROLE\$ \}\s*"
+                         r"remove_variable = sr_sc_order_\$ROLE\$\s*\}\s*$")
+        # A button's tooltip walks these and writes nothing: neither reads the
+        # variable itself, only the guarded value.
+        for name in ("sr_sc_order_add", "sr_sc_order_cut", "sr_sc_orders_sync"):
+            self.assertNotIn("var:", _block(self.effects, name), name)
+
+    def test_the_mix_steps_down_and_up_without_wrapping(self):
+        step = _block(self.generated, "sr_sc_mix_step")
+        self.assertRegex(step, r"limit = \{ scope:pick = 1 sr_sc_mix_\$ROLE\$_value > 0 \}\s*"
+                               r"set_variable = \{ name = sr_sc_mix_\$ROLE\$ value = \{ value = sr_sc_mix_\$ROLE\$_value add = -1 \} \}")
+        self.assertRegex(step, r"limit = \{ scope:pick = 2 sr_sc_mix_\$ROLE\$_value < sr_sc_mix_max \}\s*"
+                               r"set_variable = \{ name = sr_sc_mix_\$ROLE\$ value = \{ value = sr_sc_mix_\$ROLE\$_value add = 1 \} \}")
+        self.assertNotIn("value = 0 }", step)   # the old round trip, 3 back to 0
+        self.assertNotIn("sr_sc_mix_step", self.effects)   # generated now, from MIX_STEPS
+
+    def test_each_scripted_gui_checks_every_code_the_table_sends(self):
+        """An op-coded scripted GUI fails closed on a code its is_valid leaves
+        out, silently (gui_modding_guide.md, Click Modifiers with ScriptedGuis)."""
+        for sgui, codes in (("sr_sc_mix_sgui", gsf.MIX_STEPS), ("sr_sc_order_sgui", {**gsf.ORDER_STEPS, gsf.ORDER_CLEAR: 0})):
+            body = _block(self.sguis, sgui)
+            with self.subTest(sgui=sgui):
+                self.assertIn("saved_scopes = { op pick }", body)
+                self.assertNotIn("scope:", _block("x = {" + body.split("is_shown = {", 1)[1], "x"))   # gotcha #22
+                self.assertIn("always = no", _block("x = {" + body.split("ai_is_valid = {", 1)[1], "x"))
+                valid = _block("x = {" + body.split("\n\tis_valid = {", 1)[1], "x")
+                self.assertRegex(valid, r"trigger_else = \{\s*always = no\s*\}\s*$")
+                sent = set(int(c) for c in re.findall(
+                    rf"GetScriptedGui\('{sgui}'\)\.Execute\( [^\]]*?'pick', MakeScopeValue\( '\(CFixedPoint\)(\d+)' \)", self.rows))
+                self.assertEqual(sent, set(codes))
+        valid = _block("x = {" + _block(self.sguis, "sr_sc_order_sgui").split("\n\tis_valid = {", 1)[1], "x")
+        # + while the order has room, every other code (-, withdraw) while there is one.
+        self.assertRegex(valid, r"trigger_if = \{\s*limit = \{\s*scope:pick >= 4\s*scope:pick <= 6\s*\}\s*custom_tooltip = \{\s*"
+                                r"text = sr_sc_order_below_max_tt\s*sr_sc_order_op_value < sr_sc_order_max\s*\}")
+        self.assertRegex(valid, r"trigger_else_if = \{\s*limit = \{\s*scope:pick >= 1\s*scope:pick <= 7\s*\}\s*custom_tooltip = \{\s*"
+                                r"text = sr_sc_order_some_tt\s*sr_sc_order_op_value > 0\s*\}")
+        self.assertEqual(max(gsf.ORDER_STEPS), 6)
+        self.assertEqual(gsf.ORDER_CLEAR, 7)
+        for name, source in (("sr_sc_mix_op_value", "sr_sc_mix_{}_value"), ("sr_sc_order_op_value", "sr_sc_order_{}_value")):
+            value = _block(self.values, name)
+            for role in gsf.ROLES:
+                with self.subTest(value=name, role=role.key):
+                    self.assertIn(f"if = {{ limit = {{ scope:op = {gsf.ROLE_CODE[role.key]} }} value = {source.format(role.key)} }}", value)
+
+    def test_the_table_has_a_row_a_role(self):
+        rows = _block(self.rows.replace("\ttype te_sr_sc_build_rows = flowcontainer", "te_sr_sc_build_rows ="), "te_sr_sc_build_rows")
+        self.assertEqual(rows.count("te_sr_sc_build_row = {"), len(gsf.ROLES))
+        self.assertEqual(re.findall(r'texture = "gfx/interface/icons/space_race_icons/role_(\w+)\.dds"', rows), [r.key for r in gsf.ROLES])
+        for role in gsf.ROLES:
+            k, op = role.key, gsf.ROLE_CODE[role.key]
+            row = _block_around(rows, rows.index(f"role_{k}.dds"), 2)
+            def call(sgui, method, pick):
+                return (f"[GetScriptedGui('{sgui}').{method}( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope )"
+                        f".AddScope( 'op', MakeScopeValue( '(CFixedPoint){op}' ) )"
+                        f".AddScope( 'pick', MakeScopeValue( '(CFixedPoint){pick}' ) ).End )]")
+            with self.subTest(role=k):
+                for block, name in (("br_fleets", f"sr_disp_fl_role_{k}"), ("br_reserve", f"sr_disp_reserve_{k}"),
+                                    ("br_mix_weight", f"sr_disp_sc_mix_{k}"), ("br_order", f"sr_disp_sc_order_{k}")):
+                    self.assertRegex(row, rf'blockoverride "{block}" \{{\s*raw_text = "\[JournalEntry\.GetCountry\.MakeScope\.'
+                                          rf"ScriptValue\('{name}'\)\|0\]\"")
+                self.assertIn(f"ScriptValue('sr_disp_sc_mix_pct_{k}')|0]%\"", row)
+                self.assertIn(f'text = "je_space_race_widget_fl_role_{k}"', row)   # the fleet cards' word for the role
+                # The mix: - and +, each greyed and explained by its own code.
+                for block, pick in (("br_mix_down", 1), ("br_mix_up", 2)):
+                    body = _block_around(row, row.index(f'blockoverride "{block}"') + len(f'blockoverride "{block}" {{'), 1)
+                    self.assertIn(f'enabled = "{call("sr_sc_mix_sgui", "IsValid", pick)}"', body)
+                    self.assertIn(f'onclick = "{call("sr_sc_mix_sgui", "Execute", pick)}"', body)
+                    self.assertIn("IsValidTooltip", body)
+                # An order: a click 1, shift-click 10, ctrl-click 100, the button
+                # greyed and explained by its plain click.
+                for block, picks in (("br_order_down", (1, 2, 3)), ("br_order_up", (4, 5, 6))):
+                    body = _block_around(row, row.index(f'blockoverride "{block}"') + len(f'blockoverride "{block}" {{'), 1)
+                    self.assertIn(f'enabled = "{call("sr_sc_order_sgui", "IsValid", picks[0])}"', body)
+                    self.assertIn("IsValidTooltip", body)
+                    self.assertNotIn("onclick", body)
+                    for handler, pick in zip(("ondefault", "onshift", "onctrl"), picks):
+                        self.assertIn(f'{handler} = "{call("sr_sc_order_sgui", "Execute", pick)}"', body)
+                    self.assertEqual([abs(gsf.ORDER_STEPS[p]) for p in picks], [1, 10, 100])
+                body = _block_around(row, row.index('blockoverride "br_order_clear"') + len('blockoverride "br_order_clear" {'), 1)
+                self.assertIn(f'onclick = "{call("sr_sc_order_sgui", "Execute", gsf.ORDER_CLEAR)}"', body)
+                self.assertIn(f'enabled = "{call("sr_sc_order_sgui", "IsValid", gsf.ORDER_CLEAR)}"', body)
+
+    def test_the_figures_the_table_shows(self):
+        for role in gsf.ROLES:
+            k = role.key
+            with self.subTest(role=k):
+                # An order under way never reads 0: rounded up.
+                self.assertEqual(_block(self.display, f"sr_disp_sc_order_{k}").split(),
+                                 f"value = sr_sc_order_{k}_value ceiling = yes".split())
+                self.assertEqual(_block(self.display, f"sr_disp_sc_mix_pct_{k}").split(),
+                                 f"value = sr_sc_mix_share_{k} multiply = 100".split())
+                for suffix in ("", "_full"):
+                    self.assertEqual(re.findall(r"add = (\S+)", _block(self.display, f"sr_disp_fl_role_{k}{suffix}")),
+                                     [gsf.var(n, f"{k}{suffix}_value") for n in range(1, gsf.SLOTS + 1)])
+                # What the mix builds with nothing on order: its share of the yards' pace.
+                self.assertEqual(_block(self.display, f"sr_disp_sc_mix_rate_{k}").split(),
+                                 f"value = sr_disp_sc_pace multiply = sr_sc_mix_share_{k}".split())
+        # Hulls on order is what the rows add up to (two orders of 0.4 read 1 and 1, and 2).
+        self.assertEqual(re.findall(r"add = (\S+)", _block(self.display, "sr_disp_sc_order_total")),
+                         [f"sr_disp_sc_order_{r.key}" for r in gsf.ROLES])
+        # The yards' pace is the month's points at the last step that built,
+        # kept through a pause; the orders' months count on it, only while the
+        # yards build.
+        hand = _strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"))
+        self.assertRegex(_block(hand, "sr_disp_sc_pace"),
+                         r"^\s*value = 0\s*if = \{ limit = \{ has_variable = sr_sc_pace_last \} value = var:sr_sc_pace_last \}\s*$")
+        self.assertRegex(_block(self.effects, "sr_sc_month"),
+                         r"set_local_variable = \{ name = sr_sc_points value = sr_sc_rate \}\s*"
+                         r"set_variable = \{ name = sr_sc_pace_last value = local_var:sr_sc_points \}")
+        months = _block(hand, "sr_disp_sc_order_months")
+        self.assertRegex(months, r"^\s*value = 0\s*if = \{\s*limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*"
+                                 r"sr_sc_order_total > 0\s*sr_disp_sc_pace > 0\s*\}\s*"
+                                 r"value = sr_sc_order_total\s*divide = sr_disp_sc_pace\s*\}\s*ceiling = yes\s*max = 999\s*$")
+        gui = _raw(self.GUI)
+        section = _block(gui.replace("\ttype te_sr_sec_space_command = flowcontainer", "te_sr_sec_space_command ="),
+                         "te_sr_sec_space_command")
+        # The mode, the heads, the rows, then what is on order: under the table,
+        # so the months' line coming and going moves nothing above it.
+        order = [section.index(s) for s in ("te_sr_sc_mode_choice = {", "te_sr_sc_build_heads = {}", "te_sr_sc_build_rows = {}",
+                                            'text = "je_space_race_widget_sc_orders_label"',
+                                            'text = "je_space_race_widget_sc_order_months_label"')]
+        self.assertEqual(order, sorted(order))
+        months_row = _block_around(section, section.index('text = "je_space_race_widget_sc_order_months_label"'), 2)
+        self.assertIn("visible = \"[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope."
+                      "ScriptValue('sr_disp_sc_order_months'), '(CFixedPoint)1' )]\"", months_row)
+
+    def test_the_texts_exist(self):
+        """Custom tooltips' keys, which loc_coverage doesn't read, and the
+        table's hovers."""
+        keys = set(re.findall(r"custom_tooltip = (sr_sc_\w+)", self.sguis)) | set(re.findall(r"text = (sr_sc_\w+_tt)", self.sguis))
+        self.assertEqual(len(keys), 5 + 5 + len(gsf.ROLES) + 6 + len(gsf.ROLES))   # modes; mix; orders
+        keys |= set(re.findall(r'tooltip = "(je_space_race_widget_sc_\w+)"', self.rows + _raw(self.GUI)))
+        for key in sorted(keys):
+            with self.subTest(key=key):
+                m = re.search(rf'(?m)^ {key}:0 "(.*)"$', self.loc)
+                self.assertIsNotNone(m, f"no {key}")
+                self.assertTrue(m.group(1).strip(), f"{key} is empty")
+        # The Order head says the three clicks; the buttons' hovers list them.
+        head = re.search(r'(?m)^ je_space_race_widget_sc_col_order_tt:0 "(.*)"$', self.loc).group(1)
+        for word in ("shift-click", "ctrl-click", "#v 10#!", "#v 100#!"):
+            self.assertIn(word, head)
+        for key, sign in (("sr_sc_order_more_tt", "+"), ("sr_sc_order_less_tt", "−")):
+            text = re.search(rf'(?m)^ {key}:0 "(.*)"$', self.loc).group(1)
+            for line in (f"#v Click#!: {sign}1", f"#v Shift+Click#!: {sign}10", f"#v Ctrl+Click#!: {sign}100"):
+                self.assertIn(line, text)
+        # The figures in the texts are the script's.
+        self.assertIn("#v 9,999#!", re.search(r'(?m)^ sr_sc_order_below_max_tt:0 "(.*)"$', self.loc).group(1))
+        for key in ("sr_sc_mix_up_tt", "sr_sc_mix_below_max_tt"):
+            self.assertIn("#v 3#!", re.search(rf'(?m)^ {key}:0 "(.*)"$', self.loc).group(1))
+        self.assertEqual(_block(_strip(_raw(FLEET_VALUES)), "sr_sc_mix_max").split(), ["value", "=", "3"])
+
+    def test_the_ai_s_mix_and_the_start_mix_are_untouched(self):
+        defend = _block(_strip(_raw(COMBAT_EFFECTS)), "sr_fl_ai_defend")
+        for role, weight in (("war", 3), ("siege", 1), ("carrier", 1), ("tender", 1), ("rapid", 0)):
+            self.assertIn(f"set_variable = {{ name = sr_sc_mix_{role} value = {weight} }}", defend)
+        # The AI neither orders nor picks a mode.
+        everything = "\n".join(_strip(_raw(p)) for p in (ROOT / "common").rglob("*.txt"))
+        for effect in ("sr_sc_order_by_op", "sr_sc_mix_by_op", "sr_sc_mode_full", "sr_sc_mode_orders"):
+            with self.subTest(effect=effect):
+                self.assertEqual(everything.count(f"{effect} = yes"), 1)   # its scripted GUI's hidden_effect
 
 
 class ShippingTest(unittest.TestCase):
@@ -1075,7 +1469,8 @@ class GroundReserveTest(unittest.TestCase):
         for role in gsf.ROLES:
             with self.subTest(role=role.key):
                 self.assertIn(f"multiply = sr_sc_mix_share_{role.key}", build)
-                self.assertIn(f"change_variable = {{ name = sr_reserve_{role.key} add = local_var:sr_sc_share }}", build)
+                # Twice since 2026-11-25: for its order, then for its share of the mix (OrdersTest).
+                self.assertEqual(build.count(f"change_variable = {{ name = sr_reserve_{role.key} add = local_var:sr_sc_share }}"), 2)
         total = _block(self.values, "sr_reserve_total")
         self.assertEqual(len(re.findall(r"add = sr_reserve_\w+_value", total)), len(gsf.ROLES))
 
@@ -2725,7 +3120,8 @@ class _Fx:
     """Enough of the engine to run a transfer, from the files as they are: value
     blocks applied in order (min and max clamp where they stand), variables and
     locals, if / else_if / else, triggers, scripted effects and triggers with
-    their $ARG$ substituted as text, saved scopes, and a scripted GUI's is_valid.
+    their $ARG$ substituted as text, saved scopes, and a scripted GUI's is_valid
+    (trigger_if / trigger_else_if / trigger_else) and effect (click).
     Every value is an integer of 1e-5 and every operation is cut toward zero:
     test_demographics_registry._Engine(truncate=True)'s model, exactly. A read of
     a variable or local never set fails, as does an argument the callee doesn't
@@ -2787,6 +3183,8 @@ class _Fx:
                 return store[v[len(prefix):]]
         if v in self.values:
             return self.calc(self.values[v])
+        if v in ("yes", "no"):   # a flag's value (set_variable = { name = x value = yes })
+            return _FX_SCALE if v == "yes" else 0
         try:
             return _fxn(v)
         except InvalidOperation:
@@ -2804,6 +3202,8 @@ class _Fx:
             elif key == "round":
                 q, r = divmod(abs(acc), _FX_SCALE)
                 acc = (q + (2 * r >= _FX_SCALE)) * _FX_SCALE * (1 if acc >= 0 else -1)
+            elif key == "ceiling":
+                acc = -((-acc) // _FX_SCALE) * _FX_SCALE
             else:
                 x = self.num(v)
                 if key == "value":
@@ -2856,6 +3256,8 @@ class _Fx:
             return v in self.globals
         if key == "has_variable_list":
             return False
+        if key == "always":
+            return v == "yes"
         if key in self.triggers:
             if v in ("yes", "no"):
                 return self.test(self._body(self.triggers, key, "yes")) == (v == "yes")
@@ -2878,6 +3280,12 @@ class _Fx:
                 d = {k: x for k, _, x in v}
                 assert d["name"] in self.vars, f"change_variable on {d['name']}, never set"
                 self.vars[d["name"]] += self.num(d["add"]) if "add" in d else -self.num(d["subtract"])
+            elif key == "change_local_variable":
+                d = {k: x for k, _, x in v}
+                assert d["name"] in self.locals, f"change_local_variable on {d['name']}, never set"
+                self.locals[d["name"]] += self.num(d["add"]) if "add" in d else -self.num(d["subtract"])
+            elif key == "custom_tooltip":
+                pass   # text: a click's effect is what it writes
             elif key == "remove_variable":
                 del self.vars[v]
             elif key == "set_global_variable":
@@ -2890,30 +3298,43 @@ class _Fx:
                 self.run(v)
             elif key in self.STUBS:
                 self.calls.append(key)
+                self.stub(key)
             elif key in self.effects:
                 self.calls.append(key)
                 self.run(self._body(self.effects, key, v))
             else:
                 raise AssertionError(f"unsupported effect {key}")
 
+    def stub(self, key):
+        """A stubbed effect was called: nothing here; a subclass may model it."""
+
     def effect(self, name, **args):
         self.run([(name, "=", [(k, "=", str(x)) for k, x in args.items()] if args else "yes")])
 
+    def click(self, sgui, **scopes):
+        """A click on a scripted GUI's button with these saved scopes: nothing
+        while its is_valid fails (the button is greyed), else its effect."""
+        self.scopes = {k: _fxn(v) for k, v in scopes.items()}
+        if self.refusals(sgui):
+            return False
+        self.run(next(v for k, _, v in self.sguis[sgui] if k == "effect"))
+        return True
+
     def refusals(self, sgui):
         """The is_valid lines of a scripted GUI that fail: each custom_tooltip's
-        text, through trigger_if / trigger_else."""
+        text, through trigger_if / trigger_else_if / trigger_else."""
         out = []
 
         def walk(block):
             taken = False
             for key, op, v in block:
-                if key in ("trigger_if", "trigger_else"):
-                    if key == "trigger_if":
-                        taken = self.test(next(x for k, _, x in v if k == "limit"))
-                        if taken:
-                            walk([e for e in v if e[0] != "limit"])
-                    elif not taken:
-                        walk(v)
+                if key in ("trigger_if", "trigger_else_if", "trigger_else"):
+                    taken = False if key == "trigger_if" else taken
+                    if taken:
+                        continue
+                    if key == "trigger_else" or self.test(next(x for k, _, x in v if k == "limit")):
+                        taken = True
+                        walk([e for e in v if e[0] != "limit"])
                 elif key == "custom_tooltip":
                     if not self.test([e for e in v if e[0] != "text"]):
                         out.append(next(x for k, _, x in v if k == "text"))
@@ -2922,6 +3343,288 @@ class _Fx:
 
         walk(next(v for k, _, v in self.sguis[sgui] if k == "is_valid"))
         return out
+
+
+class _Yards(_Fx):
+    """Space Command's month and its buttons, run from the files as they are
+    (OrdersRunTest): _Fx with the step's two walks of the map modelled.
+    sr_sc_rate, a walk of the country's states, is a figure the test gives.
+    sr_sc_pause_apply, a walk of its buildings, records the cut it would apply:
+    the inputs are cut while the pause holds at an apply, and stay as they were
+    between applies, as the building modifier does. step() fails if a month is
+    built whose inputs were cut at any time since the step before, which is the
+    rule of the review of #1287 that the modes and Orders Only's idle must keep."""
+
+    STUBS = (*_Fx.STUBS, "sr_sc_self_check", "sr_sc_pause_apply")
+    HAND_DISPLAY = ROOT / "common/script_values/sr_fleet_display_values.txt"
+    _display = None
+
+    def __init__(self, rate, ai=False):
+        super().__init__()
+        if _Yards._display is None:
+            _Yards._display = {k: _fx_parse(_fx_tokens(v))[0] for k, v in _fx_top_raw(_raw(self.HAND_DISPLAY)).items()}
+        self.values = {**self.values, **_Yards._display, "sr_sc_rate": [("value", "=", str(rate))]}
+        self.rate, self.ai = _fxn(rate), ai
+        self.cut = False             # the inputs' cut, as last applied
+        self.cut_since_step = False  # ... on at any time since the last step's own apply
+
+    def cond(self, key, op, v):
+        if key == "is_ai":
+            return (v == "yes") == self.ai
+        return super().cond(key, op, v)
+
+    def stub(self, key):
+        if key == "sr_sc_pause_apply":
+            self.cut = "sr_sc_paused" in self.vars
+            self.cut_since_step = self.cut_since_step or self.cut
+
+    def step(self):
+        """A month's construction (sr_sc_month): what it built."""
+        paid = not self.cut_since_step
+        self.locals = {}
+        self.effect("sr_sc_month")
+        built = self.vars["sr_sc_built_last"]
+        assert built == 0 or paid, "a month was built whose inputs were cut for part of it"
+        assert self.cut == ("sr_sc_paused" in self.vars), "the step left the cut out of step with the pause"
+        self.cut_since_step = self.cut
+        return built
+
+    def mode(self, name):
+        return self.click("sr_sc_mode_sgui", op={"full": 1, "orders": 2, "paused": 3}[name])
+
+    def order(self, role, pick):
+        return self.click("sr_sc_order_sgui", op=gsf.ROLE_CODE[role], pick=pick)
+
+    def book(self):
+        return sum(v for k, v in self.vars.items() if k.startswith("sr_sc_order_"))
+
+    def reserve(self, role=None):
+        return sum(v for k, v in self.vars.items() if k.startswith("sr_reserve_" + (role or "")))
+
+    def state(self):
+        """(paused, a resume waiting, Orders Only, something on order)."""
+        return ("sr_sc_paused" in self.vars, "sr_sc_resume_pending" in self.vars, "sr_sc_orders_only" in self.vars, self.book() > 0)
+
+    def shown(self):
+        """What the panel reads: Built a month's cell (0 the figure, 1 Paused, 2
+        Resuming, 3 Idle) and the mode drawn selected (1 Full, 2 Orders Only, 3 Paused)."""
+        return self.num("sr_disp_sc_paused") // _FX_SCALE, self.num("sr_disp_sc_mode") // _FX_SCALE
+
+
+class OrdersRunTest(unittest.TestCase):
+    """The orders, the modes and the month, run in the engine's fixed point from
+    the files as they are (the review of #2063: OrdersTest's regexes pinned the
+    script's shape and let an order that never finishes through)."""
+
+    PLUS_1, PLUS_10, MINUS_1, CLEAR = 4, 5, 1, gsf.ORDER_CLEAR
+    # (paused, resuming, Orders Only, on order): the six states and what the panel shows in each.
+    BUILDING, BUILDING_ORDERS, PAUSED, RESUMING, IDLE, RESUMING_ORDERS = "S1", "S2", "S3", "S4", "S5", "S6"
+
+    @staticmethod
+    def _name(state):
+        paused, resuming, orders_only, on_order = state
+        if not paused:
+            return None if resuming else ("S2" if orders_only else "S1")
+        if not orders_only:
+            return "S4" if resuming else "S3"
+        if resuming:
+            return "S6" if on_order else None
+        return None if on_order else "S5"
+
+    SHOWN = {"S1": (0, 1), "S2": (0, 2), "S3": (1, 3), "S4": (2, 1), "S5": (3, 2), "S6": (2, 2)}
+
+    def test_an_order_always_finishes(self):
+        """The review's case: 5 hulls at 2.499 a month left 0.00201 on order for
+        good, since a share of a small remainder cuts to 0."""
+        y = _Yards("2.499")
+        y.mode("orders")
+        for _ in range(5):
+            y.order("war", self.PLUS_1)
+        built = [y.step(), y.step(), y.step()]
+        self.assertEqual(built[0], _fxn("2.499"))
+        self.assertEqual(built[2], _fxn("0.00201"))   # the remainder the old share left behind, moved whole
+        self.assertEqual(sum(built), _fxn(5))
+        self.assertNotIn("sr_sc_order_war", y.vars)
+        self.assertEqual(y.reserve("war"), _fxn(5))
+        self.assertEqual(self._name(y.state()), self.IDLE)   # and so the yards stop buying
+        self.assertEqual(y.step(), 0)
+
+    def test_every_order_book_empties_and_no_hull_is_lost(self):
+        rng = random.Random(2063)
+        for _ in range(300):
+            rate = Decimal(rng.randint(50_000, 600_000)) / _FX_SCALE   # 0.5 to 6 a month, to five places
+            roles = rng.sample([r.key for r in gsf.ROLES], rng.randint(1, 5))
+            y = _Yards(rate)
+            y.mode("orders")
+            wanted = {}
+            for k in roles:
+                wanted[k] = rng.randint(1, 20)
+                for _ in range(wanted[k]):
+                    y.order(k, self.PLUS_1)
+            months = math.ceil(sum(wanted.values()) / rate) + 1
+            with self.subTest(rate=str(rate), wanted=wanted):
+                built = sum(y.step() for _ in range(months))
+                self.assertEqual(y.book(), 0, "an order is still on the books")
+                self.assertEqual(self._name(y.state()), self.IDLE)
+                for k, n in wanted.items():
+                    # Whole but for the dust an order of 0.0001 or less is dropped at.
+                    self.assertLessEqual(abs(y.reserve(k) - _fxn(n)), 10 * months, k)
+                self.assertEqual(built, y.reserve())   # Built a month is what reached the reserve
+
+    def test_full_gives_the_mix_what_the_orders_leave(self):
+        y = _Yards(4)
+        y.order("siege", self.PLUS_1)             # weight 0 in the start mix: only an order builds it
+        self.assertEqual(y.step(), _fxn(4))
+        self.assertEqual({k: y.reserve(k) for k in ("siege", "war", "carrier", "tender", "rapid")},
+                         {"siege": _fxn(1), "war": _fxn("1.5"), "carrier": _fxn("0.75"), "tender": _fxn("0.75"), "rapid": 0})
+        self.assertEqual(self._name(y.state()), self.BUILDING)
+        self.assertEqual(y.step(), _fxn(4))       # and the mix alone the month after
+
+    def test_orders_only_builds_the_orders_alone_then_idles(self):
+        y = _Yards(4)
+        y.mode("orders")
+        y.order("siege", self.PLUS_1)
+        self.assertEqual(y.step(), _fxn(1))       # the month's other 3 are lost
+        self.assertEqual(y.reserve(), _fxn(1))
+        self.assertEqual(self._name(y.state()), self.IDLE)
+        self.assertTrue(y.cut)                    # from this step: the coming month isn't bought
+        self.assertEqual(y.shown(), self.SHOWN["S5"])
+
+    def test_orders_share_a_short_month_in_proportion(self):
+        y = _Yards(3)
+        y.order("war", self.PLUS_10)
+        for _ in range(5):
+            y.order("carrier", self.PLUS_1)
+        self.assertEqual(y.step(), _fxn(3))
+        self.assertEqual((y.reserve("war"), y.reserve("carrier")), (_fxn(2), _fxn(1)))
+        self.assertEqual((y.vars["sr_sc_order_war"], y.vars["sr_sc_order_carrier"]), (_fxn(8), _fxn(4)))
+        self.assertEqual(y.reserve("tender"), 0)  # nothing for the mix while the orders want the month
+        self.assertEqual(y.num("sr_disp_sc_order_months") // _FX_SCALE, 4)
+
+    def test_an_order_placed_while_idle_waits_a_step(self):
+        y = _Yards(4)
+        y.mode("orders")
+        self.assertEqual(y.step(), 0)             # nothing on order: the month builds nothing, and idles
+        self.assertEqual(self._name(y.state()), self.IDLE)
+        y.order("war", self.PLUS_10)
+        self.assertEqual(self._name(y.state()), self.RESUMING_ORDERS)
+        self.assertEqual(y.shown(), self.SHOWN["S6"])
+        self.assertEqual(y.step(), 0)             # the inputs were cut: nothing built, the cut comes off
+        self.assertFalse(y.cut)
+        self.assertEqual(y.step(), _fxn(4))       # a month that was bought
+        # The last order withdrawn while the resume waits calls it off.
+        z = _Yards(4)
+        z.mode("orders")
+        z.step()
+        z.order("war", self.PLUS_1)
+        z.order("war", self.CLEAR)
+        self.assertEqual(self._name(z.state()), self.IDLE)
+        self.assertEqual(z.step(), 0)
+        self.assertTrue(z.cut)
+
+    def test_rearranging_orders_within_a_month_loses_none_of_it(self):
+        y = _Yards(4)
+        y.mode("orders")
+        y.order("war", self.PLUS_10)
+        y.step()
+        y.order("war", self.CLEAR)                # the book is empty, and the yards still building
+        self.assertEqual(self._name(y.state()), self.BUILDING_ORDERS)
+        y.order("carrier", self.PLUS_10)
+        self.assertEqual(y.step(), _fxn(4))
+        self.assertEqual(y.reserve("carrier"), _fxn(4))
+
+    def test_a_pause_and_its_resume(self):
+        y = _Yards(4)
+        y.step()
+        y.mode("paused")
+        self.assertTrue(y.cut)                    # at once
+        self.assertEqual(y.shown(), self.SHOWN["S3"])
+        self.assertEqual(y.step(), 0)
+        y.mode("full")
+        self.assertEqual(self._name(y.state()), self.RESUMING)
+        self.assertTrue(y.cut)                    # the inputs stay cut until the step
+        self.assertEqual(y.step(), 0)
+        self.assertEqual(y.step(), _fxn(4))
+        # Paused chosen while the resume waits calls it off; orders are kept through a pause.
+        y.order("siege", self.PLUS_10)
+        y.mode("paused")
+        y.mode("orders")
+        self.assertEqual(self._name(y.state()), self.RESUMING_ORDERS)
+        y.mode("paused")
+        self.assertEqual(self._name(y.state()), self.PAUSED)
+        self.assertEqual(y.step(), 0)
+        self.assertEqual(y.vars["sr_sc_order_siege"], _fxn(10))
+        # A pause the day before the step, and a resume the day after, builds neither month.
+        z = _Yards(4)
+        z.step()
+        z.mode("paused")
+        z.mode("full")
+        self.assertEqual(z.step(), 0)
+
+    def test_the_ai_builds_in_full_whatever_it_inherits(self):
+        """The review of #2063: the flag dropped after the month's build left an
+        AI its first month unbuilt, and never dropped would idle it for good."""
+        y = _Yards(4)
+        y.mode("orders")
+        y.order("war", self.PLUS_1)
+        y.step()                                  # the order filled, the yards idle
+        self.assertEqual(self._name(y.state()), self.IDLE)
+        y.ai = True
+        self.assertEqual(y.step(), 0)             # still paused: its review ends that (sr_sc_ai_pause_review)
+        self.assertEqual(self._name(y.state()), self.PAUSED)
+        z = _Yards(4)
+        z.mode("orders")                          # building, nothing on order, handed over mid-month
+        z.ai = True
+        self.assertEqual(z.step(), _fxn(4))       # by the mix, this month
+        self.assertEqual(self._name(z.state()), self.BUILDING)
+
+    def test_no_sequence_of_clicks_builds_an_unpaid_month(self):
+        """Seeded walks over every button and the step: step() fails on a month
+        built with its inputs cut for part of it; no state outside the six is
+        reached; the panel reads each state as it is; and left alone the yards
+        settle where the mode says."""
+        rng = random.Random(1287)
+        modes, roles = ("full", "orders", "paused"), [r.key for r in gsf.ROLES]
+        seen = set()
+        for walk in range(150):
+            rate = rng.choice(("2.499", "3.33333", "4", "7.25"))
+            y = _Yards(rate)
+            for _ in range(50):
+                roll = rng.random()
+                if roll < 0.25:
+                    y.step()
+                elif roll < 0.5:
+                    y.mode(rng.choice(modes))
+                elif roll < 0.9:
+                    y.order(rng.choice(roles), rng.choice((self.PLUS_1, self.PLUS_1, self.PLUS_10, self.MINUS_1, 2, self.CLEAR)))
+                else:
+                    y.click("sr_sc_mix_sgui", op=rng.randint(1, 5), pick=rng.randint(1, 2))
+                name = self._name(y.state())
+                self.assertIsNotNone(name, f"walk {walk}: an unreachable state {y.state()}")
+                self.assertEqual(y.shown(), self.SHOWN[name], f"walk {walk}: {name}")
+                self.assertTrue(all(v >= 0 for k, v in y.vars.items() if k.startswith(("sr_sc_order_", "sr_reserve_", "sr_sc_mix_"))))
+                seen.add(name)
+            # Left alone: Paused stays paused; Full builds every month from the
+            # second step on; Orders Only works its book off and idles.
+            start = self._name(y.state())
+            with self.subTest(walk=walk, start=start):
+                if start == "S3":
+                    self.assertEqual([y.step(), y.step()], [0, 0])
+                    self.assertEqual(self._name(y.state()), "S3")
+                elif start in ("S1", "S4"):
+                    y.step()
+                    for built in (y.step(), y.step()):
+                        # The month's rate, less at most a cut of 0.00001 a role's share.
+                        self.assertLessEqual(built, _fxn(rate))
+                        self.assertGreaterEqual(built, _fxn(rate) - len(roles))
+                    self.assertEqual(self._name(y.state()), "S1")
+                else:
+                    for _ in range(math.ceil(Decimal(y.book()) / _fxn(rate)) + 3):
+                        y.step()
+                    self.assertEqual(y.book(), 0)
+                    self.assertEqual(self._name(y.state()), "S5")
+                    self.assertTrue(y.cut)
+        self.assertEqual(seen, set(self.SHOWN))   # the walks reached all six
 
 
 class TransferRunTest(unittest.TestCase):

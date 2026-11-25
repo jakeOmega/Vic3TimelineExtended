@@ -12,6 +12,8 @@
 ### (te_sr_fleet_popup; the owner, 2026-11-25): te_sr_fleet_switch_rows, its
 ### list of our fleets, and te_sr_fleet_pages, a page a slot (te_sr_fleet_page)
 ### filled from its card's own blocks, shown on the client-side sr_fleet_focus.
+### And Space Command's table (te_sr_sc_build_rows; the owner, 2026-11-25), a row a
+### role: its build-mix weight and its order.
 ### The colonies' Defenses
 ### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).
 
@@ -41121,6 +41123,346 @@ types sr_fleets_generated_rows_types
 		te_sr_note = {
 			visible = "[And3( GetVariableSystem.HasValue('sr_fleet_focus', '9'), Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9'), '(CFixedPoint)1' ) ), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)1' ) )]"
 			text = "je_space_race_widget_fw_gone"
+		}
+	}
+
+	### Space Command's table (te_sr_sec_space_command in space_race_widget.gui; the
+	### owner, 2026-11-25): a row a role (te_sr_sc_build_row), what we hold of it,
+	### its weight in the build mix with - and + (sr_sc_mix_sgui) and its order with
+	### -, + and withdraw (sr_sc_order_sgui: a click 1 hull, shift-click 10,
+	### ctrl-click 100), passing the role as scope:op and the step as scope:pick.
+	type te_sr_sc_build_rows = flowcontainer {
+		direction = vertical
+		spacing = 2
+
+		te_sr_sc_build_row = {
+			blockoverride "br_icon" {
+				texture = "gfx/interface/icons/space_race_icons/role_war.dds"
+			}
+			blockoverride "br_role" {
+				tooltip = "je_space_race_widget_sc_role_war_tt"
+			}
+			blockoverride "br_name" {
+				text = "je_space_race_widget_fl_role_war"
+			}
+			blockoverride "br_fleets_tooltip" {
+				tooltip = "je_space_race_widget_sc_fleets_war_tt"
+			}
+			blockoverride "br_fleets" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_role_war')|0]"
+			}
+			blockoverride "br_reserve" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_war')|0]"
+			}
+			blockoverride "br_mix_down" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			}
+			blockoverride "br_mix_weight" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]"
+			}
+			blockoverride "br_mix_up" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+			}
+			blockoverride "br_mix_share_tooltip" {
+				tooltip = "je_space_race_widget_sc_share_war_tt"
+			}
+			blockoverride "br_mix_share" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_pct_war')|0]%"
+			}
+			blockoverride "br_order_down" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+			blockoverride "br_order" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_war')|0]"
+			}
+			blockoverride "br_order_up" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+			blockoverride "br_order_clear" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
+		}
+
+		te_sr_sc_build_row = {
+			blockoverride "br_icon" {
+				texture = "gfx/interface/icons/space_race_icons/role_rapid.dds"
+			}
+			blockoverride "br_role" {
+				tooltip = "je_space_race_widget_sc_role_rapid_tt"
+			}
+			blockoverride "br_name" {
+				text = "je_space_race_widget_fl_role_rapid"
+			}
+			blockoverride "br_fleets_tooltip" {
+				tooltip = "je_space_race_widget_sc_fleets_rapid_tt"
+			}
+			blockoverride "br_fleets" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_role_rapid')|0]"
+			}
+			blockoverride "br_reserve" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_rapid')|0]"
+			}
+			blockoverride "br_mix_down" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			}
+			blockoverride "br_mix_weight" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]"
+			}
+			blockoverride "br_mix_up" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+			}
+			blockoverride "br_mix_share_tooltip" {
+				tooltip = "je_space_race_widget_sc_share_rapid_tt"
+			}
+			blockoverride "br_mix_share" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_pct_rapid')|0]%"
+			}
+			blockoverride "br_order_down" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+			blockoverride "br_order" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_rapid')|0]"
+			}
+			blockoverride "br_order_up" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+			blockoverride "br_order_clear" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
+		}
+
+		te_sr_sc_build_row = {
+			blockoverride "br_icon" {
+				texture = "gfx/interface/icons/space_race_icons/role_siege.dds"
+			}
+			blockoverride "br_role" {
+				tooltip = "je_space_race_widget_sc_role_siege_tt"
+			}
+			blockoverride "br_name" {
+				text = "je_space_race_widget_fl_role_siege"
+			}
+			blockoverride "br_fleets_tooltip" {
+				tooltip = "je_space_race_widget_sc_fleets_siege_tt"
+			}
+			blockoverride "br_fleets" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_role_siege')|0]"
+			}
+			blockoverride "br_reserve" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_siege')|0]"
+			}
+			blockoverride "br_mix_down" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			}
+			blockoverride "br_mix_weight" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]"
+			}
+			blockoverride "br_mix_up" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+			}
+			blockoverride "br_mix_share_tooltip" {
+				tooltip = "je_space_race_widget_sc_share_siege_tt"
+			}
+			blockoverride "br_mix_share" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_pct_siege')|0]%"
+			}
+			blockoverride "br_order_down" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+			blockoverride "br_order" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_siege')|0]"
+			}
+			blockoverride "br_order_up" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+			blockoverride "br_order_clear" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
+		}
+
+		te_sr_sc_build_row = {
+			blockoverride "br_icon" {
+				texture = "gfx/interface/icons/space_race_icons/role_carrier.dds"
+			}
+			blockoverride "br_role" {
+				tooltip = "je_space_race_widget_sc_role_carrier_tt"
+			}
+			blockoverride "br_name" {
+				text = "je_space_race_widget_fl_role_carrier"
+			}
+			blockoverride "br_fleets_tooltip" {
+				tooltip = "je_space_race_widget_sc_fleets_carrier_tt"
+			}
+			blockoverride "br_fleets" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_role_carrier')|0]"
+			}
+			blockoverride "br_reserve" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_carrier')|0]"
+			}
+			blockoverride "br_mix_down" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			}
+			blockoverride "br_mix_weight" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_carrier')|0]"
+			}
+			blockoverride "br_mix_up" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+			}
+			blockoverride "br_mix_share_tooltip" {
+				tooltip = "je_space_race_widget_sc_share_carrier_tt"
+			}
+			blockoverride "br_mix_share" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_pct_carrier')|0]%"
+			}
+			blockoverride "br_order_down" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+			blockoverride "br_order" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_carrier')|0]"
+			}
+			blockoverride "br_order_up" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+			blockoverride "br_order_clear" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
+		}
+
+		te_sr_sc_build_row = {
+			blockoverride "br_icon" {
+				texture = "gfx/interface/icons/space_race_icons/role_tender.dds"
+			}
+			blockoverride "br_role" {
+				tooltip = "je_space_race_widget_sc_role_tender_tt"
+			}
+			blockoverride "br_name" {
+				text = "je_space_race_widget_fl_role_tender"
+			}
+			blockoverride "br_fleets_tooltip" {
+				tooltip = "je_space_race_widget_sc_fleets_tender_tt"
+			}
+			blockoverride "br_fleets" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_role_tender')|0]"
+			}
+			blockoverride "br_reserve" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_tender')|0]"
+			}
+			blockoverride "br_mix_down" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+			}
+			blockoverride "br_mix_weight" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]"
+			}
+			blockoverride "br_mix_up" {
+				enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+			}
+			blockoverride "br_mix_share_tooltip" {
+				tooltip = "je_space_race_widget_sc_share_tender_tt"
+			}
+			blockoverride "br_mix_share" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mix_pct_tender')|0]%"
+			}
+			blockoverride "br_order_down" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				}
+			}
+			blockoverride "br_order" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_tender')|0]"
+			}
+			blockoverride "br_order_up" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+				click_modifiers = {
+					ondefault = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+					onshift = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+					onctrl = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				}
+			}
+			blockoverride "br_order_clear" {
+				enabled = "[GetScriptedGui('sr_sc_order_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_sc_order_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_order_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+				onclick = "[GetScriptedGui('sr_sc_order_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'pick', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+			}
 		}
 	}
 }

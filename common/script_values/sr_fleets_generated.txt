@@ -11214,6 +11214,57 @@ sr_sc_mix_share_tender = {
 	if = { limit = { sr_sc_mix_total > 0 } value = sr_sc_mix_tender_value divide = sr_sc_mix_total }
 }
 
+# ===== Orders (the owner, 2026-11-25), country scope: each role's hulls still on
+# order (sr_sc_order_<role>), which a month's construction fills before the build
+# mix takes the rest (sr_reserve_build), and their sum. =====
+sr_sc_order_war_value = {
+	value = 0
+	if = { limit = { has_variable = sr_sc_order_war } value = var:sr_sc_order_war }
+}
+sr_sc_order_rapid_value = {
+	value = 0
+	if = { limit = { has_variable = sr_sc_order_rapid } value = var:sr_sc_order_rapid }
+}
+sr_sc_order_siege_value = {
+	value = 0
+	if = { limit = { has_variable = sr_sc_order_siege } value = var:sr_sc_order_siege }
+}
+sr_sc_order_carrier_value = {
+	value = 0
+	if = { limit = { has_variable = sr_sc_order_carrier } value = var:sr_sc_order_carrier }
+}
+sr_sc_order_tender_value = {
+	value = 0
+	if = { limit = { has_variable = sr_sc_order_tender } value = var:sr_sc_order_tender }
+}
+sr_sc_order_total = {
+	value = 0
+	add = sr_sc_order_war_value
+	add = sr_sc_order_rapid_value
+	add = sr_sc_order_siege_value
+	add = sr_sc_order_carrier_value
+	add = sr_sc_order_tender_value
+}
+
+# Space Command's table (sr_sc_mix_sgui, sr_sc_order_sgui): the weight and the order
+# of scope:op's role (1 war, 2 rapid, 3 siege, 4 carrier, 5 tender), for the buttons' checks.
+sr_sc_mix_op_value = {
+	value = 0
+	if = { limit = { scope:op = 1 } value = sr_sc_mix_war_value }
+	if = { limit = { scope:op = 2 } value = sr_sc_mix_rapid_value }
+	if = { limit = { scope:op = 3 } value = sr_sc_mix_siege_value }
+	if = { limit = { scope:op = 4 } value = sr_sc_mix_carrier_value }
+	if = { limit = { scope:op = 5 } value = sr_sc_mix_tender_value }
+}
+sr_sc_order_op_value = {
+	value = 0
+	if = { limit = { scope:op = 1 } value = sr_sc_order_war_value }
+	if = { limit = { scope:op = 2 } value = sr_sc_order_rapid_value }
+	if = { limit = { scope:op = 3 } value = sr_sc_order_siege_value }
+	if = { limit = { scope:op = 4 } value = sr_sc_order_carrier_value }
+	if = { limit = { scope:op = 5 } value = sr_sc_order_tender_value }
+}
+
 # ===== The ground reserve (6d, design § 15), country scope: each role's strength
 # built and not yet launched (sr_reserve_<role>), all at full, and their sum. =====
 sr_reserve_war_value = {

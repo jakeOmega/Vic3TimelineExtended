@@ -9281,53 +9281,358 @@ types space_race_widget_types
 	### Space Command (Full Colonies; slice 6 design § 5): six overview cells
 	### (what it builds a month, the fleets' strength, its upkeep and the
 	### reserve; then, space forces personnel design § 7, Personnel and Crewed),
-	### then Launch, Auto, Pause / Resume / Resuming (sr_sc_pause_sgui; owner,
-	### 2026-10-31) and Hulls first / Marines first (sr_pers_priority_sgui), then
-	### the build mix, five buttons
-	### (te_sr_sc_role_button) each stepping a role's weight 0 → 3
-	### (sr_sc_mix_sgui, scope:op the role). Open by default; the flag is
-	### sr_panel_space_command_closed.
-	type te_sr_sc_mix_button = button {
+	### then Launch, Auto-launch (sr_reserve_auto_sgui) and Crews first
+	### (sr_pers_priority_sgui), each toggle reading "Label: value", then
+	### Construction (the owner, 2026-11-25): the yards' three modes
+	### (sr_sc_mode_sgui: Full, Orders Only, Paused; one Pause / Resume /
+	### Resuming button until then), and a table, a row a role
+	### (te_sr_sc_build_rows, generated): what we hold of it, its weight in the
+	### build mix with - and + (sr_sc_mix_sgui; five buttons each stepping 0 to
+	### 3 and round until then), and its order with -, + and withdraw
+	### (sr_sc_order_sgui), then the hulls on order and the months they take.
+	### Open by default; the flag is sr_panel_space_command_closed.
+	###
+	### Launch's button; the two toggles are wider for their "Label: value":
+	### 90 + 160 + 196 + 2 × 4 = 454, in the row's 472.
+	type te_sr_sc_button = button {
 		using = default_button_action
 		size = { 90 26 }
 		parentanchor = vcenter
-		block "mix_button" {}
+		block "sc_button" {}
 
 		textbox = {
 			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 86
+			max_width = 84
 			elide = right
 			using = te_sr_fontsize_row
-			block "mix_label" {}
+			block "sc_label" {}
 		}
 	}
 
-	### A role in the build mix: its icon (the fleet cards') over its word and
-	### weight; a click steps the weight 0 → 3 (sr_sc_mix_sgui, scope:op the
-	### role). Five to the line: 5 × 92 + 4 × 4 = 476.
-	type te_sr_sc_role_button = button {
+	type te_sr_sc_button_mid = button {
 		using = default_button_action
-		size = { 92 46 }
+		size = { 160 26 }
 		parentanchor = vcenter
-		block "mix_button" {}
+		block "sc_button" {}
 
-		icon = {
-			size = { 20 20 }
-			position = { 0 3 }
-			parentanchor = top|hcenter
-			block "mix_icon" {}
-		}
 		textbox = {
-			position = { 0 23 }
-			parentanchor = top|hcenter
+			parentanchor = center
 			align = center|nobaseline
 			autoresize = yes
-			max_width = 86
+			max_width = 154
 			elide = right
 			using = te_sr_fontsize_row
-			block "mix_label" {}
+			block "sc_label" {}
+		}
+	}
+
+	type te_sr_sc_button_wide = button {
+		using = default_button_action
+		size = { 196 26 }
+		parentanchor = vcenter
+		block "sc_button" {}
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 190
+			elide = right
+			using = te_sr_fontsize_row
+			block "sc_label" {}
+		}
+	}
+
+	### One of the yards' three modes: a button, or, for the mode in force,
+	### vanilla's selected-tab look (selected_tabs), as the Strategic Reserve
+	### draws its policy in force (widget_je_st_res_policy_choice): a greyed
+	### button would read as unavailable. Three to the line: 3 × 112 + 2 × 4.
+	type te_sr_sc_mode_choice = widget {
+		size = { 112 28 }
+		parentanchor = vcenter
+
+		button = {
+			using = default_button_action
+			size = { 100% 100% }
+			block "mode_button" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 106
+				elide = right
+				using = te_sr_fontsize_row
+				block "mode_label" {}
+			}
+		}
+		icon = {
+			using = selected_tabs
+			size = { 100% 100% }
+			block "mode_selected" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 106
+				elide = right
+				using = te_sr_fontsize_row
+				default_format = "#variable"
+				block "mode_label" {}
+			}
+		}
+	}
+
+	### The table's column heads, each over its cell: Role 100, Fleets 58,
+	### Reserve 66, Mix 116 (its head over the stepper's 76), Order 124 (over the
+	### stepper's 96): 464 + 4 × 4 = 480, the panel's 480.
+	type te_sr_sc_build_heads = flowcontainer {
+		direction = horizontal
+		spacing = 4
+		margin_top = 4
+
+		widget = {
+			size = { 100 20 }
+
+			widget = {
+				size = { 100 20 }
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 100
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_sc_col_role_tt"
+					text = "je_space_race_widget_sc_col_role"
+				}
+			}
+		}
+		widget = {
+			size = { 58 20 }
+
+			widget = {
+				size = { 58 20 }
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					max_width = 58
+					align = center|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_sc_col_fleets_tt"
+					text = "je_space_race_widget_sc_col_fleets"
+				}
+			}
+		}
+		widget = {
+			size = { 66 20 }
+
+			widget = {
+				size = { 66 20 }
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					max_width = 66
+					align = center|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_sc_col_reserve_tt"
+					text = "je_space_race_widget_sc_col_reserve"
+				}
+			}
+		}
+		widget = {
+			size = { 116 20 }
+
+			widget = {
+				size = { 76 20 }
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					max_width = 76
+					align = center|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_sc_col_mix_tt"
+					text = "je_space_race_widget_sc_col_mix"
+				}
+			}
+		}
+		widget = {
+			size = { 124 20 }
+
+			widget = {
+				size = { 96 20 }
+
+				textbox = {
+					parentanchor = center
+					autoresize = yes
+					max_width = 96
+					align = center|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					tooltip = "je_space_race_widget_sc_col_order_tt"
+					text = "je_space_race_widget_sc_col_order"
+				}
+			}
+		}
+	}
+
+	### A role's row: its icon and word; our fleets' strength in it, and the
+	### ground reserve's; its build-mix weight between - and +, and its share of
+	### what a month has left after the orders; its order between - and + (a
+	### click 1 hull, shift-click 10, ctrl-click 100), and withdraw. The cells'
+	### bindings are the generated rows' (te_sr_sc_build_rows).
+	type te_sr_sc_build_row = flowcontainer {
+		direction = horizontal
+		spacing = 4
+
+		widget = {
+			size = { 100 28 }
+			block "br_role" {}
+
+			icon = {
+				size = { 20 20 }
+				parentanchor = left|vcenter
+				block "br_icon" {}
+			}
+			textbox = {
+				position = { 24 0 }
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 76
+				align = left|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				block "br_name" {}
+			}
+		}
+		widget = {
+			size = { 58 28 }
+			block "br_fleets_tooltip" {}
+
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				max_width = 58
+				align = center|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#v"
+				block "br_fleets" {}
+			}
+		}
+		widget = {
+			size = { 66 28 }
+
+			textbox = {
+				parentanchor = center
+				autoresize = yes
+				max_width = 66
+				align = center|nobaseline
+				using = te_sr_fontsize_row
+				elide = right
+				default_format = "#v"
+				block "br_reserve" {}
+			}
+		}
+		widget = {
+			size = { 116 28 }
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 2
+				parentanchor = left|vcenter
+
+				button_icon_minus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					block "br_mix_down" {}
+				}
+				widget = {
+					size = { 20 26 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = center
+						autoresize = yes
+						max_width = 20
+						align = center|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#v"
+						block "br_mix_weight" {}
+					}
+				}
+				button_icon_plus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					block "br_mix_up" {}
+				}
+				widget = {
+					size = { 38 26 }
+					parentanchor = vcenter
+					block "br_mix_share_tooltip" {}
+
+					textbox = {
+						parentanchor = center
+						autoresize = yes
+						max_width = 38
+						align = center|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						block "br_mix_share" {}
+					}
+				}
+			}
+		}
+		widget = {
+			size = { 124 28 }
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 2
+				parentanchor = left|vcenter
+
+				button_icon_minus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					block "br_order_down" {}
+				}
+				widget = {
+					size = { 40 26 }
+					parentanchor = vcenter
+
+					textbox = {
+						parentanchor = center
+						autoresize = yes
+						max_width = 40
+						align = center|nobaseline
+						using = te_sr_fontsize_row
+						elide = right
+						default_format = "#v"
+						block "br_order" {}
+					}
+				}
+				button_icon_plus_action = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					block "br_order_up" {}
+				}
+				button_icon_cancel = {
+					size = { 26 26 }
+					parentanchor = vcenter
+					block "br_order_clear" {}
+				}
+			}
 		}
 	}
 
@@ -9367,12 +9672,14 @@ types space_race_widget_types
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_launch_site_lost'), '(CFixedPoint)1' )]"
 				text = "je_space_race_widget_sc_site_lost_note"
 			}
-			### The four readings as overview cells, two to a row (style guide rule 4;
+			### The six readings as overview cells, two to a row (style guide rule 4;
 			### owner, 2026-11-14): Banking's cell, each with its icon in an inset box,
 			### its caption and its figure, the breakdown on hover. Built a month
-			### reads Paused while construction is paused (owner, 2026-10-31), also
-			### while a resume waits for the next step (which builds nothing): one
-			### slot, the two cells taking turns, each with its own hover.
+			### reads the yards' state while they build nothing (sr_disp_sc_paused):
+			### Paused (owner, 2026-10-31), Resuming while a resume waits for the next
+			### step, Idle in Orders Only with nothing on order (the owner,
+			### 2026-11-25). One slot, the four cells taking turns, each with its own
+			### hover.
 			flowcontainer = {
 				direction = horizontal
 				spacing = 4
@@ -9399,7 +9706,7 @@ types space_race_widget_types
 						}
 					}
 					te_banking_ov_cell = {
-						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]"
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]"
 						tooltip = "je_space_race_widget_sc_rate_paused_tt"
 						blockoverride "caption" {
 							text = "je_space_race_widget_ovc_sc_rate_cap"
@@ -9413,6 +9720,42 @@ types space_race_widget_types
 						blockoverride "word" {
 							te_banking_ov_word = {
 								text = "je_space_race_widget_ovc_sc_rate_word_paused"
+							}
+						}
+					}
+					te_banking_ov_cell = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)2' )]"
+						tooltip = "je_space_race_widget_sc_rate_resuming_tt"
+						blockoverride "caption" {
+							text = "je_space_race_widget_ovc_sc_rate_cap"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "je_space_race_widget_ovc_sc_rate_word_resuming"
+							}
+						}
+					}
+					te_banking_ov_cell = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)3' )]"
+						tooltip = "je_space_race_widget_sc_rate_idle_tt"
+						blockoverride "caption" {
+							text = "je_space_race_widget_ovc_sc_rate_cap"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								texture = "gfx/interface/icons/building_icons/building_space_command.dds"
+							}
+						}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "je_space_race_widget_ovc_sc_rate_word_idle"
 							}
 						}
 					}
@@ -9524,176 +9867,158 @@ types space_race_widget_types
 					}
 				}
 			}
+			### Launch, then the two toggles, each reading "Label: value" (the owner,
+			### 2026-11-25; "Auto: on" and "Hulls" until then): Auto-launch, and who
+			### takes the personnel first (space forces personnel design § 4), Hulls
+			### (the default) or Marines. A toggle is two buttons in one slot of its size.
 			flowcontainer = {
 				direction = horizontal
-				ignoreinvisible = yes
 				spacing = 4
 				margin = { 4 1 }
 
-				te_sr_sc_mix_button = {
-					blockoverride "mix_button" {
+				te_sr_sc_button = {
+					blockoverride "sc_button" {
 						enabled = "[GetScriptedGui('sr_reserve_launch_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						onclick = "[GetScriptedGui('sr_reserve_launch_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						tooltip = "[Concatenate( GetScriptedGui('sr_reserve_launch_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_reserve_launch_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
 					}
-					blockoverride "mix_label" {
+					blockoverride "sc_label" {
 						text = "je_space_race_widget_sc_launch"
 					}
 				}
-				te_sr_sc_mix_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)1' )]"
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_reserve_auto_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				widget = {
+					size = { 160 26 }
+					parentanchor = vcenter
+
+					te_sr_sc_button_mid = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)1' )]"
+						blockoverride "sc_button" {
+							enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('sr_reserve_auto_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+						}
+						blockoverride "sc_label" {
+							text = "je_space_race_widget_sc_auto_on"
+						}
 					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_auto_on"
-					}
-				}
-				te_sr_sc_mix_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)0' )]"
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_reserve_auto_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_auto_off"
-					}
-				}
-				### Space Command's Pause / Resume (owner, 2026-10-31; sr_sc_pause_sgui).
-				te_sr_sc_mix_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)0' )]"
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_pause_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_pause_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_pause_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_pause_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_pause"
+					te_sr_sc_button_mid = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_reserve_auto'), '(CFixedPoint)0' )]"
+						blockoverride "sc_button" {
+							enabled = "[GetScriptedGui('sr_reserve_auto_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[GetScriptedGui('sr_reserve_auto_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('sr_reserve_auto_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_reserve_auto_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+						}
+						blockoverride "sc_label" {
+							text = "je_space_race_widget_sc_auto_off"
+						}
 					}
 				}
-				te_sr_sc_mix_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)1' )]"
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_pause_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_pause_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_pause_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_pause_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+				widget = {
+					size = { 196 26 }
+					parentanchor = vcenter
+
+					te_sr_sc_button_wide = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_first'), '(CFixedPoint)0' )]"
+						blockoverride "sc_button" {
+							enabled = "[GetScriptedGui('sr_pers_priority_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[GetScriptedGui('sr_pers_priority_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('sr_pers_priority_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_pers_priority_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+						}
+						blockoverride "sc_label" {
+							text = "je_space_race_widget_sc_hulls_first"
+						}
 					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_resume"
-					}
-				}
-				te_sr_sc_mix_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_paused'), '(CFixedPoint)2' )]"
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_pause_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_pause_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_pause_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_pause_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_resuming"
-					}
-				}
-				### Space forces personnel (design § 4): who takes the personnel first,
-				### Hulls first (the default) or Marines first; a click switches.
-				te_sr_sc_mix_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_first'), '(CFixedPoint)0' )]"
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_pers_priority_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('sr_pers_priority_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_pers_priority_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_pers_priority_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_hulls_first"
-					}
-				}
-				te_sr_sc_mix_button = {
-					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_first'), '(CFixedPoint)1' )]"
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_pers_priority_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						onclick = "[GetScriptedGui('sr_pers_priority_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_pers_priority_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_pers_priority_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_marines_first"
+					te_sr_sc_button_wide = {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_first'), '(CFixedPoint)1' )]"
+						blockoverride "sc_button" {
+							enabled = "[GetScriptedGui('sr_pers_priority_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[GetScriptedGui('sr_pers_priority_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( GetScriptedGui('sr_pers_priority_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_pers_priority_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+						}
+						blockoverride "sc_label" {
+							text = "je_space_race_widget_sc_marines_first"
+						}
 					}
 				}
 			}
+			### Construction (the owner, 2026-11-25): the yards' mode, then the
+			### table, then what is on order. The mode in force is drawn selected.
 			te_sr_subheader = {
 				blockoverride "subheader_text" {
-					text = "je_space_race_widget_sc_mix_header"
+					text = "je_space_race_widget_sc_build_header"
 				}
 			}
 			flowcontainer = {
 				direction = horizontal
 				spacing = 4
+				margin = { 4 1 }
 
-				te_sr_sc_role_button = {
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+				te_sr_sc_mode_choice = {
+					blockoverride "mode_button" {
+						visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mode'), '(CFixedPoint)1' ) )]"
+						enabled = "[GetScriptedGui('sr_sc_mode_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_sc_mode_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mode_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mode_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 					}
-					blockoverride "mix_icon" {
-						texture = "gfx/interface/icons/space_race_icons/role_war.dds"
+					blockoverride "mode_selected" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mode'), '(CFixedPoint)1' )]"
+						tooltip = "je_space_race_widget_sc_mode_full_on_tt"
 					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_mix_war"
-					}
-				}
-				te_sr_sc_role_button = {
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
-					}
-					blockoverride "mix_icon" {
-						texture = "gfx/interface/icons/space_race_icons/role_rapid.dds"
-					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_mix_rapid"
+					blockoverride "mode_label" {
+						text = "je_space_race_widget_sc_mode_full"
 					}
 				}
-				te_sr_sc_role_button = {
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+				te_sr_sc_mode_choice = {
+					blockoverride "mode_button" {
+						visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mode'), '(CFixedPoint)2' ) )]"
+						enabled = "[GetScriptedGui('sr_sc_mode_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_sc_mode_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mode_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mode_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
 					}
-					blockoverride "mix_icon" {
-						texture = "gfx/interface/icons/space_race_icons/role_siege.dds"
+					blockoverride "mode_selected" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mode'), '(CFixedPoint)2' )]"
+						tooltip = "je_space_race_widget_sc_mode_orders_on_tt"
 					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_mix_siege"
-					}
-				}
-				te_sr_sc_role_button = {
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
-					}
-					blockoverride "mix_icon" {
-						texture = "gfx/interface/icons/space_race_icons/role_carrier.dds"
-					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_mix_carrier"
+					blockoverride "mode_label" {
+						text = "je_space_race_widget_sc_mode_orders"
 					}
 				}
-				te_sr_sc_role_button = {
-					blockoverride "mix_button" {
-						enabled = "[GetScriptedGui('sr_sc_mix_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-						onclick = "[GetScriptedGui('sr_sc_mix_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
-						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mix_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mix_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+				te_sr_sc_mode_choice = {
+					blockoverride "mode_button" {
+						visible = "[Not( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mode'), '(CFixedPoint)3' ) )]"
+						enabled = "[GetScriptedGui('sr_sc_mode_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						onclick = "[GetScriptedGui('sr_sc_mode_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+						tooltip = "[Concatenate( GetScriptedGui('sr_sc_mode_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_sc_mode_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 					}
-					blockoverride "mix_icon" {
-						texture = "gfx/interface/icons/space_race_icons/role_tender.dds"
+					blockoverride "mode_selected" {
+						visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_mode'), '(CFixedPoint)3' )]"
+						tooltip = "je_space_race_widget_sc_mode_paused_on_tt"
 					}
-					blockoverride "mix_label" {
-						text = "je_space_race_widget_sc_mix_tender"
+					blockoverride "mode_label" {
+						text = "je_space_race_widget_sc_mode_paused"
 					}
+				}
+			}
+			te_sr_sc_build_heads = {}
+			te_sr_sc_build_rows = {}
+			### Under the table, so a line that comes and goes moves nothing above it.
+			te_sr_value_row = {
+				tooltip = "je_space_race_widget_sc_orders_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_sc_orders_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_sc_orders_figure"
+				}
+			}
+			te_sr_value_row = {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_months'), '(CFixedPoint)1' )]"
+				tooltip = "je_space_race_widget_sc_order_months_tt"
+				blockoverride "row_label" {
+					text = "je_space_race_widget_sc_order_months_label"
+				}
+				blockoverride "row_value" {
+					text = "je_space_race_widget_sc_order_months_figure"
 				}
 			}
 		}

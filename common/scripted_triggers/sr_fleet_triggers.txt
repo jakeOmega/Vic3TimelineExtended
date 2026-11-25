@@ -79,8 +79,9 @@ sr_sc_operational = {
 }
 
 # Country scope. Space Command's construction is paused (owner, 2026-10-31):
-# the player's Pause (sr_sc_pause_sgui) or the AI's fiscal review
-# (sr_sc_ai_pause_review). Building is the variable's absence, the default.
+# the player's Paused (sr_sc_mode_sgui), Orders Only's idle (sr_sc_month, 3)
+# or the AI's fiscal review (sr_sc_ai_pause_review). Building is the
+# variable's absence, the default.
 sr_sc_is_paused = {
 	has_variable = sr_sc_paused
 }
@@ -89,6 +90,15 @@ sr_sc_is_paused = {
 # next monthly step builds nothing and then ends the pause (sr_sc_month).
 sr_sc_is_resuming = {
 	has_variable = sr_sc_resume_pending
+}
+
+# Country scope. Orders Only (sr_sc_mode_sgui; the owner, 2026-11-25): the
+# yards build what is on order (sr_sc_order_<role>) and nothing by the build
+# mix; with nothing on order they stand idle, paused by the monthly step
+# (sr_sc_month) until an order asks to resume (sr_sc_orders_sync). Its absence
+# is Full, the default: orders first, the rest of the month by the mix.
+sr_sc_orders_only = {
+	has_variable = sr_sc_orders_only
 }
 
 # Country scope, an AI's pause: in default, or in deficit at peace. At war only
