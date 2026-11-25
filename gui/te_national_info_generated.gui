@@ -116,7 +116,9 @@ template te_ni_content_shown {
 types te_national_info_generated_types
 {
 	### The strips: Pops, then each public tab in NI_ORDER, five a strip, side by
-	### side and centered, each at the narrow strip width.
+	### side and centered, each at the narrow strip width; a last strip of fewer
+	### narrowed to its tabs, so each tab is as wide as a full strip's while every
+	### tab its strip lists shows (a tab a game rule hides widens the rest: #2039).
 	type te_ni_strips = hbox {
 		layoutpolicy_horizontal = expanding
 		layoutpolicy_vertical = fixed
@@ -359,8 +361,8 @@ types te_national_info_generated_types
 			}
 		}
 		tab_buttons = {
-			minimumsize = { 540 -1 }
-			maximumsize = { 540 -1 }
+			minimumsize = { 226 -1 }
+			maximumsize = { 226 -1 }
 
 			### nuclear_weapons
 			blockoverride "first_button" {
