@@ -139,6 +139,20 @@ engine matches a format name whatever its case: those files define only `V`,
 (`#purple`, `#cyan`) is flagged all the same; its `# REVIEWED` comment names
 the file that defines it.
 
+**A format whose name reads as a color it does not draw** (`misread_format`,
+from #2016) — `#Y` and `#B`. The install's `game/gui/textformatting.gui`
+defines `Y` as `zero_value`, white, bold and shadowed like `#v` (jomini's
+base file has `Y` yellow, but the game's file overrides it), and `#B` is
+`#b`, bold, since the engine ignores the case. The mod's loc wrote `#Y` 78
+times for a yellow middle state between `#G` and `#R` (Banking's "Holding
+out", the UN's "Contested") and `#B` six times for the blue top of the UN's
+ladders, and every one drew white or plain bold. Write `#yellow` (vanilla's
+pale yellow, the color of Banking's "Stagnation") for an in-between state,
+`#v` for a neutral figure, `#b` for a label and `#blue` for blue. A value
+that really is a zero may keep `#Y` with a `# REVIEWED` comment; none does.
+Lowercase `#b` is bold and never flagged. `test_loc_render_audit.py` holds
+the mod's `.gui` text to the same rule.
+
 A tag left open may be a literal hash that was never doubled: `Rank #$RANK$`,
 `#[X.GetRank]`, `the #MeToo movement`. Adding the `#!` would pass the audit
 and leave the text wrong, so the flag says to write `##` instead when the
@@ -175,7 +189,7 @@ class RenderFlag:
     loc_key: str
     # "bracket_tag" | "nested_brackets" | "quoted_arg_expansion" |
     # "quoted_name_apostrophe" | "article_desc_scope" | "unclosed_format" | "bare_hash" |
-    # "unknown_format"
+    # "unknown_format" | "misread_format"
     issue: str
     detail: str
     file: str
@@ -430,6 +444,37 @@ def check_format_tags(value: str, known_tags: set[str] | None = None,
     return out
 
 
+_MISREAD_DETAIL = {
+    "y": ("`#{name}` is vanilla's zero-value format (`Y` in `gui/textformatting.gui`): it draws white and "
+          "bold, as `#v` does, not yellow. Write `#yellow` for a caution or in-between state (between `#G` "
+          "and `#R`), `#v` for a neutral figure or `#b` for a label. A value that really is a zero may keep "
+          "it with a `# REVIEWED` comment"),
+    "B": ("`#B` is `#b`, bold (a format name matches whatever its case), not blue. Write `#blue` for blue "
+          "or `#b` for bold"),
+}
+
+
+def _misread_key(name: str) -> str | None:
+    """The `_MISREAD_DETAIL` entry a format name hits: `Y` in either case,
+    `B` only upper-case (`#b` is bold, as meant)."""
+    if name.lower() == "y":
+        return "y"
+    return "B" if name == "B" else None
+
+
+def check_misread_formats(value: str) -> list[tuple[str, str]]:
+    """Flag `#Y` and `#B`, formats whose names read as yellow and blue but
+    draw white-bold and bold (module docstring). One flag per name in a
+    value. Pure; `test_loc_render_audit.py` runs it on `.gui` text too."""
+    if "#" not in value:
+        return []
+    names: list[str] = []
+    scan = scan_format_tags(value)
+    for header in scan.closed + scan.open_tags:
+        names += [n for n in _format_names(header, keep_case=True) if _misread_key(n) and n not in names]
+    return [("misread_format", _MISREAD_DETAIL[_misread_key(n)].format(name=n)) for n in names]
+
+
 # `$key$`, or `$key|flags$` (`$key|q$` in a quoted argument from 1.15).
 _LOC_REF_RE = re.compile(r"\$([A-Za-z0-9_.]+)(?:\|[^$]*)?\$")
 _CONCEPT_DISPLAY_RE = re.compile(
@@ -680,6 +725,7 @@ def check_value(value: str, known_tags: set[str] | None = None,
             "arguments as bare expressions",
         ))
     out += check_format_tags(value, known_tags, vanilla_names)
+    out += check_misread_formats(value)
     return out
 
 
@@ -760,6 +806,7 @@ _ISSUE_LABEL = {
     "unclosed_format": "Formatting tags left open (`#bold` with no `#!`)",
     "bare_hash": "A `#` that is not a tag (write `##`)",
     "unknown_format": "A format vanilla's loc never uses (`#bolt` for `#bold`)",
+    "misread_format": "A format that draws another color than its name says (`#Y`, `#B`)",
 }
 
 
@@ -808,6 +855,11 @@ def render_report(result: AuditResult) -> str:
         "Also flagged: a tag naming a format that no value of vanilla's",
         "English loc opens, in any case, so it may not render (`#bolt`).",
         "Fix: use a format vanilla writes.",
+        "",
+        "Also flagged: `#Y`, which draws white and bold (vanilla's zero-value",
+        "format), not yellow, and `#B`, which is `#b`, bold, not blue. Fix:",
+        "`#yellow` for an in-between state, `#v` for a neutral figure, `#b` for",
+        "a label, `#blue` for blue.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",

@@ -39,6 +39,11 @@ Also flagged: a tag naming a format that no value of vanilla's
 English loc opens, in any case, so it may not render (`#bolt`).
 Fix: use a format vanilla writes.
 
+Also flagged: `#Y`, which draws white and bold (vanilla's zero-value
+format), not yellow, and `#B`, which is `#b`, bold, not blue. Fix:
+`#yellow` for an in-between state, `#v` for a neutral figure, `#b` for
+a label, `#blue` for blue.
+
 Suppress an intentional flag with a trailing comment on the loc line:
 `my_loc_key:0 "…" # REVIEWED YYYY-MM-DD: rationale`
 
