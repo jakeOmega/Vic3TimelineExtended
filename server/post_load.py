@@ -51,6 +51,7 @@ POST_LOAD_REGENERATORS = [
     ("gen_ebase",                     "scripts.generators.gen_ebase"),
     ("gen_space_fleets",              "scripts.generators.gen_space_fleets"),
     ("gen_culture_merges",            "scripts.generators.gen_culture_merges"),
+    ("gen_assimilation_cultures",     "scripts.generators.gen_assimilation_cultures"),
     ("organize_loc",                  "organize_loc"),
     ("gen_event_inventory",           "gen_event_inventory"),
     # Keep LAST: prepend UTF-8 BOM to any mod .txt the generators above (or a

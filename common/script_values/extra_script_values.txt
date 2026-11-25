@@ -2191,20 +2191,6 @@ nuclear_strike_target_score = {
 	multiply = nuclear_strike_success_fraction_here
 }
 
-pop_culture_conversion_propotion_script_value = {
-	value = 0.002 # base rate
-	multiply = {
-		value = 1
-		add = state.modifier:state_assimilation_mult
-	}
-	multiply = 12 # 12 months in a year
-	multiply = {
-		value = 1
-		subtract = pop_radical_fraction
-	}
-	max = 1
-}
-
 city_size = {
 	value = 0
 	if = {
