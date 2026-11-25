@@ -1810,11 +1810,175 @@ gm_display_vanity = {
 # save older than the system has none of these variables until the first
 # refresh).
 #
-# The overview's cells (te_gm_overview_panel; owner, 2026-10-27): how many
-# monuments hold each status. Live, with gm_status_code's order of precedence
-# (contested over heritage over the rest), so the cells always agree with the
-# rows' status icons.
+# The overview's figures (te_gm_overview_panel; owner, 2026-10-27) and the
+# gates of Awaiting a Decision, Awaiting Dedication and Our Monuments are
+# stored (2026-11-24, from #2016). Each gm_disp_<x> below reads the country
+# variable gm_ov_<x>, which gm_ov_store (gm_effects.txt) writes from the live
+# gm_live_<x> further down: at the end of every refresh (gm_country_refresh:
+# the monthly pulse, and monument_events.20 after a law, a new ruler, a state
+# gained, a site's first level, a ceremony, a trophy taken or returned, a dig,
+# a monument raised or pulled down, and the panel's buttons), at the end of the
+# monthly pulse (the AI decides its contests after the refresh), for the
+# country a state with a monument leaves (gm_state_changed_hands), for a civil
+# war's winner (gm_repair_after_civil_war), and when work on a construction
+# site's level starts or ends (gm_site_level_on_action). Each live value walks
+# every state of the country, and the panel read about sixteen of them a frame
+# while open, paused or not: roughly 400 ms of a 14.7 s profile on the owner's
+# December 2032 save (docs/audits/late_game_performance.md, "The Grand
+# Monuments tab"). A change none of those moments catches reaches the figures
+# at the next monthly pulse, as it reaches the rows' own list (gm_states,
+# written by the same refresh); TE_SELF_CHECK gm_overview_stored reads whether
+# one did. A country no store has reached yet (a save from before it, until
+# its first refresh; a first site before its first level) reads the live
+# figure, as before. To show a figure live again, give its gm_disp_<x> the
+# body `value = gm_live_<x>`. Nothing but the panel and its tooltips reads
+# these.
 gm_disp_count_upheld = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_upheld }
+		value = var:gm_ov_count_upheld
+	}
+	else = {
+		value = gm_live_count_upheld
+	}
+}
+
+gm_disp_count_heritage = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_heritage }
+		value = var:gm_ov_count_heritage
+	}
+	else = {
+		value = gm_live_count_heritage
+	}
+}
+
+gm_disp_count_contested = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_contested }
+		value = var:gm_ov_count_contested
+	}
+	else = {
+		value = gm_live_count_contested
+	}
+}
+
+gm_disp_contested_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_contested_grandeur }
+		value = var:gm_ov_contested_grandeur
+	}
+	else = {
+		value = gm_live_contested_grandeur
+	}
+}
+
+gm_disp_count_sites = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_sites }
+		value = var:gm_ov_count_sites
+	}
+	else = {
+		value = gm_live_count_sites
+	}
+}
+
+gm_disp_count_sites_ready = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_sites_ready }
+		value = var:gm_ov_count_sites_ready
+	}
+	else = {
+		value = gm_live_count_sites_ready
+	}
+}
+
+gm_disp_count_sites_building = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_sites_building }
+		value = var:gm_ov_count_sites_building
+	}
+	else = {
+		value = gm_live_count_sites_building
+	}
+}
+
+gm_disp_sites_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_sites_grandeur }
+		value = var:gm_ov_sites_grandeur
+	}
+	else = {
+		value = gm_live_sites_grandeur
+	}
+}
+
+gm_disp_count_undedicated = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_undedicated }
+		value = var:gm_ov_count_undedicated
+	}
+	else = {
+		value = gm_live_count_undedicated
+	}
+}
+
+gm_disp_count_awaiting = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_awaiting }
+		value = var:gm_ov_count_awaiting
+	}
+	else = {
+		value = gm_live_count_awaiting
+	}
+}
+
+gm_disp_count_listed_rest = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_count_listed_rest }
+		value = var:gm_ov_count_listed_rest
+	}
+	else = {
+		value = gm_live_count_listed_rest
+	}
+}
+
+gm_disp_listed_grandeur = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_listed_grandeur }
+		value = var:gm_ov_listed_grandeur
+	}
+	else = {
+		value = gm_live_listed_grandeur
+	}
+}
+
+# The months TE_SELF_CHECK gm_overview_stored has compared (gm_ov_self_check),
+# for its line.
+gm_ov_disp_chk_months = {
+	value = 0
+	if = {
+		limit = { has_variable = gm_ov_chk_months }
+		value = var:gm_ov_chk_months
+	}
+}
+
+# The live figures gm_ov_store writes (country scope). How many monuments hold
+# each status, with gm_status_code's order of precedence (contested over
+# heritage over the rest), so the cells agree with the rows' status icons.
+gm_live_count_upheld = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -1838,7 +2002,7 @@ gm_disp_count_upheld = {
 	}
 }
 
-gm_disp_count_heritage = {
+gm_live_count_heritage = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -1865,7 +2029,7 @@ gm_disp_count_heritage = {
 # those a Dedicate button can finish now (a level built and none under
 # construction, gm_dedicate_sgui's own tests); those with levels still being
 # built; and the grandeur they come to so far.
-gm_disp_count_sites = {
+gm_live_count_sites = {
 	value = 0
 	every_scope_state = {
 		limit = { gm_state_has_site = yes }
@@ -1873,7 +2037,7 @@ gm_disp_count_sites = {
 	}
 }
 
-gm_disp_count_sites_ready = {
+gm_live_count_sites_ready = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -1885,7 +2049,7 @@ gm_disp_count_sites_ready = {
 	}
 }
 
-gm_disp_count_sites_building = {
+gm_live_count_sites_building = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -1896,7 +2060,7 @@ gm_disp_count_sites_building = {
 	}
 }
 
-gm_disp_sites_grandeur = {
+gm_live_sites_grandeur = {
 	value = 0
 	every_scope_state = {
 		limit = { gm_state_has_site = yes }
@@ -1907,7 +2071,7 @@ gm_disp_sites_grandeur = {
 # A finished monument left undedicated (gm_status_code 1: an older save's,
 # until its migration makes it a site; GM-7), for the Monuments cell's
 # breakdown, which counts every status.
-gm_disp_count_undedicated = {
+gm_live_count_undedicated = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -1923,7 +2087,7 @@ gm_disp_count_undedicated = {
 # Awaiting Dedication (owner, 2026-10-18): our monuments waiting undedicated
 # for their Dedicate button, the section's gate; and the rows Our Monuments
 # keeps, so its line can say when every monument is in the section above.
-gm_disp_count_awaiting = {
+gm_live_count_awaiting = {
 	value = 0
 	every_scope_state = {
 		limit = { gm_state_awaits_dedication = yes }
@@ -1937,16 +2101,16 @@ gm_disp_count_listed = {
 
 # The rows Our Monuments draws: every finished monument but the contested,
 # which Awaiting a Decision lists (GM-3). Its line says so when it is none.
-gm_disp_count_listed_rest = {
+gm_live_count_listed_rest = {
 	value = gm_sum_monuments
-	subtract = gm_disp_count_contested
+	subtract = gm_live_count_contested
 	min = 0
 }
 
 # The grandeur of those rows, for Our Monuments' summary line (its Short and
 # Collapsed views): each finished monument's, a state's own and any beside
-# another, but the contested, as gm_disp_count_listed_rest counts them.
-gm_disp_listed_grandeur = {
+# another, but the contested, as gm_live_count_listed_rest counts them.
+gm_live_listed_grandeur = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -2018,7 +2182,7 @@ gm_state_disp_awaiting = {
 	}
 }
 
-gm_disp_count_contested = {
+gm_live_count_contested = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -2039,7 +2203,7 @@ gm_disp_count_contested = {
 
 # The grandeur the contested monuments hold back while undecided, the
 # Contested cell's figure: a state's own monument and any beside another.
-gm_disp_contested_grandeur = {
+gm_live_contested_grandeur = {
 	value = 0
 	every_scope_state = {
 		limit = {

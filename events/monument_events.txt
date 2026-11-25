@@ -1870,6 +1870,24 @@ monument_events.35 = {
 }
 
 # ============================================================================
+# Event 36: the overview's figures, a day after a site's level (#2016)
+# ============================================================================
+# Hidden plumbing, a country event from gm_ov_hook_fire (gm_effects.txt), sent
+# to the site's owner a day after a level of its construction site finished:
+# the stored figures the overview reads (gm_ov_store), once the site no longer
+# reads as under construction. No trigger: a delayed event whose trigger is
+# false on the day it is queued is dropped (delayed_event_trigger_audit), and
+# a store with the rule off only writes figures no panel shows.
+monument_events.36 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		gm_ov_store = yes
+	}
+}
+
+# ============================================================================
 # Event 27: Raise It (opportunities usability §1)
 # ============================================================================
 # Hidden plumbing. From gm_com_raise_sgui and monument_events.21's Seize It and

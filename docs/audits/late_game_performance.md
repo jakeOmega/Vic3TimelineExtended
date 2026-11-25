@@ -1573,6 +1573,18 @@ instead would agree with the rows but lag a conquest or a new site by up to a
 month, as the rows do; storing them in the country refresh would lag a site
 finishing. Neither is done. Not yet remeasured in game.
 
+**Stored, branch `gui/gm-overview-perf` (from #2016, the owner's to take):**
+the twelve figures (`gm_disp_count_*`, `gm_disp_*_grandeur`) read country
+variables that `gm_ov_store` writes from their live twins (`gm_live_*`) at
+the end of every `gm_country_refresh` and at the other moments listed in
+`gm_values.txt`'s header to them, a site's later level included (a day after
+it finishes), so a frame reads twelve variables where it walked the states
+about sixteen times (the In-game check after the merge of #2003 put
+`gm_values.txt:2023`, `:1819`, `:1870`, `:1878`, `:1942`, `:1941` at the top,
+231 to 106 ms each in 13.3 s). Queued levels on a site reach the Sites cell
+only when one finishes or at the month's end; the grandeur sums lag a month's
+ageing. `TE_SELF_CHECK gm_overview_stored` reads whether anything else lags.
+
 ## Measurements, 2026-10-03: 2072
 
 The same save, 7 Nov 2072 → Jan 2073, measured with the flat dump.
