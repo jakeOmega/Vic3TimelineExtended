@@ -69,17 +69,143 @@ sr_aut_ask = {
 	trigger_event = { id = space_race_events.94 }
 }
 
-# Country scope, the holder: autonomy at 100, the colony breaks away. A player
-# hears it (space_race_events.98), once for the first world a month breaks.
+# Country scope, the holder: autonomy at 100, the colony breaks away (from
+# sr_site_declare_<key>). A player hears it (space_race_events.98): the event
+# names the first world, and every other that breaks away while it is open adds
+# to sr_freed_count, so none leaves unheard.
 sr_aut_break_away = {
 	sr_site_set_free_$KEY$ = yes
 	if = {
-		limit = {
-			is_player = yes
-			NOT = { has_variable = sr_freed_site }
+		limit = { is_player = yes }
+		if = {
+			limit = { NOT = { has_variable = sr_freed_site } }
+			sr_site_event_open = { VAR = sr_freed_site INDEX = $INDEX$ }
+			set_variable = { name = sr_freed_count value = 1 }
+			if = { limit = { has_variable = sr_freed_marines } remove_variable = sr_freed_marines }
+			if = { limit = { has_variable = sr_freed_world } remove_variable = sr_freed_world }
+			trigger_event = { id = space_race_events.98 days = 1 }
 		}
-		sr_site_event_open = { VAR = sr_freed_site INDEX = $INDEX$ }
-		trigger_event = { id = space_race_events.98 days = 1 }
+		else = {
+			change_variable = { name = sr_freed_count add = 1 }
+		}
+	}
+}
+
+# Country scope, the holder, after sr_site_declare_<key>'s break-aways, while
+# the event is open: the marines lost with them (local_var:sr_freed_marines_now)
+# and, when colonies of ours on the Moon or Mars rose together
+# (local_var:sr_freed_together, the others), the world (WORLD: 1 the Moon, 2
+# Mars), for the event's text.
+sr_freed_note = {
+	if = {
+		limit = { is_player = yes has_variable = sr_freed_site }
+		if = {
+			limit = { local_var:sr_freed_marines_now > 0 }
+			set_variable = {
+				name = sr_freed_marines
+				value = {
+					value = local_var:sr_freed_marines_now
+					if = { limit = { has_variable = sr_freed_marines } add = var:sr_freed_marines }
+				}
+			}
+		}
+		if = {
+			limit = { local_var:sr_freed_together >= 1 }
+			set_variable = { name = sr_freed_world value = $WORLD$ }
+		}
+	}
+}
+
+# ---- Holding a colony by force (Full Colonies; owner, 2026-11-25) ------------------
+# The per-world hold is generated (sr_site_hold_<key>); these are its shared parts.
+
+# Country scope, the holder: up to local_var:sr_hold_left battalions of the
+# month's losses from our marines at the world KEY, taken off sr_hold_left.
+sr_hold_take_marines = {
+	if = {
+		limit = { sr_site_marines_value_$KEY$ > 0 }
+		set_local_variable = {
+			name = sr_hold_take
+			value = {
+				value = sr_site_marines_value_$KEY$
+				max = local_var:sr_hold_left
+			}
+		}
+		set_global_variable = {
+			name = sr_site_marines_$KEY$
+			value = {
+				value = sr_site_marines_value_$KEY$
+				subtract = local_var:sr_hold_take
+			}
+		}
+		change_local_variable = { name = sr_hold_left subtract = local_var:sr_hold_take }
+		if = {
+			limit = { sr_site_marines_value_$KEY$ <= 0 }
+			remove_global_variable = sr_site_marines_$KEY$
+		}
+	}
+}
+
+# Country scope, the holder: local_var:sr_hold_lost battalions lost holding a
+# colony, each sr_hold_radicals_per_battalion radicals among the supporters of
+# every interest group that opposes colonial exploitation, at our Free Speech
+# law's scale.
+sr_hold_radicals = {
+	if = {
+		limit = { local_var:sr_hold_lost > 0 }
+		set_local_variable = {
+			name = sr_hold_rad
+			value = {
+				value = local_var:sr_hold_lost
+				multiply = sr_hold_radicals_per_battalion
+				multiply = sr_hold_speech_scale
+			}
+		}
+		every_interest_group = {
+			limit = { sr_ig_anticolonial = yes }
+			save_temporary_scope_as = sr_hold_ig
+			owner = {
+				add_radicals = {
+					value = local_var:sr_hold_rad
+					interest_group = scope:sr_hold_ig
+				}
+			}
+		}
+	}
+}
+
+# Country scope, monthly from the always-on pulse (space_race_on_actions.txt):
+# the one refresh site of sr_hold_by_force_ig. Off every interest group,
+# then, while we hold a colony by force (sr_hold_count), on every group that
+# opposes colonial exploitation at sr_hold_approval, a strongly opposed one at
+# sr_hold_approval_strong (the dynamic-modifier pattern: a same-name add
+# stacks). Rebuilt from the colonies' records, so a revolution's winner (no
+# modifiers inherited) has it again within a month, and it ends with the last
+# hold or the rule switched off (sr_hold_count reads Full Colonies).
+sr_hold_ig_refresh = {
+	every_interest_group = {
+		limit = { has_modifier = sr_hold_by_force_ig }
+		remove_modifier = sr_hold_by_force_ig
+	}
+	if = {
+		limit = { sr_hold_count >= 1 }
+		set_local_variable = { name = sr_hold_appr value = sr_hold_approval }
+		set_local_variable = { name = sr_hold_appr_strong value = sr_hold_approval_strong }
+		every_interest_group = {
+			limit = { sr_ig_anticolonial = yes }
+			if = {
+				limit = { sr_ig_strongly_anticolonial = yes }
+				add_modifier = { name = sr_hold_by_force_ig multiplier = local_var:sr_hold_appr_strong }
+			}
+			else = {
+				add_modifier = { name = sr_hold_by_force_ig multiplier = local_var:sr_hold_appr }
+			}
+		}
+		set_variable = { name = sr_hold_ig_on value = yes }
+	}
+	else_if = {
+		limit = { has_variable = sr_hold_ig_on }
+		remove_variable = sr_hold_ig_on
 	}
 }
 
@@ -175,10 +301,19 @@ sr_site_garrison_at = {
 	}
 }
 
-# ... let it go: free, on good terms with us.
+# ... let it go: free, on good terms with us (space_race_events.94, and .114 for a
+# colony held by force). Our marines there come home first: a colony let go is no
+# defeat (owner, 2026-11-25), where one that breaks away takes them with it.
 sr_site_let_go_at = {
 	if = {
 		limit = { global_var:sr_site_holder_$KEY$ ?= this }
+		if = {
+			limit = {
+				has_global_variable = sr_site_marines_$KEY$
+				NOT = { has_global_variable = sr_site_occupier_$KEY$ }
+			}
+			sr_fl_marines_home = { AMOUNT = sr_site_marines_value_$KEY$ }
+		}
 		sr_site_set_free_$KEY$ = yes
 		set_variable = { name = sr_free_ties_$KEY$ value = sr_free_ties_amicable }
 	}
@@ -527,6 +662,7 @@ sr_site_events_clear_stale = {
 	sr_site_clear_stale_var = { VAR = sr_abandon_site }
 	sr_site_clear_stale_var = { VAR = sr_revoke_site }
 	sr_site_clear_stale_var = { VAR = sr_freed_site }
+	sr_site_clear_stale_var = { VAR = sr_rising_site }
 	sr_site_clear_stale_var = { VAR = sr_petition_site }
 	sr_site_clear_stale_var = { VAR = sr_life_site }
 }

@@ -1976,7 +1976,8 @@ sr_fl_note_at = {
 	}
 }
 
-# The AI's Land: every marine aboard, at the first world of ours there awaiting
+# The AI's Land: every marine aboard, at the first world of ours there held by
+# force with its hold running short (owner, 2026-11-25), else the first awaiting
 # its garrison, else the first world of ours there (table order); at Earth, on
 # the Moon (owner, 2026-11-24). A player picks the world and the amount in the
 # Marines popup (sr_fl_land_pick_at, sr_fl_embark_pick_at).
@@ -1984,6 +1985,30 @@ sr_fl_land_at = {
 	if = {
 		limit = { var:sr_fl_$N$_loc = 1 }
 		if = {
+			limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_resisting_shackleton sr_site_hold_months_shackleton < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = shackleton }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_resisting_peary sr_site_hold_months_peary < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = peary }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_resisting_tranquility sr_site_hold_months_tranquility < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = tranquility }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_resisting_marius_hills sr_site_hold_months_marius_hills < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = marius_hills }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_resisting_daedalus sr_site_hold_months_daedalus < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = daedalus }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_resisting_imbrium sr_site_hold_months_imbrium < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = imbrium }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_garrison_due_shackleton }
 			sr_fl_land_marines = { N = $N$ KEY = shackleton }
 		}
@@ -2035,6 +2060,14 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 2 }
 		if = {
+			limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_resisting_venus sr_site_hold_months_venus < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = venus }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_resisting_mercury sr_site_hold_months_mercury < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = mercury }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_garrison_due_venus }
 			sr_fl_land_marines = { N = $N$ KEY = venus }
 		}
@@ -2054,6 +2087,26 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 3 }
 		if = {
+			limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_resisting_valles_marineris sr_site_hold_months_valles_marineris < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = valles_marineris }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } has_global_variable = sr_site_resisting_olympus_mons sr_site_hold_months_olympus_mons < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = olympus_mons }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia sr_site_hold_months_hellas_planitia < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = hellas_planitia }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia sr_site_hold_months_utopia_planitia < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = utopia_planitia }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia sr_site_hold_months_arcadia_planitia < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = arcadia_planitia }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_garrison_due_valles_marineris }
 			sr_fl_land_marines = { N = $N$ KEY = valles_marineris }
 		}
@@ -2097,6 +2150,26 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 4 }
 		if = {
+			limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } has_global_variable = sr_site_resisting_ceres sr_site_hold_months_ceres < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = ceres }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } has_global_variable = sr_site_resisting_vesta sr_site_hold_months_vesta < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = vesta }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } has_global_variable = sr_site_resisting_psyche sr_site_hold_months_psyche < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = psyche }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } has_global_variable = sr_site_resisting_pallas sr_site_hold_months_pallas < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = pallas }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } has_global_variable = sr_site_resisting_hygiea sr_site_hold_months_hygiea < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = hygiea }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } has_global_variable = sr_site_garrison_due_ceres }
 			sr_fl_land_marines = { N = $N$ KEY = ceres }
 		}
@@ -2140,6 +2213,30 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 5 }
 		if = {
+			limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } has_global_variable = sr_site_resisting_io sr_site_hold_months_io < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = io }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } has_global_variable = sr_site_resisting_europa sr_site_hold_months_europa < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = europa }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } has_global_variable = sr_site_resisting_ganymede sr_site_hold_months_ganymede < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = ganymede }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } has_global_variable = sr_site_resisting_callisto sr_site_hold_months_callisto < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = callisto }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } has_global_variable = sr_site_resisting_himalia sr_site_hold_months_himalia < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = himalia }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } has_global_variable = sr_site_resisting_amalthea sr_site_hold_months_amalthea < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = amalthea }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } has_global_variable = sr_site_garrison_due_io }
 			sr_fl_land_marines = { N = $N$ KEY = io }
 		}
@@ -2191,6 +2288,26 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 6 }
 		if = {
+			limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } has_global_variable = sr_site_resisting_titan sr_site_hold_months_titan < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = titan }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } has_global_variable = sr_site_resisting_enceladus sr_site_hold_months_enceladus < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = enceladus }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } has_global_variable = sr_site_resisting_rhea sr_site_hold_months_rhea < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = rhea }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } has_global_variable = sr_site_resisting_mimas sr_site_hold_months_mimas < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = mimas }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } has_global_variable = sr_site_resisting_iapetus sr_site_hold_months_iapetus < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = iapetus }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } has_global_variable = sr_site_garrison_due_titan }
 			sr_fl_land_marines = { N = $N$ KEY = titan }
 		}
@@ -2234,6 +2351,22 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 7 }
 		if = {
+			limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } has_global_variable = sr_site_resisting_titania sr_site_hold_months_titania < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = titania }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } has_global_variable = sr_site_resisting_oberon sr_site_hold_months_oberon < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = oberon }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } has_global_variable = sr_site_resisting_miranda sr_site_hold_months_miranda < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = miranda }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } has_global_variable = sr_site_resisting_ariel sr_site_hold_months_ariel < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = ariel }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } has_global_variable = sr_site_garrison_due_titania }
 			sr_fl_land_marines = { N = $N$ KEY = titania }
 		}
@@ -2269,6 +2402,14 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 8 }
 		if = {
+			limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } has_global_variable = sr_site_resisting_triton sr_site_hold_months_triton < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = triton }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } has_global_variable = sr_site_resisting_proteus sr_site_hold_months_proteus < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = proteus }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } has_global_variable = sr_site_garrison_due_triton }
 			sr_fl_land_marines = { N = $N$ KEY = triton }
 		}
@@ -2288,6 +2429,26 @@ sr_fl_land_at = {
 	else_if = {
 		limit = { var:sr_fl_$N$_loc = 9 }
 		if = {
+			limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } has_global_variable = sr_site_resisting_pluto sr_site_hold_months_pluto < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = pluto }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } has_global_variable = sr_site_resisting_eris sr_site_hold_months_eris < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = eris }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } has_global_variable = sr_site_resisting_makemake sr_site_hold_months_makemake < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = makemake }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } has_global_variable = sr_site_resisting_haumea sr_site_hold_months_haumea < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = haumea }
+		}
+		else_if = {
+			limit = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } has_global_variable = sr_site_resisting_sedna sr_site_hold_months_sedna < sr_hold_ai_reinforce_months }
+			sr_fl_land_marines = { N = $N$ KEY = sedna }
+		}
+		else_if = {
 			limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } has_global_variable = sr_site_garrison_due_pluto }
 			sr_fl_land_marines = { N = $N$ KEY = pluto }
 		}

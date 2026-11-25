@@ -5002,7 +5002,11 @@ space_race_events.97 = {
 }
 
 # <World> Declares Itself Free: a colony's autonomy reached 100 (sr_aut_break_away,
-# players only).
+# players only). It names the first world; every other that breaks away while it
+# is open counts in sr_freed_count, so none leaves unheard (owner, 2026-11-25). The
+# text tells our colonies on the Moon or Mars rising together, once our marines
+# there could not hold them all (sr_freed_world, sr_site_declare_<key>), several
+# colonies at once, and a garrison overrun (sr_freed_marines, the battalions lost).
 space_race_events.98 = {
 	type = country_event
 	placement = root
@@ -5011,9 +5015,29 @@ space_race_events.98 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
-	title = space_race_events.98.t
-	desc = space_race_events.98.d
-	flavor = space_race_events.98.f
+	title = {
+		first_valid = {
+			triggered_desc = { trigger = { var:sr_freed_world ?= 1 } desc = space_race_events.98.t_moon }
+			triggered_desc = { trigger = { var:sr_freed_world ?= 2 } desc = space_race_events.98.t_mars }
+			triggered_desc = { trigger = { has_variable = sr_freed_count var:sr_freed_count > 1 } desc = space_race_events.98.t_more }
+			triggered_desc = { trigger = { always = yes } desc = space_race_events.98.t }
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = { trigger = { var:sr_freed_world ?= 1 } desc = space_race_events.98.d_moon }
+			triggered_desc = { trigger = { var:sr_freed_world ?= 2 } desc = space_race_events.98.d_mars }
+			triggered_desc = { trigger = { has_variable = sr_freed_count var:sr_freed_count > 1 } desc = space_race_events.98.d_more }
+			triggered_desc = { trigger = { has_variable = sr_freed_marines } desc = space_race_events.98.d_overrun }
+			triggered_desc = { trigger = { always = yes } desc = space_race_events.98.d }
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = { trigger = { has_variable = sr_freed_world } desc = space_race_events.98.f_together }
+			triggered_desc = { trigger = { always = yes } desc = space_race_events.98.f }
+		}
+	}
 
 	duration = 3
 
@@ -5022,11 +5046,18 @@ space_race_events.98 = {
 	option = {
 		name = space_race_events.98.a
 		default_option = yes
+		if = {
+			limit = { has_variable = sr_freed_marines }
+			custom_tooltip = sr_freed_marines_tt
+		}
 		custom_tooltip = sr_freed_supply_tt
 	}
 
 	after = {
 		sr_site_clear_event_var = { VAR = sr_freed_site }
+		if = { limit = { has_variable = sr_freed_count } remove_variable = sr_freed_count }
+		if = { limit = { has_variable = sr_freed_marines } remove_variable = sr_freed_marines }
+		if = { limit = { has_variable = sr_freed_world } remove_variable = sr_freed_world }
 	}
 }
 
@@ -5568,6 +5599,50 @@ space_race_events.113 = {
 
 	after = {
 		sr_site_clear_event_var = { VAR = sr_revoke_site }
+	}
+}
+
+# <World> Rises Against Us (owner, 2026-11-25): under Full Colonies a colony of ours
+# reached the break level and our marines hold it (sr_site_hold_<key>, players
+# only, once a hold begins). Holding it costs the garrison battalions each month
+# and the anticolonial groups' approval; letting it go frees it on good terms and
+# brings our marines there home (sr_site_let_go_at).
+space_race_events.114 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/colony_hellas_planitia.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = space_race_events.114.t
+	desc = space_race_events.114.d
+	flavor = space_race_events.114.f
+
+	duration = 3
+
+	trigger = { has_variable = sr_rising_site } # REVIEWED 2026-11-25 (delayed_trigger): sr_site_event_open sets the variable the trigger reads just before the call; a filter
+
+	# Hold it: the marines stay, at their losses and our anticolonial groups' anger.
+	option = {
+		name = space_race_events.114.a
+		# REVIEWED 2026-11-25 (no_effect_option): holding is the choice; the marines already hold it, and the tooltip says what it costs
+		default_option = yes
+		custom_tooltip = sr_hold_tt
+	}
+
+	# Let it go: a free colony, on good terms with us; our marines come home.
+	option = {
+		name = space_race_events.114.b
+		custom_tooltip = {
+			text = sr_hold_let_go_tt
+			sr_site_idx_from = { VAR = sr_rising_site }
+			sr_site_by_index = { DO = let_go }
+		}
+	}
+
+	after = {
+		sr_site_clear_event_var = { VAR = sr_rising_site }
 	}
 }
 

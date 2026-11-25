@@ -12143,6 +12143,295 @@ sr_garrison_lapsed_site_name = {
 	}
 }
 
+sr_rising_site_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 1
+		}
+		localization_key = sr_site_name_valles_marineris
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 2
+		}
+		localization_key = sr_site_name_olympus_mons
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 3
+		}
+		localization_key = sr_site_name_hellas_planitia
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 4
+		}
+		localization_key = sr_site_name_utopia_planitia
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 5
+		}
+		localization_key = sr_site_name_arcadia_planitia
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 6
+		}
+		localization_key = sr_site_name_ceres
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 7
+		}
+		localization_key = sr_site_name_vesta
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 8
+		}
+		localization_key = sr_site_name_psyche
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 9
+		}
+		localization_key = sr_site_name_pallas
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 10
+		}
+		localization_key = sr_site_name_hygiea
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 11
+		}
+		localization_key = sr_site_name_io
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 12
+		}
+		localization_key = sr_site_name_europa
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 13
+		}
+		localization_key = sr_site_name_ganymede
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 14
+		}
+		localization_key = sr_site_name_callisto
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 15
+		}
+		localization_key = sr_site_name_himalia
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 16
+		}
+		localization_key = sr_site_name_amalthea
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 17
+		}
+		localization_key = sr_site_name_venus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 18
+		}
+		localization_key = sr_site_name_mercury
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 19
+		}
+		localization_key = sr_site_name_titan
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 20
+		}
+		localization_key = sr_site_name_enceladus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 21
+		}
+		localization_key = sr_site_name_rhea
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 22
+		}
+		localization_key = sr_site_name_mimas
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 23
+		}
+		localization_key = sr_site_name_iapetus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 24
+		}
+		localization_key = sr_site_name_titania
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 25
+		}
+		localization_key = sr_site_name_oberon
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 26
+		}
+		localization_key = sr_site_name_miranda
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 27
+		}
+		localization_key = sr_site_name_ariel
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 28
+		}
+		localization_key = sr_site_name_triton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 29
+		}
+		localization_key = sr_site_name_proteus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 30
+		}
+		localization_key = sr_site_name_pluto
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 31
+		}
+		localization_key = sr_site_name_eris
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 32
+		}
+		localization_key = sr_site_name_makemake
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 33
+		}
+		localization_key = sr_site_name_haumea
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 34
+		}
+		localization_key = sr_site_name_sedna
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 35
+		}
+		localization_key = sr_site_name_shackleton
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 36
+		}
+		localization_key = sr_site_name_peary
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 37
+		}
+		localization_key = sr_site_name_tranquility
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 38
+		}
+		localization_key = sr_site_name_marius_hills
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 39
+		}
+		localization_key = sr_site_name_daedalus
+	}
+	text = {
+		trigger = {
+			has_variable = sr_rising_site
+			var:sr_rising_site = 40
+		}
+		localization_key = sr_site_name_imbrium
+	}
+	text = {
+		localization_key = sr_site_name_unknown
+	}
+}
+
 # The overview's Colonies cell (audit SPC-6): the first colony of ours, in the
 # panel's order, at or past the autonomy that demands self-government, with the
 # people to (sr_site_peopled_<key>).

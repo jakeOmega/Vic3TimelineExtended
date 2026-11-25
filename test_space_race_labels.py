@@ -274,6 +274,8 @@ def _longest_figure(name):
         return END_YEAR
     if re.fullmatch(r"sr_fl_\d_strength", name):  # the Transfer popup's Into buttons, "Antimatter 99999"
         return FLEET_STRENGTH
+    if re.fullmatch(r"sr_disp_hold_months_\w+", name):  # a hold's months, capped at sr_hold_months_none
+        return 999
     if m := re.fullmatch(r"sr_disp_ss_people_room_(\w+)", name):
         return _site_room(m.group(1)) * _room_factor_ceiling()
     fixed = {"sr_current_colonization_stage": STAGE_CEILING, "sr_disp_mq_next_months": 999,
@@ -570,7 +572,7 @@ CELLS = {
         r"|fw_role_(war|rapid|siege|carrier|tender)|fw_drive|fw_fire_(fleets|defences)|fw_dock|fw_repair)"),
     "a word beside a page heading, or a page tile's word (te_sr_page_value)": (
         ("te_sr_page_value", None),
-        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+"
+        r"je_space_race_widget_(page_settlers|autonomy_status_\w+|autonomy_held_months_\w+|def_status_\w+"
         r"|terra_(?:years_left|finished|idle)|fw_dock_(?:none|earth|port|flight))"),
     "a module's name on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'block "row_name"'),

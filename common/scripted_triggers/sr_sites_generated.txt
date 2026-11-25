@@ -8385,6 +8385,50 @@ sr_site_peopled_marius_hills = { sr_site_pop_value_marius_hills >= sr_free_colon
 sr_site_peopled_daedalus = { sr_site_pop_value_daedalus >= sr_free_colony_minimum }
 sr_site_peopled_imbrium = { sr_site_pop_value_imbrium >= sr_free_colony_minimum }
 
+# Per world, holder scope: under Full Colonies our marines there, not occupied, may
+# hold the colony at the break level (sr_site_hold_<key>; owner, 2026-11-25). The
+# hold's own test, marines against need, comes after the month's losses.
+sr_site_may_hold_valles_marineris = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_hold_marines_valles_marineris > 0 }
+sr_site_may_hold_olympus_mons = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_hold_marines_olympus_mons > 0 }
+sr_site_may_hold_hellas_planitia = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_hold_marines_hellas_planitia > 0 }
+sr_site_may_hold_utopia_planitia = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_hold_marines_utopia_planitia > 0 }
+sr_site_may_hold_arcadia_planitia = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_hold_marines_arcadia_planitia > 0 }
+sr_site_may_hold_ceres = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_ceres } sr_site_hold_marines_ceres > 0 }
+sr_site_may_hold_vesta = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_vesta } sr_site_hold_marines_vesta > 0 }
+sr_site_may_hold_psyche = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_psyche } sr_site_hold_marines_psyche > 0 }
+sr_site_may_hold_pallas = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_pallas } sr_site_hold_marines_pallas > 0 }
+sr_site_may_hold_hygiea = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_hygiea } sr_site_hold_marines_hygiea > 0 }
+sr_site_may_hold_io = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_io } sr_site_hold_marines_io > 0 }
+sr_site_may_hold_europa = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_europa } sr_site_hold_marines_europa > 0 }
+sr_site_may_hold_ganymede = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_hold_marines_ganymede > 0 }
+sr_site_may_hold_callisto = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_hold_marines_callisto > 0 }
+sr_site_may_hold_himalia = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_hold_marines_himalia > 0 }
+sr_site_may_hold_amalthea = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_hold_marines_amalthea > 0 }
+sr_site_may_hold_venus = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_venus } sr_site_hold_marines_venus > 0 }
+sr_site_may_hold_mercury = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_mercury } sr_site_hold_marines_mercury > 0 }
+sr_site_may_hold_titan = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_titan } sr_site_hold_marines_titan > 0 }
+sr_site_may_hold_enceladus = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_hold_marines_enceladus > 0 }
+sr_site_may_hold_rhea = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_hold_marines_rhea > 0 }
+sr_site_may_hold_mimas = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_hold_marines_mimas > 0 }
+sr_site_may_hold_iapetus = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_hold_marines_iapetus > 0 }
+sr_site_may_hold_titania = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_titania } sr_site_hold_marines_titania > 0 }
+sr_site_may_hold_oberon = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_hold_marines_oberon > 0 }
+sr_site_may_hold_miranda = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_hold_marines_miranda > 0 }
+sr_site_may_hold_ariel = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_hold_marines_ariel > 0 }
+sr_site_may_hold_triton = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_triton } sr_site_hold_marines_triton > 0 }
+sr_site_may_hold_proteus = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_proteus } sr_site_hold_marines_proteus > 0 }
+sr_site_may_hold_pluto = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_pluto } sr_site_hold_marines_pluto > 0 }
+sr_site_may_hold_eris = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_eris } sr_site_hold_marines_eris > 0 }
+sr_site_may_hold_makemake = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_makemake } sr_site_hold_marines_makemake > 0 }
+sr_site_may_hold_haumea = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_haumea } sr_site_hold_marines_haumea > 0 }
+sr_site_may_hold_sedna = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_sedna } sr_site_hold_marines_sedna > 0 }
+sr_site_may_hold_shackleton = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_hold_marines_shackleton > 0 }
+sr_site_may_hold_peary = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_peary } sr_site_hold_marines_peary > 0 }
+sr_site_may_hold_tranquility = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_hold_marines_tranquility > 0 }
+sr_site_may_hold_marius_hills = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_hold_marines_marius_hills > 0 }
+sr_site_may_hold_daedalus = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_hold_marines_daedalus > 0 }
+sr_site_may_hold_imbrium = { sr_colonies_full_enabled = yes NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_hold_marines_imbrium > 0 }
+
 # Per world, country scope: THIS may receive the free colony's petition: it supplies
 # it with full ties, can hold a colony, and has no petition open.
 sr_free_may_petition_valles_marineris = {
