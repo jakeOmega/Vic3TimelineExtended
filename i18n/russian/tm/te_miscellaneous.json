@@ -1708,8 +1708,8 @@
   "ru": "#bold Военная подготовка:#! #G +1#!"
  },
  "HEIR_ED_RANDOM_PLUS_1": {
-  "en": "#bold Random Training:#! #bold;yellow +1#! to a random skill",
-  "ru": "#bold Случайная подготовка:#! #bold;yellow +1#! к случайному навыку"
+  "en": "#bold Random Training:#! #G +1#! to a random skill",
+  "ru": "#bold Случайная подготовка:#! #G +1#! к случайному навыку"
  },
  "HEIR_ED_TOTAL_MINUS_1": {
   "en": "#bold Education Progress:#! #R -1#!",
@@ -32288,8 +32288,8 @@
   "ru": "#lore в этом месяце что-то записано — политика, действие или крах. Наведите курсор на столбец.#!"
  },
  "te_hist_mk_action": {
-  "en": "#b Action taken this month:#!",
-  "ru": "#b Действие в этом месяце:#!"
+  "en": "#v Action taken this month:#!",
+  "ru": "#v Действие в этом месяце:#!"
  },
  "te_hist_mk_crash_contagion_tt": {
   "en": "#R Financial contagion reached the country this month#! from a crash abroad.",
@@ -38600,12 +38600,12 @@
   "ru": "[Concept('concept_un_permanent_member','Постоянный член')] применил [Concept('concept_un_veto','вето')]. У референдума нет ослабленной формы, поэтому резолюция заблокирована полностью, и голосование не проводится."
  },
  "un_vote_reform_1_passed_tt": {
-  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #b New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
-  "ru": "Реформа Устава I принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 70 до 85#!, открывая уровень «Сильный» — где санкции становятся эмбарго, осуждение изолирует, а [concept_un_dues|l] вырастают до 0,4% ВВП — и #G доверие к ООН +2#!. #b Новые дела:#! Всемирный суд, оружейные эмбарго, полномочия делегаций, Постоянные силы ООН, избирательные наблюдатели и Конвенция о культурном разнообразии могут быть внесены в Ассамблею. #b [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает 5% бюджета ООН и выплачивает членам ниже четверти среднего."
+  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #v New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #v The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
+  "ru": "Реформа Устава I принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 70 до 85#!, открывая уровень «Сильный» — где санкции становятся эмбарго, осуждение изолирует, а [concept_un_dues|l] вырастают до 0,4% ВВП — и #G доверие к ООН +2#!. #v Новые дела:#! Всемирный суд, оружейные эмбарго, полномочия делегаций, Постоянные силы ООН, избирательные наблюдатели и Конвенция о культурном разнообразии могут быть внесены в Ассамблею. #v [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает 5% бюджета ООН и выплачивает членам ниже четверти среднего."
  },
  "un_vote_reform_2_passed_tt": {
-  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #b Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #b New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
-  "ru": "Реформа Устава II принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 85 до 100#!, открывая уровень «Надгосударственный» — где [concept_un_dues|l] вырастают до 1% ВВП, а каждый крупный член вводит эмбарго против находящихся под санкциями — и #G доверие к ООН +2#!. #b Сдержанность в применении вето:#! отныне большинство в две трети проводит резолюцию вопреки [Concept('concept_un_veto','вето')]. #b Новые дела:#! обязательные прекращения огня, референдумы под наблюдением и Договор о запрещении ядерного оружия могут быть внесены в Ассамблею. #b [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает четверть бюджета ООН и выплачивает членам ниже половины среднего."
+  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #v Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #v New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #v The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
+  "ru": "Реформа Устава II принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 85 до 100#!, открывая уровень «Надгосударственный» — где [concept_un_dues|l] вырастают до 1% ВВП, а каждый крупный член вводит эмбарго против находящихся под санкциями — и #G доверие к ООН +2#!. #v Сдержанность в применении вето:#! отныне большинство в две трети проводит резолюцию вопреки [Concept('concept_un_veto','вето')]. #v Новые дела:#! обязательные прекращения огня, референдумы под наблюдением и Договор о запрещении ядерного оружия могут быть внесены в Ассамблею. #v [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает четверть бюджета ООН и выплачивает членам ниже половины среднего."
  },
  "un_vote_reform_passed_tt": {
   "en": "The Charter Reform was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#!",

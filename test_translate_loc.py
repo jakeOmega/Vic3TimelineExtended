@@ -151,6 +151,33 @@ class StalePolicyTests(unittest.TestCase):
         self.assertEqual([e.key for e in state["skip"]], ["markup_only"])
 
 
+class PlainTextTests(unittest.TestCase):
+    """What `plain_text` counts as words. A tag that ends the value used to
+    count as one: `"#blue_value"`, an opening fragment with nothing to
+    translate, was offered to translators (PR #2031)."""
+
+    def test_a_tag_goes_whatever_follows_it(self):
+        self.assertEqual(t.plain_text("#v 5#! of #G Rising#!").split(), ["5", "of", "Rising"])
+        self.assertEqual(t.plain_text("#R +").split(), ["+"])
+        self.assertEqual(t.plain_text("#blue_value").split(), [])
+        self.assertEqual(t.plain_text("a #R").split(), ["a"])
+
+    def test_a_combined_header_goes_whole(self):
+        self.assertEqual(t.plain_text("#bold;yellow Seat Carried#!").split(), ["Seat", "Carried"])
+        self.assertEqual(t.plain_text("x #bold;yellow").split(), ["x"])
+        # A tooltip header's target is not a plain name, so only the first name goes, as before.
+        self.assertEqual(t.plain_text("#tooltippable;tooltip:k_tt #v No Case#!#!").split(),
+                         ["tooltip:k_tt", "No", "Case"])
+
+    def test_a_value_that_is_only_a_tag_needs_no_translation(self):
+        for value in ("#blue_value", "#R", "#bold;yellow", "#blue_value "):
+            with self.subTest(value=value):
+                self.assertFalse(t.needs_translation(value))
+        self.assertTrue(t.needs_translation("#bold;yellow Contested#!"))
+        entries = [t.Entry("a_l_english.yml", "fragment", "#blue_value")]
+        self.assertEqual([e.key for e in t.classify(entries, {})["skip"]], ["fragment"])
+
+
 class NumberFormatTests(unittest.TestCase):
     def test_decimal_and_thousands_swapped_in_prose(self):
         en = "Costs 2.5 times as much, up to 1,000 units."

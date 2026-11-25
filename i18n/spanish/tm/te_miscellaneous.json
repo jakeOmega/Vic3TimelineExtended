@@ -1708,8 +1708,8 @@
   "es": "#bold Formación militar:#! #G +1#!"
  },
  "HEIR_ED_RANDOM_PLUS_1": {
-  "en": "#bold Random Training:#! #bold;yellow +1#! to a random skill",
-  "es": "#bold Formación aleatoria:#! #bold;yellow +1#! a una habilidad aleatoria"
+  "en": "#bold Random Training:#! #G +1#! to a random skill",
+  "es": "#bold Formación aleatoria:#! #G +1#! a una habilidad aleatoria"
  },
  "HEIR_ED_TOTAL_MINUS_1": {
   "en": "#bold Education Progress:#! #R -1#!",
@@ -32344,8 +32344,8 @@
   "es": "#lore algo se registró este mes —una política, una acción o un colapso—. Pasa el cursor sobre la barra.#!"
  },
  "te_hist_mk_action": {
-  "en": "#b Action taken this month:#!",
-  "es": "#b Acción realizada este mes:#!"
+  "en": "#v Action taken this month:#!",
+  "es": "#v Acción realizada este mes:#!"
  },
  "te_hist_mk_crash_contagion_tt": {
   "en": "#R Financial contagion reached the country this month#! from a crash abroad.",
@@ -38692,12 +38692,12 @@
   "es": "Un [concept_un_permanent_member|l] emitió un [concept_un_veto|l]. Un referéndum no tiene una forma graduada, así que la resolución queda bloqueada de plano y no se celebra ninguna votación."
  },
  "un_vote_reform_1_passed_tt": {
-  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #b New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
-  "es": "La Reforma de la Carta I se adopta por supermayoría de dos tercios. #G El tope del objetivo de la [concept_un_authority|l] sube de 70 a 85#!, lo que abre el nivel Fuerte (donde las sanciones se convierten en embargos, la condena aísla y las [concept_un_dues|l] suben al 0,4% del PIB) y #G Credibilidad de la ONU +2#!. #b Nuevos asuntos:#! el Tribunal Mundial, los embargos de armas, las credenciales, la Fuerza permanente de la ONU, los observadores electorales y la Convención sobre la diversidad cultural pueden llegar ante la Asamblea. #b El [concept_un_development_fund]#!, mientras exista, se queda con el 5% del presupuesto de la ONU y paga a los miembros por debajo de una cuarta parte de la media."
+  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #v New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #v The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
+  "es": "La Reforma de la Carta I se adopta por supermayoría de dos tercios. #G El tope del objetivo de la [concept_un_authority|l] sube de 70 a 85#!, lo que abre el nivel Fuerte (donde las sanciones se convierten en embargos, la condena aísla y las [concept_un_dues|l] suben al 0,4% del PIB) y #G Credibilidad de la ONU +2#!. #v Nuevos asuntos:#! el Tribunal Mundial, los embargos de armas, las credenciales, la Fuerza permanente de la ONU, los observadores electorales y la Convención sobre la diversidad cultural pueden llegar ante la Asamblea. #v El [concept_un_development_fund]#!, mientras exista, se queda con el 5% del presupuesto de la ONU y paga a los miembros por debajo de una cuarta parte de la media."
  },
  "un_vote_reform_2_passed_tt": {
-  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #b Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #b New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
-  "es": "La Reforma de la Carta II se adopta por supermayoría de dos tercios. #G El tope del objetivo de la [concept_un_authority|l] sube de 85 a 100#!, lo que abre el nivel Supranacional (donde las [concept_un_dues|l] suben al 1% del PIB y todo miembro importante impone un embargo a los sancionados) y #G Credibilidad de la ONU +2#!. #b Moderación del veto:#! a partir de ahora, una supermayoría de dos tercios aprueba una resolución pese a un [Concept('concept_un_veto','veto')]. #b Nuevos asuntos:#! los altos el fuego vinculantes, los referendos supervisados y el Tratado sobre la Prohibición de las Armas Nucleares pueden llegar ante la Asamblea. #b El [concept_un_development_fund]#!, mientras exista, se queda con una cuarta parte del presupuesto de la ONU y paga a los miembros por debajo de la mitad de la media."
+  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #v Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #v New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #v The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
+  "es": "La Reforma de la Carta II se adopta por supermayoría de dos tercios. #G El tope del objetivo de la [concept_un_authority|l] sube de 85 a 100#!, lo que abre el nivel Supranacional (donde las [concept_un_dues|l] suben al 1% del PIB y todo miembro importante impone un embargo a los sancionados) y #G Credibilidad de la ONU +2#!. #v Moderación del veto:#! a partir de ahora, una supermayoría de dos tercios aprueba una resolución pese a un [Concept('concept_un_veto','veto')]. #v Nuevos asuntos:#! los altos el fuego vinculantes, los referendos supervisados y el Tratado sobre la Prohibición de las Armas Nucleares pueden llegar ante la Asamblea. #v El [concept_un_development_fund]#!, mientras exista, se queda con una cuarta parte del presupuesto de la ONU y paga a los miembros por debajo de la mitad de la media."
  },
  "un_vote_reform_passed_tt": {
   "en": "The Charter Reform was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#!",
