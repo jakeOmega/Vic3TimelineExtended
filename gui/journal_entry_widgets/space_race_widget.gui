@@ -10793,10 +10793,11 @@ types space_race_widget_types
 	### The Fleets window's content (te_sr_fleet_popup): at the left how many
 	### fleets we have and each of them on a button (te_sr_fleet_switch_rows,
 	### generated), a click showing that fleet; beside them, what Space Fleets
-	### says once above its cards (no Space Command, short of personnel), then
+	### says once above its cards (no Space Command, short of personnel; no
+	### fleets at all, if the last one goes under the open window), then
 	### the shown fleet's page (te_sr_fleet_pages, one te_sr_fleet_page a slot,
 	### generated), or one line when the fleet the window was opened on is
-	### gone. 244 + 14 + 960 = 1218.
+	### gone and others are left. 244 + 14 + 960 = 1218.
 	type te_sr_fleet_popup_body = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -10844,12 +10845,18 @@ types space_race_widget_types
 			spacing = 4
 			minimumsize = { 960 -1 }
 
+			### With the last fleet gone under the open window, Space Fleets' own
+			### line, in place of a page's "choose another" over an empty list.
 			te_sr_fleet_wide_note = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' )]"
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_space_fleets_empty"
+			}
+			te_sr_fleet_wide_note = {
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ) )]"
 				text = "je_space_race_widget_space_fleets_no_sc"
 			}
 			te_sr_fleet_wide_note = {
-				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_short'), '(CFixedPoint)1' )]"
+				visible = "[And( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_count'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_short'), '(CFixedPoint)1' ) )]"
 				text = "je_space_race_widget_space_fleets_short"
 			}
 			te_sr_fleet_pages = {}
@@ -10873,9 +10880,15 @@ types space_race_widget_types
 	### exists, its value the slot shown, and NOT on te_popup, which the
 	### pickers its orders open (destination, target, Transfer, Marines) take:
 	### they draw over this window, and closing one, or choosing in it, comes
-	### back here. While one is up this window's two close buttons are hidden,
-	### so its click outside and Escape (the header button's shortcut) reach the
-	### picker alone. The content sits under the entry's scope-free gate and its
+	### back here (seen in game, 2026-11-25: Choose, Transfer and a click
+	### outside a picker). While one is up this window's two close buttons are
+	### hidden, so its click outside reaches the picker alone (seen), and so
+	### should Escape, the header button's shortcut (not yet tried: a hidden
+	### button taking no shortcut is the assumption). A page may open only
+	### popups instanced after this window in te_popups: one drawn under it
+	### would hide its close buttons with nothing in reach
+	### (test_space_fleet_window.py holds the page to the four pickers). The
+	### content sits under the entry's scope-free gate and its
 	### GetPlayerJournalEntry datacontext on a child, as the Colonies window's
 	### (gotchas #22, #29). 1218 of content, plus the window's margins
 	### (2 × 35), the list's (2 × 10) and a scrollbar: 1332. 650 high: the

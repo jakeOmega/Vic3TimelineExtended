@@ -2680,9 +2680,10 @@ def _fleet_page(n: int) -> list[str]:
 
 def _fleet_gone(n: int) -> list[str]:
     """The line the Fleets window shows in a page's place when the fleet it was
-    opened on is gone (lost, or all of it transferred away with the window open)."""
+    opened on is gone (lost, or all of it transferred away with the window open)
+    and others are left to choose; with none left the window says so itself."""
     return ["\t\tte_sr_note = {",
-            f'\t\t\tvisible = "[And( {_fleet_focus(n)}, Not( {_ge(f"sr_disp_fl_{n}", 1)} ) )]"',
+            f'\t\t\tvisible = "[And3( {_fleet_focus(n)}, Not( {_ge(f"sr_disp_fl_{n}", 1)} ), {_ge("sr_disp_fl_count", 1)} )]"',
             '\t\t\ttext = "je_space_race_widget_fw_gone"',
             "\t\t}"]
 

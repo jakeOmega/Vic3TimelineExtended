@@ -1547,8 +1547,9 @@ The owner's ask: "space fleets [should] have their own 'details' type popout win
 (`te_sr_fleet_popup`, up on the client-side `sr_fleet_focus`; `mod_systems/space_race.md`, "The Fleets window").
 **Seen and clicked on 2026-11-25** in a `game_qa` session on a copy of the owner's save of June 2043 (the United
 States under Full Colonies, two fleets at Earth), with three test fleets added by a setup (one damaged at Mars, one
-in flight to Jupiter, one fresh at Earth); 3840 × 2160 at scale 1.5: the parts marked *seen* below. The rest is
-for a hand. No self-check: nothing here changes what script does. **Fallback** if the window misbehaves under a
+in flight to Jupiter, one fresh at Earth); 3840 × 2160 at scale 1.5: the parts marked *seen* below. Two more
+sessions, each launched on the files as they then stood (the last after the review's fixes), logged no line naming
+them in `error.log`. The rest is for a hand. No self-check: nothing here changes what script does. **Fallback** if the window misbehaves under a
 picker: put the window on `te_popup` like the Colonies window (`sr_fleet`), and have each picker's close and choice
 set `te_popup` back to it.
 
@@ -1563,8 +1564,9 @@ set `te_popup` back to it.
 3. **The page reads.** *(Seen, on a fleet at Mars, one at Earth and one in flight: Ships as six tiles with each
    role now of full, Condition's four bars and four tiles, Orders with a caption a line, Locations under it; in
    flight the track under the head and "In flight. It takes orders once it lands." for the orders; at Earth no
-   Posture or Target line. Hovers seen: a role's tile, Fire on Fleets, Dock, the trip's line. Not seen: Repair a
-   Month's hover, a refit in the Drive tile, a target with intelligence, the two notes above the page.)* The Mars
+   Posture or Target line. Hovers seen: a role's tile, Fire on Fleets, Fire on Defenses, Dock, Repair a Month,
+   the km/s bar, the trip's line white and red. Not
+   seen: a refit in the Drive tile, a target with intelligence, the two notes above the page.)* The Mars
    fleet's Dock read "None here" with 0% repair, the Earth fleets' "Earth" with 20%.
 4. **The trip.** *(Seen: "Months: 2, propellant: 1273.0 km/s" under Saturn, the figure red for a fleet carrying
    22 km/s, and Go greyed; for the owner's fleet I, which carries 6,316, the figure white and Go lit.)*
@@ -1572,12 +1574,16 @@ set `te_popup` back to it.
    over the dimmed window, whose own close button was gone; Choose on Saturn closed the picker and the window read
    Saturn; Transfer opened Transfer, and its Transfer made fleet III of half of IX, the list reading 6 / 9 at once;
    Land opened Marines, and a click outside it closed Marines alone. Not tried: the target picker (no hostile site
-   on that save), Escape with a picker up, which should close the picker alone, then the window.)*
+   on that save), and **Escape with a picker up**, which should close the picker alone and, pressed again, the
+   window: the window's close button is hidden under a picker on the assumption that a hidden button takes no
+   shortcut. If Escape closes both at once, or the window first, say so.)*
 6. **Orders act.** *(Seen: Station on a fleet standing off set its posture, `sr_disp_fl_7_posture` 2 then 1, the
    lit choice moving. Not tried: Go, Seize / Destroy, Close in, Interdict.)* Every greyed button gives its reason on
    hover, as on the card.
 7. **Closing.** *(Seen: the close button closed the window and left the tab behind as it was. Not tried: Escape,
    a click outside with no picker up.)*
 8. **A fleet lost under the window.** Transfer all of the fleet shown into another fleet: the page gives way to
-   "This fleet is gone. Choose another from the list.", and its row leaves the list.
+   "This fleet is gone. Choose another from the list.", and its row leaves the list. With no fleet left at all
+   (the console: clear every slot with the window open) the window reads "We have no fleets. A Space Command builds
+   the first at Earth." over an empty list.
 9. **Another country's panel** (National Info, Space Race tab) shows no fleets and no arrow, as before.

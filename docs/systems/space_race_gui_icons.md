@@ -215,7 +215,7 @@ A colony fleet on its way to a site is the transit track's dart (`track_ship.dds
 
 A fleet's page in the Fleets window (`te_sr_fleet_page`; owner, 2026-11-25) draws nothing new: its tiles reuse the set at
 a tile's 34 px. The five roles wear the cards' role icons (`role_*.dds`), the emblem at the head and the place's world are
-the card's (`fleet.dds`, `LOCATION_ICONS`), and the orders' buttons and the postures keep theirs. Four tiles take an
+the card's (`fleet.dds`, `LOCATION_ICONS`), and the orders' buttons and the postures keep theirs. Five tiles take an
 icon from elsewhere in the panel, each for what it already means there:
 
 | Tile | Icon | Where it comes from |

@@ -1260,10 +1260,7 @@ class FigureBudgetTest(unittest.TestCase):
         self.assertIn("size = { 244 26 }", switch)
         cells = [_width(_textbox_with(switch, f'block "{block}"')) for block in ("switch_number", "fl_where", "switch_strength")]
         self.assertEqual(4 + cells[0] + 4 + 20 + 4 + cells[1] + 4 + cells[2] + 4, 244)
-        # The window holds its content: the list, the gap and the page; the page its two columns.
-        self.assertEqual(244 + 14 + 960, 1218)
-        self.assertLessEqual(472 + 8 + 480, 960)
-        self.assertLessEqual(1218 + 2 * 35 + 2 * 10, 1332)
+        # (The window's and the page's widths are held in test_space_fleet_window.py, from the file.)
 
     def test_the_destination_popup(self):
         self._check("te_sr_dest_slot", self.DEST_FLEET)

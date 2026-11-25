@@ -141,10 +141,51 @@ class WindowTest(unittest.TestCase):
         window = int(re.search(r'blockoverride "popup_size" \{\s*size = \{ (\d+) \d+ \}', self.popup).group(1))
         self.assertLessEqual(sum(widths) + spacing + 2 * 35 + 2 * 10 + 16, window)
         self.assertLess(self.body.index("te_sr_fleet_switch_rows = {}"), self.body.index("te_sr_fleet_pages = {}"))
-        # What Space Fleets says once above its cards is said once above the page too (rule 6).
+        # What Space Fleets says once above its cards is said once above the page too (rule 6),
+        # on the panel's own conditions: with a fleet, and no Space Command or too few personnel.
+        some = f"GreaterThanOrEqualTo_CFixedPoint( {_sv('sr_disp_fl_count')}, '(CFixedPoint)1' )"
+        notes = dict(re.findall(r'te_sr_fleet_wide_note = \{\s*visible = "\[(.*)\]"\s*text = "je_space_race_widget_(\w+)"', self.body))
+        self.assertEqual({key: shown for shown, key in notes.items()}, {
+            "space_fleets_empty": f"EqualTo_CFixedPoint( {_sv('sr_disp_fl_count')}, '(CFixedPoint)0' )",
+            "space_fleets_no_sc": f"And( {some}, EqualTo_CFixedPoint( {_sv('sr_disp_sc_operational')}, '(CFixedPoint)0' ) )",
+            "space_fleets_short": f"And( {some}, EqualTo_CFixedPoint( {_sv('sr_disp_pers_short')}, '(CFixedPoint)1' ) )"})
+        section = _type_body(self.gui, "te_sr_sec_space_fleets")   # the panel's own, word for word
         for key in ("space_fleets_no_sc", "space_fleets_short"):
-            self.assertIn(f'text = "je_space_race_widget_{key}"', self.body)
+            self.assertIn(f'visible = "[{[s for s, k in notes.items() if k == key][0]}]"\n\t\t\t\ttext = "je_space_race_widget_{key}"', section)
         self.assertLess(self.body.index("space_fleets_short"), self.body.index("te_sr_fleet_pages = {}"))
+
+    def test_the_window_opens_only_popups_drawn_over_it(self):
+        """A popup instanced before the window in the root would draw under it,
+        and the window's close buttons are hidden while te_popup exists: nothing
+        would be in reach. So everything the window holds may set te_popup only
+        to its own slot's four pickers, each instanced after the window."""
+        root = self.popups[self.popups.index('name = "te_popups"'):]
+        at = root.index("\tte_sr_fleet_popup = {}")
+        kinds = {"dest": "te_sr_dest_popup", "ftarget": "te_sr_ftarget_popup", "xfer": "te_sr_xfer_popup", "land": "te_sr_land_popup"}
+        held = (self.popup + self.body + _type_body(self.gui, "te_sr_fleet_page") + _type_body(self.gui, "te_sr_fleet_switch_row")
+                + _type_body(self.rows, "te_sr_fleet_switch_rows"))
+        self.assertEqual(re.findall(r"Set\(\s*'te_popup'", held), [])   # none written in the types themselves
+        pages = _instances(_type_body(self.rows, "te_sr_fleet_pages"), "te_sr_fleet_page")
+        for n, page in zip(SLOTS, pages):
+            with self.subTest(slot=n):
+                opened = set(re.findall(r"GetVariableSystem\.Set\('te_popup', '(\w+)'\)", page))
+                self.assertEqual(opened, {f"sr_{kind}_{n}" for kind in kinds})
+        for popup in kinds.values():
+            self.assertLess(at, root.index(f"\t{popup} = {{}}"), popup)
+        # ... and what the page borrows from the panel opens nothing: the Locations strip.
+        self.assertNotIn("te_popup", _type_body(self.rows, "te_sr_location_cells") + _type_body(self.gui, "te_sr_location_cell"))
+
+    def test_only_the_card_and_the_list_open_it(self):
+        """The key is set by a card's arrow (the player's own panel) and by the
+        window's list, and cleared by its close buttons: an opener anywhere else
+        has to be put under the own-country guard, and listed here."""
+        import glob
+        setters = {}
+        for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
+            for m in re.finditer(r"GetVariableSystem\.(Set|Clear|Toggle)\(\s*'sr_fleet_focus'", _read(path)):
+                setters.setdefault(os.path.relpath(path, REPO), []).append(m.group(1))
+        self.assertEqual(setters, {"gui/journal_entry_widgets/space_race_widget.gui": ["Clear"],
+                                   "gui/journal_entry_widgets/sr_fleets_generated_rows.gui": ["Set"] * (2 * gsf.SLOTS)})
 
 
 class SlotsTest(unittest.TestCase):
@@ -167,7 +208,9 @@ class SlotsTest(unittest.TestCase):
                 focus = f"GetVariableSystem.HasValue('sr_fleet_focus', '{n}')"
                 show = f"onclick = \"[GetVariableSystem.Set('sr_fleet_focus', '{n}')]\""
                 self.assertIn(f'blockoverride "fp_visible" {{\n\t\t\t\tvisible = "[And( {focus}, {_holds_a_fleet(n)} )]"', page)
-                self.assertIn(f'visible = "[And( {focus}, Not( {_holds_a_fleet(n)} ) )]"', note)
+                # ... while another fleet is left to choose; with none, the window says so itself.
+                some = f"GreaterThanOrEqualTo_CFixedPoint( {_sv('sr_disp_fl_count')}, '(CFixedPoint)1' )"
+                self.assertIn(f'visible = "[And3( {focus}, Not( {_holds_a_fleet(n)} ), {some} )]"', note)
                 self.assertIn('text = "je_space_race_widget_fw_gone"', note)
                 row = _override(switch, "switch_row")
                 self.assertIn(f'visible = "[{_holds_a_fleet(n)}]"', row)
@@ -258,17 +301,26 @@ class SlotsTest(unittest.TestCase):
         self.assertEqual(page.count("te_sr_posture_choice = {"), 4)
         postures = [int(w) for w in re.findall(r'blockoverride "pc_size" \{\s*size = \{ (\d+) 46 \}', page)]
         self.assertEqual(len(postures), 4)
-        self.assertLessEqual(caption + 4 + sum(postures) + 3 * 4, 480)
-        self.assertLessEqual(caption + 4 + 190 + 4 + 98, 480)   # the target and Seize
+        columns = [int(w) for w in re.findall(r"\n\t\t\t\tminimumsize = \{ (\d+) -1 \}", page)]
+        self.assertEqual(columns, [472, 480])
+        self.assertLessEqual(caption + 4 + sum(postures) + 3 * 4, columns[1])
+        # The widest of the other orders lines: a caption, the target's button and Seize.
+        buttons = [int(w) for w in re.findall(r"using = default_button_action\s*size = \{ (\d+) 26 \}", page)]
+        self.assertEqual(sorted(buttons), [98, 190, 190])
+        self.assertLessEqual(caption + 4 + max(buttons) + 4 + min(buttons), columns[1])
         # A caption a line, in the order a fleet is used: where to, how it fights, what at, its marines.
         captions = re.findall(r'te_sr_fp_caption = \{\s*blockoverride "caption_text" \{\s*text = "je_space_race_widget_(\w+)"', page)
         self.assertEqual(captions, ["fw_destination", "fw_posture", "fw_target", "fl_col_marines"])
-        # Locations, the panel's own strip, in the right column.
+        # Locations, the panel's own strip, in the right column: its captions' column and a column a location.
         self.assertEqual(page.count("te_sr_location_cells = {}"), 1)
-        self.assertLessEqual(26 + 9 * 50, 480)
-        self.assertEqual([int(w) for w in re.findall(r"\n\t\t\t\tminimumsize = \{ (\d+) -1 \}", page)], [472, 480])
-        self.assertIn("size = { 960 58 }", page)
-        self.assertLessEqual(472 + 8 + 480, 960)
+        cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_location_cell")).group(1))
+        captions = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_location_captions")).group(1))
+        self.assertLessEqual(captions + len(gsf.LOCATIONS) * cell, columns[1])
+        # The two columns and their gap are the head's width, which is the window's page column.
+        head = int(re.search(r"\n\t\twidget = \{\n\t\t\tsize = \{ (\d+) 58 \}", page).group(1))
+        gap = int(re.search(r"direction = horizontal\n\t\t\tignoreinvisible = yes\n\t\t\tspacing = (\d+)\n\n\t\t\t### Left", page).group(1))
+        self.assertEqual(sum(columns) + gap, head)
+        self.assertIn(f"minimumsize = {{ {head} -1 }}", _type_body(self.gui, "te_sr_fleet_popup_body"))
 
     def test_each_tile_wears_an_icon_of_the_set(self):
         pairs = re.findall(r'blockoverride "tile_icon" \{\s*texture = "' + re.escape(ICONS) + r'(\w+)\.dds"\s*\}\s*'
@@ -288,6 +340,15 @@ class FireTest(unittest.TestCase):
         self.assertIn("value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness }", combat)
         self.assertRegex(combat, r"value = sr_fl_\$N\$_fire_defences\s*multiply = sr_fleet_quality\s*multiply = sr_fleet_readiness\s*"
                                  r"multiply = sr_cb_edge_\$KEY\$")
+        # What the figure leaves out is said on its hover: the survey's edge, and the share
+        # hostile fleets stationed at the colony draw (sr_cb_fd_total_<key>).
+        hover = dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _read(LOC)))["je_space_race_widget_fw_fire_defences_tt"]
+        self.assertIn("raises it past this figure", hover)
+        self.assertIn("Enemy fleets stationed at the colony draw a share of it", hover)
+        values = _read(os.path.join(REPO, "common", "script_values", "sr_fleets_generated.txt"))
+        total = values[values.index("\nsr_cb_fd_total_valles_marineris = {"):]
+        self.assertIn("add = { value = var:sr_cb_fd3_valles_marineris multiply = sr_site_target_strength_valles_marineris "
+                      "divide = { value = sr_site_target_strength_valles_marineris add = sr_cb_hs_value } }", total[:900])
         for n in SLOTS:
             for kind in ("fleets", "defences"):
                 with self.subTest(slot=n, kind=kind):
@@ -322,10 +383,44 @@ class DockTest(unittest.TestCase):
         values = _read(os.path.join(REPO, "common", "script_values", "sr_fleet_values.txt"))
         for value, figure, key in (("sr_fl_repair_earth = { value = 0.2 }", "#v 20%#! at Earth", "fw_repair_tt"),
                                    ("sr_fl_repair_port_level = { value = 0.1 }", "#v 10%#! a Spaceport level", "fw_repair_tt"),
-                                   ("sr_fl_attrition_share = { value = 0.05 }", "#v 5%#! of its strength a month", "fw_dock_tt")):
+                                   ("sr_fl_attrition_share = { value = 0.05 }", "#v 5%#! of its strength a month", "fw_dock_tt"),
+                                   ("sr_fl_port_refill_share = { value = 0.25 }", "#v 25%#! of its capacity at any other Spaceport", "fw_dock_tt"),
+                                   ("sr_fl_port_refill_share = { value = 0.25 }", "#v 25%#! of capacity a month at any other Spaceport", "fl_dv_tt")):
             with self.subTest(figure=figure):
                 self.assertIn(value, values)
                 self.assertIn(figure, loc[f"je_space_race_widget_{key}"])
+
+    def test_the_refill_rule_is_the_script_s(self):
+        """Full at Earth and at a Spaceport on a propellant world, a quarter of
+        capacity a month at any other Spaceport (sr_fl_month_at): three hovers
+        and the player guide had it the other way round until the review of #2055."""
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "sr_fleet_effects.txt"))
+        month = effects[effects.index("\nsr_fl_month_at = {"):]
+        self.assertRegex(month, r"limit = \{ sr_fl_\$N\$_refills_fully = yes \}\s*set_variable = \{ name = sr_fl_\$N\$_dv value = sr_fl_\$N\$_dv_capacity \}"
+                                r"\s*\}\s*else = \{[^}]*value = sr_fl_\$N\$_dv_capacity\s*multiply = sr_fl_port_refill_share")
+        triggers = _read(os.path.join(REPO, "common", "scripted_triggers", "sr_fleets_generated.txt"))
+        fully = triggers[triggers.index("\nsr_fl_1_refills_fully = {"):]
+        fully = fully[:fully.index("\n}\n")]
+        self.assertIn("var:sr_fl_1_loc = 1", fully)
+        self.assertIn("sr_loc_propellant_port_mars = yes", fully)
+        loc = dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _read(LOC)))
+        for key in ("fw_dock_tt", "fl_dv_tt", "dp_dv_short_tt"):
+            with self.subTest(key=key):
+                text = loc[f"je_space_race_widget_{key}"]
+                self.assertIn("at a Spaceport on a site that makes propellant", text)
+                self.assertIn("any other Spaceport", text)
+        guide = _read(os.path.join(REPO, "docs", "player_guide", "16-space.md"))
+        self.assertNotIn("propellant only on a site that makes it", guide)
+        self.assertIn("by a quarter a month anywhere else", guide)
+
+    def test_a_dock_s_work_needs_a_space_command_in_a_state_we_control(self):
+        """sr_sc_operational, not the building's mere existence: the hovers say so."""
+        loc = dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _read(LOC)))
+        for key in ("fw_dock_tt", "fw_repair_tt", "fw_fire_fleets_tt"):
+            with self.subTest(key=key):
+                self.assertIn("$building_space_command$ in a state we control", loc[f"je_space_race_widget_{key}"])
+        # Away from a dock supply counts down only at a location (sr_fl_month_at acts on a slot with one).
+        self.assertIn("At a location with no dock its supply counts down", loc["je_space_race_widget_fw_dock_tt"])
 
 
 class TextTest(unittest.TestCase):

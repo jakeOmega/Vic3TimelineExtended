@@ -753,7 +753,7 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
 | Habitat | Adds half of the colony's starting room for people, more with five technologies (see below) | A cap by the colony's size: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets; past it each costs more |
 | Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | Up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
-| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel on a site that makes propellant. Under Simple Colonies, nothing | None on the Moon |
+| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel: fully on a site that makes propellant, a quarter of their tanks a month anywhere else. Under Simple Colonies, nothing | None on the Moon |
 | Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down, and on the Moon and Mars your other colonies there too (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)). Under Simple Colonies, nothing | None |
 | Facilities | See the table below | None |
 
@@ -1479,8 +1479,9 @@ from being blockaded, but can't leave or be repaired.
 
 A fleet in flight can be neither attacked nor recalled. It docks at Earth and at
 your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
-propellant only on a site that makes it, such as Utopia Planitia, Ceres, Europa
-or Titan), damage is repaired, and a fleet on an older drive refits to your best
+the tanks fill up on a site that makes propellant, such as Utopia Planitia,
+Ceres, Europa or Titan, and by a quarter a month anywhere else), damage is
+repaired, and a fleet on an older drive refits to your best
 in three months. Away from a dock supply runs down, and a fleet without it loses
 5% of its strength a month. Marines fill up at Earth only, as far as your
 Space Forces Personnel allow. A fleet that arrives
