@@ -230,7 +230,17 @@ class SlotsTest(unittest.TestCase):
                     self.assertIn(f'raw_text = "#v [{now}|0]#! / [{full}|0]"', _override(page, f"fp_role_{role.key}"))
                 picked = f"GreaterThanOrEqualTo_CFixedPoint( {_sv(f'sr_disp_fl_{n}_pick')}, '(CFixedPoint)1' )"
                 self.assertIn(f'visible = "[{picked}]"', _override(page, "fp_leg_visible"))
+                # The leg's propellant is red while the fleet carries less: the destination popup's own comparison.
+                covered = (f"GreaterThanOrEqualTo_CFixedPoint( {_sv(f'sr_fl_{n}_dv_value')}, "
+                           f"{_sv(f'sr_disp_fl_{n}_leg_dv')} )")
+                self.assertIn(f'visible = "[{covered}]"', _override(page, "fp_leg"))
                 self.assertIn(f'text = "je_space_race_widget_fw_{n}_leg"', _override(page, "fp_leg"))
+                self.assertIn(f'visible = "[Not( {covered} )]"', _override(page, "fp_leg_short"))
+                self.assertIn(f'text = "je_space_race_widget_fw_{n}_leg_short"', _override(page, "fp_leg_short"))
+                for code, word in enumerate(("none", "earth", "port", "flight")):
+                    self.assertIn(f"EqualTo_CFixedPoint( {_sv(f'sr_disp_fl_{n}_dock')}, '(CFixedPoint){code}' )",
+                                  _override(page, f"fp_dock_{word}"))
+                self.assertIn(f'raw_text = "[{_sv(f"sr_disp_fl_{n}_repair_pct")}|0]%"', _override(page, "fp_repair"))
                 self.assertIn(f"GetCustom('sr_fl_{n}_target_intel')", _override(page, "fp_intel"))
                 for kind in ("fleets", "defences"):
                     self.assertIn(f'raw_text = "[{_sv(f"sr_disp_fl_{n}_fire_{kind}")}|1]"', _override(page, f"fp_fire_{kind}"))
@@ -238,16 +248,21 @@ class SlotsTest(unittest.TestCase):
     def test_the_page_s_lines_fit_its_columns(self):
         page = self.page_type
         tile = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_page_tile")).group(1))
-        self.assertEqual(page.count("te_sr_page_tile = {"), 8)   # five roles and the drive, then the two fires
+        self.assertEqual(page.count("te_sr_page_tile = {"), 10)   # five roles and the drive; the two fires; dock and repair
         self.assertLessEqual(2 * tile + 6, 472)
         gauge = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_fl_gauge")).group(1))
         self.assertEqual(page.count("te_sr_fl_gauge = {"), 4)
         self.assertLessEqual(4 * gauge + 3 * 4, 472)
-        posture = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_posture_choice")).group(1))
-        self.assertEqual(page.count("te_sr_posture_choice = {"), 4)
-        self.assertLessEqual(4 * posture + 3 * 4, 480)
         caption = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_fp_caption")).group(1))
-        self.assertLessEqual(caption + 4 + 190 + 4 + 98, 480)   # the widest orders line: the target and Seize
+        # The four postures beside their caption, each narrower than the card's (pc_size).
+        self.assertEqual(page.count("te_sr_posture_choice = {"), 4)
+        postures = [int(w) for w in re.findall(r'blockoverride "pc_size" \{\s*size = \{ (\d+) 46 \}', page)]
+        self.assertEqual(len(postures), 4)
+        self.assertLessEqual(caption + 4 + sum(postures) + 3 * 4, 480)
+        self.assertLessEqual(caption + 4 + 190 + 4 + 98, 480)   # the target and Seize
+        # A caption a line, in the order a fleet is used: where to, how it fights, what at, its marines.
+        captions = re.findall(r'te_sr_fp_caption = \{\s*blockoverride "caption_text" \{\s*text = "je_space_race_widget_(\w+)"', page)
+        self.assertEqual(captions, ["fw_destination", "fw_posture", "fw_target", "fl_col_marines"])
         # Locations, the panel's own strip, in the right column.
         self.assertEqual(page.count("te_sr_location_cells = {}"), 1)
         self.assertLessEqual(26 + 9 * 50, 480)
@@ -260,7 +275,8 @@ class SlotsTest(unittest.TestCase):
                            r'blockoverride "tile_caption" \{\s*text = "je_space_race_widget_fw_(\w+)"', self.page_type)
         self.assertEqual(pairs, [("role_war", "role_war"), ("role_rapid", "role_rapid"), ("role_siege", "role_siege"),
                                  ("role_carrier", "role_carrier"), ("role_tender", "role_tender"), ("track_ship", "drive"),
-                                 ("warship", "fire_fleets"), ("module_def", "fire_defences")])
+                                 ("warship", "fire_fleets"), ("module_def", "fire_defences"),
+                                 ("module_port", "dock"), ("page_crews", "repair")])
 
 
 class FireTest(unittest.TestCase):
@@ -279,6 +295,39 @@ class FireTest(unittest.TestCase):
                                   "\tmultiply = sr_fleet_quality\n\tmultiply = sr_fleet_readiness\n}", display)
 
 
+class DockTest(unittest.TestCase):
+    """Where a fleet stands for refill and repair, as the month's step has it."""
+
+    def test_the_dock_and_its_repair_follow_the_month_s_step(self):
+        display = _read(DISPLAY)
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "sr_fleet_effects.txt"))
+        month = effects[effects.index("\nsr_fl_month_at = {"):]
+        # sr_fl_month_at: a docked fleet is repaired by its dock's share, and only with a Space Command.
+        self.assertIn("limit = { sr_fl_$N$_docked = yes }", month)
+        self.assertRegex(month, r"set_local_variable = \{ name = sr_fl_share value = sr_fl_\$N\$_repair_share \}\s*if = \{\s*"
+                                r"limit = \{ local_var:sr_fl_share > 0 sr_sc_operational = yes \}")
+        for n in SLOTS:
+            with self.subTest(slot=n):
+                self.assertIn(f"sr_disp_fl_{n}_dock = {{\n\tvalue = 0\n"
+                              f"\tif = {{ limit = {{ sr_fl_{n}_at_earth = yes }} value = 1 }}\n"
+                              f"\telse_if = {{ limit = {{ sr_fl_{n}_docked = yes }} value = 2 }}\n"
+                              f"\telse_if = {{ limit = {{ NOT = {{ has_variable = sr_fl_{n}_loc }} has_variable = sr_fl_{n}_dest }} value = 3 }}\n}}",
+                              display)
+                self.assertIn(f"sr_disp_fl_{n}_repair_pct = {{\n\tvalue = 0\n\tif = {{\n"
+                              f"\t\tlimit = {{ sr_fl_{n}_docked = yes sr_sc_operational = yes }}\n"
+                              f"\t\tvalue = sr_fl_{n}_repair_share\n\t\tmultiply = 100\n\t}}\n}}", display)
+
+    def test_the_hovers_give_the_script_s_figures(self):
+        loc = dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _read(LOC)))
+        values = _read(os.path.join(REPO, "common", "script_values", "sr_fleet_values.txt"))
+        for value, figure, key in (("sr_fl_repair_earth = { value = 0.2 }", "#v 20%#! at Earth", "fw_repair_tt"),
+                                   ("sr_fl_repair_port_level = { value = 0.1 }", "#v 10%#! a Spaceport level", "fw_repair_tt"),
+                                   ("sr_fl_attrition_share = { value = 0.05 }", "#v 5%#! of its strength a month", "fw_dock_tt")):
+            with self.subTest(figure=figure):
+                self.assertIn(value, values)
+                self.assertIn(figure, loc[f"je_space_race_widget_{key}"])
+
+
 class TextTest(unittest.TestCase):
     """The window's own words."""
 
@@ -289,8 +338,12 @@ class TextTest(unittest.TestCase):
     def test_a_leg_line_a_slot_reads_that_slot(self):
         for n in SLOTS:
             with self.subTest(slot=n):
-                text = self.loc[f"je_space_race_widget_fw_{n}_leg"]
-                self.assertEqual(re.findall(r"ScriptValue\('(\w+)'\)", text), [f"sr_disp_fl_{n}_leg_months", f"sr_disp_fl_{n}_leg_dv"])
+                for key in (f"je_space_race_widget_fw_{n}_leg", f"je_space_race_widget_fw_{n}_leg_short"):
+                    self.assertEqual(re.findall(r"ScriptValue\('(\w+)'\)", self.loc[key]),
+                                     [f"sr_disp_fl_{n}_leg_months", f"sr_disp_fl_{n}_leg_dv"])
+                # One text, the propellant's figure red in the second.
+                self.assertEqual(self.loc[f"je_space_race_widget_fw_{n}_leg"].replace("propellant: #v ", "propellant: #R "),
+                                 self.loc[f"je_space_race_widget_fw_{n}_leg_short"])
 
     def test_a_role_s_hover_is_its_concept(self):
         for role, concept in (("war", "warship"), ("rapid", "rapid"), ("siege", "siege"), ("carrier", "carrier"), ("tender", "tender")):

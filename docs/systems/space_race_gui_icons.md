@@ -211,6 +211,23 @@ The Solar System tab opens on a map (`te_sr_system_map`; owner, 2026-11-23: "som
 
 A colony fleet on its way to a site is the transit track's dart (`track_ship.dds`, 9 px at the marker's corner). The map's key under it shows the same files at 14 px.
 
+## The Fleets window (2026-11-25)
+
+A fleet's page in the Fleets window (`te_sr_fleet_page`; owner, 2026-11-25) draws nothing new: its tiles reuse the set at
+a tile's 34 px. The five roles wear the cards' role icons (`role_*.dds`), the emblem at the head and the place's world are
+the card's (`fleet.dds`, `LOCATION_ICONS`), and the orders' buttons and the postures keep theirs. Four tiles take an
+icon from elsewhere in the panel, each for what it already means there:
+
+| Tile | Icon | Where it comes from |
+|---|---|---|
+| Drive | `track_ship.dds` | the transit track's ship under way |
+| Fire on Fleets | `warship.dds` | Space Command's Fleet strength cell, Locations' inbound line |
+| Fire on Defenses | `module_def.dds` | the colonies' Defenses module |
+| Dock | `module_port.dds` | the colonies' Spaceport module, where a fleet docks |
+| Repair a Month | `page_crews.dds` | the colonist with a wrench (a colony page's crews, Space Command's Upkeep) |
+
+`test_space_fleet_window.py` (`test_each_tile_wears_an_icon_of_the_set`) holds the pairs.
+
 ## Top-bar alerts: placeholders for the next icon round (2026-11-25)
 
 The colony module queue's two alerts (`common/alert_types/te_space_race_alerts.txt`, PR #2051) borrow vanilla alert icons for now; the owner asked for painted ones in the next icon round (2026-11-25). A vanilla alert icon is one painted object on a transparent background, 150 × 150, which the game's round alert button frames; the rim's green or yellow comes from the alert's `color`, not the icon. `/placeholder-icons` does not read `common/alert_types/` (#2052), so this table is their place on the work list. Each is a literal `texture` line in the alert file; a new file goes in `gfx/interface/icons/space_race_icons/`.

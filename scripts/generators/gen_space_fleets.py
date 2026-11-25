@@ -2086,7 +2086,12 @@ def render_display() -> str:
            "#   sr_disp_fl_<n>_fire_fleets, _fire_defences  its fire as the combat step counts it",
            "#                               (sr_fl_gather_at, sr_cb_add_target): the roles' fire x",
            "#                               sr_fleet_quality x sr_fleet_readiness; on Defences before",
-           "#                               a survey's edge, which is the target's (the Fleets window)"]
+           "#                               a survey's edge, which is the target's (the Fleets window)",
+           "#   sr_disp_fl_<n>_dock         where it stands for refill and repair (the Fleets window): 0 at",
+           "#                               a location with no dock, 1 docked at Earth, 2 at a Spaceport",
+           "#                               of ours, 3 in flight",
+           "#   sr_disp_fl_<n>_repair_pct   the share of its damage a month there repairs, in percent",
+           "#                               (sr_fl_month_at: its dock's share, and only with a Space Command)"]
     for n in range(1, SLOTS + 1):
         out += [f"sr_disp_fl_{n} = {{",
                 "\tvalue = 0",
@@ -2172,6 +2177,20 @@ def render_display() -> str:
                     "\tmultiply = sr_fleet_quality",
                     "\tmultiply = sr_fleet_readiness",
                     "}"]
+        out += [f"sr_disp_fl_{n}_dock = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ {var(n, 'at_earth')} = yes }} value = 1 }}",
+                f"\telse_if = {{ limit = {{ {var(n, 'docked')} = yes }} value = 2 }}",
+                f"\telse_if = {{ limit = {{ NOT = {{ has_variable = {var(n, 'loc')} }} has_variable = {var(n, 'dest')} }} value = 3 }}",
+                "}",
+                f"sr_disp_fl_{n}_repair_pct = {{",
+                "\tvalue = 0",
+                "\tif = {",
+                f"\t\tlimit = {{ {var(n, 'docked')} = yes sr_sc_operational = yes }}",
+                f"\t\tvalue = {var(n, 'repair_share')}",
+                "\t\tmultiply = 100",
+                "\t}",
+                "}"]
     out += ["",
             "# Per location: our strength there, the strongest other power's, the",
             "# inbound record (as the Solar System rows), and our worlds there."]
@@ -2635,8 +2654,8 @@ def _fleet_page(n: int) -> list[str]:
     """Slot n's page in the Fleets window (te_sr_fleet_page): shown while the
     window is on this slot and a fleet is in it; the card's blocks, then what
     the card keeps on hovers, in the open: each role now of full, its fire as
-    combat counts it, the leg to the destination picked and what we know of
-    its target."""
+    combat counts it, its dock and what the dock repairs a month, the leg to
+    the destination picked and what we know of its target."""
     out = ["\t\tte_sr_fleet_page = {"]
     out += _override("fp_visible", f'visible = "[And( {_fleet_focus(n)}, {_ge(f"sr_disp_fl_{n}", 1)} )]"')
     out += _override("fp_number", f'raw_text = "{NUMERALS[n - 1]}"')
@@ -2646,8 +2665,15 @@ def _fleet_page(n: int) -> list[str]:
         out += _override(f"fp_role_{role.key}", f'raw_text = "#v [{_sv(now)}|0]#! / [{_sv(full)}|0]"')
     for kind in ("fleets", "defences"):
         out += _override(f"fp_fire_{kind}", f'raw_text = "[{_sv(f"sr_disp_fl_{n}_fire_{kind}")}|1]"')
+    # The leg to the destination picked: its propellant in red while the fleet
+    # carries less (the destination popup's own comparison, _dest_row).
+    covered = f"GreaterThanOrEqualTo_CFixedPoint( {_sv(var(n, 'dv_value'))}, {_sv(f'sr_disp_fl_{n}_leg_dv')} )"
     out += _override("fp_leg_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}_pick", 1)}]"')
-    out += _override("fp_leg", f'text = "je_space_race_widget_fw_{n}_leg"')
+    out += _override("fp_leg", f'visible = "[{covered}]"', f'text = "je_space_race_widget_fw_{n}_leg"')
+    out += _override("fp_leg_short", f'visible = "[Not( {covered} )]"', f'text = "je_space_race_widget_fw_{n}_leg_short"')
+    for code, word in enumerate(("none", "earth", "port", "flight")):
+        out += _override(f"fp_dock_{word}", f'visible = "[{_eq(f"sr_disp_fl_{n}_dock", code)}]"')
+    out += _override("fp_repair", f'raw_text = "[{_sv(f"sr_disp_fl_{n}_repair_pct")}|0]%"')
     out += _override("fp_intel", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_target_intel')]\"")
     return out + ["\t\t}"]
 

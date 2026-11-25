@@ -1449,6 +1449,18 @@ the trip is behind it and the months until it lands. A fleet can be at one of ni
 locations: Earth Orbit, Mercury & Venus, Mars, the Asteroid Belt, Jupiter,
 Saturn, Uranus, Neptune and the Kuiper Belt.
 
+The go-to arrow beside it opens the fleet in a window of its own, Our Fleets.
+Its page sets out Ships (each role now and at full, the drive, and Transfer)
+and Condition (the card's four bars, then the fleet's fire on fleets and on
+colony defenses as a battle counts it, its dock and the share of its damage
+the dock repairs each month) on the left, and on the right its Orders, the same
+buttons as on the card, with the trip to the destination chosen (its propellant
+in red when the fleet carries too little) and what you know of its target
+written out under them, over the Locations strip. Every fleet you have is
+listed down the window's left side: click one to see its page without closing
+the window. The windows the orders open (below) come up over it, and closing
+one brings you back to the fleet.
+
 | Order | What it does |
 |---|---|
 | The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |

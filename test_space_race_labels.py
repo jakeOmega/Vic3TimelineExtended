@@ -563,11 +563,11 @@ CELLS = {
     "a tile's caption on a colony's page (te_sr_page_tile)": (
         ("te_sr_page_tile", 'block "tile_caption"'),
         r"je_space_race_widget_(page_(staffing|bases|resorts|status|terraformed)|ch_\w+|modules_col_slots"
-        r"|fw_role_(war|rapid|siege|carrier|tender)|fw_drive|fw_fire_(fleets|defences))"),
+        r"|fw_role_(war|rapid|siege|carrier|tender)|fw_drive|fw_fire_(fleets|defences)|fw_dock|fw_repair)"),
     "a word beside a page heading, or a page tile's word (te_sr_page_value)": (
         ("te_sr_page_value", None),
         r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+"
-        r"|terra_(?:years_left|finished|idle))"),
+        r"|terra_(?:years_left|finished|idle)|fw_dock_(?:none|earth|port|flight))"),
     "a module's name on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'block "row_name"'),
         r"je_space_race_widget_mod_name_\w+"),
@@ -669,10 +669,13 @@ CELLS = {
         r"je_space_race_widget_fw_fleet"),
     "an orders line's caption on a fleet's page (te_sr_fp_caption)": (
         ("te_sr_fp_caption", 'block "caption_text"'),
-        r"je_space_race_widget_(fw_destination|fw_target|fl_col_marines)"),
+        r"je_space_race_widget_(fw_destination|fw_posture|fw_target|fl_col_marines)"),
     "the leg to the destination picked, on a fleet's page (te_sr_fleet_page)": (
         ("te_sr_fleet_page", 'block "fp_leg"'),
         r"je_space_race_widget_fw_\d_leg"),
+    "the same with too little propellant aboard (te_sr_fleet_page)": (
+        ("te_sr_fleet_page", 'block "fp_leg_short"'),
+        r"je_space_race_widget_fw_\d_leg_short"),
     # The Transfer popup (UI pass design § 6).
     "the Transfer popup's Into (te_sr_xf_to_line)": (
         ("te_sr_xf_to_line", 'text = "je_space_race_widget_xf_to_label"'),
@@ -1029,7 +1032,8 @@ class FigureBudgetTest(unittest.TestCase):
     FLEET_SWITCH = {"switch_number": "VIII", "switch_strength": "9999"}
     FLEET_PAGE = {"fp_role_war": "9999 / 9999", "fp_role_rapid": "9999 / 9999", "fp_role_siege": "9999 / 9999",
                   "fp_role_carrier": "9999 / 9999", "fp_role_tender": "9999 / 9999",
-                  "fp_fire_fleets": "99999.9", "fp_fire_defences": "99999.9", "fl_refit": "3"}
+                  "fp_fire_fleets": "99999.9", "fp_fire_defences": "99999.9", "fl_refit": "3", "fp_repair": "100%"}
+    FLEET_PAGE_WORDS = ("fl_drive", "fp_dock_none", "fp_dock_earth", "fp_dock_port", "fp_dock_flight")
     SITE = {"site_inbound_ours": "9·999", "site_slots": "99"}
     QUEUE = {"mq_place": "20."}
 
@@ -1228,7 +1232,7 @@ class FigureBudgetTest(unittest.TestCase):
         page = _type_body(gui, "te_sr_fleet_page")
         width, font = _width(_type_body(gui, "te_sr_page_value")), _font(_type_body(gui, "te_sr_page_value"))
         shown = re.findall(r'te_sr_page_value = \{[^{}]*block "(\w+)"', page)
-        self.assertEqual(sorted(shown), sorted([*self.FLEET_PAGE, "fl_drive"]))
+        self.assertEqual(sorted(shown), sorted([*self.FLEET_PAGE, *self.FLEET_PAGE_WORDS]))
         for block, figure in self.FLEET_PAGE.items():
             with self.subTest(block=block):
                 need = len(figure) * UNITS_PER_CHAR[font] * MARGIN
@@ -1245,6 +1249,12 @@ class FigureBudgetTest(unittest.TestCase):
                     longest = max((_render(_loc(k)) for k in options), key=len)
                     need = len(longest) * UNITS_PER_CHAR[_font(box)] * MARGIN
                     self.assertLessEqual(need, _width(box), f"{longest!r} in {block}")
+        # A posture's word in the page's narrower choice (pc_label_width).
+        narrow = int(re.search(r'blockoverride "pc_label_width" \{\s*max_width = (\d+)', page).group(1))
+        for code in "1234":
+            with self.subTest(posture=code):
+                word = _render(_loc(f"je_space_race_widget_fl_posture_{code}"))
+                self.assertLessEqual(len(word) * UNITS_PER_CHAR["row"] * MARGIN, narrow, word)
         # The list's line: its cells and gaps are the button's width.
         switch = _type_body(gui, "te_sr_fleet_switch_row")
         self.assertIn("size = { 244 26 }", switch)

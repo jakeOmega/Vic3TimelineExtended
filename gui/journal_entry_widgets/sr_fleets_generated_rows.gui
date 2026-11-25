@@ -39096,7 +39096,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_dv') )]"
 				text = "je_space_race_widget_fw_1_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_1_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_1_target_intel')]"
@@ -39312,7 +39332,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_dv') )]"
 				text = "je_space_race_widget_fw_2_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_2_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_2_target_intel')]"
@@ -39528,7 +39568,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_dv') )]"
 				text = "je_space_race_widget_fw_3_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_3_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_3_target_intel')]"
@@ -39744,7 +39804,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_dv') )]"
 				text = "je_space_race_widget_fw_4_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_4_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_4_target_intel')]"
@@ -39960,7 +40040,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_dv') )]"
 				text = "je_space_race_widget_fw_5_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_5_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_5_target_intel')]"
@@ -40176,7 +40276,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_dv') )]"
 				text = "je_space_race_widget_fw_6_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_6_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_6_target_intel')]"
@@ -40392,7 +40512,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_dv') )]"
 				text = "je_space_race_widget_fw_7_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_7_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_7_target_intel')]"
@@ -40608,7 +40748,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_dv') )]"
 				text = "je_space_race_widget_fw_8_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_8_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_8_target_intel')]"
@@ -40824,7 +40984,27 @@ types sr_fleets_generated_rows_types
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_pick'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fp_leg" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_dv') )]"
 				text = "je_space_race_widget_fw_9_leg"
+			}
+			blockoverride "fp_leg_short" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_dv') ) )]"
+				text = "je_space_race_widget_fw_9_leg_short"
+			}
+			blockoverride "fp_dock_none" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_dock'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_dock_earth" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_dock'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_dock_port" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_dock'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_dock_flight" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_dock'), '(CFixedPoint)3' )]"
+			}
+			blockoverride "fp_repair" {
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_repair_pct')|0]%"
 			}
 			blockoverride "fp_intel" {
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_9_target_intel')]"

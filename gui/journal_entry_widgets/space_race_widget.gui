@@ -7012,9 +7012,13 @@ types space_race_widget_types
 	### posture in force in vanilla's selected-tab look (the Strategic
 	### Reserve's policy choice), not a greyed button that reads as
 	### unavailable, with its own hover (pc_held_tooltip: what the posture
-	### does), as the Strategic Reserve's choice has.
+	### does), as the Strategic Reserve's choice has. A fleet's page in the
+	### Fleets window sets them beside a caption, at 90 with the word in 86
+	### (pc_size, pc_label_width).
 	type te_sr_posture_choice = widget {
-		size = { 114 46 }
+		block "pc_size" {
+			size = { 114 46 }
+		}
 		parentanchor = vcenter
 
 		button = {
@@ -7034,7 +7038,9 @@ types space_race_widget_types
 				parentanchor = top|hcenter
 				align = center|nobaseline
 				autoresize = yes
-				max_width = 100
+				block "pc_label_width" {
+					max_width = 100
+				}
 				elide = right
 				using = te_sr_fontsize_row
 				block "pc_label" {}
@@ -7057,7 +7063,9 @@ types space_race_widget_types
 				parentanchor = top|hcenter
 				align = center|nobaseline
 				autoresize = yes
-				max_width = 100
+				block "pc_label_width" {
+					max_width = 100
+				}
 				elide = right
 				using = te_sr_fontsize_row
 				default_format = "#variable"
@@ -9919,12 +9927,13 @@ types space_race_widget_types
 	### where it is (or is bound, with the transit track under the head); then
 	### two columns. Left, 472: Ships (each role now of full on a tile, the
 	### drive, and Transfer on the heading) and Condition (the card's four
-	### bars, then its fire on fleets and on Defenses as combat counts them).
-	### Right, 480: Orders (destination and Go with the leg under them, the
-	### marines' Land and Embark, the posture's four buttons, the target with
-	### Seize / Destroy and what we know of it), then Locations, the panel's
-	### own strip (476), so the theatre is in view while the fleet gets its
-	### orders. The orders' buttons are the card's, with the card's blocks, so
+	### bars, then its fire on fleets and on Defenses as combat counts them,
+	### its dock and what the dock repairs a month).
+	### Right, 480: Orders, a caption a line (destination and Go with the leg
+	### under them, the posture's four buttons, the target with Seize /
+	### Destroy and what we know of it, the marines' Land and Embark), then
+	### Locations, the panel's own strip (476), so the theatre is in view while
+	### the fleet gets its orders. The orders' buttons are the card's, with the card's blocks, so
 	### te_sr_fleet_pages (generated, sr_fleets_generated_rows.gui) fills a
 	### page from the card's own overrides; they open the same pickers, which
 	### draw over this window and leave it open under them. Shown while its
@@ -10385,6 +10394,60 @@ types space_race_widget_types
 						}
 					}
 				}
+				### Where it stands for repair and refill: its dock (Earth, or a
+				### Spaceport of ours here; none here; in flight) and the share of
+				### its damage a month there repairs (sr_disp_fl_<n>_dock, _repair_pct).
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_dock_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/module_port.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_dock"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								text = "je_space_race_widget_fw_dock_none"
+								block "fp_dock_none" {}
+							}
+							te_sr_page_value = {
+								text = "je_space_race_widget_fw_dock_earth"
+								block "fp_dock_earth" {}
+							}
+							te_sr_page_value = {
+								text = "je_space_race_widget_fw_dock_port"
+								block "fp_dock_port" {}
+							}
+							te_sr_page_value = {
+								text = "je_space_race_widget_fw_dock_flight"
+								block "fp_dock_flight" {}
+							}
+						}
+					}
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_repair_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/page_crews.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_repair"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								default_format = "#v"
+								block "fp_repair" {}
+							}
+						}
+					}
+				}
 			}
 
 			### Right: its orders, then every location's forces.
@@ -10451,8 +10514,12 @@ types space_race_widget_types
 							}
 						}
 					}
+					### The leg to the destination picked, its propellant in red, with
+					### the reason on hover, when the fleet carries less (the
+					### destination popup's own red).
 					flowcontainer = {
 						direction = horizontal
+						ignoreinvisible = yes
 						spacing = 4
 						block "fp_leg_visible" {}
 
@@ -10465,41 +10532,17 @@ types space_race_widget_types
 							align = left|nobaseline
 							using = te_sr_fontsize_row
 							elide = right
+							tooltip = "je_space_race_widget_fw_leg_tt"
 							block "fp_leg" {}
 						}
-					}
-					### Marines: Land and Embark open the Marines popup.
-					flowcontainer = {
-						direction = horizontal
-						ignoreinvisible = yes
-						spacing = 4
-
-						te_sr_fp_caption = {
-							blockoverride "caption_text" {
-								text = "je_space_race_widget_fl_col_marines"
-							}
-						}
-						te_sr_fl_button = {
-							blockoverride "fl_btn" {
-								block "fl_land_button" {}
-							}
-							blockoverride "fl_btn_icon" {
-								texture = "gfx/interface/icons/space_race_icons/order_land.dds"
-							}
-							blockoverride "fl_btn_label" {
-								text = "je_space_race_widget_fl_land"
-							}
-						}
-						te_sr_fl_button = {
-							blockoverride "fl_btn" {
-								block "fl_embark_button" {}
-							}
-							blockoverride "fl_btn_icon" {
-								texture = "gfx/interface/icons/space_race_icons/order_embark.dds"
-							}
-							blockoverride "fl_btn_label" {
-								text = "je_space_race_widget_fl_embark"
-							}
+						textbox = {
+							autoresize = yes
+							max_width = 368
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							tooltip = "je_space_race_widget_dp_dv_short_tt"
+							block "fp_leg_short" {}
 						}
 					}
 					### Posture and target (6b), where the card shows them: away from
@@ -10515,7 +10558,18 @@ types space_race_widget_types
 							ignoreinvisible = yes
 							spacing = 4
 
+							te_sr_fp_caption = {
+								blockoverride "caption_text" {
+									text = "je_space_race_widget_fw_posture"
+								}
+							}
 							te_sr_posture_choice = {
+								blockoverride "pc_size" {
+									size = { 90 46 }
+								}
+								blockoverride "pc_label_width" {
+									max_width = 86
+								}
 								blockoverride "pc_icon" {
 									texture = "gfx/interface/icons/space_race_icons/posture_station.dds"
 								}
@@ -10536,6 +10590,12 @@ types space_race_widget_types
 								}
 							}
 							te_sr_posture_choice = {
+								blockoverride "pc_size" {
+									size = { 90 46 }
+								}
+								blockoverride "pc_label_width" {
+									max_width = 86
+								}
 								blockoverride "pc_icon" {
 									texture = "gfx/interface/icons/space_race_icons/posture_standoff.dds"
 								}
@@ -10556,6 +10616,12 @@ types space_race_widget_types
 								}
 							}
 							te_sr_posture_choice = {
+								blockoverride "pc_size" {
+									size = { 90 46 }
+								}
+								blockoverride "pc_label_width" {
+									max_width = 86
+								}
 								blockoverride "pc_icon" {
 									texture = "gfx/interface/icons/space_race_icons/posture_closein.dds"
 								}
@@ -10576,6 +10642,12 @@ types space_race_widget_types
 								}
 							}
 							te_sr_posture_choice = {
+								blockoverride "pc_size" {
+									size = { 90 46 }
+								}
+								blockoverride "pc_label_width" {
+									max_width = 86
+								}
 								blockoverride "pc_icon" {
 									texture = "gfx/interface/icons/space_race_icons/posture_interdict.dds"
 								}
@@ -10670,6 +10742,40 @@ types space_race_widget_types
 						### What we know of the target: the target button's hover, in the open.
 						te_sr_text = {
 							block "fp_intel" {}
+						}
+					}
+					### Marines: Land and Embark open the Marines popup.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+
+						te_sr_fp_caption = {
+							blockoverride "caption_text" {
+								text = "je_space_race_widget_fl_col_marines"
+							}
+						}
+						te_sr_fl_button = {
+							blockoverride "fl_btn" {
+								block "fl_land_button" {}
+							}
+							blockoverride "fl_btn_icon" {
+								texture = "gfx/interface/icons/space_race_icons/order_land.dds"
+							}
+							blockoverride "fl_btn_label" {
+								text = "je_space_race_widget_fl_land"
+							}
+						}
+						te_sr_fl_button = {
+							blockoverride "fl_btn" {
+								block "fl_embark_button" {}
+							}
+							blockoverride "fl_btn_icon" {
+								texture = "gfx/interface/icons/space_race_icons/order_embark.dds"
+							}
+							blockoverride "fl_btn_label" {
+								text = "je_space_race_widget_fl_embark"
+							}
 						}
 					}
 				}
@@ -10772,9 +10878,10 @@ types space_race_widget_types
 	### picker alone. The content sits under the entry's scope-free gate and its
 	### GetPlayerJournalEntry datacontext on a child, as the Colonies window's
 	### (gotchas #22, #29). 1218 of content, plus the window's margins
-	### (2 × 35), the list's (2 × 10) and a scrollbar: 1332. 720 high: the
-	### page's head (58), then the taller column, Orders over Locations
-	### (30 + 26 + 20 + 26 + 46 + 26 + 3 × 20 + 30 + 150, and the gaps).
+	### (2 × 35), the list's (2 × 10) and a scrollbar: 1332. 650 high: the
+	### window's own 108 (measured in game), the page's head (58), then the
+	### taller column, Orders over Locations (30 + 26 + 20 + 46 + 26 + 3 × 20
+	### + 26 + 30 + 150, and the gaps: about 460).
 	type te_sr_fleet_popup = te_ui_popup {
 		blockoverride "popup_visible" {
 			visible = "[GetVariableSystem.Exists('sr_fleet_focus')]"
@@ -10783,7 +10890,7 @@ types space_race_widget_types
 			text = "je_space_race_widget_fw_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1332 720 }
+			size = { 1332 650 }
 		}
 		blockoverride "popup_close" {
 			visible = "[Not( GetVariableSystem.Exists('te_popup') )]"
