@@ -44,13 +44,19 @@ te_history_charts/<system>.gui.in, each opened by an "@fragment <name>" line:
     ${plots}            alone on a line, in a fragment's own plot_layouts: the
                         three plots (plot_layouts below), at the line's indent
 
-THE PLOTS ARE GENERATED, every chart's at both sizes (plot_layouts): one
-te_history_plot a range, each built only while its range is shown, each with
+THE PLOTS ARE GENERATED, every chart's at both sizes (plot_layouts): the
+te_history_plots of each range, built only while its range is shown, each with
 the datamodel and the age test it reads. A shorter range's plot reads only the
 store's last samples, DataModelLast( <list>, '(int32)<n>' ), and keeps the age
 test on each (a gap in the store can't let an older one in); the longest
 range's reads the whole store and tests nothing, as the store holds no more
-than it shows. Which range an unset variable means is Range.default, for the
+than it shows. A shorter range has a second plot for a store that holds fewer
+samples than the range (a new game's first years, a power newly tracked): it
+reads the whole store, as the longest does, with the age test. The two take
+turns on the store's size (Store.holds), because DataModelLast asked for more
+than a list holds logs "Trying to reshape data model with negative offset"
+every frame, for every chart on screen (seen 2026-11-24 in a game of January
+1836: 300 to 430 error lines a second with Banking's History open). Which range an unset variable means is Range.default, for the
 monthly charts DEFAULT_RANGE, the one place it is decided: the plots' visible
 and every range button's enabled (range_row) follow it. Where the samples live
 and how old one is: the chart's Store (STORES). So no fragment carries
@@ -232,6 +238,13 @@ class Store:
 
     def age(self) -> str:
         return f"Subtract_CFixedPoint( {self.now}, ScriptContainer.GetVariableValue( '{self.index}' ) )"
+
+    def holds(self, n: int, yes: bool = True) -> str:
+        """The test that the store holds at least n samples (yes) or fewer
+        (not yes): vanilla's own pair on a list's size
+        (building_details_panel.gui, Building.GetCombatUnitTypes)."""
+        op = "GreaterThanOrEqualTo_int32" if yes else "LessThan_int32"
+        return f"{op}( GetDataModelSize( {self.samples} ), '(int32){n}' )"
 
 
 STORES = {
@@ -444,22 +457,31 @@ def fixed_width(width: int) -> list[str]:
 
 
 def plot_layouts(dims: Dims, rng: Range, store: Store) -> list[str]:
-    """The chart's three plots (THE PLOTS ARE GENERATED): one a range, shown
-    while it is the range shown (Range.shown), its bars a full range's width.
-    A shorter range's reads the store's last samples and tests each one's age;
-    the longest range's reads the whole store and tests nothing."""
+    """The chart's plots (THE PLOTS ARE GENERATED): each range's, shown while
+    it is the range shown (Range.shown), its bars a full range's width. The
+    longest range's one plot reads the whole store and tests nothing. A shorter
+    range has two, which take turns on the store's size (Store.holds): one
+    reads the store's last samples, while the store holds the range; the other
+    reads the whole store, while it holds less, since DataModelLast asked for
+    more than a list holds logs an error every frame. Both test each sample's
+    age."""
     widths = bars(dims, rng)
     out = []
     for v, n in zip(rng.values, rng.samples):
-        whole = v == rng.values[-1]
-        datamodel = f"[{store.samples}]" if whole else f"[DataModelLast( {store.samples}, '(int32){n}' )]"
-        out += ["te_history_plot = {", f'\tvisible = "[{rng.shown(v)}]"']
-        out += [f"\t{ln}" for ln in _override("bar_size", [f"size = {{ {widths[v]} {dims.bar_h} }}"])]
-        out += [f"\t{ln}" for ln in _override("sample_datamodel", [f'datamodel = "{datamodel}"'])]
-        if not whole:
-            out += [f"\t{ln}" for ln in _override(
-                "sample_visible", [f"visible = \"[LessThan_CFixedPoint( {store.age()}, '(CFixedPoint){n}' )]\""])]
-        out.append("}")
+        shown = rng.shown(v)
+        if v == rng.values[-1]:
+            plots = [(shown, f"[{store.samples}]", False)]
+        else:
+            plots = [(f"And( {shown}, {store.holds(n)} )", f"[DataModelLast( {store.samples}, '(int32){n}' )]", True),
+                     (f"And( {shown}, {store.holds(n, yes=False)} )", f"[{store.samples}]", True)]
+        for visible, datamodel, aged in plots:
+            out += ["te_history_plot = {", f'\tvisible = "[{visible}]"']
+            out += [f"\t{ln}" for ln in _override("bar_size", [f"size = {{ {widths[v]} {dims.bar_h} }}"])]
+            out += [f"\t{ln}" for ln in _override("sample_datamodel", [f'datamodel = "{datamodel}"'])]
+            if aged:
+                out += [f"\t{ln}" for ln in _override(
+                    "sample_visible", [f"visible = \"[LessThan_CFixedPoint( {store.age()}, '(CFixedPoint){n}' )]\""])]
+            out.append("}")
     return out
 
 

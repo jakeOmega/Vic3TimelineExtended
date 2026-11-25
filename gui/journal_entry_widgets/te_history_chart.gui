@@ -293,7 +293,10 @@ types te_history_chart_types
 		### Every chart's plots set it, one a range (gen_te_history_charts.py,
 		### plot_layouts): the longest range reads the whole list, a shorter
 		### one only its last samples, DataModelLast( <list>, <its samples> ),
-		### so a plot builds an item for no sample it can't show.
+		### so a plot builds an item for no sample it can't show. While the
+		### store holds fewer samples than a shorter range, that range's
+		### second plot reads the whole list instead: DataModelLast asked
+		### for more than a list holds logs an error every frame.
 		block "sample_datamodel" {
 			datamodel = "[Country.MakeScope.GetList('te_hist')]"
 		}
