@@ -1161,9 +1161,14 @@ types te_grid_widget_types
 				}
 				### The rest, under Show All: inside the container the flag
 				### shows, so while it is closed none of their rows is built or
-				### read (te_demog_town_rows' form).
+				### read (te_demog_town_rows' form). And only while more than
+				### ten are listed: the flag is the panel's, not the country's,
+				### so it outlives the country it was set on (another country's
+				### tab in National Info), and DataModelSkipFirst asked to skip
+				### more than a list holds logs "Trying to reshape data model
+				### with negative count" every frame (seen 2026-11-24).
 				flowcontainer = {
-					visible = "[GetVariableSystem.Exists('te_grid_stations_all_open')]"
+					visible = "[And( GetVariableSystem.Exists('te_grid_stations_all_open'), GreaterThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_grid_stations') ), '(int32)10' ) )]"
 					direction = vertical
 					ignoreinvisible = yes
 
