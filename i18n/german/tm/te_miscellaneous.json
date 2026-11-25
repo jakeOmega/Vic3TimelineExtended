@@ -1708,8 +1708,8 @@
   "de": "#bold Militärausbildung:#! #G +1#!"
  },
  "HEIR_ED_RANDOM_PLUS_1": {
-  "en": "#bold Random Training:#! #bold;yellow +1#! to a random skill",
-  "de": "#bold Zufällige Ausbildung:#! #bold;yellow +1#! auf eine zufällige Fähigkeit"
+  "en": "#bold Random Training:#! #G +1#! to a random skill",
+  "de": "#bold Zufällige Ausbildung:#! #G +1#! auf eine zufällige Fähigkeit"
  },
  "HEIR_ED_TOTAL_MINUS_1": {
   "en": "#bold Education Progress:#! #R -1#!",
@@ -32592,8 +32592,8 @@
   "de": "#lore in diesem Monat wurde etwas erfasst — eine Richtlinie, eine Aktion oder ein Crash. Fahren Sie mit der Maus über den Balken.#!"
  },
  "te_hist_mk_action": {
-  "en": "#b Action taken this month:#!",
-  "de": "#b Diesen Monat ergriffene Maßnahme:#!"
+  "en": "#v Action taken this month:#!",
+  "de": "#v Diesen Monat ergriffene Maßnahme:#!"
  },
  "te_hist_mk_crash_contagion_tt": {
   "en": "#R Financial contagion reached the country this month#! from a crash abroad.",
@@ -38940,12 +38940,12 @@
   "de": "Ein [concept_un_permanent_member] hat ein [concept_un_veto] eingelegt. Ein Referendum hat keine abgestufte Form, daher wird die Resolution gänzlich blockiert, und es findet keine Abstimmung statt."
  },
  "un_vote_reform_1_passed_tt": {
-  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #b New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
-  "de": "Die Charta-Reform I wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 70 auf 85#!, wodurch die Stufe „Stark“ freigeschaltet wird — dort werden aus Sanktionen Embargos, isoliert eine Verurteilung, und die [concept_un_dues] steigen auf 0,4% des BIP — sowie #G UN-Glaubwürdigkeit +2#!. #b Neue Tagesordnungspunkte:#! Der Internationale Gerichtshof, Waffenembargos, Vollmachten, die Ständige UN-Streitmacht, Wahlbeobachter und die Konvention über kulturelle Vielfalt können vor die Versammlung kommen. #b Der [concept_un_development_fund]#! nimmt, solange er besteht, 5% des UN-Budgets und zahlt an die Mitglieder unter einem Viertel des Durchschnitts."
+  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #v New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #v The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
+  "de": "Die Charta-Reform I wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 70 auf 85#!, wodurch die Stufe „Stark“ freigeschaltet wird — dort werden aus Sanktionen Embargos, isoliert eine Verurteilung, und die [concept_un_dues] steigen auf 0,4% des BIP — sowie #G UN-Glaubwürdigkeit +2#!. #v Neue Tagesordnungspunkte:#! Der Internationale Gerichtshof, Waffenembargos, Vollmachten, die Ständige UN-Streitmacht, Wahlbeobachter und die Konvention über kulturelle Vielfalt können vor die Versammlung kommen. #v Der [concept_un_development_fund]#! nimmt, solange er besteht, 5% des UN-Budgets und zahlt an die Mitglieder unter einem Viertel des Durchschnitts."
  },
  "un_vote_reform_2_passed_tt": {
-  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #b Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #b New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
-  "de": "Die Charta-Reform II wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 85 auf 100#!, wodurch die Stufe „Supranational“ freigeschaltet wird — dort steigen die [concept_un_dues] auf 1% des BIP, und jedes Großmitglied verhängt ein Embargo gegen die Sanktionierten — sowie #G UN-Glaubwürdigkeit +2#!. #b Vetoeinschränkung:#! Von nun an setzt sich eine Zweidrittelmehrheit über ein [Concept('concept_un_veto','Veto')] hinweg. #b Neue Tagesordnungspunkte:#! Verbindliche Waffenstillstände, beaufsichtigte Referenden und der Vertrag über das Verbot von Nuklearwaffen können vor die Versammlung kommen. #b Der [concept_un_development_fund]#! nimmt, solange er besteht, ein Viertel des UN-Budgets und zahlt an die Mitglieder unter der Hälfte des Durchschnitts."
+  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #v Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #v New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #v The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
+  "de": "Die Charta-Reform II wird mit einer Zweidrittelmehrheit angenommen. #G Die Obergrenze für das Ziel der [concept_un_authority] steigt von 85 auf 100#!, wodurch die Stufe „Supranational“ freigeschaltet wird — dort steigen die [concept_un_dues] auf 1% des BIP, und jedes Großmitglied verhängt ein Embargo gegen die Sanktionierten — sowie #G UN-Glaubwürdigkeit +2#!. #v Vetoeinschränkung:#! Von nun an setzt sich eine Zweidrittelmehrheit über ein [Concept('concept_un_veto','Veto')] hinweg. #v Neue Tagesordnungspunkte:#! Verbindliche Waffenstillstände, beaufsichtigte Referenden und der Vertrag über das Verbot von Nuklearwaffen können vor die Versammlung kommen. #v Der [concept_un_development_fund]#! nimmt, solange er besteht, ein Viertel des UN-Budgets und zahlt an die Mitglieder unter der Hälfte des Durchschnitts."
  },
  "un_vote_reform_passed_tt": {
   "en": "The Charter Reform was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#!",

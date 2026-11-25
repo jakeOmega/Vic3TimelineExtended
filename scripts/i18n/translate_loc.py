@@ -114,8 +114,11 @@ def load_english(english_dir: str = ENGLISH_DIR) -> list[Entry]:
 
 
 def plain_text(value: str) -> str:
-    """The translatable words of a value, markup removed."""
-    return re.sub(r"\$[^$]*\$|\[[^\]]*\]|#[a-zA-Z_]+[ ;]|#!|@\w+!|\\n", " ", value)
+    """The translatable words of a value, markup removed. A tag header goes
+    whether a space, a `;` or the end of the value follows it, and with every
+    plain name it combines (`#bold;yellow x` keeps only `x`; a value that is
+    only a tag, `"#blue_value"`, has no words)."""
+    return re.sub(r"\$[^$]*\$|\[[^\]]*\]|#[a-zA-Z_]+(?:;[a-zA-Z_]+)*(?:[ ;]|$)|#!|@\w+!|\\n", " ", value)
 
 
 def word_count(value: str) -> int:
