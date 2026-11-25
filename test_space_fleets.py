@@ -774,6 +774,21 @@ class PauseTest(unittest.TestCase):
         self.assertIn("though its inputs were bought", orders)
         self.assertIn("choose Paused", orders)
         self.assertIn("sr_sc_mode_orders_stopped_tt", loc)
+        # The idle comes first and without a lost month: the step that fills the
+        # last order idles the yards (the owner, 2026-11-25: Orders Only is right
+        # as built "as long as the tooltips describe it correctly"; the first
+        # wording read as if a month always went for nothing first).
+        self.assertLess(orders.index("leaves nothing on order, the yards stand idle"), orders.index("though its inputs were bought"))
+        # And an order's + says, while the yards are idle, that it waits a month.
+        order = _block(self.sguis, "sr_sc_order_sgui")
+        self.assertRegex(order, r"limit = \{ scope:pick >= 4 \}\s*custom_tooltip = sr_sc_order_more_tt\s*"
+                                r"if = \{\s*limit = \{\s*sr_sc_orders_only = yes\s*sr_sc_is_paused = yes\s*"
+                                r"NOT = \{ sr_sc_is_resuming = yes \}\s*\}\s*custom_tooltip = sr_sc_order_restarts_tt\s*\}")
+        restarts = re.search(r'(?m)^ sr_sc_order_restarts_tt:0 "(.*)"$', loc).group(1)
+        self.assertIn("builds nothing", restarts)
+        # A weight's - and + say when the mix is not in use.
+        self.assertRegex(_block(self.sguis, "sr_sc_mix_sgui"),
+                         r"if = \{\s*limit = \{ sr_sc_orders_only = yes \}\s*custom_tooltip = sr_sc_mix_unused_tt\s*\}")
 
     def test_the_ai_pauses_under_fiscal_stress(self):
         should = _block(self.triggers, "sr_sc_ai_should_pause")
@@ -1104,7 +1119,7 @@ class OrdersTest(unittest.TestCase):
         """Custom tooltips' keys, which loc_coverage doesn't read, and the
         table's hovers."""
         keys = set(re.findall(r"custom_tooltip = (sr_sc_\w+)", self.sguis)) | set(re.findall(r"text = (sr_sc_\w+_tt)", self.sguis))
-        self.assertEqual(len(keys), 5 + 4 + len(gsf.ROLES) + 5 + len(gsf.ROLES))   # modes; mix; orders
+        self.assertEqual(len(keys), 5 + 5 + len(gsf.ROLES) + 6 + len(gsf.ROLES))   # modes; mix; orders
         keys |= set(re.findall(r'tooltip = "(je_space_race_widget_sc_\w+)"', self.rows + _raw(self.GUI)))
         for key in sorted(keys):
             with self.subTest(key=key):

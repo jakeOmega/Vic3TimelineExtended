@@ -880,6 +880,10 @@ sr_sc_mix_sgui = {
 		else = {
 			custom_tooltip = sr_sc_mix_down_tt
 		}
+		if = {
+			limit = { sr_sc_orders_only = yes }
+			custom_tooltip = sr_sc_mix_unused_tt
+		}
 		hidden_effect = {
 			sr_sc_mix_by_op = yes
 		}
@@ -944,6 +948,16 @@ sr_sc_order_sgui = {
 		else_if = {
 			limit = { scope:pick >= 4 }
 			custom_tooltip = sr_sc_order_more_tt
+			# Idle in Orders Only: the order asks to resume (sr_sc_orders_sync), so
+			# its first month builds nothing; said where the order is placed.
+			if = {
+				limit = {
+					sr_sc_orders_only = yes
+					sr_sc_is_paused = yes
+					NOT = { sr_sc_is_resuming = yes }
+				}
+				custom_tooltip = sr_sc_order_restarts_tt
+			}
 		}
 		else = {
 			custom_tooltip = sr_sc_order_less_tt

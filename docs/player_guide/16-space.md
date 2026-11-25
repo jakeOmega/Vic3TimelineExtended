@@ -1406,7 +1406,7 @@ drawn selected:
 | Mode | What the yards build |
 |---|---|
 | Full | The orders first, then the rest of the month by the build mix. The default. |
-| Orders Only | The orders and nothing else. What a month has left after the last order is lost, and a month that finds nothing on order builds nothing and leaves the yards idle. |
+| Orders Only | The orders and nothing else. What a month has left after the last order is lost, and once nothing is on order the yards stand idle. |
 | Paused | Nothing. |
 
 Paused stops construction at once: neither Space Command nor your colonies'
