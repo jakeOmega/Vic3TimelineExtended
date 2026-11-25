@@ -939,18 +939,32 @@ class TabLayoutTest(unittest.TestCase):
         columns, read down each and then across. The registry mounts it in
         te_nation_tab_body's layout block, in place of te_nation_tab_sections,
         which carries no gate or context."""
+        column_3 = ["te_nation_section_science_and_space", "te_nation_section_international",
+                    "te_nation_sources_panel", "te_nation_all_panel"]
         columns = assert_wide_matches_narrow(self, "te_nation_wide_sections",
                                              layout=("te_nation_tab_body", "te_nation_tab_layout"),
-                                             added_gates=("te_nation_sources_panel", "te_nation_all_panel"))
-        # Where These Come From shows only once a permanent effect is listed,
-        # All Modifiers while the country holds any modifier: column 3 closes
-        # up on their two gates only when both panels hide.
-        assert_column_closes_with_its_sections(self, "te_nation_wide_sections", 3,
-                                               ["te_nation_sources_panel", "te_nation_all_panel"])
+                                             added_gates=column_3)
+        # Every section in column 3 has a gate of its own (Science and Space,
+        # International, Where These Come From, All Modifiers): it closes up on
+        # their four gates only when all four hide, early in a game.
+        assert_column_closes_with_its_sections(self, "te_nation_wide_sections", 3, column_3)
+        # balanced by height, in the tab's order (2026-11-24: 740, 800, 840 in a great power's 2032)
         self.assertEqual(columns, [
-            ["te_nation_overview_panel", "te_nation_section_governance", "te_nation_section_society"],
-            ["te_nation_section_economy", "te_nation_section_science_and_space", "te_nation_section_international"],
-            ["te_nation_sources_panel", "te_nation_all_panel"]])
+            ["te_nation_overview_panel", "te_nation_section_governance"],
+            ["te_nation_section_society", "te_nation_section_economy"],
+            column_3])
+        # Full screen each heading is its column's 520, not the side panel's 554
+        # (te_nation_header's te_nation_header_size), so two columns' headings
+        # stand 30 apart instead of meeting across the gutter.
+        wide = _type_body(self.gui, "te_nation_wide_sections")
+        headed = [s for s in sum(columns, []) if "te_nation_header = {" in _type_body(self.gui, s)]
+        self.assertEqual(len(headed), 5)
+        for section in headed:
+            with self.subTest(section=section):
+                self.assertRegex(wide, rf'{section} = \{{\s*blockoverride "te_nation_header_size" \{{\s*'
+                                       rf'size = \{{ 520 44 \}}\s*\}}\s*\}}')
+        self.assertRegex(_type_body(self.gui, "te_nation_header"),
+                         r'blockoverride "size" \{\s*block "te_nation_header_size" \{\s*size = \{ 554 44 \}\s*\}\s*\}')
         tab = next(t for t in window_gen.TABS if t.key == "nation")
         self.assertEqual((tab.body, tab.layout, tab.wide),
                          ("te_nation_tab_body", "te_nation_tab_layout", "te_nation_wide_sections"))

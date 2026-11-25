@@ -372,13 +372,24 @@ class _Walk:
             self.columns.append(None)                 # a section after the columns sits in none
 
 
+def _or_all(gates):
+    """Or over the gates, as a balanced tree, the first half first: the data
+    system's Or takes two (gen_te_systems_window.or_all builds the same)."""
+    if len(gates) == 1:
+        return gates[0]
+    mid = (len(gates) + 1) // 2
+    return f"Or( {_or_all(gates[:mid])}, {_or_all(gates[mid:])} )"
+
+
 def assert_column_closes_with_its_sections(test, wide_type, n, sections, text=None):
     """A wide layout's column_<n>_visible is exactly its sections' own gates,
-    joined: the gate of the one section it holds, or Or( a, b ) of two. It
-    hides the column only when each of them hides itself, so it can't hide a
-    section that would show; the column then closes up instead of keeping an
-    empty 520. Those sections take the gate as one more (added_gates)."""
-    test.assertIn(len(sections), (1, 2), "the data system's Or takes two")
+    joined: the gate of the one section it holds, Or( a, b ) of two, and for
+    more a balanced tree of Or, the first half first (Or( Or( a, b ), Or( c,
+    d ) ) of four). It hides the column only when each of them hides itself,
+    so it can't hide a section that would show; the column then closes up
+    instead of keeping an empty 520. Those sections take the gate as one more
+    (added_gates)."""
+    test.assertTrue(sections, "a column closes on the gates of the sections it holds")
     text = _all_gui() if text is None else _strip_comments(text)
     shown = [inner for kind, name, inner in _children(_type_body(text, wide_type))
              if kind == "blockoverride" and name == f"column_{n}_visible"]
@@ -389,8 +400,7 @@ def assert_column_closes_with_its_sections(test, wide_type, n, sections, text=No
         gates = [v for kind, k, v in _children(_type_body(text, section)) if kind == "property" and k == "visible"]
         test.assertEqual(len(gates), 1, f"{section} carries one visible of its own")
         own.append(gates[0].strip('"')[1:-1])
-    want = own[0] if len(own) == 1 else f"Or( {', '.join(own)} )"
-    test.assertEqual(props, [f'"[{want}]"'], f"{wide_type}: column_{n}_visible is its sections' own gates")
+    test.assertEqual(props, [f'"[{_or_all(own)}]"'], f"{wide_type}: column_{n}_visible is its sections' own gates")
 
 
 def assert_wide_matches_narrow(test, wide_type, narrow_types=(), *, layout=None, extra=(), outside=(),

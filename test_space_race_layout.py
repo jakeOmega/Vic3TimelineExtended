@@ -2150,7 +2150,10 @@ class PrivateTest(unittest.TestCase):
         moved = [(a, b) for a, b, x in block_defaults(body)
                  if x in {f"sr_window_{m}_live" for m in window_gen.SR_OWN_COLUMN}]
         self.assertEqual(len(moved), len(window_gen.SR_OWN_COLUMN))
-        self.assertEqual(sorted(spans), sorted(guards + moved))
+        # and each header's width, which the full-screen composer fills with its column's 520 (spec § 7.1)
+        sized = [(a, b) for a, b, x in block_defaults(body) if x == window_gen.SR_HEADER_HOOK]
+        self.assertEqual(len(sized), len(ALL) + 1)    # each entry's header and the idle note's
+        self.assertEqual(sorted(spans), sorted(guards + moved + sized))
         for a, _ in moved:
             self.assertTrue(in_spans(a, guards), "a moved block outside the player's own part")
         frames = [m.start() for m in re.finditer(r"\bte_system_tab_frame = \{", body)] + [len(body)]
@@ -2502,7 +2505,10 @@ class WideLayoutTest(unittest.TestCase):
         self.assertEqual(len(milestones), 1)
         self.assertEqual(re.findall(r'blockoverride "(\w+)" \{\s*\}', milestones[0]),
                          [f"sr_window_{m}_live" for m in self.LIVE.values()])
-        self.assertEqual(re.sub(r'blockoverride "\w+" \{\s*\}', "", milestones[0][:-1]).strip(), "")
+        # and, besides, each header's width at the column's 520 (spec § 7.1: sr_window_header_size, generated)
+        rest = re.sub(r'blockoverride "\w+" \{\s*\}', "", milestones[0][:-1])
+        rest = re.sub(r'blockoverride "sr_window_header_size" \{\s*size = \{ 520 44 \}\s*\}', "", rest, count=1)
+        self.assertEqual(rest.strip(), "")
         frames = _type_body(self.generated, "te_sr_window_milestones")
         for m in self.LIVE.values():
             with self.subTest(milestone=m):
