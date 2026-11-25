@@ -5,12 +5,15 @@ Module upkeep, free colony supply, colonial garrisons, a strike settlement and
 dome breach repairs were each Space Program throughput, which scaled the
 programme's outputs with its inputs (innovation, prestige, pace, module
 fabrication and storage), so a module's upkeep built modules faster. Each is
-now a goods_input_launch_capacity_mult on the Space Program building, at its
-units / (1 + the programme's throughput), from one monthly refresh site
-(sr_ccost_refresh), so a unit takes its share of the programme's base Launch
-Capacity whatever the funding and moves no output. These tests hold the
-modifiers, the values, the refresh, the two events, the AI's budget, the
-panel and the loc to that shape.
+now a goods_input_launch_capacity_mult on the Space Program building, from one
+monthly refresh site (sr_ccost_refresh), at 100 x its flat Launch Capacity a
+week / the building's Launch Capacity as billed (sr_emig_bill_divisor, as the
+settlers' bill), so a unit takes the same Launch Capacity whatever the mission
+and the funding and moves no output. Until the flat amounts (owner,
+2026-11-25) each was a share of the programme's base, so a garrison cost ten
+times as much on the Interstellar Mission as on Solar Colonization. These
+tests hold the modifiers, the values, the refresh, the two events, the AI's
+budget, the panel and the loc to that shape.
 """
 
 import os
@@ -21,13 +24,14 @@ import unittest
 REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
 
-# modifier -> (its key in the values, its share of base Launch Capacity a unit)
+# modifier -> (its key in the values, its Launch Capacity a week a unit): each its
+# old share of Solar Colonization's base, 10,000.
 COSTS = {
-    "sr_module_upkeep": ("upkeep", 0.01),
-    "sr_free_colony_supply": ("supply", 0.03),
-    "sr_colonial_garrisons": ("garrison", 0.02),
-    "sr_strike_settlement": ("strike", 0.05),
-    "sr_dome_breach_repairs": ("breach", 0.10),
+    "sr_module_upkeep": ("upkeep", 100),
+    "sr_free_colony_supply": ("supply", 300),
+    "sr_colonial_garrisons": ("garrison", 200),
+    "sr_strike_settlement": ("strike", 500),
+    "sr_dome_breach_repairs": ("breach", 1000),
 }
 # The three the entry declared: their units' count and its gate.
 COUNTED = {"upkeep": "sr_mod_upkeep_levels", "supply": "sr_free_supply_count", "garrison": "sr_garrison_count"}
@@ -96,17 +100,19 @@ class ModifierTest(unittest.TestCase):
         cls.modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
         cls.values = _strip(_raw(*VALUES))
 
-    def test_each_cost_is_launch_capacity_input_and_nothing_else(self):
-        for modifier, (_, share) in COSTS.items():
+    def test_each_cost_is_one_percent_of_launch_capacity_input_a_unit_and_nothing_else(self):
+        # As the settlers' bill: the multiplier carries the amount.
+        for modifier in list(COSTS) + ["sr_settler_launches"]:
             with self.subTest(modifier=modifier):
                 fields = re.findall(r"(?m)^\s*(\w+) = (\S+)", _block(self.modifiers, modifier))
                 self.assertEqual([f for f in fields if f[0] != "icon"],
-                                 [("goods_input_launch_capacity_mult", f"{share:.2f}")])
+                                 [("goods_input_launch_capacity_mult", "0.01")])
 
-    def test_the_values_shares_are_the_modifiers(self):
-        for key, share in COSTS.values():
+    def test_the_values_hold_each_amount(self):
+        for key, lc in COSTS.values():
             with self.subTest(key=key):
-                self.assertEqual(_flat(_block(self.values, f"sr_ccost_{key}_share")), f"value = {share:.2f}")
+                self.assertEqual(_flat(_block(self.values, f"sr_ccost_{key}_lc")), f"value = {lc}")
+        self.assertNotRegex(self.values, r"sr_ccost_\w+_share\b")
 
     def test_only_the_rewards_and_the_funding_are_still_throughput(self):
         found = set()
@@ -135,11 +141,27 @@ class ValueTest(unittest.TestCase):
         self.assertEqual(_flat(_block(self.values, "sr_program_throughput_factor")),
                          "value = modifier:building_space_program_throughput_add add = 1 min = 0.1")
 
-    def test_each_multiplier_divides_its_units_by_the_factor(self):
+    def test_each_multiplier_is_its_amount_over_the_billed_launch_capacity(self):
+        # 100 x units x the amount / (base x (1 + throughput)): a unit of the
+        # modifier is 1% of the building's Launch Capacity as billed.
         for key, _ in COSTS.values():
             with self.subTest(key=key):
-                self.assertEqual(_flat(_block(self.values, f"sr_ccost_{key}_mult")),
-                                 f"value = sr_ccost_{key}_units divide = sr_program_throughput_factor")
+                self.assertEqual(_flat(_block(self.values, f"sr_ccost_{key}_mult")), (
+                    f"value = sr_ccost_{key}_units multiply = sr_ccost_{key}_lc multiply = 100 "
+                    "divide = sr_emig_bill_divisor"))
+        population = _strip(_raw("common", "script_values", "sr_colony_population_values.txt"))
+        self.assertEqual(_flat(_block(population, "sr_emig_bill_divisor")),
+                         "value = sr_program_throughput_factor multiply = sr_emig_lc_base min = 1")
+
+    def test_a_unit_bills_its_amount_whatever_the_mission_and_the_funding(self):
+        # The engine's bill: base x (1 + throughput) x (1 + 0.01 x the multiplier).
+        for base in (500, 10_000, 100_000):
+            for throughput in (0.0, 0.75, 2.5):
+                for key, lc in COSTS.values():
+                    with self.subTest(base=base, throughput=throughput, key=key):
+                        billed = base * (1 + throughput)
+                        multiplier = 2 * lc * 100 / billed
+                        self.assertAlmostEqual(billed * (1 + 0.01 * multiplier) - billed, 2 * lc)
 
     def test_the_entry_costs_keep_the_entrys_gates(self):
         # The gates the entry's declarations had, and the entry active, as declared
@@ -158,14 +180,14 @@ class ValueTest(unittest.TestCase):
                     f"has_variable = {counter} }} add = 1 }}"))
                 self.assertRegex(self.values, rf"(?m)^{term} = {months}$")
 
-    def test_the_share_sums_every_cost(self):
-        share = _flat(_block(self.values, "sr_ccost_share_value"))
+    def test_the_total_sums_every_cost(self):
+        total = _flat(_block(self.values, "sr_ccost_lc_value"))
         for key, _ in COSTS.values():
             with self.subTest(key=key):
-                self.assertIn(f"add = {{ value = sr_ccost_{key}_units multiply = sr_ccost_{key}_share }}", share)
-        self.assertEqual(share.count("add = {"), len(COSTS))
-        self.assertEqual(_flat(_block(self.values, "sr_ccost_share_now")),
-                         "value = 0 if = { limit = { has_variable = sr_ccost_share } value = var:sr_ccost_share }")
+                self.assertIn(f"add = {{ value = sr_ccost_{key}_units multiply = sr_ccost_{key}_lc }}", total)
+        self.assertEqual(total.count("add = {"), len(COSTS))
+        self.assertEqual(_flat(_block(self.values, "sr_ccost_lc_now")),
+                         "value = 0 if = { limit = { has_variable = sr_ccost_lc } value = var:sr_ccost_lc }")
 
 
 class RefreshTest(unittest.TestCase):
@@ -217,18 +239,20 @@ class RefreshTest(unittest.TestCase):
                 self.assertIn(countdown, flat)
                 self.assertGreater(self.refresh.index(f"change_variable = {{ name = {counter}"), last_add)
 
-    def test_the_share_is_stored_for_the_ai_and_cleared_at_zero(self):
+    def test_the_total_is_stored_for_the_ai_and_cleared_at_zero(self):
         flat = _flat(self.refresh)
-        self.assertIn("set_local_variable = { name = sr_ccost_share_new value = sr_ccost_share_value }", flat)
-        self.assertIn("if = { limit = { local_var:sr_ccost_share_new > 0 } set_variable = { name = sr_ccost_share "
-                      "value = local_var:sr_ccost_share_new } } else_if = { limit = { has_variable = sr_ccost_share } "
-                      "remove_variable = sr_ccost_share }", flat)
+        self.assertIn("set_local_variable = { name = sr_ccost_lc_new value = sr_ccost_lc_value }", flat)
+        self.assertIn("if = { limit = { local_var:sr_ccost_lc_new > 0 } set_variable = { name = sr_ccost_lc "
+                      "value = local_var:sr_ccost_lc_new } } else_if = { limit = { has_variable = sr_ccost_lc } "
+                      "remove_variable = sr_ccost_lc }", flat)
+        # An older save's share (a share of base until the flat amounts) comes off.
+        self.assertIn("if = { limit = { has_variable = sr_ccost_share } remove_variable = sr_ccost_share }", flat)
 
     def test_it_runs_monthly_from_the_always_on_pulse_alone(self):
         always = _flat(_strip(_raw("common", "on_actions", "space_race_on_actions.txt")))
         self.assertIn("if = { limit = { OR = { sr_has_space_program = yes "
-                      "has_journal_entry = je_space_race_solar_colonization has_variable = sr_ccost_share "
-                      "has_variable = sr_strike_settlement_months has_variable = sr_dome_breach_months } } "
+                      "has_journal_entry = je_space_race_solar_colonization has_variable = sr_ccost_lc "
+                      "has_variable = sr_ccost_share has_variable = sr_strike_settlement_months has_variable = sr_dome_breach_months } } "
                       "sr_ccost_refresh = yes }", always)
         callers = [path for path, text in _walk("common", "events") if re.search(r"\bsr_ccost_refresh = yes", text)]
         self.assertEqual(callers, ["common/on_actions/space_race_on_actions.txt"])
@@ -246,41 +270,50 @@ class EventTest(unittest.TestCase):
                 self.assertIn(f"name = {event}.a", option)
                 tooltip = _loc(f"{'sr_strike_settlement' if key == 'strike' else 'sr_dome_breach_repairs'}_tt")
                 self.assertIn(f"#v {months}#! months", tooltip)
-                share = next(s for k, s in COSTS.values() if k == key)
-                self.assertIn(f"#v {round(share * 100)}%#! of the Space Program's base Launch Capacity", tooltip)
+                lc = next(v for k, v in COSTS.values() if k == key)
+                self.assertIn(f"#v {lc:,}#! Launch Capacity a week", tooltip)
                 self.assertRegex(option, rf"custom_tooltip = \{{ text = \w+_tt set_variable = \{{ "
                                          rf"name = {counter} value = {term} \}} \}}")
                 self.assertNotIn("add_modifier", option)
 
 
 class AiAndPanelTest(unittest.TestCase):
-    def test_the_ai_bills_the_share_beside_the_throughput(self):
+    def test_the_ai_adds_the_costs_to_every_missions_bill_not_the_throughput(self):
         values = _strip(_raw("common", "script_values", "sr_ai_mission_budget_values.txt"))
         self.assertEqual(_flat(_block(values, "sr_ai_program_throughput_unfunded")), (
             "value = 1 add = modifier:building_space_program_throughput_add "
-            "subtract = sr_ai_program_funding_throughput min = 1 add = sr_ccost_share_now"))
+            "subtract = sr_ai_program_funding_throughput min = 1"))
+        for mission in ("earth_orbit", "moon", "mars", "solar", "deep_space", "interstellar", "current", "now"):
+            with self.subTest(mission=mission):
+                bill = _flat(_block(values, f"sr_ai_mission_bill_{mission}"))
+                self.assertRegex(bill, r"^value = \w+ multiply = sr_ai_program_throughput_(un)?funded "
+                                       r"add = sr_ccost_lc_now multiply = sr_launch_capacity_unit_price$")
 
     def test_the_panel_shows_the_upkeep_in_launch_capacity(self):
         display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
         self.assertEqual(_flat(_block(display, "sr_disp_mod_upkeep_week")),
-                         "value = sr_ccost_upkeep_units multiply = sr_ccost_upkeep_share multiply = sr_emig_lc_base")
+                         "value = sr_ccost_upkeep_units multiply = sr_ccost_upkeep_lc")
         self.assertIn("sr_disp_mod_upkeep_week", _loc("je_space_race_widget_mod_upkeep_figure"))
-        self.assertIn("#v 1%#!", _loc("je_space_race_widget_mod_upkeep_tt"))
+        self.assertIn("#v 100#! for each level", _loc("je_space_race_widget_mod_upkeep_tt"))
 
 
 class LocTest(unittest.TestCase):
-    def test_each_desc_gives_its_share_and_none_says_throughput(self):
-        for modifier, (_, share) in COSTS.items():
+    def test_each_desc_gives_its_amount_and_none_says_throughput_or_a_share(self):
+        for modifier, (_, lc) in COSTS.items():
             with self.subTest(modifier=modifier):
                 desc = _loc(f"{modifier}_desc")
-                self.assertIn(f"#v {round(share * 100)}%#!", desc)
-                self.assertIn("base Launch Capacity", desc)
+                self.assertIn(f"#v {lc:,}#! Launch Capacity a week", desc)
                 self.assertNotIn("throughput", desc)
-        for key in ("concept_sr_free_colony_desc", "sr_free_supply_start_tt", "sr_aut_garrison_tt",
-                    "je_space_race_widget_autonomy_garrison_tt", "je_space_race_widget_free_trade_tt",
-                    "je_space_race_widget_mod_upkeep_label"):
+                self.assertNotIn("base Launch Capacity", desc)
+        amounts = {"concept_sr_free_colony_desc": 300, "sr_free_supply_start_tt": 300, "sr_aut_garrison_tt": 200,
+                   "je_space_race_widget_autonomy_garrison_tt": 200, "je_space_race_widget_free_trade_tt": 300}
+        for key, lc in amounts.items():
+            with self.subTest(key=key):
+                self.assertIn(f"#v {lc}#! Launch Capacity a week", _loc(key))
+        for key in list(amounts) + ["je_space_race_widget_mod_upkeep_label", "je_space_race_widget_mod_upkeep_tt"]:
             with self.subTest(key=key):
                 self.assertNotIn("throughput", _loc(key))
+                self.assertNotIn("base Launch Capacity", _loc(key))
 
 
 if __name__ == "__main__":

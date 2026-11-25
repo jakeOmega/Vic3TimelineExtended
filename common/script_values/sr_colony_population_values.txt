@@ -128,9 +128,11 @@ sr_emig_lc_base = {
 # sr_program_throughput_factor, sr_colony_cost_values.txt), which the mult would
 # otherwise multiply the settlers' bill by. The colonies' costs are Launch
 # Capacity mults beside this one, not throughput, so they add to it and leave
-# the divisor alone (until 2026-11-25 module upkeep and free colony supply were
-# throughput, and in it). Floored at 1: a base of 0 divides by nothing (Review
-# Focus 5). State-scope throughput (devastation, riots) is not divided out.
+# the divisor alone, and divide their own flat amounts by it too
+# (sr_ccost_<key>_mult, sr_colony_cost_values.txt; until 2026-11-25 module
+# upkeep and free colony supply were throughput, and in it). Floored at 1: a
+# base of 0 divides by nothing (Review Focus 5). State-scope throughput
+# (devastation, riots) is not divided out.
 sr_emig_bill_divisor = {
 	value = sr_program_throughput_factor
 	multiply = sr_emig_lc_base

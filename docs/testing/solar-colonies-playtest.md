@@ -186,8 +186,8 @@ for `TE_SR_SITES <world> is a free colony`.
    the most populous state without any). Leave them to govern themselves makes it
    Free, with our ties at 50. An outpost of fewer than 1,000 people offers only Close
    the outpost.
-5. **Free colonies.** Supply a free colony: the Space Program's Launch Capacity input shows Free Colony Supply (3% of
-   its base Launch Capacity; § The colonies' costs as Launch Capacity) and the entry Free Colony Trade, the colony's people grow again, and our ties climb 2 a month. At 100 (option g, then a month) "<World>
+5. **Free colonies.** Supply a free colony: the Space Program's Launch Capacity input shows Free Colony Supply (300 Launch
+   Capacity a week; § The colonies' costs as Launch Capacity) and the entry Free Colony Trade, the colony's people grow again, and our ties climb 2 a month. At 100 (option g, then a month) "<World>
    Asks to Join Us": welcome it and it is ours again at autonomy 20, with its people and modules.
 6. **A dead holder.** `annex <TAG>` an AI holder whose capital region nobody can take a colony for: a world with 1,000
    people or more reads Free, not Unclaimed.
@@ -1656,29 +1656,31 @@ set `te_popup` back to it.
 
 ## The colonies' costs as Launch Capacity (2026-11-25)
 
-Module upkeep, free colony supply, colonial garrisons, a strike settlement and dome breach repairs are each a share of the
-Space Program's base Launch Capacity, on the building, and no longer its throughput (`docs/systems/mod_systems/space_race.md`
-§ *The colonies' costs*). Simple or Full Colonies. No self-check line: a good's input mult added to a building at
-runtime was seen working (Space Command's old upkeep), and how a building's input sums its throughput and its mults can't
-be read from script, only from the tooltip (items 1 and 2).
+Module upkeep, free colony supply, colonial garrisons, a strike settlement and dome breach repairs are each a flat
+Launch Capacity a week, on the Space Program building, and no longer its throughput nor a share of its base
+(`docs/systems/mod_systems/space_race.md` § *The colonies' costs*). Simple or Full Colonies. No self-check line: a good's
+input mult added to a building at runtime was seen working (Space Command's old upkeep), and how a building's input sums
+its throughput and its mults can't be read from script, only from the tooltip (items 1 and 2).
 
 1. **The line.** Holding colonies with 12 module levels past each one's first, the Space Program's Launch Capacity input
-   tooltip shows Colony Modules, and its +% is 12 ÷ (1 + the programme's throughput): +12% unfunded, +6% at four
-   funding levels (+100% throughput). The Launch Capacity it adds is 12% of the methods' listed Launch Capacity at full
-   staff either way. The Modules view's Upkeep row reads that figure a week. **Fallback** if the line is missing: the
-   multiplier didn't reach the building through the local variable; carry it as `root.var:`, as the settlers' bill does.
-2. **Funding doesn't raise it.** Note the Launch Capacity the line adds, then fund the running milestone one level up: a
-   month later the line's +% has fallen and the Launch Capacity it adds is the same. **Fallback** if it rose: the engine
-   doesn't multiply a runtime input mult by throughput, so drop the division (`sr_ccost_<key>_mult` = the units).
+   tooltip shows Colony Modules, adding 1,200 Launch Capacity a week at full staff: its +% is 1,200 ÷ (the methods'
+   listed Launch Capacity × (1 + the programme's throughput)), +12% on Solar Colonization alone, unfunded. The Modules
+   view's Upkeep row reads 1,200. **Fallback** if the line is missing: the multiplier didn't reach the building through
+   the local variable; carry it as `root.var:`, as the settlers' bill does.
+2. **Neither funding nor the mission raises it.** Note the Launch Capacity the line adds, then fund the running
+   milestone one level up: a month later the line's +% has fallen and the Launch Capacity it adds is the same. Switch
+   the mission (Solar Colonization to Deep Space Exploration): the +% falls to about a fifth and the Launch Capacity is
+   the same. **Fallback** if funding raised it: the engine doesn't multiply a runtime input mult by throughput, so drop
+   `sr_program_throughput_factor` from `sr_emig_bill_divisor`, which Settler Launches shares (item 8 shows it too).
 3. **No output.** With fabrication running, queue modules: Colony Module Fabrication per Month doesn't rise as levels land
    (until 2026-11-25 each level raised it 1%), nor do the programme's innovation, prestige and pace.
-4. **Garrison, supply.** Garrison a colony (`.94`): Colonial Garrisons joins the line at 2% of base. Supply a free
-   colony: Free Colony Supply at 3%. The tooltips of both choices and the Autonomy view's hovers say so.
+4. **Garrison, supply.** Garrison a colony (`.94`): Colonial Garrisons joins the line at 200 Launch Capacity a week.
+   Supply a free colony: Free Colony Supply at 300. The tooltips of both choices and the Autonomy view's hovers say so.
 5. **The strike and the breach.** Fire `space_race_events.96` and meet the demands: next month Colony Strike Settlement
-   (5% of base) is on the line, and stays 36 months (`sr_strike_settlement_months` counts down in the console's
-   variables). `.97`'s Rebuild at once: Dome Breach Repairs, 10%, 12 months.
+   (500 a week) is on the line, and stays 36 months (`sr_strike_settlement_months` counts down in the console's
+   variables). `.97`'s Rebuild at once: Dome Breach Repairs, 1,000 a week, 12 months.
 6. **A rebuilt programme.** Demolish the Space Program and build it again: within a month the lines are back.
 7. **The AI.** In an observer run, an AI colony power's mission matches its budget: no program stepped down by a bill
-   the budget didn't see (`sr_ai_program_throughput_unfunded` adds the share).
+   the budget didn't see (every `sr_ai_mission_bill_*` adds `sr_ccost_lc_now`).
 8. **The settlers.** With settlers and modules both billed, Settler Launches and Colony Modules sit on the same input
    and the People view's Launch Capacity a week matches what Settler Launches adds.

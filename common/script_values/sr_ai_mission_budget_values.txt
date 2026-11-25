@@ -127,17 +127,11 @@ sr_ai_program_funding_throughput = {
 # estimate sound if the modifier read leaves the funding out: the bill then
 # reads at 1 plus the funding, the funding being nearly all of it in the
 # saves read (Germany 1958: 7 levels, 2.56 in all).
-# Then the colonies' costs (sr_ccost_share_now, sr_colony_cost_values.txt):
-# module upkeep, free colony supply, garrisons and the strike and breach terms,
-# each a share of the program's Launch Capacity at base that funding doesn't
-# raise, so a mission's Launch Capacity is billed at its base x (1 + throughput
-# + the share). Until 2026-11-25 they were throughput, in the modifier read.
 sr_ai_program_throughput_unfunded = {
 	value = 1
 	add = modifier:building_space_program_throughput_add
 	subtract = sr_ai_program_funding_throughput
 	min = 1
-	add = sr_ccost_share_now
 }
 
 sr_ai_program_throughput_funded = {
@@ -149,35 +143,45 @@ sr_ai_program_throughput_funded = {
 
 # Each mission's weekly bill without funding, at full staff, at our market's
 # Launch Capacity price, never below base (sr_launch_capacity_unit_price,
-# space_race_values.txt: a glut should not tempt the AI up a mission).
+# space_race_values.txt: a glut should not tempt the AI up a mission). Each
+# adds the colonies' costs (sr_ccost_lc_now, sr_colony_cost_values.txt): module
+# upkeep, free colony supply, garrisons and the strike and breach terms, a flat
+# Launch Capacity a week the program buys whatever the mission and the funding.
+# Until 2026-11-25 they were a share of the mission's base, in the throughput.
 sr_ai_mission_bill_earth_orbit = {
 	value = sr_mission_units_earth_orbit
 	multiply = sr_ai_program_throughput_unfunded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 sr_ai_mission_bill_moon = {
 	value = sr_mission_units_moon
 	multiply = sr_ai_program_throughput_unfunded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 sr_ai_mission_bill_mars = {
 	value = sr_mission_units_mars
 	multiply = sr_ai_program_throughput_unfunded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 sr_ai_mission_bill_solar = {
 	value = sr_mission_units_solar
 	multiply = sr_ai_program_throughput_unfunded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 sr_ai_mission_bill_deep_space = {
 	value = sr_mission_units_deep_space
 	multiply = sr_ai_program_throughput_unfunded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 sr_ai_mission_bill_interstellar = {
 	value = sr_mission_units_interstellar
 	multiply = sr_ai_program_throughput_unfunded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 
@@ -528,16 +532,18 @@ sr_ai_mission_target_tier = {
 # ---- The current mission against the budget -----------------------------------
 
 # The current mission's bill without funding, and with it (what the program
-# pays now, at full staff).
+# pays now, at full staff), each with the colonies' costs.
 sr_ai_mission_bill_current = {
 	value = sr_ai_mission_units_current
 	multiply = sr_ai_program_throughput_unfunded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 
 sr_ai_mission_bill_now = {
 	value = sr_ai_mission_units_current
 	multiply = sr_ai_program_throughput_funded
+	add = sr_ccost_lc_now
 	multiply = sr_launch_capacity_unit_price
 }
 
