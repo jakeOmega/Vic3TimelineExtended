@@ -1,0 +1,60 @@
+﻿# ============================================================================
+# SPACE RACE — alerts on the top bar (the owner, 2026-11-25)
+# ============================================================================
+# The format is vanilla's (the header of common/alert_types/00_alert_types.txt):
+# `valid` decides whether the alert shows, `open_panel` is what a click opens,
+# `type = alert` gives it a round icon of its own, and `color` its rim. The text
+# is alert_<key>_name, _desc, _hint and _action, and <key>_setting_name names
+# its switch in the game's alert settings (te_notifications_l_english.yml;
+# organize_loc.find_alert_type_keys keeps the keys out of te_unused, since only
+# the engine names them).
+#
+# `valid` is read on drawn frames, not ticks, about 200 times a game day
+# (docs/audits/late_game_performance.md, vanilla's low_expected_sol_in_state).
+# So these test the game rule and variables first and walk no list:
+# sr_launch_site_lost walks every building the country has, and is left out.
+# While a Space Program's state is occupied under Full Colonies it makes no
+# points, and the alerts may still show on the method's rate; the Modules
+# view's next-module line says "stopped".
+# ============================================================================
+
+# Colony modules (simple and full colonies; space_race.md § "Colony modules and
+# Extraplanetary Base room"). Both need a colony held, module fabrication
+# running (the Space Program's method or Orbital Yards, sr_mod_fab_rate) and
+# an empty queue (sr_mq_1_site is its head). They split on the module stock, as
+# the overview's Modules cell does ("Queue empty", red once the stock is full):
+# while it fills, nothing is lost yet (green); once it holds its cap,
+# sr_mod_month adds nothing more and each month's points are lost (yellow).
+sr_module_queue_empty = {
+	script_context = player_country
+	texture = "gfx/interface/icons/alert_icons/wasted_construction.dds"
+
+	valid = {
+		sr_colonies_contested_enabled = yes
+		sr_has_space_colony = yes
+		NOT = { has_variable = sr_mq_1_site }
+		sr_mod_fab_rate > 0
+		sr_mod_fab_stock_value < sr_mod_fab_stock_cap
+	}
+
+	open_panel = journal
+	type = alert
+	color = green
+}
+
+sr_module_stock_full = {
+	script_context = player_country
+	texture = "gfx/interface/icons/alert_icons/market_over_capacity.dds"
+
+	valid = {
+		sr_colonies_contested_enabled = yes
+		sr_has_space_colony = yes
+		NOT = { has_variable = sr_mq_1_site }
+		sr_mod_fab_rate > 0
+		sr_mod_fab_stock_value >= sr_mod_fab_stock_cap
+	}
+
+	open_panel = journal
+	type = alert
+	color = yellow
+}

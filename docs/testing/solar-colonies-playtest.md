@@ -1517,3 +1517,26 @@ is `event te_debug_space_race.4` (modules) and `.6` (marines).
    it, ten do.
 8. **The AI.** An AI with Training Grounds closes in with fewer battalions than one without, against the same
    garrison; one facing a trained garrison waits for more.
+
+## Module queue alerts on the top bar (2026-11-25)
+
+Two alerts, `sr_module_queue_empty` and `sr_module_stock_full` (`common/alert_types/te_space_race_alerts.txt`), the
+mod's first. The console is `event te_debug_space_race.4`: option b fills the stock to its cap, option c queues one of
+each module at our first colony.
+
+1. **The file loads.** Under Simple or Full Colonies, holding a colony, with Orbital Assembly running and nothing
+   queued, a green round alert with vanilla's hammer shows, "No Colony Modules Queued". Its hover gives the month's
+   points and the stock against its cap, and the hint names the Modules view of the Colonies section in Solar System
+   Colonization. If no alert shows at all, the engine did not read a mod file in `common/alert_types/` beside
+   vanilla's `00_alert_types.txt`: the fallback is a copy of vanilla's file under the same name with the two alerts
+   added, which then has to follow every vanilla patch.
+2. **The stock full.** Option b: the green alert gives way to a yellow one with vanilla's crate, "Colony Module Stock
+   Full", whose hover gives the cap and the points lost each month. The overview's Modules cell reads a red "Queue
+   empty" at the same time.
+3. **Queueing ends both.** Option c, or one module queued by hand: whichever alert showed goes at once.
+4. **The click** opens the Journal.
+5. **The switches.** The game's alert settings list "Colony Module Queue Empty" and "Colony Module Stock Full";
+   switching one off hides it.
+6. **Neither shows** with No Module Fabrication and no Orbital Yard or Mass Driver, with no colony held, or under
+   Races Only. The text shows no raw key and no stray `[`, and "Colony Module" in the name and the description opens
+   the concept on hover.

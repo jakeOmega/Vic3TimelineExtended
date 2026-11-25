@@ -319,6 +319,30 @@ def find_progress_bar_keys(project_directory):
     return bar_keys
 
 
+def find_alert_type_keys(project_directory):
+    """Finds the implicit text keys of the mod's top-bar alerts.
+
+    The engine names an alert's text off its key with no script reference:
+    `alert_<key>_name`, `_desc`, `_hint` and `_action`, and `<key>_setting_name`
+    for its switch in the alert settings (vanilla's `alerts_l_english.yml`).
+    Without this every key the mod's `common/alert_types/` needs would be filed
+    to te_unused_l_english.yml.
+    """
+    alert_keys = set()
+    alert_path = os.path.join(project_directory, "common", "alert_types")
+    if not os.path.isdir(alert_path):
+        return alert_keys
+    for file in os.listdir(alert_path):
+        if file.endswith(".txt"):
+            with open(os.path.join(alert_path, file), "r", encoding="utf-8-sig") as f:
+                matches = re.findall(r"^([\w\.-]+)\s*=\s*{", f.read(), re.MULTILINE)
+                for base_key in matches:
+                    for suffix in ("_name", "_desc", "_hint", "_action"):
+                        alert_keys.add(f"alert_{base_key}{suffix}")
+                    alert_keys.add(f"{base_key}_setting_name")
+    return alert_keys
+
+
 def find_war_goal_keys(project_directory):
     """Finds the implicit key suite for war goal types.
 
@@ -676,6 +700,11 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # and te_debug_demog.* event keys keep their own routing.
     if key.startswith("te_demog_"):
         return "MISCELLANEOUS"
+    # Top-bar alerts (common/alert_types/, find_alert_type_keys): the engine's
+    # alert_<key>_name/_desc/_hint/_action and <key>_setting_name file together
+    # with the notifications, ahead of the substring rules (`_desc`, `module`).
+    if key.startswith("alert_") or key.endswith("_setting_name"):
+        return "NOTIFICATIONS"
     # Tax-code engine probes (docs/testing/tax-code-probes.md), a temporary
     # harness kept in te_debug_tax_l_english.yml until it is removed. Tested
     # before the `law_` and `_add` rules, which would take the carrier law and
@@ -1069,6 +1098,7 @@ def build_output_plan(project_directory):
         find_journal_entry_keys,
         find_progress_bar_keys,
         find_war_goal_keys,
+        find_alert_type_keys,
     ]
     for func in parser_functions:
         used_keys.update(func(project_directory))

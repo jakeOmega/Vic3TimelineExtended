@@ -6210,3 +6210,22 @@ still to place by its share of the weight still to share, `round(weight ÷ weigh
 both off (`change_local_variable` on the two locals, which run on through an `every_scope_state`). The shares
 then add up to N, and the last state takes what is left (`sr_pers_kill_step`). A state's cap (its pops) passes
 what it can't take on to the states after it.
+
+## Top-Bar Alerts Are Script in `common/alert_types`, and Their `valid` Runs on Drawn Frames (1.15.2)
+
+The round alerts above the outliner ("Can Establish a new Company", "No Active Research") and the lines inside the
+briefcase of important actions are vanilla's `common/alert_types/00_alert_types.txt`, and a mod can add its own:
+`script_context` (an engine list in the file's header, `player_country` for a country test), `texture` (any icon;
+vanilla's are 150 × 150 in `gfx/interface/icons/alert_icons/`), `valid` (a trigger in that scope), `open_panel =
+<panel>|<tab>` or `open_popup`, `type = alert` (an icon of its own) or `important_action` /
+`angry_important_action` (inside the briefcase, angry first), `color = green | yellow | red`, and `alert_group`
+(`common/alert_groups/`) to fold several into one briefcase line. The text is `alert_<key>_name`, `_desc`, `_hint`
+and `_action`, with `GetPlayer` for the country (`[GetPlayer.MakeScope.ScriptValue('x')|0]`), and
+`<key>_setting_name` names its switch in the game's alert settings. No script names those keys, so
+`organize_loc.find_alert_type_keys` lists them, or they go to `te_unused_l_english.yml`. `open_panel = journal`
+opens the Journal, not an entry: vanilla never passes it a tab. `valid` is read on drawn frames, not ticks: vanilla's
+`low_expected_sol_in_state`, a walk of the player's states, ran 12,460 times in 60 game days at 446 µs a call
+(`docs/audits/late_game_performance.md`). Test the rule and variables first and walk no long list; the mod's
+module-queue alerts leave out `sr_launch_site_lost` for its walk of every building (`te_space_race_alerts.txt`).
+Unverified in game until the module-queue alerts are seen: that the engine reads a mod file in the folder beside
+vanilla's (`docs/testing/solar-colonies-playtest.md` § "Module queue alerts on the top bar").

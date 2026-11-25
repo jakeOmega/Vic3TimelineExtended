@@ -9,7 +9,7 @@ import unittest
 from organize_loc import (
     categorize_key, find_country_keys, find_diplo_action_keys, find_drift, find_parameterized_keys,
     find_quoted_loc_args, find_treaty_article_keys, find_used_keys_explicitly,
-    find_war_goal_keys, organize_all, treaty_article_families,
+    find_alert_type_keys, find_war_goal_keys, organize_all, treaty_article_families,
 )
 
 
@@ -492,6 +492,43 @@ class FindWarGoalKeysTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
+
+
+class FindAlertTypeKeysTests(unittest.TestCase):
+    def test_engine_implicit_suite(self):
+        with tempfile.TemporaryDirectory() as td:
+            _write(td, "common/alert_types/a.txt",
+                   "# comment\nte_my_alert = {\n\tvalid = { always = yes }\n\ttype = alert\n}\n")
+            keys = find_alert_type_keys(td)
+        for suffix in ("_name", "_desc", "_hint", "_action"):
+            self.assertIn(f"alert_te_my_alert{suffix}", keys)
+        self.assertIn("te_my_alert_setting_name", keys)
+        # Nested blocks are not alerts.
+        self.assertNotIn("alert_valid_name", keys)
+
+    def test_family_files_with_notifications(self):
+        for key in ("alert_sr_module_queue_empty_name", "alert_sr_module_queue_empty_desc",
+                    "alert_sr_module_queue_empty_hint", "alert_sr_module_queue_empty_action",
+                    "sr_module_queue_empty_setting_name"):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "NOTIFICATIONS")
+
+    def test_mod_alerts_have_their_text(self):
+        # Every alert the mod defines has its four texts and its setting name in
+        # the English loc: the engine shows a raw key for a missing one.
+        repo = os.path.dirname(os.path.abspath(__file__))
+        needed = find_alert_type_keys(repo)
+        loc_dir = os.path.join(repo, "localization", "english")
+        defined = set()
+        for name in os.listdir(loc_dir):
+            if name.endswith(".yml"):
+                with open(os.path.join(loc_dir, name), encoding="utf-8-sig") as f:
+                    defined.update(
+                        line.split(":", 1)[0].strip() for line in f
+                        if line.startswith(" ") and ":" in line
+                    )
+        self.assertTrue(needed, "the mod defines no alert")
+        self.assertEqual(sorted(needed - defined), [])
 
 
 class FindUsedKeysExplicitlyTests(unittest.TestCase):
