@@ -590,12 +590,14 @@ class ModulePersonnelTest(unittest.TestCase):
         # is one it can build a base for.
         self.assertNotIn("sr_pers_ai_may_staff_module", _raw(gss.ROOT / gss.EFFECTS_OUT))
 
-    def test_yards_build_hulls_only_with_space_militarization(self):
+    def test_yards_build_hulls_only_for_an_operational_space_command(self):
         """A base makes its owner a fleet power, whose month runs Space Command's
         build, so a base and an Orbital Yard would otherwise build warships a
-        technology early."""
+        technology early; and the fleets' upkeep is billed on Space Command, so
+        yards for a country with none would build warships with no bill (the
+        owner, 2026-11-25)."""
         rate = _block(self.values, "sr_sc_rate")
-        self.assertRegex(rate, r"if = \{\s*limit = \{ has_technology_researched = space_militarization \}\s*"
+        self.assertRegex(rate, r"if = \{\s*limit = \{ sr_sc_operational = yes \}\s*"
                                r"add = \{\s*value = sr_mod_units_yard\s*multiply = sr_mod_yard_ships\s*\}")
         self.assertEqual(rate.count("sr_mod_units_yard"), 1)
 

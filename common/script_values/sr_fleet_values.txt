@@ -74,11 +74,13 @@ sr_sc_mix_max = { value = 3 }
 # workforce-scaled state modifier, summed over the states the country controls
 # (design § 5.1: nothing is built in an occupied state). Staffing is in the
 # number already. Plus the colonies' Orbital Yards (colony management design
-# § 7), only with Space Militarization: the Space Forces Base comes with
-# Cislunar Infrastructure (the owner, 2026-11-25), and a base makes its owner a
-# fleet power whose month runs this build, so without the gate a base and a
-# yard would build warships a technology early. sr_sc_rate_buildings, Space
-# Command's alone, is the self-check's.
+# § 7), only while Space Command is operational (sr_sc_operational: a level in
+# a state the country controls), the owner, 2026-11-25. The fleets' upkeep is
+# billed on Space Command and they fire at half without it, so yards building
+# for a country with none would give it warships with no bill; and a Space
+# Forces Base, which comes with Cislunar Infrastructure, makes its owner a
+# fleet power whose month runs this build, a technology before Space
+# Command's. sr_sc_rate_buildings, Space Command's alone, is the self-check's.
 sr_sc_rate_buildings = {
 	value = 0
 	every_scope_state = {
@@ -89,7 +91,7 @@ sr_sc_rate_buildings = {
 sr_sc_rate = {
 	value = sr_sc_rate_buildings
 	if = {
-		limit = { has_technology_researched = space_militarization }
+		limit = { sr_sc_operational = yes }
 		add = {
 			value = sr_mod_units_yard
 			multiply = sr_mod_yard_ships

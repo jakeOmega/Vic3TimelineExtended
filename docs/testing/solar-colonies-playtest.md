@@ -1470,9 +1470,10 @@ point), o puts an enemy fleet at Earth.
 14. **The Research Station.** A staffed Research Station shows Off-World Research Stations on the Nation tab with
     +25 innovation cap and no research speed; the cap in the innovation tooltip rises by 25.
 15. **A base before fleets.** With Cislunar Infrastructure and without Space Militarization, build a Space Forces
-    Base and an Orbital Yard: Space Command's Built a month stays 0 and the reserve stays empty; with Space
-    Militarization, Built a month reads the yards' 0.5 a staffed level. A Black Site queued at the same time is
-    staffed once the base hires.
+    Base and an Orbital Yard: Space Command's Built a month stays 0 and the reserve stays empty. With Space
+    Militarization and still no Space Command it stays 0; once a Space Command level stands in a state we control,
+    Built a month adds the yards' 0.5 a staffed level. A Black Site queued at the same time is staffed once the
+    base hires.
 
 ## A giant planet's moons share an Orbital Yard, not their Defenses (2026-11-25)
 

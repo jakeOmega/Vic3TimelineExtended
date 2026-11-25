@@ -31,8 +31,8 @@ building_space_forces_base = {
 	# Cislunar Infrastructure, the technology of the first Module Fabrication
 	# method (the owner, 2026-11-25): colony modules take personnel, so a country
 	# can staff one from the first it can build. Fleets still wait for Space
-	# Militarization's Space Command, and an Orbital Yard builds hulls only with
-	# it (sr_sc_rate).
+	# Militarization's Space Command, and an Orbital Yard builds hulls only for a
+	# country with one operational (sr_sc_rate).
 	unlocking_technologies = {
 		cislunar_infrastructure
 	}

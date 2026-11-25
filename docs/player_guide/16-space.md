@@ -766,7 +766,7 @@ colonies:
 | Facility | A staffed level gives |
 |---|---|
 | Mining Complex | +50 Extraplanetary Base room at the colony |
-| Orbital Yard | +4 module fabrication points a month; under Full Colonies with Space Militarization, +0.5 Space Command strength a month. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
+| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month while you have a Space Command in a state you control. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
 | Research Station | +25 innovation cap, which pays only while your universities make more innovation than you can invest |
 | Cultural Center | +3% cultural pull, +1% prestige, and +1 to the colony's Resort Draw |
 | Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
