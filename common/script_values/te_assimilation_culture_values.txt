@@ -133,8 +133,8 @@ te_hc_pop_step = {
 }
 
 # Pop scope. The fraction for the heritage step: the rate times the owner's
-# crossing share, or 1 for a small pop. The caller has checked that the share
-# is above 0 (te_hc_cross).
+# crossing share, or 1 for a small pop where both are above 0. With no share
+# it is 0 for every pop.
 te_hc_pop_cross_step = {
 	value = te_hc_pop_rate
 	multiply = owner.te_hc_cross_share
@@ -142,6 +142,7 @@ te_hc_pop_cross_step = {
 		limit = {
 			total_size < te_hc_small_pop
 			te_hc_pop_rate > 0
+			owner = { te_hc_cross_share > 0 }
 		}
 		value = 1
 	}

@@ -36,8 +36,8 @@
 #   te_hc_capital_known   1 once te_hc_find_capital_host has run this pass
 #   te_hc_has_capital_host   1 where it found one
 #   te_hc_has_host, te_hc_has_targets, te_hc_has_local_<group>   per state, reset
-#                         at the top of every state's pass before anything reads
-#                         them: a temporary scope outlives the state it was saved
+#                         in every state's pass before anything reads them (the
+#                         last ten by te_hc_find_locals, under Hybrid Cultures): a temporary scope outlives the state it was saved
 #                         for, so these flags, not `exists`, say whether
 #                         scope:te_hc_host, the hybrids and a local culture are
 #                         this state's
@@ -116,7 +116,6 @@ te_hc_state_pass = {
 	save_temporary_scope_as = te_hc_state
 	set_local_variable = { name = te_hc_has_host value = 0 }
 	set_local_variable = { name = te_hc_has_targets value = 0 }
-	te_hc_reset_locals = yes
 	te_hc_pick_host = yes
 	if = {
 		limit = { local_var:te_hc_has_host = 1 }
@@ -228,7 +227,8 @@ te_hc_find_capital_host = {
 
 # ---- The local cultures (Hybrid Cultures only) ----
 
-# Any scope. Clears the ten per-state flags of te_hc_find_locals.
+# Any scope. Clears the ten per-state flags, as the first step of te_hc_find_locals. They are read under
+# Hybrid Cultures only (te_hc_language_step), which always runs te_hc_find_locals first.
 te_hc_reset_locals = {
 	set_local_variable = { name = te_hc_has_local_african value = 0 }
 	set_local_variable = { name = te_hc_has_local_central_asian value = 0 }
@@ -257,6 +257,7 @@ te_hc_reset_locals = {
 # a culture that has merged away (Afro-American into American) is not found, and
 # the merge is no way across the wall.
 te_hc_find_locals = {
+	te_hc_reset_locals = yes
 	scope:te_hc_owner = {
 		every_scope_culture = {
 			limit = {
