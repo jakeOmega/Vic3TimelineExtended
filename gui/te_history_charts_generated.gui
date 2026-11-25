@@ -4111,8 +4111,15 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			### Empty, with its line, until a census has a year's step behind it (te_demog_stepped_sgui):
+			### the game-start census is a seed, with no births, deaths or moves, so the store's first
+			### sample holds none and the frame stood empty, axis and all, through the first year. ONLY
+			### WHILE THE STORE IS A NEW GAME'S, under 3 samples: 1836's, and 1837's when the country's
+			### pulse falls before all its states' first steps. A census goes back to a seed later too
+			### (a gap of over a year, the rule off a year and on again; an emptied ring; the fourth
+			### guard; the console), and then the line would sit over years of bars.
 			blockoverride "empty_visible" {
-				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+				visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), And( LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)3' ), Not( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
@@ -4343,7 +4350,7 @@ types te_history_charts_generated_types
 				}
 			}
 			blockoverride "empty_visible" {
-				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+				visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), And( LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)3' ), Not( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
@@ -4577,8 +4584,15 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			### Empty, with its line, until a census has a year's step behind it (te_demog_stepped_sgui):
+			### the game-start census is a seed, with no births, deaths or moves, so the store's first
+			### sample holds none and the frame stood empty, axis and all, through the first year. ONLY
+			### WHILE THE STORE IS A NEW GAME'S, under 3 samples: 1836's, and 1837's when the country's
+			### pulse falls before all its states' first steps. A census goes back to a seed later too
+			### (a gap of over a year, the rule off a year and on again; an emptied ring; the fourth
+			### guard; the console), and then the line would sit over years of bars.
 			blockoverride "empty_visible" {
-				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+				visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), And( LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)3' ), Not( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
@@ -4815,7 +4829,7 @@ types te_history_charts_generated_types
 				}
 			}
 			blockoverride "empty_visible" {
-				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+				visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), And( LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)3' ), Not( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
@@ -6335,8 +6349,11 @@ types te_history_charts_generated_types
 					}
 				}
 			}
+			### Empty, with its line, until a census has counted deaths by cause (te_demog_dc_ready_sgui):
+			### the game-start census counts none, so the frame stood empty through the first year. Only
+			### while the store is a new game's, under 3 samples, as Births and Deaths' (its note).
 			blockoverride "empty_visible" {
-				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+				visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), And( LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)3' ), Not( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
@@ -6635,7 +6652,7 @@ types te_history_charts_generated_types
 				}
 			}
 			blockoverride "empty_visible" {
-				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+				visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), And( LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)3' ), Not( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 			}
 			blockoverride "empty_text" {
 				text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"

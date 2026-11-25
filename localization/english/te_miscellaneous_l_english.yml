@@ -1743,6 +1743,7 @@
  banking_dash_mon_fx_effect_float:0 "exports #v [Country.MakeScope.ScriptValue('te_mon_fx_export_edge_pct')|+=1]%#! · prices #v [Country.MakeScope.ScriptValue('te_mon_fx_imported_display')|+=1]#! pts"
  banking_dash_mon_fx_effect_label:0 "[Concept('concept_banking_exchange_rate','Trade and Prices')]"
  banking_dash_mon_fx_effect_none:0 "#lore none — the currency does not trade#!"
+ banking_dash_mon_fx_effect_par:0 "not overvalued"
  banking_dash_mon_fx_effect_peg:0 "overvalued by #v [Country.MakeScope.ScriptValue('te_mon_fx_overvaluation_display')|1]#!"
  banking_dash_mon_fx_effect_tt:0 "#header Trade and Prices#!\nEvery point under par is #G +1.25%#! $state_export_advantage_mult$ and #R −1.25%#! $state_import_advantage_mult$ in every state, and every point over par the reverse.\n$TOOLTIP_DELIMITER$\nPrices are measured against the currency's average of the last three years: #v [Country.MakeScope.ScriptValue('te_mon_fx_avg_display')|1]#!.\nUnder a fixed parity, where it would float: #v [Country.MakeScope.ScriptValue('te_mon_fx_shadow_display')|1]#!."
  banking_dash_mon_fx_effect_value:0 "[Country.GetCustom('te_mon_fx_effect')]"

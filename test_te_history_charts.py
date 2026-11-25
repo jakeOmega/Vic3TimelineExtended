@@ -1176,6 +1176,172 @@ class MarkerPipTest(unittest.TestCase):
                     self.assertEqual(len(_override_bodies(text, "marker_pips")), 1)
 
 
+_OPEN = re.compile(r"(?:\btype (\w+) = (\w+)|(?<![\w.\"])(\w+) =) \{")
+
+
+def _holders(text, pos):
+    """Every widget block holding pos, outermost first, as (name, kind, body):
+    a type's opening gives its name and its base widget, an instance its name
+    twice (blocks and blockoverrides are not widgets and are left out)."""
+    out = []
+    for m in _OPEN.finditer(text, 0, pos):
+        end = _close(text, m.end() - 1)
+        if end > pos:
+            out.append((m.group(1) or m.group(3), m.group(2) or m.group(3), text[m.end():end]))
+    assert out, f"nothing holds {pos}"
+    return out
+
+
+def _first_level(body):
+    """A block's own lines: (its `key = value` properties, the names of its
+    `name = {` children), its children's insides left out."""
+    props, kids, depth = {}, [], 0
+    for line in body.split("\n"):
+        if depth == 0:
+            m = re.match(r"\s*(\w+) = ([^{}\n]+?)\s*$", line)
+            if m:
+                props.setdefault(m.group(1), m.group(2))
+            m = re.match(r"\s*(\w+) = \{", line)
+            if m:
+                kids.append(m.group(1))
+        depth += line.count("{") - line.count("}")
+    return props, kids
+
+
+PRIMITIVES = {"flowcontainer", "widget", "textbox", "icon", "button"}
+
+
+def _resolved(text, name, kind, body):
+    """A container's own layout as it draws: an instance of a type (a name
+    that is no primitive widget) takes the type's properties and children,
+    then its own. (properties, children)."""
+    props, kids = {}, []
+    if name == kind and kind not in PRIMITIVES:
+        m = re.search(rf"\btype {kind} = \w+ \{{", text)
+        assert m, f"no type {kind} in the section's file"
+        props, kids = _first_level(text[m.end():_close(text, m.end() - 1)])
+    own_props, own_kids = _first_level(body)
+    return {**props, **own_props}, kids + own_kids
+
+
+# How a flowcontainer lays its items out, and the defaults of each.
+LAYOUT = {"direction": "horizontal", "spacing": "0", "ignoreinvisible": "no"}
+
+
+# The sections of several charts on one store, which say "nothing recorded
+# yet" once, under their range buttons, and draw their charts only once the
+# store holds a sample (te_history_section_empty, 2026-11-24). A new game's
+# Banking History drew the same sentence in eight frames. The Strategic
+# Reserve draws each good's one chart in that good's row, and Cultural
+# Hegemony one chart: each says it once already.
+SAY_ONCE = ["banking", "demographics", "nuclear_weapons", "united_nations", "global_warming", "colonial_empire"]
+# The two whose sections read the entry's country, as their "since" lines do
+# (test_global_warming_layout forbids an ambient Country there). Every other
+# is drawn in National Info too, under a Country with no journal entry.
+ENTRY_COUNTRY = {"global_warming", "united_nations"}
+
+
+class SectionEmptyStateTest(unittest.TestCase):
+    """A section's empty store is said once, not in every chart's frame."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.note = _type_body(_strip_comments(_read(CHART_GUI)), "te_history_section_empty")
+        cls.chart = _type_body(_strip_comments(_read(CHART_GUI)), "te_history_chart")
+        by_system = {}
+        for c in gen.CHARTS:
+            by_system.setdefault(c.system, []).append(c)
+        cls.by_system = by_system
+        cls.sections = {}
+        for system in SAY_ONCE:
+            text = _strip_comments(_read(os.path.join(REPO, SECTIONS[system])))
+            notes = [m.end() for m in re.finditer(r"(?<![\w.])te_history_section_empty = \{", text)]
+            spots = [re.search(rf"(?<![\w.]){gen.wrapper_name(c, gen.SMALL)} = \{{", text).start()
+                     for c in by_system[system]]
+            cls.sections[system] = (text, notes, spots)
+
+    def test_the_line_is_the_charts_own_words(self):
+        """The note's default is the te_hist store's emptiness and the chart
+        type's own empty text: no new key."""
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_visible")],
+                         [f'visible = "[IsDataModelEmpty( {gen.STORES["te_hist"].samples} )]"'])
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_text")],
+                         [b.strip() for b in _block_bodies(self.chart, "empty_text")])
+        self.assertIn("multiline = yes", self.note)
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_width")], ["max_width = 480"])
+
+    def test_every_section_of_several_charts_says_it_once(self):
+        self.assertEqual(sorted(s for s, cs in self.by_system.items() if len(cs) > 1 and s != "strategic_reserve"),
+                         sorted(SAY_ONCE), "a section of several charts joins SAY_ONCE")
+        for system in SAY_ONCE:
+            charts = self.by_system[system]
+            (store,) = {c.store for c in charts}
+            text, notes, spots = self.sections[system]
+            with self.subTest(system=system):
+                self.assertEqual(len(notes), 1, "said once")
+                # the charts: all in one flowcontainer, shown only while the store holds a sample
+                holders = {_holders(text, p)[-1] for p in spots}
+                self.assertEqual(len(holders), 1, "the charts share one container")
+                ((name, kind, body),) = holders
+                self.assertEqual((name, kind), ("flowcontainer", "flowcontainer"))
+                # the store's list as the charts read it, or the entry's country's in the two that read it
+                lst = gen.STORES[store].samples
+                if system in ENTRY_COUNTRY:
+                    lst = lst.replace("Country.MakeScope", "JournalEntry.GetCountry.MakeScope")
+                self.assertEqual(_first_level(body)[0].get("visible"), f'"[Not( IsDataModelEmpty( {lst} ) )]"')
+                # the line, on the same list, before the charts and after the range buttons
+                note = text[notes[0]:_close(text, notes[0] - 1)]
+                visible = _override_bodies(note, "empty_note_visible")
+                shown = visible[0].strip() if visible else _block_bodies(self.note, "empty_note_visible")[0].strip()
+                self.assertEqual(shown, f'visible = "[IsDataModelEmpty( {lst} )]"')
+                self.assertLess(text.rindex("te_history_range_button = {", 0, notes[0]), notes[0])
+                self.assertLess(notes[0], min(spots))
+                # in the charts' own words (Demographics' "next census")
+                words = {tuple(b.strip() for b in _override_bodies(gen.fragment(c), "empty_text")) for c in charts}
+                self.assertEqual(len(words), 1)
+                (own,) = words
+                said = tuple(b.strip() for b in _override_bodies(note, "empty_note_text"))
+                self.assertEqual(said, own, "the charts' own empty text, or the type's default for both")
+
+    def test_the_charts_container_lays_out_as_its_parent(self):
+        """The container the charts moved into lays them out as the section
+        did before (2026-11-24): its parent's direction, spacing and
+        ignoreinvisible, read from the parent's markup (an instance through its
+        type). A spacing changed, or Banking's ignoreinvisible dropped (it
+        holds the charts hidden for a currency), would move or gap them."""
+        for system in SAY_ONCE:
+            text, _notes, spots = self.sections[system]
+            *_, parent, inner = _holders(text, spots[0])
+            with self.subTest(system=system, parent=parent[0]):
+                mine = _resolved(text, *inner)[0]
+                theirs = _resolved(text, *parent)[0]
+                for key, default in LAYOUT.items():
+                    self.assertEqual(mine.get(key, default), theirs.get(key, default), key)
+
+    def test_a_panel_keeps_its_size_while_the_charts_wait(self):
+        """Where the line sits in a panel with a background of its own, the
+        line is the charts' width, fixed, so the panel doesn't shrink to the
+        line and the range buttons while the store is empty (the Colonial
+        Empire's colonial_empire_panel, 2026-11-24). Elsewhere it wraps at the
+        type's 480."""
+        framed = []
+        for system in SAY_ONCE:
+            text, notes, _spots = self.sections[system]
+            parent = _holders(text, notes[0] - 1)[-1]   # the note's own opening ends past pos
+            note = text[notes[0]:_close(text, notes[0] - 1)]
+            width = _override_bodies(note, "empty_note_width")
+            with self.subTest(system=system, parent=parent[0]):
+                if "background" in _resolved(text, *parent)[1]:
+                    framed.append(system)
+                    (kind,) = {c.kind for c in self.by_system[system]}
+                    w = gen.SMALL[kind].width
+                    self.assertEqual([ln.strip() for ln in width[0].strip().split("\n")] if width else [],
+                                     [f"minimumsize = {{ {w} -1 }}", f"maximumsize = {{ {w} -1 }}"])
+                else:
+                    self.assertEqual(width, [])
+        self.assertEqual(framed, ["colonial_empire"])
+
+
 class GeneratorTest(unittest.TestCase):
     def test_generated_file_is_current(self):
         with open(GENERATED, "rb") as f:

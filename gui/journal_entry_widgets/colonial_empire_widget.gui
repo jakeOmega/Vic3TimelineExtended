@@ -2797,18 +2797,38 @@ types colonial_empire_widget_types
 				text = "te_hist_since"
 			}
 
-			# ---- Colonial stability, 0-100 ----
-			# Sampled to the nearest 5 (see colonial_empire_refresh_display: the bar
-			# is trigger-only, so a comparison ladder is the only read). The legend
-			# says so.
-			te_hist_ce_stability = {}
+			### Nothing stored yet, or a country that keeps no history: said once, here,
+			### and the charts wait (te_history_section_empty). At the charts' width, 496,
+			### so colonial_empire_panel's background keeps its size while they wait.
+			te_history_section_empty = {
+				blockoverride "empty_note_width" {
+					minimumsize = { 496 -1 }
+					maximumsize = { 496 -1 }
+				}
+			}
 
-			# ---- Projected monthly drift, signed ----
-			# Exact: colonial_stability_drift_total, the same capped sum of leaf
-			# script values the bar applies. The scale is +/-2 because that sum is
-			# capped at +/-colonial_stability_drift_cap (1.5); the cap stripe is
-			# 0.17, the same 1/12 of the half-height the other signed charts use.
-			te_hist_ce_drift = {}
+			### The two charts, once the store holds a sample: until then each drew its own
+			### frame around the same sentence.
+			flowcontainer = {
+				visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_hist') ) )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				# colonial_empire_panel's spacing, none, as the charts had in it
+
+				# ---- Colonial stability, 0-100 ----
+				# Sampled to the nearest 5 (see colonial_empire_refresh_display: the bar
+				# is trigger-only, so a comparison ladder is the only read). The legend
+				# says so.
+				te_hist_ce_stability = {}
+
+				# ---- Projected monthly drift, signed ----
+				# Exact: colonial_stability_drift_total, the same capped sum of leaf
+				# script values the bar applies. The scale is +/-2 because that sum is
+				# capped at +/-colonial_stability_drift_cap (1.5); the cap stripe is
+				# 0.17, the same 1/12 of the half-height the other signed charts use.
+				te_hist_ce_drift = {}
+			}
 		}
 	}
 
