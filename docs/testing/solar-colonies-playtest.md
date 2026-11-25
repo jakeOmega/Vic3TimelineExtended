@@ -1454,6 +1454,29 @@ point), o puts an enemy fleet at Earth.
 9. **The AI.** In an observer run, AI fleet powers build Space Forces Bases (the census or the Map Room's Spacers
    map shows where), and none pauses Space Command for crews while it has a base level queued.
 
+## A giant planet's moons share an Orbital Yard, not their Defenses (2026-11-25)
+
+The owner: "all Jupiter's moons, Saturn's moons, etc. should count as the same place - i.e. you can build modules on
+Europa with an Orbital Yard on Io. This should not be the case for defenses, though." (`space_race.md`, *Colony
+modules*: *Shipments*; `gen_solar_sites.yard_mates`). No self-check: the reach is the generated
+`sr_site_yard_builds_<key>`, read by the build loop the section below already checks. What only the game shows is the
+hovers. The console is `event te_debug_space_race.4` (modules).
+
+1. **Across the moons.** Hold Io with a staffed Orbital Yard level and Europa with none, and queue a module for
+   Europa: the next module reads "in N mo", its hover is *Built at an Orbital Yard*, and at the pulse it is installed
+   at once, with no shipment and no wait for Jupiter's window. Titan's yard builds for Rhea the same way; Ceres's
+   doesn't build for Vesta, nor Pluto-Charon's for Eris.
+2. **The hovers.** Europa's Yard cell names Jupiter's six moons and says the moons' Defenses and marines stay apart;
+   Saturn's, Uranus's and Neptune's moons name theirs; Ceres's reads "this colony", Valles Marineris's Mars and
+   Shackleton's the Moon. The Yard column's header gives the whole rule, and the Defenses hover says each moon of a
+   giant planet is defended by its own. None shows a raw `$je_space_race_widget_mod_yard_tt_…$` key (the hovers are
+   spliced from three fragments). The yard's queue button names the reach too.
+3. **Defenses stay apart.** Under Full Colonies, with Defenses and marines at Io and none at Europa, close in on
+   Europa: Io's Defenses don't fire for it, and Io's marines don't count toward Europa's garrison (the target
+   hover's Defenses and marines are Europa's alone).
+4. **The yard's moon lost.** Occupy Io: Europa's next module ships from Earth again (it waits for a slot and the
+   window).
+
 ## Orbital Yards build on their world; Cultural Centers draw guests; Training Grounds train marines (2026-11-24)
 
 Three facility changes the owner asked for together (`space_race.md`, *Colony modules*: *Shipments*, *Facilities*,
@@ -1471,7 +1494,7 @@ is `event te_debug_space_race.4` (modules) and `.6` (marines).
    whose world has our yard: all seven are built in one month (four into shipment slots, three installed at once).
    Queue the yard's three first instead: the same seven.
 3. **A shared world.** A yard at Valles Marineris builds for our Olympus Mons too (the Moon's six sites the same);
-   one at Europa doesn't build for our Ganymede.
+   since 2026-11-25 one at Europa builds for our Ganymede too (the next section).
 4. **A blockade.** Blockade Earth: Mercury's modules wait ("on hold"), the yard world's are still built from the
    stock, except the Moon's (its colonies are blockaded while Earth is). Lose the launch site under Full Colonies:
    Mercury's read "stopped", and the yard world's are built while the stock lasts (the month adds no points). A

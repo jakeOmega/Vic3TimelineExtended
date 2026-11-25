@@ -766,7 +766,7 @@ colonies:
 | Facility | A staffed level gives |
 |---|---|
 | Mining Complex | +50 Extraplanetary Base room at the colony |
-| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month. Modules for your colonies on its world are built at the yard (see below) |
+| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
 | Research Station | +2% research speed |
 | Cultural Center | +3% cultural pull, +1% prestige, and +1 to the colony's Resort Draw |
 | Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
@@ -895,16 +895,23 @@ A module lands for whoever holds the colony then, and is lost if the site was
 released in the meantime, or its specializations' four levels or a finished
 world's Terraforming leave no room for it.
 
-A module for a colony on a world where you have an Orbital Yard is built at the
+A module for a colony within reach of one of your Orbital Yards is built at the
 yard instead. It costs the same points, but it is installed the month it is
 built: it takes no shipment slot, waits for no launch window and needs no launch
 from Earth, so a blockade of Earth doesn't hold it, except on the Moon: your
 Moon colonies count as blockaded while Earth is. It also doesn't count toward
 the four a month: once those are built, the first such module in the queue is
-built next, and so on while your stock covers them. The Moon is one world and
-Mars is another, so a yard at any of your colonies there builds for all of them;
-each of Jupiter's moons is a world of its own. The yard must be yours and neither
-blockaded nor occupied, and so must the colony. The next module reads "in N mo"
+built next, and so on while your stock covers them. A yard reaches every one
+of your colonies on its world, and around a giant planet every one on that
+planet's moons: a yard anywhere on the Moon builds for all your Moon colonies,
+one on Mars for all your Martian ones, and one on Io for Europa, Ganymede and
+Jupiter's other moons, as one on Titan does for Saturn's, and likewise around
+Uranus and Neptune. Each asteroid, Venus, Mercury and each world of the Kuiper
+Belt has only its own. The moons share nothing else: each moon's Defenses and
+marines defend that moon alone (see [Blockade, seizure and
+destruction](#blockade-seizure-and-destruction)). The yard's hover in the
+Modules view names the colonies it builds for. The yard must be yours and
+neither blockaded nor occupied, and so must the colony. The next module reads "in N mo"
 as usual, and its hover says it is built at a yard.
 
 Every level past the first needs a crew of 10,000 people (5,000 with Artificial
@@ -1511,7 +1518,9 @@ So the colony with the most Defenses stays the hardest to take, and a colony
 with none of its own still holds out longer than it would alone. An occupied
 colony shares nothing: its occupier's garrison defends it alone, and its
 Defenses fire for no one. The Defenses view's Marines and the target's hover
-give the shared figures.
+give the shared figures. The moons of Jupiter, Saturn, Uranus and Neptune share
+none of this: each moon is a world of its own, though an Orbital Yard on one of
+them builds for all of its planet's moons.
 
 ### Interdiction
 
