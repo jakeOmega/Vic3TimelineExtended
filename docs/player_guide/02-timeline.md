@@ -805,7 +805,7 @@ works abroad and digs; the buttons, an open opportunity and Interest Group
 Approval are only on your own.
 
 The state panel of a state with a Grand Monument, yours or another country's,
-shows a Grand Monument card under the tourism card: the monument's status, name
+shows a Grand Monument card above the tourism card: the monument's status, name
 and dedication, its grandeur with a bar toward its next step, its levels and age
 once finished, and the tourism
 output and local effect it gives that state. Hover a line for its
