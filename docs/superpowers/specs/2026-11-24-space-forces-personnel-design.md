@@ -236,3 +236,19 @@ hire.
   by a hidden event, before the base's weekly hiring most likely refills it: OK
   when the state's spacers fell by at least half the count, BROKEN when they
   didn't.
+
+## 10. Colony modules (the owner, 2026-11-25)
+
+"Spaceport, defenses, black site, training ground, and nuclear command center
+should each use 1k spacer jobs/'Personnel' (in addition to Crew)." Built as
+follows; the system doc's personnel bullet names every hook.
+
+| Call | Decision | Why |
+|---|---|---|
+| Which levels count | Every built level of the five (`gen_solar_sites.PERSONNEL_TYPES`) at a colony we hold and no one occupies, 1,000 each (`sr_pers_per_module`), not halved by Artificial Intelligence | A level, not a staffed level, as a damaged hull keeps its crew. An occupied colony's modules serve no one. A battalion isn't halved either. |
+| Who is short first | Nobody: the modules join in service, and one share covers fleets, marines and modules | One figure in the Crewed cell explains all three. The modules take theirs when they land, with no gate, as a lost base level does; the gates keep stopping only launches and refills. |
+| What a shortfall does | The share multiplies the three facilities' and Defences' staffed levels, and a Spaceport's repair level. Docking and the integrity bonus need only a level | The staffed levels are what every effect already reads, so one factor reaches all of them. |
+| Simple Colonies | No personnel: the bases are Full only | |
+| Before Space Militarization | The modules wait at a share of 0 under Full; the + button says so, and the AI plans them only with the technology | The base is the building that does the work, a hard gate by the design defaults. A Black Site from a colony's first year now waits for the era 11 technology. |
+| Holders with no fleet | `space_race_on_action` stores their share, since only a fleet power runs the fleets' month | Making them fleet powers would also run Space Command's month, whose Orbital Yard points would build hulls with no Space Command. |
+| Old saves | `sr_pers_modules_migrate_once`, once a save from the global step | § 8's migration runs per country at its first fleets month, which a holder with no fleet never has; and a save that ran it already needs the modules' levels too. Run per country, it would give a new game's first module holder a free base. |

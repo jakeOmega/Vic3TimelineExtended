@@ -544,7 +544,7 @@
  building_space_elevator_throughput_add:0 "$building_space_elevator$ [concept_throughput]"
  building_space_elevator_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_space_elevator$ buildings"
  building_space_forces_base:0 "Space Forces Base"
- building_space_forces_base_desc:0 "Barracks and training halls for the people who crew our warships in space and fight as their marines. Each staffed level trains #v 1,000#! Space Forces Personnel. A point of fleet strength needs #v 100#! of them to crew it, #v 50#! with $artificial_intelligence$, and a marine battalion needs #v 1,000#!. When ships are destroyed or marines lost, the base's $spacers_no_icon$ die with them."
+ building_space_forces_base_desc:0 "Barracks and training halls for the people who crew our warships in space and fight as their marines. Each staffed level trains #v 1,000#! [concept_sr_space_personnel]. A point of fleet strength needs #v 100#! of them to crew it, #v 50#! with $artificial_intelligence$, and a marine battalion, or a level of Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center at a colony of ours, #v 1,000#!. When ships are destroyed or marines lost, the base's $spacers_no_icon$ die with them."
  building_space_mine:0 "Extraplanetary Base"
  building_space_mine_throughput_add:0 "$building_space_mine$ [concept_throughput]"
  building_space_mine_throughput_add_desc:0 "A bonus or penalty to both input and output of $building_space_mine$ buildings"

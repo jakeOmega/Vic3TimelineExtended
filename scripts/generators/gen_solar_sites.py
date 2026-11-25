@@ -438,6 +438,14 @@ FACILITIES: tuple[Facility, ...] = (
 )
 FACILITY_TYPES = tuple(f.key for f in FACILITIES)
 FACILITY = {f.key: f for f in FACILITIES}
+# The modules that also take Space Forces Personnel under Full Colonies (the
+# owner, 2026-11-25: "spaceport, defenses, black site, training ground, and
+# nuclear command center should each use 1k ... Personnel (in addition to
+# Crew)"): sr_pers_per_module (1,000) a level at a colony THIS holds and no one
+# occupies, counted in service with the fleets and marines (sr_pers_module_levels,
+# sr_pers_in_service), and their effects run at the holder's crewed share
+# (sr_site_pers_share_<key>), as the fleets fire at it.
+PERSONNEL_TYPES = ("def", "port", "black", "train", "bunker")
 MODULE_TYPES = ("hab", "a", "b", "port", "def", *FACILITY_TYPES)
 MODULE_CODES = {"a": 1, "b": 2, "hab": 3, "def": 4, "port": 5,
                 **{t: 6 + n for n, t in enumerate(FACILITY_TYPES)}}
@@ -2201,7 +2209,12 @@ def render_module_values() -> list[str]:
            "#   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing",
            "#                                  x the charter's share (slice 5 design § 2)",
            "#   sr_site_<spec|generic>_built_<key>  the levels against each cap",
-           "#   sr_site_<facility>_staffed_<key>  a facility's levels at the colony's staffing",
+           "#   sr_site_<facility>_staffed_<key>  a facility's levels at the colony's staffing,",
+           "#                                  and a personnel module's (PERSONNEL_TYPES) at its",
+           "#                                  holder's crewed share too",
+           "#   sr_site_pers_share_<key>      under Full Colonies its holder's crewed share",
+           "#                                  (sr_pers_share_value), else 1",
+           "#   sr_site_pers_levels_<key>     its levels that take Space Forces Personnel",
            "#   sr_site_boon_<type>_<key>     1, plus sr_site_boon_bonus for each discovery there",
            "#                                  whose recorded option boosts the type (only where",
            "#                                  one can: gen_solar_sites.DISCOVERY_BOONS)",
@@ -2251,6 +2264,18 @@ def render_module_values() -> list[str]:
                 "\t\tadd = 1",
                 f"\t\tdivide = sr_site_levels_{k}",
                 "\t}",
+                "}",
+                # The personnel modules' share (PERSONNEL_TYPES): the holder's
+                # stored crewed share, as sr_site_marines_share_<key> reads it.
+                f"sr_site_pers_share_{k} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ sr_colonies_full_enabled = yes exists = global_var:sr_site_holder_{k} }} "
+                f"global_var:sr_site_holder_{k} = {{ add = sr_pers_share_value }} }}",
+                "\telse = { add = 1 }",
+                "}",
+                f"sr_site_pers_levels_{k} = {{",
+                *[f"\t{'value' if i == 0 else 'add'} = sr_site_{t}_value_{k}"
+                  for i, t in enumerate(_types_at(site, PERSONNEL_TYPES))],
                 "}"]
         for slot, ships in zip(("a", "b"), site.ships):
             out += [f"sr_site_mult_{slot}_{k} = {{",
@@ -2373,7 +2398,8 @@ def _hab_values(site: Site) -> list[str]:
            "}"]
     for t in FACILITY_TYPES:
         if t in generic_types(site):
-            out.append(f"sr_site_{t}_staffed_{k} = {{ value = sr_site_{t}_value_{k} multiply = sr_site_staffing_{k} }}")
+            pers = f" multiply = sr_site_pers_share_{k}" if t in PERSONNEL_TYPES else ""
+            out.append(f"sr_site_{t}_staffed_{k} = {{ value = sr_site_{t}_value_{k} multiply = sr_site_staffing_{k}{pers} }}")
     out += _boon_values(site)
     out += ["# Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).",
             f"sr_site_ebase_room_{k} = {{",
@@ -2479,6 +2505,29 @@ def render_facility_values() -> list[str]:
         out += [f"\tif = {{ limit = {{ {_facility_serves(s, f)} }} add = {eff_value(s, f.key)} }}" for s in SITES
                 if f.key in generic_types(s)]
         out.append("}")
+    # Space Forces Personnel (PERSONNEL_TYPES; the owner, 2026-11-25): the levels
+    # in service, at the colonies THIS holds and no one occupies (an occupied
+    # colony's modules serve no one), blockaded or not; and those coming, THIS's
+    # queue and the shipments to its colonies, for the + button's line.
+    held = "global_var:sr_site_holder_{k} ?= this"
+    out += ["# Country scope: THIS's module levels that take Space Forces Personnel",
+            "# (gen_solar_sites.PERSONNEL_TYPES), at the colonies it holds unoccupied,",
+            "# which sr_pers_modules counts in service (sr_fleet_values.txt).",
+            "sr_pers_module_levels = {", "\tvalue = 0",
+            *[f"\tif = {{ limit = {{ {held.format(k=s.key)} NOT = {{ has_global_variable = sr_site_occupier_{s.key} }} }} "
+              f"add = sr_site_pers_levels_{s.key} }}" for s in SITES],
+            "}",
+            "# ... and those queued or on their way to its colonies (the + button's line).",
+            "sr_mod_pers_pending = {", "\tvalue = 0"]
+    for s in SITES:
+        k = s.key
+        types = _types_at(s, PERSONNEL_TYPES)
+        out += [f"\tif = {{ limit = {{ has_variable = sr_mq_{t}_{k} }} add = var:sr_mq_{t}_{k} }}" for t in types]
+        out += [f"\tif = {{ limit = {{ {held.format(k=k)} }}",
+                *[f"\t\tif = {{ limit = {{ has_global_variable = sr_site_ship_{t}_{k} }} add = global_var:sr_site_ship_{t}_{k} }}"
+                  for t in types],
+                "\t}"]
+    out.append("}")
     out += ["# The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a Habitat",
             "# (code 3) the world's sr_mod_hab_cost_<key>, every other module the base (colony",
             "# people design § 4.3).",
@@ -2602,6 +2651,11 @@ def _module_ai(site: Site) -> list[str]:
                 f"\t\t\t\t{crew}"]
         if why:
             out.append(f"\t\t\t\t{why}")
+        if t in PERSONNEL_TYPES:
+            # Under Full Colonies, only once it can build the Space Forces Bases
+            # that staff it; its base builder follows the demand
+            # (sr_pers_may_build_government).
+            out.append("\t\t\t\tsr_pers_ai_may_staff_module = yes")
         out += ["\t\t\t}", f"\t\t\t{_queue_call(site, t)}", "\t\t}"]
     out += ["\t}", "}"]
     return out
@@ -3786,7 +3840,9 @@ def render_slice6_values() -> list[str]:
            "#                                  (sr_assault_loss_share; design § 5.2)",
            "#   sr_site_assault_need_<key>     the need and the toll: what the closing-in marines, at",
            "#                                  their own share and weight, must exceed",
-           "#   sr_site_def_staffed_<key>      its Defences levels at its staffing",
+           "#   sr_site_def_staffed_<key>      its Defences levels at its staffing and its holder's",
+           "#                                  crewed share (PERSONNEL_TYPES)",
+           "#   sr_site_port_crewed_<key>      its Spaceport levels at that share (the repairs')",
            "#   sr_site_def_others_<key>       ... the holder's at its other colonies on the same world",
            "#   sr_site_def_shared_<key>       ... the two: the Defences that fire for it",
            "#   sr_site_def_shared_levels_<key> the same in levels, unstaffed (the panel's)",
@@ -3808,7 +3864,11 @@ def render_slice6_values() -> list[str]:
         out += [f"sr_site_shared_marines_{k} = {{", f"\tvalue = sr_site_marines_value_{k}",
                 *[f"\tif = {{ limit = {{ {shares[t.key]} }} add = sr_site_marines_value_{t.key} }}" for t in mates],
                 "}",
-                f"sr_site_def_staffed_{k} = {{ value = sr_site_def_value_{k} multiply = sr_site_staffing_{k} }}"]
+                f"sr_site_def_staffed_{k} = {{ value = sr_site_def_value_{k} multiply = sr_site_staffing_{k} "
+                f"multiply = sr_site_pers_share_{k} }}",
+                # A Spaceport repairs at its personnel's share (gen_space_fleets'
+                # sr_loc_port_level_<loc>); it docks with a level of any staff.
+                f"sr_site_port_crewed_{k} = {{ value = sr_site_port_value_{k} multiply = sr_site_pers_share_{k} }}"]
         if mates:
             out += [f"sr_site_def_others_{k} = {{", "\tvalue = 0",
                     *[f"\tif = {{ limit = {{ {shares[t.key]} }} add = sr_site_def_staffed_{t.key} }}" for t in mates],

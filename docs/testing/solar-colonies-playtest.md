@@ -1430,6 +1430,7 @@ point), o puts an enemy fleet at Earth.
 | `TE_SELF_CHECK OK/BROKEN pers_pop_type country=… spacers=… occupancy=… personnel=… want=…` | once a game, three months after a country first has a Space Forces Base of a level or more (whatever its staff; later while the base is under half staff) | the base's state holds Spacers and its `state_sr_space_personnel_add` is 0.75 to 1.5 times 1,000 × the base's levels × its occupancy (throughput moves it: −10% unincorporated, +10% a new capital, economies of scale) | `spacers=0`: the pop type, or its social class (`te_spacers_classes.txt`, one per hierarchy), doesn't load or doesn't hire (also look for a pop-type or social-class error in `error.log`); `personnel` off `want`: the method's workforce-scaled state modifier doesn't reach the state as the batteries' does | for the pop type, put Spacers in vanilla's lower class by a full restatement of `lower_class` (and the caste and Edo classes) rather than classes of their own; for the figure, compute capacity in script, level × occupancy × 1,000 by `is_building_type`, as `ship_construction`'s fallback does |
 | `TE_SELF_CHECK OK/BROKEN pers_kill country=… spacers_before=… killed=… spacers_day_on=…` | once a game, a day after the first state kills a hundred or more Spacers (`space_race_events.140`) | the state's Spacers fell by at least half the count: `kill_population_in_state` with `pop_type = spacers` takes the mod's pop type | they fell by less. A weekly hire falling in that day can refill a small kill (about one game in seven), so a BROKEN with the base's staff up since wants a second game before the fallback | kill by `every_scope_pop = { limit = { is_pop_type = spacers } }` with `kill_population_percent` scaled to the count |
 | `TE_SR_PERS migrate country=… in_service=… grace_until_month=…` | once a country, its first fleets month, only when an old save's fleets need more personnel than its bases give | (a record, not a check) the levels the migration built, in Space Command's state or the capital | | |
+| `TE_SR_PERS migrate_modules country=… need=… grace_until_month=…` | once a save, its first month under Full Colonies after the colony modules took personnel (2026-11-25), for each country holding a Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center whose need tops its bases' capacity | (a record, not a check) the levels it built beyond those built and queued, in Space Command's state or the capital | | |
 
 1. **The building.** With Space Militarization under Full Colonies, the build menu offers Space Forces Base in any
    state, as a government building only. Its method's tooltip shows 1,000 Spacers a level and +1,000 Space Forces
@@ -1454,6 +1455,20 @@ point), o puts an enemy fleet at Earth.
    appear in Space Command's state (`TE_SR_PERS migrate`), and Crewed reads 100% for six months while they hire.
 9. **The AI.** In an observer run, AI fleet powers build Space Forces Bases (the census or the Map Room's Spacers
    map shows where), and none pauses Space Command for crews while it has a base level queued.
+10. **Colony modules take personnel** (the owner, 2026-11-25). Under Full Colonies, with a colony and one staffed
+    base level, hover a Black Site's + button: the personnel line says 1,000 are spare; queue two and the next
+    hover says none are spare. Once one lands, the Personnel cell's in service rises by 1,000 and its hover names
+    the module levels. With two landed and the one level, Crewed reads about 50% and the Nation tab's Off-World
+    Black Sites reads +1 intelligence capacity, two levels at half.
+11. **A holder with no fleet.** In a country with a colony, a Training Ground and no Space Forces Base or Space
+    Command, Crewed reads 0% a month after it lands and Off-World Training Grounds is gone from the Nation tab; build
+    a base level and both come back as it hires.
+12. **Spaceport repairs.** With a damaged fleet docked at a colony Spaceport and Crewed at 50%, the fleet repairs
+    about 5% of its damage a month a level instead of 10%, and still refills and refits.
+13. **An old save's modules.** Load a save from before 2026-11-25 with colony Black Sites or Defenses: in the first
+    month base levels appear (`TE_SR_PERS migrate_modules`) and Crewed holds at 100% for six months.
+14. **The Research Station.** A staffed Research Station shows Off-World Research Stations on the Nation tab with
+    +25 innovation cap and no research speed; the cap in the innovation tooltip rises by 25.
 
 ## A giant planet's moons share an Orbital Yard, not their Defenses (2026-11-25)
 
