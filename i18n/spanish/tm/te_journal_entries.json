@@ -2092,8 +2092,8 @@
   "es": "Las temperaturas globales se mantienen cerca de los niveles preindustriales. La anotación se abre cuando el mundo se haya calentado #v 0,1 °C#!, o cuando adoptemos [GetLawType('law_fossil_expansion_moratorium').GetName] o [GetLawType('law_managed_fossil_phaseout').GetName]. Sus políticas climáticas se abren a los #v 0,5 °C#!."
  },
  "je_global_warming_status_moderate": {
-  "en": "#bold Warming:#! #Y Moderate#! - The planet has warmed noticeably. Crop disruptions and erratic weather become common.",
-  "es": "#bold Calentamiento:#! #Y Moderado#! - El planeta se ha calentado de forma notable. Las perturbaciones en las cosechas y el clima errático se vuelven habituales."
+  "en": "#bold Warming:#! #bold;yellow Moderate#! - The planet has warmed noticeably. Crop disruptions and erratic weather become common.",
+  "es": "#bold Calentamiento:#! #bold;yellow Moderado#! - El planeta se ha calentado de forma notable. Las perturbaciones en las cosechas y el clima errático se vuelven habituales."
  },
  "je_global_warming_status_negligible": {
   "en": "#bold Warming:#! #G Negligible#! - Global temperatures remain near pre-industrial levels.",
@@ -2108,8 +2108,8 @@
   "es": "#bold Calentamiento:#! #o Considerable#! - El calentamiento ha alcanzado niveles peligrosos. Se aceleran las inundaciones costeras, la sequía y los desplazamientos masivos."
  },
  "je_global_warming_status_slight": {
-  "en": "#bold Warming:#! #Y Slight#! - Global temperatures have risen slightly. Early signs of shifting weather patterns emerge.",
-  "es": "#bold Calentamiento:#! #Y Leve#! - Las temperaturas globales han subido ligeramente. Surgen los primeros indicios de cambios en los patrones meteorológicos."
+  "en": "#bold Warming:#! #bold;yellow Slight#! - Global temperatures have risen slightly. Early signs of shifting weather patterns emerge.",
+  "es": "#bold Calentamiento:#! #bold;yellow Leve#! - Las temperaturas globales han subido ligeramente. Surgen los primeros indicios de cambios en los patrones meteorológicos."
  },
  "je_grand_monuments": {
   "en": "Monuments",
@@ -2380,8 +2380,8 @@
   "es": "Operaciones extranjeras conocidas"
  },
  "je_iw_known_ordered": {
-  "en": "#Y Exposure ordered#!",
-  "es": "#Y Exposición ordenada#!"
+  "en": "#bold;yellow Exposure ordered#!",
+  "es": "#bold;yellow Exposición ordenada#!"
  },
  "je_iw_known_ordered_tt": {
   "en": "The exposure goes out as soon as no other exposure of this country's operations is open, by our service's next monthly review after that at the latest; the country may take weeks to answer for one. Once ours is settled, the operation ends and leaves this list.",
@@ -2664,8 +2664,8 @@
   "es": "#bold $iw_op_name_nuclear_sabotage$#!\\nSobre [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName], a intensidad base:\\n[GetStaticModifier('covert_nuclear_sabotage').GetDesc]\\n$je_iw_op_row_strength_line$"
  },
  "je_iw_op_row_phase_est": {
-  "en": "[Concept('concept_operation_phase','Phase')]: #Y Establishing#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Fully Operational",
-  "es": "[Concept('concept_operation_phase','Fase')]: #Y En implantación#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] meses para estar Plenamente operativa"
+  "en": "[Concept('concept_operation_phase','Phase')]: #bold;yellow Establishing#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Fully Operational",
+  "es": "[Concept('concept_operation_phase','Fase')]: #bold;yellow En implantación#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] meses para estar Plenamente operativa"
  },
  "je_iw_op_row_phase_est_tt": {
   "en": "Working at base strength. Once fully operational, its effects are multiplied by #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!.",
@@ -2740,8 +2740,8 @@
   "es": "[concept_technology] robada: nada todavía"
  },
  "je_iw_op_row_tech_stolen_tt": {
-  "en": "Each month from #Y Establishing#! on, this operation adds progress to a [concept_technology] in its tree (production for Industrial Espionage, military for Military Espionage) that its target has researched and we have not: our current research if it is one, otherwise a random one we could research now. At base strength that is #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! of the technology's era cost, multiplied by phase and priority. Each espionage operation steals on its own, and ends once its target has nothing left we could take.",
-  "es": "Cada mes a partir de la fase #Y En implantación#!, esta operación aporta progreso a una [concept_technology|l] de su árbol (producción para Espionaje industrial, militar para Espionaje militar) que su objetivo ha investigado y nosotros no: nuestra investigación en curso, si lo es, y si no una aleatoria que podríamos investigar ahora. A intensidad base eso supone un #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! del coste de era de la tecnología, multiplicado por la fase y la prioridad. Cada operación de espionaje roba por su cuenta, y termina cuando su objetivo no tiene nada más que podamos tomar."
+  "en": "Each month from #bold;yellow Establishing#! on, this operation adds progress to a [concept_technology] in its tree (production for Industrial Espionage, military for Military Espionage) that its target has researched and we have not: our current research if it is one, otherwise a random one we could research now. At base strength that is #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! of the technology's era cost, multiplied by phase and priority. Each espionage operation steals on its own, and ends once its target has nothing left we could take.",
+  "es": "Cada mes a partir de la fase #bold;yellow En implantación#!, esta operación aporta progreso a una [concept_technology|l] de su árbol (producción para Espionaje industrial, militar para Espionaje militar) que su objetivo ha investigado y nosotros no: nuestra investigación en curso, si lo es, y si no una aleatoria que podríamos investigar ahora. A intensidad base eso supone un #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! del coste de era de la tecnología, multiplicado por la fase y la prioridad. Cada operación de espionaje roba por su cuenta, y termina cuando su objetivo no tiene nada más que podamos tomar."
  },
  "je_iw_ov_capacity_tt": {
   "en": "#bold [concept_intelligence_capacity]: [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_display')|0]#!\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('global_max_ic_display')|0]#!)\\n[concept_literacy]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_from_literacy_display')|0]#!\\n[Concept('concept_gdp', 'GDP')] share: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_from_gdp_display')|0]#!\\nBase, rank, technology and laws: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_from_modifiers_display')|0]#!\\n\\n#bold Where the base, rank, technology and laws part comes from#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_intelligence_capacity_add')]",
@@ -2832,8 +2832,8 @@
   "es": "#bold $je_iw_ov_standing_4$#! desde el [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_4')|0]% de la mejor [concept_intelligence_capacity|l] del mundo"
  },
  "je_iw_status_defended": {
-  "en": "#Y Defended.#! Our intelligence capabilities are adequate, though determined adversaries may find vulnerabilities.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Hardened#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%",
-  "es": "#Y Defendida.#! Nuestras capacidades de inteligencia son adecuadas, aunque adversarios decididos pueden encontrar vulnerabilidades.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! de la mejor del mundo; #bold Reforzada#! desde el [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%"
+  "en": "#bold;yellow Defended.#! Our intelligence capabilities are adequate, though determined adversaries may find vulnerabilities.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Hardened#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%",
+  "es": "#bold;yellow Defendida.#! Nuestras capacidades de inteligencia son adecuadas, aunque adversarios decididos pueden encontrar vulnerabilidades.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! de la mejor del mundo; #bold Reforzada#! desde el [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%"
  },
  "je_iw_status_exposed": {
   "en": "#o Exposed.#! Our intelligence infrastructure has significant gaps. We are vulnerable to sustained covert campaigns.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Defended#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%",
@@ -3332,8 +3332,8 @@
   "es": "La automatización y la IA están volviendo obsoleto el trabajo tradicional. La sociedad debe decidir qué viene después, a medida que se desmorona el viejo orden económico."
  },
  "je_post_scarcity_status_early": {
-  "en": "#Y The age of automation dawns.#! Mass unemployment looms as machines replace workers across all sectors. Next: research [GetTechnology('post-scarcity_economy').GetName].",
-  "es": "#Y Amanece la era de la automatización.#! El desempleo masivo se cierne mientras las máquinas sustituyen a los trabajadores en todos los sectores. A continuación: investigar [GetTechnology('post-scarcity_economy').GetName]."
+  "en": "#bold;yellow The age of automation dawns.#! Mass unemployment looms as machines replace workers across all sectors. Next: research [GetTechnology('post-scarcity_economy').GetName].",
+  "es": "#bold;yellow Amanece la era de la automatización.#! El desempleo masivo se cierne mientras las máquinas sustituyen a los trabajadores en todos los sectores. A continuación: investigar [GetTechnology('post-scarcity_economy').GetName]."
  },
  "je_post_scarcity_status_transition": {
   "en": "#G Post-scarcity technology exists.#! Next: enact the [GetLawType('law_post-scarcity').GetName] law.",
@@ -6160,12 +6160,12 @@
   "es": "#bold Sonda interestelar#! — $sr_prog_state_running$\\nUna vez lanzada, la sonda avanza por inercia durante 132 meses antes de que vuelvan sus datos."
  },
  "je_space_race_widget_prog_interstellar_2": {
-  "en": "#bold Interstellar Probe#! — #Y launched, awaiting data#!\\nIts data reaches us in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
-  "es": "#bold Sonda interestelar#! — #Y lanzada, a la espera de datos#!\\nSus datos nos llegan en [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
+  "en": "#bold Interstellar Probe#! — #bold;yellow launched, awaiting data#!\\nIts data reaches us in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
+  "es": "#bold Sonda interestelar#! — #bold;yellow lanzada, a la espera de datos#!\\nSus datos nos llegan en [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
  },
  "je_space_race_widget_prog_interstellar_2_ni": {
-  "en": "#bold Interstellar Probe#! — #Y launched, awaiting data#!\\nIts data comes back in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
-  "es": "#bold Sonda interestelar#! — #Y lanzada, a la espera de datos#!\\nSus datos llegan en [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
+  "en": "#bold Interstellar Probe#! — #bold;yellow launched, awaiting data#!\\nIts data comes back in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
+  "es": "#bold Sonda interestelar#! — #bold;yellow lanzada, a la espera de datos#!\\nSus datos llegan en [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] meses."
  },
  "je_space_race_widget_prog_interstellar_3": {
   "en": "#bold Interstellar Probe#! — $sr_prog_state_signal_received$",
@@ -7720,8 +7720,8 @@
   "es": "Ningún miembro defiende ni socava el orden, y toda [concept_great_power|l] es miembro."
  },
  "je_un_auth_powers_outsiders": {
-  "en": "#Y [Concept('concept_great_power', 'Great Powers')] outside the UN#!",
-  "es": "#Y [Concept('concept_great_power', 'Grandes potencias')] fuera de la ONU#!"
+  "en": "#bold;yellow [Concept('concept_great_power', 'Great Powers')] outside the UN#!",
+  "es": "#bold;yellow [Concept('concept_great_power', 'Grandes potencias')] fuera de la ONU#!"
  },
  "je_un_auth_powers_underminers": {
   "en": "#R Undermining the order#!",
@@ -8228,8 +8228,8 @@
   "es": "Los cinco puestos permanentes del [concept_un_security_council] están ocupados. Un puesto queda vacante cuando su titular abandona la ONU, pasa diez años por debajo del rango de [Concept('concept_great_power', 'gran potencia')] o es expulsado por un voto de 2/3; entonces pasa a la [Concept('concept_great_power', 'gran potencia')] miembro con más [concept_prestige|l] que no ocupe ninguno."
  },
  "je_un_chamber_council_in_line_entry": {
-  "en": "#Y In line for a seat#! — [THIS.GetCountry.GetName] ([THIS.ScriptValue('un_prestige_order_value')|0] [concept_prestige])",
-  "es": "#Y Aspirante a un puesto#! — [THIS.GetCountry.GetName] ([THIS.ScriptValue('un_prestige_order_value')|0] [concept_prestige|l])"
+  "en": "#bold;yellow In line for a seat#! — [THIS.GetCountry.GetName] ([THIS.ScriptValue('un_prestige_order_value')|0] [concept_prestige])",
+  "es": "#bold;yellow Aspirante a un puesto#! — [THIS.GetCountry.GetName] ([THIS.ScriptValue('un_prestige_order_value')|0] [concept_prestige|l])"
  },
  "je_un_chamber_council_member_entry": {
   "en": "#v Permanent member#! — [THIS.GetCountry.GetName]",
@@ -8732,8 +8732,8 @@
   "es": "  #G En vigor#!, aún no ejercido: una sola exigencia (#tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_mandate_rule_tt #bold la regla#!#!)."
  },
  "je_un_chamber_mandate_status_bound": {
-  "en": "  #Y Being exercised.#! It is bound to the one play it was raised in and cannot be carried into another. #R Adding any other demand against that country for territory, subjugation, regime change or humiliation voids it and is condemned;#! so does backing down.",
-  "es": "  #Y En ejercicio.#! Está ligado a la única jugada en la que se planteó y no puede trasladarse a otra. #R Añadir cualquier otra exigencia de territorio, sometimiento, cambio de régimen o humillación contra ese país lo anula y se condena;#! lo mismo ocurre al echarse atrás."
+  "en": "  #bold;yellow Being exercised.#! It is bound to the one play it was raised in and cannot be carried into another. #R Adding any other demand against that country for territory, subjugation, regime change or humiliation voids it and is condemned;#! so does backing down.",
+  "es": "  #bold;yellow En ejercicio.#! Está ligado a la única jugada en la que se planteó y no puede trasladarse a otra. #R Añadir cualquier otra exigencia de territorio, sometimiento, cambio de régimen o humillación contra ese país lo anula y se condena;#! lo mismo ocurre al echarse atrás."
  },
  "je_un_chamber_mandate_status_complied": {
   "en": "  #G Discharged as written.#!",
@@ -9004,8 +9004,8 @@
   "es": "  #R Rechazada#! — y además vetada."
  },
  "je_un_chamber_outcome_lapsed": {
-  "en": "  #Y Lapsed.#! The proposer never brought it back to the floor, and the chair struck it from the order paper.",
-  "es": "  #Y Caducada.#! El proponente nunca la volvió a llevar al pleno, y la presidencia la retiró del orden del día."
+  "en": "  #bold;yellow Lapsed.#! The proposer never brought it back to the floor, and the chair struck it from the order paper.",
+  "es": "  #bold;yellow Caducada.#! El proponente nunca la volvió a llevar al pleno, y la presidencia la retiró del orden del día."
  },
  "je_un_chamber_outcome_passed": {
   "en": "  #G Carried.#!",
@@ -9136,12 +9136,12 @@
   "es": "  #lore Los miembros de la IA votan entre el noveno y el undécimo mes y aún no figuran en este recuento; Delegaciones muestra hacia dónde se inclinan.#!"
  },
  "je_un_chamber_propose_blocked_in_session": {
-  "en": "#Y A resolution is already in session. The floor takes one at a time.#!",
-  "es": "#Y Ya hay una resolución en sesión. El pleno solo admite una a la vez.#!"
+  "en": "#bold;yellow A resolution is already in session. The floor takes one at a time.#!",
+  "es": "#bold;yellow Ya hay una resolución en sesión. El pleno solo admite una a la vez.#!"
  },
  "je_un_chamber_propose_blocked_reserved": {
-  "en": "#Y Another delegation holds the floor while it decides whether to propose a motion.#!",
-  "es": "#Y Otra delegación tiene la palabra mientras decide si presenta una moción.#!"
+  "en": "#bold;yellow Another delegation holds the floor while it decides whether to propose a motion.#!",
+  "es": "#bold;yellow Otra delegación tiene la palabra mientras decide si presenta una moción.#!"
  },
  "je_un_chamber_propose_button_label": {
   "en": "Propose",
@@ -9364,8 +9364,8 @@
   "es": "#bold Nuestra próxima moción:#! dentro de #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! meses, la espera que fijan nuestro rango y nuestra [Concept('concept_un_standing','posición')] tras la última."
  },
  "je_un_chamber_propose_no_case_aid": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #Y No Case#!#!",
-  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #Y Sin caso#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #bold;yellow No Case#!#!",
+  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #bold;yellow Sin caso#!#!"
  },
  "je_un_chamber_propose_no_case_aid_tt": {
   "en": "No state of ours is in want enough to ask the Assembly for aid.",
@@ -9412,8 +9412,8 @@
   "es": "Ningún miembro representado, aparte de nuestros aliados, nuestro soberano y nuestros súbditos, tiene un historial que respalde suspender sus credenciales (fuerza del caso de 50 o más) mientras incumple las condiciones de derechos humanos o acumula un historial de desafío de 10 o más. Un [concept_un_permanent_member|l] solo puede ser señalado tras la Reforma de la Carta II."
  },
  "je_un_chamber_propose_no_case_decolonization": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #Y No Case#!#!",
-  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #Y Sin caso#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #bold;yellow No Case#!#!",
+  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #bold;yellow Sin caso#!#!"
  },
  "je_un_chamber_propose_no_case_decolonization_tt": {
   "en": "No country holds a subject any longer: there is nothing left to decolonize.",
@@ -9444,8 +9444,8 @@
   "es": "La [concept_un_food_reserve] ya existe. Nuestra promesa, si la hacemos, figura en Nuestras obligaciones."
  },
  "je_un_chamber_propose_no_case_lift_sanctions": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #Y No Case#!#!",
-  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #Y Sin caso#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #bold;yellow No Case#!#!",
+  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #bold;yellow Sin caso#!#!"
  },
  "je_un_chamber_propose_no_case_lift_sanctions_tt": {
   "en": "We are not under [concept_un_sanctions]. The voluntary sanctions a veto leaves end by themselves after five years.",
@@ -9460,16 +9460,16 @@
   "es": "No tenemos abierto ningún caso para una autorización."
  },
  "je_un_chamber_propose_no_case_observer_request": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #Y No Case#!#!",
-  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #Y Sin caso#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #bold;yellow No Case#!#!",
+  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #bold;yellow Sin caso#!#!"
  },
  "je_un_chamber_propose_no_case_observer_request_tt": {
   "en": "Either we hold no elections (no voting law and no Anarchy), or UN electoral observers are already at work here, or our delegation is not seated, or every one of our states already holds another UN mission.",
   "es": "O bien no celebramos elecciones (ni ley de voto ni Anarquía), o ya hay observadores electorales de la ONU trabajando aquí, o nuestra delegación no tiene asiento, o cada uno de nuestros estados ya acoge otra misión de la ONU."
  },
  "je_un_chamber_propose_no_case_peacekeepers": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #Y No Case#!#!",
-  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #Y Sin caso#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #bold;yellow No Case#!#!",
+  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #bold;yellow Sin caso#!#!"
  },
  "je_un_chamber_propose_no_case_peacekeepers_tt": {
   "en": "We are neither at war nor holding a devastated state — there is nothing to ask peacekeepers for.",
@@ -9504,8 +9504,8 @@
   "es": "O bien ya aplicamos un régimen de sanciones propio, o el historial de ningún rival respalda sanciones (fuerza del caso de 50 o más)."
  },
  "je_un_chamber_propose_no_case_standing_force": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #Y Already Founded#!#!",
-  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #Y Ya fundada#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #bold;yellow Already Founded#!#!",
+  "es": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #bold;yellow Ya fundada#!#!"
  },
  "je_un_chamber_propose_no_case_standing_force_tt": {
   "en": "The [concept_un_standing_force] already stands.",
@@ -9640,8 +9640,8 @@
   "es": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_propose_topic_condemn_tt #bold Condena de la agresión#!#!"
  },
  "je_un_chamber_propose_topic_cooldown": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #Y On Cooldown#!#!",
-  "es": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #Y En espera#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #bold;yellow On Cooldown#!#!",
+  "es": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #bold;yellow En espera#!#!"
  },
  "je_un_chamber_propose_topic_cooldown_tt": {
   "en": "A resolution on this question closed within the last five years. Neither we nor the docket may table it again until they are up.",
@@ -9968,12 +9968,12 @@
   "es": "[GetStaticModifier('un_regime_heritage_site_modifier').GetName|v]\\n[GetStaticModifier('un_regime_heritage_site_modifier').GetDesc]\\n#lore Se muestra a ×1: el nuestro se escala con la [concept_un_enforcement|l].#!"
  },
  "je_un_chamber_regime_icc": {
-  "en": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #Y Jurisdiction#!#!: the Court can indict our ruler.",
-  "es": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #Y Jurisdicción#!#!: la Corte puede procesar a nuestro gobernante."
+  "en": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Jurisdiction#!#!: the Court can indict our ruler.",
+  "es": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Jurisdicción#!#!: la Corte puede procesar a nuestro gobernante."
  },
  "je_un_chamber_regime_icc_outside": {
-  "en": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #Y Jurisdiction#!#! over us, though we are not a party: it can indict our ruler.",
-  "es": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #Y Jurisdicción#!#! sobre nosotros, aunque no somos parte: puede procesar a nuestro gobernante."
+  "en": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Jurisdiction#!#! over us, though we are not a party: it can indict our ruler.",
+  "es": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Jurisdicción#!#! sobre nosotros, aunque no somos parte: puede procesar a nuestro gobernante."
  },
  "je_un_chamber_regime_icc_tt": {
   "en": "The International Criminal Court can indict our ruler for a nuclear first strike that lands, a tactical nuclear strike, or an exposed attempt to overthrow a government not caught in a war, at most once in ten years, and would ask us to hand the accused over. Handing them over sends them into exile; defying the court costs standing and a defiance record, and brings International Court Defied for five years.",
@@ -11508,8 +11508,8 @@
   "es": "#G Miembro permanente#!"
  },
  "je_un_ov_member_5": {
-  "en": "#Y Seat Carried#!",
-  "es": "#Y Puesto conservado#!"
+  "en": "#bold;yellow Seat Carried#!",
+  "es": "#bold;yellow Puesto conservado#!"
  },
  "je_un_ov_member_6": {
   "en": "#R Suspended#!",
@@ -11640,8 +11640,8 @@
   "es": "#R Desprestigiada#!"
  },
  "je_un_ov_standing_3": {
-  "en": "#Y Poor#!",
-  "es": "#Y Deficiente#!"
+  "en": "#bold;yellow Poor#!",
+  "es": "#bold;yellow Deficiente#!"
  },
  "je_un_ov_standing_4": {
   "en": "#v Neutral#!",
@@ -11652,8 +11652,8 @@
   "es": "#G Respetada#!"
  },
  "je_un_ov_standing_6": {
-  "en": "#B Exemplary#!",
-  "es": "#B Ejemplar#!"
+  "en": "#blue_value Exemplary#!",
+  "es": "#blue_value Ejemplar#!"
  },
  "je_un_ov_standing_fig": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! of 100",
@@ -11676,8 +11676,8 @@
   "es": "#R Moribunda#!"
  },
  "je_un_ov_tier_1": {
-  "en": "#Y Contested#!",
-  "es": "#Y Cuestionada#!"
+  "en": "#bold;yellow Contested#!",
+  "es": "#bold;yellow Cuestionada#!"
  },
  "je_un_ov_tier_2": {
   "en": "#v Established#!",
@@ -11688,8 +11688,8 @@
   "es": "#G Fuerte#!"
  },
  "je_un_ov_tier_4": {
-  "en": "#B Supranational#!",
-  "es": "#B Supranacional#!"
+  "en": "#blue_value Supranational#!",
+  "es": "#blue_value Supranacional#!"
  },
  "je_un_ov_vote_against": {
   "en": "#v Voted against#!",
@@ -12172,16 +12172,16 @@
   "es": "#R Posición internacional: Desprestigiada#! — [THIS.Var('un_standing').GetValue|0] de 100."
  },
  "je_un_standing_tier_exemplary": {
-  "en": "#B International Standing: Exemplary#! — [THIS.Var('un_standing').GetValue|0] of 100.",
-  "es": "#B Posición internacional: Ejemplar#! — [THIS.Var('un_standing').GetValue|0] de 100."
+  "en": "#blue_value International Standing: Exemplary#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "es": "#blue_value Posición internacional: Ejemplar#! — [THIS.Var('un_standing').GetValue|0] de 100."
  },
  "je_un_standing_tier_neutral": {
   "en": "#v International Standing: Neutral#! — [THIS.Var('un_standing').GetValue|0] of 100.",
   "es": "#v Posición internacional: Neutral#! — [THIS.Var('un_standing').GetValue|0] de 100."
  },
  "je_un_standing_tier_poor": {
-  "en": "#Y International Standing: Poor#! — [THIS.Var('un_standing').GetValue|0] of 100.",
-  "es": "#Y Posición internacional: Deficiente#! — [THIS.Var('un_standing').GetValue|0] de 100."
+  "en": "#bold;yellow International Standing: Poor#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "es": "#bold;yellow Posición internacional: Deficiente#! — [THIS.Var('un_standing').GetValue|0] de 100."
  },
  "je_un_standing_tier_respected": {
   "en": "#G International Standing: Respected#! — [THIS.Var('un_standing').GetValue|0] of 100.",
@@ -12532,8 +12532,8 @@
   "es": "$je_un_terms_standing_force$\\n\\n#lore Además de lo que toda [concept_un_resolution|l] aporta a quien la propone y a los miembros.#!"
  },
  "je_un_tier_line_contested": {
-  "en": "#Y [concept_un_authority]: Contested#! (20–45). Resolutions bite at half strength ([concept_un_enforcement] ×0.5). Membership benefits are paid, scaled by authority.",
-  "es": "#Y [concept_un_authority]: Cuestionada#! (20–45). Las resoluciones surten efecto a media fuerza ([concept_un_enforcement|l] ×0,5). Se pagan los beneficios de pertenencia, escalados según la autoridad."
+  "en": "#bold;yellow [concept_un_authority]: Contested#! (20–45). Resolutions bite at half strength ([concept_un_enforcement] ×0.5). Membership benefits are paid, scaled by authority.",
+  "es": "#bold;yellow [concept_un_authority]: Cuestionada#! (20–45). Las resoluciones surten efecto a media fuerza ([concept_un_enforcement|l] ×0,5). Se pagan los beneficios de pertenencia, escalados según la autoridad."
  },
  "je_un_tier_line_established": {
   "en": "#v [concept_un_authority]: Established#! (45–70). Binding resolutions bite in full ([concept_un_enforcement] ×1), and great powers outside the UN are treated as pariahs.",
@@ -12548,8 +12548,8 @@
   "es": "#G [concept_un_authority]: Fuerte#! (70–85). Las resoluciones surten efecto a ×1,5 ([concept_un_enforcement|l]), y los ajenos también pierden comercio y potestad. Solo se alcanza bajo la [Concept('concept_un_charter','Reforma de la Carta I')]."
  },
  "je_un_tier_line_supranational": {
-  "en": "#B [concept_un_authority]: Supranational#! (85+). Resolutions bite at ×2.5 ([concept_un_enforcement]). Reached only under [Concept('concept_un_charter','Charter Reform II')].",
-  "es": "#B [concept_un_authority]: Supranacional#! (85+). Las resoluciones surten efecto a ×2,5 ([concept_un_enforcement|l]). Solo se alcanza bajo la [Concept('concept_un_charter','Reforma de la Carta II')]."
+  "en": "#blue_value [concept_un_authority]: Supranational#! (85+). Resolutions bite at ×2.5 ([concept_un_enforcement]). Reached only under [Concept('concept_un_charter','Charter Reform II')].",
+  "es": "#blue_value [concept_un_authority]: Supranacional#! (85+). Las resoluciones surten efecto a ×2,5 ([concept_un_enforcement|l]). Solo se alcanza bajo la [Concept('concept_un_charter','Reforma de la Carta II')]."
  },
  "je_unite_the_nations_invalid_conclusion_desc": {
   "en": "The $concept_journal_entry$ ended with our nations joined in a wider #b union#!",
@@ -12628,8 +12628,8 @@
   "es": "#R CRISIS:#! La guerra es inminente. Las [Concept('concept_great_power', 'grandes potencias')] han trazado sus líneas. Cualquier incidente podría prender el polvorín."
  },
  "je_world_war_status_high_tension": {
-  "en": "#Y HIGH TENSION:#! The ideological divide deepens. Military buildups accelerate. Diplomatic channels are strained to breaking point.",
-  "es": "#Y TENSIÓN ELEVADA:#! La brecha ideológica se ahonda. Los despliegues militares se aceleran. Los canales diplomáticos están tensados hasta el límite."
+  "en": "#bold;yellow HIGH TENSION:#! The ideological divide deepens. Military buildups accelerate. Diplomatic channels are strained to breaking point.",
+  "es": "#bold;yellow TENSIÓN ELEVADA:#! La brecha ideológica se ahonda. Los despliegues militares se aceleran. Los canales diplomáticos están tensados hasta el límite."
  },
  "je_world_war_status_observing": {
   "en": "The [Concept('concept_great_power', 'great powers')] are at war. We remain outside the conflict: for now. Pressure mounts to choose a side.",

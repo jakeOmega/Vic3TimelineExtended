@@ -8546,7 +8546,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#Y"
+				default_format = "#yellow;bold"
 				tooltip = "je_space_race_widget_ld_due_tt"
 				text = "je_space_race_widget_ld_due"
 				block "lr_due_visible" {}
