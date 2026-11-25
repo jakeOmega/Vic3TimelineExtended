@@ -1758,7 +1758,7 @@ types te_systems_window_generated_types
 						te_sr_suborbital_status = {
 							blockoverride "sr_debris" {}
 						}
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1810,7 +1810,7 @@ types te_systems_window_generated_types
 						te_sr_orbital_status = {
 							blockoverride "sr_debris" {}
 						}
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1862,7 +1862,7 @@ types te_systems_window_generated_types
 						te_sr_moon_landing_status = {
 							blockoverride "sr_debris" {}
 						}
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1914,7 +1914,7 @@ types te_systems_window_generated_types
 						te_sr_probe_status = {
 							blockoverride "sr_debris" {}
 						}
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -1966,7 +1966,7 @@ types te_systems_window_generated_types
 						te_sr_mars_landing_status = {
 							blockoverride "sr_debris" {}
 						}
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -2018,7 +2018,7 @@ types te_systems_window_generated_types
 						te_sr_interstellar_probe_status = {
 							blockoverride "sr_debris" {}
 						}
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -2067,7 +2067,7 @@ types te_systems_window_generated_types
 						ignoreinvisible = yes
 						spacing = 10
 
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button
@@ -2123,7 +2123,7 @@ types te_systems_window_generated_types
 								blockoverride "sr_debris" {}
 							}
 						}
-						te_je_modifier_strip = {}
+						te_sr_program_effects = {}
 						button = {
 							visible = "[JournalEntry.IsActive]"
 							using = default_button

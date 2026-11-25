@@ -918,6 +918,61 @@ class ProgrammeRowTest(unittest.TestCase):
             self.assertIn("te_sr_ov_programme = {}", _type_body(gui, composer))
 
 
+class ProgramEffectsTest(unittest.TestCase):
+    """Program Effects (te_sr_program_effects; 2026-11-24 evaluation): the
+    entry's modifiers under a ruled subheading, the Ongoing (scaling) icons,
+    then the Timed rows; each group and the panel only with something in it;
+    every milestone frame draws it in the shared strip's place."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.body = _strip_comments(_type_body(_read(GUI), "te_sr_program_effects"))
+
+    def test_heading_then_ongoing_then_timed(self):
+        order = [self.body.index(s) for s in ('text = "je_space_race_widget_effects_header"',
+                                              'text = "je_space_race_widget_effects_ongoing"',
+                                              "datamodel = \"[JournalEntry.GetScalingModifiers]\"",
+                                              'text = "je_space_race_widget_effects_timed"',
+                                              "datamodel = \"[JournalEntry.GetTimedModifiers]\"")]
+        self.assertEqual(order, sorted(order))
+        self.assertIn("te_sr_subheader = {", self.body)
+        for key in ("header", "ongoing", "timed"):
+            with self.subTest(key=key):
+                self.assertIn(f'tooltip = "je_space_race_widget_effects_{key}_tt"', self.body)
+                self.assertTrue(_loc(f"je_space_race_widget_effects_{key}"))
+                self.assertTrue(_loc(f"je_space_race_widget_effects_{key}_tt"))
+
+    def test_each_group_draws_only_with_something_in_it(self):
+        """A caption sits inside its own list's gate, never above an empty one
+        (style guide § 8)."""
+        for caption, model in (("ongoing", "GetScalingModifiers"), ("timed", "GetTimedModifiers")):
+            with self.subTest(group=caption):
+                at = self.body.index(f'text = "je_space_race_widget_effects_{caption}"')
+                gate = list(re.finditer(r'(?<![\w])visible = "[^"]*"', self.body[:at]))[-1].group()
+                self.assertEqual(gate, f'visible = "[Not( IsDataModelEmpty( JournalEntry.{model} ) )]"')
+
+    def test_it_fits_the_column(self):
+        grid = re.search(r"spacing = (\d+)\s+wrap_count = (\d+)\s+datamodel = \"\[JournalEntry\.GetScalingModifiers\]\"",
+                         self.body)
+        spacing, per_row = int(grid.group(1)), int(grid.group(2))
+        icon = int(re.search(r"size = \{ (\d+) \1 \}", self.body[grid.end():]).group(1))
+        self.assertLessEqual(per_row * icon + (per_row - 1) * spacing, 480)
+        timed = self.body[self.body.index('datamodel = "[JournalEntry.GetTimedModifiers]"'):]
+        row_spacing = int(re.search(r"direction = horizontal\s+spacing = (\d+)", timed).group(1))
+        cells = [int(re.search(r"size = \{ (\d+) 25 \}", timed).group(1))]
+        cells += [int(w) for w in re.findall(r"minimumsize = \{ (\d+) -1 \}", timed)]
+        self.assertEqual(sum(cells) + (len(cells) - 1) * row_spacing, 480)
+        # the longest timed name script puts on a milestone's entry, at the row font, fits its cell
+        name_cell = cells[1]
+        self.assertLessEqual(len(_loc("sr_temporary_safety_review")) * 10.0 / 20 * 17 * 1.1, name_cell)
+
+    def test_every_milestone_frame_draws_it_in_the_strips_place(self):
+        generated = _read(os.path.join(REPO, "gui", "te_systems_window_generated.gui"))
+        milestones = _type_body(generated, "te_sr_window_milestones")
+        self.assertEqual(milestones.count("te_sr_program_effects = {}"), len(ALL))
+        self.assertNotIn("te_je_modifier_strip", milestones)
+
+
 class InterstellarCellTest(unittest.TestCase):
     """The Interstellar Probe and its wait for data: one cell, four states, each
     its own icon, texture and hover, never two at once (round 3)."""
