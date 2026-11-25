@@ -4,8 +4,9 @@
 ### then how strong the UN is, who runs it and what it has built. The first
 ### part is a grid of Banking's te_banking_ov_cell (the owner's decision of
 ### 2026-10-27, which replaced the round-1 row of icons; gui_style_guide.md
-### rule 4), with the journal entry's membership controls under the
-### membership cell. Every figure is a un_disp_* value
+### rule 4), with the journal entry's membership controls in a fixed row of
+### their own under the grid, so every row of cells is the same height. Every
+### figure is a un_disp_* value
 ### (common/script_values/un_overview_display_values.txt); every tooltip is the
 ### text it replaced, from a scripted GUI in un_chamber_sguis.txt.
 ### Icons are the UN's own (gfx/interface/icons/un_icons/, PR #572), and four of
@@ -115,170 +116,75 @@ types un_overview_widget_types
 				spacing = 4
 				minimumsize = { 480 -1 }
 
-				### Row 1: membership, with its controls under it, and the UN's tier.
+				### Row 1: membership and the UN's tier. The membership controls are
+				### in their own row under the grid (below).
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
 					spacing = 4
 
-					flowcontainer = {
-						direction = vertical
-						ignoreinvisible = yes
-						spacing = 4
-
-						### Membership: our seat, from no UN at all to a suspended permanent seat (un_disp_member_code; its hover the old status line).
-						te_banking_ov_cell = {
-							tooltip = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-							size = { 238 70 }
-							blockoverride "caption_width" {
-								max_width = 154
+					### Membership: our seat, from no UN at all to a suspended permanent seat (un_disp_member_code; its hover the old status line).
+					te_banking_ov_cell = {
+						tooltip = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+						size = { 238 70 }
+						blockoverride "caption_width" {
+							max_width = 154
+						}
+						blockoverride "caption" {
+							text = "je_un_ov_member_caption"
+						}
+						blockoverride "icons" {
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
+								texture = "gfx/interface/icons/un_icons/member_no_un.dds"
 							}
-							blockoverride "caption" {
-								text = "je_un_ov_member_caption"
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)1' )]"
+								texture = "gfx/interface/icons/un_icons/member_cannot_join.dds"
 							}
-							blockoverride "icons" {
-								icon = {
-									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)0' )]"
-									texture = "gfx/interface/icons/un_icons/member_no_un.dds"
-								}
-								icon = {
-									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)1' )]"
-									texture = "gfx/interface/icons/un_icons/member_cannot_join.dds"
-								}
-								icon = {
-									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)2' )]"
-									texture = "gfx/interface/icons/un_icons/member_can_join.dds"
-								}
-								icon = {
-									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)3' )]"
-									texture = "gfx/interface/icons/un_icons/member.dds"
-								}
-								icon = {
-									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)4' )]"
-									texture = "gfx/interface/icons/un_icons/member_permanent.dds"
-								}
-								icon = {
-									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)5' )]"
-									texture = "gfx/interface/icons/un_icons/member_suspended_carried.dds"
-								}
-								icon = {
-									size = { 100% 100% }
-									visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)6' )]"
-									texture = "gfx/interface/icons/un_icons/member_suspended.dds"
-								}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)2' )]"
+								texture = "gfx/interface/icons/un_icons/member_can_join.dds"
 							}
-							blockoverride "word" {
-								te_banking_ov_word = {
-									text = "je_un_ov_member_word"
-								}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)3' )]"
+								texture = "gfx/interface/icons/un_icons/member.dds"
 							}
-							blockoverride "third_line" {
-								te_banking_ov_word = {
-									visible = "[GetScriptedGui('un_ov_conference_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-									position = { 78 46 }
-									text = "je_un_ov_member_conference"
-								}
-								te_banking_ov_word = {
-									visible = "[And( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('un_ov_conference_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-									position = { 78 46 }
-									text = "je_un_ov_member_dissolved"
-								}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)4' )]"
+								texture = "gfx/interface/icons/un_icons/member_permanent.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)5' )]"
+								texture = "gfx/interface/icons/un_icons/member_suspended_carried.dds"
+							}
+							icon = {
+								size = { 100% 100% }
+								visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_member_code'), '(CFixedPoint)6' )]"
+								texture = "gfx/interface/icons/un_icons/member_suspended.dds"
 							}
 						}
-						# Found or convene, join, and leave: the journal entry's buttons, which
-						# are the AI's now, as controls under the cell they act on (UN-9).
-						# Found and Join take turns in one fixed-size slot, hidden when
-						# neither shows, and nothing here is anchored: the controls are as
-						# wide as the cell (236 in 238), and a centred wrapper sized by its
-						# content drifts when a button appears (un_act_control).
-						un_act_slot = {
-							visible = "[Or( GetScriptedGui('un_act_found_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_join_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
-							blockoverride "slot_anchor" {}
-							un_act_control = {
-								blockoverride "act_context" {
-									datacontext = "[GetScriptedGui('un_act_found_sgui')]"
-								}
-								blockoverride "act_label" {
-									text = "[SelectLocalization( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_convene_label', SelectLocalization( GetScriptedGui('un_ov_league_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_found_league_label', 'je_un_act_found_label' ) )]"
-								}
-							}
-							un_act_control = {
-								blockoverride "act_context" {
-									datacontext = "[GetScriptedGui('un_act_join_sgui')]"
-								}
-								blockoverride "act_label" {
-									text = "je_un_act_join_label"
-								}
+						blockoverride "word" {
+							te_banking_ov_word = {
+								text = "je_un_ov_member_word"
 							}
 						}
-						# Leave is armed before it acts, as the veto is: a membership
-						# undone by one stray click is decades of standing. The flag is
-						# client-side GUI state (gui_modding_guide.md, the veto's note).
-						flowcontainer = {
-							direction = vertical
-							spacing = 4
-							ignoreinvisible = yes
-							datacontext = "[GetScriptedGui('un_act_leave_sgui')]"
-
-							button = {
-								using = default_button_action
-								size = { 236 30 }
-								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetVariableSystem.Exists('un_leave_armed') ) )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-
-								textbox = {
-									parentanchor = center
-									align = center|nobaseline
-									autoresize = yes
-									max_width = 226
-									elide = right
-									using = un_fontsize_row
-									text = "je_un_act_leave_label"
-								}
+						blockoverride "third_line" {
+							te_banking_ov_word = {
+								visible = "[GetScriptedGui('un_ov_conference_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+								position = { 78 46 }
+								text = "je_un_ov_member_conference"
 							}
-							button = {
-								using = default_button_action
-								size = { 236 30 }
-								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
-								enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-								onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
-								tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
-
-								textbox = {
-									parentanchor = center
-									align = center|nobaseline
-									autoresize = yes
-									max_width = 226
-									elide = right
-									using = un_fontsize_row
-									text = "je_un_act_leave_confirm_label"
-								}
-							}
-							button = {
-								using = default_button_action
-								size = { 236 30 }
-								visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
-								onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
-								tooltip = "je_un_act_leave_cancel_tt"
-
-								textbox = {
-									parentanchor = center
-									align = center|nobaseline
-									autoresize = yes
-									max_width = 226
-									elide = right
-									using = un_fontsize_row
-									text = "je_un_act_leave_cancel_label"
-								}
+							te_banking_ov_word = {
+								visible = "[And( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('un_ov_conference_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+								position = { 78 46 }
+								text = "je_un_ov_member_dissolved"
 							}
 						}
 					}
@@ -699,6 +605,117 @@ types un_overview_widget_types
 								position = { 78 46 }
 								text = "je_un_ov_crisis_fig"
 							}
+						}
+					}
+				}
+			}
+
+			### The membership controls: Found (or Convene), Join and Leave, the
+			### journal entry's buttons, which are the AI's now (UN-9). They act on
+			### the Membership cell but sit in a row of their own under the grid,
+			### centred, not under that cell: under it they made the first row a
+			### button taller than the rest, and two buttons taller while Leave was
+			### armed (from #2016; gui_style_guide.md rule 6's "centred under it"
+			### taken as under the grid the cell heads, every row then 70). The
+			### row is a fixed 480 x 30 whichever control shows, hidden when none
+			### does, and nothing in it is anchored: each control has a fixed place
+			### (gotchas #43, #52). Found and Join take turns in one 236 slot at
+			### the row's middle, where Leave sits; the three never show together
+			### (no UN, outside it, in it).
+			widget = {
+				visible = "[Or( Or( GetScriptedGui('un_act_found_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_join_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ), GetScriptedGui('un_act_leave_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+				size = { 480 30 }
+
+				un_act_slot = {
+					visible = "[Or( GetScriptedGui('un_act_found_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('un_act_join_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+					### Placed, not anchored: the row's middle.
+					blockoverride "slot_anchor" {
+						position = { 122 0 }
+					}
+					un_act_control = {
+						blockoverride "act_context" {
+							datacontext = "[GetScriptedGui('un_act_found_sgui')]"
+						}
+						blockoverride "act_label" {
+							text = "[SelectLocalization( GetScriptedGui('un_ov_refounding_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_convene_label', SelectLocalization( GetScriptedGui('un_ov_league_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), 'je_un_act_found_league_label', 'je_un_act_found_label' ) )]"
+						}
+					}
+					un_act_control = {
+						blockoverride "act_context" {
+							datacontext = "[GetScriptedGui('un_act_join_sgui')]"
+						}
+						blockoverride "act_label" {
+							text = "je_un_act_join_label"
+						}
+					}
+				}
+
+				# Leave is armed before it acts, as the veto is: a membership
+				# undone by one stray click is decades of standing. The flag is
+				# client-side GUI state (gui_modding_guide.md, the veto's note).
+				# Leave sits mid-row; armed, Confirm takes its left half and Think
+				# Again its right, as the veto's Confirm and Cancel sit. A double
+				# click on Leave's right half now lands on Think Again; in the old
+				# stack Confirm took Leave's place, so every double click left.
+				widget = {
+					size = { 480 30 }
+					datacontext = "[GetScriptedGui('un_act_leave_sgui')]"
+
+					button = {
+						using = default_button_action
+						size = { 236 30 }
+						position = { 122 0 }
+						visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetVariableSystem.Exists('un_leave_armed') ) )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 226
+							elide = right
+							using = un_fontsize_row
+							text = "je_un_act_leave_label"
+						}
+					}
+					button = {
+						using = default_button_action
+						size = { 236 30 }
+						position = { 2 0 }
+						visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
+						tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 226
+							elide = right
+							using = un_fontsize_row
+							text = "je_un_act_leave_confirm_label"
+						}
+					}
+					button = {
+						using = default_button_action
+						size = { 236 30 }
+						position = { 242 0 }
+						visible = "[And( ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('un_leave_armed') )]"
+						onclick = "[GetVariableSystem.Toggle('un_leave_armed')]"
+						tooltip = "je_un_act_leave_cancel_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 226
+							elide = right
+							using = un_fontsize_row
+							text = "je_un_act_leave_cancel_label"
 						}
 					}
 				}

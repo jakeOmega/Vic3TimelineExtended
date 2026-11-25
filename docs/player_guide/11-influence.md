@@ -187,7 +187,7 @@ at the next monthly update.
 |---|---|---|---|
 | Program Funding | − and + | Each step adds +1 cultural pull and +5% pull. | A weekly expense per step that grows with your GDP, so the bill rises with every step. The tooltip shows the cost of one step and of your current level. |
 | International Cultural Outreach | Begin / End | +10% pull, +5% prestige, +10% mass migration attraction. Needs Mass Media (the Electric Telegraph under *Early Unlock*). | The weekly cost of one funding step. |
-| Cultural Institutes | Fund / Defund | +10% pull. | 150 influence. |
+| Cultural Institutes | Fund / End | +10% pull. | 150 influence. |
 | Global Media Campaign | Launch / End | +15% pull, +5% prestige. Needs Mass Media. | 200 influence. |
 | Cultural Protectionism | Enact / End | +10% pull, +100 authority. | −5% society research speed, −10% mass migration attraction. |
 

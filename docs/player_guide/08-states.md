@@ -14,10 +14,13 @@ is experimental and has a game rule of its own (see
 
 ## State panel additions
 
-The mod adds tiles to the status grid of the state panel, and above the grid a
-tourism card and, in a state with a Grand Monument, a Grand Monument card. Each
-tile is titled with a game concept you can hover for an explanation, and its
-tooltip breaks the numbers down.
+The mod adds tiles to the state panel's Overview, in two columns of their own
+after the game's tiles and decrees: Arable Land heads the left column and Local
+Climate the right in every state, with the tiles that show only in some states
+below them. After the tiles come a Grand Monument card, in a state with one, and
+the tourism card. Each tile is titled with a game concept you can hover for an
+explanation, and its tooltip breaks the numbers down. GDP per Capita, at the head
+of the game's own tiles, gives the state's figure and the country's.
 
 ![A state panel with the tourism card above the status grid and the Homeland Dynamics, Arable Land and Migration Crowding tiles at the bottom.](images/state_panel.png)
 

@@ -545,8 +545,66 @@ def _content(tab: Tab, wide: bool = False) -> list[str]:
     return [f"{tab.body} = {{", f'\tblockoverride "{tab.layout}" {{', f"\t\t{tab.wide} = {{}}", "\t}", "}"]
 
 
+# --- the full-screen title (spec § 7.1) ----------------------------------------
+#
+# Full screen, every tab's title is one bar across the frame, its three 520
+# columns and two 30 gutters, the strips' row above it: a constant width, so it
+# never moves when a column opens or closes (style guide rule 8), the same on
+# every tab. Each body's header carries the hook TITLE_HOOK, vanilla's 554
+# (te_system_tab_frame's tab_header), which only this window's full-screen
+# mount fills; the side panel, the vanilla panels' tabs and National Info's
+# mounts (_content) leave it. A body with no header of its own (the Space
+# Race's: each running entry is a frame with its entry's header) gets the page's
+# title from the mount instead, above its composer (OWN_TITLE: the name and
+# the "?" lines).
+WIDE_WIDTH = 1620
+TITLE_HOOK = "te_tab_header_size"
+TITLE_HEIGHT = 44
+
+
+def _title_size(width: int = WIDE_WIDTH) -> str:
+    return f"size = {{ {width} {TITLE_HEIGHT} }}"
+
+
+def _own_titles() -> dict[str, tuple[str, list[str]]]:
+    return {"space_race": ("te_window_tab_space_race", SR_HELP_BUTTON)}
+
+
+def _page_title(text: str, button: list[str]) -> list[str]:
+    """The page's title for a body with no header: vanilla's default_header
+    across the frame, the "?" its last child, as every tab header has it."""
+    return (["default_header = {",
+             "\tusing = default_list_position",
+             '\tblockoverride "size" {',
+             f"\t\t{_title_size()}",
+             "\t}",
+             '\tblockoverride "text" {',
+             f'\t\ttext = "{text}"',
+             "\t}"]
+            + [f"\t{ln}" for ln in button]
+            + ["}"])
+
+
+def _wide_content(tab: Tab) -> list[str]:
+    """The window's full-screen mount: the body with its layout block holding
+    the wide composer (as _content(tab, wide=True), National Info's), and its
+    title across the frame: the body's own header widened through TITLE_HOOK,
+    or for a body with none, a title drawn above the composer."""
+    if tab.layout is None:
+        return [f"{tab.wide} = {{}}"]
+    own = _own_titles().get(tab.key)
+    if own:
+        return ([f"{tab.body} = {{", f'\tblockoverride "{tab.layout}" {{']
+                + [f"\t\t{ln}" for ln in _page_title(*own)]
+                + [f"\t\t{tab.wide} = {{}}", "\t}", "}"])
+    return [f"{tab.body} = {{",
+            f'\tblockoverride "{TITLE_HOOK}" {{', f"\t\t{_title_size()}", "\t}",
+            f'\tblockoverride "{tab.layout}" {{', f"\t\t{tab.wide} = {{}}", "\t}",
+            "}"]
+
+
 def _mount(tab: Tab, wide: bool = False) -> list[str]:
-    content = [f"\t{ln}" for ln in _content(tab, wide)]
+    content = [f"\t{ln}" for ln in (_wide_content(tab) if wide else _content(tab))]
     return ["flowcontainer = {",
             f'\tname = "te_systems_window_{tab.key}_tab{"_wide" if wide else ""}"',
             '\tdatacontext = "[GetPlayer]"',
@@ -585,7 +643,8 @@ def tabs_wide() -> list[str]:
     out = ["### The full-screen frame's column: three 520 columns and their 30 px",
            "### gaps wide (spec § 4.3), centered, so the frame scrolls sideways",
            "### below that width. Each tab's mount as narrow, holding its wide",
-           "### layout (the registry's `wide`).",
+           "### layout (the registry's `wide`) and its title across the frame",
+           f"### ({TITLE_HOOK}, or the page's own title: spec § 7.1).",
            "type te_systems_window_tabs_wide = flowcontainer {",
            '\tname = "te_systems_window_content_wide"',
            "\tparentanchor = hcenter",
@@ -613,6 +672,18 @@ SR_HELP_BUTTON = ["te_help_button = {",
                   "\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"",
                   "}"]
 
+# The width of every header in te_sr_window_milestones (each entry's, the idle
+# note's): vanilla's 554 in a block, SR_HEADER_HOOK, which the full-screen
+# composer (te_sr_wide_sections) fills with its column's 520, so there a header
+# heads its column under the page's title instead of overhanging it. Its lines
+# go before the "?", which stays each header's last child.
+SR_HEADER_HOOK = "sr_window_header_size"
+SR_HEADER_SIZE = ['blockoverride "size" {',
+                  f'\tblock "{SR_HEADER_HOOK}" {{',
+                  "\t\tsize = { 554 44 }",
+                  "\t}",
+                  "}"]
+
 
 # Open Journal Entry, the frame's own link (te_system_tab_frame's
 # tab_open_journal default), at its size and with the tab's tooltip; a
@@ -626,6 +697,13 @@ SR_OPEN_JOURNAL = ["button = {",
                    '\ttooltip = "te_window_space_race_open_journal_tt"',
                    '\tonclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"',
                    "}"]
+
+
+# The entry's modifiers (#1383), grouped under a Program Effects subheading:
+# te_sr_program_effects (space_race_widget.gui), the same two datamodels as
+# the shared te_je_modifier_strip, the Ongoing (scaling) icons then the Timed
+# rows with their time left (2026-11-24 evaluation).
+SR_EFFECTS = "te_sr_program_effects = {}"
 
 
 def _sr_status(m: str) -> list[str]:
@@ -675,7 +753,7 @@ def _milestone(m: str) -> list[str]:
         status = ([f"### Full screen, in a column of their own (te_sr_window_{m}_live).",
                    f'block "sr_window_{m}_live" {{']
                   + [f"\t{ln}" for ln in status] + ["}"])
-    own = _sr_own(m, status + ["te_je_modifier_strip = {}"] + SR_OPEN_JOURNAL)
+    own = _sr_own(m, status + [SR_EFFECTS] + SR_OPEN_JOURNAL)
     return ([f"### {m}",
              "te_system_tab_frame = {",
              '\tblockoverride "tab_country" {}',
@@ -686,7 +764,7 @@ def _milestone(m: str) -> list[str]:
              '\t\t\tblockoverride "text" {',
              f'\t\t\t\ttext = "{entry}"',
              "\t\t\t}"]
-            + [f"\t\t\t{ln}" for ln in SR_HELP_BUTTON]
+            + [f"\t\t\t{ln}" for ln in SR_HEADER_SIZE + SR_HELP_BUTTON]
             + ["\t\t}",
                "\t}",
                '\tblockoverride "tab_content" {',
@@ -734,7 +812,7 @@ def sr_milestones() -> list[str]:
            '\t\t\tblockoverride "text" {',
            '\t\t\t\ttext = "te_window_space_race_idle_header"',
            "\t\t\t}"]
-    out += [f"\t\t\t{ln}" for ln in SR_HELP_BUTTON]
+    out += [f"\t\t\t{ln}" for ln in SR_HEADER_SIZE + SR_HELP_BUTTON]
     out += ["\t\t}",
             "\t\tte_sr_panel = {",
             "\t\t\tte_sr_text = {",

@@ -171,6 +171,14 @@ types te_demographics_layout
 				}
 				### Show the census on the map (gui/te_map_widgets.gui; journal_map_modes.md).
 				te_jmap_demog_map_button = {}
+				### Full screen, the page's title across the frame: the window's full-screen
+				### mount fills te_tab_header_size (gen_te_systems_window.py); everywhere else
+				### it is vanilla's own 554 (@panel_width_plus_14).
+				blockoverride "size" {
+					block "te_tab_header_size" {
+						size = { 554 44 }
+					}
+				}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_demographics')]"

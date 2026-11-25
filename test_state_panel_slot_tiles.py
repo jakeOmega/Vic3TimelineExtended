@@ -29,10 +29,12 @@ TILES = (("TE_STATE_SOLAR_AVAILABLE", "solar_receiver_slots_remaining"),
 
 class SlotTileTest(unittest.TestCase):
     def test_each_tile_reads_its_figure_through_the_key(self):
+        # The tiles stand among the mod's tiles (te_state_tiles, te_state_panel_widgets.gui).
         for key, value in TILES:
             with self.subTest(key=key):
-                self.assertIn('text = "%s"' % key, STATES)
-                self.assertNotIn("ScriptValue('%s')|0]" % value, STATES, "the bare |0 printed a shortfall as -0")
+                self.assertIn('text = "%s"' % key, WIDGETS)
+                for text in (STATES, WIDGETS):
+                    self.assertNotIn("ScriptValue('%s')|0]" % value, text, "the bare |0 printed a shortfall as -0")
 
     def test_the_figure_follows_its_sign(self):
         for key, value in TILES:

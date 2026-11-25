@@ -470,7 +470,10 @@ CELLS = {
     "colony stage and location heading (te_sr_subheader)": (
         ("te_sr_subheader", 'block "subheader_text"'),
         r"je_space_race_widget_(ss_loc_\w+|powers_others|mq_header|free_header|sc_mix_header|howc_sub_\w+"
-        r"|windows_header|eb_totals_header)"),
+        r"|windows_header|eb_totals_header|effects_header)"),
+    "Program Effects' group captions (te_sr_program_effects)": (
+        ("te_sr_program_effects", 'text = "je_space_race_widget_effects_ongoing"'),
+        r"je_space_race_widget_effects_(ongoing|timed)"),
     "a world's holder: ours (te_sr_site_row)": (
         ("te_sr_site_row", 'text = "je_space_race_widget_ss_ours"'),
         r"je_space_race_widget_ss_ours"),

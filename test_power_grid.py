@@ -42,7 +42,8 @@ ON_ACTIONS = os.path.join(COMMON, "on_actions", "power_grid_on_actions.txt")
 EVENTS = os.path.join(REPO, "events", "te_grid_events.txt")
 ARTICLE = os.path.join(COMMON, "treaty_articles", "123_grid_interconnection.txt")
 TECH_DIR = os.path.join(COMMON, "technology", "technologies")
-STATES_PANEL = os.path.join(REPO, "gui", "states_panel.gui")
+# The state view's Power Grid tile stands among the mod's tiles (te_state_tiles).
+STATE_WIDGETS = os.path.join(REPO, "gui", "te_state_panel_widgets.gui")
 TEXTICONS = os.path.join(REPO, "gui", "zzz_extra_goods_texticons.gui")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 
@@ -62,6 +63,14 @@ def _block_from(text, start):
             if depth == 0:
                 return text[start:j]
     raise AssertionError("unbalanced braces")
+
+
+def _grid_tile():
+    """The state view's Power Grid tile: the te_state_tile after its "### POWER GRID" note."""
+    text = _read(STATE_WIDGETS)
+    start = text.index("### POWER GRID")
+    m = re.compile(r"te_state_tile = \{").search(text, start)
+    return text[start:m.end()] + _block_from(text, m.end())
 
 
 def _top_level(text, name):
@@ -782,14 +791,11 @@ class TreatyAndTileTest(unittest.TestCase):
         self.assertIn("set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }", balance)
         hub = _code(_top_level(_read(VALUES), "te_grid_hub_disp"))
         self.assertIn("exists = var:te_grid_hub", hub)
-        panel = _read(STATES_PANEL)
-        tile = panel[panel.index("### POWER GRID"):panel.index("### UN MISSION", panel.index("### POWER GRID"))]
+        tile = _grid_tile()
         self.assertIn("te_grid_hub_disp", tile)
 
     def test_tile_reads_only_guarded_values(self):
-        panel = _read(STATES_PANEL)
-        start = panel.index("### POWER GRID")
-        tile = panel[start:panel.index("### UN MISSION", start)]
+        tile = _grid_tile()
         values = set(re.findall(r"ScriptValue\('(\w+)'\)", tile))
         self.assertIn("te_grid_tile_shown", values)
         defined = set(re.findall(r"(?m)^(\w+) = \{", _read(VALUES)))
@@ -1214,9 +1220,7 @@ class CableRangeTest(unittest.TestCase):
                       _sub(article, "inherent_accept_score"))
 
     def test_tile_has_a_sea_cables_row_naming_the_links(self):
-        panel = _read(STATES_PANEL)
-        start = panel.index("### POWER GRID")
-        tile = panel[start:panel.index("### UN MISSION", start)]
+        tile = _grid_tile()
         self.assertIn("TE_STATE_GRID_ROW_CABLES_TT", tile)
         self.assertIn("te_grid_cable_count_disp", tile)
         sgui = _code(_top_level(_read(self.SGUIS), "te_grid_cable_links_sgui"))

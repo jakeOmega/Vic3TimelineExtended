@@ -164,9 +164,10 @@ class StateRowNoUnderlineTest(unittest.TestCase):
 
 class HomelandTileTest(unittest.TestCase):
     def test_hidden_where_nothing_can_change(self):
-        text = _read(STATES)
+        # The mod's tiles stand in te_state_tiles (te_state_panel_widgets.gui).
+        text = _read(WIDGETS)
         at = text.index('tooltip = "TE_STATE_HOMELAND_TT"')
-        tile = text[text.rindex("state_panel_status_item_small = {", 0, at):at]
+        tile = text[text.rindex("te_state_tile = {", 0, at):at]
         self.assertIn("te_homeland_relevant", tile)
         self.assertIn("visible", tile)
         self.assertNotIn("TE_HOMELAND_NOTHING_TO_CHANGE", _read(WIDGETS))
@@ -248,9 +249,10 @@ class HeirEducationCostPreviewTest(unittest.TestCase):
 
 class OceanBasinTileTest(unittest.TestCase):
     def tile(self):
-        text = _read(STATES)
+        # The mod's tiles stand in te_state_tiles (te_state_panel_widgets.gui).
+        text = _read(WIDGETS)
         at = text.index('tooltip = "TE_STATE_SEABED_BASIN_TT"')
-        return text[text.rindex("state_panel_status_item_small = {", 0, at):at]
+        return text[text.rindex("te_state_tile = {", 0, at):at]
 
     def test_observer_safe_and_per_viewer(self):
         visible = re.search(r'visible = "(.*)"', self.tile()).group(1)
@@ -268,9 +270,9 @@ class OceanBasinTileTest(unittest.TestCase):
                       "'(CFixedPoint)0'), State.GetOwner.IsLocalPlayer )")
 
     def licences_tile(self):
-        text = _read(STATES)
+        text = _read(WIDGETS)
         at = text.index('tooltip = "TE_STATE_SEABED_TT"')
-        return text[text.rindex("state_panel_status_item_small = {", 0, at):at]
+        return text[text.rindex("te_state_tile = {", 0, at):at]
 
     def test_licences_tile_only_on_the_players_own_state(self):
         # #1352: the Licences tile's words are the player's ("our claims"), so
