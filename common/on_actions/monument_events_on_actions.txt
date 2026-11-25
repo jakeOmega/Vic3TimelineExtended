@@ -12,31 +12,6 @@ on_building_built = {
 	}
 }
 
-# A later level of a construction site finished (ROOT = the building): its
-# state into its owner's rows' list if it is not there (gm_ov_list_site), so
-# the Sites cell's "to dedicate" and Awaiting Dedication, which count that
-# list live, find it at once (#2016). The first level's on_building_built
-# lists it through monument_events.1's refresh; whether either hook fires for
-# levels that finish together is untested (scripting_best_practices.md §
-# "`on_building_built` Missed Levels That Finished Together"), so
-# gm_state_monthly lists it too. Display only.
-on_building_expanded = {
-	on_actions = {
-		gm_site_level_on_action
-	}
-}
-
-gm_site_level_on_action = {
-	trigger = {
-		gm_system_enabled = yes
-		is_building_type = building_grand_monument_site
-		exists = owner
-	}
-	effect = {
-		state = { gm_ov_list_site = yes }
-	}
-}
-
 on_monthly_pulse_country = {
 	on_actions = {
 		monument_events_on_action

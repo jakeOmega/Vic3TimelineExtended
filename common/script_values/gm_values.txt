@@ -1812,35 +1812,28 @@ gm_display_vanity = {
 #
 # The overview's figures (te_gm_overview_panel; owner, 2026-10-27) and the
 # gates of Awaiting a Decision, Awaiting Dedication and Our Monuments
-# (2026-11-24, from #2016). Each used to walk every state of the country, and
-# the panel read them up to 37 times a frame while open, paused or not
+# (2026-11-24, from #2016). Each walks every state of the country, and the
+# panel read them up to 37 times a frame while open, paused or not
 # (docs/audits/late_game_performance.md, "The Grand Monuments tab"). The
-# owner's rule (2026-11-24, on #2033): a call to action is live; a figure that
-# only describes is stored.
+# owner's rule (2026-11-24, on #2033): items that are calls to action "should
+# probably not be stale".
 #
-# Live, every frame, from the rows' own lists: the Contested cell (how many to
-# decide, which also opens Awaiting a Decision, and the grandeur they hold
-# back), the Sites cell (how many sites, how many to dedicate, how many still
-# building, their grandeur) and the gate of Awaiting Dedication, where the
-# Dedicate buttons are. Each walks gm_states (the monuments' and sites' states,
-# which every refresh writes and gm_ov_list_site adds a site's state to, from
-# a later level's hook and each month) and gm_monuments_held, testing each
-# entry live, with its owner: a figure never stays lit after its cause has
-# gone, and since the sections' rows are those lists filtered the same way, it
-# counts the rows its section draws. A site reaches the list at the refresh of
-# its first level (monument_events.1), or at the latest at the monthly pulse
-# (TE_SELF_CHECK gm_overview_lists reads whether the hooks list it first).
+# Live, computed as they always were (below these five): the Contested and
+# Sites cells whole, with their red "to decide" and "to dedicate", and the
+# gates of Awaiting a Decision and Awaiting Dedication. No hook or list has to
+# be kept current for them.
 #
-# Stored: the Monuments cell (upheld, heritage, and the undedicated in its
-# hover, beside the live contested count, which moves only with a store) and
-# Our Monuments' count and grandeur. Each gm_disp_<x> there reads
-# the country variable gm_ov_<x>, which gm_ov_store (gm_effects.txt) writes
-# from its live gm_live_<x> at the end of every refresh (gm_country_refresh:
-# the monthly pulse, and monument_events.20 after a law, a new ruler, a state
-# gained, a site's first level, a ceremony, a trophy taken or returned, a dig,
-# a monument raised or pulled down, and the panel's buttons), after the AI's
-# contest decisions, for the country a monument's state leaves and for a civil
-# war's winner. A change none of those catches reaches them at the next
+# Stored, the figures that only describe: the Monuments cell (upheld,
+# heritage, and the undedicated in its hover, beside the live contested count,
+# which moves only with a store) and Our Monuments' count and grandeur. Each
+# gm_disp_<x> here reads the country variable gm_ov_<x>, which gm_ov_store
+# (gm_effects.txt) writes from its live gm_live_<x> at the end of every
+# refresh (gm_country_refresh: the monthly pulse, and monument_events.20 after
+# a law, a new ruler, a state gained, a site's first level, a ceremony, a
+# trophy taken or returned, a dig, a monument raised or pulled down, and the
+# panel's buttons), a day after a dedication (monument_events.36), after the
+# AI's contest decisions, for the country a monument's state leaves and for a
+# civil war's winner. A change none of those catches reaches them at the next
 # monthly pulse; TE_SELF_CHECK gm_overview_stored reads whether one did. A
 # country no store has reached yet (a save from before it, until its first
 # refresh) reads the live figure, as before. To show a stored figure live
@@ -1902,26 +1895,23 @@ gm_disp_listed_grandeur = {
 	}
 }
 
-# The calls to action, live from the lists (above). Inside a list, PREV is the
-# country: a state another country has taken since the last refresh is left
-# out. How many monuments of ours wait for a decision, a state's own and any
-# beside another, and the grandeur they hold back (the Contested cell; the
-# gate of Awaiting a Decision, whose rows are the same lists filtered on
-# gm_status_code 4 and gm_mon_status_code 4).
+# The calls to action and the cells they stand in, live: every state of the
+# country walked each frame, as before #2016 (owner, 2026-11-24, on #2033).
+# Nothing keeps them current but the states themselves, so they are right the
+# frame a site is queued, built, gained or lost, or a contest set or decided.
+#
+# How many monuments of ours wait for a decision, a state's own and any beside
+# another, and the grandeur they hold back: the Contested cell, and the gate
+# of Awaiting a Decision, whose rows are the same monuments (gm_status_code 4,
+# gm_mon_status_code 4).
 gm_disp_count_contested = {
 	value = 0
-	if = {
-		limit = { has_variable_list = gm_states }
-		every_in_list = {
-			variable = gm_states
-			limit = {
-				exists = owner
-				owner = prev
-				has_building = building_grand_monument
-				gm_state_is_contested = yes
-			}
-			add = 1
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_contested = yes
 		}
+		add = 1
 	}
 	if = {
 		limit = { has_variable_list = gm_monuments_held }
@@ -1935,18 +1925,12 @@ gm_disp_count_contested = {
 
 gm_disp_contested_grandeur = {
 	value = 0
-	if = {
-		limit = { has_variable_list = gm_states }
-		every_in_list = {
-			variable = gm_states
-			limit = {
-				exists = owner
-				owner = prev
-				has_building = building_grand_monument
-				gm_state_is_contested = yes
-			}
-			add = gm_state_primary_grandeur
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument
+			gm_state_is_contested = yes
 		}
+		add = gm_state_primary_grandeur
 	}
 	if = {
 		limit = { has_variable_list = gm_monuments_held }
@@ -1958,91 +1942,53 @@ gm_disp_contested_grandeur = {
 	}
 }
 
-# The Sites cell (sites spec 2026-10-18): our construction sites; those a
-# Dedicate button can finish now (a level built and none under construction,
-# gm_dedicate_sgui's own tests); those with levels still being built; and the
-# grandeur they come to so far. Awaiting Dedication's gate: our sites waiting
-# for their Dedicate button, the section's rows (gm_state_disp_awaiting).
+# The Sites cell (sites spec 2026-10-18): our construction sites; those whose
+# Dedicate button is enabled now (gm_state_dedicate_ready, the button's own
+# test, so "to dedicate" is never red over a greyed button); those with levels
+# still being built; and the grandeur they come to so far.
 gm_disp_count_sites = {
 	value = 0
-	if = {
-		limit = { has_variable_list = gm_states }
-		every_in_list = {
-			variable = gm_states
-			limit = {
-				exists = owner
-				owner = prev
-				gm_state_has_site = yes
-			}
-			add = 1
-		}
+	every_scope_state = {
+		limit = { gm_state_has_site = yes }
+		add = 1
 	}
 }
 
 gm_disp_count_sites_ready = {
 	value = 0
-	if = {
-		limit = { has_variable_list = gm_states }
-		every_in_list = {
-			variable = gm_states
-			limit = {
-				exists = owner
-				owner = prev
-				gm_state_awaits_dedication = yes
-				gm_state_site_level >= 1
-				gm_state_disp_site_building = 0
-			}
-			add = 1
-		}
+	every_scope_state = {
+		limit = { gm_state_dedicate_ready = yes }
+		add = 1
 	}
 }
 
 gm_disp_count_sites_building = {
 	value = 0
-	if = {
-		limit = { has_variable_list = gm_states }
-		every_in_list = {
-			variable = gm_states
-			limit = {
-				exists = owner
-				owner = prev
-				gm_state_has_site = yes
-				gm_state_disp_site_building = 1
-			}
-			add = 1
+	every_scope_state = {
+		limit = {
+			gm_state_has_site = yes
+			gm_state_disp_site_building = 1
 		}
+		add = 1
 	}
 }
 
 gm_disp_sites_grandeur = {
 	value = 0
-	if = {
-		limit = { has_variable_list = gm_states }
-		every_in_list = {
-			variable = gm_states
-			limit = {
-				exists = owner
-				owner = prev
-				gm_state_has_site = yes
-			}
-			add = gm_state_disp_site_grandeur
-		}
+	every_scope_state = {
+		limit = { gm_state_has_site = yes }
+		add = gm_state_disp_site_grandeur
 	}
 }
 
+# Awaiting Dedication (owner, 2026-10-18): our sites waiting for their
+# Dedicate button, the section's gate, as its rows read them
+# (gm_state_disp_awaiting).
 gm_disp_count_awaiting = {
 	value = 0
-	if = {
-		limit = { has_variable_list = gm_states }
-		every_in_list = {
-			variable = gm_states
-			limit = {
-				exists = owner
-				owner = prev
-				gm_state_awaits_dedication = yes
-			}
-			add = 1
-		}
+	every_scope_state = {
+		limit = { gm_state_awaits_dedication = yes }
+		add = 1
 	}
 }
 
@@ -2056,13 +2002,14 @@ gm_ov_disp_chk_months = {
 	}
 }
 
-# The sites TE_SELF_CHECK gm_overview_lists has found listed
-# (gm_ov_site_monthly), for its line; any scope.
-gm_ov_disp_lists_seen = {
+# A player's first dedication, a day after it (gm_ov_store_after_dedication),
+# for the same line: 1 when the ceremony's own store had already counted the
+# new monument, 0 when the store a day later had to.
+gm_ov_disp_ded_read_back = {
 	value = 0
 	if = {
-		limit = { has_global_variable = gm_ov_lists_seen }
-		value = global_var:gm_ov_lists_seen
+		limit = { has_variable = gm_ov_ded_read_back }
+		value = var:gm_ov_ded_read_back
 	}
 }
 
