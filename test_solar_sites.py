@@ -2015,13 +2015,14 @@ class ModulesTest(unittest.TestCase):
 
         self.assertIn("no shipment slot, launch window or launch", text("je_space_race_widget_mod_yard_tt_built"))
         self.assertIn("$je_space_race_widget_mod_yard_tt_built$", text("je_space_race_widget_mod_yard_tt"))
-        self.assertIn("Jupiter, Saturn, Uranus or Neptune", text("je_space_race_widget_mod_yard_tt"))
+        self.assertIn("around Jupiter, Saturn, Uranus or Neptune on all of its planet's moons",
+                      text("je_space_race_widget_mod_yard_tt"))
 
     def test_a_yard_s_hover_names_the_colonies_it_builds_for(self):
         """Each site's Orbital Yard cell names its place (the owner, 2026-11-25:
         "make this understandable in game from the module tooltips"): the giant
-        planets' hovers list every moon, and say the moons' Defenses and marines
-        stay apart."""
+        planets' hovers name the planet whose moons it serves, and say the moons'
+        Defenses and marines stay apart."""
         loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
 
         def text(key):
@@ -2040,16 +2041,31 @@ class ModulesTest(unittest.TestCase):
                 if not gss.yard_mates(site):
                     self.assertEqual(key, "je_space_race_widget_mod_yard_tt_alone")
                 if site.location in gss.YARD_SYSTEMS:
-                    for mate in (site, *gss.yard_mates(site)):
-                        self.assertIn(f"$sr_site_name_{mate.key}$", tip)
-                    self.assertIn(f"{gss.YARD_SYSTEMS[site.location]}'s moons", tip)
+                    self.assertIn(f"on all of {gss.YARD_SYSTEMS[site.location]}'s moons", tip)
                     self.assertIn("$je_space_race_widget_mod_yard_tt_moons_apart$", tip)
-        self.assertIn("Defenses and marines defend that moon alone", text("je_space_race_widget_mod_yard_tt_moons_apart"))
+        self.assertIn("Defenses and marines defend it alone", text("je_space_race_widget_mod_yard_tt_moons_apart"))
         self.assertIn("on Mars", text("je_space_race_widget_mod_yard_tt_mars"))
         self.assertIn("on the Moon", text("je_space_race_widget_mod_yard_tt_moon"))
         # The Defenses hover says the moons stay apart.
         self.assertIn("Each moon of Jupiter, Saturn, Uranus or Neptune is defended by its own alone",
                       text("je_space_race_widget_mod_def_tt"))
+        # Every yard hover links Yard Reach, which lists each place's sites.
+        for key in {gss.yard_tooltip(site) for site in gss.SITES} | {"je_space_race_widget_mod_yard_tt"}:
+            self.assertIn("[concept_sr_yard_reach]", text(key), key)
+        self.assertIn("[concept_sr_yard_reach]", text("je_space_race_widget_mod_def_tt"))
+        concepts = _raw("localization", "english", "te_concepts_l_english.yml")
+        reach = re.search(r'^ concept_sr_yard_reach_desc:0 "(.*)"$', concepts, re.M).group(1)
+        lines = reach.split("\\n")
+        heads = {"moon": "#bold The Moon:#! ", "mars": "#bold Mars:#! ",
+                 **{loc: f"#bold {planet}'s moons:#! " for loc, planet in gss.YARD_SYSTEMS.items()}}
+        self.assertEqual(set(heads), set(gss.YARD_PLACES))
+        for place, head in heads.items():
+            with self.subTest(place=place):
+                line = next(x for x in lines if x.startswith(head))
+                listed = re.findall(r"\$sr_site_name_(\w+)\$", line)
+                self.assertEqual(listed, [t.key for t in gss.SITES if gss.yard_place_of(t) == place])
+        self.assertIn("each moon of Jupiter, Saturn, Uranus and Neptune is defended by its own alone", reach)
+        self.assertIn("concept_sr_yard_reach = {}", _raw("common", "game_concepts", "extra_concepts.txt"))
 
     def test_past_its_cap_a_habitat_needs_its_price_in_stock(self):
         """No top past the cap (the owner's call 7, colony people design § 4.3):

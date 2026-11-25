@@ -910,7 +910,8 @@ Uranus and Neptune. Each asteroid, Venus, Mercury and each world of the Kuiper
 Belt has only its own. The moons share nothing else: each moon's Defenses and
 marines defend that moon alone (see [Blockade, seizure and
 destruction](#blockade-seizure-and-destruction)). The yard's hover in the
-Modules view names the colonies it builds for. The yard must be yours and
+Modules view names the colonies it builds for, and its Yard Reach link lists the
+sites of every place. The yard must be yours and
 neither blockaded nor occupied, and so must the colony. The next module reads "in N mo"
 as usual, and its hover says it is built at a yard.
 
