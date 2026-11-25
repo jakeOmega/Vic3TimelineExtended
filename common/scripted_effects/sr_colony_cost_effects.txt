@@ -2,7 +2,8 @@
 # SOLAR SYSTEM COLONIZATION — the colonies' costs on the Space Program
 # ============================================================================
 # Design: the owner, 2026-11-25 ("we may want these costs to be input-side
-# only"). The values, and why each is divided by the programme's throughput:
+# only"; then a flat amount each, whatever the mission). The values, and why
+# each is divided by the building's Launch Capacity as billed:
 # common/script_values/sr_colony_cost_values.txt.
 # ============================================================================
 
@@ -68,16 +69,21 @@ sr_ccost_refresh = {
 			add_modifier = { name = sr_dome_breach_repairs multiplier = local_var:sr_ccost_breach }
 		}
 	}
-	# The share in all, for the AI's mission budget (sr_ccost_share_now), with or
-	# without a Space Program: a colony holder founding one will pay it.
-	set_local_variable = { name = sr_ccost_share_new value = sr_ccost_share_value }
+	# The Launch Capacity in all, for the AI's mission budget (sr_ccost_lc_now),
+	# with or without a Space Program: a colony holder founding one will pay it.
+	# A save from before 2026-11-25's flat amounts holds the old share instead.
 	if = {
-		limit = { local_var:sr_ccost_share_new > 0 }
-		set_variable = { name = sr_ccost_share value = local_var:sr_ccost_share_new }
-	}
-	else_if = {
 		limit = { has_variable = sr_ccost_share }
 		remove_variable = sr_ccost_share
+	}
+	set_local_variable = { name = sr_ccost_lc_new value = sr_ccost_lc_value }
+	if = {
+		limit = { local_var:sr_ccost_lc_new > 0 }
+		set_variable = { name = sr_ccost_lc value = local_var:sr_ccost_lc_new }
+	}
+	else_if = {
+		limit = { has_variable = sr_ccost_lc }
+		remove_variable = sr_ccost_lc
 	}
 	# The strike's and the breach's terms run by the calendar, after this month's
 	# bill, with or without a Space Program: set to the term by the event, they

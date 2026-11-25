@@ -928,10 +928,10 @@ crews run at three quarters each, four with none at a quarter. The Modules view'
 Crews figure reads the crews against the crews needed, red while short; a
 module's + button says whether the colony has a crew to spare, and the overview
 shows a Crews cell while any colony of yours is short. Each level past
-each colony's first takes 1% of your Space Program's base Launch Capacity, the
-figures its methods list before funding: the Modules view's Upkeep row gives the
-total a week. Funding doesn't raise it, and it adds nothing to the program's
-output, fabrication included.
+each colony's first takes 100 Launch Capacity a week, which your Space Program
+buys beside its own: the Modules view's Upkeep row gives the total. Neither the
+mission nor funding changes it, and it adds nothing to the program's output,
+fabrication included.
 
 A colony's modules stay with it when it changes hands, and the Cede Colony AI
 values a colony more for each of them. An AI that holds a colony, or is in the
@@ -1194,7 +1194,7 @@ years at most, and you choose:
 | Choice | Now | After |
 |---|---|---|
 | Grant a charter | −30 autonomy | Until you revoke it: its specializations work at 80% for you, and its autonomy falls 0.4 a month |
-| Send a garrison | −25 autonomy | For ten years: 2% of your Space Program's base Launch Capacity a garrisoned colony (Colonial Garrisons), and the colony's resentment adds 0.2 a month |
+| Send a garrison | −25 autonomy | For ten years: 200 Launch Capacity a week a garrisoned colony (Colonial Garrisons), and the colony's resentment adds 0.2 a month |
 | Let it go | It becomes a free colony, on good terms with you | — |
 
 A charter settles a colony at a fifth of its output for as long as it stands; a
@@ -1245,7 +1245,7 @@ with it. Click Supply on a free colony to send it supplies:
 
 | Supplying a free colony | |
 |---|---|
-| Costs | 3% of your Space Program's base Launch Capacity for each colony you supply (Free Colony Supply) |
+| Costs | 300 Launch Capacity a week for each colony you supply (Free Colony Supply) |
 | Earns | Free Colony Trade: +1% research speed and +2% influence for every 20,000 of its people, shared among its suppliers, up to five times |
 | Ties | +2 a month while you supply it, −1 a month when you don't |
 
@@ -1271,9 +1271,9 @@ between pulling the colony closer or letting it be proud of itself. A Strike can
 come at a colony of 10,000 or more and a Dome Breach, which kills a tenth of a
 colony's people, at one of 5,000 or more; after either, neither comes again for
 ten years, so a nation sees one about every fifteen years. Paying for the strike
-costs 5% of your Space Program's base Launch Capacity for three years, and the
-repairs 10% for a year; either lowers the colony's autonomy, and leaving the
-colonists to it raises it.
+costs 500 Launch Capacity a week for three years, and the repairs 1,000 a week
+for a year; either lowers the colony's autonomy, and leaving the colonists to it
+raises it.
 
 ### Rare colony discoveries
 

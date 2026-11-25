@@ -254,16 +254,17 @@ sr_settler_launches = {
 # Launch Capacity). Each takes Launch Capacity, the programme's input, and leaves
 # its outputs alone (owner, 2026-11-25): until then each was Space Program
 # throughput, which scaled the outputs too (innovation, prestige, pace, module
-# fabrication and storage), so a module's upkeep built modules faster. Each
-# value is the share of the programme's Launch Capacity at base one unit takes:
-# a module level past each colony's first, a free colony supplied, a garrisoned
-# colony, a strike settlement, a dome breach repaired (the shares in
-# sr_colony_cost_values.txt; test_colony_costs.py holds them equal). Each is
-# added at multiplier = its units / (1 + the programme's throughput), so funding
-# doesn't raise it: the Launch Capacity a unit took as throughput. The one
-# refresh site is sr_ccost_refresh (sr_colony_cost_effects.txt), monthly from
-# the country pulse; it rebuilds them from the colonies' records and two month
-# counters, so a rebuilt building and a revolution's winner get them back.
+# fabrication and storage), so a module's upkeep built modules faster. Each is a
+# flat amount of Launch Capacity a week a unit, whatever the mission and the
+# funding: a module level past each colony's first 100, a free colony supplied
+# 300, a garrisoned colony 200, a strike settlement 500, a dome breach repaired
+# 1,000 (sr_ccost_<key>_lc, sr_colony_cost_values.txt; test_colony_costs.py
+# holds them). Like the settlers' bill, a unit of each modifier is 1% of the
+# building's Launch Capacity as billed, added at multiplier = 100 x the amount /
+# that (sr_emig_bill_divisor). The one refresh site is sr_ccost_refresh
+# (sr_colony_cost_effects.txt), monthly from the country pulse; it rebuilds them
+# from the colonies' records and two month counters, so a rebuilt building and a
+# revolution's winner get them back.
 sr_module_upkeep = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	goods_input_launch_capacity_mult = 0.01
@@ -271,12 +272,12 @@ sr_module_upkeep = {
 
 sr_free_colony_supply = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	goods_input_launch_capacity_mult = 0.03
+	goods_input_launch_capacity_mult = 0.01
 }
 
 sr_colonial_garrisons = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	goods_input_launch_capacity_mult = 0.02
+	goods_input_launch_capacity_mult = 0.01
 }
 
 # The strike's and the dome breach's terms (space_race_events.96 and .97) are
@@ -285,12 +286,12 @@ sr_colonial_garrisons = {
 # a duration would be lost with the building.
 sr_strike_settlement = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	goods_input_launch_capacity_mult = 0.05
+	goods_input_launch_capacity_mult = 0.01
 }
 
 sr_dome_breach_repairs = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	goods_input_launch_capacity_mult = 0.10
+	goods_input_launch_capacity_mult = 0.01
 }
 
 # The nation's people off Earth, per 100,000 (at most ten times).
