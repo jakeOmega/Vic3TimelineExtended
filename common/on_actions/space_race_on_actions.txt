@@ -114,6 +114,24 @@ space_race_on_action = {
 			}
 			if = { limit = { has_variable = sr_emig_bill_units } remove_variable = sr_emig_bill_units }
 		}
+		# The colonies' costs on the Space Program (sr_colony_cost_effects.txt;
+		# owner, 2026-11-25): their one refresh site, here and not in the entry's
+		# pulse so that a cost with nothing left to bill comes off by itself, the
+		# strike's and the breach's months run out with the entry inactive, and
+		# the rule switched off mid-game ends them all. For a country with a
+		# Space Program or the entry, and one still holding a share or a term.
+		if = {
+			limit = {
+				OR = {
+					sr_has_space_program = yes
+					has_journal_entry = je_space_race_solar_colonization
+					has_variable = sr_ccost_share
+					has_variable = sr_strike_settlement_months
+					has_variable = sr_dome_breach_months
+				}
+			}
+			sr_ccost_refresh = yes
+		}
 		# Earth orbit (slice 6d, sr_earth_orbit_effects.txt): a player told when
 		# its Earth is blockaded, or its launch site lost and back; and of each
 		# hostile fleet bound for Earth (the Earth alert, UI pass design § 9,

@@ -1,0 +1,169 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the colonies' costs on the Space Program
+# ============================================================================
+# Country scope. Five costs of holding and serving colonies, each a share of
+# the Space Program's Launch Capacity at base (its active methods' Launch
+# Capacity at full staff, sr_emig_lc_base, before throughput), taken as more
+# Launch Capacity input and nothing else (owner, 2026-11-25). Until then each was
+# Space Program throughput, which raised the programme's outputs with its
+# inputs: a module level's upkeep raised fabrication, which built more modules,
+# which raised the upkeep. Simple and full colonies only.
+#
+# The modifiers (space_race_modifiers.txt, "the colonies' costs") are on the
+# Space Program building, each at multiplier = its units / the throughput factor
+# below, from the one refresh site sr_ccost_refresh
+# (sr_colony_cost_effects.txt). The engine bills a building's Launch Capacity as
+# base x (1 + throughput) x (1 + the Launch Capacity input mults), so dividing
+# by the factor makes a unit take its share of base, whatever the funding: the
+# Launch Capacity it took as throughput, without the other goods or the outputs.
+# test_colony_costs.py holds the shares to the modifiers.
+# ============================================================================
+
+# The Space Program's throughput as the engine multiplies a Launch Capacity
+# input mult by: 1 plus the country's Space Program throughput (funding, the
+# milestone rewards). State-scope throughput (devastation, riots) and the
+# global building_throughput_add are not divided out, as in the settlers' bill
+# (sr_emig_bill_divisor, which reads this). Floored at 0.1: a factor of 0 or
+# below would divide by nothing.
+sr_program_throughput_factor = {
+	value = modifier:building_space_program_throughput_add
+	add = 1
+	min = 0.1
+}
+
+# ---- Each cost's share of base Launch Capacity a unit ------------------------
+# The modifiers' goods_input_launch_capacity_mult, for the AI's budget and the
+# panel.
+sr_ccost_upkeep_share = { value = 0.01 }
+sr_ccost_supply_share = { value = 0.03 }
+sr_ccost_garrison_share = { value = 0.02 }
+sr_ccost_strike_share = { value = 0.05 }
+sr_ccost_breach_share = { value = 0.10 }
+
+# The strike's and the breach's terms, in months (space_race_events.96, .97).
+sr_strike_settlement_term = 36
+sr_dome_breach_term = 12
+
+# ---- Each cost's units ---------------------------------------------------------
+# The three the entry declared until 2026-11-25, with its gates: the rule at
+# simple or full colonies, and the entry active, which a colony holder's always
+# is (its possible) and a supplier's must be (sr_free_can_supply).
+# The module levels past the first at the colonies held (colony modules design
+# § 8).
+sr_ccost_upkeep_units = {
+	value = 0
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			has_journal_entry = je_space_race_solar_colonization
+			sr_mod_upkeep_levels >= 1
+		}
+		add = sr_mod_upkeep_levels
+	}
+}
+# A unit a free colony supplied (slice 5 design § 3).
+sr_ccost_supply_units = {
+	value = 0
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			has_journal_entry = je_space_race_solar_colonization
+			sr_free_supply_count >= 1
+		}
+		add = sr_free_supply_count
+	}
+}
+# A unit a garrisoned colony (slice 5 design § 2).
+sr_ccost_garrison_units = {
+	value = 0
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			has_journal_entry = je_space_race_solar_colonization
+			sr_garrison_count >= 1
+		}
+		add = sr_garrison_count
+	}
+}
+# A unit while the strike's or the breach's term runs. The counter is removed
+# at 0 (sr_ccost_refresh), so having it is the term.
+sr_ccost_strike_units = {
+	value = 0
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			has_variable = sr_strike_settlement_months
+		}
+		add = 1
+	}
+}
+sr_ccost_breach_units = {
+	value = 0
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			has_variable = sr_dome_breach_months
+		}
+		add = 1
+	}
+}
+
+# ---- Each modifier's multiplier on the building --------------------------------
+sr_ccost_upkeep_mult = {
+	value = sr_ccost_upkeep_units
+	divide = sr_program_throughput_factor
+}
+sr_ccost_supply_mult = {
+	value = sr_ccost_supply_units
+	divide = sr_program_throughput_factor
+}
+sr_ccost_garrison_mult = {
+	value = sr_ccost_garrison_units
+	divide = sr_program_throughput_factor
+}
+sr_ccost_strike_mult = {
+	value = sr_ccost_strike_units
+	divide = sr_program_throughput_factor
+}
+sr_ccost_breach_mult = {
+	value = sr_ccost_breach_units
+	divide = sr_program_throughput_factor
+}
+
+# ---- The share in all ------------------------------------------------------------
+# The share of base Launch Capacity the five take together. sr_ccost_refresh
+# stores it as var:sr_ccost_share, which the AI's mission budget adds to the
+# programme's throughput when it prices a mission
+# (sr_ai_program_throughput_unfunded): a mission's Launch Capacity is billed at
+# its base x (1 + throughput + this share).
+sr_ccost_share_value = {
+	value = 0
+	add = {
+		value = sr_ccost_upkeep_units
+		multiply = sr_ccost_upkeep_share
+	}
+	add = {
+		value = sr_ccost_supply_units
+		multiply = sr_ccost_supply_share
+	}
+	add = {
+		value = sr_ccost_garrison_units
+		multiply = sr_ccost_garrison_share
+	}
+	add = {
+		value = sr_ccost_strike_units
+		multiply = sr_ccost_strike_share
+	}
+	add = {
+		value = sr_ccost_breach_units
+		multiply = sr_ccost_breach_share
+	}
+}
+# The share as last billed: 0 before the first refresh, and with nothing to pay.
+sr_ccost_share_now = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_ccost_share }
+		value = var:sr_ccost_share
+	}
+}

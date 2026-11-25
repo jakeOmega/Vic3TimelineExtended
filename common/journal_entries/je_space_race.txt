@@ -2415,36 +2415,10 @@ je_space_race_solar_colonization = {
 			}
 		}
 	}
-	# The module levels past the first at the colonies held (colony modules
-	# design § 8).
-	scaling_modifiers_while_active = {
-		modifier = sr_module_upkeep
-		value = {
-			value = 0
-			if = {
-				limit = {
-					sr_colonies_contested_enabled = yes
-					sr_mod_upkeep_levels >= 1
-				}
-				add = sr_mod_upkeep_levels
-			}
-		}
-	}
-	# Autonomy and free colonies (slice 5 design §§ 2-3): a unit a free colony
-	# supplied, the trade from them, a unit a garrisoned colony.
-	scaling_modifiers_while_active = {
-		modifier = sr_free_colony_supply
-		value = {
-			value = 0
-			if = {
-				limit = {
-					sr_colonies_contested_enabled = yes
-					sr_free_supply_count >= 1
-				}
-				add = sr_free_supply_count
-			}
-		}
-	}
+	# The module upkeep, a free colony's supply and a garrison are the Space
+	# Program's Launch Capacity, on the building (sr_ccost_refresh,
+	# sr_colony_cost_effects.txt; owner, 2026-11-25). Autonomy and free colonies
+	# (slice 5 design §§ 2-3): the trade from the free colonies supplied.
 	scaling_modifiers_while_active = {
 		modifier = sr_free_colony_trade
 		value = {
@@ -2455,19 +2429,6 @@ je_space_race_solar_colonization = {
 					sr_free_trade_units > 0
 				}
 				add = sr_free_trade_units
-			}
-		}
-	}
-	scaling_modifiers_while_active = {
-		modifier = sr_colonial_garrisons
-		value = {
-			value = 0
-			if = {
-				limit = {
-					sr_colonies_contested_enabled = yes
-					sr_garrison_count >= 1
-				}
-				add = sr_garrison_count
 			}
 		}
 	}

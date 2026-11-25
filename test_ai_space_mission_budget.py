@@ -129,10 +129,12 @@ class Country:
     """An AI country with a Space Program, as the pass reads it."""
 
     def __init__(self, income, price=BASE_PRICE, mission=4, ceiling=None, throughput_modifier=0.0,
-                 funding=None, techs=ALL_TECH, ai=True, in_default=False, bankrupt=False, program=True):
+                 funding=None, techs=ALL_TECH, ai=True, in_default=False, bankrupt=False, program=True,
+                 cost_share=0.0):
         self.income = income
         self.price = max(price, BASE_PRICE)   # sr_launch_capacity_unit_price: never below base
         self.throughput_modifier = throughput_modifier
+        self.cost_share = cost_share          # sr_ccost_share_now: the colonies' costs, a share of base
         self.funding = dict(funding or {})    # milestone -> level, all billed
         self.techs = set(techs)
         self.ai = ai
@@ -210,6 +212,8 @@ class Script:
             return c.throughput_modifier + self.constants["sr_ai_funding_throughput_per_level"] * sum(c.funding.values())
         if token == "sr_launch_capacity_unit_price":      # its market scopes are the engine's
             return c.price
+        if token == "sr_ccost_share_now":                 # its units are the colonies' records
+            return c.cost_share
         if token == "sr_solar_colonization_goal":         # its stage and target are the sites'
             return c.colonization_goal
         m = re.fullmatch(r"sr_funding_(\w+)_level", token)
@@ -634,6 +638,30 @@ class PassTest(unittest.TestCase):
         c = Country(income_for(0.001, self.units(6)), mission=1, techs={"space_exploration", "knowledge_economy"})
         self.script.month(c)
         self.assertEqual((c.mission, c.ceiling), (3, 6))
+
+    def test_the_colonies_costs_are_billed_beside_the_throughput(self):
+        """The colonies' costs (sr_colony_cost_values.txt) take a share of the program's
+        base Launch Capacity that funding doesn't raise, so a mission's bill is its units x
+        (1 + throughput + the share) x the price, funded or not (owner, 2026-11-25)."""
+        for throughput, funding, share in ((0.0, 0, 0.4), (0.1, 3, 0.4), (0.0, 0, 0.0), (0.0, 5, 1.23)):
+            with self.subTest(throughput=throughput, funding=funding, share=share):
+                c = Country(1_000_000, mission=4, throughput_modifier=throughput,
+                            funding={"solar_colonization": funding} if funding else None, cost_share=share)
+                expect = self.units(4) * (1 + throughput + share) * BASE_PRICE
+                self.assertAlmostEqual(self.script.value("sr_ai_mission_bill_solar", c), expect, delta=1)
+                funded = self.units(4) * (1 + throughput + share + 0.25 * funding) * BASE_PRICE
+                self.assertAlmostEqual(self.script.value("sr_ai_mission_bill_now", c), funded, delta=1)
+
+    def test_the_colonies_costs_step_a_mission_down(self):
+        """Solar at 9% of income climbs; the same with a cost share of 0.4 is 12.6%, over
+        the climbing share, so the pass climbs only as far as Mars."""
+        income = income_for(0.09, self.units(4))
+        c = Country(income, mission=1)
+        self.script.month(c)
+        self.assertEqual(c.mission, 4)
+        c = Country(income, mission=1, cost_share=0.4)
+        self.script.month(c)
+        self.assertEqual(c.mission, 3)
 
     def test_holds_inside_the_band(self):
         # Mars at 15%: over the climbing share, under the step-down one, for years.

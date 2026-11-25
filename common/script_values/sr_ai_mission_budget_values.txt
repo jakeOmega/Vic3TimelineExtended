@@ -127,11 +127,17 @@ sr_ai_program_funding_throughput = {
 # estimate sound if the modifier read leaves the funding out: the bill then
 # reads at 1 plus the funding, the funding being nearly all of it in the
 # saves read (Germany 1958: 7 levels, 2.56 in all).
+# Then the colonies' costs (sr_ccost_share_now, sr_colony_cost_values.txt):
+# module upkeep, free colony supply, garrisons and the strike and breach terms,
+# each a share of the program's Launch Capacity at base that funding doesn't
+# raise, so a mission's Launch Capacity is billed at its base x (1 + throughput
+# + the share). Until 2026-11-25 they were throughput, in the modifier read.
 sr_ai_program_throughput_unfunded = {
 	value = 1
 	add = modifier:building_space_program_throughput_add
 	subtract = sr_ai_program_funding_throughput
 	min = 1
+	add = sr_ccost_share_now
 }
 
 sr_ai_program_throughput_funded = {

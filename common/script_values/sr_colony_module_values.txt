@@ -110,8 +110,11 @@ sr_mod_fab_bill_base_fusion_shipyards = { value = 1368000 }
 # program's throughput with its funding (its goods scale with it), times our
 # market's Launch Capacity premium, never below base (sr_launch_capacity_price_up,
 # space_race_values.txt). Launch Capacity is 70% to 76% of every method's bill;
-# the premium stands in for the rest. An estimate: an understaffed programme
-# buys less.
+# the premium stands in for the rest. The colonies' costs, in the throughput
+# here (sr_ai_program_throughput_unfunded), take Launch Capacity alone, so
+# multiplying the whole bill by them reads them on the other 24% to 30% too:
+# the AI's settlers are left a little less. An estimate: an understaffed
+# programme buys less.
 sr_mod_fab_bill_price_factor = {
 	value = sr_ai_program_throughput_funded
 	multiply = {

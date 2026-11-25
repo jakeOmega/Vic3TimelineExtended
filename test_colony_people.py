@@ -549,9 +549,15 @@ class SettlerBillTest(unittest.TestCase):
                      "divide = 52"):
             self.assertIn(term, week)
         divisor = _block(self.values, "sr_emig_bill_divisor")
-        for term in ("value = modifier:building_space_program_throughput_add", "add = 1",
-                     "multiply = sr_emig_lc_base", "min = 1"):
+        for term in ("value = sr_program_throughput_factor", "multiply = sr_emig_lc_base", "min = 1"):
             self.assertIn(term, divisor)
+        # The factor is the country's Space Program throughput, which the colonies'
+        # costs no longer join (test_colony_costs.py): they are Launch Capacity mults
+        # beside this one, so they add to it and leave the divisor alone.
+        costs = _strip(_raw("common", "script_values", "sr_colony_cost_values.txt"))
+        factor = _block(costs, "sr_program_throughput_factor")
+        for term in ("value = modifier:building_space_program_throughput_add", "add = 1"):
+            self.assertIn(term, factor)
         units = _block(self.values, "sr_emig_bill_units_value")
         for term in ("value = sr_emig_bill_week", "multiply = 100", "divide = sr_emig_bill_divisor"):
             self.assertIn(term, units)

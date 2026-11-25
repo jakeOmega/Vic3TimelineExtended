@@ -144,8 +144,8 @@ module at our first colony and fabricate now; land our shipments now; recompute 
    colony's room in Settlers.
 4. **Staffing.** A colony with no people and its founding specialization at level 3 reads 33%, and the specialization
    gives one level's worth; with Artificial General Intelligence it reads 100% and gives three.
-5. **Upkeep.** The entry's Colony Modules modifier adds +1% Space Program throughput for each level past each
-   colony's first, and the Space Program's Launch Capacity bill follows.
+5. **Upkeep.** Superseded by § The colonies' costs as Launch Capacity (2026-11-25): Colony Modules is on the Space
+   Program building, as Launch Capacity input, not on the entry as throughput.
 6. **Extraplanetary Base room.** A country with no colony and 20 Extraplanetary Base levels shows Extraplanetary Base
    Room at -25% throughput in the building's breakdown; one holding 16 Psyche and 20 levels shows +30%. Under Races
    Only neither shows.
@@ -186,8 +186,8 @@ for `TE_SR_SITES <world> is a free colony`.
    the most populous state without any). Leave them to govern themselves makes it
    Free, with our ties at 50. An outpost of fewer than 1,000 people offers only Close
    the outpost.
-5. **Free colonies.** Supply a free colony: the entry shows Free Colony Supply (+3% Space Program throughput) and Free
-   Colony Trade, the colony's people grow again, and our ties climb 2 a month. At 100 (option g, then a month) "<World>
+5. **Free colonies.** Supply a free colony: the Space Program's Launch Capacity input shows Free Colony Supply (3% of
+   its base Launch Capacity; § The colonies' costs as Launch Capacity) and the entry Free Colony Trade, the colony's people grow again, and our ties climb 2 a month. At 100 (option g, then a month) "<World>
    Asks to Join Us": welcome it and it is ours again at autonomy 20, with its people and modules.
 6. **A dead holder.** `annex <TAG>` an AI holder whose capital region nobody can take a colony for: a world with 1,000
    people or more reads Free, not Unclaimed.
@@ -1609,3 +1609,32 @@ set `te_popup` back to it.
    (the console: clear every slot with the window open) the window reads "We have no fleets. A Space Command builds
    the first at Earth." over an empty list.
 9. **Another country's panel** (National Info, Space Race tab) shows no fleets and no arrow, as before.
+
+## The colonies' costs as Launch Capacity (2026-11-25)
+
+Module upkeep, free colony supply, colonial garrisons, a strike settlement and dome breach repairs are each a share of the
+Space Program's base Launch Capacity, on the building, and no longer its throughput (`docs/systems/mod_systems/space_race.md`
+§ *The colonies' costs*). Simple or Full Colonies. No self-check line: a good's input mult added to a building at
+runtime was seen working (Space Command's old upkeep), and how a building's input sums its throughput and its mults can't
+be read from script, only from the tooltip (items 1 and 2).
+
+1. **The line.** Holding colonies with 12 module levels past each one's first, the Space Program's Launch Capacity input
+   tooltip shows Colony Modules, and its +% is 12 ÷ (1 + the programme's throughput): +12% unfunded, +6% at four
+   funding levels (+100% throughput). The Launch Capacity it adds is 12% of the methods' listed Launch Capacity at full
+   staff either way. The Modules view's Upkeep row reads that figure a week. **Fallback** if the line is missing: the
+   multiplier didn't reach the building through the local variable; carry it as `root.var:`, as the settlers' bill does.
+2. **Funding doesn't raise it.** Note the Launch Capacity the line adds, then fund the running milestone one level up: a
+   month later the line's +% has fallen and the Launch Capacity it adds is the same. **Fallback** if it rose: the engine
+   doesn't multiply a runtime input mult by throughput, so drop the division (`sr_ccost_<key>_mult` = the units).
+3. **No output.** With fabrication running, queue modules: Colony Module Fabrication per Month doesn't rise as levels land
+   (until 2026-11-25 each level raised it 1%), nor do the programme's innovation, prestige and pace.
+4. **Garrison, supply.** Garrison a colony (`.94`): Colonial Garrisons joins the line at 2% of base. Supply a free
+   colony: Free Colony Supply at 3%. The tooltips of both choices and the Autonomy view's hovers say so.
+5. **The strike and the breach.** Fire `space_race_events.96` and meet the demands: next month Colony Strike Settlement
+   (5% of base) is on the line, and stays 36 months (`sr_strike_settlement_months` counts down in the console's
+   variables). `.97`'s Rebuild at once: Dome Breach Repairs, 10%, 12 months.
+6. **A rebuilt programme.** Demolish the Space Program and build it again: within a month the lines are back.
+7. **The AI.** In an observer run, an AI colony power's mission matches its budget: no program stepped down by a bill
+   the budget didn't see (`sr_ai_program_throughput_unfunded` adds the share).
+8. **The settlers.** With settlers and modules both billed, Settler Launches and Colony Modules sit on the same input
+   and the People view's Launch Capacity a week matches what Settler Launches adds.

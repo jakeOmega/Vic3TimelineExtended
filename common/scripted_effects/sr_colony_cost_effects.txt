@@ -1,0 +1,101 @@
+﻿# ============================================================================
+# SOLAR SYSTEM COLONIZATION — the colonies' costs on the Space Program
+# ============================================================================
+# Design: the owner, 2026-11-25 ("we may want these costs to be input-side
+# only"). The values, and why each is divided by the programme's throughput:
+# common/script_values/sr_colony_cost_values.txt.
+# ============================================================================
+
+# Country scope, monthly from the always-on space race pulse
+# (space_race_on_actions.txt): the one refresh site of the five colony costs,
+# sr_module_upkeep, sr_free_colony_supply, sr_colonial_garrisons,
+# sr_strike_settlement and sr_dome_breach_repairs. Off every Space Program, then
+# on at this month's multipliers, each skipped at 0 (the dynamic-modifier
+# pattern: a same-name add stacks). Everything is rebuilt from the colonies'
+# records and the two month counters, never from the modifiers, so a rebuilt
+# Space Program has them again within a month, a revolution's winner (which
+# inherits variables, not modifiers) rebuilds them, and a building taken from
+# another country loses that country's.
+sr_ccost_refresh = {
+	# An older save's timed copy on the country: until 2026-11-25 the strike's
+	# and the breach's terms were timed country modifiers, and on the country
+	# the input mult would reach every building that buys Launch Capacity.
+	# Taken off; the months it had left can't be read, so its term ends with it.
+	# A strike or a breach needs a colony, so the country has the entry and
+	# this refresh reaches it.
+	if = {
+		limit = { has_modifier = sr_strike_settlement }
+		remove_modifier = sr_strike_settlement
+	}
+	if = {
+		limit = { has_modifier = sr_dome_breach_repairs }
+		remove_modifier = sr_dome_breach_repairs
+	}
+	every_scope_building = {
+		limit = { is_building_type = building_space_program }
+		remove_modifier_if_exists_effect = { MODIFIER = sr_module_upkeep }
+		remove_modifier_if_exists_effect = { MODIFIER = sr_free_colony_supply }
+		remove_modifier_if_exists_effect = { MODIFIER = sr_colonial_garrisons }
+		remove_modifier_if_exists_effect = { MODIFIER = sr_strike_settlement }
+		remove_modifier_if_exists_effect = { MODIFIER = sr_dome_breach_repairs }
+	}
+	# Read in country scope, then carried into the building's.
+	set_local_variable = { name = sr_ccost_upkeep value = sr_ccost_upkeep_mult }
+	set_local_variable = { name = sr_ccost_supply value = sr_ccost_supply_mult }
+	set_local_variable = { name = sr_ccost_garrison value = sr_ccost_garrison_mult }
+	set_local_variable = { name = sr_ccost_strike value = sr_ccost_strike_mult }
+	set_local_variable = { name = sr_ccost_breach value = sr_ccost_breach_mult }
+	every_scope_building = {
+		limit = { is_building_type = building_space_program }
+		if = {
+			limit = { local_var:sr_ccost_upkeep > 0 }
+			add_modifier = { name = sr_module_upkeep multiplier = local_var:sr_ccost_upkeep }
+		}
+		if = {
+			limit = { local_var:sr_ccost_supply > 0 }
+			add_modifier = { name = sr_free_colony_supply multiplier = local_var:sr_ccost_supply }
+		}
+		if = {
+			limit = { local_var:sr_ccost_garrison > 0 }
+			add_modifier = { name = sr_colonial_garrisons multiplier = local_var:sr_ccost_garrison }
+		}
+		if = {
+			limit = { local_var:sr_ccost_strike > 0 }
+			add_modifier = { name = sr_strike_settlement multiplier = local_var:sr_ccost_strike }
+		}
+		if = {
+			limit = { local_var:sr_ccost_breach > 0 }
+			add_modifier = { name = sr_dome_breach_repairs multiplier = local_var:sr_ccost_breach }
+		}
+	}
+	# The share in all, for the AI's mission budget (sr_ccost_share_now), with or
+	# without a Space Program: a colony holder founding one will pay it.
+	set_local_variable = { name = sr_ccost_share_new value = sr_ccost_share_value }
+	if = {
+		limit = { local_var:sr_ccost_share_new > 0 }
+		set_variable = { name = sr_ccost_share value = local_var:sr_ccost_share_new }
+	}
+	else_if = {
+		limit = { has_variable = sr_ccost_share }
+		remove_variable = sr_ccost_share
+	}
+	# The strike's and the breach's terms run by the calendar, after this month's
+	# bill, with or without a Space Program: set to the term by the event, they
+	# are billed that many months and removed at 0.
+	if = {
+		limit = { has_variable = sr_strike_settlement_months }
+		change_variable = { name = sr_strike_settlement_months add = -1 }
+		if = {
+			limit = { var:sr_strike_settlement_months <= 0 }
+			remove_variable = sr_strike_settlement_months
+		}
+	}
+	if = {
+		limit = { has_variable = sr_dome_breach_months }
+		change_variable = { name = sr_dome_breach_months add = -1 }
+		if = {
+			limit = { var:sr_dome_breach_months <= 0 }
+			remove_variable = sr_dome_breach_months
+		}
+	}
+}

@@ -241,10 +241,56 @@ sr_solar_system_trade = {
 # on the Space Program at sr_emig_bill_units (100 x the week's bill / the
 # building's Launch Capacity x (1 + its throughput); sr_emig_bill_refresh, the one
 # refresh site, sr_colony_population_effects.txt). A unit adds 1% to its Launch
-# Capacity input. The off-world bonus is declared on the entry (je_space_race.txt).
+# Capacity input, beside the colonies' costs below, which add to it. The
+# off-world bonus is declared on the entry (je_space_race.txt).
 sr_settler_launches = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	goods_input_launch_capacity_mult = 0.01
+}
+
+# ======= Solar System Colonization - the colonies' costs (simple and full colonies)
+# What holding and serving colonies costs, on the Space Program building, never
+# the country (the input mult is building-masked and would raise every building's
+# Launch Capacity). Each takes Launch Capacity, the programme's input, and leaves
+# its outputs alone (owner, 2026-11-25): until then each was Space Program
+# throughput, which scaled the outputs too (innovation, prestige, pace, module
+# fabrication and storage), so a module's upkeep built modules faster. Each
+# value is the share of the programme's Launch Capacity at base one unit takes:
+# a module level past each colony's first, a free colony supplied, a garrisoned
+# colony, a strike settlement, a dome breach repaired (the shares in
+# sr_colony_cost_values.txt; test_colony_costs.py holds them equal). Each is
+# added at multiplier = its units / (1 + the programme's throughput), so funding
+# doesn't raise it: the Launch Capacity a unit took as throughput. The one
+# refresh site is sr_ccost_refresh (sr_colony_cost_effects.txt), monthly from
+# the country pulse; it rebuilds them from the colonies' records and two month
+# counters, so a rebuilt building and a revolution's winner get them back.
+sr_module_upkeep = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	goods_input_launch_capacity_mult = 0.01
+}
+
+sr_free_colony_supply = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	goods_input_launch_capacity_mult = 0.03
+}
+
+sr_colonial_garrisons = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	goods_input_launch_capacity_mult = 0.02
+}
+
+# The strike's and the dome breach's terms (space_race_events.96 and .97) are
+# month counters on the country (sr_strike_settlement_months,
+# sr_dome_breach_months), counted down by the refresh: a building modifier with
+# a duration would be lost with the building.
+sr_strike_settlement = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	goods_input_launch_capacity_mult = 0.05
+}
+
+sr_dome_breach_repairs = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	goods_input_launch_capacity_mult = 0.10
 }
 
 # The nation's people off Earth, per 100,000 (at most ten times).
@@ -252,16 +298,6 @@ sr_offworld_population = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.01
 	country_cultural_pull_mult = 0.02
-}
-
-# ======= Solar System Colonization - colony modules (simple and full colonies)
-# Declared on the entry at the module levels past the first at the colonies
-# held (sr_mod_upkeep_levels), with the two above (colony modules design § 8):
-# each level's upkeep is the Space Program's Launch Capacity bill, as
-# emigration's is.
-sr_module_upkeep = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_space_program_throughput_add = 0.01
 }
 
 # ======= Solar System Colonization - facilities (simple and full colonies;
@@ -314,29 +350,18 @@ sr_module_foundry = {
 
 # ======= Solar System Colonization - autonomy and free colonies (slice 5;
 # docs/superpowers/specs/2026-10-26-solar-colonization-free-colonies-design.md)
-# Declared on the entry, each at its units, with the three above
-# (je_space_race.txt): supplying free colonies is the Space Program's Launch
-# Capacity bill (a unit a colony supplied); their trade a unit
-# a 20,000 of a colony's people, shared among its suppliers, at most five
-# (sr_free_trade_units); a garrison's upkeep a unit a garrisoned colony.
-sr_free_colony_supply = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_space_program_throughput_add = 0.03
-}
-
+# Declared on the entry at its units (je_space_race.txt): the free colonies' trade, a unit a 20,000 of a colony's people, shared among
+# its suppliers, at most five (sr_free_trade_units). Supplying them and the
+# garrisons are the Space Program's Launch Capacity (the colonies' costs above).
 sr_free_colony_trade = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_tech_research_speed_mult = 0.01
 	country_influence_mult = 0.02
 }
 
-sr_colonial_garrisons = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_space_program_throughput_add = 0.02
-}
-
-# Colony life (slice 5 design § 7): timed, on the country, from the events'
-# options (space_race_events.95 to .97).
+# Colony life (slice 5 design § 7): timed, on the country, from the first
+# child's options (space_race_events.95). The strike's and the dome breach's
+# costs are the colonies' costs above.
 sr_birth_citizen = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.05
@@ -345,16 +370,6 @@ sr_birth_citizen = {
 sr_birth_native = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_prestige_mult = 0.10
-}
-
-sr_strike_settlement = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_space_program_throughput_add = 0.05
-}
-
-sr_dome_breach_repairs = {
-	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	building_space_program_throughput_add = 0.10
 }
 
 # Extraplanetary Base room (colony modules design § 9): unit country modifiers,

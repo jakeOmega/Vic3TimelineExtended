@@ -242,6 +242,12 @@ NOT_ON_COUNTRY = {
     "sr_space_command_paused": "a Space Command building",
     # The settlers' Launch Capacity bill (colony people design § 6.2, sr_emig_bill_refresh).
     "sr_settler_launches": "the Space Program building",
+    # The colonies' costs, Launch Capacity on the building since 2026-11-25 (sr_ccost_refresh).
+    "sr_module_upkeep": "the Space Program building",
+    "sr_free_colony_supply": "the Space Program building",
+    "sr_colonial_garrisons": "the Space Program building",
+    "sr_strike_settlement": "the Space Program building",
+    "sr_dome_breach_repairs": "the Space Program building",
     # The ground mix, on each base building (ground types design § 5.3, sr_eb_apply_mix).
     "sr_ebase_mix_*": "an Extraplanetary Base building",
     # The state's share taken back off each Resort Colony (#1953, sr_resort_state_refresh).
