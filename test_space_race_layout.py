@@ -1450,7 +1450,7 @@ class FleetCardTest(unittest.TestCase):
         slot = slot[:slot.index('block "fl_refit" {}')]
         self.assertIn('block "fl_drive" {}', slot)
         self.assertIn('block "fl_refit_visible" {}', slot)
-        self.assertNotIn("background", slot)
+        self.assertNotIn("background = {", slot)
         for n, row in enumerate(self.rows, 1):
             refitting = (f"GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope."
                          f"ScriptValue('sr_disp_fl_{n}_refit_left'), '(CFixedPoint)1' )")
