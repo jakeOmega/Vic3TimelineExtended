@@ -288,6 +288,32 @@ class SlotsTest(unittest.TestCase):
                 for kind in ("fleets", "defences"):
                     self.assertIn(f'raw_text = "[{_sv(f"sr_disp_fl_{n}_fire_{kind}")}|1]"', _override(page, f"fp_fire_{kind}"))
 
+    def test_the_page_opens_on_the_picture_of_its_fleet_s_drive(self):
+        """The owner, 2026-11-25: "include the fleet banner image (the era
+        specific one)". Space Fleets' four pictures, in its order, at the size
+        they were painted (twice the panel's slot, the page column's width), the
+        one shown the fleet's own drive's."""
+        banner, panel = _type_body(self.gui, "te_sr_fleet_page_banner"), _type_body(self.gui, "te_sr_fleet_banner")
+        pictures = re.findall(r'block "pb_(\w+)" \{\}\s*background = \{\s*texture = "([^"]+)"\s*fittype = centercrop', banner)
+        self.assertEqual([path for _, path in pictures], re.findall(r'texture = "([^"]+)"', panel))
+        self.assertEqual([drive for drive, _ in pictures], list(gsf.DRIVES))
+        for (drive, path) in pictures:
+            self.assertTrue(path.endswith(f"fleet_banner_{drive}.dds"), path)
+        width, height = map(int, re.search(r"size = \{ (\d+) (\d+) \}", panel).groups())
+        self.assertIn(f"size = {{ {2 * width} {2 * height} }}", banner)
+        page = self.page_type
+        self.assertEqual(page.count("te_sr_fleet_page_banner = {"), 1)
+        head = re.search(r"\n\t\twidget = \{\n\t\t\tsize = \{ (\d+) 58 \}", page)
+        self.assertEqual(int(head.group(1)), 2 * width)   # as wide as the page, so nothing is scaled
+        self.assertLess(page.index("te_sr_fleet_page_banner = {"), head.start())
+        for n, instance in zip(SLOTS, self.pages):
+            for code, drive in enumerate(gsf.DRIVES):
+                # the last drive's picture also covers any level a later drive adds, as the panel's does
+                test = "GreaterThanOrEqualTo" if code == len(gsf.DRIVES) - 1 else "EqualTo"
+                with self.subTest(slot=n, drive=drive):
+                    self.assertIn(f'visible = "[{test}_CFixedPoint( {_sv(f"sr_fl_{n}_drive_value")}, \'(CFixedPoint){code}\' )]"',
+                                  _override(instance, f"fp_banner_{drive}"))
+
     def test_the_page_s_lines_fit_its_columns(self):
         page = self.page_type
         tile = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_page_tile")).group(1))

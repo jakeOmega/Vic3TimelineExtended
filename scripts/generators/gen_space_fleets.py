@@ -2652,12 +2652,18 @@ _FLEET_ROW_ONLY = re.compile(r"fl_visible|fl_number|fl_open|fl_roll_(?:up|down)|
 
 def _fleet_page(n: int) -> list[str]:
     """Slot n's page in the Fleets window (te_sr_fleet_page): shown while the
-    window is on this slot and a fleet is in it; the card's blocks, then what
+    window is on this slot and a fleet is in it; the picture of its drive's day,
+    the card's blocks, then what
     the card keeps on hovers, in the open: each role now of full, its fire as
     combat counts it, its dock and what the dock repairs a month, the leg to
     the destination picked and what we know of its target."""
     out = ["\t\tte_sr_fleet_page = {"]
     out += _override("fp_visible", f'visible = "[And( {_fleet_focus(n)}, {_ge(f"sr_disp_fl_{n}", 1)} )]"')
+    # The picture at its head: Space Fleets' banner for the fleet's own drive
+    # (the last drive's also covers any level a later drive adds, as the panel's).
+    for code, drive in enumerate(DRIVES):
+        test = _ge if code == len(DRIVES) - 1 else _eq
+        out += _override(f"fp_banner_{drive}", f'visible = "[{test(var(n, "drive_value"), code)}]"')
     out += _override("fp_number", f'raw_text = "{NUMERALS[n - 1]}"')
     out += gss._without(_fleet_blocks(n), _FLEET_ROW_ONLY)
     for role in ROLES:

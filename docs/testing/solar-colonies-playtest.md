@@ -1549,7 +1549,7 @@ The owner's ask: "space fleets [should] have their own 'details' type popout win
 States under Full Colonies, two fleets at Earth), with three test fleets added by a setup (one damaged at Mars, one
 in flight to Jupiter, one fresh at Earth); 3840 × 2160 at scale 1.5: the parts marked *seen* below. Two more
 sessions, each launched on the files as they then stood (the last after the review's fixes), logged no line naming
-them in `error.log`. The rest is for a hand. No self-check: nothing here changes what script does. **Fallback** if the window misbehaves under a
+them in `error.log`; a fourth, for the banner the owner then asked for, the same. The rest is for a hand. No self-check: nothing here changes what script does. **Fallback** if the window misbehaves under a
 picker: put the window on `te_popup` like the Colonies window (`sr_fleet`), and have each picker's close and choice
 set `te_popup` back to it.
 
@@ -1561,7 +1561,9 @@ set `te_popup` back to it.
 2. **The list.** *(Seen: six fleets in slot order with number, world, place and strength, the one shown greyed;
    a click on IX changed the page and kept the window; "→ Jupiter" with Jupiter's icon for the fleet in flight.)*
    A row's hover is the fleet's ships, each role of its full number.
-3. **The page reads.** *(Seen, on a fleet at Mars, one at Earth and one in flight: Ships as six tiles with each
+3. **The page reads.** *(Seen, on a fleet at Mars, one at Earth and one in flight: the fleet banner across the
+   top at its full size, a different picture for each of four fleets on four drives (the owner's antimatter fleets,
+   and test fleets set to torch, fusion and chemical), each matching its Drive tile; Ships as six tiles with each
    role now of full, Condition's four bars and four tiles, Orders with a caption a line, Locations under it; in
    flight the track under the head and "In flight. It takes orders once it lands." for the orders; at Earth no
    Posture or Target line. Hovers seen: a role's tile, Fire on Fleets, Fire on Defenses, Dock, Repair a Month,

@@ -1450,7 +1450,9 @@ locations: Earth Orbit, Mercury & Venus, Mars, the Asteroid Belt, Jupiter,
 Saturn, Uranus, Neptune and the Kuiper Belt.
 
 The go-to arrow beside it opens the fleet in a window of its own, Our Fleets.
-Its page sets out Ships (each role now and at full, the drive, and Transfer)
+Under a picture of a fleet of its drive's day (the fleet's own drive, so one
+not yet refitted shows the ships it still flies),
+its page sets out Ships (each role now and at full, the drive, and Transfer)
 and Condition (the card's four bars, then the fleet's fire on fleets and on
 colony defenses as a battle counts it, its dock and the share of its damage
 the dock repairs each month) on the left, and on the right its Orders, the same

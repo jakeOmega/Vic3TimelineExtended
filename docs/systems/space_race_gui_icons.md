@@ -228,6 +228,11 @@ icon from elsewhere in the panel, each for what it already means there:
 
 `test_space_fleet_window.py` (`test_each_tile_wears_an_icon_of_the_set`) holds the pairs.
 
+The page opens on the banner (`te_sr_fleet_page_banner`; owner, 2026-11-25): the four pictures of "Space Fleets: the
+banner" below, the same files, drawn at the 960 × 220 they were painted at (the panel shows them at half that). Here
+the picture follows the fleet's own drive, not the program's. A fifth drive needs its picture in both types;
+`test_the_page_opens_on_the_picture_of_its_fleet_s_drive` holds the page's four to the panel's.
+
 ## Top-bar alerts: placeholders for the next icon round (2026-11-25)
 
 The colony module queue's two alerts (`common/alert_types/te_space_race_alerts.txt`, PR #2051) borrow vanilla alert icons for now; the owner asked for painted ones in the next icon round (2026-11-25). A vanilla alert icon is one painted object on a transparent background, 150 × 150, which the game's round alert button frames; the rim's green or yellow comes from the alert's `color`, not the icon. `/placeholder-icons` does not read `common/alert_types/` (#2052), so this table is their place on the work list. Each is a literal `texture` line in the alert file; a new file goes in `gfx/interface/icons/space_race_icons/`.

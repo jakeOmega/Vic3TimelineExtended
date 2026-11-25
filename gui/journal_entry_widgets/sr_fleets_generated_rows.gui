@@ -38895,6 +38895,18 @@ types sr_fleets_generated_rows_types
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '1'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1'), '(CFixedPoint)1' ) )]"
 			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_drive_value'), '(CFixedPoint)3' )]"
+			}
 			blockoverride "fp_number" {
 				raw_text = "I"
 			}
@@ -39130,6 +39142,18 @@ types sr_fleets_generated_rows_types
 		te_sr_fleet_page = {
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '2'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2'), '(CFixedPoint)1' ) )]"
+			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_drive_value'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "fp_number" {
 				raw_text = "II"
@@ -39367,6 +39391,18 @@ types sr_fleets_generated_rows_types
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '3'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3'), '(CFixedPoint)1' ) )]"
 			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_drive_value'), '(CFixedPoint)3' )]"
+			}
 			blockoverride "fp_number" {
 				raw_text = "III"
 			}
@@ -39602,6 +39638,18 @@ types sr_fleets_generated_rows_types
 		te_sr_fleet_page = {
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '4'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4'), '(CFixedPoint)1' ) )]"
+			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_drive_value'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "fp_number" {
 				raw_text = "IV"
@@ -39839,6 +39887,18 @@ types sr_fleets_generated_rows_types
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '5'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5'), '(CFixedPoint)1' ) )]"
 			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_drive_value'), '(CFixedPoint)3' )]"
+			}
 			blockoverride "fp_number" {
 				raw_text = "V"
 			}
@@ -40074,6 +40134,18 @@ types sr_fleets_generated_rows_types
 		te_sr_fleet_page = {
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '6'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6'), '(CFixedPoint)1' ) )]"
+			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_drive_value'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "fp_number" {
 				raw_text = "VI"
@@ -40311,6 +40383,18 @@ types sr_fleets_generated_rows_types
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '7'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7'), '(CFixedPoint)1' ) )]"
 			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_drive_value'), '(CFixedPoint)3' )]"
+			}
 			blockoverride "fp_number" {
 				raw_text = "VII"
 			}
@@ -40547,6 +40631,18 @@ types sr_fleets_generated_rows_types
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '8'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8'), '(CFixedPoint)1' ) )]"
 			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_drive_value'), '(CFixedPoint)3' )]"
+			}
 			blockoverride "fp_number" {
 				raw_text = "VIII"
 			}
@@ -40782,6 +40878,18 @@ types sr_fleets_generated_rows_types
 		te_sr_fleet_page = {
 			blockoverride "fp_visible" {
 				visible = "[And( GetVariableSystem.HasValue('sr_fleet_focus', '9'), GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9'), '(CFixedPoint)1' ) )]"
+			}
+			blockoverride "fp_banner_chemical" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_drive_value'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fp_banner_fusion" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_drive_value'), '(CFixedPoint)1' )]"
+			}
+			blockoverride "fp_banner_torch" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_drive_value'), '(CFixedPoint)2' )]"
+			}
+			blockoverride "fp_banner_antimatter" {
+				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_drive_value'), '(CFixedPoint)3' )]"
 			}
 			blockoverride "fp_number" {
 				raw_text = "IX"

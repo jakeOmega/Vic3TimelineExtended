@@ -9921,9 +9921,58 @@ types space_race_widget_types
 		}
 	}
 
+	### The picture at the head of a fleet's page (the owner, 2026-11-25: "it
+	### would be nice to include the fleet banner image (the era specific
+	### one)"): Space Fleets' own four pictures (te_sr_fleet_banner), here at the
+	### size they were painted, 960 x 220, which is the page column's width, so
+	### nothing is scaled or cut. One slot, the four taking turns on the page's
+	### blocks (pb_<drive>): the fleet's own drive, not the program's, so a
+	### fleet not yet refitted shows the ships it flies, as its Drive tile says.
+	type te_sr_fleet_page_banner = widget {
+		size = { 960 220 }
+
+		widget = {
+			size = { 100% 100% }
+			block "pb_chemical" {}
+
+			background = {
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_chemical.dds"
+				fittype = centercrop
+			}
+		}
+		widget = {
+			size = { 100% 100% }
+			block "pb_fusion" {}
+
+			background = {
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_fusion.dds"
+				fittype = centercrop
+			}
+		}
+		widget = {
+			size = { 100% 100% }
+			block "pb_torch" {}
+
+			background = {
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_torch.dds"
+				fittype = centercrop
+			}
+		}
+		widget = {
+			size = { 100% 100% }
+			block "pb_antimatter" {}
+
+			background = {
+				texture = "gfx/interface/illustrations/space_race/fleet_banner_antimatter.dds"
+				fittype = centercrop
+			}
+		}
+	}
+
 	### A fleet's page in the Fleets window (te_sr_fleet_popup): everything its
 	### card in Space Fleets has, at once and with room, plus what the card
-	### keeps on hovers. Across the top the fleet's emblem, its number and
+	### keeps on hovers. At the top the picture of a fleet of its drive's day
+	### (te_sr_fleet_page_banner), then the fleet's emblem, its number and
 	### where it is (or is bound, with the transit track under the head); then
 	### two columns. Left, 472: Ships (each role now of full on a tile, the
 	### drive, and Transfer on the heading) and Condition (the card's four
@@ -9945,6 +9994,20 @@ types space_race_widget_types
 		spacing = 6
 		block "fp_visible" {}
 
+		te_sr_fleet_page_banner = {
+			blockoverride "pb_chemical" {
+				block "fp_banner_chemical" {}
+			}
+			blockoverride "pb_fusion" {
+				block "fp_banner_fusion" {}
+			}
+			blockoverride "pb_torch" {
+				block "fp_banner_torch" {}
+			}
+			blockoverride "pb_antimatter" {
+				block "fp_banner_antimatter" {}
+			}
+		}
 		### The fleet: its emblem, its number, and the world and name of where it
 		### is, or is bound.
 		widget = {
@@ -10891,10 +10954,10 @@ types space_race_widget_types
 	### content sits under the entry's scope-free gate and its
 	### GetPlayerJournalEntry datacontext on a child, as the Colonies window's
 	### (gotchas #22, #29). 1218 of content, plus the window's margins
-	### (2 × 35), the list's (2 × 10) and a scrollbar: 1332. 650 high: the
-	### window's own 108 (measured in game), the page's head (58), then the
-	### taller column, Orders over Locations (30 + 26 + 20 + 46 + 26 + 3 × 20
-	### + 26 + 30 + 150, and the gaps: about 460).
+	### (2 × 35), the list's (2 × 10) and a scrollbar: 1332. 880 high: the
+	### window's own 108 (measured in game), the page's picture (220) and head
+	### (58), then the taller column, Orders over Locations (30 + 26 + 20 + 46
+	### + 26 + 3 × 20 + 26 + 30 + 150, and the gaps: about 460).
 	type te_sr_fleet_popup = te_ui_popup {
 		blockoverride "popup_visible" {
 			visible = "[GetVariableSystem.Exists('sr_fleet_focus')]"
@@ -10903,7 +10966,7 @@ types space_race_widget_types
 			text = "je_space_race_widget_fw_title"
 		}
 		blockoverride "popup_size" {
-			size = { 1332 650 }
+			size = { 1332 880 }
 		}
 		blockoverride "popup_close" {
 			visible = "[Not( GetVariableSystem.Exists('te_popup') )]"
