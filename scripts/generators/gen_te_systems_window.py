@@ -450,8 +450,8 @@ STRIP_FRAME = 2 * 3 + 2 * 5
 
 
 def strip_width(tabs: int, per_strip: int = len(SLOTS)) -> int:
-    """The width of a strip of `tabs` whose tabs are as wide as a full
-    strip's of `per_strip` at STRIP_WIDTH."""
+    """The width of a strip that lists `tabs` whose tabs, all showing, are as
+    wide as a full strip's of `per_strip` at STRIP_WIDTH."""
     return round(STRIP_FRAME + tabs * (STRIP_WIDTH - STRIP_FRAME) / per_strip)
 
 
@@ -998,12 +998,17 @@ def ni_strips() -> list[str]:
     one vanilla tab_buttons per five tabs, each at the narrow width (540), as
     the Timeline Extended window's full-screen frame has them. A last strip
     of fewer is narrowed to its tabs (strip_width), so they are as wide as
-    the full strips' and the row stays centered on what it draws."""
+    the full strips' and the row stays centered on what it draws. That holds
+    while every tab a strip lists shows: the engine shares a strip's width
+    among the tabs it shows, so a tab its game rule hides still widens the
+    others on its strip (four at 131 with the Tax Code rule off, #2039;
+    pinning each tab instead drew no first strip in game, 2026-11-24)."""
     keys = [NI_FALLBACK] + [t.key for t in ni_tabs()]
     by_key = {t.key: t for t in TABS}
     out = ["### The strips: Pops, then each public tab in NI_ORDER, five a strip, side by",
            "### side and centered, each at the narrow strip width; a last strip of fewer",
-           "### narrowed to its tabs, so each tab is as wide as a full strip's.",
+           "### narrowed to its tabs, so each tab is as wide as a full strip's while every",
+           "### tab its strip lists shows (a tab a game rule hides widens the rest: #2039).",
            "type te_ni_strips = hbox {",
            "\tlayoutpolicy_horizontal = expanding",
            "\tlayoutpolicy_vertical = fixed",

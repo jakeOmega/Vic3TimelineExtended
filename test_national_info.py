@@ -360,7 +360,9 @@ class StripTest(unittest.TestCase):
 
     def test_a_short_strips_tabs_are_as_wide_as_a_full_strips(self):
         """vanilla's tab_buttons shares its width, less its margin and end dividers, among the tabs it shows; a
-        strip of two at 540 drew each tab two and a half times a full strip's (2026-11-24, seen in game)."""
+        strip of two at 540 drew each tab two and a half times a full strip's (2026-11-24, seen in game). The
+        width follows the tabs a strip lists, so it holds while each of them shows; a tab its game rule hides
+        still widens the others on its strip (#2039)."""
         self.assertEqual(gen.strip_width(gen.NI_PER_STRIP, gen.NI_PER_STRIP), 540, "a full strip: the narrow width")
         full = (540 - gen.STRIP_FRAME) / gen.NI_PER_STRIP
         for n in range(1, gen.NI_PER_STRIP + 1):
