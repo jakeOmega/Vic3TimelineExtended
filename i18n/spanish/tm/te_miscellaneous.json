@@ -16780,8 +16780,8 @@
   "es": "#R Grave#!"
  },
  "gw_tier_short_significant": {
-  "en": "#o Significant#!",
-  "es": "#o Significativa#!"
+  "en": "#bold;gold Significant#!",
+  "es": "#bold;gold Significativa#!"
  },
  "gw_tier_short_slight": {
   "en": "#bold;yellow Slight#!",
@@ -18412,8 +18412,8 @@
   "es": "#R En duda#!"
  },
  "nd_credibility_band_mid": {
-  "en": "Steady",
-  "es": "Estable"
+  "en": "#v Steady#!",
+  "es": "#v Estable#!"
  },
  "nd_crisis_coercive_success": {
   "en": "Nuclear Brinkmanship Rewarded",

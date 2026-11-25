@@ -5053,7 +5053,7 @@
  gw_tier_short_moderate:0 "#bold;yellow Moderate#!"
  gw_tier_short_negligible:0 "#G Negligible#!"
  gw_tier_short_severe:0 "#R Severe#!"
- gw_tier_short_significant:0 "#o Significant#!"
+ gw_tier_short_significant:0 "#bold;gold Significant#!"
  gw_tier_short_slight:0 "#bold;yellow Slight#!"
  gw_treaty_source_has_technologies_tt:0 "The country cutting its emissions has researched [GetTechnology('clean_energy_technologies').GetName], [GetTechnology('pollution_control').GetName] and [GetTechnology('modern_urban_planning').GetName], which the policies it would be forced to adopt need"
  gw_trend_prefix_cooling:0 "#G -" # REVIEWED 2026-11-12: opening fragment of the gw_trend_prefix custom loc; each of its three callers (gw_cond_trend_value, gw_ov_temp_projected, gw_ov_temp_tt_projection) closes it after the number
@@ -5469,7 +5469,7 @@
  nd_concession_short_9:0 "End operations"
  nd_credibility_band_high:0 "#G Trusted#!"
  nd_credibility_band_low:0 "#R Doubted#!"
- nd_credibility_band_mid:0 "Steady"
+ nd_credibility_band_mid:0 "#v Steady#!"
  nd_crisis_coercive_success:0 "Nuclear Brinkmanship Rewarded"
  nd_crisis_cred_down_15:0 "#R -15#!"
  nd_crisis_cred_down_5:0 "#R -5#!"

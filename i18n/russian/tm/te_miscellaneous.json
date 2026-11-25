@@ -16744,8 +16744,8 @@
   "ru": "#R Тяжёлое#!"
  },
  "gw_tier_short_significant": {
-  "en": "#o Significant#!",
-  "ru": "#o Значительное#!"
+  "en": "#bold;gold Significant#!",
+  "ru": "#bold;gold Значительное#!"
  },
  "gw_tier_short_slight": {
   "en": "#bold;yellow Slight#!",
@@ -18376,8 +18376,8 @@
   "ru": "#R Под сомнением#!"
  },
  "nd_credibility_band_mid": {
-  "en": "Steady",
-  "ru": "Ровный"
+  "en": "#v Steady#!",
+  "ru": "#v Ровный#!"
  },
  "nd_crisis_coercive_success": {
   "en": "Nuclear Brinkmanship Rewarded",
