@@ -164,7 +164,7 @@ Compared with the engine doing the same assimilation itself:
 - **The target.** The host culture by the rule above, where the engine takes the most accepted culture present, which under generous laws can be one that is not primary.
 - **`country_assimilation_delta_threshold_add`** is not imitated: its base value is in no define, so how much more accepted the target must be is unknown. Affirmative Action carries −100 of it. A row on the play-test list.
 - **The fervor factor** is a guess at the formula from the define's comment.
-- **The engine's minimum of one person a month** has no counterpart; a pop too small for a fraction converts whole.
+- **The engine's minimum of one person a month** has no counterpart; a pop of under 50 people converts whole.
 - **Unincorporated states** are skipped. If the engine does assimilate there, slowly, the pass does not follow it.
 
 ## Unverified

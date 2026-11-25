@@ -244,10 +244,10 @@ def test_both_modifier_types_are_script_only_and_named(self):
 - Consumes: `te_hcg_save_targets` (Task 3); `te_hc_mode_hybrid`, `te_hc_mode_none`, the two modifier types (Task 4).
 - Produces:
   - on_action `te_hc_yearly_on_action` on `on_yearly_pulse_country`, whose effect is `te_hc_yearly_country = yes`.
-  - Effects: `te_hc_yearly_country` (country), `te_hc_state_pass` (state), `te_hc_pick_host` (state), `te_hc_find_locals` (state), `te_hc_convert_pop` (pop).
-  - Triggers: `te_hc_state_has_other_group` (state), `te_hc_pop_taken` (pop), `te_hc_pop_status_allowed` (pop), `te_hc_speaks_host` (pop).
-  - Values: `te_hc_monthly_rate = 0.002`, `te_hc_months = 12`, `te_hc_fervor_effect = 0.0075`, `te_hc_homeland_factor = 0.75`, `te_hc_rate_cap = 0.5`; `te_hc_pop_rate` (pop); `te_hc_cross_share` (country).
-  - Local variables, set in `te_hc_yearly_country` unless noted: `te_hc_mode` (1 Hybrid Cultures, 2 Unrestricted, 3 None), `te_hc_cross` (`te_hc_cross_share`), `te_hc_blocked` (1 when the bool reads yes); per state `te_hc_has_host`, `te_hc_has_targets`.
+  - Effects: `te_hc_yearly_country` (country), `te_hc_state_pass` (state), `te_hc_pick_host` (state), `te_hc_find_locals` (state), `te_hc_convert_pop` (pop); helpers with arguments, each a single token: `te_hc_weigh_primary = { STATE OUT FLAG }` (culture), `te_hc_keep_local = { G }` (culture), `te_hc_language_step = { G }` (pop), `G` a heritage group key less `heritage_group_`; `te_hc_find_capital_host`, `te_hc_reset_locals`.
+  - Triggers: `te_hc_state_has_other_group` (state), `te_hc_pop_taken` (pop), `te_hc_pop_status_allowed` (pop), `te_hc_speaks_host` (pop), `te_hc_culture_lives_in = { STATE }` (culture).
+  - Values: `te_hc_monthly_rate = 0.002`, `te_hc_months = 12`, `te_hc_fervor_effect = 0.0075`, `te_hc_homeland_factor = 0.75`, `te_hc_rate_cap = 0.5`, `te_hc_small_pop = 50`; `te_hc_pop_rate` and `te_hc_status_mult` (pop); `te_hc_cross_share` (country); and the two fractions a `change_pop_culture` is given, `te_hc_pop_step` (the rate) and `te_hc_pop_cross_step` (the rate times the owner's `te_hc_cross_share`), each 1 for a small pop.
+  - Local variables, set in `te_hc_yearly_country` unless noted: `te_hc_mode` (1 Hybrid Cultures, 2 Unrestricted, 3 None), `te_hc_cross` (`te_hc_cross_share`), `te_hc_blocked` (1 when the bool reads yes), `te_hc_can` (0 where nothing can convert this year: mode 2 under a block, mode 3 under a block or with `te_hc_cross` 0; no state is walked then); per state `te_hc_has_host`, `te_hc_has_targets` and the ten `te_hc_has_local_<group>` (0 none, 1 shares a homeland with a primary culture, 2 its homeland is this state); per pop `te_hc_done` (1 once it took the language step).
   - Temporary scopes: `te_hc_owner`, `te_hc_state`, `te_hc_host`, `te_hc_capital_host`, `te_hc_l_<group>`, and Task 3's `te_hc_t_<group>`.
 
 **The rules the script implements** (spec § The pass):
@@ -258,12 +258,12 @@ def test_both_modifier_types_are_script_only_and_named(self):
 - `te_hc_pop_taken`: the culture shares no heritage group with any primary culture of the owner; the state is not a homeland of the culture, or carries `state_allow_assimilation_in_homeland_bool`; `te_hc_pop_status_allowed`.
 - `te_hc_pop_status_allowed`: the owner's `country_allow_assimilation_<status>_bool` for the pop's status, by `pop_acceptance` against vanilla's `acceptance_status_2` to `_5` (20, 40, 60, 80): `violent_hostility`, `cultural_erasure`, `open_prejudice`, `second_rate_citizen`, `full_acceptance`.
 - `te_hc_pop_rate` = `te_hc_monthly_rate` × `te_hc_months` × max(0, 1 + `state.modifier:state_assimilation_mult`) × max(0, 1 + the owner's `country_assimilation_<status>_mult`) × (1 − `pop_radical_fraction`) × max(0, 1 − `te_hc_fervor_effect` × the culture's `culture_current_fervor`) × `te_hc_homeland_factor` in a homeland of the culture; 0 to `te_hc_rate_cap`.
-- A conversion whose fraction of the pop is under one person converts the whole pop; a fraction of 0 converts nobody.
+- A pop of under `te_hc_small_pop` people converts whole where its rate is above 0 (at the base rate a year's fraction of such a pop is about one person); a rate of 0 converts nobody.
 - **The outcome table.** `speaks` is `te_hc_speaks_host` (`shares_language_trait_with_culture = scope:te_hc_host`); `slave` is `is_pop_type = slaves`.
 
-| `te_hc_mode` | speaks | targets | Becomes | Fraction | Not when |
+| `te_hc_mode` | speaks | targets | Becomes | Fraction (`te_hc_pop_step` for rate, `te_hc_pop_cross_step` for rate × `te_hc_cross`) | Not when |
 |---|---|---|---|---|---|
-| 1 | no | any, local 1 | `scope:te_hc_l_<the pop's heritage group>` | rate | never |
+| 1 | no | any, local > 0 | `scope:te_hc_l_<the pop's heritage group>` | rate | never |
 | 1 | no | 1, local 0 | `scope:te_hc_t_<the pop's heritage group>` | rate | never |
 | 1 | no | 0, local 0 | `scope:te_hc_host` | rate × `te_hc_cross` | blocked, slave, `te_hc_cross` = 0 |
 | 1 | yes | any | `scope:te_hc_host` | rate × `te_hc_cross` | blocked, slave, `te_hc_cross` = 0 |
@@ -304,7 +304,7 @@ def test_a_pop_in_its_homeland_is_taken_only_with_the_state_bool(self):
 def test_the_status_ladder_covers_five_statuses_at_vanillas_thresholds(self):
 def test_a_state_without_a_primary_culture_takes_the_capitals_host(self):   # Review Focus 5
 def test_only_incorporated_states_are_walked(self):                        # Review Focus 5
-def test_under_one_person_converts_the_whole_pop_and_zero_converts_nobody(self):
+def test_a_small_pop_converts_whole_and_a_zero_rate_converts_nobody(self):   # te_hc_pop_step and te_hc_pop_cross_step
 def test_a_local_culture_needs_people_language_group_and_a_shared_homeland(self):   # this state its homeland, or an owned state a homeland of it and of a primary culture
 def test_local_flags_are_reset_in_every_state(self):                # Review Focus 2
 def test_the_local_search_names_no_culture(self):
