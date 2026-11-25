@@ -352,7 +352,10 @@ class StructureTest(unittest.TestCase):
     def test_the_columns(self):
         columns = assert_wide_matches_narrow(self, "te_grid_wide_sections",
                                              layout=("te_grid_tab_body", "te_grid_tab_layout"))
-        self.assertEqual(columns, [["te_grid_overview_panel", "te_grid_grids_panel"], ["te_grid_stations_panel"]])
+        # one section to a column, in the tab's order (2026-11-24: 435, 500 and 360 in a great power's 2032, where
+        # two columns ran 940 beside 360); none hides while the tab is open, so no column takes a gate
+        self.assertEqual(columns, [["te_grid_overview_panel"], ["te_grid_grids_panel"], ["te_grid_stations_panel"]])
+        self.assertNotIn("_visible", _type_body(self.gui, "te_grid_wide_sections"))
 
     def test_the_registry(self):
         tab = next(t for t in window_gen.TABS if t.key == "power_grids")

@@ -10537,9 +10537,16 @@ types space_race_widget_types
 	### the tab's gate on its own wrapper, as in te_sr_tab_body (the name stays
 	### there: the window's tests find the wrapper by it).
 	type te_sr_wide_sections = te_ui_columns_three {
+		### Each milestone's header, and the idle note's, at the column's 520
+		### (sr_window_header_size, generated), not the side panel's 554, which
+		### overhung the column by 17 a side: here they head a column under the
+		### page's own title, which the window's full-screen mount draws.
 		blockoverride "column_1" {
 			te_sr_window_milestones = {
 				blockoverride "sr_window_solar_colonization_live" {}
+				blockoverride "sr_window_header_size" {
+					size = { 520 44 }
+				}
 			}
 		}
 

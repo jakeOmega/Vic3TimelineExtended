@@ -27,6 +27,7 @@ REPO = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, REPO)
 from scripts.generators import gen_te_systems_window as gen  # noqa: E402
 from gui_test_helpers import _block_at, _close, _read, _strip_comments, _type_body  # noqa: E402,F401 (re-exported)
+import gui_test_helpers as gh  # noqa: E402
 
 GENERATED = os.path.join(REPO, "gui", "te_systems_window_generated.gui")
 GUI = os.path.join(REPO, "gui", "te_systems_window.gui")
@@ -1213,12 +1214,89 @@ class WideTest(unittest.TestCase):
                 if t.layout is None:
                     self.assertEqual(re.findall(r"^\t+(\w+) = \{\}$", mount, re.M), [t.wide])
                     self.assertNotIn(t.body, content)
+                elif t.key in gen._own_titles():
+                    # a body with no header: the page's title above the composer, in its layout block
+                    self.assertRegex(content, re.compile(rf'^\t+{t.body} = \{{\n\t+blockoverride "{t.layout}" \{{\n'
+                                                         rf'\t+default_header = \{{.*\n\t+\}}\n\t+{t.wide} = \{{\}}\n'
+                                                         rf'\t+\}}\n\t+\}}\n\t+\}}$', re.S))
                 else:
-                    # ^ and $ without re.M: the whole content is the body and its one override
-                    self.assertRegex(content, rf'^\t+{t.body} = \{{\n\t+blockoverride "{t.layout}" \{{\n'
+                    # ^ and $ without re.M: the whole content is the body, its title's width and its layout
+                    self.assertRegex(content, rf'^\t+{t.body} = \{{\n'
+                                              rf'\t+blockoverride "{gen.TITLE_HOOK}" \{{\n\t+size = \{{ 1620 44 \}}\n\t+\}}\n'
+                                              rf'\t+blockoverride "{t.layout}" \{{\n'
                                               rf'\t+{t.wide} = \{{\}}\n\t+\}}\n\t+\}}\n\t+\}}$')
         at = [column.index(f'name = "te_systems_window_{t.key}_tab_wide"') for t in gen.TABS]
         self.assertEqual(at, sorted(at))
+
+
+class FullScreenTitleTest(unittest.TestCase):
+    """The full-screen frame's title (spec § 7.1, 2026-11-24): every tab's
+    title is one bar across the frame, its three 520 columns and two 30
+    gutters (1620, the strips' row above it), with its "?" at the right end: a
+    constant width, so it never moves when a column opens or closes (style
+    guide rule 8). Each body's header carries the hook at vanilla's 554, so the
+    side panel, the vanilla panels' tabs and National Info draw as before; only
+    the window's full-screen mount fills it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.generated = _strip_comments(_read(GENERATED))
+        cls.ni = _strip_comments(_read(gen.NI_OUT))
+        cls.all = "\n".join(_strip_comments(_read(p))
+                            for p in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)))
+
+    def test_the_width_is_the_frames(self):
+        self.assertEqual(gen.WIDE_WIDTH, 3 * 520 + 2 * 30)
+        self.assertIn(f"minimumsize = {{ {gen.WIDE_WIDTH} -1 }}", _type_body(self.generated, "te_systems_window_tabs_wide"))
+
+    def test_every_body_header_carries_the_hook(self):
+        """Every header in a frame body's tab_header has the hook, at vanilla's
+        554 (@panel_width_plus_14), before its "?" (the last child)."""
+        hook = re.compile(rf'blockoverride "size" \{{\s*block "{gen.TITLE_HOOK}" \{{\s*size = \{{ 554 44 \}}\s*\}}\s*\}}\s*'
+                          r'te_help_button = \{')
+        for t in gen.TABS:
+            if t.key in gen._own_titles():
+                continue
+            with self.subTest(tab=t.key):
+                self.assertRegex(self.all, rf"type {t.body} = te_system_tab_frame \{{")
+                header = _block_at(_type_body(self.all, t.body), _type_body(self.all, t.body).index('blockoverride "tab_header"'))
+                headers = re.findall(r"\bdefault_header = \{", header)
+                self.assertTrue(headers)
+                self.assertEqual(len(hook.findall(header)), len(headers))
+
+    def test_only_the_full_screen_mount_fills_it(self):
+        """The window's full-screen mounts fill the hook, each once, at the
+        frame's width; its side-panel mounts and National Info's never do."""
+        wide = _type_body(self.generated, "te_systems_window_tabs_wide")
+        framed = [t for t in gen.TABS if t.key not in gen._own_titles()]
+        self.assertEqual(wide.count(f'blockoverride "{gen.TITLE_HOOK}"'), len(framed))
+        self.assertEqual(len(re.findall(rf'blockoverride "{gen.TITLE_HOOK}" \{{\s*size = \{{ 1620 44 \}}\s*\}}', wide)),
+                         len(framed))
+        self.assertNotIn(gen.TITLE_HOOK, _type_body(self.generated, "te_systems_window_tabs_narrow"))
+        self.assertNotIn(gen.TITLE_HOOK, self.ni)
+
+    def test_the_space_race_page_title(self):
+        """The Space Race's body has no header (each running entry is a frame
+        with its entry's): the full-screen mount draws the page's title above
+        the composer, the tab's name and the "?" as its last child."""
+        named = self.generated.index('name = "te_systems_window_space_race_tab_wide"')
+        mount = _block_at(self.generated, self.generated.rindex("flowcontainer = {", 0, named))
+        at = mount.index("default_header = {")
+        title = mount[mount.index("{", at) + 1:_close(mount, mount.index("{", at))]
+        items = gh._children(title)
+        self.assertEqual([(kind, name) for kind, name, _ in items],
+                         [("property", "using"), ("blockoverride", "size"), ("blockoverride", "text"),
+                          ("widget", "te_help_button")])
+        self.assertRegex(items[1][2], r"^\s*size = \{ 1620 44 \}\s*$")
+        self.assertEqual(items[2][2].strip(), 'text = "te_window_tab_space_race"')
+        self.assertIn("help_space_race", items[3][2])
+        self.assertGreater(mount.index("te_sr_wide_sections = {}"), at)
+        # its milestones' headers: vanilla's 554 in a block the full-screen composer fills with its column's 520
+        milestones = _type_body(self.generated, "te_sr_window_milestones")
+        headers = len(re.findall(r"\bdefault_header = \{", milestones))
+        self.assertEqual(milestones.count(f'block "{gen.SR_HEADER_HOOK}" {{\n'), headers)
+        sr = _type_body(self.all, "te_sr_wide_sections")
+        self.assertRegex(sr, rf'blockoverride "{gen.SR_HEADER_HOOK}" \{{\s*size = \{{ 520 44 \}}\s*\}}')
 
 
 class TaxFooterTest(unittest.TestCase):

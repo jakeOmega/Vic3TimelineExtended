@@ -1527,7 +1527,13 @@ class WideTest(unittest.TestCase):
         self.assertEqual(wide.count(f"{WORLD_COLUMN} = {{}}"), 1)
         visibles = re.findall(r'visible = "\[(.*)\]"', wide)
         self.assertEqual(visibles.count(f"And( Country.IsLocalPlayer, {gate} )"), 2, "columns 2 and 3's composers")
-        self.assertNotIn("Country.IsLocalPlayer", visibles, "column 3's How wrapper is gone")
+        # column 3 holds only the player's own, so for another country it closes up on the same
+        # Country.IsLocalPlayer (its column_3_visible, and nowhere else: column 3's How wrapper is gone), and
+        # National Info's two columns sit centred rather than beside an empty 520 band (spec § 7.1)
+        self.assertEqual(visibles.count("Country.IsLocalPlayer"), 1)
+        self.assertRegex(wide, r'blockoverride "column_3_visible" \{\s*visible = "\[Country\.IsLocalPlayer\]"\s*\}')
+        self.assertNotIn("column_1_visible", wide)
+        self.assertNotIn("column_2_visible", wide)
         self.assertEqual(visibles.count(gate), 1, "column 1's composer, open for both")
 
     def test_the_window_registers_it(self):

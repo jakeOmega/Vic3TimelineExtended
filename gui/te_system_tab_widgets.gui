@@ -783,7 +783,14 @@ types te_system_tab_widgets
 	###                             GetPlayer, on the root, so the header and the
 	###                             part before the gate read it too
 	###   tab_header                the tab's default_header, outside the gate, so
-	###                             it shows whenever the tab does
+	###                             it shows whenever the tab does. It carries
+	###                             blockoverride "size" { block
+	###                             "te_tab_header_size" { size = { 554 44 } } }
+	###                             (vanilla's own 554) before its "?", which the
+	###                             window's full-screen mount fills with 1620,
+	###                             so there the title spans the frame (the
+	###                             wide-mode spec § 7.1); every other mount
+	###                             leaves it 554
 	###   tab_before_gate           anything above the gated content (Banking's
 	###                             readout for a country with no entry)
 	###   tab_gate                  the gate's visible, on a parent of the
