@@ -69,6 +69,12 @@ def _read(path):
         return f.read()
 
 
+def _ch_panel_column(tree):
+    """ch_panel's text column, read from its markup: its minimum width less its side margins."""
+    panel = next(n for n in tree.walk() if n.kind == "type" and n.name == "ch_panel")
+    return gui_tree.size(panel, "minimumsize")[0] - 2 * gui_tree.size(panel, "margin")[0]
+
+
 def _type_body(text, name):
     m = re.search(rf"type {name} = \w+ \{{", text)
     assert m, f"no type {name}"
@@ -840,12 +846,11 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(_read(WIDGET).count("size = { 144 58 }"), 16)   # the model cells and their slot
 
     def test_the_overviews_first_row_fits_its_column(self):
-        # tier, rank and benchmark at 108, the model cell at 144, 4 between: the 480 column.
-        ov = _type_body(_read(WIDGET), "te_ch_overview_panel")
-        row = ov[ov.index("### Row 1:"):ov.index("### The influence tier")]
-        self.assertIn("spacing = 4", row)
-        self.assertEqual(108 * 3 + 144 + 3 * 4, 480)
-        self.assertIn("minimumsize = { 480 -1 }", ov[:ov.index("### Row 1:")])
+        # The overview's column is the panel's text column, whichever cells show.
+        text = _read(WIDGET)
+        tree = gui_tree.parse(text)
+        row = gui_tree.node_after(tree, text, "### Row 1:", "flowcontainer")
+        self.assertEqual(gui_tree.size(row.parent, "minimumsize"), (_ch_panel_column(tree), -1))
 
     def test_the_overviews_first_row_keeps_its_width_whichever_cells_show(self):
         # The row is centred, so it must be one width whatever shows (gotcha
@@ -859,7 +864,12 @@ class LabelBudgetTest(unittest.TestCase):
         self.assertEqual(tier.kind, "flowcontainer")
         self.assertIsNone(tier.prop("visible"))
         self.assertEqual([c.kind for c in gui_tree.widgets(tier)], ["te_ch_ov_icon_label"] * 6)
-        widths = [108]
+        # the tier cells take te_ch_ov_icon_label's own cell_size
+        icon_label = next(n for n in gui_tree.parse(text).walk() if n.kind == "type" and n.name == "te_ch_ov_icon_label")
+        cell_size = next(c for c in icon_label.children if c.kind == "block" and c.name == "cell_size")
+        self.assertFalse([c for c in gui_tree.widgets(tier) if any(b.kind == "blockoverride" and b.name == "cell_size"
+                                                                  for b in c.children)])
+        widths = [gui_tree.size(cell_size)[0]]
         for slot, gate in zip(slots, ("ch_rank_self_display", "ch_disp_model_code", "ch_benchmark_sgui"), strict=True):
             with self.subTest(gate=gate):
                 self.assertEqual(slot.kind, "widget")
@@ -870,7 +880,8 @@ class LabelBudgetTest(unittest.TestCase):
                     self.assertEqual(gui_tree.size(cell), gui_tree.size(slot))
                 widths.append(gui_tree.size(slot)[0])
         self.assertEqual(widths, [108, 108, 144, 108])
-        self.assertEqual(sum(widths) + 4 * 3, 480)
+        spacing = int(row.prop("spacing").value)
+        self.assertEqual(sum(widths) + spacing * (len(widths) - 1), _ch_panel_column(gui_tree.parse(text)))
 
 
 class PanelWidthTest(unittest.TestCase):
@@ -970,10 +981,12 @@ class BoardTest(unittest.TestCase):
         self.assertEqual(widths(self.row), [14, 22, 36, 36, 58, 66, 64])
         self.assertIn(14, head)
         self.assertIn(36, head)
-        # 2026-11-24: the cells and the rows' 2 between them fill 464 of the column (474, now 480), as before,
-        # so the box keeps its width; the head is the row's cells in the row's order.
-        self.assertEqual(14 + 22 + 36 + 192 + 58 + 66 + 64 + 6 * 2, 464)
+        # The head is the row's cells in the row's order, and with the spacing between them they fit the
+        # panel's text column (464 of 474 until 2026-11-24, of 480 since).
         self.assertEqual([w for w in head], [14, 22, 36, 192, 58, 66, 64])
+        spacing = {int(re.search(r"spacing = (\d+)", body).group(1)) for body in (self.head, self.row)}
+        (spacing,) = spacing
+        self.assertLessEqual(sum(head) + spacing * (len(head) - 1), _ch_panel_column(gui_tree.parse(self.gui)))
 
     def test_the_flag_and_name_read_the_stored_capital(self):
         flag = self.row[self.row.index("tiny_flag = {") - 200:self.row.index("tiny_flag = {") + 200]
@@ -1193,8 +1206,9 @@ class HegemonyBonusTest(unittest.TestCase):
         for cell in cells:
             self.assertIsNone(cell.prop("visible"))   # both always show: one width (gotcha #43)
             self.assertEqual(gui_tree.size(cell), (238, 70))
-        self.assertEqual(row.prop("spacing").value, "4")
-        self.assertEqual(238 * 2 + 4, 480)
+        spacing = int(row.prop("spacing").value)
+        self.assertEqual(sum(gui_tree.size(c)[0] for c in cells) + spacing * (len(cells) - 1),
+                         _ch_panel_column(gui_tree.parse(_read(WIDGET))), "the two cells fill the text column")
 
     def test_the_cells_states_are_gated_on_the_strength(self):
         cell = self.ov[self.ov.index('tooltip = "je_ch_ov_bonus_tt"'):]
