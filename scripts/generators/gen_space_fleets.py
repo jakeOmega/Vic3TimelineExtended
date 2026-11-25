@@ -424,13 +424,15 @@ def render_values() -> str:
             *[f"sr_site_ai_worth_{w.key} = {{ value = sr_site_pop_value_{w.key} divide = 10000 "
               f"add = sr_site_spec_built_{w.key} add = sr_site_generic_built_{w.key} }}" for w in gss.SITES],
             "", "# ===== Per location, country scope: the best Spaceport level of ours there =====",
-            "# (an occupied world's serves no one)."]
+            "# (an occupied world's serves no one), at our Space Forces Personnel's crewed",
+            "# share (sr_site_port_crewed_<key>; the owner, 2026-11-25), so a port short of",
+            "# personnel repairs at that share. Docking needs a level of any staff."]
     for loc in LOCATIONS[1:]:
         out += [f"sr_loc_port_level_{loc.key} = {{", "\tvalue = 0"]
         for s in worlds_at(loc.key):
             k = s.key
             out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this "
-                       f"NOT = {{ has_global_variable = sr_site_occupier_{k} }} }} min = sr_site_port_value_{k} }}")
+                       f"NOT = {{ has_global_variable = sr_site_occupier_{k} }} }} min = sr_site_port_crewed_{k} }}")
         out.append("}")
     return "\n".join(out) + "\n"
 

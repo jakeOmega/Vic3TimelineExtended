@@ -753,8 +753,8 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
 | Habitat | Adds half of the colony's starting room for people, more with five technologies (see below) | A cap by the colony's size: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets; past it each costs more |
 | Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | Up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
-| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel: fully on a site that makes propellant, a quarter of their tanks a month anywhere else. Under Simple Colonies, nothing | None on the Moon |
-| Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down, and on the Moon and Mars your other colonies there too (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)). Under Simple Colonies, nothing | None |
+| Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel: fully on a site that makes propellant, a quarter of their tanks a month anywhere else. It takes 1,000 [personnel](#space-forces-personnel) a level besides its crew. Under Simple Colonies, nothing | None on the Moon |
+| Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down, and on the Moon and Mars your other colonies there too (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)). They take 1,000 personnel a level besides their crew. Under Simple Colonies, nothing | None |
 | Facilities | See the table below | None |
 
 Every module but the Habitat needs a crew (see below), so a colony's people are
@@ -766,13 +766,13 @@ colonies:
 | Facility | A staffed level gives |
 |---|---|
 | Mining Complex | +50 Extraplanetary Base room at the colony |
-| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
-| Research Station | +2% research speed |
+| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month while you have a Space Command in a state you control. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
+| Research Station | +25 innovation cap, which pays only while your universities make more innovation than you can invest |
 | Cultural Center | +3% cultural pull, +1% prestige, and +1 to the colony's Resort Draw |
 | Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
-| Black Site | +1 intelligence capacity, +3% covert operation efficiency |
-| Training Ground | +4% army experience gain; under Full Colonies, your marines count 5% more, at most +25% (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)) |
-| Nuclear Command Center | +4 nuclear command reliability, at most +12; +2 Command Redundancy against a salvo on the capital, at most +6 |
+| Black Site | +1 intelligence capacity, +3% covert operation efficiency; under Full Colonies it takes 1,000 [personnel](#space-forces-personnel) |
+| Training Ground | +4% army experience gain; under Full Colonies, your marines count 5% more, at most +25% (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)), and it takes 1,000 personnel |
+| Nuclear Command Center | +4 nuclear command reliability, at most +12; +2 Command Redundancy against a salvo on the capital, at most +6; under Full Colonies it takes 1,000 personnel |
 | Materials Foundry | +3% advanced materials output |
 | Administration | −0.15 a month to the colony's autonomy, for 25 authority |
 
@@ -1394,7 +1394,7 @@ last month's construction, so pause just after Built a month changes.
 ### Space Forces Personnel
 
 Every ship needs a crew and every marine is a person. The Space Forces Base, a
-government building unlocked by Space Militarization and built in any state,
+government building unlocked by Cislunar Infrastructure and built in any state,
 employs Spacers, the mod's own pop type, 1,000 a level, hired as barracks hire
 soldiers. It uses no goods. Each level gives 1,000 Space Forces Personnel,
 scaled by staffing, and a base in a state an enemy occupies still counts. Each
@@ -1406,6 +1406,16 @@ is in service needs them:
 |---|---|
 | A point of fleet strength at full, in a fleet (not the reserve on the ground) | 100, or 50 with Artificial General Intelligence |
 | A marine battalion, aboard or landed as a garrison | 1,000 |
+| A level of Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center at a colony you hold that no enemy occupies, besides its crew | 1,000 |
+
+The colony modules take theirs as soon as they land, whatever is spare, so
+building one with no personnel to spare leaves everything in service short.
+The module's + button says whether you have 1,000 to spare, counting those
+already queued and on their way. The base comes with Cislunar Infrastructure,
+the technology that fabricates the first modules, so you can staff one from
+the first you build, a technology before your fleets. Until you build a base,
+those five modules do nothing under Full Colonies. Under Simple Colonies they
+need none.
 
 Space Command's Personnel cell gives those in service out of what your bases
 give. Personnel to spare are what launches the reserve and fills marines:
@@ -1422,9 +1432,11 @@ give. Personnel to spare are what launches the reserve and fills marines:
 With more in service than your bases give, as after a base loses staff, a level
 is demolished or the reserve went up during an old game's grace (below), your
 forces are short of personnel. The Crewed cell gives the share crewed, and a
-note above your fleets says so. Every fleet fires at that share, and marines,
-aboard or landed, count only at that share when a seizure is weighed, until
-the bases hire again or the forces shrink.
+note above your fleets says so. Every fleet fires at that share, marines,
+aboard or landed, count only at that share when a seizure is weighed, and the
+five personnel modules give that share of their bonus (Defenses fire at it, and
+a Spaceport repairs at it, though it still docks), until the bases hire again
+or the forces shrink.
 
 People die with what is lost. Ships destroyed in battle, the strength lost
 away from supply, a fleet all but destroyed, marines aboard assault carriers
@@ -1435,9 +1447,10 @@ many Spacers in your bases' states, each state by its share of the personnel.
 The census counts them as war dead. The battle report and the occupation
 notice give the dead, and the Personnel hover the year's. The bases rehire.
 
-In a game already under way, a country whose fleets need more personnel than
-its bases give gets the base levels they lack, in Space Command's state, and
-for six months its forces count fully crewed while the new levels hire.
+In a game already under way, a country whose fleets, or colony modules, need
+more personnel than its bases give gets the base levels they lack, in Space
+Command's state or else its capital, and for six months its forces count fully
+crewed while the new levels hire.
 
 ### Moving fleets
 
@@ -1689,8 +1702,8 @@ marines outnumber half again that colony's garrison and militia closes in on it.
 fleets at Earth stay stationed. An AI never destroys a colony, never attacks a free one and never
 interdicts. With an enemy fleet at Earth, it launches its reserve once the part
 of it that it can crew and its fleets at Earth match the enemy's there. It
-builds Space Forces Bases while its fleets, its reserve and its carriers'
-empty room need more personnel than its built and queued base levels give,
+builds Space Forces Bases while its fleets, its reserve, its carriers'
+empty room and its colony modules need more personnel than its built and queued base levels give,
 with a fifth to spare, and
 puts marines first at war and hulls first in peace. It builds batteries
 only while at war with a country that has fleets, up to five levels, and runs

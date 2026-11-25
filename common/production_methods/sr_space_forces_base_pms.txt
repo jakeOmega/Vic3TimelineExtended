@@ -27,7 +27,7 @@ pm_space_forces_training = {
 	texture = "gfx/interface/icons/production_method_icons/pm_space_forces_training.dds"
 
 	unlocking_technologies = {
-		space_militarization
+		cislunar_infrastructure
 	}
 
 	building_modifiers = {

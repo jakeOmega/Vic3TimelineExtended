@@ -597,7 +597,7 @@ class PauseTest(unittest.TestCase):
                 self.assertNotIn(name, rest)
         calls = re.findall(r"sr_reserve_build = yes", self.effects + self.earth + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)))
         self.assertEqual(len(calls), 1)
-        self.assertIn("add = {\n\t\tvalue = sr_mod_units_yard", _block(_strip(_raw(FLEET_VALUES)), "sr_sc_rate"))
+        self.assertRegex(_block(_strip(_raw(FLEET_VALUES)), "sr_sc_rate"), r"add = \{\s*value = sr_mod_units_yard")
 
     def test_the_panel_reads_paused(self):
         shown = _block(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"), "sr_disp_sc_paused")

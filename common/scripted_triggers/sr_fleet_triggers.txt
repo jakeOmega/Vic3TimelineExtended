@@ -539,3 +539,10 @@ sr_pers_can_crew_launch = {
 	sr_pers_reserve_share > 0
 	sr_pers_room_points >= sr_fl_minimum_strength
 }
+
+# Country scope, the colony module + button's personnel line (the owner,
+# 2026-11-25): our personnel to spare cover one more personnel module level,
+# with those queued and on their way. A line, never a bar, as the crews' is.
+sr_mod_scope_pers_spare = {
+	sr_pers_room_value >= sr_mod_pers_next_need
+}
