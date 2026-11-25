@@ -25,8 +25,8 @@ founded organization standing.
 ## Founding the United Nations
 
 A great power that has researched Intergovernmental Organizations and is not a
-subject can press Found the United Nations, under the overview's Membership
-cell, while no UN exists. Founding uses 500
+subject can press Found the United Nations, under the overview's grid of
+cells, while no UN exists. Founding uses 500
 influence, fading over five years, and needs that much available. The founder
 becomes the first member, a
 founding member, the headquarters host and the first permanent member of the
@@ -53,7 +53,7 @@ building is demolished.
 ### Joining and leaving the UN
 
 Any country that conducts its own foreign policy may press Join the United
-Nations, under the overview's Membership cell: an independent country, or a dominion, protectorate or tributary.
+Nations, under the overview's grid of cells: an independent country, or a dominion, protectorate or tributary.
 Puppets, vassals, colonies, personal unions, crown lands, chartered companies
 and decentralized nations cannot, nor can an uprising while it fights (it can't
 found one either). No technology is needed.

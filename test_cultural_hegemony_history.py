@@ -264,12 +264,15 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
             self.assertIn(f'blockoverride "{block}"', plot)
         # The store and the age test are each plot's, the generator's
         # (gen_te_history_charts.plot_layouts): the 5 and 20 years read the
-        # store's last 5 and 20 years, the 100 the whole store.
-        self.assertEqual(chart.count("te_history_plot = {"), 3)
-        self.assertEqual(layouts.count("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')"), 3)
+        # store's last 5 and 20 years, the 100 the whole store. Each shorter
+        # range has a second plot for a store that holds less than the range,
+        # which reads the whole store; the two take turns on the store's size,
+        # so each names the store twice (its visible and its datamodel).
+        self.assertEqual(chart.count("te_history_plot = {"), 5)
+        self.assertEqual(layouts.count("GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')"), 9)
         self.assertEqual(re.findall(r"DataModelLast\( GetGlobalVariable\('ch_model_hist_store'\)"
                                     r"\.GetList\('ch_model_hist'\), '\(int32\)(\d+)' \)", layouts), ["5", "20"])
-        self.assertEqual(layouts.count("GetVariableValue( 'te_hist_y' )"), 2)
+        self.assertEqual(layouts.count("GetVariableValue( 'te_hist_y' )"), 4)
         for path in sorted(ROOT.glob("gui/**/*.gui")):
             self.assertIsNone(re.search(r"\btype\s+\w+\s*=\s*te_history_plot\b", read(path.relative_to(ROOT))), path)
         self.assertEqual(re.findall(r"GetVariableValue\('ch_model_hist_cum_(\w+)'\)", plot), list(reversed(MODELS)))
@@ -305,8 +308,9 @@ class CulturalHegemonyHistoryTests(unittest.TestCase):
         width, height = map(int, frame.groups())
         bars = [tuple(map(int, b)) for b in re.findall(r'blockoverride "bar_size" \{\s*size = \{ (\d+) (\d+) \}\s*\}', chart)]
         label_column, right_margin = 48, 8
-        self.assertEqual(len(bars), 3)
-        for years, (bar_width, bar_height) in zip((5, 20, 100), bars):
+        # five plots: the 5 and 20 years have two each (the store holds the range, or less)
+        self.assertEqual(len(bars), 5)
+        for years, (bar_width, bar_height) in zip((5, 5, 20, 20, 100), bars):
             with self.subTest(years=years):
                 self.assertEqual(years * bar_width, width - label_column - right_margin)
                 self.assertEqual(bar_height, height - 12)

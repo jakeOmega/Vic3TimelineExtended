@@ -268,6 +268,31 @@ class CopiesTest(unittest.TestCase):
                          ["te_mon_is_anchored = yes", "te_mon_mandate_binds = yes", ""])
 
 
+class FxEffectParTest(unittest.TestCase):
+    """The Monetary Policy section's Trade and Prices row (te_mon_fx_effect):
+    a fixed parity that sits where its currency would trade reads "not
+    overvalued", not "overvalued by 0.0" (2026-11-24: a new game's gold
+    standard at par)."""
+
+    def test_a_parity_at_zero_says_so(self):
+        branches = _branches(_custom_locs()["te_mon_fx_effect"])
+        keys = [k for _, k in branches]
+        self.assertEqual(keys, ["banking_dash_mon_fx_effect_none", "banking_dash_mon_fx_effect_par",
+                                "banking_dash_mon_fx_effect_peg", "banking_dash_mon_fx_effect_peg",
+                                "banking_dash_mon_fx_effect_float"])
+        par = branches[1][0]
+        # both of the peg's branches, before them, while the figure would print 0.0 (one place)
+        for peg in (branches[2][0], branches[3][0]):
+            self.assertIn(peg.replace(" ", ""), par.replace(" ", ""))
+        self.assertIn("te_mon_fx_overvaluation_display < 0.05", par)
+        self.assertIn("|1]", _loc()["banking_dash_mon_fx_effect_peg"])
+        # never under 0, so under 0.05 is the whole of "0.0"
+        values = _read(os.path.join(REPO, "common", "script_values", "te_monetary_fx_script_values.txt"))
+        body = values.split("te_mon_fx_overvaluation_value = {", 1)[1].split("}", 1)[0]
+        self.assertIn("min = 0", body)
+        self.assertEqual(_loc()["banking_dash_mon_fx_effect_par"], "not overvalued")
+
+
 class PegEventTooltipTest(unittest.TestCase):
     """The no-entry tooltips of te_peg.1/.2/.3 name what the readout shows,
     and not what only the dashboard has."""

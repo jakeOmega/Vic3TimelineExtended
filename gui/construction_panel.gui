@@ -14,6 +14,16 @@
 @ship_queue_item_width = 540
 @ship_queue_item_height = 40
 
+### MOD: the construction market Help page's type sizes, the house ladder
+### (gui_style_guide.md rule 3): notes 17, subheadings 20.
+template te_cm_fontsize_row {
+	fontsize = 17
+}
+
+template te_cm_fontsize_heading {
+	fontsize = 20
+}
+
 types construction_panel
 {
 	type construction_panel_ships_content = flowcontainer {
@@ -904,6 +914,121 @@ types construction_panel
 		}
 	}
 
+	### MOD: the construction market's Help page (gui_style_guide.md rule 1):
+	### what the section's intro and its old collapsed "How the Construction
+	### Market Works" said, one subheading per topic. The live section keeps
+	### the controls and the read-out; the "?" in its header opens the page.
+	### Shown in te_popups (gui/te_popups.gui) on te_popup = help_construction_market.
+	### It reads nothing, so it opens wherever the "?" shows
+	### (test_te_help_pages.py). The house sizes: notes 17, subheadings 20
+	### (te_cm_fontsize_*, the file's head), in the Help popup's 480 column.
+	type te_cm_how_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 6
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = te_cm_fontsize_heading
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	type te_cm_how_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_cm_fontsize_row
+		default_format = "#lore"
+	}
+
+	### Instanced only by te_construction_market_help_popup.
+	type te_construction_market_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		te_cm_how_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "TE_CM_HOW_SUB_MARKET"
+			}
+		}
+		te_cm_how_note = {
+			text = "TE_CM_HOW_MARKET"
+		}
+		te_cm_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "TE_CM_HOW_SUB_SUPPLY"
+			}
+		}
+		te_cm_how_note = {
+			text = "TE_CM_HOW_SUPPLY"
+		}
+		te_cm_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "TE_CM_HOW_SUB_PURCHASE"
+			}
+		}
+		te_cm_how_note = {
+			text = "TE_CM_HOW_PURCHASE"
+		}
+		te_cm_how_note = {
+			text = "TE_CM_HOW_PURCHASE_CAP"
+		}
+		te_cm_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "TE_CM_HOW_SUB_PRIVATE"
+			}
+		}
+		te_cm_how_note = {
+			text = "TE_CM_HOW_PRIVATE"
+		}
+		te_cm_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "TE_CM_HOW_SUB_DELIVERY"
+			}
+		}
+		te_cm_how_note = {
+			text = "TE_CM_HOW_DELIVERY"
+		}
+		te_cm_how_subheader = {
+			blockoverride "subheader_text" {
+				text = "TE_CM_HOW_SUB_SHORTAGES"
+			}
+		}
+		te_cm_how_note = {
+			text = "TE_CM_HOW_SHORTAGES"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_construction_market_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_construction_market')]"
+		}
+		blockoverride "popup_title" {
+			text = "TE_CM_HOW_IT_WORKS"
+		}
+		blockoverride "popup_list" {
+			te_construction_market_help_body = {}
+		}
+	}
+
 	type construction_panel = default_block_window_two_lines {
 		name = "construction_panel"
 
@@ -1002,15 +1127,17 @@ types construction_panel
 
 				### MOD: construction-market section (te_construction_market) ###
 				# The construction good's purchase control (a weekly quantity or a
-				# weekly budget, by mode), a live read-out of where construction is
-				# going, and an expandable explanation.
+				# weekly budget, by mode) and a live read-out of where construction
+				# is going. The explanations are on the Help page
+				# (te_construction_market_help_popup, above; gui_style_guide.md
+				# rule 1), which the "?" at the right of the header opens.
 				# Figures: te_construction_market_display_* in
 				# common/script_values/te_construction_market_display_values.txt.
-				# Text: the TE_CM_* keys. The open flag of the explanation lives in
-				# the GUI variable system only, never in the save.
+				# Text: the TE_CM_* keys.
 				# Shown only while the construction market runs; with
 				# free_market_construction_rule disabled the direct-construction
-				# section below replaces it. The GUI cannot test a game rule, so
+				# section below replaces it, and the "?" goes with this section.
+				# The GUI cannot test a game rule, so
 				# te_construction_market_rule_on_sgui answers for it.
 				flowcontainer = {
 					name = "te_construction_market_section"
@@ -1022,20 +1149,16 @@ types construction_panel
 					margin_bottom = 10
 					spacing = 5
 
+					### The section's header carries the Help page's "?" at its
+					### right, as a system tab's header does (style guide rule 1).
 					default_header = {
 						blockoverride "text" {
 							text = "TE_CM_SECTION_HEADER"
 						}
-					}
-
-					textbox = {
-						parentanchor = hcenter
-						text = "TE_CM_SECTION_INTRO"
-						autoresize = yes
-						multiline = yes
-						max_width = @panel_width_minus_10
-						margin = { 10 0 }
-						align = left|nobaseline
+						te_help_button = {
+							visible = "[Not( GetMetaPlayer.IsObserver )]"
+							onclick = "[GetVariableSystem.Set('te_popup', 'help_construction_market')]"
+						}
 					}
 
 					### PURCHASE MODE
@@ -1341,41 +1464,6 @@ types construction_panel
 								text = "TE_CM_STAT_MARKET_VALUE"
 							}
 						}
-					}
-
-					### HOW IT WORKS (collapsible)
-					section_header_button = {
-						blockoverride "layout" {
-							parentanchor = hcenter
-							size = { @panel_width_minus_10 32 }
-						}
-						blockoverride "left_text_alignment" {
-							align = left|nobaseline
-						}
-						blockoverride "left_text" {
-							text = "TE_CM_HOW_IT_WORKS"
-							using = elide_fontsize_min
-						}
-						blockoverride "onclick" {
-							onclick = "[GetVariableSystem.Toggle('te_cm_how_it_works_open')]"
-						}
-						blockoverride "onclick_showmore" {
-							visible = "[Not(GetVariableSystem.Exists('te_cm_how_it_works_open'))]"
-						}
-						blockoverride "onclick_showless" {
-							visible = "[GetVariableSystem.Exists('te_cm_how_it_works_open')]"
-						}
-					}
-
-					textbox = {
-						visible = "[GetVariableSystem.Exists('te_cm_how_it_works_open')]"
-						parentanchor = hcenter
-						text = "TE_CM_HOW_IT_WORKS_BODY"
-						autoresize = yes
-						multiline = yes
-						max_width = @panel_width_minus_10
-						margin = { 10 5 }
-						align = left|nobaseline
 					}
 				}
 

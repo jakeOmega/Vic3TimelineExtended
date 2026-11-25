@@ -439,7 +439,24 @@ def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED
 
 # The wide frame's strips keep the narrow slot width: 540, the Census
 # window's strip (pop_browser_panel.gui).
-WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
+STRIP_WIDTH = 540
+WIDE_STRIP = [f"minimumsize = {{ {STRIP_WIDTH} -1 }}", f"maximumsize = {{ {STRIP_WIDTH} -1 }}"]
+# Vanilla's tab_buttons (gui/shared/tab_bars.gui) spends 16 of its width on
+# its margin (3 a side) and its two end dividers (5 each), and shares the rest
+# among the tabs it shows, each layoutstretchfactor 1: five tabs at 540 are
+# 104.8 wide, but a strip of two at 540 drew each 262 (National Info's
+# Nuclear Weapons and Power Grids, 2026-11-24, seen in game).
+STRIP_FRAME = 2 * 3 + 2 * 5
+
+
+def strip_width(tabs: int, per_strip: int = len(SLOTS)) -> int:
+    """The width of a strip that lists `tabs` whose tabs, all showing, are as
+    wide as a full strip's of `per_strip` at STRIP_WIDTH."""
+    return round(STRIP_FRAME + tabs * (STRIP_WIDTH - STRIP_FRAME) / per_strip)
+
+
+def strip_size(width: int) -> list[str]:
+    return [f"minimumsize = {{ {width} -1 }}", f"maximumsize = {{ {width} -1 }}"]
 
 
 def _strip(tabs: list[Tab], wide: bool = False, root: str = PLAYER_ROOT) -> list[str]:
@@ -528,8 +545,66 @@ def _content(tab: Tab, wide: bool = False) -> list[str]:
     return [f"{tab.body} = {{", f'\tblockoverride "{tab.layout}" {{', f"\t\t{tab.wide} = {{}}", "\t}", "}"]
 
 
+# --- the full-screen title (spec § 7.1) ----------------------------------------
+#
+# Full screen, every tab's title is one bar across the frame, its three 520
+# columns and two 30 gutters, the strips' row above it: a constant width, so it
+# never moves when a column opens or closes (style guide rule 8), the same on
+# every tab. Each body's header carries the hook TITLE_HOOK, vanilla's 554
+# (te_system_tab_frame's tab_header), which only this window's full-screen
+# mount fills; the side panel, the vanilla panels' tabs and National Info's
+# mounts (_content) leave it. A body with no header of its own (the Space
+# Race's: each running entry is a frame with its entry's header) gets the page's
+# title from the mount instead, above its composer (OWN_TITLE: the name and
+# the "?" lines).
+WIDE_WIDTH = 1620
+TITLE_HOOK = "te_tab_header_size"
+TITLE_HEIGHT = 44
+
+
+def _title_size(width: int = WIDE_WIDTH) -> str:
+    return f"size = {{ {width} {TITLE_HEIGHT} }}"
+
+
+def _own_titles() -> dict[str, tuple[str, list[str]]]:
+    return {"space_race": ("te_window_tab_space_race", SR_HELP_BUTTON)}
+
+
+def _page_title(text: str, button: list[str]) -> list[str]:
+    """The page's title for a body with no header: vanilla's default_header
+    across the frame, the "?" its last child, as every tab header has it."""
+    return (["default_header = {",
+             "\tusing = default_list_position",
+             '\tblockoverride "size" {',
+             f"\t\t{_title_size()}",
+             "\t}",
+             '\tblockoverride "text" {',
+             f'\t\ttext = "{text}"',
+             "\t}"]
+            + [f"\t{ln}" for ln in button]
+            + ["}"])
+
+
+def _wide_content(tab: Tab) -> list[str]:
+    """The window's full-screen mount: the body with its layout block holding
+    the wide composer (as _content(tab, wide=True), National Info's), and its
+    title across the frame: the body's own header widened through TITLE_HOOK,
+    or for a body with none, a title drawn above the composer."""
+    if tab.layout is None:
+        return [f"{tab.wide} = {{}}"]
+    own = _own_titles().get(tab.key)
+    if own:
+        return ([f"{tab.body} = {{", f'\tblockoverride "{tab.layout}" {{']
+                + [f"\t\t{ln}" for ln in _page_title(*own)]
+                + [f"\t\t{tab.wide} = {{}}", "\t}", "}"])
+    return [f"{tab.body} = {{",
+            f'\tblockoverride "{TITLE_HOOK}" {{', f"\t\t{_title_size()}", "\t}",
+            f'\tblockoverride "{tab.layout}" {{', f"\t\t{tab.wide} = {{}}", "\t}",
+            "}"]
+
+
 def _mount(tab: Tab, wide: bool = False) -> list[str]:
-    content = [f"\t{ln}" for ln in _content(tab, wide)]
+    content = [f"\t{ln}" for ln in (_wide_content(tab) if wide else _content(tab))]
     return ["flowcontainer = {",
             f'\tname = "te_systems_window_{tab.key}_tab{"_wide" if wide else ""}"',
             '\tdatacontext = "[GetPlayer]"',
@@ -568,7 +643,8 @@ def tabs_wide() -> list[str]:
     out = ["### The full-screen frame's column: three 520 columns and their 30 px",
            "### gaps wide (spec § 4.3), centered, so the frame scrolls sideways",
            "### below that width. Each tab's mount as narrow, holding its wide",
-           "### layout (the registry's `wide`).",
+           "### layout (the registry's `wide`) and its title across the frame",
+           f"### ({TITLE_HOOK}, or the page's own title: spec § 7.1).",
            "type te_systems_window_tabs_wide = flowcontainer {",
            '\tname = "te_systems_window_content_wide"',
            "\tparentanchor = hcenter",
@@ -596,6 +672,18 @@ SR_HELP_BUTTON = ["te_help_button = {",
                   "\tonclick = \"[GetVariableSystem.Set('te_popup', 'help_space_race')]\"",
                   "}"]
 
+# The width of every header in te_sr_window_milestones (each entry's, the idle
+# note's): vanilla's 554 in a block, SR_HEADER_HOOK, which the full-screen
+# composer (te_sr_wide_sections) fills with its column's 520, so there a header
+# heads its column under the page's title instead of overhanging it. Its lines
+# go before the "?", which stays each header's last child.
+SR_HEADER_HOOK = "sr_window_header_size"
+SR_HEADER_SIZE = ['blockoverride "size" {',
+                  f'\tblock "{SR_HEADER_HOOK}" {{',
+                  "\t\tsize = { 554 44 }",
+                  "\t}",
+                  "}"]
+
 
 # Open Journal Entry, the frame's own link (te_system_tab_frame's
 # tab_open_journal default), at its size and with the tab's tooltip; a
@@ -609,6 +697,13 @@ SR_OPEN_JOURNAL = ["button = {",
                    '\ttooltip = "te_window_space_race_open_journal_tt"',
                    '\tonclick = "[InformationPanelBar.OpenJournalEntryPanel(JournalEntry.AccessSelf)]"',
                    "}"]
+
+
+# The entry's modifiers (#1383), grouped under a Program Effects subheading:
+# te_sr_program_effects (space_race_widget.gui), the same two datamodels as
+# the shared te_je_modifier_strip, the Ongoing (scaling) icons then the Timed
+# rows with their time left (2026-11-24 evaluation).
+SR_EFFECTS = "te_sr_program_effects = {}"
 
 
 def _sr_status(m: str) -> list[str]:
@@ -658,7 +753,7 @@ def _milestone(m: str) -> list[str]:
         status = ([f"### Full screen, in a column of their own (te_sr_window_{m}_live).",
                    f'block "sr_window_{m}_live" {{']
                   + [f"\t{ln}" for ln in status] + ["}"])
-    own = _sr_own(m, status + ["te_je_modifier_strip = {}"] + SR_OPEN_JOURNAL)
+    own = _sr_own(m, status + [SR_EFFECTS] + SR_OPEN_JOURNAL)
     return ([f"### {m}",
              "te_system_tab_frame = {",
              '\tblockoverride "tab_country" {}',
@@ -669,7 +764,7 @@ def _milestone(m: str) -> list[str]:
              '\t\t\tblockoverride "text" {',
              f'\t\t\t\ttext = "{entry}"',
              "\t\t\t}"]
-            + [f"\t\t\t{ln}" for ln in SR_HELP_BUTTON]
+            + [f"\t\t\t{ln}" for ln in SR_HEADER_SIZE + SR_HELP_BUTTON]
             + ["\t\t}",
                "\t}",
                '\tblockoverride "tab_content" {',
@@ -717,7 +812,7 @@ def sr_milestones() -> list[str]:
            '\t\t\tblockoverride "text" {',
            '\t\t\t\ttext = "te_window_space_race_idle_header"',
            "\t\t\t}"]
-    out += [f"\t\t\t{ln}" for ln in SR_HELP_BUTTON]
+    out += [f"\t\t\t{ln}" for ln in SR_HEADER_SIZE + SR_HELP_BUTTON]
     out += ["\t\t}",
             "\t\tte_sr_panel = {",
             "\t\t\tte_sr_text = {",
@@ -979,18 +1074,27 @@ def _ni_pops_slot(slot: str) -> list[str]:
 def ni_strips() -> list[str]:
     """te_ni_strips: the window's strips side by side in one centered row,
     one vanilla tab_buttons per five tabs, each at the narrow width (540), as
-    the Timeline Extended window's full-screen frame has them."""
+    the Timeline Extended window's full-screen frame has them. A last strip
+    of fewer is narrowed to its tabs (strip_width), so they are as wide as
+    the full strips' and the row stays centered on what it draws. That holds
+    while every tab a strip lists shows: the engine shares a strip's width
+    among the tabs it shows, so a tab its game rule hides still widens the
+    others on its strip (four at 131 with the Tax Code rule off, #2039;
+    pinning each tab instead drew no first strip in game, 2026-11-24)."""
     keys = [NI_FALLBACK] + [t.key for t in ni_tabs()]
     by_key = {t.key: t for t in TABS}
     out = ["### The strips: Pops, then each public tab in NI_ORDER, five a strip, side by",
-           "### side and centered, each at the narrow strip width.",
+           "### side and centered, each at the narrow strip width; a last strip of fewer",
+           "### narrowed to its tabs, so each tab is as wide as a full strip's while every",
+           "### tab its strip lists shows (a tab a game rule hides widens the rest: #2039).",
            "type te_ni_strips = hbox {",
            "\tlayoutpolicy_horizontal = expanding",
            "\tlayoutpolicy_vertical = fixed",
            "",
            "\texpand = {}"]
     for i in range(0, len(keys), NI_PER_STRIP):
-        out += ["\ttab_buttons = {"] + [f"\t\t{ln}" for ln in WIDE_STRIP] + [""]
+        width = strip_width(len(keys[i:i + NI_PER_STRIP]), NI_PER_STRIP)
+        out += ["\ttab_buttons = {"] + [f"\t\t{ln}" for ln in strip_size(width)] + [""]
         for j, (slot, key) in enumerate(zip(SLOTS, keys[i:i + NI_PER_STRIP])):
             if j:
                 out.append("")

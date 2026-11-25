@@ -1211,6 +1211,17 @@ counter, the branch loaded with that night's other branches): `DataModelLast`
 over a script list draws, 12 bars to the right edge at 1 Year, 60 at 5
 Years, every month at 20, the pips on the same charts.
 
+**A store shorter than the range** (2026-11-24, the same evening, a fresh
+game as Great Britain). `DataModelLast` asked for more than a list holds
+logs `Trying to reshape data model with negative offset -60` every frame for
+every chart: 300 to 430 error lines a second with Banking's History open in
+January 1836, and the tab took over ten seconds to open under the QA harness
+(with History collapsed it opened at once). Each shorter range now has a
+second plot that reads the whole store, shown while the store holds less
+than the range (`history_charts.md`, "The chart"); a store that short costs
+little to read whole. Seen in March 1836 with two samples: two bars at the
+right edge at each range, and no error line.
+
 | Banking's History section | Before | After |
 |---|---|---|
 | Open, 1 Year | 23 | 74 |
