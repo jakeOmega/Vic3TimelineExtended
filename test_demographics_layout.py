@@ -718,6 +718,38 @@ class IconsTest(unittest.TestCase):
         self.assertEqual(colours, [c for _, c in _pie_colours()])
 
 
+TREND_TYPES = ("te_demog_trend_good_up", "te_demog_trend_good_down", "te_demog_trend_neutral")
+
+
+class TrendTest(unittest.TestCase):
+    """A figure's arrow: up or down since the last census, and nothing for one that held level. Vanilla's no-change
+    dot (trend_nochange.dds) read in game as a stray speck at the row's end (2026-11-24, the state subtab's
+    Sex Balance row), and vanilla draws no mark beside an unchanged figure; the hover gives the last census's."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.widgets = _read(WIDGETS)
+
+    def test_each_trend_type_draws_up_and_down_only(self):
+        for name in TREND_TYPES:
+            with self.subTest(type=name):
+                body = _type_body(self.widgets, name)
+                self.assertEqual(re.findall(r'block "(\w+)"', body), ["trend_up", "trend_down"])
+                self.assertEqual([c for c in _children(body) if c != "size"], ["icon", "icon"])
+        self.assertNotIn("generic_icons/trend_nochange.dds\"", self.widgets)
+
+    def test_every_instance_sets_both_arrows_and_no_level_mark(self):
+        found = 0
+        for name in TREND_TYPES:
+            for block in _instances(self.widgets, name):
+                found += 1
+                with self.subTest(type=name, at=block[:120]):
+                    self.assertIsNotNone(_override(block, "trend_up"))
+                    self.assertIsNotNone(_override(block, "trend_down"))
+                    self.assertIsNone(_override(block, "trend_level"))
+        self.assertEqual(found, 12, "four overview cells and two rows, for the country and for a state")
+
+
 def _pie_colours():
     """The generator's (texture, colour) pairs for the demographics pie, in its order."""
     return re.findall(r'\("icons/demographics_icons/(pie_\w+)\.dds", "(#[0-9a-f]{6})"\)', _read(PIE_GEN))
