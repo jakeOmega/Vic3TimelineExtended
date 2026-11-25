@@ -1679,7 +1679,6 @@ types banking_dashboard_widget_types
 	type te_banking_sec_active = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		parentanchor = hcenter
 		spacing = 2
 		visible = "[GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
@@ -2545,7 +2544,6 @@ types banking_dashboard_widget_types
 	type te_banking_sec_monetary = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		parentanchor = hcenter
 		spacing = 2
 		visible = "[GetScriptedGui('banking_dash_monetary_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 
@@ -4329,8 +4327,8 @@ types banking_dashboard_widget_types
 		using = te_own_country_only
 		direction = vertical
 		ignoreinvisible = yes
-		parentanchor = hcenter
 		spacing = 2
+		minimumsize = { 520 -1 }
 
 		### A group heading over centred category sections, so centred (style
 		### guide rule 7).
@@ -4355,30 +4353,30 @@ types banking_dashboard_widget_types
 			tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 			autoresize = yes
 			multiline = yes
-			minimumsize = { 480 -1 }
-			maximumsize = { 480 -1 }
-			parentanchor = hcenter
+			minimumsize = { 520 -1 }
+			maximumsize = { 520 -1 }
 			align = center|nobaseline
 			using = banking_dash_fontsize_row
-			margin = { 6 4 }
+			margin = { 26 4 }
 		}
 
 		### No points free (GUI audit BNK-12): each greyed Enable button says
 		### why in its own tooltip, and this says it once, above the rows, so
 		### the reason and what to do about it sit with the tools. Its hover is
-		### the overview's points-free breakdown.
+		### the overview's points-free breakdown. Both notes are the section's
+		### 520, their text in the same 468 as before, so neither needs an anchor
+		### (gotcha #52).
 		textbox = {
 			visible = "[GetScriptedGui('banking_dash_no_points_free').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
 			text = "banking_dash_no_points_note"
 			tooltip = "banking_dash_budget_free_tt"
 			autoresize = yes
 			multiline = yes
-			minimumsize = { 480 -1 }
-			maximumsize = { 480 -1 }
-			parentanchor = hcenter
+			minimumsize = { 520 -1 }
+			maximumsize = { 520 -1 }
 			align = center|nobaseline
 			using = banking_dash_fontsize_row
-			margin = { 6 4 }
+			margin = { 26 4 }
 		}
 
 		### The categories below flow with no anchor of their own (until

@@ -14,7 +14,11 @@
 types banking_layout_widget_types
 {
 	### What a returning player acts on, open by default: what is in force, the
-	### dial, and the tools.
+	### dial, and the tools. The sections flow with no anchor of their own: each
+	### is 520, its header's width, so this composer and the wide columns'
+	### wrappers are 520 too and an anchor placed nothing, while a section
+	### anchored under the dial kept its first-layout place when a dial line
+	### rewrapped above it (gui_modding_guide.md gotcha #52; from #2016).
 	type te_banking_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -274,12 +278,16 @@ types banking_layout_widget_types
 				te_banking_mon_readout = {}
 
 				# What opens the rest: the tab's own unlock checklist on hover,
-				# asked IsValid first like the tab's tooltip.
+				# asked IsValid first like the tab's tooltip. The readout's 520,
+				# its text in the 480 between margins, and not anchored: the
+				# readout's lines above it rewrap as their figures change
+				# (gui_modding_guide.md gotcha #52).
 				textbox = {
-					parentanchor = hcenter
 					autoresize = yes
 					multiline = yes
-					max_width = 480
+					minimumsize = { 520 -1 }
+					maximumsize = { 520 -1 }
+					margin = { 20 0 }
 					align = center|nobaseline
 					using = fontsize_large
 					text = "banking_dash_ro_note"

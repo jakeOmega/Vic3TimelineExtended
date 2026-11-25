@@ -1717,6 +1717,38 @@ class FlowedSlotTest(unittest.TestCase):
                 self.assertEqual(gui_tree.widgets(c)[0].kind, "banking_dash_category_header")
                 self.assertIsNone(c.prop("parentanchor"))
 
+    def test_the_status_sections_flow(self):
+        """The sections are each 520 (a 520 header, or the categories' 520 and a minimum), so their
+        composer and the wide columns' wrappers are 520 and an anchor placed nothing; an anchored
+        Available Interventions kept its first-layout place when a dial line rewrapped above it."""
+        sections = ("te_banking_sec_active", "te_banking_sec_monetary", "te_banking_sec_interventions")
+        for name in sections:
+            with self.subTest(section=name):
+                self.assertIsNone(self.types[name].prop("parentanchor"))
+        self.assertEqual(gui_tree.size(self.types["te_banking_sec_interventions"], "minimumsize"), (520, -1))
+        for name in ("te_banking_sec_active", "te_banking_sec_monetary"):
+            self.assertEqual(gui_tree.widgets(self.types[name])[0].kind, "banking_dash_category_header")
+        notes = [w for w in gui_tree.widgets(self.types["te_banking_sec_interventions"])
+                 if w.kind == "textbox" and w.prop("multiline")]
+        self.assertEqual(len(notes), 2)
+        for note in notes:
+            with self.subTest(note=note.prop("text").value):
+                self.assertIsNone(note.prop("parentanchor"))
+                self.assertEqual(gui_tree.size(note, "minimumsize"), (520, -1))
+                self.assertEqual(gui_tree.size(note, "margin"), (26, 4))
+        layout = gui_tree.parse(_read(LAYOUT))
+        hosts = [n.parent for n in layout.walk() if n.kind in sections]
+        self.assertEqual(len(hosts), 6)
+        for host in set(hosts):
+            with self.subTest(host=host.line):
+                self.assertIsNone(host.prop("minimumsize"), "content-sized, so the sections set its width")
+        # The tab's read-only note under the readout: the readout's 520, no anchor.
+        note = next(n for n in layout.walk() if n.kind == "textbox" and n.prop("text")
+                    and n.prop("text").value == "banking_dash_ro_note")
+        self.assertIsNone(note.prop("parentanchor"))
+        self.assertEqual(gui_tree.size(note, "minimumsize"), (520, -1))
+        self.assertEqual(gui_tree.size(note, "maximumsize"), (520, -1))
+
     def test_recapitalise_flows(self):
         text = self.dash
         at = text.index('text = "banking_dash_mon_btn_recapitalise"')

@@ -890,6 +890,26 @@ class PanelWidthTest(unittest.TestCase):
         self.assertIn("maximumsize = { 480 -1 }", note)
         self.assertNotRegex(gui, r"(?m)^[^#\n]*\b474\b", "a width left at the old column")
 
+    def test_the_status_sections_flow(self):
+        """gui_modding_guide.md gotcha #52 (from #2016): a section anchored under the board kept its
+        first-layout place when the board's list grew a row above it. Each section is its header's 520,
+        so its composer and the wide columns' wrappers are 520 and an anchor placed nothing."""
+        gui = _read(WIDGET)
+        tree = gui_tree.parse(gui)
+        types = {n.name: n for n in tree.walk() if n.kind == "type"}
+        self.assertIn("size = { 520 38 }", _type_body(gui, "ch_section_header"))
+        sections = ("te_ch_sec_board", "te_ch_sec_programmes", "te_ch_sec_breakdown", "te_ch_sec_models")
+        for name in sections:
+            with self.subTest(section=name):
+                sec = types[name]
+                self.assertIsNone(sec.prop("parentanchor"))
+                self.assertEqual(gui_tree.widgets(sec)[0].kind, "ch_section_header")
+        hosts = {n.parent for n in tree.walk() if n.kind in sections}
+        self.assertEqual(len(hosts), 3, "the composer and two wide columns' wrappers")
+        for host in hosts:
+            with self.subTest(host=host.line):
+                self.assertIsNone(host.prop("minimumsize"), "content-sized, so the sections set its width")
+
 
 class TypeSizeTest(unittest.TestCase):
     """CH-15: the 17 / 20 / 16 ladder through the panel's own templates (the

@@ -1663,7 +1663,6 @@ types cultural_hegemony_widget_types
 	### every condition with ticks and crosses.
 	type te_ch_sec_programmes = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -1922,7 +1921,6 @@ types cultural_hegemony_widget_types
 	### with zero at the centre line, the value. Then the totals under a rule.
 	type te_ch_sec_breakdown = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -2158,7 +2156,6 @@ types cultural_hegemony_widget_types
 	### ch_board_has_rows and a line says when the board fills.
 	type te_ch_sec_board = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -2238,7 +2235,6 @@ types cultural_hegemony_widget_types
 	### scripts/image_pipeline/gen_ch_model_pie_textures.py.
 	type te_ch_sec_models = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -2905,7 +2901,12 @@ types cultural_hegemony_widget_types
 	### COMPOSERS — the one order of the sections, for both hosts
 	### ==========================================================================
 
-	### Everything a returning player checks, open by default.
+	### Everything a returning player checks, open by default. The sections flow
+	### with no anchor of their own: each is 520, its header's width, so this
+	### composer and the wide columns' wrappers are 520 too and an anchor placed
+	### nothing, while a section anchored under the board kept its first-layout
+	### place when the board's list grew a row above it (gui_modding_guide.md
+	### gotcha #52; from #2016).
 	type te_ch_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
