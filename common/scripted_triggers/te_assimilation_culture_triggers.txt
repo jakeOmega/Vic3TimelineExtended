@@ -1,0 +1,24 @@
+﻿# ============================================================================
+# ASSIMILATION CULTURES: triggers
+# (docs/systems/mod_systems/assimilation_cultures.md;
+#  docs/superpowers/specs/2026-11-25-assimilation-cultures-design.md)
+# ============================================================================
+
+# ---- The rule ----
+# Any scope. The only two reads of assimilation_cultures_rule in the mod
+# (test_assimilation_cultures_rule.py). Each is a positive test of its own
+# setting; neither true is Unrestricted, so a game that names no setting takes
+# that branch. A has_game_rule on a setting no file defines is true
+# (test_has_game_rule_targets.py), so both settings stay defined.
+#
+# Hybrid Cultures also asks for the sentinel hybrid: the engine makes a
+# culture's object when a game starts, so a game begun before the hybrids were
+# added has none, and must never name one (the Culture Merges' lesson, #1518).
+te_hc_mode_hybrid = {
+	has_game_rule = assimilation_cultures_hybrid
+	exists = cu:hc_anglophone_african
+}
+
+te_hc_mode_none = {
+	has_game_rule = assimilation_cultures_none
+}

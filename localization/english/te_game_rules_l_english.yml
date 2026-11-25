@@ -3,6 +3,7 @@
 #
 # GAME_RULES
 #
+ rule_assimilation_cultures_rule:0 "Assimilation Across Heritages"
  rule_banking_system_rule:0 "Banking System"
  rule_covert_warfare_rule:0 "Covert Warfare"
  rule_cultural_hegemony_rule:0 "Cultural Hegemony"
@@ -24,6 +25,12 @@
  rule_united_nations_rule:0 "United Nations"
  rule_universal_aptitude_traits_rule:0 "Universal Aptitude Traits"
  rule_world_war_rule:0 "World War"
+ setting_assimilation_cultures_hybrid:0 "Hybrid Cultures"
+ setting_assimilation_cultures_hybrid_desc:0 "A [concept_pop] living among a people of another heritage group takes up their language and keeps its heritage, in a hybrid culture such as $hc_anglophone_african$. It joins the majority only under a $lawgroup_bodily_autonomy$ law. A game begun before these cultures were added plays as $setting_assimilation_cultures_unrestricted$."
+ setting_assimilation_cultures_none:0 "None"
+ setting_assimilation_cultures_none_desc:0 "No [concept_pop] joins a [concept_culture] of another heritage group, and no hybrid cultures form, until a $lawgroup_bodily_autonomy$ law allows it. Within a heritage group pops assimilate as before. Hybrid pops from another setting stay as they are."
+ setting_assimilation_cultures_unrestricted:0 "Unrestricted"
+ setting_assimilation_cultures_unrestricted_desc:0 "A [concept_pop] can join the country's largest primary [concept_culture] whatever its heritage, as in the base game. For a pop of another heritage group the mod does this once a year, so the pop's panel does not show it. Hybrid pops from another setting join the majority at the usual rate."
  setting_banking_system_disabled:0 "Banking System Disabled"
  setting_banking_system_disabled_desc:0 "The [concept_banking_cycle] [concept_journal_entry] is disabled. [concept_financial_regulation] laws keep their general economic effects, such as Urban Center [concept_throughput], [concept_investment_pool] contributions, innovation, and government [concept_dividends], but banking-specific modifiers are inactive."
  setting_banking_system_enabled:0 "Banking System Enabled"
