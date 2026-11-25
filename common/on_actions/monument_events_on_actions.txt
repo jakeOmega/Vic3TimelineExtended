@@ -10,19 +10,16 @@ on_building_built = {
 	events = {
 		monument_events.1
 	}
-	on_actions = {
-		gm_site_level_on_action
-	}
 }
 
-# A construction site's level finished (ROOT = the building): its first level
-# fires on_building_built, a later one on_building_expanded (whether
-# on_building_built also fires for a later level is untested; see
-# scripting_best_practices.md § "`on_building_built` Missed Levels That
-# Finished Together"). The overview's stored figures follow a day later
-# (gm_ov_hook_fire, monument_events.36), so "to dedicate" lights once the last
-# queued level is done rather than at the next monthly refresh (#2016).
-# Display only.
+# A later level of a construction site finished (ROOT = the building): its
+# state into its owner's rows' list if it is not there (gm_ov_list_site), so
+# the Sites cell's "to dedicate" and Awaiting Dedication, which count that
+# list live, find it at once (#2016). The first level's on_building_built
+# lists it through monument_events.1's refresh; whether either hook fires for
+# levels that finish together is untested (scripting_best_practices.md §
+# "`on_building_built` Missed Levels That Finished Together"), so
+# gm_state_monthly lists it too. Display only.
 on_building_expanded = {
 	on_actions = {
 		gm_site_level_on_action
@@ -36,7 +33,7 @@ gm_site_level_on_action = {
 		exists = owner
 	}
 	effect = {
-		state = { gm_ov_hook_fire = yes }
+		state = { gm_ov_list_site = yes }
 	}
 }
 

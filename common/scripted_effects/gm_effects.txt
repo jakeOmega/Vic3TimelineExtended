@@ -546,6 +546,12 @@ gm_state_monthly = {
 		gm_state_zero_local_steps = yes
 		gm_state_sig_zero_local_steps = yes
 	}
+	# Last: the overview's list behind the hooks (gm_ov_site_monthly): the Sites
+	# cell and Awaiting Dedication count a site from gm_states.
+	if = {
+		limit = { gm_state_has_site = yes }
+		gm_ov_site_monthly = yes
+	}
 }
 
 # State scope, from gm_state_monthly. Dedication $KEY$'s local effect here: the
@@ -928,29 +934,28 @@ gm_country_monthly = {
 	}
 }
 
-# ---- The overview's stored figures (2026-11-24, from #2016) --------------------
-# Country scope, any ROOT: the live values read only the country and its
-# states. The overview's cells and the gates of Awaiting a Decision, Awaiting
-# Dedication and Our Monuments read these variables through gm_disp_<x>
-# (gm_values.txt), where they walked every state of the country about sixteen
-# times a frame. Each is its live gm_live_<x> at the moment of the store
-# (StoredOverviewTest in test_grand_monuments_layout.py holds the pairs). The
-# callers: the end of gm_country_refresh, the AI's contest decisions
-# (gm_ai_decide_contests), the country a monument's state leaves
-# (gm_state_changed_hands), a civil war's winner (gm_repair_after_civil_war)
-# and a construction site's level (gm_ov_hook_fire). Display only: nothing
-# else reads them.
+# ---- The overview's figures (2026-11-24, from #2016) ---------------------------
+# The owner's rule (2026-11-24, on #2033): a call to action is live; a figure
+# that only describes is stored. The calls to action (the Contested and Sites
+# cells, the gates of Awaiting a Decision and Awaiting Dedication) are live
+# walks of the rows' own lists, gm_states and gm_monuments_held (gm_values.txt,
+# gm_disp_count_contested and below); gm_ov_list_site keeps a site's state in
+# gm_states between refreshes.
+#
+# Stored, country scope, any ROOT (the live values read only the country and
+# its states): the Monuments cell (upheld, heritage, the undedicated in its
+# hover) and Our Monuments' count and grandeur, read through gm_disp_<x>, where
+# each walked every state of the country, several times a frame. Each is its
+# live gm_live_<x> at the moment of the store (StoredOverviewTest in
+# test_grand_monuments_layout.py holds the pairs). The callers: the end of
+# gm_country_refresh, the AI's contest decisions (gm_ai_decide_contests), the
+# country a monument's state leaves (gm_state_changed_hands) and a civil war's
+# winner (gm_repair_after_civil_war). A construction site moves none of them.
+# Display only: nothing else reads them.
 gm_ov_store = {
 	set_variable = { name = gm_ov_count_upheld value = gm_live_count_upheld }
 	set_variable = { name = gm_ov_count_heritage value = gm_live_count_heritage }
-	set_variable = { name = gm_ov_count_contested value = gm_live_count_contested }
-	set_variable = { name = gm_ov_contested_grandeur value = gm_live_contested_grandeur }
-	set_variable = { name = gm_ov_count_sites value = gm_live_count_sites }
-	set_variable = { name = gm_ov_count_sites_ready value = gm_live_count_sites_ready }
-	set_variable = { name = gm_ov_count_sites_building value = gm_live_count_sites_building }
-	set_variable = { name = gm_ov_sites_grandeur value = gm_live_sites_grandeur }
 	set_variable = { name = gm_ov_count_undedicated value = gm_live_count_undedicated }
-	set_variable = { name = gm_ov_count_awaiting value = gm_live_count_awaiting }
 	set_variable = { name = gm_ov_count_listed_rest value = gm_live_count_listed_rest }
 	set_variable = { name = gm_ov_listed_grandeur value = gm_live_listed_grandeur }
 }
@@ -978,15 +983,17 @@ gm_ov_list_states = {
 	}
 }
 
-# State scope, ROOT the site's building (gm_site_level_on_action): a level of
-# this state's construction site has finished. The site's row is listed for
-# its owner if it was not (Awaiting Dedication shows its rows from gm_states),
-# and the overview's figures are stored a day later (monument_events.36), so
-# "to dedicate" lights once the last queued level is done: whether a site
-# still reads under construction inside its own level's hook is untested
-# (gm_state_ai_dedicates_now's note). One store however many levels finish
-# together (gm_ov_store_pending, two days, the space mine's hook form).
-gm_ov_hook_fire = {
+# State scope: a construction site stands here. Its state goes into its
+# owner's rows' list (gm_states) if it is not there, so the Sites cell and
+# Awaiting Dedication's gate, which count that list live, and the section's
+# rows, drawn from it, all find the site: from a site's level
+# (gm_site_level_on_action; on_building_built's monument_events.1 refreshes,
+# which lists it too) and each month from gm_state_monthly
+# (gm_ov_site_monthly), behind the hooks: five levels that finished together
+# fired no on_building_built (2026-10-07). The refresh lists a site from the
+# day its first level is queued; this only adds. Display only, as the list
+# is.
+gm_ov_list_site = {
 	save_scope_as = gm_ov_site_state
 	owner = {
 		if = {
@@ -999,35 +1006,85 @@ gm_ov_hook_fire = {
 			}
 			add_to_variable_list = { name = gm_states target = scope:gm_ov_site_state }
 		}
-		if = {
-			limit = { NOT = { has_variable = gm_ov_store_pending } }
-			set_variable = { name = gm_ov_store_pending value = yes days = 2 }
-			trigger_event = { id = monument_events.36 days = 1 }
-		}
 	}
 }
 
+# State scope, from gm_state_monthly where a construction site stands: the
+# list's monthly backstop (gm_ov_list_site), after TE_SELF_CHECK
+# gm_overview_lists, once a game. It reads a player's site with a level built
+# in a country no monthly refresh lists (gm_country_on_action's own test: no
+# finished monument, no gm_active, opportunity or naming; with one, the
+# refresh would list the site first and hide a miss). Found outside the list:
+# BROKEN, a finished level the hooks never listed, so the site's "to dedicate"
+# and its row came only now (the fallback: gm_disp_count_sites_ready and
+# gm_disp_count_awaiting walk every state again, as before #2016). Found in it
+# twelve times (a site a month each): OK.
+gm_ov_site_monthly = {
+	if = {
+		limit = {
+			exists = owner
+			gm_state_site_level >= 1
+			NOT = { has_global_variable = gm_ov_lists_checked }
+			owner = {
+				is_ai = no
+				NOT = {
+					OR = {
+						any_scope_state = { has_building = building_grand_monument }
+						has_variable = gm_active
+						has_variable = gm_com_open
+						has_variable = gm_naming_active
+					}
+				}
+			}
+		}
+		save_scope_as = gm_ov_site_state
+		if = {
+			limit = {
+				owner = {
+					has_variable_list = gm_states
+					is_target_in_variable_list = { name = gm_states target = scope:gm_ov_site_state }
+				}
+			}
+			if = {
+				limit = { has_global_variable = gm_ov_lists_seen }
+				change_global_variable = { name = gm_ov_lists_seen add = 1 }
+			}
+			else = {
+				set_global_variable = { name = gm_ov_lists_seen value = 1 }
+			}
+			if = {
+				limit = { global_var:gm_ov_lists_seen >= 12 }
+				set_global_variable = gm_ov_lists_checked
+				debug_log = "TE_SELF_CHECK OK gm_overview_lists seen=[THIS.ScriptValue('gm_ov_disp_lists_seen')|0] level=[THIS.ScriptValue('gm_state_site_level')|0] (each month a site of ours with a level built, in a country no monthly refresh lists, was already in the rows' list: its hooks listed it, so its count to dedicate and its row came when its levels did)"
+			}
+		}
+		else = {
+			set_global_variable = gm_ov_lists_checked
+			debug_log = "TE_SELF_CHECK BROKEN gm_overview_lists seen=[THIS.ScriptValue('gm_ov_disp_lists_seen')|0] level=[THIS.ScriptValue('gm_state_site_level')|0] (a site of ours with a level built was not in the rows' list at the monthly pulse: no hook listed it, so its count to dedicate and its Awaiting Dedication row came only now; see docs/testing/grand-monuments-ageing-playtest.md)"
+		}
+	}
+	gm_ov_list_site = yes
+}
+
 # Country scope, the first thing gm_country_monthly does: TE_SELF_CHECK
-# gm_overview_stored, once a game, for a player with a monument or a site
-# (with none, a zero matches a zero). Each month it compares the counts the
-# last store wrote with the live ones, before the month's refresh writes them
-# again: equal means no change reached the panel late. The first month any
-# differs logs BROKEN with every pair (stored/live): a change some moment
-# brought without a store, which the overview showed up to a month late (the
-# fallback: a store at that moment, or that figure live again; see
+# gm_overview_stored, once a game, for a player with a finished monument (the
+# stored figures count only those; with none, a zero matches a zero). Each
+# month it compares the counts the last store wrote with the live ones, before
+# the month's refresh writes them again: equal means no change reached the
+# panel late. The first month any differs logs BROKEN with every pair
+# (stored/live): a change some moment brought without a store, which the
+# Monuments cell or Our Monuments showed up to a month late (the fallback: a
+# store at that moment, or that figure live again; see
 # docs/testing/grand-monuments-ageing-playtest.md § The overview's stored
-# figures). Twelve months that all agree log OK. The grandeur sums are left
-# out: a month's ageing (gm_state_monthly) moves them by design.
+# figures). Twelve months that all agree log OK. The grandeur sum is left out:
+# a month's ageing (gm_state_monthly) moves it by design.
 gm_ov_self_check = {
 	if = {
 		limit = {
 			is_ai = no
 			NOT = { has_global_variable = gm_ov_checked }
 			has_variable = gm_ov_count_listed_rest
-			OR = {
-				any_scope_state = { has_building = building_grand_monument }
-				any_scope_state = { has_building = building_grand_monument_site }
-			}
+			any_scope_state = { has_building = building_grand_monument }
 		}
 		if = {
 			limit = { gm_ov_counts_match = yes }
@@ -1041,12 +1098,12 @@ gm_ov_self_check = {
 			if = {
 				limit = { var:gm_ov_chk_months >= 12 }
 				set_global_variable = gm_ov_checked
-				debug_log = "TE_SELF_CHECK OK gm_overview_stored months=[THIS.ScriptValue('gm_ov_disp_chk_months')|0] monuments=[THIS.ScriptValue('gm_disp_count_listed_rest')|0] sites=[THIS.ScriptValue('gm_disp_count_sites')|0] (at the end of each month the overview's stored counts equalled the live ones: no change reached the panel late)"
+				debug_log = "TE_SELF_CHECK OK gm_overview_stored months=[THIS.ScriptValue('gm_ov_disp_chk_months')|0] monuments=[THIS.ScriptValue('gm_disp_count_listed_rest')|0] upheld=[THIS.ScriptValue('gm_disp_count_upheld')|0] (at the end of each month the overview's stored counts equalled the live ones: no change reached the Monuments cell or Our Monuments late)"
 			}
 		}
 		else = {
 			set_global_variable = gm_ov_checked
-			debug_log = "TE_SELF_CHECK BROKEN gm_overview_stored months=[THIS.ScriptValue('gm_ov_disp_chk_months')|0] stored/live upheld=[THIS.ScriptValue('gm_disp_count_upheld')|0]/[THIS.ScriptValue('gm_live_count_upheld')|0] heritage=[THIS.ScriptValue('gm_disp_count_heritage')|0]/[THIS.ScriptValue('gm_live_count_heritage')|0] contested=[THIS.ScriptValue('gm_disp_count_contested')|0]/[THIS.ScriptValue('gm_live_count_contested')|0] undedicated=[THIS.ScriptValue('gm_disp_count_undedicated')|0]/[THIS.ScriptValue('gm_live_count_undedicated')|0] listed=[THIS.ScriptValue('gm_disp_count_listed_rest')|0]/[THIS.ScriptValue('gm_live_count_listed_rest')|0] sites=[THIS.ScriptValue('gm_disp_count_sites')|0]/[THIS.ScriptValue('gm_live_count_sites')|0] ready=[THIS.ScriptValue('gm_disp_count_sites_ready')|0]/[THIS.ScriptValue('gm_live_count_sites_ready')|0] building=[THIS.ScriptValue('gm_disp_count_sites_building')|0]/[THIS.ScriptValue('gm_live_count_sites_building')|0] awaiting=[THIS.ScriptValue('gm_disp_count_awaiting')|0]/[THIS.ScriptValue('gm_live_count_awaiting')|0] (a change reached the overview's counts only at the monthly pulse: the pair that differs names the moment with no store; see docs/testing/grand-monuments-ageing-playtest.md)"
+			debug_log = "TE_SELF_CHECK BROKEN gm_overview_stored months=[THIS.ScriptValue('gm_ov_disp_chk_months')|0] stored/live upheld=[THIS.ScriptValue('gm_disp_count_upheld')|0]/[THIS.ScriptValue('gm_live_count_upheld')|0] heritage=[THIS.ScriptValue('gm_disp_count_heritage')|0]/[THIS.ScriptValue('gm_live_count_heritage')|0] undedicated=[THIS.ScriptValue('gm_disp_count_undedicated')|0]/[THIS.ScriptValue('gm_live_count_undedicated')|0] listed=[THIS.ScriptValue('gm_disp_count_listed_rest')|0]/[THIS.ScriptValue('gm_live_count_listed_rest')|0] (a change reached the overview's stored counts only at the monthly pulse: the pair that differs names the moment with no store; see docs/testing/grand-monuments-ageing-playtest.md)"
 		}
 	}
 }

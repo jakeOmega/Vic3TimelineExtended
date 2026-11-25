@@ -5422,7 +5422,7 @@ class SecondaryFitTests(unittest.TestCase):
             self.assertIn(s, one)
 
     def test_the_overview_counts_secondaries(self):
-        for name in ("gm_live_count_upheld", "gm_live_count_heritage", "gm_live_count_contested"):
+        for name in ("gm_live_count_upheld", "gm_live_count_heritage", "gm_disp_count_contested"):
             self.assertIn("variable = gm_monuments_held", squash(block(self.v, name)), name)
         self.assertIn("variable = gm_monuments_held", squash(block(self.v, "gm_sum_monuments")))
 
@@ -7259,7 +7259,7 @@ class SitePanelTests(unittest.TestCase):
         self.assertEqual(squash(block(values, "gm_state_disp_listed")),
                          "value = 0 if = { limit = { has_building = building_grand_monument } value = 1 }")
         self.assertEqual(squash(block(values, "gm_disp_count_listed")), "value = gm_sum_monuments")
-        self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_live_count_sites")))
+        self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_disp_count_sites")))
         # The Monuments cell's breakdown counts a finished monument left
         # undedicated (GM-7: one term per thing).
         self.assertIn("gm_state_is_dedicated = no", squash(block(values, "gm_live_count_undedicated")))
@@ -7760,7 +7760,7 @@ class DedicateButtonTests(unittest.TestCase):
         self.assertIn(DEDICATE_SLOT, sec)
         # The section's gate and its rows read the same trigger.
         values = read(VALUES)
-        self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_live_count_awaiting")))
+        self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_disp_count_awaiting")))
         self.assertIn("gm_state_awaits_dedication = yes", squash(block(values, "gm_state_disp_awaiting")))
         # Sites are not monuments yet: Our Monuments lists every finished one.
         self.assertEqual(squash(block(values, "gm_disp_count_listed")), "value = gm_sum_monuments")

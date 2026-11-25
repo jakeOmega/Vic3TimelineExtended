@@ -144,27 +144,17 @@ gm_state_awaits_dedication = {
 
 # Country scope. The overview's stored counts (gm_ov_store, gm_effects.txt)
 # equal the live ones now: TE_SELF_CHECK gm_overview_stored
-# (gm_ov_self_check). The grandeur sums are not compared: ageing moves them
-# each month by design.
+# (gm_ov_self_check). Only the stored figures: the calls to action are live.
+# The grandeur sum is not compared: ageing moves it each month by design.
 gm_ov_counts_match = {
 	has_variable = gm_ov_count_upheld
 	var:gm_ov_count_upheld = gm_live_count_upheld
 	has_variable = gm_ov_count_heritage
 	var:gm_ov_count_heritage = gm_live_count_heritage
-	has_variable = gm_ov_count_contested
-	var:gm_ov_count_contested = gm_live_count_contested
 	has_variable = gm_ov_count_undedicated
 	var:gm_ov_count_undedicated = gm_live_count_undedicated
 	has_variable = gm_ov_count_listed_rest
 	var:gm_ov_count_listed_rest = gm_live_count_listed_rest
-	has_variable = gm_ov_count_sites
-	var:gm_ov_count_sites = gm_live_count_sites
-	has_variable = gm_ov_count_sites_ready
-	var:gm_ov_count_sites_ready = gm_live_count_sites_ready
-	has_variable = gm_ov_count_sites_building
-	var:gm_ov_count_sites_building = gm_live_count_sites_building
-	has_variable = gm_ov_count_awaiting
-	var:gm_ov_count_awaiting = gm_live_count_awaiting
 }
 
 # The AI has no button: its ceremony asks once nothing more is queued on its
