@@ -409,8 +409,8 @@ sr_fleet_upkeep_goods = {
 # maintenance line and the fleets' upkeep (sr_fleet_upkeep_goods) are on six
 # other goods and stay. These three multipliers were the old upkeep's, seen in
 # game. Derived from the variable: its one apply site sr_sc_pause_apply,
-# removed first, from sr_sc_month and the toggle (sr_sc_toggle_pause). A
-# building modifier, under NOT_ON_COUNTRY in gen_nation_tab.py.
+# removed first, from sr_sc_month, Paused (sr_sc_mode_paused) and the AI's
+# resume. A building modifier, under NOT_ON_COUNTRY in gen_nation_tab.py.
 sr_space_command_paused = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	goods_input_launch_capacity_mult = -1

@@ -1001,6 +1001,10 @@ sr_sc_mode_sgui = {
 				}
 				custom_tooltip = sr_sc_mode_resume_tt
 			}
+			else_if = {
+				limit = { sr_sc_is_paused = yes }
+				custom_tooltip = sr_sc_mode_orders_stopped_tt
+			}
 			hidden_effect = {
 				sr_sc_mode_orders = yes
 			}

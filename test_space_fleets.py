@@ -11,6 +11,7 @@ Run: python3 -m unittest test_space_fleets -v
 """
 
 import math
+import random
 import re
 import sys
 import unittest
@@ -575,6 +576,9 @@ class PauseTest(unittest.TestCase):
         self.assertRegex(sgui, r"limit = \{ scope:op = 2 \}\s*custom_tooltip = sr_sc_mode_orders_tt\s*"
                                r"if = \{\s*limit = \{\s*sr_sc_is_paused = yes\s*sr_sc_order_total > 0\s*\}\s*"
                                r"custom_tooltip = sr_sc_mode_resume_tt\s*\}\s*"
+                               # ... or, stopped with nothing on order, that they stay idle
+                               r"else_if = \{\s*limit = \{ sr_sc_is_paused = yes \}\s*"
+                               r"custom_tooltip = sr_sc_mode_orders_stopped_tt\s*\}\s*"
                                r"hidden_effect = \{\s*sr_sc_mode_orders = yes\s*\}")
         self.assertRegex(sgui, r"limit = \{ scope:op = 3 \}\s*custom_tooltip = sr_sc_mode_paused_tt\s*"
                                r"hidden_effect = \{\s*sr_sc_mode_paused = yes\s*\}")
@@ -765,6 +769,11 @@ class PauseTest(unittest.TestCase):
         orders = re.search(r'(?m)^ sr_sc_mode_orders_tt:0 "(.*)"$', loc).group(1)
         self.assertIn("idle", orders)
         self.assertIn("is lost", orders)
+        # ... and that a month which finds nothing on order was bought for
+        # nothing, with Paused the way to stop at once (the review of #2063).
+        self.assertIn("though its inputs were bought", orders)
+        self.assertIn("choose Paused", orders)
+        self.assertIn("sr_sc_mode_orders_stopped_tt", loc)
 
     def test_the_ai_pauses_under_fiscal_stress(self):
         should = _block(self.triggers, "sr_sc_ai_should_pause")
@@ -782,9 +791,15 @@ class PauseTest(unittest.TestCase):
                                  r"NOT = \{ has_variable = sr_sc_pause_hold \}\s*"
                                  r"NOT = \{ sr_pers_ai_hulls_uncrewed = yes \}\s*$")
         review = _block(self.effects, "sr_sc_ai_pause_review")
-        # The AI places no orders, so it drops Orders Only (a player's country
-        # it inherits), or its yards would idle for good.
-        self.assertRegex(review, r"^\s*if = \{\s*limit = \{ sr_sc_orders_only = yes \}\s*remove_variable = sr_sc_orders_only\s*\}\s*if = \{")
+        # The AI places no orders, so it drops Orders Only (a player's country it
+        # inherits), or its yards would idle for good: at the step, before the
+        # month's build, not here after it (the review of #2063: that month went
+        # unbuilt).
+        self.assertNotIn("sr_sc_orders_only", review)
+        step = _block(self.effects, "sr_sc_month")
+        drop = re.search(r"if = \{\s*limit = \{\s*is_ai = yes\s*sr_sc_orders_only = yes\s*\}\s*remove_variable = sr_sc_orders_only\s*\}", step)
+        self.assertIsNotNone(drop)
+        self.assertLess(drop.end(), step.index("limit = { sr_sc_is_paused = yes }"))
         self.assertRegex(review, r"limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*sr_has_space_command = yes\s*"
                                  r"sr_sc_ai_should_pause = yes\s*\}\s*"
                                  r"sr_sc_mode_paused = yes\s*"
@@ -871,40 +886,52 @@ class OrdersTest(unittest.TestCase):
 
     def test_the_month_fills_orders_before_the_mix(self):
         build = _block(self.generated, "sr_reserve_build")
-        orders = re.search(r"if = \{\s*limit = \{ local_var:sr_sc_order_left > 0 \}", build)
+        whole = re.search(r"if = \{\s*limit = \{\s*local_var:sr_sc_order_left > 0\s*"
+                          r"local_var:sr_sc_points >= local_var:sr_sc_order_left\s*\}", build)
+        shared = re.search(r"else_if = \{\s*limit = \{ local_var:sr_sc_order_left > 0 \}", build)
         mix = re.search(r"if = \{\s*limit = \{\s*local_var:sr_sc_points > 0\.0001\s*NOT = \{ sr_sc_orders_only = yes \}\s*\}", build)
-        self.assertIsNotNone(orders)
+        self.assertIsNotNone(whole, "no branch for a month that covers every order")
+        self.assertIsNotNone(shared, "no branch for orders that want more than the month")
         self.assertIsNotNone(mix, "the mix isn't shut out of Orders Only")
-        self.assertLess(orders.start(), mix.start())
-        # The orders' sum is read once, before any order moves, and they take no
-        # more than they want.
-        self.assertLess(build.index("name = sr_sc_order_left value = sr_sc_order_total"), orders.start())
-        ordered = build[orders.start():mix.start()]
-        self.assertRegex(ordered, r"set_local_variable = \{ name = sr_sc_order_take value = local_var:sr_sc_points \}\s*"
-                                  r"if = \{\s*limit = \{ local_var:sr_sc_order_take > local_var:sr_sc_order_left \}\s*"
-                                  r"set_local_variable = \{ name = sr_sc_order_take value = local_var:sr_sc_order_left \}")
+        self.assertLess(whole.start(), shared.start())
+        self.assertLess(shared.start(), mix.start())
+        # The orders' sum is read once, before any order moves.
+        self.assertLess(build.index("name = sr_sc_order_left value = sr_sc_order_total"), whole.start())
+        moved, split = build[whole.start():shared.start()], build[shared.start():mix.start()]
+        # A month that covers the orders moves each whole: an amount, never a
+        # share, which cuts a small remainder to 0 and leaves it on order for
+        # good (the review of #2063; OrdersRunTest runs it).
+        self.assertNotIn("multiply", moved)
+        self.assertNotIn("sr_sc_share", moved)
         for role in gsf.ROLES:
             with self.subTest(role=role.key):
                 k = role.key
-                # Its share of what the orders take, in proportion to its order;
-                # into the reserve, and off the order by the same amount.
-                self.assertRegex(ordered, rf"limit = \{{ sr_sc_order_{k}_value > 0 \}}\s*"
-                                          rf"set_local_variable = \{{ name = sr_sc_share value = \{{ value = var:sr_sc_order_{k} "
-                                          r"multiply = local_var:sr_sc_order_take divide = local_var:sr_sc_order_left \} \}\s*"
-                                          rf"if = \{{ limit = \{{ NOT = \{{ has_variable = sr_reserve_{k} \}} \}} "
-                                          rf"set_variable = \{{ name = sr_reserve_{k} value = 0 \}} \}}\s*"
-                                          rf"change_variable = \{{ name = sr_reserve_{k} add = local_var:sr_sc_share \}}\s*"
-                                          rf"change_variable = \{{ name = sr_sc_order_{k} subtract = local_var:sr_sc_share \}}")
-                # A filled order leaves no variable behind (its guard and its
-                # read in one limit, not under a NOT).
+                self.assertRegex(moved, rf"limit = \{{ has_variable = sr_sc_order_{k} \}}\s*"
+                                        rf"if = \{{ limit = \{{ NOT = \{{ has_variable = sr_reserve_{k} \}} \}} "
+                                        rf"set_variable = \{{ name = sr_reserve_{k} value = 0 \}} \}}\s*"
+                                        rf"change_variable = \{{ name = sr_reserve_{k} add = var:sr_sc_order_{k} \}}\s*"
+                                        rf"remove_variable = sr_sc_order_{k}\s*\}}")
+                # Orders that want more: its share of the month, in proportion to
+                # its order; into the reserve, off the order and onto what was
+                # built by the same amount.
+                self.assertRegex(split, rf"limit = \{{ sr_sc_order_{k}_value > 0 \}}\s*"
+                                        rf"set_local_variable = \{{ name = sr_sc_share value = \{{ value = var:sr_sc_order_{k} "
+                                        r"multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left \} \}\s*"
+                                        rf"if = \{{ limit = \{{ NOT = \{{ has_variable = sr_reserve_{k} \}} \}} "
+                                        rf"set_variable = \{{ name = sr_reserve_{k} value = 0 \}} \}}\s*"
+                                        rf"change_variable = \{{ name = sr_reserve_{k} add = local_var:sr_sc_share \}}\s*"
+                                        rf"change_variable = \{{ name = sr_sc_order_{k} subtract = local_var:sr_sc_share \}}\s*"
+                                        r"change_local_variable = \{ name = sr_sc_built add = local_var:sr_sc_share \}")
+                # No dust left on order (its guard and its read in one limit, not under a NOT).
                 self.assertIn(f"if = {{ limit = {{ has_variable = sr_sc_order_{k} var:sr_sc_order_{k} <= 0.0001 }} "
-                              f"remove_variable = sr_sc_order_{k} }}", ordered)
+                              f"remove_variable = sr_sc_order_{k} }}", split)
                 self.assertNotIn(f"sr_sc_order_{k}", build[mix.start():])
-        # What the orders took comes off the month, and Built a month counts
-        # what was built: the orders' take, then the mix's rest, never the
-        # points Orders Only lost.
-        self.assertRegex(ordered, r"change_local_variable = \{ name = sr_sc_built add = local_var:sr_sc_order_take \}\s*"
-                                  r"change_local_variable = \{ name = sr_sc_points subtract = local_var:sr_sc_order_take \}\s*\}\s*$")
+        # What the orders took comes off the month: their whole sum, or all of it.
+        self.assertRegex(moved, r"change_local_variable = \{ name = sr_sc_built add = local_var:sr_sc_order_left \}\s*"
+                                r"change_local_variable = \{ name = sr_sc_points subtract = local_var:sr_sc_order_left \}\s*\}\s*$")
+        self.assertRegex(split, r"set_local_variable = \{ name = sr_sc_points value = 0 \}\s*\}\s*$")
+        # Built a month counts what was built: the orders' take, then the mix's
+        # rest, never the points Orders Only lost.
         self.assertTrue(build.rstrip().endswith("change_local_variable = { name = sr_sc_built add = local_var:sr_sc_points }\n\t}"))
         month = _block(self.effects, "sr_sc_month")
         self.assertRegex(month, r"sr_reserve_build = yes\s*\}\s*set_variable = \{ name = sr_sc_built_last value = local_var:sr_sc_built \}")
@@ -1041,12 +1068,25 @@ class OrdersTest(unittest.TestCase):
                 for suffix in ("", "_full"):
                     self.assertEqual(re.findall(r"add = (\S+)", _block(self.display, f"sr_disp_fl_role_{k}{suffix}")),
                                      [gsf.var(n, f"{k}{suffix}_value") for n in range(1, gsf.SLOTS + 1)])
-        self.assertEqual(_block(self.display, "sr_disp_sc_order_total").split(), "value = sr_sc_order_total ceiling = yes".split())
-        # The months the orders take: only while the yards build and last month built.
-        months = _block(_strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt")), "sr_disp_sc_order_months")
+                # What the mix builds with nothing on order: its share of the yards' pace.
+                self.assertEqual(_block(self.display, f"sr_disp_sc_mix_rate_{k}").split(),
+                                 f"value = sr_disp_sc_pace multiply = sr_sc_mix_share_{k}".split())
+        # Hulls on order is what the rows add up to (two orders of 0.4 read 1 and 1, and 2).
+        self.assertEqual(re.findall(r"add = (\S+)", _block(self.display, "sr_disp_sc_order_total")),
+                         [f"sr_disp_sc_order_{r.key}" for r in gsf.ROLES])
+        # The yards' pace is the month's points at the last step that built,
+        # kept through a pause; the orders' months count on it, only while the
+        # yards build.
+        hand = _strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt"))
+        self.assertRegex(_block(hand, "sr_disp_sc_pace"),
+                         r"^\s*value = 0\s*if = \{ limit = \{ has_variable = sr_sc_pace_last \} value = var:sr_sc_pace_last \}\s*$")
+        self.assertRegex(_block(self.effects, "sr_sc_month"),
+                         r"set_local_variable = \{ name = sr_sc_points value = sr_sc_rate \}\s*"
+                         r"set_variable = \{ name = sr_sc_pace_last value = local_var:sr_sc_points \}")
+        months = _block(hand, "sr_disp_sc_order_months")
         self.assertRegex(months, r"^\s*value = 0\s*if = \{\s*limit = \{\s*NOT = \{ sr_sc_is_paused = yes \}\s*"
-                                 r"sr_sc_order_total > 0\s*sr_disp_sc_rate > 0\s*\}\s*"
-                                 r"value = sr_sc_order_total\s*divide = sr_disp_sc_rate\s*\}\s*ceiling = yes\s*max = 999\s*$")
+                                 r"sr_sc_order_total > 0\s*sr_disp_sc_pace > 0\s*\}\s*"
+                                 r"value = sr_sc_order_total\s*divide = sr_disp_sc_pace\s*\}\s*ceiling = yes\s*max = 999\s*$")
         gui = _raw(self.GUI)
         section = _block(gui.replace("\ttype te_sr_sec_space_command = flowcontainer", "te_sr_sec_space_command ="),
                          "te_sr_sec_space_command")
@@ -1064,7 +1104,7 @@ class OrdersTest(unittest.TestCase):
         """Custom tooltips' keys, which loc_coverage doesn't read, and the
         table's hovers."""
         keys = set(re.findall(r"custom_tooltip = (sr_sc_\w+)", self.sguis)) | set(re.findall(r"text = (sr_sc_\w+_tt)", self.sguis))
-        self.assertEqual(len(keys), 4 + 4 + len(gsf.ROLES) + 5 + len(gsf.ROLES))   # modes; mix; orders
+        self.assertEqual(len(keys), 5 + 4 + len(gsf.ROLES) + 5 + len(gsf.ROLES))   # modes; mix; orders
         keys |= set(re.findall(r'tooltip = "(je_space_race_widget_sc_\w+)"', self.rows + _raw(self.GUI)))
         for key in sorted(keys):
             with self.subTest(key=key):
@@ -3065,7 +3105,8 @@ class _Fx:
     """Enough of the engine to run a transfer, from the files as they are: value
     blocks applied in order (min and max clamp where they stand), variables and
     locals, if / else_if / else, triggers, scripted effects and triggers with
-    their $ARG$ substituted as text, saved scopes, and a scripted GUI's is_valid.
+    their $ARG$ substituted as text, saved scopes, and a scripted GUI's is_valid
+    (trigger_if / trigger_else_if / trigger_else) and effect (click).
     Every value is an integer of 1e-5 and every operation is cut toward zero:
     test_demographics_registry._Engine(truncate=True)'s model, exactly. A read of
     a variable or local never set fails, as does an argument the callee doesn't
@@ -3127,6 +3168,8 @@ class _Fx:
                 return store[v[len(prefix):]]
         if v in self.values:
             return self.calc(self.values[v])
+        if v in ("yes", "no"):   # a flag's value (set_variable = { name = x value = yes })
+            return _FX_SCALE if v == "yes" else 0
         try:
             return _fxn(v)
         except InvalidOperation:
@@ -3144,6 +3187,8 @@ class _Fx:
             elif key == "round":
                 q, r = divmod(abs(acc), _FX_SCALE)
                 acc = (q + (2 * r >= _FX_SCALE)) * _FX_SCALE * (1 if acc >= 0 else -1)
+            elif key == "ceiling":
+                acc = -((-acc) // _FX_SCALE) * _FX_SCALE
             else:
                 x = self.num(v)
                 if key == "value":
@@ -3196,6 +3241,8 @@ class _Fx:
             return v in self.globals
         if key == "has_variable_list":
             return False
+        if key == "always":
+            return v == "yes"
         if key in self.triggers:
             if v in ("yes", "no"):
                 return self.test(self._body(self.triggers, key, "yes")) == (v == "yes")
@@ -3218,6 +3265,12 @@ class _Fx:
                 d = {k: x for k, _, x in v}
                 assert d["name"] in self.vars, f"change_variable on {d['name']}, never set"
                 self.vars[d["name"]] += self.num(d["add"]) if "add" in d else -self.num(d["subtract"])
+            elif key == "change_local_variable":
+                d = {k: x for k, _, x in v}
+                assert d["name"] in self.locals, f"change_local_variable on {d['name']}, never set"
+                self.locals[d["name"]] += self.num(d["add"]) if "add" in d else -self.num(d["subtract"])
+            elif key == "custom_tooltip":
+                pass   # text: a click's effect is what it writes
             elif key == "remove_variable":
                 del self.vars[v]
             elif key == "set_global_variable":
@@ -3230,30 +3283,43 @@ class _Fx:
                 self.run(v)
             elif key in self.STUBS:
                 self.calls.append(key)
+                self.stub(key)
             elif key in self.effects:
                 self.calls.append(key)
                 self.run(self._body(self.effects, key, v))
             else:
                 raise AssertionError(f"unsupported effect {key}")
 
+    def stub(self, key):
+        """A stubbed effect was called: nothing here; a subclass may model it."""
+
     def effect(self, name, **args):
         self.run([(name, "=", [(k, "=", str(x)) for k, x in args.items()] if args else "yes")])
 
+    def click(self, sgui, **scopes):
+        """A click on a scripted GUI's button with these saved scopes: nothing
+        while its is_valid fails (the button is greyed), else its effect."""
+        self.scopes = {k: _fxn(v) for k, v in scopes.items()}
+        if self.refusals(sgui):
+            return False
+        self.run(next(v for k, _, v in self.sguis[sgui] if k == "effect"))
+        return True
+
     def refusals(self, sgui):
         """The is_valid lines of a scripted GUI that fail: each custom_tooltip's
-        text, through trigger_if / trigger_else."""
+        text, through trigger_if / trigger_else_if / trigger_else."""
         out = []
 
         def walk(block):
             taken = False
             for key, op, v in block:
-                if key in ("trigger_if", "trigger_else"):
-                    if key == "trigger_if":
-                        taken = self.test(next(x for k, _, x in v if k == "limit"))
-                        if taken:
-                            walk([e for e in v if e[0] != "limit"])
-                    elif not taken:
-                        walk(v)
+                if key in ("trigger_if", "trigger_else_if", "trigger_else"):
+                    taken = False if key == "trigger_if" else taken
+                    if taken:
+                        continue
+                    if key == "trigger_else" or self.test(next(x for k, _, x in v if k == "limit")):
+                        taken = True
+                        walk([e for e in v if e[0] != "limit"])
                 elif key == "custom_tooltip":
                     if not self.test([e for e in v if e[0] != "text"]):
                         out.append(next(x for k, _, x in v if k == "text"))
@@ -3262,6 +3328,288 @@ class _Fx:
 
         walk(next(v for k, _, v in self.sguis[sgui] if k == "is_valid"))
         return out
+
+
+class _Yards(_Fx):
+    """Space Command's month and its buttons, run from the files as they are
+    (OrdersRunTest): _Fx with the step's two walks of the map modelled.
+    sr_sc_rate, a walk of the country's states, is a figure the test gives.
+    sr_sc_pause_apply, a walk of its buildings, records the cut it would apply:
+    the inputs are cut while the pause holds at an apply, and stay as they were
+    between applies, as the building modifier does. step() fails if a month is
+    built whose inputs were cut at any time since the step before, which is the
+    rule of the review of #1287 that the modes and Orders Only's idle must keep."""
+
+    STUBS = (*_Fx.STUBS, "sr_sc_self_check", "sr_sc_pause_apply")
+    HAND_DISPLAY = ROOT / "common/script_values/sr_fleet_display_values.txt"
+    _display = None
+
+    def __init__(self, rate, ai=False):
+        super().__init__()
+        if _Yards._display is None:
+            _Yards._display = {k: _fx_parse(_fx_tokens(v))[0] for k, v in _fx_top_raw(_raw(self.HAND_DISPLAY)).items()}
+        self.values = {**self.values, **_Yards._display, "sr_sc_rate": [("value", "=", str(rate))]}
+        self.rate, self.ai = _fxn(rate), ai
+        self.cut = False             # the inputs' cut, as last applied
+        self.cut_since_step = False  # ... on at any time since the last step's own apply
+
+    def cond(self, key, op, v):
+        if key == "is_ai":
+            return (v == "yes") == self.ai
+        return super().cond(key, op, v)
+
+    def stub(self, key):
+        if key == "sr_sc_pause_apply":
+            self.cut = "sr_sc_paused" in self.vars
+            self.cut_since_step = self.cut_since_step or self.cut
+
+    def step(self):
+        """A month's construction (sr_sc_month): what it built."""
+        paid = not self.cut_since_step
+        self.locals = {}
+        self.effect("sr_sc_month")
+        built = self.vars["sr_sc_built_last"]
+        assert built == 0 or paid, "a month was built whose inputs were cut for part of it"
+        assert self.cut == ("sr_sc_paused" in self.vars), "the step left the cut out of step with the pause"
+        self.cut_since_step = self.cut
+        return built
+
+    def mode(self, name):
+        return self.click("sr_sc_mode_sgui", op={"full": 1, "orders": 2, "paused": 3}[name])
+
+    def order(self, role, pick):
+        return self.click("sr_sc_order_sgui", op=gsf.ROLE_CODE[role], pick=pick)
+
+    def book(self):
+        return sum(v for k, v in self.vars.items() if k.startswith("sr_sc_order_"))
+
+    def reserve(self, role=None):
+        return sum(v for k, v in self.vars.items() if k.startswith("sr_reserve_" + (role or "")))
+
+    def state(self):
+        """(paused, a resume waiting, Orders Only, something on order)."""
+        return ("sr_sc_paused" in self.vars, "sr_sc_resume_pending" in self.vars, "sr_sc_orders_only" in self.vars, self.book() > 0)
+
+    def shown(self):
+        """What the panel reads: Built a month's cell (0 the figure, 1 Paused, 2
+        Resuming, 3 Idle) and the mode drawn selected (1 Full, 2 Orders Only, 3 Paused)."""
+        return self.num("sr_disp_sc_paused") // _FX_SCALE, self.num("sr_disp_sc_mode") // _FX_SCALE
+
+
+class OrdersRunTest(unittest.TestCase):
+    """The orders, the modes and the month, run in the engine's fixed point from
+    the files as they are (the review of #2063: OrdersTest's regexes pinned the
+    script's shape and let an order that never finishes through)."""
+
+    PLUS_1, PLUS_10, MINUS_1, CLEAR = 4, 5, 1, gsf.ORDER_CLEAR
+    # (paused, resuming, Orders Only, on order): the six states and what the panel shows in each.
+    BUILDING, BUILDING_ORDERS, PAUSED, RESUMING, IDLE, RESUMING_ORDERS = "S1", "S2", "S3", "S4", "S5", "S6"
+
+    @staticmethod
+    def _name(state):
+        paused, resuming, orders_only, on_order = state
+        if not paused:
+            return None if resuming else ("S2" if orders_only else "S1")
+        if not orders_only:
+            return "S4" if resuming else "S3"
+        if resuming:
+            return "S6" if on_order else None
+        return None if on_order else "S5"
+
+    SHOWN = {"S1": (0, 1), "S2": (0, 2), "S3": (1, 3), "S4": (2, 1), "S5": (3, 2), "S6": (2, 2)}
+
+    def test_an_order_always_finishes(self):
+        """The review's case: 5 hulls at 2.499 a month left 0.00201 on order for
+        good, since a share of a small remainder cuts to 0."""
+        y = _Yards("2.499")
+        y.mode("orders")
+        for _ in range(5):
+            y.order("war", self.PLUS_1)
+        built = [y.step(), y.step(), y.step()]
+        self.assertEqual(built[0], _fxn("2.499"))
+        self.assertEqual(built[2], _fxn("0.00201"))   # the remainder the old share left behind, moved whole
+        self.assertEqual(sum(built), _fxn(5))
+        self.assertNotIn("sr_sc_order_war", y.vars)
+        self.assertEqual(y.reserve("war"), _fxn(5))
+        self.assertEqual(self._name(y.state()), self.IDLE)   # and so the yards stop buying
+        self.assertEqual(y.step(), 0)
+
+    def test_every_order_book_empties_and_no_hull_is_lost(self):
+        rng = random.Random(2063)
+        for _ in range(300):
+            rate = Decimal(rng.randint(50_000, 600_000)) / _FX_SCALE   # 0.5 to 6 a month, to five places
+            roles = rng.sample([r.key for r in gsf.ROLES], rng.randint(1, 5))
+            y = _Yards(rate)
+            y.mode("orders")
+            wanted = {}
+            for k in roles:
+                wanted[k] = rng.randint(1, 20)
+                for _ in range(wanted[k]):
+                    y.order(k, self.PLUS_1)
+            months = math.ceil(sum(wanted.values()) / rate) + 1
+            with self.subTest(rate=str(rate), wanted=wanted):
+                built = sum(y.step() for _ in range(months))
+                self.assertEqual(y.book(), 0, "an order is still on the books")
+                self.assertEqual(self._name(y.state()), self.IDLE)
+                for k, n in wanted.items():
+                    # Whole but for the dust an order of 0.0001 or less is dropped at.
+                    self.assertLessEqual(abs(y.reserve(k) - _fxn(n)), 10 * months, k)
+                self.assertEqual(built, y.reserve())   # Built a month is what reached the reserve
+
+    def test_full_gives_the_mix_what_the_orders_leave(self):
+        y = _Yards(4)
+        y.order("siege", self.PLUS_1)             # weight 0 in the start mix: only an order builds it
+        self.assertEqual(y.step(), _fxn(4))
+        self.assertEqual({k: y.reserve(k) for k in ("siege", "war", "carrier", "tender", "rapid")},
+                         {"siege": _fxn(1), "war": _fxn("1.5"), "carrier": _fxn("0.75"), "tender": _fxn("0.75"), "rapid": 0})
+        self.assertEqual(self._name(y.state()), self.BUILDING)
+        self.assertEqual(y.step(), _fxn(4))       # and the mix alone the month after
+
+    def test_orders_only_builds_the_orders_alone_then_idles(self):
+        y = _Yards(4)
+        y.mode("orders")
+        y.order("siege", self.PLUS_1)
+        self.assertEqual(y.step(), _fxn(1))       # the month's other 3 are lost
+        self.assertEqual(y.reserve(), _fxn(1))
+        self.assertEqual(self._name(y.state()), self.IDLE)
+        self.assertTrue(y.cut)                    # from this step: the coming month isn't bought
+        self.assertEqual(y.shown(), self.SHOWN["S5"])
+
+    def test_orders_share_a_short_month_in_proportion(self):
+        y = _Yards(3)
+        y.order("war", self.PLUS_10)
+        for _ in range(5):
+            y.order("carrier", self.PLUS_1)
+        self.assertEqual(y.step(), _fxn(3))
+        self.assertEqual((y.reserve("war"), y.reserve("carrier")), (_fxn(2), _fxn(1)))
+        self.assertEqual((y.vars["sr_sc_order_war"], y.vars["sr_sc_order_carrier"]), (_fxn(8), _fxn(4)))
+        self.assertEqual(y.reserve("tender"), 0)  # nothing for the mix while the orders want the month
+        self.assertEqual(y.num("sr_disp_sc_order_months") // _FX_SCALE, 4)
+
+    def test_an_order_placed_while_idle_waits_a_step(self):
+        y = _Yards(4)
+        y.mode("orders")
+        self.assertEqual(y.step(), 0)             # nothing on order: the month builds nothing, and idles
+        self.assertEqual(self._name(y.state()), self.IDLE)
+        y.order("war", self.PLUS_10)
+        self.assertEqual(self._name(y.state()), self.RESUMING_ORDERS)
+        self.assertEqual(y.shown(), self.SHOWN["S6"])
+        self.assertEqual(y.step(), 0)             # the inputs were cut: nothing built, the cut comes off
+        self.assertFalse(y.cut)
+        self.assertEqual(y.step(), _fxn(4))       # a month that was bought
+        # The last order withdrawn while the resume waits calls it off.
+        z = _Yards(4)
+        z.mode("orders")
+        z.step()
+        z.order("war", self.PLUS_1)
+        z.order("war", self.CLEAR)
+        self.assertEqual(self._name(z.state()), self.IDLE)
+        self.assertEqual(z.step(), 0)
+        self.assertTrue(z.cut)
+
+    def test_rearranging_orders_within_a_month_loses_none_of_it(self):
+        y = _Yards(4)
+        y.mode("orders")
+        y.order("war", self.PLUS_10)
+        y.step()
+        y.order("war", self.CLEAR)                # the book is empty, and the yards still building
+        self.assertEqual(self._name(y.state()), self.BUILDING_ORDERS)
+        y.order("carrier", self.PLUS_10)
+        self.assertEqual(y.step(), _fxn(4))
+        self.assertEqual(y.reserve("carrier"), _fxn(4))
+
+    def test_a_pause_and_its_resume(self):
+        y = _Yards(4)
+        y.step()
+        y.mode("paused")
+        self.assertTrue(y.cut)                    # at once
+        self.assertEqual(y.shown(), self.SHOWN["S3"])
+        self.assertEqual(y.step(), 0)
+        y.mode("full")
+        self.assertEqual(self._name(y.state()), self.RESUMING)
+        self.assertTrue(y.cut)                    # the inputs stay cut until the step
+        self.assertEqual(y.step(), 0)
+        self.assertEqual(y.step(), _fxn(4))
+        # Paused chosen while the resume waits calls it off; orders are kept through a pause.
+        y.order("siege", self.PLUS_10)
+        y.mode("paused")
+        y.mode("orders")
+        self.assertEqual(self._name(y.state()), self.RESUMING_ORDERS)
+        y.mode("paused")
+        self.assertEqual(self._name(y.state()), self.PAUSED)
+        self.assertEqual(y.step(), 0)
+        self.assertEqual(y.vars["sr_sc_order_siege"], _fxn(10))
+        # A pause the day before the step, and a resume the day after, builds neither month.
+        z = _Yards(4)
+        z.step()
+        z.mode("paused")
+        z.mode("full")
+        self.assertEqual(z.step(), 0)
+
+    def test_the_ai_builds_in_full_whatever_it_inherits(self):
+        """The review of #2063: the flag dropped after the month's build left an
+        AI its first month unbuilt, and never dropped would idle it for good."""
+        y = _Yards(4)
+        y.mode("orders")
+        y.order("war", self.PLUS_1)
+        y.step()                                  # the order filled, the yards idle
+        self.assertEqual(self._name(y.state()), self.IDLE)
+        y.ai = True
+        self.assertEqual(y.step(), 0)             # still paused: its review ends that (sr_sc_ai_pause_review)
+        self.assertEqual(self._name(y.state()), self.PAUSED)
+        z = _Yards(4)
+        z.mode("orders")                          # building, nothing on order, handed over mid-month
+        z.ai = True
+        self.assertEqual(z.step(), _fxn(4))       # by the mix, this month
+        self.assertEqual(self._name(z.state()), self.BUILDING)
+
+    def test_no_sequence_of_clicks_builds_an_unpaid_month(self):
+        """Seeded walks over every button and the step: step() fails on a month
+        built with its inputs cut for part of it; no state outside the six is
+        reached; the panel reads each state as it is; and left alone the yards
+        settle where the mode says."""
+        rng = random.Random(1287)
+        modes, roles = ("full", "orders", "paused"), [r.key for r in gsf.ROLES]
+        seen = set()
+        for walk in range(150):
+            rate = rng.choice(("2.499", "3.33333", "4", "7.25"))
+            y = _Yards(rate)
+            for _ in range(50):
+                roll = rng.random()
+                if roll < 0.25:
+                    y.step()
+                elif roll < 0.5:
+                    y.mode(rng.choice(modes))
+                elif roll < 0.9:
+                    y.order(rng.choice(roles), rng.choice((self.PLUS_1, self.PLUS_1, self.PLUS_10, self.MINUS_1, 2, self.CLEAR)))
+                else:
+                    y.click("sr_sc_mix_sgui", op=rng.randint(1, 5), pick=rng.randint(1, 2))
+                name = self._name(y.state())
+                self.assertIsNotNone(name, f"walk {walk}: an unreachable state {y.state()}")
+                self.assertEqual(y.shown(), self.SHOWN[name], f"walk {walk}: {name}")
+                self.assertTrue(all(v >= 0 for k, v in y.vars.items() if k.startswith(("sr_sc_order_", "sr_reserve_", "sr_sc_mix_"))))
+                seen.add(name)
+            # Left alone: Paused stays paused; Full builds every month from the
+            # second step on; Orders Only works its book off and idles.
+            start = self._name(y.state())
+            with self.subTest(walk=walk, start=start):
+                if start == "S3":
+                    self.assertEqual([y.step(), y.step()], [0, 0])
+                    self.assertEqual(self._name(y.state()), "S3")
+                elif start in ("S1", "S4"):
+                    y.step()
+                    for built in (y.step(), y.step()):
+                        # The month's rate, less at most a cut of 0.00001 a role's share.
+                        self.assertLessEqual(built, _fxn(rate))
+                        self.assertGreaterEqual(built, _fxn(rate) - len(roles))
+                    self.assertEqual(self._name(y.state()), "S1")
+                else:
+                    for _ in range(math.ceil(Decimal(y.book()) / _fxn(rate)) + 3):
+                        y.step()
+                    self.assertEqual(y.book(), 0)
+                    self.assertEqual(self._name(y.state()), "S5")
+                    self.assertTrue(y.cut)
+        self.assertEqual(seen, set(self.SHOWN))   # the walks reached all six
 
 
 class TransferRunTest(unittest.TestCase):

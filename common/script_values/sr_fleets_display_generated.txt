@@ -3505,7 +3505,8 @@ sr_disp_fl_count = { value = sr_fl_count }
 
 # The build mix's weights (Space Command's table), each role's share of what a
 # month's construction has left after the orders, in percent, and that share of
-# last month's construction (the share's hover).
+# the yards' pace (sr_disp_sc_pace: what the mix builds a month with nothing on
+# order; the share's hover).
 sr_disp_sc_mix_war = { value = sr_sc_mix_war_value }
 sr_disp_sc_mix_rapid = { value = sr_sc_mix_rapid_value }
 sr_disp_sc_mix_siege = { value = sr_sc_mix_siege_value }
@@ -3516,20 +3517,28 @@ sr_disp_sc_mix_pct_rapid = { value = sr_sc_mix_share_rapid multiply = 100 }
 sr_disp_sc_mix_pct_siege = { value = sr_sc_mix_share_siege multiply = 100 }
 sr_disp_sc_mix_pct_carrier = { value = sr_sc_mix_share_carrier multiply = 100 }
 sr_disp_sc_mix_pct_tender = { value = sr_sc_mix_share_tender multiply = 100 }
-sr_disp_sc_mix_rate_war = { value = sr_disp_sc_rate multiply = sr_sc_mix_share_war }
-sr_disp_sc_mix_rate_rapid = { value = sr_disp_sc_rate multiply = sr_sc_mix_share_rapid }
-sr_disp_sc_mix_rate_siege = { value = sr_disp_sc_rate multiply = sr_sc_mix_share_siege }
-sr_disp_sc_mix_rate_carrier = { value = sr_disp_sc_rate multiply = sr_sc_mix_share_carrier }
-sr_disp_sc_mix_rate_tender = { value = sr_disp_sc_rate multiply = sr_sc_mix_share_tender }
+sr_disp_sc_mix_rate_war = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_war }
+sr_disp_sc_mix_rate_rapid = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_rapid }
+sr_disp_sc_mix_rate_siege = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_siege }
+sr_disp_sc_mix_rate_carrier = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_carrier }
+sr_disp_sc_mix_rate_tender = { value = sr_disp_sc_pace multiply = sr_sc_mix_share_tender }
 
-# Orders (the owner, 2026-11-25): each role's hulls still on order and their sum,
-# rounded up, so an order under way never reads 0.
+# Orders (the owner, 2026-11-25): each role's hulls still on order, rounded up,
+# so an order under way never reads 0, and the rows' sum, so Hulls on order is
+# what the table's rows add up to.
 sr_disp_sc_order_war = { value = sr_sc_order_war_value ceiling = yes }
 sr_disp_sc_order_rapid = { value = sr_sc_order_rapid_value ceiling = yes }
 sr_disp_sc_order_siege = { value = sr_sc_order_siege_value ceiling = yes }
 sr_disp_sc_order_carrier = { value = sr_sc_order_carrier_value ceiling = yes }
 sr_disp_sc_order_tender = { value = sr_sc_order_tender_value ceiling = yes }
-sr_disp_sc_order_total = { value = sr_sc_order_total ceiling = yes }
+sr_disp_sc_order_total = {
+	value = 0
+	add = sr_disp_sc_order_war
+	add = sr_disp_sc_order_rapid
+	add = sr_disp_sc_order_siege
+	add = sr_disp_sc_order_carrier
+	add = sr_disp_sc_order_tender
+}
 
 # Our fleets' strength by role, now and at full (the table's Fleets column and its
 # hover).

@@ -872,7 +872,8 @@ engine fact it rests on is in use elsewhere in the panel (two chained scopes on 
    + and cross buttons sit level with their figures. A click on Auto-launch and on Crews first changes its value in
    place, the row not moving.
 2. **The mix.** − and + step a weight by one, between 0 and 3: at 3 the + is greyed ("Its weight is below 3",
-   crossed), at 0 the −. The share beside each weight follows at once and the five sum to 100%. With every weight at
+   crossed), at 0 the −. The share beside each weight follows at once and the five sum to 100%, give or take a point of
+   rounding. With every weight at
    0, Warships reads 100% and the month's construction is all warships.
 3. **An order's clicks.** On one role: a click on + adds 1, shift-click 10, ctrl-click 100; the same three on − take
    them off, stopping at 0; the cross withdraws the order. − and the cross are greyed with no order ("It has hulls on
@@ -888,9 +889,14 @@ engine fact it rests on is in use elsewhere in the panel (two chained scopes on 
    next step builds nothing, the one after builds. Withdraw that order before the step: back to Idle.
 6. **No month lost to rearranging.** In Orders Only with the yards building, withdraw the only order and place
    another the same day: Built a month keeps its figure (not Idle), and the next step builds the new order in full.
-7. **Switching modes.** Full to Orders Only and back while the yards build: no Resuming, no missed month. From
-   Paused, Orders Only with nothing on order reads Idle and stays cut; with an order it reads Resuming.
-8. **The AI (observer).** An AI fleet power's table is not ours to see, but its reserve and fleets grow in its mix
+7. **Switching modes.** With an order under way, Full to Orders Only and back while the yards build: no Resuming, no
+   missed month. With nothing on order, Full to Orders Only: Built a month keeps its figure until the month turns,
+   then reads Idle, that month building nothing. From Paused, Orders Only with nothing on order reads Idle at once
+   and stays cut (the hover says the yards stay idle until an order); with an order it reads Resuming.
+8. **An order always finishes.** Order 5 of one role at a rate that is not round (Built a month 2.5 or so, from a
+   yard short of staff): within three months Hulls on order reads 0, and `sr_sc_order_<role>` is unset in the
+   console (`has_variable`). In Orders Only the yards then read Idle.
+9. **The AI (observer).** An AI fleet power's table is not ours to see, but its reserve and fleets grow in its mix
    as before (warships, carriers and tenders in peace). Tag over to one mid-game: its mode reads Full, or Paused
    under its fiscal pause, and Hulls on order 0.
 

@@ -127,64 +127,104 @@ sr_fl_clear_at = {
 }
 
 # The month's construction (local_var:sr_sc_points) into the ground reserve (6d,
-# design § 15). Orders first (the owner, 2026-11-25): each role on order
-# (sr_sc_order_<role>) takes the points in proportion to what it still wants, so
-# the orders finish together, and its order comes down by what it got. The rest
-# is shared by the build mix, unless the yards build orders only
+# design § 15). Orders first (the owner, 2026-11-25; sr_sc_order_<role>). A
+# month that covers every order moves each whole, an amount and not a share:
+# a share of a small remainder cuts to 0 in fixed point (0.002 x 0.002), and
+# the order would stay on the books for good (the review of #2063). Orders that
+# want more than the month take all of it, each in proportion to what it still
+# wants, so they finish together, and each comes down by what it got. What the
+# orders leave is shared by the build mix, unless the yards build orders only
 # (sr_sc_orders_only), when it is lost. local_var:sr_sc_built is what was built,
 # for Built a month. A hull reaches orbit at full when launched.
 sr_reserve_build = {
 	set_local_variable = { name = sr_sc_built value = 0 }
 	set_local_variable = { name = sr_sc_order_left value = sr_sc_order_total }
 	if = {
-		limit = { local_var:sr_sc_order_left > 0 }
-		set_local_variable = { name = sr_sc_order_take value = local_var:sr_sc_points }
-		if = {
-			limit = { local_var:sr_sc_order_take > local_var:sr_sc_order_left }
-			set_local_variable = { name = sr_sc_order_take value = local_var:sr_sc_order_left }
+		limit = {
+			local_var:sr_sc_order_left > 0
+			local_var:sr_sc_points >= local_var:sr_sc_order_left
 		}
 		if = {
+			limit = { has_variable = sr_sc_order_war }
+			if = { limit = { NOT = { has_variable = sr_reserve_war } } set_variable = { name = sr_reserve_war value = 0 } }
+			change_variable = { name = sr_reserve_war add = var:sr_sc_order_war }
+			remove_variable = sr_sc_order_war
+		}
+		if = {
+			limit = { has_variable = sr_sc_order_rapid }
+			if = { limit = { NOT = { has_variable = sr_reserve_rapid } } set_variable = { name = sr_reserve_rapid value = 0 } }
+			change_variable = { name = sr_reserve_rapid add = var:sr_sc_order_rapid }
+			remove_variable = sr_sc_order_rapid
+		}
+		if = {
+			limit = { has_variable = sr_sc_order_siege }
+			if = { limit = { NOT = { has_variable = sr_reserve_siege } } set_variable = { name = sr_reserve_siege value = 0 } }
+			change_variable = { name = sr_reserve_siege add = var:sr_sc_order_siege }
+			remove_variable = sr_sc_order_siege
+		}
+		if = {
+			limit = { has_variable = sr_sc_order_carrier }
+			if = { limit = { NOT = { has_variable = sr_reserve_carrier } } set_variable = { name = sr_reserve_carrier value = 0 } }
+			change_variable = { name = sr_reserve_carrier add = var:sr_sc_order_carrier }
+			remove_variable = sr_sc_order_carrier
+		}
+		if = {
+			limit = { has_variable = sr_sc_order_tender }
+			if = { limit = { NOT = { has_variable = sr_reserve_tender } } set_variable = { name = sr_reserve_tender value = 0 } }
+			change_variable = { name = sr_reserve_tender add = var:sr_sc_order_tender }
+			remove_variable = sr_sc_order_tender
+		}
+		change_local_variable = { name = sr_sc_built add = local_var:sr_sc_order_left }
+		change_local_variable = { name = sr_sc_points subtract = local_var:sr_sc_order_left }
+	}
+	else_if = {
+		limit = { local_var:sr_sc_order_left > 0 }
+		if = {
 			limit = { sr_sc_order_war_value > 0 }
-			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_war multiply = local_var:sr_sc_order_take divide = local_var:sr_sc_order_left } }
+			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_war multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left } }
 			if = { limit = { NOT = { has_variable = sr_reserve_war } } set_variable = { name = sr_reserve_war value = 0 } }
 			change_variable = { name = sr_reserve_war add = local_var:sr_sc_share }
 			change_variable = { name = sr_sc_order_war subtract = local_var:sr_sc_share }
+			change_local_variable = { name = sr_sc_built add = local_var:sr_sc_share }
 		}
 		if = { limit = { has_variable = sr_sc_order_war var:sr_sc_order_war <= 0.0001 } remove_variable = sr_sc_order_war }
 		if = {
 			limit = { sr_sc_order_rapid_value > 0 }
-			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_rapid multiply = local_var:sr_sc_order_take divide = local_var:sr_sc_order_left } }
+			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_rapid multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left } }
 			if = { limit = { NOT = { has_variable = sr_reserve_rapid } } set_variable = { name = sr_reserve_rapid value = 0 } }
 			change_variable = { name = sr_reserve_rapid add = local_var:sr_sc_share }
 			change_variable = { name = sr_sc_order_rapid subtract = local_var:sr_sc_share }
+			change_local_variable = { name = sr_sc_built add = local_var:sr_sc_share }
 		}
 		if = { limit = { has_variable = sr_sc_order_rapid var:sr_sc_order_rapid <= 0.0001 } remove_variable = sr_sc_order_rapid }
 		if = {
 			limit = { sr_sc_order_siege_value > 0 }
-			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_siege multiply = local_var:sr_sc_order_take divide = local_var:sr_sc_order_left } }
+			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_siege multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left } }
 			if = { limit = { NOT = { has_variable = sr_reserve_siege } } set_variable = { name = sr_reserve_siege value = 0 } }
 			change_variable = { name = sr_reserve_siege add = local_var:sr_sc_share }
 			change_variable = { name = sr_sc_order_siege subtract = local_var:sr_sc_share }
+			change_local_variable = { name = sr_sc_built add = local_var:sr_sc_share }
 		}
 		if = { limit = { has_variable = sr_sc_order_siege var:sr_sc_order_siege <= 0.0001 } remove_variable = sr_sc_order_siege }
 		if = {
 			limit = { sr_sc_order_carrier_value > 0 }
-			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_carrier multiply = local_var:sr_sc_order_take divide = local_var:sr_sc_order_left } }
+			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_carrier multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left } }
 			if = { limit = { NOT = { has_variable = sr_reserve_carrier } } set_variable = { name = sr_reserve_carrier value = 0 } }
 			change_variable = { name = sr_reserve_carrier add = local_var:sr_sc_share }
 			change_variable = { name = sr_sc_order_carrier subtract = local_var:sr_sc_share }
+			change_local_variable = { name = sr_sc_built add = local_var:sr_sc_share }
 		}
 		if = { limit = { has_variable = sr_sc_order_carrier var:sr_sc_order_carrier <= 0.0001 } remove_variable = sr_sc_order_carrier }
 		if = {
 			limit = { sr_sc_order_tender_value > 0 }
-			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_tender multiply = local_var:sr_sc_order_take divide = local_var:sr_sc_order_left } }
+			set_local_variable = { name = sr_sc_share value = { value = var:sr_sc_order_tender multiply = local_var:sr_sc_points divide = local_var:sr_sc_order_left } }
 			if = { limit = { NOT = { has_variable = sr_reserve_tender } } set_variable = { name = sr_reserve_tender value = 0 } }
 			change_variable = { name = sr_reserve_tender add = local_var:sr_sc_share }
 			change_variable = { name = sr_sc_order_tender subtract = local_var:sr_sc_share }
+			change_local_variable = { name = sr_sc_built add = local_var:sr_sc_share }
 		}
 		if = { limit = { has_variable = sr_sc_order_tender var:sr_sc_order_tender <= 0.0001 } remove_variable = sr_sc_order_tender }
-		change_local_variable = { name = sr_sc_built add = local_var:sr_sc_order_take }
-		change_local_variable = { name = sr_sc_points subtract = local_var:sr_sc_order_take }
+		set_local_variable = { name = sr_sc_points value = 0 }
 	}
 	if = {
 		limit = {

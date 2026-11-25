@@ -652,12 +652,28 @@ sr_sc_one_per_nation = {
 # asks to resume like any other (sr_sc_orders_sync), so it too waits out a
 # step that builds nothing. While the yards build, emptying the order book
 # changes nothing until the step, so withdrawing one order and placing
-# another in the same month loses none of it; a book still empty at the step
+# another in the same month loses none of it. A book still empty at the step
 # has bought that month for nothing, at most a month's inputs, as a pause
-# mid-month does. In Orders Only what a month has left after the last order
-# is lost (sr_reserve_build), and Built a month reads what was built.
+# mid-month does: so does a switch to Orders Only with nothing on order, and
+# the mode's tooltip says so and names Paused for stopping at once. (Cutting
+# at the switch instead would cost the usual sequence, Orders Only and then
+# the orders, a month: the order would find the yards idle.) In Orders Only
+# what a month has left after the last order is lost (sr_reserve_build), and
+# Built a month reads what was built.
 sr_sc_month = {
 	sr_sc_self_check = yes
+	# 0. The AI places no orders, so it never builds in Orders Only: one that
+	# inherits the mode from a player drops it before this month's build (the
+	# review of #2063: dropped after it, the month went unbuilt), and any
+	# orders left with it are still built first. An idle it inherits is then a
+	# plain pause, which its review ends (sr_sc_ai_pause_review).
+	if = {
+		limit = {
+			is_ai = yes
+			sr_sc_orders_only = yes
+		}
+		remove_variable = sr_sc_orders_only
+	}
 	# 1. The build: nothing while paused, a resume pending or not.
 	if = {
 		limit = { sr_sc_is_paused = yes }
@@ -665,6 +681,8 @@ sr_sc_month = {
 	}
 	else = {
 		set_local_variable = { name = sr_sc_points value = sr_sc_rate }
+		# The yards' pace, kept through a pause for the panel (sr_disp_sc_pace).
+		set_variable = { name = sr_sc_pace_last value = local_var:sr_sc_points }
 		set_local_variable = { name = sr_sc_built value = 0 }
 		if = {
 			limit = { local_var:sr_sc_points > 0 }
@@ -727,8 +745,10 @@ sr_sc_pause_apply = {
 # resume (sr_sc_resume_pending), the inputs stay cut, and the next step,
 # which builds nothing, ends it (sr_sc_month). Choosing Paused while a resume
 # waits calls it off. Between Full and Orders Only, while the yards build, a
-# switch costs nothing. No cost to pausing either: a pause mid-month bills
-# the days since the last step for nothing, at most a month's inputs a pause.
+# switch only changes what the next step builds: in Orders Only, nothing if
+# the order book is empty then, though the month's inputs were bought. No
+# cost to pausing: a pause mid-month bills the days since the last step for
+# nothing, at most a month's inputs a pause.
 sr_sc_mode_full = {
 	if = {
 		limit = { sr_sc_orders_only = yes }
@@ -1031,15 +1051,10 @@ sr_fl_ai_review = {
 # next month's step builds nothing. A resume ends the pause directly, not
 # through the pending resume a player's waits on: this runs at the step,
 # after the month's build (nothing, while paused), so the inputs are bought
-# again from now and the next step builds a month they paid for. The AI
-# places no orders, so it never builds in Orders Only: one that inherits the
-# mode from a player drops it here, or its yards would idle for good (any
-# orders left with it are still built first).
+# again from now and the next step builds a month they paid for. An Orders
+# Only it inherited is gone by now (sr_sc_month, 0), so an idle it inherited
+# is a pause like any other.
 sr_sc_ai_pause_review = {
-	if = {
-		limit = { sr_sc_orders_only = yes }
-		remove_variable = sr_sc_orders_only
-	}
 	if = {
 		limit = {
 			NOT = { sr_sc_is_paused = yes }

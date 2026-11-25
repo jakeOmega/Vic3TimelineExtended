@@ -1365,10 +1365,10 @@ in the reserve, its weight in the build mix and its order.
   hull, shift-click for 10 and ctrl-click for 100; the cross withdraws the
   order. Each month's construction goes to the orders first, shared in
   proportion to their size so that they finish together, and an order counts
-  down as its hulls are built. An order costs nothing to place, and
-  withdrawing one loses nothing: the hulls it built are already in the
-  reserve. Under the table, Hulls on order gives the total and Months to build
-  them how long that takes at last month's pace.
+  down as its hulls are built. An order costs nothing to place, and the hulls
+  an order has built stay in the reserve when you withdraw it. Under the
+  table, Hulls on order gives the total and Months to build them how long that
+  takes at the yards' last pace.
 - **The build mix.** Each role has a weight from 0 to 3, set with − and +, with
   its share beside it. The mix shares out what a month has left once the
   orders are filled. With every weight at 0, warships take it all.
@@ -1406,7 +1406,7 @@ drawn selected:
 | Mode | What the yards build |
 |---|---|
 | Full | The orders first, then the rest of the month by the build mix. The default. |
-| Orders Only | The orders and nothing else. What a month has left after the last order is lost, and with nothing on order the yards stand idle. |
+| Orders Only | The orders and nothing else. What a month has left after the last order is lost, and a month that finds nothing on order builds nothing and leaves the yards idle. |
 | Paused | Nothing. |
 
 Paused stops construction at once: neither Space Command nor your colonies'
@@ -1427,7 +1427,11 @@ three inputs. A new order starts them again as leaving a pause does: the next
 month's construction builds nothing, and the one after builds. So Orders Only
 suits a fleet you top up now and then. If you order often, place the next order
 before the last one is finished, or use Full. Switching between Full and Orders
-Only while the yards are building costs nothing.
+Only doesn't interrupt yards that are building, but the yards go idle only at a
+month's construction: if you switch to Orders Only, or withdraw your last
+order, and nothing is on order when the month turns, that month's inputs were
+bought and nothing is built. Place the order before then, or choose Paused to
+stop the yards at once.
 
 ### Space Forces Personnel
 

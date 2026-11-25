@@ -51,19 +51,27 @@ sr_disp_sc_mode = {
 		value = 3
 	}
 }
-# The months the orders take at last month's pace, rounded up; 0 with nothing
-# on order, while the yards don't build, and in a first month back, when last
-# month built nothing: the panel shows the line from 1. Three digits at most.
+# The yards' pace: what a month's construction came to at the last step that
+# built (sr_sc_pace_last), kept through a pause. Built a month
+# (sr_disp_sc_rate) is what was built, which in Orders Only can be less, and
+# is 0 on a first month back.
+sr_disp_sc_pace = {
+	value = 0
+	if = { limit = { has_variable = sr_sc_pace_last } value = var:sr_sc_pace_last }
+}
+# The months the orders take at the yards' pace, rounded up; 0 with nothing
+# on order, while the yards don't build, and before they ever have: the panel
+# shows the line from 1. Three digits at most.
 sr_disp_sc_order_months = {
 	value = 0
 	if = {
 		limit = {
 			NOT = { sr_sc_is_paused = yes }
 			sr_sc_order_total > 0
-			sr_disp_sc_rate > 0
+			sr_disp_sc_pace > 0
 		}
 		value = sr_sc_order_total
-		divide = sr_disp_sc_rate
+		divide = sr_disp_sc_pace
 	}
 	ceiling = yes
 	max = 999

@@ -79,8 +79,9 @@ sr_sc_operational = {
 }
 
 # Country scope. Space Command's construction is paused (owner, 2026-10-31):
-# the player's Pause (sr_sc_pause_sgui) or the AI's fiscal review
-# (sr_sc_ai_pause_review). Building is the variable's absence, the default.
+# the player's Paused (sr_sc_mode_sgui), Orders Only's idle (sr_sc_month, 3)
+# or the AI's fiscal review (sr_sc_ai_pause_review). Building is the
+# variable's absence, the default.
 sr_sc_is_paused = {
 	has_variable = sr_sc_paused
 }
