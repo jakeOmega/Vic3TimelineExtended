@@ -10,7 +10,10 @@ pop that converts in a year is
     x max(0, 1 - te_hc_fervor_effect x the culture's culture_current_fervor)   (the mod's define, 0.0075 a point)
     x te_hc_homeland_factor in a homeland of the culture   (the engine's ASSIMILATION_IN_HOMELAND_MULT, 0.75)
 
-held between 0 and te_hc_rate_cap (one half). It reads the engine's own sums, so every law, institution and decree
+held between 0 and te_hc_rate_cap (one half). The fraction a conversion is given (te_hc_pop_step, and
+te_hc_pop_cross_step, the rate times the owner's crossing share) is that, floored at one person where it is above 0
+(1 / the pop's size: the engine's MIN_ASSIMILATION = 1, once a year) and never above 1; a fraction of 0 stays 0. The
+small-pop rule it replaced (a pop under 50 converting whole) is gone (the changes after review, point 1). It reads the engine's own sums, so every law, institution and decree
 that speeds assimilation speeds this too. Each factor is held at 0 on its own: two sums below -100% would otherwise
 multiply into a positive rate (Review Focus 3, Clade Citizenship's -300%). With no modifiers that is 2.4% a year; at
 the +690% of the owner's 2039 New York 19%.
@@ -65,6 +68,14 @@ def pop_rate(state_mult, status_mult=0, radicals=0, fervor=0, homeland=False):
     return min(max(rate, 0.0), figure("te_hc_rate_cap"))
 
 
+def pop_step(rate, size, share=None):
+    """The twin of te_hc_pop_step (share None) and te_hc_pop_cross_step (share the crossing share)."""
+    fraction = rate if share is None else rate * share
+    if rate > 0 and (share is None or share > 0):
+        fraction = max(fraction, 1 / max(size, 1))
+    return min(fraction, 1.0)
+
+
 def callees(text):
     """Every te_hc_ script value `text` reads (dotted reads included), transitively."""
     values = script().values
@@ -106,6 +117,31 @@ class FiguresTest(unittest.TestCase):
         for name, value in FIGURES.items():
             with self.subTest(name=name):
                 self.assertAlmostEqual(figure(name), value)
+        # The small-pop figure is gone with its rule; the floor is one person, a pop's own size.
+        self.assertNotRegex(code(VALUES), r"\bte_hc_small_pop\b")
+
+    def test_the_one_person_floor(self):
+        # The changes note's worked figures, on the twin.
+        self.assertAlmostEqual(pop_step(0.024, 1000), 0.024)
+        self.assertAlmostEqual(pop_step(0.024, 24), 1 / 24)
+        self.assertAlmostEqual(pop_step(0.024, 1), 1.0)
+        self.assertAlmostEqual(pop_step(0.024, 1000, share=0.5), 0.012)
+        self.assertAlmostEqual(pop_step(0.024, 24, share=0.5), 1 / 24)
+        for size in (1, 24, 1000):
+            self.assertEqual(pop_step(0.024, size, share=0), 0)
+            self.assertEqual(pop_step(0, size), 0)
+            self.assertEqual(pop_step(0, size, share=1), 0)
+        # The two script values against the twin, rate from the script's own te_hc_pop_rate.
+        for size in (0, 1, 2, 24, 41, 42, 49, 50, 1000, 100000):
+            for state_mult in (-1.0, -0.99, 0.0, 1.0, 40.0):
+                for share in (0.0, 0.5, 1.0):
+                    with self.subTest(size=size, state=state_mult, share=share):
+                        world = rate_world(state_mult=state_mult, size=size, cross=share)
+                        rate = pop_rate(state_mult)
+                        step, cross_step = value_in(world, "te_hc_pop_step"), value_in(world, "te_hc_pop_cross_step")
+                        self.assertAlmostEqual(step, pop_step(rate, size))
+                        self.assertAlmostEqual(cross_step, pop_step(rate, size, share=share))
+                        self.assertLessEqual(max(step, cross_step), 1.0)
 
     def test_the_spec_rates(self):
         self.assertAlmostEqual(pop_rate(0), 0.024)
@@ -182,14 +218,15 @@ class FiguresTest(unittest.TestCase):
         vanilla = installed_defines()
         if vanilla is None:
             self.skipTest("no installed game: ASSIMILATION_RATE and ASSIMILATION_IN_HOMELAND_MULT not read")
-        for name, ours in (("ASSIMILATION_RATE", "te_hc_monthly_rate"),
-                           ("ASSIMILATION_IN_HOMELAND_MULT", "te_hc_homeland_factor")):
+        for name, ours in (("ASSIMILATION_RATE", figure("te_hc_monthly_rate")),
+                           ("ASSIMILATION_IN_HOMELAND_MULT", figure("te_hc_homeland_factor")),
+                           ("MIN_ASSIMILATION", 1)):  # the floor is one person: 1 / te_hc_pop_size_floor
             with self.subTest(define=name):
                 # The mod's own line where it sets one, as the engine reads it; vanilla's otherwise.
                 engine = define(mod, name)
                 engine = define(vanilla, name) if engine is None else engine
                 self.assertIsNotNone(engine, f"{name} is in neither the mod's nor vanilla's defines")
-                self.assertAlmostEqual(figure(ours), engine)
+                self.assertAlmostEqual(ours, engine)
 
 
 if __name__ == "__main__":

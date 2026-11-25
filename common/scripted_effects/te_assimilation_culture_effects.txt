@@ -33,8 +33,9 @@
 #                         fraction itself is the named value te_hc_pop_cross_step)
 #   te_hc_blocked         1 where the owner's laws block joining the host
 #   te_hc_can             0 where nothing can convert in this country this year
-#   te_hc_any_shared      1 where the country holds a homeland a primary culture shares
-#                         with a culture of another heritage group (Hybrid Cultures only)
+#   te_hc_any_shared      1 where some culture of another heritage group with people in the
+#                         country shares a homeland the country holds with a primary culture
+#                         (Hybrid Cultures only)
 #   te_hc_capital_known   1 once te_hc_find_capital_host has run this pass
 #   te_hc_has_capital_host   1 where it found one
 #   te_hc_has_host, te_hc_has_targets, te_hc_has_local_<group>   per state, reset
@@ -77,22 +78,30 @@ te_hc_yearly_country = {
 		}
 		set_local_variable = { name = te_hc_capital_known value = 0 }
 		set_local_variable = { name = te_hc_has_capital_host value = 0 }
-		# Hybrid Cultures: does the country hold a state that is a homeland of both a
-		# primary culture and a culture of another heritage group living there? Asked
-		# once here, so that te_hc_find_locals walks the country's states for a
-		# candidate only where the answer can be yes (most countries hold none).
+		# Hybrid Cultures: is there a culture that could be a local culture by a shared
+		# homeland? One with people in the country, of another heritage group than every
+		# primary culture, with a homeland in a state the country holds that is also a
+		# homeland of a primary culture. Asked once here, without the host's language, so
+		# that te_hc_find_locals walks the country's states for a candidate only where the
+		# answer can be yes (most countries have none). The culture need not live in that
+		# state: the first form of this test asked that it did, and missed a culture whose
+		# people all live elsewhere in the country (the pass's tests, 2026-11-25).
 		set_local_variable = { name = te_hc_any_shared value = 0 }
 		if = {
 			limit = {
 				local_var:te_hc_mode = 1
-				any_scope_state = {
-					save_temporary_scope_as = te_hc_shared_state
+				any_scope_culture = {
+					NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
+					te_hc_culture_lives_in_country = yes
+					save_temporary_scope_as = te_hc_cand
 					scope:te_hc_owner = {
-						any_primary_culture = { has_homeland = scope:te_hc_shared_state }
-					}
-					any_scope_culture = {
-						has_homeland = scope:te_hc_shared_state
-						NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
+						any_scope_state = {
+							save_temporary_scope_as = te_hc_shared_state
+							state_region = { is_homeland = scope:te_hc_cand }
+							scope:te_hc_owner = {
+								any_primary_culture = { has_homeland = scope:te_hc_shared_state }
+							}
+						}
 					}
 				}
 			}

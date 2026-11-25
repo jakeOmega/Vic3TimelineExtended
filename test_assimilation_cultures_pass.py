@@ -654,8 +654,8 @@ class Interp:
                 raise NotModeled(f"{n!r}")
             self.saved[n.value] = stack[-1]
             return True
-        if k == "culture_percent_state":
-            return self.culture_percent_state(n, stack)
+        if k in ("culture_percent_state", "culture_percent_country"):
+            return self.culture_percent(n, stack)
         if n.children is None and self.is_value_read(k):
             return self.compare(n, stack)
         if k.startswith(("te_hc_", "te_hcg_")):
@@ -679,20 +679,23 @@ class Interp:
             return (left == right) != (n.op == "!=")
         raise NotModeled(f"the trigger {n!r}")
 
-    def culture_percent_state(self, n, stack):
-        """Only `culture_percent_state = { target = PREV value > 0 }` in state scope, entered from a culture: that
-        culture has people in this state. Any other use is not modeled."""
+    def culture_percent(self, n, stack):
+        """Only `culture_percent_state = { target = PREV value > 0 }` in state scope, or `culture_percent_country = {
+        target = PREV value > 0 }` in country scope, entered from a culture: that culture has people in this state, or
+        in a state this country holds. Any other use is not modeled."""
+        kind = {"culture_percent_state": "state", "culture_percent_country": "country"}[n.key]
         target, value = n.child("target"), n.child("value")
         if (n.children is None or len(n.children) != 2 or target is None or value is None
                 or target.op != "=" or target.value not in ("PREV", "prev") or value.op != ">" or value.value != "0"):
-            raise NotModeled(f"culture_percent_state in a form other than {{ target = PREV value > 0 }}: {n!r}")
-        state = self.ent(stack[-1])
-        if state.kind != "state":
-            raise ScriptBug(f"culture_percent_state in {state.kind} scope")
+            raise NotModeled(f"{n.key} in a form other than {{ target = PREV value > 0 }}: {n!r}")
+        where = self.ent(stack[-1])
+        if where.kind != kind:
+            raise ScriptBug(f"{n.key} in {where.kind} scope")
         culture = self.ent(self.resolve("prev", stack, reading=True))
         if culture.kind != "culture":
-            raise ScriptBug(f"culture_percent_state's PREV is a {culture.kind}, not a culture")
-        return any(self.ent(pid).culture == culture.id for pid in state.pops)
+            raise ScriptBug(f"{n.key}'s PREV is a {culture.kind}, not a culture")
+        pops = where.pops if kind == "state" else self.world.items(where.id, "scope_pop")
+        return any(self.ent(pid).culture == culture.id for pid in pops)
 
     def switch_case(self, n, stack):
         """The body of the first case of a switch whose `trigger = case` holds, else its fallback, else None."""
@@ -1045,10 +1048,12 @@ def _pick_host_stand_in(interp, stack, args):
 
 
 def _save_targets_stand_in(interp, stack, args):
+    # As the generated ladder: every hybrid of the host's language, none for the language's own heritage group.
     state = interp.ent(stack[-1])
     if state.facts["targets"]:
         for group in GROUPS:
-            interp.saved[f"te_hc_t_{group}"] = f"HYB_{group}_{state.id}"
+            if group != state.facts.get("no_hybrid"):
+                interp.saved[f"te_hc_t_{group}"] = f"HYB_{group}_{state.id}"
         interp.locals["te_hc_has_targets"] = 1
 
 
@@ -1062,11 +1067,13 @@ def _find_locals_stand_in(interp, stack, args):
             interp.saved[f"te_hc_l_{group}"] = f"LOC_{group}_{state.id}"
 
 
-def table_world(row, host=True, stale=True):
+def table_world(row, host=True, stale=True, no_hybrid=None, state_mult=0.0):
     """One country whose pass reaches state S1 with the row's facts. S1 holds P1 first, of the next heritage group,
     which takes the language step under Hybrid Cultures (so a per-pop flag left at 1 shows), then P, the row's pop.
-    With `stale`, S0 is walked first with a host, the targets and every group's local culture, and no pops: the
-    scopes it saved are still there when S1 is passed. SC is the capital, with no culture of another group."""
+    With `stale`, S0 is walked first with a host of another language, its hybrids, and every group's local culture,
+    and no pops: the scopes it saved are still there when S1 is passed. SC is the capital, with no culture of another
+    group. `no_hybrid` is a group S1's host language has no hybrid for (the language's own group); `state_mult` is
+    S1's assimilation sum."""
     group, y = row["group"], other_group(row["group"])
     w = World(mode=row["mode"])
     w.culture("C_HOST", "european", "l_host")
@@ -1079,12 +1086,14 @@ def table_world(row, host=True, stale=True):
         states.append(w.state("S0", "OWNER", other=True, host=True, host_culture="C_HOST0", targets=True,
                               locals={g: 2 for g in GROUPS}))
     states.append(w.state("S1", "OWNER", other=True, host=host, host_culture="C_HOST", targets=row["targets"],
-                          locals={group: row["local"], y: 1}))
+                          locals={group: row["local"], y: 1}, no_hybrid=no_hybrid,
+                          modifiers={STATE_MULT: state_mult}))
     w.state("SC", "OWNER", other=False, host=True, host_culture="C_HOST", targets=False, locals={})
     for sid in states:
+        language = w.ents[w.ents[sid].facts["host_culture"]].language
         for g in GROUPS:
-            w.culture(f"HYB_{g}_{sid}", g, "l_host")
-            w.culture(f"LOC_{g}_{sid}", g, "l_host")
+            w.culture(f"HYB_{g}_{sid}", g, language)
+            w.culture(f"LOC_{g}_{sid}", g, language)
     w.pop("P1", "S1", "C_P1")
     w.pop("P", "S1", "C_P", slave=row["slave"])
     w.pop("P_CAP", "SC", "C_HOST")
@@ -1098,7 +1107,9 @@ def _in_scope(interp, stack, kind, what):
     return e
 
 
-def run_table_world(world, cross):
+def run_table_world(world, cross, real_values=False):
+    """The pass over a table world. The fractions are stood in for (rate 0.024) unless `real_values`, when the
+    values file is read as written."""
     interp = Interp(
         script(), world,
         effects={"te_hc_pick_host": _pick_host_stand_in, "te_hcg_save_targets": _save_targets_stand_in,
@@ -1108,7 +1119,7 @@ def run_table_world(world, cross):
                   "te_hc_pop_taken": lambda i, s, a: bool(_in_scope(i, s, "pop", "te_hc_pop_taken")),
                   "te_hc_speaks_host":
                   lambda i, s, a: i.ent(_in_scope(i, s, "pop", "te_hc_speaks_host").culture).language == "l_host"},
-        values={"te_hc_pop_rate": 0.024, STEP: 0.024, CROSS_STEP: 0.024 * cross},
+        values=None if real_values else {"te_hc_pop_rate": 0.024, STEP: 0.024, CROSS_STEP: 0.024 * cross},
     )
     interp.run_effect("te_hc_yearly_country", ["OWNER"])
     return interp
@@ -1204,9 +1215,9 @@ def rate_world(state_mult=0.0, status="full_acceptance", status_mult=0.0, other_
     return w
 
 
-def value_in(world, name, stack=POP_STACK):
+def value_in(world, name, stack=POP_STACK, values=None):
     cross = world.ents["OWNER"].modifiers[SHARE]
-    interp = Interp(script(), world, locals_=pass_locals(cross=cross),
+    interp = Interp(script(), world, values=values, locals_=pass_locals(cross=cross),
                     saved={"te_hc_owner": "OWNER", "te_hc_state": "S1", "te_hc_host": "C_HOST"})
     return interp.value(name, stack)
 
@@ -1262,6 +1273,47 @@ class OutcomeTableTest(unittest.TestCase):
 
     def test_none_rows(self):
         bad = check_rows(table_rows(3))
+        self.assertFalse(bad, report(bad))
+
+    def test_a_zero_rate_calls_nothing(self):
+        # Changes note 2: a taken pop whose rate is 0 gets no change_pop_culture at all, under every setting. The rate
+        # is 0 through the state's sum (-100%) or the status's (-100%), the values file read as written.
+        bad, converted = [], []
+        for mode in (1, 2, 3):
+            for row in table_rows(mode):
+                if row["group"] != "african":
+                    continue
+                for zero in ("state", "status"):
+                    world = table_world(row, state_mult=-1.0 if zero == "state" else 0.0)
+                    if zero == "status":
+                        world.ents["OWNER"].modifiers["country_assimilation_full_acceptance_mult"] = -1.0
+                    interp = run_table_world(world, row["cross"], real_values=True)
+                    if interp.conversions:
+                        bad.append(f"{row} rate 0 by the {zero} sum: {interp.conversions}")
+            # The same worlds at the base rate do convert, so the check above is not vacuous.
+            row = dict(mode=mode, speaks=True, targets=0, local=0, blocked=0, slave=False, cross=1.0, group="african")
+            converted.append(bool(run_table_world(table_world(row), 1.0, real_values=True).conversions))
+        self.assertFalse(bad, report(bad))
+        self.assertEqual(converted, [True, True, True])
+
+    def test_a_hybrid_of_another_language_is_not_a_target(self):
+        # Changes note 3: the ladder saves no hybrid for the host language's own heritage group, so te_hc_t_<group>
+        # can still hold an earlier state's hybrid of another language. With te_hc_has_targets = 1, a pop of that
+        # group takes no language step there and is handled by the joining branch, as if there were no targets.
+        bad = []
+        for group in GROUPS:
+            for blocked in (0, 1):
+                for slave in (False, True):
+                    for cross in (0.0, 0.5, 1.0):
+                        row = dict(mode=1, speaks=False, targets=1, local=0, blocked=blocked, slave=slave,
+                                   cross=cross, group=group)
+                        for stale in (True, False):
+                            interp = run_table_world(table_world(row, stale=stale, no_hybrid=group), cross)
+                            want = expected(**dict(row, targets=0))
+                            got = conversions_of(interp, "P")
+                            if got != ([want] if want else []):
+                                bad.append(f"{row} stale={stale}: expected {want}, got {got}")
+                            bad += [f"{row} stale={stale}: {line}" for line in wrong_scopes(interp)]
         self.assertFalse(bad, report(bad))
 
     def test_speaking_the_hosts_language_is_a_shared_language_trait(self):
@@ -1430,12 +1482,23 @@ class HostTest(unittest.TestCase):
         capital = [w for w in interp.walks if w[0] == "every_scope_pop" and w[1] == "SC"
                    and (len(w[3]) < 2 or w[3][1] != "SC")]
         self.assertLessEqual(len(capital), 2, capital)
-        # The capital has no primary culture either: any primary culture.
-        hosts, _ = self.hosts([("S1", [("C_X", 300)]), ("SC", [("C_X", 100)])])
-        self.assertIn(hosts["S1"][0], ("C_A", "C_B"))
-        self.assertEqual(hosts["S1"][1], 1)
+        # The capital has no primary culture either: any primary culture with people in the country (changes note 4).
+        # A lives only in S5; B nowhere in the country.
+        hosts, _ = self.hosts([("S1", [("C_X", 300)]), ("S5", [("C_A", 80), ("C_X", 20)]), ("SC", [("C_X", 100)])])
+        self.assertEqual(hosts["S1"], ("C_A", 1))
+        # No primary culture has anyone in the country: no host, and nothing converts in that state.
+        hosts, interp = self.hosts([("S1", [("C_X", 300)]), ("SC", [("C_X", 100)])], taken=True)
+        self.assertEqual(hosts["S1"][1], 0, hosts)
+        self.assertEqual([c for c in interp.conversions if c[0].startswith("P_S1_")], [])
+        # The same pops with a primary culture living in the country do convert in S1, so that is not vacuous.
+        hosts, interp = self.hosts([("S1", [("C_X", 300)]), ("S5", [("C_A", 80)]), ("SC", [("C_X", 100)])],
+                                   taken=True)
+        self.assertEqual([c[:2] for c in interp.conversions if c[0].startswith("P_S1_")],
+                         [("P_S1_0", "scope:te_hc_host")])
 
-    def hosts(self, layout):
+    def hosts(self, layout, taken=False):
+        """The pass under Unrestricted over the layout's states; each state's host and te_hc_has_host after its pass.
+        With `taken`, every pop that is not of a primary culture is taken, so conversions show."""
         w = World(mode=2)
         w.culture("C_A", "european", "l_a")
         w.culture("C_B", "european", "l_b")
@@ -1450,7 +1513,8 @@ class HostTest(unittest.TestCase):
         interp = Interp(script(), w,
                         effects={"te_hcg_save_targets": lambda i, s, a: None,
                                  "te_hc_find_locals": _find_locals_stand_in_empty},
-                        triggers={"te_hc_pop_taken": lambda i, s, a: False})
+                        triggers={"te_hc_pop_taken":
+                                  lambda i, s, a: taken and i.ent(s[-1]).culture not in ("C_A", "C_B")})
         interp.after["te_hc_state_pass"] = lambda i, stack: hosts.__setitem__(
             stack[-1], (i.saved.get("te_hc_host"), i.locals.get("te_hc_has_host")))
         interp.run_effect("te_hc_yearly_country", ["OWNER"])
@@ -1509,39 +1573,111 @@ class TakenTest(unittest.TestCase):
             self.assertIn(f"country_allow_assimilation_{status}_bool", text)
 
 
-class SmallPopTest(unittest.TestCase):
-    def test_a_small_pop_converts_whole_and_a_zero_rate_converts_nobody(self):
-        figure = re.search(r"(?m)^te_hc_small_pop\s*=\s*([-\d.]+)\s*$", code(VALUES))
-        self.assertIsNotNone(figure, "te_hc_small_pop is not a bare `name = N` line")
-        self.assertEqual(float(figure.group(1)), 50)
+class OnePersonFloorTest(unittest.TestCase):
+    def test_a_fraction_above_zero_converts_at_least_one_person_and_zero_converts_nobody(self):
+        # Changes note 1: the small-pop rule (a pop under 50 converting whole) is gone. Where the fraction is above 0
+        # at least one person converts (the engine's MIN_ASSIMILATION = 1, once a year): the fraction is floored at
+        # 1 / the pop's size, never above 1. A fraction of 0 (a rate of 0, or a crossing share of 0) stays 0.
+        self.assertNotRegex(code(VALUES), r"\bte_hc_small_pop\b", "te_hc_small_pop is back in the values file")
+        for path in PASS_FILES:
+            self.assertNotIn("te_hc_small_pop", code(path), path.name)
         cases = [
-            # (size, state_mult, cross, te_hc_pop_step, te_hc_pop_cross_step)
-            (49, 0.0, 0.5, 1.0, 1.0),          # under 50 with a rate: whole
-            (10, -0.99, 1.0, 1.0, 1.0),        # a tiny rate still converts a small pop whole
-            (49, 0.0, 0.0, 1.0, 0.0),          # the crossing share 0 is a rate of 0: nobody
-            (10, -1.0, 1.0, 0.0, 0.0),         # a rate of 0: nobody
-            (10, -3.0, 0.5, 0.0, 0.0),
-            (50, 0.0, 0.5, 0.024, 0.012),      # 50 is not under 50
+            # (size, state_mult, share, te_hc_pop_step, te_hc_pop_cross_step): the note's worked figures first.
             (1000, 0.0, 1.0, 0.024, 0.024),
+            (24, 0.0, 1.0, 1 / 24, 1 / 24),          # 0.0417, not the whole pop
+            (1, 0.0, 1.0, 1.0, 1.0),
             (1000, 0.0, 0.5, 0.024, 0.012),
+            (24, 0.0, 0.5, 1 / 24, 1 / 24),
+            (1000, 0.0, 0.0, 0.024, 0.0),            # share 0: nobody crosses, at any size
+            (24, 0.0, 0.0, 1 / 24, 0.0),
+            (1, 0.0, 0.0, 1.0, 0.0),
+            (1000, -1.0, 1.0, 0.0, 0.0),             # rate 0: nobody, at any size
+            (24, -1.0, 0.5, 0.0, 0.0),
+            (1, -1.0, 1.0, 0.0, 0.0),
+            (10, -3.0, 0.5, 0.0, 0.0),
+            # Either side of the floor: 1/41 = 0.0244 is above the rate, 1/42 = 0.0238 below it.
+            (41, 0.0, 1.0, 1 / 41, 1 / 41),
+            (42, 0.0, 1.0, 0.024, 0.024),
+            (49, 0.0, 0.5, 0.024, 1 / 49),           # was whole under the small-pop rule; 1/49 = 0.0204
+            (2, 0.0, 1.0, 0.5, 0.5),
+            (0, 0.0, 1.0, 1.0, 1.0),                 # no lower than one person: never above 1
             (1000, 1.0, 0.5, 0.048, 0.024),
-            (1000, 0.0, 0.0, 0.024, 0.0),
-            (1000, -1.0, 1.0, 0.0, 0.0),
+            (1000, 40.0, 1.0, 0.5, 0.5),             # the rate's own cap
+            (1000, -0.99, 1.0, 0.001, 0.001),        # a tiny rate: one person in a thousand, not the whole pop
         ]
-        for size, state_mult, cross, step, cross_step in cases:
-            with self.subTest(size=size, state_mult=state_mult, cross=cross):
-                world = rate_world(state_mult=state_mult, size=size, cross=cross)
-                self.assertAlmostEqual(value_in(world, STEP), step)
-                self.assertAlmostEqual(value_in(world, CROSS_STEP), cross_step)
+        for size, state_mult, share, step, cross_step in cases:
+            with self.subTest(size=size, state_mult=state_mult, share=share):
+                world = rate_world(state_mult=state_mult, size=size, cross=share)
+                got_step, got_cross = value_in(world, STEP), value_in(world, CROSS_STEP)
+                self.assertAlmostEqual(got_step, step)
+                self.assertAlmostEqual(got_cross, cross_step)
+                self.assertLessEqual(max(got_step, got_cross), 1.0)
+        # The cap at 1 as written: the real inputs cannot reach it (the rate is capped at one half, the floor is at
+        # most one person in one), so a rate above 1 is stood in for.
+        for rate, share, cross_step in ((1.5, 1.0, 1.0), (1.5, 0.5, 0.75), (4.0, 0.5, 1.0)):
+            with self.subTest(stood_in_rate=rate, share=share):
+                world = rate_world(size=1000, cross=share)
+                self.assertAlmostEqual(value_in(world, STEP, values={"te_hc_pop_rate": rate}), 1.0)
+                self.assertAlmostEqual(value_in(world, CROSS_STEP, values={"te_hc_pop_rate": rate}), cross_step)
+
+
+def any_shared(world, country):
+    """te_hc_any_shared as the coordinator's fix round 3 defines it (replacing changes note 5): 1 under Hybrid Cultures
+    exactly when some culture (a) has people in the country, (b) shares no heritage group with any primary culture of
+    the country, and (c) has a homeland in a state the country holds that is also a primary culture's homeland. It
+    need not live in that state, and the host's language is not asked. 0 otherwise, and under the other settings.
+    The flag test's oracle only: the prune test reads the script's own flag (script_any_shared)."""
+    if world.mode != 1:
+        return 0
+    groups = {world.ents[c].group for c in world.ents[country].primaries}
+    shared = world.primary_homelands(country) & {world.ents[s].region for s in world.items(country, "scope_state")}
+    living = {world.ents[pid].culture for pid in world.items(country, "scope_pop")}
+    for cid in world.items(country, "scope_culture"):
+        culture = world.ents[cid]
+        if cid in living and culture.group not in groups and culture.homelands & shared:
+            return 1
+    return 0
+
+
+def script_any_shared(world):
+    """te_hc_any_shared as the script's own te_hc_yearly_country computes it over the world (its state passes stood
+    in for)."""
+    _, interp = yearly_walk(world)
+    return interp.locals["te_hc_any_shared"]
 
 
 class LocalCultureTest(unittest.TestCase):
-    """te_hc_find_locals run on its own in S1 (state scope), the host P, under Hybrid Cultures."""
+    """te_hc_find_locals run on its own in S1 (state scope), the host P, under Hybrid Cultures, with te_hc_any_shared
+    as the script's te_hc_yearly_country computes it for the same world."""
 
-    def world(self, order):
+    # (the owner's cultures in order, the levels found, the cultures kept)
+    CASES = [
+        (["C5", "C6", "C3", "C4"], {}, {}),
+        (["C5", "C6", "C3", "C4", "C2"], {"african": 1}, {"african": "C2"}),
+        (["C5", "C6", "C3", "C4", "C2", "C1", "C8"], {"african": 2, "south_asian": 1},
+         {"african": "C1", "south_asian": "C8"}),
+        (["C1", "C2"], {"african": 2}, {"african": "C1"}),        # a homeland here is kept over a later one
+        (["C2", "C1"], {"african": 2}, {"african": "C1"}),        # and replaces an earlier shared-homeland one
+        (["C2", "C2b"], {"african": 1}, {"african": "C2"}),       # otherwise the first found is kept
+        (["C7"], {}, {}),                                         # listed, but nobody in the country (note 4)
+        (["C7", "C2"], {"african": 1}, {"african": "C2"}),
+    ]
+    # Cases where a culture's people live elsewhere than the default: (order, homes, levels, kept).
+    MOVED = [
+        # C2 lives in the country (S4) and shares the held S2 with P as a homeland; nobody of another group lives in
+        # S2. Spec line 108: it is S1's local culture all the same (round 2's finding).
+        (["C2"], {"C2": "S4"}, {"african": 1}, {"african": "C2"}),
+        (["C2"], {"C2": "S3"}, {}, {}),                           # its only people are in OTHER's S3
+        (["C3"], {"C3": "S4"}, {}, {}),                           # its homeland shared with P is OTHER's S3
+        (["C4", "C2"], {"C2": "S4", "C4": "S2"}, {"african": 1}, {"african": "C2"}),
+    ]
+
+    def world(self, order, homes=None, mode=1):
         # Regions: R1 is S1's; the owner holds S2 (a homeland of the primary culture P) and S4 (of none); OTHER
-        # holds S3, a homeland of P. C7 would qualify in S1 but has no people in the country.
-        w = World(mode=1)
+        # holds S3, a homeland of P. C7 would qualify in S1 but its only people are in OTHER's S3: the country lists
+        # it (as the engine's every_scope_culture might) with nobody there. `homes` moves a culture's people.
+        homes = dict(homes or {})
+        w = World(mode=mode)
         w.culture("P", "european", "l_host", homelands={"R2", "R3"})
         cultures = {
             "C1": ("african", "l_host", {"R1"}),        # its homeland is this state: level 2
@@ -1565,14 +1701,18 @@ class LocalCultureTest(unittest.TestCase):
         w.state("S4", "OWNER", region="R4")
         # Only C1 and C1b live in S1 itself: the rest of the owner's cultures live elsewhere in the country.
         for cid in order:
-            w.pop(f"P_{cid}", "S1" if cid in ("C1", "C1b") else "S2", cid)
+            if cid != "C7":
+                w.pop(f"P_{cid}", homes.get(cid, "S1" if cid in ("C1", "C1b") else "S2"), cid)
         w.pop("P_C7", "S3", "C7")
         w.pop("P_P", "S1", "P")
         return w
 
-    def find(self, order, stale=0):
-        w = self.world(order)
-        locals_ = dict(pass_locals(), te_hc_has_host=1, te_hc_has_targets=0)
+    def find(self, order, stale=0, homes=None, shared=None):
+        """te_hc_find_locals in S1. The flag is `shared` where given, else the script's own: te_hc_yearly_country run
+        over a copy of the same world."""
+        w = self.world(order, homes)
+        shared = script_any_shared(self.world(order, homes)) if shared is None else shared
+        locals_ = dict(pass_locals(), te_hc_has_host=1, te_hc_has_targets=0, te_hc_any_shared=shared)
         saved = {"te_hc_owner": "OWNER", "te_hc_state": "S1", "te_hc_host": "P"}
         if stale:
             for group in GROUPS:
@@ -1586,16 +1726,7 @@ class LocalCultureTest(unittest.TestCase):
 
     def test_a_local_culture_needs_people_language_group_and_a_shared_homeland(self):
         nothing = {g: 0 for g in GROUPS}
-        cases = [
-            (["C5", "C6", "C3", "C4"], {}, {}),
-            (["C5", "C6", "C3", "C4", "C2"], {"african": 1}, {"african": "C2"}),
-            (["C5", "C6", "C3", "C4", "C2", "C1", "C8"], {"african": 2, "south_asian": 1},
-             {"african": "C1", "south_asian": "C8"}),
-            (["C1", "C2"], {"african": 2}, {"african": "C1"}),        # a homeland here is kept over a later one
-            (["C2", "C1"], {"african": 2}, {"african": "C1"}),        # and replaces an earlier shared-homeland one
-            (["C2", "C2b"], {"african": 1}, {"african": "C2"}),       # otherwise the first found is kept
-        ]
-        for order, levels, kept in cases:
+        for order, levels, kept in self.CASES:
             with self.subTest(order=order):
                 got_levels, got_kept, _ = self.find(order)
                 self.assertEqual(got_levels, dict(nothing, **levels))
@@ -1608,6 +1739,55 @@ class LocalCultureTest(unittest.TestCase):
         _, _, interp = self.find(["C5", "C6", "C2"])
         state_walks = [w for w in interp.walks if "state" in w[0] and set(w[3]) & {"C5", "C6"}]
         self.assertEqual(state_walks, [])
+
+    def test_the_shared_homeland_flag_only_prunes_work(self):
+        # Changes note 5: te_hc_any_shared lets te_hc_find_locals skip the shared-homeland walk where it cannot
+        # succeed; "the meaning of a local culture is unchanged". So each case finds the same with the flag as the
+        # country pass sets it and with the flag forced to 1 (no pruning), and that is the case's expected result.
+        # The flag is the script's own (te_hc_yearly_country over the same world), not a restatement of it.
+        nothing = {g: 0 for g in GROUPS}
+        cases = [(order, None, levels, kept) for order, levels, kept in self.CASES] + self.MOVED
+        flags = set()
+        for order, homes, levels, kept in cases:
+            with self.subTest(order=order, homes=homes):
+                flags.add(script_any_shared(self.world(order, homes)))
+                pruned = self.find(order, homes=homes)[:2]
+                unpruned = self.find(order, homes=homes, shared=1)[:2]
+                self.assertEqual(unpruned, (dict(nothing, **levels), kept))
+                self.assertEqual(pruned, unpruned)
+        # Both values occur, so the cases do test the pruning (with the flag at 0 the branch is skipped).
+        self.assertEqual(flags, {0, 1})
+
+    def test_the_shared_homeland_flag_is_set_where_a_shared_homeland_holds_another_group(self):
+        # te_hc_any_shared, as te_hc_yearly_country sets it (fix round 3's definition): 1 exactly when, under Hybrid
+        # Cultures, some culture with people in the country, of no primary culture's heritage group, has a homeland in
+        # a state the country holds that is also a homeland of a primary culture (P: R2, R3; the owner holds R1, R2,
+        # R4). It need not live in that state; its language is not asked.
+        cases = [
+            (["C2"], None, 1, 1),               # C2 lives in S2, its homeland and P's
+            (["C8"], None, 1, 1),
+            (["C5"], None, 1, 1),               # the flag asks no language
+            (["C2"], {"C2": "S4"}, 1, 1),       # C2 lives elsewhere in the country; nobody of another group in S2
+            (["C2"], {"C2": "S1"}, 1, 1),
+            (["C4", "C2"], {"C2": "S4", "C4": "S2"}, 1, 1),
+            (["C2"], {"C2": "S3"}, 1, 0),       # listed, but its only people are in OTHER's S3
+            (["C3"], {"C3": "S3"}, 1, 0),       # the shared homeland R3 is OTHER's
+            (["C3"], None, 1, 0),               # living in the held S2 does not make S2 its homeland
+            (["C6"], None, 1, 0),               # C6 shares P's heritage group
+            (["C4"], {"C4": "S4"}, 1, 0),       # S4 is C4's homeland but no primary culture's
+            (["C4"], {"C4": "S2"}, 1, 0),       # living in P's homeland S2 is not having a homeland there
+            (["C1"], None, 1, 0),               # S1 is C1's homeland but no primary culture's
+            (["C7"], None, 1, 0),
+            (["C2"], None, 2, 0),               # not under Unrestricted
+            (["C2"], None, 3, 0),               # nor None
+            (["C2"], {"C2": "S4"}, 2, 0),
+        ]
+        for order, homes, mode, flag in cases:
+            with self.subTest(order=order, homes=homes, mode=mode):
+                world = self.world(order, homes, mode=mode)
+                self.assertEqual(any_shared(world, "OWNER"), flag)
+                _, interp = yearly_walk(world)
+                self.assertEqual(interp.locals.get("te_hc_any_shared"), flag)
 
     def test_local_flags_are_reset_in_every_state(self):
         # Review Focus 2: every group's local is cleared in each state before any culture is kept, so a local
