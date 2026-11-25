@@ -1,8 +1,9 @@
 """Self-Directed Evolution and Clade Citizenship (era 13 spec § 7.3, § 7.1).
 
-Static checks on the script: the technology's place in the tree and its lines
-(the colonies' growth marker, the census's work safety), Clade Citizenship as
-the fourth Bodily Autonomy law, the stances (someone must rank it above
+Static checks on the script: the technology's place in the tree (it carries no
+lines since 2026-11-24: the space colonies' growth marker and the census's
+safety are the law's), Clade Citizenship as the fourth Bodily Autonomy law, the
+stances (someone must rank it above
 Morphological Freedom, or no group could back the step), the heritage parity's
 dynamic-modifier shape, its arithmetic on the mod's own citizenship figures,
 the once-a-game self-check, and the colonies' growth factor.
@@ -109,11 +110,13 @@ class TechnologyTest(unittest.TestCase):
         for prereq in prereqs:   # Tech Tree Authoring: prerequisites in the technology's own category
             self.assertRegex(_tech(prereq), r"category = society\b", prereq)
 
-    def test_its_lines_are_the_marker_and_the_census_s_work_safety(self):
-        lines = dict(re.findall(r"(?m)^\s*(\w+) = (-?[\d.]+)\s*$", _sub(self.tech, "modifier")))
-        self.assertEqual(lines, {gss.GROWTH_MODIFIER: "0.001", "state_work_safety_add": "0.05"})
-        for budget in ("country_weekly_innovation_max_add", "_max_investment_add", "mortality"):
-            self.assertNotIn(budget, self.tech)
+    def test_it_carries_no_lines_of_its_own(self):
+        """Owner, 2026-11-24: its safer work and faster space colonies moved onto Clade Citizenship, the law it
+        unlocks, so the law is what turns the science into a population."""
+        self.assertNotRegex(self.tech, r"\bmodifier = \{")
+        for line in (gss.GROWTH_MODIFIER, "state_work_safety_add", "country_weekly_innovation_max_add",
+                     "_max_investment_add", "mortality"):
+            self.assertNotIn(line, self.tech)
 
     def test_its_painted_icon_is_tracked(self):
         """Painted in icon batch 9; it borrowed another technology's until then."""
@@ -136,16 +139,23 @@ class LawTest(unittest.TestCase):
         self.assertRegex(self.law, r"group = lawgroup_bodily_autonomy\b")
         self.assertRegex(self.law, r"progressiveness = 80\b")
         self.assertEqual(_sub(self.law, "unlocking_technologies").split(), ["self_directed_evolution"])
-        for key in ("unlocking_laws", "disallowing_laws"):
-            self.assertNotRegex(self.law, rf"\b{key} = ")
+        self.assertNotRegex(self.law, r"\bunlocking_laws = ")
+        # A heritable change is genetic modification (owner, 2026-11-24): test_bodily_autonomy.py holds both sides.
+        self.assertEqual(_sub(self.law, "disallowing_laws").split(), ["law_ban_on_genetic_modification"])
 
-    def test_no_pop_is_worse_off_than_under_morphological_freedom(self):
-        """The static line is Morphological Freedom's +10; the parity lifts every figure on top of it."""
+    def test_no_pop_is_less_accepted_than_under_morphological_freedom(self):
+        """The static heritage line is Morphological Freedom's +10; the parity lifts every figure on top of it. The
+        rest of the law is not Morphological Freedom and more (test_bodily_autonomy.py, FourDestinationsTest)."""
         freedom = _sub(_top_level(self.text, "law_morphological_freedom"), "modifier")
         clade = _sub(self.law, "modifier")
         self.assertEqual(_heritage_lines(clade), _heritage_lines(freedom))
-        pull = lambda block: float(re.search(r"state_migration_pull_mult = ([\d.]+)", block).group(1))  # noqa: E731
-        self.assertGreater(pull(clade), pull(freedom))
+
+    def test_it_carries_what_its_technology_did_and_safer_streets(self):
+        """People born to a body, in workplaces and streets rebuilt around them (owner, 2026-11-24)."""
+        lines = dict(re.findall(r"(?m)^\s*(\w+) = (-?[\d.]+)\s*$", _sub(self.law, "modifier")))
+        self.assertEqual(lines[gss.GROWTH_MODIFIER], "0.001")
+        self.assertEqual(lines["state_work_safety_add"], "0.05")
+        self.assertEqual(lines["state_external_safety_add"], "0.15")
 
     def test_the_tooltip_says_what_the_parity_does(self):
         on_enact = _sub(self.law, "on_enact")
@@ -324,7 +334,7 @@ class SelfCheckTest(unittest.TestCase):
 
 
 class ColonyGrowthTest(unittest.TestCase):
-    def test_the_marker_is_script_only_and_the_technology_alone_carries_it(self):
+    def test_the_marker_is_script_only_and_the_law_alone_carries_it(self):
         block = _top_level(_code(_read(SR_TYPES)), gss.GROWTH_MODIFIER)
         self.assertIn("script_only = yes", block)
         self.assertIn("percent = yes", block)
@@ -334,7 +344,7 @@ class ColonyGrowthTest(unittest.TestCase):
                 continue
             if re.search(rf"\b{gss.GROWTH_MODIFIER} = ", _code(_read(path))):
                 carriers.append(os.path.relpath(path, REPO))
-        self.assertEqual(carriers, [os.path.relpath(ERA_13, REPO)])
+        self.assertEqual(carriers, [os.path.relpath(LAWS, REPO)])
 
     def test_every_world_s_growth_reads_its_holder_s_marker(self):
         values = _code(_read(os.path.join(REPO, gss.VALUES_OUT)))

@@ -1013,7 +1013,11 @@ AUTOMATION_STANCES = {
 # higher than on the law in force, so no list here that strongly approves of
 # Morphological Freedom can back the step on to Clade Citizenship: the
 # transhumanists (extra_ideologies.txt) rank it above Morphological Freedom
-# and carry that step. Prescribed Form (owner, 2026-11-04), the state's
+# and carry that step, and the "developmental" ideologies (technocratic,
+# positivist, meritocratic, modernizer; split from "regulated" on 2026-11-24,
+# when the law took the safer work and the space colonies' growth from its
+# technology) approve of it for what it does: a group that only tolerates
+# Morphological Freedom backs moving on from it. Prescribed Form (owner, 2026-11-04), the state's
 # standard body, is the fifth: the fascist and ethno-nationalist ideologies
 # carry it ("uniform"), the statist ones approve ("statist"), the Devout
 # want the body as given, not as the state makes it, and every group that
@@ -1050,6 +1054,9 @@ BODILY_AUTONOMY_LISTS = {
     # Safety and standards: licensed clinics, publicly overseen; a body plan of
     # one's own is past what any standard covers, and so is one body for all.
     "regulated": bodily_autonomy_constructor("0", "+", "0", "-", "-"),
+    # The regulated view on the first three laws, but a people built for the
+    # work and for other worlds is progress: they follow capability.
+    "developmental": bodily_autonomy_constructor("0", "+", "0", "+", "-"),
     # A person's body is their own to express: the Intelligentsia.
     "liberal": bodily_autonomy_constructor("0", "+", "++", "++", "--"),
     # No license needed to own oneself.
@@ -1084,8 +1091,10 @@ BODILY_AUTONOMY_STANCES = {
     )},
     **{k: "regulated" for k in (
         "ideology_egalitarian", "ideology_communist", "ideology_state_socialist", "ideology_reformer",
-        "ideology_plutocratic", "ideology_technocratic", "ideology_positivist", "ideology_meritocratic",
-        "ideology_modernizer",
+        "ideology_plutocratic",
+    )},
+    **{k: "developmental" for k in (
+        "ideology_technocratic", "ideology_positivist", "ideology_meritocratic", "ideology_modernizer",
     )},
     **{k: "liberal" for k in (
         "ideology_liberal", "ideology_liberal_modern", "ideology_liberal_leader", "ideology_liberal_movement",

@@ -314,8 +314,9 @@ HORIZON_MONTHS = 180
 # module level, the priority weights (Closed, Low, Normal, High).
 GROWTH_PER_MONTH = 0.002
 # A held colony grows faster by its holder's GROWTH_MODIFIER, a script-only type
-# (space_race_modifier_types.txt) that Self-Directed Evolution carries at +0.001,
-# people adapted to low gravity and radiation (era 13 spec § 7.3). Each world's
+# (space_race_modifier_types.txt) that the Clade Citizenship law carries at +0.001,
+# people born adapted to low gravity and radiation (era 13 spec § 7.3; its technology,
+# Self-Directed Evolution, carried it until 2026-11-24). Each world's
 # sr_site_growth_<key> reads it through the holder, as the Habitat share reads
 # HABITAT_MODIFIER; a free colony has no holder and grows at the base rate.
 GROWTH_MODIFIER = "country_sr_colony_growth_add"
@@ -1094,7 +1095,7 @@ def _monthly(site: Site) -> list[str]:
         "\t# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a",
         "\t# Habitat's share while one comes down (sr_site_room_held_<key>); at a free",
         "\t# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,",
-        "\t# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).",
+        "\t# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).",
         "\tif = {",
         "\t\tlimit = {",
         "\t\t\tsr_colonies_contested_enabled = yes",
@@ -1955,7 +1956,7 @@ def render_population_values() -> list[str]:
            "# THIS's priority weight for it (Closed 0, Low 1, Normal 2, High 4; Normal when",
            "# unset) and its emigration weight, priority x free room, 0 unless THIS holds it.",
            f"# Any scope: its growth a month, sr_site_growth_<key>, 1 + {GROWTH_PER_MONTH} and its",
-           f"# holder's {GROWTH_MODIFIER} (Self-Directed Evolution, era 13 spec § 7.3)."]
+           f"# holder's {GROWTH_MODIFIER} (the Clade Citizenship law, era 13 spec § 7.3)."]
     for site in SITES:
         k = site.key
         out += [f"sr_site_room_mult_now_{k} = {{",

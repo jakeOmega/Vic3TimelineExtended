@@ -6092,7 +6092,7 @@ REPLACE:ideology_meritocratic = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
-		law_clade_citizenship = disapprove
+		law_clade_citizenship = approve
 		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
@@ -12370,7 +12370,7 @@ REPLACE:ideology_positivist = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
-		law_clade_citizenship = disapprove
+		law_clade_citizenship = approve
 		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {
@@ -16808,7 +16808,7 @@ INJECT:ideology_modernizer = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
-		law_clade_citizenship = disapprove
+		law_clade_citizenship = approve
 		law_prescribed_form = disapprove
 	}
 }
@@ -20512,7 +20512,7 @@ REPLACE:ideology_technocratic = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
-		law_clade_citizenship = disapprove
+		law_clade_citizenship = approve
 		law_prescribed_form = disapprove
 	}
 	lawgroup_automation_policy = {

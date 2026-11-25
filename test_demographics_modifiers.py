@@ -129,8 +129,9 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
                    P.CAPACITY_TYPE: {"law"},
                    # calibration step 3: Malaria Prevention's control
                    P.MALARIA_CONTROL_TYPE: {"technology"},
-                   # modern safety (2026-10-16): the era 7-9 technologies
-                   **{t: {"technology"} for t in P.SAFETY_TYPES.values()},
+                   # modern safety (2026-10-16): the era 7-9 technologies, and since 2026-11-24 one law, Clade
+                   # Citizenship (people born to bodies built for the work; test_modern_safety_... names it)
+                   **{t: {"technology", "law"} for t in P.SAFETY_TYPES.values()},
                    # phase 3, the late game: the ageing ladder and the pull sit on the era 10-12 technologies
                    P.AGEING_RATE_TYPE: {"technology"}, P.REJUVENATION_TYPE: {"technology"},
                    # and who longevity care reaches on the health and augmentation laws (2026-10-17)
@@ -266,18 +267,22 @@ class TestCarriersInTheGameFiles(unittest.TestCase):
 
     def test_modern_safety_sits_on_the_era_7_to_9_technologies(self):
         """Modern safety (owner, 2026-10-16): work safety from building, robots, container ports and office work, 0.90 by
-        era 9, and bodies built for the work in era 13 (Self-Directed Evolution, era 13 spec § 7.3), the cap 0.95;
-        accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40, and self-driving
-        cars in era 11, 0.50."""
+        era 9; accidents and violence from planned streets, computer-designed cars and mobile phones, 0.40, and
+        self-driving cars in era 11, 0.50. One law carries both (owner, 2026-11-24): Clade Citizenship, people born
+        to bodies built for the work in workplaces and streets rebuilt around them, work 0.05 (the cap, 0.95; its
+        technology, Self-Directed Evolution, carried that until then) and accidents and violence 0.15 (0.65)."""
         carried = {}
         for c in self.carriers:
             if c.type in P.SAFETY_TYPES.values():
                 carried.setdefault(c.type, {})[c.key] = c.value
         self.assertEqual(carried, {
             P.SAFETY_TYPES["work"]: {"prefabricated_construction": 0.15, "robotics": 0.35, "containerization": 0.15,
-                                     "knowledge_economy": 0.25, "self_directed_evolution": 0.05},
+                                     "knowledge_economy": 0.25, "law_clade_citizenship": 0.05},
             P.SAFETY_TYPES["external"]: {"modern_urban_planning": 0.2, "computer_aided_design": 0.1,
-                                         "cellular_networks": 0.1, "autonomous_vehicles": 0.1}})
+                                         "cellular_networks": 0.1, "autonomous_vehicles": 0.1,
+                                         "law_clade_citizenship": 0.15}})
+        self.assertEqual({c.kind for c in self.carriers
+                          if c.type in P.SAFETY_TYPES.values() and c.key == "law_clade_citizenship"}, {"law"})
         self.assertLessEqual(max(sum(v.values()) for v in carried.values()), P.SAFETY_MAX)
 
     def test_policing_and_criminal_justice_lower_deaths_from_violence(self):

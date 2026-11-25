@@ -1893,7 +1893,7 @@ ideology_custom_religion_meritocratic_society = {
 		law_natural_form = neutral
 		law_licensed_modification = approve
 		law_morphological_freedom = neutral
-		law_clade_citizenship = disapprove
+		law_clade_citizenship = approve
 		law_prescribed_form = disapprove
 	}
 }

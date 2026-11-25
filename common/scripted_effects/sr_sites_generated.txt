@@ -2295,7 +2295,7 @@ sr_site_monthly_valles_marineris = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2588,7 +2588,7 @@ sr_site_monthly_olympus_mons = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -2881,7 +2881,7 @@ sr_site_monthly_hellas_planitia = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3174,7 +3174,7 @@ sr_site_monthly_utopia_planitia = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3467,7 +3467,7 @@ sr_site_monthly_arcadia_planitia = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -3749,7 +3749,7 @@ sr_site_monthly_ceres = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4031,7 +4031,7 @@ sr_site_monthly_vesta = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4313,7 +4313,7 @@ sr_site_monthly_psyche = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4595,7 +4595,7 @@ sr_site_monthly_pallas = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -4856,7 +4856,7 @@ sr_site_monthly_hygiea = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5138,7 +5138,7 @@ sr_site_monthly_io = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5441,7 +5441,7 @@ sr_site_monthly_europa = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -5734,7 +5734,7 @@ sr_site_monthly_ganymede = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6027,7 +6027,7 @@ sr_site_monthly_callisto = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6288,7 +6288,7 @@ sr_site_monthly_himalia = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6549,7 +6549,7 @@ sr_site_monthly_amalthea = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -6842,7 +6842,7 @@ sr_site_monthly_venus = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7124,7 +7124,7 @@ sr_site_monthly_mercury = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7417,7 +7417,7 @@ sr_site_monthly_titan = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7699,7 +7699,7 @@ sr_site_monthly_enceladus = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -7960,7 +7960,7 @@ sr_site_monthly_rhea = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8221,7 +8221,7 @@ sr_site_monthly_mimas = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8482,7 +8482,7 @@ sr_site_monthly_iapetus = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -8764,7 +8764,7 @@ sr_site_monthly_titania = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9025,7 +9025,7 @@ sr_site_monthly_oberon = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9286,7 +9286,7 @@ sr_site_monthly_miranda = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9547,7 +9547,7 @@ sr_site_monthly_ariel = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -9829,7 +9829,7 @@ sr_site_monthly_triton = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10090,7 +10090,7 @@ sr_site_monthly_proteus = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10372,7 +10372,7 @@ sr_site_monthly_pluto = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10633,7 +10633,7 @@ sr_site_monthly_eris = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -10894,7 +10894,7 @@ sr_site_monthly_makemake = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11155,7 +11155,7 @@ sr_site_monthly_haumea = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11416,7 +11416,7 @@ sr_site_monthly_sedna = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11675,7 +11675,7 @@ sr_site_monthly_shackleton = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -11934,7 +11934,7 @@ sr_site_monthly_peary = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12193,7 +12193,7 @@ sr_site_monthly_tranquility = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12452,7 +12452,7 @@ sr_site_monthly_marius_hills = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12711,7 +12711,7 @@ sr_site_monthly_daedalus = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
@@ -12970,7 +12970,7 @@ sr_site_monthly_imbrium = {
 	# 6. Growth, up to the room (simple and full; slices 2-3 design § 10.2), less a
 	# Habitat's share while one comes down (sr_site_room_held_<key>); at a free
 	# colony only while someone supplies it. The month's factor, sr_site_growth_<key>,
-	# is faster with the holder's Self-Directed Evolution (era 13 spec § 7.3).
+	# is faster under the holder's Clade Citizenship law (era 13 spec § 7.3).
 	if = {
 		limit = {
 			sr_colonies_contested_enabled = yes
