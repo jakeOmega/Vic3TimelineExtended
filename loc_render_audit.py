@@ -137,7 +137,8 @@ engine matches a format name whatever its case: those files define only `V`,
 `R` and `O` (gold), and vanilla's loc writes `#v` 3,880 times, `#r` 183 and
 `#o` 3 (1.15.1). A name the files define that vanilla's loc never writes
 (`#purple`, `#cyan`) is flagged all the same; its `# REVIEWED` comment names
-the file that defines it.
+the file that defines it. One that has been seen drawing in game goes in
+`SEEN_IN_GAME_FORMATS` instead (`#blue_value`, the bold blue).
 
 **A format whose name reads as a color it does not draw** (`misread_format`,
 from #2016) — `#Y` and `#B`. The install's `game/gui/textformatting.gui`
@@ -146,10 +147,13 @@ base file has `Y` yellow, but the game's file overrides it), and `#B` is
 `#b`, bold, since the engine ignores the case. The mod's loc wrote `#Y` 78
 times for a yellow middle state between `#G` and `#R` (Banking's "Holding
 out", the UN's "Contested") and `#B` six times for the blue top of the UN's
-ladders, and every one drew white or plain bold. Write `#yellow` (vanilla's
-pale yellow, the color of Banking's "Stagnation") for an in-between state,
-`#v` for a neutral figure, `#b` for a label and `#blue` for blue. A value
-that really is a zero may keep `#Y` with a `# REVIEWED` comment; none does.
+ladders, and every one drew white or plain bold. Write vanilla's pale
+yellow for an in-between state and its blue for blue, in the weight of the
+ladder's other states: `#bold;yellow` and `#blue_value` beside the bold
+`#G`, `#R` and `#v`, plain `#yellow` and `#blue` beside plain colors
+(Banking's overview words). `#v` is for a neutral figure, `#b` for a label.
+A value that really is a zero may keep `#Y` with a `# REVIEWED` comment;
+none does.
 Lowercase `#b` is bold and never flagged. `test_loc_render_audit.py` holds
 the mod's `.gui` text to the same rule.
 
@@ -348,6 +352,14 @@ def used_format_names(values: Iterable[str]) -> set[str]:
 
 _VANILLA_LOC_JSON = os.path.join("vanilla_parsed", "localization_english.json")
 
+# Formats the install's `game/gui/textformatting.gui` defines that vanilla's
+# loc never writes, seen drawing as defined in the running game, so
+# `unknown_format` takes them without a `# REVIEWED` on every line.
+SEEN_IN_GAME_FORMATS = {
+    "blue_value": "blue;bold;shadow, the bold blue beside #G / #R / #v; drew bold blue in game "
+                  "(2026-11-24, PR #2031)",
+}
+
 
 def vanilla_format_names(mod_path: str) -> set[str] | None:
     """used_format_names over vanilla's English loc, from the committed
@@ -427,10 +439,11 @@ def check_format_tags(value: str, known_tags: set[str] | None = None,
         ))
     if vanilla_names is not None:
         # Compared lower-cased, as the engine matches them (`#v` is `V`).
+        known = vanilla_names | SEEN_IN_GAME_FORMATS.keys()
         unknown: list[str] = []
         for header in scan.closed + scan.open_tags:
             unknown += [n for n in _format_names(header, keep_case=True)
-                        if n.lower() not in vanilla_names and n not in unknown]
+                        if n.lower() not in known and n not in unknown]
         if unknown:
             out.append((
                 "unknown_format",
@@ -446,11 +459,12 @@ def check_format_tags(value: str, known_tags: set[str] | None = None,
 
 _MISREAD_DETAIL = {
     "y": ("`#{name}` is vanilla's zero-value format (`Y` in `gui/textformatting.gui`): it draws white and "
-          "bold, as `#v` does, not yellow. Write `#yellow` for a caution or in-between state (between `#G` "
-          "and `#R`), `#v` for a neutral figure or `#b` for a label. A value that really is a zero may keep "
-          "it with a `# REVIEWED` comment"),
-    "B": ("`#B` is `#b`, bold (a format name matches whatever its case), not blue. Write `#blue` for blue "
-          "or `#b` for bold"),
+          "bold, as `#v` does, not yellow. For a caution or in-between state write `#bold;yellow` where the "
+          "ladder's other states are bold (`#G`, `#R`, `#v`) and plain `#yellow` where they are plain "
+          "(`#green`, `#gold`, none); `#v` for a neutral figure, `#b` for a label. A value that really is a "
+          "zero may keep it with a `# REVIEWED` comment"),
+    "B": ("`#B` is `#b`, bold (a format name matches whatever its case), not blue. Write `#blue_value` "
+          "(bold blue) beside bold states, `#blue` beside plain ones, or `#b` for bold"),
 }
 
 
@@ -858,8 +872,9 @@ def render_report(result: AuditResult) -> str:
         "",
         "Also flagged: `#Y`, which draws white and bold (vanilla's zero-value",
         "format), not yellow, and `#B`, which is `#b`, bold, not blue. Fix:",
-        "`#yellow` for an in-between state, `#v` for a neutral figure, `#b` for",
-        "a label, `#blue` for blue.",
+        "`#bold;yellow` / `#blue_value` for an in-between or blue state whose",
+        "ladder's other states are bold (`#G`, `#R`, `#v`), plain `#yellow` /",
+        "`#blue` where they are plain; `#v` for a neutral figure, `#b` for a label.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",

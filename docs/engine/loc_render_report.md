@@ -41,8 +41,9 @@ Fix: use a format vanilla writes.
 
 Also flagged: `#Y`, which draws white and bold (vanilla's zero-value
 format), not yellow, and `#B`, which is `#b`, bold, not blue. Fix:
-`#yellow` for an in-between state, `#v` for a neutral figure, `#b` for
-a label, `#blue` for blue.
+`#bold;yellow` / `#blue_value` for an in-between or blue state whose
+ladder's other states are bold (`#G`, `#R`, `#v`), plain `#yellow` /
+`#blue` where they are plain; `#v` for a neutral figure, `#b` for a label.
 
 Suppress an intentional flag with a trailing comment on the loc line:
 `my_loc_key:0 "…" # REVIEWED YYYY-MM-DD: rationale`
