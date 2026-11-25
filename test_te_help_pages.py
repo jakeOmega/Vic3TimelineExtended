@@ -14,7 +14,10 @@ tabs, the Timeline Extended window narrow and full screen, National Info for
 the player's own country), in National Info's header for another country, and
 te_help_row (a section-wide row with the "?" at its right) at the top of each
 journal entry and of the state panel's Demographics subtab, which have no
-header. Each "?" is hidden for an observer, for whom te_popups never opens.
+header. A system that lives in a vanilla panel's own section, with no tab, has
+its "?" at the right of that section's header (the construction market, in the
+Construction panel: HEADER_HOSTS). Each "?" is hidden for an observer, for whom
+te_popups never opens.
 
 A help body reads only GetPlayer, never JournalEntry, so a page opens from any
 host, whether or not the player holds the entry. That holds for the loc it
@@ -22,6 +25,7 @@ shows too, in English and in the translation memories deploy ships.
 
 Every tab of the Timeline Extended window has its page
 (test_every_system_with_a_tab_has_a_page): a new system's is one row in PAGES.
+A page with no tab is one of NO_TAB.
 """
 import collections
 import glob
@@ -58,8 +62,11 @@ HELP_ICON = "gfx/interface/buttons/button_icons/unused/help.dds"
 #   rows         the other headerless hosts, each a type whose first child is te_help_row
 #   popup_title  the popup's title block, when it isn't `text = "<title>"` (Tax
 #                Code's, which names the code in force; Global Warming's)
-Page = collections.namedtuple("Page", "key title flags tabs entries rows popup_title",
-                              defaults=((), (), None))
+#   headers      a vanilla panel's own sections whose default_header carries the "?",
+#                each (file under gui/, the section's name); a system with no tab
+#                (HEADER_HOSTS)
+Page = collections.namedtuple("Page", "key title flags tabs entries rows popup_title headers",
+                              defaults=((), (), None, ()))
 
 SR_ENTRIES = ("je_space_race_suborbital", "je_space_race_orbital", "je_space_race_moon_landing",
               "je_space_race_probe", "je_space_race_mars_landing",
@@ -110,7 +117,25 @@ PAGES = [
     # no journal entry: the window's tab and National Info; the station's
     # building panel links to the tab
     Page("power_grids", "te_grid_how_header", (), ("te_grid_tab_body",)),
+    # no journal entry and no tab: the Construction panel's market section, whose
+    # header has the "?"; the section shows only while the Free Market
+    # Construction rule runs the market (2026-11-24, from #2016)
+    Page("construction_market", "TE_CM_HOW_IT_WORKS", ("te_cm_how_it_works_open",), (),
+         headers=(("construction_panel.gui", "te_construction_market_section"),)),
 ]
+
+# The pages of systems with no Timeline Extended window tab: their one host is
+# a vanilla panel's section (Page.headers).
+NO_TAB = {"construction_market"}
+
+# Each section that hosts a "?" in its header, and the gate it shows under: the
+# "?" shows only where the section does. The construction market's section
+# shows only while the Free Market Construction rule runs the market, so its
+# page is reachable only then, as the section's old explanation was.
+HEADER_HOSTS = {
+    ("construction_panel.gui", "te_construction_market_section"):
+        "[GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]",
+}
 
 # The vanilla panels' tabs that show a system, each the type it mounts: a tab body
 # with its header's "?" or a row host (test_every_vanilla_panel_mount_has_the_button).
@@ -237,6 +262,13 @@ TOPICS = {
         "je_space_race_widget_howc_autonomy", "je_space_race_widget_howc_sub_space_command",
         "je_space_race_widget_howc_space_command", "je_space_race_widget_howc_sub_defences",
         "je_space_race_widget_howc_defences",
+    ],
+    # the section's intro, then the old How section's five numbered topics
+    "construction_market": [
+        "TE_CM_HOW_SUB_MARKET", "TE_CM_HOW_MARKET", "TE_CM_HOW_SUB_SUPPLY", "TE_CM_HOW_SUPPLY",
+        "TE_CM_HOW_SUB_PURCHASE", "TE_CM_HOW_PURCHASE", "TE_CM_HOW_PURCHASE_CAP",
+        "TE_CM_HOW_SUB_PRIVATE", "TE_CM_HOW_PRIVATE", "TE_CM_HOW_SUB_DELIVERY", "TE_CM_HOW_DELIVERY",
+        "TE_CM_HOW_SUB_SHORTAGES", "TE_CM_HOW_SHORTAGES",
     ],
     "global_warming": [
         "gw_how_sub_warming", "gw_how_warming_1", "gw_how_warming_2", "gw_how_sub_penalty", "gw_how_penalty",
@@ -499,8 +531,15 @@ class PageTest(unittest.TestCase):
         """Every tab of the Timeline Extended window has its Help page, and
         no page is for a system without one (gen_te_systems_window.TABS)."""
         from scripts.generators import gen_te_systems_window as gen
-        self.assertEqual(sorted(page.key for page in PAGES), sorted(tab.key for tab in gen.TABS))
+        self.assertEqual(sorted(page.key for page in PAGES if page.key not in NO_TAB),
+                         sorted(tab.key for tab in gen.TABS))
         self.assertEqual(len(PAGES), len({page.key for page in PAGES}))
+        # a page with no tab has a host of its own: a section's header
+        for page in PAGES:
+            if page.key in NO_TAB:
+                with self.subTest(page=page.key):
+                    self.assertFalse(page.tabs)
+                    self.assertTrue(page.headers)
 
     def test_every_page_opens(self):
         """Something opens each page (its link at least), and nothing opens a
@@ -607,6 +646,44 @@ class PageTest(unittest.TestCase):
                     # a frame without an entry draws no Open Journal Entry
                     if "tab_entry" not in body or "GetPlayerJournalEntry" not in _override(body, "tab_entry"):
                         self.assertEqual(_override(body, "tab_open_journal").strip(), "")
+
+    def test_each_section_header_has_its_button(self):
+        """A vanilla panel's section that hosts a system (HEADER_HOSTS): its
+        one default_header ends on the "?", hidden for an observer, and the
+        section shows only under its gate, so the "?" does too."""
+        listed = {host for page in PAGES for host in page.headers}
+        self.assertEqual(listed, set(HEADER_HOSTS))
+        for page in PAGES:
+            for name, section in page.headers:
+                with self.subTest(section=section):
+                    text = _strip_comments(_read(os.path.join(GUI_DIR, name)))
+                    at = text.index(f'name = "{section}"')
+                    start = text.rindex("{", 0, at)
+                    body = text[start + 1:_close(text, start)]
+                    items = _children(body)
+                    props = {key: value for kind, key, value in items if kind == "property"}
+                    self.assertEqual(props.get("name"), f'"{section}"')
+                    self.assertEqual(props.get("visible"), f'"{HEADER_HOSTS[(name, section)]}"')
+                    headers = [inner for kind, key, inner in items if kind == "widget" and key == "default_header"]
+                    self.assertEqual(len(headers), 1)
+                    header = _children(headers[0])
+                    self.assertEqual(header[-1][:2], ("widget", "te_help_button"))
+                    self.assertEqual([key for _, key, _ in header].count("te_help_button"), 1)
+                    self.assertEqual([line.strip() for line in header[-1][2].strip().splitlines()],
+                                     [NOT_OBSERVER, f'onclick = "{_open(page.key)}"'])
+
+    def test_the_construction_market_keeps_no_explanation(self):
+        """The construction market section's intro and its collapsed How
+        section moved to the page: their keys are gone from the panel and the
+        loc, and the page's title is the old section's."""
+        panel = _strip_comments(_read(os.path.join(GUI_DIR, "construction_panel.gui")))
+        for key in ("TE_CM_SECTION_INTRO", "TE_CM_HOW_IT_WORKS_BODY"):
+            with self.subTest(key=key):
+                self.assertNotIn(key, panel)
+                self.assertNotIn(key, self.loc)
+        self.assertEqual(panel.count('"TE_CM_HOW_IT_WORKS"'), 1)
+        self.assertNotIn("How the Construction Market Works#! has", self.loc["concept_te_construction_market_desc"])
+        self.assertIn("$TE_CM_HOW_IT_WORKS$", self.loc["concept_te_construction_market_desc"])
 
     def test_each_journal_entry_has_the_row(self):
         """Each entry's overview root (its custom_widget_container_1 widget)
