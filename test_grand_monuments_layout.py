@@ -835,7 +835,8 @@ OVERVIEW_TYPES = ("te_gm_overview_panel", "te_gm_sec_decisions", "te_gm_sec_awai
 
 class StoredOverviewTest(unittest.TestCase):
     """The overview reads what the refresh stored, not twelve walks of every
-    state a frame; each stored figure is its live twin at the store."""
+    state a frame; each stored figure is its live twin at the store. A country
+    no store has reached yet reads the live one, as before."""
 
     @classmethod
     def setUpClass(cls):
@@ -850,7 +851,8 @@ class StoredOverviewTest(unittest.TestCase):
     def test_each_display_reads_its_stored_variable(self):
         for x in STORED:
             self.assertEqual(_squash(_block(self.values, f"gm_disp_{x}")),
-                             f"value = 0 if = {{ limit = {{ has_variable = gm_ov_{x} }} value = var:gm_ov_{x} }}", x)
+                             f"value = 0 if = {{ limit = {{ has_variable = gm_ov_{x} }} value = var:gm_ov_{x} }} "
+                             f"else = {{ value = gm_live_{x} }}", x)
 
     def test_each_stored_variable_is_written_from_its_live_twin(self):
         store = self._effect("gm_ov_store")

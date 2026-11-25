@@ -1828,13 +1828,19 @@ gm_display_vanity = {
 # Monuments tab"). A change none of those moments catches reaches the figures
 # at the next monthly pulse, as it reaches the rows' own list (gm_states,
 # written by the same refresh); TE_SELF_CHECK gm_overview_stored reads whether
-# one did. To show a figure live again, give its gm_disp_<x> the body
-# `value = gm_live_<x>`. Nothing but the panel and its tooltips reads these.
+# one did. A country no store has reached yet (a save from before it, until
+# its first refresh; a first site before its first level) reads the live
+# figure, as before. To show a figure live again, give its gm_disp_<x> the
+# body `value = gm_live_<x>`. Nothing but the panel and its tooltips reads
+# these.
 gm_disp_count_upheld = {
 	value = 0
 	if = {
 		limit = { has_variable = gm_ov_count_upheld }
 		value = var:gm_ov_count_upheld
+	}
+	else = {
+		value = gm_live_count_upheld
 	}
 }
 
@@ -1844,6 +1850,9 @@ gm_disp_count_heritage = {
 		limit = { has_variable = gm_ov_count_heritage }
 		value = var:gm_ov_count_heritage
 	}
+	else = {
+		value = gm_live_count_heritage
+	}
 }
 
 gm_disp_count_contested = {
@@ -1851,6 +1860,9 @@ gm_disp_count_contested = {
 	if = {
 		limit = { has_variable = gm_ov_count_contested }
 		value = var:gm_ov_count_contested
+	}
+	else = {
+		value = gm_live_count_contested
 	}
 }
 
@@ -1860,6 +1872,9 @@ gm_disp_contested_grandeur = {
 		limit = { has_variable = gm_ov_contested_grandeur }
 		value = var:gm_ov_contested_grandeur
 	}
+	else = {
+		value = gm_live_contested_grandeur
+	}
 }
 
 gm_disp_count_sites = {
@@ -1867,6 +1882,9 @@ gm_disp_count_sites = {
 	if = {
 		limit = { has_variable = gm_ov_count_sites }
 		value = var:gm_ov_count_sites
+	}
+	else = {
+		value = gm_live_count_sites
 	}
 }
 
@@ -1876,6 +1894,9 @@ gm_disp_count_sites_ready = {
 		limit = { has_variable = gm_ov_count_sites_ready }
 		value = var:gm_ov_count_sites_ready
 	}
+	else = {
+		value = gm_live_count_sites_ready
+	}
 }
 
 gm_disp_count_sites_building = {
@@ -1883,6 +1904,9 @@ gm_disp_count_sites_building = {
 	if = {
 		limit = { has_variable = gm_ov_count_sites_building }
 		value = var:gm_ov_count_sites_building
+	}
+	else = {
+		value = gm_live_count_sites_building
 	}
 }
 
@@ -1892,6 +1916,9 @@ gm_disp_sites_grandeur = {
 		limit = { has_variable = gm_ov_sites_grandeur }
 		value = var:gm_ov_sites_grandeur
 	}
+	else = {
+		value = gm_live_sites_grandeur
+	}
 }
 
 gm_disp_count_undedicated = {
@@ -1899,6 +1926,9 @@ gm_disp_count_undedicated = {
 	if = {
 		limit = { has_variable = gm_ov_count_undedicated }
 		value = var:gm_ov_count_undedicated
+	}
+	else = {
+		value = gm_live_count_undedicated
 	}
 }
 
@@ -1908,6 +1938,9 @@ gm_disp_count_awaiting = {
 		limit = { has_variable = gm_ov_count_awaiting }
 		value = var:gm_ov_count_awaiting
 	}
+	else = {
+		value = gm_live_count_awaiting
+	}
 }
 
 gm_disp_count_listed_rest = {
@@ -1916,6 +1949,9 @@ gm_disp_count_listed_rest = {
 		limit = { has_variable = gm_ov_count_listed_rest }
 		value = var:gm_ov_count_listed_rest
 	}
+	else = {
+		value = gm_live_count_listed_rest
+	}
 }
 
 gm_disp_listed_grandeur = {
@@ -1923,6 +1959,9 @@ gm_disp_listed_grandeur = {
 	if = {
 		limit = { has_variable = gm_ov_listed_grandeur }
 		value = var:gm_ov_listed_grandeur
+	}
+	else = {
+		value = gm_live_listed_grandeur
 	}
 }
 
