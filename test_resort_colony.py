@@ -102,8 +102,9 @@ class ResortRoomTest(unittest.TestCase):
             with self.subTest(site=k):
                 world = _block(values, f"sr_site_resort_room_{k}")
                 self.assertIn(f"value = {site.resort_room}", world)
-                self.assertIn(f"add = {{ value = sr_site_resort_staffed_{k} multiply = sr_mod_resort_room floor = yes }}",
-                              world)
+                # Doubled where a discovery there boosts the Off-World Resort (2026-11-25).
+                self.assertIn(f"add = {{ value = {gss.eff_value(site, 'resort')} multiply = sr_mod_resort_room "
+                              "floor = yes }", world)
 
     def test_fill_and_next_fill(self):
         effects = _effects()
@@ -137,7 +138,7 @@ class ResortRoomTest(unittest.TestCase):
             with self.subTest(site=k):
                 draw = _block(values, f"sr_site_resort_draw_{k}")
                 self.assertIn(f"value = {site.resort_draw}\n", draw)
-                self.assertIn(f"add = {{ value = sr_site_culture_staffed_{k} multiply = sr_mod_culture_draw }}", draw)
+                self.assertIn(f"add = {{ value = {gss.eff_value(site, 'culture')} multiply = sr_mod_culture_draw }}", draw)
         loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
         tip = re.search(r'^ je_space_race_widget_mod_culture_tt:0 "(.*)"$', loc, re.M).group(1)
         self.assertIn("#v +1#! point of [concept_sr_resort_draw]", tip)

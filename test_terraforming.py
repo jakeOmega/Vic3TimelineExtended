@@ -220,7 +220,8 @@ class RoomTest(unittest.TestCase):
             k = site.key
             with self.subTest(site=k):
                 rate = _squash(_block(VALUES, f"sr_site_terra_rate_{k}"))
-                self.assertIn(f"value = sr_site_terra_staffed_{k}", rate)
+                # Doubled where a discovery there boosts Terraforming (2026-11-25).
+                self.assertIn(f"value = {gss.eff_value(site, 'terra')}", rate)
                 self.assertIn(f"has_global_variable = sr_site_occupier_{k} }} value = 0", rate)
                 self.assertIn(f"sr_site_terra_staffed_{k} = {{ value = sr_site_terra_value_{k} "
                               f"multiply = sr_site_staffing_{k} }}", VALUES)

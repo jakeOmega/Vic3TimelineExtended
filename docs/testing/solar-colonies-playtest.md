@@ -156,6 +156,7 @@ module at our first colony and fabricate now; land our shipments now; recompute 
    module, queue Habitats and specialization levels, never Spaceports or Defences, and switch it off with nothing
    queued.
 9. **Cession.** A colony ceded with modules keeps them; a module on its way when it was ceded lands for the new holder.
+10. **Discovery boons** (2026-11-25; `docs/systems/space_race_discoveries.md` § "Choice rewards: site boons"). Under Full Colonies, holding Titan with one staffed Research Station and one staffed Materials Foundry, fire `space_race_discovery_events.4` from the console (`event space_race_discovery_events.4` after giving the country `sr_discovery_titan_chemistry_pending`): each option's tooltip reads "+100% to ... at Titan. It belongs to the colony, whoever holds it." with the module's name and Titan spliced, and no modifier line. Take the second: within a month the entry's Materials Foundry line doubles (one level reads as two), and Titan's page shows "An Impact-Born Chemical Laboratory: +100%" under Materials Foundry, its hover the option's tooltip, and nothing under Research Station. Cede Titan: the new holder's page shows the line and its Foundry line doubles. Under Races Only the same option's tooltip shows its old modifier (+2% advanced materials output) and the entry holds it. A boosted Habitat (Olympus Mons, second option) shows twice the Habitat share in its hover and twice the room in Settlers.
 
 ## Autonomy, free colonies, abandonment and colony life (slice 5)
 
