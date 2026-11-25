@@ -1624,10 +1624,19 @@ class SharedWorldTest(unittest.TestCase):
                 elif site.key in mars:
                     self.assertEqual(mates, [k for k in mars if k != site.key])
                 else:
-                    # Jupiter's six, Saturn's five and the rest are each a world of their own.
+                    # Jupiter's six, Saturn's five and the rest are each a world of their own,
+                    # though an Orbital Yard builds for all of a planet's moons (owner,
+                    # 2026-11-25: "This should not be the case for defenses").
                     self.assertEqual(mates, [])
                 # A world's sites share a location, so one combat pass holds them all.
                 self.assertTrue(all(t.location == site.location for t in gss.world_mates(site)))
+
+    def test_a_giant_planet_s_moons_share_a_yard_but_not_their_defences(self):
+        europa = _block(self.values, "sr_site_def_shared_europa") + _block(self.values, "sr_site_shared_marines_europa")
+        self.assertEqual({t.key for t in gss.yard_mates(gss.SITES[[s.key for s in gss.SITES].index("europa")])},
+                         {"io", "ganymede", "callisto", "himalia", "amalthea"})
+        for moon in ("io", "ganymede", "callisto", "himalia", "amalthea"):
+            self.assertNotIn(f"_{moon}", europa)
 
     def test_two_sites_share_with_one_holder_and_neither_occupied(self):
         shares = _block(self.triggers, "sr_site_shares")

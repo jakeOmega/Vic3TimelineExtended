@@ -1567,7 +1567,7 @@ sr_mod_can_queue_terra_valles_marineris = {
 }
 # Valles Marineris has terraforming still to do (any scope).
 sr_site_terra_open_valles_marineris = { sr_site_terra_done_value_valles_marineris < sr_terra_full_months }
-# A module for Valles Marineris is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Valles Marineris is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_valles_marineris = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } OR = { sr_site_yard_value_valles_marineris >= 1 AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_yard_value_olympus_mons >= 1 } AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_yard_value_hellas_planitia >= 1 } AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_yard_value_utopia_planitia >= 1 } AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_yard_value_arcadia_planitia >= 1 } } }
 sr_mod_departs_valles_marineris = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_valles_marineris = {
@@ -1685,7 +1685,7 @@ sr_mod_can_queue_terra_olympus_mons = {
 }
 # Olympus Mons has terraforming still to do (any scope).
 sr_site_terra_open_olympus_mons = { sr_site_terra_done_value_olympus_mons < sr_terra_full_months }
-# A module for Olympus Mons is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Olympus Mons is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_olympus_mons = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } OR = { sr_site_yard_value_olympus_mons >= 1 AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_yard_value_valles_marineris >= 1 } AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_yard_value_hellas_planitia >= 1 } AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_yard_value_utopia_planitia >= 1 } AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_yard_value_arcadia_planitia >= 1 } } }
 sr_mod_departs_olympus_mons = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_olympus_mons = {
@@ -1803,7 +1803,7 @@ sr_mod_can_queue_terra_hellas_planitia = {
 }
 # Hellas Planitia has terraforming still to do (any scope).
 sr_site_terra_open_hellas_planitia = { sr_site_terra_done_value_hellas_planitia < sr_terra_full_months }
-# A module for Hellas Planitia is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Hellas Planitia is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_hellas_planitia = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } OR = { sr_site_yard_value_hellas_planitia >= 1 AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_yard_value_valles_marineris >= 1 } AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_yard_value_olympus_mons >= 1 } AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_yard_value_utopia_planitia >= 1 } AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_yard_value_arcadia_planitia >= 1 } } }
 sr_mod_departs_hellas_planitia = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_hellas_planitia = {
@@ -1921,7 +1921,7 @@ sr_mod_can_queue_terra_utopia_planitia = {
 }
 # Utopia Planitia has terraforming still to do (any scope).
 sr_site_terra_open_utopia_planitia = { sr_site_terra_done_value_utopia_planitia < sr_terra_full_months }
-# A module for Utopia Planitia is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Utopia Planitia is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_utopia_planitia = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } OR = { sr_site_yard_value_utopia_planitia >= 1 AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_yard_value_valles_marineris >= 1 } AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_yard_value_olympus_mons >= 1 } AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_yard_value_hellas_planitia >= 1 } AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } sr_site_yard_value_arcadia_planitia >= 1 } } }
 sr_mod_departs_utopia_planitia = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_utopia_planitia = {
@@ -2039,7 +2039,7 @@ sr_mod_can_queue_terra_arcadia_planitia = {
 }
 # Arcadia Planitia has terraforming still to do (any scope).
 sr_site_terra_open_arcadia_planitia = { sr_site_terra_done_value_arcadia_planitia < sr_terra_full_months }
-# A module for Arcadia Planitia is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Arcadia Planitia is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_arcadia_planitia = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } OR = { sr_site_yard_value_arcadia_planitia >= 1 AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } sr_site_yard_value_valles_marineris >= 1 } AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } sr_site_yard_value_olympus_mons >= 1 } AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } sr_site_yard_value_hellas_planitia >= 1 } AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } sr_site_yard_value_utopia_planitia >= 1 } } }
 sr_mod_departs_arcadia_planitia = { sr_mod_departs = { BODY = mars } }
 sr_site_shipping_arcadia_planitia = {
@@ -2147,7 +2147,7 @@ sr_mod_can_queue_admin_ceres = {
 	global_var:sr_site_holder_ceres ?= this
 	sr_mq_has_room = yes
 }
-# A module for Ceres is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Ceres is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_ceres = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } OR = { sr_site_yard_value_ceres >= 1 } }
 sr_mod_departs_ceres = { sr_mod_departs = { BODY = ceres } }
 sr_site_shipping_ceres = {
@@ -2254,7 +2254,7 @@ sr_mod_can_queue_admin_vesta = {
 	global_var:sr_site_holder_vesta ?= this
 	sr_mq_has_room = yes
 }
-# A module for 4 Vesta is built at an Orbital Yard on its world (yard_builds_test).
+# A module for 4 Vesta is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_vesta = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } OR = { sr_site_yard_value_vesta >= 1 } }
 sr_mod_departs_vesta = { sr_mod_departs = { BODY = vesta } }
 sr_site_shipping_vesta = {
@@ -2361,7 +2361,7 @@ sr_mod_can_queue_admin_psyche = {
 	global_var:sr_site_holder_psyche ?= this
 	sr_mq_has_room = yes
 }
-# A module for 16 Psyche is built at an Orbital Yard on its world (yard_builds_test).
+# A module for 16 Psyche is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_psyche = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } OR = { sr_site_yard_value_psyche >= 1 } }
 sr_mod_departs_psyche = { sr_mod_departs = { BODY = psyche } }
 sr_site_shipping_psyche = {
@@ -2468,7 +2468,7 @@ sr_mod_can_queue_admin_pallas = {
 	global_var:sr_site_holder_pallas ?= this
 	sr_mq_has_room = yes
 }
-# A module for 2 Pallas is built at an Orbital Yard on its world (yard_builds_test).
+# A module for 2 Pallas is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_pallas = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } OR = { sr_site_yard_value_pallas >= 1 } }
 sr_mod_departs_pallas = { sr_mod_departs = { BODY = pallas } }
 sr_site_shipping_pallas = {
@@ -2575,7 +2575,7 @@ sr_mod_can_queue_admin_hygiea = {
 	global_var:sr_site_holder_hygiea ?= this
 	sr_mq_has_room = yes
 }
-# A module for 10 Hygiea is built at an Orbital Yard on its world (yard_builds_test).
+# A module for 10 Hygiea is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_hygiea = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } OR = { sr_site_yard_value_hygiea >= 1 } }
 sr_mod_departs_hygiea = { sr_mod_departs = { BODY = hygiea } }
 sr_site_shipping_hygiea = {
@@ -2682,8 +2682,8 @@ sr_mod_can_queue_admin_io = {
 	global_var:sr_site_holder_io ?= this
 	sr_mq_has_room = yes
 }
-# A module for Io is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_io = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } OR = { sr_site_yard_value_io >= 1 } }
+# A module for Io is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_io = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } OR = { sr_site_yard_value_io >= 1 AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } sr_site_yard_value_europa >= 1 } AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_yard_value_ganymede >= 1 } AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_yard_value_callisto >= 1 } AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_yard_value_himalia >= 1 } AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_yard_value_amalthea >= 1 } } }
 sr_mod_departs_io = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_io = {
 	OR = {
@@ -2789,8 +2789,8 @@ sr_mod_can_queue_admin_europa = {
 	global_var:sr_site_holder_europa ?= this
 	sr_mq_has_room = yes
 }
-# A module for Europa is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_europa = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } OR = { sr_site_yard_value_europa >= 1 } }
+# A module for Europa is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_europa = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } OR = { sr_site_yard_value_europa >= 1 AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } sr_site_yard_value_io >= 1 } AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_yard_value_ganymede >= 1 } AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_yard_value_callisto >= 1 } AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_yard_value_himalia >= 1 } AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_yard_value_amalthea >= 1 } } }
 sr_mod_departs_europa = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_europa = {
 	OR = {
@@ -2906,8 +2906,8 @@ sr_mod_can_queue_terra_ganymede = {
 }
 # Ganymede has terraforming still to do (any scope).
 sr_site_terra_open_ganymede = { sr_site_terra_done_value_ganymede < sr_terra_full_months }
-# A module for Ganymede is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_ganymede = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } OR = { sr_site_yard_value_ganymede >= 1 } }
+# A module for Ganymede is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_ganymede = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } OR = { sr_site_yard_value_ganymede >= 1 AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } sr_site_yard_value_io >= 1 } AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } sr_site_yard_value_europa >= 1 } AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_yard_value_callisto >= 1 } AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_yard_value_himalia >= 1 } AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_yard_value_amalthea >= 1 } } }
 sr_mod_departs_ganymede = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_ganymede = {
 	OR = {
@@ -3024,8 +3024,8 @@ sr_mod_can_queue_terra_callisto = {
 }
 # Callisto has terraforming still to do (any scope).
 sr_site_terra_open_callisto = { sr_site_terra_done_value_callisto < sr_terra_full_months }
-# A module for Callisto is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_callisto = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } OR = { sr_site_yard_value_callisto >= 1 } }
+# A module for Callisto is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_callisto = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } OR = { sr_site_yard_value_callisto >= 1 AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } sr_site_yard_value_io >= 1 } AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } sr_site_yard_value_europa >= 1 } AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_yard_value_ganymede >= 1 } AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_yard_value_himalia >= 1 } AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_yard_value_amalthea >= 1 } } }
 sr_mod_departs_callisto = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_callisto = {
 	OR = {
@@ -3132,8 +3132,8 @@ sr_mod_can_queue_admin_himalia = {
 	global_var:sr_site_holder_himalia ?= this
 	sr_mq_has_room = yes
 }
-# A module for Himalia is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_himalia = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } OR = { sr_site_yard_value_himalia >= 1 } }
+# A module for Himalia is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_himalia = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } OR = { sr_site_yard_value_himalia >= 1 AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } sr_site_yard_value_io >= 1 } AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } sr_site_yard_value_europa >= 1 } AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_yard_value_ganymede >= 1 } AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_yard_value_callisto >= 1 } AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } sr_site_yard_value_amalthea >= 1 } } }
 sr_mod_departs_himalia = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_himalia = {
 	OR = {
@@ -3239,8 +3239,8 @@ sr_mod_can_queue_admin_amalthea = {
 	global_var:sr_site_holder_amalthea ?= this
 	sr_mq_has_room = yes
 }
-# A module for Amalthea is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_amalthea = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } OR = { sr_site_yard_value_amalthea >= 1 } }
+# A module for Amalthea is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_amalthea = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } OR = { sr_site_yard_value_amalthea >= 1 AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } sr_site_yard_value_io >= 1 } AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } sr_site_yard_value_europa >= 1 } AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } sr_site_yard_value_ganymede >= 1 } AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } sr_site_yard_value_callisto >= 1 } AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } sr_site_yard_value_himalia >= 1 } } }
 sr_mod_departs_amalthea = { sr_mod_departs = { BODY = jupiter } }
 sr_site_shipping_amalthea = {
 	OR = {
@@ -3356,7 +3356,7 @@ sr_mod_can_queue_terra_venus = {
 }
 # Venus Cloud Habitat has terraforming still to do (any scope).
 sr_site_terra_open_venus = { sr_site_terra_done_value_venus < sr_terra_full_months }
-# A module for Venus Cloud Habitat is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Venus Cloud Habitat is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_venus = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } OR = { sr_site_yard_value_venus >= 1 } }
 sr_mod_departs_venus = { sr_mod_departs = { BODY = venus } }
 sr_site_shipping_venus = {
@@ -3464,7 +3464,7 @@ sr_mod_can_queue_admin_mercury = {
 	global_var:sr_site_holder_mercury ?= this
 	sr_mq_has_room = yes
 }
-# A module for Mercury is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Mercury is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_mercury = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } OR = { sr_site_yard_value_mercury >= 1 } }
 sr_mod_departs_mercury = { always = yes }
 sr_site_shipping_mercury = {
@@ -3581,8 +3581,8 @@ sr_mod_can_queue_terra_titan = {
 }
 # Titan has terraforming still to do (any scope).
 sr_site_terra_open_titan = { sr_site_terra_done_value_titan < sr_terra_full_months }
-# A module for Titan is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_titan = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } OR = { sr_site_yard_value_titan >= 1 } }
+# A module for Titan is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_titan = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } OR = { sr_site_yard_value_titan >= 1 AND = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_yard_value_enceladus >= 1 } AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_yard_value_rhea >= 1 } AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_yard_value_mimas >= 1 } AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_yard_value_iapetus >= 1 } } }
 sr_mod_departs_titan = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_titan = {
 	OR = {
@@ -3689,8 +3689,8 @@ sr_mod_can_queue_admin_enceladus = {
 	global_var:sr_site_holder_enceladus ?= this
 	sr_mq_has_room = yes
 }
-# A module for Enceladus is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_enceladus = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } OR = { sr_site_yard_value_enceladus >= 1 } }
+# A module for Enceladus is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_enceladus = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } OR = { sr_site_yard_value_enceladus >= 1 AND = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } sr_site_yard_value_titan >= 1 } AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_yard_value_rhea >= 1 } AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_yard_value_mimas >= 1 } AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_yard_value_iapetus >= 1 } } }
 sr_mod_departs_enceladus = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_enceladus = {
 	OR = {
@@ -3796,8 +3796,8 @@ sr_mod_can_queue_admin_rhea = {
 	global_var:sr_site_holder_rhea ?= this
 	sr_mq_has_room = yes
 }
-# A module for Rhea is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_rhea = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } OR = { sr_site_yard_value_rhea >= 1 } }
+# A module for Rhea is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_rhea = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } OR = { sr_site_yard_value_rhea >= 1 AND = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } sr_site_yard_value_titan >= 1 } AND = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_yard_value_enceladus >= 1 } AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_yard_value_mimas >= 1 } AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_yard_value_iapetus >= 1 } } }
 sr_mod_departs_rhea = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_rhea = {
 	OR = {
@@ -3903,8 +3903,8 @@ sr_mod_can_queue_admin_mimas = {
 	global_var:sr_site_holder_mimas ?= this
 	sr_mq_has_room = yes
 }
-# A module for Mimas is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_mimas = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } OR = { sr_site_yard_value_mimas >= 1 } }
+# A module for Mimas is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_mimas = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } OR = { sr_site_yard_value_mimas >= 1 AND = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } sr_site_yard_value_titan >= 1 } AND = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_yard_value_enceladus >= 1 } AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_yard_value_rhea >= 1 } AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } sr_site_yard_value_iapetus >= 1 } } }
 sr_mod_departs_mimas = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_mimas = {
 	OR = {
@@ -4010,8 +4010,8 @@ sr_mod_can_queue_admin_iapetus = {
 	global_var:sr_site_holder_iapetus ?= this
 	sr_mq_has_room = yes
 }
-# A module for Iapetus is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_iapetus = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } OR = { sr_site_yard_value_iapetus >= 1 } }
+# A module for Iapetus is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_iapetus = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } OR = { sr_site_yard_value_iapetus >= 1 AND = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } sr_site_yard_value_titan >= 1 } AND = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } sr_site_yard_value_enceladus >= 1 } AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } sr_site_yard_value_rhea >= 1 } AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } sr_site_yard_value_mimas >= 1 } } }
 sr_mod_departs_iapetus = { sr_mod_departs = { BODY = saturn } }
 sr_site_shipping_iapetus = {
 	OR = {
@@ -4117,8 +4117,8 @@ sr_mod_can_queue_admin_titania = {
 	global_var:sr_site_holder_titania ?= this
 	sr_mq_has_room = yes
 }
-# A module for Titania is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_titania = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } OR = { sr_site_yard_value_titania >= 1 } }
+# A module for Titania is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_titania = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } OR = { sr_site_yard_value_titania >= 1 AND = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_yard_value_oberon >= 1 } AND = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_yard_value_miranda >= 1 } AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_yard_value_ariel >= 1 } } }
 sr_mod_departs_titania = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_titania = {
 	OR = {
@@ -4224,8 +4224,8 @@ sr_mod_can_queue_admin_oberon = {
 	global_var:sr_site_holder_oberon ?= this
 	sr_mq_has_room = yes
 }
-# A module for Oberon is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_oberon = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } OR = { sr_site_yard_value_oberon >= 1 } }
+# A module for Oberon is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_oberon = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } OR = { sr_site_yard_value_oberon >= 1 AND = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } sr_site_yard_value_titania >= 1 } AND = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_yard_value_miranda >= 1 } AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_yard_value_ariel >= 1 } } }
 sr_mod_departs_oberon = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_oberon = {
 	OR = {
@@ -4331,8 +4331,8 @@ sr_mod_can_queue_admin_miranda = {
 	global_var:sr_site_holder_miranda ?= this
 	sr_mq_has_room = yes
 }
-# A module for Miranda is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_miranda = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } OR = { sr_site_yard_value_miranda >= 1 } }
+# A module for Miranda is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_miranda = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } OR = { sr_site_yard_value_miranda >= 1 AND = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } sr_site_yard_value_titania >= 1 } AND = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_yard_value_oberon >= 1 } AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } sr_site_yard_value_ariel >= 1 } } }
 sr_mod_departs_miranda = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_miranda = {
 	OR = {
@@ -4438,8 +4438,8 @@ sr_mod_can_queue_admin_ariel = {
 	global_var:sr_site_holder_ariel ?= this
 	sr_mq_has_room = yes
 }
-# A module for Ariel is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_ariel = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } OR = { sr_site_yard_value_ariel >= 1 } }
+# A module for Ariel is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_ariel = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } OR = { sr_site_yard_value_ariel >= 1 AND = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } sr_site_yard_value_titania >= 1 } AND = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } sr_site_yard_value_oberon >= 1 } AND = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } sr_site_yard_value_miranda >= 1 } } }
 sr_mod_departs_ariel = { sr_mod_departs = { BODY = uranus } }
 sr_site_shipping_ariel = {
 	OR = {
@@ -4545,8 +4545,8 @@ sr_mod_can_queue_admin_triton = {
 	global_var:sr_site_holder_triton ?= this
 	sr_mq_has_room = yes
 }
-# A module for Triton is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_triton = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } OR = { sr_site_yard_value_triton >= 1 } }
+# A module for Triton is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_triton = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } OR = { sr_site_yard_value_triton >= 1 AND = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } sr_site_yard_value_proteus >= 1 } } }
 sr_mod_departs_triton = { sr_mod_departs = { BODY = neptune } }
 sr_site_shipping_triton = {
 	OR = {
@@ -4652,8 +4652,8 @@ sr_mod_can_queue_admin_proteus = {
 	global_var:sr_site_holder_proteus ?= this
 	sr_mq_has_room = yes
 }
-# A module for Proteus is built at an Orbital Yard on its world (yard_builds_test).
-sr_site_yard_builds_proteus = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } OR = { sr_site_yard_value_proteus >= 1 } }
+# A module for Proteus is built at an Orbital Yard in its place (yard_builds_test).
+sr_site_yard_builds_proteus = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } OR = { sr_site_yard_value_proteus >= 1 AND = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } sr_site_yard_value_triton >= 1 } } }
 sr_mod_departs_proteus = { sr_mod_departs = { BODY = neptune } }
 sr_site_shipping_proteus = {
 	OR = {
@@ -4759,7 +4759,7 @@ sr_mod_can_queue_admin_pluto = {
 	global_var:sr_site_holder_pluto ?= this
 	sr_mq_has_room = yes
 }
-# A module for Pluto-Charon is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Pluto-Charon is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_pluto = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } OR = { sr_site_yard_value_pluto >= 1 } }
 sr_mod_departs_pluto = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_pluto = {
@@ -4866,7 +4866,7 @@ sr_mod_can_queue_admin_eris = {
 	global_var:sr_site_holder_eris ?= this
 	sr_mq_has_room = yes
 }
-# A module for Eris is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Eris is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_eris = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } OR = { sr_site_yard_value_eris >= 1 } }
 sr_mod_departs_eris = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_eris = {
@@ -4973,7 +4973,7 @@ sr_mod_can_queue_admin_makemake = {
 	global_var:sr_site_holder_makemake ?= this
 	sr_mq_has_room = yes
 }
-# A module for Makemake is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Makemake is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_makemake = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } OR = { sr_site_yard_value_makemake >= 1 } }
 sr_mod_departs_makemake = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_makemake = {
@@ -5080,7 +5080,7 @@ sr_mod_can_queue_admin_haumea = {
 	global_var:sr_site_holder_haumea ?= this
 	sr_mq_has_room = yes
 }
-# A module for Haumea is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Haumea is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_haumea = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } OR = { sr_site_yard_value_haumea >= 1 } }
 sr_mod_departs_haumea = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_haumea = {
@@ -5187,7 +5187,7 @@ sr_mod_can_queue_admin_sedna = {
 	global_var:sr_site_holder_sedna ?= this
 	sr_mq_has_room = yes
 }
-# A module for Sedna is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Sedna is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_sedna = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } OR = { sr_site_yard_value_sedna >= 1 } }
 sr_mod_departs_sedna = { sr_mod_departs = { BODY = kuiper } }
 sr_site_shipping_sedna = {
@@ -5289,7 +5289,7 @@ sr_mod_can_queue_admin_shackleton = {
 	global_var:sr_site_holder_shackleton ?= this
 	sr_mq_has_room = yes
 }
-# A module for Shackleton Crater is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Shackleton Crater is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_shackleton = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } OR = { sr_site_yard_value_shackleton >= 1 AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } sr_site_yard_value_peary >= 1 } AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_yard_value_tranquility >= 1 } AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_yard_value_marius_hills >= 1 } AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_yard_value_daedalus >= 1 } AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_yard_value_imbrium >= 1 } } }
 sr_mod_departs_shackleton = { always = yes }
 sr_site_shipping_shackleton = {
@@ -5390,7 +5390,7 @@ sr_mod_can_queue_admin_peary = {
 	global_var:sr_site_holder_peary ?= this
 	sr_mq_has_room = yes
 }
-# A module for Peary Crater is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Peary Crater is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_peary = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } OR = { sr_site_yard_value_peary >= 1 AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_yard_value_shackleton >= 1 } AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_yard_value_tranquility >= 1 } AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_yard_value_marius_hills >= 1 } AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_yard_value_daedalus >= 1 } AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_yard_value_imbrium >= 1 } } }
 sr_mod_departs_peary = { always = yes }
 sr_site_shipping_peary = {
@@ -5491,7 +5491,7 @@ sr_mod_can_queue_admin_tranquility = {
 	global_var:sr_site_holder_tranquility ?= this
 	sr_mq_has_room = yes
 }
-# A module for Tranquility Base is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Tranquility Base is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_tranquility = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } OR = { sr_site_yard_value_tranquility >= 1 AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_yard_value_shackleton >= 1 } AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } sr_site_yard_value_peary >= 1 } AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_yard_value_marius_hills >= 1 } AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_yard_value_daedalus >= 1 } AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_yard_value_imbrium >= 1 } } }
 sr_mod_departs_tranquility = { always = yes }
 sr_site_shipping_tranquility = {
@@ -5592,7 +5592,7 @@ sr_mod_can_queue_admin_marius_hills = {
 	global_var:sr_site_holder_marius_hills ?= this
 	sr_mq_has_room = yes
 }
-# A module for Marius Hills is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Marius Hills is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_marius_hills = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } OR = { sr_site_yard_value_marius_hills >= 1 AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_yard_value_shackleton >= 1 } AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } sr_site_yard_value_peary >= 1 } AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_yard_value_tranquility >= 1 } AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_yard_value_daedalus >= 1 } AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_yard_value_imbrium >= 1 } } }
 sr_mod_departs_marius_hills = { always = yes }
 sr_site_shipping_marius_hills = {
@@ -5693,7 +5693,7 @@ sr_mod_can_queue_admin_daedalus = {
 	global_var:sr_site_holder_daedalus ?= this
 	sr_mq_has_room = yes
 }
-# A module for Daedalus Crater is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Daedalus Crater is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_daedalus = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } OR = { sr_site_yard_value_daedalus >= 1 AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_yard_value_shackleton >= 1 } AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } sr_site_yard_value_peary >= 1 } AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_yard_value_tranquility >= 1 } AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_yard_value_marius_hills >= 1 } AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } sr_site_yard_value_imbrium >= 1 } } }
 sr_mod_departs_daedalus = { always = yes }
 sr_site_shipping_daedalus = {
@@ -5794,7 +5794,7 @@ sr_mod_can_queue_admin_imbrium = {
 	global_var:sr_site_holder_imbrium ?= this
 	sr_mq_has_room = yes
 }
-# A module for Mare Imbrium is built at an Orbital Yard on its world (yard_builds_test).
+# A module for Mare Imbrium is built at an Orbital Yard in its place (yard_builds_test).
 sr_site_yard_builds_imbrium = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } OR = { sr_site_yard_value_imbrium >= 1 AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } sr_site_yard_value_shackleton >= 1 } AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } sr_site_yard_value_peary >= 1 } AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } sr_site_yard_value_tranquility >= 1 } AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } sr_site_yard_value_marius_hills >= 1 } AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } sr_site_yard_value_daedalus >= 1 } } }
 sr_mod_departs_imbrium = { always = yes }
 sr_site_shipping_imbrium = {
@@ -5820,13 +5820,13 @@ sr_site_shipping_imbrium = {
 sr_mq_has_room = { NOT = { has_variable = sr_mq_20_site } }
 
 # The queue's first module can be built now (ready_test; sr_mod_month's build loop):
-# one built at an Orbital Yard on its world or a lunar world's needs no slot, any
+# one built at an Orbital Yard in its place or a lunar world's needs no slot, any
 # other a free one and, for a world with launch windows, its window open or at most
 # sr_mod_build_lead_months off (the owner, 2026-11-23). Never while launches are
 # barred: the loop asks sr_mq_head_yard_ready on its own for that.
 sr_mq_head_ready = { NOT = { sr_launches_barred = yes } OR = { OR = { AND = { var:sr_mq_1_site ?= 1 sr_site_yard_builds_valles_marineris = yes } AND = { var:sr_mq_1_site ?= 2 sr_site_yard_builds_olympus_mons = yes } AND = { var:sr_mq_1_site ?= 3 sr_site_yard_builds_hellas_planitia = yes } AND = { var:sr_mq_1_site ?= 4 sr_site_yard_builds_utopia_planitia = yes } AND = { var:sr_mq_1_site ?= 5 sr_site_yard_builds_arcadia_planitia = yes } AND = { var:sr_mq_1_site ?= 6 sr_site_yard_builds_ceres = yes } AND = { var:sr_mq_1_site ?= 7 sr_site_yard_builds_vesta = yes } AND = { var:sr_mq_1_site ?= 8 sr_site_yard_builds_psyche = yes } AND = { var:sr_mq_1_site ?= 9 sr_site_yard_builds_pallas = yes } AND = { var:sr_mq_1_site ?= 10 sr_site_yard_builds_hygiea = yes } AND = { var:sr_mq_1_site ?= 11 sr_site_yard_builds_io = yes } AND = { var:sr_mq_1_site ?= 12 sr_site_yard_builds_europa = yes } AND = { var:sr_mq_1_site ?= 13 sr_site_yard_builds_ganymede = yes } AND = { var:sr_mq_1_site ?= 14 sr_site_yard_builds_callisto = yes } AND = { var:sr_mq_1_site ?= 15 sr_site_yard_builds_himalia = yes } AND = { var:sr_mq_1_site ?= 16 sr_site_yard_builds_amalthea = yes } AND = { var:sr_mq_1_site ?= 17 sr_site_yard_builds_venus = yes } AND = { var:sr_mq_1_site ?= 18 sr_site_yard_builds_mercury = yes } AND = { var:sr_mq_1_site ?= 19 sr_site_yard_builds_titan = yes } AND = { var:sr_mq_1_site ?= 20 sr_site_yard_builds_enceladus = yes } AND = { var:sr_mq_1_site ?= 21 sr_site_yard_builds_rhea = yes } AND = { var:sr_mq_1_site ?= 22 sr_site_yard_builds_mimas = yes } AND = { var:sr_mq_1_site ?= 23 sr_site_yard_builds_iapetus = yes } AND = { var:sr_mq_1_site ?= 24 sr_site_yard_builds_titania = yes } AND = { var:sr_mq_1_site ?= 25 sr_site_yard_builds_oberon = yes } AND = { var:sr_mq_1_site ?= 26 sr_site_yard_builds_miranda = yes } AND = { var:sr_mq_1_site ?= 27 sr_site_yard_builds_ariel = yes } AND = { var:sr_mq_1_site ?= 28 sr_site_yard_builds_triton = yes } AND = { var:sr_mq_1_site ?= 29 sr_site_yard_builds_proteus = yes } AND = { var:sr_mq_1_site ?= 30 sr_site_yard_builds_pluto = yes } AND = { var:sr_mq_1_site ?= 31 sr_site_yard_builds_eris = yes } AND = { var:sr_mq_1_site ?= 32 sr_site_yard_builds_makemake = yes } AND = { var:sr_mq_1_site ?= 33 sr_site_yard_builds_haumea = yes } AND = { var:sr_mq_1_site ?= 34 sr_site_yard_builds_sedna = yes } AND = { var:sr_mq_1_site ?= 35 sr_site_yard_builds_shackleton = yes } AND = { var:sr_mq_1_site ?= 36 sr_site_yard_builds_peary = yes } AND = { var:sr_mq_1_site ?= 37 sr_site_yard_builds_tranquility = yes } AND = { var:sr_mq_1_site ?= 38 sr_site_yard_builds_marius_hills = yes } AND = { var:sr_mq_1_site ?= 39 sr_site_yard_builds_daedalus = yes } AND = { var:sr_mq_1_site ?= 40 sr_site_yard_builds_imbrium = yes } } OR = { AND = { var:sr_mq_1_site ?= 35 NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } } AND = { var:sr_mq_1_site ?= 36 NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } } AND = { var:sr_mq_1_site ?= 37 NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } } AND = { var:sr_mq_1_site ?= 38 NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } } AND = { var:sr_mq_1_site ?= 39 NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } } AND = { var:sr_mq_1_site ?= 40 NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } } } AND = { sr_ms_has_free_slot = yes OR = { AND = { var:sr_mq_1_site ?= 1 sr_mod_wait_months_valles_marineris <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 2 sr_mod_wait_months_olympus_mons <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 3 sr_mod_wait_months_hellas_planitia <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 4 sr_mod_wait_months_utopia_planitia <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 5 sr_mod_wait_months_arcadia_planitia <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 6 sr_mod_wait_months_ceres <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 7 sr_mod_wait_months_vesta <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 8 sr_mod_wait_months_psyche <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 9 sr_mod_wait_months_pallas <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 10 sr_mod_wait_months_hygiea <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 11 sr_mod_wait_months_io <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 12 sr_mod_wait_months_europa <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 13 sr_mod_wait_months_ganymede <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 14 sr_mod_wait_months_callisto <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 15 sr_mod_wait_months_himalia <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 16 sr_mod_wait_months_amalthea <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 17 sr_mod_wait_months_venus <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 18 } AND = { var:sr_mq_1_site ?= 19 sr_mod_wait_months_titan <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 20 sr_mod_wait_months_enceladus <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 21 sr_mod_wait_months_rhea <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 22 sr_mod_wait_months_mimas <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 23 sr_mod_wait_months_iapetus <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 24 sr_mod_wait_months_titania <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 25 sr_mod_wait_months_oberon <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 26 sr_mod_wait_months_miranda <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 27 sr_mod_wait_months_ariel <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 28 sr_mod_wait_months_triton <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 29 sr_mod_wait_months_proteus <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 30 sr_mod_wait_months_pluto <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 31 sr_mod_wait_months_eris <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 32 sr_mod_wait_months_makemake <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 33 sr_mod_wait_months_haumea <= sr_mod_build_lead_months } AND = { var:sr_mq_1_site ?= 34 sr_mod_wait_months_sedna <= sr_mod_build_lead_months } } } } }
 
-# The queue's first module is built at an Orbital Yard on its world (the owner,
+# The queue's first module is built at an Orbital Yard in its place (the owner,
 # 2026-11-24): no slot, window or launch, and not one of the month's
 # sr_mod_fab_per_month, so sr_mod_month builds it while launches are barred too.
 sr_mq_head_yard_ready = { OR = { AND = { var:sr_mq_1_site ?= 1 sr_site_yard_builds_valles_marineris = yes } AND = { var:sr_mq_1_site ?= 2 sr_site_yard_builds_olympus_mons = yes } AND = { var:sr_mq_1_site ?= 3 sr_site_yard_builds_hellas_planitia = yes } AND = { var:sr_mq_1_site ?= 4 sr_site_yard_builds_utopia_planitia = yes } AND = { var:sr_mq_1_site ?= 5 sr_site_yard_builds_arcadia_planitia = yes } AND = { var:sr_mq_1_site ?= 6 sr_site_yard_builds_ceres = yes } AND = { var:sr_mq_1_site ?= 7 sr_site_yard_builds_vesta = yes } AND = { var:sr_mq_1_site ?= 8 sr_site_yard_builds_psyche = yes } AND = { var:sr_mq_1_site ?= 9 sr_site_yard_builds_pallas = yes } AND = { var:sr_mq_1_site ?= 10 sr_site_yard_builds_hygiea = yes } AND = { var:sr_mq_1_site ?= 11 sr_site_yard_builds_io = yes } AND = { var:sr_mq_1_site ?= 12 sr_site_yard_builds_europa = yes } AND = { var:sr_mq_1_site ?= 13 sr_site_yard_builds_ganymede = yes } AND = { var:sr_mq_1_site ?= 14 sr_site_yard_builds_callisto = yes } AND = { var:sr_mq_1_site ?= 15 sr_site_yard_builds_himalia = yes } AND = { var:sr_mq_1_site ?= 16 sr_site_yard_builds_amalthea = yes } AND = { var:sr_mq_1_site ?= 17 sr_site_yard_builds_venus = yes } AND = { var:sr_mq_1_site ?= 18 sr_site_yard_builds_mercury = yes } AND = { var:sr_mq_1_site ?= 19 sr_site_yard_builds_titan = yes } AND = { var:sr_mq_1_site ?= 20 sr_site_yard_builds_enceladus = yes } AND = { var:sr_mq_1_site ?= 21 sr_site_yard_builds_rhea = yes } AND = { var:sr_mq_1_site ?= 22 sr_site_yard_builds_mimas = yes } AND = { var:sr_mq_1_site ?= 23 sr_site_yard_builds_iapetus = yes } AND = { var:sr_mq_1_site ?= 24 sr_site_yard_builds_titania = yes } AND = { var:sr_mq_1_site ?= 25 sr_site_yard_builds_oberon = yes } AND = { var:sr_mq_1_site ?= 26 sr_site_yard_builds_miranda = yes } AND = { var:sr_mq_1_site ?= 27 sr_site_yard_builds_ariel = yes } AND = { var:sr_mq_1_site ?= 28 sr_site_yard_builds_triton = yes } AND = { var:sr_mq_1_site ?= 29 sr_site_yard_builds_proteus = yes } AND = { var:sr_mq_1_site ?= 30 sr_site_yard_builds_pluto = yes } AND = { var:sr_mq_1_site ?= 31 sr_site_yard_builds_eris = yes } AND = { var:sr_mq_1_site ?= 32 sr_site_yard_builds_makemake = yes } AND = { var:sr_mq_1_site ?= 33 sr_site_yard_builds_haumea = yes } AND = { var:sr_mq_1_site ?= 34 sr_site_yard_builds_sedna = yes } AND = { var:sr_mq_1_site ?= 35 sr_site_yard_builds_shackleton = yes } AND = { var:sr_mq_1_site ?= 36 sr_site_yard_builds_peary = yes } AND = { var:sr_mq_1_site ?= 37 sr_site_yard_builds_tranquility = yes } AND = { var:sr_mq_1_site ?= 38 sr_site_yard_builds_marius_hills = yes } AND = { var:sr_mq_1_site ?= 39 sr_site_yard_builds_daedalus = yes } AND = { var:sr_mq_1_site ?= 40 sr_site_yard_builds_imbrium = yes } } }

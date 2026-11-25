@@ -516,7 +516,8 @@ LUNAR: tuple[Site, ...] = tuple(s for s in SITES if s.stage == 0)
 # marines on one of its colonies there defend each of its colonies on that
 # world, and its Defences fire for each of them and add half their hardness.
 # The Moon's six sites are its Earth location's, Mars's five its location's;
-# every other site is a world of its own (Jupiter's six are six moons).
+# every other site is a world of its own (Jupiter's six are six moons). An
+# Orbital Yard reaches further: YARD_SYSTEMS below.
 SHARED_WORLDS: dict[str, str] = {"moon": "the Moon", "mars": "Mars"}
 
 
@@ -532,6 +533,44 @@ def world_of(site: Site) -> str:
 def world_mates(site: Site) -> list[Site]:
     """The other sites on the same world, in table order (none for most)."""
     return [s for s in SITES if s is not site and world_of(s) == world_of(site)]
+
+
+# The places an Orbital Yard builds for (the owner, 2026-11-25: "all Jupiter's
+# moons, Saturn's moons, etc. should count as the same place - i.e. you can
+# build modules on Europa with an Orbital Yard on Io. This should not be the
+# case for defenses, though."). A yard builds for every colony of its holder's
+# on its world (world_of) and, around a giant planet, on any of that planet's
+# moons. Only the yard reads this: Defences and marines still share by
+# world_of, so each of those moons defends itself. The asteroids, the Kuiper
+# Belt's dwarf planets, Venus and Mercury stay a place each.
+YARD_SYSTEMS: dict[str, str] = {"jupiter": "Jupiter", "saturn": "Saturn", "uranus": "Uranus",
+                                "neptune": "Neptune"}
+
+# The places with several sites, each with its own hover on a yard's cell
+# (je_space_race_widget_mod_yard_tt_<place>); every other site's names itself
+# alone (yard_tooltip).
+YARD_PLACES: tuple[str, ...] = (*SHARED_WORLDS, *YARD_SYSTEMS)
+
+
+def yard_place_of(site: Site) -> str:
+    """The place an Orbital Yard at `site` builds for: its planet's name around a
+    giant planet ("jupiter", "saturn", "uranus", "neptune"), else world_of."""
+    if site.location in YARD_SYSTEMS:
+        return site.location
+    return world_of(site)
+
+
+def yard_mates(site: Site) -> list[Site]:
+    """The other sites a yard at `site` builds for, and whose yards build for it,
+    in table order: its world's (world_mates) and its planet's other moons."""
+    return [s for s in SITES if s is not site and yard_place_of(s) == yard_place_of(site)]
+
+
+def yard_tooltip(site: Site) -> str:
+    """The loc key of the hover on the site's Orbital Yard cell, which names the
+    colonies its yard builds for."""
+    place = yard_place_of(site)
+    return f"je_space_race_widget_mod_yard_tt_{place if place in YARD_PLACES else 'alone'}"
 
 
 def lunar_open_test(var: str, place_type: str | None = None) -> str:
@@ -585,22 +624,24 @@ def ready_test(var: str, place_type: str | None = None) -> str:
 
 
 def yard_builds_test(site: Site) -> str:
-    """A country-scope trigger: a module for `site` is built at an Orbital Yard on
-    its world (the owner, 2026-11-24): THIS holds the site, neither blockaded nor
-    occupied, and has an Orbital Yard level there or at a colony of its own on the
-    same world that serves it (world_mates; site_serves: held, not blockaded, not
-    occupied, as the yard's fabrication points need). Such a module takes no
-    shipment slot, waits for no launch window or launch, and is not one of the
-    month's sr_mod_fab_per_month (sr_mod_month); it costs the same points."""
+    """A country-scope trigger: a module for `site` is built at an Orbital Yard in
+    its place (the owner, 2026-11-24, and 2026-11-25 for a giant planet's moons):
+    THIS holds the site, neither blockaded nor occupied, and has an Orbital Yard
+    level there or at a colony of its own in the same place that serves it
+    (yard_mates: its world, or any moon of its planet; site_serves: held, not
+    blockaded, not occupied, as the yard's fabrication points need). Such a
+    module takes no shipment slot, waits for no launch window or launch, and is
+    not one of the month's sr_mod_fab_per_month (sr_mod_month); it costs the
+    same points."""
     yards = [f"{level_value('yard', site)} >= 1"]
     yards += [f"AND = {{ {site_serves(m)} {level_value('yard', m)} >= 1 }}"
-              for m in world_mates(site) if "yard" in generic_types(m)]
+              for m in yard_mates(site) if "yard" in generic_types(m)]
     return f"{site_serves(site)} OR = {{ {' '.join(yards)} }}"
 
 
 def yard_ready_test(var: str, place_type: str | None = None) -> str:
     """A country-scope trigger: `var` (a queue place's site) names a world whose
-    module is built at an Orbital Yard on its world now (sr_site_yard_builds_<key>,
+    module is built at an Orbital Yard in its place now (sr_site_yard_builds_<key>,
     yard_builds_test); false while it is unset. With `place_type`, also one the
     stock can pay for (_paid_terms)."""
     parts = [" ".join([f"{var} ?= {s.index}", f"sr_site_yard_builds_{s.key} = yes", *_paid_terms(s, place_type)])
@@ -2946,7 +2987,7 @@ def render_module_triggers() -> list[str]:
             out += [f"# {site.name} has terraforming still to do (any scope).",
                     f"sr_site_terra_open_{k} = {{ sr_site_terra_done_value_{k} < sr_terra_full_months }}"]
         if "yard" in generic_types(site):
-            out += [f"# A module for {site.name} is built at an Orbital Yard on its world (yard_builds_test).",
+            out += [f"# A module for {site.name} is built at an Orbital Yard in its place (yard_builds_test).",
                     f"sr_site_yard_builds_{k} = {{ {yard_builds_test(site)} }}"]
         if site.body:
             out.append(f"sr_mod_departs_{k} = {{ sr_mod_departs = {{ BODY = {site.body} }} }}")
@@ -2958,12 +2999,12 @@ def render_module_triggers() -> list[str]:
     out += ["", f"# THIS's module queue has a free place (of {QUEUE_SLOTS}).",
             f"sr_mq_has_room = {{ NOT = {{ has_variable = sr_mq_{QUEUE_SLOTS}_site }} }}",
             "", "# The queue's first module can be built now (ready_test; sr_mod_month's build loop):",
-            "# one built at an Orbital Yard on its world or a lunar world's needs no slot, any",
+            "# one built at an Orbital Yard in its place or a lunar world's needs no slot, any",
             "# other a free one and, for a world with launch windows, its window open or at most",
             "# sr_mod_build_lead_months off (the owner, 2026-11-23). Never while launches are",
             "# barred: the loop asks sr_mq_head_yard_ready on its own for that.",
             f"sr_mq_head_ready = {{ NOT = {{ sr_launches_barred = yes }} {ready_test('var:sr_mq_1_site')} }}",
-            "", "# The queue's first module is built at an Orbital Yard on its world (the owner,",
+            "", "# The queue's first module is built at an Orbital Yard in its place (the owner,",
             "# 2026-11-24): no slot, window or launch, and not one of the month's",
             "# sr_mod_fab_per_month, so sr_mod_month builds it while launches are barred too.",
             f"sr_mq_head_yard_ready = {{ {yard_ready_test('var:sr_mq_1_site')} }}",
@@ -4776,6 +4817,8 @@ def _colony_blocks(site: Site) -> list[str]:
     # A colony's page names its specializations in full (design § 8).
     for slot, m in zip(("a", "b"), spec_modifiers(site)):
         out += _override(f"page_name_{slot}", f'text = "{m}"', f'tooltip = "{spec_tt[slot]}"')
+    # An Orbital Yard's hover names the colonies it builds for (yard_tooltip).
+    spec_tt["yard"] = yard_tooltip(site)
     for t in ("a", "b", *generic_types(site)):
         pending = f"sr_disp_mod_pending_{t}_{k}"
         tooltip = spec_tt.get(t, f"je_space_race_widget_mod_{t}_tt")
