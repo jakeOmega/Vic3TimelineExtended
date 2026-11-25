@@ -1708,8 +1708,8 @@
   "ru": "#bold Военная подготовка:#! #G +1#!"
  },
  "HEIR_ED_RANDOM_PLUS_1": {
-  "en": "#bold Random Training:#! #Y +1#! to a random skill",
-  "ru": "#bold Случайная подготовка:#! #Y +1#! к случайному навыку"
+  "en": "#bold Random Training:#! #yellow +1#! to a random skill",
+  "ru": "#bold Случайная подготовка:#! #yellow +1#! к случайному навыку"
  },
  "HEIR_ED_TOTAL_MINUS_1": {
   "en": "#bold Education Progress:#! #R -1#!",
@@ -5460,8 +5460,8 @@
   "ru": "#gold Обвал#!"
  },
  "banking_dash_momentum_band_falling": {
-  "en": "#Y Falling#!",
-  "ru": "#Y Падение#!"
+  "en": "#yellow Falling#!",
+  "ru": "#yellow Падение#!"
  },
  "banking_dash_momentum_band_freefall": {
   "en": "#R Freefall#!",
@@ -5480,8 +5480,8 @@
   "ru": "Ровный"
  },
  "banking_dash_momentum_band_surging": {
-  "en": "#Y Surging#!",
-  "ru": "#Y Рывок#!"
+  "en": "#yellow Surging#!",
+  "ru": "#yellow Рывок#!"
  },
  "banking_dash_momentum_change_less": {
   "en": "[Country.MakeScope.ScriptValue('banking_disp_momentum_change_hi')|+=2] or less",
@@ -5888,8 +5888,8 @@
   "ru": "#R Разрывается#!"
  },
  "banking_dash_mon_peg_state_defending": {
-  "en": "#Y Being defended#!",
-  "ru": "#Y Защищается#!"
+  "en": "#yellow Being defended#!",
+  "ru": "#yellow Защищается#!"
  },
  "banking_dash_mon_peg_state_doubted": {
   "en": "#R Doubted#!",
@@ -5908,8 +5908,8 @@
   "ru": "#G Пользуется доверием#!"
  },
  "banking_dash_mon_peg_state_watched": {
-  "en": "#Y Watched#!",
-  "ru": "#Y Под наблюдением#!"
+  "en": "#yellow Watched#!",
+  "ru": "#yellow Под наблюдением#!"
  },
  "banking_dash_mon_peg_suspension_due": {
   "en": "Suspension: decision due. Resume convertibility, or keep the paper as $law_fiat_currency$.",
@@ -6032,8 +6032,8 @@
   "ru": "Валюта принята, действие приостановлено"
  },
  "banking_dash_mon_union_member_holdout": {
-  "en": "#Y Holding out#!",
-  "ru": "#Y Не присоединяется#!"
+  "en": "#yellow Holding out#!",
+  "ru": "#yellow Не присоединяется#!"
  },
  "banking_dash_mon_union_member_outside": {
   "en": "Outside: its money does not qualify",
@@ -8648,8 +8648,8 @@
   "ru": "Поддержать их контрразведку"
  },
  "covert_counterintel_support_phase_tt": {
-  "en": "[concept_operation_phase]: #R Preparatory#! for [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] months, adding nothing; then #Y Establishing#!, adding the defenses listed; #G Fully Operational#! from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!. Priority multiplies them again.",
-  "ru": "[concept_operation_phase]: #R Подготовка#! в течение [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] мес., ничего не добавляет; затем #Y Становление#!, добавляя перечисленные средства защиты; #G Полная готовность#! с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!. Приоритет умножает их ещё раз."
+  "en": "[concept_operation_phase]: #R Preparatory#! for [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] months, adding nothing; then #yellow Establishing#!, adding the defenses listed; #G Fully Operational#! from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!. Priority multiplies them again.",
+  "ru": "[concept_operation_phase]: #R Подготовка#! в течение [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] мес., ничего не добавляет; затем #yellow Становление#!, добавляя перечисленные средства защиты; #G Полная готовность#! с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!. Приоритет умножает их ещё раз."
  },
  "covert_counterintel_support_public_tt": {
   "en": "An open arrangement, not a secret: it is never rolled for detection and never exposed. It gives us nothing inside [SCOPE.sCountry('target_country').GetName]: no network there and no Tradecraft.",
@@ -8804,8 +8804,8 @@
   "ru": "Разжигать колониальную автономию"
  },
  "covert_incite_autonomy_extra_tt": {
-  "en": "Nothing happens on Earth. From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, every colony of #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more the target holds gains #v 0.5#! autonomy a month; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #v 1#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly gain to #v 2#!. A colony whose autonomy reaches #v 100#! breaks away and becomes a free colony.",
-  "ru": "На Земле ничего не происходит. С месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], когда операция на этапе #Y Становление#!, каждая колония численностью #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! человек и более, которой владеет цель, получает #v 0,5#! автономии в месяц; с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], на #G Полной готовности#!, — #v 1#!. Наша сеть, уже действующая у цели, сокращает ожидание, а приоритет 3 повышает месячный прирост до #v 2#!. Колония, чья автономия достигает #v 100#!, отделяется и становится свободной колонией."
+  "en": "Nothing happens on Earth. From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #yellow Establishing#!, every colony of #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more the target holds gains #v 0.5#! autonomy a month; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #v 1#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly gain to #v 2#!. A colony whose autonomy reaches #v 100#! breaks away and becomes a free colony.",
+  "ru": "На Земле ничего не происходит. С месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], когда операция на этапе #yellow Становление#!, каждая колония численностью #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! человек и более, которой владеет цель, получает #v 0,5#! автономии в месяц; с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], на #G Полной готовности#!, — #v 1#!. Наша сеть, уже действующая у цели, сокращает ожидание, а приоритет 3 повышает месячный прирост до #v 2#!. Колония, чья автономия достигает #v 100#!, отделяется и становится свободной колонией."
  },
  "covert_industrial_espionage_action": {
   "en": "Covert: $iw_op_name_industrial_espionage$",
@@ -9024,8 +9024,8 @@
   "ru": "Повышенная бдительность"
  },
  "covert_op_phase_warning_tt": {
-  "en": "[concept_operation_phase]: #R Preparatory#! for [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] months, with no effect; then #Y Establishing#!, with the effects listed; #G Fully Operational#! from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!.",
-  "ru": "[concept_operation_phase]: #R Подготовка#! в течение [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] мес., без эффекта; затем #Y Становление#!, с перечисленными эффектами; #G Полная готовность#! с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!."
+  "en": "[concept_operation_phase]: #R Preparatory#! for [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] months, with no effect; then #yellow Establishing#!, with the effects listed; #G Fully Operational#! from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!.",
+  "ru": "[concept_operation_phase]: #R Подготовка#! в течение [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0] мес., без эффекта; затем #yellow Становление#!, с перечисленными эффектами; #G Полная готовность#! с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!."
  },
  "covert_op_preview_header_tt": {
   "en": "The operation's effects are listed at #bold base strength#!, as they are once it is established and at priority 1.",
@@ -9124,8 +9124,8 @@
   "ru": "Саботировать колонию"
  },
  "covert_sabotage_colony_extra_tt": {
-  "en": "From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, the target's most populous colony loses #R 1%#! of its people a month and, with #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more, gains #v 0.25#! autonomy; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #R 2%#! and #v 0.5#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly toll to #R 4%#! and #v 1#!.",
-  "ru": "С месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], когда операция на этапе #Y Становление#!, самая населённая колония цели теряет #R 1%#! жителей в месяц и, если в ней #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! человек и более, получает #v 0,25#! автономии; с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], на #G Полной готовности#!, — #R 2%#! и #v 0,5#!. Наша сеть, уже действующая у цели, сокращает ожидание, а приоритет 3 повышает месячную дань до #R 4%#! и #v 1#!."
+  "en": "From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #yellow Establishing#!, the target's most populous colony loses #R 1%#! of its people a month and, with #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people or more, gains #v 0.25#! autonomy; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #R 2%#! and #v 0.5#!. A network of ours already in the target shortens the wait, and priority 3 raises the monthly toll to #R 4%#! and #v 1#!.",
+  "ru": "С месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], когда операция на этапе #yellow Становление#!, самая населённая колония цели теряет #R 1%#! жителей в месяц и, если в ней #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! человек и более, получает #v 0,25#! автономии; с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], на #G Полной готовности#!, — #R 2%#! и #v 0,5#!. Наша сеть, уже действующая у цели, сокращает ожидание, а приоритет 3 повышает месячную дань до #R 4%#! и #v 1#!."
  },
  "covert_secure_material_action": {
   "en": "Covert: $iw_op_name_secure_material$",
@@ -9196,8 +9196,8 @@
   "ru": "Разведать оборону колонии"
  },
  "covert_survey_defences_extra_tt": {
-  "en": "Nothing happens on Earth. From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #Y Establishing#!, our fleets' fire on the defenses of every colony the target holds is #G +20%#!; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #G +40%#!. A network of ours already in the target shortens the wait, and priority 3 raises it to #G +80%#!. While it runs, our Fleets panel shows the Defenses, integrity and marines of the target's colonies exactly.",
-  "ru": "На Земле ничего не происходит. С месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], когда операция на этапе #Y Становление#!, огонь наших флотов по обороне каждой колонии цели #G +20%#!; с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], на #G Полной готовности#!, — #G +40%#!. Наша сеть, уже действующая у цели, сокращает ожидание, а приоритет 3 повышает его до #G +80%#!. Пока операция идёт, наша панель флотов точно показывает оборону, целостность и морскую пехоту колоний цели."
+  "en": "Nothing happens on Earth. From month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], when the operation is #yellow Establishing#!, our fleets' fire on the defenses of every colony the target holds is #G +20%#!; from month [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], #G Fully Operational#!, #G +40%#!. A network of ours already in the target shortens the wait, and priority 3 raises it to #G +80%#!. While it runs, our Fleets panel shows the Defenses, integrity and marines of the target's colonies exactly.",
+  "ru": "На Земле ничего не происходит. С месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_2_month')|0], когда операция на этапе #yellow Становление#!, огонь наших флотов по обороне каждой колонии цели #G +20%#!; с месяца [GetPlayer.MakeScope.ScriptValue('covert_op_phase_3_month')|0], на #G Полной готовности#!, — #G +40%#!. Наша сеть, уже действующая у цели, сокращает ожидание, а приоритет 3 повышает его до #G +80%#!. Пока операция идёт, наша панель флотов точно показывает оборону, целостность и морскую пехоту колоний цели."
  },
  "covert_warfare_unlock_early_tt": {
   "en": "$central_archives$, or an [Concept('concept_operation_slots', 'operation slot')] beyond what your rank grants, from $mainframe_computers$, $computer_networks$, $cyber_warfare$, $quantum_computing$ or $law_ministry_of_intelligence_and_security$",
@@ -16732,8 +16732,8 @@
   "ru": "#R Катастрофическое#!"
  },
  "gw_tier_short_moderate": {
-  "en": "#Y Moderate#!",
-  "ru": "#Y Умеренное#!"
+  "en": "#yellow Moderate#!",
+  "ru": "#yellow Умеренное#!"
  },
  "gw_tier_short_negligible": {
   "en": "#G Negligible#!",
@@ -16748,8 +16748,8 @@
   "ru": "#o Значительное#!"
  },
  "gw_tier_short_slight": {
-  "en": "#Y Slight#!",
-  "ru": "#Y Слабое#!"
+  "en": "#yellow Slight#!",
+  "ru": "#yellow Слабое#!"
  },
  "gw_treaty_source_has_technologies_tt": {
   "en": "The country cutting its emissions has researched [GetTechnology('clean_energy_technologies').GetName], [GetTechnology('pollution_control').GetName] and [GetTechnology('modern_urban_planning').GetName], which the policies it would be forced to adopt need",
@@ -18572,8 +18572,8 @@
   "ru": "#G под контролем#!"
  },
  "nd_danger_word_1": {
-  "en": "#Y Tense#!",
-  "ru": "#Y напряжённая#!"
+  "en": "#yellow Tense#!",
+  "ru": "#yellow напряжённая#!"
  },
  "nd_danger_word_2": {
   "en": "#R Dangerous#!",
@@ -18688,8 +18688,8 @@
   "ru": "#R Блеф#!"
  },
  "nd_ft_word_uncertain": {
-  "en": "#Y Uncertain#!",
-  "ru": "#Y Неопределённо#!"
+  "en": "#yellow Uncertain#!",
+  "ru": "#yellow Неопределённо#!"
  },
  "nd_home_list_none": {
   "en": "#lore No interest group holds a view on our posture.#!",
@@ -19084,8 +19084,8 @@
   "ru": "#G Низкий#!"
  },
  "nd_risk_band_2": {
-  "en": "#Y Elevated#!",
-  "ru": "#Y Повышенный#!"
+  "en": "#yellow Elevated#!",
+  "ru": "#yellow Повышенный#!"
  },
  "nd_risk_band_3": {
   "en": "#R High#!",
@@ -20308,8 +20308,8 @@
   "ru": "Ставки: если они уступят, наша [Concept('concept_nuclear_credibility','убедительность')] вырастет на #G 15#!. Если отступим мы, она упадёт на #R 15#!; если срок истечёт — на #R 10#!"
  },
  "nd_tt_open_uncertain": {
-  "en": "#Y Uncertain:#! our doctrine would let us carry this out only if this became a war that threatened what it protects. No effect on their pressure",
-  "ru": "#Y Неопределённо:#! наша доктрина позволит исполнить угрозу, только если это перерастёт в войну, угрожающую тому, что она защищает. На давление на них не влияет"
+  "en": "#yellow Uncertain:#! our doctrine would let us carry this out only if this became a war that threatened what it protects. No effect on their pressure",
+  "ru": "#yellow Неопределённо:#! наша доктрина позволит исполнить угрозу, только если это перерастёт в войну, угрожающую тому, что она защищает. На давление на них не влияет"
  },
  "nd_tt_orbital_frozen": {
   "en": "We agreed in a nuclear crisis to build no Orbital Battlestation for ten years",
@@ -21588,8 +21588,8 @@
   "ru": "У вас есть $nuclear_weapons$, и вы — [concept_great_power|l], либо [concept_major_power|l], у которой есть $ICBMs$, либо страна с помощью программе; либо у вас есть боезаряды или вы столкнулись с ядерным кризисом; либо боезаряд уже построен где-либо в мире"
  },
  "nuclear_program_world_first_note_active": {
-  "en": " · #Y world first#!",
-  "ru": " · #Y первые в мире#!"
+  "en": " · #v world first#!",
+  "ru": " · #v первые в мире#!"
  },
  "nuclear_retaliation_full_tt": {
   "en": "This option is available because we are a #bold nuclear power#! with at least #bold three warheads#! in our stockpile.",
@@ -24248,8 +24248,8 @@
   "ru": "#G достигнуто, первыми в мире#!"
  },
  "sr_power_state_launched": {
-  "en": "#Y launched; its data is still on its way#!",
-  "ru": "#Y запущено; данные ещё в пути#!"
+  "en": "#yellow launched; its data is still on its way#!",
+  "ru": "#yellow запущено; данные ещё в пути#!"
  },
  "sr_probe_astro_wonders_data": {
   "en": "Interstellar Data: Astrophysical Wonders",
@@ -24296,8 +24296,8 @@
   "ru": "не начато"
  },
  "sr_prog_state_running": {
-  "en": "#Y under way#!",
-  "ru": "#Y в процессе#!"
+  "en": "#yellow under way#!",
+  "ru": "#yellow в процессе#!"
  },
  "sr_prog_state_signal_received": {
   "en": "#G the signal has reached us#!",
@@ -25140,8 +25140,8 @@
   "ru": "#R Заблокировано#!"
  },
  "st_res_mode_idle": {
-  "en": "#Y Idle#!",
-  "ru": "#Y Простой#!"
+  "en": "#yellow Idle#!",
+  "ru": "#yellow Простой#!"
  },
  "st_res_mode_storing": {
   "en": "#G Storing#!",
@@ -25404,20 +25404,20 @@
   "ru": "#G Покупка#! — ниже вашего порога покупки, но недельного бюджета закупок хватает лишь на часть запрошенного потока."
  },
  "st_res_policy_reason_ceiling": {
-  "en": "#Y Paused#! — target stockpile reached.",
-  "ru": "#Y Пауза#! — целевой запас достигнут."
+  "en": "#yellow Paused#! — target stockpile reached.",
+  "ru": "#yellow Пауза#! — целевой запас достигнут."
  },
  "st_res_policy_reason_floor": {
-  "en": "#Y Paused#! — protected stockpile reached.",
-  "ru": "#Y Пауза#! — неприкосновенный запас достигнут."
+  "en": "#yellow Paused#! — protected stockpile reached.",
+  "ru": "#yellow Пауза#! — неприкосновенный запас достигнут."
  },
  "st_res_policy_reason_holding": {
-  "en": "#Y Holding#! — above your release threshold, but a stockpile at peace sells only far above base price.",
-  "ru": "#Y Выжидание#! — цена выше вашего порога отпуска, но запас в мирное время продаётся лишь при цене намного выше базовой."
+  "en": "#yellow Holding#! — above your release threshold, but a stockpile at peace sells only far above base price.",
+  "ru": "#yellow Выжидание#! — цена выше вашего порога отпуска, но запас в мирное время продаётся лишь при цене намного выше базовой."
  },
  "st_res_policy_reason_manual": {
-  "en": "#Y Manual control#! — you set this good's rate by hand.",
-  "ru": "#Y Ручное управление#! — вы сами задаёте норму этого товара."
+  "en": "#yellow Manual control#! — you set this good's rate by hand.",
+  "ru": "#yellow Ручное управление#! — вы сами задаёте норму этого товара."
  },
  "st_res_policy_reason_no_hub": {
   "en": "#R Paused#! — no Strategic Reserve Hub is operating.",
@@ -25432,8 +25432,8 @@
   "ru": "#R Пауза#! — узел недоукомплектован, поэтому на этой неделе не торгует."
  },
  "st_res_policy_reason_waiting": {
-  "en": "#Y Waiting#! — the averaged market price has not crossed a trigger threshold.",
-  "ru": "#Y Ожидание#! — усреднённая рыночная цена не пересекла ни один пороговый уровень."
+  "en": "#yellow Waiting#! — the averaged market price has not crossed a trigger threshold.",
+  "ru": "#yellow Ожидание#! — усреднённая рыночная цена не пересекла ни один пороговый уровень."
  },
  "st_res_policy_release_high": {
   "en": "Release When Expensive",
@@ -32288,8 +32288,8 @@
   "ru": "#lore в этом месяце что-то записано — политика, действие или крах. Наведите курсор на столбец.#!"
  },
  "te_hist_mk_action": {
-  "en": "#Y Action taken this month:#!",
-  "ru": "#Y Действие в этом месяце:#!"
+  "en": "#b Action taken this month:#!",
+  "ru": "#b Действие в этом месяце:#!"
  },
  "te_hist_mk_crash_contagion_tt": {
   "en": "#R Financial contagion reached the country this month#! from a crash abroad.",
@@ -38600,12 +38600,12 @@
   "ru": "[Concept('concept_un_permanent_member','Постоянный член')] применил [Concept('concept_un_veto','вето')]. У референдума нет ослабленной формы, поэтому резолюция заблокирована полностью, и голосование не проводится."
  },
  "un_vote_reform_1_passed_tt": {
-  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #Y New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #Y The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
-  "ru": "Реформа Устава I принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 70 до 85#!, открывая уровень «Сильный» — где санкции становятся эмбарго, осуждение изолирует, а [concept_un_dues|l] вырастают до 0,4% ВВП — и #G доверие к ООН +2#!. #Y Новые дела:#! Всемирный суд, оружейные эмбарго, полномочия делегаций, Постоянные силы ООН, избирательные наблюдатели и Конвенция о культурном разнообразии могут быть внесены в Ассамблею. #Y [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает 5% бюджета ООН и выплачивает членам ниже четверти среднего."
+  "en": "Charter Reform I is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 70 to 85#!, opening the Strong tier — where sanctions become embargoes, condemnation isolates, and [concept_un_dues] rise to 0.4% of GDP — and #G UN credibility +2#!. #b New business:#! the World Court, arms embargoes, credentials, the Standing UN Force, electoral observers and the Convention on Cultural Diversity can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes 5% of the UN budget and pays the members below a quarter of the average.",
+  "ru": "Реформа Устава I принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 70 до 85#!, открывая уровень «Сильный» — где санкции становятся эмбарго, осуждение изолирует, а [concept_un_dues|l] вырастают до 0,4% ВВП — и #G доверие к ООН +2#!. #b Новые дела:#! Всемирный суд, оружейные эмбарго, полномочия делегаций, Постоянные силы ООН, избирательные наблюдатели и Конвенция о культурном разнообразии могут быть внесены в Ассамблею. #b [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает 5% бюджета ООН и выплачивает членам ниже четверти среднего."
  },
  "un_vote_reform_2_passed_tt": {
-  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #Y Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #Y New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #Y The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
-  "ru": "Реформа Устава II принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 85 до 100#!, открывая уровень «Надгосударственный» — где [concept_un_dues|l] вырастают до 1% ВВП, а каждый крупный член вводит эмбарго против находящихся под санкциями — и #G доверие к ООН +2#!. #Y Сдержанность в применении вето:#! отныне большинство в две трети проводит резолюцию вопреки [Concept('concept_un_veto','вето')]. #Y Новые дела:#! обязательные прекращения огня, референдумы под наблюдением и Договор о запрещении ядерного оружия могут быть внесены в Ассамблею. #Y [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает четверть бюджета ООН и выплачивает членам ниже половины среднего."
+  "en": "Charter Reform II is adopted by a two-thirds supermajority. #G The ceiling on [concept_un_authority]'s target rises from 85 to 100#!, opening the Supranational tier — where [concept_un_dues] rise to 1% of GDP and every major member embargoes the sanctioned — and #G UN credibility +2#!. #b Veto restraint:#! from now on a two-thirds supermajority carries a resolution over a [Concept('concept_un_veto','veto')]. #b New business:#! binding ceasefires, supervised referendums and the Treaty on the Prohibition of Nuclear Weapons can come before the Assembly. #b The [concept_un_development_fund]#!, while it stands, takes a quarter of the UN budget and pays the members below half the average.",
+  "ru": "Реформа Устава II принята большинством в две трети. #G Потолок цели [Concept('concept_un_authority','авторитета ООН')] поднимается с 85 до 100#!, открывая уровень «Надгосударственный» — где [concept_un_dues|l] вырастают до 1% ВВП, а каждый крупный член вводит эмбарго против находящихся под санкциями — и #G доверие к ООН +2#!. #b Сдержанность в применении вето:#! отныне большинство в две трети проводит резолюцию вопреки [Concept('concept_un_veto','вето')]. #b Новые дела:#! обязательные прекращения огня, референдумы под наблюдением и Договор о запрещении ядерного оружия могут быть внесены в Ассамблею. #b [Concept('concept_un_development_fund','Всемирный фонд развития')]#!, пока он существует, забирает четверть бюджета ООН и выплачивает членам ниже половины среднего."
  },
  "un_vote_reform_passed_tt": {
   "en": "The Charter Reform was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#!",
