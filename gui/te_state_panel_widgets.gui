@@ -11,8 +11,17 @@
 ### a stack of rows ends at one x with no padding spaces in localization — the
 ### same idiom as ch_breakdown_row and nuclear_program_row in the JE widgets.
 ### The defaults suit a 250 px column of the tourism card;
-### te_state_tile_row resizes them for the 160 px text column of a
-### state_panel_status_item_small tile.
+### te_state_tile_row resizes them for the 170 px text column of a te_state_tile.
+###
+### THE MOD'S TILES (te_state_tiles, at the end of this file). One anatomy for
+### every tile the mod adds to the Overview (te_state_tile): vanilla's tile
+### (entry_bg_simple, margin 10, 260 wide, two to a 530 row) with its icon in an
+### inset box of its own at the top left (60, the icon 52; gui_style_guide.md
+### rule 4's overview box) and a 170 text column: the caption, then rows of one
+### split, label 92 + 4 + value 74, so labels start at one x and values end at
+### one x down each column. The tiles stand in two columns of their own after
+### vanilla's grid and decrees, each a vertical flow, so a short tile never sits
+### beside a tall one waiting for the row to end.
 ###
 ### DATA. Every number is a state-scope script value read through
 ### State.MakeScope.ScriptValue (ScriptValue needs MakeScope, and the JE
@@ -83,42 +92,182 @@ types te_state_panel_widget_types
 		}
 	}
 
-	### The same row sized for a status tile's 160 px text column: no icon,
-	### 96 px of label, 60 px of value.
+	### A te_state_tile's reading, the one split of every mod tile: no icon,
+	### 92 of label, 74 of value (170 with the row's spacing of 4). Sized from
+	### the game's OpenSans at 14 (fontsize_medium), whose widths matched the
+	### panel's screenshot to 2 units: the longest label is "Pass-through" (86),
+	### the longest value "Moderate" (68, bold), each with 5% to spare
+	### (test_state_tiles.py's WidthBudgetTest).
 	type te_state_tile_row = te_state_stat_row {
 		blockoverride "row_icon" {}
 
 		blockoverride "label_size" {
-			size = { 96 20 }
+			size = { 92 20 }
 		}
 		blockoverride "label_max_width" {
-			max_width = 96
+			max_width = 92
 		}
 		blockoverride "value_size" {
-			size = { 60 20 }
+			size = { 74 20 }
 		}
 		blockoverride "value_max_width" {
-			max_width = 60
+			max_width = 74
 		}
 	}
 
-	### The tile row for a word rather than a number (a basin's name, "62 → 55"):
-	### 60 px of label, 96 px of value. "Southern" at fontsize_medium needs about
-	### 66 px (gui_style_guide.md rule 3's budget), past the number column's 60.
-	type te_state_tile_word_row = te_state_stat_row {
+	### The tile row for a name as the value (the grid's hub, a state's name up
+	### to 137 wide; an ocean basin): 52 of label, 114 of value, the value
+	### wrapping onto a second line rather than eliding, in vanilla's own form
+	### for a right-aligned value that wraps (building_details_panel.gui: a
+	### fixed-width multiline textbox, align = right). It still ends at the
+	### column's right edge, so it lines up with the te_state_tile_rows.
+	type te_state_tile_word_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		block "row_visible" {}
+		block "row_tooltip" {}
+
+		widget = {
+			size = { 52 20 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 52
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "row_label" {}
+			}
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 114 -1 }
+			maximumsize = { 114 -1 }
+			align = right|nobaseline
+			using = fontsize_medium
+			block "row_value" {}
+		}
+	}
+
+	### The tile row for a name as the label (a culture's homeland project):
+	### 115 of label, 51 of value, which holds a percentage ("100.0%", 49 bold).
+	### Every vanilla culture's name fits (the longest, "Central American", is
+	### 113); at the reading split's 92 one in twenty elided.
+	type te_state_tile_culture_row = te_state_stat_row {
 		blockoverride "row_icon" {}
 
 		blockoverride "label_size" {
-			size = { 60 20 }
+			size = { 115 20 }
 		}
 		blockoverride "label_max_width" {
-			max_width = 60
+			max_width = 115
 		}
 		blockoverride "value_size" {
-			size = { 96 20 }
+			size = { 51 20 }
 		}
 		blockoverride "value_max_width" {
-			max_width = 96
+			max_width = 51
+		}
+	}
+
+	### GDP per Capita's rows: a tile in vanilla's grid keeps vanilla's 160 text
+	### column (70 icon), so the same row at 84 + 4 + 72.
+	type te_state_vanilla_tile_row = te_state_stat_row {
+		blockoverride "row_icon" {}
+
+		blockoverride "label_size" {
+			size = { 84 20 }
+		}
+		blockoverride "label_max_width" {
+			max_width = 84
+		}
+		blockoverride "value_size" {
+			size = { 72 20 }
+		}
+		blockoverride "value_max_width" {
+			max_width = 72
+		}
+	}
+
+	### A line across a te_state_tile's text column: a word under the caption
+	### (the UN mission's kind), a status line or a note. It wraps.
+	type te_state_tile_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 170 -1 }
+		maximumsize = { 170 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+	}
+
+	### THE MOD'S TILE. Vanilla's state_panel_status_item_small with one change
+	### of anatomy: the icon sits in an inset box of its own, 60 at the top left
+	### (the icon 52 inside), so a square building picture, a round medallion and
+	### a bare glyph read as one shape, and a tile taller than the box keeps its
+	### icon level with its caption rather than floating at the middle of a tall
+	### table. A tile shorter than the box centres its text on it, as vanilla's
+	### one-line tiles do. The text column is 170: the caption in vanilla's tile
+	### name style, then the rows, 2 apart. 10 + 60 + 10 + 170 + 10 = 260.
+	###
+	### An instance sets its own visible and tooltip, and fills "texture",
+	### "name" (the caption) and "rows" (te_state_tile_rows, te_state_tile_lines,
+	### te_state_tile_bars, or one of the tile bodies below). A tile with no rows
+	### empties "rows_box", so the caption centres on the box.
+	type te_state_tile = container {
+		flowcontainer = {
+			spacing = 10
+			margin = { 10 10 }
+			minimumsize = { 260 -1 }
+
+			background = {
+				using = entry_bg_simple
+			}
+
+			widget = {
+				size = { 60 60 }
+
+				background = {
+					using = dark_area
+					alpha = 0.3
+				}
+
+				icon = {
+					size = { 52 52 }
+					parentanchor = center
+					block "texture" {}
+				}
+			}
+
+			flowcontainer = {
+				parentanchor = vcenter
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+
+				textbox = {
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 170 -1 }
+					maximumsize = { 170 -1 }
+					align = nobaseline
+					block "name" {}
+				}
+
+				block "rows_box" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+
+						block "rows" {}
+					}
+				}
+			}
 		}
 	}
 
@@ -184,6 +333,14 @@ types te_state_panel_widget_types
 					color = { 0.86 0.70 0.36 1.0 }
 				}
 			}
+		}
+	}
+
+	### A te_state_tile's bar, under its row: the text column's width.
+	type te_state_tile_bar = te_state_stat_bar {
+		blockoverride "bar_indent" {}
+		blockoverride "bar_size" {
+			size = { 170 4 }
 		}
 	}
 
@@ -1027,7 +1184,7 @@ types te_state_panel_widget_types
 		direction = vertical
 		ignoreinvisible = yes
 		spacing = 1
-		te_state_tile_row = {
+		te_state_tile_culture_row = {
 			blockoverride "row_label" {
 				text = "[GetScriptedGui('te_homeland_project_culture_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).AddScope('project', ScriptContainer.MakeScope).End)]"
 			}
@@ -1038,26 +1195,20 @@ types te_state_panel_widget_types
 				raw_text = "#v [ScriptContainer.MakeScope.ScriptValue('te_homeland_project_progress_pct')|1]%#!"
 			}
 		}
-		te_state_stat_bar = {
-			blockoverride "bar_indent" {}
-			blockoverride "bar_size" { size = { 160 6 } }
+		te_state_tile_bar = {
 			blockoverride "bar_value" {
 				value = "[FixedPointToFloat(ScriptContainer.MakeScope.ScriptValue('te_homeland_project_progress_pct'))]"
 			}
 		}
-		textbox = {
+		te_state_tile_line = {
 			visible = "[EqualTo_CFixedPoint(ScriptContainer.MakeScope.ScriptValue('te_homeland_project_eligible'), '(CFixedPoint)0')]"
 			text = "TE_HOMELAND_PROJECT_INVALID"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
 		}
 	}
 
-	### The Homeland Dynamics tile's extra_widget. Every line is conditional,
+	### The Homeland Dynamics tile's rows. Every line is conditional,
 	### on state-scope values in common/script_values/homeland_values.txt:
-	### - te_homeland_relevant = 0 hides the whole tile (states_panel.gui).
+	### - te_homeland_relevant = 0 hides the whole tile (te_state_tiles).
 	### - te_homeland_pause_status: the pause reason, once for the tile.
 	### - te_homeland_<track>_shown: a track appears only while it has
 	###   projects or can run here, so a core state with nothing to form or
@@ -1069,22 +1220,14 @@ types te_state_panel_widget_types
 		ignoreinvisible = yes
 		spacing = 6
 
-		textbox = {
+		te_state_tile_line = {
 			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)1')]"
 			text = "TE_HOMELAND_PAUSED_LOCKED"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
 		}
 
-		textbox = {
+		te_state_tile_line = {
 			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)2')]"
 			text = "TE_HOMELAND_PAUSED_SPLIT"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
 		}
 
 		### CREATION. Statuses 1-2 (paused) are the tile-level line above and
@@ -1098,7 +1241,7 @@ types te_state_panel_widget_types
 			textbox = {
 				text = "TE_HOMELAND_CREATION"
 				autoresize = yes
-				maximumsize = { 160 -1 }
+				maximumsize = { 170 -1 }
 			}
 			flowcontainer = {
 				direction = vertical
@@ -1111,31 +1254,19 @@ types te_state_panel_widget_types
 				}
 			}
 
-			textbox = {
+			te_state_tile_line = {
 				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)4')]"
 				text = "TE_HOMELAND_CREATION_THRESHOLD"
-				autoresize = yes
-				maximumsize = { 160 -1 }
-				multiline = yes
-				using = fontsize_small
 			}
 
-			textbox = {
+			te_state_tile_line = {
 				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)5')]"
 				text = "TE_HOMELAND_TRACK_ACTIVE"
-				autoresize = yes
-				maximumsize = { 160 -1 }
-				multiline = yes
-				using = fontsize_small
 			}
 
-			textbox = {
+			te_state_tile_line = {
 				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)6')]"
 				text = "TE_HOMELAND_TRACK_WAITING"
-				autoresize = yes
-				maximumsize = { 160 -1 }
-				multiline = yes
-				using = fontsize_small
 			}
 		}
 
@@ -1149,7 +1280,7 @@ types te_state_panel_widget_types
 			textbox = {
 				text = "TE_HOMELAND_REMOVAL"
 				autoresize = yes
-				maximumsize = { 160 -1 }
+				maximumsize = { 170 -1 }
 			}
 			flowcontainer = {
 				direction = vertical
@@ -1162,64 +1293,36 @@ types te_state_panel_widget_types
 				}
 			}
 
-			textbox = {
+			te_state_tile_line = {
 				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)4')]"
 				text = "TE_HOMELAND_REMOVAL_THRESHOLD"
-				autoresize = yes
-				maximumsize = { 160 -1 }
-				multiline = yes
-				using = fontsize_small
 			}
 
-			textbox = {
+			te_state_tile_line = {
 				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)5')]"
 				text = "TE_HOMELAND_REMOVAL_TRACK_ACTIVE"
-				autoresize = yes
-				maximumsize = { 160 -1 }
-				multiline = yes
-				using = fontsize_small
 			}
 
-			textbox = {
+			te_state_tile_line = {
 				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)6')]"
 				text = "TE_HOMELAND_TRACK_WAITING"
-				autoresize = yes
-				maximumsize = { 160 -1 }
-				multiline = yes
-				using = fontsize_small
 			}
 		}
 	}
 
 	### LOCAL CLIMATE
 	###
-	### Local Climate's rows (docs/systems/mod_systems/local_climate.md): 80 px of label, 76 of
-	### value. "Humidity" needs about 75 px and "Seasonal" about 75 at fontsize_medium
-	### (gui_style_guide.md rule 3's budget), past both the number row's 60 and the word row's 60.
-	type te_state_climate_row = te_state_stat_row {
-		blockoverride "row_icon" {}
-		blockoverride "label_size" {
-			size = { 80 20 }
-		}
-		blockoverride "label_max_width" {
-			max_width = 80
-		}
-		blockoverride "value_size" {
-			size = { 76 20 }
-		}
-		blockoverride "value_max_width" {
-			max_width = 76
-		}
-	}
+	### Local Climate's rows (docs/systems/mod_systems/local_climate.md) are te_state_tile_rows:
+	### "Humidity" is 60 wide at fontsize_medium and "Moderate" 68, inside the reading split's 92 and 74.
 
 	### The Local Climate tile: the climate record of the state's region, where most of its people
 	### live (common/script_values/local_climate_generated.txt). A region with no row says so.
 	type te_state_climate_tile = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		spacing = 3
+		spacing = 2
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
 			}
@@ -1234,7 +1337,7 @@ types te_state_panel_widget_types
 			}
 		}
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
 			}
@@ -1249,7 +1352,7 @@ types te_state_panel_widget_types
 			}
 		}
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
 			}
@@ -1265,7 +1368,7 @@ types te_state_panel_widget_types
 		}
 
 		# Winter sunshine (spec § 13): hours of sun a day around midwinter.
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
 			}
@@ -1280,7 +1383,7 @@ types te_state_panel_widget_types
 			}
 		}
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
 			}
@@ -1295,7 +1398,7 @@ types te_state_panel_widget_types
 			}
 		}
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0')]"
 			}
@@ -1313,7 +1416,7 @@ types te_state_panel_widget_types
 		# Comfort: what local_climate_discomfort or local_climate_amenity applies, from the last yearly refresh.
 		# One of four rows shows: the red cost, the green bonus of a mild winter (spec § 12), None when the
 		# climate does neither, or Pending before the first monthly application.
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.5'))]"
 			}
@@ -1328,7 +1431,7 @@ types te_state_panel_widget_types
 			}
 		}
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_bonus_now'), '(CFixedPoint)0.5'))]"
 			}
@@ -1343,7 +1446,7 @@ types te_state_panel_widget_types
 			}
 		}
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[And(And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')), And(Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_now'), '(CFixedPoint)0.5')), Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_bonus_now'), '(CFixedPoint)0.5'))))]"
 			}
@@ -1358,7 +1461,7 @@ types te_state_panel_widget_types
 			}
 		}
 
-		te_state_climate_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[And(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'), Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_penalty_shown'), '(CFixedPoint)0')))]"
 			}
@@ -1372,19 +1475,15 @@ types te_state_panel_widget_types
 				text = "te_state_climate_pending"
 			}
 		}
-		textbox = {
+		te_state_tile_line = {
 			visible = "[Not(GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_has_record'), '(CFixedPoint)0'))]"
-			autoresize = yes
-			max_width = 160
-			multiline = yes
-			using = fontsize_medium
 			text = "TE_STATE_CLIMATE_NO_DATA"
 		}
 	}
 
 	### WEALTH CONCENTRATION
 	###
-	### The Wealth Concentration tile's extra_widget (Nation tab plan, Part 2):
+	### The Dynastic Wealth tile's rows (Nation tab plan, Part 2):
 	### the state's score heading for its target once it has been scored, then
 	### the state modifiers wealth concentration and the inheritance law give
 	### it, each with its own tooltip. The tile shows while the state carries
@@ -1397,9 +1496,9 @@ types te_state_panel_widget_types
 	type te_state_wealth_tile = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		spacing = 3
+		spacing = 2
 
-		te_state_tile_word_row = {
+		te_state_tile_row = {
 			blockoverride "row_visible" {
 				visible = "[GetScriptedGui('te_demog_state_wealth_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End )]"
 			}
@@ -1415,12 +1514,12 @@ types te_state_panel_widget_types
 		}
 
 		### Names wrap rather than elide (rule 3): "Cadet Sons Leave the Land"
-		### is wider than the 136 px beside its icon.
+		### is wider than the 146 beside its icon (20 + 4 + 146, the text column).
 		flowcontainer = {
 			datamodel = "[State.GetTimedModifiers]"
 			direction = vertical
 			ignoreinvisible = yes
-			spacing = 3
+			spacing = 2
 
 			item = {
 				flowcontainer = {
@@ -1437,11 +1536,637 @@ types te_state_panel_widget_types
 						text = "[TimedModifier.GetName]"
 						autoresize = yes
 						multiline = yes
-						maximumsize = { 136 -1 }
+						maximumsize = { 146 -1 }
 						align = nobaseline
 						parentanchor = vcenter
 						using = fontsize_medium
 					}
+				}
+			}
+		}
+	}
+
+	### THE MOD'S TILES ON THE OVERVIEW
+	###
+	### After vanilla's whole Overview (its status grid with the state's traits,
+	### then the decrees), in two columns of their own: each a vertical flow of
+	### 260-wide te_state_tiles, so a short tile sits under a short tile and a tall
+	### one beside them, and neither column waits on the other. The grid above
+	### is wrap_count = 2, whose rows are as tall as their taller tile, which left
+	### a two-line tile beside a seven-line one with a hole under it. The engine
+	### has no layout that packs; two flows are the nearest.
+	###
+	### Each column opens with its always-shown tile, so Arable Land and Local
+	### Climate stand at the same place in every state, then the tiles that show
+	### only in some states, most often acted on first. Left: the land and what
+	### can be built on it (farmland, inheritance of land, seabed, the orbital
+	### slots, a UN mission's ground). Right: the people and the networks they
+	### live in (climate and crowding both move migration pull, the power grid,
+	### homelands). The split keeps the columns within one short tile of each
+	### other in the common states; the heights per state are in the pull
+	### request (gui/state-tiles). Each column is fixed at 260, so the right one
+	### keeps its x whatever the left shows.
+	type te_state_tiles = flowcontainer {
+		parentanchor = hcenter
+		margin = { 10 0 }
+		spacing = 10
+
+		### LEFT COLUMN
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 10
+			minimumsize = { 260 -1 }
+
+			### ARABLE LAND: always shown, so it heads the left column.
+			te_state_tile = {
+				tooltip = "TE_STATE_ARABLE_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/wheat_farm.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_ARABLE_STATUS"
+				}
+
+				blockoverride "rows" {
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_ARABLE_ROW_TOTAL"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('arable_land_total')|0]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_ARABLE_ROW_REGIONAL"
+						}
+						blockoverride "row_value" {
+							raw_text = "#G +[State.MakeScope.ScriptValue('arable_land_from_modifiers')|0]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_ARABLE_ROW_MULT"
+						}
+						blockoverride "row_value" {
+							raw_text = "#G +[State.MakeScope.ScriptValue('arable_land_mult_pct')|0]%#!"
+						}
+					}
+				}
+			}
+
+			### DYNASTIC WEALTH (Inheritance; Nation tab plan, Part 2): while
+			### the state carries any of the six state modifiers that wealth
+			### concentration and the inheritance law give it, which both modifier
+			### rows leave out. Whatever the Demographics rule: Wealth Concentration
+			### runs with the rule off, when the state view's Demographics subtab
+			### (where the plan first put this list) is gone, so the list lives
+			### here. Its rows: te_state_wealth_tile, above. Under Arable Land, as
+			### most of what it lists is about how farmland passes to heirs.
+			te_state_tile = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('gui_state_wealth_modifier_count'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_WEALTH_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/law_icons/law_primogeniture.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_WEALTH_STATUS"
+				}
+
+				blockoverride "rows" {
+					te_state_wealth_tile = {}
+				}
+			}
+
+			### SEABED LICENCES (Global Commons, spec § 2.7): on the player's own
+			### coastal state once the player has taken part in a seabed sharing
+			### (te_seabed_tile_shown and State.GetOwner.IsLocalPlayer: its words
+			### are written for the player, #1352; another country's coastal state
+			### shows the Ocean Basin tile below). The rows are this state's: its basin, the
+			### licences on its Deep-Sea Mine levels and how many are another
+			### basin's, our unused claims in its basin (what a new level here
+			### would take at full throughput) and what it adds to our claim
+			### weight there; each row's hover has the detail. The tile's hover
+			### has the country's licences and sends the player to the Seabed tab
+			### for each basin's figures (GUI audit VAN-8).
+			te_state_tile = {
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0'), State.GetOwner.IsLocalPlayer )]"
+				tooltip = "TE_STATE_SEABED_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_SEABED_STATUS"
+				}
+
+				blockoverride "rows" {
+					### A coastal state gets its basin at its owner's monthly
+					### recording, so one gained since has none: the three rows
+					### that read the basin wait for it.
+					te_state_tile_word_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_SEABED_ROW_BASIN_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_SEABED_ROW_BASIN"
+						}
+						blockoverride "row_value" {
+							text = "TE_STATE_SEABED_ROW_BASIN_VALUE"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_SEABED_ROW_LICENCES_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_SEABED_ROW_LICENCES"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('te_seabed_state_records')|0]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_distant_records'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_SEABED_ROW_LONG_HAUL_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_SEABED_ROW_LONG_HAUL"
+						}
+						blockoverride "row_value" {
+							raw_text = "#R [State.MakeScope.ScriptValue('te_seabed_state_distant_records')|0]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_SEABED_ROW_CLAIMS_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_SEABED_ROW_CLAIMS"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('te_seabed_state_owner_local_unbuilt')|0]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_state_basin_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_SEABED_ROW_WEIGHT_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_SEABED_ROW_WEIGHT"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('te_seabed_state_weight_disp')|1]#!"
+						}
+					}
+				}
+			}
+
+			### OCEAN BASIN (GUI audit VAN-8b, owner 2026-10-27): a coastal state
+			### without the Seabed Licences tile above (another country's, or the
+			### player's own before it took part in a sharing) shows its basin
+			### once the viewing player has researched Abyssal Plain Mining, so the
+			### player can see which pool a port there would weigh in. The cheap
+			### state tests first, then the Licences tile's own test negated;
+			### Not( GetMetaPlayer.IsObserver ) before the GetPlayer-rooted gate,
+			### since an observer has no player.
+			te_state_tile = {
+				visible = "[And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_basin_tile_shown'), '(CFixedPoint)0'), And( Not( And( GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_seabed_tile_shown'), '(CFixedPoint)0'), State.GetOwner.IsLocalPlayer ) ), And( Not( GetMetaPlayer.IsObserver ), GetScriptedGui('te_seabed_basin_tile_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+				tooltip = "TE_STATE_SEABED_BASIN_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_ocean_mine.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_SEABED_BASIN_STATUS"
+				}
+
+				### The caption is the whole reading, so no rows box: the
+				### caption centres on the icon, as vanilla's one-line tiles do.
+				blockoverride "rows_box" {}
+			}
+
+			### SOLAR COLLECTOR POINTS: the country's Solar Receiver slots, shown
+			### only in a state that holds a Solar Collector or a Receiver
+			### (te_state_solar_tile_shown, extra_script_values.txt). The slots are
+			### one pool for the whole country, so the tile stays out of states with
+			### nothing to do with them (GUI audit VAN-7).
+			te_state_tile = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_state_solar_tile_shown'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_SOLAR_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_solar_collector.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_SOLAR_STATUS"
+				}
+
+				blockoverride "rows" {
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_POINTS_ROW_AVAILABLE"
+						}
+						### TIMELINE EXTENDED: a figure by its sign (TE_STATE_SOLAR_AVAILABLE). The slots
+						### are a sum of fractions (a part-staffed level gives part of its
+						### slots), and "|0" printed a remainder of -0.2 as a green "-0".
+						blockoverride "row_value" {
+							text = "TE_STATE_SOLAR_AVAILABLE"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_POINTS_ROW_GENERATED"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.GetOwner.MakeScope.ScriptValue('solar_total_generated_points')|0]#!"
+						}
+					}
+				}
+			}
+
+			### ANTIMATTER FACILITY POINTS: the country's Antimatter Facility slots,
+			### shown only in a state that holds the Facility, an Antimatter Engine or
+			### a Warhead Plant (te_state_antimatter_tile_shown), as the solar tile.
+			te_state_tile = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_state_antimatter_tile_shown'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_ANTIMATTER_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/power_plant.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_ANTIMATTER_STATUS"
+				}
+
+				blockoverride "rows" {
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_POINTS_ROW_AVAILABLE"
+						}
+						### TIMELINE EXTENDED: a figure by its sign (TE_STATE_ANTIMATTER_AVAILABLE). The slots
+						### are a sum of fractions (a part-staffed level gives part of its
+						### slots), and "|0" printed a remainder of -0.2 as a green "-0".
+						blockoverride "row_value" {
+							text = "TE_STATE_ANTIMATTER_AVAILABLE"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_POINTS_ROW_GENERATED"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.GetOwner.MakeScope.ScriptValue('antimatter_total_generated_points')|0]#!"
+						}
+					}
+				}
+			}
+
+			### UN MISSION (UN redesign phase 6; phase 7 added the electoral
+			### kind and the Standing UN Force's line in the tooltip)
+			### One tile while an active UN mission works in this state: its
+			### kind, months, strength and progress. Every value reads 0 with no
+			### mission (un_mission_values.txt), so the gate never reads a
+			### missing variable.
+			te_state_tile = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_UN_MISSION_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/event_icons/waving_flag.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_UN_STATUS"
+				}
+
+				blockoverride "rows" {
+					### The kind, a line of its own under the caption: its name
+					### runs to "Electoral Observer Mission" (186 wide), which a
+					### value cell elided, and the caption already says Mission.
+					te_state_tile_line = {
+						text = "TE_STATE_UN_ROW_KIND_VALUE"
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_UN_ROW_MONTHS"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('un_state_mission_months')|0]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_UN_ROW_STRENGTH"
+						}
+						blockoverride "row_value" {
+							text = "TE_STATE_UN_ROW_STRENGTH_VALUE"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_UN_ROW_PROGRESS"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('un_state_mission_progress')|0]%#!"
+						}
+					}
+
+					te_state_tile_bar = {
+						blockoverride "bar_value" {
+							value = "[FixedPointToFloat(State.MakeScope.ScriptValue('un_state_mission_progress'))]"
+						}
+						blockoverride "bar_color" {
+							color = { 0.36 0.62 0.86 1.0 }
+						}
+					}
+				}
+			}
+		}
+
+		### RIGHT COLUMN
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 10
+			minimumsize = { 260 -1 }
+
+			### LOCAL CLIMATE: the climate where most of the state's people live
+			### (te_state_climate_tile, above). Always shown, so it heads the
+			### right column, level with Arable Land.
+			te_state_tile = {
+				tooltip = "TE_STATE_CLIMATE_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/state_status_icons/local_climate.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_CLIMATE_STATUS"
+				}
+
+				blockoverride "rows" {
+					te_state_climate_tile = {}
+				}
+			}
+
+			### MIGRATION CROWDING: under Local Climate, as both move the
+			### state's migration pull.
+			te_state_tile = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('migration_crowding_mult'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_CROWDING_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/generic_icons/population.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_CROWDING_STATUS"
+				}
+
+				blockoverride "rows" {
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_CROWDING_ROW_POP"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.GetPopulationSize|Kv]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_CROWDING_ROW_THRESHOLD"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('migration_crowding_threshold_pop')|Kv]#!"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_CROWDING_ROW_RATIO"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('migration_crowding_ratio')|%0]#!"
+						}
+					}
+
+					### The ratio against the 10x knee; full from the knee on.
+					te_state_tile_bar = {
+						blockoverride "bar_value" {
+							value = "[FixedPointToFloat(State.MakeScope.ScriptValue('migration_crowding_fill_pct'))]"
+						}
+						blockoverride "bar_color" {
+							color = { 0.82 0.38 0.34 1.0 }
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_label" {
+							text = "TE_STATE_CROWDING_ROW_PULL"
+						}
+						blockoverride "row_value" {
+							raw_text = "#R -[State.MakeScope.ScriptValue('migration_crowding_pull_pct')|%0]#!"
+						}
+					}
+				}
+			}
+
+			### POWER GRID (power grids phase 2): on a state with a Grid
+			### Transfer Station. Its mode (sending, receiving, idle, offline),
+			### the Electricity it moves a week, its grid's size, its undersea
+			### cable's links and the owner's transmission efficiency; the
+			### tile's hover explains them and gives the grid's supply against
+			### its demand.
+			te_state_tile = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_tile_shown'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_GRID_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/building_icons/building_grid_transfer_station.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_GRID_STATUS"
+				}
+
+				blockoverride "rows" {
+					te_state_tile_row = {
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_MODE"
+						}
+						blockoverride "row_value" {
+							text = "TE_STATE_GRID_ROW_MODE_VALUE"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_electricity_moved_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_MOVED_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_MOVED"
+						}
+						blockoverride "row_value" {
+							text = "te_grid_tile_moved_value"
+						}
+					}
+
+					### The grid's hub, its largest producer, read from the
+					### state reference the balancing stores (te_grid_hub).
+					te_state_tile_word_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_hub_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_HUB_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_HUB"
+						}
+						blockoverride "row_value" {
+							text = "TE_STATE_GRID_ROW_HUB_VALUE"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_region_size_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_SIZE_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_SIZE"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('te_grid_region_size_disp')|0]#!"
+						}
+					}
+
+					### On a station with an undersea cable: how many
+					### stations of other groups the cable joins to this
+					### grid (te_grid_cable_links). The hover names them.
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_interconnector_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_CABLES_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_CABLES"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('te_grid_cable_count_disp')|0]#!"
+						}
+					}
+
+					### On a grid that spans markets: what this state's market
+					### sends (Exports) or receives (Imports) across the
+					### border, net, a week (te_grid_market_net).
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_market_dir_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_MARKET_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_MARKET"
+						}
+						blockoverride "row_value" {
+							text = "te_grid_tile_market_value"
+						}
+					}
+
+					### The receiving market's station that passes the
+					### import through (te_grid_import).
+					te_state_tile_row = {
+						blockoverride "row_visible" {
+							visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_grid_import_disp'), '(CFixedPoint)0')]"
+						}
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_PASS_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_PASS"
+						}
+						blockoverride "row_value" {
+							text = "te_grid_tile_pass_value"
+						}
+					}
+
+					te_state_tile_row = {
+						blockoverride "row_tooltip" {
+							tooltip = "TE_STATE_GRID_ROW_EFFICIENCY_TT"
+						}
+						blockoverride "row_label" {
+							text = "TE_STATE_GRID_ROW_EFFICIENCY"
+						}
+						blockoverride "row_value" {
+							raw_text = "#v [State.MakeScope.ScriptValue('te_grid_state_efficiency_value')|%0]#!"
+						}
+					}
+				}
+			}
+
+			### HOMELAND DYNAMICS — shown only where a homeland can change
+			### (te_homeland_relevant, homeland_values.txt): a culture here could
+			### gain or lose one, or a culture's project is under way. That
+			### includes the paused cases (changes not enabled, region divided),
+			### which the player can act on. Where nothing can change the tile is
+			### hidden (owner decision, 2026-10-27; GUI audit VAN-6c).
+			te_state_tile = {
+				visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_HOMELAND_TT"
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
+				}
+				blockoverride "name" {
+					text = "TE_STATE_HOMELAND_STATUS"
+				}
+				blockoverride "rows" {
+					te_state_homeland_tracks = {}
 				}
 			}
 		}

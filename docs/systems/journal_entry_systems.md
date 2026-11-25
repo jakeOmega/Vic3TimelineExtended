@@ -532,7 +532,7 @@ Op table — `ch_policy_sgui` (interactive; `is_valid` → the trigger, `effect`
 |---|---|---|
 | 0 / 1 | programme funding − / + | `decrease_program_funding` / `increase_program_funding` |
 | 2 / 3 | International Cultural Outreach begin / end | `world_exposition` / `disable_world_exposition` |
-| 4 / 5 | Cultural Institutes fund / defund | `cultural_institutes` / `disable_cultural_institutes` |
+| 4 / 5 | Cultural Institutes fund / end | `cultural_institutes` / `disable_cultural_institutes` |
 | 6 / 7 | Global Media Campaign launch / end | `global_media_campaign` / `disable_global_media_campaign` |
 | 8 / 9 | Cultural Protectionism enact / end | `cultural_protectionism` / `disable_cultural_protectionism` |
 

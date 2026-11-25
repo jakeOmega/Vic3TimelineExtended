@@ -90,7 +90,7 @@
 ### ---- ch_policy_sgui op table (mirrored in the sgui file and the system doc) --
 ###   0 / 1   programme funding   decrease / increase
 ###   2 / 3   International Cultural Outreach   begin / end
-###   4 / 5   Cultural Institutes               fund  / defund
+###   4 / 5   Cultural Institutes               fund  / end
 ###   6 / 7   Global Media Campaign             launch / end
 ###   8 / 9   Cultural Protectionism            enact / end
 ###
@@ -126,13 +126,19 @@ template ch_fontsize_overview {
 
 types cultural_hegemony_widget_types
 {
-	### A panel: the standard journal-entry widget frame.
+	### A panel: the standard journal-entry widget frame, 20 + a 480 text
+	### column + 20 = 520, the tab column's width and the newer tabs' panels'
+	### (the UN's, Global Warming's, Power Grids'). Until 2026-11-24 it was
+	### 14 + 474 + 14 and sized by its content, so the boxes ran 494 to 502,
+	### narrower than the others in the same column (from #2016); now fixed
+	### at 520 whatever shows (style guide rule 8).
 	type ch_panel = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
-		margin = { 14 8 }
+		minimumsize = { 520 -1 }
+		margin = { 20 8 }
 
 		background = {
 			using = entry_bg_fancy_dark
@@ -152,7 +158,7 @@ types cultural_hegemony_widget_types
 
 	### A heading inside a section's panel, over one group of its lines, with a
 	### faint rule under it (un_chamber_subheader's shape, at this panel's
-	### 474 px text column).
+	### 480 px text column).
 	type ch_subheader = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -164,7 +170,7 @@ types cultural_hegemony_widget_types
 		textbox = {
 			autoresize = yes
 			multiline = yes
-			maximumsize = { 474 -1 }
+			maximumsize = { 480 -1 }
 			align = left|nobaseline
 			using = ch_fontsize_heading
 			default_format = "#title"
@@ -172,7 +178,7 @@ types cultural_hegemony_widget_types
 		}
 		divider_clean = {
 			blockoverride "size" {
-				size = { 474 2 }
+				size = { 480 2 }
 			}
 		}
 	}
@@ -182,8 +188,8 @@ types cultural_hegemony_widget_types
 	type ch_note = textbox {
 		autoresize = yes
 		multiline = yes
-		minimumsize = { 474 -1 }
-		maximumsize = { 474 -1 }
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
 		align = left|nobaseline
 		using = ch_fontsize_row
 		default_format = "#lore"
@@ -429,8 +435,9 @@ types cultural_hegemony_widget_types
 
 	### The Top Cultural Powers board's columns (CH-2): the "us" marker, rank,
 	### flag, country, share, change and the political model's swatch, at
-	### 14 / 22 / 36 / 192 / 58 / 66 / 64 with 2 between, 464 of the 474
-	### column. The head and every row share them, so they line up. The rank
+	### 14 / 22 / 36 / 192 / 58 / 66 / 64 with 2 between, 464 of the 480
+	### column (474 until 2026-11-24), centred in it. The head and every row
+	### share them, so they line up. The rank
 	### is right-aligned in its cell and the flag centred in a wider one, so
 	### "10" keeps clear of the flag and the flag of the name; the model's
 	### cell is wider than "Model", so its centred head stands apart from
@@ -981,12 +988,14 @@ types cultural_hegemony_widget_types
 				parentanchor = hcenter
 				ignoreinvisible = yes
 				spacing = 8
-				minimumsize = { 474 -1 }
+				minimumsize = { 480 -1 }
 
 				### Row 1: tier · world rank · exported model · benchmark, at
-				### 108 + 108 + 136 + 108 and 4 between: 472 of the 474 column.
+				### 108 + 108 + 144 + 108 and 4 between: the 480 column (472 of
+				### 474 until the panel took the tab column's 520 on 2026-11-24;
+				### the model cell took the 8, for its long names).
 				### The tier always shows; the other three come later, so each
-				### sits in an ungated slot of its size and the row is 472 wide
+				### sits in an ungated slot of its size and the row is 480 wide
 				### whichever show. Centred at 360 (no benchmark) and grown to 472,
 				### it ended near 529, past the column (gui_modding_guide.md
 				### gotcha #43). An empty slot is a gap, not a narrower row.
@@ -1092,10 +1101,10 @@ types cultural_hegemony_widget_types
 					### The world's leading cultural power's political model, as its
 					### slice colour in the models pie below, once the first census
 					### has run. Codes: ch_set_political_model's 1-15. The cell is
-					### 136 wide, for the longest short names ("Constitutional",
+					### 144 wide, for the longest short names ("Constitutional",
 					### "Military Junta") at 16; the full name is on hover.
 					widget = {
-						size = { 136 58 }
+						size = { 144 58 }
 
 						flowcontainer = {
 							ignoreinvisible = yes
@@ -1105,10 +1114,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)1' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_communist.dds"
@@ -1122,10 +1131,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)2' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_anarchist.dds"
@@ -1139,10 +1148,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)3' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_fascist.dds"
@@ -1156,10 +1165,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)4' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_corporatist.dds"
@@ -1173,10 +1182,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)5' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_socialist.dds"
@@ -1190,10 +1199,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)6' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_absolutist.dds"
@@ -1207,10 +1216,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)7' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_royalist_constitutional.dds"
@@ -1224,10 +1233,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)8' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_religious.dds"
@@ -1241,10 +1250,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)9' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_reactionary.dds"
@@ -1258,10 +1267,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)10' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_military_junta.dds"
@@ -1275,10 +1284,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)11' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_liberal.dds"
@@ -1292,10 +1301,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)12' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_other.dds"
@@ -1309,10 +1318,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)13' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_technocratic.dds"
@@ -1326,10 +1335,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)14' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_republican.dds"
@@ -1343,10 +1352,10 @@ types cultural_hegemony_widget_types
 							te_ch_ov_icon_label = {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('ch_disp_model_code'), '(CFixedPoint)15' )]"
 								blockoverride "cell_size" {
-									size = { 136 58 }
+									size = { 144 58 }
 								}
 								blockoverride "label_width" {
-									max_width = 134
+									max_width = 142
 								}
 								blockoverride "icon_texture" {
 									texture = "gfx/interface/journal_entry_widgets/ch_model_pie/ch_pie_developmentalist_junta.dds"
@@ -1531,9 +1540,11 @@ types cultural_hegemony_widget_types
 				### Beside it, the Hegemony Bonus: the cultural_hegemony_effect
 				### modifier, which sits on the journal entry and so showed only
 				### in the entry's own modifier strip, never in the tabs. Its
-				### effects at the strength applied are on hover. Two cells of 234
-				### and 4 between: 472 of the 474 column, as Row 1. Both always
-				### show, so the centred row keeps its width (gotcha #43).
+				### effects at the strength applied are on hover. Two cells of 238
+				### and 4 between: the 480 column, as Row 1, and Banking's,
+				### the UN's and Global Warming's cells (234, in 474, until
+				### 2026-11-24). Both always show, so the centred row keeps its
+				### width (gotcha #43).
 				flowcontainer = {
 					direction = horizontal
 					parentanchor = hcenter
@@ -1542,9 +1553,9 @@ types cultural_hegemony_widget_types
 
 					te_banking_ov_cell = {
 						tooltip = "je_ch_ov_prog_tt"
-						size = { 234 70 }
+						size = { 238 70 }
 						blockoverride "caption_width" {
-							max_width = 150
+							max_width = 154
 						}
 						blockoverride "caption" {
 							text = "je_ch_ov_prog_label"
@@ -1565,19 +1576,19 @@ types cultural_hegemony_widget_types
 						blockoverride "word" {
 							te_banking_ov_word = {
 								visible = "[GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-								max_width = 150
+								max_width = 154
 								text = "je_ch_ov_prog_no_ministry"
 							}
 							te_banking_ov_word = {
 								visible = "[Not( GetScriptedGui('ch_ministry_missing_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-								max_width = 150
+								max_width = 154
 								text = "je_ch_ov_prog_running"
 							}
 						}
 						blockoverride "third_line" {
 							te_banking_ov_word = {
 								position = { 78 46 }
-								max_width = 150
+								max_width = 154
 								text = "je_ch_ov_prog_funding"
 							}
 						}
@@ -1590,9 +1601,9 @@ types cultural_hegemony_widget_types
 					### the entry carries no cultural_hegemony_effect.
 					te_banking_ov_cell = {
 						tooltip = "je_ch_ov_bonus_tt"
-						size = { 234 70 }
+						size = { 238 70 }
 						blockoverride "caption_width" {
-							max_width = 150
+							max_width = 154
 						}
 						blockoverride "caption" {
 							text = "je_ch_ov_bonus_label"
@@ -1613,12 +1624,12 @@ types cultural_hegemony_widget_types
 						blockoverride "word" {
 							te_banking_ov_word = {
 								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' )]"
-								max_width = 150
+								max_width = 154
 								text = "je_ch_ov_bonus_active"
 							}
 							te_banking_ov_word = {
 								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' ) )]"
-								max_width = 150
+								max_width = 154
 								text = "je_ch_ov_bonus_none"
 							}
 						}
@@ -1626,13 +1637,13 @@ types cultural_hegemony_widget_types
 							te_banking_ov_word = {
 								visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' )]"
 								position = { 78 46 }
-								max_width = 150
+								max_width = 154
 								text = "je_ch_ov_bonus_strength"
 							}
 							te_banking_ov_word = {
 								visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('ch_bonus_strength_display'), '(CFixedPoint)0' ) )]"
 								position = { 78 46 }
-								max_width = 150
+								max_width = 154
 								text = "je_ch_ov_bonus_from"
 							}
 						}
@@ -1652,7 +1663,6 @@ types cultural_hegemony_widget_types
 	### every condition with ticks and crosses.
 	type te_ch_sec_programmes = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -1680,7 +1690,7 @@ types cultural_hegemony_widget_types
 				parentanchor = hcenter
 				autoresize = yes
 				multiline = yes
-				maximumsize = { 474 -1 }
+				maximumsize = { 480 -1 }
 				align = hcenter|nobaseline
 				using = ch_fontsize_row
 				text = "je_ch_prog_needs_ministry"
@@ -1911,7 +1921,6 @@ types cultural_hegemony_widget_types
 	### with zero at the centre line, the value. Then the totals under a rule.
 	type te_ch_sec_breakdown = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -2127,7 +2136,7 @@ types cultural_hegemony_widget_types
 			### The total under the rule, alone. It always shows.
 			divider_clean = {
 				blockoverride "size" {
-					size = { 474 2 }
+					size = { 480 2 }
 				}
 			}
 			### Raw score
@@ -2147,7 +2156,6 @@ types cultural_hegemony_widget_types
 	### ch_board_has_rows and a line says when the board fills.
 	type te_ch_sec_board = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -2204,7 +2212,7 @@ types cultural_hegemony_widget_types
 				tooltip = "je_ch_widget_rank_tt"
 				text = "je_ch_widget_board_us"
 				autoresize = yes
-				max_width = 474
+				max_width = 480
 				align = left|nobaseline
 				using = ch_fontsize_row
 				margin_top = 4
@@ -2227,7 +2235,6 @@ types cultural_hegemony_widget_types
 	### scripts/image_pipeline/gen_ch_model_pie_textures.py.
 	type te_ch_sec_models = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 
@@ -2257,8 +2264,8 @@ types cultural_hegemony_widget_types
 				text = "je_ch_widget_models_pending"
 				autoresize = yes
 				multiline = yes
-				minimumsize = { 474 -1 }
-				maximumsize = { 474 -1 }
+				minimumsize = { 480 -1 }
+				maximumsize = { 480 -1 }
 				align = left|nobaseline
 				using = ch_fontsize_row
 				default_format = "#lore"
@@ -2894,7 +2901,12 @@ types cultural_hegemony_widget_types
 	### COMPOSERS — the one order of the sections, for both hosts
 	### ==========================================================================
 
-	### Everything a returning player checks, open by default.
+	### Everything a returning player checks, open by default. The sections flow
+	### with no anchor of their own: each is 520, its header's width, so this
+	### composer and the wide columns' wrappers are 520 too and an anchor placed
+	### nothing, while a section anchored under the board kept its first-layout
+	### place when the board's list grew a row above it (gui_modding_guide.md
+	### gotcha #52; from #2016).
 	type te_ch_status_sections = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -2937,6 +2949,14 @@ types cultural_hegemony_widget_types
 				}
 				### Show the political models on the map (gui/te_map_widgets.gui; journal_map_modes.md).
 				te_jmap_ch_map_button = {}
+				### Full screen, the page's title across the frame: the window's full-screen
+				### mount fills te_tab_header_size (gen_te_systems_window.py); everywhere else
+				### it is vanilla's own 554 (@panel_width_plus_14).
+				blockoverride "size" {
+					block "te_tab_header_size" {
+						size = { 554 44 }
+					}
+				}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_cultural_hegemony')]"

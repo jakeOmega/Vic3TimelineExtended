@@ -222,10 +222,12 @@ te_grid_world_update_effect = {
 		te_grid_close_region_effect = yes
 	}
 
-	# Each country's stations, in the order the Power Grids tab lists them.
+	# Each country's stations, in the order the Power Grids tab lists them,
+	# and the overview's Sent and Received as of this run.
 	every_in_global_list = {
 		variable = te_grid_record_countries
 		te_grid_order_stations_effect = yes
+		te_grid_store_tab_flows_effect = yes
 	}
 
 	te_grid_staffing_info_end_effect = yes
@@ -252,8 +254,45 @@ te_grid_record_clear_effect = {
 		clear_variable_list = te_grid_hubs
 		clear_variable_list = te_grid_stations
 		clear_variable_list = te_grid_cable_reach
+		te_grid_clear_tab_flows_effect = yes
 	}
 	clear_global_variable_list = te_grid_record_countries
+}
+
+# Country scope, at the end of a run, after te_grid_order_stations_effect: the
+# Power Grids tab's Sent and Received (te_grid_tab_sent_disp and the rest),
+# each from its live value, which walks every state of the country. The tab
+# read the four live six times a frame while open (from #2016). Their figures
+# change only at a run (te_grid_flow, te_grid_command), so the stored ones lag
+# only a station gone offline, demolished or lost with its state since, as the
+# Stations table's list does. Display only: nothing else reads them.
+te_grid_store_tab_flows_effect = {
+	set_variable = { name = te_grid_tab_sent value = te_grid_tab_sent_live }
+	set_variable = { name = te_grid_tab_senders value = te_grid_tab_senders_live }
+	set_variable = { name = te_grid_tab_received value = te_grid_tab_received_live }
+	set_variable = { name = te_grid_tab_receivers value = te_grid_tab_receivers_live }
+}
+
+# Country scope, a country of the last run's record (te_grid_record_clear_effect):
+# a country that has left the run (its last station gone) keeps no figures;
+# one still in it has them written again at the run's end.
+te_grid_clear_tab_flows_effect = {
+	if = {
+		limit = { has_variable = te_grid_tab_sent }
+		remove_variable = te_grid_tab_sent
+	}
+	if = {
+		limit = { has_variable = te_grid_tab_senders }
+		remove_variable = te_grid_tab_senders
+	}
+	if = {
+		limit = { has_variable = te_grid_tab_received }
+		remove_variable = te_grid_tab_received
+	}
+	if = {
+		limit = { has_variable = te_grid_tab_receivers }
+		remove_variable = te_grid_tab_receivers
+	}
 }
 
 # Country scope, at the end of a run, after the last grid: its built stations

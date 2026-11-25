@@ -706,7 +706,7 @@ HAS_RECORD = "GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('te_climate_ha
 
 
 def tile_rows():
-    """The visible-condition part and the whole text of each te_state_climate_row in the Local Climate tile."""
+    """The visible-condition part and the whole text of each row (te_state_tile_row) in the Local Climate tile."""
     text = WIDGETS.read_text(encoding="utf-8-sig")
     m = re.search(r"(?m)^\s*type te_state_climate_tile = flowcontainer \{", text)
     depth, i = 1, m.end()
@@ -717,7 +717,7 @@ def tile_rows():
             continue
         depth += {"{": 1, "}": -1}.get(c, 0)
         i += 1
-    rows = text[m.end():i - 1].split("te_state_climate_row = {")[1:]
+    rows = text[m.end():i - 1].split("te_state_tile_row = {")[1:]
     return [(row.split("row_tooltip")[0], row) for row in rows]
 
 

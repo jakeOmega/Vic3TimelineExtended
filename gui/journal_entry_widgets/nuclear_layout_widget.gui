@@ -198,6 +198,14 @@ types nuclear_layout_widget_types
 				}
 				### Show the world's nuclear powers and your deterrent on the map (gui/te_map_widgets.gui; journal_map_modes.md).
 				te_jmap_nuclear_map_button = {}
+				### Full screen, the page's title across the frame: the window's full-screen
+				### mount fills te_tab_header_size (gen_te_systems_window.py); everywhere else
+				### it is vanilla's own 554 (@panel_width_plus_14).
+				blockoverride "size" {
+					block "te_tab_header_size" {
+						size = { 554 44 }
+					}
+				}
 				te_help_button = {
 					visible = "[Not( GetMetaPlayer.IsObserver )]"
 					onclick = "[GetVariableSystem.Set('te_popup', 'help_nuclear_weapons')]"
@@ -312,7 +320,14 @@ types nuclear_layout_widget_types
 		}
 
 		### The player's: another country's copy of the taboo and Nuclear
-		### Powers is in column 2 (te_nuclear_world_column).
+		### Powers is in column 2 (te_nuclear_world_column). For another country
+		### (National Info) the column closes up on the same Country.IsLocalPlayer
+		### its wrapper carries, so its two columns sit centred rather than
+		### beside an empty 520 band (2026-11-24, the full-screen frame rework).
+		blockoverride "column_3_visible" {
+			visible = "[Country.IsLocalPlayer]"
+		}
+
 		blockoverride "column_3" {
 			flowcontainer = {
 				direction = vertical

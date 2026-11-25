@@ -91,7 +91,9 @@ One of the two identities added on 2026-11-16, beside the Research Commons: memb
 
 **The rest.** Summit option p, Debt Conference (`te_pb_summit_debt_conference`, every member, −0.5pp `country_risk_premium_add`, member relations). Statue `pm_power_bloc_statue_creditors_consortium` (prestige 3; +10% `state_capitalists_investment_pool_efficiency_mult` in its own state) and HQ `pm_hq_creditors_consortium` (−0.5pp premium, +10% leverage generation, capitalists' pool efficiency). A statue can go in every state of every member, and a country-wide line is paid once a statue: the −0.25pp premium a statue it first carried reached the cyclical premium's −10pp clamp at forty (review, 2026-11-16). So its identity effect is the state's, as vanilla's statues have theirs, and the premium cut is the headquarters', one to a bloc. Subjugation: `country_subjugation_creditor_strength_add = 0.4` in the identity's own `leader_modifier`, paid against a member in the leader's receivership. Bloc names: four generic ones. Concept `concept_consortium_guarantee`.
 
-**Not built.** The banking dashboard's Backstops rows don't list the consortium's members (the sums are in the premium breakdowns); the principles reuse the Foreign Investment and Construction icons.
+**Banking panel.** The Backstops rows give the standing guarantee one line on each side (from #2016, when both sums counted it with no row): the leader's "The consortium — Members guaranteed" (`te_mon_bs_cred_pts`, summed by `te_cred_discover_leader_costs` beside the cost it adds to `te_mon_arr_provider_pts`), and each member's "Consortium guarantee" under the leader's flag (`te_mon_bs_cred_received_display`, its `te_cred_guarantee_relief`). `test_banking_layout.BackstopSumsTest` holds every term of both sums to a row.
+
+**Not built.** The Backstops rows don't list the guaranteed members one by one (the leader's line is their sum); the principles reuse the Foreign Investment and Construction icons.
 
 ## Research Commons
 

@@ -135,35 +135,43 @@ class WideTest(unittest.TestCase):
     so it shows the player's own market, the body's default view, as the
     window wants."""
 
-    def test_the_wide_layout_takes_the_tabs_order_in_three_columns(self):
-        # With the Global Warming rule off columns 1 and 3 close up on the rule,
-        # which the overview carries on its root, the policies on their header
-        # and panel and the record on its composer: one more gate on the first
-        # two, the record's own.
+    def test_the_wide_layout_takes_three_balanced_columns(self):
+        # Balanced by height (2026-11-24, a great power in 2032: 690, 885 and
+        # 860, where the tab's order down the columns ran 1310, 720 and 390):
+        # the overview and Top Emitters, then Mitigation Policies, then the
+        # Fossil Transition and the record. With the Global Warming rule off
+        # columns 1 and 2 close up on the rule, which the overview and Top
+        # Emitters carry on their roots and the policies on their header and
+        # panel: one more gate on those three. Column 3 always draws, the
+        # Fossil Transition with the rule off too, and the record under it
+        # carries the rule on its composer.
+        want = [["te_gw_overview_panel", "te_gw_sec_emitters"], ["te_gw_sec_policies"],
+                ["te_gw_sec_transition"] + REFERENCE]
         columns = assert_wide_matches_narrow(self, "te_gw_wide_sections",
                                              layout=("te_gw_tab_body", "te_gw_tab_layout"),
-                                             added_gates=("te_gw_overview_panel", "te_gw_sec_policies"))
+                                             added_gates=("te_gw_overview_panel", "te_gw_sec_emitters",
+                                                          "te_gw_sec_policies"),
+                                             columns=want)
         rule = "GetScriptedGui('gw_rule_enabled_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )"
         wide = _strip_comments(_read(GUI))
         wide = wide[wide.index("type te_gw_wide_sections"):]
-        for n in (1, 3):
+        for n in (1, 2):
             self.assertRegex(wide, rf'blockoverride "column_{n}_visible" \{{\s*visible = "\[{re.escape(rule)}\]"\s*\}}')
-        self.assertNotIn("column_2_visible", wide.split("\n}\n")[0])
-        # what the column's gate stands for: the overview's own root, and the
-        # policies' header and panel, each on the rule
+        self.assertNotIn("column_3_visible", wide.split("\n}\n")[0])
+        # what the columns' gate stands for: the overview's and Top Emitters'
+        # own roots, and the policies' header and panel, each on the rule
         text = _strip_comments(_read(GUI))
-        overview = [v for kind, k, v in _children(gh._type_body(text, "te_gw_overview_panel")) if k == "visible"]
-        self.assertEqual(len(overview), 1)
-        self.assertIn(rule, overview[0])
+        for name in ("te_gw_overview_panel", "te_gw_sec_emitters"):
+            own = [v for kind, k, v in _children(gh._type_body(text, name)) if kind == "property" and k == "visible"]
+            self.assertEqual(len(own), 1, name)
+            self.assertIn(rule, own[0], name)
         # (the policies read Country, which the gw_market_country block sets to the entry's country here)
         policies = [(k, inner) for kind, k, inner in _children(gh._type_body(text, "te_gw_sec_policies")) if kind == "widget"]
         self.assertEqual([k for k, _ in policies], ["gw_section_header", "gw_panel"])
         for k, inner in policies:
             own = [v for kind, kk, v in _children(inner) if kind == "property" and kk == "visible"]
             self.assertIn(rule.replace("JournalEntry.GetCountry.MakeScope", "Country.MakeScope"), own[0], k)
-        self.assertEqual(columns, [["te_gw_overview_panel", "te_gw_sec_policies"],
-                                   ["te_gw_sec_emitters", "te_gw_sec_transition"],
-                                   REFERENCE])
+        self.assertEqual(columns, want)
 
     def test_the_registry_names_it(self):
         from scripts.generators import gen_te_systems_window as gen
