@@ -338,7 +338,8 @@ class SelectionTest(unittest.TestCase):
 
 class StripTest(unittest.TestCase):
     """te_ni_strips: Pops, then each public tab in NI_ORDER, five a strip, at
-    the narrow strip width; every gate on the window's Country."""
+    the narrow strip width, a short last strip narrowed so its tabs are a full
+    strip's width; every gate on the window's Country."""
 
     @classmethod
     def setUpClass(cls):
@@ -349,11 +350,29 @@ class StripTest(unittest.TestCase):
         out = []
         for m in re.finditer(r"\ttab_buttons = \{", strips):
             strip = _block_at(strips, m.start() + 1)
-            out.append([re.search(r"GetVariableSystem\.Set\('te_ni_tab', '(\w+)'\)", block).group(1)
-                        for block in re.findall(r'blockoverride "\w+_button_click" \{[^}]*\}', strip)])
-            self.assertEqual(strip.count("minimumsize = { 540 -1 }"), 1)
-            self.assertEqual(strip.count("maximumsize = { 540 -1 }"), 1)
+            keys = [re.search(r"GetVariableSystem\.Set\('te_ni_tab', '(\w+)'\)", block).group(1)
+                    for block in re.findall(r'blockoverride "\w+_button_click" \{[^}]*\}', strip)]
+            out.append(keys)
+            width = gen.strip_width(len(keys), gen.NI_PER_STRIP)
+            self.assertEqual(strip.count(f"minimumsize = {{ {width} -1 }}"), 1)
+            self.assertEqual(strip.count(f"maximumsize = {{ {width} -1 }}"), 1)
         return out
+
+    def test_a_short_strips_tabs_are_as_wide_as_a_full_strips(self):
+        """vanilla's tab_buttons shares its width, less its margin and end dividers, among the tabs it shows; a
+        strip of two at 540 drew each tab two and a half times a full strip's (2026-11-24, seen in game). The
+        width follows the tabs a strip lists, so it holds while each of them shows; a tab its game rule hides
+        still widens the others on its strip (#2039)."""
+        self.assertEqual(gen.strip_width(gen.NI_PER_STRIP, gen.NI_PER_STRIP), 540, "a full strip: the narrow width")
+        full = (540 - gen.STRIP_FRAME) / gen.NI_PER_STRIP
+        for n in range(1, gen.NI_PER_STRIP + 1):
+            with self.subTest(tabs=n):
+                self.assertLessEqual(abs((gen.strip_width(n, gen.NI_PER_STRIP) - gen.STRIP_FRAME) / n - full), 0.5)
+        with mock.patch.object(gen, "TABS", _every_candidate_public()):
+            strips = _type_body(_strip_comments(gen.render_ni()), "te_ni_strips")
+        widths = [int(w) for w in re.findall(r"minimumsize = \{ (\d+) -1 \}", strips)]
+        self.assertEqual(widths, [540, 540, gen.strip_width(2, gen.NI_PER_STRIP)])
+        self.assertEqual(widths[-1], 226)
 
     def test_strips_of_five_in_order(self):
         keys = [gen.NI_FALLBACK] + [t.key for t in gen.ni_tabs()]

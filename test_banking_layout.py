@@ -1484,7 +1484,7 @@ class FlagGroupTest(unittest.TestCase):
         for key in self.LISTS.values():
             with self.subTest(label=key):
                 text = re.sub(r"\[[^\[\]]*\]", "99", self.loc[key])
-                text = re.sub(r"#[A-Za-z_]+ ", "", text).replace("#!", "")
+                text = re.sub(r"#[A-Za-z_]+(?:;\S*)? ", "", text).replace("#!", "")
                 self.assertLessEqual(len(text) * UNITS["row"] * MARGIN, 160, text)
 
     def test_no_figure_prints_as_zero(self):

@@ -1345,6 +1345,134 @@ types space_race_widget_types
 		}
 	}
 
+	### Program Effects: the modifiers the milestone's entry puts on the country,
+	### which the journal window draws in its header and a tab otherwise shows
+	### in te_je_modifier_strip (gui/te_system_tab_widgets.gui): the same two
+	### datamodels, grouped under a ruled subheading (2026-11-24 evaluation:
+	### about thirty icons with no heading read as part of the Program row).
+	### Ongoing: JournalEntry.GetScalingModifiers, the entry's
+	### scaling_modifiers_while_active (cost, funding, approach, choices, and
+	### solar colonization's worlds, facilities and colonies), 35 px icons, 12 to
+	### a row (12 x 35 + 11 x 5 = 475), left-aligned so a short last row sits
+	### under the one above. Timed: JournalEntry.GetTimedModifiers (the safety
+	### review after a setback), one row each: icon, name and time left, 25 + 269
+	### + 170 + 2 x 8 = 480. The engine gives the two lists and no finer kind, so
+	### there are two groups. Each group, and the panel, draws only with
+	### something in it. The Timeline Extended window's milestone frames draw it
+	### under the entry's datacontext, in the player's own part
+	### (gen_te_systems_window._milestone); te_own_country_only as the shared
+	### strip has it, since it reads JournalEntry (gotcha #35).
+	type te_sr_program_effects = flowcontainer {
+		using = te_own_country_only
+		parentanchor = hcenter
+		direction = vertical
+		ignoreinvisible = yes
+
+		te_sr_panel = {
+			visible = "[Or( Not( IsDataModelEmpty( JournalEntry.GetScalingModifiers ) ), Not( IsDataModelEmpty( JournalEntry.GetTimedModifiers ) ) )]"
+			spacing = 4
+
+			te_sr_subheader = {
+				tooltip = "je_space_race_widget_effects_header_tt"
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_space_race_widget_effects_header"
+				}
+			}
+
+			flowcontainer = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetScalingModifiers ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				minimumsize = { 480 -1 }
+
+				textbox = {
+					autoresize = yes
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					default_format = "#title"
+					text = "je_space_race_widget_effects_ongoing"
+					tooltip = "je_space_race_widget_effects_ongoing_tt"
+				}
+				flowcontainer = {
+					spacing = 5
+					wrap_count = 12
+					datamodel = "[JournalEntry.GetScalingModifiers]"
+
+					item = {
+						icon = {
+							size = { 35 35 }
+							using = tooltip_se
+							tooltip = "[ScalingModifier.GetTooltip]"
+							texture = "[ScalingModifier.GetIcon]"
+						}
+					}
+				}
+			}
+
+			flowcontainer = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetTimedModifiers ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				minimumsize = { 480 -1 }
+
+				textbox = {
+					autoresize = yes
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					default_format = "#title"
+					text = "je_space_race_widget_effects_timed"
+					tooltip = "je_space_race_widget_effects_timed_tt"
+				}
+				flowcontainer = {
+					direction = vertical
+					spacing = 4
+					datamodel = "[JournalEntry.GetTimedModifiers]"
+
+					item = {
+						flowcontainer = {
+							direction = horizontal
+							spacing = 8
+							tooltip = "[TimedModifier.GetTooltip]"
+							using = tooltip_se
+
+							icon = {
+								size = { 25 25 }
+								parentanchor = vcenter
+								texture = "[TimedModifier.GetIcon]"
+							}
+							textbox = {
+								autoresize = yes
+								multiline = yes
+								minimumsize = { 269 -1 }
+								maximumsize = { 269 -1 }
+								parentanchor = vcenter
+								align = left|nobaseline
+								using = te_sr_fontsize_row
+								text = "[TimedModifier.GetName]"
+							}
+							textbox = {
+								autoresize = yes
+								multiline = yes
+								minimumsize = { 170 -1 }
+								maximumsize = { 170 -1 }
+								parentanchor = vcenter
+								align = right|nobaseline
+								using = te_sr_fontsize_row
+								default_format = "#v"
+								text = "[TimedModifier.GetRemainingDuration]"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	### One colony in Colonies (audit SPC-5; the colony sections of slices 2-6 in
 	### one table), in its own framed box (colony management design § 8): its
 	### icon and name on the first line, the name a button (its hover its
@@ -7081,6 +7209,10 @@ types space_race_widget_types
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_fl_drive_tt"
 
+				### The drive, or while a refit runs, "Refit" and its months in its
+				### place: the drive's override hides it then. Neither has a
+				### background: the engine drew one on this flowcontainer smaller
+				### than its autoresized text and off to one side (2026-11-24).
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
@@ -7093,13 +7225,10 @@ types space_race_widget_types
 				flowcontainer = {
 					parentanchor = left|vcenter
 					direction = horizontal
-					spacing = 2
+					spacing = 4
 					ignoreinvisible = yes
 					block "fl_refit_visible" {}
 
-					background = {
-						using = entry_bg_fancy_dark
-					}
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
@@ -8545,7 +8674,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#Y"
+				default_format = "#yellow;bold"
 				tooltip = "je_space_race_widget_ld_due_tt"
 				text = "je_space_race_widget_ld_due"
 				block "lr_due_visible" {}

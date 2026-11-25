@@ -1668,11 +1668,30 @@ types global_warming_widget_types
 				text = "te_hist_since"
 			}
 
-			### ---- Global temperature anomaly (0-4 C, the journal entry's scale) -
-			te_hist_gw_temp = {}
+			### Nothing stored yet, or a country that keeps no history: said once, here,
+			### and the charts wait (te_history_section_empty). The entry's country, as the
+			### line above reads it.
+			te_history_section_empty = {
+				blockoverride "empty_note_visible" {
+					visible = "[IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') )]"
+				}
+			}
 
-			### ---- This market's share of world emissions (0-100 %) -------------
-			te_hist_gw_share = {}
+			### The two charts, once the store holds a sample: until then each drew its own
+			### frame around the same sentence.
+			flowcontainer = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 2
+
+				### ---- Global temperature anomaly (0-4 C, the journal entry's scale) -
+				te_hist_gw_temp = {}
+
+				### ---- This market's share of world emissions (0-100 %) -------------
+				te_hist_gw_share = {}
+			}
 		}
 	}
 
