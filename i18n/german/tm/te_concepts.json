@@ -2224,16 +2224,16 @@
   "de": "Die Förderung von Universitäten und Forschungseinrichtungen hilft, unsere klügsten Köpfe im Land zu halten."
  },
  "ch_tier_hegemon": {
-  "en": "#G Cultural Hegemon#!",
-  "de": "#G Kulturhegemon#!"
+  "en": "#blue_value Cultural Hegemon#!",
+  "de": "#blue_value Kulturhegemon#!"
  },
  "ch_tier_major": {
   "en": "#G Major Cultural Power#!",
   "de": "#G Bedeutende Kulturmacht#!"
  },
  "ch_tier_minor": {
-  "en": "Minor Cultural Influence",
-  "de": "Geringer kultureller Einfluss"
+  "en": "#bold;gold Minor Cultural Influence#!",
+  "de": "#bold;gold Geringer kultureller Einfluss#!"
  },
  "ch_tier_moderate": {
   "en": "#bold;yellow Moderate Cultural Influence#!",
@@ -2244,8 +2244,8 @@
   "de": "#R Vernachlässigbarer kultureller Einfluss#!"
  },
  "ch_tier_significant": {
-  "en": "#bold;yellow Significant Cultural Presence#!",
-  "de": "#bold;yellow Bedeutende kulturelle Präsenz#!"
+  "en": "#v Significant Cultural Presence#!",
+  "de": "#v Bedeutende kulturelle Präsenz#!"
  },
  "ch_touring_exhibition": {
   "en": "Touring Exhibition",

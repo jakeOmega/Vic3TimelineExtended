@@ -688,8 +688,8 @@
   "es": "#G Estable#!"
  },
  "je_colonial_empire_band_strained": {
-  "en": "#o Strained#!",
-  "es": "#o En tensión#!"
+  "en": "#bold;gold Strained#!",
+  "es": "#bold;gold En tensión#!"
  },
  "je_colonial_empire_band_unknown": {
   "en": "#lore unknown#!",
@@ -1216,8 +1216,8 @@
   "es": "#header $je_colonial_empire_row_invest$#!\\n#G En marcha#! en el nivel #v [Country.MakeScope.ScriptValue('colonial_invest_level_value')|0]#! de 3"
  },
  "je_colonial_empire_ov_isolation": {
-  "en": "#o Isolated#!",
-  "es": "#o Aislamiento#!"
+  "en": "#bold;gold Isolated#!",
+  "es": "#bold;gold Aislamiento#!"
  },
  "je_colonial_empire_ov_isolation_tt": {
   "en": "#header Diplomatic Isolation#!\\nThe condemning [Concept('concept_great_power','great powers')] hold a third of the [concept_prestige] of all great powers and ourselves. Until their share falls, [concept_colonial_stability] takes a further loss every month.",
@@ -1436,8 +1436,8 @@
   "es": "Presión internacional"
  },
  "je_colonial_empire_pressure_isolation": {
-  "en": "#o Diplomatic isolation#!",
-  "es": "#o Aislamiento diplomático#!"
+  "en": "#bold;gold Diplomatic isolation#!",
+  "es": "#bold;gold Aislamiento diplomático#!"
  },
  "je_colonial_empire_pressure_isolation_value": {
   "en": "[Country.MakeScope.ScriptValue('colonial_gp_isolation_loss')|=+2]/mo",
@@ -1704,12 +1704,12 @@
   "es": "[SelectLocalization( Country.IsLocalPlayer, 'je_colonial_empire_status_strained_ours', 'je_colonial_empire_status_strained_theirs' )]"
  },
  "je_colonial_empire_status_strained_ours": {
-  "en": "#o Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
-  "es": "#o El imperio colonial está sometido a tensión.#! El aumento de las tensiones y la presión internacional amenazan nuestro dominio."
+  "en": "#bold;gold Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold.",
+  "es": "#bold;gold El imperio colonial está sometido a tensión.#! El aumento de las tensiones y la presión internacional amenazan nuestro dominio."
  },
  "je_colonial_empire_status_strained_theirs": {
-  "en": "#o Colonial empire is under strain.#! Rising tensions and international pressure threaten its hold.",
-  "es": "#o El imperio colonial está bajo tensión.#! La tensión en aumento y la presión internacional amenazan su control."
+  "en": "#bold;gold Colonial empire is under strain.#! Rising tensions and international pressure threaten its hold.",
+  "es": "#bold;gold El imperio colonial está bajo tensión.#! La tensión en aumento y la presión internacional amenazan su control."
  },
  "je_colonial_empire_subject_gdp_tt": {
   "en": "[concept_gdp]: @money! #v [State.GetCountry.MakeScope.ScriptValue('colonial_subject_disp_gdp')|D]#! a year.",
@@ -2104,8 +2104,8 @@
   "es": "#bold Calentamiento:#! #R Grave#! - La crisis climática es dramática. La hambruna, el colapso ecológico y el aumento de la mortalidad amenazan la civilización."
  },
  "je_global_warming_status_significant": {
-  "en": "#bold Warming:#! #o Significant#! - Warming has reached dangerous levels. Coastal flooding, drought, and mass displacement accelerate.",
-  "es": "#bold Calentamiento:#! #o Considerable#! - El calentamiento ha alcanzado niveles peligrosos. Se aceleran las inundaciones costeras, la sequía y los desplazamientos masivos."
+  "en": "#bold Warming:#! #bold;gold Significant#! - Warming has reached dangerous levels. Coastal flooding, drought, and mass displacement accelerate.",
+  "es": "#bold Calentamiento:#! #bold;gold Considerable#! - El calentamiento ha alcanzado niveles peligrosos. Se aceleran las inundaciones costeras, la sequía y los desplazamientos masivos."
  },
  "je_global_warming_status_slight": {
   "en": "#bold Warming:#! #bold;yellow Slight#! - Global temperatures have risen slightly. Early signs of shifting weather patterns emerge.",
@@ -2836,8 +2836,8 @@
   "es": "#bold;yellow Defendida.#! Nuestras capacidades de inteligencia son adecuadas, aunque adversarios decididos pueden encontrar vulnerabilidades.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! de la mejor del mundo; #bold Reforzada#! desde el [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%"
  },
  "je_iw_status_exposed": {
-  "en": "#o Exposed.#! Our intelligence infrastructure has significant gaps. We are vulnerable to sustained covert campaigns.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Defended#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%",
-  "es": "#o Expuesta.#! Nuestra infraestructura de inteligencia tiene lagunas importantes. Somos vulnerables a campañas encubiertas sostenidas.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! de la mejor del mundo; #bold Defendida#! desde el [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%"
+  "en": "#bold;gold Exposed.#! Our intelligence infrastructure has significant gaps. We are vulnerable to sustained covert campaigns.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Defended#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%",
+  "es": "#bold;gold Expuesta.#! Nuestra infraestructura de inteligencia tiene lagunas importantes. Somos vulnerables a campañas encubiertas sostenidas.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! de la mejor del mundo; #bold Defendida#! desde el [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%"
  },
  "je_iw_status_fortress": {
   "en": "#G Fortress.#! Our counterintelligence is virtually impenetrable: foreign operations face near-certain detection.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best",
@@ -7424,8 +7424,8 @@
   "es": "#R [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_empty_count')|0] vacíos#!"
  },
  "je_strategic_reserve_ov_held_word_full": {
-  "en": "#o [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] full#!",
-  "es": "#o [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] llenos#!"
+  "en": "#bold;gold [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] full#!",
+  "es": "#bold;gold [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_disp_full_count')|0] llenos#!"
  },
  "je_strategic_reserve_ov_held_word_none": {
   "en": "#G None#!",

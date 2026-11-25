@@ -16944,8 +16944,8 @@
   "de": "#R Schwerwiegend#!"
  },
  "gw_tier_short_significant": {
-  "en": "#o Significant#!",
-  "de": "#o Erheblich#!"
+  "en": "#bold;gold Significant#!",
+  "de": "#bold;gold Erheblich#!"
  },
  "gw_tier_short_slight": {
   "en": "#bold;yellow Slight#!",
@@ -18576,8 +18576,8 @@
   "de": "#R Angezweifelt#!"
  },
  "nd_credibility_band_mid": {
-  "en": "Steady",
-  "de": "Stetig"
+  "en": "#v Steady#!",
+  "de": "#v Stetig#!"
  },
  "nd_crisis_coercive_success": {
   "en": "Nuclear Brinkmanship Rewarded",

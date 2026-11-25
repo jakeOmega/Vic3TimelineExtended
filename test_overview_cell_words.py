@@ -23,9 +23,9 @@ GUI_DIR = ROOT / "gui"
 BOLD_LIMIT = 14     # characters of a word in a bold format in a 154 px line
 PLAIN_LIMIT = 17    # characters of a plain word there
 DEFAULT_WIDTH = 154
-# `#bold;yellow` and `#blue_value` are the bold yellow and blue of a ladder whose other states are
-# `#G` / `#R` / `#v` (PR #2031).
-_BOLD = re.compile(r"#(?:v|G|R|Y|b|bold|N|P|bold;yellow|blue_value)\s")
+# `#bold;gold`, `#bold;yellow` and `#blue_value` are the bold gold, yellow and blue of a ladder whose
+# other states are `#G` / `#R` / `#v` (PR #2031, test_tier_ladder_colours.py).
+_BOLD = re.compile(r"#(?:v|G|R|Y|b|bold|N|P|bold;gold|bold;yellow|blue_value)\s")
 _LOC_LINE = re.compile(r'\s*([A-Za-z0-9_.\-]+):\d*\s+"(.*)"\s*$')
 _WORD_BLOCK = re.compile(r"te_banking_ov_word\s*=\s*\{(.*?)\n\t*\}", re.S)
 _QUOTED_KEY = re.compile(r"'([A-Za-z0-9_.]+)'")

@@ -2224,16 +2224,16 @@
   "es": "La financiación de universidades e instituciones de investigación ayuda a retener a nuestras mentes más brillantes."
  },
  "ch_tier_hegemon": {
-  "en": "#G Cultural Hegemon#!",
-  "es": "#G Hegemón cultural#!"
+  "en": "#blue_value Cultural Hegemon#!",
+  "es": "#blue_value Hegemón cultural#!"
  },
  "ch_tier_major": {
   "en": "#G Major Cultural Power#!",
   "es": "#G Gran potencia cultural#!"
  },
  "ch_tier_minor": {
-  "en": "Minor Cultural Influence",
-  "es": "Influencia cultural menor"
+  "en": "#bold;gold Minor Cultural Influence#!",
+  "es": "#bold;gold Influencia cultural menor#!"
  },
  "ch_tier_moderate": {
   "en": "#bold;yellow Moderate Cultural Influence#!",
@@ -2244,8 +2244,8 @@
   "es": "#R Influencia cultural insignificante#!"
  },
  "ch_tier_significant": {
-  "en": "#bold;yellow Significant Cultural Presence#!",
-  "es": "#bold;yellow Presencia cultural significativa#!"
+  "en": "#v Significant Cultural Presence#!",
+  "es": "#v Presencia cultural significativa#!"
  },
  "ch_touring_exhibition": {
   "en": "Touring Exhibition",
