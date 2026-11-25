@@ -116,16 +116,16 @@ template te_ni_content_shown {
 types te_national_info_generated_types
 {
 	### The strips: Pops, then each public tab in NI_ORDER, five a strip, side by
-	### side and centered. Each tab is 105 wide (NI_TAB_WIDTH, on both halves of its
-	### slot) and each strip as wide as the tabs it shows, so a tab off its strip
-	### narrows the strip rather than widening its neighbours.
+	### side and centered, each at the narrow strip width; a last strip of fewer
+	### narrowed to its tabs, so each tab is as wide as a full strip's.
 	type te_ni_strips = hbox {
 		layoutpolicy_horizontal = expanding
 		layoutpolicy_vertical = fixed
 
 		expand = {}
 		tab_buttons = {
-			layoutpolicy_horizontal = preferred
+			minimumsize = { 540 -1 }
+			maximumsize = { 540 -1 }
 
 			### pops
 			blockoverride "first_button" {
@@ -140,13 +140,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "first_button_visibility" {
 				using = te_ni_pops_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "first_button_visibility_checked" {
 				using = te_ni_pops_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "first_button_selected" {
 				text = "te_pop_browser_tab_pops"
@@ -167,13 +163,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "second_button_visibility" {
 				using = te_ni_demographics_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "second_button_visibility_checked" {
 				using = te_ni_demographics_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_demographics"
@@ -193,13 +185,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "third_button_visibility" {
 				using = te_ni_nation_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "third_button_visibility_checked" {
 				using = te_ni_nation_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "third_button_selected" {
 				text = "te_window_tab_nation"
@@ -220,13 +208,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "fourth_button_visibility" {
 				using = te_ni_banking_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fourth_button_visibility_checked" {
 				using = te_ni_banking_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fourth_button_selected" {
 				text = "te_window_tab_banking"
@@ -247,13 +231,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "fifth_button_visibility" {
 				using = te_ni_tax_code_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fifth_button_visibility_checked" {
 				using = te_ni_tax_code_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fifth_button_selected" {
 				text = "te_window_tab_tax_code"
@@ -261,7 +241,8 @@ types te_national_info_generated_types
 			}
 		}
 		tab_buttons = {
-			layoutpolicy_horizontal = preferred
+			minimumsize = { 540 -1 }
+			maximumsize = { 540 -1 }
 
 			### grand_monuments
 			blockoverride "first_button" {
@@ -277,13 +258,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "first_button_visibility" {
 				using = te_ni_grand_monuments_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "first_button_visibility_checked" {
 				using = te_ni_grand_monuments_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_grand_monuments"
@@ -304,13 +281,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "second_button_visibility" {
 				using = te_ni_colonial_empire_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "second_button_visibility_checked" {
 				using = te_ni_colonial_empire_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_colonial_empire"
@@ -331,13 +304,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "third_button_visibility" {
 				using = te_ni_seabed_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "third_button_visibility_checked" {
 				using = te_ni_seabed_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "third_button_selected" {
 				text = "te_window_tab_seabed"
@@ -358,13 +327,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "fourth_button_visibility" {
 				using = te_ni_cultural_hegemony_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fourth_button_visibility_checked" {
 				using = te_ni_cultural_hegemony_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fourth_button_selected" {
 				text = "te_window_tab_cultural_hegemony"
@@ -385,13 +350,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "fifth_button_visibility" {
 				using = te_ni_space_race_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fifth_button_visibility_checked" {
 				using = te_ni_space_race_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "fifth_button_selected" {
 				text = "te_window_tab_space_race"
@@ -399,7 +360,8 @@ types te_national_info_generated_types
 			}
 		}
 		tab_buttons = {
-			layoutpolicy_horizontal = preferred
+			minimumsize = { 226 -1 }
+			maximumsize = { 226 -1 }
 
 			### nuclear_weapons
 			blockoverride "first_button" {
@@ -415,13 +377,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "first_button_visibility" {
 				using = te_ni_nuclear_weapons_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "first_button_visibility_checked" {
 				using = te_ni_nuclear_weapons_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "first_button_selected" {
 				text = "te_window_tab_nuclear_weapons"
@@ -442,13 +400,9 @@ types te_national_info_generated_types
 			}
 			blockoverride "second_button_visibility" {
 				using = te_ni_power_grids_selected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "second_button_visibility_checked" {
 				using = te_ni_power_grids_unselected
-				minimumsize = { 105 -1 }
-				maximumsize = { 105 -1 }
 			}
 			blockoverride "second_button_selected" {
 				text = "te_window_tab_power_grids"

@@ -337,9 +337,9 @@ class SelectionTest(unittest.TestCase):
 
 
 class StripTest(unittest.TestCase):
-    """te_ni_strips: Pops, then each public tab in NI_ORDER, five a strip;
-    each tab NI_TAB_WIDTH wide on both halves of its slot and each strip as
-    wide as the tabs it shows; every gate on the window's Country."""
+    """te_ni_strips: Pops, then each public tab in NI_ORDER, five a strip, at
+    the narrow strip width, a short last strip narrowed so its tabs are a full
+    strip's width; every gate on the window's Country."""
 
     @classmethod
     def setUpClass(cls):
@@ -353,91 +353,24 @@ class StripTest(unittest.TestCase):
             keys = [re.search(r"GetVariableSystem\.Set\('te_ni_tab', '(\w+)'\)", block).group(1)
                     for block in re.findall(r'blockoverride "\w+_button_click" \{[^}]*\}', strip)]
             out.append(keys)
-            # no width of its own: it takes its shown tabs', beside te_ni_strips' expands
-            own = [(kind, name, value) for kind, name, value in _children(strip[strip.index("{") + 1:-1])
-                   if kind == "property"]
-            self.assertEqual(own, [("property", "layoutpolicy_horizontal", "preferred")])
+            width = gen.strip_width(len(keys), gen.NI_PER_STRIP)
+            self.assertEqual(strip.count(f"minimumsize = {{ {width} -1 }}"), 1)
+            self.assertEqual(strip.count(f"maximumsize = {{ {width} -1 }}"), 1)
         return out
 
-    def _halves(self, strip):
-        """[(slot, selected half's (template, min, max), unselected half's)] in slot order."""
-        out = []
-        for slot in gen.SLOTS:
-            halves = []
-            for name in (f"{slot}_button_visibility", f"{slot}_button_visibility_checked"):
-                m = re.search(rf'blockoverride "{name}" \{{', strip)
-                if not m:
-                    break
-                body = strip[m.end():_close(strip, m.end() - 1)]
-                halves.append((re.search(r"using = (\w+)", body).group(1),
-                               re.findall(r"minimumsize = \{ (\d+) -1 \}", body),
-                               re.findall(r"maximumsize = \{ (\d+) -1 \}", body)))
-            if halves:
-                out.append((slot, *halves))
-        return out
-
-    def test_every_tab_is_one_width_on_both_halves(self):
-        """Vanilla's tab_buttons shares its width among the tabs it SHOWS, and
-        most of these follow a game rule (Tax Code's is off by default), so a
-        tab's width must not come from its strip: each half of every slot, the
-        tab and its selected face, is pinned by min and max to NI_TAB_WIDTH."""
-        width = str(gen.NI_TAB_WIDTH)
-        for text in (self.text, _strip_comments(self._every())):
-            strips = _type_body(text, "te_ni_strips")
-            for m in re.finditer(r"\ttab_buttons = \{", strips):
-                strip = _block_at(strips, m.start() + 1)
-                halves = self._halves(strip)
-                self.assertTrue(halves)
-                for slot, selected, unselected in halves:
-                    with self.subTest(slot=slot, tab=selected[0]):
-                        self.assertTrue(selected[0].endswith("_selected") and unselected[0].endswith("_unselected"))
-                        for _, lo, hi in (selected, unselected):
-                            self.assertEqual((lo, hi), ([width], [width]))
-
-    def _every(self):
+    def test_a_short_strips_tabs_are_as_wide_as_a_full_strips(self):
+        """vanilla's tab_buttons shares its width, less its margin and end dividers, among the tabs it shows; a
+        strip of two at 540 drew each tab two and a half times a full strip's (2026-11-24, seen in game)."""
+        self.assertEqual(gen.strip_width(gen.NI_PER_STRIP, gen.NI_PER_STRIP), 540, "a full strip: the narrow width")
+        full = (540 - gen.STRIP_FRAME) / gen.NI_PER_STRIP
+        for n in range(1, gen.NI_PER_STRIP + 1):
+            with self.subTest(tabs=n):
+                self.assertLessEqual(abs((gen.strip_width(n, gen.NI_PER_STRIP) - gen.STRIP_FRAME) / n - full), 0.5)
         with mock.patch.object(gen, "TABS", _every_candidate_public()):
-            return gen.render_ni()
-
-    def test_a_hidden_tab_narrows_its_strip_and_widens_no_neighbour(self):
-        """Every case the selection tests evaluate (each tab off its strip, on
-        it, open; every stored choice): per strip, at most one half of a slot
-        shows, every half that shows is NI_TAB_WIDTH whatever its neighbours
-        show, and the strip is as wide as the tabs it shows. Named: the
-        default game, with the Tax Code rule off, shows four tabs on the first
-        strip, each as wide as the second strip's five."""
-        raw = self._every()
-        tabs = [t for t in _every_candidate_public() if t.key in gen.NI_ORDER]
-        strips = [_block_at(_type_body(raw, "te_ni_strips"), m.start() + 1)
-                  for m in re.finditer(r"\ttab_buttons = \{", _type_body(raw, "te_ni_strips"))]
-        model = [[(slot, [(_template(raw, h[0]), int(h[1][0]), int(h[2][0])) for h in (sel, unsel)])
-                  for slot, sel, unsel in self._halves(strip)] for strip in strips]
-        counts = set()
-        cases = 0
-        for stored, shown in _cases(tabs):
-            cases += 1
-            widths = []
-            for strip in model:
-                shown_tabs = []
-                for slot, halves in strip:
-                    up = [(lo, hi) for expr, lo, hi in halves if _evaluate(expr, shown, stored)]
-                    self.assertLessEqual(len(up), 1, slot)
-                    shown_tabs += [lo for lo, hi in up if lo == hi]
-                    self.assertEqual([lo for lo, hi in up], [gen.NI_TAB_WIDTH] * len(up))
-                widths.append(len(shown_tabs))
-            counts.add(tuple(widths))
-        self.assertGreater(cases, 50)
-        self.assertIn((5, 5, 2), counts, "every tab on its strip")
-        self.assertTrue(any(c[0] < 5 for c in counts), "a case with a tab off the first strip")
-        # the default game: Tax Code's rule off, so its tab is off the first strip
-        tax = next(t for t in tabs if t.key == "tax_code")
-        self.assertIsNotNone(tax.strip, "Tax Code's tab follows its rule")
-        on = set()
-        for t in tabs:
-            if t.key != "tax_code":
-                on |= _atoms(gen.ni_open_gate(t)) | _atoms(gen.rooted(t.strip, gen.COUNTRY_ROOT))
-        first = [(slot, [_evaluate(expr, on, None) for expr, _, _ in halves]) for slot, halves in model[0]]
-        self.assertEqual(sum(any(up) for _, up in first), 4)
-        self.assertEqual(sum(any(_evaluate(expr, on, None) for expr, _, _ in halves) for _, halves in model[1]), 5)
+            strips = _type_body(_strip_comments(gen.render_ni()), "te_ni_strips")
+        widths = [int(w) for w in re.findall(r"minimumsize = \{ (\d+) -1 \}", strips)]
+        self.assertEqual(widths, [540, 540, gen.strip_width(2, gen.NI_PER_STRIP)])
+        self.assertEqual(widths[-1], 226)
 
     def test_strips_of_five_in_order(self):
         keys = [gen.NI_FALLBACK] + [t.key for t in gen.ni_tabs()]
