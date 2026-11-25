@@ -136,6 +136,10 @@ either. Its inputs follow call 4:
 | Tourism (out) | 900 | 900 | 90,000 |
 | **Profit a level** | £38,000 | | **£42,000** (38.9% margin) |
 
+*Since 2026-11-25:* the owner found the method still underpowered and doubled its
+Tourism, 900 to 1,800 (£180,000), so a level earns £132,000 at base prices
+(122% margin). The inputs above are unchanged.
+
 - Four fifths of the Advanced Materials and half the Electronic Components come
   out (£9,200). £5,200 of luxury goods goes in: Wine for the bar, Luxury
   Furniture for the suites and Fruit for the table, each a vanilla `luxury`

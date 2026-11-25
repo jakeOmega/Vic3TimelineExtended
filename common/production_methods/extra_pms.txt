@@ -17791,7 +17791,8 @@ pm_space_colony_mining = {
 # (until then its levels took base room) the owner asked for a modest buff: four
 # fifths of the Advanced Materials and half the Electronic Components out, a smaller
 # bill of luxuries for the guests in (no services, a local good), 42,000 a level at
-# base prices against 38,000 before.
+# base prices against 38,000 before. On 2026-11-25 the owner found it still
+# underpowered and doubled its Tourism, 900 to 1,800: 132,000 a level at base prices.
 pm_space_colony_vacation = {
 	texture = "gfx/interface/icons/production_method_icons/film_art.dds"
 
@@ -17811,13 +17812,13 @@ pm_space_colony_vacation = {
 			goods_input_luxury_furniture_add = 30                # Price:   60, Total cost:  1800.0 (1.67%)
 			goods_input_fruit_add = 30                           # Price:   30, Total cost:   900.0 (0.83%)
 			# Output goods
-			goods_output_fine_art_add = 300                      # Price:  200, Total cost: 60000.0 (40.00%)
-			goods_output_tourism_add = 900                       # Price:  100, Total cost: 90000.0 (60.00%)
+			goods_output_fine_art_add = 300                      # Price:  200, Total cost: 60000.0 (25.00%)
+			goods_output_tourism_add = 1800                      # Price:  100, Total cost: 180000.0 (75.00%)
 			# Total input cost: 108000.0
-			# Total output cost: 150000.0
-			# Profit: 42000.0
-			# Profit margin: 38.89%
-			# Zero profit price multiplier: 0.72
+			# Total output cost: 240000.0
+			# Profit: 132000.0
+			# Profit margin: 122.22%
+			# Zero profit price multiplier: 0.45
 			# Employment: 0
 			# Wage breakeven: 0.00
 		}
