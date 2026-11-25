@@ -439,7 +439,24 @@ def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED
 
 # The wide frame's strips keep the narrow slot width: 540, the Census
 # window's strip (pop_browser_panel.gui).
-WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
+STRIP_WIDTH = 540
+WIDE_STRIP = [f"minimumsize = {{ {STRIP_WIDTH} -1 }}", f"maximumsize = {{ {STRIP_WIDTH} -1 }}"]
+# Vanilla's tab_buttons (gui/shared/tab_bars.gui) spends 16 of its width on
+# its margin (3 a side) and its two end dividers (5 each), and shares the rest
+# among the tabs it shows, each layoutstretchfactor 1: five tabs at 540 are
+# 104.8 wide, but a strip of two at 540 drew each 262 (National Info's
+# Nuclear Weapons and Power Grids, 2026-11-24, seen in game).
+STRIP_FRAME = 2 * 3 + 2 * 5
+
+
+def strip_width(tabs: int, per_strip: int = len(SLOTS)) -> int:
+    """The width of a strip of `tabs` whose tabs are as wide as a full
+    strip's of `per_strip` at STRIP_WIDTH."""
+    return round(STRIP_FRAME + tabs * (STRIP_WIDTH - STRIP_FRAME) / per_strip)
+
+
+def strip_size(width: int) -> list[str]:
+    return [f"minimumsize = {{ {width} -1 }}", f"maximumsize = {{ {width} -1 }}"]
 
 
 def _strip(tabs: list[Tab], wide: bool = False, root: str = PLAYER_ROOT) -> list[str]:
@@ -979,18 +996,22 @@ def _ni_pops_slot(slot: str) -> list[str]:
 def ni_strips() -> list[str]:
     """te_ni_strips: the window's strips side by side in one centered row,
     one vanilla tab_buttons per five tabs, each at the narrow width (540), as
-    the Timeline Extended window's full-screen frame has them."""
+    the Timeline Extended window's full-screen frame has them. A last strip
+    of fewer is narrowed to its tabs (strip_width), so they are as wide as
+    the full strips' and the row stays centered on what it draws."""
     keys = [NI_FALLBACK] + [t.key for t in ni_tabs()]
     by_key = {t.key: t for t in TABS}
     out = ["### The strips: Pops, then each public tab in NI_ORDER, five a strip, side by",
-           "### side and centered, each at the narrow strip width.",
+           "### side and centered, each at the narrow strip width; a last strip of fewer",
+           "### narrowed to its tabs, so each tab is as wide as a full strip's.",
            "type te_ni_strips = hbox {",
            "\tlayoutpolicy_horizontal = expanding",
            "\tlayoutpolicy_vertical = fixed",
            "",
            "\texpand = {}"]
     for i in range(0, len(keys), NI_PER_STRIP):
-        out += ["\ttab_buttons = {"] + [f"\t\t{ln}" for ln in WIDE_STRIP] + [""]
+        width = strip_width(len(keys[i:i + NI_PER_STRIP]), NI_PER_STRIP)
+        out += ["\ttab_buttons = {"] + [f"\t\t{ln}" for ln in strip_size(width)] + [""]
         for j, (slot, key) in enumerate(zip(SLOTS, keys[i:i + NI_PER_STRIP])):
             if j:
                 out.append("")
