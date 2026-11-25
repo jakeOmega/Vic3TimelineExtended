@@ -2798,8 +2798,14 @@ types colonial_empire_widget_types
 			}
 
 			### Nothing stored yet, or a country that keeps no history: said once, here,
-			### and the charts wait (te_history_section_empty)
-			te_history_section_empty = {}
+			### and the charts wait (te_history_section_empty). At the charts' width, 496,
+			### so colonial_empire_panel's background keeps its size while they wait.
+			te_history_section_empty = {
+				blockoverride "empty_note_width" {
+					minimumsize = { 496 -1 }
+					maximumsize = { 496 -1 }
+				}
+			}
 
 			### The two charts, once the store holds a sample: until then each drew its own
 			### frame around the same sentence.

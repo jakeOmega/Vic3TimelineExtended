@@ -291,7 +291,10 @@ types te_history_chart_types
 	### instance whose charts read another store overrides "empty_note_visible"
 	### with that store's list (gen_te_history_charts.STORES) and
 	### "empty_note_text" with its charts' words; "empty_note_font" is the
-	### section's row font.
+	### section's row font. "empty_note_width" is the line's wrap width; a
+	### section whose charts sit in a panel with a background fixes it at the
+	### charts' width (the vanilla form: min and max size { <w> -1 }), so the
+	### panel keeps its size while the charts wait (the Colonial Empire's).
 	type te_history_section_empty = textbox {
 		block "empty_note_visible" {
 			visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_hist') )]"
@@ -299,7 +302,9 @@ types te_history_chart_types
 		parentanchor = hcenter
 		autoresize = yes
 		multiline = yes
-		max_width = 480
+		block "empty_note_width" {
+			max_width = 480
+		}
 		align = hcenter|nobaseline
 		block "empty_note_font" {}
 		block "empty_note_text" {
