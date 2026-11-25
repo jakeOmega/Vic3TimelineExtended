@@ -31,8 +31,8 @@ GENERATED = os.path.join(REPO, "gui", "te_history_charts_generated.gui")
 SGUIS = os.path.join(REPO, "common", "scripted_guis")
 JE_DIR = os.path.join(REPO, "common", "journal_entries")
 ICONS_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md")
-# The open button's placeholder art: vanilla's (style guide rule 10).
-OPEN_ICON = "gfx/interface/buttons/button_icons/areacharts.dds"
+# The open button's art: vanilla's gold arrow twice, the "expand" mark (icon_prompts.py's button_icon).
+OPEN_ICON = "gfx/interface/buttons/button_icons/te_chart_open.dds"
 # The sections that hold the charts, and so their range buttons.
 SECTIONS = {
     "banking": "gui/journal_entry_widgets/banking_history_widget.gui",
@@ -191,16 +191,15 @@ class OpenButtonTest(unittest.TestCase):
         self.assertNotIn("visible", self.button)
         self.assertEqual(sorted(c.system for c in gen.CHARTS if c.entry is None), ["demographics"] * 8)
 
-    def test_its_placeholder_art_is_listed(self):
-        """Style guide rule 10: the placeholder (vanilla's area-charts icon)
-        is listed in the icons doc with the final art's subject."""
+    def test_its_art_is_listed(self):
+        """The icon is the mod's own, listed in the icons doc with what it shows."""
         textures = re.findall(r'texture = "([^"]+)"', self.button)
         self.assertEqual(textures, [OPEN_ICON])
         doc = _read(ICONS_DOC)
         row = next((ln for ln in doc.splitlines() if ln.startswith("| ") and "`te_chart_open_button`" in ln), None)
         self.assertIsNotNone(row, "no row for te_chart_open_button in the icons doc")
         self.assertIn(f"`{OPEN_ICON}`", row)
-        self.assertIn("two arrows pointing out from a corner", row.lower())
+        self.assertIn("arrows pointing out from the middle", row.lower())
 
     def test_every_small_wrapper_opens_its_viewer(self):
         """Each panel chart's wrapper fills chart_open with the button, on its

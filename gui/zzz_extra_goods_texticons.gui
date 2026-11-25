@@ -150,14 +150,14 @@ texticon = {
 }
 
 # Spacers, the mod's pop type (common/pop_types/te_spacers.txt): @spacers! in
-# loc, at vanilla's two pop-icon sizes. The art is vanilla's soldiers' until
-# Spacers get their own (the pop type's texture is the same placeholder).
+# loc, at vanilla's two pop-icon sizes: the pop type's own icon and its 30 px
+# copy, which the icon pipeline writes beside it (icon_prompts.py, pop_type).
 texticon = {
 	icon = spacers
 	iconsize = {
 		offset = { 0 50 }
 		fontsize = 250
-		texture = "gfx/interface/icons/pops_icons/soldiers.dds"
+		texture = "gfx/interface/icons/pops_icons/spacers.dds"
 	}
 }
 
@@ -166,6 +166,6 @@ texticon = {
 	iconsize = {
 		offset = { 0 5 }
 		fontsize = 30
-		texture = "gfx/interface/icons/pops_icons/soldiers_15.dds"
+		texture = "gfx/interface/icons/pops_icons/spacers_15.dds"
 	}
 }

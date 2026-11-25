@@ -14,7 +14,7 @@
 # once the pact ends; the break effects take it off at once.
 # ============================================================================
 te_rc_technology_embargo = {
-	# Placeholder art: vanilla's Knowledge Sharing icon.
+	# A microscope in a padlocked chain (icon batch of #1956).
 	texture = "gfx/interface/icons/diplomatic_action_icons/te_rc_technology_embargo.dds"
 	groups = {
 		general

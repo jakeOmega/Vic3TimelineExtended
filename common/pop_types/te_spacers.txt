@@ -14,11 +14,11 @@
 # (SERVICEMEN_POP_TYPE, OFFICERS_POP_TYPE), and what the flag does for a third
 # type isn't recorded; spacers serve no land unit. Wages between soldiers'
 # and officers' (1.5 and 5), and a better start than soldiers' (7): a trained
-# service. The icon is a placeholder, vanilla's soldiers', until art is chosen.
+# service. Its icon is its own, from the icon pipeline (icon_prompts.py, pop_type).
 # ============================================================================
 
 spacers = {
-	texture = "gfx/interface/icons/pops_icons/soldiers.dds"
+	texture = "gfx/interface/icons/pops_icons/spacers.dds"
 	color = hsv{ 0.70 0.45 0.62 }
 	start_quality_of_life = 8
 	can_always_hire = yes

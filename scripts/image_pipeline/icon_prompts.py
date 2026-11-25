@@ -42,7 +42,8 @@ icon), "rotate" (degrees) and, for a part, "tint". The system panels' states
 its foot), "turn" (about its centre), "base" {"scale", "at"} (the emblem
 shrunk and placed), and "disc" in place of "from": drawn outright on a disc
 of its own colours (the warming tiers). "drawn": True in place of either is
-a bare canvas holding only its drawn marks (banking momentum's triple arrows). "solid": True fills back any hole the cut-out left inside the
+a bare canvas holding only its marks, drawn shapes or vanilla icons (banking momentum's triple arrows,
+the chart-open button's two vanilla arrows). "solid": True fills back any hole the cut-out left inside the
 object (rembg took a crate's front boards for background); only for
 objects with no real holes. "see_through": (x0, y0, x1, y1), shares of the side, does the
 reverse inside that box: the light backdrop the cut-out kept there (the white between a
@@ -618,6 +619,33 @@ CATEGORIES = {
         disc=((34, 27, 26), (24, 19, 19)), grade="spread",
         gui=("gui/states_panel.gui",),
         style="{subject}, one chunky compact object, bright warm lighting, " + PAINTED),
+    # Pop types (256 px, PopType.GetTexture, read from `texture =`). Vanilla's 20 are painted objects of
+    # the trade on transparency (the soldiers' boots, the officers' medal, the engineers' compasses),
+    # spanning 0.94-1.00 of the side. Each has a 30 px copy, <key>_15.dds, that only its text icon
+    # reads (texticons.gui); `small` writes the mod's beside the icon, for
+    # gui/zzz_extra_goods_texticons.gui.
+    "pop_type": dict(
+        folder="pops_icons", size=256, mode="cutout", fill=0.97, grade_strength=0.5, small=("_15", 30),
+        entity_dir="common/pop_types", field="texture",
+        style="{subject}, one chunky readable object, " + PAINTED),
+    # Mobilization option groups' backgrounds (780 x 224, `background`, required since 1.15): an oil
+    # painting in the right half, faded out to the left. `mask` names the vanilla file whose alpha
+    # does the fading, so the brushed edge is vanilla's own. Rendered wide (1792 x 512), the
+    # scene placed on the right, then graded toward vanilla's six: FLUX painted Training's brighter
+    # and more photographic than their dim, muted scenes. DXT5 (BC3) through texconv, as vanilla's are.
+    "mobilization_group": dict(
+        folder="mobilization_options", root="gfx/interface/illustrations", size=(780, 224),
+        gen_size=(1792, 512), mode="banner", mask="mobilisation_support_equipment.dds", grade_strength=0.8,
+        dds_format="BC3_UNORM",
+        entity_dir="common/mobilization_option_groups", field="background",
+        style="{subject}, the scene filling the right half of a wide picture, oil painting, historical "
+              "realism, muted earthy colours, soft diffuse light, visible brushwork"),
+    # Round-button icons (116 px, the gold glyphs `button_icon_round` and its kin draw). Vanilla's are
+    # flat worn-gold shapes. The mod's are drawn entries built from vanilla's own glyphs as `icon`
+    # marks with no outline, so the metal is vanilla's (te_systems_window_gui_icons.md).
+    "button_icon": dict(
+        folder="button_icons", root="gfx/interface/buttons", size=116, mode="derived",
+        neighbours="../buttons/button_icons", gui=("gui/journal_entry_widgets/te_history_chart.gui",)),
 }
 
 
@@ -639,6 +667,11 @@ def icon_path(cat: str, key: str) -> str:
     """The mod path an accepted icon is written to and wired as."""
     spec = CATEGORIES[cat]
     return f"{spec.get('root', 'gfx/interface/icons')}/{spec['folder']}/{key}.dds"
+
+
+def small_path(cat: str, key: str) -> str:
+    """Where a category with `small` (pop types) writes the icon's small copy, beside the icon."""
+    return icon_path(cat, key)[:-len(".dds")] + CATEGORIES[cat]["small"][0] + ".dds"
 
 
 _GI = "gfx/interface/icons"
@@ -1162,6 +1195,13 @@ ICONS: dict[str, dict[str, dict]] = {
         # until now. Both stand on the ground, so the building style, not ORBIT.
         "building_orbital_defense_battery": {"subject": "a ground-to-orbit missile battery: a fenced concrete compound with a row of open round interceptor silos, a tall radar dish and a low bunker, one slim grey missile rising from a silo on a plume of white smoke, loosely hand-painted with visible brush strokes", "seed": 1},
         "building_space_command": {"subject": "a military space command base: a long low concrete headquarters with two white radar domes and a big dish antenna, beside a tall rocket assembly hangar and a launch tower holding a grey rocket, loosely hand-painted with visible brush strokes", "seed": 1},
+        # Where Spacers live and train (#2020), on vanilla's barracks until now. Not Space Command's
+        # launch tower and radar domes: the people's base, its parade ground and training halls.
+        # The figure in its lower right is vanilla's barracks and conscription center layout: a
+        # serviceman over the compound (space_part/spacer, in the Spacers' helmet colours). Seeds 0, 1
+        # and 3 carry a watermark or a signature along the bottom edge.
+        "building_space_forces_base": {"subject": "a space forces training base: long low grey barracks blocks around a parade ground where rows of small figures in orange pressure suits stand in formation, a big round domed centrifuge hall and a full-size grey space capsule mock-up on a stand, inside a fenced perimeter, green grass around it, loosely hand-painted with visible brush strokes", "seed": 2,
+                                       "marks": [{"part": "space_part/spacer", "at": (0.71, 0.655), "scale": 0.47}]},
         # Grand Monuments sites (#1058), on the finished monument's icon until now, as the megaproject
         # sites were before batch 2.
         "building_grand_monument_site": {"subject": "a grand monument under construction: a half-built stone column wrapped in wooden scaffolding with a timber crane beside it, blocks of cut stone stacked on an unfinished paved plaza, loosely hand-painted with visible brush strokes", "seed": 2},
@@ -2287,6 +2327,11 @@ ICONS: dict[str, dict[str, dict]] = {
     # Space Race (space_race_gui_icons.md): 36 px; the interstellar states 44 px,
     # the first-to-finish mark 18 px. A white craft loses its body in the cut-out.
     "space_part": {
+        # A Spacer, over the Space Forces Base's compound as vanilla's soldier is over its barracks: cream
+        # and orange, the Spacers' pop icon's helmet, not Space Marines' sand-tan (module_train).
+        "spacer": {"subject": "a soldier seen from the waist up facing the viewer, in a cream and orange pressure "
+                              "suit and a round space helmet with a dark gold visor, holding a rifle diagonally "
+                              "across his chest", "seed": 1},
         "rocket": {"subject": "a squat silver rocket with red fins and a pointed nose cone, standing upright",
                    "seed": 1},
         # A colony's own flag on its page's Autonomy tile (batch 8). Teal, not the gold of the
@@ -2605,6 +2650,18 @@ ICONS: dict[str, dict[str, dict]] = {
                                         "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
         "pm_hq_cultural_coalition": {"subject": "two theatre masks above an open book", "seed": 1,
                                      "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        # #1865's two identities, on the national laboratories' icon and Trade League's until now.
+        "pm_hq_research_commons": {"subject": "a big atom symbol with three thick elliptical orbit rings around a round nucleus, "
+                                              "above a small domed observatory building", "seed": 1,
+                                   "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        "pm_hq_creditors_consortium": {"subject": "a heavy iron-bound strongbox with a big padlock on its front, standing on a "
+                                                  "tall stack of plain coins", "seed": 1,
+                                       "color": (216, 281, 336), "color_bottom": (164, 227, 318)},
+        # The Space Forces Base's one method (#2020), on vanilla's NCO incorporation until now: its three
+        # marching soldiers in pressure suits, in its red (nco_incorporation's quarters, measured).
+        "pm_space_forces_training": {"subject": "three soldiers in bulky pressure suits and round helmets marching in a row, "
+                                                "seen from the side", "seed": 1,
+                                     "color": (264, 155, 155), "color_bottom": (257, 118, 118)},
         "pm_advanced_process_control_explosives_factory": {"use": f"{_GI}/production_method_icons/pm_advanced_process_control.dds"},
         # Era 7 (icon batch 11), with the National Park designations (era 7 by design, owner 2026-11-01)
         # and the Modern orchards (Green Revolution). Colours follow the glyph each replaces.
@@ -3103,6 +3160,26 @@ ICONS: dict[str, dict[str, dict]] = {
         "local_climate": {"subject": "a fat glass thermometer with a big round red bulb, a small bright yellow sun beside "
                                      "its top and a small pale blue snowflake beside its bottom",
                           "seed": 3, "solid": True, "now": f"{_GI}/state_trait_icons/tropical_climate.dds"},
+    },
+    # Spacers (#2020), on vanilla's soldiers' boots until now: the trade's object, as vanilla's are.
+    "pop_type": {
+        "spacers": {"subject": "an empty spacesuit helmet with a dark gold-tinted visor, a pale grey and orange shell and a "
+                               "ribbed steel neck ring, seen from the side at a three-quarter angle", "seed": 0},
+    },
+    # Training (the mod's one group), on vanilla's support-equipment picture until now (owner, 2026-11-05).
+    "mobilization_group": {
+        "training": {"subject": "soldiers in olive drab combat uniforms and steel helmets climbing over a tall wooden "
+                                "obstacle wall on an army assault course, a drill instructor in a campaign hat shouting "
+                                "beside it", "seed": 2},
+    },
+    # The history charts' open button (te_systems_window_gui_icons.md), on vanilla's area-charts toggle
+    # until now: two of vanilla's gold arrows pointing out from the middle, the usual "expand" mark.
+    "button_icon": {
+        "te_chart_open": {"drawn": True, "now": "gfx/interface/buttons/button_icons/areacharts.dds",
+                          "marks": [{"icon": "gfx/interface/buttons/button_icons/goto.dds", "at": (0.68, 0.32),
+                                     "scale": 0.46, "rotate": 45, "outline": False},
+                                    {"icon": "gfx/interface/buttons/button_icons/goto.dds", "at": (0.32, 0.68),
+                                     "scale": 0.46, "rotate": 225, "outline": False}]},
     },
     # Grand Monument pictures (spec 2026-10-11 §3.1): one per style and form; keys are
     # test_grand_monument_registry.py's picture_key(code). Archetypes, never a real holy site.
@@ -4432,7 +4509,8 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                 states["kept"] += 1
             else:
                 states["accepted"] += 1
-                if not spec.get("part") and icon_path(cat, key) not in on_disk:
+                if not spec.get("part") and (icon_path(cat, key) not in on_disk
+                                             or ("small" in spec and small_path(cat, key) not in on_disk)):
                     report["missing_dds"].append((cat, key))
         report["states"][cat] = states
         bd = spec.get("backdrop")
@@ -4545,9 +4623,10 @@ def _derived_ok(spec: dict, entry: dict) -> bool:
                                       for k in ("centre", "edge", "rim_light", "rim_dark")):
             return False
     elif entry.get("drawn"):
-        # Marks on a bare canvas: nothing to draw them on but the marks themselves.
+        # Marks on a bare canvas: nothing to draw them on but the marks themselves, drawn shapes or
+        # vanilla icons (a button glyph made of vanilla's own), never a part, which waits on a pick.
         if "from" in entry or entry["drawn"] is not True or not entry.get("marks") \
-                or any("draw" not in m for m in entry["marks"]):
+                or any("part" in m for m in entry["marks"]):
             return False
     else:
         src = _ref(entry["from"])

@@ -2525,9 +2525,9 @@ pm_hq_diplomatic_framework = {
 # by a fortieth of the pool beside the identity's tenth (te_rc_pool_cap_value
 # reads the field), a quarter more of a cap rise that grows with the members'
 # innovation. A flat +25 was a tenth of era 6's technology cap gains and under
-# a hundredth of era 13's. Placeholder art: the national laboratories' icon.
+# a hundredth of era 13's.
 pm_hq_research_commons = {
-	texture = "gfx/interface/icons/production_method_icons/pm_national_labs.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_research_commons.dds"
 
 	unlocking_identity = identity_research_commons
 	is_hidden_when_unavailable = yes
@@ -2558,7 +2558,7 @@ pm_hq_research_commons = {
 # more leverage over the countries it lends to, and capitalists who put more
 # of their income into the pool, which Development Lending moves.
 pm_hq_creditors_consortium = {
-	texture = "gfx/interface/icons/production_method_icons/pm_hq_trade_league.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_hq_creditors_consortium.dds"
 
 	unlocking_identity = identity_creditors_consortium
 	is_hidden_when_unavailable = yes

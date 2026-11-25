@@ -1,7 +1,8 @@
 ﻿# 1.15 dropped a mobilization option group's icon and requires a background
-# (780x224). Until the mod has its own art, training borrows vanilla's
-# support-equipment one, soldiers in field kit (owner, 2026-11-05).
+# (780x224). Training's is its own (icon_prompts.py, mobilization_group),
+# faded out to the left through vanilla's support-equipment picture's mask;
+# it borrowed that picture until 2026-11-25 (owner, 2026-11-05).
 training = {
-	background = "gfx/interface/illustrations/mobilization_options/mobilisation_support_equipment.dds"
+	background = "gfx/interface/illustrations/mobilization_options/training.dds"
 	weight = 0
 }
