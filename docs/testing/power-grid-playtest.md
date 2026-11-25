@@ -334,3 +334,16 @@ state's buildings. Look at the owner's December 2032 save (180 stations on three
 | **Small figures.** The Bermuda card (a grid that sends nothing), and a station moving under 1,000 a week. | Sent: 0, Delivered: 0; a figure under 1,000 a plain number, 1,000 and above abbreviated (9.97K), in the overview's Sent and Received, National Generation, the cards, the table's Flow, the building panel's Flow and the Supply hover. | "0.00K": the selection isn't in effect. A raw key: a `_small` key missing. |
 | **Countries.** The New York grid's card (four countries). | The flags right after "Countries:", not a third of the way across. | — |
 | **b: reads.** The tab and the state panel tiles across the update, and the next 1st. | The same stations on a grid as before the update (the overview's "on a grid" and the cards' sizes), Staff the building panel's staffing. | Every station Offline, and the grids empty at the next 1st: `b:building_grid_transfer_station ?= { level >= 1 }` doesn't read in `te_grid_station_online`; put back the `any_scope_building` walk, which the balancing reads too. Staff 0% everywhere: `b:building_grid_transfer_station ?= { add = occupancy }` in a script value; put back `every_scope_building`. |
+
+## Sent and Received are the run's (2026-11-24, from #2016)
+
+The overview's Sent and Received cells and their hovers read the four figures the monthly run stores
+(`te_grid_store_tab_flows_effect`), where they walked every state of the country six times a frame. No self-check: the
+figures they sum (`te_grid_flow`, `te_grid_command`) are written only by the run, so the stored and the live can differ
+only by a station gone offline, demolished or lost since, which the next run puts right.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The same figures.** The overview's Sent and Received, and their hovers, before and after the update and after the next 1st. | The same figures and station counts as the cards' Sent and Delivered summed over the country's stations, and as before the update; after the 1st, the new month's. | 0 everywhere after a 1st: the run didn't reach `te_grid_store_tab_flows_effect`. 0 until the first 1st after the update is expected (the figures are written at the run). |
+| **A station demolished** mid-month. | Its flow stays in Sent or Received until the 1st, as its row stays in the Stations table. | — |
+| **Profiler**, the game paused, the tab open. | None of `power_grid_values.txt`'s `te_grid_tab_*_live` lines among the roots. | One is: something still reads a live figure. |
