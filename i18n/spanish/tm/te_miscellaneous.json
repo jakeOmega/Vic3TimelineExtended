@@ -7592,8 +7592,8 @@
   "es": "Pone fin al #b $ch_cultural_institutes_program$#!, a sus efectos y a su coste de [concept_influence|l]."
  },
  "ch_policy_institutes_off": {
-  "en": "Defund",
-  "es": "Retirar fondos"
+  "en": "End",
+  "es": "Terminar"
  },
  "ch_policy_institutes_on": {
   "en": "Fund",

@@ -1054,7 +1054,8 @@ of the Common Currency to each holdout; one that refuses costs the bloc cohesion
 and gains Monetary Independence. Under the Monetary Union row a leader sees each
 member: adopted, holding out, or holding out and set to refuse, with what backing
 it costs. The Backstops row lists each treaty partner the same way, received and
-extended. Power blocs in general are covered in [Power
+extended, and a Creditors' Consortium's standing guarantee on a line of its own.
+Power blocs in general are covered in [Power
 bloc principles and
 identities](09-diplomacy.md#power-bloc-principles-and-identities).
 
