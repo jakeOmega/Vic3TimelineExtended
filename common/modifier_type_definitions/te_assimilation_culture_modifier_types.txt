@@ -1,0 +1,23 @@
+﻿# Assimilation cultures (docs/systems/mod_systems/assimilation_cultures.md): what the laws do to the
+# yearly pass, as script-only types, so each law's tooltip says it. Read by te_hc_yearly_country
+# (common/scripted_effects/te_assimilation_culture_effects.txt) on the country.
+
+# The share of a pop's usual assimilation rate at which it joins a culture of another heritage
+# group. The Bodily Autonomy laws carry it (Licensed Modification 0.5, the three beyond it 1; Natural
+# Form nothing). Read capped at 1. It acts under Hybrid Cultures and None; under Unrestricted every
+# pop crosses at the full rate.
+country_cross_heritage_assimilation_add = {
+	color = neutral
+	percent = yes
+	decimals = 0
+	script_only = yes
+}
+
+# No pop of the country joins a culture of another heritage group, under any setting and whatever
+# the share above. Ancestral Citizenship (law_ethnostate) carries it. The language step into a
+# hybrid culture still runs.
+country_cross_heritage_assimilation_blocked_bool = {
+	color = neutral
+	boolean = yes
+	script_only = yes
+}

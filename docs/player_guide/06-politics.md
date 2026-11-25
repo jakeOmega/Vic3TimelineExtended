@@ -141,6 +141,15 @@ fascist and ethno-nationalist ideologies strongly support it and the statist
 ones support it; the Devout and every group that values self-expression oppose
 it.
 
+Under the Hybrid Cultures and None settings of the Assimilation Across
+Heritages rule, the group also decides whether pops of another heritage group
+can join your majority culture: never under Natural Form, at half the usual
+rate under Licensed Modification, and at the full rate under Morphological
+Freedom, Clade Citizenship and Prescribed Form, each law's own assimilation
+figure applying on top. Under Unrestricted, the default, this changes nothing.
+Ancestral Citizenship stops it under every law. See [Assimilation across
+heritage groups](08-states.md#assimilation-across-heritage-groups).
+
 ### Laws on state power and information
 
 | Law group | Laws | What it governs |

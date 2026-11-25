@@ -82,7 +82,12 @@ NPops = {
 	NUM_WEALTH_LEVELS = 200
 
 	ALLOW_ASSIMILATION_IN_HOMELANDS = no		# Can pops assimilate when living in their homelands?
-	# ALLOW_ASSIMILATION_ACROSS_HERITAGES = no 	# Can pops assimilate into pops of a different heritage?
+	# Assimilation cultures (docs/systems/mod_systems/assimilation_cultures.md): the engine assimilates a pop only
+	# into a culture of its own heritage group. Across groups the mod's yearly pass does it, under the
+	# assimilation_cultures_rule game rule (common/scripted_effects/te_assimilation_culture_effects.txt). A define is
+	# read at load, so this holds for every game whatever the rule says. Vanilla's value is no; the stricter
+	# heritage-trait define stays at vanilla's no. The define the mod set here until 1.12 left the game then.
+	ALLOW_ASSIMILATION_REQUIRE_HERITAGE_GROUP = yes
 
 	CULTURAL_COMMUNITY_ACCEPTANCE_DELTA_ON_SPAWN = -0.4							# The percentage of the maximum cultural acceptance that should be added as a delta to the cultural community when it first appears
 	CULTURAL_COMMUNITY_ACCEPTANCE_DELTA_DECAY_PER_MONTH = 0.0833	# The percentage of the maximum cultural acceptance that should be removed as a delta to the cultural community each month

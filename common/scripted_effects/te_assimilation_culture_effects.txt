@@ -1,0 +1,436 @@
+﻿# ============================================================================
+# ASSIMILATION CULTURES: the yearly pass
+# (docs/systems/mod_systems/assimilation_cultures.md;
+#  docs/superpowers/specs/2026-11-25-assimilation-cultures-design.md)
+# ============================================================================
+# The define ALLOW_ASSIMILATION_REQUIRE_HERITAGE_GROUP (extra_defines.txt) keeps
+# the engine's assimilation inside a pop's heritage group, in every game. This
+# pass converts the pops the engine leaves: those whose culture shares no
+# heritage group with any primary culture of their country. It runs once a year
+# per country, in incorporated states only, under every setting of the game
+# rule assimilation_cultures_rule, and branches on it:
+#
+#   te_hc_mode  setting           a taken pop that does not speak      one that does
+#                                 the host's language
+#   1           Hybrid Cultures   the local culture for its heritage   the host, at the rate
+#                                 group, else that group's hybrid of   times the crossing share
+#                                 the host's language (the language
+#                                 step); with neither, as under 3
+#   2           Unrestricted      the host, at the rate                the same
+#   3           None              the host, at the rate times the      the same
+#                                 crossing share
+#
+# The HOST of a state is its owner's primary culture with the most people there
+# (te_hc_pick_host). The CROSSING SHARE is te_hc_cross_share: nothing without a
+# Bodily Autonomy law. Joining the host never happens for a slave pop, nor in a
+# country whose laws block it (country_cross_heritage_assimilation_blocked_bool,
+# Ancestral Citizenship); the language step runs for both.
+#
+# Locals, all set in te_hc_yearly_country unless a helper's header says so; a
+# local lasts the whole effect across scope changes:
+#   te_hc_mode            1, 2 or 3, above
+#   te_hc_cross           the owner's te_hc_cross_share (read in limits only; the
+#                         fraction itself is the named value te_hc_pop_cross_step)
+#   te_hc_blocked         1 where the owner's laws block joining the host
+#   te_hc_can             0 where nothing can convert in this country this year
+#   te_hc_any_shared      1 where some culture of another heritage group with people in the
+#                         country shares a homeland the country holds with a primary culture
+#                         (Hybrid Cultures only)
+#   te_hc_capital_known   1 once te_hc_find_capital_host has run this pass
+#   te_hc_has_capital_host   1 where it found one
+#   te_hc_has_host, te_hc_has_targets, te_hc_has_local_<group>   per state, reset
+#                         in every state's pass before anything reads them (the
+#                         last ten by te_hc_find_locals, under Hybrid Cultures): a temporary scope outlives the state it was saved
+#                         for, so these flags, not `exists`, say whether
+#                         scope:te_hc_host, the hybrids and a local culture are
+#                         this state's
+#   te_hc_best, te_hc_cnt, te_hc_here, te_hc_done   working values of the helpers
+# Temporary scopes: te_hc_owner (country), te_hc_state, te_hc_host,
+# te_hc_capital, te_hc_capital_host, te_hc_cand, te_hc_shared_state,
+# te_hc_l_<group> (a local culture), and te_hc_t_<group> (a hybrid; saved by the
+# generated te_hcg_save_targets).
+#
+# No culture is named in this file: traits and saved scopes only
+# (test_assimilation_cultures_pass.py).
+
+# Country scope: the country's own yearly pulse (te_hc_yearly_on_action).
+te_hc_yearly_country = {
+	if = {
+		limit = {
+			any_scope_state = { is_incorporated = yes }
+		}
+		save_temporary_scope_as = te_hc_owner
+		# The rule, read once. Neither trigger true is Unrestricted.
+		set_local_variable = { name = te_hc_mode value = 2 }
+		if = {
+			limit = { te_hc_mode_hybrid = yes }
+			set_local_variable = { name = te_hc_mode value = 1 }
+		}
+		else_if = {
+			limit = { te_hc_mode_none = yes }
+			set_local_variable = { name = te_hc_mode value = 3 }
+		}
+		set_local_variable = { name = te_hc_cross value = te_hc_cross_share }
+		set_local_variable = { name = te_hc_blocked value = 0 }
+		if = {
+			limit = { modifier:country_cross_heritage_assimilation_blocked_bool = yes }
+			set_local_variable = { name = te_hc_blocked value = 1 }
+		}
+		set_local_variable = { name = te_hc_capital_known value = 0 }
+		set_local_variable = { name = te_hc_has_capital_host value = 0 }
+		# Hybrid Cultures: is there a culture that could be a local culture by a shared
+		# homeland? One with people in the country, of another heritage group than every
+		# primary culture, with a homeland in a state the country holds that is also a
+		# homeland of a primary culture. Asked once here, without the host's language, so
+		# that te_hc_find_locals walks the country's states for a candidate only where the
+		# answer can be yes (most countries have none). The culture need not live in that
+		# state: the first form of this test asked that it did, and missed a culture whose
+		# people all live elsewhere in the country (the pass's tests, 2026-11-25).
+		set_local_variable = { name = te_hc_any_shared value = 0 }
+		if = {
+			limit = {
+				local_var:te_hc_mode = 1
+				any_scope_culture = {
+					NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
+					te_hc_culture_lives_in_country = yes
+					save_temporary_scope_as = te_hc_cand
+					scope:te_hc_owner = {
+						any_scope_state = {
+							save_temporary_scope_as = te_hc_shared_state
+							state_region = { is_homeland = scope:te_hc_cand }
+							scope:te_hc_owner = {
+								any_primary_culture = { has_homeland = scope:te_hc_shared_state }
+							}
+						}
+					}
+				}
+			}
+			set_local_variable = { name = te_hc_any_shared value = 1 }
+		}
+		# Where nothing can convert, no state is walked: Unrestricted under a block, and
+		# None under a block or with no crossing share (every country before the Bodily
+		# Autonomy laws). Hybrid Cultures always has the language step.
+		set_local_variable = { name = te_hc_can value = 1 }
+		if = {
+			limit = {
+				local_var:te_hc_mode = 2
+				local_var:te_hc_blocked = 1
+			}
+			set_local_variable = { name = te_hc_can value = 0 }
+		}
+		if = {
+			limit = {
+				local_var:te_hc_mode = 3
+				OR = {
+					local_var:te_hc_blocked = 1
+					local_var:te_hc_cross <= 0
+				}
+			}
+			set_local_variable = { name = te_hc_can value = 0 }
+		}
+		if = {
+			limit = { local_var:te_hc_can = 1 }
+			every_scope_state = {
+				limit = {
+					is_incorporated = yes
+					te_hc_state_has_other_group = yes
+				}
+				te_hc_state_pass = yes
+			}
+		}
+	}
+}
+
+# State scope. One state's pass: the host, then under Hybrid Cultures the
+# hybrids of the host's language and the local cultures, then one walk of the
+# state's pops.
+te_hc_state_pass = {
+	save_temporary_scope_as = te_hc_state
+	set_local_variable = { name = te_hc_has_host value = 0 }
+	set_local_variable = { name = te_hc_has_targets value = 0 }
+	te_hc_pick_host = yes
+	if = {
+		limit = { local_var:te_hc_has_host = 1 }
+		if = {
+			limit = { local_var:te_hc_mode = 1 }
+			te_hcg_save_targets = yes
+			te_hc_find_locals = yes
+		}
+		every_scope_pop = {
+			limit = { te_hc_pop_taken = yes }
+			te_hc_convert_pop = yes
+		}
+	}
+}
+
+# ---- The host ----
+
+# State scope; reads scope:te_hc_owner and scope:te_hc_state. Saves
+# scope:te_hc_host and sets te_hc_has_host: the owner's primary culture with the
+# most people in this state. One primary culture living here is the host with no
+# count; several are counted, a pop walk each (te_hc_weigh_primary). Where none
+# lives here the host is the capital's, by the same rule, found once per pass:
+# every incorporated state carries vanilla's
+# state_allow_assimilation_without_presence_bool, so the engine too assimilates
+# into a primary culture that has nobody in the state.
+te_hc_pick_host = {
+	set_local_variable = { name = te_hc_best value = 0 }
+	scope:te_hc_owner = {
+		if = {
+			limit = {
+				any_primary_culture = {
+					count >= 2
+					te_hc_culture_lives_in = { STATE = te_hc_state }
+				}
+			}
+			every_primary_culture = {
+				limit = { te_hc_culture_lives_in = { STATE = te_hc_state } }
+				te_hc_weigh_primary = { STATE = te_hc_state OUT = te_hc_host FLAG = te_hc_has_host }
+			}
+		}
+		else = {
+			random_primary_culture = {
+				limit = { te_hc_culture_lives_in = { STATE = te_hc_state } }
+				save_temporary_scope_as = te_hc_host
+				set_local_variable = { name = te_hc_has_host value = 1 }
+			}
+		}
+	}
+	if = {
+		limit = { local_var:te_hc_has_host = 0 }
+		if = {
+			limit = { local_var:te_hc_capital_known = 0 }
+			te_hc_find_capital_host = yes
+		}
+		if = {
+			limit = { local_var:te_hc_has_capital_host = 1 }
+			scope:te_hc_capital_host = { save_temporary_scope_as = te_hc_host }
+			set_local_variable = { name = te_hc_has_host value = 1 }
+		}
+	}
+}
+
+# Culture scope: one primary culture. Counts its people in scope:$STATE$ and,
+# where they outnumber the best so far (te_hc_best, which the caller sets to 0),
+# saves it as scope:$OUT$ and sets $FLAG$. The ranking form of
+# decol_release_culture_weigh: no value gives a culture's share of a state.
+te_hc_weigh_primary = {
+	save_temporary_scope_as = te_hc_cand
+	set_local_variable = { name = te_hc_cnt value = 0 }
+	scope:$STATE$ = {
+		every_scope_pop = {
+			limit = { culture = scope:te_hc_cand }
+			change_local_variable = { name = te_hc_cnt add = total_size }
+		}
+	}
+	if = {
+		limit = { local_var:te_hc_cnt > local_var:te_hc_best }
+		set_local_variable = { name = te_hc_best value = local_var:te_hc_cnt }
+		save_temporary_scope_as = $OUT$
+		set_local_variable = { name = $FLAG$ value = 1 }
+	}
+}
+
+# Any scope; reads scope:te_hc_owner. Saves scope:te_hc_capital_host and sets
+# te_hc_has_capital_host: the capital's host by te_hc_pick_host's rule, or, with
+# no primary culture in the capital either, any primary culture that has people
+# in the country (one that merged away can still be primary); with none, no
+# host, and the states that needed one convert nobody. Run at most once per
+# country per pass (te_hc_capital_known).
+te_hc_find_capital_host = {
+	set_local_variable = { name = te_hc_capital_known value = 1 }
+	set_local_variable = { name = te_hc_best value = 0 }
+	scope:te_hc_owner = {
+		if = {
+			limit = { exists = capital }
+			capital = { save_temporary_scope_as = te_hc_capital }
+			every_primary_culture = {
+				limit = { te_hc_culture_lives_in = { STATE = te_hc_capital } }
+				te_hc_weigh_primary = { STATE = te_hc_capital OUT = te_hc_capital_host FLAG = te_hc_has_capital_host }
+			}
+		}
+		if = {
+			limit = { local_var:te_hc_has_capital_host = 0 }
+			random_primary_culture = {
+				limit = { te_hc_culture_lives_in_country = yes }
+				save_temporary_scope_as = te_hc_capital_host
+				set_local_variable = { name = te_hc_has_capital_host value = 1 }
+			}
+		}
+	}
+}
+
+# ---- The local cultures (Hybrid Cultures only) ----
+
+# Any scope. Clears the ten per-state flags, as the first step of te_hc_find_locals. They are read under
+# Hybrid Cultures only (te_hc_language_step), which always runs te_hc_find_locals first.
+te_hc_reset_locals = {
+	set_local_variable = { name = te_hc_has_local_african value = 0 }
+	set_local_variable = { name = te_hc_has_local_central_asian value = 0 }
+	set_local_variable = { name = te_hc_has_local_east_asian value = 0 }
+	set_local_variable = { name = te_hc_has_local_european value = 0 }
+	set_local_variable = { name = te_hc_has_local_indigenous_american value = 0 }
+	set_local_variable = { name = te_hc_has_local_indigenous_oceanic value = 0 }
+	set_local_variable = { name = te_hc_has_local_middle_eastern value = 0 }
+	set_local_variable = { name = te_hc_has_local_north_asian value = 0 }
+	set_local_variable = { name = te_hc_has_local_south_asian value = 0 }
+	set_local_variable = { name = te_hc_has_local_southeast_asian value = 0 }
+}
+
+# State scope; reads scope:te_hc_owner, scope:te_hc_state and scope:te_hc_host.
+# A LOCAL CULTURE takes a pop in place of the hybrid (owner, 2026-11-25): a
+# culture with people in the country, of another heritage group than every
+# primary culture, that speaks the host's language and belongs here in one of
+# two ways. Either this state is one of its homelands (te_hc_here 2), or the
+# country holds a state that is a homeland of both it and a primary culture
+# (te_hc_here 1): Afro-American shares seven of its eight homeland states with
+# Dixie, so a United States with Dixie as a primary culture makes Afro-Americans
+# in New York too, and a Britain that has taken Georgia makes them in Georgia
+# only. Found by trait, so none is named. For each heritage group the one saved
+# is the first found, unless a later one has its homeland here.
+# A culture that has merged away (Afro-American into American) has nobody left in
+# the country, so te_hc_culture_lives_in_country keeps it out, and the merge is no
+# way across the wall. The test is explicit because nobody has read in game
+# whether every_scope_culture on a country lists only the cultures with people.
+te_hc_find_locals = {
+	te_hc_reset_locals = yes
+	scope:te_hc_owner = {
+		every_scope_culture = {
+			limit = {
+				NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
+				shares_language_trait_with_culture = scope:te_hc_host
+				te_hc_culture_lives_in_country = yes
+			}
+			save_temporary_scope_as = te_hc_cand
+			set_local_variable = { name = te_hc_here value = 0 }
+			if = {
+				limit = { has_homeland = scope:te_hc_state }
+				set_local_variable = { name = te_hc_here value = 2 }
+			}
+			else_if = {
+				limit = {
+					local_var:te_hc_any_shared = 1
+					scope:te_hc_owner = {
+						any_scope_state = {
+							save_temporary_scope_as = te_hc_shared_state
+							state_region = { is_homeland = scope:te_hc_cand }
+							scope:te_hc_owner = {
+								any_primary_culture = { has_homeland = scope:te_hc_shared_state }
+							}
+						}
+					}
+				}
+				set_local_variable = { name = te_hc_here value = 1 }
+			}
+			if = {
+				limit = { local_var:te_hc_here > 0 }
+				te_hc_keep_local = { G = african }
+				te_hc_keep_local = { G = central_asian }
+				te_hc_keep_local = { G = east_asian }
+				te_hc_keep_local = { G = european }
+				te_hc_keep_local = { G = indigenous_american }
+				te_hc_keep_local = { G = indigenous_oceanic }
+				te_hc_keep_local = { G = middle_eastern }
+				te_hc_keep_local = { G = north_asian }
+				te_hc_keep_local = { G = south_asian }
+				te_hc_keep_local = { G = southeast_asian }
+			}
+		}
+	}
+}
+
+# Culture scope: a culture te_hc_find_locals found to belong here, at te_hc_here
+# (1 or 2). Where it is of heritage group $G$ and belongs more than the one kept
+# for that group so far, saves it as scope:te_hc_l_$G$.
+te_hc_keep_local = {
+	if = {
+		limit = {
+			has_discrimination_trait_group = heritage_group_$G$
+			local_var:te_hc_here > local_var:te_hc_has_local_$G$
+		}
+		save_temporary_scope_as = te_hc_l_$G$
+		set_local_variable = { name = te_hc_has_local_$G$ value = local_var:te_hc_here }
+	}
+}
+
+# ---- The conversion ----
+
+# Pop scope: a pop that passed te_hc_pop_taken. The table at the head of this
+# file. te_hc_done is 1 once the pop has taken the language step, so that it
+# does not also take the heritage step in the same year.
+te_hc_convert_pop = {
+	# TEMPORARY self-check hc_rate_inputs (te_assimilation_culture_selfcheck_effects.txt; delete after the play-test).
+	te_hc_chk_rate_inputs = yes
+	set_local_variable = { name = te_hc_done value = 0 }
+	# A rate of 0 (Clade Citizenship's -300% with under +200% of other assimilation, a pop that is
+	# all radicals) converts nobody, and change_pop_culture is not called with 0.
+	if = {
+		limit = { te_hc_pop_rate > 0 }
+		if = {
+			limit = {
+				local_var:te_hc_mode = 1
+				NOT = { te_hc_speaks_host = yes }
+			}
+			te_hc_language_step = { G = african }
+			te_hc_language_step = { G = central_asian }
+			te_hc_language_step = { G = east_asian }
+			te_hc_language_step = { G = european }
+			te_hc_language_step = { G = indigenous_american }
+			te_hc_language_step = { G = indigenous_oceanic }
+			te_hc_language_step = { G = middle_eastern }
+			te_hc_language_step = { G = north_asian }
+			te_hc_language_step = { G = south_asian }
+			te_hc_language_step = { G = southeast_asian }
+		}
+		# Joining the host: every pop under Unrestricted; under the other two a pop that
+		# took no language step (one that speaks the host's language, any pop under None,
+		# and under Hybrid Cultures a pop whose host's language has no hybrid and no
+		# local culture), at the crossing share.
+		if = {
+			limit = {
+				local_var:te_hc_done = 0
+				local_var:te_hc_blocked = 0
+				NOT = { is_pop_type = slaves }
+			}
+			if = {
+				limit = { local_var:te_hc_mode = 2 }
+				change_pop_culture = { target = scope:te_hc_host value = te_hc_pop_step }
+			}
+			else_if = {
+				limit = { local_var:te_hc_cross > 0 }
+				change_pop_culture = { target = scope:te_hc_host value = te_hc_pop_cross_step }
+			}
+		}
+	}
+}
+
+# Pop scope: the language step for a pop of heritage group $G$. It joins the
+# local culture for the group where the state has one, else the group's hybrid
+# of the host's language where the roster has it (te_hc_has_targets, which only
+# te_hcg_save_targets sets, behind `exists` on the hybrid). A language has no
+# hybrid for its own heritage group, so the ladder saves none for it and the
+# scope may still hold an earlier state's: the target is used only where it has
+# the host's language. That case needs a host whose own culture is of another
+# heritage group than its language's, a hybrid that became a primary culture.
+te_hc_language_step = {
+	if = {
+		limit = {
+			local_var:te_hc_done = 0
+			culture = { has_discrimination_trait_group = heritage_group_$G$ }
+		}
+		if = {
+			limit = { local_var:te_hc_has_local_$G$ > 0 }
+			change_pop_culture = { target = scope:te_hc_l_$G$ value = te_hc_pop_step }
+			set_local_variable = { name = te_hc_done value = 1 }
+		}
+		else_if = {
+			limit = {
+				local_var:te_hc_has_targets = 1
+				exists = scope:te_hc_t_$G$
+				scope:te_hc_t_$G$ = { shares_language_trait_with_culture = scope:te_hc_host }
+			}
+			change_pop_culture = { target = scope:te_hc_t_$G$ value = te_hc_pop_step }
+			set_local_variable = { name = te_hc_done value = 1 }
+		}
+	}
+}

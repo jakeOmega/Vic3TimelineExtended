@@ -1,0 +1,109 @@
+﻿# ============================================================================
+# ASSIMILATION CULTURES: triggers
+# (docs/systems/mod_systems/assimilation_cultures.md;
+#  docs/superpowers/specs/2026-11-25-assimilation-cultures-design.md)
+# ============================================================================
+
+# ---- The rule ----
+# Any scope. The only two reads of assimilation_cultures_rule in the mod
+# (test_assimilation_cultures_rule.py). Each is a positive test of its own
+# setting; neither true is Unrestricted, so a game that names no setting takes
+# that branch. A has_game_rule on a setting no file defines is true
+# (test_has_game_rule_targets.py), so both settings stay defined.
+#
+# Hybrid Cultures also asks for the sentinel hybrid: the engine makes a
+# culture's object when a game starts, so a game begun before the hybrids were
+# added has none, and must never name one (the Culture Merges' lesson, #1518).
+te_hc_mode_hybrid = {
+	has_game_rule = assimilation_cultures_hybrid
+	exists = cu:hc_anglophone_african
+}
+
+te_hc_mode_none = {
+	has_game_rule = assimilation_cultures_none
+}
+
+# ---- The pass (te_assimilation_culture_effects.txt) ----
+
+# State scope; reads scope:te_hc_owner. A culture of another heritage group than
+# every primary culture of the owner lives here. It walks the state's cultures,
+# not its pops: the test that keeps the pop walk out of states with nobody to
+# convert.
+te_hc_state_has_other_group = {
+	any_scope_culture = {
+		NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
+	}
+}
+
+# Culture scope. The culture has people in scope:$STATE$.
+te_hc_culture_lives_in = {
+	scope:$STATE$ = {
+		culture_percent_state = { target = PREV value > 0 }
+	}
+}
+
+# Culture scope; reads scope:te_hc_owner. The culture has people in the country. A primary culture
+# need not: a culture that merged away stays primary for a time, and forming a country adds every
+# culture its definition lists. So the pass tests it wherever it would otherwise join pops to a
+# culture, or take its language, with nobody in it.
+te_hc_culture_lives_in_country = {
+	scope:te_hc_owner = {
+		culture_percent_country = { target = PREV value > 0 }
+	}
+}
+
+# Pop scope; reads scope:te_hc_owner and scope:te_hc_state. The pop is one the
+# pass converts: of another heritage group than every primary culture of its
+# country (the engine assimilates the rest itself), outside its homeland unless
+# the state lets pops assimilate there, and of an acceptance status the
+# country's laws let assimilate.
+te_hc_pop_taken = {
+	culture = {
+		NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
+	}
+	OR = {
+		culture = {
+			NOT = { has_homeland = scope:te_hc_state }
+		}
+		scope:te_hc_state = { modifier:state_allow_assimilation_in_homeland_bool = yes }
+	}
+	te_hc_pop_status_allowed = yes
+}
+
+# Pop scope; reads scope:te_hc_owner. The engine's own switches, one per
+# acceptance status, which the Minority Rights laws set
+# (country_allow_assimilation_<status>_bool): Ghettoization lets only
+# Second-class Citizens and Full Acceptance assimilate, Protection every status.
+# Vanilla's thresholds: acceptance_status_2 to _5 are 20, 40, 60, 80.
+te_hc_pop_status_allowed = {
+	OR = {
+		AND = {
+			pop_acceptance >= acceptance_status_5
+			scope:te_hc_owner = { modifier:country_allow_assimilation_full_acceptance_bool = yes }
+		}
+		AND = {
+			pop_acceptance >= acceptance_status_4
+			pop_acceptance < acceptance_status_5
+			scope:te_hc_owner = { modifier:country_allow_assimilation_second_rate_citizen_bool = yes }
+		}
+		AND = {
+			pop_acceptance >= acceptance_status_3
+			pop_acceptance < acceptance_status_4
+			scope:te_hc_owner = { modifier:country_allow_assimilation_open_prejudice_bool = yes }
+		}
+		AND = {
+			pop_acceptance >= acceptance_status_2
+			pop_acceptance < acceptance_status_3
+			scope:te_hc_owner = { modifier:country_allow_assimilation_cultural_erasure_bool = yes }
+		}
+		AND = {
+			pop_acceptance < acceptance_status_2
+			scope:te_hc_owner = { modifier:country_allow_assimilation_violent_hostility_bool = yes }
+		}
+	}
+}
+
+# Pop scope; reads scope:te_hc_host. The pop's culture has the host's language.
+te_hc_speaks_host = {
+	culture = { shares_language_trait_with_culture = scope:te_hc_host }
+}

@@ -408,8 +408,9 @@ class PrescribedFormTest(unittest.TestCase):
                      "state_assimilation_mult = 2", "country_cultural_hegemony_art_mult = -0.25",
                      "state_migration_pull_mult = -0.5"):
             self.assertRegex(block, re.escape(line) + r"\b")
-        # No static heritage line: the parity alone, lifting to the highest and no further.
-        self.assertNotIn("heritage", block)
+        # No static heritage acceptance line: the parity alone, lifting to the highest and no further.
+        # (country_cross_heritage_assimilation_add is the assimilation cultures' line, not an acceptance one.)
+        self.assertNotRegex(block, r"country_acceptance_\w*heritage")
         self.assertNotIn("country_authority_cost_add", block)
         self.assertIn("custom_tooltip = te_prescribed_form_parity_tt", _sub(self.law, "on_enact"))
 

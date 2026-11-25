@@ -257,7 +257,7 @@ the mod.
 
 ### Game rules
 
-The mod adds twenty-two game rules to the game setup screen. Each one turns a
+The mod adds twenty-three game rules to the game setup screen. Each one turns a
 system on or off, and a few offer a reduced version of the system. You choose
 them when you start a campaign, and outside Ironman you can change them later.
 
@@ -305,6 +305,7 @@ turn a default system off.
 | Grand Monuments | Enabled | Grand Monuments, their dedications, the Monuments journal entry and contested monuments. | [The extended timeline](02-timeline.md#grand-monuments) |
 | Demographics | Full | *Full*: every state keeps a census of its people by age and sex, shown in a Demographics tab in the Population panel and National Info and a subtab on the state panel, and the census sets each state's births and deaths. *Display only*: the same census and panels, with births and deaths left to the base game. *Disabled*: no census and no tabs. Dynastic Wealth keeps working. The census is experimental; a game saved before it was added keeps it off. | [States and population](08-states.md#demographics) |
 | Culture Merges | Enabled | Closely related cultures merging into one national culture. In a game saved before it was added, the merges that make a new culture never start. Turned off mid-game, every merge pauses where it stands and carries on when the rule is turned back on. | [States and population](08-states.md#culture-merges) |
+| Assimilation Across Heritages | Unrestricted | How pops assimilate when none of your primary cultures shares their heritage group. *Unrestricted*: they join your majority culture, as in the base game. *Hybrid Cultures*: they take up your majority's language and keep their heritage, in a hybrid culture such as Anglophone African, and join your majority culture only under a Bodily Autonomy law that allows it. *None*: no hybrid cultures; they stay as they are until such a law. Changed mid-game, hybrid pops keep their culture. A game begun before the rule was added has no hybrid cultures and plays as Unrestricted unless set to None. | [States and population](08-states.md#assimilation-across-heritage-groups) |
 | Small-Economy Construction | Full Cost for Every Country | Experimental. Construction and construction maintenance cost a small economy less, rising to the full price at a GDP of 10 million. *Half the Cost*, *A Fifth of the Cost* and *A Tenth of the Cost for Small Economies* set the price with almost no GDP. Switched in a running game, on, off or to another strength, it reaches each country within a year. | [Economy and construction](03-economy.md) |
 | Global Commons | Enabled | *Enabled*: seabed licenses that cap the Deep-Sea Mine, which only governments build, the Law of the Sea's seabed terms at the UN, Antarctic research stations and the Antarctic Treaty. *Disabled*: the Deep-Sea Mine has no cap, and private investors build it too. | [The extended timeline](02-timeline.md#seabed-licenses) |
 | Power Bloc Principle Slots | Up to Eight | *Up to Eight*: four technologies the bloc leader researches each add a principle slot, up to eight. *Four (Base Game)*: the base game's slots only. | [Diplomacy](09-diplomacy.md#principle-slots) |

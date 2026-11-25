@@ -10,7 +10,9 @@ always on except internal resettlement, which the Internal Resettlement game
 rule controls (see the [Introduction](01-introduction.md)), culture merges,
 which the Culture Merges rule controls (on by default), and the census, which
 is experimental and has a game rule of its own (see
-[Demographics](#demographics)).
+[Demographics](#demographics)). How pops of another heritage group assimilate
+is set by the Assimilation Across Heritages rule (see [Assimilation across
+heritage groups](#assimilation-across-heritage-groups)).
 
 ## State panel additions
 
@@ -302,6 +304,79 @@ severe outbreak kills 10% of that culture in the state, radicalizes the
 survivors, devastates the region and sets off a mass migration; a lesser one
 kills 2% and does the same on a smaller scale. Minority laws are in [Rights and
 society laws](06-politics.md#rights-and-society-laws).
+
+## Assimilation across heritage groups
+
+The base game assimilates a pop into the most accepted culture where it lives,
+whatever its heritage. In the mod that happens only within a heritage group, the
+base game's broad families of heritage such as African, European or East Asian,
+so an Irish pop in London still becomes English as it would in the base game. A
+pop whose heritage group none of your primary cultures shares, such as a Yoruba
+pop in New York, is moved by the mod instead, once a year, and the Assimilation
+Across Heritages game rule decides what it becomes:
+
+| Setting | A pop whose heritage group none of your primary cultures shares |
+|---|---|
+| Unrestricted (the default) | Joins your majority culture, as in the base game. |
+| Hybrid Cultures | Takes up your majority's language and keeps its heritage, in a hybrid culture such as Anglophone African. It joins your majority culture only under a Bodily Autonomy law that allows it. |
+| None | Stays as it is until a Bodily Autonomy law allows it to join your majority culture. No hybrid cultures form. |
+
+Your majority culture is worked out state by state: the primary culture of
+yours with the most people in the state, or your capital's where none of your
+primary cultures lives there. A Canada with Anglo-Canadian and Franco-Canadian
+primary cultures draws Quebec's minorities toward Franco-Canadian and Ontario's
+toward Anglo-Canadian.
+
+The mod moves these pops in your incorporated states only, at about the base
+game's pace: 2.4% of a pop a year with nothing to speed it, faster with the
+laws, institutions and decrees that speed any assimilation, and slower where
+the pop has radicals or its culture high fervor. A pop in one of its own
+homelands doesn't assimilate unless something allows it there, such as the
+Promote National Values decree or Linguistic Purity. Your Minority Rights law
+decides which pops can assimilate, here as everywhere: under Ghettoization only
+those at Provisional or Full Acceptance; under Violent Hostility, Open Prejudice
+and above; under Discrimination and Indifference, Latent Hostility and above;
+under Cultural Assimilation, Protection and Affirmative Action, everyone. Since
+the mod does the moving, a pop's panel doesn't show it as assimilating. AI
+countries follow the same rules.
+
+Under Hybrid Cultures, a pop that doesn't speak your majority's language takes
+it up first. Where a culture of the pop's own heritage group already speaks it
+and belongs in your country, the pop joins that culture instead of a hybrid: a
+culture whose homeland the state is, or one that shares a homeland state you
+hold with one of your primary cultures. So an African-heritage pop in the
+United States becomes Afro-American, in New York as in Georgia, while a Britain
+that has taken Georgia makes Afro-Americans there and Anglophone Africans in
+London. Either way the pop now shares your language but not your heritage, so
+it gets the acceptance your Citizenship law gives a shared language. Hybrid
+cultures exist for 64 languages: the most widely spoken in 1836, more of
+Africa's and the Americas', and the five new languages culture merges create.
+Where your majority culture's language has none, pops are treated as under
+None.
+
+Joining your majority culture across a heritage group, the step after the
+language under Hybrid Cultures and the only step under None, needs a Bodily
+Autonomy law. It never happens under Natural Form. Under Licensed Modification
+it runs at half the usual rate, and under Morphological Freedom, Clade
+Citizenship and Prescribed Form at the full rate. Each law's own assimilation
+figure applies on top, so Prescribed Form is the fastest way across and Clade
+Citizenship's −300% can stop assimilation altogether. Those laws open from the
+Morphological Freedom technology (era 12), so under Hybrid Cultures or None a
+pop keeps its heritage group for most of a game. Slaves never join a culture of
+another heritage group; under Hybrid Cultures they take up the language and go
+no further.
+
+Ancestral Citizenship closes the way while it is in force: under any setting
+and whatever your Bodily Autonomy law, no pop joins a culture of another
+heritage group. Under Hybrid Cultures pops still take up the language. Under
+Unrestricted, a country with Ancestral Citizenship assimilates only within its
+heritage group, which the base game doesn't do.
+
+You can change the rule mid-game. Hybrid pops keep their culture: under
+Unrestricted they go on to join your majority culture at the yearly rate, and
+under None they stay until a law lets them across. A game begun before the rule
+was added has no hybrid cultures, so it plays as Unrestricted unless you set it
+to None.
 
 ## Culture merges
 

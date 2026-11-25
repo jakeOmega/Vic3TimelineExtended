@@ -309,6 +309,9 @@ REPLACE:law_ethnostate = {
 		country_acceptance_shared_heritage_trait_add = 40
 		country_acceptance_shared_heritage_trait_group_add = 20
 		country_acceptance_no_shared_heritage_trait_add = -10
+		# Right of blood: no pop joins a culture of another heritage group, under any setting of the
+		# assimilation_cultures_rule game rule and whatever the Bodily Autonomy law (owner, 2026-11-25).
+		country_cross_heritage_assimilation_blocked_bool = yes
 
 		#Language
 		#From this block, we only apply the highest value a Pop qualifies for

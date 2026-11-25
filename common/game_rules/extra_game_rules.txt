@@ -635,3 +635,34 @@ te_small_economy_construction_rule = {
 		flag = te_small_economy_construction_enabled
 	}
 }
+
+# Assimilation across heritage groups (docs/systems/mod_systems/assimilation_cultures.md).
+# A define makes the engine assimilate a pop only within its heritage group, in
+# every game. This rule sets what the mod's yearly pass does across groups:
+#   hybrid        the pop takes the majority's language and keeps its heritage,
+#                 in a generated hybrid culture (hc_<language>_<group>), and joins
+#                 the majority only at the share a Bodily Autonomy law grants
+#   unrestricted  the pop joins the majority primary culture, as the base game
+#                 has it (the default in the release that adds the rule)
+#   none          no hybrids: nothing crosses until a Bodily Autonomy law allows
+#                 it, and then the pop joins the majority directly
+# Script reads it through te_hc_mode_hybrid and te_hc_mode_none only
+# (te_assimilation_culture_triggers.txt), each a positive test of its own
+# setting: a game that names none of the three, one begun before the rule,
+# plays as unrestricted. Nothing is torn down when it changes mid-game: the
+# system keeps no modifier, variable or journal entry, and hybrid pops stay.
+assimilation_cultures_rule = {
+	default = assimilation_cultures_unrestricted
+
+	assimilation_cultures_hybrid = {
+		flag = assimilation_cultures_hybrid
+	}
+
+	assimilation_cultures_unrestricted = {
+		flag = assimilation_cultures_unrestricted
+	}
+
+	assimilation_cultures_none = {
+		flag = assimilation_cultures_none
+	}
+}

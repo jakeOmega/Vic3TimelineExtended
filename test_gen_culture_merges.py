@@ -677,5 +677,29 @@ class MechanicsTest(unittest.TestCase):
             gen.build_plan(vanilla(), broken)
 
 
+class KeyedRenderersTest(unittest.TestCase):
+    """The renderers that take culture keys, which gen_assimilation_cultures shares, write what the plan's form does."""
+
+    def test_keyed_static_modifiers_match_the_plan_form(self):
+        plan = gen.build_plan(gen.load_vanilla())
+        keys = [entry.merge.result for entry in plan]
+        self.assertEqual(gen.render_static_modifiers_for(keys, gen.HEADER), gen.render_static_modifiers(plan))
+        self.assertEqual(gen.render_modifier_types_for(keys, gen.HEADER, gen.STATIC_MODIFIERS_OUT.name),
+                         gen.render_modifier_types(plan))
+        self.assertEqual(gen.static_modifier_loc_for(keys), gen.static_modifier_loc(plan))
+
+    def test_a_culture_block_is_the_merge_form_without_its_comment(self):
+        entry = gen.build_plan(gen.load_vanilla())[0]
+        block = gen.render_culture_block(entry.merge.result, "# x", entry.merge.new.color, entry.fields)
+        self.assertEqual(block.split("\n", 1)[1], gen.render_culture(entry).split("\n", 1)[1])
+
+    def test_the_public_aliases_are_the_private_readers(self):
+        self.assertIs(gen.culture_fields, gen._fields)
+        self.assertIs(gen.single, gen._single)
+        self.assertIs(gen.name_list, gen._list)
+        self.assertIs(gen.ethnicities, gen._ethnicities)
+        self.assertIs(gen.token, gen._token)
+
+
 if __name__ == "__main__":
     unittest.main()
