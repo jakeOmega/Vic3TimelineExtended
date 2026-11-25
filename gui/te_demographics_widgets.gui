@@ -3473,25 +3473,46 @@ types te_demographics_widgets
 				}
 			}
 
+			### Nothing in the census store yet, or a country that keeps no history (National
+			### Info): said once, here, and the charts wait (te_history_section_empty)
+			te_history_section_empty = {
+				blockoverride "empty_note_visible" {
+					visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+				}
+				blockoverride "empty_note_text" {
+					text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
+				}
+			}
+
 			### What the pips above a bar mean (the year's war dead, a famine, a demographic event)
 			te_demog_hist_pip_legend = {}
 
-			### Births and deaths per 1,000, side by side: their gap is natural change
-			te_hist_demog_births_deaths = {}
-			### Net migration per 1,000, signed
-			te_hist_demog_migration = {}
-			### Life expectancy
-			te_hist_demog_e0 = {}
-			### Children per woman
-			te_hist_demog_tfr = {}
-			### Median age
-			te_hist_demog_median = {}
-			### Deaths by cause, stacked in the pie's order
-			te_hist_demog_causes = {}
-			### The Gini
-			te_hist_demog_gini = {}
-			### Wealth Concentration
-			te_hist_demog_wc = {}
+			### The eight charts, once the store holds a census: until then each drew its own
+			### frame around the same sentence.
+			flowcontainer = {
+				visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ) )]"
+				direction = vertical
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 2
+
+				### Births and deaths per 1,000, side by side: their gap is natural change
+				te_hist_demog_births_deaths = {}
+				### Net migration per 1,000, signed
+				te_hist_demog_migration = {}
+				### Life expectancy
+				te_hist_demog_e0 = {}
+				### Children per woman
+				te_hist_demog_tfr = {}
+				### Median age
+				te_hist_demog_median = {}
+				### Deaths by cause, stacked in the pie's order
+				te_hist_demog_causes = {}
+				### The Gini
+				te_hist_demog_gini = {}
+				### Wealth Concentration
+				te_hist_demog_wc = {}
+			}
 		}
 	}
 

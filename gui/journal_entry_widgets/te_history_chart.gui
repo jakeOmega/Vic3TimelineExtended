@@ -278,6 +278,35 @@ types te_history_chart_types
 		}
 	}
 
+	### A History section's one line while its store holds no sample (2026-11-24),
+	### under its range buttons. A section of several charts draws them only
+	### once the store holds a sample, in a flowcontainer gated on the same
+	### test, and says this once in their place: each chart drew its own empty
+	### state before, so Banking's History said "Nothing recorded yet" in eight
+	### frames in a new game's first month, and National Info, on a country
+	### that keeps no history, "kept only for played countries" eight times.
+	### The words are the chart type's own (its "empty_text"). The chart keeps
+	### its empty state for its full-screen viewer and for a chart drawn alone
+	### (a Strategic Reserve good's row, Cultural Hegemony's one chart). An
+	### instance whose charts read another store overrides "empty_note_visible"
+	### with that store's list (gen_te_history_charts.STORES) and
+	### "empty_note_text" with its charts' words; "empty_note_font" is the
+	### section's row font.
+	type te_history_section_empty = textbox {
+		block "empty_note_visible" {
+			visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_hist') )]"
+		}
+		parentanchor = hcenter
+		autoresize = yes
+		multiline = yes
+		max_width = 480
+		align = hcenter|nobaseline
+		block "empty_note_font" {}
+		block "empty_note_text" {
+			text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_hist_empty_state', 'te_history_untracked' )]"
+		}
+	}
+
 	### Fixed-width monthly slots, shared by all three range layouts.
 	type te_history_plot = flowcontainer {
 		direction = horizontal

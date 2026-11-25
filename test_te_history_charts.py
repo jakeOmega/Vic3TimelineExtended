@@ -1176,6 +1176,95 @@ class MarkerPipTest(unittest.TestCase):
                     self.assertEqual(len(_override_bodies(text, "marker_pips")), 1)
 
 
+def _holder(text, pos):
+    """The innermost `name = {` block holding pos: (its name, its body)."""
+    best = None
+    for m in re.finditer(r"(\w+) = \{", text[:pos]):
+        end = _close(text, m.end() - 1)
+        if end > pos:
+            best = (m.group(1), text[m.end():end])
+    assert best, f"nothing holds {pos}"
+    return best
+
+
+def _own_visible(body):
+    """A block's own visible line (its first-level one), or None."""
+    depth, out = 0, None
+    for line in body.split("\n"):
+        if depth == 0:
+            m = re.match(r'\s*visible = "(.*)"\s*$', line)
+            if m and out is None:
+                out = m.group(1)
+        depth += line.count("{") - line.count("}")
+    return out
+
+
+# The sections of several charts on one store, which say "nothing recorded
+# yet" once, under their range buttons, and draw their charts only once the
+# store holds a sample (te_history_section_empty, 2026-11-24). A new game's
+# Banking History drew the same sentence in eight frames. The Strategic
+# Reserve draws each good's one chart in that good's row, and Cultural
+# Hegemony one chart: each says it once already.
+SAY_ONCE = ["banking", "demographics", "nuclear_weapons", "united_nations", "global_warming", "colonial_empire"]
+
+
+class SectionEmptyStateTest(unittest.TestCase):
+    """A section's empty store is said once, not in every chart's frame."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.note = _type_body(_strip_comments(_read(CHART_GUI)), "te_history_section_empty")
+        cls.chart = _type_body(_strip_comments(_read(CHART_GUI)), "te_history_chart")
+
+    def test_the_line_is_the_charts_own_words(self):
+        """The note's default is the te_hist store's emptiness and the chart
+        type's own empty text: no new key."""
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_visible")],
+                         [f'visible = "[IsDataModelEmpty( {gen.STORES["te_hist"].samples} )]"'])
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_text")],
+                         [b.strip() for b in _block_bodies(self.chart, "empty_text")])
+        self.assertIn("multiline = yes", self.note)
+        self.assertIn("max_width = 480", self.note)
+
+    def test_every_section_of_several_charts_says_it_once(self):
+        by_system = {}
+        for c in gen.CHARTS:
+            by_system.setdefault(c.system, []).append(c)
+        self.assertEqual(sorted(s for s, cs in by_system.items() if len(cs) > 1 and s != "strategic_reserve"),
+                         sorted(SAY_ONCE), "a section of several charts joins SAY_ONCE")
+        for system in SAY_ONCE:
+            charts = by_system[system]
+            (store,) = {c.store for c in charts}
+            text = _strip_comments(_read(os.path.join(REPO, SECTIONS[system])))
+            with self.subTest(system=system):
+                notes = [m.end() for m in re.finditer(r"(?<![\w.])te_history_section_empty = \{", text)]
+                self.assertEqual(len(notes), 1, "said once")
+                # the charts: all in one flowcontainer, shown only while the store holds a sample
+                spots = [re.search(rf"(?<![\w.]){gen.wrapper_name(c, gen.SMALL)} = \{{", text).start() for c in charts]
+                holders = {_holder(text, p) for p in spots}
+                self.assertEqual(len(holders), 1, "the charts share one container")
+                ((kind, body),) = holders
+                self.assertEqual(kind, "flowcontainer")
+                lists = {gen.STORES[store].samples,
+                         gen.STORES[store].samples.replace("Country.MakeScope", "JournalEntry.GetCountry.MakeScope")}
+                gate = re.fullmatch(r"\[Not\( IsDataModelEmpty\( (.*) \) \)\]", _own_visible(body) or "")
+                self.assertIsNotNone(gate, _own_visible(body))
+                self.assertIn(gate.group(1), lists)
+                # the line, on the same list, before the charts and after the range buttons
+                note = text[notes[0]:_close(text, notes[0] - 1)]
+                visible = _override_bodies(note, "empty_note_visible")
+                shown = visible[0].strip() if visible else _block_bodies(self.note, "empty_note_visible")[0].strip()
+                self.assertEqual(shown, f'visible = "[IsDataModelEmpty( {gate.group(1)} )]"')
+                self.assertLess(text.rindex("te_history_range_button = {", 0, notes[0]), notes[0])
+                self.assertLess(notes[0], min(spots))
+                # in the charts' own words (Demographics' "next census")
+                words = {tuple(b.strip() for b in _override_bodies(gen.fragment(c), "empty_text")) for c in charts}
+                self.assertEqual(len(words), 1)
+                (own,) = words
+                said = tuple(b.strip() for b in _override_bodies(note, "empty_note_text"))
+                self.assertEqual(said, own, "the charts' own empty text, or the type's default for both")
+
+
 class GeneratorTest(unittest.TestCase):
     def test_generated_file_is_current(self):
         with open(GENERATED, "rb") as f:
