@@ -244,16 +244,16 @@ def test_both_modifier_types_are_script_only_and_named(self):
 - Consumes: `te_hcg_save_targets` (Task 3); `te_hc_mode_hybrid`, `te_hc_mode_none`, the two modifier types (Task 4).
 - Produces:
   - on_action `te_hc_yearly_on_action` on `on_yearly_pulse_country`, whose effect is `te_hc_yearly_country = yes`.
-  - Effects: `te_hc_yearly_country` (country), `te_hc_state_pass` (state), `te_hc_pick_host` (state), `te_hc_convert_pop` (pop).
+  - Effects: `te_hc_yearly_country` (country), `te_hc_state_pass` (state), `te_hc_pick_host` (state), `te_hc_find_locals` (state), `te_hc_convert_pop` (pop).
   - Triggers: `te_hc_state_has_other_group` (state), `te_hc_pop_taken` (pop), `te_hc_pop_status_allowed` (pop), `te_hc_speaks_host` (pop).
   - Values: `te_hc_monthly_rate = 0.002`, `te_hc_months = 12`, `te_hc_fervor_effect = 0.0075`, `te_hc_homeland_factor = 0.75`, `te_hc_rate_cap = 0.5`; `te_hc_pop_rate` (pop); `te_hc_cross_share` (country).
   - Local variables, set in `te_hc_yearly_country` unless noted: `te_hc_mode` (1 Hybrid Cultures, 2 Unrestricted, 3 None), `te_hc_cross` (`te_hc_cross_share`), `te_hc_blocked` (1 when the bool reads yes); per state `te_hc_has_host`, `te_hc_has_targets`.
-  - Temporary scopes: `te_hc_owner`, `te_hc_state`, `te_hc_host`, `te_hc_capital_host`, and Task 3's `te_hc_t_<group>`.
+  - Temporary scopes: `te_hc_owner`, `te_hc_state`, `te_hc_host`, `te_hc_capital_host`, `te_hc_l_<group>`, and Task 3's `te_hc_t_<group>`.
 
 **The rules the script implements** (spec § The pass):
 
 - `te_hc_yearly_country` does nothing for a country with no state. It walks the incorporated states (`is_incorporated = yes`) that pass `te_hc_state_has_other_group`: `any_scope_culture` with `NOT = { shares_heritage_trait_group_with_any_primary_culture = <owner> }`.
-- `te_hc_state_pass` first sets `te_hc_has_host` and `te_hc_has_targets` to 0, then picks the host, then, under mode 1, calls `te_hcg_save_targets`, then walks the pops that pass `te_hc_pop_taken`.
+- `te_hc_state_pass` first sets `te_hc_has_host` and `te_hc_has_targets` to 0, then picks the host, then, under mode 1, calls `te_hcg_save_targets` and `te_hc_find_locals`, then walks the pops that pass `te_hc_pop_taken`.
 - `te_hc_pick_host`: the owner's primary culture with the most people in the state. With one primary culture present, that one, with no pop walk. With several, each is counted by one pop walk (`total_size` into a local) and the largest kept. With none in the state, the capital's host by the same rule, worked out at most once per country per pass and kept in the temporary scope `te_hc_capital_host`; with none in the capital either, any primary culture.
 - `te_hc_pop_taken`: the culture shares no heritage group with any primary culture of the owner; the state is not a homeland of the culture, or carries `state_allow_assimilation_in_homeland_bool`; `te_hc_pop_status_allowed`.
 - `te_hc_pop_status_allowed`: the owner's `country_allow_assimilation_<status>_bool` for the pop's status, by `pop_acceptance` against vanilla's `acceptance_status_2` to `_5` (20, 40, 60, 80): `violent_hostility`, `cultural_erasure`, `open_prejudice`, `second_rate_citizen`, `full_acceptance`.
@@ -263,13 +263,16 @@ def test_both_modifier_types_are_script_only_and_named(self):
 
 | `te_hc_mode` | speaks | targets | Becomes | Fraction | Not when |
 |---|---|---|---|---|---|
-| 1 | no | 1 | `scope:te_hc_t_<the pop's heritage group>` | rate | never |
-| 1 | no | 0 | `scope:te_hc_host` | rate × `te_hc_cross` | blocked, slave, `te_hc_cross` = 0 |
+| 1 | no | any, local 1 | `scope:te_hc_l_<the pop's heritage group>` | rate | never |
+| 1 | no | 1, local 0 | `scope:te_hc_t_<the pop's heritage group>` | rate | never |
+| 1 | no | 0, local 0 | `scope:te_hc_host` | rate × `te_hc_cross` | blocked, slave, `te_hc_cross` = 0 |
 | 1 | yes | any | `scope:te_hc_host` | rate × `te_hc_cross` | blocked, slave, `te_hc_cross` = 0 |
 | 2 | any | any | `scope:te_hc_host` | rate | blocked, slave |
 | 3 | any | any | `scope:te_hc_host` | rate × `te_hc_cross` | blocked, slave, `te_hc_cross` = 0 |
 
-Nothing converts while `te_hc_has_host` is 0.
+Nothing converts while `te_hc_has_host` is 0. "local" is the local variable `te_hc_has_local_<group>` for the pop's heritage group.
+
+- **The local culture** (spec § The pass, step 4). Under mode 1, after the host is picked, `te_hc_find_locals` (state scope) sets the ten locals `te_hc_has_local_<group>` to 0, then walks the owner's cultures (`every_scope_culture` on the country, which lists the cultures with people there) and, for each that shares no heritage group with any primary culture of the owner, speaks the host's language (`shares_language_trait_with_culture = scope:te_hc_host`) and has a homeland in a state the owner holds, saves it as `te_hc_l_<its group>` and sets that group's local to 1. A culture whose homeland this state is replaces one saved before it for the same group; otherwise the first found is kept. The cheap trait tests come before the walk of the owner's states.
 
 - [ ] **Step 1: The value tests** (`test_assimilation_cultures_values.py`; a Python twin `pop_rate(state_mult, status_mult=0, radicals=0, fervor=0, homeland=False)` built from the numbers the test reads out of the values file):
 
@@ -302,6 +305,9 @@ def test_the_status_ladder_covers_five_statuses_at_vanillas_thresholds(self):
 def test_a_state_without_a_primary_culture_takes_the_capitals_host(self):   # Review Focus 5
 def test_only_incorporated_states_are_walked(self):                        # Review Focus 5
 def test_under_one_person_converts_the_whole_pop_and_zero_converts_nobody(self):
+def test_a_local_culture_needs_people_language_group_and_a_homeland_in_the_country(self):
+def test_local_flags_are_reset_in_every_state(self):                # Review Focus 2
+def test_the_local_search_names_no_culture(self):
 def test_the_pass_names_no_culture(self):                         # no `cu:` in the three hand-written files but the sentinel in the triggers file
 def test_no_world_iterator(self):                                 # no every_state / any_state / every_country in the pass
 ```

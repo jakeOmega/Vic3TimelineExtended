@@ -102,8 +102,10 @@ One hand-written effect, run for each of a country's incorporated states from th
 
    | The pop | Hybrid Cultures | Unrestricted | None |
    |---|---|---|---|
-   | does not speak the host's language | the hybrid of the host's language and its own heritage group (the language step) | the host culture | the host culture, at the rate times the crossing share |
+   | does not speak the host's language | the country's local culture for its heritage group, where there is one; otherwise the hybrid of the host's language and that group (the language step) | the host culture | the host culture, at the rate times the crossing share |
    | speaks it: a hybrid, or a vanilla culture such as Afro-American under a Yankee host | the host culture (the heritage step), at the rate times the crossing share | the host culture | the same |
+
+   **The local culture** (owner, 2026-11-25, from the review's point that three African hybrids have exactly the traits of Afro-American, Afro-Brazilian and Afro-Caribeño): a culture that has people in the country, speaks the host's language, is of the pop's heritage group and has a homeland in a state the country owns. Found by trait at each pass, so no culture is named; where several qualify, one whose homeland the state is, else the first found. A Yoruba pop in the United States becomes Afro-American, in New York as in Georgia (the owner: "in New York, they should become Afro-American"), and rides the American merge; in Britain or Canada, which hold no such homeland, it becomes Anglophone African. Once Afro-American has switched into American there are none left in the country, so later arrivals become Anglophone African: otherwise the merge would be a way across the wall with no law. A pop that joined a local culture inside that culture's homeland states no longer assimilates, as nobody does in a homeland; outside them it can still take the heritage step.
 
    The crossing share is the country's `country_cross_heritage_assimilation_add`, 0 without a Bodily Autonomy law. So None is Hybrid Cultures without the hybrids (owner, 2026-11-25): a wall until a law opens it, then straight across. A host whose language is off the roster is treated as under None (my call, which the owner approved), so that a Bodily Autonomy law opens the wall there too.
 
@@ -183,16 +185,9 @@ The owner, 2026-11-25, on the draft's eight questions:
 7. **The law table**: as drawn, the conversion reading the state's assimilation modifier.
 8. **The heritage step takes any culture that speaks the host's language**, not only a generated hybrid.
 
-Also the owner's: the host is the majority primary culture; the imitation's differences from the engine are acceptable ("That's fine"); Ancestral Citizenship blocks joining a culture of another heritage group ("Good idea - agreed"); None "is hybrid cultures without the hybrids".
+Also the owner's: the local culture in place of a hybrid, where the country holds one's homeland; the host is the majority primary culture; the imitation's differences from the engine are acceptable ("That's fine"); Ancestral Citizenship blocks joining a culture of another heritage group ("Good idea - agreed"); None "is hybrid cultures without the hybrids".
 
 Calls of mine the owner has seen and approved ("good"): the group define, not the trait one; slaves take the language step only; the host counted per state; no patch for vanilla's share tests.
-
-## Still open
-
-**A hybrid beside a vanilla culture with the same traits** (from the review of this file, 2026-11-25). The African hybrids carry vanilla's African Diaspora heritage, so `hc_anglophone_african` has exactly Afro-American's two traits, `hc_lusophone_african` Afro-Brazilian's and `hc_hispanophone_african` Afro-Caribeño's. As drawn, a Yoruba pop in Georgia becomes Anglophone African beside the Afro-Americans there, and the American merge later takes Afro-American and never the hybrid. Other vanilla cultures stand in the same place for other pairs (Griqua, Sudanese, Haratin, Maltese, Pathan, Turkmen, Hazara, the two Hispanophone Filipino cultures).
-
-- **A, as drawn:** always the hybrid.
-- **B, proposed:** in a state that is a homeland of a culture that lives there, speaks the host's language and is of the pop's heritage group, the pop joins that culture; anywhere else, the hybrid. Found by trait at each pass, so no culture is named. Yoruba in Georgia become Afro-American and ride the American merge; in New York or London they become Anglophone African. The cost: a pop that joined a local culture lives in its own homeland from then on, where nothing assimilates, so a Bodily Autonomy law does not reach it.
 
 ## Left to the build
 
