@@ -450,11 +450,12 @@ class StructureTest(unittest.TestCase):
     def test_the_tabs_figures(self):
         """What each figure counts (each a mutation the review named)."""
         values = _no_comments(_read(VALUES))
-        sent, received = _txt_block(values, "te_grid_tab_sent_disp"), _txt_block(values, "te_grid_tab_received_disp")
+        # Sent and Received: the live figures the run stores (StoredFlowsTest).
+        sent, received = _txt_block(values, "te_grid_tab_sent_live"), _txt_block(values, "te_grid_tab_received_live")
         self.assertIn("te_grid_mode_disp = 1", sent)
         self.assertIn("te_grid_mode_disp = 2", received)
-        self.assertIn("te_grid_mode_disp = 1", _txt_block(values, "te_grid_tab_senders_disp"))
-        self.assertIn("te_grid_mode_disp = 2", _txt_block(values, "te_grid_tab_receivers_disp"))
+        self.assertIn("te_grid_mode_disp = 1", _txt_block(values, "te_grid_tab_senders_live"))
+        self.assertIn("te_grid_mode_disp = 2", _txt_block(values, "te_grid_tab_receivers_live"))
         for body in (sent, received):
             self.assertIn("add = te_grid_electricity_moved_disp", body)
         reach = _txt_block(values, "te_grid_tab_reach_disp")
@@ -621,6 +622,70 @@ class StationsTableTest(unittest.TestCase):
         self.assertIn(f"te_grid_station_staffing_disp < {threshold}", wants)
         section = _type_body(self.gui, "te_grid_building_section")
         self.assertIn(f"'(CFixedPoint){threshold}' ), 'te_grid_st_staff_short', 'te_grid_st_staff' )", section)
+
+
+class StoredFlowsTest(unittest.TestCase):
+    """The overview's Sent and Received read what the monthly run stored, not
+    six walks of every state a frame (2026-11-24, from #2016); each stored
+    figure is its live twin at the run's end. A country the run has not stored
+    for (no station, or a save from before the store until its first run)
+    reads the live one, as before."""
+
+    FLOWS = ("sent", "senders", "received", "receivers")
+
+    def setUp(self):
+        self.values = _no_comments(_read(VALUES))
+        self.effects = _no_comments(_read(EFFECTS))
+
+    def _squash(self, text):
+        return " ".join(text.split())
+
+    def test_each_display_reads_its_stored_variable(self):
+        for x in self.FLOWS:
+            self.assertEqual(self._squash(_txt_block(self.values, f"te_grid_tab_{x}_disp")),
+                             f"{{ value = 0 if = {{ limit = {{ has_variable = te_grid_tab_{x} }} "
+                             f"value = var:te_grid_tab_{x} }} else = {{ value = te_grid_tab_{x}_live }} }}", x)
+            live = _txt_block(self.values, f"te_grid_tab_{x}_live")
+            self.assertIn("every_scope_state", live, x)
+            self.assertNotIn("var:te_grid_tab_", live, x)
+
+    def test_the_run_stores_each_from_its_live_twin(self):
+        store = self._squash(_txt_block(self.effects, "te_grid_store_tab_flows_effect"))
+        self.assertEqual(re.findall(r"set_variable = \{ name = (\w+) value = (\w+) \}", store),
+                         [(f"te_grid_tab_{x}", f"te_grid_tab_{x}_live") for x in self.FLOWS])
+        self.assertEqual(store.count("set_variable"), len(self.FLOWS))
+        # At the run's end, for every country of its record, after its stations' order.
+        run = self._squash(_txt_block(self.effects, "te_grid_world_update_effect"))
+        self.assertIn("every_in_global_list = { variable = te_grid_record_countries te_grid_order_stations_effect = yes "
+                      "te_grid_store_tab_flows_effect = yes }", run)
+        self.assertLess(run.index("te_grid_balance_region_effect = yes"), run.index("te_grid_store_tab_flows_effect"))
+        # A country that leaves the run keeps none, as it keeps no list: cleared where its lists are.
+        clear = self._squash(_txt_block(self.effects, "te_grid_record_clear_effect"))
+        self.assertIn("clear_variable_list = te_grid_stations clear_variable_list = te_grid_cable_reach "
+                      "te_grid_clear_tab_flows_effect = yes", clear)
+        cleared = self._squash(_txt_block(self.effects, "te_grid_clear_tab_flows_effect"))
+        for x in self.FLOWS:
+            self.assertIn(f"if = {{ limit = {{ has_variable = te_grid_tab_{x} }} remove_variable = te_grid_tab_{x} }}",
+                          cleared)
+        # What they sum is the run's: the live figures read the flow and the order it set.
+        moved = _txt_block(self.values, "te_grid_electricity_moved_disp")
+        for var in ("te_grid_flow", "te_grid_command"):
+            self.assertIn(f"var:{var}", moved)
+
+    def test_no_reader_walks_the_states_for_them(self):
+        """The overview's two cells and their hovers read the stored figures;
+        nothing in the GUI or the loc reads a live one."""
+        gui, loc = _read(GUI), _all_loc()
+        overview = _type_body(gui, "te_grid_overview_panel")
+        for x in ("sent", "received"):
+            self.assertIn(f"ScriptValue('te_grid_tab_{x}_disp')", overview)
+        for key in ("te_grid_ov_sent_word", "te_grid_ov_sent_tt", "te_grid_ov_received_word", "te_grid_ov_received_tt"):
+            self.assertRegex(loc[key], r"ScriptValue\('te_grid_tab_(sent|senders|received|receivers)_disp'\)", key)
+        for root in ("gui", "localization"):
+            for dirpath, _dirs, files in os.walk(os.path.join(REPO, root)):
+                for f in files:
+                    if f.endswith((".gui", ".yml")):
+                        self.assertNotRegex(_read(os.path.join(dirpath, f)), r"te_grid_tab_\w+_live", f)
 
 
 class FigureTest(unittest.TestCase):
