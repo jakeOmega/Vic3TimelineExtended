@@ -611,6 +611,13 @@ SR_OPEN_JOURNAL = ["button = {",
                    "}"]
 
 
+# The entry's modifiers (#1383), grouped under a Program Effects subheading:
+# te_sr_program_effects (space_race_widget.gui), the same two datamodels as
+# the shared te_je_modifier_strip, the Ongoing (scaling) icons then the Timed
+# rows with their time left (2026-11-24 evaluation).
+SR_EFFECTS = "te_sr_program_effects = {}"
+
+
 def _sr_status(m: str) -> list[str]:
     """A milestone's live sections, the debris row overridden out (Orbit
     shows it once)."""
@@ -658,7 +665,7 @@ def _milestone(m: str) -> list[str]:
         status = ([f"### Full screen, in a column of their own (te_sr_window_{m}_live).",
                    f'block "sr_window_{m}_live" {{']
                   + [f"\t{ln}" for ln in status] + ["}"])
-    own = _sr_own(m, status + ["te_je_modifier_strip = {}"] + SR_OPEN_JOURNAL)
+    own = _sr_own(m, status + [SR_EFFECTS] + SR_OPEN_JOURNAL)
     return ([f"### {m}",
              "te_system_tab_frame = {",
              '\tblockoverride "tab_country" {}',

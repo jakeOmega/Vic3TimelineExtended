@@ -6,7 +6,9 @@ the journal window's header strip (vanilla's JournalEntry.GetTimedModifiers /
 GetScalingModifiers row). A system tab draws the same strip,
 te_je_modifier_strip (gui/te_system_tab_widgets.gui), under the entry's
 GetPlayerJournalEntry datacontext: through the frame's tab_entry_modifiers
-block, or, for a Space Race milestone, inside its own part.
+block, or, for a Space Race milestone, inside its own part, where the Space
+Race's own form of it, te_sr_program_effects (space_race_widget.gui: the same
+two datamodels grouped under a Program Effects subheading), takes its place.
 
 This is the audit the issue asked for, as a test: every entry that carries
 such a modifier and has a tab draws the strip there, and every entry with
@@ -24,6 +26,11 @@ from gui_test_helpers import _children, _close, _read, _strip_comments, _type_bo
 REPO = os.path.dirname(os.path.abspath(__file__))
 WIDGETS = os.path.join(REPO, "gui", "te_system_tab_widgets.gui")
 STRIP = "te_je_modifier_strip = {}"
+# The Space Race milestones' grouped form (2026-11-24): the same datamodels,
+# under a subheading, the scaling icons then the timed rows.
+SR_STRIP = "te_sr_program_effects = {}"
+STRIPS = (STRIP, SR_STRIP)
+SR_WIDGETS = os.path.join(REPO, "gui", "journal_entry_widgets", "space_race_widget.gui")
 
 # Entries script adds modifiers to that have no system tab: only the journal
 # window shows their modifiers (2026-11-12). An entry that gets a tab leaves
@@ -113,10 +120,10 @@ def strips_by_entry():
     out, orphans = {}, []
     for path in sorted(glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)):
         raw = _read(path)
-        if STRIP not in raw:
+        if not any(s in raw for s in STRIPS):
             continue
         text = _strip_comments(raw)
-        for m in re.finditer(re.escape(STRIP), text):
+        for m in re.finditer("|".join(re.escape(s) for s in STRIPS), text):
             entry = None
             for brace in _enclosing(text, m.start()):
                 body = text[brace + 1:_close(text, brace)]
@@ -163,6 +170,29 @@ class StripTypeTest(unittest.TestCase):
                 self.assertIn(f'datamodel = "[JournalEntry.{model}]"', body)
                 self.assertIn(f'tooltip = "[{item}.GetTooltip]"', body)
                 self.assertIn(f'texture = "[{item}.GetIcon]"', body)
+
+
+    def test_the_space_races_form_reads_the_same_rows(self):
+        """te_sr_program_effects: the same guard and the same two datamodels,
+        each icon with its own tooltip; the timed rows add the name and the
+        time left. The panel and each group draw only with something in them,
+        and only the Space Race's milestone frames draw it."""
+        body = _strip_comments(_type_body(_read(SR_WIDGETS), "te_sr_program_effects"))
+        top = _children(body)
+        self.assertIn(("property", "using", "te_own_country_only"), top)
+        self.assertNotIn("visible", [n for k, n, _ in top if k == "property"])   # gotcha #17
+        for model, item in (("GetScalingModifiers", "ScalingModifier"), ("GetTimedModifiers", "TimedModifier")):
+            with self.subTest(model=model):
+                self.assertIn(f'datamodel = "[JournalEntry.{model}]"', body)
+                self.assertIn(f'tooltip = "[{item}.GetTooltip]"', body)
+                self.assertIn(f'texture = "[{item}.GetIcon]"', body)
+                self.assertIn(f'visible = "[Not( IsDataModelEmpty( JournalEntry.{model} ) )]"', body)
+        self.assertIn('text = "[TimedModifier.GetRemainingDuration]"', body)
+        self.assertIn('visible = "[Or( Not( IsDataModelEmpty( JournalEntry.GetScalingModifiers ) ), '
+                      'Not( IsDataModelEmpty( JournalEntry.GetTimedModifiers ) ) )]"', body)
+        users = [os.path.relpath(p, REPO) for p in glob.glob(os.path.join(REPO, "gui", "**", "*.gui"), recursive=True)
+                 if SR_STRIP in _read(p)]
+        self.assertEqual(users, [os.path.join("gui", "te_systems_window_generated.gui")])
 
 
 class StripCoverageTest(unittest.TestCase):
