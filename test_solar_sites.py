@@ -2221,7 +2221,9 @@ class FreeColoniesTest(unittest.TestCase):
                 self.assertIn(f"add = sr_site_aut_drift_{k}", step)
                 self.assertIn("min = 0", step)
                 self.assertIn("max = sr_aut_break_level", step)
-                self.assertLess(step.index("sr_aut_break_away"), step.index("sr_aut_ask ="))
+                # At 100 it is held or declares (sr_site_declare_<key> frees it through
+                # sr_aut_break_away; owner, 2026-11-25), before the demand at 50.
+                self.assertLess(step.index(f"sr_site_declare_{k} = yes"), step.index("sr_aut_ask ="))
                 self.assertIn(f"name = sr_site_aut_asked_{k} value = yes days = 1825", step)
                 # The drift is the pressure less settling (colony management design § 4.2).
                 drift = _block(self.values, f"sr_site_aut_drift_{k}")
@@ -2254,7 +2256,7 @@ class FreeColoniesTest(unittest.TestCase):
                 self.assertEqual(pressure[-1].strip(), f"if = {{ limit = {{ NOT = {{ {peopled} }} }} value = 0 }}")
                 # both thresholds test the people
                 step = _block(self.effects, f"sr_site_aut_step_{k}")
-                brk = step[step.rindex("limit", 0, step.index("sr_aut_break_away")):step.index("sr_aut_break_away")]
+                brk = step[step.index("local_var:sr_aut_peak >= sr_aut_break_level"):step.index(f"sr_site_may_hold_{k}")]
                 ask = step[step.index("else_if"):step.index("sr_aut_ask =")]
                 self.assertIn("sr_aut_break_level", brk)
                 self.assertIn(peopled, brk)
