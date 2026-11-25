@@ -1,6 +1,6 @@
 # Assimilation cultures: heritage as a limit on assimilation, behind a game rule
 
-Status: design draft, 2026-11-25. The owner answered the draft's questions the same day (§ Decided). One thing is open, which languages the roster adds for Africa and the Americas (§ Still open); it is a config list and holds up nothing else. Nothing is built.
+Status: design draft, 2026-11-25. The owner answered the draft's questions the same day (§ Decided) and approved the design with the roster below ("I'm happy with the spec with those added!"). Nothing is built.
 
 ## Why
 
@@ -36,7 +36,7 @@ Non-goals:
 
 - A hybrid culture as a Culture Merge part, a homeland for a hybrid, a journal entry or a panel. A card on the state overview that shows the year's scripted assimilation is a possible later addition (the owner: "we can potentially add a card to the state overview panel if we want to make it more visible"), not part of this build.
 - Patching vanilla content that counts a primary culture's share of a state where the minority is of another heritage group (the Algerian departments, Goa). Under Hybrid Cultures those pops become French-speaking, not French, and the share stops rising.
-- Languages outside the roster (§ The cultures): their countries assimilate nobody across heritage under Hybrid Cultures.
+- Hybrids for languages outside the roster (§ The cultures): their countries are treated as under None.
 
 Anti-goals:
 
@@ -60,18 +60,19 @@ Anti-goals:
 ### The cultures
 
 - **One hybrid for each roster language and heritage group**, `hc_<language>_<group>` (`hc_anglophone_african`), less the group that is the only one the language's own cultures have: German needs no European hybrid. The prefix is for the reason `cm_` has one.
-- **Roster**, a list in the generator's config, where a language is one line. The rule: the 30 languages with the most people living under them in 1836 together with the 30 with the most speakers, 39 in all, since a count by rulers alone misses the languages of colonized peoples (Bengali's language is second in the world by speakers and 70th by rulers). With the five languages the tier-2 merges mint (`language_cm_latin` and its kin) and the five the owner agreed by hand (Greek, South Slavic, Philippinic, Amharic, Burmic) that is 49 languages and 454 cultures; the ten proposed in § Still open would make 59 and 544. The count was taken over every country in the 1836 history, the 158 decentralized nations among them. Every language that is primary somewhere in 1836 would be 130 languages and about 1,230 cultures; every language, 1,782.
+- **Roster**, a list in the generator's config, where a language is one line. The rule: the 30 languages with the most people living under them in 1836 together with the 30 with the most speakers, 39 in all, since a count by rulers alone misses the languages of colonized peoples (Bengali's language is second in the world by speakers and 70th by rulers). The count was taken over every country in the 1836 history, the 158 decentralized nations among them. To those the owner added 20 by hand (2026-11-25), most of them for Africa, which vanilla splits into about 60 languages, none large enough to make either count but Fulani and Hausa; and three for the Americas. The mod's formables are why they matter: the African Union lists 49 primary cultures and the East African Federation 18, and under the majority rule each state's host is its largest one. With the five languages the tier-2 merges mint (`language_cm_latin` and its kin) the roster is 64 languages and 589 cultures, covering 90% of 1836's people by the language they speak. Considered and left out: Fluvial Bantu, which only five decentralized nations hold and no formable lists. Every language that is primary somewhere in 1836 would be 130 languages and about 1,230 cultures; every language, 1,782.
 
   | Region | Languages (vanilla's name, then its main cultures) |
   |---|---|
-  | Europe | Anglophone (English, Yankee, Dixie, Scottish), Germanophone, Francophone, Hispanophone (Spanish, Mexican and 17 more), Lusophone (Portuguese, Brazilian), Italian, Dutch (Dutch, Flemish, Boer), East Slavic (Russian, Ukrainian, Byelorussian), West Slavic (Polish, Czech, Slovak), Scandinavian, Hungarian, Eastern Romance (Romanian), Occitano-Romance (Occitan, Catalan), Gaelic (Irish, Gael), Greek, South Slavic (Serbian, Croatian, Bosniak) |
+  | Europe | Anglophone (English, Yankee, Dixie, Scottish), Germanophone, Francophone, Hispanophone (Spanish, Mexican and 17 more), Lusophone (Portuguese, Brazilian), Italian, Dutch (Dutch, Flemish, Boer), East Slavic (Russian, Ukrainian, Byelorussian), West Slavic (Polish, Czech, Slovak), Scandinavian, Hungarian, Eastern Romance (Romanian), Occitano-Romance (Occitan, Catalan), Gaelic (Irish, Gael); by hand: Greek, South Slavic (Serbian, Croatian, Bosniak) |
   | Middle East, North Africa | Arabic, Oghuz (Turkish, Azerbaijani, Turkmen), Persian, Berber |
   | South Asia | Hindustani, Magadhan (Bengali, Bihari, Oria), Tamil-Tulu (Tamil, Kannada, Malayalam), Southern Indic (Marathi, Sinhala), Western Indic (Rajput, Gujarati), Northwestern Indic (Punjabi, Sindi), South-Central (Telugu, Gondi), Pahari (Nepali) |
   | East Asia | Mandarin (Han), Yue, Min, Hakka, Jurchenic (Manchu), Japanese, Korean, Tibetan |
-  | Southeast Asia | Malay (Javan, Malay, Sumatran), Vietic (Vietnamese), Siamese (Thai), Philippinic (Tagalog, Visayan), Burmic (Burmese) |
-  | Africa | Fulani, Hausa, Amharic (Amhara) |
+  | Southeast Asia | Malay (Javan, Malay, Sumatran), Vietic (Vietnamese), Siamese (Thai); by hand: Philippinic (Tagalog, Visayan), Burmic (Burmese) |
+  | Africa | Fulani, Hausa; by hand: Amharic, Oromo (vanilla's `language_galla`) and Tigrinya, which are Ethiopia's three primary cultures, Somali, Lacustrine Bantu (Baganda, Ruanda, Rundi), Equatorial Bantu, Nguni (Zulu, Xhosa), Swahili, Yoruba, Akan (Ashanti), Malagasy, Mande and Manding (Bambara), the two languages of vanilla's Mali |
+  | The Americas | by hand: Quechuan (Quechua), Guarani (a primary culture of Paraguay), Siouan (Lakota, Dakota) |
 - **Traits.** The language is the host's. The heritage is one diaspora trait for each group, minted in vanilla's group (`heritage_hc_east_asian` in `heritage_group_east_asian`), except that the African hybrids use vanilla's `heritage_african_diaspora`, Afro-American's own trait.
-- **Name**, spliced from vanilla's own names for the language and the group, so it follows any rename or translation: `$language_anglophone$ $heritage_group_african$` reads "Anglophone African"; "Lusophone East Asian", "Mandarin European". Where vanilla's word is a linguist's ("Oghuz European", "Jurchenic African", "Eastern Romance African"), the config gives that language or group a word of its own for the hybrids' names ("Turkic", "Manchu", "Romanian"), by the owner's rule: "we should try to make them sound good if there are any cases where the default rule makes something that sounds bad". The build's PR lists every name for a read-through.
+- **Name**, spliced from vanilla's own names for the language and the group, so it follows any rename or translation: `$language_anglophone$ $heritage_group_african$` reads "Anglophone African"; "Lusophone East Asian", "Mandarin European". Where vanilla's word is a linguist's ("Oghuz European", "Jurchenic African", "Eastern Romance African"), the config gives that language or group a word of its own for the hybrids' names ("Turkic", "Manchu", "Romanian"), by the owner's rule: "we should try to make them sound good if there are any cases where the default rule makes something that sounds bad". Vanilla's "Galla" is a name the Oromo reject, so those hybrids say "Oromo". The build's PR lists every name for a read-through.
 - **Other fields**, derived, none typed in: name lists and religion from the language's largest culture by 1836 population; ethnicities and graphics from the group's largest; a color between the two; no traditions, obsessions or homelands. The six static modifiers and three modifier types come from the functions `gen_culture_merges.py` already has, moved to a module both generators use.
 - They exist from 1836 with no pops, under every setting of the rule: a culture can't be gated at load.
 
@@ -88,7 +89,7 @@ One hand-written effect, run for each of a country's states from that country's 
    - the state is not a homeland of its culture, or carries `state_allow_assimilation_in_homeland_bool`;
    - the owner's laws let its acceptance status assimilate (`country_allow_assimilation_<status>_bool`).
 
-   Under Ancestral Citizenship (`law_ethnostate`) no pop joins a culture of another heritage group, under any setting and whatever the Bodily Autonomy law (owner, 2026-11-25). The law carries a bool the pass reads, `country_cross_heritage_assimilation_blocked_bool`, so its tooltip says so. The language step still runs there. Under Unrestricted, where every conversion crosses heritage, that leaves nothing: an Ancestral Citizenship country assimilates only within its heritage group, which is not vanilla's behavior. Within a group the engine runs assimilation and no law can filter it by heritage trait; that is left to acceptance, where the law already puts a pop sharing only the group 20 points below one sharing the trait.
+   Under Ancestral Citizenship (`law_ethnostate`) no pop joins a culture of another heritage group, under any setting and whatever the Bodily Autonomy law (owner, 2026-11-25). The law carries a bool the pass reads, `country_cross_heritage_assimilation_blocked_bool`, so its tooltip says so. The language step still runs there. Under Unrestricted, where every conversion crosses heritage, that leaves nothing: an Ancestral Citizenship country assimilates only within its heritage group, which is not vanilla's behavior; the owner kept it ("let's keep, I think it is good"). Within a group the engine runs assimilation and no law can filter it by heritage trait; that is left to acceptance, where the law already puts a pop sharing only the group 20 points below one sharing the trait.
 
    | Minority Rights law | Statuses that assimilate |
    |---|---|
@@ -104,7 +105,7 @@ One hand-written effect, run for each of a country's states from that country's 
    | does not speak the host's language | the hybrid of the host's language and its own heritage group (the language step) | the host culture | the host culture, at the rate times the crossing share |
    | speaks it: a hybrid, or a vanilla culture such as Afro-American under a Yankee host | the host culture (the heritage step), at the rate times the crossing share | the host culture | the same |
 
-   The crossing share is the country's `country_cross_heritage_assimilation_add`, 0 without a Bodily Autonomy law. So None is Hybrid Cultures without the hybrids (owner, 2026-11-25): a wall until a law opens it, then straight across. A host whose language is off the roster is treated as under None *(my call)*, so that a Bodily Autonomy law opens the wall there too.
+   The crossing share is the country's `country_cross_heritage_assimilation_add`, 0 without a Bodily Autonomy law. So None is Hybrid Cultures without the hybrids (owner, 2026-11-25): a wall until a law opens it, then straight across. A host whose language is off the roster is treated as under None (my call, which the owner approved), so that a Bodily Autonomy law opens the wall there too.
 
 5. **The rate**, the fraction of the pop that converts that year: 12 × 0.002 (the engine's monthly `ASSIMILATION_RATE`) × (1 + the state's `state_assimilation_mult`) × (1 + the owner's `country_assimilation_<status>_mult`), each factor no lower than 0, × (1 − the pop's radical share) × the culture's fervor factor (the mod's define, 0.0075 a point) × 0.75 in a homeland, capped at one half. It reads the engine's own sums, so every law, institution, decree and Cultural Hegemony bonus that speeds assimilation speeds this, with no second list to keep. With no modifiers that is 2.4% a year, half a community in 29 years; at the +690% of the owner's 2039 New York it is 19% a year.
 6. **The hybrids' scopes**, under Hybrid Cultures: a generated ladder with one branch per roster language tests the host's language trait once per state and saves that language's ten hybrids, each behind `exists = cu:<hybrid>`. It is the only generated script; the pass itself is written by hand, and its conversions name the saved scopes.
@@ -175,7 +176,7 @@ The owner, 2026-11-25, on the draft's eight questions:
 
 1. **The shape**: the rule, with script doing the work across heritage groups ("I like it with the rule").
 2. **Name and default**: as recommended, with a third setting, None (§ The rule).
-3. **Which pairs get a culture**: a config roster, listed in § The cultures, with Greek, South Slavic, Philippinic, Amharic and Burmic added by hand ("good additions - agreed with all!"). More for Africa and the Americas are open, below.
+3. **Which pairs get a culture**: a config roster, listed in § The cultures, with 20 languages added by hand over three rounds; Jurchenic, Occitano-Romance and Gaelic, which I offered to drop, stay ("yes, keep").
 4. **Who may convert**: the Minority Rights laws' per-status switches.
 5. **The hybrids' heritage trait**: one diaspora trait per group, the African one vanilla's own.
 6. **The names**: spliced, with a word of the mod's own where vanilla's sounds bad.
@@ -185,19 +186,6 @@ The owner, 2026-11-25, on the draft's eight questions:
 Also the owner's: the host is the majority primary culture; the imitation's differences from the engine are acceptable ("That's fine"); Ancestral Citizenship blocks joining a culture of another heritage group ("Good idea - agreed"); None "is hybrid cultures without the hybrids".
 
 Calls of mine the owner has seen and approved ("good"): the group define, not the trait one; slaves take the language step only; the host counted per state; no patch for vanilla's share tests.
-
-## Still open
-
-**The roster's additions for Africa and the Americas.** The owner's concern is Africa, which the count leaves with Fulani, Hausa and Amharic: vanilla splits the continent into about 60 languages, and none of its own reaches the top 30 by speakers or by rulers except those. The mod's own formables make them matter: the African Union lists 49 primary cultures and the East African Federation 18, and under the majority rule each state's host is its largest one. Proposed, nine cultures each:
-
-- **Ethiopia and the Kushitic languages**: Oromo (vanilla's `language_galla`, 2.8 million speakers; the hybrids' names say "Oromo", "Galla" being a name the Oromo reject), Tigrinya (0.5 million), Somali (1.3 million). With Amharic these are all three of Ethiopia's primary cultures.
-- **Bantu**: Lacustrine Bantu (Baganda, Ruanda, Rundi; 4.5 million), Equatorial Bantu (3.6 million), Nguni (Zulu, Xhosa; 1.1 million), Swahili (0.7 million, the coast's language and the East African Federation's).
-- **West Africa**: Yoruba (2.1 million).
-- **The Americas**: Quechuan (1.8 million speakers, the largest by far; Iquicha in 1836, and vanilla's Tawantinsuyu) and Guarani (a primary culture of Paraguay from 1836, where the Guarani are the majority, so in use from the first day). Siouan (Lakota, Dakota, vanilla's Turtle Island) is the pick for one from North America.
-
-Next in line if more are wanted: Fluvial Bantu, Mande, Akan, Malagasy; Nahuan (vanilla's Anahuac).
-
-Not answered, so kept: the three candidates to drop (Jurchenic, Occitano-Romance, Gaelic).
 
 ## Left to the build
 
