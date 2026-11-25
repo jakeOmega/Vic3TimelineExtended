@@ -1068,6 +1068,7 @@ class StoredOverviewTest(unittest.TestCase):
         building, which may not read back yet: one more store a day later."""
         finish = self._effect("gm_state_finish_site")
         self.assertTrue(finish.endswith("remove_variable = gm_site_counted remove_variable = gm_site_grandeur "
+                                        "set_variable = { name = gm_holder value = owner } "
                                         "owner = { trigger_event = { id = monument_events.36 days = 1 } } }"),
                         finish[-200:])
         self.assertTrue(finish.startswith("set_variable = gm_finish_click if = { limit = { has_variable = "
@@ -1105,15 +1106,22 @@ class StoredOverviewTest(unittest.TestCase):
         self.assertTrue(hands.endswith(tail), hands[-400:])
         # After the monuments beside it have moved to the new owner's list.
         self.assertLess(hands.index("gm_mon_changed_hands = yes"), hands.index(tail))
-        # gm_holder is the owner, stamped by the state pulse and by every
-        # refresh, so a state lost before its next pulse still names it.
+        # gm_holder is the owner, stamped by the state pulse and when a site
+        # is dedicated, so a monument's state lost before its next pulse
+        # still names it. Never by the refresh: a transfer of several
+        # monument states refreshes the new owner from the first state's
+        # hook, and a stamp there would name the new owner on the others
+        # before their own hooks ran (the trophies' gm_taken_from would be
+        # lost: the review of #2033).
         stamp = "set_variable = { name = gm_holder value = owner }"
         trophy = _squash(_block(_read(os.path.join(REPO, "common", "scripted_effects", "gm_trophy_effects.txt")),
                                 "gm_state_tr_monthly"))
         self.assertTrue(trophy.startswith(stamp))
-        self.assertIn("clear_variable_list = gm_states every_scope_state = { limit = { has_building = "
-                      f"building_grand_monument }} gm_state_restore_dedication = yes gm_state_sig_backfill = yes {stamp}",
-                      self._effect("gm_country_refresh"))
+        finish = self._effect("gm_state_finish_site")
+        self.assertIn(f"remove_variable = gm_site_grandeur {stamp} owner = {{ trigger_event = {{ id = "
+                      "monument_events.36 days = 1 } }", finish)
+        self.assertLess(finish.index("remove_variable = gm_finish_click"), finish.index(stamp))   # only when it runs
+        self.assertNotIn("gm_holder", self._effect("gm_country_refresh"))
 
     def test_a_civil_wars_winner(self):
         """Lists are not inherited and the winner's own variables win the

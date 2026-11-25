@@ -771,10 +771,6 @@ gm_country_refresh = {
 		gm_state_restore_dedication = yes
 		# A landmark's unique dedication (signatures spec §4.4).
 		gm_state_sig_backfill = yes
-		# Its owner, as the state pulse stamps it (gm_state_tr_monthly): a state
-		# lost before its next pulse still names the country it leaves
-		# (gm_state_changed_hands, #2033).
-		set_variable = { name = gm_holder value = owner }
 		set_variable = { name = gm_grandeur value = gm_state_primary_grandeur }
 		# A part of this region merged into this state, and the records of a
 		# monument that stood there wait to be adopted here (issue #936): the
@@ -2463,6 +2459,14 @@ gm_state_finish_site = {
 		}
 		remove_variable = gm_site_counted
 		remove_variable = gm_site_grandeur
+		# Its owner, as the state pulse stamps it (gm_state_tr_monthly): a
+		# monument dedicated since the last pulse still names the country a
+		# lost state leaves (gm_state_changed_hands, #2033). Here and not in
+		# the refresh: a transfer of several monument states refreshes the new
+		# owner from the first state's hook, and a stamp there would name the
+		# new owner on the others before their own hooks ran, so the trophies
+		# would lose who they were taken from (gm_state_tr_changed_hands).
+		set_variable = { name = gm_holder value = owner }
 		# The overview's stored figures again a day later (#2033): the
 		# ceremony's refresh stores in this same effect, where the building
 		# made above may not read back yet (gm_ov_store_after_dedication).
