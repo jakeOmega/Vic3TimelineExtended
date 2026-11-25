@@ -381,6 +381,19 @@ te_debug_space_race.5 = { # REVIEWED 2026-10-26: console-only test event (`event
 		sr_aut_debug_first_held = yes
 		sr_aut_debug_abandon_ask = yes
 	}
+
+	# Our first colony's autonomy to 100: the next month's step holds it with our
+	# marines there (Full Colonies, space_race_events.114) or frees it (.98).
+	option = {
+		name = te_debug_space_race.5.i
+		trigger = {
+			sr_colonies_contested_enabled = yes
+			sr_has_space_colony = yes
+		}
+		sr_aut_debug_first_held = yes
+		set_local_variable = { name = sr_aut_delta value = 100 }
+		sr_site_by_index = { DO = debug_aut }
+	}
 }
 
 te_debug_space_race.6 = { # REVIEWED 2026-10-26: console-only test event (`event te_debug_space_race.6`); never fired by script on purpose

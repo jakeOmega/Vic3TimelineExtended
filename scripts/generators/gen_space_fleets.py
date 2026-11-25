@@ -784,7 +784,9 @@ def render_triggers() -> str:
             "#   sr_loc_propellant_port_<loc>  ... on a propellant world",
             "#   sr_loc_our_marines_<loc>      marines of ours stand at a world of ours there",
             "#   sr_loc_garrison_due_<loc>     a world of ours there waits for its garrison, and",
-            "#                                 our marines on its world don't make one already"]
+            "#                                 our marines on its world don't make one already;",
+            "#                                 or one held at the break level by force for fewer",
+            "#                                 than sr_hold_ai_reinforce_months (owner, 2026-11-25)"]
     held = lambda s: (f"global_var:sr_site_holder_{s.key} ?= this "  # noqa: E731
                       f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}")
 
@@ -793,7 +795,9 @@ def render_triggers() -> str:
                 *[f"\t\tAND = {{ {held(s)} sr_site_marines_value_{s.key} >= 1 }}" for s in ws], "\t}", "}",
                 f"sr_loc_garrison_due_{loc} = {{", "\tOR = {",
                 *[f"\t\tAND = {{ {held(s)} has_global_variable = sr_site_garrison_due_{s.key} "
-                  f"sr_site_shared_marines_{s.key} < sr_garrison_marines_needed }}" for s in ws], "\t}", "}"]
+                  f"sr_site_shared_marines_{s.key} < sr_garrison_marines_needed }}" for s in ws],
+                *[f"\t\tAND = {{ {held(s)} has_global_variable = sr_site_resisting_{s.key} "
+                  f"sr_site_hold_months_{s.key} < sr_hold_ai_reinforce_months }}" for s in ws], "\t}", "}"]
 
     out += ["# The Moon's colonies, at Earth: Land and Embark there (owner, 2026-11-24).",
             "sr_loc_held_lunar = {", "\tOR = {", *[f"\t\tAND = {{ {held(s)} }}" for s in LUNAR], "\t}", "}",
@@ -1363,7 +1367,8 @@ def render_location_effects() -> list[str]:
             "\t\tset_local_variable = { name = sr_fl_arr value = var:sr_fl_$N$_arrive }"]
     out += _chain([(f"var:sr_fl_$N$_dest = {lc.code}", [f"sr_loc_add_inbound = {{ LOC = {lc.key} }}"]) for lc in LOCATIONS], 2)
     out += ["\t}", "}", "",
-            "# The AI's Land: every marine aboard, at the first world of ours there awaiting",
+            "# The AI's Land: every marine aboard, at the first world of ours there held by",
+            "# force with its hold running short (owner, 2026-11-25), else the first awaiting",
             "# its garrison, else the first world of ours there (table order); at Earth, on",
             "# the Moon (owner, 2026-11-24). A player picks the world and the amount in the",
             "# Marines popup (sr_fl_land_pick_at, sr_fl_embark_pick_at)."]
@@ -1373,8 +1378,11 @@ def render_location_effects() -> list[str]:
         ws = worlds_at(lc.key)
         held = lambda s: (f"global_var:sr_site_holder_{s.key} ?= this "  # noqa: E731
                           f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }}")
-        inner = [(f"{held(s)} has_global_variable = sr_site_garrison_due_{s.key}",
+        inner = [(f"{held(s)} has_global_variable = sr_site_resisting_{s.key} "
+                  f"sr_site_hold_months_{s.key} < sr_hold_ai_reinforce_months",
                   [f"sr_fl_land_marines = {{ N = $N$ KEY = {s.key} }}"]) for s in ws]
+        inner += [(f"{held(s)} has_global_variable = sr_site_garrison_due_{s.key}",
+                   [f"sr_fl_land_marines = {{ N = $N$ KEY = {s.key} }}"]) for s in ws]
         inner += [(held(s), [f"sr_fl_land_marines = {{ N = $N$ KEY = {s.key} }}"]) for s in ws]
         cases.append((f"var:sr_fl_$N$_loc = {lc.code}", _chain(inner, 0)))
     out += _chain(cases)

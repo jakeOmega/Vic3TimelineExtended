@@ -2221,7 +2221,9 @@ class FreeColoniesTest(unittest.TestCase):
                 self.assertIn(f"add = sr_site_aut_drift_{k}", step)
                 self.assertIn("min = 0", step)
                 self.assertIn("max = sr_aut_break_level", step)
-                self.assertLess(step.index("sr_aut_break_away"), step.index("sr_aut_ask ="))
+                # At 100 it is held or declares (sr_site_declare_<key> frees it through
+                # sr_aut_break_away; owner, 2026-11-25), before the demand at 50.
+                self.assertLess(step.index(f"sr_site_declare_{k} = yes"), step.index("sr_aut_ask ="))
                 self.assertIn(f"name = sr_site_aut_asked_{k} value = yes days = 1825", step)
                 # The drift is the pressure less settling (colony management design § 4.2).
                 drift = _block(self.values, f"sr_site_aut_drift_{k}")
@@ -2254,7 +2256,7 @@ class FreeColoniesTest(unittest.TestCase):
                 self.assertEqual(pressure[-1].strip(), f"if = {{ limit = {{ NOT = {{ {peopled} }} }} value = 0 }}")
                 # both thresholds test the people
                 step = _block(self.effects, f"sr_site_aut_step_{k}")
-                brk = step[step.rindex("limit", 0, step.index("sr_aut_break_away")):step.index("sr_aut_break_away")]
+                brk = step[step.index("local_var:sr_aut_peak >= sr_aut_break_level"):step.index(f"sr_site_may_hold_{k}")]
                 ask = step[step.index("else_if"):step.index("sr_aut_ask =")]
                 self.assertIn("sr_aut_break_level", brk)
                 self.assertIn(peopled, brk)
@@ -2361,24 +2363,31 @@ class FreeColoniesTest(unittest.TestCase):
         self.assertIn(f"rises to #v {int(self._number('sr_aut_revoke_level'))}#!", level)
 
     def test_a_colony_pushed_to_the_break_level_breaks_away(self):
-        """Design § 2: at 100 a colony breaks away whatever its status. The month's
-        settling takes 1% of the autonomy off before the check, so a colony an
-        incitement, a sabotage or a revoked charter's spike pushed to 100 would
-        drift back under it: the check reads the higher of the autonomy before the
-        drift and after (sr_aut_peak)."""
+        """Design § 2: at 100 a colony breaks away whatever its status, unless under
+        Full Colonies our marines hold it (owner, 2026-11-25; test_colony_hold.py).
+        The month's settling takes 1% of the autonomy off before the check, so a
+        colony an incitement, a sabotage or a revoked charter's spike pushed to 100
+        would drift back under it: the check reads the higher of the autonomy before
+        the drift and after (sr_aut_peak). A colony already held reads it after
+        alone, since the hold set it at 100."""
         for site in gss.SITES:
             k = site.key
             with self.subTest(site=k):
                 step = _block(self.effects, f"sr_site_aut_step_{k}")
                 before = step.index(f"set_local_variable = {{ name = sr_aut_peak value = sr_site_autonomy_value_{k} }}")
+                held = step.index(f"if = {{ limit = {{ has_global_variable = sr_site_resisting_{k} }} "
+                                  "set_local_variable = { name = sr_aut_peak value = 0 } }")
                 drift = step.index(f"add = sr_site_aut_drift_{k}")
                 after = step.index(f"value = local_var:sr_aut_peak min = sr_site_autonomy_value_{k}")
-                brk = step.index("sr_aut_break_away")
-                self.assertLess(before, drift)
+                brk = step.index(f"sr_site_declare_{k} = yes")
+                self.assertLess(before, held)
+                self.assertLess(held, drift)
                 self.assertLess(drift, after)
                 self.assertLess(after, brk)
                 self.assertIn(f"limit = {{ local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_{k} = yes }}",
                               step[after:brk])
+                declare = _block(self.effects, f"sr_site_declare_{k}")
+                self.assertIn(f"sr_aut_break_away = {{ KEY = {k} INDEX = {site.index} }}", declare)
 
     def test_the_garrison_goes_home_with_a_cession(self):
         for site in gss.SITES:

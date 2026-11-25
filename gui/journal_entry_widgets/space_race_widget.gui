@@ -1695,6 +1695,16 @@ types space_race_widget_types
 							text = "je_space_race_widget_autonomy_status_both"
 							block "aut_both_visible" {}
 						}
+						textbox = {
+							parentanchor = left|vcenter
+							autoresize = yes
+							max_width = 80
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							text = "je_space_race_widget_autonomy_status_held"
+							block "aut_held_visible" {}
+						}
 					}
 					button = {
 						using = default_button_action
@@ -2854,6 +2864,13 @@ types space_race_widget_types
 								tooltip = "je_space_race_widget_autonomy_both_tt"
 								block "aut_both_visible" {}
 								text = "je_space_race_widget_autonomy_status_both"
+							}
+							te_sr_page_value = {
+								block "aut_held_steady_visible" {}
+								text = "je_space_race_widget_autonomy_status_held"
+							}
+							te_sr_page_value = {
+								block "aut_held_months_visible" {}
 							}
 						}
 					}

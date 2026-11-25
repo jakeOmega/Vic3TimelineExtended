@@ -265,6 +265,24 @@ sr_site_shares = {
 	}
 }
 
+# Interest group scope: it opposes colonial exploitation (disapprove or worse),
+# so a colony held by force costs its approval and radicalizes its supporters
+# (sr_hold_ig_refresh, sr_hold_radicals; owner, 2026-11-25). Read from its stance
+# on the law, as vanilla reads one on suffrage, so it follows its leader's
+# ideology; strongly, at strongly disapprove.
+sr_ig_anticolonial = {
+	law_stance = {
+		law = law_type:law_colonial_exploitation
+		value < neutral
+	}
+}
+sr_ig_strongly_anticolonial = {
+	law_stance = {
+		law = law_type:law_colonial_exploitation
+		value < disapprove
+	}
+}
+
 # It closes in to destroy the world KEY with its fire on defences above the
 # Defences' own (on the Moon and Mars, every Defences level its holder has
 # there), and no hostile fleet is stationed against it (§ 9.3).

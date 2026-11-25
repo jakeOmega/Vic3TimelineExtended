@@ -18608,6 +18608,54 @@ sr_garrison_count = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_garrison_daedalus } add = 1 }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_garrison_imbrium } add = 1 }
 }
+# ... and its colonies held at the break level by force, under Full Colonies (the
+# interest groups' disapproval, sr_hold_ig_refresh).
+sr_hold_count = {
+	value = 0
+	if = {
+		limit = { sr_colonies_full_enabled = yes }
+		if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_resisting_valles_marineris } add = 1 }
+		if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_resisting_olympus_mons } add = 1 }
+		if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_resisting_hellas_planitia } add = 1 }
+		if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_resisting_utopia_planitia } add = 1 }
+		if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_resisting_arcadia_planitia } add = 1 }
+		if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_resisting_ceres } add = 1 }
+		if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_resisting_vesta } add = 1 }
+		if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_resisting_psyche } add = 1 }
+		if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_resisting_pallas } add = 1 }
+		if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_resisting_hygiea } add = 1 }
+		if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_resisting_io } add = 1 }
+		if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_resisting_europa } add = 1 }
+		if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_resisting_ganymede } add = 1 }
+		if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_resisting_callisto } add = 1 }
+		if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_resisting_himalia } add = 1 }
+		if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_resisting_amalthea } add = 1 }
+		if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_resisting_venus } add = 1 }
+		if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_resisting_mercury } add = 1 }
+		if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_resisting_titan } add = 1 }
+		if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_resisting_enceladus } add = 1 }
+		if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_resisting_rhea } add = 1 }
+		if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_resisting_mimas } add = 1 }
+		if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_resisting_iapetus } add = 1 }
+		if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_resisting_titania } add = 1 }
+		if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_resisting_oberon } add = 1 }
+		if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_resisting_miranda } add = 1 }
+		if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_resisting_ariel } add = 1 }
+		if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_resisting_triton } add = 1 }
+		if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_resisting_proteus } add = 1 }
+		if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_resisting_pluto } add = 1 }
+		if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_resisting_eris } add = 1 }
+		if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_resisting_makemake } add = 1 }
+		if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_resisting_haumea } add = 1 }
+		if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_resisting_sedna } add = 1 }
+		if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_resisting_shackleton } add = 1 }
+		if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_resisting_peary } add = 1 }
+		if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_resisting_tranquility } add = 1 }
+		if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_resisting_marius_hills } add = 1 }
+		if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_resisting_daedalus } add = 1 }
+		if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_resisting_imbrium } add = 1 }
+	}
+}
 
 # ===== Fleets: defences, integrity, marines, occupation (slice 6 design §§ 7-10) =====
 # Per world, any scope:
@@ -18698,12 +18746,48 @@ sr_site_marines_mult_valles_marineris = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_valles_marineris = {
 	value = sr_site_shared_marines_valles_marineris
 	multiply = sr_site_marines_share_valles_marineris
 	multiply = sr_site_marines_mult_valles_marineris
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_militia_value_valles_marineris }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_valles_marineris } NOT = { has_global_variable = sr_site_resisting_valles_marineris } } add = sr_site_militia_value_valles_marineris }
+}
+sr_site_hold_people_valles_marineris = {
+	value = sr_site_pop_value_valles_marineris
+	if = { limit = { sr_site_shares = { A = valles_marineris B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_pop_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_pop_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_pop_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_pop_value_arcadia_planitia }
+}
+sr_site_hold_need_valles_marineris = { value = sr_site_hold_people_valles_marineris divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_valles_marineris = { value = sr_site_shared_marines_valles_marineris multiply = sr_site_marines_share_valles_marineris }
+sr_site_hold_loss_valles_marineris = {
+	value = sr_site_aut_pressure_valles_marineris
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_valles_marineris = {
+	value = sr_site_hold_loss_valles_marineris
+	if = { limit = { sr_site_shares = { A = valles_marineris B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_hold_loss_olympus_mons }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_hold_loss_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_hold_loss_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = valles_marineris B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_hold_loss_arcadia_planitia }
+}
+sr_site_hold_months_valles_marineris = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_valles_marineris > 0 }
+		value = sr_site_hold_marines_valles_marineris
+		subtract = sr_site_hold_need_valles_marineris
+		divide = { value = sr_site_hold_world_loss_valles_marineris multiply = sr_site_marines_share_valles_marineris min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_valles_marineris = { value = sr_site_garrison_need_valles_marineris multiply = sr_assault_loss_share }
 sr_site_assault_need_valles_marineris = { value = sr_site_garrison_need_valles_marineris add = sr_site_assault_toll_valles_marineris }
@@ -18789,12 +18873,48 @@ sr_site_marines_mult_olympus_mons = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_olympus_mons = {
 	value = sr_site_shared_marines_olympus_mons
 	multiply = sr_site_marines_share_olympus_mons
 	multiply = sr_site_marines_mult_olympus_mons
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_militia_value_olympus_mons }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_olympus_mons } NOT = { has_global_variable = sr_site_resisting_olympus_mons } } add = sr_site_militia_value_olympus_mons }
+}
+sr_site_hold_people_olympus_mons = {
+	value = sr_site_pop_value_olympus_mons
+	if = { limit = { sr_site_shares = { A = olympus_mons B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_pop_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_pop_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_pop_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_pop_value_arcadia_planitia }
+}
+sr_site_hold_need_olympus_mons = { value = sr_site_hold_people_olympus_mons divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_olympus_mons = { value = sr_site_shared_marines_olympus_mons multiply = sr_site_marines_share_olympus_mons }
+sr_site_hold_loss_olympus_mons = {
+	value = sr_site_aut_pressure_olympus_mons
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_olympus_mons = {
+	value = sr_site_hold_loss_olympus_mons
+	if = { limit = { sr_site_shares = { A = olympus_mons B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_hold_loss_valles_marineris }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_hold_loss_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_hold_loss_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = olympus_mons B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_hold_loss_arcadia_planitia }
+}
+sr_site_hold_months_olympus_mons = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_olympus_mons > 0 }
+		value = sr_site_hold_marines_olympus_mons
+		subtract = sr_site_hold_need_olympus_mons
+		divide = { value = sr_site_hold_world_loss_olympus_mons multiply = sr_site_marines_share_olympus_mons min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_olympus_mons = { value = sr_site_garrison_need_olympus_mons multiply = sr_assault_loss_share }
 sr_site_assault_need_olympus_mons = { value = sr_site_garrison_need_olympus_mons add = sr_site_assault_toll_olympus_mons }
@@ -18880,12 +19000,48 @@ sr_site_marines_mult_hellas_planitia = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_hellas_planitia = {
 	value = sr_site_shared_marines_hellas_planitia
 	multiply = sr_site_marines_share_hellas_planitia
 	multiply = sr_site_marines_mult_hellas_planitia
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_militia_value_hellas_planitia }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hellas_planitia } NOT = { has_global_variable = sr_site_resisting_hellas_planitia } } add = sr_site_militia_value_hellas_planitia }
+}
+sr_site_hold_people_hellas_planitia = {
+	value = sr_site_pop_value_hellas_planitia
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_pop_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_pop_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_pop_value_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_pop_value_arcadia_planitia }
+}
+sr_site_hold_need_hellas_planitia = { value = sr_site_hold_people_hellas_planitia divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_hellas_planitia = { value = sr_site_shared_marines_hellas_planitia multiply = sr_site_marines_share_hellas_planitia }
+sr_site_hold_loss_hellas_planitia = {
+	value = sr_site_aut_pressure_hellas_planitia
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_hellas_planitia = {
+	value = sr_site_hold_loss_hellas_planitia
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_hold_loss_valles_marineris }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_hold_loss_olympus_mons }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_hold_loss_utopia_planitia }
+	if = { limit = { sr_site_shares = { A = hellas_planitia B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_hold_loss_arcadia_planitia }
+}
+sr_site_hold_months_hellas_planitia = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_hellas_planitia > 0 }
+		value = sr_site_hold_marines_hellas_planitia
+		subtract = sr_site_hold_need_hellas_planitia
+		divide = { value = sr_site_hold_world_loss_hellas_planitia multiply = sr_site_marines_share_hellas_planitia min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_hellas_planitia = { value = sr_site_garrison_need_hellas_planitia multiply = sr_assault_loss_share }
 sr_site_assault_need_hellas_planitia = { value = sr_site_garrison_need_hellas_planitia add = sr_site_assault_toll_hellas_planitia }
@@ -18971,12 +19127,48 @@ sr_site_marines_mult_utopia_planitia = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_utopia_planitia = {
 	value = sr_site_shared_marines_utopia_planitia
 	multiply = sr_site_marines_share_utopia_planitia
 	multiply = sr_site_marines_mult_utopia_planitia
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_militia_value_utopia_planitia }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_utopia_planitia } NOT = { has_global_variable = sr_site_resisting_utopia_planitia } } add = sr_site_militia_value_utopia_planitia }
+}
+sr_site_hold_people_utopia_planitia = {
+	value = sr_site_pop_value_utopia_planitia
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_pop_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_pop_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_pop_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_pop_value_arcadia_planitia }
+}
+sr_site_hold_need_utopia_planitia = { value = sr_site_hold_people_utopia_planitia divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_utopia_planitia = { value = sr_site_shared_marines_utopia_planitia multiply = sr_site_marines_share_utopia_planitia }
+sr_site_hold_loss_utopia_planitia = {
+	value = sr_site_aut_pressure_utopia_planitia
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_utopia_planitia = {
+	value = sr_site_hold_loss_utopia_planitia
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_hold_loss_valles_marineris }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_hold_loss_olympus_mons }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_hold_loss_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = utopia_planitia B = arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia } add = sr_site_hold_loss_arcadia_planitia }
+}
+sr_site_hold_months_utopia_planitia = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_utopia_planitia > 0 }
+		value = sr_site_hold_marines_utopia_planitia
+		subtract = sr_site_hold_need_utopia_planitia
+		divide = { value = sr_site_hold_world_loss_utopia_planitia multiply = sr_site_marines_share_utopia_planitia min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_utopia_planitia = { value = sr_site_garrison_need_utopia_planitia multiply = sr_assault_loss_share }
 sr_site_assault_need_utopia_planitia = { value = sr_site_garrison_need_utopia_planitia add = sr_site_assault_toll_utopia_planitia }
@@ -19062,12 +19254,48 @@ sr_site_marines_mult_arcadia_planitia = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_arcadia_planitia = {
 	value = sr_site_shared_marines_arcadia_planitia
 	multiply = sr_site_marines_share_arcadia_planitia
 	multiply = sr_site_marines_mult_arcadia_planitia
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_militia_value_arcadia_planitia }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } NOT = { has_global_variable = sr_site_resisting_arcadia_planitia } } add = sr_site_militia_value_arcadia_planitia }
+}
+sr_site_hold_people_arcadia_planitia = {
+	value = sr_site_pop_value_arcadia_planitia
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_pop_value_valles_marineris }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_pop_value_olympus_mons }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_pop_value_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_pop_value_utopia_planitia }
+}
+sr_site_hold_need_arcadia_planitia = { value = sr_site_hold_people_arcadia_planitia divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_arcadia_planitia = { value = sr_site_shared_marines_arcadia_planitia multiply = sr_site_marines_share_arcadia_planitia }
+sr_site_hold_loss_arcadia_planitia = {
+	value = sr_site_aut_pressure_arcadia_planitia
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_arcadia_planitia = {
+	value = sr_site_hold_loss_arcadia_planitia
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = valles_marineris } has_global_variable = sr_site_resisting_valles_marineris } add = sr_site_hold_loss_valles_marineris }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = olympus_mons } has_global_variable = sr_site_resisting_olympus_mons } add = sr_site_hold_loss_olympus_mons }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia } add = sr_site_hold_loss_hellas_planitia }
+	if = { limit = { sr_site_shares = { A = arcadia_planitia B = utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia } add = sr_site_hold_loss_utopia_planitia }
+}
+sr_site_hold_months_arcadia_planitia = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_arcadia_planitia > 0 }
+		value = sr_site_hold_marines_arcadia_planitia
+		subtract = sr_site_hold_need_arcadia_planitia
+		divide = { value = sr_site_hold_world_loss_arcadia_planitia multiply = sr_site_marines_share_arcadia_planitia min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_arcadia_planitia = { value = sr_site_garrison_need_arcadia_planitia multiply = sr_assault_loss_share }
 sr_site_assault_need_arcadia_planitia = { value = sr_site_garrison_need_arcadia_planitia add = sr_site_assault_toll_arcadia_planitia }
@@ -19136,12 +19364,40 @@ sr_site_marines_mult_ceres = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_ceres = {
 	value = sr_site_shared_marines_ceres
 	multiply = sr_site_marines_share_ceres
 	multiply = sr_site_marines_mult_ceres
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_militia_value_ceres }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ceres } NOT = { has_global_variable = sr_site_resisting_ceres } } add = sr_site_militia_value_ceres }
+}
+sr_site_hold_people_ceres = {
+	value = sr_site_pop_value_ceres
+}
+sr_site_hold_need_ceres = { value = sr_site_hold_people_ceres divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_ceres = { value = sr_site_shared_marines_ceres multiply = sr_site_marines_share_ceres }
+sr_site_hold_loss_ceres = {
+	value = sr_site_aut_pressure_ceres
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_ceres = {
+	value = sr_site_hold_loss_ceres
+}
+sr_site_hold_months_ceres = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_ceres > 0 }
+		value = sr_site_hold_marines_ceres
+		subtract = sr_site_hold_need_ceres
+		divide = { value = sr_site_hold_world_loss_ceres multiply = sr_site_marines_share_ceres min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_ceres = { value = sr_site_garrison_need_ceres multiply = sr_assault_loss_share }
 sr_site_assault_need_ceres = { value = sr_site_garrison_need_ceres add = sr_site_assault_toll_ceres }
@@ -19208,12 +19464,40 @@ sr_site_marines_mult_vesta = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_vesta = {
 	value = sr_site_shared_marines_vesta
 	multiply = sr_site_marines_share_vesta
 	multiply = sr_site_marines_mult_vesta
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_militia_value_vesta }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_vesta } NOT = { has_global_variable = sr_site_resisting_vesta } } add = sr_site_militia_value_vesta }
+}
+sr_site_hold_people_vesta = {
+	value = sr_site_pop_value_vesta
+}
+sr_site_hold_need_vesta = { value = sr_site_hold_people_vesta divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_vesta = { value = sr_site_shared_marines_vesta multiply = sr_site_marines_share_vesta }
+sr_site_hold_loss_vesta = {
+	value = sr_site_aut_pressure_vesta
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_vesta = {
+	value = sr_site_hold_loss_vesta
+}
+sr_site_hold_months_vesta = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_vesta > 0 }
+		value = sr_site_hold_marines_vesta
+		subtract = sr_site_hold_need_vesta
+		divide = { value = sr_site_hold_world_loss_vesta multiply = sr_site_marines_share_vesta min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_vesta = { value = sr_site_garrison_need_vesta multiply = sr_assault_loss_share }
 sr_site_assault_need_vesta = { value = sr_site_garrison_need_vesta add = sr_site_assault_toll_vesta }
@@ -19280,12 +19564,40 @@ sr_site_marines_mult_psyche = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_psyche = {
 	value = sr_site_shared_marines_psyche
 	multiply = sr_site_marines_share_psyche
 	multiply = sr_site_marines_mult_psyche
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_militia_value_psyche }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_psyche } NOT = { has_global_variable = sr_site_resisting_psyche } } add = sr_site_militia_value_psyche }
+}
+sr_site_hold_people_psyche = {
+	value = sr_site_pop_value_psyche
+}
+sr_site_hold_need_psyche = { value = sr_site_hold_people_psyche divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_psyche = { value = sr_site_shared_marines_psyche multiply = sr_site_marines_share_psyche }
+sr_site_hold_loss_psyche = {
+	value = sr_site_aut_pressure_psyche
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_psyche = {
+	value = sr_site_hold_loss_psyche
+}
+sr_site_hold_months_psyche = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_psyche > 0 }
+		value = sr_site_hold_marines_psyche
+		subtract = sr_site_hold_need_psyche
+		divide = { value = sr_site_hold_world_loss_psyche multiply = sr_site_marines_share_psyche min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_psyche = { value = sr_site_garrison_need_psyche multiply = sr_assault_loss_share }
 sr_site_assault_need_psyche = { value = sr_site_garrison_need_psyche add = sr_site_assault_toll_psyche }
@@ -19352,12 +19664,40 @@ sr_site_marines_mult_pallas = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_pallas = {
 	value = sr_site_shared_marines_pallas
 	multiply = sr_site_marines_share_pallas
 	multiply = sr_site_marines_mult_pallas
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_militia_value_pallas }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pallas } NOT = { has_global_variable = sr_site_resisting_pallas } } add = sr_site_militia_value_pallas }
+}
+sr_site_hold_people_pallas = {
+	value = sr_site_pop_value_pallas
+}
+sr_site_hold_need_pallas = { value = sr_site_hold_people_pallas divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_pallas = { value = sr_site_shared_marines_pallas multiply = sr_site_marines_share_pallas }
+sr_site_hold_loss_pallas = {
+	value = sr_site_aut_pressure_pallas
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_pallas = {
+	value = sr_site_hold_loss_pallas
+}
+sr_site_hold_months_pallas = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_pallas > 0 }
+		value = sr_site_hold_marines_pallas
+		subtract = sr_site_hold_need_pallas
+		divide = { value = sr_site_hold_world_loss_pallas multiply = sr_site_marines_share_pallas min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_pallas = { value = sr_site_garrison_need_pallas multiply = sr_assault_loss_share }
 sr_site_assault_need_pallas = { value = sr_site_garrison_need_pallas add = sr_site_assault_toll_pallas }
@@ -19424,12 +19764,40 @@ sr_site_marines_mult_hygiea = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_hygiea = {
 	value = sr_site_shared_marines_hygiea
 	multiply = sr_site_marines_share_hygiea
 	multiply = sr_site_marines_mult_hygiea
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_militia_value_hygiea }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_hygiea } NOT = { has_global_variable = sr_site_resisting_hygiea } } add = sr_site_militia_value_hygiea }
+}
+sr_site_hold_people_hygiea = {
+	value = sr_site_pop_value_hygiea
+}
+sr_site_hold_need_hygiea = { value = sr_site_hold_people_hygiea divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_hygiea = { value = sr_site_shared_marines_hygiea multiply = sr_site_marines_share_hygiea }
+sr_site_hold_loss_hygiea = {
+	value = sr_site_aut_pressure_hygiea
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_hygiea = {
+	value = sr_site_hold_loss_hygiea
+}
+sr_site_hold_months_hygiea = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_hygiea > 0 }
+		value = sr_site_hold_marines_hygiea
+		subtract = sr_site_hold_need_hygiea
+		divide = { value = sr_site_hold_world_loss_hygiea multiply = sr_site_marines_share_hygiea min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_hygiea = { value = sr_site_garrison_need_hygiea multiply = sr_assault_loss_share }
 sr_site_assault_need_hygiea = { value = sr_site_garrison_need_hygiea add = sr_site_assault_toll_hygiea }
@@ -19496,12 +19864,40 @@ sr_site_marines_mult_io = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_io = {
 	value = sr_site_shared_marines_io
 	multiply = sr_site_marines_share_io
 	multiply = sr_site_marines_mult_io
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_militia_value_io }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_io } NOT = { has_global_variable = sr_site_resisting_io } } add = sr_site_militia_value_io }
+}
+sr_site_hold_people_io = {
+	value = sr_site_pop_value_io
+}
+sr_site_hold_need_io = { value = sr_site_hold_people_io divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_io = { value = sr_site_shared_marines_io multiply = sr_site_marines_share_io }
+sr_site_hold_loss_io = {
+	value = sr_site_aut_pressure_io
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_io = {
+	value = sr_site_hold_loss_io
+}
+sr_site_hold_months_io = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_io > 0 }
+		value = sr_site_hold_marines_io
+		subtract = sr_site_hold_need_io
+		divide = { value = sr_site_hold_world_loss_io multiply = sr_site_marines_share_io min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_io = { value = sr_site_garrison_need_io multiply = sr_assault_loss_share }
 sr_site_assault_need_io = { value = sr_site_garrison_need_io add = sr_site_assault_toll_io }
@@ -19568,12 +19964,40 @@ sr_site_marines_mult_europa = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_europa = {
 	value = sr_site_shared_marines_europa
 	multiply = sr_site_marines_share_europa
 	multiply = sr_site_marines_mult_europa
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_militia_value_europa }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_europa } NOT = { has_global_variable = sr_site_resisting_europa } } add = sr_site_militia_value_europa }
+}
+sr_site_hold_people_europa = {
+	value = sr_site_pop_value_europa
+}
+sr_site_hold_need_europa = { value = sr_site_hold_people_europa divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_europa = { value = sr_site_shared_marines_europa multiply = sr_site_marines_share_europa }
+sr_site_hold_loss_europa = {
+	value = sr_site_aut_pressure_europa
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_europa = {
+	value = sr_site_hold_loss_europa
+}
+sr_site_hold_months_europa = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_europa > 0 }
+		value = sr_site_hold_marines_europa
+		subtract = sr_site_hold_need_europa
+		divide = { value = sr_site_hold_world_loss_europa multiply = sr_site_marines_share_europa min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_europa = { value = sr_site_garrison_need_europa multiply = sr_assault_loss_share }
 sr_site_assault_need_europa = { value = sr_site_garrison_need_europa add = sr_site_assault_toll_europa }
@@ -19640,12 +20064,40 @@ sr_site_marines_mult_ganymede = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_ganymede = {
 	value = sr_site_shared_marines_ganymede
 	multiply = sr_site_marines_share_ganymede
 	multiply = sr_site_marines_mult_ganymede
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_militia_value_ganymede }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ganymede } NOT = { has_global_variable = sr_site_resisting_ganymede } } add = sr_site_militia_value_ganymede }
+}
+sr_site_hold_people_ganymede = {
+	value = sr_site_pop_value_ganymede
+}
+sr_site_hold_need_ganymede = { value = sr_site_hold_people_ganymede divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_ganymede = { value = sr_site_shared_marines_ganymede multiply = sr_site_marines_share_ganymede }
+sr_site_hold_loss_ganymede = {
+	value = sr_site_aut_pressure_ganymede
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_ganymede = {
+	value = sr_site_hold_loss_ganymede
+}
+sr_site_hold_months_ganymede = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_ganymede > 0 }
+		value = sr_site_hold_marines_ganymede
+		subtract = sr_site_hold_need_ganymede
+		divide = { value = sr_site_hold_world_loss_ganymede multiply = sr_site_marines_share_ganymede min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_ganymede = { value = sr_site_garrison_need_ganymede multiply = sr_assault_loss_share }
 sr_site_assault_need_ganymede = { value = sr_site_garrison_need_ganymede add = sr_site_assault_toll_ganymede }
@@ -19712,12 +20164,40 @@ sr_site_marines_mult_callisto = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_callisto = {
 	value = sr_site_shared_marines_callisto
 	multiply = sr_site_marines_share_callisto
 	multiply = sr_site_marines_mult_callisto
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_militia_value_callisto }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_callisto } NOT = { has_global_variable = sr_site_resisting_callisto } } add = sr_site_militia_value_callisto }
+}
+sr_site_hold_people_callisto = {
+	value = sr_site_pop_value_callisto
+}
+sr_site_hold_need_callisto = { value = sr_site_hold_people_callisto divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_callisto = { value = sr_site_shared_marines_callisto multiply = sr_site_marines_share_callisto }
+sr_site_hold_loss_callisto = {
+	value = sr_site_aut_pressure_callisto
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_callisto = {
+	value = sr_site_hold_loss_callisto
+}
+sr_site_hold_months_callisto = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_callisto > 0 }
+		value = sr_site_hold_marines_callisto
+		subtract = sr_site_hold_need_callisto
+		divide = { value = sr_site_hold_world_loss_callisto multiply = sr_site_marines_share_callisto min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_callisto = { value = sr_site_garrison_need_callisto multiply = sr_assault_loss_share }
 sr_site_assault_need_callisto = { value = sr_site_garrison_need_callisto add = sr_site_assault_toll_callisto }
@@ -19784,12 +20264,40 @@ sr_site_marines_mult_himalia = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_himalia = {
 	value = sr_site_shared_marines_himalia
 	multiply = sr_site_marines_share_himalia
 	multiply = sr_site_marines_mult_himalia
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_militia_value_himalia }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_himalia } NOT = { has_global_variable = sr_site_resisting_himalia } } add = sr_site_militia_value_himalia }
+}
+sr_site_hold_people_himalia = {
+	value = sr_site_pop_value_himalia
+}
+sr_site_hold_need_himalia = { value = sr_site_hold_people_himalia divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_himalia = { value = sr_site_shared_marines_himalia multiply = sr_site_marines_share_himalia }
+sr_site_hold_loss_himalia = {
+	value = sr_site_aut_pressure_himalia
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_himalia = {
+	value = sr_site_hold_loss_himalia
+}
+sr_site_hold_months_himalia = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_himalia > 0 }
+		value = sr_site_hold_marines_himalia
+		subtract = sr_site_hold_need_himalia
+		divide = { value = sr_site_hold_world_loss_himalia multiply = sr_site_marines_share_himalia min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_himalia = { value = sr_site_garrison_need_himalia multiply = sr_assault_loss_share }
 sr_site_assault_need_himalia = { value = sr_site_garrison_need_himalia add = sr_site_assault_toll_himalia }
@@ -19856,12 +20364,40 @@ sr_site_marines_mult_amalthea = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_amalthea = {
 	value = sr_site_shared_marines_amalthea
 	multiply = sr_site_marines_share_amalthea
 	multiply = sr_site_marines_mult_amalthea
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_militia_value_amalthea }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_amalthea } NOT = { has_global_variable = sr_site_resisting_amalthea } } add = sr_site_militia_value_amalthea }
+}
+sr_site_hold_people_amalthea = {
+	value = sr_site_pop_value_amalthea
+}
+sr_site_hold_need_amalthea = { value = sr_site_hold_people_amalthea divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_amalthea = { value = sr_site_shared_marines_amalthea multiply = sr_site_marines_share_amalthea }
+sr_site_hold_loss_amalthea = {
+	value = sr_site_aut_pressure_amalthea
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_amalthea = {
+	value = sr_site_hold_loss_amalthea
+}
+sr_site_hold_months_amalthea = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_amalthea > 0 }
+		value = sr_site_hold_marines_amalthea
+		subtract = sr_site_hold_need_amalthea
+		divide = { value = sr_site_hold_world_loss_amalthea multiply = sr_site_marines_share_amalthea min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_amalthea = { value = sr_site_garrison_need_amalthea multiply = sr_assault_loss_share }
 sr_site_assault_need_amalthea = { value = sr_site_garrison_need_amalthea add = sr_site_assault_toll_amalthea }
@@ -19928,12 +20464,40 @@ sr_site_marines_mult_venus = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_venus = {
 	value = sr_site_shared_marines_venus
 	multiply = sr_site_marines_share_venus
 	multiply = sr_site_marines_mult_venus
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_militia_value_venus }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_venus } NOT = { has_global_variable = sr_site_resisting_venus } } add = sr_site_militia_value_venus }
+}
+sr_site_hold_people_venus = {
+	value = sr_site_pop_value_venus
+}
+sr_site_hold_need_venus = { value = sr_site_hold_people_venus divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_venus = { value = sr_site_shared_marines_venus multiply = sr_site_marines_share_venus }
+sr_site_hold_loss_venus = {
+	value = sr_site_aut_pressure_venus
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_venus = {
+	value = sr_site_hold_loss_venus
+}
+sr_site_hold_months_venus = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_venus > 0 }
+		value = sr_site_hold_marines_venus
+		subtract = sr_site_hold_need_venus
+		divide = { value = sr_site_hold_world_loss_venus multiply = sr_site_marines_share_venus min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_venus = { value = sr_site_garrison_need_venus multiply = sr_assault_loss_share }
 sr_site_assault_need_venus = { value = sr_site_garrison_need_venus add = sr_site_assault_toll_venus }
@@ -20000,12 +20564,40 @@ sr_site_marines_mult_mercury = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_mercury = {
 	value = sr_site_shared_marines_mercury
 	multiply = sr_site_marines_share_mercury
 	multiply = sr_site_marines_mult_mercury
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_militia_value_mercury }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mercury } NOT = { has_global_variable = sr_site_resisting_mercury } } add = sr_site_militia_value_mercury }
+}
+sr_site_hold_people_mercury = {
+	value = sr_site_pop_value_mercury
+}
+sr_site_hold_need_mercury = { value = sr_site_hold_people_mercury divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_mercury = { value = sr_site_shared_marines_mercury multiply = sr_site_marines_share_mercury }
+sr_site_hold_loss_mercury = {
+	value = sr_site_aut_pressure_mercury
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_mercury = {
+	value = sr_site_hold_loss_mercury
+}
+sr_site_hold_months_mercury = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_mercury > 0 }
+		value = sr_site_hold_marines_mercury
+		subtract = sr_site_hold_need_mercury
+		divide = { value = sr_site_hold_world_loss_mercury multiply = sr_site_marines_share_mercury min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_mercury = { value = sr_site_garrison_need_mercury multiply = sr_assault_loss_share }
 sr_site_assault_need_mercury = { value = sr_site_garrison_need_mercury add = sr_site_assault_toll_mercury }
@@ -20072,12 +20664,40 @@ sr_site_marines_mult_titan = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_titan = {
 	value = sr_site_shared_marines_titan
 	multiply = sr_site_marines_share_titan
 	multiply = sr_site_marines_mult_titan
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_militia_value_titan }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titan } NOT = { has_global_variable = sr_site_resisting_titan } } add = sr_site_militia_value_titan }
+}
+sr_site_hold_people_titan = {
+	value = sr_site_pop_value_titan
+}
+sr_site_hold_need_titan = { value = sr_site_hold_people_titan divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_titan = { value = sr_site_shared_marines_titan multiply = sr_site_marines_share_titan }
+sr_site_hold_loss_titan = {
+	value = sr_site_aut_pressure_titan
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_titan = {
+	value = sr_site_hold_loss_titan
+}
+sr_site_hold_months_titan = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_titan > 0 }
+		value = sr_site_hold_marines_titan
+		subtract = sr_site_hold_need_titan
+		divide = { value = sr_site_hold_world_loss_titan multiply = sr_site_marines_share_titan min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_titan = { value = sr_site_garrison_need_titan multiply = sr_assault_loss_share }
 sr_site_assault_need_titan = { value = sr_site_garrison_need_titan add = sr_site_assault_toll_titan }
@@ -20144,12 +20764,40 @@ sr_site_marines_mult_enceladus = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_enceladus = {
 	value = sr_site_shared_marines_enceladus
 	multiply = sr_site_marines_share_enceladus
 	multiply = sr_site_marines_mult_enceladus
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_militia_value_enceladus }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_enceladus } NOT = { has_global_variable = sr_site_resisting_enceladus } } add = sr_site_militia_value_enceladus }
+}
+sr_site_hold_people_enceladus = {
+	value = sr_site_pop_value_enceladus
+}
+sr_site_hold_need_enceladus = { value = sr_site_hold_people_enceladus divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_enceladus = { value = sr_site_shared_marines_enceladus multiply = sr_site_marines_share_enceladus }
+sr_site_hold_loss_enceladus = {
+	value = sr_site_aut_pressure_enceladus
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_enceladus = {
+	value = sr_site_hold_loss_enceladus
+}
+sr_site_hold_months_enceladus = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_enceladus > 0 }
+		value = sr_site_hold_marines_enceladus
+		subtract = sr_site_hold_need_enceladus
+		divide = { value = sr_site_hold_world_loss_enceladus multiply = sr_site_marines_share_enceladus min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_enceladus = { value = sr_site_garrison_need_enceladus multiply = sr_assault_loss_share }
 sr_site_assault_need_enceladus = { value = sr_site_garrison_need_enceladus add = sr_site_assault_toll_enceladus }
@@ -20216,12 +20864,40 @@ sr_site_marines_mult_rhea = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_rhea = {
 	value = sr_site_shared_marines_rhea
 	multiply = sr_site_marines_share_rhea
 	multiply = sr_site_marines_mult_rhea
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_militia_value_rhea }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_rhea } NOT = { has_global_variable = sr_site_resisting_rhea } } add = sr_site_militia_value_rhea }
+}
+sr_site_hold_people_rhea = {
+	value = sr_site_pop_value_rhea
+}
+sr_site_hold_need_rhea = { value = sr_site_hold_people_rhea divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_rhea = { value = sr_site_shared_marines_rhea multiply = sr_site_marines_share_rhea }
+sr_site_hold_loss_rhea = {
+	value = sr_site_aut_pressure_rhea
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_rhea = {
+	value = sr_site_hold_loss_rhea
+}
+sr_site_hold_months_rhea = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_rhea > 0 }
+		value = sr_site_hold_marines_rhea
+		subtract = sr_site_hold_need_rhea
+		divide = { value = sr_site_hold_world_loss_rhea multiply = sr_site_marines_share_rhea min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_rhea = { value = sr_site_garrison_need_rhea multiply = sr_assault_loss_share }
 sr_site_assault_need_rhea = { value = sr_site_garrison_need_rhea add = sr_site_assault_toll_rhea }
@@ -20288,12 +20964,40 @@ sr_site_marines_mult_mimas = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_mimas = {
 	value = sr_site_shared_marines_mimas
 	multiply = sr_site_marines_share_mimas
 	multiply = sr_site_marines_mult_mimas
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_militia_value_mimas }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_mimas } NOT = { has_global_variable = sr_site_resisting_mimas } } add = sr_site_militia_value_mimas }
+}
+sr_site_hold_people_mimas = {
+	value = sr_site_pop_value_mimas
+}
+sr_site_hold_need_mimas = { value = sr_site_hold_people_mimas divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_mimas = { value = sr_site_shared_marines_mimas multiply = sr_site_marines_share_mimas }
+sr_site_hold_loss_mimas = {
+	value = sr_site_aut_pressure_mimas
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_mimas = {
+	value = sr_site_hold_loss_mimas
+}
+sr_site_hold_months_mimas = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_mimas > 0 }
+		value = sr_site_hold_marines_mimas
+		subtract = sr_site_hold_need_mimas
+		divide = { value = sr_site_hold_world_loss_mimas multiply = sr_site_marines_share_mimas min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_mimas = { value = sr_site_garrison_need_mimas multiply = sr_assault_loss_share }
 sr_site_assault_need_mimas = { value = sr_site_garrison_need_mimas add = sr_site_assault_toll_mimas }
@@ -20360,12 +21064,40 @@ sr_site_marines_mult_iapetus = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_iapetus = {
 	value = sr_site_shared_marines_iapetus
 	multiply = sr_site_marines_share_iapetus
 	multiply = sr_site_marines_mult_iapetus
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } } add = sr_site_militia_value_iapetus }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_iapetus } NOT = { has_global_variable = sr_site_resisting_iapetus } } add = sr_site_militia_value_iapetus }
+}
+sr_site_hold_people_iapetus = {
+	value = sr_site_pop_value_iapetus
+}
+sr_site_hold_need_iapetus = { value = sr_site_hold_people_iapetus divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_iapetus = { value = sr_site_shared_marines_iapetus multiply = sr_site_marines_share_iapetus }
+sr_site_hold_loss_iapetus = {
+	value = sr_site_aut_pressure_iapetus
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_iapetus = {
+	value = sr_site_hold_loss_iapetus
+}
+sr_site_hold_months_iapetus = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_iapetus > 0 }
+		value = sr_site_hold_marines_iapetus
+		subtract = sr_site_hold_need_iapetus
+		divide = { value = sr_site_hold_world_loss_iapetus multiply = sr_site_marines_share_iapetus min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_iapetus = { value = sr_site_garrison_need_iapetus multiply = sr_assault_loss_share }
 sr_site_assault_need_iapetus = { value = sr_site_garrison_need_iapetus add = sr_site_assault_toll_iapetus }
@@ -20432,12 +21164,40 @@ sr_site_marines_mult_titania = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_titania = {
 	value = sr_site_shared_marines_titania
 	multiply = sr_site_marines_share_titania
 	multiply = sr_site_marines_mult_titania
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titania } } add = sr_site_militia_value_titania }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_titania } NOT = { has_global_variable = sr_site_resisting_titania } } add = sr_site_militia_value_titania }
+}
+sr_site_hold_people_titania = {
+	value = sr_site_pop_value_titania
+}
+sr_site_hold_need_titania = { value = sr_site_hold_people_titania divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_titania = { value = sr_site_shared_marines_titania multiply = sr_site_marines_share_titania }
+sr_site_hold_loss_titania = {
+	value = sr_site_aut_pressure_titania
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_titania = {
+	value = sr_site_hold_loss_titania
+}
+sr_site_hold_months_titania = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_titania > 0 }
+		value = sr_site_hold_marines_titania
+		subtract = sr_site_hold_need_titania
+		divide = { value = sr_site_hold_world_loss_titania multiply = sr_site_marines_share_titania min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_titania = { value = sr_site_garrison_need_titania multiply = sr_assault_loss_share }
 sr_site_assault_need_titania = { value = sr_site_garrison_need_titania add = sr_site_assault_toll_titania }
@@ -20504,12 +21264,40 @@ sr_site_marines_mult_oberon = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_oberon = {
 	value = sr_site_shared_marines_oberon
 	multiply = sr_site_marines_share_oberon
 	multiply = sr_site_marines_mult_oberon
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_oberon } } add = sr_site_militia_value_oberon }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_oberon } NOT = { has_global_variable = sr_site_resisting_oberon } } add = sr_site_militia_value_oberon }
+}
+sr_site_hold_people_oberon = {
+	value = sr_site_pop_value_oberon
+}
+sr_site_hold_need_oberon = { value = sr_site_hold_people_oberon divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_oberon = { value = sr_site_shared_marines_oberon multiply = sr_site_marines_share_oberon }
+sr_site_hold_loss_oberon = {
+	value = sr_site_aut_pressure_oberon
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_oberon = {
+	value = sr_site_hold_loss_oberon
+}
+sr_site_hold_months_oberon = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_oberon > 0 }
+		value = sr_site_hold_marines_oberon
+		subtract = sr_site_hold_need_oberon
+		divide = { value = sr_site_hold_world_loss_oberon multiply = sr_site_marines_share_oberon min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_oberon = { value = sr_site_garrison_need_oberon multiply = sr_assault_loss_share }
 sr_site_assault_need_oberon = { value = sr_site_garrison_need_oberon add = sr_site_assault_toll_oberon }
@@ -20576,12 +21364,40 @@ sr_site_marines_mult_miranda = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_miranda = {
 	value = sr_site_shared_marines_miranda
 	multiply = sr_site_marines_share_miranda
 	multiply = sr_site_marines_mult_miranda
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_miranda } } add = sr_site_militia_value_miranda }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_miranda } NOT = { has_global_variable = sr_site_resisting_miranda } } add = sr_site_militia_value_miranda }
+}
+sr_site_hold_people_miranda = {
+	value = sr_site_pop_value_miranda
+}
+sr_site_hold_need_miranda = { value = sr_site_hold_people_miranda divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_miranda = { value = sr_site_shared_marines_miranda multiply = sr_site_marines_share_miranda }
+sr_site_hold_loss_miranda = {
+	value = sr_site_aut_pressure_miranda
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_miranda = {
+	value = sr_site_hold_loss_miranda
+}
+sr_site_hold_months_miranda = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_miranda > 0 }
+		value = sr_site_hold_marines_miranda
+		subtract = sr_site_hold_need_miranda
+		divide = { value = sr_site_hold_world_loss_miranda multiply = sr_site_marines_share_miranda min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_miranda = { value = sr_site_garrison_need_miranda multiply = sr_assault_loss_share }
 sr_site_assault_need_miranda = { value = sr_site_garrison_need_miranda add = sr_site_assault_toll_miranda }
@@ -20648,12 +21464,40 @@ sr_site_marines_mult_ariel = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_ariel = {
 	value = sr_site_shared_marines_ariel
 	multiply = sr_site_marines_share_ariel
 	multiply = sr_site_marines_mult_ariel
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_militia_value_ariel }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_ariel } NOT = { has_global_variable = sr_site_resisting_ariel } } add = sr_site_militia_value_ariel }
+}
+sr_site_hold_people_ariel = {
+	value = sr_site_pop_value_ariel
+}
+sr_site_hold_need_ariel = { value = sr_site_hold_people_ariel divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_ariel = { value = sr_site_shared_marines_ariel multiply = sr_site_marines_share_ariel }
+sr_site_hold_loss_ariel = {
+	value = sr_site_aut_pressure_ariel
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_ariel = {
+	value = sr_site_hold_loss_ariel
+}
+sr_site_hold_months_ariel = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_ariel > 0 }
+		value = sr_site_hold_marines_ariel
+		subtract = sr_site_hold_need_ariel
+		divide = { value = sr_site_hold_world_loss_ariel multiply = sr_site_marines_share_ariel min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_ariel = { value = sr_site_garrison_need_ariel multiply = sr_assault_loss_share }
 sr_site_assault_need_ariel = { value = sr_site_garrison_need_ariel add = sr_site_assault_toll_ariel }
@@ -20720,12 +21564,40 @@ sr_site_marines_mult_triton = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_triton = {
 	value = sr_site_shared_marines_triton
 	multiply = sr_site_marines_share_triton
 	multiply = sr_site_marines_mult_triton
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_militia_value_triton }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_triton } NOT = { has_global_variable = sr_site_resisting_triton } } add = sr_site_militia_value_triton }
+}
+sr_site_hold_people_triton = {
+	value = sr_site_pop_value_triton
+}
+sr_site_hold_need_triton = { value = sr_site_hold_people_triton divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_triton = { value = sr_site_shared_marines_triton multiply = sr_site_marines_share_triton }
+sr_site_hold_loss_triton = {
+	value = sr_site_aut_pressure_triton
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_triton = {
+	value = sr_site_hold_loss_triton
+}
+sr_site_hold_months_triton = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_triton > 0 }
+		value = sr_site_hold_marines_triton
+		subtract = sr_site_hold_need_triton
+		divide = { value = sr_site_hold_world_loss_triton multiply = sr_site_marines_share_triton min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_triton = { value = sr_site_garrison_need_triton multiply = sr_assault_loss_share }
 sr_site_assault_need_triton = { value = sr_site_garrison_need_triton add = sr_site_assault_toll_triton }
@@ -20792,12 +21664,40 @@ sr_site_marines_mult_proteus = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_proteus = {
 	value = sr_site_shared_marines_proteus
 	multiply = sr_site_marines_share_proteus
 	multiply = sr_site_marines_mult_proteus
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_militia_value_proteus }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_proteus } NOT = { has_global_variable = sr_site_resisting_proteus } } add = sr_site_militia_value_proteus }
+}
+sr_site_hold_people_proteus = {
+	value = sr_site_pop_value_proteus
+}
+sr_site_hold_need_proteus = { value = sr_site_hold_people_proteus divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_proteus = { value = sr_site_shared_marines_proteus multiply = sr_site_marines_share_proteus }
+sr_site_hold_loss_proteus = {
+	value = sr_site_aut_pressure_proteus
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_proteus = {
+	value = sr_site_hold_loss_proteus
+}
+sr_site_hold_months_proteus = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_proteus > 0 }
+		value = sr_site_hold_marines_proteus
+		subtract = sr_site_hold_need_proteus
+		divide = { value = sr_site_hold_world_loss_proteus multiply = sr_site_marines_share_proteus min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_proteus = { value = sr_site_garrison_need_proteus multiply = sr_assault_loss_share }
 sr_site_assault_need_proteus = { value = sr_site_garrison_need_proteus add = sr_site_assault_toll_proteus }
@@ -20864,12 +21764,40 @@ sr_site_marines_mult_pluto = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_pluto = {
 	value = sr_site_shared_marines_pluto
 	multiply = sr_site_marines_share_pluto
 	multiply = sr_site_marines_mult_pluto
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_militia_value_pluto }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_pluto } NOT = { has_global_variable = sr_site_resisting_pluto } } add = sr_site_militia_value_pluto }
+}
+sr_site_hold_people_pluto = {
+	value = sr_site_pop_value_pluto
+}
+sr_site_hold_need_pluto = { value = sr_site_hold_people_pluto divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_pluto = { value = sr_site_shared_marines_pluto multiply = sr_site_marines_share_pluto }
+sr_site_hold_loss_pluto = {
+	value = sr_site_aut_pressure_pluto
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_pluto = {
+	value = sr_site_hold_loss_pluto
+}
+sr_site_hold_months_pluto = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_pluto > 0 }
+		value = sr_site_hold_marines_pluto
+		subtract = sr_site_hold_need_pluto
+		divide = { value = sr_site_hold_world_loss_pluto multiply = sr_site_marines_share_pluto min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_pluto = { value = sr_site_garrison_need_pluto multiply = sr_assault_loss_share }
 sr_site_assault_need_pluto = { value = sr_site_garrison_need_pluto add = sr_site_assault_toll_pluto }
@@ -20936,12 +21864,40 @@ sr_site_marines_mult_eris = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_eris = {
 	value = sr_site_shared_marines_eris
 	multiply = sr_site_marines_share_eris
 	multiply = sr_site_marines_mult_eris
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_militia_value_eris }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_eris } NOT = { has_global_variable = sr_site_resisting_eris } } add = sr_site_militia_value_eris }
+}
+sr_site_hold_people_eris = {
+	value = sr_site_pop_value_eris
+}
+sr_site_hold_need_eris = { value = sr_site_hold_people_eris divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_eris = { value = sr_site_shared_marines_eris multiply = sr_site_marines_share_eris }
+sr_site_hold_loss_eris = {
+	value = sr_site_aut_pressure_eris
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_eris = {
+	value = sr_site_hold_loss_eris
+}
+sr_site_hold_months_eris = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_eris > 0 }
+		value = sr_site_hold_marines_eris
+		subtract = sr_site_hold_need_eris
+		divide = { value = sr_site_hold_world_loss_eris multiply = sr_site_marines_share_eris min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_eris = { value = sr_site_garrison_need_eris multiply = sr_assault_loss_share }
 sr_site_assault_need_eris = { value = sr_site_garrison_need_eris add = sr_site_assault_toll_eris }
@@ -21008,12 +21964,40 @@ sr_site_marines_mult_makemake = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_makemake = {
 	value = sr_site_shared_marines_makemake
 	multiply = sr_site_marines_share_makemake
 	multiply = sr_site_marines_mult_makemake
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_makemake } } add = sr_site_militia_value_makemake }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_makemake } NOT = { has_global_variable = sr_site_resisting_makemake } } add = sr_site_militia_value_makemake }
+}
+sr_site_hold_people_makemake = {
+	value = sr_site_pop_value_makemake
+}
+sr_site_hold_need_makemake = { value = sr_site_hold_people_makemake divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_makemake = { value = sr_site_shared_marines_makemake multiply = sr_site_marines_share_makemake }
+sr_site_hold_loss_makemake = {
+	value = sr_site_aut_pressure_makemake
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_makemake = {
+	value = sr_site_hold_loss_makemake
+}
+sr_site_hold_months_makemake = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_makemake > 0 }
+		value = sr_site_hold_marines_makemake
+		subtract = sr_site_hold_need_makemake
+		divide = { value = sr_site_hold_world_loss_makemake multiply = sr_site_marines_share_makemake min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_makemake = { value = sr_site_garrison_need_makemake multiply = sr_assault_loss_share }
 sr_site_assault_need_makemake = { value = sr_site_garrison_need_makemake add = sr_site_assault_toll_makemake }
@@ -21080,12 +22064,40 @@ sr_site_marines_mult_haumea = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_haumea = {
 	value = sr_site_shared_marines_haumea
 	multiply = sr_site_marines_share_haumea
 	multiply = sr_site_marines_mult_haumea
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_haumea } } add = sr_site_militia_value_haumea }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_haumea } NOT = { has_global_variable = sr_site_resisting_haumea } } add = sr_site_militia_value_haumea }
+}
+sr_site_hold_people_haumea = {
+	value = sr_site_pop_value_haumea
+}
+sr_site_hold_need_haumea = { value = sr_site_hold_people_haumea divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_haumea = { value = sr_site_shared_marines_haumea multiply = sr_site_marines_share_haumea }
+sr_site_hold_loss_haumea = {
+	value = sr_site_aut_pressure_haumea
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_haumea = {
+	value = sr_site_hold_loss_haumea
+}
+sr_site_hold_months_haumea = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_haumea > 0 }
+		value = sr_site_hold_marines_haumea
+		subtract = sr_site_hold_need_haumea
+		divide = { value = sr_site_hold_world_loss_haumea multiply = sr_site_marines_share_haumea min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_haumea = { value = sr_site_garrison_need_haumea multiply = sr_assault_loss_share }
 sr_site_assault_need_haumea = { value = sr_site_garrison_need_haumea add = sr_site_assault_toll_haumea }
@@ -21152,12 +22164,40 @@ sr_site_marines_mult_sedna = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_sedna = {
 	value = sr_site_shared_marines_sedna
 	multiply = sr_site_marines_share_sedna
 	multiply = sr_site_marines_mult_sedna
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_sedna } } add = sr_site_militia_value_sedna }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_sedna } NOT = { has_global_variable = sr_site_resisting_sedna } } add = sr_site_militia_value_sedna }
+}
+sr_site_hold_people_sedna = {
+	value = sr_site_pop_value_sedna
+}
+sr_site_hold_need_sedna = { value = sr_site_hold_people_sedna divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_sedna = { value = sr_site_shared_marines_sedna multiply = sr_site_marines_share_sedna }
+sr_site_hold_loss_sedna = {
+	value = sr_site_aut_pressure_sedna
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_sedna = {
+	value = sr_site_hold_loss_sedna
+}
+sr_site_hold_months_sedna = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_sedna > 0 }
+		value = sr_site_hold_marines_sedna
+		subtract = sr_site_hold_need_sedna
+		divide = { value = sr_site_hold_world_loss_sedna multiply = sr_site_marines_share_sedna min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_sedna = { value = sr_site_garrison_need_sedna multiply = sr_assault_loss_share }
 sr_site_assault_need_sedna = { value = sr_site_garrison_need_sedna add = sr_site_assault_toll_sedna }
@@ -21244,12 +22284,50 @@ sr_site_marines_mult_shackleton = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_shackleton = {
 	value = sr_site_shared_marines_shackleton
 	multiply = sr_site_marines_share_shackleton
 	multiply = sr_site_marines_mult_shackleton
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_shackleton } } add = sr_site_militia_value_shackleton }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_shackleton } NOT = { has_global_variable = sr_site_resisting_shackleton } } add = sr_site_militia_value_shackleton }
+}
+sr_site_hold_people_shackleton = {
+	value = sr_site_pop_value_shackleton
+	if = { limit = { sr_site_shares = { A = shackleton B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_pop_value_peary }
+	if = { limit = { sr_site_shares = { A = shackleton B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_pop_value_tranquility }
+	if = { limit = { sr_site_shares = { A = shackleton B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_pop_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = shackleton B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_pop_value_daedalus }
+	if = { limit = { sr_site_shares = { A = shackleton B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_pop_value_imbrium }
+}
+sr_site_hold_need_shackleton = { value = sr_site_hold_people_shackleton divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_shackleton = { value = sr_site_shared_marines_shackleton multiply = sr_site_marines_share_shackleton }
+sr_site_hold_loss_shackleton = {
+	value = sr_site_aut_pressure_shackleton
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_shackleton = {
+	value = sr_site_hold_loss_shackleton
+	if = { limit = { sr_site_shares = { A = shackleton B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_hold_loss_peary }
+	if = { limit = { sr_site_shares = { A = shackleton B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_hold_loss_tranquility }
+	if = { limit = { sr_site_shares = { A = shackleton B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_hold_loss_marius_hills }
+	if = { limit = { sr_site_shares = { A = shackleton B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_hold_loss_daedalus }
+	if = { limit = { sr_site_shares = { A = shackleton B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_hold_loss_imbrium }
+}
+sr_site_hold_months_shackleton = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_shackleton > 0 }
+		value = sr_site_hold_marines_shackleton
+		subtract = sr_site_hold_need_shackleton
+		divide = { value = sr_site_hold_world_loss_shackleton multiply = sr_site_marines_share_shackleton min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_shackleton = { value = sr_site_garrison_need_shackleton multiply = sr_assault_loss_share }
 sr_site_assault_need_shackleton = { value = sr_site_garrison_need_shackleton add = sr_site_assault_toll_shackleton }
@@ -21338,12 +22416,50 @@ sr_site_marines_mult_peary = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_peary = {
 	value = sr_site_shared_marines_peary
 	multiply = sr_site_marines_share_peary
 	multiply = sr_site_marines_mult_peary
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_peary } } add = sr_site_militia_value_peary }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_peary } NOT = { has_global_variable = sr_site_resisting_peary } } add = sr_site_militia_value_peary }
+}
+sr_site_hold_people_peary = {
+	value = sr_site_pop_value_peary
+	if = { limit = { sr_site_shares = { A = peary B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_pop_value_shackleton }
+	if = { limit = { sr_site_shares = { A = peary B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_pop_value_tranquility }
+	if = { limit = { sr_site_shares = { A = peary B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_pop_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = peary B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_pop_value_daedalus }
+	if = { limit = { sr_site_shares = { A = peary B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_pop_value_imbrium }
+}
+sr_site_hold_need_peary = { value = sr_site_hold_people_peary divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_peary = { value = sr_site_shared_marines_peary multiply = sr_site_marines_share_peary }
+sr_site_hold_loss_peary = {
+	value = sr_site_aut_pressure_peary
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_peary = {
+	value = sr_site_hold_loss_peary
+	if = { limit = { sr_site_shares = { A = peary B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_hold_loss_shackleton }
+	if = { limit = { sr_site_shares = { A = peary B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_hold_loss_tranquility }
+	if = { limit = { sr_site_shares = { A = peary B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_hold_loss_marius_hills }
+	if = { limit = { sr_site_shares = { A = peary B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_hold_loss_daedalus }
+	if = { limit = { sr_site_shares = { A = peary B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_hold_loss_imbrium }
+}
+sr_site_hold_months_peary = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_peary > 0 }
+		value = sr_site_hold_marines_peary
+		subtract = sr_site_hold_need_peary
+		divide = { value = sr_site_hold_world_loss_peary multiply = sr_site_marines_share_peary min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_peary = { value = sr_site_garrison_need_peary multiply = sr_assault_loss_share }
 sr_site_assault_need_peary = { value = sr_site_garrison_need_peary add = sr_site_assault_toll_peary }
@@ -21432,12 +22548,50 @@ sr_site_marines_mult_tranquility = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_tranquility = {
 	value = sr_site_shared_marines_tranquility
 	multiply = sr_site_marines_share_tranquility
 	multiply = sr_site_marines_mult_tranquility
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_tranquility } } add = sr_site_militia_value_tranquility }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_tranquility } NOT = { has_global_variable = sr_site_resisting_tranquility } } add = sr_site_militia_value_tranquility }
+}
+sr_site_hold_people_tranquility = {
+	value = sr_site_pop_value_tranquility
+	if = { limit = { sr_site_shares = { A = tranquility B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_pop_value_shackleton }
+	if = { limit = { sr_site_shares = { A = tranquility B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_pop_value_peary }
+	if = { limit = { sr_site_shares = { A = tranquility B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_pop_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = tranquility B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_pop_value_daedalus }
+	if = { limit = { sr_site_shares = { A = tranquility B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_pop_value_imbrium }
+}
+sr_site_hold_need_tranquility = { value = sr_site_hold_people_tranquility divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_tranquility = { value = sr_site_shared_marines_tranquility multiply = sr_site_marines_share_tranquility }
+sr_site_hold_loss_tranquility = {
+	value = sr_site_aut_pressure_tranquility
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_tranquility = {
+	value = sr_site_hold_loss_tranquility
+	if = { limit = { sr_site_shares = { A = tranquility B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_hold_loss_shackleton }
+	if = { limit = { sr_site_shares = { A = tranquility B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_hold_loss_peary }
+	if = { limit = { sr_site_shares = { A = tranquility B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_hold_loss_marius_hills }
+	if = { limit = { sr_site_shares = { A = tranquility B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_hold_loss_daedalus }
+	if = { limit = { sr_site_shares = { A = tranquility B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_hold_loss_imbrium }
+}
+sr_site_hold_months_tranquility = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_tranquility > 0 }
+		value = sr_site_hold_marines_tranquility
+		subtract = sr_site_hold_need_tranquility
+		divide = { value = sr_site_hold_world_loss_tranquility multiply = sr_site_marines_share_tranquility min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_tranquility = { value = sr_site_garrison_need_tranquility multiply = sr_assault_loss_share }
 sr_site_assault_need_tranquility = { value = sr_site_garrison_need_tranquility add = sr_site_assault_toll_tranquility }
@@ -21526,12 +22680,50 @@ sr_site_marines_mult_marius_hills = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_marius_hills = {
 	value = sr_site_shared_marines_marius_hills
 	multiply = sr_site_marines_share_marius_hills
 	multiply = sr_site_marines_mult_marius_hills
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_militia_value_marius_hills }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_marius_hills } NOT = { has_global_variable = sr_site_resisting_marius_hills } } add = sr_site_militia_value_marius_hills }
+}
+sr_site_hold_people_marius_hills = {
+	value = sr_site_pop_value_marius_hills
+	if = { limit = { sr_site_shares = { A = marius_hills B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_pop_value_shackleton }
+	if = { limit = { sr_site_shares = { A = marius_hills B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_pop_value_peary }
+	if = { limit = { sr_site_shares = { A = marius_hills B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_pop_value_tranquility }
+	if = { limit = { sr_site_shares = { A = marius_hills B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_pop_value_daedalus }
+	if = { limit = { sr_site_shares = { A = marius_hills B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_pop_value_imbrium }
+}
+sr_site_hold_need_marius_hills = { value = sr_site_hold_people_marius_hills divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_marius_hills = { value = sr_site_shared_marines_marius_hills multiply = sr_site_marines_share_marius_hills }
+sr_site_hold_loss_marius_hills = {
+	value = sr_site_aut_pressure_marius_hills
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_marius_hills = {
+	value = sr_site_hold_loss_marius_hills
+	if = { limit = { sr_site_shares = { A = marius_hills B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_hold_loss_shackleton }
+	if = { limit = { sr_site_shares = { A = marius_hills B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_hold_loss_peary }
+	if = { limit = { sr_site_shares = { A = marius_hills B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_hold_loss_tranquility }
+	if = { limit = { sr_site_shares = { A = marius_hills B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_hold_loss_daedalus }
+	if = { limit = { sr_site_shares = { A = marius_hills B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_hold_loss_imbrium }
+}
+sr_site_hold_months_marius_hills = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_marius_hills > 0 }
+		value = sr_site_hold_marines_marius_hills
+		subtract = sr_site_hold_need_marius_hills
+		divide = { value = sr_site_hold_world_loss_marius_hills multiply = sr_site_marines_share_marius_hills min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_marius_hills = { value = sr_site_garrison_need_marius_hills multiply = sr_assault_loss_share }
 sr_site_assault_need_marius_hills = { value = sr_site_garrison_need_marius_hills add = sr_site_assault_toll_marius_hills }
@@ -21620,12 +22812,50 @@ sr_site_marines_mult_daedalus = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_daedalus = {
 	value = sr_site_shared_marines_daedalus
 	multiply = sr_site_marines_share_daedalus
 	multiply = sr_site_marines_mult_daedalus
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_militia_value_daedalus }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_daedalus } NOT = { has_global_variable = sr_site_resisting_daedalus } } add = sr_site_militia_value_daedalus }
+}
+sr_site_hold_people_daedalus = {
+	value = sr_site_pop_value_daedalus
+	if = { limit = { sr_site_shares = { A = daedalus B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_pop_value_shackleton }
+	if = { limit = { sr_site_shares = { A = daedalus B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_pop_value_peary }
+	if = { limit = { sr_site_shares = { A = daedalus B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_pop_value_tranquility }
+	if = { limit = { sr_site_shares = { A = daedalus B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_pop_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = daedalus B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_pop_value_imbrium }
+}
+sr_site_hold_need_daedalus = { value = sr_site_hold_people_daedalus divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_daedalus = { value = sr_site_shared_marines_daedalus multiply = sr_site_marines_share_daedalus }
+sr_site_hold_loss_daedalus = {
+	value = sr_site_aut_pressure_daedalus
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_daedalus = {
+	value = sr_site_hold_loss_daedalus
+	if = { limit = { sr_site_shares = { A = daedalus B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_hold_loss_shackleton }
+	if = { limit = { sr_site_shares = { A = daedalus B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_hold_loss_peary }
+	if = { limit = { sr_site_shares = { A = daedalus B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_hold_loss_tranquility }
+	if = { limit = { sr_site_shares = { A = daedalus B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_hold_loss_marius_hills }
+	if = { limit = { sr_site_shares = { A = daedalus B = imbrium } has_global_variable = sr_site_resisting_imbrium } add = sr_site_hold_loss_imbrium }
+}
+sr_site_hold_months_daedalus = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_daedalus > 0 }
+		value = sr_site_hold_marines_daedalus
+		subtract = sr_site_hold_need_daedalus
+		divide = { value = sr_site_hold_world_loss_daedalus multiply = sr_site_marines_share_daedalus min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_daedalus = { value = sr_site_garrison_need_daedalus multiply = sr_assault_loss_share }
 sr_site_assault_need_daedalus = { value = sr_site_garrison_need_daedalus add = sr_site_assault_toll_daedalus }
@@ -21714,12 +22944,50 @@ sr_site_marines_mult_imbrium = {
 }
 # A seizure must exceed the garrison (shared on the Moon and Mars), at its
 # owner's crewed share and Training Grounds' weight, and the militia; a
-# liberation, the occupier's garrison alone (its people are the holder's).
+# liberation, the occupier's garrison alone (its people are the holder's). A
+# colony held by force has no militia for its holder: it is fighting it (owner,
+# 2026-11-25).
 sr_site_garrison_need_imbrium = {
 	value = sr_site_shared_marines_imbrium
 	multiply = sr_site_marines_share_imbrium
 	multiply = sr_site_marines_mult_imbrium
-	if = { limit = { NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_militia_value_imbrium }
+	if = { limit = { NOT = { has_global_variable = sr_site_occupier_imbrium } NOT = { has_global_variable = sr_site_resisting_imbrium } } add = sr_site_militia_value_imbrium }
+}
+sr_site_hold_people_imbrium = {
+	value = sr_site_pop_value_imbrium
+	if = { limit = { sr_site_shares = { A = imbrium B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_pop_value_shackleton }
+	if = { limit = { sr_site_shares = { A = imbrium B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_pop_value_peary }
+	if = { limit = { sr_site_shares = { A = imbrium B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_pop_value_tranquility }
+	if = { limit = { sr_site_shares = { A = imbrium B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_pop_value_marius_hills }
+	if = { limit = { sr_site_shares = { A = imbrium B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_pop_value_daedalus }
+}
+sr_site_hold_need_imbrium = { value = sr_site_hold_people_imbrium divide = sr_hold_people_per_battalion }
+sr_site_hold_marines_imbrium = { value = sr_site_shared_marines_imbrium multiply = sr_site_marines_share_imbrium }
+sr_site_hold_loss_imbrium = {
+	value = sr_site_aut_pressure_imbrium
+	subtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }
+	min = 0
+	multiply = sr_hold_loss_per_excess
+}
+sr_site_hold_world_loss_imbrium = {
+	value = sr_site_hold_loss_imbrium
+	if = { limit = { sr_site_shares = { A = imbrium B = shackleton } has_global_variable = sr_site_resisting_shackleton } add = sr_site_hold_loss_shackleton }
+	if = { limit = { sr_site_shares = { A = imbrium B = peary } has_global_variable = sr_site_resisting_peary } add = sr_site_hold_loss_peary }
+	if = { limit = { sr_site_shares = { A = imbrium B = tranquility } has_global_variable = sr_site_resisting_tranquility } add = sr_site_hold_loss_tranquility }
+	if = { limit = { sr_site_shares = { A = imbrium B = marius_hills } has_global_variable = sr_site_resisting_marius_hills } add = sr_site_hold_loss_marius_hills }
+	if = { limit = { sr_site_shares = { A = imbrium B = daedalus } has_global_variable = sr_site_resisting_daedalus } add = sr_site_hold_loss_daedalus }
+}
+sr_site_hold_months_imbrium = {
+	value = sr_hold_months_none
+	if = {
+		limit = { sr_site_hold_world_loss_imbrium > 0 }
+		value = sr_site_hold_marines_imbrium
+		subtract = sr_site_hold_need_imbrium
+		divide = { value = sr_site_hold_world_loss_imbrium multiply = sr_site_marines_share_imbrium min = 0.001 }
+		min = 0
+		max = sr_hold_months_none
+		floor = yes
+	}
 }
 sr_site_assault_toll_imbrium = { value = sr_site_garrison_need_imbrium multiply = sr_assault_loss_share }
 sr_site_assault_need_imbrium = { value = sr_site_garrison_need_imbrium add = sr_site_assault_toll_imbrium }
