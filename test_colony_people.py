@@ -725,8 +725,9 @@ class PeopleViewTest(unittest.TestCase):
                 self.assertIn(f"else_if = {{ limit = {{ sr_site_crews_planned_{k} > sr_site_crews_{k} }} value = 2 }}", fit)
                 used = (f"[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_needed_{k}')|0]/"
                         f"[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_{k}')|0]")
-                # `yellow`, not `Y`: `#Y` is vanilla's zero-value format and draws white (from #2016).
-                for block, value, color in (("settler_crews", 0, "G"), ("settler_crews_exact", 1, "yellow"),
+                # `bold;yellow`, not `Y`: `#Y` is vanilla's zero-value format and draws white,
+                # and the bold matches `G` and `R` (from #2016).
+                for block, value, color in (("settler_crews", 0, "G"), ("settler_crews_exact", 1, "bold;yellow"),
                                             ("settler_crews_short", 2, "R")):
                     self.assertIn(f'blockoverride "{block}" {{\n\t\t\t\tvisible = "[EqualTo_CFixedPoint( '
                                   f"JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_crews_fit_{k}'), "

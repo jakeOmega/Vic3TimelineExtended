@@ -2012,8 +2012,8 @@
   "ru": "Глобальные температуры остаются близкими к доиндустриальным. Запись откроется, когда мир нагреется на #v 0,1 °C#! или когда мы примем [GetLawType('law_fossil_expansion_moratorium').GetName] или [GetLawType('law_managed_fossil_phaseout').GetName]. Её климатические политики откроются при #v 0,5 °C#!."
  },
  "je_global_warming_status_moderate": {
-  "en": "#bold Warming:#! #yellow Moderate#! - The planet has warmed noticeably. Crop disruptions and erratic weather become common.",
-  "ru": "#bold Потепление:#! #yellow Умеренное#! — планета заметно нагрелась. Сбои урожаев и неустойчивая погода становятся обычным делом."
+  "en": "#bold Warming:#! #bold;yellow Moderate#! - The planet has warmed noticeably. Crop disruptions and erratic weather become common.",
+  "ru": "#bold Потепление:#! #bold;yellow Умеренное#! — планета заметно нагрелась. Сбои урожаев и неустойчивая погода становятся обычным делом."
  },
  "je_global_warming_status_negligible": {
   "en": "#bold Warming:#! #G Negligible#! - Global temperatures remain near pre-industrial levels.",
@@ -2028,8 +2028,8 @@
   "ru": "#bold Потепление:#! #o Значительное#! — потепление достигло опасного уровня. Затопление побережий, засухи и массовое переселение усиливаются."
  },
  "je_global_warming_status_slight": {
-  "en": "#bold Warming:#! #yellow Slight#! - Global temperatures have risen slightly. Early signs of shifting weather patterns emerge.",
-  "ru": "#bold Потепление:#! #yellow Слабое#! — глобальные температуры слегка выросли. Появляются первые признаки смены погодных режимов."
+  "en": "#bold Warming:#! #bold;yellow Slight#! - Global temperatures have risen slightly. Early signs of shifting weather patterns emerge.",
+  "ru": "#bold Потепление:#! #bold;yellow Слабое#! — глобальные температуры слегка выросли. Появляются первые признаки смены погодных режимов."
  },
  "je_grand_monuments": {
   "en": "Monuments",
@@ -2300,8 +2300,8 @@
   "ru": "Известные иностранные операции"
  },
  "je_iw_known_ordered": {
-  "en": "#yellow Exposure ordered#!",
-  "ru": "#yellow Разоблачение назначено#!"
+  "en": "#bold;yellow Exposure ordered#!",
+  "ru": "#bold;yellow Разоблачение назначено#!"
  },
  "je_iw_known_ordered_tt": {
   "en": "The exposure goes out as soon as no other exposure of this country's operations is open, by our service's next monthly review after that at the latest; the country may take weeks to answer for one. Once ours is settled, the operation ends and leaves this list.",
@@ -2580,8 +2580,8 @@
   "ru": "#bold $iw_op_name_nuclear_sabotage$#!\\nПротив страны [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName] при базовой силе:\\n[GetStaticModifier('covert_nuclear_sabotage').GetDesc]\\n$je_iw_op_row_strength_line$"
  },
  "je_iw_op_row_phase_est": {
-  "en": "[Concept('concept_operation_phase','Phase')]: #yellow Establishing#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Fully Operational",
-  "ru": "[Concept('concept_operation_phase','Фаза')]: #yellow Становление#!, до полной готовности [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] мес."
+  "en": "[Concept('concept_operation_phase','Phase')]: #bold;yellow Establishing#!, [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months to Fully Operational",
+  "ru": "[Concept('concept_operation_phase','Фаза')]: #bold;yellow Становление#!, до полной готовности [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] мес."
  },
  "je_iw_op_row_phase_est_tt": {
   "en": "Working at base strength. Once fully operational, its effects are multiplied by #G ×[GetPlayer.MakeScope.ScriptValue('covert_op_phase_full_mult')|0]#!.",
@@ -2656,8 +2656,8 @@
   "ru": "Похищено [Concept('concept_technology','технологий')]: пока ничего"
  },
  "je_iw_op_row_tech_stolen_tt": {
-  "en": "Each month from #yellow Establishing#! on, this operation adds progress to a [concept_technology] in its tree (production for Industrial Espionage, military for Military Espionage) that its target has researched and we have not: our current research if it is one, otherwise a random one we could research now. At base strength that is #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! of the technology's era cost, multiplied by phase and priority. Each espionage operation steals on its own, and ends once its target has nothing left we could take.",
-  "ru": "Каждый месяц, начиная со стадии #yellow становления#!, эта операция добавляет прогресс к [Concept('concept_technology','технологии')] в своей ветви (производственной — для «Промышленного шпионажа», военной — для «Военного шпионажа»), которую изучила цель, а мы нет: нашему текущему исследованию, если оно подходит, иначе случайной, которую мы могли бы изучить сейчас. При базовой силе это #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! стоимости технологии её эпохи, умноженной на фазу и приоритет. Каждая шпионская операция ворует сама по себе и заканчивается, когда у цели не остаётся того, что мы могли бы взять."
+  "en": "Each month from #bold;yellow Establishing#! on, this operation adds progress to a [concept_technology] in its tree (production for Industrial Espionage, military for Military Espionage) that its target has researched and we have not: our current research if it is one, otherwise a random one we could research now. At base strength that is #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! of the technology's era cost, multiplied by phase and priority. Each espionage operation steals on its own, and ends once its target has nothing left we could take.",
+  "ru": "Каждый месяц, начиная со стадии #bold;yellow становления#!, эта операция добавляет прогресс к [Concept('concept_technology','технологии')] в своей ветви (производственной — для «Промышленного шпионажа», военной — для «Военного шпионажа»), которую изучила цель, а мы нет: нашему текущему исследованию, если оно подходит, иначе случайной, которую мы могли бы изучить сейчас. При базовой силе это #G [GetPlayer.MakeScope.ScriptValue('covert_tech_theft_share_percent_display')|0]%#! стоимости технологии её эпохи, умноженной на фазу и приоритет. Каждая шпионская операция ворует сама по себе и заканчивается, когда у цели не остаётся того, что мы могли бы взять."
  },
  "je_iw_ov_capacity_tt": {
   "en": "#bold [concept_intelligence_capacity]: [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_display')|0]#!\\n#v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best (#v [JournalEntry.GetCountry.MakeScope.ScriptValue('global_max_ic_display')|0]#!)\\n[concept_literacy]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_from_literacy_display')|0]#!\\n[Concept('concept_gdp', 'GDP')] share: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_from_gdp_display')|0]#!\\nBase, rank, technology and laws: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_from_modifiers_display')|0]#!\\n\\n#bold Where the base, rank, technology and laws part comes from#!\\n[JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_intelligence_capacity_add')]",
@@ -2748,8 +2748,8 @@
   "ru": "#bold $je_iw_ov_standing_4$#! от [GetPlayer.MakeScope.ScriptValue('covert_disp_standing_floor_4')|0]% лучшего в мире [Concept('concept_intelligence_capacity','разведывательного потенциала')]"
  },
  "je_iw_status_defended": {
-  "en": "#yellow Defended.#! Our intelligence capabilities are adequate, though determined adversaries may find vulnerabilities.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Hardened#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%",
-  "ru": "#yellow Защищённая.#! Наши разведывательные возможности достаточны, хотя решительные противники могут найти уязвимости.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! от лучшего в мире; #bold Закалённая#! от [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%"
+  "en": "#bold;yellow Defended.#! Our intelligence capabilities are adequate, though determined adversaries may find vulnerabilities.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Hardened#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%",
+  "ru": "#bold;yellow Защищённая.#! Наши разведывательные возможности достаточны, хотя решительные противники могут найти уязвимости.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! от лучшего в мире; #bold Закалённая#! от [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_3')|0]%"
  },
  "je_iw_status_exposed": {
   "en": "#o Exposed.#! Our intelligence infrastructure has significant gaps. We are vulnerable to sustained covert campaigns.\\n[concept_intelligence_capacity]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_relative_display')|0]%#! of the world's best; #bold Defended#! from [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_disp_standing_floor_2')|0]%",
@@ -3244,8 +3244,8 @@
   "ru": "Автоматизация и ИИ делают традиционный труд ненужным. Обществу предстоит решить, что будет дальше, пока рушится старый экономический порядок."
  },
  "je_post_scarcity_status_early": {
-  "en": "#yellow The age of automation dawns.#! Mass unemployment looms as machines replace workers across all sectors. Next: research [GetTechnology('post-scarcity_economy').GetName].",
-  "ru": "#yellow Наступает эпоха автоматизации.#! Массовая безработица надвигается, пока машины заменяют рабочих во всех секторах. Далее: изучить технологию [GetTechnology('post-scarcity_economy').GetName]."
+  "en": "#bold;yellow The age of automation dawns.#! Mass unemployment looms as machines replace workers across all sectors. Next: research [GetTechnology('post-scarcity_economy').GetName].",
+  "ru": "#bold;yellow Наступает эпоха автоматизации.#! Массовая безработица надвигается, пока машины заменяют рабочих во всех секторах. Далее: изучить технологию [GetTechnology('post-scarcity_economy').GetName]."
  },
  "je_post_scarcity_status_transition": {
   "en": "#G Post-scarcity technology exists.#! Next: enact the [GetLawType('law_post-scarcity').GetName] law.",
@@ -6072,12 +6072,12 @@
   "ru": "#bold Межзвёздный зонд#! — $sr_prog_state_running$\\nПосле запуска зонд летит по инерции 132 мес., прежде чем его данные вернутся."
  },
  "je_space_race_widget_prog_interstellar_2": {
-  "en": "#bold Interstellar Probe#! — #yellow launched, awaiting data#!\\nIts data reaches us in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
-  "ru": "#bold Межзвёздный зонд#! — #yellow запущен, ожидание данных#!\\nЕго данные дойдут до нас через [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] мес."
+  "en": "#bold Interstellar Probe#! — #bold;yellow launched, awaiting data#!\\nIts data reaches us in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
+  "ru": "#bold Межзвёздный зонд#! — #bold;yellow запущен, ожидание данных#!\\nЕго данные дойдут до нас через [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] мес."
  },
  "je_space_race_widget_prog_interstellar_2_ni": {
-  "en": "#bold Interstellar Probe#! — #yellow launched, awaiting data#!\\nIts data comes back in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
-  "ru": "#bold Межзвёздный зонд#! — #yellow запущен, ожидание данных#!\\nЕго данные вернутся через [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] мес."
+  "en": "#bold Interstellar Probe#! — #bold;yellow launched, awaiting data#!\\nIts data comes back in [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] months.",
+  "ru": "#bold Межзвёздный зонд#! — #bold;yellow запущен, ожидание данных#!\\nЕго данные вернутся через [Country.MakeScope.ScriptValue('sr_interstellar_months_left')|0] мес."
  },
  "je_space_race_widget_prog_interstellar_3": {
   "en": "#bold Interstellar Probe#! — $sr_prog_state_signal_received$",
@@ -7632,8 +7632,8 @@
   "ru": "Ни один член не отстаивает порядок и не подрывает его, и каждая [concept_great_power|l] — член ООН."
  },
  "je_un_auth_powers_outsiders": {
-  "en": "#yellow [Concept('concept_great_power', 'Great Powers')] outside the UN#!",
-  "ru": "#yellow [Concept('concept_great_power', 'Великие державы')] вне ООН#!"
+  "en": "#bold;yellow [Concept('concept_great_power', 'Great Powers')] outside the UN#!",
+  "ru": "#bold;yellow [Concept('concept_great_power', 'Великие державы')] вне ООН#!"
  },
  "je_un_auth_powers_underminers": {
   "en": "#R Undermining the order#!",
@@ -8140,8 +8140,8 @@
   "ru": "Заняты все пять постоянных мест в [Concept('concept_un_security_council','Совете Безопасности')]. Место освобождается, когда его владелец покидает ООН, десять лет остаётся ниже ранга [Concept('concept_great_power','великой державы')] или исключается голосованием 2/3; затем оно переходит члену ранга [Concept('concept_great_power','великой державы')] с наибольшим [concept_prestige|l], у которого такого места нет."
  },
  "je_un_chamber_council_in_line_entry": {
-  "en": "#yellow In line for a seat#! — [THIS.GetCountry.GetName] ([THIS.ScriptValue('un_prestige_order_value')|0] [concept_prestige])",
-  "ru": "#yellow В очереди на место#! — [THIS.GetCountry.GetName] ([concept_prestige|l]: [THIS.ScriptValue('un_prestige_order_value')|0])"
+  "en": "#bold;yellow In line for a seat#! — [THIS.GetCountry.GetName] ([THIS.ScriptValue('un_prestige_order_value')|0] [concept_prestige])",
+  "ru": "#bold;yellow В очереди на место#! — [THIS.GetCountry.GetName] ([concept_prestige|l]: [THIS.ScriptValue('un_prestige_order_value')|0])"
  },
  "je_un_chamber_council_member_entry": {
   "en": "#v Permanent member#! — [THIS.GetCountry.GetName]",
@@ -8644,8 +8644,8 @@
   "ru": "  #G Действует#!, пока не использован: только одно требование (#tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_mandate_rule_tt #bold правило#!#!)."
  },
  "je_un_chamber_mandate_status_bound": {
-  "en": "  #yellow Being exercised.#! It is bound to the one play it was raised in and cannot be carried into another. #R Adding any other demand against that country for territory, subjugation, regime change or humiliation voids it and is condemned;#! so does backing down.",
-  "ru": "  #yellow Используется.#! Он привязан к той единственной игре, в которой был выдвинут, и не может быть перенесён в другую. #R Добавление любого другого требования к этой стране о территории, подчинении, смене режима или унижении аннулирует его и осуждается;#! так же и отступление."
+  "en": "  #bold;yellow Being exercised.#! It is bound to the one play it was raised in and cannot be carried into another. #R Adding any other demand against that country for territory, subjugation, regime change or humiliation voids it and is condemned;#! so does backing down.",
+  "ru": "  #bold;yellow Используется.#! Он привязан к той единственной игре, в которой был выдвинут, и не может быть перенесён в другую. #R Добавление любого другого требования к этой стране о территории, подчинении, смене режима или унижении аннулирует его и осуждается;#! так же и отступление."
  },
  "je_un_chamber_mandate_status_complied": {
   "en": "  #G Discharged as written.#!",
@@ -8916,8 +8916,8 @@
   "ru": "  #R Отклонена#! — и к тому же с вето."
  },
  "je_un_chamber_outcome_lapsed": {
-  "en": "  #yellow Lapsed.#! The proposer never brought it back to the floor, and the chair struck it from the order paper.",
-  "ru": "  #yellow Утратила силу.#! Автор так и не вернул её на обсуждение, и председатель вычеркнул её из повестки."
+  "en": "  #bold;yellow Lapsed.#! The proposer never brought it back to the floor, and the chair struck it from the order paper.",
+  "ru": "  #bold;yellow Утратила силу.#! Автор так и не вернул её на обсуждение, и председатель вычеркнул её из повестки."
  },
  "je_un_chamber_outcome_passed": {
   "en": "  #G Carried.#!",
@@ -9048,12 +9048,12 @@
   "ru": "  #lore ИИ-члены голосуют на девятый–одиннадцатый месяц и в этот подсчёт пока не вошли; вкладка «Делегации» показывает, как они склоняются.#!"
  },
  "je_un_chamber_propose_blocked_in_session": {
-  "en": "#yellow A resolution is already in session. The floor takes one at a time.#!",
-  "ru": "#yellow Резолюция уже рассматривается. Одновременно рассматривается только одна.#!"
+  "en": "#bold;yellow A resolution is already in session. The floor takes one at a time.#!",
+  "ru": "#bold;yellow Резолюция уже рассматривается. Одновременно рассматривается только одна.#!"
  },
  "je_un_chamber_propose_blocked_reserved": {
-  "en": "#yellow Another delegation holds the floor while it decides whether to propose a motion.#!",
-  "ru": "#yellow Слово держит другая делегация, пока решает, вносить ли предложение.#!"
+  "en": "#bold;yellow Another delegation holds the floor while it decides whether to propose a motion.#!",
+  "ru": "#bold;yellow Слово держит другая делегация, пока решает, вносить ли предложение.#!"
  },
  "je_un_chamber_propose_button_label": {
   "en": "Propose",
@@ -9272,8 +9272,8 @@
   "ru": "#bold Наше следующее предложение:#! через #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_propose_wait_months')|0]#! мес.; срок ожидания после последнего предложения определён нашим рангом и [Concept('concept_un_standing','международным авторитетом')]."
  },
  "je_un_chamber_propose_no_case_aid": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #yellow No Case#!#!",
-  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #yellow Нет оснований#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #bold;yellow No Case#!#!",
+  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_aid_tt #bold;yellow Нет оснований#!#!"
  },
  "je_un_chamber_propose_no_case_aid_tt": {
   "en": "No state of ours is in want enough to ask the Assembly for aid.",
@@ -9320,8 +9320,8 @@
   "ru": "Ни у одного представленного члена, кроме наших союзников, нашего сюзерена и наших зависимых государств, нет послужного списка, оправдывающего приостановку его полномочий (весомость дела 50 или более), пока он нарушает условия о правах человека или имеет историю неповиновения 10 или более. [Concept('concept_un_permanent_member','Постоянного члена')] можно назвать лишь после Реформы Устава II."
  },
  "je_un_chamber_propose_no_case_decolonization": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #yellow No Case#!#!",
-  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #yellow Нет оснований#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #bold;yellow No Case#!#!",
+  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_decolonization_tt #bold;yellow Нет оснований#!#!"
  },
  "je_un_chamber_propose_no_case_decolonization_tt": {
   "en": "No country holds a subject any longer: there is nothing left to decolonize.",
@@ -9352,8 +9352,8 @@
   "ru": "[concept_un_food_reserve] уже действует. Наше обещание, если мы его дадим, указано в «Наших обязательствах»."
  },
  "je_un_chamber_propose_no_case_lift_sanctions": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #yellow No Case#!#!",
-  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #yellow Нет оснований#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #bold;yellow No Case#!#!",
+  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_lift_sanctions_tt #bold;yellow Нет оснований#!#!"
  },
  "je_un_chamber_propose_no_case_lift_sanctions_tt": {
   "en": "We are not under [concept_un_sanctions]. The voluntary sanctions a veto leaves end by themselves after five years.",
@@ -9368,16 +9368,16 @@
   "ru": "Для нас не открыто дела о разрешении."
  },
  "je_un_chamber_propose_no_case_observer_request": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #yellow No Case#!#!",
-  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #yellow Нет оснований#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #bold;yellow No Case#!#!",
+  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_observer_request_tt #bold;yellow Нет оснований#!#!"
  },
  "je_un_chamber_propose_no_case_observer_request_tt": {
   "en": "Either we hold no elections (no voting law and no Anarchy), or UN electoral observers are already at work here, or our delegation is not seated, or every one of our states already holds another UN mission.",
   "ru": "Либо мы не проводим выборы (нет закона об избирательном праве и Анархии), либо избирательные наблюдатели ООН здесь уже работают, либо наша делегация не допущена, либо в каждой нашей области уже есть другая миссия ООН."
  },
  "je_un_chamber_propose_no_case_peacekeepers": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #yellow No Case#!#!",
-  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #yellow Нет оснований#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #bold;yellow No Case#!#!",
+  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_peacekeepers_tt #bold;yellow Нет оснований#!#!"
  },
  "je_un_chamber_propose_no_case_peacekeepers_tt": {
   "en": "We are neither at war nor holding a devastated state — there is nothing to ask peacekeepers for.",
@@ -9412,8 +9412,8 @@
   "ru": "Либо мы уже применяем собственный режим санкций, либо ни у одного соперника послужной список не оправдывает санкции (весомость дела 50 или более)."
  },
  "je_un_chamber_propose_no_case_standing_force": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #yellow Already Founded#!#!",
-  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #yellow Уже учреждены#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #bold;yellow Already Founded#!#!",
+  "ru": "#tooltippable;tooltip:je_un_chamber_propose_no_case_standing_force_tt #bold;yellow Уже учреждены#!#!"
  },
  "je_un_chamber_propose_no_case_standing_force_tt": {
   "en": "The [concept_un_standing_force] already stands.",
@@ -9548,8 +9548,8 @@
   "ru": "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],je_un_chamber_propose_topic_condemn_tt #bold Осуждение агрессии#!#!"
  },
  "je_un_chamber_propose_topic_cooldown": {
-  "en": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #yellow On Cooldown#!#!",
-  "ru": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #yellow На перезарядке#!#!"
+  "en": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #bold;yellow On Cooldown#!#!",
+  "ru": "#tooltippable;tooltip:je_un_chamber_propose_topic_cooldown_tt #bold;yellow На перезарядке#!#!"
  },
  "je_un_chamber_propose_topic_cooldown_tt": {
   "en": "A resolution on this question closed within the last five years. Neither we nor the docket may table it again until they are up.",
@@ -9876,12 +9876,12 @@
   "ru": "[GetStaticModifier('un_regime_heritage_site_modifier').GetName|v]\\n[GetStaticModifier('un_regime_heritage_site_modifier').GetDesc]\\n#lore Показано при ×1: наш масштабируется в зависимости от [Concept('concept_un_enforcement','принуждения ООН')].#!"
  },
  "je_un_chamber_regime_icc": {
-  "en": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #yellow Jurisdiction#!#!: the Court can indict our ruler.",
-  "ru": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #yellow Юрисдикция#!#!: Суд может предъявить обвинение нашему правителю."
+  "en": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Jurisdiction#!#!: the Court can indict our ruler.",
+  "ru": "    #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Юрисдикция#!#!: Суд может предъявить обвинение нашему правителю."
  },
  "je_un_chamber_regime_icc_outside": {
-  "en": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #yellow Jurisdiction#!#! over us, though we are not a party: it can indict our ruler.",
-  "ru": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #yellow Юрисдикция#!#! над нами, хотя мы не участник: он может предъявить обвинение нашему правителю."
+  "en": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Jurisdiction#!#! over us, though we are not a party: it can indict our ruler.",
+  "ru": "#bold $je_un_conv_name_icc$:#! #tooltippable;tooltip:je_un_chamber_regime_icc_tt #bold;yellow Юрисдикция#!#! над нами, хотя мы не участник: он может предъявить обвинение нашему правителю."
  },
  "je_un_chamber_regime_icc_tt": {
   "en": "The International Criminal Court can indict our ruler for a nuclear first strike that lands, a tactical nuclear strike, or an exposed attempt to overthrow a government not caught in a war, at most once in ten years, and would ask us to hand the accused over. Handing them over sends them into exile; defying the court costs standing and a defiance record, and brings International Court Defied for five years.",
@@ -11412,8 +11412,8 @@
   "ru": "#G Постоянный член#!"
  },
  "je_un_ov_member_5": {
-  "en": "#yellow Seat Carried#!",
-  "ru": "#yellow Место несёт сюзерен#!"
+  "en": "#bold;yellow Seat Carried#!",
+  "ru": "#bold;yellow Место несёт сюзерен#!"
  },
  "je_un_ov_member_6": {
   "en": "#R Suspended#!",
@@ -11544,8 +11544,8 @@
   "ru": "#R Опозоренный#!"
  },
  "je_un_ov_standing_3": {
-  "en": "#yellow Poor#!",
-  "ru": "#yellow Плохой#!"
+  "en": "#bold;yellow Poor#!",
+  "ru": "#bold;yellow Плохой#!"
  },
  "je_un_ov_standing_4": {
   "en": "#v Neutral#!",
@@ -11556,8 +11556,8 @@
   "ru": "#G Уважаемый#!"
  },
  "je_un_ov_standing_6": {
-  "en": "#blue Exemplary#!",
-  "ru": "#blue Образцовый#!"
+  "en": "#blue_value Exemplary#!",
+  "ru": "#blue_value Образцовый#!"
  },
  "je_un_ov_standing_fig": {
   "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_standing')|0]#! of 100",
@@ -11580,8 +11580,8 @@
   "ru": "#R Угасающий#!"
  },
  "je_un_ov_tier_1": {
-  "en": "#yellow Contested#!",
-  "ru": "#yellow Оспариваемый#!"
+  "en": "#bold;yellow Contested#!",
+  "ru": "#bold;yellow Оспариваемый#!"
  },
  "je_un_ov_tier_2": {
   "en": "#v Established#!",
@@ -11592,8 +11592,8 @@
   "ru": "#G Сильный#!"
  },
  "je_un_ov_tier_4": {
-  "en": "#blue Supranational#!",
-  "ru": "#blue Надгосударственный#!"
+  "en": "#blue_value Supranational#!",
+  "ru": "#blue_value Надгосударственный#!"
  },
  "je_un_ov_vote_against": {
   "en": "#v Voted against#!",
@@ -12068,16 +12068,16 @@
   "ru": "#R Международный авторитет: Опозоренный#! — [THIS.Var('un_standing').GetValue|0] из 100."
  },
  "je_un_standing_tier_exemplary": {
-  "en": "#blue International Standing: Exemplary#! — [THIS.Var('un_standing').GetValue|0] of 100.",
-  "ru": "#blue Международный авторитет: Образцовый#! — [THIS.Var('un_standing').GetValue|0] из 100."
+  "en": "#blue_value International Standing: Exemplary#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "ru": "#blue_value Международный авторитет: Образцовый#! — [THIS.Var('un_standing').GetValue|0] из 100."
  },
  "je_un_standing_tier_neutral": {
   "en": "#v International Standing: Neutral#! — [THIS.Var('un_standing').GetValue|0] of 100.",
   "ru": "#v Международный авторитет: Нейтральный#! — [THIS.Var('un_standing').GetValue|0] из 100."
  },
  "je_un_standing_tier_poor": {
-  "en": "#yellow International Standing: Poor#! — [THIS.Var('un_standing').GetValue|0] of 100.",
-  "ru": "#yellow Международный авторитет: Плохой#! — [THIS.Var('un_standing').GetValue|0] из 100."
+  "en": "#bold;yellow International Standing: Poor#! — [THIS.Var('un_standing').GetValue|0] of 100.",
+  "ru": "#bold;yellow Международный авторитет: Плохой#! — [THIS.Var('un_standing').GetValue|0] из 100."
  },
  "je_un_standing_tier_respected": {
   "en": "#G International Standing: Respected#! — [THIS.Var('un_standing').GetValue|0] of 100.",
@@ -12428,8 +12428,8 @@
   "ru": "$je_un_terms_standing_force$\\n\\n#lore Плюс то, что каждая [concept_un_resolution|l] даёт автору и членам.#!"
  },
  "je_un_tier_line_contested": {
-  "en": "#yellow [concept_un_authority]: Contested#! (20–45). Resolutions bite at half strength ([concept_un_enforcement] ×0.5). Membership benefits are paid, scaled by authority.",
-  "ru": "#yellow [concept_un_authority]: Оспариваемый#! (20–45). Резолюции действуют вполовину ([concept_un_enforcement] ×0,5). Преимущества членства выплачиваются в масштабе по авторитету."
+  "en": "#bold;yellow [concept_un_authority]: Contested#! (20–45). Resolutions bite at half strength ([concept_un_enforcement] ×0.5). Membership benefits are paid, scaled by authority.",
+  "ru": "#bold;yellow [concept_un_authority]: Оспариваемый#! (20–45). Резолюции действуют вполовину ([concept_un_enforcement] ×0,5). Преимущества членства выплачиваются в масштабе по авторитету."
  },
  "je_un_tier_line_established": {
   "en": "#v [concept_un_authority]: Established#! (45–70). Binding resolutions bite in full ([concept_un_enforcement] ×1), and great powers outside the UN are treated as pariahs.",
@@ -12444,8 +12444,8 @@
   "ru": "#G [concept_un_authority]: Сильный#! (70–85). Резолюции действуют с ×1,5 ([concept_un_enforcement]), а посторонние также теряют торговлю и рычаги влияния. Достигается только при [Concept('concept_un_charter','Реформе Устава I')]."
  },
  "je_un_tier_line_supranational": {
-  "en": "#blue [concept_un_authority]: Supranational#! (85+). Resolutions bite at ×2.5 ([concept_un_enforcement]). Reached only under [Concept('concept_un_charter','Charter Reform II')].",
-  "ru": "#blue [concept_un_authority]: Надгосударственный#! (85+). Резолюции действуют с ×2,5 ([concept_un_enforcement]). Достигается только при [Concept('concept_un_charter','Реформе Устава II')]."
+  "en": "#blue_value [concept_un_authority]: Supranational#! (85+). Resolutions bite at ×2.5 ([concept_un_enforcement]). Reached only under [Concept('concept_un_charter','Charter Reform II')].",
+  "ru": "#blue_value [concept_un_authority]: Надгосударственный#! (85+). Резолюции действуют с ×2,5 ([concept_un_enforcement]). Достигается только при [Concept('concept_un_charter','Реформе Устава II')]."
  },
  "je_unite_the_nations_invalid_conclusion_desc": {
   "en": "The $concept_journal_entry$ ended with our nations joined in a wider #b union#!",
@@ -12520,8 +12520,8 @@
   "ru": "#R КРИЗИС:#! Война неизбежна. [Concept('concept_great_power', 'Великие державы')] провели свои линии. Любой инцидент может поджечь пороховую бочку."
  },
  "je_world_war_status_high_tension": {
-  "en": "#yellow HIGH TENSION:#! The ideological divide deepens. Military buildups accelerate. Diplomatic channels are strained to breaking point.",
-  "ru": "#yellow ВЫСОКОЕ НАПРЯЖЕНИЕ:#! Идеологический раскол углубляется. Военные приготовления ускоряются. Дипломатические каналы натянуты до предела."
+  "en": "#bold;yellow HIGH TENSION:#! The ideological divide deepens. Military buildups accelerate. Diplomatic channels are strained to breaking point.",
+  "ru": "#bold;yellow ВЫСОКОЕ НАПРЯЖЕНИЕ:#! Идеологический раскол углубляется. Военные приготовления ускоряются. Дипломатические каналы натянуты до предела."
  },
  "je_world_war_status_observing": {
   "en": "The [Concept('concept_great_power', 'great powers')] are at war. We remain outside the conflict: for now. Pressure mounts to choose a side.",

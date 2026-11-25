@@ -613,7 +613,7 @@ def _visible_text(value):
     formatting codes and data reads are dropped (the caller supplies data)."""
     value = re.sub(r"\[Concept\('\w+',\s*'([^']*)'\)\]", r"\1", value)
     value = re.sub(r"\[concept_(\w+)\]", lambda m: _loc_value(f"concept_{m.group(1)}"), value)
-    value = re.sub(r"#!|#\w+ ?", "", value)
+    value = re.sub(r"#!|#\w+(?:;\w+)* ?", "", value)    # `#bold;yellow` is one tag
     return value
 
 
