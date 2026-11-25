@@ -26,8 +26,9 @@ toggle.
   (texture, colour, `start_quality_of_life = 8`, `can_always_hire = yes`,
   `wage_weight = 2`, `paid_private_wage = yes`, `dependent_wage = 0.5`,
   `unemployment = yes`, `ignores_employment_proportionality = yes`, soldiers'
-  political engagement and portrait fields). Its icon is a placeholder
-  (vanilla's soldiers icon) until painted art is chosen.
+  political engagement and portrait fields). Its icon was a placeholder
+  (vanilla's soldiers icon) until painted art was chosen (2026-11-25: a
+  cream and orange spacesuit helmet, `pops_icons/spacers.dds`).
 - **Its class: a class of its own in each hierarchy**, `te_spacers_class`
   (default hierarchy), `te_spacers_class_edo` and `te_spacers_class_caste`,
   each lower strata with `allowed_professions = { spacers }`, in

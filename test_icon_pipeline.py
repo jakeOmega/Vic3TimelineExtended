@@ -77,8 +77,12 @@ class RegistryTests(unittest.TestCase):
                     "drawn_no_marks": {"drawn": True, "now": f"{gi_}/x.dds"},
                     "drawn_from": {"drawn": True, "from": "un_part/emblem", "now": f"{gi_}/x.dds",
                                    "marks": [{"draw": "star"}]},
+                    # A vanilla icon may be a drawn entry's mark (a button glyph made of vanilla's
+                    # own); a part may not, since it waits on a pick.
                     "drawn_icon_mark": {"drawn": True, "now": f"{gi_}/x.dds",
                                         "marks": [{"icon": f"{gi_}/red_cross.dds"}]},
+                    "drawn_part_mark": {"drawn": True, "now": f"{gi_}/x.dds",
+                                        "marks": [{"part": "un_part/emblem"}]},
                 },
             }
             r = ip.check(tempfile.mkdtemp(), on_disk=set())
@@ -88,10 +92,10 @@ class RegistryTests(unittest.TestCase):
         self.assertEqual(sorted(r["bad_entry"]), [
             ("un_disc", "bad_from"), ("un_disc", "bad_mark"), ("un_disc", "from_derived"),
             ("un_disc", "no_now"), ("un_disc", "part_not_a_part"),
-            ("un_member", "bad_tint"), ("un_member", "drawn_from"), ("un_member", "drawn_icon_mark"),
-            ("un_member", "drawn_no_marks"), ("un_member", "flag_no_size")])
+            ("un_member", "bad_tint"), ("un_member", "drawn_from"), ("un_member", "drawn_no_marks"),
+            ("un_member", "drawn_part_mark"), ("un_member", "flag_no_size")])
         self.assertEqual(sorted(r["missing_dds"]), [("un_disc", "agency_a"), ("un_member", "drawn"),
-                                                    ("un_member", "member")])
+                                                    ("un_member", "drawn_icon_mark"), ("un_member", "member")])
         self.assertEqual(r["states"]["un_disc"]["derived"], 1)
 
     def test_check_flags_bad_entries(self):
@@ -528,6 +532,48 @@ class BannerTests(unittest.TestCase):
         self.assertGreater(out[:, -8:, 0].mean(), 247)
         rows = np.where(out[:, out.shape[1] // 2, 1] > 128)[0]
         self.assertAlmostEqual(rows.mean(), (spec["size"][1] - 1) / 2, delta=1)   # the middle stays in the middle
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_a_mask_gives_the_banner_vanilla_s_fade(self):
+        import icon_render
+        spec = ip.CATEGORIES["mobilization_group"]
+        W, H = spec["size"]
+        mask = np.zeros((H, W, 4), dtype=np.uint8)
+        mask[:, W // 2:, 3] = 255                                          # clear left, opaque right
+        path = Path(tempfile.mkdtemp()) / "mask.png"
+        Image.fromarray(mask, "RGBA").save(path)
+        gw, gh = spec["gen_size"]
+        out = np.asarray(icon_render.compose_banner(Image.new("RGB", (gw, gh), (200, 100, 50)),
+                                                    dict(spec, mask=str(path))))
+        self.assertEqual(out.shape, (H, W, 4))
+        self.assertTrue((out[:, :W // 2 - 2, 3] == 0).all())               # the left fades out
+        self.assertTrue((out[:, W // 2 + 2:, 3] == 255).all())
+        self.assertEqual(tuple(out[H // 2, W - 5, :3]), (200, 100, 50))      # the picture itself is untouched
+
+    def test_the_mobilization_groups_shape(self):
+        spec = ip.CATEGORIES["mobilization_group"]
+        (w, h), (gw, gh) = spec["size"], spec["gen_size"]
+        self.assertEqual((w, h), (780, 224))                # 1.15's required background size
+        self.assertEqual((gw % 16, gh % 16), (0, 0))
+        self.assertLess(abs(gw / gh - w / h), 0.1)
+        self.assertEqual(ip.icon_path("mobilization_group", "training"),
+                         "gfx/interface/illustrations/mobilization_options/training.dds")
+
+    def test_a_pop_type_s_small_copy_sits_beside_its_icon(self):
+        self.assertEqual(ip.small_path("pop_type", "spacers"), "gfx/interface/icons/pops_icons/spacers_15.dds")
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {"pop_type": {"spacers": {"subject": "a helmet", "seed": 0}}}
+            both = {ip.icon_path("pop_type", "spacers"), ip.small_path("pop_type", "spacers")}
+            root = tempfile.mkdtemp()
+            os.makedirs(os.path.join(root, "common", "pop_types"))
+            with open(os.path.join(root, "common", "pop_types", "x.txt"), "w") as f:
+                f.write("spacers = {\n}\n")
+            self.assertEqual(ip.check(root, on_disk=both)["missing_dds"], [])
+            self.assertEqual(ip.check(root, on_disk={ip.icon_path("pop_type", "spacers")})["missing_dds"],
+                             [("pop_type", "spacers")])                     # the small copy is due too
+        finally:
+            ip.ICONS = saved
 
     def test_the_shape_is_the_render_s_and_block_compression_s(self):
         spec = ip.CATEGORIES["space_banner"]

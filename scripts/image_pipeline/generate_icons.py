@@ -65,7 +65,7 @@ MOD_ROOT = SCRIPT_DIR.parents[1]
 sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(MOD_ROOT))
 from icon_prompts import (CATEGORIES, ICONS, KEEP, RESTYLE_CROP, entry_prompt, icon_path,  # noqa: E402
-                          restyle_strengths)
+                          restyle_strengths, small_path)
 
 SHEET_ROWS = 20
 
@@ -682,6 +682,11 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
             convert_image(final, dest, ensure_texconv(), spec["dds_format"], do_resize=False)
         else:
             write_dds(icon, dest)
+            if "small" in spec:
+                # The pop's text-icon copy (pops_icons' <key>_15.dds), the same picture downsized.
+                from icon_dds import resize_premultiplied
+                px = spec["small"][1]
+                write_dds(resize_premultiplied(icon, (px, px)), MOD_ROOT / small_path(cat, key))
         manifest[name(cat, key)] = want
         wrote += 1
     manifest_path.parent.mkdir(parents=True, exist_ok=True)

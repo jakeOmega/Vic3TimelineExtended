@@ -22,7 +22,7 @@
 
 building_space_forces_base = {
 	building_group = bg_government
-	icon = "gfx/interface/icons/building_icons/building_barracks.dds"
+	icon = "gfx/interface/icons/building_icons/building_space_forces_base.dds"
 	city_type = city
 	levels_per_mesh = -1
 

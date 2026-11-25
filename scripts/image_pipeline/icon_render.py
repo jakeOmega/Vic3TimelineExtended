@@ -1694,19 +1694,46 @@ def compose_strip(raw: Image.Image, spec: dict, target) -> Image.Image:
     return Image.fromarray(np.dstack([np.clip(out + 0.5, 0, 255), np.full((H, W), 255.0)]).astype(np.uint8), "RGBA")
 
 
-def compose_banner(raw: Image.Image, spec: dict) -> Image.Image:
+def banner_grade_target(folder: Path) -> dict:
+    """50th and 90th percentiles of saturation and value over the shown (opaque) part of vanilla's banners."""
+    s, v = [], []
+    for f in sorted(folder.glob("*.dds")):
+        try:
+            im = load_rgba(f)
+        except Exception:
+            continue
+        m = np.asarray(im)[..., 3] > 200
+        hsv = np.asarray(im.convert("RGB").convert("HSV"), dtype=np.float32) / 255
+        s.append(hsv[..., 1][m])
+        v.append(hsv[..., 2][m])
+    if not s:
+        raise SystemExit(f"no banners in {folder}: check VIC3_BASE_GAME")
+    return {1: np.percentile(np.concatenate(s), SPREAD_PCT), 2: np.percentile(np.concatenate(v), SPREAD_PCT)}
+
+
+def compose_banner(raw: Image.Image, spec: dict, target: dict | None = None) -> Image.Image:
     """A wide render scaled to cover the banner's size and cropped about its centre.
 
     The render is made close to the banner's shape (`gen_size`), so the crop
-    takes a few rows off the top and bottom at most. Nothing is graded: no
-    vanilla folder holds pictures of this kind to grade against.
+    takes a few rows off the top and bottom at most. A `mask` (a file in the
+    category's vanilla folder, or an absolute path) gives the picture that
+    file's alpha, its fade included (the mobilization groups' brushed left
+    edge). With a `target` (banner_grade_target of a vanilla folder holding
+    pictures of the kind; the Space Fleets' banners have none) the shown part
+    is graded toward it at the spec's `grade_strength`.
     """
     W, H = spec["size"]
     k = max(W / raw.width, H / raw.height)
     w, h = max(W, round(raw.width * k)), max(H, round(raw.height * k))
     scene = raw.convert("RGB").resize((w, h), Image.LANCZOS)
     left, top = (w - W) // 2, (h - H) // 2
-    return scene.crop((left, top, left + W, top + H)).convert("RGBA")
+    out = scene.crop((left, top, left + W, top + H)).convert("RGBA")
+    if spec.get("mask"):
+        alpha = load_rgba(vanilla_folder(spec) / spec["mask"]).getchannel("A")
+        out.putalpha(alpha if alpha.size == (W, H) else alpha.resize((W, H), Image.LANCZOS))
+    if target is not None:
+        out = grade_spread(out, target, strength=spec.get("grade_strength", 0.8))
+    return out
 
 
 def banner_sheet(rows: list, out: Path, gap: int = 14) -> None:
@@ -1720,7 +1747,9 @@ def banner_sheet(rows: list, out: Path, gap: int = 14) -> None:
         tiles = list(cands)
         if Path(now).is_file():
             tiles.insert(0, ("now", load_rgba(now)))
-        blocks.append((label.splitlines()[0], [(cap, im.convert("RGB")) for cap, im in tiles]))
+        # Over the panel's dark ground, so a masked banner's fade shows as in game.
+        blocks.append((label.splitlines()[0], [(cap, Image.alpha_composite(
+            Image.new("RGBA", im.size, (33, 34, 40, 255)), im.convert("RGBA")).convert("RGB")) for cap, im in tiles]))
     W, H = max((im.size for _, tiles in blocks for cap, im in tiles if cap != "now"), default=(960, 220))
     left, line = 70, H + gap
     height = gap + sum(20 + line * len(tiles) for _, tiles in blocks)
@@ -1823,6 +1852,8 @@ class Composer:
                                  else category_grade_target(spec.get("grade_folder", spec["folder"])))
         if mode == "strip" and cat not in self._target:
             self._target[cat] = strip_grade_target(vanilla_folder(spec))
+        if mode == "banner" and "grade_strength" in spec and cat not in self._target:
+            self._target[cat] = banner_grade_target(vanilla_folder(spec))
         if mode == "tinted" and cat not in self._tmpl:
             self._tmpl[cat] = tone_ramp(spec.get("ramp_folder", spec["folder"]))
         if mode == "card" and cat not in self._tmpl:
@@ -1837,7 +1868,7 @@ class Composer:
         if mode == "strip":
             return compose_strip(raw, spec, self._target[cat])
         if mode == "banner":
-            return compose_banner(raw, spec)
+            return compose_banner(raw, spec, self._target.get(cat))
         if mode == "tinted":
             return compose_tinted(raw, spec, self._tmpl[cat])
         if mode == "card":

@@ -188,8 +188,8 @@ types te_history_chart_types
 	### own country (OWN_COUNTRY_ONLY in the generator) te_popup = chart_<id>,
 	### the player's viewer; for another (OTHER_COUNTRY, in National Info)
 	### te_ni_chart = <id>, the viewer the window holds, on its own Country
-	### (PR F1). The icon is a placeholder, vanilla's area-charts toggle (style
-	### guide rule 10; docs/systems/te_systems_window_gui_icons.md).
+	### (PR F1). The icon is vanilla's gold arrow twice, pointing out from the
+	### middle (docs/systems/te_systems_window_gui_icons.md).
 	type te_chart_open_button = button_icon_round {
 		parentanchor = vcenter
 		tooltip = "te_chart_open_tt"
@@ -201,7 +201,7 @@ types te_history_chart_types
 			size = { 80% 80% }
 		}
 		blockoverride "icon" {
-			texture = "gfx/interface/buttons/button_icons/areacharts.dds"
+			texture = "gfx/interface/buttons/button_icons/te_chart_open.dds"
 		}
 	}
 

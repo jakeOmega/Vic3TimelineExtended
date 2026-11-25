@@ -35,10 +35,10 @@ book, but a book reads as opening the encyclopedia. `test_te_help_pages.py`'s `S
 
 The full-screen frame (`te_fullscreen_block_window`) draws vanilla's own art: its top filler, fades and borders, copied with the type from vanilla's `block_windows.gui`. They are vanilla files, so this page doesn't list them (`IconsTest` holds them to the vanilla type's).
 
-## Placeholders: the history charts' open button (charts PR C2, 2026-11-02)
+## The history charts' open button (charts PR C2, 2026-11-02; art 2026-11-25)
 
-Every panel history chart has a round button beside its title that opens the chart alone at full size (`te_chart_open_button` in `gui/journal_entry_widgets/te_history_chart.gui`, filled into each chart's panel wrapper by `scripts/generators/gen_te_history_charts.py`). It shows in every host the chart does, the Timeline Extended window and the vanilla panels' tabs alike. Its art is a placeholder, a vanilla button icon (style guide rule 10). `OpenButtonTest` in `test_te_history_charts.py` holds the path in the type to this row.
+Every panel history chart has a round button beside its title that opens the chart alone at full size (`te_chart_open_button` in `gui/journal_entry_widgets/te_history_chart.gui`, filled into each chart's panel wrapper by `scripts/generators/gen_te_history_charts.py`). It shows in every host the chart does, the Timeline Extended window and the vanilla panels' tabs alike. Until 2026-11-25 it drew vanilla's area-chart toggle from the Population panel, a placeholder (style guide rule 10) that read as "switch to an area chart". Its own art is the usual "expand" mark built from vanilla's gold arrow (`goto.dds`), twice, pointing out from the middle to the top right and the bottom left: a drawn entry in `icon_prompts.py`'s `button_icon` category, so the metal is vanilla's. The faint bar chart the first brief put under the arrows is left out, since at the button's 19 px a second shape is a smudge. `OpenButtonTest` in `test_te_history_charts.py` holds the path in the type to this row.
 
-| Where | Placeholder | Final art (icon pipeline subject) | Proposed path |
-|---|---|---|---|
-| Beside each history chart's title (`te_chart_open_button`, 24 × 24, `button_icon_round`) | `gfx/interface/buttons/button_icons/areacharts.dds`, vanilla's area-chart toggle from the Population panel | Two arrows pointing out from a corner, one to the top right and one to the bottom left, over a faint small bar chart, in the gold line style of vanilla's round button icons | `gfx/interface/buttons/button_icons/te_chart_open.dds` |
+| Where | Shows | File |
+|---|---|---|
+| Beside each history chart's title (`te_chart_open_button`, 24 × 24, `button_icon_round`) | Two of vanilla's gold arrows pointing out from the middle, one to the top right and one to the bottom left | `gfx/interface/buttons/button_icons/te_chart_open.dds` |
