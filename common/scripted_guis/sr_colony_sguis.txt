@@ -438,6 +438,31 @@ sr_colony_module_sgui = {
 				custom_tooltip = sr_mod_queue_crew_short_tt
 			}
 		}
+		# A personnel module (gen_solar_sites.PERSONNEL_TYPES: Defenses, Spaceport,
+		# Black Site, Training Ground, Nuclear Command Center) under Full Colonies:
+		# whether our Space Forces Personnel cover one more level, with those
+		# queued and on their way (the owner, 2026-11-25). Like the crews' line,
+		# it never bars a module: one past them runs, with everything in
+		# service, at the crewed share.
+		if = {
+			limit = {
+				sr_colonies_full_enabled = yes
+				OR = {
+					scope:op = 4
+					scope:op = 5
+					scope:op = 11
+					scope:op = 12
+					scope:op = 13
+				}
+			}
+			if = {
+				limit = { sr_mod_scope_pers_spare = yes }
+				custom_tooltip = sr_mod_queue_pers_spare_tt
+			}
+			else = {
+				custom_tooltip = sr_mod_queue_pers_short_tt
+			}
+		}
 		# Past the world's Habitat cap a Habitat costs more fabrication (colony
 		# people design § 4.3).
 		if = {

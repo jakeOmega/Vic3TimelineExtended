@@ -225,6 +225,9 @@ sr_sites_global_monthly = {
 		if = {
 			limit = { sr_colonies_full_enabled = yes }
 			sr_fl_global_month = yes
+			# Once a save: the personnel a save from before needs for its
+			# colonies' personnel modules (sr_space_forces_effects.txt).
+			sr_pers_modules_migrate_once = yes
 		}
 	}
 	sr_sites_monthly = yes

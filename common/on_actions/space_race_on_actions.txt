@@ -58,6 +58,23 @@ space_race_on_action = {
 			limit = { has_modifier = sr_orbital_superiority }
 			remove_modifier = sr_orbital_superiority
 		}
+		# The crewed share is stored in the fleets' month (sr_pers_close). A colony
+		# holder with no fleet, Space Command or Space Forces Base has no such
+		# month, but its colonies' personnel modules (the owner, 2026-11-25) run
+		# at the share too (sr_site_pers_share_<key>), so it is stored here: 0
+		# while such modules stand with no base to staff them, 1 with none. A
+		# stale share left from a fleet power's last month comes back to 1.
+		if = {
+			limit = {
+				sr_colonies_full_enabled = yes
+				OR = {
+					sr_has_space_colony = yes
+					has_variable = sr_pers_share
+				}
+				NOT = { sr_fleet_power = yes }
+			}
+			set_variable = { name = sr_pers_share value = sr_pers_share_calc }
+		}
 		# So are Space Command's fleet upkeep and pause marker: a country that
 		# stops being a fleet power with the building standing (the rule
 		# switched off mid-game, or set below Full Colonies; 2026-11-08) would
