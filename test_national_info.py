@@ -445,6 +445,23 @@ def _close_paren(text, open_paren):
     raise AssertionError("unclosed call")
 
 
+def _without_title(lines):
+    """A full-screen mount's lines less its title across the frame (the
+    window's own, spec § 7.1): the te_tab_header_size override, or the page's
+    title a body with no header gets."""
+    out, skip = [], None
+    for ln in lines:
+        if skip is not None:
+            skip = None if ln == skip else skip
+            continue
+        m = re.match(rf'^(\t*)(?:blockoverride "{gen.TITLE_HOOK}" \{{|default_header = \{{)$', ln)
+        if m:
+            skip = m.group(1) + "}"
+            continue
+        out.append(ln)
+    return out
+
+
 class MountTest(unittest.TestCase):
     """Each public tab: one flowcontainer, up while its tab is shown, holding
     the player's mount (the window's full-screen mount) and another country's
@@ -541,7 +558,12 @@ class MountTest(unittest.TestCase):
                 self.assertIn(content.replace("\n", "\n\t\t\t\t"), _read(GENERATED))
                 wide = re.search(rf'name = "te_systems_window_{t.key}_tab_wide"', window)
                 self.assertTrue(wide)
-                self.assertIn(content.replace("\n", "\n\t\t\t"), window[wide.start():])
+                # the window's adds only its title across the frame (spec § 7.1: te_tab_header_size, or
+                # the Space Race's page title), which National Info leaves at the header's own 554
+                windows = gen._wide_content(t)
+                self.assertIn("\n".join(windows).replace("\n", "\n\t\t\t"), window[wide.start():])
+                self.assertEqual(_without_title(windows), gen._content(t, wide=True))
+                self.assertNotIn(gen.TITLE_HOOK, own)
                 self.assertIn(content.split("\n")[0], own)
 
     def test_the_players_mount_keeps_the_entry(self):
