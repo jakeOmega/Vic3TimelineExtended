@@ -5422,7 +5422,7 @@ class SecondaryFitTests(unittest.TestCase):
             self.assertIn(s, one)
 
     def test_the_overview_counts_secondaries(self):
-        for name in ("gm_disp_count_upheld", "gm_disp_count_heritage", "gm_disp_count_contested"):
+        for name in ("gm_live_count_upheld", "gm_live_count_heritage", "gm_disp_count_contested"):
             self.assertIn("variable = gm_monuments_held", squash(block(self.v, name)), name)
         self.assertIn("variable = gm_monuments_held", squash(block(self.v, "gm_sum_monuments")))
 
@@ -7262,7 +7262,7 @@ class SitePanelTests(unittest.TestCase):
         self.assertIn("gm_state_has_site = yes", squash(block(values, "gm_disp_count_sites")))
         # The Monuments cell's breakdown counts a finished monument left
         # undedicated (GM-7: one term per thing).
-        self.assertIn("gm_state_is_dedicated = no", squash(block(values, "gm_disp_count_undedicated")))
+        self.assertIn("gm_state_is_dedicated = no", squash(block(values, "gm_live_count_undedicated")))
 
     def test_the_site_row(self):
         row = self.type_body(WIDGET, "gm_site_row")
@@ -7714,11 +7714,15 @@ class DedicateButtonTests(unittest.TestCase):
         # is_valid fails closed.
         self.assertIn("is_shown = { always = yes }", sgui)
         self.assertIn("is_valid = { exists = scope:gm_state scope:gm_state = { owner = root "
-                      "gm_state_awaits_dedication = yes", sgui)
+                      "gm_state_dedicate_ready = yes } }", sgui)
+        # Its tests are one trigger the overview's "to dedicate" counts too (#2033).
+        ready = squash(block(read(TRIGGERS), "gm_state_dedicate_ready"))
+        self.assertTrue(ready.startswith("gm_state_awaits_dedication = yes"), ready[:80])
         for gate in ("gm_state_site_level >= 1", "b:building_grand_monument_site ?= { is_under_construction = no }",
                      "NOT = { has_variable = gm_ceremony_pending }",
                      "NOT = { has_variable = gm_restore_pm }", "NOT = { has_variable = gm_rebuilding }"):
-            self.assertIn(gate, sgui.split("is_valid", 1)[1].split("effect", 1)[0])
+            self.assertIn(gate, ready)
+        sgui += " " + ready
         self.assertIn("effect = { scope:gm_state = { custom_tooltip = { text = gm_dedicate_effect_tt "
                       "gm_state_start_ceremony = yes } } }", sgui)
         self.assertIn("ai_is_valid = { always = no }", sgui)

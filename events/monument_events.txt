@@ -1870,6 +1870,26 @@ monument_events.35 = {
 }
 
 # ============================================================================
+# Event 36: the overview's stored figures, a day after a dedication (#2033)
+# ============================================================================
+# Hidden plumbing, a country event from gm_state_finish_site (gm_effects.txt),
+# sent to the site's owner a day after its dedication made the finished
+# building: the overview's stored figures again
+# (gm_ov_store_after_dedication), in case the ceremony's own store, in the
+# effect that made the building, did not read it back. No trigger: a delayed
+# event whose trigger is false on the day it is queued is dropped
+# (delayed_event_trigger_audit), and a store with the rule off only writes
+# figures no panel shows.
+monument_events.36 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		gm_ov_store_after_dedication = yes
+	}
+}
+
+# ============================================================================
 # Event 27: Raise It (opportunities usability §1)
 # ============================================================================
 # Hidden plumbing. From gm_com_raise_sgui and monument_events.21's Seize It and

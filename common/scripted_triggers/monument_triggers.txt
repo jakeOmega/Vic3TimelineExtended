@@ -142,6 +142,71 @@ gm_state_awaits_dedication = {
 	gm_state_has_site = yes
 }
 
+# State scope. Dedicate can be pressed for this site now: gm_dedicate_sgui's
+# is_valid (with its owner = root, the one test the panel's count takes from
+# walking its own states) and the Sites cell's "to dedicate"
+# (gm_disp_count_sites_ready) read this one trigger, so the count is never
+# red over a greyed button (#2033). Each test's tooltip is the button's.
+gm_state_dedicate_ready = {
+	gm_state_awaits_dedication = yes
+	custom_tooltip = {
+		text = gm_sgui_dedicate_built_tt
+		gm_state_site_level >= 1
+	}
+	custom_tooltip = {
+		text = gm_sgui_dedicate_building_tt
+		b:building_grand_monument_site ?= { is_under_construction = no }
+	}
+	custom_tooltip = {
+		text = gm_sgui_dedicate_asking_tt
+		NOT = { has_variable = gm_ceremony_pending }
+	}
+	custom_tooltip = {
+		text = gm_sgui_dedicate_rebuilding_tt
+		NOT = { has_variable = gm_restore_pm }
+		NOT = { has_variable = gm_rebuilding }
+	}
+	# The monument standing here moves beside the new one: not while its
+	# unveiling or naming runs (gm_state_finish_site).
+	custom_tooltip = {
+		text = gm_sgui_dedicate_naming_tt
+		NOT = { has_variable = gm_unveil_pending }
+		NOT = { has_variable = gm_name_choice_open }
+		NOT = { has_variable = gm_being_named }
+	}
+}
+
+# Country scope. A stored count moved since the last month TE_SELF_CHECK
+# gm_overview_stored compared (gm_ov_self_check's snapshot, gm_ov_snap_<x>):
+# only such a month tests that the stores follow changes.
+gm_ov_snap_moved = {
+	has_variable = gm_ov_snap_count_upheld
+	has_variable = gm_ov_snap_count_heritage
+	has_variable = gm_ov_snap_count_undedicated
+	has_variable = gm_ov_snap_count_listed_rest
+	OR = {
+		NOT = { gm_disp_count_upheld = var:gm_ov_snap_count_upheld }
+		NOT = { gm_disp_count_heritage = var:gm_ov_snap_count_heritage }
+		NOT = { gm_disp_count_undedicated = var:gm_ov_snap_count_undedicated }
+		NOT = { gm_disp_count_listed_rest = var:gm_ov_snap_count_listed_rest }
+	}
+}
+
+# Country scope. The overview's stored counts (gm_ov_store, gm_effects.txt)
+# equal the live ones now: TE_SELF_CHECK gm_overview_stored
+# (gm_ov_self_check). Only the stored figures: the calls to action are live.
+# The grandeur sum is not compared: ageing moves it each month by design.
+gm_ov_counts_match = {
+	has_variable = gm_ov_count_upheld
+	var:gm_ov_count_upheld = gm_live_count_upheld
+	has_variable = gm_ov_count_heritage
+	var:gm_ov_count_heritage = gm_live_count_heritage
+	has_variable = gm_ov_count_undedicated
+	var:gm_ov_count_undedicated = gm_live_count_undedicated
+	has_variable = gm_ov_count_listed_rest
+	var:gm_ov_count_listed_rest = gm_live_count_listed_rest
+}
+
 # The AI has no button: its ceremony asks once nothing more is queued on its
 # construction site, when its monuments were finished before the button.
 # Whether the site still reads under construction inside its last level's
