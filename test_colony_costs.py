@@ -196,6 +196,17 @@ class RefreshTest(unittest.TestCase):
                 self.assertIsNone(re.search(rf"(add_modifier = \{{\s*name|has_modifier|remove_modifier) = ({names})\b",
                                             text))
 
+    def test_an_older_saves_country_copies_come_off_first(self):
+        # Until 2026-11-25 the two terms were timed country modifiers; on the country
+        # the input mult would reach every building that buys Launch Capacity.
+        flat = _flat(self.refresh)
+        first_building = flat.index("every_scope_building")
+        for modifier in ("sr_strike_settlement", "sr_dome_breach_repairs"):
+            with self.subTest(modifier=modifier):
+                strip = f"if = {{ limit = {{ has_modifier = {modifier} }} remove_modifier = {modifier} }}"
+                self.assertIn(strip, flat)
+                self.assertLess(flat.index(strip), first_building)
+
     def test_the_terms_count_down_after_the_bill(self):
         flat = _flat(self.refresh)
         last_add = max(self.refresh.index(f"name = {m} ") for m in COSTS)

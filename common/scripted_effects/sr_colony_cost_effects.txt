@@ -17,6 +17,20 @@
 # inherits variables, not modifiers) rebuilds them, and a building taken from
 # another country loses that country's.
 sr_ccost_refresh = {
+	# An older save's timed copy on the country: until 2026-11-25 the strike's
+	# and the breach's terms were timed country modifiers, and on the country
+	# the input mult would reach every building that buys Launch Capacity.
+	# Taken off; the months it had left can't be read, so its term ends with it.
+	# A strike or a breach needs a colony, so the country has the entry and
+	# this refresh reaches it.
+	if = {
+		limit = { has_modifier = sr_strike_settlement }
+		remove_modifier = sr_strike_settlement
+	}
+	if = {
+		limit = { has_modifier = sr_dome_breach_repairs }
+		remove_modifier = sr_dome_breach_repairs
+	}
 	every_scope_building = {
 		limit = { is_building_type = building_space_program }
 		remove_modifier_if_exists_effect = { MODIFIER = sr_module_upkeep }
