@@ -4340,6 +4340,21 @@ def render_display() -> str:
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_free_{k} }} value = 4 }}",
                 f"\telse_if = {{ limit = {{ has_global_variable = sr_site_ruined_{k} }} value = 6 }}",
                 "}"]
+    # The Colonies figure counts worlds, not specializations: a module raises
+    # the second specialization too, so both <modifier>_held records can be set
+    # and the sum of the per-specialization sr_disp_colony_* read 41 of 40
+    # (#2054). One test a world, on the records the Colonies rows' hovers read.
+    out += ["",
+            "# Colonies held, in worlds (the overview's Colonies cell, Colonies Held above the",
+            "# list, the count over the Colonies window's): one for each world where either of",
+            "# its two specializations is held. A module can raise both, so the per-",
+            "# specialization sr_disp_colony_* are not summed; this never passes",
+            "# sr_sites_world_count (#2054).",
+            "sr_disp_colonies_held = {", "\tvalue = 0"]
+    for site in SITES:
+        a, b = spec_modifiers(site)
+        out.append(f"\tif = {{ limit = {{ OR = {{ has_variable = {a}_held has_variable = {b}_held }} }} add = 1 }}")
+    out += ["}"]
     out += ["",
             "# Colony fleets and population (slices 2-3 design §§ 3, 8, 10), per world:",
             "#   sr_disp_site_target_<key>         2 our target, 1 we may target it now, 0 neither",

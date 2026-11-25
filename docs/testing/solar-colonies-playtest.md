@@ -1735,3 +1735,15 @@ i (our first colony's autonomy to 100).
    holds by force once the hold has under a year left.
 9. **Simple Colonies.** Option i under Simple Colonies: next month the colony declares itself free, no hold.
 
+
+## Colonies Held counts worlds (2026-11-25)
+
+Fix for #2054: the overview's Colonies cell, Colonies Held above the Colonies list and the count over the Colonies
+window's list read `sr_disp_colonies_held`, which summed a value for each of a world's two specializations, so a world
+whose modules had raised both counted twice ("41 of 40 held"). It now adds 1 for each world where either is held.
+Simple or Full Colonies, with Colony Modules.
+
+1. **Both specializations raised.** On a colony with one specialization at level 1 or more, raise the other with a
+   module until both read a level. Colonies Held, the overview's Colonies cell and the Colonies window's count do not
+   move, and read the number of colonies in the list: `read sr_disp_colonies_held` equals the rows shown, and never
+   passes `sr_sites_world_count` (40).
