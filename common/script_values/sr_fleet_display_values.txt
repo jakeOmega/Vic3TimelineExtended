@@ -162,6 +162,13 @@ sr_disp_pers_marines_garrison = {
 	value = sr_pers_marines_garrison
 	multiply = sr_pers_per_battalion
 }
+# The staff of our colonies' personnel modules (the owner, 2026-11-25).
+sr_disp_pers_modules = {
+	value = sr_pers_modules
+}
+sr_disp_pers_module_levels = {
+	value = sr_pers_module_levels
+}
 sr_disp_pers_per_point = {
 	value = sr_pers_per_point
 }

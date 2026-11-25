@@ -356,6 +356,35 @@ class AdminAuthorityTest(unittest.TestCase):
         for key in ("sr_module_admin", "sr_module_admin_desc"):
             self.assertTrue(re.search(rf"(?m)^ {key}:0 ", loc), f"no loc for {key}")
 
+    def test_its_hovers_name_the_cost(self):
+        """The owner, 2026-11-25: the cost was not spelled out where a player
+        picks the module, its + button and its column."""
+        loc = "".join(_raw("localization", "english", f) for f in
+                      ("te_miscellaneous_l_english.yml", "te_journal_entries_l_english.yml"))
+        for key in ("sr_mod_queue_admin_tt", "je_space_race_widget_mod_admin_tt"):
+            text = re.search(rf'(?m)^ {key}:0 "([^\n]*)"', loc).group(1)
+            with self.subTest(key=key):
+                self.assertIn("#R 25#! [concept_authority]", text)
+
+
+class ResearchStationTest(unittest.TestCase):
+    """The owner, 2026-11-25: a Research Station raises the innovation cap, so
+    its benefit needs universities at home, instead of +2% research speed."""
+
+    def test_the_modifier_raises_the_innovation_cap(self):
+        body = _block(_strip(_raw("common", "static_modifiers", "space_race_modifiers.txt")), "sr_module_lab")
+        self.assertIn("country_weekly_innovation_max_add = 25", body)
+        self.assertNotIn("research_speed", body)
+
+    def test_its_hovers_say_so(self):
+        loc = "".join(_raw("localization", "english", f) for f in
+                      ("te_miscellaneous_l_english.yml", "te_journal_entries_l_english.yml"))
+        for key in ("sr_mod_queue_lab_tt", "je_space_race_widget_mod_lab_tt"):
+            text = re.search(rf'(?m)^ {key}:0 "([^\n]*)"', loc).group(1)
+            with self.subTest(key=key):
+                self.assertIn("#v +25#! [concept_innovation] cap", text)
+                self.assertNotIn("research speed", text)
+
 
 class ColonyAiTest(unittest.TestCase):
     """Design § 9: the AI and a colony's own builds stay within the Habitat cap

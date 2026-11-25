@@ -1430,8 +1430,9 @@ point), o puts an enemy fleet at Earth.
 | `TE_SELF_CHECK OK/BROKEN pers_pop_type country=… spacers=… occupancy=… personnel=… want=…` | once a game, three months after a country first has a Space Forces Base of a level or more (whatever its staff; later while the base is under half staff) | the base's state holds Spacers and its `state_sr_space_personnel_add` is 0.75 to 1.5 times 1,000 × the base's levels × its occupancy (throughput moves it: −10% unincorporated, +10% a new capital, economies of scale) | `spacers=0`: the pop type, or its social class (`te_spacers_classes.txt`, one per hierarchy), doesn't load or doesn't hire (also look for a pop-type or social-class error in `error.log`); `personnel` off `want`: the method's workforce-scaled state modifier doesn't reach the state as the batteries' does | for the pop type, put Spacers in vanilla's lower class by a full restatement of `lower_class` (and the caste and Edo classes) rather than classes of their own; for the figure, compute capacity in script, level × occupancy × 1,000 by `is_building_type`, as `ship_construction`'s fallback does |
 | `TE_SELF_CHECK OK/BROKEN pers_kill country=… spacers_before=… killed=… spacers_day_on=…` | once a game, a day after the first state kills a hundred or more Spacers (`space_race_events.140`) | the state's Spacers fell by at least half the count: `kill_population_in_state` with `pop_type = spacers` takes the mod's pop type | they fell by less. A weekly hire falling in that day can refill a small kill (about one game in seven), so a BROKEN with the base's staff up since wants a second game before the fallback | kill by `every_scope_pop = { limit = { is_pop_type = spacers } }` with `kill_population_percent` scaled to the count |
 | `TE_SR_PERS migrate country=… in_service=… grace_until_month=…` | once a country, its first fleets month, only when an old save's fleets need more personnel than its bases give | (a record, not a check) the levels the migration built, in Space Command's state or the capital | | |
+| `TE_SR_PERS migrate_modules country=… need=… grace_until_month=…` | once a save, its first month under Full Colonies after the colony modules took personnel (2026-11-25), for each country holding a Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center whose need tops its bases' capacity | (a record, not a check) the levels it built beyond those built and queued, in Space Command's state or the capital | | |
 
-1. **The building.** With Space Militarization under Full Colonies, the build menu offers Space Forces Base in any
+1. **The building.** With Cislunar Infrastructure under Full Colonies, the build menu offers Space Forces Base in any
    state, as a government building only. Its method's tooltip shows 1,000 Spacers a level and +1,000 Space Forces
    Personnel. A level hires Spacers (the state's pops list shows them, with the placeholder soldiers icon), and the
    Map Room's Classes row has Spacers' two maps.
@@ -1454,6 +1455,25 @@ point), o puts an enemy fleet at Earth.
    appear in Space Command's state (`TE_SR_PERS migrate`), and Crewed reads 100% for six months while they hire.
 9. **The AI.** In an observer run, AI fleet powers build Space Forces Bases (the census or the Map Room's Spacers
    map shows where), and none pauses Space Command for crews while it has a base level queued.
+10. **Colony modules take personnel** (the owner, 2026-11-25). Under Full Colonies, with a colony and one staffed
+    base level, hover a Black Site's + button: the personnel line says 1,000 are spare; queue two and the next
+    hover says none are spare. Once one lands, the Personnel cell's in service rises by 1,000 and its hover names
+    the module levels. With two landed and the one level, Crewed reads about 50% and the Nation tab's Off-World
+    Black Sites reads +1 intelligence capacity, two levels at half.
+11. **A holder with no fleet.** In a country with a colony, a Training Ground and no Space Forces Base or Space
+    Command, Crewed reads 0% a month after it lands and Off-World Training Grounds is gone from the Nation tab; build
+    a base level and both come back as it hires.
+12. **Spaceport repairs.** With a damaged fleet docked at a colony Spaceport and Crewed at 50%, the fleet repairs
+    about 5% of its damage a month a level instead of 10%, and still refills and refits.
+13. **An old save's modules.** Load a save from before 2026-11-25 with colony Black Sites or Defenses: in the first
+    month base levels appear (`TE_SR_PERS migrate_modules`) and Crewed holds at 100% for six months.
+14. **The Research Station.** A staffed Research Station shows Off-World Research Stations on the Nation tab with
+    +25 innovation cap and no research speed; the cap in the innovation tooltip rises by 25.
+15. **A base before fleets.** With Cislunar Infrastructure and without Space Militarization, build a Space Forces
+    Base and an Orbital Yard: Space Command's Built a month stays 0 and the reserve stays empty. With Space
+    Militarization and still no Space Command it stays 0; once a Space Command level stands in a state we control,
+    Built a month adds the yards' 0.5 a staffed level. A Black Site queued at the same time is staffed once the
+    base hires.
 
 ## A giant planet's moons share an Orbital Yard, not their Defenses (2026-11-25)
 
@@ -1540,6 +1560,55 @@ each module at our first colony.
 6. **Neither shows** with No Module Fabrication and no Orbital Yard or Mass Driver, with no colony held, or under
    Races Only. The text shows no raw key and no stray `[`, and "Colony Module" in the name and the description opens
    the concept on hover.
+
+## The Fleets window (2026-11-25)
+
+The owner's ask: "space fleets [should] have their own 'details' type popout window, like bases/colonies have now"
+(`te_sr_fleet_popup`, up on the client-side `sr_fleet_focus`; `mod_systems/space_race.md`, "The Fleets window").
+**Seen and clicked on 2026-11-25** in a `game_qa` session on a copy of the owner's save of June 2043 (the United
+States under Full Colonies, two fleets at Earth), with three test fleets added by a setup (one damaged at Mars, one
+in flight to Jupiter, one fresh at Earth); 3840 × 2160 at scale 1.5: the parts marked *seen* below. Two more
+sessions, each launched on the files as they then stood (the last after the review's fixes), logged no line naming
+them in `error.log`; a fourth, for the banner the owner then asked for, the same. The rest is for a hand. No self-check: nothing here changes what script does. **Fallback** if the window misbehaves under a
+picker: put the window on `te_popup` like the Colonies window (`sr_fleet`), and have each picker's close and choice
+set `te_popup` back to it.
+
+1. **A card opens the window.** *(Seen: the arrow on fleet I's card, on the Fleets tab of the Timeline Extended
+   window's side panel, opened Our Fleets on Fleet I over a dimmed screen, with no scrollbar. Not tried: the journal
+   entry's own card, a rolled-up card's arrow.)* Each fleet's card has vanilla's go-to arrow left of the button that
+   rolls it up; its hover says what opens. Rolled up, the card still shows the arrow, and its strength is not cut
+   ("9999/9999" fits).
+2. **The list.** *(Seen: six fleets in slot order with number, world, place and strength, the one shown greyed;
+   a click on IX changed the page and kept the window; "→ Jupiter" with Jupiter's icon for the fleet in flight.)*
+   A row's hover is the fleet's ships, each role of its full number.
+3. **The page reads.** *(Seen, on a fleet at Mars, one at Earth and one in flight: the fleet banner across the
+   top at its full size, a different picture for each of four fleets on four drives (the owner's antimatter fleets,
+   and test fleets set to torch, fusion and chemical), each matching its Drive tile; Ships as six tiles with each
+   role now of full, Condition's four bars and four tiles, Orders with a caption a line, Locations under it; in
+   flight the track under the head and "In flight. It takes orders once it lands." for the orders; at Earth no
+   Posture or Target line. Hovers seen: a role's tile, Fire on Fleets, Fire on Defenses, Dock, Repair a Month,
+   the km/s bar, the trip's line white and red. Not
+   seen: a refit in the Drive tile, a target with intelligence, the two notes above the page.)* The Mars
+   fleet's Dock read "None here" with 0% repair, the Earth fleets' "Earth" with 20%.
+4. **The trip.** *(Seen: "Months: 2, propellant: 1273.0 km/s" under Saturn, the figure red for a fleet carrying
+   22 km/s, and Go greyed; for the owner's fleet I, which carries 6,316, the figure white and Go lit.)*
+5. **A picker opens over the window and comes back to it.** *(Seen: the destination button opened Fleet Destination
+   over the dimmed window, whose own close button was gone; Choose on Saturn closed the picker and the window read
+   Saturn; Transfer opened Transfer, and its Transfer made fleet III of half of IX, the list reading 6 / 9 at once;
+   Land opened Marines, and a click outside it closed Marines alone. Not tried: the target picker (no hostile site
+   on that save), and **Escape with a picker up**, which should close the picker alone and, pressed again, the
+   window: the window's close button is hidden under a picker on the assumption that a hidden button takes no
+   shortcut. If Escape closes both at once, or the window first, say so.)*
+6. **Orders act.** *(Seen: Station on a fleet standing off set its posture, `sr_disp_fl_7_posture` 2 then 1, the
+   lit choice moving. Not tried: Go, Seize / Destroy, Close in, Interdict.)* Every greyed button gives its reason on
+   hover, as on the card.
+7. **Closing.** *(Seen: the close button closed the window and left the tab behind as it was. Not tried: Escape,
+   a click outside with no picker up.)*
+8. **A fleet lost under the window.** Transfer all of the fleet shown into another fleet: the page gives way to
+   "This fleet is gone. Choose another from the list.", and its row leaves the list. With no fleet left at all
+   (the console: clear every slot with the window open) the window reads "We have no fleets. A Space Command builds
+   the first at Earth." over an empty list.
+9. **Another country's panel** (National Info, Space Race tab) shows no fleets and no arrow, as before.
 
 ## The colonies' costs as Launch Capacity (2026-11-25)
 

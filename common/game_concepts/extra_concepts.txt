@@ -118,6 +118,9 @@ concept_sr_free_colony = {}
 concept_sr_blockade = {}
 concept_sr_integrity = {}
 concept_sr_marines = {}
+# Space Forces Personnel: who crews the fleets, the marines and the personnel
+# modules (space forces personnel design; the owner, 2026-11-25).
+concept_sr_space_personnel = {}
 concept_decolonization_system = {}
 concept_colonial_stability = {}
 # Colonial Empire panel terms (gui/journal_entry_widgets/colonial_empire_widget.gui)

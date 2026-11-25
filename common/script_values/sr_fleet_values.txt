@@ -74,7 +74,13 @@ sr_sc_mix_max = { value = 3 }
 # workforce-scaled state modifier, summed over the states the country controls
 # (design § 5.1: nothing is built in an occupied state). Staffing is in the
 # number already. Plus the colonies' Orbital Yards (colony management design
-# § 7); sr_sc_rate_buildings, Space Command's alone, is the self-check's.
+# § 7), only while Space Command is operational (sr_sc_operational: a level in
+# a state the country controls), the owner, 2026-11-25. The fleets' upkeep is
+# billed on Space Command and they fire at half without it, so yards building
+# for a country with none would give it warships with no bill; and a Space
+# Forces Base, which comes with Cislunar Infrastructure, makes its owner a
+# fleet power whose month runs this build, a technology before Space
+# Command's. sr_sc_rate_buildings, Space Command's alone, is the self-check's.
 sr_sc_rate_buildings = {
 	value = 0
 	every_scope_state = {
@@ -84,9 +90,12 @@ sr_sc_rate_buildings = {
 }
 sr_sc_rate = {
 	value = sr_sc_rate_buildings
-	add = {
-		value = sr_mod_units_yard
-		multiply = sr_mod_yard_ships
+	if = {
+		limit = { sr_sc_operational = yes }
+		add = {
+			value = sr_mod_units_yard
+			multiply = sr_mod_yard_ships
+		}
 	}
 }
 
@@ -610,9 +619,10 @@ sr_pers_capacity = {
 }
 
 # Country scope. Personnel in service: the crews of every slot at full (a
-# damaged hull keeps its crew), and every marine battalion aboard and in a
+# damaged hull keeps its crew), every marine battalion aboard and in a
 # garrison of ours, as holder or occupier (sr_pers_marines_aboard,
-# sr_pers_marines_garrison, generated).
+# sr_pers_marines_garrison, generated), and the staff of our colonies'
+# personnel modules (sr_pers_modules).
 sr_pers_crews = {
 	value = sr_fl_strength_full_total
 	multiply = sr_pers_per_point
@@ -621,10 +631,35 @@ sr_pers_marines_in_service = {
 	value = sr_pers_marines_aboard
 	add = sr_pers_marines_garrison
 }
+# A level of Spaceport, Defenses, Black Site, Training Ground or Nuclear
+# Command Center at a colony we hold and no one occupies takes this many, as
+# well as its crew (the owner, 2026-11-25: "each use 1k ... Personnel (in
+# addition to Crew)"; gen_solar_sites.PERSONNEL_TYPES). Not halved with
+# Artificial Intelligence, as a battalion isn't. Only under Full Colonies,
+# where the Space Forces Base is built; under Simple Colonies they need none.
+# Their effects run at the crewed share (sr_site_pers_share_<key>).
+sr_pers_per_module = { value = 1000 }
+sr_pers_modules = {
+	value = 0
+	if = {
+		limit = { sr_colonies_full_enabled = yes }
+		value = sr_pers_module_levels
+		multiply = sr_pers_per_module
+	}
+}
 sr_pers_in_service = {
 	value = sr_pers_marines_in_service
 	multiply = sr_pers_per_battalion
 	add = sr_pers_crews
+	add = sr_pers_modules
+}
+# Country scope, the colony module + button's personnel line
+# (sr_mod_scope_pers_spare): the personnel the next level would need, with our
+# personnel modules queued and on their way (sr_mod_pers_pending, generated).
+sr_mod_pers_next_need = {
+	value = sr_mod_pers_pending
+	add = 1
+	multiply = sr_pers_per_module
 }
 
 # Country scope. The crewed share, stored at the end of the fleets' month
@@ -766,6 +801,20 @@ sr_pers_migrate_need = {
 sr_pers_migrate_levels = {
 	value = sr_pers_migrate_need
 	subtract = sr_pers_capacity_bases
+	divide = sr_pers_per_level
+	ceiling = yes
+	min = 0
+	max = 100
+}
+# The modules' migration (sr_pers_modules_migrate_once): the levels the need
+# lacks beyond those built and queued, so a save migrated before modules took
+# personnel, whose levels may still be hiring, isn't given them twice.
+sr_pers_mod_migrate_levels = {
+	value = sr_pers_migrate_need
+	subtract = {
+		value = sr_pers_planned_levels
+		multiply = sr_pers_per_level
+	}
 	divide = sr_pers_per_level
 	ceiling = yes
 	min = 0

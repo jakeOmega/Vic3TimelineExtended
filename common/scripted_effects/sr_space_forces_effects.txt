@@ -309,37 +309,81 @@ sr_pers_migrate_once = {
 				}
 			}
 			set_local_variable = { name = sr_pers_new_levels value = sr_pers_migrate_levels }
-			if = {
-				limit = { local_var:sr_pers_new_levels > 0 }
-				if = {
-					limit = {
-						any_scope_state = {
-							has_building = building_space_command
-						}
-					}
-					ordered_scope_state = {
-						limit = { has_building = building_space_command }
-						order_by = sr_sc_keeper_score
-						max = 1
-						extended_timeline_build_specified_building_level = {
-							SPEC_TYPE = building_space_forces_base
-							SPEC_LEVEL = local_var:sr_pers_new_levels
-							SPEC_OWNER = owner
-						}
-					}
-				}
-				else_if = {
-					limit = { exists = capital }
-					capital = {
-						extended_timeline_build_specified_building_level = {
-							SPEC_TYPE = building_space_forces_base
-							SPEC_LEVEL = local_var:sr_pers_new_levels
-							SPEC_OWNER = owner
-						}
-					}
+			sr_pers_migrate_build = yes
+			debug_log = "TE_SR_PERS migrate country=[THIS.GetCountry.GetTagName] in_service=[THIS.Var('sr_pers_grace_capacity').GetValue|0] grace_until_month=[THIS.Var('sr_pers_grace_until').GetValue|0]"
+		}
+	}
+}
+
+# Country scope, the migrations' base levels: local_var:sr_pers_new_levels of
+# them, government owned, in Space Command's state, else the capital.
+sr_pers_migrate_build = {
+	if = {
+		limit = { local_var:sr_pers_new_levels > 0 }
+		if = {
+			limit = {
+				any_scope_state = {
+					has_building = building_space_command
 				}
 			}
-			debug_log = "TE_SR_PERS migrate country=[THIS.GetCountry.GetTagName] in_service=[THIS.Var('sr_pers_grace_capacity').GetValue|0] grace_until_month=[THIS.Var('sr_pers_grace_until').GetValue|0]"
+			ordered_scope_state = {
+				limit = { has_building = building_space_command }
+				order_by = sr_sc_keeper_score
+				max = 1
+				extended_timeline_build_specified_building_level = {
+					SPEC_TYPE = building_space_forces_base
+					SPEC_LEVEL = local_var:sr_pers_new_levels
+					SPEC_OWNER = owner
+				}
+			}
+		}
+		else_if = {
+			limit = { exists = capital }
+			capital = {
+				extended_timeline_build_specified_building_level = {
+					SPEC_TYPE = building_space_forces_base
+					SPEC_LEVEL = local_var:sr_pers_new_levels
+					SPEC_OWNER = owner
+				}
+			}
+		}
+	}
+}
+
+# Global, from the sites' monthly step under Full Colonies, once a save
+# (sr_pers_modules_migrated): colony modules take personnel (the owner,
+# 2026-11-25; gen_solar_sites.PERSONNEL_TYPES), so a save from before has
+# Spaceports, Defenses, Black Sites, Training Grounds and Nuclear Command
+# Centers with nobody to staff them, many of them held by countries with no
+# fleet, whose month never ran the migration above. Every country holding such
+# a module, migrated or not, whose need (sr_pers_migrate_need, modules
+# included) is above its bases' capacity gets the levels its need lacks beyond
+# those it has built and queued (sr_pers_mod_migrate_levels), and the grace at
+# that need. It counts as the migration above (sr_pers_migrated), which would
+# otherwise see the new levels' staff as missing while they hire and build them
+# again. A new game runs it in its first month, before any colony, so a new
+# game's modules wait for bases of their own.
+sr_pers_modules_migrate_once = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_pers_modules_migrated } }
+		set_global_variable = { name = sr_pers_modules_migrated value = yes }
+		every_country = {
+			limit = { sr_pers_module_levels > 0 }
+			set_variable = { name = sr_pers_migrated value = yes }
+			if = {
+				limit = { sr_pers_migrate_need > sr_pers_capacity_bases }
+				set_variable = { name = sr_pers_grace_capacity value = sr_pers_migrate_need }
+				set_variable = {
+					name = sr_pers_grace_until
+					value = {
+						value = te_history_month_index
+						add = sr_pers_grace_months
+					}
+				}
+				set_local_variable = { name = sr_pers_new_levels value = sr_pers_mod_migrate_levels }
+				sr_pers_migrate_build = yes
+				debug_log = "TE_SR_PERS migrate_modules country=[THIS.GetCountry.GetTagName] need=[THIS.Var('sr_pers_grace_capacity').GetValue|0] grace_until_month=[THIS.Var('sr_pers_grace_until').GetValue|0]"
+			}
 		}
 	}
 }

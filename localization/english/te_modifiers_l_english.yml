@@ -1626,7 +1626,7 @@
  state_sr_ship_construction_add:0 "Fleet Strength Built a Month"
  state_sr_ship_construction_add_desc:0 "Warship strength this state's Space Command adds to its owner's home fleet each month, while its owner controls the state"
  state_sr_space_personnel_add:0 "Space Forces Personnel"
- state_sr_space_personnel_add_desc:0 "People this state's $building_space_forces_base$ trains to crew its owner's fleets and fight as its marines: a point of fleet strength needs #v 100#!, a marine battalion #v 1,000#!. They count while the state is occupied too, since they are already in orbit."
+ state_sr_space_personnel_add_desc:0 "People this state's $building_space_forces_base$ trains to crew its owner's fleets, fight as its marines and staff its colonies' personnel modules: a point of fleet strength needs #v 100#!, a marine battalion or a module level #v 1,000#!. They count while the state is occupied too, since they are already in orbit."
  state_urban_fertility_relief_add:0 "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]"
  state_urban_fertility_relief_add_desc:0 "How much of city life's pull toward smaller families is offset, as homes with room for children are built. Used by the census on the Demographics tab.[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_desc_ingame','te_demog_census_off_none')]"
  state_war_support_monthly_add:0 "Monthly [concept_war_support]"

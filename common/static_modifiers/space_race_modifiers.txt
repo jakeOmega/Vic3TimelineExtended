@@ -315,9 +315,15 @@ sr_module_admin = {
 	country_authority_cost_add = 25
 }
 
+# A Research Station raises the innovation cap rather than research speed (the
+# owner, 2026-11-25: "you need to run Universities back on Earth to get the
+# benefits and those have a cost"), so its benefit is the innovation a country
+# makes past its cap. +2% research speed a level had no input and no ceiling:
+# 25 staffed levels, one world's crews, gave +50%. A late-game university level
+# makes 3 to 5 innovation a week, so a level's 25 takes five to eight of them.
 sr_module_lab = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
-	country_tech_research_speed_mult = 0.02
+	country_weekly_innovation_max_add = 25
 }
 
 sr_module_culture = {

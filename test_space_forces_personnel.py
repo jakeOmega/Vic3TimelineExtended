@@ -130,7 +130,7 @@ class BuildingTest(unittest.TestCase):
     def test_the_building(self):
         body = _block(_strip(_raw(BUILDING)), "building_space_forces_base")
         self.assertIn("building_group = bg_government", body)
-        self.assertRegex(body, r"unlocking_technologies = \{\s*space_militarization\s*\}")
+        self.assertRegex(body, r"unlocking_technologies = \{\s*cislunar_infrastructure\s*\}")
         self.assertRegex(body, r"production_method_groups = \{\s*pmg_space_forces_base\s*\}")
         self.assertIn("sr_colonies_full_enabled = yes", _block("x = {" + body.split("potential = {", 1)[1], "x"))
         self.assertIn("sr_pers_may_build_government = yes", body)
@@ -472,6 +472,134 @@ class SelfChecksTest(unittest.TestCase):
         self.assertIn("TE_SELF_CHECK OK pers_pop_type", _raw(PERS_EFFECTS))
         self.assertIn("TE_SELF_CHECK BROKEN pers_pop_type", _raw(PERS_EFFECTS))
 
+
+
+class ModulePersonnelTest(unittest.TestCase):
+    """The owner, 2026-11-25: Spaceport, Defenses, Black Site, Training Ground and
+    Nuclear Command Center each take 1,000 personnel a level as well as a crew,
+    under Full Colonies. They count in service with the fleets and marines, and
+    their effects run at the holder's crewed share."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _strip(_raw(VALUES))
+        cls.generated = _strip(_raw(gss.ROOT / gss.VALUES_OUT))
+        cls.fleets = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+        cls.pers = _strip(_raw(PERS_EFFECTS))
+
+    def test_the_types(self):
+        self.assertEqual(gss.PERSONNEL_TYPES, ("def", "port", "black", "train", "bunker"))
+        self.assertRegex(_block(self.values, "sr_pers_per_module"), r"^\s*value = 1000\s*$")
+
+    def test_they_count_in_service_under_full_colonies_only(self):
+        modules = _block(self.values, "sr_pers_modules")
+        self.assertIn("sr_colonies_full_enabled = yes", modules)
+        self.assertIn("value = sr_pers_module_levels", modules)
+        self.assertIn("multiply = sr_pers_per_module", modules)
+        self.assertIn("add = sr_pers_modules", _block(self.values, "sr_pers_in_service"))
+
+    def test_each_world_counts_its_personnel_levels(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                levels = _block(self.generated, f"sr_site_pers_levels_{k}")
+                named = set(re.findall(rf"sr_site_(\w+?)_value_{k}\b", levels))
+                self.assertEqual(named, set(gss._types_at(site, gss.PERSONNEL_TYPES)))
+                total = _block(self.generated, "sr_pers_module_levels")
+                self.assertRegex(total, rf"global_var:sr_site_holder_{k} \?= this NOT = \{{ has_global_variable = "
+                                        rf"sr_site_occupier_{k} \}} \}} add = sr_site_pers_levels_{k}")
+
+    def test_their_effects_run_at_the_share(self):
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                share = _block(self.generated, f"sr_site_pers_share_{k}")
+                self.assertIn("sr_colonies_full_enabled = yes", share)
+                self.assertIn(f"global_var:sr_site_holder_{k} = {{ add = sr_pers_share_value }}", share)
+                self.assertIn("else = { add = 1 }", share)
+                self.assertIn(f"multiply = sr_site_pers_share_{k}", _block(self.generated, f"sr_site_def_staffed_{k}"))
+                self.assertIn(f"multiply = sr_site_pers_share_{k}", _block(self.generated, f"sr_site_port_crewed_{k}"))
+                for t in gss.FACILITY_TYPES:
+                    if t not in gss.generic_types(site):
+                        continue
+                    staffed = _block(self.generated, f"sr_site_{t}_staffed_{k}")
+                    if t in gss.PERSONNEL_TYPES:
+                        self.assertIn(f"multiply = sr_site_pers_share_{k}", staffed, t)
+                    else:
+                        self.assertNotIn("sr_site_pers_share", staffed, t)
+        # A Spaceport's repairs read the crewed level.
+        for loc in gsf.LOCATIONS[1:]:
+            port = _block(self.fleets, f"sr_loc_port_level_{loc.key}")
+            self.assertNotIn("min = sr_site_port_value_", port)
+            for s in gsf.worlds_at(loc.key):
+                self.assertIn(f"min = sr_site_port_crewed_{s.key}", port)
+
+    def test_a_holder_with_no_fleet_stores_the_share(self):
+        on_action = _strip(_raw(ROOT / "common/on_actions/space_race_on_actions.txt"))
+        m = re.search(r"if = \{\s*limit = \{\s*sr_colonies_full_enabled = yes\s*OR = \{\s*sr_has_space_colony = yes\s*"
+                      r"has_variable = sr_pers_share\s*\}\s*NOT = \{ sr_fleet_power = yes \}\s*\}\s*"
+                      r"set_variable = \{ name = sr_pers_share value = sr_pers_share_calc \}", on_action)
+        self.assertTrue(m, "the non-fleet-power branch that stores the share")
+
+    def test_the_migration_runs_once_a_save(self):
+        migrate = _block(self.pers, "sr_pers_modules_migrate_once")
+        self.assertIn("NOT = { has_global_variable = sr_pers_modules_migrated }", migrate)
+        self.assertIn("every_country", migrate)
+        self.assertIn("sr_pers_module_levels > 0", migrate)
+        # It counts as the fleets' migration, which would build the hiring levels again.
+        self.assertIn("set_variable = { name = sr_pers_migrated value = yes }", migrate)
+        self.assertIn("name = sr_pers_grace_capacity value = sr_pers_migrate_need", migrate)
+        self.assertIn("value = sr_pers_mod_migrate_levels", migrate)
+        levels = _block(self.values, "sr_pers_mod_migrate_levels")
+        self.assertIn("value = sr_pers_planned_levels", levels)
+        self.assertIn("max = 100", levels)
+        self.assertIn("sr_pers_migrate_build = yes", _block(self.pers, "sr_pers_migrate_once"))
+        sites = _strip(_raw(ROOT / "common/scripted_effects/sr_site_effects.txt"))
+        self.assertRegex(_block(sites, "sr_sites_global_monthly"),
+                         r"limit = \{ sr_colonies_full_enabled = yes \}\s*sr_fl_global_month = yes\s*"
+                         r"sr_pers_modules_migrate_once = yes")
+
+    def test_the_plus_button_line(self):
+        sgui = _strip(_raw(ROOT / "common/scripted_guis/sr_colony_sguis.txt"))
+        body = _block(sgui, "sr_colony_module_sgui")
+        codes = sorted(re.findall(r"scope:op = (\d+)", body.split("sr_mod_scope_pers_spare", 1)[0].rsplit("sr_colonies_full_enabled", 1)[1]))
+        self.assertEqual(sorted(str(gss.MODULE_CODES[t]) for t in gss.PERSONNEL_TYPES), codes)
+        self.assertIn("custom_tooltip = sr_mod_queue_pers_spare_tt", body)
+        self.assertIn("custom_tooltip = sr_mod_queue_pers_short_tt", body)
+        trigger = _block(_strip(_raw(TRIGGERS)), "sr_mod_scope_pers_spare")
+        self.assertIn("sr_pers_room_value >= sr_mod_pers_next_need", trigger)
+        self.assertIn("value = sr_mod_pers_pending", _block(self.values, "sr_mod_pers_next_need"))
+        loc = "".join(Path(p).read_text(encoding="utf-8-sig") for p in (ROOT / "localization/english").glob("*.yml"))
+        for key in ("sr_mod_queue_pers_spare_tt", "sr_mod_queue_pers_short_tt",
+                    "concept_sr_space_personnel", "concept_sr_space_personnel_desc"):
+            self.assertRegex(loc, rf"(?m)^ {key}:0 ")
+        self.assertIn("concept_sr_space_personnel = {}", _raw(ROOT / "common/game_concepts/extra_concepts.txt"))
+
+    def test_the_base_comes_with_the_first_fabrication_method(self):
+        """The owner, 2026-11-25: a country can staff a personnel module from the
+        first it can build, so the base and its method unlock with the technology
+        of the first Module Fabrication method, not with fleets'."""
+        fab = _block(_strip(_raw(ROOT / "common/production_methods/sr_colony_module_pms.txt")),
+                     "pm_sr_fabrication_orbital_assembly")
+        tech = re.search(r"unlocking_technologies = \{\s*(\w+)\s*\}", fab).group(1)
+        self.assertEqual(tech, "cislunar_infrastructure")
+        for body in (_block(_strip(_raw(BUILDING)), "building_space_forces_base"),
+                     _block(_strip(_raw(PMS)), "pm_space_forces_training")):
+            self.assertRegex(body, rf"unlocking_technologies = \{{\s*{tech}\s*\}}")
+        # So the AI's plan needs no personnel gate of its own: a module it can build
+        # is one it can build a base for.
+        self.assertNotIn("sr_pers_ai_may_staff_module", _raw(gss.ROOT / gss.EFFECTS_OUT))
+
+    def test_yards_build_hulls_only_for_an_operational_space_command(self):
+        """A base makes its owner a fleet power, whose month runs Space Command's
+        build, so a base and an Orbital Yard would otherwise build warships a
+        technology early; and the fleets' upkeep is billed on Space Command, so
+        yards for a country with none would build warships with no bill (the
+        owner, 2026-11-25)."""
+        rate = _block(self.values, "sr_sc_rate")
+        self.assertRegex(rate, r"if = \{\s*limit = \{ sr_sc_operational = yes \}\s*"
+                               r"add = \{\s*value = sr_mod_units_yard\s*multiply = sr_mod_yard_ships\s*\}")
+        self.assertEqual(rate.count("sr_mod_units_yard"), 1)
 
 if __name__ == "__main__":
     unittest.main()
