@@ -4590,9 +4590,10 @@ def _colony_blocks(site: Site) -> list[str]:
     out += _override("settler_people", f'raw_text = "#v [{_sv(f"sr_disp_site_pop_{k}")}|K] / [{_sv(f"sr_site_room_{k}")}|K]#!"')
     # Crews used / available (the owner, 2026-11-23): green with crews to spare
     # once the queue and every shipment land, yellow with exactly enough, red short.
+    # Yellow is `yellow`: `Y` is vanilla's zero-value format and draws white.
     used = f"[{_sv(f'sr_disp_site_crews_needed_{k}')}|0]/[{_sv(f'sr_disp_site_crews_{k}')}|0]"
     fit = f"sr_disp_site_crews_fit_{k}"
-    for block, value, color in (("settler_crews", 0, "G"), ("settler_crews_exact", 1, "Y"),
+    for block, value, color in (("settler_crews", 0, "G"), ("settler_crews_exact", 1, "yellow"),
                                 ("settler_crews_short", 2, "R")):
         out += _override(block, f'visible = "[{_eq(fit, value)}]"', f'raw_text = "#{color} {used}#!"')
     # Modules
