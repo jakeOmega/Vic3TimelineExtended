@@ -222,10 +222,11 @@ class ResortBuildingTest(unittest.TestCase):
         self.assertEqual(inputs, {"electronic_components": 15, "radios": 30, "digital_access": 10,
                                   "advanced_materials": 0.5, "launch_capacity": 480, "wine": 50,
                                   "luxury_furniture": 30, "fruit": 30})
-        self.assertEqual(outputs, {"fine_art": 300, "tourism": 900})
+        # Tourism doubled, 900 to 1,800, on 2026-11-25 (the owner: "underpowered").
+        self.assertEqual(outputs, {"fine_art": 300, "tourism": 1800})
         cost = sum(n * goods[g][0] for g, n in inputs.items())
         value = sum(n * goods[g][0] for g, n in outputs.items())
-        self.assertEqual((cost, value, value - cost), (108000, 150000, 42000))
+        self.assertEqual((cost, value, value - cost), (108000, 240000, 132000))
         # Call 4: no services (a local good), and no local good added; Digital
         # Access, local, stays as the required input.
         self.assertNotIn("services", inputs)

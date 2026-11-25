@@ -350,7 +350,7 @@ the Space Race rule on Simple Colonies or Full Colonies its levels need room,
 from the near-Earth asteroids (with Asteroid Mining) and your colonies, and work at −75% past it (see
 [Extraplanetary Base room](16-space.md#extraplanetary-base-room)).
 Space Colonization also brings the Resort Colony, a building of its own whose
-Luxury Resorts make Art and Entertainment and Tourism, about £42,000 a level a week at base
+Luxury Resorts make Art and Entertainment and Tourism, about £132,000 a level a week at base
 prices. Its levels need room of their own, in Earth orbit and at your colonies,
 and the Moon's landing sites and the wonders of Mars draw the most guests (see
 [Resort Colony room](16-space.md#resort-colony-room)).

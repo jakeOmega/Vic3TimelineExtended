@@ -1046,7 +1046,7 @@ you lose for good drops its assignment, and its levels move to your other room.
 Space Colonization brings the Resort Colony, a building of its own. Its Luxury
 Resorts method makes Art and Entertainment and Tourism from Launch Capacity, a little
 electronics and Advanced Materials, and wine, furniture and fruit for the
-guests: about £42,000 a level a week at base prices. Under Simple Colonies and
+guests: about £132,000 a level a week at base prices. Under Simple Colonies and
 Full Colonies its levels need room, as bases do, but room of their own. Earth
 orbit gives every country room for 10 levels, and each colony you hold adds its
 own, from 10 levels on the small moons to 50 on Mars, and 10 more
