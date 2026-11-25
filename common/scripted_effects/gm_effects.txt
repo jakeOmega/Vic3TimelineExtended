@@ -866,11 +866,17 @@ gm_country_refresh = {
 	# What each contested monument's three choices would do now (GM-4).
 	gm_preview_choices = yes
 	gm_notify_new_contests = yes
+	# The overview's figures, last: they count what the refresh has just
+	# decided (#2016).
+	gm_ov_store = yes
 }
 
 # Country scope. The monthly pulse: decay, then refresh; gm_active keeps the
 # pulse running while a ledger fades after the last monument has gone.
 gm_country_monthly = {
+	# First, before anything this month moves: the stored figures against the
+	# live ones (TE_SELF_CHECK gm_overview_stored).
+	gm_ov_self_check = yes
 	gm_init_ledgers = yes
 	gm_decay_ledgers = yes
 	# A month off every opportunity boon (gm_commission_effects.txt), and the
@@ -919,6 +925,129 @@ gm_country_monthly = {
 	if = {
 		limit = { is_ai = no }
 		gm_debug_log = yes
+	}
+}
+
+# ---- The overview's stored figures (2026-11-24, from #2016) --------------------
+# Country scope, any ROOT: the live values read only the country and its
+# states. The overview's cells and the gates of Awaiting a Decision, Awaiting
+# Dedication and Our Monuments read these variables through gm_disp_<x>
+# (gm_values.txt), where they walked every state of the country about sixteen
+# times a frame. Each is its live gm_live_<x> at the moment of the store
+# (StoredOverviewTest in test_grand_monuments_layout.py holds the pairs). The
+# callers: the end of gm_country_refresh, the AI's contest decisions
+# (gm_ai_decide_contests), the country a monument's state leaves
+# (gm_state_changed_hands), a civil war's winner (gm_repair_after_civil_war)
+# and a construction site's level (gm_ov_hook_fire). Display only: nothing
+# else reads them.
+gm_ov_store = {
+	set_variable = { name = gm_ov_count_upheld value = gm_live_count_upheld }
+	set_variable = { name = gm_ov_count_heritage value = gm_live_count_heritage }
+	set_variable = { name = gm_ov_count_contested value = gm_live_count_contested }
+	set_variable = { name = gm_ov_contested_grandeur value = gm_live_contested_grandeur }
+	set_variable = { name = gm_ov_count_sites value = gm_live_count_sites }
+	set_variable = { name = gm_ov_count_sites_ready value = gm_live_count_sites_ready }
+	set_variable = { name = gm_ov_count_sites_building value = gm_live_count_sites_building }
+	set_variable = { name = gm_ov_sites_grandeur value = gm_live_sites_grandeur }
+	set_variable = { name = gm_ov_count_undedicated value = gm_live_count_undedicated }
+	set_variable = { name = gm_ov_count_awaiting value = gm_live_count_awaiting }
+	set_variable = { name = gm_ov_count_listed_rest value = gm_live_count_listed_rest }
+	set_variable = { name = gm_ov_listed_grandeur value = gm_live_listed_grandeur }
+}
+
+# Country scope. The rows' list (gm_states) as gm_country_refresh's two state
+# loops write it, the monuments' states then the construction sites', for a
+# country whose list is gone without a refresh: a civil war's winner inherits
+# no lists. Display only, as the list is.
+gm_ov_list_states = {
+	clear_variable_list = gm_states
+	every_scope_state = {
+		limit = { has_building = building_grand_monument }
+		owner = {
+			add_to_variable_list = { name = gm_states target = prev }
+		}
+	}
+	every_scope_state = {
+		limit = {
+			has_building = building_grand_monument_site
+			NOT = { has_building = building_grand_monument }
+		}
+		owner = {
+			add_to_variable_list = { name = gm_states target = prev }
+		}
+	}
+}
+
+# State scope, ROOT the site's building (gm_site_level_on_action): a level of
+# this state's construction site has finished. The site's row is listed for
+# its owner if it was not (Awaiting Dedication shows its rows from gm_states),
+# and the overview's figures are stored a day later (monument_events.36), so
+# "to dedicate" lights once the last queued level is done: whether a site
+# still reads under construction inside its own level's hook is untested
+# (gm_state_ai_dedicates_now's note). One store however many levels finish
+# together (gm_ov_store_pending, two days, the space mine's hook form).
+gm_ov_hook_fire = {
+	save_scope_as = gm_ov_site_state
+	owner = {
+		if = {
+			limit = { NOT = { has_variable_list = gm_states } }
+			add_to_variable_list = { name = gm_states target = scope:gm_ov_site_state }
+		}
+		else_if = {
+			limit = {
+				NOT = { is_target_in_variable_list = { name = gm_states target = scope:gm_ov_site_state } }
+			}
+			add_to_variable_list = { name = gm_states target = scope:gm_ov_site_state }
+		}
+		if = {
+			limit = { NOT = { has_variable = gm_ov_store_pending } }
+			set_variable = { name = gm_ov_store_pending value = yes days = 2 }
+			trigger_event = { id = monument_events.36 days = 1 }
+		}
+	}
+}
+
+# Country scope, the first thing gm_country_monthly does: TE_SELF_CHECK
+# gm_overview_stored, once a game, for a player with a monument or a site
+# (with none, a zero matches a zero). Each month it compares the counts the
+# last store wrote with the live ones, before the month's refresh writes them
+# again: equal means no change reached the panel late. The first month any
+# differs logs BROKEN with every pair (stored/live): a change some moment
+# brought without a store, which the overview showed up to a month late (the
+# fallback: a store at that moment, or that figure live again; see
+# docs/testing/grand-monuments-ageing-playtest.md § The overview's stored
+# figures). Twelve months that all agree log OK. The grandeur sums are left
+# out: a month's ageing (gm_state_monthly) moves them by design.
+gm_ov_self_check = {
+	if = {
+		limit = {
+			is_ai = no
+			NOT = { has_global_variable = gm_ov_checked }
+			has_variable = gm_ov_count_listed_rest
+			OR = {
+				any_scope_state = { has_building = building_grand_monument }
+				any_scope_state = { has_building = building_grand_monument_site }
+			}
+		}
+		if = {
+			limit = { gm_ov_counts_match = yes }
+			if = {
+				limit = { has_variable = gm_ov_chk_months }
+				change_variable = { name = gm_ov_chk_months add = 1 }
+			}
+			else = {
+				set_variable = { name = gm_ov_chk_months value = 1 }
+			}
+			if = {
+				limit = { var:gm_ov_chk_months >= 12 }
+				set_global_variable = gm_ov_checked
+				debug_log = "TE_SELF_CHECK OK gm_overview_stored months=[THIS.ScriptValue('gm_ov_disp_chk_months')|0] monuments=[THIS.ScriptValue('gm_disp_count_listed_rest')|0] sites=[THIS.ScriptValue('gm_disp_count_sites')|0] (at the end of each month the overview's stored counts equalled the live ones: no change reached the panel late)"
+			}
+		}
+		else = {
+			set_global_variable = gm_ov_checked
+			debug_log = "TE_SELF_CHECK BROKEN gm_overview_stored months=[THIS.ScriptValue('gm_ov_disp_chk_months')|0] stored/live upheld=[THIS.ScriptValue('gm_disp_count_upheld')|0]/[THIS.ScriptValue('gm_live_count_upheld')|0] heritage=[THIS.ScriptValue('gm_disp_count_heritage')|0]/[THIS.ScriptValue('gm_live_count_heritage')|0] contested=[THIS.ScriptValue('gm_disp_count_contested')|0]/[THIS.ScriptValue('gm_live_count_contested')|0] undedicated=[THIS.ScriptValue('gm_disp_count_undedicated')|0]/[THIS.ScriptValue('gm_live_count_undedicated')|0] listed=[THIS.ScriptValue('gm_disp_count_listed_rest')|0]/[THIS.ScriptValue('gm_live_count_listed_rest')|0] sites=[THIS.ScriptValue('gm_disp_count_sites')|0]/[THIS.ScriptValue('gm_live_count_sites')|0] ready=[THIS.ScriptValue('gm_disp_count_sites_ready')|0]/[THIS.ScriptValue('gm_live_count_sites_ready')|0] building=[THIS.ScriptValue('gm_disp_count_sites_building')|0]/[THIS.ScriptValue('gm_live_count_sites_building')|0] awaiting=[THIS.ScriptValue('gm_disp_count_awaiting')|0]/[THIS.ScriptValue('gm_live_count_awaiting')|0] (a change reached the overview's counts only at the monthly pulse: the pair that differs names the moment with no store; see docs/testing/grand-monuments-ageing-playtest.md)"
+		}
 	}
 }
 
@@ -1307,6 +1436,21 @@ gm_state_lift_contest = {
 # a revolutionary country); the nation that raised it taking it back fails
 # `gm_state_raised_by_owner = no`, and the monthly check restores it.
 gm_state_changed_hands = {
+	# The country it leaves, for its overview below (#2016): gm_holder, the
+	# owner each month's state pulse stamps (on_state_owner_change names no
+	# previous owner), before gm_state_tr_changed_hands stamps the new one.
+	save_scope_as = gm_ov_moved_state
+	owner = { save_scope_as = gm_ov_new_owner }
+	clear_saved_scope = gm_ov_old_owner
+	if = {
+		limit = {
+			var:gm_holder ?= {
+				NOT = { this = scope:gm_ov_new_owner }
+				is_country_alive = yes
+			}
+		}
+		var:gm_holder = { save_scope_as = gm_ov_old_owner }
+	}
 	# A part of this region merged into this state (issue #936): the records of
 	# the monuments that stood there are adopted before anything here is judged.
 	if = {
@@ -1361,6 +1505,20 @@ gm_state_changed_hands = {
 			# conqueror gets the notice) -- gm_state_contest itself resets
 			# gm_contested to 0.
 			gm_state_contest = yes
+		}
+	}
+	# The country it left: its rows (gm_states) and the overview's figures
+	# without it now, not at its next monthly refresh. Display only: its
+	# national effects still follow at that refresh, as before. The monuments
+	# beside it have moved to the new owner's list above.
+	if = {
+		limit = { exists = scope:gm_ov_old_owner }
+		scope:gm_ov_old_owner = {
+			if = {
+				limit = { has_variable_list = gm_states }
+				remove_list_variable = { name = gm_states target = scope:gm_ov_moved_state }
+			}
+			gm_ov_store = yes
 		}
 	}
 	owner = { trigger_event = { id = monument_events.20 } }
@@ -1430,6 +1588,12 @@ gm_repair_after_civil_war = {
 			}
 		}
 		gm_monument_pass = yes
+		# The panel (#2016): the winner inherits no rows' list and keeps its
+		# own stored figures over the loser's (variables merge, the winner's
+		# taking precedence), so both are written for the states it holds
+		# now, after the pass has rebuilt gm_monuments_held.
+		gm_ov_list_states = yes
+		gm_ov_store = yes
 	}
 }
 
@@ -2061,6 +2225,10 @@ gm_ai_decide_contests = {
 				}
 			}
 		}
+		# Pull Down and Keep as Heritage run here, after the month's refresh,
+		# and fire none: the overview's figures (National Info shows an AI's
+		# tab) follow them now (#2016).
+		gm_ov_store = yes
 	}
 }
 

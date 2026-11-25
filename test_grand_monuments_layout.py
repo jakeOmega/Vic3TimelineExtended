@@ -412,7 +412,7 @@ class DecisionSectionTest(unittest.TestCase):
                                        "visible = \"[GreaterThan_CFixedPoint( Country.MakeScope"
                                        ".ScriptValue('gm_disp_count_contested'), '(CFixedPoint)0' )]\""))
         self.assertIn('text = "gm_je_decisions_header"', sec)
-        self.assertIn("gm_disp_count_contested", _squash(_block(_read(VALUES), "gm_disp_count_listed_rest")))
+        self.assertIn("gm_live_count_contested", _squash(_block(_read(VALUES), "gm_live_count_listed_rest")))
 
     def test_the_two_lists_split_on_the_status(self):
         decide = _squash(_strip_comments(_type_body(_gui(), "te_gm_sec_decisions")))
@@ -756,17 +756,18 @@ class DisplayValuesTest(unittest.TestCase):
                 self.assertIn(f"has_variable = {var}", body, f"{name} reads var:{var} unguarded")
 
     def test_status_counts_follow_the_status_codes_precedence(self):
-        for name in ("gm_disp_count_upheld", "gm_disp_count_heritage", "gm_disp_count_undedicated"):
+        # The live counts the stored figures are written from (StoredOverviewTest).
+        for name in ("gm_live_count_upheld", "gm_live_count_heritage", "gm_live_count_undedicated"):
             self.assertIn("gm_state_is_contested = no", _squash(_block(self.values, name)), name)
-        self.assertIn("gm_state_is_heritage = no", _squash(_block(self.values, "gm_disp_count_upheld")))
-        self.assertIn("gm_state_is_dedicated = yes", _squash(_block(self.values, "gm_disp_count_upheld")))
+        self.assertIn("gm_state_is_heritage = no", _squash(_block(self.values, "gm_live_count_upheld")))
+        self.assertIn("gm_state_is_dedicated = yes", _squash(_block(self.values, "gm_live_count_upheld")))
         # The Sites cell counts construction sites (sites spec 2026-10-18), and
         # those Dedicate can finish now.
-        self.assertIn("gm_state_has_site = yes", _squash(_block(self.values, "gm_disp_count_sites")))
-        ready = _squash(_block(self.values, "gm_disp_count_sites_ready"))
+        self.assertIn("gm_state_has_site = yes", _squash(_block(self.values, "gm_live_count_sites")))
+        ready = _squash(_block(self.values, "gm_live_count_sites_ready"))
         for test in ("gm_state_awaits_dedication = yes", "gm_state_site_level >= 1", "gm_state_disp_site_building = 0"):
             self.assertIn(test, ready)
-        self.assertIn("gm_state_is_contested = yes", _squash(_block(self.values, "gm_disp_count_contested")))
+        self.assertIn("gm_state_is_contested = yes", _squash(_block(self.values, "gm_live_count_contested")))
 
     def test_each_bar_follows_its_curve(self):
         """A bar's first step f and variables must be its gm_set_steps call's;
@@ -814,6 +815,176 @@ class DisplayValuesTest(unittest.TestCase):
                 self.assertAlmostEqual(frac((start + end) / 2), 0.5, msg=(f, start, end))
                 self.assertAlmostEqual(frac(end - 1e-9), 1.0, places=6, msg=(f, end))
                 start = end
+
+
+TRIGGERS = os.path.join(REPO, "common", "scripted_triggers", "monument_triggers.txt")
+ON_ACTIONS = os.path.join(REPO, "common", "on_actions", "monument_events_on_actions.txt")
+EVENTS = os.path.join(REPO, "events", "monument_events.txt")
+AGEING_PLAYTEST = os.path.join(REPO, "docs", "testing", "grand-monuments-ageing-playtest.md")
+# The overview's figures and the sections' gates, stored (2026-11-24, from
+# #2016): gm_disp_<x> reads the variable gm_ov_<x>, which gm_ov_store writes
+# from the live gm_live_<x>. Each live one walks every state of the country;
+# the panel read about sixteen a frame.
+STORED = ("count_upheld", "count_heritage", "count_contested", "contested_grandeur", "count_sites",
+          "count_sites_ready", "count_sites_building", "sites_grandeur", "count_undedicated", "count_awaiting",
+          "count_listed_rest", "listed_grandeur")
+# The panel's per-frame readers of the country's figures: the overview and the
+# three sections the stored counts gate.
+OVERVIEW_TYPES = ("te_gm_overview_panel", "te_gm_sec_decisions", "te_gm_sec_awaiting", "te_gm_sec_monuments")
+
+
+class StoredOverviewTest(unittest.TestCase):
+    """The overview reads what the refresh stored, not twelve walks of every
+    state a frame; each stored figure is its live twin at the store."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.values = _read(VALUES)
+        cls.effects = _read(EFFECTS)
+        cls.gui = _gui()
+        cls.loc = _loc()
+
+    def _effect(self, name):
+        return _squash(_block(self.effects, name))
+
+    def test_each_display_reads_its_stored_variable(self):
+        for x in STORED:
+            self.assertEqual(_squash(_block(self.values, f"gm_disp_{x}")),
+                             f"value = 0 if = {{ limit = {{ has_variable = gm_ov_{x} }} value = var:gm_ov_{x} }}", x)
+
+    def test_each_stored_variable_is_written_from_its_live_twin(self):
+        store = self._effect("gm_ov_store")
+        writes = re.findall(r"set_variable = \{ name = (\w+) value = (\w+) \}", store)
+        self.assertEqual(writes, [(f"gm_ov_{x}", f"gm_live_{x}") for x in STORED])
+        self.assertEqual(store.count("set_variable"), len(STORED), "gm_ov_store writes only the figures")
+        for x in STORED:
+            live = _squash(_block(self.values, f"gm_live_{x}"))
+            self.assertTrue(live, x)
+            self.assertNotIn("var:gm_ov_", live, f"gm_live_{x} reads a stored figure")
+        # The Our Monuments line's count is the live monuments less the live contested.
+        self.assertEqual(_squash(_block(self.values, "gm_live_count_listed_rest")),
+                         "value = gm_sum_monuments subtract = gm_live_count_contested min = 0")
+
+    def test_no_per_frame_reader_walks_the_states(self):
+        """Every country figure the overview and the gated sections read, in
+        their bindings and in the loc they show, is a variable read: no
+        gm_live_* and no state walk."""
+        for name in OVERVIEW_TYPES:
+            body = _strip_comments(_type_body(self.gui, name))
+            keys = set(re.findall(r'(?:text|tooltip) = "([a-z]\w*)"', body)) | set(re.findall(r"'(gm_\w+)'", body))
+            shown = body + "\n".join(self.loc.get(k, "") for k in keys)
+            nested = set(re.findall(r"'(gm_\w+)'", shown)) & set(self.loc)
+            shown += "\n".join(self.loc.get(k, "") for k in nested)
+            read = set(re.findall(r"Country\.MakeScope\.ScriptValue\('(\w+)'\)", shown))
+            self.assertTrue(read, name)
+            for value in read:
+                self.assertFalse(value.startswith("gm_live_"), (name, value))
+                body_v = _block(self.values, value)
+                if body_v is None:
+                    continue
+                self.assertIsNone(re.search(r"(every|any|ordered|random)_scope_state", body_v), (name, value))
+        # Nor does any file of the mod's GUI or loc read a live one.
+        for root in ("gui", "localization"):
+            for dirpath, _dirs, files in os.walk(os.path.join(REPO, root)):
+                for f in files:
+                    if f.endswith((".gui", ".yml")):
+                        self.assertNotIn("gm_live_", _read(os.path.join(dirpath, f)), f)
+
+    def test_the_refresh_stores_last(self):
+        refresh = self._effect("gm_country_refresh")
+        self.assertTrue(refresh.endswith("gm_notify_new_contests = yes gm_ov_store = yes"), refresh[-200:])
+
+    def test_the_ais_decisions_are_stored(self):
+        """Pull Down and Keep as Heritage run in the monthly pulse after its
+        refresh and fire none."""
+        ai = self._effect("gm_ai_decide_contests")
+        self.assertTrue(ai.startswith("if = { limit = { is_ai = yes }"))
+        self.assertTrue(ai.endswith("gm_ov_store = yes }"), ai[-120:])
+        monthly = self._effect("gm_country_monthly")
+        self.assertLess(monthly.index("gm_country_refresh = yes"), monthly.index("gm_ai_decide_contests = yes"))
+
+    def test_the_country_a_state_leaves(self):
+        hands = self._effect("gm_state_changed_hands")
+        self.assertTrue(hands.startswith(
+            "save_scope_as = gm_ov_moved_state owner = { save_scope_as = gm_ov_new_owner } "
+            "clear_saved_scope = gm_ov_old_owner if = { limit = { var:gm_holder ?= { NOT = { this = "
+            "scope:gm_ov_new_owner } is_country_alive = yes } } var:gm_holder = { save_scope_as = gm_ov_old_owner } }"),
+            hands[:400])
+        # Before the trophies' own stamp of the new owner.
+        self.assertLess(hands.index("save_scope_as = gm_ov_old_owner"), hands.index("gm_state_tr_changed_hands = yes"))
+        tail = ("if = { limit = { exists = scope:gm_ov_old_owner } scope:gm_ov_old_owner = { if = { limit = { "
+                "has_variable_list = gm_states } remove_list_variable = { name = gm_states target = "
+                "scope:gm_ov_moved_state } } gm_ov_store = yes } } owner = { trigger_event = { id = monument_events.20 } }")
+        self.assertTrue(hands.endswith(tail), hands[-400:])
+        # After the monuments beside it have moved to the new owner's list.
+        self.assertLess(hands.index("gm_mon_changed_hands = yes"), hands.index(tail))
+        # gm_holder is the state pulse's stamp of its owner.
+        trophy = _squash(_block(_read(os.path.join(REPO, "common", "scripted_effects", "gm_trophy_effects.txt")),
+                                "gm_state_tr_monthly"))
+        self.assertTrue(trophy.startswith("set_variable = { name = gm_holder value = owner }"))
+
+    def test_a_civil_wars_winner(self):
+        """Lists are not inherited and the winner's own variables win the
+        merge: the rows' list and the figures are written after the pass."""
+        repair = self._effect("gm_repair_after_civil_war")
+        self.assertTrue(repair.endswith("gm_monument_pass = yes gm_ov_list_states = yes gm_ov_store = yes }"),
+                        repair[-200:])
+
+    def test_the_rows_list_is_the_refreshs(self):
+        listing = self._effect("gm_ov_list_states")
+        add = "owner = { add_to_variable_list = { name = gm_states target = prev } }"
+        self.assertEqual(listing,
+                         "clear_variable_list = gm_states "
+                         f"every_scope_state = {{ limit = {{ has_building = building_grand_monument }} {add} }} "
+                         "every_scope_state = { limit = { has_building = building_grand_monument_site "
+                         f"NOT = {{ has_building = building_grand_monument }} }} {add} }}")
+        refresh = self._effect("gm_country_refresh")
+        self.assertIn("clear_variable_list = gm_states every_scope_state = { limit = { has_building = "
+                      "building_grand_monument }", refresh)
+        self.assertIn("every_scope_state = { limit = { has_building = building_grand_monument_site NOT = { "
+                      "has_building = building_grand_monument } } gm_state_offer_missed_ceremony = yes "
+                      f"{add} }}", refresh)
+
+    def test_a_sites_level_is_stored_a_day_later(self):
+        hooks = _squash(_strip_comments(_read(ON_ACTIONS)))
+        self.assertIn("on_building_built = { events = { monument_events.1 } on_actions = { gm_site_level_on_action } }",
+                      hooks)
+        self.assertIn("on_building_expanded = { on_actions = { gm_site_level_on_action } }", hooks)
+        self.assertEqual(_squash(_block(_read(ON_ACTIONS), "gm_site_level_on_action")),
+                         "trigger = { gm_system_enabled = yes is_building_type = building_grand_monument_site "
+                         "exists = owner } effect = { state = { gm_ov_hook_fire = yes } }")
+        fire = self._effect("gm_ov_hook_fire")
+        self.assertIn("if = { limit = { NOT = { has_variable = gm_ov_store_pending } } set_variable = { name = "
+                      "gm_ov_store_pending value = yes days = 2 } trigger_event = { id = monument_events.36 days = 1 } }",
+                      fire)
+        self.assertIn("NOT = { is_target_in_variable_list = { name = gm_states target = scope:gm_ov_site_state } }",
+                      fire)
+        # A delayed event with no trigger (delayed_event_trigger_audit), which stores and does nothing else.
+        self.assertEqual(_squash(_block(_read(EVENTS), "monument_events.36")),
+                         "type = country_event hidden = yes immediate = { gm_ov_store = yes }")
+
+    def test_the_self_check(self):
+        monthly = self._effect("gm_country_monthly")
+        self.assertTrue(monthly.startswith("gm_ov_self_check = yes"), monthly[:80])
+        check = self._effect("gm_ov_self_check")
+        for s in ("is_ai = no", "NOT = { has_global_variable = gm_ov_checked }", "has_variable = gm_ov_count_listed_rest",
+                  "any_scope_state = { has_building = building_grand_monument }",
+                  "any_scope_state = { has_building = building_grand_monument_site }",
+                  "var:gm_ov_chk_months >= 12", "TE_SELF_CHECK OK gm_overview_stored",
+                  "TE_SELF_CHECK BROKEN gm_overview_stored"):
+            self.assertIn(s, check, s)
+        self.assertEqual(check.count("set_global_variable = gm_ov_checked"), 2)
+        # Every count compared, each guarded; the grandeur sums left out (ageing moves them).
+        match = _squash(_block(_read(TRIGGERS), "gm_ov_counts_match"))
+        counts = [x for x in STORED if x.startswith("count_")]
+        self.assertEqual(match, " ".join(f"has_variable = gm_ov_{x} var:gm_ov_{x} = gm_live_{x}" for x in
+                                         ("count_upheld", "count_heritage", "count_contested", "count_undedicated",
+                                          "count_listed_rest", "count_sites", "count_sites_ready",
+                                          "count_sites_building", "count_awaiting")))
+        self.assertEqual(sorted(re.findall(r"var:gm_ov_(\w+) =", match)), sorted(counts))
+        for x in counts:
+            self.assertIn(f"[THIS.ScriptValue('gm_disp_{x}')|0]/[THIS.ScriptValue('gm_live_{x}')|0]", check, x)
+        self.assertIn("gm_overview_stored", _read(AGEING_PLAYTEST))
 
 
 class StatusDescTest(unittest.TestCase):
@@ -1664,12 +1835,12 @@ class MonumentsViewTest(unittest.TestCase):
             self.assertIn(word, loc["gm_je_mon_summary_tt"], word)
         # The grandeur of the rows the count counts: every finished monument but the contested, a state's
         # own (the Full rows' figure) and any beside another.
-        body = _squash(_block(_read(VALUES), "gm_disp_listed_grandeur"))
+        body = _squash(_block(_read(VALUES), "gm_live_listed_grandeur"))
         self.assertEqual(body, "value = 0 every_scope_state = { limit = { has_building = building_grand_monument "
                                "gm_state_is_contested = no } add = gm_state_primary_grandeur } if = { limit = { "
                                "has_variable_list = gm_monuments_held } every_in_list = { variable = gm_monuments_held "
                                "limit = { gm_mon_is_contested = no } add = gm_mon_grandeur } }")
-        self.assertIn("subtract = gm_disp_count_contested", _squash(_block(_read(VALUES), "gm_disp_count_listed_rest")))
+        self.assertIn("subtract = gm_live_count_contested", _squash(_block(_read(VALUES), "gm_live_count_listed_rest")))
 
     def _short(self, name):
         text = self.gui if name == "gm_monument_row_short" else self.trophy
