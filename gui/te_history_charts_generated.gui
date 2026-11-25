@@ -55,7 +55,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -67,12 +67,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -142,7 +166,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -154,12 +178,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -250,7 +298,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -262,12 +310,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -363,7 +435,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -375,12 +447,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -452,7 +548,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -464,12 +560,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -546,7 +666,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -558,12 +678,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -635,7 +779,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -647,12 +791,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -729,7 +897,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -741,12 +909,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -831,7 +1023,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -843,12 +1035,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -938,7 +1154,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -950,12 +1166,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1027,7 +1267,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -1039,12 +1279,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1121,7 +1385,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -1133,12 +1397,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1223,7 +1511,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -1235,12 +1523,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1330,7 +1642,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -1342,12 +1654,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1431,7 +1767,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -1443,12 +1779,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1537,7 +1897,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -1549,12 +1909,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1618,7 +2002,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -1630,12 +2014,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1704,7 +2112,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -1716,12 +2124,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1785,7 +2217,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -1797,12 +2229,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1871,7 +2327,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -1883,12 +2339,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -1952,7 +2432,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -1964,12 +2444,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2038,7 +2542,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -2050,12 +2554,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2119,7 +2647,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -2131,12 +2659,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2205,7 +2757,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -2217,12 +2769,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2286,7 +2862,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -2298,12 +2874,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2372,7 +2972,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -2384,12 +2984,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2453,7 +3077,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -2465,12 +3089,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2539,7 +3187,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -2551,12 +3199,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2620,7 +3292,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -2632,12 +3304,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2706,7 +3402,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -2718,12 +3414,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2787,7 +3507,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -2799,12 +3519,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2873,7 +3617,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -2885,12 +3629,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -2954,7 +3722,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -2966,12 +3734,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -3040,7 +3832,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -3052,12 +3844,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -3168,7 +3984,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3192,7 +4008,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3203,6 +4043,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -3351,7 +4215,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3375,7 +4239,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3386,6 +4274,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -3538,7 +4450,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3562,7 +4474,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3573,6 +4509,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -3727,7 +4687,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3751,7 +4711,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3762,6 +4746,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -3882,7 +4890,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3906,7 +4914,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -3917,6 +4949,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -4040,7 +5096,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4064,7 +5120,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4075,6 +5155,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -4195,7 +5299,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4219,7 +5323,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4230,6 +5358,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -4353,7 +5505,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4377,7 +5529,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4388,6 +5564,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -4508,7 +5708,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4532,7 +5732,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4543,6 +5767,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -4666,7 +5914,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4690,7 +5938,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4701,6 +5973,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -4912,7 +6208,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4936,7 +6232,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -4947,6 +6267,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -5163,7 +6507,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5187,7 +6531,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5198,6 +6566,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -5316,7 +6708,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5340,7 +6732,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5351,6 +6767,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -5474,7 +6914,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5498,7 +6938,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5509,6 +6973,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -5627,7 +7115,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5651,7 +7139,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 80 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5662,6 +7174,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 20 84 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -5785,7 +7321,7 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '5' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5809,7 +7345,31 @@ types te_history_charts_generated_types
 
 					te_history_plot = {
 
-						visible = "[GetVariableSystem.HasValue( 'te_demog_hist_range', '20' )]"
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '5' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)5' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 240 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)5' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
 
 						blockoverride "bar_size" {
 
@@ -5820,6 +7380,30 @@ types te_history_charts_generated_types
 						blockoverride "sample_datamodel" {
 
 							datamodel = "[DataModelLast( Country.MakeScope.GetList('te_dg_hist'), '(int32)20' )]"
+
+						}
+
+						blockoverride "sample_visible" {
+
+							visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)20' )]"
+
+						}
+
+					}
+
+					te_history_plot = {
+
+						visible = "[And( GetVariableSystem.HasValue( 'te_demog_hist_range', '20' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_dg_hist') ), '(int32)20' ) )]"
+
+						blockoverride "bar_size" {
+
+							size = { 60 336 }
+
+						}
+
+						blockoverride "sample_datamodel" {
+
+							datamodel = "[Country.MakeScope.GetList('te_dg_hist')]"
 
 						}
 
@@ -6106,7 +7690,7 @@ types te_history_charts_generated_types
 			blockoverride "plot_size" { size = { 456 180 } }
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'ch_model_hist_range', '5' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)5' ) )]"
 					blockoverride "bar_size" {
 						size = { 80 168 }
 					}
@@ -6118,12 +7702,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'ch_model_hist_range', '20' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '5' ), LessThan_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)5' ) )]"
+					blockoverride "bar_size" {
+						size = { 80 168 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_y' ) ), '(CFixedPoint)5' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)20' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 168 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist'), '(int32)20' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_y' ) ), '(CFixedPoint)20' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '20' ), LessThan_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)20' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 168 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_y' ) ), '(CFixedPoint)20' )]"
@@ -6386,7 +7994,7 @@ types te_history_charts_generated_types
 			blockoverride "plot_size" { size = { 1256 348 } }
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'ch_model_hist_range', '5' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '5' ), GreaterThanOrEqualTo_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)5' ) )]"
 					blockoverride "bar_size" {
 						size = { 240 336 }
 					}
@@ -6398,12 +8006,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'ch_model_hist_range', '20' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '5' ), LessThan_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)5' ) )]"
+					blockoverride "bar_size" {
+						size = { 240 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_y' ) ), '(CFixedPoint)5' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '20' ), GreaterThanOrEqualTo_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)20' ) )]"
 					blockoverride "bar_size" {
 						size = { 60 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist'), '(int32)20' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_y' ) ), '(CFixedPoint)20' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( GetVariableSystem.HasValue( 'ch_model_hist_range', '20' ), LessThan_int32( GetDataModelSize( GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist') ), '(int32)20' ) )]"
+					blockoverride "bar_size" {
+						size = { 60 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[GetGlobalVariable('ch_model_hist_store').GetList('ch_model_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_current_year' ), ScriptContainer.GetVariableValue( 'te_hist_y' ) ), '(CFixedPoint)20' )]"
@@ -6487,7 +8119,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -6499,12 +8131,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -6576,7 +8232,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -6588,12 +8244,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -6661,7 +8341,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -6673,12 +8353,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -6750,7 +8454,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -6762,12 +8466,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -6836,7 +8564,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -6848,12 +8576,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -6925,7 +8677,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -6937,12 +8689,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7011,7 +8787,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -7023,12 +8799,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7100,7 +8900,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -7112,12 +8912,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7186,7 +9010,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -7198,12 +9022,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7275,7 +9123,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -7287,12 +9135,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7361,7 +9233,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -7373,12 +9245,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7450,7 +9346,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -7462,12 +9358,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7536,7 +9456,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -7548,12 +9468,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7625,7 +9569,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -7637,12 +9581,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7730,7 +9698,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 40 84 }
 					}
@@ -7742,12 +9710,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 40 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 8 84 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 8 84 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
@@ -7838,7 +9830,7 @@ types te_history_charts_generated_types
 			}
 			blockoverride "plot_layouts" {
 				te_history_plot = {
-					visible = "[GetVariableSystem.HasValue( 'te_hist_range', '1' )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
 					blockoverride "bar_size" {
 						size = { 100 336 }
 					}
@@ -7850,12 +9842,36 @@ types te_history_charts_generated_types
 					}
 				}
 				te_history_plot = {
-					visible = "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]"
+					visible = "[And( GetVariableSystem.HasValue( 'te_hist_range', '1' ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)12' ) )]"
+					blockoverride "bar_size" {
+						size = { 100 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)12' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), GreaterThanOrEqualTo_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
 					blockoverride "bar_size" {
 						size = { 20 336 }
 					}
 					blockoverride "sample_datamodel" {
 						datamodel = "[DataModelLast( Country.MakeScope.GetList('te_hist'), '(int32)60' )]"
+					}
+					blockoverride "sample_visible" {
+						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"
+					}
+				}
+				te_history_plot = {
+					visible = "[And( Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) ), LessThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_hist') ), '(int32)60' ) )]"
+					blockoverride "bar_size" {
+						size = { 20 336 }
+					}
+					blockoverride "sample_datamodel" {
+						datamodel = "[Country.MakeScope.GetList('te_hist')]"
 					}
 					blockoverride "sample_visible" {
 						visible = "[LessThan_CFixedPoint( Subtract_CFixedPoint( Country.MakeScope.ScriptValue( 'te_history_month_index' ), ScriptContainer.GetVariableValue( 'te_hist_i' ) ), '(CFixedPoint)60' )]"

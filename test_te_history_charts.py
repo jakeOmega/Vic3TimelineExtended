@@ -294,7 +294,9 @@ class RegistryTest(unittest.TestCase):
         # the type's plot_layouts is empty: every chart's plots are the generator's (PlotTest)
         self.assertEqual(_block_bodies(chart, "plot_layouts"), [""])
         ours = "\n".join(gen.plot_layouts(m, gen.RANGES["te_hist_range"], gen.STORES["te_hist"]))
-        self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours), [("40", "84"), ("8", "84"), ("2", "84")])
+        # a shorter range's two plots (the store holds the range, or less) share its bar
+        self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours),
+                         [("40", "84"), ("40", "84"), ("8", "84"), ("8", "84"), ("2", "84")])
 
     def test_the_small_wrapper_is_its_fragment(self):
         """At SMALL the generator substitutes and adds nothing but the open
@@ -945,41 +947,86 @@ class PlotTest(unittest.TestCase):
     the longest range's the whole store with no test, and which range an
     unset variable means is decided once, Range.default (DEFAULT_RANGE for
     the monthly charts, 5 years since 2026-11-24), for the plots and the
-    range buttons alike."""
+    range buttons alike. A shorter range has a second plot, for a store that
+    holds fewer samples than the range: DataModelLast asked for more than a
+    list holds logs an error every frame (a game of January 1836, 2026-11-24),
+    so the two take turns on the store's size."""
 
     @classmethod
     def setUpClass(cls):
         cls.text = _strip_comments(_read(GENERATED))
 
+    @staticmethod
+    def wanted(rng, store):
+        """Each plot in order: its range's value and samples, the store-size
+        test beside its range test (None for the longest range's), and whether
+        it reads the store's last samples only."""
+        out = []
+        for value, n in zip(rng.values, rng.samples):
+            if value == rng.values[-1]:
+                out.append((value, n, None, False))
+            else:
+                out += [(value, n, store.holds(n), True), (value, n, store.holds(n, yes=False), False)]
+        return out
+
     def check_plots(self, chart_text, chart, size, ranges=None):
         rng, store = (ranges or gen.RANGES)[chart.range], gen.STORES[chart.store]
-        plots = _plots(chart_text)
-        self.assertEqual(len(plots), 3, "a plot a range")
+        plots, want = _plots(chart_text), self.wanted(rng, store)
+        self.assertEqual(len(plots), 5, "two plots a shorter range, one the longest")
         widths = gen.bars(size[chart.kind], rng)
-        for plot, value, n in zip(plots, rng.values, rng.samples):
+        range_tests = []
+        for plot, (value, n, holds, last) in zip(plots, want):
             whole = value == rng.values[-1]
             self.assertEqual(_override_bodies(plot, "bar_size")[0].strip(),
                              f"size = {{ {widths[value]} {size[chart.kind].bar_h} }}")
             datamodel = _override_bodies(plot, "sample_datamodel")[0].strip()
             tests = _override_bodies(plot, "sample_visible")
-            if whole:
+            if last:
+                self.assertEqual(datamodel, f"datamodel = \"[DataModelLast( {store.samples}, '(int32){n}' )]\"")
+            else:
                 self.assertEqual(datamodel, f'datamodel = "[{store.samples}]"')
+            if whole:
                 self.assertEqual(tests, [], "the longest range tests no sample")
             else:
-                self.assertEqual(datamodel, f"datamodel = \"[DataModelLast( {store.samples}, '(int32){n}' )]\"")
                 self.assertEqual(tests[0].strip(), f"visible = \"[LessThan_CFixedPoint( {store.age()}, "
                                                    f"'(CFixedPoint){n}' )]\"")
-        # one plot shows whatever the variable holds: the default's while unset
+            visible = re.search(r'^\s*visible = "\[(.*)\]"', plot, re.M).group(1)
+            if holds is None:
+                range_tests.append(visible)
+            else:
+                # the store's size decides between a shorter range's two plots
+                head, tail = "And( ", f", {holds} )"
+                self.assertTrue(visible.startswith(head) and visible.endswith(tail), visible)
+                range_tests.append(visible[len(head):-len(tail)])
+        # one range's plots show whatever the variable holds: the default's while unset
         states = [None] + list(rng.values)
         for state in states:
-            visible = [_shown(re.search(r'^\s*visible = "\[(.*)\]"', p, re.M).group(1), rng.var, state)
-                       for p in plots]
-            self.assertEqual(visible, [v == (state or rng.default) for v in rng.values], state)
+            visible = [_shown(t, rng.var, state) for t in range_tests]
+            self.assertEqual(visible, [value == (state or rng.default) for value, *_ in want], state)
         # and the chart itself reads no store but through its plots
         outside = chart_text
         for p in plots:
             outside = outside.replace(p, "")
         self.assertNotRegex(outside, r'blockoverride "sample_(datamodel|visible)"')
+
+    def test_a_short_store_is_never_asked_for_more_than_it_holds(self):
+        """Every DataModelLast of a script list in the generated file sits in a
+        plot whose visible tests that the store holds that many samples, and
+        the plot that takes its place below that reads the whole store. The
+        tests are vanilla's pair on GetDataModelSize."""
+        for store in gen.STORES.values():
+            self.assertEqual(store.holds(12), f"GreaterThanOrEqualTo_int32( GetDataModelSize( {store.samples} ), '(int32)12' )")
+            self.assertEqual(store.holds(12, yes=False),
+                             f"LessThan_int32( GetDataModelSize( {store.samples} ), '(int32)12' )")
+        seen = 0
+        for plot in _plots(self.text):
+            last = re.search(r"DataModelLast\( (.*), '\(int32\)(\d+)' \)\]", plot)
+            if last:
+                seen += 1
+                self.assertIn(f"GreaterThanOrEqualTo_int32( GetDataModelSize( {last.group(1)} ), '(int32){last.group(2)}' )",
+                              re.search(r'^\s*visible = "\[(.*)\]"', plot, re.M).group(1))
+        self.assertEqual(seen, 2 * len(gen.CHARTS) * len(gen.SIZES))
+        self.assertEqual(self.text.count("DataModelLast("), seen, "none outside a plot")
 
     def test_every_chart_reads_only_what_its_range_shows(self):
         for chart in gen.CHARTS:
@@ -1029,10 +1076,15 @@ class PlotTest(unittest.TestCase):
         greys; the 20-year plot still reads the whole store and tests nothing.
         Demographics and Cultural Hegemony keep their own default, 100 years."""
         plot = _plots(_type_body(self.text, "te_hist_bank_value"))
-        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[1], re.M).group(1),
-                         "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
-                         "GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]")
+        store = gen.STORES["te_hist"]
+        five = ("Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
+                "GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )")
+        # plots 2 and 3 are the 5 years' (the store holds 60 samples, or fewer), plot 4 the 20 years'
         self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[2], re.M).group(1),
+                         f"[And( {five}, {store.holds(60)} )]")
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[3], re.M).group(1),
+                         f"[And( {five}, {store.holds(60, yes=False)} )]")
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[4], re.M).group(1),
                          "[GetVariableSystem.HasValue( 'te_hist_range', '20' )]")
         self.assertEqual({gen.RANGES["te_demog_hist_range"].default, gen.RANGES["ch_model_hist_range"].default},
                          {"100"})
@@ -1052,7 +1104,7 @@ class PlotTest(unittest.TestCase):
                                      dict(gen.RANGES, te_hist_range=other))
         self.check_range_row(text, other)
         plot = _plots(_type_body(text, "te_hist_bank_value"))
-        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[2], re.M).group(1),
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[4], re.M).group(1),
                          "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
                          "GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) )]")
         with mock.patch.dict(gen.RANGES, {"te_hist_range": dataclasses.replace(other, default="10")}):
