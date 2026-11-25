@@ -209,6 +209,11 @@ types te_demographics_widgets
 	###                             woman, sex balance, urban share): a bronze
 	###                             chevron, the politics summary's arrow, so the
 	###                             colour claims nothing
+	### A figure that held level (code 0) draws no arrow, as vanilla draws none
+	### beside an unchanged figure: the row's or cell's hover gives the last
+	### census's figure. Vanilla's no-change mark (trend_nochange.dds, an 8 x 20
+	### texture whose dot is about 6 units across) stood here until 2026-11-24
+	### and read in game as a stray speck at the row's end.
 	type te_demog_trend_good_up = widget {
 		size = { 24 22 }
 
@@ -223,12 +228,6 @@ types te_demographics_widgets
 			parentanchor = center
 			texture = "gfx/interface/icons/generic_icons/trend_down.dds"
 			block "trend_down" {}
-		}
-		icon = {
-			size = { 8 20 }
-			parentanchor = center
-			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
-			block "trend_level" {}
 		}
 	}
 
@@ -249,12 +248,6 @@ types te_demographics_widgets
 			mirror = vertical
 			block "trend_down" {}
 		}
-		icon = {
-			size = { 8 20 }
-			parentanchor = center
-			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
-			block "trend_level" {}
-		}
 	}
 
 	type te_demog_trend_neutral = widget {
@@ -272,12 +265,6 @@ types te_demographics_widgets
 			parentanchor = center
 			texture = "gfx/interface/politics_view/summary_arrow_down.dds"
 			block "trend_down" {}
-		}
-		icon = {
-			size = { 8 20 }
-			parentanchor = center
-			texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
-			block "trend_level" {}
 		}
 	}
 
@@ -1086,9 +1073,6 @@ types te_demographics_widgets
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)-1' )]"
 							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)0' )]"
-							}
 						}
 					}
 				}
@@ -1131,9 +1115,6 @@ types te_demographics_widgets
 							}
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)-1' )]"
-							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)0' )]"
 							}
 						}
 					}
@@ -1224,9 +1205,6 @@ types te_demographics_widgets
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)-1' )]"
 							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)0' )]"
-							}
 						}
 					}
 				}
@@ -1251,9 +1229,6 @@ types te_demographics_widgets
 							}
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)-1' )]"
-							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)0' )]"
 							}
 						}
 					}
@@ -1567,9 +1542,6 @@ types te_demographics_widgets
 						}
 						blockoverride "trend_down" {
 							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)-1' )]"
-						}
-						blockoverride "trend_level" {
-							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
 						}
 					}
 				}
@@ -3077,9 +3049,6 @@ types te_demographics_widgets
 						blockoverride "trend_down" {
 							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)-1' )]"
 						}
-						blockoverride "trend_level" {
-							visible = "[EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('te_demog_trend_urban_share'), '(CFixedPoint)0' )]"
-						}
 					}
 				}
 			}
@@ -4533,9 +4502,6 @@ types te_demographics_widgets
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)-1' )]"
 							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_natural'), '(CFixedPoint)0' )]"
-							}
 						}
 					}
 				}
@@ -4578,9 +4544,6 @@ types te_demographics_widgets
 							}
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)-1' )]"
-							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_e0'), '(CFixedPoint)0' )]"
 							}
 						}
 					}
@@ -4671,9 +4634,6 @@ types te_demographics_widgets
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)-1' )]"
 							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)0' )]"
-							}
 						}
 					}
 				}
@@ -4698,9 +4658,6 @@ types te_demographics_widgets
 							}
 							blockoverride "trend_down" {
 								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)-1' )]"
-							}
-							blockoverride "trend_level" {
-								visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_median'), '(CFixedPoint)0' )]"
 							}
 						}
 					}
@@ -5184,9 +5141,6 @@ types te_demographics_widgets
 						blockoverride "trend_down" {
 							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)-1' )]"
 						}
-						blockoverride "trend_level" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)0' )]"
-						}
 					}
 				}
 			}
@@ -5232,9 +5186,6 @@ types te_demographics_widgets
 						}
 						blockoverride "trend_down" {
 							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_mt'), '(CFixedPoint)-1' )]"
-						}
-						blockoverride "trend_level" {
-							visible = "[EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_mt'), '(CFixedPoint)0' )]"
 						}
 					}
 				}
