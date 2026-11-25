@@ -225,7 +225,7 @@ needs you, with the detail on hover. A word turns red when something is due:
 | Next Window | The months to your chemical rockets' next launch window, Open now, Any month once your drive needs no window, or No site left; and the stage. |
 | Base Room | Once you have In-Situ Resource Utilization: your Extraplanetary Base levels, built and queued, against your room (120 +20 / 400 with 20 queued, or their sum once the figures run long), red once they pass it, and the site the next level goes to, queued levels counted, or "next at −75%" once they pass all of your room. Hover it for that site's type, grade and profit a level (see [Extraplanetary Base room](#extraplanetary-base-room)). |
 | Resort Room | Once you have Space Colonization: the same for your Resort Colony levels and their room, and the draw the next level would work at (see [Resort Colony room](#resort-colony-room)). |
-| Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the months until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
+| Hostile Fleet | Under Full Colonies, while a fleet of a country at war with you is on its way to Earth: Earth in the weeks until the first lands, and their strength at and bound for Earth against your fleets there. Red while a landing would tip the balance: you have no fleet at Earth and it isn't blockaded already, or yours holds against what is there now but not against what is coming too. Hover it for how many are coming. |
 
 Below its overview, Solar System Colonization has four tabs, and the one you
 were last on stays chosen while you play:
@@ -1521,9 +1521,14 @@ The Space Fleets section shows your fleets, up to nine, each as a card: where it
 is, its drive, its ships by role, and bars for its strength, its propellant in
 km/s, its months of supply and its marines, each now and at full. The arrow at
 a card's right rolls it up to one line. A fleet on its way shows how much of
-the trip is behind it and the months until it lands. A fleet can be at one of nine
+the trip is behind it and the weeks until it lands. A fleet can be at one of nine
 locations: Earth Orbit, Mercury & Venus, Mars, the Asteroid Belt, Jupiter,
 Saturn, Uranus, Neptune and the Kuiper Belt.
+
+Fleets move four times a month, on the 1st, 8th, 15th and 22nd, and a trip is
+counted in weeks, one for each of those days: a fleet with antimatter engines
+reaches Mars in about three, one with a fusion torch in about five. A fleet sent
+between two of those days sets out from the last of them.
 
 The go-to arrow beside it opens the fleet in a window of its own, Our Fleets.
 Under a picture of a fleet of its drive's day (the fleet's own drive, so one
@@ -1541,7 +1546,7 @@ one brings you back to the fleet.
 
 | Order | What it does |
 |---|---|
-| The destination button | Opens Fleet Destination, a row for each other location: the trip's months and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
+| The destination button | Opens Fleet Destination, a row for each other location: the trip's weeks and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
 | Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
 | Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. The marines stay within what the assault carriers on each side can hold, so moving carriers can change them too. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
 | Land, Embark | Each opens Marines: your colonies at the fleet's location, with your marines at each and Due where a garrison you ordered waits for them, and an amount, which starts at every marine aboard for Land and at the room aboard for Embark (− and + as in Transfer). Land on a row puts up to that many of the marines aboard at that colony; Embark takes up to that many of yours there back aboard, as many as the carriers hold. The window stays open, so you can split the marines between colonies. At Earth, your colonies on the Moon | <!-- style: allow ai-vocab -->
@@ -1565,7 +1570,7 @@ in three months. Away from a dock supply runs down, and a fleet without it loses
 Space Forces Personnel allow. A fleet that arrives
 where you hold a colony counts as contact for the colony's autonomy. When an
 enemy fleet sets out for a location where you hold a colony, you are warned
-with the months until it arrives.
+with the weeks until it arrives.
 
 ### Battles in space
 

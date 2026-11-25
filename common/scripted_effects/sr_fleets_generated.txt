@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer, land_pick, embark_pick, ld_open_land, ld_open_embark, ld_step:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer, land_pick, embark_pick, ld_open_land, ld_open_embark, ld_step, migrate_ticks:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -101,7 +101,7 @@ sr_fl_clear_at = {
 	if = { limit = { has_variable = sr_fl_$N$_dest } remove_variable = sr_fl_$N$_dest }
 	if = { limit = { has_variable = sr_fl_$N$_depart } remove_variable = sr_fl_$N$_depart }
 	if = { limit = { has_variable = sr_fl_$N$_arrive } remove_variable = sr_fl_$N$_arrive }
-	if = { limit = { has_variable = sr_fl_$N$_leg_months } remove_variable = sr_fl_$N$_leg_months }
+	if = { limit = { has_variable = sr_fl_$N$_leg_quarters } remove_variable = sr_fl_$N$_leg_quarters }
 	if = { limit = { has_variable = sr_fl_$N$_dv } remove_variable = sr_fl_$N$_dv }
 	if = { limit = { has_variable = sr_fl_$N$_supply } remove_variable = sr_fl_$N$_supply }
 	if = { limit = { has_variable = sr_fl_$N$_marines } remove_variable = sr_fl_$N$_marines }
@@ -11714,7 +11714,7 @@ sr_loc_debug_log = {
 }
 # Every fleet of ours in transit lands now.
 sr_fl_debug_land_at = {
-	if = { limit = { has_variable = sr_fl_$N$_arrive } set_variable = { name = sr_fl_$N$_arrive value = te_history_month_index } }
+	if = { limit = { has_variable = sr_fl_$N$_arrive } set_variable = { name = sr_fl_$N$_arrive value = sr_fl_tick_now } }
 	sr_fl_arrive_at = { N = $N$ }
 }
 
@@ -12224,7 +12224,7 @@ sr_ov_list_defense = {
 		custom_tooltip_no_bullet = je_space_race_widget_ovc_def_line_calm
 	}
 	if = {
-		limit = { has_variable = sr_fl_alert_arrive var:sr_fl_alert_arrive >= te_history_month_index }
+		limit = { has_variable = sr_fl_alert_arrive var:sr_fl_alert_arrive >= sr_fl_tick_now }
 		custom_tooltip_no_bullet = je_space_race_widget_ovc_def_line_inbound
 	}
 }

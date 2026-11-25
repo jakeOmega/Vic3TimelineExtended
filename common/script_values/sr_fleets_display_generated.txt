@@ -3,9 +3,10 @@
 # gen_space_fleets. Read by the GUI only. The viewer's scope.
 # Per slot n:
 #   sr_disp_fl_<n>              0 empty, 1 at a location, 2 in transit
-#   sr_disp_fl_<n>_months_left  months until it lands
+#   sr_disp_fl_<n>_weeks_left   weeks until it lands (ticks of the fleets' clock, four a
+#                               month: the panel calls a tick a week)
 #   sr_disp_fl_<n>_refit_left   months of its refit left
-#   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination
+#   sr_disp_fl_<n>_leg_weeks, _leg_dv  the leg to its picked destination
 #   sr_disp_fl_<n>_place        the code of the location it is at, or is bound for (the card's world icon)
 #   sr_disp_fl_<n>_strength_frac, _dv_frac, _supply_frac, _marines_frac  the card's bars:
 #                               each reading as a share of its full, 0 to 1
@@ -33,26 +34,26 @@ sr_disp_fl_1 = {
 	if = { limit = { has_variable = sr_fl_1_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_1_dest } value = 2 }
 }
-sr_disp_fl_1_months_left = {
+sr_disp_fl_1_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_1_arrive } value = var:sr_fl_1_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_1_arrive } value = var:sr_fl_1_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_1_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_1_refitting = yes } value = var:sr_fl_1_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_1_leg_months = {
+sr_disp_fl_1_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 1 } value = sr_fl_1_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 2 } value = sr_fl_1_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 3 } value = sr_fl_1_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 4 } value = sr_fl_1_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 5 } value = sr_fl_1_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 6 } value = sr_fl_1_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 7 } value = sr_fl_1_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 8 } value = sr_fl_1_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 9 } value = sr_fl_1_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 1 } value = sr_fl_1_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 2 } value = sr_fl_1_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 3 } value = sr_fl_1_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 4 } value = sr_fl_1_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 5 } value = sr_fl_1_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 6 } value = sr_fl_1_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 7 } value = sr_fl_1_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 8 } value = sr_fl_1_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_1 var:sr_fl_dest_pick_1 = 9 } value = sr_fl_1_leg_quarters_kuiper }
 }
 sr_disp_fl_1_leg_dv = {
 	value = 0
@@ -113,10 +114,10 @@ sr_disp_fl_1_marines_frac = {
 sr_disp_fl_1_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_1_leg_months var:sr_fl_1_leg_months > 0 }
-		value = var:sr_fl_1_leg_months
-		subtract = sr_disp_fl_1_months_left
-		divide = var:sr_fl_1_leg_months
+		limit = { has_variable = sr_fl_1_leg_quarters var:sr_fl_1_leg_quarters > 0 }
+		value = var:sr_fl_1_leg_quarters
+		subtract = sr_disp_fl_1_weeks_left
+		divide = var:sr_fl_1_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -162,26 +163,26 @@ sr_disp_fl_2 = {
 	if = { limit = { has_variable = sr_fl_2_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_2_dest } value = 2 }
 }
-sr_disp_fl_2_months_left = {
+sr_disp_fl_2_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_2_arrive } value = var:sr_fl_2_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_2_arrive } value = var:sr_fl_2_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_2_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_2_refitting = yes } value = var:sr_fl_2_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_2_leg_months = {
+sr_disp_fl_2_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 1 } value = sr_fl_2_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 2 } value = sr_fl_2_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 3 } value = sr_fl_2_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 4 } value = sr_fl_2_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 5 } value = sr_fl_2_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 6 } value = sr_fl_2_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 7 } value = sr_fl_2_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 8 } value = sr_fl_2_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 9 } value = sr_fl_2_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 1 } value = sr_fl_2_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 2 } value = sr_fl_2_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 3 } value = sr_fl_2_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 4 } value = sr_fl_2_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 5 } value = sr_fl_2_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 6 } value = sr_fl_2_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 7 } value = sr_fl_2_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 8 } value = sr_fl_2_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_2 var:sr_fl_dest_pick_2 = 9 } value = sr_fl_2_leg_quarters_kuiper }
 }
 sr_disp_fl_2_leg_dv = {
 	value = 0
@@ -242,10 +243,10 @@ sr_disp_fl_2_marines_frac = {
 sr_disp_fl_2_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_2_leg_months var:sr_fl_2_leg_months > 0 }
-		value = var:sr_fl_2_leg_months
-		subtract = sr_disp_fl_2_months_left
-		divide = var:sr_fl_2_leg_months
+		limit = { has_variable = sr_fl_2_leg_quarters var:sr_fl_2_leg_quarters > 0 }
+		value = var:sr_fl_2_leg_quarters
+		subtract = sr_disp_fl_2_weeks_left
+		divide = var:sr_fl_2_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -291,26 +292,26 @@ sr_disp_fl_3 = {
 	if = { limit = { has_variable = sr_fl_3_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_3_dest } value = 2 }
 }
-sr_disp_fl_3_months_left = {
+sr_disp_fl_3_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_3_arrive } value = var:sr_fl_3_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_3_arrive } value = var:sr_fl_3_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_3_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_3_refitting = yes } value = var:sr_fl_3_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_3_leg_months = {
+sr_disp_fl_3_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 1 } value = sr_fl_3_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 2 } value = sr_fl_3_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 3 } value = sr_fl_3_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 4 } value = sr_fl_3_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 5 } value = sr_fl_3_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 6 } value = sr_fl_3_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 7 } value = sr_fl_3_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 8 } value = sr_fl_3_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 9 } value = sr_fl_3_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 1 } value = sr_fl_3_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 2 } value = sr_fl_3_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 3 } value = sr_fl_3_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 4 } value = sr_fl_3_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 5 } value = sr_fl_3_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 6 } value = sr_fl_3_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 7 } value = sr_fl_3_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 8 } value = sr_fl_3_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_3 var:sr_fl_dest_pick_3 = 9 } value = sr_fl_3_leg_quarters_kuiper }
 }
 sr_disp_fl_3_leg_dv = {
 	value = 0
@@ -371,10 +372,10 @@ sr_disp_fl_3_marines_frac = {
 sr_disp_fl_3_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_3_leg_months var:sr_fl_3_leg_months > 0 }
-		value = var:sr_fl_3_leg_months
-		subtract = sr_disp_fl_3_months_left
-		divide = var:sr_fl_3_leg_months
+		limit = { has_variable = sr_fl_3_leg_quarters var:sr_fl_3_leg_quarters > 0 }
+		value = var:sr_fl_3_leg_quarters
+		subtract = sr_disp_fl_3_weeks_left
+		divide = var:sr_fl_3_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -420,26 +421,26 @@ sr_disp_fl_4 = {
 	if = { limit = { has_variable = sr_fl_4_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_4_dest } value = 2 }
 }
-sr_disp_fl_4_months_left = {
+sr_disp_fl_4_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_4_arrive } value = var:sr_fl_4_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_4_arrive } value = var:sr_fl_4_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_4_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_4_refitting = yes } value = var:sr_fl_4_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_4_leg_months = {
+sr_disp_fl_4_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 1 } value = sr_fl_4_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 2 } value = sr_fl_4_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 3 } value = sr_fl_4_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 4 } value = sr_fl_4_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 5 } value = sr_fl_4_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 6 } value = sr_fl_4_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 7 } value = sr_fl_4_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 8 } value = sr_fl_4_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 9 } value = sr_fl_4_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 1 } value = sr_fl_4_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 2 } value = sr_fl_4_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 3 } value = sr_fl_4_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 4 } value = sr_fl_4_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 5 } value = sr_fl_4_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 6 } value = sr_fl_4_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 7 } value = sr_fl_4_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 8 } value = sr_fl_4_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_4 var:sr_fl_dest_pick_4 = 9 } value = sr_fl_4_leg_quarters_kuiper }
 }
 sr_disp_fl_4_leg_dv = {
 	value = 0
@@ -500,10 +501,10 @@ sr_disp_fl_4_marines_frac = {
 sr_disp_fl_4_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_4_leg_months var:sr_fl_4_leg_months > 0 }
-		value = var:sr_fl_4_leg_months
-		subtract = sr_disp_fl_4_months_left
-		divide = var:sr_fl_4_leg_months
+		limit = { has_variable = sr_fl_4_leg_quarters var:sr_fl_4_leg_quarters > 0 }
+		value = var:sr_fl_4_leg_quarters
+		subtract = sr_disp_fl_4_weeks_left
+		divide = var:sr_fl_4_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -549,26 +550,26 @@ sr_disp_fl_5 = {
 	if = { limit = { has_variable = sr_fl_5_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_5_dest } value = 2 }
 }
-sr_disp_fl_5_months_left = {
+sr_disp_fl_5_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_5_arrive } value = var:sr_fl_5_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_5_arrive } value = var:sr_fl_5_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_5_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_5_refitting = yes } value = var:sr_fl_5_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_5_leg_months = {
+sr_disp_fl_5_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 1 } value = sr_fl_5_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 2 } value = sr_fl_5_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 3 } value = sr_fl_5_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 4 } value = sr_fl_5_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 5 } value = sr_fl_5_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 6 } value = sr_fl_5_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 7 } value = sr_fl_5_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 8 } value = sr_fl_5_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 9 } value = sr_fl_5_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 1 } value = sr_fl_5_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 2 } value = sr_fl_5_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 3 } value = sr_fl_5_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 4 } value = sr_fl_5_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 5 } value = sr_fl_5_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 6 } value = sr_fl_5_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 7 } value = sr_fl_5_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 8 } value = sr_fl_5_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_5 var:sr_fl_dest_pick_5 = 9 } value = sr_fl_5_leg_quarters_kuiper }
 }
 sr_disp_fl_5_leg_dv = {
 	value = 0
@@ -629,10 +630,10 @@ sr_disp_fl_5_marines_frac = {
 sr_disp_fl_5_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_5_leg_months var:sr_fl_5_leg_months > 0 }
-		value = var:sr_fl_5_leg_months
-		subtract = sr_disp_fl_5_months_left
-		divide = var:sr_fl_5_leg_months
+		limit = { has_variable = sr_fl_5_leg_quarters var:sr_fl_5_leg_quarters > 0 }
+		value = var:sr_fl_5_leg_quarters
+		subtract = sr_disp_fl_5_weeks_left
+		divide = var:sr_fl_5_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -678,26 +679,26 @@ sr_disp_fl_6 = {
 	if = { limit = { has_variable = sr_fl_6_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_6_dest } value = 2 }
 }
-sr_disp_fl_6_months_left = {
+sr_disp_fl_6_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_6_arrive } value = var:sr_fl_6_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_6_arrive } value = var:sr_fl_6_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_6_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_6_refitting = yes } value = var:sr_fl_6_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_6_leg_months = {
+sr_disp_fl_6_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 1 } value = sr_fl_6_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 2 } value = sr_fl_6_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 3 } value = sr_fl_6_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 4 } value = sr_fl_6_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 5 } value = sr_fl_6_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 6 } value = sr_fl_6_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 7 } value = sr_fl_6_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 8 } value = sr_fl_6_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 9 } value = sr_fl_6_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 1 } value = sr_fl_6_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 2 } value = sr_fl_6_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 3 } value = sr_fl_6_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 4 } value = sr_fl_6_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 5 } value = sr_fl_6_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 6 } value = sr_fl_6_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 7 } value = sr_fl_6_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 8 } value = sr_fl_6_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_6 var:sr_fl_dest_pick_6 = 9 } value = sr_fl_6_leg_quarters_kuiper }
 }
 sr_disp_fl_6_leg_dv = {
 	value = 0
@@ -758,10 +759,10 @@ sr_disp_fl_6_marines_frac = {
 sr_disp_fl_6_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_6_leg_months var:sr_fl_6_leg_months > 0 }
-		value = var:sr_fl_6_leg_months
-		subtract = sr_disp_fl_6_months_left
-		divide = var:sr_fl_6_leg_months
+		limit = { has_variable = sr_fl_6_leg_quarters var:sr_fl_6_leg_quarters > 0 }
+		value = var:sr_fl_6_leg_quarters
+		subtract = sr_disp_fl_6_weeks_left
+		divide = var:sr_fl_6_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -807,26 +808,26 @@ sr_disp_fl_7 = {
 	if = { limit = { has_variable = sr_fl_7_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_7_dest } value = 2 }
 }
-sr_disp_fl_7_months_left = {
+sr_disp_fl_7_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_7_arrive } value = var:sr_fl_7_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_7_arrive } value = var:sr_fl_7_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_7_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_7_refitting = yes } value = var:sr_fl_7_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_7_leg_months = {
+sr_disp_fl_7_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 1 } value = sr_fl_7_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 2 } value = sr_fl_7_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 3 } value = sr_fl_7_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 4 } value = sr_fl_7_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 5 } value = sr_fl_7_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 6 } value = sr_fl_7_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 7 } value = sr_fl_7_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 8 } value = sr_fl_7_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 9 } value = sr_fl_7_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 1 } value = sr_fl_7_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 2 } value = sr_fl_7_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 3 } value = sr_fl_7_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 4 } value = sr_fl_7_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 5 } value = sr_fl_7_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 6 } value = sr_fl_7_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 7 } value = sr_fl_7_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 8 } value = sr_fl_7_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_7 var:sr_fl_dest_pick_7 = 9 } value = sr_fl_7_leg_quarters_kuiper }
 }
 sr_disp_fl_7_leg_dv = {
 	value = 0
@@ -887,10 +888,10 @@ sr_disp_fl_7_marines_frac = {
 sr_disp_fl_7_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_7_leg_months var:sr_fl_7_leg_months > 0 }
-		value = var:sr_fl_7_leg_months
-		subtract = sr_disp_fl_7_months_left
-		divide = var:sr_fl_7_leg_months
+		limit = { has_variable = sr_fl_7_leg_quarters var:sr_fl_7_leg_quarters > 0 }
+		value = var:sr_fl_7_leg_quarters
+		subtract = sr_disp_fl_7_weeks_left
+		divide = var:sr_fl_7_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -936,26 +937,26 @@ sr_disp_fl_8 = {
 	if = { limit = { has_variable = sr_fl_8_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_8_dest } value = 2 }
 }
-sr_disp_fl_8_months_left = {
+sr_disp_fl_8_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_8_arrive } value = var:sr_fl_8_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_8_arrive } value = var:sr_fl_8_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_8_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_8_refitting = yes } value = var:sr_fl_8_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_8_leg_months = {
+sr_disp_fl_8_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 1 } value = sr_fl_8_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 2 } value = sr_fl_8_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 3 } value = sr_fl_8_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 4 } value = sr_fl_8_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 5 } value = sr_fl_8_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 6 } value = sr_fl_8_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 7 } value = sr_fl_8_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 8 } value = sr_fl_8_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 9 } value = sr_fl_8_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 1 } value = sr_fl_8_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 2 } value = sr_fl_8_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 3 } value = sr_fl_8_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 4 } value = sr_fl_8_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 5 } value = sr_fl_8_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 6 } value = sr_fl_8_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 7 } value = sr_fl_8_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 8 } value = sr_fl_8_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_8 var:sr_fl_dest_pick_8 = 9 } value = sr_fl_8_leg_quarters_kuiper }
 }
 sr_disp_fl_8_leg_dv = {
 	value = 0
@@ -1016,10 +1017,10 @@ sr_disp_fl_8_marines_frac = {
 sr_disp_fl_8_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_8_leg_months var:sr_fl_8_leg_months > 0 }
-		value = var:sr_fl_8_leg_months
-		subtract = sr_disp_fl_8_months_left
-		divide = var:sr_fl_8_leg_months
+		limit = { has_variable = sr_fl_8_leg_quarters var:sr_fl_8_leg_quarters > 0 }
+		value = var:sr_fl_8_leg_quarters
+		subtract = sr_disp_fl_8_weeks_left
+		divide = var:sr_fl_8_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -1065,26 +1066,26 @@ sr_disp_fl_9 = {
 	if = { limit = { has_variable = sr_fl_9_loc } value = 1 }
 	else_if = { limit = { has_variable = sr_fl_9_dest } value = 2 }
 }
-sr_disp_fl_9_months_left = {
+sr_disp_fl_9_weeks_left = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_9_arrive } value = var:sr_fl_9_arrive subtract = te_history_month_index }
+	if = { limit = { has_variable = sr_fl_9_arrive } value = var:sr_fl_9_arrive subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_fl_9_refit_left = {
 	value = 0
 	if = { limit = { sr_fl_9_refitting = yes } value = var:sr_fl_9_refit_until subtract = te_history_month_index }
 }
-sr_disp_fl_9_leg_months = {
+sr_disp_fl_9_leg_weeks = {
 	value = 0
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 1 } value = sr_fl_9_leg_months_earth }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 2 } value = sr_fl_9_leg_months_inner }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 3 } value = sr_fl_9_leg_months_mars }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 4 } value = sr_fl_9_leg_months_asteroids }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 5 } value = sr_fl_9_leg_months_jupiter }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 6 } value = sr_fl_9_leg_months_saturn }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 7 } value = sr_fl_9_leg_months_uranus }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 8 } value = sr_fl_9_leg_months_neptune }
-	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 9 } value = sr_fl_9_leg_months_kuiper }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 1 } value = sr_fl_9_leg_quarters_earth }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 2 } value = sr_fl_9_leg_quarters_inner }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 3 } value = sr_fl_9_leg_quarters_mars }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 4 } value = sr_fl_9_leg_quarters_asteroids }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 5 } value = sr_fl_9_leg_quarters_jupiter }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 6 } value = sr_fl_9_leg_quarters_saturn }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 7 } value = sr_fl_9_leg_quarters_uranus }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 8 } value = sr_fl_9_leg_quarters_neptune }
+	if = { limit = { has_variable = sr_fl_dest_pick_9 var:sr_fl_dest_pick_9 = 9 } value = sr_fl_9_leg_quarters_kuiper }
 }
 sr_disp_fl_9_leg_dv = {
 	value = 0
@@ -1145,10 +1146,10 @@ sr_disp_fl_9_marines_frac = {
 sr_disp_fl_9_transit_frac = {
 	value = 0
 	if = {
-		limit = { has_variable = sr_fl_9_leg_months var:sr_fl_9_leg_months > 0 }
-		value = var:sr_fl_9_leg_months
-		subtract = sr_disp_fl_9_months_left
-		divide = var:sr_fl_9_leg_months
+		limit = { has_variable = sr_fl_9_leg_quarters var:sr_fl_9_leg_quarters > 0 }
+		value = var:sr_fl_9_leg_quarters
+		subtract = sr_disp_fl_9_weeks_left
+		divide = var:sr_fl_9_leg_quarters
 	}
 	min = 0
 	max = 1
@@ -1209,9 +1210,9 @@ sr_disp_loc_inbound_earth = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_earth } value = global_var:sr_loc_inbound_earth }
 }
-sr_disp_loc_inbound_months_earth = {
+sr_disp_loc_inbound_weeks_earth = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_earth } value = global_var:sr_loc_inbound_first_earth subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_earth } value = global_var:sr_loc_inbound_first_earth subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_earth = {
@@ -1244,9 +1245,9 @@ sr_disp_loc_inbound_inner = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_inner } value = global_var:sr_loc_inbound_inner }
 }
-sr_disp_loc_inbound_months_inner = {
+sr_disp_loc_inbound_weeks_inner = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_inner } value = global_var:sr_loc_inbound_first_inner subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_inner } value = global_var:sr_loc_inbound_first_inner subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_inner = {
@@ -1275,9 +1276,9 @@ sr_disp_loc_inbound_mars = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_mars } value = global_var:sr_loc_inbound_mars }
 }
-sr_disp_loc_inbound_months_mars = {
+sr_disp_loc_inbound_weeks_mars = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_mars } value = global_var:sr_loc_inbound_first_mars subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_mars } value = global_var:sr_loc_inbound_first_mars subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_mars = {
@@ -1309,9 +1310,9 @@ sr_disp_loc_inbound_asteroids = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_asteroids } value = global_var:sr_loc_inbound_asteroids }
 }
-sr_disp_loc_inbound_months_asteroids = {
+sr_disp_loc_inbound_weeks_asteroids = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_asteroids } value = global_var:sr_loc_inbound_first_asteroids subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_asteroids } value = global_var:sr_loc_inbound_first_asteroids subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_asteroids = {
@@ -1343,9 +1344,9 @@ sr_disp_loc_inbound_jupiter = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_jupiter } value = global_var:sr_loc_inbound_jupiter }
 }
-sr_disp_loc_inbound_months_jupiter = {
+sr_disp_loc_inbound_weeks_jupiter = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_jupiter } value = global_var:sr_loc_inbound_first_jupiter subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_jupiter } value = global_var:sr_loc_inbound_first_jupiter subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_jupiter = {
@@ -1378,9 +1379,9 @@ sr_disp_loc_inbound_saturn = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_saturn } value = global_var:sr_loc_inbound_saturn }
 }
-sr_disp_loc_inbound_months_saturn = {
+sr_disp_loc_inbound_weeks_saturn = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_saturn } value = global_var:sr_loc_inbound_first_saturn subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_saturn } value = global_var:sr_loc_inbound_first_saturn subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_saturn = {
@@ -1412,9 +1413,9 @@ sr_disp_loc_inbound_uranus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_uranus } value = global_var:sr_loc_inbound_uranus }
 }
-sr_disp_loc_inbound_months_uranus = {
+sr_disp_loc_inbound_weeks_uranus = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_uranus } value = global_var:sr_loc_inbound_first_uranus subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_uranus } value = global_var:sr_loc_inbound_first_uranus subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_uranus = {
@@ -1445,9 +1446,9 @@ sr_disp_loc_inbound_neptune = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_neptune } value = global_var:sr_loc_inbound_neptune }
 }
-sr_disp_loc_inbound_months_neptune = {
+sr_disp_loc_inbound_weeks_neptune = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_neptune } value = global_var:sr_loc_inbound_first_neptune subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_neptune } value = global_var:sr_loc_inbound_first_neptune subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_neptune = {
@@ -1476,9 +1477,9 @@ sr_disp_loc_inbound_kuiper = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_kuiper } value = global_var:sr_loc_inbound_kuiper }
 }
-sr_disp_loc_inbound_months_kuiper = {
+sr_disp_loc_inbound_weeks_kuiper = {
 	value = 0
-	if = { limit = { has_global_variable = sr_loc_inbound_first_kuiper } value = global_var:sr_loc_inbound_first_kuiper subtract = te_history_month_index }
+	if = { limit = { has_global_variable = sr_loc_inbound_first_kuiper } value = global_var:sr_loc_inbound_first_kuiper subtract = sr_fl_tick_now }
 	min = 0
 }
 sr_disp_loc_inbound_ours_kuiper = {
@@ -3672,7 +3673,7 @@ sr_disp_reserve_tender = { value = sr_reserve_tender_value }
 
 # Per power, in its own scope (the Hostile Fleet cell's hover, a line a power at
 # war with the viewer, sr_ov_list_earth): its fleets in flight to Earth, their
-# strength, and the months until the first lands.
+# strength, and the weeks (ticks) until the first lands.
 sr_disp_earth_power_count = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } add = 1 }
@@ -3697,7 +3698,7 @@ sr_disp_earth_power_strength = {
 	if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } add = sr_fl_8_strength }
 	if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } add = sr_fl_9_strength }
 }
-sr_disp_earth_power_months = {
+sr_disp_earth_power_weeks = {
 	value = 0
 	if = {
 		limit = {
@@ -3723,7 +3724,7 @@ sr_disp_earth_power_months = {
 		if = { limit = { has_variable = sr_fl_7_dest var:sr_fl_7_dest = 1 NOT = { has_variable = sr_fl_7_loc } } max = var:sr_fl_7_arrive }
 		if = { limit = { has_variable = sr_fl_8_dest var:sr_fl_8_dest = 1 NOT = { has_variable = sr_fl_8_loc } } max = var:sr_fl_8_arrive }
 		if = { limit = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } } max = var:sr_fl_9_arrive }
-		subtract = te_history_month_index
+		subtract = sr_fl_tick_now
 		min = 0
 	}
 }

@@ -691,82 +691,82 @@ The months a colony fleet takes (solar colonization slices 2-3 design § 2), rou
 
 ## Fleets' legs
 
-The legs between the nine fleet locations (solar colonization slice 6 design § 1.2), in `common/script_values/sr_fleet_legs_generated.txt`. Each location is measured to one body: Mercury and Venus to Venus, Mars to Mars, the Asteroid Belt to Ceres, the Jupiter system to Jupiter, the Saturn system to Saturn, the Uranus system to Uranus, the Neptune system to Neptune, the Kuiper Belt to Kuiper. Departure from a planet's system starts in its loose capture orbit (eccentricity 0.9), from Earth in the 200 km parking orbit; arrival is that capture orbit, a rendezvous at a small body. Chemical's delta-v is the cheapest transfer of the departure's month; fusion's the shortest transfer within its budget; a torch's acceleration × time, at most its cap. Months are rounded, at least 1; a better drive is never slower.
+The legs between the nine fleet locations (solar colonization slice 6 design § 1.2), in `common/script_values/sr_fleet_legs_generated.txt`. Each location is measured to one body: Mercury and Venus to Venus, Mars to Mars, the Asteroid Belt to Ceres, the Jupiter system to Jupiter, the Saturn system to Saturn, the Uranus system to Uranus, the Neptune system to Neptune, the Kuiper Belt to Kuiper. Departure from a planet's system starts in its loose capture orbit (eccentricity 0.9), from Earth in the 200 km parking orbit; arrival is that capture orbit, a rendezvous at a small body. Chemical's delta-v is the cheapest transfer of the departure's month; fusion's the shortest transfer within its budget; a torch's acceleration × time, at most its cap. Times are in quarter-months (a quarter is 7.61 days: the fleets' clock ticks on the 1st, 8th, 15th and 22nd), rounded, at least 1; a better drive is never slower.
 
-| Leg | Kind | Cycle (months) | Mean cycle's worst miss (months) | Chemical, months · km/s | Fusion, months · km/s | Fusion torch, months · km/s | Antimatter, months · km/s |
+| Leg | Kind | Cycle (months) | Mean cycle's worst miss (months) | Chemical, quarters · km/s | Fusion, quarters · km/s | Fusion torch, quarters · km/s | Antimatter, quarters · km/s |
 |---|---|---|---|---|---|---|---|
-| Earth and the Moon → Mercury and Venus | exact | — | — | 5 · 4.7 | 2 · 30 | 1 · 163 | 1 · 319 |
-| Earth and the Moon → Mars | exact | — | — | 9 · 4.4 | 3 · 30 | 1 · 315 | 1 · 522 |
-| Earth and the Moon → the Asteroid Belt | exact | — | — | 16 · 12.6 | 6 · 30 | 2 · 396 | 1 · 714 |
-| Earth and the Moon → the Jupiter system | exact | — | — | 33 · 8.2 | 8 · 30 | 2 · 400 | 1 · 981 |
-| Earth and the Moon → the Saturn system | exact | — | — | 73 · 9 | 16 · 30 | 4 · 400 | 2 · 1325 |
-| Earth and the Moon → the Uranus system | exact | — | — | 192 · 9.2 | 37 · 30 | 6 · 400 | 2 · 1858 |
-| Earth and the Moon → the Neptune system | exact | — | — | 369 · 9.6 | 57 · 30 | 9 · 400 | 3 · 2000 |
-| Earth and the Moon → the Kuiper Belt | exact | — | — | 611 · 15 | 133 · 30 | 13 · 400 | 4 · 2000 |
-| Mercury and Venus → Earth and the Moon | cycle | 19.18 | 0.48 | 5 · 1.8 | 1 · 30 | 1 · 234 | 1 · 369 |
-| Mercury and Venus → Mars | cycle | 10.97 | 0.59 | 7 · 4.6 | 3 · 30 | 1 · 309 | 1 · 519 |
-| Mercury and Venus → the Asteroid Belt | cycle | 8.52 | 0.56 | 14 · 12.6 | 6 · 30 | 2 · 399 | 1 · 720 |
-| Mercury and Venus → the Jupiter system | cycle | 7.79 | 0.83 | 31 · 8.1 | 8 · 30 | 2 · 400 | 1 · 982 |
-| Mercury and Venus → the Saturn system | fixed | — | — | 70 · 11.2 | 29 · 30 | 3 · 400 | 2 · 1298 |
-| Mercury and Venus → the Uranus system | fixed | — | — | 188 · 10.6 | 89 · 30 | 6 · 400 | 2 · 1842 |
-| Mercury and Venus → the Neptune system | fixed | — | — | 364 · 11.2 | 128 · 30 | 9 · 400 | 3 · 2000 |
-| Mercury and Venus → the Kuiper Belt | fixed | — | — | 605 · 18.9 | 390 · 30 | 13 · 400 | 4 · 2000 |
-| Mars → Earth and the Moon | cycle | 25.62 | 1.94 | 9 · 1.9 | 3 · 30 | 1 · 255 | 1 · 478 |
-| Mars → Mercury and Venus | cycle | 10.97 | 1.27 | 7 · 4.6 | 5 · 30 | 1 · 328 | 1 · 600 |
-| Mars → the Asteroid Belt | cycle | 38.17 | 1.71 | 19 · 6.5 | 6 · 30 | 2 · 380 | 1 · 660 |
-| Mars → the Jupiter system | cycle | 26.82 | 1.09 | 37 · 4.7 | 8 · 30 | 2 · 400 | 1 · 975 |
-| Mars → the Saturn system | fixed | — | — | 78 · 7 | 22 · 30 | 3 · 400 | 2 · 1273 |
-| Mars → the Uranus system | fixed | — | — | 199 · 9.7 | 57 · 30 | 6 · 400 | 2 · 1844 |
-| Mars → the Neptune system | fixed | — | — | 378 · 9.4 | 93 · 30 | 9 · 400 | 3 · 2000 |
-| Mars → the Kuiper Belt | fixed | — | — | 621 · 16.5 | 246 · 30 | 13 · 400 | 4 · 2000 |
-| the Asteroid Belt → Earth and the Moon | cycle | 15.33 | 2.08 | 16 · 10.5 | 12 · 30 | 2 · 400 | 1 · 740 |
-| the Asteroid Belt → Mercury and Venus | cycle | 8.52 | 1.80 | 14 · 13.6 | 10 · 30 | 2 · 387 | 1 · 718 |
-| the Asteroid Belt → Mars | cycle | 38.17 | 4.25 | 19 · 6.7 | 10 · 30 | 2 · 400 | 1 · 792 |
-| the Asteroid Belt → the Jupiter system | cycle | 90.22 | 3.98 | 48 · 4.9 | 8 · 30 | 2 · 400 | 1 · 898 |
-| the Asteroid Belt → the Saturn system | fixed | — | — | 92 · 9.4 | 28 · 30 | 4 · 400 | 2 · 1315 |
-| the Asteroid Belt → the Uranus system | fixed | — | — | 218 · 11.7 | 60 · 30 | 6 · 400 | 2 · 1847 |
-| the Asteroid Belt → the Neptune system | fixed | — | — | 401 · 11.9 | 96 · 30 | 9 · 400 | 3 · 2000 |
-| the Asteroid Belt → the Kuiper Belt | fixed | — | — | 648 · 14.1 | 205 · 30 | 13 · 400 | 4 · 2000 |
-| the Jupiter system → Earth and the Moon | cycle | 13.10 | 2.61 | 33 · 5.7 | 16 · 30 | 2 · 400 | 1 · 902 |
-| the Jupiter system → Mercury and Venus | cycle | 7.79 | 2.74 | 31 · 8.1 | 10 · 30 | 2 · 400 | 1 · 1017 |
-| the Jupiter system → Mars | cycle | 26.82 | 2.96 | 37 · 4.9 | 7 · 30 | 2 · 400 | 1 · 838 |
-| the Jupiter system → the Asteroid Belt | cycle | 90.22 | 5.43 | 48 · 5.9 | 18 · 29.8 | 3 · 400 | 1 · 1115 |
-| the Jupiter system → the Saturn system | fixed | — | — | 121 · 2.7 | 20 · 30 | 4 · 400 | 2 · 1396 |
-| the Jupiter system → the Uranus system | fixed | — | — | 253 · 2.6 | 37 · 30 | 6 · 400 | 2 · 1876 |
-| the Jupiter system → the Neptune system | fixed | — | — | 446 · 2.6 | 44 · 30 | 10 · 400 | 3 · 2000 |
-| the Jupiter system → the Kuiper Belt | fixed | — | — | 700 · 5.5 | 99 · 30 | 13 · 400 | 4 · 2000 |
-| the Saturn system → Earth and the Moon | cycle | 12.42 | 6.21 | 73 · 6.5 | 17 · 30 | 4 · 400 | 2 · 1257 |
-| the Saturn system → Mercury and Venus | fixed | — | — | 70 · 8.8 | 18 · 30 | 4 · 400 | 2 · 1296 |
-| the Saturn system → Mars | fixed | — | — | 79 · 6.2 | 24 · 30 | 3 · 400 | 2 · 1288 |
-| the Saturn system → the Asteroid Belt | fixed | — | — | 92 · 7.2 | 27 · 30 | 4 · 400 | 2 · 1331 |
-| the Saturn system → the Jupiter system | fixed | — | — | 120 · 2.4 | 19 · 30 | 4 · 400 | 2 · 1399 |
-| the Saturn system → the Uranus system | fixed | — | — | 324 · 1.7 | 42 · 30 | 7 · 400 | 2 · 1932 |
-| the Saturn system → the Neptune system | fixed | — | — | 530 · 1.8 | 45 · 30 | 10 · 400 | 3 · 2000 |
-| the Saturn system → the Kuiper Belt | fixed | — | — | 808 · 4 | 106 · 30 | 12 · 400 | 4 · 2000 |
-| the Uranus system → Earth and the Moon | cycle | 12.14 | 6.06 | 193 · 6.4 | 41 · 29.9 | 6 · 400 | 2 · 1873 |
-| the Uranus system → Mercury and Venus | fixed | — | — | 190 · 9.6 | 45 · 29.9 | 6 · 400 | 2 · 1839 |
-| the Uranus system → Mars | fixed | — | — | 202 · 6.8 | 44 · 30 | 6 · 400 | 2 · 1849 |
-| the Uranus system → the Asteroid Belt | fixed | — | — | 220 · 8.9 | 56 · 30 | 6 · 400 | 2 · 1858 |
-| the Uranus system → the Jupiter system | fixed | — | — | 257 · 2.2 | 37 · 30 | 6 · 400 | 2 · 1869 |
-| the Uranus system → the Saturn system | fixed | — | — | 331 · 1.5 | 40 · 30 | 7 · 400 | 2 · 1928 |
-| the Uranus system → the Neptune system | fixed | — | — | 737 · 1.2 | 71 · 30 | 12 · 400 | 4 · 2000 |
-| the Uranus system → the Kuiper Belt | fixed | — | — | 1030 · 2.5 | 125 · 30 | 13 · 400 | 4 · 2000 |
-| the Neptune system → Earth and the Moon | cycle | 12.07 | 6.03 | 368 · 7 | 57 · 30 | 10 · 400 | 3 · 2000 |
-| the Neptune system → Mercury and Venus | fixed | — | — | 363 · 9.9 | 69 · 29.8 | 9 · 400 | 3 · 2000 |
-| the Neptune system → Mars | fixed | — | — | 378 · 7.1 | 68 · 29.9 | 9 · 400 | 3 · 2000 |
-| the Neptune system → the Asteroid Belt | fixed | — | — | 400 · 9.6 | 83 · 30 | 9 · 400 | 3 · 2000 |
-| the Neptune system → the Jupiter system | fixed | — | — | 445 · 2.3 | 44 · 30 | 9 · 400 | 3 · 2000 |
-| the Neptune system → the Saturn system | fixed | — | — | 529 · 1.6 | 43 · 30 | 10 · 400 | 3 · 2000 |
-| the Neptune system → the Uranus system | fixed | — | — | 737 · 1.1 | 45 · 30 | 12 · 400 | 4 · 2000 |
-| the Neptune system → the Kuiper Belt | fixed | — | — | 1309 · 2.2 | 65 · 28.2 | 10 · 400 | 3 · 2000 |
-| the Kuiper Belt → Earth and the Moon | cycle | 12.05 | 6.02 | 606 · 15.2 | 193 · 29.7 | 12 · 400 | 4 · 2000 |
-| the Kuiper Belt → Mercury and Venus | fixed | — | — | 579 · 18.7 | 200 · 29.6 | 13 · 400 | 4 · 2000 |
-| the Kuiper Belt → Mars | fixed | — | — | 596 · 14.7 | 158 · 29.9 | 13 · 400 | 4 · 2000 |
-| the Kuiper Belt → the Asteroid Belt | fixed | — | — | 619 · 12.2 | 145 · 30 | 12 · 400 | 4 · 2000 |
-| the Kuiper Belt → the Jupiter system | fixed | — | — | 671 · 4.4 | 98 · 30 | 13 · 400 | 4 · 2000 |
-| the Kuiper Belt → the Saturn system | fixed | — | — | 773 · 3.1 | 107 · 30 | 13 · 400 | 4 · 2000 |
-| the Kuiper Belt → the Uranus system | fixed | — | — | 997 · 1.8 | 114 · 30 | 13 · 400 | 4 · 2000 |
-| the Kuiper Belt → the Neptune system | fixed | — | — | 1279 · 1.7 | 91 · 30 | 11 · 400 | 3 · 2000 |
+| Earth and the Moon → Mercury and Venus | exact | — | — | 19 · 4.7 | 7 · 30 | 3 · 163 | 2 · 319 |
+| Earth and the Moon → Mars | exact | — | — | 35 · 4.4 | 12 · 30 | 5 · 315 | 3 · 522 |
+| Earth and the Moon → the Asteroid Belt | exact | — | — | 63 · 12.6 | 25 · 30 | 6 · 396 | 4 · 714 |
+| Earth and the Moon → the Jupiter system | exact | — | — | 132 · 8.2 | 31 · 30 | 9 · 400 | 5 · 981 |
+| Earth and the Moon → the Saturn system | exact | — | — | 292 · 9 | 65 · 30 | 14 · 400 | 7 · 1325 |
+| Earth and the Moon → the Uranus system | exact | — | — | 769 · 9.2 | 146 · 30 | 25 · 400 | 10 · 1858 |
+| Earth and the Moon → the Neptune system | exact | — | — | 1477 · 9.6 | 229 · 30 | 38 · 400 | 12 · 2000 |
+| Earth and the Moon → the Kuiper Belt | exact | — | — | 2446 · 15 | 532 · 30 | 50 · 400 | 15 · 2000 |
+| Mercury and Venus → Earth and the Moon | cycle | 19.18 | 0.48 | 19 · 1.8 | 5 · 30 | 4 · 234 | 2 · 369 |
+| Mercury and Venus → Mars | cycle | 10.97 | 0.59 | 29 · 4.6 | 10 · 30 | 5 · 309 | 3 · 519 |
+| Mercury and Venus → the Asteroid Belt | cycle | 8.52 | 0.56 | 56 · 12.6 | 23 · 30 | 7 · 399 | 4 · 720 |
+| Mercury and Venus → the Jupiter system | cycle | 7.79 | 0.83 | 123 · 8.1 | 31 · 30 | 9 · 400 | 5 · 982 |
+| Mercury and Venus → the Saturn system | fixed | — | — | 280 · 11.2 | 114 · 30 | 14 · 400 | 7 · 1298 |
+| Mercury and Venus → the Uranus system | fixed | — | — | 754 · 10.6 | 356 · 30 | 25 · 400 | 10 · 1842 |
+| Mercury and Venus → the Neptune system | fixed | — | — | 1458 · 11.2 | 510 · 30 | 37 · 400 | 12 · 2000 |
+| Mercury and Venus → the Kuiper Belt | fixed | — | — | 2420 · 18.9 | 1560 · 30 | 50 · 400 | 15 · 2000 |
+| Mars → Earth and the Moon | cycle | 25.62 | 1.94 | 35 · 1.9 | 14 · 30 | 4 · 255 | 2 · 478 |
+| Mars → Mercury and Venus | cycle | 10.97 | 1.27 | 29 · 4.6 | 18 · 30 | 5 · 328 | 3 · 600 |
+| Mars → the Asteroid Belt | cycle | 38.17 | 1.71 | 76 · 6.5 | 23 · 30 | 6 · 380 | 3 · 660 |
+| Mars → the Jupiter system | cycle | 26.82 | 1.09 | 148 · 4.7 | 33 · 30 | 9 · 400 | 5 · 975 |
+| Mars → the Saturn system | fixed | — | — | 314 · 7 | 89 · 30 | 14 · 400 | 7 · 1273 |
+| Mars → the Uranus system | fixed | — | — | 796 · 9.7 | 227 · 30 | 25 · 400 | 10 · 1844 |
+| Mars → the Neptune system | fixed | — | — | 1513 · 9.4 | 370 · 30 | 37 · 400 | 12 · 2000 |
+| Mars → the Kuiper Belt | fixed | — | — | 2482 · 16.5 | 983 · 30 | 50 · 400 | 15 · 2000 |
+| the Asteroid Belt → Earth and the Moon | cycle | 15.33 | 2.08 | 63 · 10.5 | 46 · 30 | 7 · 400 | 4 · 740 |
+| the Asteroid Belt → Mercury and Venus | cycle | 8.52 | 1.80 | 56 · 13.6 | 41 · 30 | 6 · 387 | 4 · 718 |
+| the Asteroid Belt → Mars | cycle | 38.17 | 4.25 | 76 · 6.7 | 40 · 30 | 7 · 400 | 4 · 792 |
+| the Asteroid Belt → the Jupiter system | cycle | 90.22 | 3.98 | 190 · 4.9 | 34 · 30 | 8 · 400 | 5 · 898 |
+| the Asteroid Belt → the Saturn system | fixed | — | — | 368 · 9.4 | 113 · 30 | 14 · 400 | 7 · 1315 |
+| the Asteroid Belt → the Uranus system | fixed | — | — | 872 · 11.7 | 239 · 30 | 25 · 400 | 10 · 1847 |
+| the Asteroid Belt → the Neptune system | fixed | — | — | 1602 · 11.9 | 383 · 30 | 38 · 400 | 12 · 2000 |
+| the Asteroid Belt → the Kuiper Belt | fixed | — | — | 2593 · 14.1 | 819 · 30 | 51 · 400 | 15 · 2000 |
+| the Jupiter system → Earth and the Moon | cycle | 13.10 | 2.61 | 131 · 5.7 | 64 · 30 | 8 · 400 | 5 · 902 |
+| the Jupiter system → Mercury and Venus | cycle | 7.79 | 2.74 | 123 · 8.1 | 41 · 30 | 9 · 400 | 5 · 1017 |
+| the Jupiter system → Mars | cycle | 26.82 | 2.96 | 148 · 4.9 | 28 · 30 | 7 · 400 | 4 · 838 |
+| the Jupiter system → the Asteroid Belt | cycle | 90.22 | 5.43 | 193 · 5.9 | 74 · 29.8 | 11 · 400 | 6 · 1115 |
+| the Jupiter system → the Saturn system | fixed | — | — | 484 · 2.7 | 80 · 30 | 16 · 400 | 7 · 1396 |
+| the Jupiter system → the Uranus system | fixed | — | — | 1013 · 2.6 | 149 · 30 | 26 · 400 | 10 · 1876 |
+| the Jupiter system → the Neptune system | fixed | — | — | 1783 · 2.6 | 176 · 30 | 38 · 400 | 12 · 2000 |
+| the Jupiter system → the Kuiper Belt | fixed | — | — | 2799 · 5.5 | 396 · 30 | 50 · 400 | 15 · 2000 |
+| the Saturn system → Earth and the Moon | cycle | 12.42 | 6.21 | 293 · 6.5 | 70 · 30 | 14 · 400 | 6 · 1257 |
+| the Saturn system → Mercury and Venus | fixed | — | — | 280 · 8.8 | 73 · 30 | 14 · 400 | 7 · 1296 |
+| the Saturn system → Mars | fixed | — | — | 314 · 6.2 | 97 · 30 | 13 · 400 | 7 · 1288 |
+| the Saturn system → the Asteroid Belt | fixed | — | — | 368 · 7.2 | 110 · 30 | 14 · 400 | 7 · 1331 |
+| the Saturn system → the Jupiter system | fixed | — | — | 481 · 2.4 | 78 · 30 | 16 · 400 | 7 · 1399 |
+| the Saturn system → the Uranus system | fixed | — | — | 1298 · 1.7 | 170 · 30 | 27 · 400 | 10 · 1932 |
+| the Saturn system → the Neptune system | fixed | — | — | 2121 · 1.8 | 181 · 30 | 39 · 400 | 12 · 2000 |
+| the Saturn system → the Kuiper Belt | fixed | — | — | 3233 · 4 | 425 · 30 | 50 · 400 | 15 · 2000 |
+| the Uranus system → Earth and the Moon | cycle | 12.14 | 6.06 | 771 · 6.4 | 164 · 29.9 | 24 · 400 | 10 · 1873 |
+| the Uranus system → Mercury and Venus | fixed | — | — | 761 · 9.6 | 180 · 29.9 | 25 · 400 | 10 · 1839 |
+| the Uranus system → Mars | fixed | — | — | 808 · 6.8 | 176 · 30 | 25 · 400 | 10 · 1849 |
+| the Uranus system → the Asteroid Belt | fixed | — | — | 879 · 8.9 | 225 · 30 | 25 · 400 | 10 · 1858 |
+| the Uranus system → the Jupiter system | fixed | — | — | 1028 · 2.2 | 149 · 30 | 26 · 400 | 10 · 1869 |
+| the Uranus system → the Saturn system | fixed | — | — | 1324 · 1.5 | 161 · 30 | 27 · 400 | 10 · 1928 |
+| the Uranus system → the Neptune system | fixed | — | — | 2948 · 1.2 | 283 · 30 | 49 · 400 | 14 · 2000 |
+| the Uranus system → the Kuiper Belt | fixed | — | — | 4119 · 2.5 | 501 · 30 | 51 · 400 | 15 · 2000 |
+| the Neptune system → Earth and the Moon | cycle | 12.07 | 6.03 | 1473 · 7 | 227 · 30 | 38 · 400 | 12 · 2000 |
+| the Neptune system → Mercury and Venus | fixed | — | — | 1453 · 9.9 | 275 · 29.8 | 37 · 400 | 12 · 2000 |
+| the Neptune system → Mars | fixed | — | — | 1511 · 7.1 | 273 · 29.9 | 37 · 400 | 12 · 2000 |
+| the Neptune system → the Asteroid Belt | fixed | — | — | 1600 · 9.6 | 331 · 30 | 38 · 400 | 12 · 2000 |
+| the Neptune system → the Jupiter system | fixed | — | — | 1780 · 2.3 | 177 · 30 | 38 · 400 | 12 · 2000 |
+| the Neptune system → the Saturn system | fixed | — | — | 2117 · 1.6 | 174 · 30 | 39 · 400 | 12 · 2000 |
+| the Neptune system → the Uranus system | fixed | — | — | 2946 · 1.1 | 180 · 30 | 48 · 400 | 14 · 2000 |
+| the Neptune system → the Kuiper Belt | fixed | — | — | 5235 · 2.2 | 262 · 28.2 | 40 · 400 | 13 · 2000 |
+| the Kuiper Belt → Earth and the Moon | cycle | 12.05 | 6.02 | 2422 · 15.2 | 770 · 29.7 | 48 · 400 | 14 · 2000 |
+| the Kuiper Belt → Mercury and Venus | fixed | — | — | 2316 · 18.7 | 799 · 29.6 | 50 · 400 | 15 · 2000 |
+| the Kuiper Belt → Mars | fixed | — | — | 2384 · 14.7 | 634 · 29.9 | 51 · 400 | 15 · 2000 |
+| the Kuiper Belt → the Asteroid Belt | fixed | — | — | 2475 · 12.2 | 581 · 30 | 50 · 400 | 15 · 2000 |
+| the Kuiper Belt → the Jupiter system | fixed | — | — | 2682 · 4.4 | 392 · 30 | 50 · 400 | 15 · 2000 |
+| the Kuiper Belt → the Saturn system | fixed | — | — | 3091 · 3.1 | 426 · 30 | 50 · 400 | 15 · 2000 |
+| the Kuiper Belt → the Uranus system | fixed | — | — | 3988 · 1.8 | 456 · 30 | 51 · 400 | 15 · 2000 |
+| the Kuiper Belt → the Neptune system | fixed | — | — | 5116 · 1.7 | 364 · 30 | 42 · 400 | 13 · 2000 |
 
 The figures above are at the optimum (offset 0) for exact and cycle legs, the median for fixed ones.
 
@@ -774,643 +774,643 @@ The figures above are at the optimum (offset 0) for exact and cycle legs, the me
 
 Mean cycle 19.18 months, epoch 415 hundredths from 1800.01; the fitted cycle is within 0.48 months of each of the span's 148 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -10 | 5 · 8.9 | 3 · 30 | 1 · 290 | 1 · 519 |
-| -9 | 5 · 10.4 | 3 · 30 | 1 · 297 | 1 · 529 |
-| -8 | 5 · 13.5 | 3 · 30 | 1 · 307 | 1 · 543 |
-| -7 | 5 · 12.7 | 3 · 30 | 1 · 314 | 1 · 550 |
-| -6 | 5 · 10 | 3 · 30 | 1 · 318 | 1 · 550 |
-| -5 | 5 · 7.7 | 3 · 30 | 1 · 317 | 1 · 542 |
-| -4 | 5 · 5.8 | 3 · 30 | 1 · 311 | 1 · 526 |
-| -3 | 5 · 4.2 | 2 · 30 | 1 · 301 | 1 · 502 |
-| -2 | 5 · 2.9 | 2 · 30 | 1 · 286 | 1 · 469 |
-| -1 | 5 · 2 | 2 · 30 | 1 · 264 | 1 · 425 |
-| +0 | 5 · 1.8 | 1 · 30 | 1 · 234 | 1 · 369 |
-| +1 | 5 · 2 | 1 · 30 | 1 · 194 | 1 · 299 |
-| +2 | 5 · 2.9 | 1 · 30 | 1 · 148 | 1 · 236 |
-| +3 | 5 · 3.7 | 2 · 30 | 1 · 133 | 1 · 241 |
-| +4 | 5 · 4.5 | 3 · 30 | 1 · 156 | 1 · 294 |
-| +5 | 5 · 5.1 | 4 · 30 | 1 · 187 | 1 · 350 |
-| +6 | 5 · 5.7 | 5 · 30 | 1 · 215 | 1 · 399 |
-| +7 | 5 · 6.3 | 5 · 30 | 1 · 240 | 1 · 441 |
-| +8 | 5 · 6.8 | 5 · 30 | 1 · 261 | 1 · 476 |
-| +9 | 5 · 7.8 | 4 · 30 | 1 · 280 | 1 · 504 |
-| +10 | 5 · 8.7 | 3 · 30 | 1 · 288 | 1 · 517 |
+| -10 | 19 · 8.9 | 12 · 30 | 4 · 290 | 3 · 519 |
+| -9 | 19 · 10.4 | 11 · 30 | 5 · 297 | 3 · 529 |
+| -8 | 19 · 13.5 | 11 · 30 | 5 · 307 | 3 · 543 |
+| -7 | 19 · 12.7 | 11 · 30 | 5 · 314 | 3 · 550 |
+| -6 | 19 · 10 | 11 · 30 | 5 · 318 | 3 · 550 |
+| -5 | 19 · 7.7 | 11 · 30 | 5 · 317 | 3 · 542 |
+| -4 | 19 · 5.8 | 11 · 30 | 5 · 311 | 3 · 526 |
+| -3 | 19 · 4.2 | 10 · 30 | 5 · 301 | 3 · 502 |
+| -2 | 19 · 2.9 | 8 · 30 | 4 · 286 | 2 · 469 |
+| -1 | 19 · 2 | 7 · 30 | 4 · 264 | 2 · 425 |
+| +0 | 19 · 1.8 | 5 · 30 | 4 · 234 | 2 · 369 |
+| +1 | 19 · 2 | 3 · 30 | 3 · 194 | 2 · 299 |
+| +2 | 19 · 2.9 | 3 · 30 | 2 · 148 | 1 · 236 |
+| +3 | 19 · 3.7 | 6 · 30 | 2 · 133 | 1 · 241 |
+| +4 | 19 · 4.5 | 11 · 30 | 2 · 156 | 2 · 294 |
+| +5 | 19 · 5.1 | 16 · 30 | 3 · 187 | 2 · 350 |
+| +6 | 19 · 5.7 | 19 · 30 | 3 · 215 | 2 · 399 |
+| +7 | 19 · 6.3 | 19 · 30 | 4 · 240 | 2 · 441 |
+| +8 | 19 · 6.8 | 19 · 30 | 4 · 261 | 2 · 476 |
+| +9 | 19 · 7.8 | 15 · 30 | 4 · 280 | 3 · 504 |
+| +10 | 19 · 8.7 | 12 · 30 | 4 · 288 | 3 · 517 |
 
 ### Mercury and Venus → Mars: by months from the mean cycle's optimum
 
 Mean cycle 10.97 months, epoch 1055 hundredths from 1800.01; the fitted cycle is within 0.59 months of each of the span's 258 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -5 | 7 · 20.9 | 7 · 30 | 1 · 331 | 1 · 586 |
-| -4 | 7 · 22.5 | 5 · 30 | 1 · 352 | 1 · 617 |
-| -3 | 7 · 15.7 | 4 · 30 | 1 · 361 | 1 · 626 |
-| -2 | 7 · 10 | 4 · 30 | 1 · 358 | 1 · 613 |
-| -1 | 7 · 6 | 3 · 30 | 1 · 341 | 1 · 578 |
-| +0 | 7 · 4.6 | 3 · 30 | 1 · 309 | 1 · 519 |
-| +1 | 7 · 5.5 | 2 · 30 | 1 · 266 | 1 · 444 |
-| +2 | 7 · 8.3 | 3 · 30 | 1 · 227 | 1 · 386 |
-| +3 | 7 · 10.6 | 7 · 30 | 1 · 227 | 1 · 402 |
-| +4 | 7 · 12 | 7 · 30 | 1 · 263 | 1 · 470 |
-| +5 | 7 · 14.1 | 7 · 30 | 1 · 299 | 1 · 533 |
+| -5 | 29 · 20.9 | 29 · 30 | 5 · 331 | 3 · 586 |
+| -4 | 29 · 22.5 | 18 · 30 | 5 · 352 | 3 · 617 |
+| -3 | 29 · 15.7 | 17 · 30 | 6 · 361 | 3 · 626 |
+| -2 | 29 · 10 | 16 · 30 | 6 · 358 | 3 · 613 |
+| -1 | 29 · 6 | 13 · 30 | 5 · 341 | 3 · 578 |
+| +0 | 29 · 4.6 | 10 · 30 | 5 · 309 | 3 · 519 |
+| +1 | 29 · 5.5 | 9 · 30 | 4 · 266 | 2 · 444 |
+| +2 | 29 · 8.3 | 12 · 30 | 4 · 227 | 2 · 386 |
+| +3 | 29 · 10.6 | 27 · 30 | 4 · 227 | 2 · 402 |
+| +4 | 29 · 12 | 29 · 30 | 4 · 263 | 2 · 470 |
+| +5 | 29 · 14.1 | 29 · 30 | 5 · 299 | 3 · 533 |
 
 ### Mercury and Venus → the Asteroid Belt: by months from the mean cycle's optimum
 
 Mean cycle 8.52 months, epoch 569 hundredths from 1800.01; the fitted cycle is within 0.56 months of each of the span's 332 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -4 | 14 · 29.7 | 14 · 34.2 | 2 · 399 | 1 · 729 |
-| -3 | 14 · 31.2 | 12 · 34.5 | 2 · 400 | 1 · 771 |
-| -2 | 14 · 21.3 | 9 · 30 | 2 · 400 | 1 · 787 |
-| -1 | 14 · 14.4 | 8 · 30 | 2 · 400 | 1 · 769 |
-| +0 | 14 · 12.6 | 6 · 30 | 2 · 399 | 1 · 720 |
-| +1 | 14 · 13.8 | 7 · 30 | 1 · 380 | 1 · 654 |
-| +2 | 14 · 17.4 | 14 · 30 | 1 · 355 | 1 · 613 |
-| +3 | 14 · 20 | 14 · 30 | 1 · 363 | 1 · 633 |
-| +4 | 14 · 25.7 | 14 · 30.3 | 2 · 388 | 1 · 684 |
+| -4 | 56 · 29.7 | 56 · 34.2 | 6 · 399 | 4 · 729 |
+| -3 | 56 · 31.2 | 49 · 34.5 | 7 · 400 | 4 · 771 |
+| -2 | 56 · 21.3 | 35 · 30 | 7 · 400 | 4 · 787 |
+| -1 | 56 · 14.4 | 33 · 30 | 7 · 400 | 4 · 769 |
+| +0 | 56 · 12.6 | 23 · 30 | 7 · 399 | 4 · 720 |
+| +1 | 56 · 13.8 | 26 · 30 | 6 · 380 | 3 · 654 |
+| +2 | 56 · 17.4 | 56 · 30 | 5 · 355 | 3 · 613 |
+| +3 | 56 · 20 | 56 · 30 | 6 · 363 | 3 · 633 |
+| +4 | 56 · 25.7 | 56 · 30.3 | 6 · 388 | 4 · 684 |
 
 ### Mercury and Venus → the Jupiter system: by months from the mean cycle's optimum
 
 Mean cycle 7.79 months, epoch 527 hundredths from 1800.01; the fitted cycle is within 0.83 months of each of the span's 364 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -4 | 31 · 18.8 | 31 · 30.1 | 2 · 400 | 1 · 950 |
-| -3 | 31 · 23.6 | 31 · 30.6 | 2 · 400 | 1 · 984 |
-| -2 | 31 · 20.7 | 13 · 30.1 | 2 · 400 | 1 · 1015 |
-| -1 | 31 · 11.7 | 10 · 30 | 2 · 400 | 1 · 1015 |
-| +0 | 31 · 8.1 | 8 · 30 | 2 · 400 | 1 · 982 |
-| +1 | 31 · 8 | 9 · 30 | 2 · 400 | 1 · 933 |
-| +2 | 31 · 8.5 | 22 · 30 | 2 · 400 | 1 · 898 |
-| +3 | 31 · 10.7 | 31 · 30 | 2 · 400 | 1 · 904 |
-| +4 | 31 · 15.5 | 31 · 30 | 2 · 400 | 1 · 934 |
+| -4 | 123 · 18.8 | 123 · 30.1 | 9 · 400 | 5 · 950 |
+| -3 | 123 · 23.6 | 123 · 30.6 | 9 · 400 | 5 · 984 |
+| -2 | 123 · 20.7 | 53 · 30.1 | 10 · 400 | 5 · 1015 |
+| -1 | 123 · 11.7 | 40 · 30 | 10 · 400 | 5 · 1015 |
+| +0 | 123 · 8.1 | 31 · 30 | 9 · 400 | 5 · 982 |
+| +1 | 123 · 8 | 35 · 30 | 9 · 400 | 5 · 933 |
+| +2 | 123 · 8.5 | 87 · 30 | 8 · 400 | 5 · 898 |
+| +3 | 123 · 10.7 | 123 · 30 | 8 · 400 | 5 · 904 |
+| +4 | 123 · 15.5 | 123 · 30 | 9 · 400 | 5 · 934 |
 
 ### Mars → Earth and the Moon: by months from the mean cycle's optimum
 
 Mean cycle 25.62 months, epoch 2159 hundredths from 1800.01; the fitted cycle is within 1.94 months of each of the span's 111 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -13 | 9 · 5.7 | 5 · 30 | 1 · 380 | 1 · 641 |
-| -12 | 9 · 5.2 | 5 · 30 | 1 · 382 | 1 · 648 |
-| -11 | 9 · 4.9 | 5 · 30 | 1 · 385 | 1 · 659 |
-| -10 | 9 · 4.6 | 5 · 30 | 1 · 384 | 1 · 665 |
-| -9 | 9 · 4.3 | 6 · 30 | 1 · 381 | 1 · 666 |
-| -8 | 9 · 4 | 6 · 30 | 1 · 376 | 1 · 662 |
-| -7 | 9 · 3.7 | 7 · 30 | 1 · 368 | 1 · 654 |
-| -6 | 9 · 3.3 | 7 · 30 | 1 · 358 | 1 · 641 |
-| -5 | 9 · 3 | 7 · 30 | 1 · 345 | 1 · 624 |
-| -4 | 9 · 2.7 | 6 · 30 | 1 · 331 | 1 · 603 |
-| -3 | 9 · 2.4 | 5 · 30 | 1 · 315 | 1 · 578 |
-| -2 | 9 · 2.2 | 5 · 30 | 1 · 297 | 1 · 549 |
-| -1 | 9 · 2 | 4 · 30 | 1 · 277 | 1 · 515 |
-| +0 | 9 · 1.9 | 3 · 30 | 1 · 255 | 1 · 478 |
-| +1 | 9 · 2 | 3 · 30 | 1 · 232 | 1 · 437 |
-| +2 | 9 · 2.4 | 2 · 30 | 1 · 209 | 1 · 393 |
-| +3 | 9 · 3.3 | 2 · 30 | 1 · 189 | 1 · 350 |
-| +4 | 9 · 4.4 | 2 · 30 | 1 · 181 | 1 · 319 |
-| +5 | 9 · 5.5 | 2 · 30 | 1 · 198 | 1 · 318 |
-| +6 | 9 · 6.1 | 2 · 30 | 1 · 233 | 1 · 357 |
-| +7 | 9 · 6.5 | 3 · 30 | 1 · 269 | 1 · 414 |
-| +8 | 9 · 6.6 | 4 · 30 | 1 · 300 | 1 · 470 |
-| +9 | 9 · 6.5 | 4 · 30 | 1 · 325 | 1 · 518 |
-| +10 | 9 · 6.2 | 4 · 30 | 1 · 345 | 1 · 558 |
-| +11 | 9 · 6 | 4 · 30 | 1 · 360 | 1 · 591 |
-| +12 | 9 · 5.7 | 5 · 30 | 1 · 371 | 1 · 618 |
-| +13 | 9 · 5.3 | 5 · 30 | 1 · 373 | 1 · 625 |
+| -13 | 35 · 5.7 | 19 · 30 | 6 · 380 | 3 · 641 |
+| -12 | 35 · 5.2 | 19 · 30 | 6 · 382 | 3 · 648 |
+| -11 | 35 · 4.9 | 19 · 30 | 6 · 385 | 3 · 659 |
+| -10 | 35 · 4.6 | 19 · 30 | 6 · 384 | 3 · 665 |
+| -9 | 35 · 4.3 | 23 · 30 | 6 · 381 | 3 · 666 |
+| -8 | 35 · 4 | 26 · 30 | 6 · 376 | 3 · 662 |
+| -7 | 35 · 3.7 | 29 · 30 | 6 · 368 | 3 · 654 |
+| -6 | 35 · 3.3 | 29 · 30 | 6 · 358 | 3 · 641 |
+| -5 | 35 · 3 | 26 · 30 | 5 · 345 | 3 · 624 |
+| -4 | 35 · 2.7 | 24 · 30 | 5 · 331 | 3 · 603 |
+| -3 | 35 · 2.4 | 21 · 30 | 5 · 315 | 3 · 578 |
+| -2 | 35 · 2.2 | 19 · 30 | 5 · 297 | 3 · 549 |
+| -1 | 35 · 2 | 16 · 30 | 4 · 277 | 3 · 515 |
+| +0 | 35 · 1.9 | 14 · 30 | 4 · 255 | 2 · 478 |
+| +1 | 35 · 2 | 11 · 30 | 4 · 232 | 2 · 437 |
+| +2 | 35 · 2.4 | 9 · 30 | 3 · 209 | 2 · 393 |
+| +3 | 35 · 3.3 | 7 · 30 | 3 · 189 | 2 · 350 |
+| +4 | 35 · 4.4 | 6 · 30 | 3 · 181 | 2 · 319 |
+| +5 | 35 · 5.5 | 6 · 30 | 3 · 198 | 2 · 318 |
+| +6 | 35 · 6.1 | 8 · 30 | 4 · 233 | 2 · 357 |
+| +7 | 35 · 6.5 | 12 · 30 | 4 · 269 | 2 · 414 |
+| +8 | 35 · 6.6 | 15 · 30 | 5 · 300 | 2 · 470 |
+| +9 | 35 · 6.5 | 17 · 30 | 5 · 325 | 3 · 518 |
+| +10 | 35 · 6.2 | 18 · 30 | 5 · 345 | 3 · 558 |
+| +11 | 35 · 6 | 18 · 30 | 6 · 360 | 3 · 591 |
+| +12 | 35 · 5.7 | 18 · 30 | 6 · 371 | 3 · 618 |
+| +13 | 35 · 5.3 | 18 · 30 | 6 · 373 | 3 · 625 |
 
 ### Mars → Mercury and Venus: by months from the mean cycle's optimum
 
 Mean cycle 10.97 months, epoch 275 hundredths from 1800.01; the fitted cycle is within 1.27 months of each of the span's 258 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -5 | 7 · 7 | 5 · 30 | 1 · 301 | 1 · 460 |
-| -4 | 7 · 6.5 | 6 · 30 | 1 · 347 | 1 · 558 |
-| -3 | 7 · 5.8 | 7 · 30 | 1 · 361 | 1 · 606 |
-| -2 | 7 · 5.3 | 6 · 30 | 1 · 361 | 1 · 626 |
-| -1 | 7 · 4.9 | 5 · 30 | 1 · 349 | 1 · 624 |
-| +0 | 7 · 4.6 | 5 · 30 | 1 · 328 | 1 · 600 |
-| +1 | 7 · 4.9 | 4 · 30 | 1 · 300 | 1 · 559 |
-| +2 | 7 · 5.9 | 3 · 30 | 1 · 266 | 1 · 502 |
-| +3 | 7 · 7.3 | 2 · 30 | 1 · 233 | 1 · 438 |
-| +4 | 7 · 8.2 | 2 · 30 | 1 · 222 | 1 · 387 |
-| +5 | 7 · 7.5 | 3 · 30 | 1 · 252 | 1 · 394 |
+| -5 | 29 · 7 | 18 · 30 | 5 · 301 | 2 · 460 |
+| -4 | 29 · 6.5 | 26 · 30 | 5 · 347 | 3 · 558 |
+| -3 | 29 · 5.8 | 28 · 30 | 6 · 361 | 3 · 606 |
+| -2 | 29 · 5.3 | 25 · 30 | 6 · 361 | 3 · 626 |
+| -1 | 29 · 4.9 | 22 · 30 | 5 · 349 | 3 · 624 |
+| +0 | 29 · 4.6 | 18 · 30 | 5 · 328 | 3 · 600 |
+| +1 | 29 · 4.9 | 15 · 30 | 5 · 300 | 3 · 559 |
+| +2 | 29 · 5.9 | 12 · 30 | 4 · 266 | 3 · 502 |
+| +3 | 29 · 7.3 | 10 · 30 | 4 · 233 | 2 · 438 |
+| +4 | 29 · 8.2 | 9 · 30 | 3 · 222 | 2 · 387 |
+| +5 | 29 · 7.5 | 14 · 30 | 4 · 252 | 2 · 394 |
 
 ### Mars → the Asteroid Belt: by months from the mean cycle's optimum
 
 Mean cycle 38.17 months, epoch 3184 hundredths from 1800.01; the fitted cycle is within 1.71 months of each of the span's 74 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -19 | 19 · 19.5 | 18 · 30 | 2 · 400 | 1 · 817 |
-| -18 | 19 · 22 | 16 · 30 | 2 · 400 | 1 · 825 |
-| -17 | 19 · 22.6 | 11 · 30 | 2 · 400 | 1 · 840 |
-| -16 | 19 · 21.6 | 11 · 30 | 2 · 400 | 1 · 851 |
-| -15 | 19 · 20.1 | 11 · 30 | 2 · 400 | 1 · 860 |
-| -14 | 19 · 18.4 | 11 · 30 | 2 · 400 | 1 · 866 |
-| -13 | 19 · 16.8 | 10 · 30 | 2 · 400 | 1 · 870 |
-| -12 | 19 · 15.4 | 10 · 30 | 2 · 400 | 1 · 870 |
-| -11 | 19 · 14 | 10 · 30 | 2 · 400 | 1 · 868 |
-| -10 | 19 · 12.7 | 10 · 30 | 2 · 400 | 1 · 864 |
-| -9 | 19 · 11.6 | 10 · 30 | 2 · 400 | 1 · 856 |
-| -8 | 19 · 10.5 | 10 · 30 | 2 · 400 | 1 · 846 |
-| -7 | 19 · 9.5 | 10 · 30 | 2 · 400 | 1 · 833 |
-| -6 | 19 · 8.7 | 11 · 30 | 2 · 400 | 1 · 817 |
-| -5 | 19 · 8 | 10 · 30 | 2 · 400 | 1 · 798 |
-| -4 | 19 · 7.6 | 8 · 30 | 2 · 400 | 1 · 776 |
-| -3 | 19 · 7.3 | 8 · 30 | 2 · 400 | 1 · 752 |
-| -2 | 19 · 7.1 | 7 · 30 | 2 · 397 | 1 · 724 |
-| -1 | 19 · 6.7 | 6 · 30 | 2 · 390 | 1 · 693 |
-| +0 | 19 · 6.5 | 6 · 30 | 2 · 380 | 1 · 660 |
-| +1 | 19 · 6.6 | 5 · 30 | 1 · 366 | 1 · 624 |
-| +2 | 19 · 7 | 5 · 30 | 1 · 347 | 1 · 588 |
-| +3 | 19 · 7.5 | 5 · 30 | 1 · 326 | 1 · 553 |
-| +4 | 19 · 8.2 | 4 · 30 | 1 · 307 | 1 · 522 |
-| +5 | 19 · 8.9 | 5 · 30 | 1 · 292 | 1 · 500 |
-| +6 | 19 · 9.6 | 5 · 30 | 1 · 284 | 1 · 490 |
-| +7 | 19 · 10.1 | 7 · 30 | 1 · 282 | 1 · 492 |
-| +8 | 19 · 10.4 | 8 · 30 | 1 · 289 | 1 · 506 |
-| +9 | 19 · 10.7 | 11 · 30 | 1 · 301 | 1 · 530 |
-| +10 | 19 · 10.9 | 13 · 30 | 1 · 312 | 1 · 552 |
-| +11 | 19 · 11.2 | 15 · 30 | 1 · 330 | 1 · 584 |
-| +12 | 19 · 11.5 | 18 · 30 | 1 · 349 | 1 · 617 |
-| +13 | 19 · 11.8 | 19 · 30 | 1 · 366 | 1 · 650 |
-| +14 | 19 · 12.1 | 19 · 30 | 1 · 379 | 1 · 681 |
-| +15 | 19 · 12.5 | 19 · 30 | 2 · 389 | 1 · 711 |
-| +16 | 19 · 13.2 | 19 · 30 | 2 · 396 | 1 · 738 |
-| +17 | 19 · 14.3 | 19 · 30 | 2 · 400 | 1 · 763 |
-| +18 | 19 · 15.9 | 19 · 30 | 2 · 400 | 1 · 785 |
-| +19 | 19 · 17.9 | 19 · 30 | 2 · 400 | 1 · 799 |
+| -19 | 76 · 19.5 | 70 · 30 | 7 · 400 | 4 · 817 |
+| -18 | 76 · 22 | 65 · 30 | 7 · 400 | 4 · 825 |
+| -17 | 76 · 22.6 | 44 · 30 | 8 · 400 | 4 · 840 |
+| -16 | 76 · 21.6 | 43 · 30 | 8 · 400 | 4 · 851 |
+| -15 | 76 · 20.1 | 42 · 30 | 8 · 400 | 4 · 860 |
+| -14 | 76 · 18.4 | 42 · 30 | 8 · 400 | 4 · 866 |
+| -13 | 76 · 16.8 | 42 · 30 | 8 · 400 | 4 · 870 |
+| -12 | 76 · 15.4 | 41 · 30 | 8 · 400 | 4 · 870 |
+| -11 | 76 · 14 | 41 · 30 | 8 · 400 | 4 · 868 |
+| -10 | 76 · 12.7 | 40 · 30 | 8 · 400 | 4 · 864 |
+| -9 | 76 · 11.6 | 40 · 30 | 8 · 400 | 4 · 856 |
+| -8 | 76 · 10.5 | 40 · 30 | 8 · 400 | 4 · 846 |
+| -7 | 76 · 9.5 | 42 · 30 | 8 · 400 | 4 · 833 |
+| -6 | 76 · 8.7 | 44 · 30 | 8 · 400 | 4 · 817 |
+| -5 | 76 · 8 | 40 · 30 | 7 · 400 | 4 · 798 |
+| -4 | 76 · 7.6 | 34 · 30 | 7 · 400 | 4 · 776 |
+| -3 | 76 · 7.3 | 30 · 30 | 7 · 400 | 4 · 752 |
+| -2 | 76 · 7.1 | 28 · 30 | 7 · 397 | 4 · 724 |
+| -1 | 76 · 6.7 | 25 · 30 | 6 · 390 | 4 · 693 |
+| +0 | 76 · 6.5 | 23 · 30 | 6 · 380 | 3 · 660 |
+| +1 | 76 · 6.6 | 21 · 30 | 6 · 366 | 3 · 624 |
+| +2 | 76 · 7 | 19 · 30 | 5 · 347 | 3 · 588 |
+| +3 | 76 · 7.5 | 18 · 30 | 5 · 326 | 3 · 553 |
+| +4 | 76 · 8.2 | 18 · 30 | 5 · 307 | 3 · 522 |
+| +5 | 76 · 8.9 | 19 · 30 | 5 · 292 | 3 · 500 |
+| +6 | 76 · 9.6 | 22 · 30 | 4 · 284 | 3 · 490 |
+| +7 | 76 · 10.1 | 27 · 30 | 4 · 282 | 3 · 492 |
+| +8 | 76 · 10.4 | 34 · 30 | 4 · 289 | 3 · 506 |
+| +9 | 76 · 10.7 | 43 · 30 | 5 · 301 | 3 · 530 |
+| +10 | 76 · 10.9 | 50 · 30 | 5 · 312 | 3 · 552 |
+| +11 | 76 · 11.2 | 61 · 30 | 5 · 330 | 3 · 584 |
+| +12 | 76 · 11.5 | 73 · 30 | 5 · 349 | 3 · 617 |
+| +13 | 76 · 11.8 | 76 · 30 | 6 · 366 | 3 · 650 |
+| +14 | 76 · 12.1 | 76 · 30 | 6 · 379 | 4 · 681 |
+| +15 | 76 · 12.5 | 76 · 30 | 6 · 389 | 4 · 711 |
+| +16 | 76 · 13.2 | 76 · 30 | 7 · 396 | 4 · 738 |
+| +17 | 76 · 14.3 | 76 · 30 | 7 · 400 | 4 · 763 |
+| +18 | 76 · 15.9 | 76 · 30 | 7 · 400 | 4 · 785 |
+| +19 | 76 · 17.9 | 76 · 30 | 7 · 400 | 4 · 799 |
 
 ### Mars → the Jupiter system: by months from the mean cycle's optimum
 
 Mean cycle 26.82 months, epoch 1778 hundredths from 1800.01; the fitted cycle is within 1.09 months of each of the span's 106 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -13 | 37 · 13.1 | 16 · 30 | 2 · 400 | 1 · 990 |
-| -12 | 37 · 15.2 | 15 · 30 | 2 · 400 | 1 · 1018 |
-| -11 | 37 · 17.5 | 14 · 30 | 3 · 400 | 1 · 1042 |
-| -10 | 37 · 19.3 | 14 · 30 | 3 · 400 | 1 · 1060 |
-| -9 | 37 · 17.7 | 13 · 30 | 3 · 400 | 1 · 1075 |
-| -8 | 37 · 15.6 | 13 · 30 | 3 · 400 | 1 · 1084 |
-| -7 | 37 · 13.6 | 13 · 30 | 3 · 400 | 1 · 1088 |
-| -6 | 37 · 11.8 | 12 · 30 | 3 · 400 | 1 · 1086 |
-| -5 | 37 · 10 | 12 · 30 | 3 · 400 | 1 · 1080 |
-| -4 | 37 · 8.3 | 11 · 30 | 3 · 400 | 1 · 1068 |
-| -3 | 37 · 6.8 | 10 · 30 | 3 · 400 | 1 · 1052 |
-| -2 | 37 · 5.7 | 10 · 30 | 3 · 400 | 1 · 1030 |
-| -1 | 37 · 4.9 | 9 · 30 | 2 · 400 | 1 · 1005 |
-| +0 | 37 · 4.7 | 8 · 30 | 2 · 400 | 1 · 975 |
-| +1 | 37 · 4.8 | 8 · 30 | 2 · 400 | 1 · 943 |
-| +2 | 37 · 5 | 7 · 30 | 2 · 400 | 1 · 910 |
-| +3 | 37 · 5.2 | 7 · 30 | 2 · 400 | 1 · 876 |
-| +4 | 37 · 5.4 | 7 · 30 | 2 · 400 | 1 · 846 |
-| +5 | 37 · 5.5 | 8 · 30 | 2 · 400 | 1 · 822 |
-| +6 | 37 · 5.7 | 10 · 30 | 2 · 400 | 1 · 809 |
-| +7 | 37 · 5.8 | 13 · 30 | 2 · 400 | 1 · 807 |
-| +8 | 37 · 5.9 | 17 · 30 | 2 · 400 | 1 · 818 |
-| +9 | 37 · 6.1 | 23 · 30 | 2 · 400 | 1 · 840 |
-| +10 | 37 · 7 | 30 · 30 | 2 · 400 | 1 · 868 |
-| +11 | 37 · 8.2 | 36 · 30 | 2 · 400 | 1 · 899 |
-| +12 | 37 · 10 | 37 · 30 | 2 · 400 | 1 · 932 |
-| +13 | 37 · 11.4 | 29 · 30 | 2 · 400 | 1 · 962 |
+| -13 | 148 · 13.1 | 65 · 30 | 9 · 400 | 5 · 990 |
+| -12 | 148 · 15.2 | 61 · 30 | 10 · 400 | 5 · 1018 |
+| -11 | 148 · 17.5 | 58 · 30 | 10 · 400 | 5 · 1042 |
+| -10 | 148 · 19.3 | 56 · 30 | 10 · 400 | 5 · 1060 |
+| -9 | 148 · 17.7 | 54 · 30 | 11 · 400 | 6 · 1075 |
+| -8 | 148 · 15.6 | 52 · 30 | 11 · 400 | 6 · 1084 |
+| -7 | 148 · 13.6 | 50 · 30 | 11 · 400 | 6 · 1088 |
+| -6 | 148 · 11.8 | 49 · 30 | 11 · 400 | 6 · 1086 |
+| -5 | 148 · 10 | 47 · 30 | 11 · 400 | 6 · 1080 |
+| -4 | 148 · 8.3 | 44 · 30 | 11 · 400 | 6 · 1068 |
+| -3 | 148 · 6.8 | 41 · 30 | 10 · 400 | 5 · 1052 |
+| -2 | 148 · 5.7 | 38 · 30 | 10 · 400 | 5 · 1030 |
+| -1 | 148 · 4.9 | 35 · 30 | 10 · 400 | 5 · 1005 |
+| +0 | 148 · 4.7 | 33 · 30 | 9 · 400 | 5 · 975 |
+| +1 | 148 · 4.8 | 30 · 30 | 9 · 400 | 5 · 943 |
+| +2 | 148 · 5 | 29 · 30 | 9 · 400 | 5 · 910 |
+| +3 | 148 · 5.2 | 28 · 30 | 8 · 400 | 5 · 876 |
+| +4 | 148 · 5.4 | 29 · 30 | 8 · 400 | 4 · 846 |
+| +5 | 148 · 5.5 | 33 · 30 | 8 · 400 | 4 · 822 |
+| +6 | 148 · 5.7 | 39 · 30 | 7 · 400 | 4 · 809 |
+| +7 | 148 · 5.8 | 51 · 30 | 7 · 400 | 4 · 807 |
+| +8 | 148 · 5.9 | 69 · 30 | 7 · 400 | 4 · 818 |
+| +9 | 148 · 6.1 | 92 · 30 | 8 · 400 | 4 · 840 |
+| +10 | 148 · 7 | 118 · 30 | 8 · 400 | 4 · 868 |
+| +11 | 148 · 8.2 | 144 · 30 | 8 · 400 | 5 · 899 |
+| +12 | 148 · 10 | 148 · 30 | 9 · 400 | 5 · 932 |
+| +13 | 148 · 11.4 | 117 · 30 | 9 · 400 | 5 · 962 |
 
 ### the Asteroid Belt → Earth and the Moon: by months from the mean cycle's optimum
 
 Mean cycle 15.33 months, epoch 159 hundredths from 1800.01; the fitted cycle is within 2.08 months of each of the span's 185 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -8 | 16 · 11.5 | 5 · 30 | 1 · 377 | 1 · 691 |
-| -7 | 16 · 11.6 | 5 · 30 | 1 · 363 | 1 · 666 |
-| -6 | 16 · 11.4 | 6 · 30 | 1 · 339 | 1 · 617 |
-| -5 | 16 · 11.2 | 8 · 30 | 1 · 326 | 1 · 578 |
-| -4 | 16 · 11.1 | 11 · 30 | 1 · 332 | 1 · 563 |
-| -3 | 16 · 10.9 | 13 · 30 | 1 · 359 | 1 · 585 |
-| -2 | 16 · 10.8 | 13 · 30 | 2 · 387 | 1 · 634 |
-| -1 | 16 · 10.6 | 12 · 30 | 2 · 399 | 1 · 690 |
-| +0 | 16 · 10.5 | 12 · 30 | 2 · 400 | 1 · 740 |
-| +1 | 16 · 10.4 | 11 · 30 | 2 · 400 | 1 · 777 |
-| +2 | 16 · 10.5 | 10 · 30 | 2 · 400 | 1 · 800 |
-| +3 | 16 · 10.6 | 9 · 30 | 2 · 400 | 1 · 809 |
-| +4 | 16 · 11 | 8 · 30 | 2 · 400 | 1 · 806 |
-| +5 | 16 · 11.3 | 7 · 30 | 2 · 400 | 1 · 790 |
-| +6 | 16 · 11.4 | 7 · 30 | 2 · 400 | 1 · 765 |
-| +7 | 16 · 11.7 | 6 · 30 | 2 · 395 | 1 · 727 |
-| +8 | 16 · 11.2 | 6 · 30 | 1 · 385 | 1 · 705 |
+| -8 | 63 · 11.5 | 22 · 30 | 6 · 377 | 4 · 691 |
+| -7 | 63 · 11.6 | 21 · 30 | 6 · 363 | 3 · 666 |
+| -6 | 63 · 11.4 | 23 · 30 | 5 · 339 | 3 · 617 |
+| -5 | 63 · 11.2 | 31 · 30 | 5 · 326 | 3 · 578 |
+| -4 | 63 · 11.1 | 43 · 30 | 5 · 332 | 3 · 563 |
+| -3 | 63 · 10.9 | 51 · 30 | 6 · 359 | 3 · 585 |
+| -2 | 63 · 10.8 | 53 · 30 | 6 · 387 | 3 · 634 |
+| -1 | 63 · 10.6 | 50 · 30 | 7 · 399 | 4 · 690 |
+| +0 | 63 · 10.5 | 46 · 30 | 7 · 400 | 4 · 740 |
+| +1 | 63 · 10.4 | 43 · 30 | 7 · 400 | 4 · 777 |
+| +2 | 63 · 10.5 | 39 · 30 | 7 · 400 | 4 · 800 |
+| +3 | 63 · 10.6 | 36 · 30 | 7 · 400 | 4 · 809 |
+| +4 | 63 · 11 | 33 · 30 | 7 · 400 | 4 · 806 |
+| +5 | 63 · 11.3 | 29 · 30 | 7 · 400 | 4 · 790 |
+| +6 | 63 · 11.4 | 26 · 30 | 7 · 400 | 4 · 765 |
+| +7 | 63 · 11.7 | 24 · 30 | 6 · 395 | 4 · 727 |
+| +8 | 63 · 11.2 | 22 · 30 | 6 · 385 | 4 · 705 |
 
 ### the Asteroid Belt → Mercury and Venus: by months from the mean cycle's optimum
 
 Mean cycle 8.52 months, epoch 682 hundredths from 1800.01; the fitted cycle is within 1.80 months of each of the span's 333 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -4 | 14 · 13.3 | 8 · 30 | 2 · 400 | 1 · 731 |
-| -3 | 14 · 13.8 | 7 · 30 | 2 · 400 | 1 · 774 |
-| -2 | 14 · 13.6 | 6 · 30 | 2 · 400 | 1 · 787 |
-| -1 | 14 · 13.6 | 7 · 30 | 2 · 400 | 1 · 766 |
-| +0 | 14 · 13.6 | 10 · 30 | 2 · 387 | 1 · 718 |
-| +1 | 14 · 13.6 | 11 · 30 | 1 · 361 | 1 · 660 |
-| +2 | 14 · 13.7 | 10 · 30 | 1 · 356 | 1 · 615 |
-| +3 | 14 · 13.8 | 9 · 30 | 2 · 385 | 1 · 627 |
-| +4 | 14 · 14.2 | 8 · 30 | 2 · 399 | 1 · 673 |
+| -4 | 56 · 13.3 | 31 · 30 | 7 · 400 | 4 · 731 |
+| -3 | 56 · 13.8 | 28 · 30 | 7 · 400 | 4 · 774 |
+| -2 | 56 · 13.6 | 25 · 30 | 7 · 400 | 4 · 787 |
+| -1 | 56 · 13.6 | 28 · 30 | 7 · 400 | 4 · 766 |
+| +0 | 56 · 13.6 | 41 · 30 | 6 · 387 | 4 · 718 |
+| +1 | 56 · 13.6 | 44 · 30 | 6 · 361 | 3 · 660 |
+| +2 | 56 · 13.7 | 40 · 30 | 6 · 356 | 3 · 615 |
+| +3 | 56 · 13.8 | 37 · 30 | 6 · 385 | 3 · 627 |
+| +4 | 56 · 14.2 | 34 · 30 | 7 · 399 | 3 · 673 |
 
 ### the Asteroid Belt → Mars: by months from the mean cycle's optimum
 
 Mean cycle 38.17 months, epoch 74 hundredths from 1800.01; the fitted cycle is within 4.25 months of each of the span's 74 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -19 | 19 · 9.2 | 10 · 30 | 2 · 397 | 1 · 705 |
-| -18 | 19 · 9 | 10 · 30 | 2 · 399 | 1 · 719 |
-| -17 | 19 · 8.8 | 10 · 30 | 2 · 400 | 1 · 747 |
-| -16 | 19 · 8.7 | 10 · 30 | 2 · 400 | 1 · 773 |
-| -15 | 19 · 8.5 | 10 · 30 | 2 · 400 | 1 · 795 |
-| -14 | 19 · 8.4 | 11 · 30 | 2 · 400 | 1 · 815 |
-| -13 | 19 · 8.3 | 13 · 30 | 2 · 400 | 1 · 831 |
-| -12 | 19 · 8.1 | 14 · 30 | 2 · 400 | 1 · 844 |
-| -11 | 19 · 8 | 14 · 30 | 2 · 400 | 1 · 855 |
-| -10 | 19 · 7.9 | 15 · 30 | 2 · 400 | 1 · 862 |
-| -9 | 19 · 7.8 | 16 · 30 | 2 · 400 | 1 · 867 |
-| -8 | 19 · 7.7 | 16 · 30 | 2 · 400 | 1 · 869 |
-| -7 | 19 · 7.6 | 15 · 30 | 2 · 400 | 1 · 869 |
-| -6 | 19 · 7.6 | 15 · 30 | 2 · 400 | 1 · 865 |
-| -5 | 19 · 7.4 | 14 · 30 | 2 · 400 | 1 · 859 |
-| -4 | 19 · 7.3 | 13 · 30 | 2 · 400 | 1 · 851 |
-| -3 | 19 · 7.1 | 12 · 30 | 2 · 400 | 1 · 840 |
-| -2 | 19 · 6.9 | 12 · 30 | 2 · 400 | 1 · 826 |
-| -1 | 19 · 6.7 | 11 · 30 | 2 · 400 | 1 · 810 |
-| +0 | 19 · 6.7 | 10 · 30 | 2 · 400 | 1 · 792 |
-| +1 | 19 · 6.6 | 9 · 30 | 2 · 399 | 1 · 771 |
-| +2 | 19 · 6.7 | 9 · 30 | 2 · 395 | 1 · 747 |
-| +3 | 19 · 6.8 | 8 · 30 | 2 · 388 | 1 · 721 |
-| +4 | 19 · 7.2 | 7 · 30 | 1 · 378 | 1 · 693 |
-| +5 | 19 · 7.6 | 7 · 30 | 1 · 365 | 1 · 664 |
-| +6 | 19 · 8.2 | 6 · 30 | 1 · 347 | 1 · 632 |
-| +7 | 19 · 8.8 | 6 · 30 | 1 · 329 | 1 · 600 |
-| +8 | 19 · 9.1 | 5 · 30 | 1 · 313 | 1 · 567 |
-| +9 | 19 · 9.5 | 5 · 30 | 1 · 298 | 1 · 537 |
-| +10 | 19 · 9.8 | 5 · 30 | 1 · 288 | 1 · 512 |
-| +11 | 19 · 10.2 | 5 · 30 | 1 · 284 | 1 · 496 |
-| +12 | 19 · 10.2 | 5 · 30 | 1 · 287 | 1 · 491 |
-| +13 | 19 · 10.2 | 6 · 30 | 1 · 297 | 1 · 498 |
-| +14 | 19 · 10 | 7 · 30 | 1 · 314 | 1 · 518 |
-| +15 | 19 · 9.9 | 8 · 30 | 1 · 335 | 1 · 547 |
-| +16 | 19 · 9.8 | 9 · 30 | 1 · 357 | 1 · 582 |
-| +17 | 19 · 9.4 | 10 · 30 | 1 · 370 | 1 · 614 |
-| +18 | 19 · 9.3 | 10 · 30 | 2 · 384 | 1 · 650 |
-| +19 | 19 · 8.8 | 10 · 30 | 2 · 391 | 1 · 671 |
+| -19 | 76 · 9.2 | 41 · 30 | 7 · 397 | 4 · 705 |
+| -18 | 76 · 9 | 40 · 30 | 7 · 399 | 4 · 719 |
+| -17 | 76 · 8.8 | 41 · 30 | 7 · 400 | 4 · 747 |
+| -16 | 76 · 8.7 | 41 · 30 | 7 · 400 | 4 · 773 |
+| -15 | 76 · 8.5 | 42 · 30 | 7 · 400 | 4 · 795 |
+| -14 | 76 · 8.4 | 44 · 30 | 8 · 400 | 4 · 815 |
+| -13 | 76 · 8.3 | 54 · 30 | 8 · 400 | 4 · 831 |
+| -12 | 76 · 8.1 | 55 · 30 | 8 · 400 | 4 · 844 |
+| -11 | 76 · 8 | 58 · 30 | 8 · 400 | 4 · 855 |
+| -10 | 76 · 7.9 | 60 · 30 | 8 · 400 | 4 · 862 |
+| -9 | 76 · 7.8 | 64 · 30 | 8 · 400 | 4 · 867 |
+| -8 | 76 · 7.7 | 64 · 30 | 8 · 400 | 4 · 869 |
+| -7 | 76 · 7.6 | 61 · 30 | 8 · 400 | 4 · 869 |
+| -6 | 76 · 7.6 | 58 · 30 | 8 · 400 | 4 · 865 |
+| -5 | 76 · 7.4 | 55 · 30 | 8 · 400 | 4 · 859 |
+| -4 | 76 · 7.3 | 52 · 30 | 8 · 400 | 4 · 851 |
+| -3 | 76 · 7.1 | 49 · 30 | 7 · 400 | 4 · 840 |
+| -2 | 76 · 6.9 | 46 · 30 | 7 · 400 | 4 · 826 |
+| -1 | 76 · 6.7 | 43 · 30 | 7 · 400 | 4 · 810 |
+| +0 | 76 · 6.7 | 40 · 30 | 7 · 400 | 4 · 792 |
+| +1 | 76 · 6.6 | 37 · 30 | 7 · 399 | 4 · 771 |
+| +2 | 76 · 6.7 | 35 · 30 | 6 · 395 | 4 · 747 |
+| +3 | 76 · 6.8 | 32 · 30 | 6 · 388 | 4 · 721 |
+| +4 | 76 · 7.2 | 29 · 30 | 6 · 378 | 4 · 693 |
+| +5 | 76 · 7.6 | 27 · 30 | 6 · 365 | 3 · 664 |
+| +6 | 76 · 8.2 | 24 · 30 | 5 · 347 | 3 · 632 |
+| +7 | 76 · 8.8 | 22 · 30 | 5 · 329 | 3 · 600 |
+| +8 | 76 · 9.1 | 20 · 30 | 5 · 313 | 3 · 567 |
+| +9 | 76 · 9.5 | 19 · 30 | 5 · 298 | 3 · 537 |
+| +10 | 76 · 9.8 | 18 · 30 | 4 · 288 | 3 · 512 |
+| +11 | 76 · 10.2 | 18 · 30 | 4 · 284 | 3 · 496 |
+| +12 | 76 · 10.2 | 20 · 30 | 4 · 287 | 3 · 491 |
+| +13 | 76 · 10.2 | 23 · 30 | 5 · 297 | 3 · 498 |
+| +14 | 76 · 10 | 30 · 30 | 5 · 314 | 3 · 518 |
+| +15 | 76 · 9.9 | 34 · 30 | 5 · 335 | 3 · 547 |
+| +16 | 76 · 9.8 | 37 · 30 | 6 · 357 | 3 · 582 |
+| +17 | 76 · 9.4 | 40 · 30 | 6 · 370 | 3 · 614 |
+| +18 | 76 · 9.3 | 40 · 30 | 6 · 384 | 3 · 650 |
+| +19 | 76 · 8.8 | 40 · 30 | 6 · 391 | 3 · 671 |
 
 ### the Asteroid Belt → the Jupiter system: by months from the mean cycle's optimum
 
 Mean cycle 90.22 months, epoch 8257 hundredths from 1800.01; the fitted cycle is within 3.98 months of each of the span's 31 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -45 | 48 · 11.8 | 17 · 30 | 3 · 400 | 1 · 1106 |
-| -44 | 48 · 12.1 | 17 · 30 | 3 · 400 | 1 · 1114 |
-| -43 | 48 · 12.5 | 17 · 30 | 3 · 400 | 1 · 1123 |
-| -42 | 48 · 12.9 | 16 · 30 | 3 · 400 | 1 · 1131 |
-| -41 | 48 · 13.1 | 16 · 30 | 3 · 400 | 1 · 1139 |
-| -40 | 48 · 13.2 | 16 · 30 | 3 · 400 | 1 · 1146 |
-| -39 | 48 · 13.3 | 16 · 30 | 3 · 400 | 1 · 1153 |
-| -38 | 48 · 13.4 | 16 · 30 | 3 · 400 | 1 · 1158 |
-| -37 | 48 · 13.5 | 16 · 30 | 3 · 400 | 2 · 1163 |
-| -36 | 48 · 13.6 | 16 · 30 | 3 · 400 | 2 · 1168 |
-| -35 | 48 · 13.5 | 16 · 30 | 3 · 400 | 2 · 1174 |
-| -34 | 48 · 13.5 | 16 · 30 | 3 · 400 | 2 · 1178 |
-| -33 | 48 · 13.4 | 16 · 30 | 3 · 400 | 2 · 1180 |
-| -32 | 48 · 13.2 | 16 · 30 | 3 · 400 | 2 · 1182 |
-| -31 | 48 · 12.8 | 16 · 30 | 3 · 400 | 2 · 1183 |
-| -30 | 48 · 12.5 | 16 · 30 | 3 · 400 | 2 · 1184 |
-| -29 | 48 · 12.1 | 16 · 30 | 3 · 400 | 2 · 1184 |
-| -28 | 48 · 11.8 | 16 · 30 | 3 · 400 | 2 · 1183 |
-| -27 | 48 · 11.5 | 16 · 30 | 3 · 400 | 2 · 1182 |
-| -26 | 48 · 11.2 | 16 · 30 | 3 · 400 | 2 · 1180 |
-| -25 | 48 · 10.8 | 16 · 30 | 3 · 400 | 2 · 1177 |
-| -24 | 48 · 10.5 | 16 · 30 | 3 · 400 | 2 · 1174 |
-| -23 | 48 · 10.2 | 16 · 30 | 3 · 400 | 2 · 1170 |
-| -22 | 48 · 9.9 | 17 · 30 | 3 · 400 | 2 · 1165 |
-| -21 | 48 · 9.6 | 17 · 30 | 3 · 400 | 1 · 1160 |
-| -20 | 48 · 9.3 | 18 · 30 | 3 · 400 | 1 · 1154 |
-| -19 | 48 · 9.1 | 16 · 30 | 3 · 400 | 1 · 1148 |
-| -18 | 48 · 8.8 | 16 · 30 | 3 · 400 | 1 · 1140 |
-| -17 | 48 · 8.5 | 16 · 30 | 3 · 400 | 1 · 1132 |
-| -16 | 48 · 8.3 | 15 · 30 | 3 · 400 | 1 · 1124 |
-| -15 | 48 · 8 | 14 · 30 | 3 · 400 | 1 · 1115 |
-| -14 | 48 · 7.8 | 14 · 30 | 3 · 400 | 1 · 1105 |
-| -13 | 48 · 7.5 | 13 · 30 | 3 · 400 | 1 · 1094 |
-| -12 | 48 · 7.3 | 13 · 30 | 3 · 400 | 1 · 1083 |
-| -11 | 48 · 7.1 | 13 · 30 | 3 · 400 | 1 · 1071 |
-| -10 | 48 · 6.9 | 12 · 30 | 3 · 400 | 1 · 1058 |
-| -9 | 48 · 6.7 | 12 · 30 | 3 · 400 | 1 · 1045 |
-| -8 | 48 · 6.5 | 11 · 30 | 3 · 400 | 1 · 1031 |
-| -7 | 48 · 6.3 | 11 · 30 | 2 · 400 | 1 · 1017 |
-| -6 | 48 · 6.1 | 11 · 30 | 2 · 400 | 1 · 1001 |
-| -5 | 48 · 5.8 | 10 · 30 | 2 · 400 | 1 · 986 |
-| -4 | 48 · 5.6 | 10 · 30 | 2 · 400 | 1 · 969 |
-| -3 | 48 · 5.4 | 10 · 30 | 2 · 400 | 1 · 952 |
-| -2 | 48 · 5.2 | 9 · 30 | 2 · 400 | 1 · 935 |
-| -1 | 48 · 5 | 9 · 30 | 2 · 400 | 1 · 917 |
-| +0 | 48 · 4.9 | 8 · 30 | 2 · 400 | 1 · 898 |
-| +1 | 48 · 4.9 | 8 · 30 | 2 · 400 | 1 · 879 |
-| +2 | 48 · 4.9 | 8 · 30 | 2 · 400 | 1 · 860 |
-| +3 | 48 · 4.9 | 7 · 30 | 2 · 400 | 1 · 840 |
-| +4 | 48 · 4.9 | 7 · 30 | 2 · 400 | 1 · 820 |
-| +5 | 48 · 5 | 7 · 30 | 2 · 400 | 1 · 801 |
-| +6 | 48 · 5 | 7 · 30 | 2 · 400 | 1 · 781 |
-| +7 | 48 · 5.1 | 6 · 30 | 2 · 400 | 1 · 762 |
-| +8 | 48 · 5.2 | 6 · 30 | 2 · 398 | 1 · 744 |
-| +9 | 48 · 5.3 | 6 · 30 | 2 · 395 | 1 · 727 |
-| +10 | 48 · 5.4 | 6 · 30 | 2 · 392 | 1 · 712 |
-| +11 | 48 · 5.5 | 6 · 30 | 2 · 390 | 1 · 698 |
-| +12 | 48 · 5.6 | 6 · 30 | 2 · 387 | 1 · 686 |
-| +13 | 48 · 5.7 | 6 · 30 | 2 · 385 | 1 · 678 |
-| +14 | 48 · 5.8 | 6 · 30 | 2 · 384 | 1 · 672 |
-| +15 | 48 · 5.9 | 7 · 30 | 1 · 383 | 1 · 669 |
-| +16 | 48 · 5.9 | 7 · 30 | 1 · 382 | 1 · 670 |
-| +17 | 48 · 5.9 | 8 · 30 | 2 · 383 | 1 · 673 |
-| +18 | 48 · 6 | 8 · 29.8 | 2 · 384 | 1 · 680 |
-| +19 | 48 · 6 | 9 · 29.4 | 2 · 387 | 1 · 694 |
-| +20 | 48 · 6.1 | 10 · 29 | 2 · 389 | 1 · 707 |
-| +21 | 48 · 6.1 | 12 · 28.6 | 2 · 392 | 1 · 721 |
-| +22 | 48 · 6.2 | 13 · 28.3 | 2 · 394 | 1 · 737 |
-| +23 | 48 · 6.2 | 14 · 28.1 | 2 · 397 | 1 · 754 |
-| +24 | 48 · 6.2 | 15 · 28.2 | 2 · 399 | 1 · 772 |
-| +25 | 48 · 6.3 | 17 · 28.8 | 2 · 400 | 1 · 791 |
-| +26 | 48 · 6.3 | 17 · 29 | 2 · 400 | 1 · 810 |
-| +27 | 48 · 6.3 | 18 · 29.4 | 2 · 400 | 1 · 829 |
-| +28 | 48 · 6.3 | 18 · 29.7 | 2 · 400 | 1 · 848 |
-| +29 | 48 · 6.3 | 19 · 29.9 | 2 · 400 | 1 · 866 |
-| +30 | 48 · 6.4 | 19 · 29.9 | 2 · 400 | 1 · 885 |
-| +31 | 48 · 6.4 | 19 · 30 | 2 · 400 | 1 · 903 |
-| +32 | 48 · 6.5 | 18 · 30 | 2 · 400 | 1 · 921 |
-| +33 | 48 · 6.5 | 18 · 30 | 2 · 400 | 1 · 938 |
-| +34 | 48 · 6.7 | 17 · 30 | 2 · 400 | 1 · 955 |
-| +35 | 48 · 6.8 | 17 · 30 | 2 · 400 | 1 · 971 |
-| +36 | 48 · 7 | 17 · 30 | 2 · 400 | 1 · 987 |
-| +37 | 48 · 7.3 | 17 · 30 | 2 · 400 | 1 · 1002 |
-| +38 | 48 · 7.6 | 17 · 30 | 2 · 400 | 1 · 1017 |
-| +39 | 48 · 8 | 17 · 30 | 2 · 400 | 1 · 1031 |
-| +40 | 48 · 8.4 | 17 · 30 | 3 · 400 | 1 · 1044 |
-| +41 | 48 · 8.9 | 17 · 30 | 3 · 400 | 1 · 1057 |
-| +42 | 48 · 9.5 | 17 · 30 | 3 · 400 | 1 · 1069 |
-| +43 | 48 · 10.3 | 17 · 30 | 3 · 400 | 1 · 1081 |
-| +44 | 48 · 11 | 17 · 30 | 3 · 400 | 1 · 1092 |
-| +45 | 48 · 11.8 | 17 · 30 | 3 · 400 | 1 · 1103 |
+| -45 | 190 · 11.8 | 66 · 30 | 11 · 400 | 6 · 1106 |
+| -44 | 190 · 12.1 | 66 · 30 | 11 · 400 | 6 · 1114 |
+| -43 | 190 · 12.5 | 66 · 30 | 11 · 400 | 6 · 1123 |
+| -42 | 190 · 12.9 | 66 · 30 | 11 · 400 | 6 · 1131 |
+| -41 | 190 · 13.1 | 66 · 30 | 11 · 400 | 6 · 1139 |
+| -40 | 190 · 13.2 | 66 · 30 | 12 · 400 | 6 · 1146 |
+| -39 | 190 · 13.3 | 66 · 30 | 12 · 400 | 6 · 1153 |
+| -38 | 190 · 13.4 | 66 · 30 | 12 · 400 | 6 · 1158 |
+| -37 | 190 · 13.5 | 65 · 30 | 12 · 400 | 6 · 1163 |
+| -36 | 190 · 13.6 | 65 · 30 | 12 · 400 | 6 · 1168 |
+| -35 | 190 · 13.5 | 65 · 30 | 12 · 400 | 6 · 1174 |
+| -34 | 190 · 13.5 | 65 · 30 | 12 · 400 | 6 · 1178 |
+| -33 | 190 · 13.4 | 65 · 30 | 12 · 400 | 6 · 1180 |
+| -32 | 190 · 13.2 | 65 · 30 | 12 · 400 | 6 · 1182 |
+| -31 | 190 · 12.8 | 65 · 30 | 12 · 400 | 6 · 1183 |
+| -30 | 190 · 12.5 | 65 · 30 | 12 · 400 | 6 · 1184 |
+| -29 | 190 · 12.1 | 64 · 30 | 12 · 400 | 6 · 1184 |
+| -28 | 190 · 11.8 | 64 · 30 | 12 · 400 | 6 · 1183 |
+| -27 | 190 · 11.5 | 64 · 30 | 12 · 400 | 6 · 1182 |
+| -26 | 190 · 11.2 | 64 · 30 | 12 · 400 | 6 · 1180 |
+| -25 | 190 · 10.8 | 64 · 30 | 12 · 400 | 6 · 1177 |
+| -24 | 190 · 10.5 | 64 · 30 | 12 · 400 | 6 · 1174 |
+| -23 | 190 · 10.2 | 65 · 30 | 12 · 400 | 6 · 1170 |
+| -22 | 190 · 9.9 | 67 · 30 | 12 · 400 | 6 · 1165 |
+| -21 | 190 · 9.6 | 69 · 30 | 12 · 400 | 6 · 1160 |
+| -20 | 190 · 9.3 | 71 · 30 | 12 · 400 | 6 · 1154 |
+| -19 | 190 · 9.1 | 65 · 30 | 12 · 400 | 6 · 1148 |
+| -18 | 190 · 8.8 | 65 · 30 | 12 · 400 | 6 · 1140 |
+| -17 | 190 · 8.5 | 63 · 30 | 11 · 400 | 6 · 1132 |
+| -16 | 190 · 8.3 | 60 · 30 | 11 · 400 | 6 · 1124 |
+| -15 | 190 · 8 | 56 · 30 | 11 · 400 | 6 · 1115 |
+| -14 | 190 · 7.8 | 54 · 30 | 11 · 400 | 6 · 1105 |
+| -13 | 190 · 7.5 | 53 · 30 | 11 · 400 | 6 · 1094 |
+| -12 | 190 · 7.3 | 52 · 30 | 11 · 400 | 6 · 1083 |
+| -11 | 190 · 7.1 | 50 · 30 | 11 · 400 | 6 · 1071 |
+| -10 | 190 · 6.9 | 49 · 30 | 10 · 400 | 5 · 1058 |
+| -9 | 190 · 6.7 | 47 · 30 | 10 · 400 | 5 · 1045 |
+| -8 | 190 · 6.5 | 46 · 30 | 10 · 400 | 5 · 1031 |
+| -7 | 190 · 6.3 | 44 · 30 | 10 · 400 | 5 · 1017 |
+| -6 | 190 · 6.1 | 43 · 30 | 10 · 400 | 5 · 1001 |
+| -5 | 190 · 5.8 | 41 · 30 | 10 · 400 | 5 · 986 |
+| -4 | 190 · 5.6 | 40 · 30 | 9 · 400 | 5 · 969 |
+| -3 | 190 · 5.4 | 38 · 30 | 9 · 400 | 5 · 952 |
+| -2 | 190 · 5.2 | 37 · 30 | 9 · 400 | 5 · 935 |
+| -1 | 190 · 5 | 35 · 30 | 9 · 400 | 5 · 917 |
+| +0 | 190 · 4.9 | 34 · 30 | 8 · 400 | 5 · 898 |
+| +1 | 190 · 4.9 | 32 · 30 | 8 · 400 | 5 · 879 |
+| +2 | 190 · 4.9 | 31 · 30 | 8 · 400 | 4 · 860 |
+| +3 | 190 · 4.9 | 29 · 30 | 8 · 400 | 4 · 840 |
+| +4 | 190 · 4.9 | 28 · 30 | 8 · 400 | 4 · 820 |
+| +5 | 190 · 5 | 27 · 30 | 7 · 400 | 4 · 801 |
+| +6 | 190 · 5 | 26 · 30 | 7 · 400 | 4 · 781 |
+| +7 | 190 · 5.1 | 25 · 30 | 7 · 400 | 4 · 762 |
+| +8 | 190 · 5.2 | 25 · 30 | 7 · 398 | 4 · 744 |
+| +9 | 190 · 5.3 | 24 · 30 | 7 · 395 | 4 · 727 |
+| +10 | 190 · 5.4 | 24 · 30 | 6 · 392 | 4 · 712 |
+| +11 | 190 · 5.5 | 24 · 30 | 6 · 390 | 4 · 698 |
+| +12 | 190 · 5.6 | 24 · 30 | 6 · 387 | 4 · 686 |
+| +13 | 190 · 5.7 | 25 · 30 | 6 · 385 | 4 · 678 |
+| +14 | 190 · 5.8 | 26 · 30 | 6 · 384 | 3 · 672 |
+| +15 | 190 · 5.9 | 27 · 30 | 6 · 383 | 3 · 669 |
+| +16 | 190 · 5.9 | 28 · 30 | 6 · 382 | 3 · 670 |
+| +17 | 190 · 5.9 | 30 · 30 | 6 · 383 | 3 · 673 |
+| +18 | 190 · 6 | 33 · 29.8 | 6 · 384 | 4 · 680 |
+| +19 | 190 · 6 | 37 · 29.4 | 6 · 387 | 4 · 694 |
+| +20 | 190 · 6.1 | 42 · 29 | 6 · 389 | 4 · 707 |
+| +21 | 190 · 6.1 | 46 · 28.6 | 6 · 392 | 4 · 721 |
+| +22 | 190 · 6.2 | 51 · 28.3 | 7 · 394 | 4 · 737 |
+| +23 | 190 · 6.2 | 56 · 28.1 | 7 · 397 | 4 · 754 |
+| +24 | 190 · 6.2 | 62 · 28.2 | 7 · 399 | 4 · 772 |
+| +25 | 190 · 6.3 | 66 · 28.8 | 7 · 400 | 4 · 791 |
+| +26 | 190 · 6.3 | 70 · 29 | 7 · 400 | 4 · 810 |
+| +27 | 190 · 6.3 | 72 · 29.4 | 7 · 400 | 4 · 829 |
+| +28 | 190 · 6.3 | 73 · 29.7 | 8 · 400 | 4 · 848 |
+| +29 | 190 · 6.3 | 75 · 29.9 | 8 · 400 | 4 · 866 |
+| +30 | 190 · 6.4 | 76 · 29.9 | 8 · 400 | 5 · 885 |
+| +31 | 190 · 6.4 | 75 · 30 | 8 · 400 | 5 · 903 |
+| +32 | 190 · 6.5 | 72 · 30 | 8 · 400 | 5 · 921 |
+| +33 | 190 · 6.5 | 71 · 30 | 9 · 400 | 5 · 938 |
+| +34 | 190 · 6.7 | 70 · 30 | 9 · 400 | 5 · 955 |
+| +35 | 190 · 6.8 | 69 · 30 | 9 · 400 | 5 · 971 |
+| +36 | 190 · 7 | 68 · 30 | 9 · 400 | 5 · 987 |
+| +37 | 190 · 7.3 | 68 · 30 | 9 · 400 | 5 · 1002 |
+| +38 | 190 · 7.6 | 67 · 30 | 10 · 400 | 5 · 1017 |
+| +39 | 190 · 8 | 67 · 30 | 10 · 400 | 5 · 1031 |
+| +40 | 190 · 8.4 | 67 · 30 | 10 · 400 | 5 · 1044 |
+| +41 | 190 · 8.9 | 67 · 30 | 10 · 400 | 5 · 1057 |
+| +42 | 190 · 9.5 | 67 · 30 | 10 · 400 | 6 · 1069 |
+| +43 | 190 · 10.3 | 66 · 30 | 11 · 400 | 6 · 1081 |
+| +44 | 190 · 11 | 66 · 30 | 11 · 400 | 6 · 1092 |
+| +45 | 190 · 11.8 | 67 · 30 | 11 · 400 | 6 · 1103 |
 
 ### the Jupiter system → Earth and the Moon: by months from the mean cycle's optimum
 
 Mean cycle 13.10 months, epoch 311 hundredths from 1800.01; the fitted cycle is within 2.61 months of each of the span's 216 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -7 | 33 · 5.6 | 10 · 30 | 3 · 400 | 1 · 1036 |
-| -6 | 33 · 5.6 | 10 · 30 | 3 · 400 | 1 · 1036 |
-| -5 | 33 · 5.5 | 9 · 30 | 2 · 400 | 1 · 1044 |
-| -4 | 33 · 5.6 | 8 · 30 | 2 · 400 | 1 · 1037 |
-| -3 | 33 · 5.7 | 8 · 30 | 2 · 400 | 1 · 1016 |
-| -2 | 33 · 5.6 | 7 · 30 | 2 · 400 | 1 · 981 |
-| -1 | 33 · 5.5 | 12 · 30 | 2 · 400 | 1 · 941 |
-| +0 | 33 · 5.7 | 16 · 30 | 2 · 400 | 1 · 902 |
-| +1 | 33 · 5.6 | 15 · 30 | 2 · 400 | 1 · 873 |
-| +2 | 33 · 5.5 | 14 · 30 | 2 · 400 | 1 · 865 |
-| +3 | 33 · 5.5 | 13 · 30 | 2 · 400 | 1 · 883 |
-| +4 | 33 · 5.5 | 12 · 30 | 2 · 400 | 1 · 923 |
-| +5 | 33 · 5.5 | 12 · 30 | 2 · 400 | 1 · 969 |
-| +6 | 33 · 5.5 | 11 · 30 | 3 · 400 | 1 · 1008 |
-| +7 | 33 · 5.6 | 10 · 30 | 3 · 400 | 1 · 1023 |
+| -7 | 131 · 5.6 | 39 · 30 | 10 · 400 | 5 · 1036 |
+| -6 | 131 · 5.6 | 39 · 30 | 10 · 400 | 5 · 1036 |
+| -5 | 131 · 5.5 | 36 · 30 | 10 · 400 | 5 · 1044 |
+| -4 | 131 · 5.6 | 33 · 30 | 10 · 400 | 5 · 1037 |
+| -3 | 131 · 5.7 | 30 · 30 | 9 · 400 | 5 · 1016 |
+| -2 | 131 · 5.6 | 28 · 30 | 9 · 400 | 5 · 981 |
+| -1 | 131 · 5.5 | 47 · 30 | 8 · 400 | 5 · 941 |
+| +0 | 131 · 5.7 | 64 · 30 | 8 · 400 | 5 · 902 |
+| +1 | 131 · 5.6 | 61 · 30 | 8 · 400 | 5 · 873 |
+| +2 | 131 · 5.5 | 57 · 30 | 8 · 400 | 4 · 865 |
+| +3 | 131 · 5.5 | 53 · 30 | 9 · 400 | 5 · 883 |
+| +4 | 131 · 5.5 | 50 · 30 | 9 · 400 | 5 · 923 |
+| +5 | 131 · 5.5 | 46 · 30 | 10 · 400 | 5 · 969 |
+| +6 | 131 · 5.5 | 43 · 30 | 10 · 400 | 5 · 1008 |
+| +7 | 131 · 5.6 | 41 · 30 | 10 · 400 | 5 · 1023 |
 
 ### the Jupiter system → Mercury and Venus: by months from the mean cycle's optimum
 
 Mean cycle 7.79 months, epoch 34 hundredths from 1800.01; the fitted cycle is within 2.74 months of each of the span's 363 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -4 | 31 · 8.1 | 10 · 30 | 2 · 400 | 1 · 891 |
-| -3 | 31 · 8 | 9 · 30 | 2 · 400 | 1 · 913 |
-| -2 | 31 · 8 | 8 · 30 | 2 · 400 | 1 · 962 |
-| -1 | 31 · 8 | 8 · 30 | 2 · 400 | 1 · 1004 |
-| +0 | 31 · 8.1 | 10 · 30 | 2 · 400 | 1 · 1017 |
-| +1 | 31 · 8.1 | 13 · 30 | 2 · 400 | 1 · 999 |
-| +2 | 31 · 8 | 12 · 30 | 2 · 400 | 1 · 958 |
-| +3 | 31 · 8 | 11 · 30 | 2 · 400 | 1 · 915 |
-| +4 | 31 · 8.1 | 10 · 30 | 2 · 400 | 1 · 892 |
+| -4 | 123 · 8.1 | 39 · 30 | 9 · 400 | 5 · 891 |
+| -3 | 123 · 8 | 37 · 30 | 9 · 400 | 5 · 913 |
+| -2 | 123 · 8 | 33 · 30 | 10 · 400 | 5 · 962 |
+| -1 | 123 · 8 | 32 · 30 | 10 · 400 | 5 · 1004 |
+| +0 | 123 · 8.1 | 41 · 30 | 9 · 400 | 5 · 1017 |
+| +1 | 123 · 8.1 | 50 · 30 | 9 · 400 | 5 · 999 |
+| +2 | 123 · 8 | 47 · 30 | 9 · 400 | 5 · 958 |
+| +3 | 123 · 8 | 43 · 30 | 8 · 400 | 5 · 915 |
+| +4 | 123 · 8.1 | 40 · 30 | 8 · 400 | 5 · 892 |
 
 ### the Jupiter system → Mars: by months from the mean cycle's optimum
 
 Mean cycle 26.82 months, epoch 1500 hundredths from 1800.01; the fitted cycle is within 2.96 months of each of the span's 105 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -13 | 37 · 5.3 | 15 · 30 | 3 · 400 | 1 · 1082 |
-| -12 | 37 · 5 | 15 · 30 | 3 · 400 | 1 · 1087 |
-| -11 | 37 · 4.9 | 14 · 30 | 3 · 400 | 1 · 1087 |
-| -10 | 37 · 4.9 | 13 · 30 | 3 · 400 | 1 · 1082 |
-| -9 | 37 · 4.9 | 12 · 30 | 3 · 400 | 1 · 1072 |
-| -8 | 37 · 4.9 | 11 · 30 | 2 · 400 | 1 · 1057 |
-| -7 | 37 · 4.9 | 11 · 30 | 2 · 400 | 1 · 1038 |
-| -6 | 37 · 4.9 | 10 · 30 | 2 · 400 | 1 · 1015 |
-| -5 | 37 · 4.9 | 9 · 30 | 2 · 400 | 1 · 989 |
-| -4 | 37 · 5.1 | 9 · 30 | 2 · 400 | 1 · 959 |
-| -3 | 37 · 5.1 | 8 · 30 | 2 · 400 | 1 · 928 |
-| -2 | 37 · 4.8 | 8 · 30 | 2 · 400 | 1 · 896 |
-| -1 | 37 · 4.9 | 7 · 30 | 2 · 400 | 1 · 865 |
-| +0 | 37 · 4.9 | 7 · 30 | 2 · 400 | 1 · 838 |
-| +1 | 37 · 4.9 | 7 · 30 | 2 · 400 | 1 · 818 |
-| +2 | 37 · 4.9 | 9 · 30 | 2 · 400 | 1 · 807 |
-| +3 | 37 · 4.9 | 11 · 30 | 2 · 400 | 1 · 810 |
-| +4 | 37 · 5 | 12 · 30 | 2 · 400 | 1 · 824 |
-| +5 | 37 · 4.9 | 13 · 30 | 2 · 400 | 1 · 849 |
-| +6 | 37 · 5 | 14 · 30 | 2 · 400 | 1 · 881 |
-| +7 | 37 · 5 | 19 · 30 | 2 · 400 | 1 · 915 |
-| +8 | 37 · 4.9 | 20 · 30 | 2 · 400 | 1 · 948 |
-| +9 | 37 · 4.9 | 19 · 30 | 2 · 400 | 1 · 981 |
-| +10 | 37 · 4.9 | 19 · 30 | 3 · 400 | 1 · 1011 |
-| +11 | 37 · 5 | 18 · 30 | 3 · 400 | 1 · 1037 |
-| +12 | 37 · 5.1 | 17 · 30 | 3 · 400 | 1 · 1057 |
-| +13 | 37 · 5.3 | 16 · 30 | 3 · 400 | 1 · 1071 |
+| -13 | 148 · 5.3 | 62 · 30 | 11 · 400 | 6 · 1082 |
+| -12 | 148 · 5 | 58 · 30 | 11 · 400 | 6 · 1087 |
+| -11 | 148 · 4.9 | 55 · 30 | 11 · 400 | 6 · 1087 |
+| -10 | 148 · 4.9 | 52 · 30 | 10 · 400 | 6 · 1082 |
+| -9 | 148 · 4.9 | 49 · 30 | 10 · 400 | 6 · 1072 |
+| -8 | 148 · 4.9 | 46 · 30 | 10 · 400 | 5 · 1057 |
+| -7 | 148 · 4.9 | 43 · 30 | 10 · 400 | 5 · 1038 |
+| -6 | 148 · 4.9 | 40 · 30 | 9 · 400 | 5 · 1015 |
+| -5 | 148 · 4.9 | 37 · 30 | 9 · 400 | 5 · 989 |
+| -4 | 148 · 5.1 | 35 · 30 | 9 · 400 | 5 · 959 |
+| -3 | 148 · 5.1 | 32 · 30 | 8 · 400 | 5 · 928 |
+| -2 | 148 · 4.8 | 30 · 30 | 8 · 400 | 5 · 896 |
+| -1 | 148 · 4.9 | 29 · 30 | 8 · 400 | 4 · 865 |
+| +0 | 148 · 4.9 | 28 · 30 | 7 · 400 | 4 · 838 |
+| +1 | 148 · 4.9 | 29 · 30 | 7 · 400 | 4 · 818 |
+| +2 | 148 · 4.9 | 35 · 30 | 7 · 400 | 4 · 807 |
+| +3 | 148 · 4.9 | 43 · 30 | 7 · 400 | 4 · 810 |
+| +4 | 148 · 5 | 49 · 30 | 8 · 400 | 4 · 824 |
+| +5 | 148 · 4.9 | 52 · 30 | 8 · 400 | 4 · 849 |
+| +6 | 148 · 5 | 55 · 30 | 9 · 400 | 5 · 881 |
+| +7 | 148 · 5 | 74 · 30 | 9 · 400 | 5 · 915 |
+| +8 | 148 · 4.9 | 80 · 30 | 9 · 400 | 5 · 948 |
+| +9 | 148 · 4.9 | 78 · 30 | 10 · 400 | 5 · 981 |
+| +10 | 148 · 4.9 | 74 · 30 | 10 · 400 | 5 · 1011 |
+| +11 | 148 · 5 | 71 · 30 | 10 · 400 | 5 · 1037 |
+| +12 | 148 · 5.1 | 68 · 30 | 11 · 400 | 5 · 1057 |
+| +13 | 148 · 5.3 | 65 · 30 | 11 · 400 | 6 · 1071 |
 
 ### the Jupiter system → the Asteroid Belt: by months from the mean cycle's optimum
 
 Mean cycle 90.22 months, epoch 1064 hundredths from 1800.01; the fitted cycle is within 5.43 months of each of the span's 31 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -45 | 48 · 5.9 | 12 · 30 | 2 · 400 | 1 · 874 |
-| -44 | 48 · 5.8 | 13 · 30 | 2 · 400 | 1 · 896 |
-| -43 | 48 · 5.8 | 13 · 30 | 2 · 400 | 1 · 915 |
-| -42 | 48 · 5.8 | 14 · 30 | 2 · 400 | 1 · 933 |
-| -41 | 48 · 5.8 | 15 · 30 | 2 · 400 | 1 · 951 |
-| -40 | 48 · 5.8 | 15 · 30 | 2 · 400 | 1 · 968 |
-| -39 | 48 · 5.8 | 16 · 30 | 2 · 400 | 1 · 985 |
-| -38 | 48 · 5.8 | 17 · 30 | 2 · 400 | 1 · 1001 |
-| -37 | 48 · 5.8 | 17 · 30 | 3 · 400 | 1 · 1016 |
-| -36 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1031 |
-| -35 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1045 |
-| -34 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1058 |
-| -33 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1071 |
-| -32 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1083 |
-| -31 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1094 |
-| -30 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1105 |
-| -29 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1114 |
-| -28 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1124 |
-| -27 | 48 · 5.8 | 16 · 30 | 3 · 400 | 1 · 1132 |
-| -26 | 48 · 5.9 | 16 · 30 | 3 · 400 | 1 · 1140 |
-| -25 | 48 · 5.9 | 16 · 30 | 3 · 400 | 1 · 1147 |
-| -24 | 48 · 5.9 | 16 · 30 | 3 · 400 | 1 · 1154 |
-| -23 | 48 · 5.9 | 16 · 30 | 3 · 400 | 1 · 1159 |
-| -22 | 48 · 5.9 | 16 · 30 | 3 · 400 | 2 · 1165 |
-| -21 | 48 · 5.9 | 16 · 30 | 3 · 400 | 2 · 1169 |
-| -20 | 48 · 5.9 | 16 · 30 | 3 · 400 | 2 · 1173 |
-| -19 | 48 · 5.9 | 16 · 30 | 3 · 400 | 2 · 1176 |
-| -18 | 48 · 5.9 | 16 · 30 | 3 · 400 | 2 · 1178 |
-| -17 | 48 · 5.9 | 16 · 30 | 3 · 400 | 2 · 1180 |
-| -16 | 48 · 5.9 | 17 · 30 | 3 · 400 | 2 · 1184 |
-| -15 | 48 · 5.9 | 17 · 30 | 3 · 400 | 2 · 1184 |
-| -14 | 48 · 6 | 17 · 30 | 3 · 400 | 2 · 1184 |
-| -13 | 48 · 6 | 17 · 30 | 3 · 400 | 2 · 1183 |
-| -12 | 48 · 6.1 | 17 · 30 | 3 · 400 | 2 · 1182 |
-| -11 | 48 · 6.1 | 17 · 30 | 3 · 400 | 2 · 1180 |
-| -10 | 48 · 6.1 | 17 · 30 | 3 · 400 | 2 · 1177 |
-| -9 | 48 · 6.1 | 17 · 30 | 3 · 400 | 2 · 1174 |
-| -8 | 48 · 6.1 | 17 · 30 | 3 · 400 | 2 · 1169 |
-| -7 | 48 · 6.1 | 17 · 30 | 3 · 400 | 2 · 1165 |
-| -6 | 48 · 6.1 | 17 · 30 | 3 · 400 | 1 · 1159 |
-| -5 | 48 · 6 | 17 · 30 | 3 · 400 | 1 · 1154 |
-| -4 | 48 · 6 | 18 · 30 | 3 · 400 | 1 · 1147 |
-| -3 | 48 · 5.9 | 18 · 30 | 3 · 400 | 1 · 1140 |
-| -2 | 48 · 5.9 | 18 · 29.9 | 3 · 400 | 1 · 1132 |
-| -1 | 48 · 5.9 | 18 · 29.9 | 3 · 400 | 1 · 1124 |
-| +0 | 48 · 5.9 | 18 · 29.8 | 3 · 400 | 1 · 1115 |
-| +1 | 48 · 5.9 | 18 · 29.5 | 3 · 400 | 1 · 1105 |
-| +2 | 48 · 5.9 | 18 · 29.3 | 3 · 400 | 1 · 1095 |
-| +3 | 48 · 5.9 | 18 · 29.1 | 3 · 400 | 1 · 1084 |
-| +4 | 48 · 5.9 | 18 · 28.3 | 3 · 400 | 1 · 1073 |
-| +5 | 48 · 5.9 | 17 · 28.1 | 3 · 400 | 1 · 1060 |
-| +6 | 48 · 5.9 | 17 · 28.1 | 2 · 400 | 1 · 1048 |
-| +7 | 48 · 5.9 | 16 · 28.2 | 2 · 400 | 1 · 1035 |
-| +8 | 48 · 5.9 | 15 · 28.2 | 2 · 400 | 1 · 1021 |
-| +9 | 48 · 5.9 | 15 · 28.3 | 2 · 400 | 1 · 1006 |
-| +10 | 48 · 5.9 | 14 · 28.4 | 2 · 400 | 1 · 992 |
-| +11 | 48 · 5.9 | 14 · 28.5 | 2 · 400 | 1 · 976 |
-| +12 | 48 · 5.9 | 13 · 28.6 | 2 · 400 | 1 · 960 |
-| +13 | 48 · 5.9 | 12 · 28.6 | 2 · 400 | 1 · 943 |
-| +14 | 48 · 5.9 | 12 · 28.8 | 2 · 400 | 1 · 927 |
-| +15 | 48 · 5.9 | 11 · 28.9 | 2 · 400 | 1 · 909 |
-| +16 | 48 · 5.9 | 11 · 29 | 2 · 400 | 1 · 891 |
-| +17 | 48 · 5.9 | 10 · 29.2 | 2 · 400 | 1 · 873 |
-| +18 | 48 · 5.9 | 10 · 29.3 | 2 · 400 | 1 · 855 |
-| +19 | 48 · 6 | 9 · 29.5 | 2 · 400 | 1 · 836 |
-| +20 | 48 · 6.1 | 9 · 29.7 | 2 · 400 | 1 · 817 |
-| +21 | 48 · 6.2 | 8 · 29.9 | 2 · 400 | 1 · 799 |
-| +22 | 48 · 6.1 | 8 · 30 | 2 · 400 | 1 · 780 |
-| +23 | 48 · 6.2 | 8 · 30 | 2 · 398 | 1 · 762 |
-| +24 | 48 · 6.1 | 7 · 30 | 2 · 396 | 1 · 745 |
-| +25 | 48 · 6.1 | 7 · 30 | 2 · 393 | 1 · 728 |
-| +26 | 48 · 6.1 | 7 · 30 | 2 · 390 | 1 · 713 |
-| +27 | 48 · 6.1 | 6 · 30 | 2 · 387 | 1 · 700 |
-| +28 | 48 · 6 | 6 · 30 | 2 · 385 | 1 · 688 |
-| +29 | 48 · 6 | 6 · 30 | 2 · 384 | 1 · 679 |
-| +30 | 48 · 5.9 | 6 · 30 | 1 · 383 | 1 · 673 |
-| +31 | 48 · 5.9 | 6 · 30 | 1 · 382 | 1 · 669 |
-| +32 | 48 · 5.9 | 6 · 30 | 2 · 383 | 1 · 669 |
-| +33 | 48 · 5.9 | 6 · 30 | 2 · 384 | 1 · 672 |
-| +34 | 48 · 5.9 | 6 · 30 | 2 · 387 | 1 · 678 |
-| +35 | 48 · 5.9 | 7 · 30 | 2 · 389 | 1 · 687 |
-| +36 | 48 · 5.9 | 7 · 30 | 2 · 393 | 1 · 699 |
-| +37 | 48 · 5.9 | 7 · 30 | 2 · 396 | 1 · 714 |
-| +38 | 48 · 5.9 | 8 · 30 | 2 · 397 | 1 · 734 |
-| +39 | 48 · 5.9 | 8 · 30 | 2 · 399 | 1 · 752 |
-| +40 | 48 · 5.9 | 9 · 30 | 2 · 400 | 1 · 771 |
-| +41 | 48 · 5.9 | 10 · 30 | 2 · 400 | 1 · 791 |
-| +42 | 48 · 5.8 | 10 · 30 | 2 · 400 | 1 · 811 |
-| +43 | 48 · 5.8 | 11 · 30 | 2 · 400 | 1 · 832 |
-| +44 | 48 · 5.8 | 11 · 30 | 2 · 400 | 1 · 852 |
-| +45 | 48 · 5.8 | 12 · 30 | 2 · 400 | 1 · 864 |
+| -45 | 193 · 5.9 | 48 · 30 | 8 · 400 | 5 · 874 |
+| -44 | 193 · 5.8 | 51 · 30 | 9 · 400 | 5 · 896 |
+| -43 | 193 · 5.8 | 53 · 30 | 9 · 400 | 5 · 915 |
+| -42 | 193 · 5.8 | 55 · 30 | 9 · 400 | 5 · 933 |
+| -41 | 193 · 5.8 | 59 · 30 | 9 · 400 | 5 · 951 |
+| -40 | 193 · 5.8 | 62 · 30 | 10 · 400 | 5 · 968 |
+| -39 | 193 · 5.8 | 66 · 30 | 10 · 400 | 5 · 985 |
+| -38 | 193 · 5.8 | 66 · 30 | 10 · 400 | 5 · 1001 |
+| -37 | 193 · 5.8 | 66 · 30 | 10 · 400 | 5 · 1016 |
+| -36 | 193 · 5.8 | 65 · 30 | 10 · 400 | 5 · 1031 |
+| -35 | 193 · 5.8 | 64 · 30 | 11 · 400 | 5 · 1045 |
+| -34 | 193 · 5.8 | 64 · 30 | 11 · 400 | 5 · 1058 |
+| -33 | 193 · 5.8 | 64 · 30 | 11 · 400 | 6 · 1071 |
+| -32 | 193 · 5.8 | 64 · 30 | 11 · 400 | 6 · 1083 |
+| -31 | 193 · 5.8 | 64 · 30 | 11 · 400 | 6 · 1094 |
+| -30 | 193 · 5.8 | 64 · 30 | 11 · 400 | 6 · 1105 |
+| -29 | 193 · 5.8 | 64 · 30 | 11 · 400 | 6 · 1114 |
+| -28 | 193 · 5.8 | 65 · 30 | 12 · 400 | 6 · 1124 |
+| -27 | 193 · 5.8 | 65 · 30 | 12 · 400 | 6 · 1132 |
+| -26 | 193 · 5.9 | 65 · 30 | 12 · 400 | 6 · 1140 |
+| -25 | 193 · 5.9 | 65 · 30 | 12 · 400 | 6 · 1147 |
+| -24 | 193 · 5.9 | 65 · 30 | 12 · 400 | 6 · 1154 |
+| -23 | 193 · 5.9 | 65 · 30 | 12 · 400 | 6 · 1159 |
+| -22 | 193 · 5.9 | 66 · 30 | 12 · 400 | 6 · 1165 |
+| -21 | 193 · 5.9 | 66 · 30 | 12 · 400 | 6 · 1169 |
+| -20 | 193 · 5.9 | 66 · 30 | 12 · 400 | 6 · 1173 |
+| -19 | 193 · 5.9 | 66 · 30 | 12 · 400 | 6 · 1176 |
+| -18 | 193 · 5.9 | 66 · 30 | 12 · 400 | 6 · 1178 |
+| -17 | 193 · 5.9 | 66 · 30 | 12 · 400 | 6 · 1180 |
+| -16 | 193 · 5.9 | 66 · 30 | 12 · 400 | 6 · 1184 |
+| -15 | 193 · 5.9 | 67 · 30 | 12 · 400 | 6 · 1184 |
+| -14 | 193 · 6 | 67 · 30 | 12 · 400 | 6 · 1184 |
+| -13 | 193 · 6 | 67 · 30 | 12 · 400 | 6 · 1183 |
+| -12 | 193 · 6.1 | 67 · 30 | 12 · 400 | 6 · 1182 |
+| -11 | 193 · 6.1 | 67 · 30 | 12 · 400 | 6 · 1180 |
+| -10 | 193 · 6.1 | 67 · 30 | 12 · 400 | 6 · 1177 |
+| -9 | 193 · 6.1 | 67 · 30 | 12 · 400 | 6 · 1174 |
+| -8 | 193 · 6.1 | 68 · 30 | 12 · 400 | 6 · 1169 |
+| -7 | 193 · 6.1 | 68 · 30 | 12 · 400 | 6 · 1165 |
+| -6 | 193 · 6.1 | 68 · 30 | 12 · 400 | 6 · 1159 |
+| -5 | 193 · 6 | 69 · 30 | 11 · 400 | 6 · 1154 |
+| -4 | 193 · 6 | 71 · 30 | 11 · 400 | 6 · 1147 |
+| -3 | 193 · 5.9 | 73 · 30 | 11 · 400 | 6 · 1140 |
+| -2 | 193 · 5.9 | 74 · 29.9 | 11 · 400 | 6 · 1132 |
+| -1 | 193 · 5.9 | 73 · 29.9 | 11 · 400 | 6 · 1124 |
+| +0 | 193 · 5.9 | 74 · 29.8 | 11 · 400 | 6 · 1115 |
+| +1 | 193 · 5.9 | 74 · 29.5 | 11 · 400 | 6 · 1105 |
+| +2 | 193 · 5.9 | 73 · 29.3 | 11 · 400 | 6 · 1095 |
+| +3 | 193 · 5.9 | 72 · 29.1 | 10 · 400 | 6 · 1084 |
+| +4 | 193 · 5.9 | 71 · 28.3 | 10 · 400 | 6 · 1073 |
+| +5 | 193 · 5.9 | 68 · 28.1 | 10 · 400 | 5 · 1060 |
+| +6 | 193 · 5.9 | 66 · 28.1 | 10 · 400 | 5 · 1048 |
+| +7 | 193 · 5.9 | 64 · 28.2 | 10 · 400 | 5 · 1035 |
+| +8 | 193 · 5.9 | 61 · 28.2 | 10 · 400 | 5 · 1021 |
+| +9 | 193 · 5.9 | 59 · 28.3 | 9 · 400 | 5 · 1006 |
+| +10 | 193 · 5.9 | 57 · 28.4 | 9 · 400 | 5 · 992 |
+| +11 | 193 · 5.9 | 54 · 28.5 | 9 · 400 | 5 · 976 |
+| +12 | 193 · 5.9 | 52 · 28.6 | 9 · 400 | 5 · 960 |
+| +13 | 193 · 5.9 | 50 · 28.6 | 9 · 400 | 5 · 943 |
+| +14 | 193 · 5.9 | 48 · 28.8 | 8 · 400 | 5 · 927 |
+| +15 | 193 · 5.9 | 45 · 28.9 | 8 · 400 | 5 · 909 |
+| +16 | 193 · 5.9 | 43 · 29 | 8 · 400 | 5 · 891 |
+| +17 | 193 · 5.9 | 41 · 29.2 | 8 · 400 | 5 · 873 |
+| +18 | 193 · 5.9 | 39 · 29.3 | 8 · 400 | 4 · 855 |
+| +19 | 193 · 6 | 37 · 29.5 | 7 · 400 | 4 · 836 |
+| +20 | 193 · 6.1 | 35 · 29.7 | 7 · 400 | 4 · 817 |
+| +21 | 193 · 6.2 | 33 · 29.9 | 7 · 400 | 4 · 799 |
+| +22 | 193 · 6.1 | 32 · 30 | 7 · 400 | 4 · 780 |
+| +23 | 193 · 6.2 | 30 · 30 | 7 · 398 | 4 · 762 |
+| +24 | 193 · 6.1 | 29 · 30 | 7 · 396 | 4 · 745 |
+| +25 | 193 · 6.1 | 28 · 30 | 6 · 393 | 4 · 728 |
+| +26 | 193 · 6.1 | 27 · 30 | 6 · 390 | 4 · 713 |
+| +27 | 193 · 6.1 | 26 · 30 | 6 · 387 | 4 · 700 |
+| +28 | 193 · 6 | 25 · 30 | 6 · 385 | 4 · 688 |
+| +29 | 193 · 6 | 24 · 30 | 6 · 384 | 4 · 679 |
+| +30 | 193 · 5.9 | 24 · 30 | 6 · 383 | 3 · 673 |
+| +31 | 193 · 5.9 | 24 · 30 | 6 · 382 | 3 · 669 |
+| +32 | 193 · 5.9 | 24 · 30 | 6 · 383 | 3 · 669 |
+| +33 | 193 · 5.9 | 24 · 30 | 6 · 384 | 3 · 672 |
+| +34 | 193 · 5.9 | 25 · 30 | 6 · 387 | 4 · 678 |
+| +35 | 193 · 5.9 | 26 · 30 | 6 · 389 | 4 · 687 |
+| +36 | 193 · 5.9 | 27 · 30 | 6 · 393 | 4 · 699 |
+| +37 | 193 · 5.9 | 29 · 30 | 7 · 396 | 4 · 714 |
+| +38 | 193 · 5.9 | 31 · 30 | 7 · 397 | 4 · 734 |
+| +39 | 193 · 5.9 | 34 · 30 | 7 · 399 | 4 · 752 |
+| +40 | 193 · 5.9 | 36 · 30 | 7 · 400 | 4 · 771 |
+| +41 | 193 · 5.9 | 38 · 30 | 7 · 400 | 4 · 791 |
+| +42 | 193 · 5.8 | 41 · 30 | 8 · 400 | 4 · 811 |
+| +43 | 193 · 5.8 | 43 · 30 | 8 · 400 | 4 · 832 |
+| +44 | 193 · 5.8 | 46 · 30 | 8 · 400 | 4 · 852 |
+| +45 | 193 · 5.8 | 47 · 30 | 8 · 400 | 4 · 864 |
 
 ### the Saturn system → Earth and the Moon: by months from the mean cycle's optimum
 
 Mean cycle 12.42 months, epoch 1152 hundredths from 1800.01; the fitted cycle is within 6.21 months of each of the span's 228 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -6 | 73 · 6.2 | 19 · 30 | 3 · 400 | 2 · 1323 |
-| -5 | 73 · 6.6 | 19 · 30 | 3 · 400 | 2 · 1300 |
-| -4 | 73 · 6.6 | 18 · 30 | 3 · 400 | 2 · 1268 |
-| -3 | 73 · 6.5 | 17 · 30 | 3 · 400 | 2 · 1241 |
-| -2 | 73 · 6.5 | 16 · 30 | 3 · 400 | 2 · 1228 |
-| -1 | 73 · 6.5 | 16 · 30 | 3 · 400 | 2 · 1233 |
-| +0 | 73 · 6.5 | 17 · 30 | 4 · 400 | 2 · 1257 |
-| +1 | 73 · 6.4 | 19 · 30 | 4 · 400 | 2 · 1291 |
-| +2 | 73 · 6.5 | 23 · 30 | 4 · 400 | 2 · 1325 |
-| +3 | 73 · 6.5 | 23 · 30 | 4 · 400 | 2 · 1349 |
-| +4 | 73 · 6.5 | 22 · 30 | 4 · 400 | 2 · 1361 |
-| +5 | 73 · 6.4 | 21 · 30 | 4 · 400 | 2 · 1357 |
-| +6 | 73 · 6.3 | 20 · 30 | 3 · 400 | 2 · 1343 |
+| -6 | 293 · 6.2 | 78 · 30 | 13 · 400 | 7 · 1323 |
+| -5 | 293 · 6.6 | 75 · 30 | 13 · 400 | 7 · 1300 |
+| -4 | 293 · 6.6 | 72 · 30 | 13 · 400 | 7 · 1268 |
+| -3 | 293 · 6.5 | 68 · 30 | 13 · 400 | 6 · 1241 |
+| -2 | 293 · 6.5 | 65 · 30 | 13 · 400 | 6 · 1228 |
+| -1 | 293 · 6.5 | 62 · 30 | 14 · 400 | 6 · 1233 |
+| +0 | 293 · 6.5 | 70 · 30 | 14 · 400 | 6 · 1257 |
+| +1 | 293 · 6.4 | 77 · 30 | 15 · 400 | 7 · 1291 |
+| +2 | 293 · 6.5 | 92 · 30 | 15 · 400 | 7 · 1325 |
+| +3 | 293 · 6.5 | 91 · 30 | 15 · 400 | 7 · 1349 |
+| +4 | 293 · 6.5 | 87 · 30 | 15 · 400 | 7 · 1361 |
+| +5 | 293 · 6.4 | 84 · 30 | 14 · 400 | 7 · 1357 |
+| +6 | 293 · 6.3 | 81 · 30 | 14 · 400 | 7 · 1343 |
 
 ### the Uranus system → Earth and the Moon: by months from the mean cycle's optimum
 
 Mean cycle 12.14 months, epoch 352 hundredths from 1800.01; the fitted cycle is within 6.06 months of each of the span's 233 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -6 | 193 · 6.4 | 39 · 29.9 | 7 · 400 | 2 · 1827 |
-| -5 | 193 · 6.4 | 38 · 29.9 | 7 · 400 | 2 · 1838 |
-| -4 | 193 · 6.4 | 42 · 29.9 | 6 · 400 | 2 · 1863 |
-| -3 | 193 · 6.5 | 37 · 30 | 6 · 400 | 2 · 1881 |
-| -2 | 193 · 6.5 | 36 · 30 | 6 · 400 | 2 · 1890 |
-| -1 | 193 · 6.5 | 43 · 29.9 | 6 · 400 | 2 · 1887 |
-| +0 | 193 · 6.4 | 41 · 29.9 | 6 · 400 | 2 · 1873 |
-| +1 | 193 · 6.8 | 41 · 30 | 6 · 400 | 2 · 1852 |
-| +2 | 193 · 6.6 | 43 · 29.9 | 6 · 400 | 2 · 1825 |
-| +3 | 193 · 6.6 | 42 · 29.9 | 6 · 400 | 2 · 1805 |
-| +4 | 193 · 6.4 | 41 · 29.9 | 6 · 400 | 2 · 1795 |
-| +5 | 193 · 6.4 | 44 · 29.9 | 7 · 400 | 2 · 1799 |
-| +6 | 193 · 6.4 | 39 · 29.9 | 7 · 400 | 2 · 1811 |
+| -6 | 771 · 6.4 | 155 · 29.9 | 26 · 400 | 9 · 1827 |
+| -5 | 771 · 6.4 | 154 · 29.9 | 26 · 400 | 10 · 1838 |
+| -4 | 771 · 6.4 | 170 · 29.9 | 26 · 400 | 10 · 1863 |
+| -3 | 771 · 6.5 | 146 · 30 | 25 · 400 | 10 · 1881 |
+| -2 | 771 · 6.5 | 143 · 30 | 25 · 400 | 10 · 1890 |
+| -1 | 771 · 6.5 | 173 · 29.9 | 24 · 400 | 10 · 1887 |
+| +0 | 771 · 6.4 | 164 · 29.9 | 24 · 400 | 10 · 1873 |
+| +1 | 771 · 6.8 | 166 · 30 | 24 · 400 | 10 · 1852 |
+| +2 | 771 · 6.6 | 172 · 29.9 | 24 · 400 | 9 · 1825 |
+| +3 | 771 · 6.6 | 168 · 29.9 | 25 · 400 | 9 · 1805 |
+| +4 | 771 · 6.4 | 165 · 29.9 | 26 · 400 | 9 · 1795 |
+| +5 | 771 · 6.4 | 175 · 29.9 | 26 · 400 | 9 · 1799 |
+| +6 | 771 · 6.4 | 158 · 29.9 | 26 · 400 | 9 · 1811 |
 
 ### the Neptune system → Earth and the Moon: by months from the mean cycle's optimum
 
 Mean cycle 12.07 months, epoch 1086 hundredths from 1800.01; the fitted cycle is within 6.03 months of each of the span's 236 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -6 | 368 · 6.9 | 81 · 29.9 | 9 · 400 | 3 · 2000 |
-| -5 | 368 · 7 | 59 · 29.9 | 9 · 400 | 3 · 2000 |
-| -4 | 368 · 6.9 | 58 · 29.9 | 9 · 400 | 3 · 2000 |
-| -3 | 368 · 6.9 | 64 · 29.9 | 9 · 400 | 3 · 2000 |
-| -2 | 368 · 7 | 68 · 29.9 | 9 · 400 | 3 · 2000 |
-| -1 | 368 · 6.9 | 73 · 29.9 | 10 · 400 | 3 · 2000 |
-| +0 | 368 · 7 | 57 · 30 | 10 · 400 | 3 · 2000 |
-| +1 | 368 · 7 | 59 · 29.9 | 10 · 400 | 3 · 2000 |
-| +2 | 368 · 7.1 | 64 · 29.9 | 9 · 400 | 3 · 2000 |
-| +3 | 368 · 6.9 | 63 · 29.9 | 9 · 400 | 3 · 2000 |
-| +4 | 368 · 6.9 | 63 · 29.9 | 9 · 400 | 3 · 2000 |
-| +5 | 368 · 7 | 73 · 29.9 | 9 · 400 | 3 · 2000 |
-| +6 | 368 · 6.9 | 82 · 29.9 | 9 · 400 | 3 · 2000 |
+| -6 | 1473 · 6.9 | 324 · 29.9 | 36 · 400 | 12 · 2000 |
+| -5 | 1473 · 7 | 237 · 29.9 | 36 · 400 | 12 · 2000 |
+| -4 | 1473 · 6.9 | 233 · 29.9 | 37 · 400 | 12 · 2000 |
+| -3 | 1473 · 6.9 | 255 · 29.9 | 37 · 400 | 12 · 2000 |
+| -2 | 1473 · 7 | 271 · 29.9 | 38 · 400 | 12 · 2000 |
+| -1 | 1473 · 6.9 | 291 · 29.9 | 38 · 400 | 12 · 2000 |
+| +0 | 1473 · 7 | 227 · 30 | 38 · 400 | 12 · 2000 |
+| +1 | 1473 · 7 | 235 · 29.9 | 38 · 400 | 12 · 2000 |
+| +2 | 1473 · 7.1 | 256 · 29.9 | 38 · 400 | 12 · 2000 |
+| +3 | 1473 · 6.9 | 252 · 29.9 | 37 · 400 | 12 · 2000 |
+| +4 | 1473 · 6.9 | 251 · 29.9 | 37 · 400 | 12 · 2000 |
+| +5 | 1473 · 7 | 291 · 29.9 | 36 · 400 | 12 · 2000 |
+| +6 | 1473 · 6.9 | 326 · 29.9 | 36 · 400 | 12 · 2000 |
 
 ### the Kuiper Belt → Earth and the Moon: by months from the mean cycle's optimum
 
 Mean cycle 12.05 months, epoch 352 hundredths from 1800.01; the fitted cycle is within 6.02 months of each of the span's 238 true optima.
 
-| Months | Chemical (months · km/s) | Fusion (months · km/s) | Fusion torch (months · km/s) | Antimatter (months · km/s) |
+| Months | Chemical (quarters · km/s) | Fusion (quarters · km/s) | Fusion torch (quarters · km/s) | Antimatter (quarters · km/s) |
 |---|---|---|---|---|
-| -6 | 606 · 15.3 | 156 · 29.8 | 12 · 400 | 4 · 2000 |
-| -5 | 606 · 15.2 | 137 · 29.9 | 12 · 400 | 4 · 2000 |
-| -4 | 606 · 15.1 | 139 · 29.8 | 12 · 400 | 4 · 2000 |
-| -3 | 606 · 15.4 | 149 · 29.8 | 12 · 400 | 4 · 2000 |
-| -2 | 606 · 15.2 | 179 · 29.8 | 12 · 400 | 4 · 2000 |
-| -1 | 606 · 15.1 | 188 · 29.7 | 12 · 400 | 4 · 2000 |
-| +0 | 606 · 15.2 | 193 · 29.7 | 12 · 400 | 4 · 2000 |
-| +1 | 606 · 15.2 | 168 · 29.9 | 12 · 400 | 4 · 2000 |
-| +2 | 606 · 15 | 162 · 29.8 | 12 · 400 | 4 · 2000 |
-| +3 | 606 · 15.1 | 173 · 29.8 | 12 · 400 | 4 · 2000 |
-| +4 | 606 · 15.2 | 187 · 29.8 | 12 · 400 | 4 · 2000 |
-| +5 | 606 · 15 | 148 · 29.8 | 12 · 400 | 4 · 2000 |
-| +6 | 606 · 14.8 | 144 · 29.9 | 12 · 400 | 3 · 2000 |
+| -6 | 2422 · 15.3 | 623 · 29.8 | 49 · 400 | 14 · 2000 |
+| -5 | 2422 · 15.2 | 549 · 29.9 | 48 · 400 | 14 · 2000 |
+| -4 | 2422 · 15.1 | 557 · 29.8 | 48 · 400 | 14 · 2000 |
+| -3 | 2422 · 15.4 | 597 · 29.8 | 48 · 400 | 14 · 2000 |
+| -2 | 2422 · 15.2 | 715 · 29.8 | 48 · 400 | 14 · 2000 |
+| -1 | 2422 · 15.1 | 754 · 29.7 | 48 · 400 | 14 · 2000 |
+| +0 | 2422 · 15.2 | 770 · 29.7 | 48 · 400 | 14 · 2000 |
+| +1 | 2422 · 15.2 | 671 · 29.9 | 49 · 400 | 14 · 2000 |
+| +2 | 2422 · 15 | 649 · 29.8 | 49 · 400 | 14 · 2000 |
+| +3 | 2422 · 15.1 | 693 · 29.8 | 49 · 400 | 14 · 2000 |
+| +4 | 2422 · 15.2 | 746 · 29.8 | 49 · 400 | 14 · 2000 |
+| +5 | 2422 · 15 | 593 · 29.8 | 49 · 400 | 14 · 2000 |
+| +6 | 2422 · 14.8 | 578 · 29.9 | 48 · 400 | 14 · 2000 |
 

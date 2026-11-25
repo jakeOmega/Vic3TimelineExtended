@@ -225,7 +225,8 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 |---|---|---|---|---|
 | `TE_SELF_CHECK OK/BROKEN ship_construction country=… rate=…` | once a game, a month after a Space Command first runs at half staff or more in a state its owner controls | `sr_sc_rate`, the sum of `modifier:state_sr_ship_construction_add` over the states its owner controls, reads above 0: a production method's workforce-scaled `state_modifiers` reach the state | it reads 0 | compute the rate in script, level × occupancy × the method's rate by `has_active_production_method`, and state the rates in the methods' descriptions |
 | `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… units=… robotics_mult=… telephones_mult=… software_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics, Wired Telecommunication Gear and Software input multipliers are each 9 × its units: the newly registered mults reach the building (that they multiply the unscaled line is item 2's tooltip read) | one reads 0 (unregistered, or not on the building) or another figure (other lines reach that input) | for 0, check the `goods_input_<good>_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
-| `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands in its month; BROKEN once, if any fleet lands two or more months late | `flown` equals `leg`, the months `docs/engine/launch_windows_report.md` gives that leg and drive | the global monthly step missed an arrival | land fleets from the country pulse as well |
+| `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands on its tick; BROKEN once, if any fleet lands four ticks (a month) or more late | `flown` equals `leg`, in ticks of the fleets' clock (four a month): the quarters `docs/engine/launch_windows_report.md` gives that leg and drive | the clock missed an arrival | read `fleet_clock`; land fleets from the country pulse as well |
+| `TE_SELF_CHECK OK/BROKEN fleet_clock last_quarter=…` | once a game each way, on a 1st when last month's clock was queued on a power that lived through the month (2026-11-25 design § 1.6) | `last_quarter` is 3: the 8th's, 15th's and 22nd's hidden ticks (`space_race_events.120`-`.122`, queued with `days = 7/14/21` on one fleet power) ran | the 22nd never ran on a power still alive | queue the three ticks on every fleet power (`sr_fl_clock_queue`); the guard in `sr_fl_tick_step` keeps each tick once |
 | `TE_SELF_CHECK OK/BROKEN xfer_step_scope … slot=… role=… [amount=…]` | once a game, the first − or + clicked in a fleet's Transfer popup | the step code, the third chained `AddScope` (`scope:step`, after `op` and `pick`), reached `sr_fleet_xfer_step_sgui`; `slot` is the fleet's slot, `role` the row's code (1 warships … 6 marines), `amount` the figure after the click | no step code matched: the third scope didn't arrive, and the amount didn't move. **No line at all** after a click means `op` or `pick` didn't arrive (no case of `sr_fl_by_op` or `sr_fl_xfer_step_at` matched) or the button never ran | for BROKEN, pass two scopes: `pick` = role × 100 + step code, decoded in `sr_fl_xfer_step_at`; for no line, check the button's `enabled` and the Into buttons, which use `op` and `pick` too |
 
 **What checks itself, and what needs a hand.**
@@ -238,6 +239,7 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
   `sr_sc_checked_v2`, so a save that already ran the old one checks again.
 - **Logged after one action:**
   - `fleet_leg` logs on the first fleet that lands, so send one (AI fleets seldom leave Earth outside a war).
+  - `fleet_clock` logs on the second 1st after the first fleet power appears: any Full Colonies game with a Space Command.
   - `TE_SR_FLEET` and `TE_SR_LOC` are console option a's.
   - `TE_SR_COMBAT` lines log every occupation, liberation, seizure and destruction as it happens.
 - **Set up by hand and read by eye:** steps 1 to 22 below. Console option b gives a fleet, h and i force an assault
@@ -254,10 +256,14 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 4. **Upkeep.** As the fleets grow, Space Command's input tooltip shows Fleet Upkeep on its six maintenance goods,
    +900% for every 10 strength at full, and the section's Upkeep figure matches (the UI pass section, PR 7, has the
    detail). The methods' other inputs don't change.
-5. **Orders.** Pick a destination in the Fleet Destination popup (its rows give each trip's months and propellant;
+5. **Orders.** Pick a destination in the Fleet Destination popup (its rows give each trip's weeks and propellant;
    the PR 3 section below), then Go: Go is disabled with the reason when the leg can't leave or the propellant is short (a chemical fleet
-   at Earth outside Mars's window, for instance). In transit the row reads "→ Mars" and its landing month; on landing
-   `fleet_leg` logs OK and the months flown match `docs/engine/launch_windows_report.md`.
+   at Earth outside Mars's window, for instance). In transit the card reads "Lands in N weeks"; on landing
+   `fleet_leg` logs OK and the ticks flown match the quarters `docs/engine/launch_windows_report.md` gives.
+   **The clock (2026-11-25 design § 1).** Send a torch or antimatter fleet on the 3rd of a month: its weeks count down
+   by one on the 8th, 15th, 22nd and 1st, and it lands on the tick the popup's weeks said, counted from the 1st it was
+   sent after (not a whole month later). Two fleets of different drives sent to the same place on the same day land on
+   different ticks.
 6. **Docking and refits.** A fleet back at Earth refills propellant and supply, repairs 20% of its damage a month, and
    refits to a newer drive (Refit shows three months). A fleet at our colony with a Spaceport repairs 10% a level, and
    refills propellant by 25% a month only on a world that makes it (Utopia Planitia, Ceres, Europa, Ganymede, Callisto,

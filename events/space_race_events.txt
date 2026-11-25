@@ -5646,6 +5646,38 @@ space_race_events.114 = {
 	}
 }
 
+# The fleets' clock (2026-11-25 design § 1.2,
+# docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md):
+# the 8th's, 15th's and 22nd's ticks, queued on the 1st on one fleet power
+# (sr_fl_clock_queue). Hidden, and no trigger, so the queue can't drop them;
+# sr_fl_tick_step checks the rules and that the tick has not run.
+space_race_events.120 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		sr_fl_tick_step = { Q = 1 }
+	}
+}
+
+space_race_events.121 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		sr_fl_tick_step = { Q = 2 }
+	}
+}
+
+space_race_events.122 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		sr_fl_tick_step = { Q = 3 }
+	}
+}
+
 # TE_SELF_CHECK pers_kill's read, a week after the first kill of the bases'
 # Spacers (sr_pers_kill_check_arm, sr_space_forces_effects.txt): a state's
 # figures lag a tick, so the count is read again here. Hidden; no trigger, so
