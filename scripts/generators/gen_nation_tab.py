@@ -248,6 +248,8 @@ NOT_ON_COUNTRY = {
     "sr_colonial_garrisons": "the Space Program building",
     "sr_strike_settlement": "the Space Program building",
     "sr_dome_breach_repairs": "the Space Program building",
+    # A colony held by force: on the interest groups that oppose colonial exploitation.
+    "sr_hold_by_force_ig": "interest groups",
     # The ground mix, on each base building (ground types design § 5.3, sr_eb_apply_mix).
     "sr_ebase_mix_*": "an Extraplanetary Base building",
     # The state's share taken back off each Resort Colony (#1953, sr_resort_state_refresh).

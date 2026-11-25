@@ -1195,16 +1195,37 @@ years at most, and you choose:
 |---|---|---|
 | Grant a charter | −30 autonomy | Until you revoke it: its specializations work at 80% for you, and its autonomy falls 0.4 a month |
 | Send a garrison | −25 autonomy | For ten years: 200 Launch Capacity a week a garrisoned colony (Colonial Garrisons), and the colony's resentment adds 0.2 a month |
-| Let it go | It becomes a free colony, on good terms with you | — |
+| Let it go | It becomes a free colony, on good terms with you, and your marines there come home | — |
 
 A charter settles a colony at a fifth of its output for as long as it stands; a
 garrison buys ten years and costs Launch Capacity. Under Full Colonies a garrison is real
 troops: it takes effect only once a fleet lands two marine battalions at the
 colony, within a year of the order, or the order lapses. On the Moon and Mars,
-your marines at any of your colonies there count. A colony that reaches 100 declares itself
-free whatever you chose. A charter stays with the colony when it changes hands;
+your marines at any of your colonies there count. Under Simple Colonies a colony
+that reaches 100 declares itself free whatever you chose; under Full Colonies your
+marines can hold it (below). A charter stays with the colony when it changes hands;
 a garrison goes home. AI powers grant a charter, garrison while at war, and let
 a colony go only when they have no Space Program to supply it.
+
+**Holding a colony by force.** Under Full Colonies a colony that reaches 100 with
+your marines there doesn't declare at once: they hold it at 100, and its row in the
+Autonomy view reads Held.
+
+| Holding a colony by force | |
+|---|---|
+| Marines needed | One battalion for every 100,000 of its people. On the Moon and Mars your marines at all your colonies there hold every colony of yours there at 100 together |
+| Losses | Half a battalion a month for each point a month its terms exceed the 1 that settling takes off at 100: one that would settle at 120 costs a battalion about every ten months, one at 150 about every four |
+| At home | Every interest group that disapproves of Colonial Exploitation loses 2 approval for the first colony you hold, 1 more for each after and 5 at most, twice that if it strongly disapproves; each battalion lost adds radicals among its supporters. Protected Speech makes both half again as large, Censorship a quarter smaller and Outlawed Dissent half |
+| Its militia | Doesn't count for you against a seizure |
+
+When your marines there fall short, the colony declares itself free, and on the
+Moon and Mars every colony you hold there by force goes with it; the marines at
+those colonies are lost. The colony's page shows about how many months the
+marines hold at this month's losses, and its hover every figure. When a hold
+begins you're asked whether to keep it or let the colony go on good terms, with
+your marines there coming home. A hold ends by itself once the colony's terms fall
+back below what keeps it at 100. AI powers send marines to a colony they hold this
+way once it has less than a year left.
 
 **Revoking a charter.** A chartered colony's page has a Revoke button beside
 Abandon, which asks first and is grayed out while the colony is occupied.

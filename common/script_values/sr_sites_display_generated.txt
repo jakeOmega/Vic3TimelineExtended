@@ -7623,6 +7623,11 @@ sr_disp_md_left_imbrium = {
 #   sr_disp_site_aut_<key>        its autonomy, whole
 #   sr_disp_site_aut_drift_<key>  its drift a month, ours only (0 otherwise)
 #   sr_disp_site_aut_status_<key> 0 nothing, 1 chartered, 2 garrisoned, 3 both
+#   sr_disp_site_held_<key>       1 while ours and held at the break level by force
+#                                 (sr_site_hold_<key>): the status cell says so instead
+#   sr_disp_hold_<fig>_<key>      a hold's figures, ours only: marines, need, loss
+#                                 (the world's) a month, months it holds, and 1 while
+#                                 it loses nothing (steady)
 #   sr_disp_free_<key>            1 while it is a free colony
 #   sr_disp_free_ties_<key>       our ties with it, whole
 #   sr_disp_free_supplied_<key>   1 while we supply it
@@ -7639,6 +7644,12 @@ sr_disp_site_aut_status_valles_marineris = {
 	if = { limit = { has_global_variable = sr_site_charter_valles_marineris } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_valles_marineris } add = 2 }
 }
+sr_disp_site_held_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_resisting_valles_marineris } value = 1 } }
+sr_disp_hold_marines_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_resisting_valles_marineris } value = sr_site_hold_marines_valles_marineris } }
+sr_disp_hold_need_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_resisting_valles_marineris } value = sr_site_hold_need_valles_marineris } }
+sr_disp_hold_loss_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_resisting_valles_marineris } value = sr_site_hold_world_loss_valles_marineris } }
+sr_disp_hold_months_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_resisting_valles_marineris } value = sr_site_hold_months_valles_marineris } }
+sr_disp_hold_steady_valles_marineris = { value = 0 if = { limit = { global_var:sr_site_holder_valles_marineris ?= this has_global_variable = sr_site_resisting_valles_marineris sr_site_hold_world_loss_valles_marineris <= 0 } value = 1 } }
 sr_disp_free_valles_marineris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_valles_marineris } value = 1 }
@@ -7664,6 +7675,12 @@ sr_disp_site_aut_status_olympus_mons = {
 	if = { limit = { has_global_variable = sr_site_charter_olympus_mons } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_olympus_mons } add = 2 }
 }
+sr_disp_site_held_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_resisting_olympus_mons } value = 1 } }
+sr_disp_hold_marines_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_resisting_olympus_mons } value = sr_site_hold_marines_olympus_mons } }
+sr_disp_hold_need_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_resisting_olympus_mons } value = sr_site_hold_need_olympus_mons } }
+sr_disp_hold_loss_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_resisting_olympus_mons } value = sr_site_hold_world_loss_olympus_mons } }
+sr_disp_hold_months_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_resisting_olympus_mons } value = sr_site_hold_months_olympus_mons } }
+sr_disp_hold_steady_olympus_mons = { value = 0 if = { limit = { global_var:sr_site_holder_olympus_mons ?= this has_global_variable = sr_site_resisting_olympus_mons sr_site_hold_world_loss_olympus_mons <= 0 } value = 1 } }
 sr_disp_free_olympus_mons = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_olympus_mons } value = 1 }
@@ -7689,6 +7706,12 @@ sr_disp_site_aut_status_hellas_planitia = {
 	if = { limit = { has_global_variable = sr_site_charter_hellas_planitia } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_hellas_planitia } add = 2 }
 }
+sr_disp_site_held_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_resisting_hellas_planitia } value = 1 } }
+sr_disp_hold_marines_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_resisting_hellas_planitia } value = sr_site_hold_marines_hellas_planitia } }
+sr_disp_hold_need_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_resisting_hellas_planitia } value = sr_site_hold_need_hellas_planitia } }
+sr_disp_hold_loss_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_resisting_hellas_planitia } value = sr_site_hold_world_loss_hellas_planitia } }
+sr_disp_hold_months_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_resisting_hellas_planitia } value = sr_site_hold_months_hellas_planitia } }
+sr_disp_hold_steady_hellas_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this has_global_variable = sr_site_resisting_hellas_planitia sr_site_hold_world_loss_hellas_planitia <= 0 } value = 1 } }
 sr_disp_free_hellas_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_hellas_planitia } value = 1 }
@@ -7714,6 +7737,12 @@ sr_disp_site_aut_status_utopia_planitia = {
 	if = { limit = { has_global_variable = sr_site_charter_utopia_planitia } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_utopia_planitia } add = 2 }
 }
+sr_disp_site_held_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_resisting_utopia_planitia } value = 1 } }
+sr_disp_hold_marines_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_resisting_utopia_planitia } value = sr_site_hold_marines_utopia_planitia } }
+sr_disp_hold_need_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_resisting_utopia_planitia } value = sr_site_hold_need_utopia_planitia } }
+sr_disp_hold_loss_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_resisting_utopia_planitia } value = sr_site_hold_world_loss_utopia_planitia } }
+sr_disp_hold_months_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_resisting_utopia_planitia } value = sr_site_hold_months_utopia_planitia } }
+sr_disp_hold_steady_utopia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this has_global_variable = sr_site_resisting_utopia_planitia sr_site_hold_world_loss_utopia_planitia <= 0 } value = 1 } }
 sr_disp_free_utopia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_utopia_planitia } value = 1 }
@@ -7739,6 +7768,12 @@ sr_disp_site_aut_status_arcadia_planitia = {
 	if = { limit = { has_global_variable = sr_site_charter_arcadia_planitia } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_arcadia_planitia } add = 2 }
 }
+sr_disp_site_held_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_resisting_arcadia_planitia } value = 1 } }
+sr_disp_hold_marines_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_resisting_arcadia_planitia } value = sr_site_hold_marines_arcadia_planitia } }
+sr_disp_hold_need_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_resisting_arcadia_planitia } value = sr_site_hold_need_arcadia_planitia } }
+sr_disp_hold_loss_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_resisting_arcadia_planitia } value = sr_site_hold_world_loss_arcadia_planitia } }
+sr_disp_hold_months_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_resisting_arcadia_planitia } value = sr_site_hold_months_arcadia_planitia } }
+sr_disp_hold_steady_arcadia_planitia = { value = 0 if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this has_global_variable = sr_site_resisting_arcadia_planitia sr_site_hold_world_loss_arcadia_planitia <= 0 } value = 1 } }
 sr_disp_free_arcadia_planitia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_arcadia_planitia } value = 1 }
@@ -7764,6 +7799,12 @@ sr_disp_site_aut_status_ceres = {
 	if = { limit = { has_global_variable = sr_site_charter_ceres } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_ceres } add = 2 }
 }
+sr_disp_site_held_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_resisting_ceres } value = 1 } }
+sr_disp_hold_marines_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_resisting_ceres } value = sr_site_hold_marines_ceres } }
+sr_disp_hold_need_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_resisting_ceres } value = sr_site_hold_need_ceres } }
+sr_disp_hold_loss_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_resisting_ceres } value = sr_site_hold_world_loss_ceres } }
+sr_disp_hold_months_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_resisting_ceres } value = sr_site_hold_months_ceres } }
+sr_disp_hold_steady_ceres = { value = 0 if = { limit = { global_var:sr_site_holder_ceres ?= this has_global_variable = sr_site_resisting_ceres sr_site_hold_world_loss_ceres <= 0 } value = 1 } }
 sr_disp_free_ceres = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_ceres } value = 1 }
@@ -7789,6 +7830,12 @@ sr_disp_site_aut_status_vesta = {
 	if = { limit = { has_global_variable = sr_site_charter_vesta } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_vesta } add = 2 }
 }
+sr_disp_site_held_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_resisting_vesta } value = 1 } }
+sr_disp_hold_marines_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_resisting_vesta } value = sr_site_hold_marines_vesta } }
+sr_disp_hold_need_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_resisting_vesta } value = sr_site_hold_need_vesta } }
+sr_disp_hold_loss_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_resisting_vesta } value = sr_site_hold_world_loss_vesta } }
+sr_disp_hold_months_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_resisting_vesta } value = sr_site_hold_months_vesta } }
+sr_disp_hold_steady_vesta = { value = 0 if = { limit = { global_var:sr_site_holder_vesta ?= this has_global_variable = sr_site_resisting_vesta sr_site_hold_world_loss_vesta <= 0 } value = 1 } }
 sr_disp_free_vesta = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_vesta } value = 1 }
@@ -7814,6 +7861,12 @@ sr_disp_site_aut_status_psyche = {
 	if = { limit = { has_global_variable = sr_site_charter_psyche } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_psyche } add = 2 }
 }
+sr_disp_site_held_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_resisting_psyche } value = 1 } }
+sr_disp_hold_marines_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_resisting_psyche } value = sr_site_hold_marines_psyche } }
+sr_disp_hold_need_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_resisting_psyche } value = sr_site_hold_need_psyche } }
+sr_disp_hold_loss_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_resisting_psyche } value = sr_site_hold_world_loss_psyche } }
+sr_disp_hold_months_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_resisting_psyche } value = sr_site_hold_months_psyche } }
+sr_disp_hold_steady_psyche = { value = 0 if = { limit = { global_var:sr_site_holder_psyche ?= this has_global_variable = sr_site_resisting_psyche sr_site_hold_world_loss_psyche <= 0 } value = 1 } }
 sr_disp_free_psyche = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_psyche } value = 1 }
@@ -7839,6 +7892,12 @@ sr_disp_site_aut_status_pallas = {
 	if = { limit = { has_global_variable = sr_site_charter_pallas } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_pallas } add = 2 }
 }
+sr_disp_site_held_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_resisting_pallas } value = 1 } }
+sr_disp_hold_marines_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_resisting_pallas } value = sr_site_hold_marines_pallas } }
+sr_disp_hold_need_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_resisting_pallas } value = sr_site_hold_need_pallas } }
+sr_disp_hold_loss_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_resisting_pallas } value = sr_site_hold_world_loss_pallas } }
+sr_disp_hold_months_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_resisting_pallas } value = sr_site_hold_months_pallas } }
+sr_disp_hold_steady_pallas = { value = 0 if = { limit = { global_var:sr_site_holder_pallas ?= this has_global_variable = sr_site_resisting_pallas sr_site_hold_world_loss_pallas <= 0 } value = 1 } }
 sr_disp_free_pallas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_pallas } value = 1 }
@@ -7864,6 +7923,12 @@ sr_disp_site_aut_status_hygiea = {
 	if = { limit = { has_global_variable = sr_site_charter_hygiea } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_hygiea } add = 2 }
 }
+sr_disp_site_held_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_resisting_hygiea } value = 1 } }
+sr_disp_hold_marines_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_resisting_hygiea } value = sr_site_hold_marines_hygiea } }
+sr_disp_hold_need_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_resisting_hygiea } value = sr_site_hold_need_hygiea } }
+sr_disp_hold_loss_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_resisting_hygiea } value = sr_site_hold_world_loss_hygiea } }
+sr_disp_hold_months_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_resisting_hygiea } value = sr_site_hold_months_hygiea } }
+sr_disp_hold_steady_hygiea = { value = 0 if = { limit = { global_var:sr_site_holder_hygiea ?= this has_global_variable = sr_site_resisting_hygiea sr_site_hold_world_loss_hygiea <= 0 } value = 1 } }
 sr_disp_free_hygiea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_hygiea } value = 1 }
@@ -7889,6 +7954,12 @@ sr_disp_site_aut_status_io = {
 	if = { limit = { has_global_variable = sr_site_charter_io } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_io } add = 2 }
 }
+sr_disp_site_held_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_resisting_io } value = 1 } }
+sr_disp_hold_marines_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_resisting_io } value = sr_site_hold_marines_io } }
+sr_disp_hold_need_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_resisting_io } value = sr_site_hold_need_io } }
+sr_disp_hold_loss_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_resisting_io } value = sr_site_hold_world_loss_io } }
+sr_disp_hold_months_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_resisting_io } value = sr_site_hold_months_io } }
+sr_disp_hold_steady_io = { value = 0 if = { limit = { global_var:sr_site_holder_io ?= this has_global_variable = sr_site_resisting_io sr_site_hold_world_loss_io <= 0 } value = 1 } }
 sr_disp_free_io = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_io } value = 1 }
@@ -7914,6 +7985,12 @@ sr_disp_site_aut_status_europa = {
 	if = { limit = { has_global_variable = sr_site_charter_europa } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_europa } add = 2 }
 }
+sr_disp_site_held_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_resisting_europa } value = 1 } }
+sr_disp_hold_marines_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_resisting_europa } value = sr_site_hold_marines_europa } }
+sr_disp_hold_need_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_resisting_europa } value = sr_site_hold_need_europa } }
+sr_disp_hold_loss_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_resisting_europa } value = sr_site_hold_world_loss_europa } }
+sr_disp_hold_months_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_resisting_europa } value = sr_site_hold_months_europa } }
+sr_disp_hold_steady_europa = { value = 0 if = { limit = { global_var:sr_site_holder_europa ?= this has_global_variable = sr_site_resisting_europa sr_site_hold_world_loss_europa <= 0 } value = 1 } }
 sr_disp_free_europa = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_europa } value = 1 }
@@ -7939,6 +8016,12 @@ sr_disp_site_aut_status_ganymede = {
 	if = { limit = { has_global_variable = sr_site_charter_ganymede } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_ganymede } add = 2 }
 }
+sr_disp_site_held_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_resisting_ganymede } value = 1 } }
+sr_disp_hold_marines_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_resisting_ganymede } value = sr_site_hold_marines_ganymede } }
+sr_disp_hold_need_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_resisting_ganymede } value = sr_site_hold_need_ganymede } }
+sr_disp_hold_loss_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_resisting_ganymede } value = sr_site_hold_world_loss_ganymede } }
+sr_disp_hold_months_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_resisting_ganymede } value = sr_site_hold_months_ganymede } }
+sr_disp_hold_steady_ganymede = { value = 0 if = { limit = { global_var:sr_site_holder_ganymede ?= this has_global_variable = sr_site_resisting_ganymede sr_site_hold_world_loss_ganymede <= 0 } value = 1 } }
 sr_disp_free_ganymede = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_ganymede } value = 1 }
@@ -7964,6 +8047,12 @@ sr_disp_site_aut_status_callisto = {
 	if = { limit = { has_global_variable = sr_site_charter_callisto } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_callisto } add = 2 }
 }
+sr_disp_site_held_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_resisting_callisto } value = 1 } }
+sr_disp_hold_marines_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_resisting_callisto } value = sr_site_hold_marines_callisto } }
+sr_disp_hold_need_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_resisting_callisto } value = sr_site_hold_need_callisto } }
+sr_disp_hold_loss_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_resisting_callisto } value = sr_site_hold_world_loss_callisto } }
+sr_disp_hold_months_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_resisting_callisto } value = sr_site_hold_months_callisto } }
+sr_disp_hold_steady_callisto = { value = 0 if = { limit = { global_var:sr_site_holder_callisto ?= this has_global_variable = sr_site_resisting_callisto sr_site_hold_world_loss_callisto <= 0 } value = 1 } }
 sr_disp_free_callisto = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_callisto } value = 1 }
@@ -7989,6 +8078,12 @@ sr_disp_site_aut_status_himalia = {
 	if = { limit = { has_global_variable = sr_site_charter_himalia } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_himalia } add = 2 }
 }
+sr_disp_site_held_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_resisting_himalia } value = 1 } }
+sr_disp_hold_marines_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_resisting_himalia } value = sr_site_hold_marines_himalia } }
+sr_disp_hold_need_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_resisting_himalia } value = sr_site_hold_need_himalia } }
+sr_disp_hold_loss_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_resisting_himalia } value = sr_site_hold_world_loss_himalia } }
+sr_disp_hold_months_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_resisting_himalia } value = sr_site_hold_months_himalia } }
+sr_disp_hold_steady_himalia = { value = 0 if = { limit = { global_var:sr_site_holder_himalia ?= this has_global_variable = sr_site_resisting_himalia sr_site_hold_world_loss_himalia <= 0 } value = 1 } }
 sr_disp_free_himalia = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_himalia } value = 1 }
@@ -8014,6 +8109,12 @@ sr_disp_site_aut_status_amalthea = {
 	if = { limit = { has_global_variable = sr_site_charter_amalthea } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_amalthea } add = 2 }
 }
+sr_disp_site_held_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_resisting_amalthea } value = 1 } }
+sr_disp_hold_marines_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_resisting_amalthea } value = sr_site_hold_marines_amalthea } }
+sr_disp_hold_need_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_resisting_amalthea } value = sr_site_hold_need_amalthea } }
+sr_disp_hold_loss_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_resisting_amalthea } value = sr_site_hold_world_loss_amalthea } }
+sr_disp_hold_months_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_resisting_amalthea } value = sr_site_hold_months_amalthea } }
+sr_disp_hold_steady_amalthea = { value = 0 if = { limit = { global_var:sr_site_holder_amalthea ?= this has_global_variable = sr_site_resisting_amalthea sr_site_hold_world_loss_amalthea <= 0 } value = 1 } }
 sr_disp_free_amalthea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_amalthea } value = 1 }
@@ -8039,6 +8140,12 @@ sr_disp_site_aut_status_venus = {
 	if = { limit = { has_global_variable = sr_site_charter_venus } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_venus } add = 2 }
 }
+sr_disp_site_held_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_resisting_venus } value = 1 } }
+sr_disp_hold_marines_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_resisting_venus } value = sr_site_hold_marines_venus } }
+sr_disp_hold_need_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_resisting_venus } value = sr_site_hold_need_venus } }
+sr_disp_hold_loss_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_resisting_venus } value = sr_site_hold_world_loss_venus } }
+sr_disp_hold_months_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_resisting_venus } value = sr_site_hold_months_venus } }
+sr_disp_hold_steady_venus = { value = 0 if = { limit = { global_var:sr_site_holder_venus ?= this has_global_variable = sr_site_resisting_venus sr_site_hold_world_loss_venus <= 0 } value = 1 } }
 sr_disp_free_venus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_venus } value = 1 }
@@ -8064,6 +8171,12 @@ sr_disp_site_aut_status_mercury = {
 	if = { limit = { has_global_variable = sr_site_charter_mercury } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_mercury } add = 2 }
 }
+sr_disp_site_held_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_resisting_mercury } value = 1 } }
+sr_disp_hold_marines_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_resisting_mercury } value = sr_site_hold_marines_mercury } }
+sr_disp_hold_need_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_resisting_mercury } value = sr_site_hold_need_mercury } }
+sr_disp_hold_loss_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_resisting_mercury } value = sr_site_hold_world_loss_mercury } }
+sr_disp_hold_months_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_resisting_mercury } value = sr_site_hold_months_mercury } }
+sr_disp_hold_steady_mercury = { value = 0 if = { limit = { global_var:sr_site_holder_mercury ?= this has_global_variable = sr_site_resisting_mercury sr_site_hold_world_loss_mercury <= 0 } value = 1 } }
 sr_disp_free_mercury = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_mercury } value = 1 }
@@ -8089,6 +8202,12 @@ sr_disp_site_aut_status_titan = {
 	if = { limit = { has_global_variable = sr_site_charter_titan } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_titan } add = 2 }
 }
+sr_disp_site_held_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_resisting_titan } value = 1 } }
+sr_disp_hold_marines_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_resisting_titan } value = sr_site_hold_marines_titan } }
+sr_disp_hold_need_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_resisting_titan } value = sr_site_hold_need_titan } }
+sr_disp_hold_loss_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_resisting_titan } value = sr_site_hold_world_loss_titan } }
+sr_disp_hold_months_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_resisting_titan } value = sr_site_hold_months_titan } }
+sr_disp_hold_steady_titan = { value = 0 if = { limit = { global_var:sr_site_holder_titan ?= this has_global_variable = sr_site_resisting_titan sr_site_hold_world_loss_titan <= 0 } value = 1 } }
 sr_disp_free_titan = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_titan } value = 1 }
@@ -8114,6 +8233,12 @@ sr_disp_site_aut_status_enceladus = {
 	if = { limit = { has_global_variable = sr_site_charter_enceladus } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_enceladus } add = 2 }
 }
+sr_disp_site_held_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_resisting_enceladus } value = 1 } }
+sr_disp_hold_marines_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_resisting_enceladus } value = sr_site_hold_marines_enceladus } }
+sr_disp_hold_need_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_resisting_enceladus } value = sr_site_hold_need_enceladus } }
+sr_disp_hold_loss_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_resisting_enceladus } value = sr_site_hold_world_loss_enceladus } }
+sr_disp_hold_months_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_resisting_enceladus } value = sr_site_hold_months_enceladus } }
+sr_disp_hold_steady_enceladus = { value = 0 if = { limit = { global_var:sr_site_holder_enceladus ?= this has_global_variable = sr_site_resisting_enceladus sr_site_hold_world_loss_enceladus <= 0 } value = 1 } }
 sr_disp_free_enceladus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_enceladus } value = 1 }
@@ -8139,6 +8264,12 @@ sr_disp_site_aut_status_rhea = {
 	if = { limit = { has_global_variable = sr_site_charter_rhea } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_rhea } add = 2 }
 }
+sr_disp_site_held_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_resisting_rhea } value = 1 } }
+sr_disp_hold_marines_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_resisting_rhea } value = sr_site_hold_marines_rhea } }
+sr_disp_hold_need_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_resisting_rhea } value = sr_site_hold_need_rhea } }
+sr_disp_hold_loss_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_resisting_rhea } value = sr_site_hold_world_loss_rhea } }
+sr_disp_hold_months_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_resisting_rhea } value = sr_site_hold_months_rhea } }
+sr_disp_hold_steady_rhea = { value = 0 if = { limit = { global_var:sr_site_holder_rhea ?= this has_global_variable = sr_site_resisting_rhea sr_site_hold_world_loss_rhea <= 0 } value = 1 } }
 sr_disp_free_rhea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_rhea } value = 1 }
@@ -8164,6 +8295,12 @@ sr_disp_site_aut_status_mimas = {
 	if = { limit = { has_global_variable = sr_site_charter_mimas } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_mimas } add = 2 }
 }
+sr_disp_site_held_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_resisting_mimas } value = 1 } }
+sr_disp_hold_marines_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_resisting_mimas } value = sr_site_hold_marines_mimas } }
+sr_disp_hold_need_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_resisting_mimas } value = sr_site_hold_need_mimas } }
+sr_disp_hold_loss_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_resisting_mimas } value = sr_site_hold_world_loss_mimas } }
+sr_disp_hold_months_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_resisting_mimas } value = sr_site_hold_months_mimas } }
+sr_disp_hold_steady_mimas = { value = 0 if = { limit = { global_var:sr_site_holder_mimas ?= this has_global_variable = sr_site_resisting_mimas sr_site_hold_world_loss_mimas <= 0 } value = 1 } }
 sr_disp_free_mimas = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_mimas } value = 1 }
@@ -8189,6 +8326,12 @@ sr_disp_site_aut_status_iapetus = {
 	if = { limit = { has_global_variable = sr_site_charter_iapetus } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_iapetus } add = 2 }
 }
+sr_disp_site_held_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_resisting_iapetus } value = 1 } }
+sr_disp_hold_marines_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_resisting_iapetus } value = sr_site_hold_marines_iapetus } }
+sr_disp_hold_need_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_resisting_iapetus } value = sr_site_hold_need_iapetus } }
+sr_disp_hold_loss_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_resisting_iapetus } value = sr_site_hold_world_loss_iapetus } }
+sr_disp_hold_months_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_resisting_iapetus } value = sr_site_hold_months_iapetus } }
+sr_disp_hold_steady_iapetus = { value = 0 if = { limit = { global_var:sr_site_holder_iapetus ?= this has_global_variable = sr_site_resisting_iapetus sr_site_hold_world_loss_iapetus <= 0 } value = 1 } }
 sr_disp_free_iapetus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_iapetus } value = 1 }
@@ -8214,6 +8357,12 @@ sr_disp_site_aut_status_titania = {
 	if = { limit = { has_global_variable = sr_site_charter_titania } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_titania } add = 2 }
 }
+sr_disp_site_held_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_resisting_titania } value = 1 } }
+sr_disp_hold_marines_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_resisting_titania } value = sr_site_hold_marines_titania } }
+sr_disp_hold_need_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_resisting_titania } value = sr_site_hold_need_titania } }
+sr_disp_hold_loss_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_resisting_titania } value = sr_site_hold_world_loss_titania } }
+sr_disp_hold_months_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_resisting_titania } value = sr_site_hold_months_titania } }
+sr_disp_hold_steady_titania = { value = 0 if = { limit = { global_var:sr_site_holder_titania ?= this has_global_variable = sr_site_resisting_titania sr_site_hold_world_loss_titania <= 0 } value = 1 } }
 sr_disp_free_titania = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_titania } value = 1 }
@@ -8239,6 +8388,12 @@ sr_disp_site_aut_status_oberon = {
 	if = { limit = { has_global_variable = sr_site_charter_oberon } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_oberon } add = 2 }
 }
+sr_disp_site_held_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_resisting_oberon } value = 1 } }
+sr_disp_hold_marines_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_resisting_oberon } value = sr_site_hold_marines_oberon } }
+sr_disp_hold_need_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_resisting_oberon } value = sr_site_hold_need_oberon } }
+sr_disp_hold_loss_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_resisting_oberon } value = sr_site_hold_world_loss_oberon } }
+sr_disp_hold_months_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_resisting_oberon } value = sr_site_hold_months_oberon } }
+sr_disp_hold_steady_oberon = { value = 0 if = { limit = { global_var:sr_site_holder_oberon ?= this has_global_variable = sr_site_resisting_oberon sr_site_hold_world_loss_oberon <= 0 } value = 1 } }
 sr_disp_free_oberon = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_oberon } value = 1 }
@@ -8264,6 +8419,12 @@ sr_disp_site_aut_status_miranda = {
 	if = { limit = { has_global_variable = sr_site_charter_miranda } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_miranda } add = 2 }
 }
+sr_disp_site_held_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_resisting_miranda } value = 1 } }
+sr_disp_hold_marines_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_resisting_miranda } value = sr_site_hold_marines_miranda } }
+sr_disp_hold_need_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_resisting_miranda } value = sr_site_hold_need_miranda } }
+sr_disp_hold_loss_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_resisting_miranda } value = sr_site_hold_world_loss_miranda } }
+sr_disp_hold_months_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_resisting_miranda } value = sr_site_hold_months_miranda } }
+sr_disp_hold_steady_miranda = { value = 0 if = { limit = { global_var:sr_site_holder_miranda ?= this has_global_variable = sr_site_resisting_miranda sr_site_hold_world_loss_miranda <= 0 } value = 1 } }
 sr_disp_free_miranda = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_miranda } value = 1 }
@@ -8289,6 +8450,12 @@ sr_disp_site_aut_status_ariel = {
 	if = { limit = { has_global_variable = sr_site_charter_ariel } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_ariel } add = 2 }
 }
+sr_disp_site_held_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_resisting_ariel } value = 1 } }
+sr_disp_hold_marines_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_resisting_ariel } value = sr_site_hold_marines_ariel } }
+sr_disp_hold_need_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_resisting_ariel } value = sr_site_hold_need_ariel } }
+sr_disp_hold_loss_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_resisting_ariel } value = sr_site_hold_world_loss_ariel } }
+sr_disp_hold_months_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_resisting_ariel } value = sr_site_hold_months_ariel } }
+sr_disp_hold_steady_ariel = { value = 0 if = { limit = { global_var:sr_site_holder_ariel ?= this has_global_variable = sr_site_resisting_ariel sr_site_hold_world_loss_ariel <= 0 } value = 1 } }
 sr_disp_free_ariel = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_ariel } value = 1 }
@@ -8314,6 +8481,12 @@ sr_disp_site_aut_status_triton = {
 	if = { limit = { has_global_variable = sr_site_charter_triton } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_triton } add = 2 }
 }
+sr_disp_site_held_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_resisting_triton } value = 1 } }
+sr_disp_hold_marines_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_resisting_triton } value = sr_site_hold_marines_triton } }
+sr_disp_hold_need_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_resisting_triton } value = sr_site_hold_need_triton } }
+sr_disp_hold_loss_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_resisting_triton } value = sr_site_hold_world_loss_triton } }
+sr_disp_hold_months_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_resisting_triton } value = sr_site_hold_months_triton } }
+sr_disp_hold_steady_triton = { value = 0 if = { limit = { global_var:sr_site_holder_triton ?= this has_global_variable = sr_site_resisting_triton sr_site_hold_world_loss_triton <= 0 } value = 1 } }
 sr_disp_free_triton = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_triton } value = 1 }
@@ -8339,6 +8512,12 @@ sr_disp_site_aut_status_proteus = {
 	if = { limit = { has_global_variable = sr_site_charter_proteus } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_proteus } add = 2 }
 }
+sr_disp_site_held_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_resisting_proteus } value = 1 } }
+sr_disp_hold_marines_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_resisting_proteus } value = sr_site_hold_marines_proteus } }
+sr_disp_hold_need_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_resisting_proteus } value = sr_site_hold_need_proteus } }
+sr_disp_hold_loss_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_resisting_proteus } value = sr_site_hold_world_loss_proteus } }
+sr_disp_hold_months_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_resisting_proteus } value = sr_site_hold_months_proteus } }
+sr_disp_hold_steady_proteus = { value = 0 if = { limit = { global_var:sr_site_holder_proteus ?= this has_global_variable = sr_site_resisting_proteus sr_site_hold_world_loss_proteus <= 0 } value = 1 } }
 sr_disp_free_proteus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_proteus } value = 1 }
@@ -8364,6 +8543,12 @@ sr_disp_site_aut_status_pluto = {
 	if = { limit = { has_global_variable = sr_site_charter_pluto } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_pluto } add = 2 }
 }
+sr_disp_site_held_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_resisting_pluto } value = 1 } }
+sr_disp_hold_marines_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_resisting_pluto } value = sr_site_hold_marines_pluto } }
+sr_disp_hold_need_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_resisting_pluto } value = sr_site_hold_need_pluto } }
+sr_disp_hold_loss_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_resisting_pluto } value = sr_site_hold_world_loss_pluto } }
+sr_disp_hold_months_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_resisting_pluto } value = sr_site_hold_months_pluto } }
+sr_disp_hold_steady_pluto = { value = 0 if = { limit = { global_var:sr_site_holder_pluto ?= this has_global_variable = sr_site_resisting_pluto sr_site_hold_world_loss_pluto <= 0 } value = 1 } }
 sr_disp_free_pluto = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_pluto } value = 1 }
@@ -8389,6 +8574,12 @@ sr_disp_site_aut_status_eris = {
 	if = { limit = { has_global_variable = sr_site_charter_eris } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_eris } add = 2 }
 }
+sr_disp_site_held_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_resisting_eris } value = 1 } }
+sr_disp_hold_marines_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_resisting_eris } value = sr_site_hold_marines_eris } }
+sr_disp_hold_need_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_resisting_eris } value = sr_site_hold_need_eris } }
+sr_disp_hold_loss_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_resisting_eris } value = sr_site_hold_world_loss_eris } }
+sr_disp_hold_months_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_resisting_eris } value = sr_site_hold_months_eris } }
+sr_disp_hold_steady_eris = { value = 0 if = { limit = { global_var:sr_site_holder_eris ?= this has_global_variable = sr_site_resisting_eris sr_site_hold_world_loss_eris <= 0 } value = 1 } }
 sr_disp_free_eris = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_eris } value = 1 }
@@ -8414,6 +8605,12 @@ sr_disp_site_aut_status_makemake = {
 	if = { limit = { has_global_variable = sr_site_charter_makemake } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_makemake } add = 2 }
 }
+sr_disp_site_held_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_resisting_makemake } value = 1 } }
+sr_disp_hold_marines_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_resisting_makemake } value = sr_site_hold_marines_makemake } }
+sr_disp_hold_need_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_resisting_makemake } value = sr_site_hold_need_makemake } }
+sr_disp_hold_loss_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_resisting_makemake } value = sr_site_hold_world_loss_makemake } }
+sr_disp_hold_months_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_resisting_makemake } value = sr_site_hold_months_makemake } }
+sr_disp_hold_steady_makemake = { value = 0 if = { limit = { global_var:sr_site_holder_makemake ?= this has_global_variable = sr_site_resisting_makemake sr_site_hold_world_loss_makemake <= 0 } value = 1 } }
 sr_disp_free_makemake = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_makemake } value = 1 }
@@ -8439,6 +8636,12 @@ sr_disp_site_aut_status_haumea = {
 	if = { limit = { has_global_variable = sr_site_charter_haumea } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_haumea } add = 2 }
 }
+sr_disp_site_held_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_resisting_haumea } value = 1 } }
+sr_disp_hold_marines_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_resisting_haumea } value = sr_site_hold_marines_haumea } }
+sr_disp_hold_need_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_resisting_haumea } value = sr_site_hold_need_haumea } }
+sr_disp_hold_loss_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_resisting_haumea } value = sr_site_hold_world_loss_haumea } }
+sr_disp_hold_months_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_resisting_haumea } value = sr_site_hold_months_haumea } }
+sr_disp_hold_steady_haumea = { value = 0 if = { limit = { global_var:sr_site_holder_haumea ?= this has_global_variable = sr_site_resisting_haumea sr_site_hold_world_loss_haumea <= 0 } value = 1 } }
 sr_disp_free_haumea = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_haumea } value = 1 }
@@ -8464,6 +8667,12 @@ sr_disp_site_aut_status_sedna = {
 	if = { limit = { has_global_variable = sr_site_charter_sedna } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_sedna } add = 2 }
 }
+sr_disp_site_held_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_resisting_sedna } value = 1 } }
+sr_disp_hold_marines_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_resisting_sedna } value = sr_site_hold_marines_sedna } }
+sr_disp_hold_need_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_resisting_sedna } value = sr_site_hold_need_sedna } }
+sr_disp_hold_loss_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_resisting_sedna } value = sr_site_hold_world_loss_sedna } }
+sr_disp_hold_months_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_resisting_sedna } value = sr_site_hold_months_sedna } }
+sr_disp_hold_steady_sedna = { value = 0 if = { limit = { global_var:sr_site_holder_sedna ?= this has_global_variable = sr_site_resisting_sedna sr_site_hold_world_loss_sedna <= 0 } value = 1 } }
 sr_disp_free_sedna = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_sedna } value = 1 }
@@ -8489,6 +8698,12 @@ sr_disp_site_aut_status_shackleton = {
 	if = { limit = { has_global_variable = sr_site_charter_shackleton } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_shackleton } add = 2 }
 }
+sr_disp_site_held_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_resisting_shackleton } value = 1 } }
+sr_disp_hold_marines_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_resisting_shackleton } value = sr_site_hold_marines_shackleton } }
+sr_disp_hold_need_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_resisting_shackleton } value = sr_site_hold_need_shackleton } }
+sr_disp_hold_loss_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_resisting_shackleton } value = sr_site_hold_world_loss_shackleton } }
+sr_disp_hold_months_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_resisting_shackleton } value = sr_site_hold_months_shackleton } }
+sr_disp_hold_steady_shackleton = { value = 0 if = { limit = { global_var:sr_site_holder_shackleton ?= this has_global_variable = sr_site_resisting_shackleton sr_site_hold_world_loss_shackleton <= 0 } value = 1 } }
 sr_disp_free_shackleton = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_shackleton } value = 1 }
@@ -8514,6 +8729,12 @@ sr_disp_site_aut_status_peary = {
 	if = { limit = { has_global_variable = sr_site_charter_peary } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_peary } add = 2 }
 }
+sr_disp_site_held_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_resisting_peary } value = 1 } }
+sr_disp_hold_marines_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_resisting_peary } value = sr_site_hold_marines_peary } }
+sr_disp_hold_need_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_resisting_peary } value = sr_site_hold_need_peary } }
+sr_disp_hold_loss_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_resisting_peary } value = sr_site_hold_world_loss_peary } }
+sr_disp_hold_months_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_resisting_peary } value = sr_site_hold_months_peary } }
+sr_disp_hold_steady_peary = { value = 0 if = { limit = { global_var:sr_site_holder_peary ?= this has_global_variable = sr_site_resisting_peary sr_site_hold_world_loss_peary <= 0 } value = 1 } }
 sr_disp_free_peary = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_peary } value = 1 }
@@ -8539,6 +8760,12 @@ sr_disp_site_aut_status_tranquility = {
 	if = { limit = { has_global_variable = sr_site_charter_tranquility } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_tranquility } add = 2 }
 }
+sr_disp_site_held_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_resisting_tranquility } value = 1 } }
+sr_disp_hold_marines_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_resisting_tranquility } value = sr_site_hold_marines_tranquility } }
+sr_disp_hold_need_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_resisting_tranquility } value = sr_site_hold_need_tranquility } }
+sr_disp_hold_loss_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_resisting_tranquility } value = sr_site_hold_world_loss_tranquility } }
+sr_disp_hold_months_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_resisting_tranquility } value = sr_site_hold_months_tranquility } }
+sr_disp_hold_steady_tranquility = { value = 0 if = { limit = { global_var:sr_site_holder_tranquility ?= this has_global_variable = sr_site_resisting_tranquility sr_site_hold_world_loss_tranquility <= 0 } value = 1 } }
 sr_disp_free_tranquility = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_tranquility } value = 1 }
@@ -8564,6 +8791,12 @@ sr_disp_site_aut_status_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_charter_marius_hills } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_marius_hills } add = 2 }
 }
+sr_disp_site_held_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_resisting_marius_hills } value = 1 } }
+sr_disp_hold_marines_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_resisting_marius_hills } value = sr_site_hold_marines_marius_hills } }
+sr_disp_hold_need_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_resisting_marius_hills } value = sr_site_hold_need_marius_hills } }
+sr_disp_hold_loss_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_resisting_marius_hills } value = sr_site_hold_world_loss_marius_hills } }
+sr_disp_hold_months_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_resisting_marius_hills } value = sr_site_hold_months_marius_hills } }
+sr_disp_hold_steady_marius_hills = { value = 0 if = { limit = { global_var:sr_site_holder_marius_hills ?= this has_global_variable = sr_site_resisting_marius_hills sr_site_hold_world_loss_marius_hills <= 0 } value = 1 } }
 sr_disp_free_marius_hills = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_marius_hills } value = 1 }
@@ -8589,6 +8822,12 @@ sr_disp_site_aut_status_daedalus = {
 	if = { limit = { has_global_variable = sr_site_charter_daedalus } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_daedalus } add = 2 }
 }
+sr_disp_site_held_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_resisting_daedalus } value = 1 } }
+sr_disp_hold_marines_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_resisting_daedalus } value = sr_site_hold_marines_daedalus } }
+sr_disp_hold_need_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_resisting_daedalus } value = sr_site_hold_need_daedalus } }
+sr_disp_hold_loss_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_resisting_daedalus } value = sr_site_hold_world_loss_daedalus } }
+sr_disp_hold_months_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_resisting_daedalus } value = sr_site_hold_months_daedalus } }
+sr_disp_hold_steady_daedalus = { value = 0 if = { limit = { global_var:sr_site_holder_daedalus ?= this has_global_variable = sr_site_resisting_daedalus sr_site_hold_world_loss_daedalus <= 0 } value = 1 } }
 sr_disp_free_daedalus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_daedalus } value = 1 }
@@ -8614,6 +8853,12 @@ sr_disp_site_aut_status_imbrium = {
 	if = { limit = { has_global_variable = sr_site_charter_imbrium } add = 1 }
 	if = { limit = { has_global_variable = sr_site_garrison_imbrium } add = 2 }
 }
+sr_disp_site_held_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_resisting_imbrium } value = 1 } }
+sr_disp_hold_marines_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_resisting_imbrium } value = sr_site_hold_marines_imbrium } }
+sr_disp_hold_need_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_resisting_imbrium } value = sr_site_hold_need_imbrium } }
+sr_disp_hold_loss_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_resisting_imbrium } value = sr_site_hold_world_loss_imbrium } }
+sr_disp_hold_months_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_resisting_imbrium } value = sr_site_hold_months_imbrium } }
+sr_disp_hold_steady_imbrium = { value = 0 if = { limit = { global_var:sr_site_holder_imbrium ?= this has_global_variable = sr_site_resisting_imbrium sr_site_hold_world_loss_imbrium <= 0 } value = 1 } }
 sr_disp_free_imbrium = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_free_imbrium } value = 1 }

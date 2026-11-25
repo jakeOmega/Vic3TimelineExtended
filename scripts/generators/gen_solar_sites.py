@@ -1056,8 +1056,10 @@ def _transfer(site: Site) -> list[str]:
         "\tif = {",
         f"\t\tlimit = {{ scope:sr_site_to_{k} ?= {{ is_country_alive = yes }} }}",
         f"\t\tset_global_variable = {{ name = sr_site_holder_{k} value = scope:sr_site_to_{k} }}",
-        "\t\t# The garrison is its holder's and goes home (slice 5 design § 1).",
+        "\t\t# The garrison is its holder's and goes home (slice 5 design § 1), and with it",
+        "\t\t# the hold at the break level (sr_site_hold_<key>).",
         f"\t\tif = {{ limit = {{ has_global_variable = sr_site_garrison_{k} }} remove_global_variable = sr_site_garrison_{k} }}",
+        f"\t\tif = {{ limit = {{ has_global_variable = sr_site_resisting_{k} }} remove_global_variable = sr_site_resisting_{k} }}",
         f"\t\tif = {{ limit = {{ has_global_variable = sr_site_garrison_due_{k} }} remove_global_variable = sr_site_garrison_due_{k} }}",
         "\t\t# A treaty ends an occupation (slice 6 design § 9.2); an heir takes the world",
         "\t\t# occupied. Marines stay with an ally of their owner, else go home (§ 9.6).",
@@ -3328,7 +3330,7 @@ def slice5_vars(site: Site) -> list[str]:
     k = site.key
     return [f"sr_site_free_{k}", f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}",
             f"sr_site_aut_asked_{k}", f"sr_site_contact_{k}", f"sr_site_suppliers_{k}", f"sr_site_born_{k}",
-            f"sr_site_petition_{k}", f"sr_site_self_{k}"]
+            f"sr_site_petition_{k}", f"sr_site_self_{k}", f"sr_site_resisting_{k}"]
 
 
 def slice6_vars(site: Site) -> list[str]:
@@ -3369,7 +3371,7 @@ def _autonomy_world(site: Site) -> list[str]:
         f"\tsr_site_sync_{k} = yes",
         *[f"\tif = {{ limit = {{ has_global_variable = {v} }} remove_global_variable = {v} }}"
           for v in (f"sr_site_autonomy_{k}", f"sr_site_charter_{k}", f"sr_site_garrison_{k}", f"sr_site_aut_asked_{k}",
-                    f"sr_site_self_{k}", *slice6_vars(site))],
+                    f"sr_site_self_{k}", f"sr_site_resisting_{k}", *slice6_vars(site))],
         "\tsr_sites_refresh_players = yes",
         f'\tdebug_log = "TE_SR_SITES {k} is a free colony"',
         "}",
@@ -3431,13 +3433,17 @@ def _autonomy_world(site: Site) -> list[str]:
         f"# THIS holds {site.name}: its autonomy for the month, then its thresholds (design § 2),",
         "# each only with sr_free_colony_minimum people or more (sr_site_peopled_<key>).",
         "# A colony pushed to 100 since the last step (an incitement, a sabotage, a revoked",
-        "# charter's spike) breaks away though the month's settling takes it back under",
-        "# (design § 2: \"at 100 the colony breaks away whatever its status\"), so the break",
-        "# reads local_var:sr_aut_peak, the higher of its autonomy before the drift and after.",
+        "# charter's spike) declares itself free though the month's settling takes it back",
+        "# under (design § 2: \"at 100 the colony breaks away whatever its status\"), so the",
+        "# test reads local_var:sr_aut_peak, the higher of its autonomy before the drift and",
+        "# after; a colony held at 100 by force reads it after alone, since the hold set it",
+        "# there. Under Full Colonies our marines may hold it (sr_site_hold_<key>; owner,",
+        "# 2026-11-25), else it declares, with the world's held colonies (sr_site_declare_<key>).",
         f"sr_site_aut_step_{k} = {{",
         f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_contact_{k} }} }} "
         f"set_global_variable = {{ name = sr_site_contact_{k} value = te_history_month_index }} }}",
         f"\tset_local_variable = {{ name = sr_aut_peak value = sr_site_autonomy_value_{k} }}",
+        f"\tif = {{ limit = {{ has_global_variable = sr_site_resisting_{k} }} set_local_variable = {{ name = sr_aut_peak value = 0 }} }}",
         "\tset_global_variable = {",
         f"\t\tname = sr_site_autonomy_{k}",
         "\t\tvalue = {",
@@ -3457,7 +3463,13 @@ def _autonomy_world(site: Site) -> list[str]:
         f"\tset_local_variable = {{ name = sr_aut_peak value = {{ value = local_var:sr_aut_peak min = sr_site_autonomy_value_{k} }} }}",
         "\tif = {",
         f"\t\tlimit = {{ local_var:sr_aut_peak >= sr_aut_break_level sr_site_peopled_{k} = yes }}",
-        f"\t\tsr_aut_break_away = {{ KEY = {k} INDEX = {i} }}",
+        "\t\tif = {",
+        f"\t\t\tlimit = {{ sr_site_may_hold_{k} = yes }}",
+        f"\t\t\tsr_site_hold_{k} = yes",
+        "\t\t}",
+        "\t\telse = {",
+        f"\t\t\tsr_site_declare_{k} = yes",
+        "\t\t}",
         "\t}",
         "\telse_if = {",
         "\t\tlimit = {",
@@ -3469,9 +3481,96 @@ def _autonomy_world(site: Site) -> list[str]:
         f"\t\tset_global_variable = {{ name = sr_site_aut_asked_{k} value = yes days = 1825 }}",
         f"\t\tsr_aut_ask = {{ INDEX = {i} }}",
         "\t}",
+        "\t# The hold ends once the colony's terms take it back under the break level.",
+        "\tif = {",
+        f"\t\tlimit = {{ has_global_variable = sr_site_resisting_{k} sr_site_autonomy_value_{k} < sr_aut_break_level }}",
+        f"\t\tremove_global_variable = sr_site_resisting_{k}",
+        "\t}",
         "}",
+        *_hold(site),
         *_self_build(site),
     ]
+
+
+def _hold(site: Site) -> list[str]:
+    """A colony at the break level held by our marines, or declaring itself free
+    (Full Colonies; owner, 2026-11-25). Holder scope. A battalion holds
+    sr_hold_people_per_battalion of the people of our colonies at the break level
+    on its world (on the Moon and Mars, our marines at every colony of ours there
+    hold all of ours there together: sr_site_hold_need_<key>). Each month held the
+    garrison loses sr_site_hold_loss_<key> battalions, its own first, then ours at
+    our other colonies there, and every battalion lost adds radicals among the
+    interest groups that oppose colonial exploitation (sr_hold_radicals). Once the
+    marines fall short, every colony of ours held there declares itself free
+    together (owner: "once the British couldn't hold it all, they couldn't hold
+    any"). A player hears the hold begin (space_race_events.114)."""
+    k, i = site.key, site.index
+    mates = world_mates(site)
+    shares = {t.key: f"sr_site_shares = {{ A = {k} B = {t.key} }}" for t in mates}
+    out = [f"# {site.name} at the break level, held by our marines: at 100, the month's losses,",
+           "# then the test; short of marines, it declares itself free (sr_site_declare_<key>).",
+           f"sr_site_hold_{k} = {{",
+           f"\tset_global_variable = {{ name = sr_site_autonomy_{k} value = sr_aut_break_level }}",
+           "\tset_local_variable = { name = sr_hold_new value = 0 }",
+           "\tif = {",
+           f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_resisting_{k} }} }}",
+           f"\t\tset_global_variable = {{ name = sr_site_resisting_{k} value = yes }}",
+           "\t\tset_local_variable = { name = sr_hold_new value = 1 }",
+           "\t}",
+           f"\tset_local_variable = {{ name = sr_hold_left value = sr_site_hold_loss_{k} }}",
+           "\tset_local_variable = { name = sr_hold_lost value = local_var:sr_hold_left }",
+           "\tif = {",
+           "\t\tlimit = { local_var:sr_hold_left > 0 }",
+           f"\t\tsr_hold_take_marines = {{ KEY = {k} }}"]
+    for t in mates:
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ local_var:sr_hold_left > 0 {shares[t.key]} }}",
+                f"\t\t\tsr_hold_take_marines = {{ KEY = {t.key} }}",
+                "\t\t}"]
+    out += ["\t\tchange_local_variable = { name = sr_hold_lost subtract = local_var:sr_hold_left }",
+            "\t\tsr_hold_radicals = yes",
+            "\t}",
+            "\tif = {",
+            f"\t\tlimit = {{ sr_site_hold_marines_{k} < sr_site_hold_need_{k} }}",
+            f"\t\tsr_site_declare_{k} = yes",
+            "\t}",
+            "\telse_if = {",
+            "\t\tlimit = {",
+            "\t\t\tlocal_var:sr_hold_new = 1",
+            "\t\t\tis_player = yes",
+            "\t\t\tNOT = { has_variable = sr_rising_site }",
+            "\t\t}",
+            f"\t\tsr_site_event_open = {{ VAR = sr_rising_site INDEX = {i} }}",
+            "\t\ttrigger_event = { id = space_race_events.114 days = 1 }",
+            "\t}",
+            "}",
+            f"# {site.name} declares itself free (sr_aut_break_away): alone, or on the Moon and Mars",
+            "# with every colony of ours there held at the break level, whose marines go with them.",
+            "# The marines lost (ours at the colonies freed, while none is occupied) are counted",
+            "# first, for the event (space_race_events.98).",
+            f"sr_site_declare_{k} = {{",
+            "\tset_local_variable = { name = sr_freed_marines_now value = 0 }",
+            "\tset_local_variable = { name = sr_freed_together value = 0 }",
+            "\tif = {",
+            f"\t\tlimit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} }}",
+            f"\t\tchange_local_variable = {{ name = sr_freed_marines_now add = sr_site_marines_value_{k} }}",
+            "\t}"]
+    for t in mates:
+        out += ["\tif = {",
+                f"\t\tlimit = {{ {shares[t.key]} has_global_variable = sr_site_resisting_{t.key} }}",
+                f"\t\tchange_local_variable = {{ name = sr_freed_marines_now add = sr_site_marines_value_{t.key} }}",
+                "\t\tchange_local_variable = { name = sr_freed_together add = 1 }",
+                "\t}"]
+    for t in mates:
+        out += ["\tif = {",
+                f"\t\tlimit = {{ {shares[t.key]} has_global_variable = sr_site_resisting_{t.key} }}",
+                f"\t\tsr_aut_break_away = {{ KEY = {t.key} INDEX = {t.index} }}",
+                "\t}"]
+    world = {"moon": 1, "mars": 2}.get(world_of(site), 0)
+    out += [f"\tsr_aut_break_away = {{ KEY = {k} INDEX = {i} }}",
+            f"\tsr_freed_note = {{ WORLD = {world} }}",
+            "}"]
+    return out
 
 
 def _self_build(site: Site) -> list[str]:
@@ -3689,6 +3788,12 @@ def render_autonomy_triggers() -> list[str]:
             "# self-government nor breaks away (sr_site_aut_step_<key>; owner, 2026-11-12)."]
     out += [f"sr_site_peopled_{s.key} = {{ sr_site_pop_value_{s.key} >= sr_free_colony_minimum }}" for s in SITES]
     out += ["",
+            "# Per world, holder scope: under Full Colonies our marines there, not occupied, may",
+            "# hold the colony at the break level (sr_site_hold_<key>; owner, 2026-11-25). The",
+            "# hold's own test, marines against need, comes after the month's losses."]
+    out += [f"sr_site_may_hold_{s.key} = {{ sr_colonies_full_enabled = yes "
+            f"NOT = {{ has_global_variable = sr_site_occupier_{s.key} }} sr_site_hold_marines_{s.key} > 0 }}" for s in SITES]
+    out += ["",
             "# Per world, country scope: THIS may receive the free colony's petition: it supplies",
             "# it with full ties, can hold a colony, and has no petition open."]
     for site in SITES:
@@ -3788,7 +3893,13 @@ def render_autonomy_values() -> list[str]:
     out += ["}", "sr_garrison_count = {", "\tvalue = 0"]
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this has_global_variable = sr_site_garrison_{s.key} }} add = 1 }}"
             for s in SITES]
-    out.append("}")
+    out += ["}",
+            "# ... and its colonies held at the break level by force, under Full Colonies (the",
+            "# interest groups' disapproval, sr_hold_ig_refresh).",
+            "sr_hold_count = {", "\tvalue = 0", "\tif = {", "\t\tlimit = { sr_colonies_full_enabled = yes }"]
+    out += [f"\t\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this has_global_variable = sr_site_resisting_{s.key} }} add = 1 }}"
+            for s in SITES]
+    out += ["\t}", "}"]
     return out
 
 
@@ -3899,13 +4010,17 @@ def render_slice6_values() -> list[str]:
                 "}",
                 "# A seizure must exceed the garrison (shared on the Moon and Mars), at its",
                 "# owner's crewed share and Training Grounds' weight, and the militia; a",
-                "# liberation, the occupier's garrison alone (its people are the holder's).",
+                "# liberation, the occupier's garrison alone (its people are the holder's). A",
+                "# colony held by force has no militia for its holder: it is fighting it (owner,",
+                "# 2026-11-25).",
                 f"sr_site_garrison_need_{k} = {{",
                 f"\tvalue = sr_site_shared_marines_{k}",
                 f"\tmultiply = sr_site_marines_share_{k}",
                 f"\tmultiply = sr_site_marines_mult_{k}",
-                f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} }} add = sr_site_militia_value_{k} }}",
+                f"\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_occupier_{k} }} "
+                f"NOT = {{ has_global_variable = sr_site_resisting_{k} }} }} add = sr_site_militia_value_{k} }}",
                 "}",
+                *_hold_values(site, mates, shares),
                 f"sr_site_assault_toll_{k} = {{ value = sr_site_garrison_need_{k} multiply = sr_assault_loss_share }}",
                 f"sr_site_assault_need_{k} = {{ value = sr_site_garrison_need_{k} add = sr_site_assault_toll_{k} }}",
                 # Defences run at the colony's staffing, as every crewed level does
@@ -3957,6 +4072,50 @@ def render_slice6_values() -> list[str]:
                 f"subtract = sr_site_ws_weight_{k} }}"]
     out.append("}")
     return out
+
+
+def _hold_values(site: Site, mates: list[Site], shares: dict[str, str]) -> list[str]:
+    """A colony held at the break level by force (sr_site_hold_<key>; owner, 2026-11-25),
+    holder scope:
+      sr_site_hold_people_<key>   its people and, on the Moon and Mars, those of our other
+                                  colonies there held at the break level
+      sr_site_hold_need_<key>     the battalions they need: a sr_hold_people_per_battalion
+      sr_site_hold_marines_<key>  our marines there, shared on the Moon and Mars, at our
+                                  crewed share
+      sr_site_hold_loss_<key>     the battalions it costs a month: sr_hold_loss_per_excess a
+                                  point a month its terms run past the break level's
+                                  settling (sr_aut_break_level x sr_aut_settle_rate)
+      sr_site_hold_world_loss_<key> the same for every colony of ours held there
+      sr_site_hold_months_<key>   the months our marines hold at that loss, whole;
+                                  sr_hold_months_none while they lose nothing"""
+    k = site.key
+    held = {t.key: f"{shares[t.key]} has_global_variable = sr_site_resisting_{t.key}" for t in mates}
+    return [f"sr_site_hold_people_{k} = {{", f"\tvalue = sr_site_pop_value_{k}",
+            *[f"\tif = {{ limit = {{ {held[t.key]} }} add = sr_site_pop_value_{t.key} }}" for t in mates],
+            "}",
+            f"sr_site_hold_need_{k} = {{ value = sr_site_hold_people_{k} divide = sr_hold_people_per_battalion }}",
+            f"sr_site_hold_marines_{k} = {{ value = sr_site_shared_marines_{k} multiply = sr_site_marines_share_{k} }}",
+            f"sr_site_hold_loss_{k} = {{",
+            f"\tvalue = sr_site_aut_pressure_{k}",
+            "\tsubtract = { value = sr_aut_break_level multiply = sr_aut_settle_rate }",
+            "\tmin = 0",
+            "\tmultiply = sr_hold_loss_per_excess",
+            "}",
+            f"sr_site_hold_world_loss_{k} = {{", f"\tvalue = sr_site_hold_loss_{k}",
+            *[f"\tif = {{ limit = {{ {held[t.key]} }} add = sr_site_hold_loss_{t.key} }}" for t in mates],
+            "}",
+            f"sr_site_hold_months_{k} = {{",
+            "\tvalue = sr_hold_months_none",
+            "\tif = {",
+            f"\t\tlimit = {{ sr_site_hold_world_loss_{k} > 0 }}",
+            f"\t\tvalue = sr_site_hold_marines_{k}",
+            f"\t\tsubtract = sr_site_hold_need_{k}",
+            f"\t\tdivide = {{ value = sr_site_hold_world_loss_{k} multiply = sr_site_marines_share_{k} min = 0.001 }}",
+            "\t\tmin = 0",
+            "\t\tmax = sr_hold_months_none",
+            "\t\tfloor = yes",
+            "\t}",
+            "}"]
 
 
 def render_overview_display() -> list[str]:
@@ -4058,6 +4217,11 @@ def render_autonomy_display() -> list[str]:
            "#   sr_disp_site_aut_<key>        its autonomy, whole",
            "#   sr_disp_site_aut_drift_<key>  its drift a month, ours only (0 otherwise)",
            "#   sr_disp_site_aut_status_<key> 0 nothing, 1 chartered, 2 garrisoned, 3 both",
+           "#   sr_disp_site_held_<key>       1 while ours and held at the break level by force",
+           "#                                 (sr_site_hold_<key>): the status cell says so instead",
+           "#   sr_disp_hold_<fig>_<key>      a hold's figures, ours only: marines, need, loss",
+           "#                                 (the world's) a month, months it holds, and 1 while",
+           "#                                 it loses nothing (steady)",
            "#   sr_disp_free_<key>            1 while it is a free colony",
            "#   sr_disp_free_ties_<key>       our ties with it, whole",
            "#   sr_disp_free_supplied_<key>   1 while we supply it"]
@@ -4073,6 +4237,14 @@ def render_autonomy_display() -> list[str]:
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_charter_{k} }} add = 1 }}",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_garrison_{k} }} add = 2 }}",
                 "}",
+                f"sr_disp_site_held_{k} = {{ value = 0 if = {{ limit = {{ global_var:sr_site_holder_{k} ?= this "
+                f"has_global_variable = sr_site_resisting_{k} }} value = 1 }} }}",
+                *[f"sr_disp_hold_{fig}_{k} = {{ value = 0 if = {{ limit = {{ global_var:sr_site_holder_{k} ?= this "
+                  f"has_global_variable = sr_site_resisting_{k} }} value = {val} }} }}"
+                  for fig, val in (("marines", f"sr_site_hold_marines_{k}"), ("need", f"sr_site_hold_need_{k}"),
+                                   ("loss", f"sr_site_hold_world_loss_{k}"), ("months", f"sr_site_hold_months_{k}"))],
+                f"sr_disp_hold_steady_{k} = {{ value = 0 if = {{ limit = {{ global_var:sr_site_holder_{k} ?= this "
+                f"has_global_variable = sr_site_resisting_{k} sr_site_hold_world_loss_{k} <= 0 }} value = 1 }} }}",
                 f"sr_disp_free_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_global_variable = sr_site_free_{k} }} value = 1 }}",
@@ -4505,7 +4677,9 @@ def render_custom_loc() -> str:
              ("sr_occ_site_name", "sr_occ_site"),
              ("sr_destroyed_site_name", "sr_destroyed_site"),
              ("sr_seized_free_site_name", "sr_seized_free_site"),
-             ("sr_garrison_lapsed_site_name", "sr_garrison_lapsed_site")]
+             ("sr_garrison_lapsed_site_name", "sr_garrison_lapsed_site"),
+             # A colony held at the break level by force (space_race_events.114).
+             ("sr_rising_site_name", "sr_rising_site")]
     for name, var in names:
         out += [f"{name} = {{", "\ttype = country", "\trandom_valid = no", ""]
         for site in SITES:
@@ -4781,8 +4955,9 @@ def _switch_row(site: Site) -> list[str]:
 # a module's dismantling and its boons, Revoke, the Resort Colony room and the
 # specializations' full names are the page's; the crews cell in its three colors
 # is the list's.
-_PAGE_ONLY = re.compile(r"mod_\w+_dismantl\w+|mod_\w+_boons|aut_revoke_button|module_(?:draw|resorts|resorts_tooltip)|page_name_[ab]")
-_ROW_ONLY = re.compile(r"settler_crews(?:_exact|_short)?")
+_PAGE_ONLY = re.compile(r"mod_\w+_dismantl\w+|mod_\w+_boons|aut_revoke_button|module_(?:draw|resorts|resorts_tooltip)|page_name_[ab]"
+                        r"|aut_held_(?:steady|months)_visible")
+_ROW_ONLY = re.compile(r"settler_crews(?:_exact|_short)?|aut_held_visible")
 
 
 def _without(lines: list[str], names: re.Pattern) -> list[str]:
@@ -4930,8 +5105,17 @@ def _colony_blocks(site: Site) -> list[str]:
     out += _override("aut_build_tooltip", 'tooltip = "je_space_race_widget_autonomy_build_tt"')
     out += _override("aut_build", f'raw_text = "#v [{_sv(f"sr_disp_site_self_{k}")}|0]%#! '
                                   f'(+[{_sv(f"sr_disp_site_self_rate_{k}")}|1])"')
+    held = f"sr_disp_site_held_{k}"
     for code, name in enumerate(("none", "charter", "garrison", "both")):
-        out += _override(f"aut_{name}_visible", f'visible = "[{_eq(status, code)}]"')
+        out += _override(f"aut_{name}_visible", f'visible = "[And( {_eq(status, code)}, {_eq(held, 0)} )]"')
+    # Held at the break level by our marines (owner, 2026-11-25): the row says Held,
+    # the page how long they hold it at the month's losses, the hover every figure.
+    held_tt = f'tooltip = "je_space_race_widget_autonomy_held_tt_{k}"'
+    steady = f"sr_disp_hold_steady_{k}"
+    out += _override("aut_held_visible", f'visible = "[{_eq(held, 1)}]"', held_tt)
+    out += _override("aut_held_steady_visible", f'visible = "[And( {_eq(held, 1)}, {_eq(steady, 1)} )]"', held_tt)
+    out += _override("aut_held_months_visible", f'visible = "[And( {_eq(held, 1)}, {_eq(steady, 0)} )]"', held_tt,
+                     f'text = "je_space_race_widget_autonomy_held_months_{k}"')
     out += _override("aut_revoke_button",
                      f'visible = "[Or( {_eq(status, 1)}, {_eq(status, 3)} )]"',
                      f'enabled = "{_sgui_call("sr_colony_revoke_sgui", "IsValid", site)}"',

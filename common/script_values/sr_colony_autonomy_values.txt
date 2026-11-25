@@ -64,6 +64,54 @@ sr_aut_revoke_level = { value = 99 }
 # A free colony that rejoins starts here.
 sr_aut_rejoin_level = { value = 20 }
 
+# ---- Holding a colony by force, at home (owner, 2026-11-25) ---------------------------
+# Under Full Colonies our marines may hold a colony at the break level
+# (sr_fleet_values.txt). The interest groups that oppose colonial exploitation
+# (sr_ig_anticolonial: disapprove or worse) lose approval while we do, from the
+# one refresh site sr_hold_ig_refresh: sr_hold_approval_first for the first
+# colony held, sr_hold_approval_more for each after, at most
+# sr_hold_approval_max, twice that from a group that strongly disapproves. Each
+# battalion the holds lose adds sr_hold_radicals_per_battalion radicals among
+# those groups' supporters (sr_hold_radicals). Both scale with our Free Speech
+# law (sr_hold_speech_scale): a crackdown is a scandal under Protected Speech
+# and goes unreported under Outlawed Dissent.
+sr_hold_approval_first = { value = 2 }
+sr_hold_approval_more = { value = 1 }
+sr_hold_approval_max = { value = 5 }
+sr_hold_approval_strong_factor = { value = 2 }
+sr_hold_radicals_per_battalion = { value = small_radicals }
+
+# Country scope.
+sr_hold_speech_scale = {
+	value = 1
+	if = {
+		limit = { has_law_or_variant = law_type:law_protected_speech }
+		value = 1.5
+	}
+	else_if = {
+		limit = { has_law_or_variant = law_type:law_censorship }
+		value = 0.75
+	}
+	else_if = {
+		limit = { has_law_or_variant = law_type:law_outlawed_dissent }
+		value = 0.5
+	}
+}
+# The approval a disapproving group loses (positive: the modifier's unit is -1),
+# and a strongly disapproving one.
+sr_hold_approval = {
+	value = sr_hold_count
+	subtract = 1
+	multiply = sr_hold_approval_more
+	add = sr_hold_approval_first
+	max = sr_hold_approval_max
+	multiply = sr_hold_speech_scale
+}
+sr_hold_approval_strong = {
+	value = sr_hold_approval
+	multiply = sr_hold_approval_strong_factor
+}
+
 # ---- Free colonies (design § 3) -----------------------------------------------------
 # A world needs this many people to stand as a free colony: below it a dead
 # holder's world is released, and an outpost can only be closed.

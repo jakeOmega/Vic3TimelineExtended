@@ -8600,7 +8600,9 @@ sr_loc_held_earth = { always = no }
 #   sr_loc_propellant_port_<loc>  ... on a propellant world
 #   sr_loc_our_marines_<loc>      marines of ours stand at a world of ours there
 #   sr_loc_garrison_due_<loc>     a world of ours there waits for its garrison, and
-#                                 our marines on its world don't make one already
+#                                 our marines on its world don't make one already;
+#                                 or one held at the break level by force for fewer
+#                                 than sr_hold_ai_reinforce_months (owner, 2026-11-25)
 # The Moon's colonies, at Earth: Land and Embark there (owner, 2026-11-24).
 sr_loc_held_lunar = {
 	OR = {
@@ -8630,6 +8632,12 @@ sr_loc_garrison_due_earth = {
 		AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_garrison_due_marius_hills sr_site_shared_marines_marius_hills < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_garrison_due_daedalus sr_site_shared_marines_daedalus < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_garrison_due_imbrium sr_site_shared_marines_imbrium < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } has_global_variable = sr_site_resisting_shackleton sr_site_hold_months_shackleton < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } has_global_variable = sr_site_resisting_peary sr_site_hold_months_peary < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } has_global_variable = sr_site_resisting_tranquility sr_site_hold_months_tranquility < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } has_global_variable = sr_site_resisting_marius_hills sr_site_hold_months_marius_hills < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } has_global_variable = sr_site_resisting_daedalus sr_site_hold_months_daedalus < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } has_global_variable = sr_site_resisting_imbrium sr_site_hold_months_imbrium < sr_hold_ai_reinforce_months }
 	}
 }
 sr_loc_held_inner = {
@@ -8654,6 +8662,8 @@ sr_loc_garrison_due_inner = {
 	OR = {
 		AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_garrison_due_venus sr_site_shared_marines_venus < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_garrison_due_mercury sr_site_shared_marines_mercury < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } has_global_variable = sr_site_resisting_venus sr_site_hold_months_venus < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } has_global_variable = sr_site_resisting_mercury sr_site_hold_months_mercury < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),
@@ -8725,6 +8735,11 @@ sr_loc_garrison_due_mars = {
 		AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } has_global_variable = sr_site_garrison_due_hellas_planitia sr_site_shared_marines_hellas_planitia < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } has_global_variable = sr_site_garrison_due_utopia_planitia sr_site_shared_marines_utopia_planitia < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } has_global_variable = sr_site_garrison_due_arcadia_planitia sr_site_shared_marines_arcadia_planitia < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } has_global_variable = sr_site_resisting_valles_marineris sr_site_hold_months_valles_marineris < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } has_global_variable = sr_site_resisting_olympus_mons sr_site_hold_months_olympus_mons < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } has_global_variable = sr_site_resisting_hellas_planitia sr_site_hold_months_hellas_planitia < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } has_global_variable = sr_site_resisting_utopia_planitia sr_site_hold_months_utopia_planitia < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } has_global_variable = sr_site_resisting_arcadia_planitia sr_site_hold_months_arcadia_planitia < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),
@@ -8799,6 +8814,11 @@ sr_loc_garrison_due_asteroids = {
 		AND = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } has_global_variable = sr_site_garrison_due_psyche sr_site_shared_marines_psyche < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } has_global_variable = sr_site_garrison_due_pallas sr_site_shared_marines_pallas < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } has_global_variable = sr_site_garrison_due_hygiea sr_site_shared_marines_hygiea < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } has_global_variable = sr_site_resisting_ceres sr_site_hold_months_ceres < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } has_global_variable = sr_site_resisting_vesta sr_site_hold_months_vesta < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } has_global_variable = sr_site_resisting_psyche sr_site_hold_months_psyche < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } has_global_variable = sr_site_resisting_pallas sr_site_hold_months_pallas < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } has_global_variable = sr_site_resisting_hygiea sr_site_hold_months_hygiea < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),
@@ -8879,6 +8899,12 @@ sr_loc_garrison_due_jupiter = {
 		AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } has_global_variable = sr_site_garrison_due_callisto sr_site_shared_marines_callisto < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } has_global_variable = sr_site_garrison_due_himalia sr_site_shared_marines_himalia < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } has_global_variable = sr_site_garrison_due_amalthea sr_site_shared_marines_amalthea < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } has_global_variable = sr_site_resisting_io sr_site_hold_months_io < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } has_global_variable = sr_site_resisting_europa sr_site_hold_months_europa < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } has_global_variable = sr_site_resisting_ganymede sr_site_hold_months_ganymede < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } has_global_variable = sr_site_resisting_callisto sr_site_hold_months_callisto < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } has_global_variable = sr_site_resisting_himalia sr_site_hold_months_himalia < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } has_global_variable = sr_site_resisting_amalthea sr_site_hold_months_amalthea < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),
@@ -8956,6 +8982,11 @@ sr_loc_garrison_due_saturn = {
 		AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } has_global_variable = sr_site_garrison_due_rhea sr_site_shared_marines_rhea < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } has_global_variable = sr_site_garrison_due_mimas sr_site_shared_marines_mimas < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } has_global_variable = sr_site_garrison_due_iapetus sr_site_shared_marines_iapetus < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } has_global_variable = sr_site_resisting_titan sr_site_hold_months_titan < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } has_global_variable = sr_site_resisting_enceladus sr_site_hold_months_enceladus < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } has_global_variable = sr_site_resisting_rhea sr_site_hold_months_rhea < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } has_global_variable = sr_site_resisting_mimas sr_site_hold_months_mimas < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } has_global_variable = sr_site_resisting_iapetus sr_site_hold_months_iapetus < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),
@@ -9021,6 +9052,10 @@ sr_loc_garrison_due_uranus = {
 		AND = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } has_global_variable = sr_site_garrison_due_oberon sr_site_shared_marines_oberon < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } has_global_variable = sr_site_garrison_due_miranda sr_site_shared_marines_miranda < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } has_global_variable = sr_site_garrison_due_ariel sr_site_shared_marines_ariel < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } has_global_variable = sr_site_resisting_titania sr_site_hold_months_titania < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } has_global_variable = sr_site_resisting_oberon sr_site_hold_months_oberon < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } has_global_variable = sr_site_resisting_miranda sr_site_hold_months_miranda < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } has_global_variable = sr_site_resisting_ariel sr_site_hold_months_ariel < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),
@@ -9082,6 +9117,8 @@ sr_loc_garrison_due_neptune = {
 	OR = {
 		AND = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } has_global_variable = sr_site_garrison_due_triton sr_site_shared_marines_triton < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } has_global_variable = sr_site_garrison_due_proteus sr_site_shared_marines_proteus < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } has_global_variable = sr_site_resisting_triton sr_site_hold_months_triton < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } has_global_variable = sr_site_resisting_proteus sr_site_hold_months_proteus < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),
@@ -9153,6 +9190,11 @@ sr_loc_garrison_due_kuiper = {
 		AND = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } has_global_variable = sr_site_garrison_due_makemake sr_site_shared_marines_makemake < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } has_global_variable = sr_site_garrison_due_haumea sr_site_shared_marines_haumea < sr_garrison_marines_needed }
 		AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } has_global_variable = sr_site_garrison_due_sedna sr_site_shared_marines_sedna < sr_garrison_marines_needed }
+		AND = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } has_global_variable = sr_site_resisting_pluto sr_site_hold_months_pluto < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } has_global_variable = sr_site_resisting_eris sr_site_hold_months_eris < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } has_global_variable = sr_site_resisting_makemake sr_site_hold_months_makemake < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } has_global_variable = sr_site_resisting_haumea sr_site_hold_months_haumea < sr_hold_ai_reinforce_months }
+		AND = { global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_occupier_sedna } has_global_variable = sr_site_resisting_sedna sr_site_hold_months_sedna < sr_hold_ai_reinforce_months }
 	}
 }
 # A world of ours there, and an enemy fleet there or on its way (design § 14),

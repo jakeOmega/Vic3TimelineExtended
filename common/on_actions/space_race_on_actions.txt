@@ -133,6 +133,19 @@ space_race_on_action = {
 			}
 			sr_ccost_refresh = yes
 		}
+		# A colony held by force, at home (sr_colony_autonomy_effects.txt; owner,
+		# 2026-11-25): the interest groups that oppose colonial exploitation lose
+		# approval, from the one refresh site, here so that the rule switched off
+		# mid-game or the last hold ended takes it off.
+		if = {
+			limit = {
+				OR = {
+					sr_hold_count >= 1
+					has_variable = sr_hold_ig_on
+				}
+			}
+			sr_hold_ig_refresh = yes
+		}
 		# Earth orbit (slice 6d, sr_earth_orbit_effects.txt): a player told when
 		# its Earth is blockaded, or its launch site lost and back; and of each
 		# hostile fleet bound for Earth (the Earth alert, UI pass design § 9,

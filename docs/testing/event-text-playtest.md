@@ -225,3 +225,13 @@ The script bugs the batches reported were fixed after the texts. These rows are 
 | Check | How | Expected |
 |---|---|---|
 | A law with two unlocking technologies needs both | As a country with `social_media` researched and `automated_surveillance` not, then the reverse, open the Privacy Rights laws | Intrusive Surveillance (`law_intrusive_surveillance`, the only law with two) is locked both times: the engine needs all of them. `event_guarantees.py` counts only what each gives, the safe reading while this is unknown; if locked, its `law_gate` may count both, and `extra_law_events.41`'s total gains `pop_culture` (era 7). If either one unlocks it, the tool's reading is the engine's: note it in `law_gate` |
+
+## A colony held by force (`space_race_events.114`, `.98`'s variants, 2026-11-25)
+
+| Check | How | Expected |
+|---|---|---|
+| The rising event names its colony | Under Full Colonies, hold a colony at 100 with marines (`docs/testing/solar-colonies-playtest.md` § "A colony held by force") | "<World> Rises Against Us", the world's name in the title and description, not "Unknown" |
+| The world uprising | Two Mars colonies held by force, then embark the marines | "Our Martian Colonies Break Away", `.d_mars`, the joint council's document as flavor, and the option's hover gives the battalions lost |
+| Several colonies at once | Two colonies on different worlds break away in one month | "Our Colonies Declare Themselves Free", the count as a number and the first world's name |
+| The overrun garrison | One colony held by force whose marines run out | `.d_overrun`, and the hover's battalions as a number with one decimal |
+

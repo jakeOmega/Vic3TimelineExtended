@@ -1701,3 +1701,37 @@ its throughput and its mults can't be read from script, only from the tooltip (i
    the budget didn't see (every `sr_ai_mission_bill_*` adds `sr_ccost_lc_now`).
 8. **The settlers.** With settlers and modules both billed, Settler Launches and Colony Modules sit on the same input
    and the People view's Launch Capacity a week matches what Settler Launches adds.
+
+## A colony held by force (2026-11-25)
+
+Under Full Colonies a colony at 100 autonomy is held by our marines there, losing battalions each month, and declares
+itself free only when they fall short; on the Moon and Mars every colony of ours held there declares together
+(`docs/systems/mod_systems/space_race.md` § *A colony held by force*). The engine facts it rests on each have a use in
+the mod already (`law_stance` in interest group scope in `zz_te_party_join_weights.txt`, an interest group modifier at
+a multiplier in `un_regime_effects.txt`, `add_radicals` with `interest_group = scope:` in
+`amendment_petition_events.txt`), so there is no self-check line. The console is `event te_debug_space_race.5`, option
+i (our first colony's autonomy to 100).
+
+1. **The hold.** A colony of 1,000 people or more, two marine battalions landed there, at war (so its terms reach
+   1 or more), then option i: next month its autonomy reads 100, its row in the Autonomy view reads Held, the page
+   "Held: N months", and "<World> Rises Against Us" (`.114`) arrives. Its hover gives our marines, the need and
+   the loss a month.
+2. **The losses.** Month by month the colony's marines (the Defenses view) fall by the hover's loss. In the interest
+   group panel, each group that disapproves of Colonial Exploitation shows Colonies Held by Force at −2 approval, a
+   strongly disapproving one −4, and its radicals rise as battalions are lost. Change the Free Speech law: the figure
+   becomes −3 under Protected Speech, −1.5 under Censorship, −1 under Outlawed Dissent.
+3. **The overrun.** Let the marines run below the need: the colony declares itself free, "<World> Declares Itself
+   Free" with the overrun description, and the option's hover gives the battalions lost.
+4. **A world rising together.** Two Mars colonies held by force, then embark most of the marines: both declare in the
+   same month, "Our Martian Colonies Break Away", the joint council's flavor, and a colony of ours on Mars still under
+   100 keeps its marines.
+5. **Let it go.** At `.114`, option b: the colony is free, ties 50, and its marines are aboard our first fleet at Earth
+   (or leave service with none there).
+6. **The hold ends.** Make peace with the colony's terms back under 1: within a few months its autonomy falls under
+   100, the row reads its charter or garrison again, and Colonies Held by Force leaves the interest groups a month later.
+7. **No militia for us.** A seizure of a colony held by force needs more than half again its marines alone, not its
+   militia too (`sr_site_garrison_need_<key>`).
+8. **The AI.** In an observer run with Full Colonies and an AI colony at war, an AI fleet lands marines at a colony it
+   holds by force once the hold has under a year left.
+9. **Simple Colonies.** Option i under Simple Colonies: next month the colony declares itself free, no hold.
+

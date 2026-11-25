@@ -191,6 +191,26 @@ sr_sc_levels = {
 sr_garrison_marines_needed = { value = 2 }
 sr_garrison_due_months = { value = 12 }
 
+# Holding a colony by force (owner, 2026-11-25). Under Full Colonies a colony at
+# the break level declares itself free only when our marines there can't hold
+# it: a battalion holds this many of its people. On the Moon and Mars our
+# marines at every colony of ours there hold all of ours there at the break
+# level together, and once they fall short all of those declare
+# (sr_site_hold_<key>, sr_sites_generated.txt). A battalion holds five times the
+# militia a world's people field against an invader (sr_militia_people): the
+# holder keeps the domes' air, water and docks.
+sr_hold_people_per_battalion = { value = 100000 }
+# The garrison loses this many battalions a month for each point a month the
+# colony's terms run past what keeps it at the break level (the break level x
+# sr_aut_settle_rate, 1): a colony that would settle at 120 costs a battalion
+# about every ten months, one at 150 about every four.
+sr_hold_loss_per_excess = { value = 0.5 }
+# What a hold that loses nothing reads as, in months.
+sr_hold_months_none = { value = 999 }
+# The AI lands marines at a colony it holds for fewer months than this
+# (sr_loc_garrison_due_<loc>, sr_fleets_generated.txt).
+sr_hold_ai_reinforce_months = { value = 12 }
+
 # ---- Combat (design § 7) ----------------------------------------------------------------
 # Lanchester's square law: a month, each side loses k x the other's fire.
 sr_fleet_k = { value = 0.1 }

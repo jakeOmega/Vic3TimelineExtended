@@ -294,6 +294,16 @@ sr_dome_breach_repairs = {
 	goods_input_launch_capacity_mult = 0.01
 }
 
+# ======= Solar System Colonization - a colony held by force (full colonies)
+# A colony held by force (owner, 2026-11-25): on each interest group that
+# opposes colonial exploitation, at multiplier = the approval it loses
+# (sr_hold_approval, sr_colony_autonomy_values.txt), from the one refresh site
+# sr_hold_ig_refresh (sr_colony_autonomy_effects.txt).
+sr_hold_by_force_ig = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -1
+}
+
 # The nation's people off Earth, per 100,000 (at most ten times).
 sr_offworld_population = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
