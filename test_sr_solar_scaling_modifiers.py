@@ -5,9 +5,11 @@ engine re-reads its value from the owning country about every four days
 (design: docs/superpowers/specs/2026-11-06-scaling-modifiers-design.md § 4.10).
 The 80 specializations, the 40 discovery outcomes and the six facilities are
 declared in a generated file (common/journal_entries/sr_sites_generated.txt,
-an INJECT into the entry, from scripts/generators/gen_solar_sites.py); the six
-population and autonomy modifiers and Interplanetary Trade Networks in the
-hand-written entry (je_space_race.txt). These tests pin each declaration and
+an INJECT into the entry, from scripts/generators/gen_solar_sites.py); the
+off-world bonus, the free colonies' trade and Interplanetary Trade Networks in
+the hand-written entry (je_space_race.txt). The colonies' costs (module upkeep,
+free colony supply, garrisons) left the entry for the Space Program building
+on 2026-11-25 (test_colony_costs.py). These tests pin each declaration and
 its value's "off" gate, which must read 0 wherever the old code removed the
 modifier, and that the refresh code the declarations replaced is gone.
 test_journal_entry_shape.py checks the tree-wide rule that nothing adds,
@@ -32,16 +34,14 @@ ENTRY = "je_space_race_solar_colonization"
 JE = ROOT / "common/journal_entries/je_space_race.txt"
 GENERATED = ROOT / gss.ENTRY_OUT
 
-# The hand-written six (the emigration programme went: colony people design § 6.2):
-# modifier -> (the conjuncts of its value's limit, what it adds).
+# The hand-written three (the emigration programme went: colony people design § 6.2;
+# module upkeep, free colony supply and garrisons went to the Space Program building,
+# owner, 2026-11-25): modifier -> (the conjuncts of its value's limit, what it adds).
 CONTESTED = "sr_colonies_contested_enabled = yes"
 HAND = {
     "sr_solar_system_trade": (["has_variable = sr_completed_solar_colonization"], "1"),
     "sr_offworld_population": ([CONTESTED, "sr_offworld_pop_total >= sr_offworld_bonus_minimum"], "sr_offworld_units"),
-    "sr_module_upkeep": ([CONTESTED, "sr_mod_upkeep_levels >= 1"], "sr_mod_upkeep_levels"),
-    "sr_free_colony_supply": ([CONTESTED, "sr_free_supply_count >= 1"], "sr_free_supply_count"),
     "sr_free_colony_trade": ([CONTESTED, "sr_free_trade_units > 0"], "sr_free_trade_units"),
-    "sr_colonial_garrisons": ([CONTESTED, "sr_garrison_count >= 1"], "sr_garrison_count"),
 }
 
 # The old multipliers, read through owner from the entry's scope. Only an older save's
@@ -162,7 +162,7 @@ class HandWrittenDeclarationTests(unittest.TestCase):
     MILESTONE_KEYS = {"sr_space_program_cost", "sr_funding_progress", "sr_funding_throughput",
                       "sr_safe_approach", "sr_ambitious_approach"}
 
-    def test_the_entry_declares_exactly_the_six_once_each(self):
+    def test_the_entry_declares_exactly_the_three_once_each(self):
         self.assertEqual(set(self.declared) - self.MILESTONE_KEYS, set(HAND))
         for modifier, texts in self.declared.items():
             self.assertEqual(len(texts), 1, modifier)

@@ -4904,18 +4904,17 @@ space_race_events.96 = {
 
 	trigger = { has_variable = sr_life_site }
 
-	# Meet their demands: a dearer Space Program for three years.
+	# Meet their demands: a dearer Space Program for three years. The term is a
+	# month counter, billed as Launch Capacity on the Space Program by
+	# sr_ccost_refresh (sr_colony_cost_effects.txt); a second strike within it
+	# starts it again.
 	option = {
 		name = space_race_events.96.a
 		default_option = yes
-		# A same-name add_modifier stacks: a second one within the term replaces the first.
-		hidden_effect = {
-			if = {
-				limit = { has_modifier = sr_strike_settlement }
-				remove_modifier = sr_strike_settlement
-			}
+		custom_tooltip = {
+			text = sr_strike_settlement_tt
+			set_variable = { name = sr_strike_settlement_months value = sr_strike_settlement_term }
 		}
-		add_modifier = { name = sr_strike_settlement months = 36 }
 		custom_tooltip = {
 			text = sr_life_autonomy_down_5_tt
 			set_local_variable = { name = sr_aut_delta value = -5 }
@@ -4965,18 +4964,16 @@ space_race_events.97 = {
 		sr_site_by_index = { DO = breach }
 	}
 
-	# Rebuild at once: a year's dearer Space Program.
+	# Rebuild at once: a year's dearer Space Program. The term is a month
+	# counter, billed as Launch Capacity on the Space Program by sr_ccost_refresh
+	# (sr_colony_cost_effects.txt); a second breach within it starts it again.
 	option = {
 		name = space_race_events.97.a
 		default_option = yes
-		# A same-name add_modifier stacks: a second one within the term replaces the first.
-		hidden_effect = {
-			if = {
-				limit = { has_modifier = sr_dome_breach_repairs }
-				remove_modifier = sr_dome_breach_repairs
-			}
+		custom_tooltip = {
+			text = sr_dome_breach_repairs_tt
+			set_variable = { name = sr_dome_breach_months value = sr_dome_breach_term }
 		}
-		add_modifier = { name = sr_dome_breach_repairs months = 12 }
 		custom_tooltip = {
 			text = sr_life_autonomy_down_5_tt
 			set_local_variable = { name = sr_aut_delta value = -5 }

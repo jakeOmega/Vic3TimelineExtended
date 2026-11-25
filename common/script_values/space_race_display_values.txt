@@ -1350,9 +1350,16 @@ sr_disp_ms_first_land = {
 	max = sr_ms_land_months_8
 	min = 1
 }
-# The modules' upkeep: +1% Space Program throughput a level past the first.
-sr_disp_mod_upkeep_pct = {
-	value = sr_mod_upkeep_levels
+# The modules' upkeep (sr_colony_cost_values.txt): the levels it bills, and the
+# Launch Capacity it takes a week at full staff, 1% of the Space Program's
+# base Launch Capacity a level.
+sr_disp_mod_upkeep_levels = {
+	value = sr_ccost_upkeep_units
+}
+sr_disp_mod_upkeep_week = {
+	value = sr_ccost_upkeep_units
+	multiply = sr_ccost_upkeep_share
+	multiply = sr_emig_lc_base
 }
 # Our Extraplanetary Base levels, our room for them, and the throughput the
 # room gives them (percent, the average grade; negative past the room).

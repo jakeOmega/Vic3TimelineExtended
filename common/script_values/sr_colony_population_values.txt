@@ -124,13 +124,15 @@ sr_emig_lc_base = {
 	if = { limit = { any_scope_building = { is_building_type = building_space_program has_active_production_method = pm_sr_storage_orbital_depot } } add = 450 }
 }
 # The building's Launch Capacity as the engine bills it: the base times the
-# country's Space Program throughput (module upkeep, free colony supply), which
-# the mult would otherwise multiply the settlers' bill by. Floored at 1: a base
-# of 0 divides by nothing (Review Focus 5). State-scope throughput (devastation,
-# riots) is not divided out.
+# country's Space Program throughput (funding, the milestone rewards;
+# sr_program_throughput_factor, sr_colony_cost_values.txt), which the mult would
+# otherwise multiply the settlers' bill by. The colonies' costs are Launch
+# Capacity mults beside this one, not throughput, so they add to it and leave
+# the divisor alone (until 2026-11-25 module upkeep and free colony supply were
+# throughput, and in it). Floored at 1: a base of 0 divides by nothing (Review
+# Focus 5). State-scope throughput (devastation, riots) is not divided out.
 sr_emig_bill_divisor = {
-	value = modifier:building_space_program_throughput_add
-	add = 1
+	value = sr_program_throughput_factor
 	multiply = sr_emig_lc_base
 	min = 1
 }

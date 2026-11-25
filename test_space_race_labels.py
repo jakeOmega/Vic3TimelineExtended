@@ -76,7 +76,10 @@ END_YEAR = 2136           # sr_disp_cf_slot_<n>_year: END_DATE's year
 FAB_RATE_CEILING = 99.9   # sr_disp_fab_rate: the best method gives 25 a month; technology could add more
 FAB_STOCK = 200           # sr_disp_fab_stock: sr_mod_fab_stock_cap
 SHIP_SLOTS = 8            # sr_disp_ms_waiting / _flying: gen_solar_sites.SHIP_SLOTS
-UPKEEP_CEILING = 999      # sr_disp_mod_upkeep_pct: a level past the first per module, 40 worlds x 7 at most
+UPKEEP_CEILING = 999      # sr_disp_mod_upkeep_levels: a level past the first per module, 40 worlds x 7 at most
+# sr_disp_mod_upkeep_week: those levels x 1% of the Space Program's base Launch Capacity, at most the
+# Interstellar Mission's 100,000, Fusion Shipyards' 4,800, the depot's 450 and debris removal's 300 (sr_emig_lc_base)
+UPKEEP_LC_WEEK = round(UPKEEP_CEILING * 0.01 * (100_000 + 4_800 + 450 + 300))
 EBASE_LEVELS = 99_999     # sr_disp_ebase_levels / _room: 4,335 levels of room before Mining Complexes, 26,535 with every slot one; five digits
 FREE_WORLDS = 40          # sr_disp_free_supplied_count: at most every world
 FREE_TRADE_RESEARCH = 5   # sr_disp_free_trade_research: sr_free_trade_max_units (5) x 1%
@@ -275,7 +278,8 @@ def _longest_figure(name):
              "sr_disp_emig_last_sent": SETTLERS_SENT, "sr_disp_emig_bill_week": SETTLERS_LC_WEEK, "sr_disp_offworld_pop": OFFWORLD_PEOPLE,
              "sr_disp_fab_rate": FAB_RATE_CEILING, "sr_disp_fab_stock": FAB_STOCK,
              "sr_disp_ms_waiting": SHIP_SLOTS, "sr_disp_ms_flying": SHIP_SLOTS,
-             "sr_disp_mod_upkeep_pct": UPKEEP_CEILING, "sr_disp_ebase_levels": EBASE_LEVELS,
+             "sr_disp_mod_upkeep_levels": UPKEEP_CEILING,
+             "sr_disp_mod_upkeep_week": UPKEEP_LC_WEEK, "sr_disp_ebase_levels": EBASE_LEVELS,
              "sr_disp_ebase_room": EBASE_LEVELS, "sr_disp_free_supplied_count": FREE_WORLDS,
              "sr_disp_ebase_queued": EBASE_LEVELS, "sr_disp_ebase_total": EBASE_LEVELS,
              "sr_disp_ebase_next_grade": -75,
