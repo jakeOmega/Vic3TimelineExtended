@@ -273,123 +273,142 @@ types te_banking_history_types
 			text = "te_hist_since"
 		}
 
+		### Nothing stored yet (a new game's first month), or a country that keeps
+		### no history (National Info): said once, here, and the charts wait
+		### (te_history_section_empty).
+		te_history_section_empty = {
+			blockoverride "empty_note_font" {
+				using = banking_dash_fontsize_row
+			}
+		}
+
 		### What the two pips on a bar mean (te_banking_hist_marker_key, above)
 		te_banking_hist_marker_key = {}
 
-		### ---- Cycle value (0-100 index) --------------------------------
-		te_hist_bank_value = {}
+		### The eight charts, once the store holds a sample: until then each drew
+		### its own frame around the same sentence.
+		flowcontainer = {
+			visible = "[Not( IsDataModelEmpty( Country.MakeScope.GetList('te_hist') ) )]"
+			direction = vertical
+			parentanchor = hcenter
+			ignoreinvisible = yes
+			spacing = 2
 
-		### ---- Momentum (signed monthly delta) --------------------------
-		te_hist_bank_momentum = {}
+			### ---- Cycle value (0-100 index) --------------------------------
+			te_hist_bank_value = {}
 
-		### ---- Bubble pressure (0-100 index) ----------------------------
-		te_hist_bank_bubble = {}
+			### ---- Momentum (signed monthly delta) --------------------------
+			te_hist_bank_momentum = {}
 
-		### ---- Policy rate (percentage points) --------------------------
-		### TWO CHARTS, ONE VISIBLE. The policy rate is never negative unless
-		### the country is on a digital currency, whose floor is -3
-		### (country_policy_rate_floor_add on law_digital_currency,
-		### monetary_policy_design.md §5.1). A signed +/-12 axis therefore
-		### spent half its height on a range almost no campaign ever enters,
-		### and squeezed the 2-6% band an ordinary campaign lives in into a
-		### quarter of the plot.
-		###
-		### So: an unsigned 0..12 chart for everyone, and a -3..12 chart with
-		### a 0% line for a digital currency, picked by banking_mon_is_digital
-		### (common/scripted_guis/te_monetary_sguis.txt). Only one is ever
-		### drawn, the same way the whole section is gated on the collapse
-		### flag so a player who never opens it pays for no bars at all.
-		###
-		### Both are unsigned, so the series keeps ONE colour above and below
-		### the line: a negative rate is an unusual policy, not a bad reading,
-		### and the red/green split te_history_bar_signed brings with it would
-		### say otherwise. A rate above 12% draws a full bar with the exact
-		### figure in the tooltip, as before.
+			### ---- Bubble pressure (0-100 index) ----------------------------
+			te_hist_bank_bubble = {}
 
-		### Everyone except a digital currency: the axis starts at 0.
-		te_hist_mon_policy = {
-			visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
-		}
+			### ---- Policy rate (percentage points) --------------------------
+			### TWO CHARTS, ONE VISIBLE. The policy rate is never negative unless
+			### the country is on a digital currency, whose floor is -3
+			### (country_policy_rate_floor_add on law_digital_currency,
+			### monetary_policy_design.md §5.1). A signed +/-12 axis therefore
+			### spent half its height on a range almost no campaign ever enters,
+			### and squeezed the 2-6% band an ordinary campaign lives in into a
+			### quarter of the plot.
+			###
+			### So: an unsigned 0..12 chart for everyone, and a -3..12 chart with
+			### a 0% line for a digital currency, picked by banking_mon_is_digital
+			### (common/scripted_guis/te_monetary_sguis.txt). Only one is ever
+			### drawn, the same way the whole section is gated on the collapse
+			### flag so a player who never opens it pays for no bars at all.
+			###
+			### Both are unsigned, so the series keeps ONE colour above and below
+			### the line: a negative rate is an unusual policy, not a bad reading,
+			### and the red/green split te_history_bar_signed brings with it would
+			### say otherwise. A rate above 12% draws a full bar with the exact
+			### figure in the tooltip, as before.
 
-		### Digital currency: the axis reaches down to the -3 floor, and the
-		### 0% line is drawn where it actually falls — a fifth of the way up
-		### a 15-point span, i.e. 23px above the bottom of the 96px plot area
-		### (the 84px bar band is centred in it, so its own floor sits 6px up,
-		### plus 0.2 x 84 = 16.8px). EYEBALL THIS IN GAME: it is the one
-		### number here that cannot be checked from the files.
-		te_hist_mon_policy_digital = {
-			visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-		}
+			### Everyone except a digital currency: the axis starts at 0.
+			te_hist_mon_policy = {
+				visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+			}
 
-		### ---- Rate the government pays (percentage points) --------------
-		### Never negative (the §4 clamp floors it at 0.5), so an unsigned
-		### bar with its floor at 0, the same as the policy-rate chart above.
-		### The axis stops at 20 rather than the variable's 60 ceiling for
-		### the same reason as above: a default campaign sits between 2 and
-		### 12, and a country in a debt spiral draws a full bar with the real
-		### figure in the tooltip.
-		###
-		### NOT TO THE SAME SCALE as the policy-rate chart (0..20 against
-		### 0..12), so the premium is the difference between the two
-		### *tooltips*, not the gap between the two bars. Giving them one
-		### axis would cost the rate chart nearly half its resolution in the
-		### band a normal campaign lives in, which is the problem that
-		### started this.
-		te_hist_mon_rate_paid = {}
+			### Digital currency: the axis reaches down to the -3 floor, and the
+			### 0% line is drawn where it actually falls — a fifth of the way up
+			### a 15-point span, i.e. 23px above the bottom of the 96px plot area
+			### (the 84px bar band is centred in it, so its own floor sits 6px up,
+			### plus 0.2 x 84 = 16.8px). EYEBALL THIS IN GAME: it is the one
+			### number here that cannot be checked from the files.
+			te_hist_mon_policy_digital = {
+				visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			}
 
-		### ---- Headline inflation (percentage points) -------------------
-		### ONE CHART, NOT A PAIR. The policy rate needed two instances
-		### because only a digital currency can go under zero; every country
-		### can deflate, so the axis reaches below the line for all of them
-		### and the 0% line is drawn where it actually falls — a quarter of
-		### the way up a 16-point span, i.e. 27px above the bottom of the
-		### 96px plot area (the 84px bar band is centred in it, so its own
-		### floor sits 6px up, plus 0.25 x 84 = 21). EYEBALL THIS IN GAME,
-		### exactly like the digital policy-rate chart's 23px.
-		###
-		### WHY -4..12 AND NOT THE VARIABLE'S -10..100. A campaign lives
-		### between about -2 and +10: the comfort band tops out at 3 and the
-		### high band opens at 8, so both edges the player is steering
-		### against sit inside the plot with room above them. Giving the
-		### axis the hyperinflation range would squash every ordinary year
-		### into two pixels to keep space for a state that ends the currency
-		### within a few years of arriving.
-		###
-		### SO THE ENDS CLAMP, and both ends say so. Anything at or above
-		### 12% draws a full bar; anything at or below -4% draws a 1.5px
-		### sliver rather than nothing, on the cycle charts' floor trick, so
-		### a deep deflation is never mistaken for a month with no reading.
-		### Either way the bar's tooltip prints the exact figure, which is
-		### the same bargain the rate-paid chart's 0..20 axis strikes.
-		###
-		### ONE COLOUR ABOVE AND BELOW THE LINE, like the policy-rate pair
-		### and unlike momentum: te_history_bar_signed's green/red split
-		### would read as good-above / bad-below, and deflation is not the
-		### opposite of a problem. It is also the honest axis — a signed bar
-		### splits the plot 50/50 whatever its two ranges are, so a -2%
-		### month would draw taller than a +2% one.
-		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
-		### the two charts that read them are hidden rather than drawn empty; the
-		### samples are not taken either (te_history_banking_effects.txt).
-		te_hist_mon_inflation = {
-			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
-		}
+			### ---- Rate the government pays (percentage points) --------------
+			### Never negative (the §4 clamp floors it at 0.5), so an unsigned
+			### bar with its floor at 0, the same as the policy-rate chart above.
+			### The axis stops at 20 rather than the variable's 60 ceiling for
+			### the same reason as above: a default campaign sits between 2 and
+			### 12, and a country in a debt spiral draws a full bar with the real
+			### figure in the tooltip.
+			###
+			### NOT TO THE SAME SCALE as the policy-rate chart (0..20 against
+			### 0..12), so the premium is the difference between the two
+			### *tooltips*, not the gap between the two bars. Giving them one
+			### axis would cost the rate chart nearly half its resolution in the
+			### band a normal campaign lives in, which is the problem that
+			### started this.
+			te_hist_mon_rate_paid = {}
 
-		### ---- The exchange rate (monetary policy phase 4, §15.5) ----------
-		### te_fx_index, 50..150 with a drawn line at par. The spec's LOOP
-		### DETECTOR for the depreciation spiral (§20 risk 9): weak currency ->
-		### imported inflation -> expectations -> weaker currency shows up here
-		### as a slide that will not level off, years before it reaches the
-		### floor. Exact in the tooltip — the index is displayed exactly on the
-		### dashboard too, since every input to it already is. A metallic
-		### country draws a flat line at par, which is the right picture of a
-		### fixed parity. One colour either side of par, for the inflation
-		### chart's reason: weak is not the opposite of a problem.
-		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
-		### the two charts that read them are hidden rather than drawn empty; the
-		### samples are not taken either (te_history_banking_effects.txt).
-		te_hist_mon_fx = {
-			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			### ---- Headline inflation (percentage points) -------------------
+			### ONE CHART, NOT A PAIR. The policy rate needed two instances
+			### because only a digital currency can go under zero; every country
+			### can deflate, so the axis reaches below the line for all of them
+			### and the 0% line is drawn where it actually falls — a quarter of
+			### the way up a 16-point span, i.e. 27px above the bottom of the
+			### 96px plot area (the 84px bar band is centred in it, so its own
+			### floor sits 6px up, plus 0.25 x 84 = 21). EYEBALL THIS IN GAME,
+			### exactly like the digital policy-rate chart's 23px.
+			###
+			### WHY -4..12 AND NOT THE VARIABLE'S -10..100. A campaign lives
+			### between about -2 and +10: the comfort band tops out at 3 and the
+			### high band opens at 8, so both edges the player is steering
+			### against sit inside the plot with room above them. Giving the
+			### axis the hyperinflation range would squash every ordinary year
+			### into two pixels to keep space for a state that ends the currency
+			### within a few years of arriving.
+			###
+			### SO THE ENDS CLAMP, and both ends say so. Anything at or above
+			### 12% draws a full bar; anything at or below -4% draws a 1.5px
+			### sliver rather than nothing, on the cycle charts' floor trick, so
+			### a deep deflation is never mistaken for a month with no reading.
+			### Either way the bar's tooltip prints the exact figure, which is
+			### the same bargain the rate-paid chart's 0..20 axis strikes.
+			###
+			### ONE COLOUR ABOVE AND BELOW THE LINE, like the policy-rate pair
+			### and unlike momentum: te_history_bar_signed's green/red split
+			### would read as good-above / bad-below, and deflation is not the
+			### opposite of a problem. It is also the honest axis — a signed bar
+			### splits the plot 50/50 whatever its two ranges are, so a -2%
+			### month would draw taller than a +2% one.
+			### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
+			### the two charts that read them are hidden rather than drawn empty; the
+			### samples are not taken either (te_history_banking_effects.txt).
+			te_hist_mon_inflation = {
+				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			}
+
+			### ---- The exchange rate (monetary policy phase 4, §15.5) ----------
+			### te_fx_index, 50..150 with a drawn line at par. The spec's LOOP
+			### DETECTOR for the depreciation spiral (§20 risk 9): weak currency ->
+			### imported inflation -> expectations -> weaker currency shows up here
+			### as a slide that will not level off, years before it reaches the
+			### floor. Exact in the tooltip — the index is displayed exactly on the
+			### dashboard too, since every input to it already is. A metallic
+			### country draws a flat line at par, which is the right picture of a
+			### fixed parity. One colour either side of par, for the inflation
+			### chart's reason: weak is not the opposite of a problem.
+			### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
+			### the two charts that read them are hidden rather than drawn empty; the
+			### samples are not taken either (te_history_banking_effects.txt).
+			te_hist_mon_fx = {
+				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+			}
 		}
 	}
 

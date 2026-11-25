@@ -842,9 +842,64 @@ te_grid_tab_grid_stations_disp = {
 }
 
 # What its sending stations send a week, and how many send; what its
-# receiving stations deliver after losses, and how many receive (the tile's
-# mode and Flow, te_grid_mode_disp and te_grid_electricity_moved_disp).
+# receiving stations deliver after losses, and how many receive: the
+# overview's Sent and Received, as of the last run (2026-11-24, from #2016).
+# Each reads the country variable the run stores at its end
+# (te_grid_store_tab_flows_effect, from the _live value below), where it
+# walked every state of the country, six walks a frame while the tab was open.
+# The figures they sum (te_grid_flow, te_grid_command) change only at the run,
+# so what can lag is a station gone offline, demolished or lost with its state
+# since: up to a month, as the Stations table's list does. A country the run
+# has not stored for (no station; a save from before the store, until its
+# first run) reads the live figure, as before. To read one live again, give its
+# _disp the body `value = te_grid_tab_<x>_live`.
 te_grid_tab_sent_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_tab_sent }
+		value = var:te_grid_tab_sent
+	}
+	else = {
+		value = te_grid_tab_sent_live
+	}
+}
+
+te_grid_tab_senders_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_tab_senders }
+		value = var:te_grid_tab_senders
+	}
+	else = {
+		value = te_grid_tab_senders_live
+	}
+}
+
+te_grid_tab_received_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_tab_received }
+		value = var:te_grid_tab_received
+	}
+	else = {
+		value = te_grid_tab_received_live
+	}
+}
+
+te_grid_tab_receivers_disp = {
+	value = 0
+	if = {
+		limit = { has_variable = te_grid_tab_receivers }
+		value = var:te_grid_tab_receivers
+	}
+	else = {
+		value = te_grid_tab_receivers_live
+	}
+}
+
+# The live figures the run stores (the tile's mode and Flow,
+# te_grid_mode_disp and te_grid_electricity_moved_disp).
+te_grid_tab_sent_live = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -855,7 +910,7 @@ te_grid_tab_sent_disp = {
 	}
 }
 
-te_grid_tab_senders_disp = {
+te_grid_tab_senders_live = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -866,7 +921,7 @@ te_grid_tab_senders_disp = {
 	}
 }
 
-te_grid_tab_received_disp = {
+te_grid_tab_received_live = {
 	value = 0
 	every_scope_state = {
 		limit = {
@@ -877,7 +932,7 @@ te_grid_tab_received_disp = {
 	}
 }
 
-te_grid_tab_receivers_disp = {
+te_grid_tab_receivers_live = {
 	value = 0
 	every_scope_state = {
 		limit = {

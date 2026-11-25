@@ -509,8 +509,10 @@ AUDITS: tuple[Audit, ...] = (
         "loc_render_audit",
         "Bracket-style formatting in a loc value (`[b]x[/b]`), which errors on every render: write "
         "`#b x#!`. Also a formatting tag left open at the end of a value (`#bold` with no `#!`), which "
-        "runs on into the text after it, a `#` that is no tag (write a literal hash as `##`), and a format "
-        "name that no vanilla loc value opens in any case (`#bolt`).",
+        "runs on into the text after it, a `#` that is no tag (write a literal hash as `##`), a format "
+        "name that no vanilla loc value opens in any case (`#bolt`), and `#Y` or `#B`, which draw white "
+        "bold and plain bold, not yellow and blue (write `#bold;yellow` or `#blue_value` beside bold states, "
+        "`#yellow` or `#blue` beside plain ones, `#v` for a figure, `#b` for a label).",
         where="trailing on the loc line",
         note="Only the mod's own values are judged, and a surplus `#!` is never flagged. An opening "
              "fragment that its caller closes takes the comment, naming the caller.",

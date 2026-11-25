@@ -150,6 +150,9 @@ class BodyTest(unittest.TestCase):
                 self.assertRegex(head, rf'default_header = \{{\s*using = default_list_position\s*'
                                        rf'blockoverride "text" \{{\s*text = "{header}"\s*\}}\s*'
                                        rf'(?:te_jmap_\w+_map_button = \{{\}}\s*)?'    # its map (journal_map_modes.md)
+                                       # its width, vanilla's 554, which the window's full-screen mount widens
+                                       rf'blockoverride "size" \{{\s*block "te_tab_header_size" \{{\s*'
+                                       rf'size = \{{ 554 44 \}}\s*\}}\s*\}}\s*'
                                        rf'(?:te_help_button = \{{[^{{}}]*\}}\s*)?\}}')
                 self.assertEqual(_override(body, "tab_gate").strip(), f'visible = "[{_gate(gate)}]"')
                 if entry:

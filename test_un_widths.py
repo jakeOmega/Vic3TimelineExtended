@@ -76,6 +76,109 @@ def _instances(text, name):
     return [_block(text, m.end() - 1) for m in re.finditer(rf"\b{re.escape(name)} = \{{", text)]
 
 
+def _strip_textboxes(text):
+    """The text with every `textbox = { … }` cut out (a button's label is
+    anchored inside its fixed button, which is safe)."""
+    while True:
+        m = re.search(r"\btextbox = \{", text)
+        if not m:
+            return text
+        body = _block(text, m.start())
+        end = text.index(body, m.end() - 1) + len(body) + 1
+        text = text[:m.start()] + text[end:]
+
+
+class OverviewGridTest(unittest.TestCase):
+    """The overview's grid of cells has rows of one height in every state
+    (from #2016): each row holds cells of 238 x 70 and nothing else, and the
+    membership controls (Found or Convene, Join, Leave and its Confirm and
+    Think Again) are a fixed 480 x 30 row of their own under the grid, centred
+    where one shows, the confirm in the same row. A control under the
+    Membership cell made the first row a button taller than the rest, and two
+    while Leave was armed."""
+
+    @classmethod
+    def setUpClass(cls):
+        from gui_test_helpers import _children, _strip_comments, _type_body
+        cls._children = staticmethod(_children)
+        text = _strip_comments(_read(OVERVIEW))
+        panel = _children(_type_body(text, "te_un_overview_panel"))
+        chamber = [inner for kind, name, inner in panel if name == "un_chamber_panel"]
+        assert len(chamber) == 1
+        cls.items = [item for item in _children(chamber[0]) if item[0] != "property"]
+
+    def test_every_row_of_the_grid_is_cells(self):
+        kind, name, grid = self.items[0]
+        self.assertEqual((kind, name), ("widget", "flowcontainer"))
+        rows = [inner for kind, name, inner in self._children(grid) if kind == "widget"]
+        self.assertGreaterEqual(len(rows), 4)
+        for i, row in enumerate(rows, 1):
+            with self.subTest(row=i):
+                cells = [(name, inner) for kind, name, inner in self._children(row) if kind == "widget"]
+                self.assertTrue(cells)
+                for name, inner in cells:
+                    self.assertEqual(name, "te_banking_ov_cell")
+                    self.assertIn("size = { 238 70 }", [line.strip() for line in inner.splitlines()])
+        for sgui in ("un_act_found_sgui", "un_act_join_sgui", "un_act_leave_sgui", "un_leave_armed"):
+            with self.subTest(control=sgui):
+                self.assertNotIn(sgui, grid)
+
+    def test_the_membership_controls_are_a_fixed_row(self):
+        kind, name, row = self.items[1]
+        self.assertEqual((kind, name), ("widget", "widget"))
+        props = {key: value for kind, key, value in self._children(row) if kind == "property"}
+        self.assertEqual(props.get("size"), "{ 480 30 }")
+        named = set(re.findall(r"GetScriptedGui\('(\w+)'\)\.IsShown", props.get("visible", "")))
+        self.assertEqual(named, {"un_act_found_sgui", "un_act_join_sgui", "un_act_leave_sgui"})
+        # nothing in the row is anchored: each control has its place
+        self.assertNotIn("parentanchor", _strip_textboxes(row))
+        widgets = [(name, inner) for kind, name, inner in self._children(row) if kind == "widget"]
+        self.assertEqual([name for name, _ in widgets], ["un_act_slot", "widget"])
+        # Found and Join take turns mid-row, 236 wide (the slot's default size)
+        slot = widgets[0][1]
+        self.assertNotIn('blockoverride "slot_size"', slot)
+        self.assertRegex(slot, r'blockoverride "slot_anchor" \{\s*position = \{ 122 0 \}\s*\}')
+        self.assertIn("GetScriptedGui('un_act_found_sgui')", slot)
+        self.assertIn("GetScriptedGui('un_act_join_sgui')", slot)
+
+    def test_leave_is_armed_in_the_same_row(self):
+        """Leave mid-row; armed, Confirm on the left half and Think Again on
+        the right, each 236 x 30, inside the 480; the buttons, their hovers
+        (the reasons and the effect) and the arming are all kept."""
+        row = self.items[1][2]
+        leave = [inner for kind, name, inner in self._children(row) if name == "widget"][0]
+        props = {key: value for kind, key, value in self._children(leave) if kind == "property"}
+        self.assertEqual(props.get("size"), "{ 480 30 }")
+        self.assertEqual(props.get("datacontext"), "\"[GetScriptedGui('un_act_leave_sgui')]\"")
+        buttons = [inner for kind, name, inner in self._children(leave) if name == "button"]
+        self.assertEqual(len(buttons), 3)
+        placed = {}
+        for button in buttons:
+            p = {key: value for kind, key, value in self._children(button) if kind == "property"}
+            label = re.search(r'text = "(\w+)"', button).group(1)
+            self.assertEqual(p.get("size"), "{ 236 30 }", label)
+            placed[label] = (int(re.match(r"\{ (\d+) 0 \}", p["position"]).group(1)), button)
+        self.assertEqual({k: v[0] for k, v in placed.items()},
+                         {"je_un_act_leave_label": 122, "je_un_act_leave_confirm_label": 2,
+                          "je_un_act_leave_cancel_label": 242})
+        armed, cancel = placed["je_un_act_leave_confirm_label"][0], placed["je_un_act_leave_cancel_label"][0]
+        self.assertLessEqual(armed + 236 + 4, cancel)
+        self.assertLessEqual(cancel + 236, 480)
+        leave_btn = placed["je_un_act_leave_label"][1]
+        confirm = placed["je_un_act_leave_confirm_label"][1]
+        cancel_btn = placed["je_un_act_leave_cancel_label"][1]
+        self.assertIn("Not( GetVariableSystem.Exists('un_leave_armed') )", leave_btn)
+        self.assertIn("onclick = \"[GetVariableSystem.Toggle('un_leave_armed')]\"", leave_btn)
+        self.assertNotIn("ScriptedGui.Execute(", leave_btn)
+        self.assertIn("ScriptedGui.Execute(", confirm)
+        self.assertIn("GetVariableSystem.Exists('un_leave_armed') )", confirm)
+        self.assertIn("tooltip = \"je_un_act_leave_cancel_tt\"", cancel_btn)
+        for button in (leave_btn, confirm):
+            self.assertIn("ScriptedGui.IsValidTooltip(", button)
+            self.assertIn("ScriptedGui.ExecuteTooltip(", button)
+            self.assertIn("enabled = \"[ScriptedGui.IsValid(", button)
+
+
 class WidthTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -283,10 +386,8 @@ class WidthTest(unittest.TestCase):
                 self.assertTrue(named and named <= own, (named, own))
 
         # Nothing that holds a control is centred at a width it can outgrow:
-        # the overview's Leave stack and its buttons carry no anchor.
-        leave = self.overview[self.overview.rindex("flowcontainer = {", 0, self.overview.index("GetScriptedGui('un_act_leave_sgui')")):]
-        leave = _block(leave, 0)
-        self.assertNotIn("hcenter", leave)
+        # the overview's membership controls are placed in a fixed row
+        # (OverviewGridTest.test_the_membership_controls_are_a_fixed_row).
 
     def test_the_ballot_is_a_fixed_width(self):
         """The ballot's controls are hidden whenever no vote is open, so the

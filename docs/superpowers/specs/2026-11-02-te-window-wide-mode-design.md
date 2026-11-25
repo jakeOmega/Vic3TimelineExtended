@@ -207,6 +207,9 @@ the current columns. On 2026-11-05 the owner gave the Space Race three: the
 milestones, Solar System Colonization's four tabs, then Space Powers and Orbit
 (the same file, § "The Space Race in three columns").
 
+The table is the 2026-11-02 proposal; § 7.1 gives the rules since
+2026-11-24 and the columns they changed (Nation, Power Grids, Global Warming).
+
 | Tab | Column 1 | Column 2 | Column 3 |
 |---|---|---|---|
 | Nation | overview, governance, society | economy, science and space, international | sources, how |
@@ -234,6 +237,54 @@ milestones, Solar System Colonization's four tabs, then Space Powers and Orbit
   "full-page window" and its schematic would live in this frame.
 - Explanations stay collapsed in wide mode (style guide rule 1); nothing else
   about a section changes.
+
+### 7.1 The page: title, centring and balance (2026-11-24)
+
+Seen in game on 2026-11-24 (a great power, December 2032): each tab's title was
+its body's 554 header, centred over the frame, so it read as the middle
+column's heading, or straddled the gutter of two; columns ran 1,190 tall beside
+a column of two collapsed headers (Nation), 940 beside 360 (Power Grids), 1,310
+beside 390 (Global Warming); and Nation's section headings, vanilla's 554
+`default_header`, met across the 30 gutter. The frame rework set three rules,
+the same on every tab:
+
+- **The title spans the frame**: one bar of 1,620, the three columns and two
+  gutters (the strips' row above it), its map button and "?" at the right end.
+  A constant width, so the title never moves as columns open and close (style
+  guide rule 8), rather than the width of the columns in use, which would need
+  a header per state. Each body's header holds the hook
+  `blockoverride "size" { block "te_tab_header_size" { size = { 554 44 } } }`
+  (vanilla's 554), which only the window's full-screen mount fills
+  (`gen_te_systems_window._wide_content`); the side panel, the vanilla panels'
+  tabs and National Info keep the 554 header. The engine fills a block declared
+  in a nested type's override, as vanilla's budget panel does
+  (`tax_exp_frame_coin` filling `set_level_bar`'s `button_1_click`). The Space
+  Race's body has no header (each running entry is a frame with its own), so
+  its full-screen mount draws the page's title, "Space Race" and the "?", above
+  the composer; the milestones' headers stay, at 520.
+- **The columns in use are centred as a group**: `te_ui_columns_*` is centred,
+  every column a fixed 520, and a column that can be empty closes up on its
+  sections' own gates joined (`column_<n>_visible`), so the group's width is
+  decided by the tab's state, never by rows arriving later in a column. The
+  title starts the page and the columns start 10 below it, on one line: the
+  columns are top-aligned children of one row.
+- **Balanced by height, each section whole, no bar wider than its column.**
+  The side panel's order down the columns where it balances; where it doesn't,
+  the order changes as little as it can. A section heading is its column's 520
+  (Nation's through `te_nation_header_size`, the milestones' through
+  `sr_window_header_size`, each filled by the composer).
+
+| Tab | Columns since 2026-11-24 | Heights (2032) | What sets the group's width |
+|---|---|---|---|
+| Nation | overview, Governance / Society, Economy / Science and Space, International, sources, All Modifiers | 740 / 800 / 840 (was 1,190 / 1,120 / 96) | column 3 closes when its four sections all hide |
+| Power Grids | overview / Grids / Stations | 435 / 500 / 360 (was 940 / 360) | none hides: three columns |
+| Global Warming | overview, Top Emitters / Mitigation Policies / Fossil Transition, History | 690 / 885 / 860 (was 1,310 / 720 / 390) | the rule closes columns 1 and 2, leaving the Fossil Transition centred |
+| Nuclear Weapons | unchanged for the player | | column 3 is the player's own: another country's two columns (National Info) sit centred |
+| the rest | unchanged (the owner's for Grand Monuments, Banking, Demographics, Nuclear Weapons and the Space Race) | | as before: Banking's cycle and market economy, Tax Code's Light code, Covert Warfare's known operations, Grand Monuments' trophies, the Space Race's solar colonization |
+
+The composers are National Info's too, so its columns follow; its titles and
+mounts don't change. `test_te_full_screen_layout.py` holds every composer to
+the rules; the title is `test_te_systems_window.py`'s `FullScreenTitleTest`.
 
 ## 8. Tests, loc and docs
 
