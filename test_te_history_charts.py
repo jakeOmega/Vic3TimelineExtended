@@ -1018,6 +1018,16 @@ class PlotTest(unittest.TestCase):
             self.assertEqual(store.holds(12), f"GreaterThanOrEqualTo_int32( GetDataModelSize( {store.samples} ), '(int32)12' )")
             self.assertEqual(store.holds(12, yes=False),
                              f"LessThan_int32( GetDataModelSize( {store.samples} ), '(int32)12' )")
+        # exactly one of the pair holds at each store size around the count (an off-by-one
+        # in either operator would leave a size where neither plot shows, or both)
+        def holds(expr, size):
+            op, n = re.fullmatch(r"(\w+)\( GetDataModelSize\( .* \), '\(int32\)(\d+)' \)", expr).groups()
+            return {"GreaterThanOrEqualTo_int32": size >= int(n), "LessThan_int32": size < int(n)}[op]
+        for store in gen.STORES.values():
+            for n in (5, 12, 20, 60):
+                for size in (0, n - 1, n, n + 1, 240):
+                    self.assertEqual([holds(store.holds(n), size), holds(store.holds(n, yes=False), size)],
+                                     [size >= n, size < n], (n, size))
         seen = 0
         for plot in _plots(self.text):
             last = re.search(r"DataModelLast\( (.*), '\(int32\)(\d+)' \)\]", plot)
