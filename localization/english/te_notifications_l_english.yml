@@ -3,6 +3,14 @@
 #
 # NOTIFICATIONS
 #
+ alert_sr_module_queue_empty_action:0 "Journal Panel"
+ alert_sr_module_queue_empty_desc:0 "Our [concept_sr_module] queue is empty, and our module fabrication makes #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points a month. The points wait in the module stock, which now holds #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock')|0]#! of the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! it can keep. Once it is full, each month's points are lost."
+ alert_sr_module_queue_empty_hint:0 "Each colony's row in the $je_space_race_widget_cv_modules$ view of the $je_space_race_widget_colonies_header$ section in $je_space_race_solar_colonization$ has buttons that add a module to the end of the queue."
+ alert_sr_module_queue_empty_name:0 "No [concept_sr_module]s Queued"
+ alert_sr_module_stock_full_action:0 "Journal Panel"
+ alert_sr_module_stock_full_desc:0 "Our module stock is full at #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! points and our [concept_sr_module] queue is empty, so the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points our module fabrication makes each month are lost."
+ alert_sr_module_stock_full_hint:0 "Each colony's row in the $je_space_race_widget_cv_modules$ view of the $je_space_race_widget_colonies_header$ section in $je_space_race_solar_colonization$ has buttons that add a module to the end of the queue. A $pmg_space_program_module_storage$ method on our $building_space_program$ makes the stock larger, and switching its $pmg_space_program_module_fabrication$ to $pm_sr_fabrication_none$ ends the method's cost until we want modules again."
+ alert_sr_module_stock_full_name:0 "[concept_sr_module] Stock Full"
  notification_arms_race_pressure_desc:0 "[SCOPE.sCountry('arms_race_rival').GetName] is matching our military buildup, increasing pressure on our defense budget."
  notification_arms_race_pressure_name:0 "Arms Race Pressure"
  notification_arms_race_pressure_tooltip:0 "#header $notification_arms_race_pressure_name$#!\n$notification_arms_race_pressure_desc$"
@@ -977,3 +985,5 @@
  notification_wonder_construction_complete_space_elevator_desc:0 "Construction of the Space Elevator has been completed in [SCOPE.sState('wonder_complete_state').GetName]."
  notification_wonder_construction_complete_space_elevator_name:0 "Space Elevator Completed"
  notification_wonder_construction_complete_space_elevator_tooltip:0 "#header $notification_wonder_construction_complete_space_elevator_name$#!\n$notification_wonder_construction_complete_space_elevator_desc$"
+ sr_module_queue_empty_setting_name:0 "Colony Module Queue Empty"
+ sr_module_stock_full_setting_name:0 "Colony Module Stock Full"

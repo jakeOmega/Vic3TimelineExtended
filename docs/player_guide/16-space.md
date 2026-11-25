@@ -871,6 +871,12 @@ Points made while the stock is full are lost, unless the next module in the
 queue costs more, when the stock fills to its price. The Fabrication hover in
 the Modules view breaks the stock's size down.
 
+Two alerts at the top of the screen watch for an idle queue. While you hold a
+colony and fabrication runs with nothing queued, a green No Colony Modules
+Queued alert shows; once the stock is full and each month's points are lost, a
+yellow Colony Module Stock Full takes its place. Either can be switched off in
+the game's alert settings.
+
 A module for a site with launch windows is built a month before its window
 opens, waits at Earth and leaves with the window; with a fusion torch or
 antimatter drive it leaves at once. It lands after the transit your drive buys
