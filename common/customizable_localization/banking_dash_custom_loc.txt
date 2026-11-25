@@ -836,6 +836,24 @@ te_mon_fx_effect = {
 		trigger = { te_mon_is_command = yes }
 		localization_key = banking_dash_mon_fx_effect_none
 	}
+	# A fixed parity (either branch below) that sits where the currency would
+	# trade says so, rather than "overvalued by 0.0" (2026-11-24: a new game's
+	# gold standard at par). Overvaluation is never under 0
+	# (te_mon_fx_overvaluation_value's min), and the figure prints to one place,
+	# so 0.05 is where it stops reading 0.0.
+	text = {
+		trigger = {
+			OR = {
+				te_mon_is_anchored = yes
+				AND = {
+					te_mon_is_metallic = yes
+					te_mon_fx_is_devalued = no
+				}
+			}
+			te_mon_fx_overvaluation_display < 0.05
+		}
+		localization_key = banking_dash_mon_fx_effect_par
+	}
 	# [P5] ...and what it shows is how far it has diverged from that currency.
 	text = {
 		trigger = { te_mon_is_anchored = yes }

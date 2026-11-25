@@ -7081,6 +7081,10 @@ types space_race_widget_types
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_fl_drive_tt"
 
+				### The drive, or while a refit runs, "Refit" and its months in its
+				### place: the drive's override hides it then. Neither has a
+				### background: the engine drew one on this flowcontainer smaller
+				### than its autoresized text and off to one side (2026-11-24).
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
@@ -7093,13 +7097,10 @@ types space_race_widget_types
 				flowcontainer = {
 					parentanchor = left|vcenter
 					direction = horizontal
-					spacing = 2
+					spacing = 4
 					ignoreinvisible = yes
 					block "fl_refit_visible" {}
 
-					background = {
-						using = entry_bg_fancy_dark
-					}
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
@@ -8545,7 +8546,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				default_format = "#Y"
+				default_format = "#yellow;bold"
 				tooltip = "je_space_race_widget_ld_due_tt"
 				text = "je_space_race_widget_ld_due"
 				block "lr_due_visible" {}

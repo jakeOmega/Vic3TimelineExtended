@@ -1442,6 +1442,23 @@ class FleetCardTest(unittest.TestCase):
                     override = row[row.index(f'blockoverride "{block}" {{'):]
                     self.assertIn(f'visible = "[{shown}]"', override[:override.index("}")], block)
 
+    def test_a_refit_takes_the_drive_slot_alone(self):
+        """While a refit runs, "Refit" and its months show in the drive's slot and
+        the drive is hidden: both drew there at once, under a background the
+        engine drew smaller than the text and off to one side (2026-11-24)."""
+        slot = self.row[self.row.index('tooltip = "je_space_race_widget_fl_drive_tt"'):]
+        slot = slot[:slot.index('block "fl_refit" {}')]
+        self.assertIn('block "fl_drive" {}', slot)
+        self.assertIn('block "fl_refit_visible" {}', slot)
+        self.assertNotIn("background = {", slot)
+        for n, row in enumerate(self.rows, 1):
+            refitting = (f"GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope."
+                         f"ScriptValue('sr_disp_fl_{n}_refit_left'), '(CFixedPoint)1' )")
+            with self.subTest(slot=n):
+                for block, shown in (("fl_drive", f"Not( {refitting} )"), ("fl_refit_visible", refitting)):
+                    override = row[row.index(f'blockoverride "{block}" {{'):]
+                    self.assertIn(f'visible = "[{shown}]"', override[:override.index("}")], block)
+
     def test_each_reading_is_a_bar_of_a_share(self):
         display = _read(os.path.join(REPO, "common", "script_values", "sr_fleets_display_generated.txt"))
         for n, row in enumerate(self.rows, 1):

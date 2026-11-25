@@ -294,7 +294,9 @@ class RegistryTest(unittest.TestCase):
         # the type's plot_layouts is empty: every chart's plots are the generator's (PlotTest)
         self.assertEqual(_block_bodies(chart, "plot_layouts"), [""])
         ours = "\n".join(gen.plot_layouts(m, gen.RANGES["te_hist_range"], gen.STORES["te_hist"]))
-        self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours), [("40", "84"), ("8", "84"), ("2", "84")])
+        # a shorter range's two plots (the store holds the range, or less) share its bar
+        self.assertEqual(re.findall(r'size = \{ (\d+) (\d+) \}', ours),
+                         [("40", "84"), ("40", "84"), ("8", "84"), ("8", "84"), ("2", "84")])
 
     def test_the_small_wrapper_is_its_fragment(self):
         """At SMALL the generator substitutes and adds nothing but the open
@@ -945,41 +947,96 @@ class PlotTest(unittest.TestCase):
     the longest range's the whole store with no test, and which range an
     unset variable means is decided once, Range.default (DEFAULT_RANGE for
     the monthly charts, 5 years since 2026-11-24), for the plots and the
-    range buttons alike."""
+    range buttons alike. A shorter range has a second plot, for a store that
+    holds fewer samples than the range: DataModelLast asked for more than a
+    list holds logs an error every frame (a game of January 1836, 2026-11-24),
+    so the two take turns on the store's size."""
 
     @classmethod
     def setUpClass(cls):
         cls.text = _strip_comments(_read(GENERATED))
 
+    @staticmethod
+    def wanted(rng, store):
+        """Each plot in order: its range's value and samples, the store-size
+        test beside its range test (None for the longest range's), and whether
+        it reads the store's last samples only."""
+        out = []
+        for value, n in zip(rng.values, rng.samples):
+            if value == rng.values[-1]:
+                out.append((value, n, None, False))
+            else:
+                out += [(value, n, store.holds(n), True), (value, n, store.holds(n, yes=False), False)]
+        return out
+
     def check_plots(self, chart_text, chart, size, ranges=None):
         rng, store = (ranges or gen.RANGES)[chart.range], gen.STORES[chart.store]
-        plots = _plots(chart_text)
-        self.assertEqual(len(plots), 3, "a plot a range")
+        plots, want = _plots(chart_text), self.wanted(rng, store)
+        self.assertEqual(len(plots), 5, "two plots a shorter range, one the longest")
         widths = gen.bars(size[chart.kind], rng)
-        for plot, value, n in zip(plots, rng.values, rng.samples):
+        range_tests = []
+        for plot, (value, n, holds, last) in zip(plots, want):
             whole = value == rng.values[-1]
             self.assertEqual(_override_bodies(plot, "bar_size")[0].strip(),
                              f"size = {{ {widths[value]} {size[chart.kind].bar_h} }}")
             datamodel = _override_bodies(plot, "sample_datamodel")[0].strip()
             tests = _override_bodies(plot, "sample_visible")
-            if whole:
+            if last:
+                self.assertEqual(datamodel, f"datamodel = \"[DataModelLast( {store.samples}, '(int32){n}' )]\"")
+            else:
                 self.assertEqual(datamodel, f'datamodel = "[{store.samples}]"')
+            if whole:
                 self.assertEqual(tests, [], "the longest range tests no sample")
             else:
-                self.assertEqual(datamodel, f"datamodel = \"[DataModelLast( {store.samples}, '(int32){n}' )]\"")
                 self.assertEqual(tests[0].strip(), f"visible = \"[LessThan_CFixedPoint( {store.age()}, "
                                                    f"'(CFixedPoint){n}' )]\"")
-        # one plot shows whatever the variable holds: the default's while unset
+            visible = re.search(r'^\s*visible = "\[(.*)\]"', plot, re.M).group(1)
+            if holds is None:
+                range_tests.append(visible)
+            else:
+                # the store's size decides between a shorter range's two plots
+                head, tail = "And( ", f", {holds} )"
+                self.assertTrue(visible.startswith(head) and visible.endswith(tail), visible)
+                range_tests.append(visible[len(head):-len(tail)])
+        # one range's plots show whatever the variable holds: the default's while unset
         states = [None] + list(rng.values)
         for state in states:
-            visible = [_shown(re.search(r'^\s*visible = "\[(.*)\]"', p, re.M).group(1), rng.var, state)
-                       for p in plots]
-            self.assertEqual(visible, [v == (state or rng.default) for v in rng.values], state)
+            visible = [_shown(t, rng.var, state) for t in range_tests]
+            self.assertEqual(visible, [value == (state or rng.default) for value, *_ in want], state)
         # and the chart itself reads no store but through its plots
         outside = chart_text
         for p in plots:
             outside = outside.replace(p, "")
         self.assertNotRegex(outside, r'blockoverride "sample_(datamodel|visible)"')
+
+    def test_a_short_store_is_never_asked_for_more_than_it_holds(self):
+        """Every DataModelLast of a script list in the generated file sits in a
+        plot whose visible tests that the store holds that many samples, and
+        the plot that takes its place below that reads the whole store. The
+        tests are vanilla's pair on GetDataModelSize."""
+        for store in gen.STORES.values():
+            self.assertEqual(store.holds(12), f"GreaterThanOrEqualTo_int32( GetDataModelSize( {store.samples} ), '(int32)12' )")
+            self.assertEqual(store.holds(12, yes=False),
+                             f"LessThan_int32( GetDataModelSize( {store.samples} ), '(int32)12' )")
+        # exactly one of the pair holds at each store size around the count (an off-by-one
+        # in either operator would leave a size where neither plot shows, or both)
+        def holds(expr, size):
+            op, n = re.fullmatch(r"(\w+)\( GetDataModelSize\( .* \), '\(int32\)(\d+)' \)", expr).groups()
+            return {"GreaterThanOrEqualTo_int32": size >= int(n), "LessThan_int32": size < int(n)}[op]
+        for store in gen.STORES.values():
+            for n in (5, 12, 20, 60):
+                for size in (0, n - 1, n, n + 1, 240):
+                    self.assertEqual([holds(store.holds(n), size), holds(store.holds(n, yes=False), size)],
+                                     [size >= n, size < n], (n, size))
+        seen = 0
+        for plot in _plots(self.text):
+            last = re.search(r"DataModelLast\( (.*), '\(int32\)(\d+)' \)\]", plot)
+            if last:
+                seen += 1
+                self.assertIn(f"GreaterThanOrEqualTo_int32( GetDataModelSize( {last.group(1)} ), '(int32){last.group(2)}' )",
+                              re.search(r'^\s*visible = "\[(.*)\]"', plot, re.M).group(1))
+        self.assertEqual(seen, 2 * len(gen.CHARTS) * len(gen.SIZES))
+        self.assertEqual(self.text.count("DataModelLast("), seen, "none outside a plot")
 
     def test_every_chart_reads_only_what_its_range_shows(self):
         for chart in gen.CHARTS:
@@ -1029,10 +1086,15 @@ class PlotTest(unittest.TestCase):
         greys; the 20-year plot still reads the whole store and tests nothing.
         Demographics and Cultural Hegemony keep their own default, 100 years."""
         plot = _plots(_type_body(self.text, "te_hist_bank_value"))
-        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[1], re.M).group(1),
-                         "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
-                         "GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )]")
+        store = gen.STORES["te_hist"]
+        five = ("Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
+                "GetVariableSystem.HasValue( 'te_hist_range', '20' ) ) )")
+        # plots 2 and 3 are the 5 years' (the store holds 60 samples, or fewer), plot 4 the 20 years'
         self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[2], re.M).group(1),
+                         f"[And( {five}, {store.holds(60)} )]")
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[3], re.M).group(1),
+                         f"[And( {five}, {store.holds(60, yes=False)} )]")
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[4], re.M).group(1),
                          "[GetVariableSystem.HasValue( 'te_hist_range', '20' )]")
         self.assertEqual({gen.RANGES["te_demog_hist_range"].default, gen.RANGES["ch_model_hist_range"].default},
                          {"100"})
@@ -1052,7 +1114,7 @@ class PlotTest(unittest.TestCase):
                                      dict(gen.RANGES, te_hist_range=other))
         self.check_range_row(text, other)
         plot = _plots(_type_body(text, "te_hist_bank_value"))
-        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[2], re.M).group(1),
+        self.assertEqual(re.search(r'^\s*visible = "(.*)"', plot[4], re.M).group(1),
                          "[Not( Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), "
                          "GetVariableSystem.HasValue( 'te_hist_range', '5' ) ) )]")
         with mock.patch.dict(gen.RANGES, {"te_hist_range": dataclasses.replace(other, default="10")}):
@@ -1112,6 +1174,172 @@ class MarkerPipTest(unittest.TestCase):
                     self.assertNotIn('blockoverride "marker_pips"', text)
                 else:
                     self.assertEqual(len(_override_bodies(text, "marker_pips")), 1)
+
+
+_OPEN = re.compile(r"(?:\btype (\w+) = (\w+)|(?<![\w.\"])(\w+) =) \{")
+
+
+def _holders(text, pos):
+    """Every widget block holding pos, outermost first, as (name, kind, body):
+    a type's opening gives its name and its base widget, an instance its name
+    twice (blocks and blockoverrides are not widgets and are left out)."""
+    out = []
+    for m in _OPEN.finditer(text, 0, pos):
+        end = _close(text, m.end() - 1)
+        if end > pos:
+            out.append((m.group(1) or m.group(3), m.group(2) or m.group(3), text[m.end():end]))
+    assert out, f"nothing holds {pos}"
+    return out
+
+
+def _first_level(body):
+    """A block's own lines: (its `key = value` properties, the names of its
+    `name = {` children), its children's insides left out."""
+    props, kids, depth = {}, [], 0
+    for line in body.split("\n"):
+        if depth == 0:
+            m = re.match(r"\s*(\w+) = ([^{}\n]+?)\s*$", line)
+            if m:
+                props.setdefault(m.group(1), m.group(2))
+            m = re.match(r"\s*(\w+) = \{", line)
+            if m:
+                kids.append(m.group(1))
+        depth += line.count("{") - line.count("}")
+    return props, kids
+
+
+PRIMITIVES = {"flowcontainer", "widget", "textbox", "icon", "button"}
+
+
+def _resolved(text, name, kind, body):
+    """A container's own layout as it draws: an instance of a type (a name
+    that is no primitive widget) takes the type's properties and children,
+    then its own. (properties, children)."""
+    props, kids = {}, []
+    if name == kind and kind not in PRIMITIVES:
+        m = re.search(rf"\btype {kind} = \w+ \{{", text)
+        assert m, f"no type {kind} in the section's file"
+        props, kids = _first_level(text[m.end():_close(text, m.end() - 1)])
+    own_props, own_kids = _first_level(body)
+    return {**props, **own_props}, kids + own_kids
+
+
+# How a flowcontainer lays its items out, and the defaults of each.
+LAYOUT = {"direction": "horizontal", "spacing": "0", "ignoreinvisible": "no"}
+
+
+# The sections of several charts on one store, which say "nothing recorded
+# yet" once, under their range buttons, and draw their charts only once the
+# store holds a sample (te_history_section_empty, 2026-11-24). A new game's
+# Banking History drew the same sentence in eight frames. The Strategic
+# Reserve draws each good's one chart in that good's row, and Cultural
+# Hegemony one chart: each says it once already.
+SAY_ONCE = ["banking", "demographics", "nuclear_weapons", "united_nations", "global_warming", "colonial_empire"]
+# The two whose sections read the entry's country, as their "since" lines do
+# (test_global_warming_layout forbids an ambient Country there). Every other
+# is drawn in National Info too, under a Country with no journal entry.
+ENTRY_COUNTRY = {"global_warming", "united_nations"}
+
+
+class SectionEmptyStateTest(unittest.TestCase):
+    """A section's empty store is said once, not in every chart's frame."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.note = _type_body(_strip_comments(_read(CHART_GUI)), "te_history_section_empty")
+        cls.chart = _type_body(_strip_comments(_read(CHART_GUI)), "te_history_chart")
+        by_system = {}
+        for c in gen.CHARTS:
+            by_system.setdefault(c.system, []).append(c)
+        cls.by_system = by_system
+        cls.sections = {}
+        for system in SAY_ONCE:
+            text = _strip_comments(_read(os.path.join(REPO, SECTIONS[system])))
+            notes = [m.end() for m in re.finditer(r"(?<![\w.])te_history_section_empty = \{", text)]
+            spots = [re.search(rf"(?<![\w.]){gen.wrapper_name(c, gen.SMALL)} = \{{", text).start()
+                     for c in by_system[system]]
+            cls.sections[system] = (text, notes, spots)
+
+    def test_the_line_is_the_charts_own_words(self):
+        """The note's default is the te_hist store's emptiness and the chart
+        type's own empty text: no new key."""
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_visible")],
+                         [f'visible = "[IsDataModelEmpty( {gen.STORES["te_hist"].samples} )]"'])
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_text")],
+                         [b.strip() for b in _block_bodies(self.chart, "empty_text")])
+        self.assertIn("multiline = yes", self.note)
+        self.assertEqual([b.strip() for b in _block_bodies(self.note, "empty_note_width")], ["max_width = 480"])
+
+    def test_every_section_of_several_charts_says_it_once(self):
+        self.assertEqual(sorted(s for s, cs in self.by_system.items() if len(cs) > 1 and s != "strategic_reserve"),
+                         sorted(SAY_ONCE), "a section of several charts joins SAY_ONCE")
+        for system in SAY_ONCE:
+            charts = self.by_system[system]
+            (store,) = {c.store for c in charts}
+            text, notes, spots = self.sections[system]
+            with self.subTest(system=system):
+                self.assertEqual(len(notes), 1, "said once")
+                # the charts: all in one flowcontainer, shown only while the store holds a sample
+                holders = {_holders(text, p)[-1] for p in spots}
+                self.assertEqual(len(holders), 1, "the charts share one container")
+                ((name, kind, body),) = holders
+                self.assertEqual((name, kind), ("flowcontainer", "flowcontainer"))
+                # the store's list as the charts read it, or the entry's country's in the two that read it
+                lst = gen.STORES[store].samples
+                if system in ENTRY_COUNTRY:
+                    lst = lst.replace("Country.MakeScope", "JournalEntry.GetCountry.MakeScope")
+                self.assertEqual(_first_level(body)[0].get("visible"), f'"[Not( IsDataModelEmpty( {lst} ) )]"')
+                # the line, on the same list, before the charts and after the range buttons
+                note = text[notes[0]:_close(text, notes[0] - 1)]
+                visible = _override_bodies(note, "empty_note_visible")
+                shown = visible[0].strip() if visible else _block_bodies(self.note, "empty_note_visible")[0].strip()
+                self.assertEqual(shown, f'visible = "[IsDataModelEmpty( {lst} )]"')
+                self.assertLess(text.rindex("te_history_range_button = {", 0, notes[0]), notes[0])
+                self.assertLess(notes[0], min(spots))
+                # in the charts' own words (Demographics' "next census")
+                words = {tuple(b.strip() for b in _override_bodies(gen.fragment(c), "empty_text")) for c in charts}
+                self.assertEqual(len(words), 1)
+                (own,) = words
+                said = tuple(b.strip() for b in _override_bodies(note, "empty_note_text"))
+                self.assertEqual(said, own, "the charts' own empty text, or the type's default for both")
+
+    def test_the_charts_container_lays_out_as_its_parent(self):
+        """The container the charts moved into lays them out as the section
+        did before (2026-11-24): its parent's direction, spacing and
+        ignoreinvisible, read from the parent's markup (an instance through its
+        type). A spacing changed, or Banking's ignoreinvisible dropped (it
+        holds the charts hidden for a currency), would move or gap them."""
+        for system in SAY_ONCE:
+            text, _notes, spots = self.sections[system]
+            *_, parent, inner = _holders(text, spots[0])
+            with self.subTest(system=system, parent=parent[0]):
+                mine = _resolved(text, *inner)[0]
+                theirs = _resolved(text, *parent)[0]
+                for key, default in LAYOUT.items():
+                    self.assertEqual(mine.get(key, default), theirs.get(key, default), key)
+
+    def test_a_panel_keeps_its_size_while_the_charts_wait(self):
+        """Where the line sits in a panel with a background of its own, the
+        line is the charts' width, fixed, so the panel doesn't shrink to the
+        line and the range buttons while the store is empty (the Colonial
+        Empire's colonial_empire_panel, 2026-11-24). Elsewhere it wraps at the
+        type's 480."""
+        framed = []
+        for system in SAY_ONCE:
+            text, notes, _spots = self.sections[system]
+            parent = _holders(text, notes[0] - 1)[-1]   # the note's own opening ends past pos
+            note = text[notes[0]:_close(text, notes[0] - 1)]
+            width = _override_bodies(note, "empty_note_width")
+            with self.subTest(system=system, parent=parent[0]):
+                if "background" in _resolved(text, *parent)[1]:
+                    framed.append(system)
+                    (kind,) = {c.kind for c in self.by_system[system]}
+                    w = gen.SMALL[kind].width
+                    self.assertEqual([ln.strip() for ln in width[0].strip().split("\n")] if width else [],
+                                     [f"minimumsize = {{ {w} -1 }}", f"maximumsize = {{ {w} -1 }}"])
+                else:
+                    self.assertEqual(width, [])
+        self.assertEqual(framed, ["colonial_empire"])
 
 
 class GeneratorTest(unittest.TestCase):

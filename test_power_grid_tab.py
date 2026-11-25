@@ -567,8 +567,13 @@ class StationsTableTest(unittest.TestCase):
         container = _block_from(self.panel, start)
         self.assertLess(first, start)
         own = container[:container.index("te_grid_station_rows = {")]
-        self.assertIn(f"visible = \"[GetVariableSystem.Exists('{flag}')]\"", own)
-        self.assertIn("DataModelSkipFirst(", container)
+        # ... and only while more than n are listed: the flag is the panel's, so it outlives the
+        # country it was set on, and DataModelSkipFirst asked to skip more than a list holds logs
+        # "Trying to reshape data model with negative count" every frame (seen in game 2026-11-24).
+        more = (f"GreaterThan_int32( GetDataModelSize( Country.MakeScope.GetList('te_grid_stations') ), "
+                f"'(int32){n}' )")
+        self.assertIn(f"visible = \"[And( GetVariableSystem.Exists('{flag}'), {more} )]\"", own)
+        self.assertIn(f"DataModelSkipFirst( Country.MakeScope.GetList('te_grid_stations'), '(int32){n}' )", container)
         # The button under the rows, centred (rule 6), its order on hover.
         at = self.panel.index("button = {")
         self.assertGreater(at, start + len(container))
