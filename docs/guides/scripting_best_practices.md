@@ -2841,8 +2841,10 @@ The loader reads a loc file's language from its `_l_<language>.yml` suffix, and 
 | `#Y text#!` | White bold, **not yellow**: vanilla's `zero_value`, drawn as `#v` is (next section) |
 | `#N text#!` | Red bold, **not neutral**: `negative_value`, the same as `#R` |
 | `#B text#!` | Bold, **not blue**: the same as `#b`, since the case is ignored |
-| `#yellow text#!` | Pale yellow: an in-between or pending state (next section) |
-| `#blue text#!` | Blue |
+| `#yellow text#!` | Pale yellow, plain: an in-between or pending state among plain colors (next section) |
+| `#bold;yellow text#!` | Pale yellow, bold: the same among the bold `#G`, `#R`, `#v` |
+| `#blue text#!` | Blue, plain |
+| `#blue_value text#!` | Blue, bold and shadowed (vanilla's `blue_value`), beside the bold `#G`, `#R`, `#v` |
 | `#white text#!` | White text |
 | `#o text#!`, `#gold text#!` | Gold, the color of a concept link (vanilla's `O` is `gold`) |
 
@@ -2904,11 +2906,11 @@ Victoria 3 uses a **proportional font** (not monospace) for all text rendering. 
 - The best approach for structured data is `#variable VALUE#! label` (value-first) with newlines, not label-then-value with alignment padding.
 - `#indent_newline:N` provides visual structure but doesn't enable column alignment.
 
-## `#Y` Draws White, Not Yellow: Write `#yellow` for an In-Between State
+## `#Y` Draws White, Not Yellow: Write `#yellow` for an In-Between State, Bold Where Its Ladder Is Bold
 
 Jomini's base formats make `Y` yellow, but the game's own `gui/textformatting.gui` redefines it as `zero_value`, white, bold and shadowed, so `#Y` draws exactly what `#v` draws. `#B` is no blue either: a format name matches whatever its case, so it is `#b`, bold. The mod's loc wrote `#Y` 78 times for a middle state between `#G` and `#R` and `#B` six times for the blue top of the UN's ladders, and the 2026-11-24 look at a December 2032 save found Banking's "Holding out" and the UN's "Seat Carried" white beside the green and red around them; Banking's Momentum cell read "Falling" in white next to its Cycle Phase cell's "Stagnation" in `#yellow` (issue #2016).
 
-Write an in-between, caution or pending state (Contested, Holding out, Establishing, Under way) in `#yellow`, vanilla's pale yellow, as Banking's phase and bubble words already were. That keeps the mod's scale: `#G` good, `#v` neutral, `#yellow` in between, `#o` or `#gold` one step worse where a ladder has one (Banking's Downturn, Global Warming's Significant, Colonial Empire's Strained), `#R` bad, `#blue` above green (the UN's Supranational, Banking's Boom). Gold is not the in-between color: it is the color of every concept link, so a gold word in an overview cell reads as one more caption. A neutral figure is `#v` and a run-in label `#b`. `loc_render_audit` (`misread_format`) fails on `#Y` and `#B` in loc, and `test_loc_render_audit.py` on either in a `.gui` string, `raw_text` and `default_format` alike; a value that really is a zero may keep `#Y` with a `# REVIEWED` comment. Vanilla writes `#yellow` without bold, so an in-between word is a shade lighter than a bold `#G` or `#R` beside it, as Banking's are.
+Write an in-between, caution or pending state (Contested, Holding out, Establishing, Under way) in vanilla's pale yellow, as Banking's phase and bubble words already were. **A word takes the weight of the other states of its own ladder**: `#bold;yellow` and `#blue_value` where they are the bold `#G`, `#R` or `#v` (the UN overview's Permanent Seat, Established, Exemplary), plain `#yellow` and `#blue` where they are plain colors or none (Banking's overview: Stagnation, Low, Very Tight, Falling); a plain yellow beside bold green read thin in game (PR #2031). That keeps the mod's scale: `#G` good, `#v` neutral, yellow in between, `#o` or `#gold` one step worse where a ladder has one (Banking's Downturn, Global Warming's Significant, Colonial Empire's Strained), `#R` bad, blue above green (the UN's Supranational, Banking's Boom). Gold is not the in-between color: it is the color of every concept link, so a gold word in an overview cell reads as one more caption. A neutral figure is `#v` and a run-in label `#b`. `loc_render_audit` (`misread_format`) fails on `#Y` and `#B` in loc, and `test_loc_render_audit.py` on either in a `.gui` string, `raw_text` and `default_format` alike; a value that really is a zero may keep `#Y` with a `# REVIEWED` comment. In `default_format`, vanilla puts the named format first (`#high;bold`), so a bold yellow there is `#yellow;bold`; `#blue_value` is listed in the audit's `SEEN_IN_GAME_FORMATS`, since vanilla's loc never writes it.
 
 ## `|K` Abbreviates Every Figure, Zero Included: Switch to `|0` Below 1,000
 

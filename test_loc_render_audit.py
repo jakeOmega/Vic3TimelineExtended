@@ -272,20 +272,33 @@ class MisreadFormatTests(unittest.TestCase):
             with self.subTest(value=value):
                 self.assertEqual(self._issues(value), ["misread_format"])
         (_i, detail), = check_misread_formats("#Y Seat Carried#!")
-        self.assertIn("draws white and bold, as `#v` does, not yellow. Write `#yellow`", detail)
+        self.assertIn("draws white and bold, as `#v` does, not yellow. For a caution or in-between state "
+                      "write `#bold;yellow` where the ladder's other states are bold", detail)
         (_i, detail), = check_misread_formats("#B Supranational#!")
-        self.assertIn("not blue. Write `#blue`", detail)
+        self.assertIn("not blue. Write `#blue_value` (bold blue) beside bold states, `#blue` beside plain", detail)
 
     def test_one_flag_per_name_in_a_value(self):
         self.assertEqual(self._issues("#Y Poor#! then #Y Contested#! and #B Exemplary#!"),
                          ["misread_format", "misread_format"])
 
     def test_the_formats_to_write_instead_pass(self):
-        for value in ("#yellow Holding out#!", "#b bold#!", "#bold x#!", "#v 5#!", "#blue Boom#!",
+        for value in ("#yellow Holding out#!", "#bold;yellow Contested#!", "#yellow;bold Due#!",
+                      "#blue_value Exemplary#!", "#b bold#!", "#bold x#!", "#v 5#!", "#blue Boom#!",
                       "#G Adopted#! #R Refused#!", "##Y is a literal hash",
                       "[SelectLocalization( X, '#Y a#!', 'b' )]", "Yes #o Strained#!"):
             with self.subTest(value=value):
                 self.assertEqual(check_misread_formats(value), [])
+
+    def test_the_bold_forms_are_known_formats(self):
+        """`#bold;yellow` combines two names vanilla's loc writes; `#blue_value`
+        is defined by the install and seen drawing bold blue in game, so
+        neither is an `unknown_format` (PR #2031)."""
+        vanilla = used_format_names(["#bold x#!", "#yellow y#!", "#blue z#!", "#v 1#!"])
+        for value in ("#bold;yellow Contested#!", "#blue_value Exemplary#!", "#BLUE_VALUE Exemplary#!"):
+            with self.subTest(value=value):
+                self.assertEqual(check_format_tags(value, vanilla_names=vanilla), [])
+        self.assertEqual([i for i, _d in check_format_tags("#gold_value x#!", vanilla_names=vanilla)],
+                         ["unknown_format"])
 
     def test_check_value_runs_it(self):
         self.assertIn("misread_format", [i for i, _d in check_value("#Y Falling#!")])
