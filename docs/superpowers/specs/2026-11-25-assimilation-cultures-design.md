@@ -164,7 +164,7 @@ Compared with the engine doing the same assimilation itself:
 - **The target.** The host culture by the rule above, where the engine takes the most accepted culture present, which under generous laws can be one that is not primary.
 - **`country_assimilation_delta_threshold_add`** is not imitated: its base value is in no define, so how much more accepted the target must be is unknown. Affirmative Action carries −100 of it. A row on the play-test list.
 - **The fervor factor** is a guess at the formula from the define's comment.
-- **The engine's minimum of one person a month** has no counterpart; a pop of under 50 people converts whole.
+- **The engine's minimum of one person a month** is one person a year here: where the fraction is above 0, at least one person converts, and a pop converts whole only when it is one person (review, 2026-11-25: converting a pop of under 50 people whole sent each year's new hybrid pop across whole the next year).
 - **Unincorporated states** are skipped. If the engine does assimilate there, slowly, the pass does not follow it.
 
 ## Unverified
@@ -173,8 +173,8 @@ Self-checks, once a game, `TE_SELF_CHECK OK|BROKEN <name>` with the numbers:
 
 | Name | What it reads | If BROKEN |
 |---|---|---|
-| `hc_define_blocks` | 30 days into a new game, before the first pass has run: some pop of its owner's heritage group has an ongoing assimilation (so the trigger is known to read), and no pop of another group has | the define does not do what its comment says; the rule ships hidden and off until it is read by hand |
-| `hc_rate_inputs` | from pop scope, the state's assimilation sum includes a law of the owner's, and the status switches read as the law in force sets them | read the country's sum and add the state's own; a `has_law` ladder for the switches |
+| `hc_define_blocks` | 30 days after the first monthly pulse of a game, or of the load that brought the build: some pop of its owner's heritage group has an ongoing assimilation (so the trigger is known to read), some pop of another group is one the pass would take (so there is something to block), and no pop of another group has an ongoing assimilation; else retried, three pulses in all | the define does not do what its comment says; the rule ships hidden and off until it is read by hand |
+| `hc_rate_inputs` | from pop scope, in a state with no assimilation line of its own, the state's assimilation sum equals the owner's (so it includes the owner's laws), and the full-acceptance switch reads as every Minority Rights law sets it; a state with lines of its own decides nothing, 200 pops at most | read the country's sum and add the state's own; a `has_law` ladder for the switches |
 
 Play-test rows, in `docs/testing/assimilation-cultures-playtest.md`: whether the engine assimilates a pop in an unincorporated state at all (its concept text says "much slower", its tooltip that assimilating pops live in an incorporated state); the spliced names in the culture panel; whether a later pass merges into the hybrid pop an earlier one made (Culture Merges' pending `cm_conversion_merges_pops`); load time and the monthly tick with the extra cultures; the engine assimilating a pop into a hybrid of its own group that ties for the highest acceptance (harmless, the same direction); an old save.
 
