@@ -5,6 +5,7 @@ of test_un_layout.py: one layout for the journal entry and the Budget tab, an
 overview on top, the live sections open, the history and How Banking Works
 at the foot, and every collapse flag named for its default.
 """
+import glob
 import json
 import operator
 import os
@@ -1438,6 +1439,50 @@ class BlocLeaderRowTest(unittest.TestCase):
                 self.assertIn(key, value)
 
 
+class PolicyRowKeysTest(unittest.TestCase):
+    """Every policy row names one policy in each of its parts. The markup gives each row a stem: its hover
+    is banking_dash_tt_<stem>, its cost banking_dash_cost_<stem>, its buttons the scripted GUIs
+    banking_dash_enable_<stem> and banking_dash_disable_<stem> (a one-shot action's hidden second button
+    keeps the enable one), any banking_dash_enable_/_disable_ gate in its visible the same stem, and its
+    label either banking_dash_name_<stem>, banking_dash_name_active_<stem> or the name of the AI's
+    scripted button <stem>. Swapping two rows' hovers (or costs, or buttons) fails here (#2037 review)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.rows = [n for n in gui_tree.parse(_read(DASH)).walk() if n.kind == "banking_dash_policy_row"]
+        cls.buttons = {}
+        for path in glob.glob(os.path.join(REPO, "common", "scripted_buttons", "*.txt")):
+            for m in re.finditer(r'(?m)^(\w+)\s*=\s*\{\s*\n\s*name\s*=\s*"?(\w+)"?', _strip_comments(_read(path))):
+                cls.buttons[m.group(1)] = m.group(2)
+
+    @staticmethod
+    def _override(row, block, key):
+        for c in row.children:
+            if c.kind == "blockoverride" and c.name == block:
+                return c.prop(key).value if c.prop(key) else None
+        return None
+
+    def test_each_row_names_one_policy(self):
+        self.assertEqual(len(self.rows), 79)
+        for row in self.rows:
+            tooltip = self._override(row, "row_tooltip", "tooltip")
+            with self.subTest(line=row.line, tooltip=tooltip):
+                stem = re.fullmatch(r"banking_dash_tt_(\w+)", tooltip).group(1)
+                self.assertEqual(self._override(row, "row_cost", "text"), f"banking_dash_cost_{stem}")
+                self.assertEqual(self._override(row, "enable_action", "datacontext"),
+                                 f"[GetScriptedGui('banking_dash_enable_{stem}')]")
+                disable = self._override(row, "disable_action", "datacontext")
+                if self._override(row, "disable_action", "visible") == "no":
+                    self.assertEqual(disable, f"[GetScriptedGui('banking_dash_enable_{stem}')]")
+                else:
+                    self.assertEqual(disable, f"[GetScriptedGui('banking_dash_disable_{stem}')]")
+                gates = re.findall(r"GetScriptedGui\('banking_dash_(?:enable|disable)_(\w+)'\)", row.prop("visible").value)
+                self.assertEqual(set(gates) - {stem}, set())
+                label = self._override(row, "row_label", "text")
+                self.assertIn(label, {f"banking_dash_name_{stem}", f"banking_dash_name_active_{stem}",
+                                      self.buttons.get(stem)})
+
+
 class BackstopSumsTest(unittest.TestCase):
     """The Backstops row gives two sums, "−… received" and "+… extended", and the
     rows under it say what makes them up. From #2016: the Creditors' Consortium's
@@ -1454,27 +1499,57 @@ class BackstopSumsTest(unittest.TestCase):
                 "te_mon_lolr_relief": "GetList('te_mon_bs_lolr_from')",
                 "te_mon_union_recipient_value": "te_mon_bs_union_received_display",
                 "te_cred_guarantee_relief": "te_mon_bs_cred_received_display"}
-    # What records a row beside each add to te_mon_arr_provider_pts.
-    EXTENDED = ("te_mon_record_backstop_partner", "te_mon_bs_union_pts", "te_mon_bs_cred_pts")
 
     @classmethod
     def setUpClass(cls):
         cls.monetary = _type_body(_strip_comments(_read(DASH)), "te_banking_sec_monetary")
+        cls.tree = gui_tree.parse(_read(DASH))
+
+    def _row(self, kind, text_key):
+        """The one row of this kind whose text (its own or a blockoverride's) is text_key."""
+        rows = [n for n in self.tree.walk() if n.kind == kind
+                and any(p.key == "text" and p.value == text_key for m in n.walk() for p in m.props)]
+        self.assertEqual(len(rows), 1, text_key)
+        return rows[0]
 
     def test_every_extended_cost_records_a_row(self):
-        adds = 0
+        """Each add to the sum is followed by the record of its row, with the same cost: a partner's row
+        (te_mon_record_backstop_partner's COST) or the union's or the consortium's sum."""
+        adds = []
         for path in self.EFFECTS:
-            lines = _strip_comments(_read(path)).splitlines()
+            lines = [ln.strip() for ln in _strip_comments(_read(path)).splitlines() if ln.strip()]
             for i, line in enumerate(lines):
-                if re.search(r"name = te_mon_arr_provider_pts add = ", line):
-                    adds += 1
-                    near = "\n".join(lines[i:i + 3])
-                    with self.subTest(path=os.path.basename(path), line=line.strip()[:90]):
-                        self.assertTrue(any(r in near for r in self.EXTENDED), "a cost with no row under the sum")
-        self.assertEqual(adds, 6, "swap, guarantee and receivership treaties, the union, the consortium's "
-                                  "guarantee and its receiverships")
-        for drawn in ("te_mon_bs_union_pts_display", "te_mon_bs_cred_pts_display"):
-            self.assertRegex(self.monetary, rf"banking_dash_group_value_row = \{{\s*visible = \"[^\"]*'{drawn}'")
+                m = re.fullmatch(r"root = \{ change_variable = \{ name = te_mon_arr_provider_pts "
+                                 r"add = scope:te_mon_arr_party\.(\w+) \} \}", line)
+                if not m:
+                    self.assertNotIn("name = te_mon_arr_provider_pts add", line, "an add in another form")
+                    continue
+                cost = m.group(1)
+                adds.append(cost)
+                with self.subTest(path=os.path.basename(path), cost=cost):
+                    self.assertRegex(lines[i + 1],
+                                     rf"^(?:scope:te_mon_arr_party = \{{ )?te_mon_record_backstop_partner = \{{ KIND = \w+ COST = {cost} \}}"
+                                     rf"|^root = \{{ change_variable = \{{ name = te_mon_bs_(?:union|cred)_pts "
+                                     rf"add = scope:te_mon_arr_party\.{cost} \}} \}}$")
+        self.assertEqual(len(adds), 6, "swap, guarantee and receivership treaties, the union, the consortium's "
+                                       "guarantee and its receiverships")
+
+    def test_the_bloc_rows_show_the_sums_they_record(self):
+        """The union's and the consortium's leader rows: the GUI gates on X_display, the row's text reads
+        X_display and only it, and X_display is the variable the discovery adds the cost to."""
+        values = _strip_comments(_read(os.path.join(REPO, "common", "script_values",
+                                                    "te_monetary_arrangement_script_values.txt")))
+        loc = _all_loc()
+        for var, key in (("te_mon_bs_union_pts", "banking_dash_mon_bs_union_to"),
+                         ("te_mon_bs_cred_pts", "banking_dash_mon_bs_cred_to")):
+            with self.subTest(var=var):
+                display = f"{var}_display"
+                self.assertRegex(values, rf"(?m)^{display} = \{{\s*value = 0\s*if = \{{\s*limit = \{{ has_variable = {var} \}}"
+                                         rf"\s*value = var:{var}\s*\}}\s*\}}")
+                row = self._row("banking_dash_group_value_row", key)
+                self.assertEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", row.prop("visible").value)), {display})
+                for k in (key, f"{key}_fig"):
+                    self.assertEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", loc[k])), {display}, k)
 
     def test_every_received_term_has_a_row(self):
         values = _strip_comments(_read(os.path.join(REPO, "common", "script_values",
@@ -1491,8 +1566,17 @@ class BackstopSumsTest(unittest.TestCase):
     def test_the_consortium_rows_read_what_the_sums_read(self):
         values = _strip_comments(_read(os.path.join(REPO, "common", "script_values",
                                                     "te_monetary_arrangement_script_values.txt")))
-        self.assertRegex(values, r"te_mon_bs_cred_received_display = \{\s*value = te_cred_guarantee_relief\s*\}")
-        self.assertRegex(values, r"te_mon_bs_cred_pts_display = \{[^}]*has_variable = te_mon_bs_cred_pts")
+        # The member's row: the received sum adds te_cred_guarantee_relief, the row's display value is that
+        # and nothing else, and the row's gate and text read the display value and nothing else.
+        received = _block_from(values, values.index("\nte_mon_arr_recipient_value = {") + len("\nte_mon_arr_recipient_value = "))
+        self.assertIn("add = te_cred_guarantee_relief", received)
+        self.assertRegex(values, r"(?m)^te_mon_bs_cred_received_display = \{\s*value = te_cred_guarantee_relief\s*\}")
+        row = self._row("banking_dash_partner_row", "banking_dash_mon_bs_cred_from")
+        self.assertEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", row.prop("visible").value)),
+                         {"te_mon_bs_cred_received_display"})
+        loc = _all_loc()
+        for k in ("banking_dash_mon_bs_cred_from", "banking_dash_mon_bs_cred_from_fig"):
+            self.assertEqual(set(re.findall(r"ScriptValue\('(\w+)'\)", loc[k])), {"te_mon_bs_cred_received_display"}, k)
         costs = _strip_comments(_read(self.EFFECTS[2]))
         body = _block_from(costs, costs.index("\nte_cred_discover_leader_costs = {") + len("\nte_cred_discover_leader_costs = "))
         # zeroed first, outside the leader's limit, so a country that stops leading shows no row
@@ -1667,6 +1751,20 @@ class FlowedSlotTest(unittest.TestCase):
                 self.assertIsNone(n.prop("parentanchor"))
                 self.assertNotEqual(n.parent.kind, "widget", "the type is the slot now; no second one round it")
 
+    def test_the_hovers_sit_on_the_bar_and_the_row_not_the_slot(self):
+        """The slot is wider than what it centres (460 round a 440 bar, 520 round a 460 row), so a hover
+        on the slot would answer over the empty margins beside the bar or the row."""
+        for type_name, block_name, inner_kind in (("banking_dash_mon_meter", "meter_tooltip", "default_progressbar_horizontal"),
+                                                  ("banking_dash_policy_row", "row_tooltip", "flowcontainer")):
+            with self.subTest(type=type_name):
+                root = self.types[type_name]
+                blocks = [n for n in root.walk() if n.kind == "block" and n.name == block_name]
+                self.assertEqual(len(blocks), 1)
+                (inner,) = [w for w in gui_tree.widgets(root) if w.kind == inner_kind]
+                self.assertIs(blocks[0].parent, inner, f"{block_name} belongs on the {inner_kind}, not the slot")
+                self.assertIsNone(root.prop("tooltip"))
+                self.assertFalse([w for w in gui_tree.widgets(root) if w is not inner and w.kind != "background"])
+
     def test_the_policy_row_is_a_slot_with_the_row_centred(self):
         row = self.types["banking_dash_policy_row"]
         self.assertEqual(row.base, "widget")
@@ -1736,6 +1834,20 @@ class FlowedSlotTest(unittest.TestCase):
                 self.assertIsNone(note.prop("parentanchor"))
                 self.assertEqual(gui_tree.size(note, "minimumsize"), (520, -1))
                 self.assertEqual(gui_tree.size(note, "margin"), (26, 4))
+        # The sections' notes share their containers with 520 slots, so each is 520 too, its text in the 468
+        # between margins of 26 where the rows' names start (the Monetary Policy note sat at 0 to 480 beside
+        # the open-market fallback's 520 slot until the #2037 review).
+        keys = ("banking_dash_no_active", "banking_dash_dormant_monetary_note", "banking_dash_dormant_tools_note",
+                "banking_dash_no_points_note")
+        notes = {n.prop("text").value: n for n in self.tree.walk() if n.kind == "textbox" and n.prop("text")
+                 and n.prop("text").value in keys}
+        self.assertEqual(set(notes), set(keys))
+        for key, note in notes.items():
+            with self.subTest(note=key):
+                self.assertEqual((gui_tree.size(note, "minimumsize"), gui_tree.size(note, "maximumsize")),
+                                 ((520, -1), (520, -1)))
+                self.assertEqual(gui_tree.size(note, "margin"), (26, 4))
+                self.assertIsNone(note.prop("parentanchor"))
         layout = gui_tree.parse(_read(LAYOUT))
         hosts = [n.parent for n in layout.walk() if n.kind in sections]
         self.assertEqual(len(hosts), 6)

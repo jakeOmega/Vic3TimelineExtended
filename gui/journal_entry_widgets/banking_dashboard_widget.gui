@@ -2580,7 +2580,10 @@ types banking_dashboard_widget_types
 			### player's panel lays out as before. The gate asks
 			### Country.IsLocalPlayer too, as the mandate grid's, Recapitalize's and
 			### the union buttons' wrappers do, so another country's panel gives no
-			### spacing to an empty wrapper.
+			### spacing to an empty wrapper. The note is the section's 520, its text
+			### in the 468 between margins of 26, as the other notes' are: the
+			### open-market fallback below is a 520 slot, so a 480 note sat 20 to
+			### the left of the rows' names.
 			flowcontainer = {
 				visible = "[And( Country.IsLocalPlayer, GetScriptedGui('banking_dash_monetary_dormant_note').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
 				ignoreinvisible = yes
@@ -2594,11 +2597,11 @@ types banking_dashboard_widget_types
 						tooltip = "[SelectLocalization( GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValid( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_not_started_met_tt', Concatenate( Localize( 'banking_dash_not_started_tt' ), GetScriptedGui('te_budget_banking_tab_unlock_sgui').IsValidTooltip( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 						autoresize = yes
 						multiline = yes
-						minimumsize = { 480 -1 }
-						maximumsize = { 480 -1 }
+						minimumsize = { 520 -1 }
+						maximumsize = { 520 -1 }
 						align = left|nobaseline
 						using = banking_dash_fontsize_row
-						margin = { 6 4 }
+						margin = { 26 4 }
 					}
 				}
 			}
