@@ -3330,6 +3330,29 @@ types banking_dashboard_widget_types
 									}
 								}
 
+								### A Creditors' Consortium member's standing guarantee, from the
+								### leader (from #2016: the "received" sum counted it with no row
+								### under it). The union row's form: the row reads the shown
+								### member, the leader is the flag's and the name's datacontext
+								### alone. Shown while the guarantee pays (te_cred_guarantee_relief).
+								banking_dash_partner_row = {
+									visible = "[And( Country.IsInPowerBloc, GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_cred_received_display'), '(CFixedPoint)0' ) )]"
+									tooltip = "banking_dash_mon_bs_cred_backer_tt"
+									blockoverride "flag" {
+										tiny_flag = {
+											parentanchor = center
+											datacontext = "[Country.GetPowerBloc.GetLeader]"
+										}
+									}
+									blockoverride "name" {
+										datacontext = "[Country.GetPowerBloc.GetLeader]"
+										text = "banking_dash_mon_bs_country_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_cred_from"
+									}
+								}
+
 								flowcontainer = {
 									direction = vertical
 									ignoreinvisible = yes
@@ -3452,10 +3475,27 @@ types banking_dashboard_widget_types
 								banking_dash_group_value_row = {
 									visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_union_pts_display'), '(CFixedPoint)0' )]"
 									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_union_to_tt"
 										text = "banking_dash_mon_bs_bloc_name"
 									}
 									blockoverride "value" {
 										text = "banking_dash_mon_bs_union_to"
+									}
+								}
+
+								### A Creditors' Consortium leader's standing guarantee of its
+								### members, one row as the bloc's (from #2016: the "+... extended"
+								### sum counted it with no row under it, so the rows did not add
+								### up to the sum). The discovery sums it (te_mon_bs_cred_pts,
+								### te_cred_discover_leader_costs); shown while it is above 0.
+								banking_dash_group_value_row = {
+									visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_mon_bs_cred_pts_display'), '(CFixedPoint)0' )]"
+									blockoverride "group_label" {
+										tooltip = "banking_dash_mon_bs_cred_to_tt"
+										text = "banking_dash_mon_bs_cred_name"
+									}
+									blockoverride "value" {
+										text = "banking_dash_mon_bs_cred_to"
 									}
 								}
 							}

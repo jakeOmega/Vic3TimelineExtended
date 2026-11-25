@@ -1407,23 +1407,93 @@ class BlocLeaderRowTest(unittest.TestCase):
     vanish; te_rebind_country.py sees nothing either way (every read is Country)."""
 
     LEADER = 'datacontext = "[Country.GetPowerBloc.GetLeader]"'
+    # The union's backing, and (from #2016) the Creditors' Consortium's standing
+    # guarantee: both a member receives from its bloc's leader.
+    ROWS = {"te_mon_bs_union_received_display": "banking_dash_mon_bs_union_from",
+            "te_mon_bs_cred_received_display": "banking_dash_mon_bs_cred_from"}
 
     def test_the_leader_is_the_flag_and_name_only(self):
         from gui_test_helpers import own_props
         dash = _strip_comments(_read(DASH))
-        rows = [_block_from(dash, m.start()) for m in re.finditer(r"\bbanking_dash_partner_row\s*=\s*\{", dash)]
-        rows = [r[1:-1] for r in rows if "te_mon_bs_union_received_display" in own_props(r[1:-1])]
-        self.assertEqual(len(rows), 1, "the row whose visible reads te_mon_bs_union_received_display")
-        row = rows[0]
-        self.assertNotRegex(own_props(row), r"\bdatacontext\s*=", "a datacontext on the row shadows its visible")
-        self.assertRegex(own_props(row), r"visible = \"\[And\( Country\.IsInPowerBloc, ")
-        for name in ("flag", "name"):
-            with self.subTest(block=name):
-                block = _block_from(row, re.search(rf'blockoverride "{name}"\s*\{{', row).start())
-                self.assertIn(self.LEADER, block)
-        value = _block_from(row, re.search(r'blockoverride "value"\s*\{', row).start())
-        self.assertNotIn("datacontext", value)
-        self.assertIn("banking_dash_mon_bs_union_from", value)
+        all_rows = [_block_from(dash, m.start()) for m in re.finditer(r"\bbanking_dash_partner_row\s*=\s*\{", dash)]
+        for display, key in self.ROWS.items():
+            with self.subTest(row=key):
+                rows = [r[1:-1] for r in all_rows if display in own_props(r[1:-1])]
+                self.assertEqual(len(rows), 1, f"the row whose visible reads {display}")
+                row = rows[0]
+                self.assertNotRegex(own_props(row), r"\bdatacontext\s*=", "a datacontext on the row shadows its visible")
+                self.assertRegex(own_props(row), r"visible = \"\[And\( Country\.IsInPowerBloc, ")
+                for name in ("flag", "name"):
+                    block = _block_from(row, re.search(rf'blockoverride "{name}"\s*\{{', row).start())
+                    self.assertIn(self.LEADER, block, name)
+                value = _block_from(row, re.search(r'blockoverride "value"\s*\{', row).start())
+                self.assertNotIn("datacontext", value)
+                self.assertIn(key, value)
+
+
+class BackstopSumsTest(unittest.TestCase):
+    """The Backstops row gives two sums, "−… received" and "+… extended", and the
+    rows under it say what makes them up. From #2016: the Creditors' Consortium's
+    standing guarantee was in both sums with no row of its own, so a player could
+    not add the rows up to the sum. Every term of each sum has its row, read from
+    the script, so a new term without one fails here."""
+
+    EFFECTS = [os.path.join(REPO, "common", "scripted_effects", f) for f in
+               ("te_monetary_arrangement_effects.txt", "te_monetary_union_effects.txt",
+                "te_creditors_consortium_effects.txt")]
+    # Each term of te_mon_arr_recipient_value -> what draws it: a row's display
+    # value, or the list of a row per partner.
+    RECEIVED = {"te_mon_swap_premium_cut": "GetList('te_mon_bs_swap_from')",
+                "te_mon_lolr_relief": "GetList('te_mon_bs_lolr_from')",
+                "te_mon_union_recipient_value": "te_mon_bs_union_received_display",
+                "te_cred_guarantee_relief": "te_mon_bs_cred_received_display"}
+    # What records a row beside each add to te_mon_arr_provider_pts.
+    EXTENDED = ("te_mon_record_backstop_partner", "te_mon_bs_union_pts", "te_mon_bs_cred_pts")
+
+    @classmethod
+    def setUpClass(cls):
+        cls.monetary = _type_body(_strip_comments(_read(DASH)), "te_banking_sec_monetary")
+
+    def test_every_extended_cost_records_a_row(self):
+        adds = 0
+        for path in self.EFFECTS:
+            lines = _strip_comments(_read(path)).splitlines()
+            for i, line in enumerate(lines):
+                if re.search(r"name = te_mon_arr_provider_pts add = ", line):
+                    adds += 1
+                    near = "\n".join(lines[i:i + 3])
+                    with self.subTest(path=os.path.basename(path), line=line.strip()[:90]):
+                        self.assertTrue(any(r in near for r in self.EXTENDED), "a cost with no row under the sum")
+        self.assertEqual(adds, 6, "swap, guarantee and receivership treaties, the union, the consortium's "
+                                  "guarantee and its receiverships")
+        for drawn in ("te_mon_bs_union_pts_display", "te_mon_bs_cred_pts_display"):
+            self.assertRegex(self.monetary, rf"banking_dash_group_value_row = \{{\s*visible = \"[^\"]*'{drawn}'")
+
+    def test_every_received_term_has_a_row(self):
+        values = _strip_comments(_read(os.path.join(REPO, "common", "script_values",
+                                                    "te_monetary_arrangement_script_values.txt")))
+        body = _block_from(values, values.index("\nte_mon_arr_recipient_value = {") + len("\nte_mon_arr_recipient_value = "))
+        terms = set(re.findall(r"\badd = (\w+)", body))
+        self.assertEqual(terms, set(self.RECEIVED), "a term of the received sum the panel has no row for")
+        for term, drawn in self.RECEIVED.items():
+            with self.subTest(term=term):
+                self.assertIn(drawn, self.monetary)
+        # the receivership's relief is the guarantee's value, its row its own list
+        self.assertIn("GetList('te_mon_bs_receiver_from')", self.monetary)
+
+    def test_the_consortium_rows_read_what_the_sums_read(self):
+        values = _strip_comments(_read(os.path.join(REPO, "common", "script_values",
+                                                    "te_monetary_arrangement_script_values.txt")))
+        self.assertRegex(values, r"te_mon_bs_cred_received_display = \{\s*value = te_cred_guarantee_relief\s*\}")
+        self.assertRegex(values, r"te_mon_bs_cred_pts_display = \{[^}]*has_variable = te_mon_bs_cred_pts")
+        costs = _strip_comments(_read(self.EFFECTS[2]))
+        body = _block_from(costs, costs.index("\nte_cred_discover_leader_costs = {") + len("\nte_cred_discover_leader_costs = "))
+        # zeroed first, outside the leader's limit, so a country that stops leading shows no row
+        self.assertRegex(body, r"^\{\s*set_variable = \{ name = te_mon_bs_cred_pts value = 0 \}")
+        loc = _all_loc()
+        for key in ("banking_dash_mon_bs_cred_name", "banking_dash_mon_bs_cred_to_tt", "banking_dash_mon_bs_cred_backer_tt",
+                    "banking_dash_mon_bs_union_to_tt"):
+            self.assertIn(key, loc)
 
 
 
@@ -1499,7 +1569,8 @@ class FlagGroupTest(unittest.TestCase):
     def test_no_figure_prints_as_zero(self):
         """A row's figure shows only where it reads at two decimals; under that, words."""
         for key in ("banking_dash_mon_backstops_value", "banking_dash_mon_bs_swap_from", "banking_dash_mon_bs_lolr_from",
-                    "banking_dash_mon_bs_receiver_from", "banking_dash_mon_bs_union_from", "banking_dash_mon_bs_union_to"):
+                    "banking_dash_mon_bs_receiver_from", "banking_dash_mon_bs_union_from", "banking_dash_mon_bs_union_to",
+                    "banking_dash_mon_bs_cred_from", "banking_dash_mon_bs_cred_to"):
             with self.subTest(key=key):
                 self.assertNotRegex(self.loc[key], r"\|2\]", "the figure sits behind a SelectLocalization")
                 # The engine cuts a figure toward zero: 0.007 prints "0.00" (seen in game, 2026-11-24).
