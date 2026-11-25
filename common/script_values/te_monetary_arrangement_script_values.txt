@@ -739,6 +739,25 @@ te_mon_bs_union_pts_display = {
 	}
 }
 
+# The Creditors' Consortium's standing guarantee on the Backstops rows (from
+# #2016: both sums counted it with no row of its own under them). What it costs
+# a leader, summed over its members by the discovery (te_mon_bs_cred_pts,
+# te_cred_discover_leader_costs), and what it takes off a member's premium now
+# (te_cred_guarantee_relief, 0 where the guarantee does not pay: a treaty's
+# guarantee or receivership, or the union's backstop, pays it instead).
+# Display only.
+te_mon_bs_cred_pts_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_bs_cred_pts }
+		value = var:te_mon_bs_cred_pts
+	}
+}
+
+te_mon_bs_cred_received_display = {
+	value = te_cred_guarantee_relief
+}
+
 # The least figure a partner's row is kept for (te_mon_record_backstop_partner,
 # te_mon_record_union_member): the first that prints as a figure at the two
 # decimals the rows show. The engine's number formats cut toward zero, they do

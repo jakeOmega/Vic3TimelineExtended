@@ -7572,8 +7572,8 @@
   "ru": "Прекращает #b $ch_cultural_institutes_program$#!, его эффекты и расход [Concept('concept_influence','влияния')]."
  },
  "ch_policy_institutes_off": {
-  "en": "Defund",
-  "ru": "Прекратить финансирование"
+  "en": "End",
+  "ru": "Завершить"
  },
  "ch_policy_institutes_on": {
   "en": "Fund",

@@ -845,7 +845,14 @@ te_cred_end_direct_receivership = {
 # runs. A GDP-scaled share of each member's relief, as a guarantor pays
 # (te_mon_arr_lolr_cost_to_root), into the same te_mon_arr_provider_pts the
 # treaties' costs go to.
+#
+# The guarantee's part of that sum is kept apart as well, in te_mon_bs_cred_pts,
+# for the Banking panel's Backstops rows (display only, as te_mon_bs_union_pts
+# is the union's): the "+... extended" total counted it with no row of its own
+# under it (from #2016). Zeroed for every country on every discovery, so a
+# country that stops leading shows no row on the pulse it stops.
 te_cred_discover_leader_costs = {
+	set_variable = { name = te_mon_bs_cred_pts value = 0 }
 	if = {
 		limit = {
 			te_mon_full_system = yes
@@ -858,6 +865,7 @@ te_cred_discover_leader_costs = {
 				if = {
 					limit = { te_cred_guarantee_pays_relief = yes }
 					root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_cred_guarantee_cost_to_root } }
+					root = { change_variable = { name = te_mon_bs_cred_pts add = scope:te_mon_arr_party.te_cred_guarantee_cost_to_root } }
 				}
 				if = {
 					limit = {
