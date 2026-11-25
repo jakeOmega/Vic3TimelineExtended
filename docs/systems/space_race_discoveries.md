@@ -18,16 +18,15 @@ months are additional. These percentages balance game rarity; they do not
 estimate the probability of extraterrestrial life or geological features.
 
 The event consumes its pending flag immediately and sets a permanent done flag,
-preventing repeats while the player considers the choices. Every option grants
-its own modest permanent journal-entry modifier through its generated
-dispatcher, `sr_site_choose_<modifier>`, as the colony specializations do: the
-solar colonization entry declares the outcome while its holder's
-`<modifier>_held` record is set (1.15 scaling modifiers, #1404), so a
-revolution's winner, which inherits the record, keeps it. Pending discoveries and timers are country variables,
-so they follow the game's normal revolution inheritance. No flags are cleared
-by milestone cleanup. Colony surveys continue when the expansion program is
-idle and after every site has been claimed. Existing saves receive no
-retroactive rolls for colonies founded before this change.
+preventing repeats while the player considers the choices. Every option records
+the choice on the world (`sr_site_disc_<d>`, 1 or 2) through its generated
+dispatcher, `sr_site_choose_<outcome>`, and the world's sync marks the holder's
+`<outcome>_held`. Pending discoveries and timers are country variables, so they
+follow the game's normal revolution inheritance; the choice is the world's, so
+a cession or an heir takes it, and a release clears it. No flags are cleared by
+milestone cleanup. Colony surveys continue when the expansion program is idle
+and after every site has been claimed. Existing saves receive no retroactive
+rolls for colonies founded before this change.
 
 The two Europa candidates are independent: detecting vents neither guarantees
 nor excludes life. The two living-biology events use reproducible growth and
@@ -35,12 +34,67 @@ metabolism with contamination controls. The Hellas event establishes ancient mic
 finds report their own confirmed results without implying an additional life
 discovery.
 
-## Choice rewards
+## Choice rewards: site boons
 
-Each event has separate permanent modifiers for its two options, so discoveries
-stack with earlier colony specializations and with other discoveries. The
-research option gives +1% research speed, or +2% for the three biological finds.
-Other options use the following bonuses:
+Under Simple and Full Colonies (the default), each option is its world's
+**boon** (the owner, 2026-11-25): +100% to one module's effect at that world.
+The first option studies the find and boosts the Research Station; the second
+puts it to use and boosts the module its text names. The table is
+`DISCOVERY_BOONS` in `scripts/generators/gen_solar_sites.py`, and the bonus
+`BOON_BONUS` (`sr_site_boon_bonus`, 1).
+
+- **Values** (generated, `common/script_values/sr_sites_generated.txt`):
+  `sr_site_boon_<type>_<key>` is 1 plus the bonus for each of the world's
+  discoveries whose recorded option names the type, emitted only where a
+  discovery there can; `sr_site_<type>_eff_<key>` is the facility's staffed
+  levels times it, and `sr_site_hab_share_eff_<key>` the Habitat's share of the
+  base room times it. Where no discovery can boost a type, the readers take
+  `sr_site_<type>_staffed_<key>` and `sr_site_hab_share_value_<key>` as before
+  (`eff_value`, `hab_share_eff`).
+- **Readers:** every facility's `sr_mod_units_<type>` (so the entry's
+  `sr_module_<type>` modifiers, fabrication and Space Command from Orbital
+  Yards, command reliability, the marines' training weight), a world's
+  Extraplanetary Base room (Mining Complex), Resort Colony room (Off-World
+  Resort) and Resort Draw (Cultural Center), its Terraforming pace, and its room
+  for people (Habitat, and the room a dismantled Habitat leaves). The
+  Administration is never boosted (its staffed levels are also its authority
+  bill), nor Defences and Spaceport (`gen_space_fleets.py` reads their levels).
+- **The choice's tooltip** is `<outcome>_tt` under Simple and Full Colonies.
+- **Panel:** the colony's page shows a line under each boosted module for each
+  discovery boosting it, "<the event's title>: +100%"
+  (`je_space_race_widget_mod_boon_<d>`, shown by `sr_disp_site_disc_<d>`), its
+  hover the outcome's tooltip: `te_sr_page_boon_line` instances in
+  `te_sr_page_mod_row`'s `row_boons` block, measured by
+  `test_space_race_labels.py`. The list's Modules view shows nothing extra.
+- **AI:** the options keep `ai_chance` 5 each. `sr_mod_ai_plan_<key>` builds an
+  Orbital Yard, Cultural Center, Black Site, Training Ground or Materials
+  Foundry that a boon there doubles before its fallback Research Station
+  (`AI_BOON_ALWAYS`); the other boons work through the needs the plan already
+  has.
+- **Tests:** `test_space_race_discoveries.py` `BoonTests`.
+
+| Choice | Discoveries | Boon |
+|---|---|---|
+| Study, preserve or observe (first option) | all twenty | Research Station |
+| International scrutiny or cooperation | Europa life, Enceladus life, Hellas fossils | Cultural Center |
+| Engineering | Europa vents, Arcadia brines, Ganymede layers, Triton jet | Orbital Yard |
+| Materials processing | Titan chemistry, Vesta impactor, Pluto antifreeze | Materials Foundry |
+| Extraction | Ceres reservoir, Psyche metal, Mercury archive, Io roof | Mining Complex |
+| Habitat construction, shielding or local water | Olympus tubes, Pallas water, Callisto archive, Titania ocean | Habitat |
+| Water for a future atmosphere | Utopia glacier | Terraforming |
+| Aerostat navigation | Venus waves | Off-World Resort |
+
+Europa's two discoveries can both boost its Research Stations (+200%).
+
+### Under Races Only
+
+Races Only has no modules, so there each option keeps its own modest permanent
+modifier (`common/static_modifiers/space_race_discovery_modifiers.txt`), which
+the solar colonization entry declares while the holder's `<outcome>_held` is set
+and the setting is Races Only (1.15 scaling modifiers, #1404); a revolution's
+winner, which inherits the record, keeps it. The option's tooltip shows the
+modifier there. The research option gives +1% research speed, or +2% for the
+three biological finds. Other options use the following bonuses:
 
 | Choice | Permanent bonus |
 |---|---|

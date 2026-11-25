@@ -1,4 +1,8 @@
-﻿# Permanent, modest discovery bonuses, held on the solar colonization entry.
+﻿# Permanent, modest discovery bonuses, held on the solar colonization entry
+# under the Races Only colony setting, which has no colony modules. Under
+# Simple and Full Colonies a discovery's option is instead its world's boon:
+# +100% to one module's effect there (gen_solar_sites.DISCOVERY_BOONS;
+# docs/systems/space_race_discoveries.md).
 sr_discovery_europa_life_a = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
 	country_tech_research_speed_mult = 0.02

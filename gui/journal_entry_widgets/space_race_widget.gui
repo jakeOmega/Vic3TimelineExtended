@@ -3288,6 +3288,11 @@ types space_race_widget_types
 					blockoverride "row_dismantle" {
 						block "mod_hab_dismantle_button" {}
 					}
+					blockoverride "row_boons" {
+						block "mod_hab_boons" {
+							visible = no
+						}
+					}
 				}
 				te_sr_page_mod_row = {
 					blockoverride "row_icon" {
@@ -3369,6 +3374,11 @@ types space_race_widget_types
 					blockoverride "row_dismantle" {
 						block "mod_mine_dismantle_button" {}
 					}
+					blockoverride "row_boons" {
+						block "mod_mine_boons" {
+							visible = no
+						}
+					}
 				}
 				te_sr_page_mod_row = {
 					blockoverride "row_icon" {
@@ -3395,6 +3405,11 @@ types space_race_widget_types
 					}
 					blockoverride "row_dismantle" {
 						block "mod_yard_dismantle_button" {}
+					}
+					blockoverride "row_boons" {
+						block "mod_yard_boons" {
+							visible = no
+						}
 					}
 				}
 				te_sr_page_mod_row = {
@@ -3423,6 +3438,11 @@ types space_race_widget_types
 					blockoverride "row_dismantle" {
 						block "mod_lab_dismantle_button" {}
 					}
+					blockoverride "row_boons" {
+						block "mod_lab_boons" {
+							visible = no
+						}
+					}
 				}
 				te_sr_page_mod_row = {
 					blockoverride "row_icon" {
@@ -3449,6 +3469,11 @@ types space_race_widget_types
 					}
 					blockoverride "row_dismantle" {
 						block "mod_culture_dismantle_button" {}
+					}
+					blockoverride "row_boons" {
+						block "mod_culture_boons" {
+							visible = no
+						}
 					}
 				}
 				te_sr_page_mod_row = {
@@ -3477,6 +3502,11 @@ types space_race_widget_types
 					blockoverride "row_dismantle" {
 						block "mod_resort_dismantle_button" {}
 					}
+					blockoverride "row_boons" {
+						block "mod_resort_boons" {
+							visible = no
+						}
+					}
 				}
 				te_sr_page_mod_row = {
 					blockoverride "row_icon" {
@@ -3503,6 +3533,11 @@ types space_race_widget_types
 					}
 					blockoverride "row_dismantle" {
 						block "mod_black_dismantle_button" {}
+					}
+					blockoverride "row_boons" {
+						block "mod_black_boons" {
+							visible = no
+						}
 					}
 				}
 				te_sr_page_mod_row = {
@@ -3531,6 +3566,11 @@ types space_race_widget_types
 					blockoverride "row_dismantle" {
 						block "mod_train_dismantle_button" {}
 					}
+					blockoverride "row_boons" {
+						block "mod_train_boons" {
+							visible = no
+						}
+					}
 				}
 				te_sr_page_mod_row = {
 					blockoverride "row_icon" {
@@ -3558,6 +3598,11 @@ types space_race_widget_types
 					blockoverride "row_dismantle" {
 						block "mod_bunker_dismantle_button" {}
 					}
+					blockoverride "row_boons" {
+						block "mod_bunker_boons" {
+							visible = no
+						}
+					}
 				}
 				te_sr_page_mod_row = {
 					blockoverride "row_icon" {
@@ -3584,6 +3629,11 @@ types space_race_widget_types
 					}
 					blockoverride "row_dismantle" {
 						block "mod_foundry_dismantle_button" {}
+					}
+					blockoverride "row_boons" {
+						block "mod_foundry_boons" {
+							visible = no
+						}
 					}
 				}
 				te_sr_page_mod_row = {
@@ -3641,6 +3691,11 @@ types space_race_widget_types
 					}
 					blockoverride "row_dismantle" {
 						block "mod_terra_dismantle_button" {}
+					}
+					blockoverride "row_boons" {
+						block "mod_terra_boons" {
+							visible = no
+						}
 					}
 				}
 			}
@@ -4025,12 +4080,24 @@ types space_race_widget_types
 		elide = right
 	}
 
+	### A discovery's boon under a module on a colony's page (row_boons): the
+	### discovery's name and +100%, its hover the outcome (gen_solar_sites
+	### _boon_lines fills one per discovery that boosts the module there).
+	type te_sr_page_boon_line = textbox {
+		autoresize = yes
+		max_width = 430
+		align = left|nobaseline
+		using = te_sr_fontsize_row
+		elide = right
+	}
+
 	### A module on a colony's page: its icon, its full name (its hover what the
 	### module does), its level and "+N" queued or on its way, the button that
 	### queues one more and the one that takes a level down, or stops it
 	### (dismantling, owner 2026-10-31). 4 + 28 + 4 + 318 + 4 + 20 + 4 + 24 + 4 +
 	### 24 + 4 + 24 = 466, in 472. While a level comes down, a second line under
-	### the name says so, with its months to go.
+	### the name says so, with its months to go; under that, a line for each
+	### discovery there that makes the module stronger (row_boons).
 	type te_sr_page_mod_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -4151,6 +4218,18 @@ types space_race_widget_types
 				elide = right
 				default_format = "#v"
 				block "row_dismantling_months" {}
+			}
+		}
+		### A discovery's boon (gen_solar_sites.DISCOVERY_BOONS; the owner,
+		### 2026-11-25): under the name, a line for each of the world's
+		### discoveries whose outcome makes this module stronger there, naming
+		### the discovery, its hover the outcome. Hidden where none does.
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			margin_left = 36
+			block "row_boons" {
+				visible = no
 			}
 		}
 	}

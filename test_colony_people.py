@@ -133,7 +133,8 @@ class HabitatRoomTest(unittest.TestCase):
                 self.assertIn(f"min = global_var:sr_site_hab_share_{k}", share)
                 for room in (f"sr_site_room_{k}", f"sr_md_room_less_hab_{k}"):
                     body = _block(self.values, room)
-                    self.assertIn(f"multiply = sr_site_hab_share_value_{k}", body)
+                    # Doubled where a discovery there boosts Habitats (2026-11-25).
+                    self.assertIn(f"multiply = {gss.hab_share_eff(site)}", body)
                     self.assertNotIn("multiply = 0.5", body)
 
     def test_a_cession_keeps_the_room(self):
