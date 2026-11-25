@@ -121,8 +121,9 @@ class FigureSwitchTest(unittest.TestCase):
 
     def test_the_state_panels_grid_tile(self):
         """Flow, the market flow and the pass-through on the state panel's Power Grid tile (2026-11-24 follow-up):
-        three bindings of the vanilla copy, nothing else of it."""
-        states = h._read(os.path.join(REPO, "gui/states_panel.gui"))
+        three bindings of the tile, nothing else of it."""
+        # The tile stands among the mod's tiles (te_state_tiles, gui/te_state_panel_widgets.gui).
+        states = h._read(os.path.join(REPO, "gui/te_state_panel_widgets.gui"))
         for name, sv in (("moved", "te_grid_electricity_moved_disp"), ("market", "te_grid_market_flow_disp"),
                          ("pass", "te_grid_import_disp")):
             self.assertNotIn(f"ScriptValue('{sv}')|K]", states)
