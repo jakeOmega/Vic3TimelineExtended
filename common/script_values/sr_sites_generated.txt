@@ -1819,7 +1819,7 @@ sr_site_hab_share_value_olympus_mons = {
 }
 sr_site_room_olympus_mons = {
 	value = sr_site_hab_value_olympus_mons
-	multiply = sr_site_hab_share_value_olympus_mons
+	multiply = sr_site_hab_share_eff_olympus_mons
 	add = 1
 	add = sr_site_terra_share_olympus_mons
 	multiply = sr_site_base_room_olympus_mons
@@ -2236,7 +2236,7 @@ sr_site_hab_share_value_pallas = {
 }
 sr_site_room_pallas = {
 	value = sr_site_hab_value_pallas
-	multiply = sr_site_hab_share_value_pallas
+	multiply = sr_site_hab_share_eff_pallas
 	add = 1
 	multiply = sr_site_base_room_pallas
 }
@@ -2532,7 +2532,7 @@ sr_site_hab_share_value_callisto = {
 }
 sr_site_room_callisto = {
 	value = sr_site_hab_value_callisto
-	multiply = sr_site_hab_share_value_callisto
+	multiply = sr_site_hab_share_eff_callisto
 	add = 1
 	add = sr_site_terra_share_callisto
 	multiply = sr_site_base_room_callisto
@@ -3125,7 +3125,7 @@ sr_site_hab_share_value_titania = {
 }
 sr_site_room_titania = {
 	value = sr_site_hab_value_titania
-	multiply = sr_site_hab_share_value_titania
+	multiply = sr_site_hab_share_eff_titania
 	add = 1
 	multiply = sr_site_base_room_titania
 }
@@ -4248,6 +4248,9 @@ sr_offworld_pop_total = {
 
 # ===== Modules (slice 4 design §§ 2-4, 7-8) =====
 sr_mod_spec_budget = { value = 4 }
+# What a discovery's boon adds to its module's effect at its world (the owner,
+# 2026-11-25: double strength).
+sr_site_boon_bonus = { value = 1 }
 
 # Per world, any scope:
 #   sr_site_lvl_<a|b>_value_<key>  a specialization's level; the founding choice
@@ -4261,6 +4264,13 @@ sr_mod_spec_budget = { value = 4 }
 #   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing
 #                                  x the charter's share (slice 5 design § 2)
 #   sr_site_<spec|generic>_built_<key>  the levels against each cap
+#   sr_site_<facility>_staffed_<key>  a facility's levels at the colony's staffing
+#   sr_site_boon_<type>_<key>     1, plus sr_site_boon_bonus for each discovery there
+#                                  whose recorded option boosts the type (only where
+#                                  one can: gen_solar_sites.DISCOVERY_BOONS)
+#   sr_site_<facility>_eff_<key>  ... the staffed levels times it, what the facility's
+#                                  effect reads; sr_site_hab_share_eff_<key> the
+#                                  Habitat's share times it
 # Country scope, counting THIS's queue and every shipment on its way:
 #   sr_mod_spec_used_<key> (against sr_mod_spec_budget), sr_mod_hab_used_<key> (against
 #   sr_site_hab_cap_<key>, colony people design § 4.3), sr_mod_crewed_pending_<key>
@@ -4648,6 +4658,16 @@ sr_site_bunker_staffed_olympus_mons = { value = sr_site_bunker_value_olympus_mon
 sr_site_foundry_staffed_olympus_mons = { value = sr_site_foundry_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
 sr_site_admin_staffed_olympus_mons = { value = sr_site_admin_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
 sr_site_terra_staffed_olympus_mons = { value = sr_site_terra_value_olympus_mons multiply = sr_site_staffing_olympus_mons }
+sr_site_boon_lab_olympus_mons = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_olympus_tubes global_var:sr_site_disc_olympus_tubes = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_olympus_mons = { value = sr_site_lab_staffed_olympus_mons multiply = sr_site_boon_lab_olympus_mons }
+sr_site_boon_hab_olympus_mons = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_olympus_tubes global_var:sr_site_disc_olympus_tubes = 2 } add = sr_site_boon_bonus }
+}
+sr_site_hab_share_eff_olympus_mons = { value = sr_site_hab_share_value_olympus_mons multiply = sr_site_boon_hab_olympus_mons }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_olympus_mons = {
 	value = 150
@@ -4872,6 +4892,16 @@ sr_site_bunker_staffed_hellas_planitia = { value = sr_site_bunker_value_hellas_p
 sr_site_foundry_staffed_hellas_planitia = { value = sr_site_foundry_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
 sr_site_admin_staffed_hellas_planitia = { value = sr_site_admin_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
 sr_site_terra_staffed_hellas_planitia = { value = sr_site_terra_value_hellas_planitia multiply = sr_site_staffing_hellas_planitia }
+sr_site_boon_lab_hellas_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_hellas_fossils global_var:sr_site_disc_hellas_fossils = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_hellas_planitia = { value = sr_site_lab_staffed_hellas_planitia multiply = sr_site_boon_lab_hellas_planitia }
+sr_site_boon_culture_hellas_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_hellas_fossils global_var:sr_site_disc_hellas_fossils = 2 } add = sr_site_boon_bonus }
+}
+sr_site_culture_eff_hellas_planitia = { value = sr_site_culture_staffed_hellas_planitia multiply = sr_site_boon_culture_hellas_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_hellas_planitia = {
 	value = 200
@@ -4886,7 +4916,7 @@ sr_site_resort_room_hellas_planitia = {
 # staffed Cultural Center level (the owner, 2026-11-24).
 sr_site_resort_draw_hellas_planitia = {
 	value = 5
-	add = { value = sr_site_culture_staffed_hellas_planitia multiply = sr_mod_culture_draw }
+	add = { value = sr_site_culture_eff_hellas_planitia multiply = sr_mod_culture_draw }
 }
 sr_mod_spec_used_hellas_planitia = {
 	value = sr_site_spec_built_hellas_planitia
@@ -5098,6 +5128,16 @@ sr_site_bunker_staffed_utopia_planitia = { value = sr_site_bunker_value_utopia_p
 sr_site_foundry_staffed_utopia_planitia = { value = sr_site_foundry_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
 sr_site_admin_staffed_utopia_planitia = { value = sr_site_admin_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
 sr_site_terra_staffed_utopia_planitia = { value = sr_site_terra_value_utopia_planitia multiply = sr_site_staffing_utopia_planitia }
+sr_site_boon_lab_utopia_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_utopia_glacier global_var:sr_site_disc_utopia_glacier = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_utopia_planitia = { value = sr_site_lab_staffed_utopia_planitia multiply = sr_site_boon_lab_utopia_planitia }
+sr_site_boon_terra_utopia_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_utopia_glacier global_var:sr_site_disc_utopia_glacier = 2 } add = sr_site_boon_bonus }
+}
+sr_site_terra_eff_utopia_planitia = { value = sr_site_terra_staffed_utopia_planitia multiply = sr_site_boon_terra_utopia_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_utopia_planitia = {
 	value = 200
@@ -5322,6 +5362,16 @@ sr_site_bunker_staffed_arcadia_planitia = { value = sr_site_bunker_value_arcadia
 sr_site_foundry_staffed_arcadia_planitia = { value = sr_site_foundry_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
 sr_site_admin_staffed_arcadia_planitia = { value = sr_site_admin_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
 sr_site_terra_staffed_arcadia_planitia = { value = sr_site_terra_value_arcadia_planitia multiply = sr_site_staffing_arcadia_planitia }
+sr_site_boon_lab_arcadia_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_arcadia_brines global_var:sr_site_disc_arcadia_brines = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_arcadia_planitia = { value = sr_site_lab_staffed_arcadia_planitia multiply = sr_site_boon_lab_arcadia_planitia }
+sr_site_boon_yard_arcadia_planitia = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_arcadia_brines global_var:sr_site_disc_arcadia_brines = 2 } add = sr_site_boon_bonus }
+}
+sr_site_yard_eff_arcadia_planitia = { value = sr_site_yard_staffed_arcadia_planitia multiply = sr_site_boon_yard_arcadia_planitia }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_arcadia_planitia = {
 	value = 150
@@ -5540,10 +5590,20 @@ sr_site_train_staffed_ceres = { value = sr_site_train_value_ceres multiply = sr_
 sr_site_bunker_staffed_ceres = { value = sr_site_bunker_value_ceres multiply = sr_site_staffing_ceres }
 sr_site_foundry_staffed_ceres = { value = sr_site_foundry_value_ceres multiply = sr_site_staffing_ceres }
 sr_site_admin_staffed_ceres = { value = sr_site_admin_value_ceres multiply = sr_site_staffing_ceres }
+sr_site_boon_lab_ceres = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_ceres_reservoir global_var:sr_site_disc_ceres_reservoir = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_ceres = { value = sr_site_lab_staffed_ceres multiply = sr_site_boon_lab_ceres }
+sr_site_boon_mine_ceres = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_ceres_reservoir global_var:sr_site_disc_ceres_reservoir = 2 } add = sr_site_boon_bonus }
+}
+sr_site_mine_eff_ceres = { value = sr_site_mine_staffed_ceres multiply = sr_site_boon_mine_ceres }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ceres = {
 	value = 200
-	add = { value = sr_site_mine_staffed_ceres multiply = sr_mod_mine_room floor = yes }
+	add = { value = sr_site_mine_eff_ceres multiply = sr_mod_mine_room floor = yes }
 }
 # Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
 sr_site_resort_room_ceres = {
@@ -5756,6 +5816,16 @@ sr_site_train_staffed_vesta = { value = sr_site_train_value_vesta multiply = sr_
 sr_site_bunker_staffed_vesta = { value = sr_site_bunker_value_vesta multiply = sr_site_staffing_vesta }
 sr_site_foundry_staffed_vesta = { value = sr_site_foundry_value_vesta multiply = sr_site_staffing_vesta }
 sr_site_admin_staffed_vesta = { value = sr_site_admin_value_vesta multiply = sr_site_staffing_vesta }
+sr_site_boon_lab_vesta = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_vesta_impactor global_var:sr_site_disc_vesta_impactor = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_vesta = { value = sr_site_lab_staffed_vesta multiply = sr_site_boon_lab_vesta }
+sr_site_boon_foundry_vesta = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_vesta_impactor global_var:sr_site_disc_vesta_impactor = 2 } add = sr_site_boon_bonus }
+}
+sr_site_foundry_eff_vesta = { value = sr_site_foundry_staffed_vesta multiply = sr_site_boon_foundry_vesta }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_vesta = {
 	value = 200
@@ -5972,10 +6042,20 @@ sr_site_train_staffed_psyche = { value = sr_site_train_value_psyche multiply = s
 sr_site_bunker_staffed_psyche = { value = sr_site_bunker_value_psyche multiply = sr_site_staffing_psyche }
 sr_site_foundry_staffed_psyche = { value = sr_site_foundry_value_psyche multiply = sr_site_staffing_psyche }
 sr_site_admin_staffed_psyche = { value = sr_site_admin_value_psyche multiply = sr_site_staffing_psyche }
+sr_site_boon_lab_psyche = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_psyche_metal global_var:sr_site_disc_psyche_metal = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_psyche = { value = sr_site_lab_staffed_psyche multiply = sr_site_boon_lab_psyche }
+sr_site_boon_mine_psyche = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_psyche_metal global_var:sr_site_disc_psyche_metal = 2 } add = sr_site_boon_bonus }
+}
+sr_site_mine_eff_psyche = { value = sr_site_mine_staffed_psyche multiply = sr_site_boon_mine_psyche }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_psyche = {
 	value = 300
-	add = { value = sr_site_mine_staffed_psyche multiply = sr_mod_mine_room floor = yes }
+	add = { value = sr_site_mine_eff_psyche multiply = sr_mod_mine_room floor = yes }
 }
 # Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
 sr_site_resort_room_psyche = {
@@ -6188,6 +6268,16 @@ sr_site_train_staffed_pallas = { value = sr_site_train_value_pallas multiply = s
 sr_site_bunker_staffed_pallas = { value = sr_site_bunker_value_pallas multiply = sr_site_staffing_pallas }
 sr_site_foundry_staffed_pallas = { value = sr_site_foundry_value_pallas multiply = sr_site_staffing_pallas }
 sr_site_admin_staffed_pallas = { value = sr_site_admin_value_pallas multiply = sr_site_staffing_pallas }
+sr_site_boon_lab_pallas = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_pallas_water global_var:sr_site_disc_pallas_water = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_pallas = { value = sr_site_lab_staffed_pallas multiply = sr_site_boon_lab_pallas }
+sr_site_boon_hab_pallas = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_pallas_water global_var:sr_site_disc_pallas_water = 2 } add = sr_site_boon_bonus }
+}
+sr_site_hab_share_eff_pallas = { value = sr_site_hab_share_value_pallas multiply = sr_site_boon_hab_pallas }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_pallas = {
 	value = 150
@@ -6621,10 +6711,20 @@ sr_site_train_staffed_io = { value = sr_site_train_value_io multiply = sr_site_s
 sr_site_bunker_staffed_io = { value = sr_site_bunker_value_io multiply = sr_site_staffing_io }
 sr_site_foundry_staffed_io = { value = sr_site_foundry_value_io multiply = sr_site_staffing_io }
 sr_site_admin_staffed_io = { value = sr_site_admin_value_io multiply = sr_site_staffing_io }
+sr_site_boon_lab_io = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_io_roof global_var:sr_site_disc_io_roof = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_io = { value = sr_site_lab_staffed_io multiply = sr_site_boon_lab_io }
+sr_site_boon_mine_io = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_io_roof global_var:sr_site_disc_io_roof = 2 } add = sr_site_boon_bonus }
+}
+sr_site_mine_eff_io = { value = sr_site_mine_staffed_io multiply = sr_site_boon_mine_io }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_io = {
 	value = 100
-	add = { value = sr_site_mine_staffed_io multiply = sr_mod_mine_room floor = yes }
+	add = { value = sr_site_mine_eff_io multiply = sr_mod_mine_room floor = yes }
 }
 # Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
 sr_site_resort_room_io = {
@@ -6836,6 +6936,22 @@ sr_site_train_staffed_europa = { value = sr_site_train_value_europa multiply = s
 sr_site_bunker_staffed_europa = { value = sr_site_bunker_value_europa multiply = sr_site_staffing_europa }
 sr_site_foundry_staffed_europa = { value = sr_site_foundry_value_europa multiply = sr_site_staffing_europa }
 sr_site_admin_staffed_europa = { value = sr_site_admin_value_europa multiply = sr_site_staffing_europa }
+sr_site_boon_lab_europa = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_europa_life global_var:sr_site_disc_europa_life = 1 } add = sr_site_boon_bonus }
+	if = { limit = { has_global_variable = sr_site_disc_europa_vents global_var:sr_site_disc_europa_vents = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_europa = { value = sr_site_lab_staffed_europa multiply = sr_site_boon_lab_europa }
+sr_site_boon_culture_europa = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_europa_life global_var:sr_site_disc_europa_life = 2 } add = sr_site_boon_bonus }
+}
+sr_site_culture_eff_europa = { value = sr_site_culture_staffed_europa multiply = sr_site_boon_culture_europa }
+sr_site_boon_yard_europa = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_europa_vents global_var:sr_site_disc_europa_vents = 2 } add = sr_site_boon_bonus }
+}
+sr_site_yard_eff_europa = { value = sr_site_yard_staffed_europa multiply = sr_site_boon_yard_europa }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_europa = {
 	value = 100
@@ -6850,7 +6966,7 @@ sr_site_resort_room_europa = {
 # staffed Cultural Center level (the owner, 2026-11-24).
 sr_site_resort_draw_europa = {
 	value = 0
-	add = { value = sr_site_culture_staffed_europa multiply = sr_mod_culture_draw }
+	add = { value = sr_site_culture_eff_europa multiply = sr_mod_culture_draw }
 }
 sr_mod_spec_used_europa = {
 	value = sr_site_spec_built_europa
@@ -7058,6 +7174,16 @@ sr_site_bunker_staffed_ganymede = { value = sr_site_bunker_value_ganymede multip
 sr_site_foundry_staffed_ganymede = { value = sr_site_foundry_value_ganymede multiply = sr_site_staffing_ganymede }
 sr_site_admin_staffed_ganymede = { value = sr_site_admin_value_ganymede multiply = sr_site_staffing_ganymede }
 sr_site_terra_staffed_ganymede = { value = sr_site_terra_value_ganymede multiply = sr_site_staffing_ganymede }
+sr_site_boon_lab_ganymede = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_ganymede_layers global_var:sr_site_disc_ganymede_layers = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_ganymede = { value = sr_site_lab_staffed_ganymede multiply = sr_site_boon_lab_ganymede }
+sr_site_boon_yard_ganymede = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_ganymede_layers global_var:sr_site_disc_ganymede_layers = 2 } add = sr_site_boon_bonus }
+}
+sr_site_yard_eff_ganymede = { value = sr_site_yard_staffed_ganymede multiply = sr_site_boon_yard_ganymede }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_ganymede = {
 	value = 150
@@ -7282,6 +7408,16 @@ sr_site_bunker_staffed_callisto = { value = sr_site_bunker_value_callisto multip
 sr_site_foundry_staffed_callisto = { value = sr_site_foundry_value_callisto multiply = sr_site_staffing_callisto }
 sr_site_admin_staffed_callisto = { value = sr_site_admin_value_callisto multiply = sr_site_staffing_callisto }
 sr_site_terra_staffed_callisto = { value = sr_site_terra_value_callisto multiply = sr_site_staffing_callisto }
+sr_site_boon_lab_callisto = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_callisto_archive global_var:sr_site_disc_callisto_archive = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_callisto = { value = sr_site_lab_staffed_callisto multiply = sr_site_boon_lab_callisto }
+sr_site_boon_hab_callisto = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_callisto_archive global_var:sr_site_disc_callisto_archive = 2 } add = sr_site_boon_bonus }
+}
+sr_site_hab_share_eff_callisto = { value = sr_site_hab_share_value_callisto multiply = sr_site_boon_hab_callisto }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_callisto = {
 	value = 150
@@ -7939,6 +8075,16 @@ sr_site_bunker_staffed_venus = { value = sr_site_bunker_value_venus multiply = s
 sr_site_foundry_staffed_venus = { value = sr_site_foundry_value_venus multiply = sr_site_staffing_venus }
 sr_site_admin_staffed_venus = { value = sr_site_admin_value_venus multiply = sr_site_staffing_venus }
 sr_site_terra_staffed_venus = { value = sr_site_terra_value_venus multiply = sr_site_staffing_venus }
+sr_site_boon_lab_venus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_venus_waves global_var:sr_site_disc_venus_waves = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_venus = { value = sr_site_lab_staffed_venus multiply = sr_site_boon_lab_venus }
+sr_site_boon_resort_venus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_venus_waves global_var:sr_site_disc_venus_waves = 2 } add = sr_site_boon_bonus }
+}
+sr_site_resort_eff_venus = { value = sr_site_resort_staffed_venus multiply = sr_site_boon_resort_venus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_venus = {
 	value = 50
@@ -7947,7 +8093,7 @@ sr_site_ebase_room_venus = {
 # Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
 sr_site_resort_room_venus = {
 	value = 30
-	add = { value = sr_site_resort_staffed_venus multiply = sr_mod_resort_room floor = yes }
+	add = { value = sr_site_resort_eff_venus multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
 # staffed Cultural Center level (the owner, 2026-11-24).
@@ -8158,10 +8304,20 @@ sr_site_train_staffed_mercury = { value = sr_site_train_value_mercury multiply =
 sr_site_bunker_staffed_mercury = { value = sr_site_bunker_value_mercury multiply = sr_site_staffing_mercury }
 sr_site_foundry_staffed_mercury = { value = sr_site_foundry_value_mercury multiply = sr_site_staffing_mercury }
 sr_site_admin_staffed_mercury = { value = sr_site_admin_value_mercury multiply = sr_site_staffing_mercury }
+sr_site_boon_lab_mercury = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_mercury_archive global_var:sr_site_disc_mercury_archive = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_mercury = { value = sr_site_lab_staffed_mercury multiply = sr_site_boon_lab_mercury }
+sr_site_boon_mine_mercury = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_mercury_archive global_var:sr_site_disc_mercury_archive = 2 } add = sr_site_boon_bonus }
+}
+sr_site_mine_eff_mercury = { value = sr_site_mine_staffed_mercury multiply = sr_site_boon_mine_mercury }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_mercury = {
 	value = 200
-	add = { value = sr_site_mine_staffed_mercury multiply = sr_mod_mine_room floor = yes }
+	add = { value = sr_site_mine_eff_mercury multiply = sr_mod_mine_room floor = yes }
 }
 # Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).
 sr_site_resort_room_mercury = {
@@ -8381,6 +8537,16 @@ sr_site_bunker_staffed_titan = { value = sr_site_bunker_value_titan multiply = s
 sr_site_foundry_staffed_titan = { value = sr_site_foundry_value_titan multiply = sr_site_staffing_titan }
 sr_site_admin_staffed_titan = { value = sr_site_admin_value_titan multiply = sr_site_staffing_titan }
 sr_site_terra_staffed_titan = { value = sr_site_terra_value_titan multiply = sr_site_staffing_titan }
+sr_site_boon_lab_titan = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_titan_chemistry global_var:sr_site_disc_titan_chemistry = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_titan = { value = sr_site_lab_staffed_titan multiply = sr_site_boon_lab_titan }
+sr_site_boon_foundry_titan = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_titan_chemistry global_var:sr_site_disc_titan_chemistry = 2 } add = sr_site_boon_bonus }
+}
+sr_site_foundry_eff_titan = { value = sr_site_foundry_staffed_titan multiply = sr_site_boon_foundry_titan }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_titan = {
 	value = 100
@@ -8599,6 +8765,16 @@ sr_site_train_staffed_enceladus = { value = sr_site_train_value_enceladus multip
 sr_site_bunker_staffed_enceladus = { value = sr_site_bunker_value_enceladus multiply = sr_site_staffing_enceladus }
 sr_site_foundry_staffed_enceladus = { value = sr_site_foundry_value_enceladus multiply = sr_site_staffing_enceladus }
 sr_site_admin_staffed_enceladus = { value = sr_site_admin_value_enceladus multiply = sr_site_staffing_enceladus }
+sr_site_boon_lab_enceladus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_enceladus_life global_var:sr_site_disc_enceladus_life = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_enceladus = { value = sr_site_lab_staffed_enceladus multiply = sr_site_boon_lab_enceladus }
+sr_site_boon_culture_enceladus = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_enceladus_life global_var:sr_site_disc_enceladus_life = 2 } add = sr_site_boon_bonus }
+}
+sr_site_culture_eff_enceladus = { value = sr_site_culture_staffed_enceladus multiply = sr_site_boon_culture_enceladus }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_enceladus = {
 	value = 75
@@ -8613,7 +8789,7 @@ sr_site_resort_room_enceladus = {
 # staffed Cultural Center level (the owner, 2026-11-24).
 sr_site_resort_draw_enceladus = {
 	value = 15
-	add = { value = sr_site_culture_staffed_enceladus multiply = sr_mod_culture_draw }
+	add = { value = sr_site_culture_eff_enceladus multiply = sr_mod_culture_draw }
 }
 sr_mod_spec_used_enceladus = {
 	value = sr_site_spec_built_enceladus
@@ -9462,6 +9638,16 @@ sr_site_train_staffed_titania = { value = sr_site_train_value_titania multiply =
 sr_site_bunker_staffed_titania = { value = sr_site_bunker_value_titania multiply = sr_site_staffing_titania }
 sr_site_foundry_staffed_titania = { value = sr_site_foundry_value_titania multiply = sr_site_staffing_titania }
 sr_site_admin_staffed_titania = { value = sr_site_admin_value_titania multiply = sr_site_staffing_titania }
+sr_site_boon_lab_titania = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_titania_ocean global_var:sr_site_disc_titania_ocean = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_titania = { value = sr_site_lab_staffed_titania multiply = sr_site_boon_lab_titania }
+sr_site_boon_hab_titania = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_titania_ocean global_var:sr_site_disc_titania_ocean = 2 } add = sr_site_boon_bonus }
+}
+sr_site_hab_share_eff_titania = { value = sr_site_hab_share_value_titania multiply = sr_site_boon_hab_titania }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_titania = {
 	value = 75
@@ -10324,6 +10510,16 @@ sr_site_train_staffed_triton = { value = sr_site_train_value_triton multiply = s
 sr_site_bunker_staffed_triton = { value = sr_site_bunker_value_triton multiply = sr_site_staffing_triton }
 sr_site_foundry_staffed_triton = { value = sr_site_foundry_value_triton multiply = sr_site_staffing_triton }
 sr_site_admin_staffed_triton = { value = sr_site_admin_value_triton multiply = sr_site_staffing_triton }
+sr_site_boon_lab_triton = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_triton_jet global_var:sr_site_disc_triton_jet = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_triton = { value = sr_site_lab_staffed_triton multiply = sr_site_boon_lab_triton }
+sr_site_boon_yard_triton = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_triton_jet global_var:sr_site_disc_triton_jet = 2 } add = sr_site_boon_bonus }
+}
+sr_site_yard_eff_triton = { value = sr_site_yard_staffed_triton multiply = sr_site_boon_yard_triton }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_triton = {
 	value = 75
@@ -10756,6 +10952,16 @@ sr_site_train_staffed_pluto = { value = sr_site_train_value_pluto multiply = sr_
 sr_site_bunker_staffed_pluto = { value = sr_site_bunker_value_pluto multiply = sr_site_staffing_pluto }
 sr_site_foundry_staffed_pluto = { value = sr_site_foundry_value_pluto multiply = sr_site_staffing_pluto }
 sr_site_admin_staffed_pluto = { value = sr_site_admin_value_pluto multiply = sr_site_staffing_pluto }
+sr_site_boon_lab_pluto = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_pluto_antifreeze global_var:sr_site_disc_pluto_antifreeze = 1 } add = sr_site_boon_bonus }
+}
+sr_site_lab_eff_pluto = { value = sr_site_lab_staffed_pluto multiply = sr_site_boon_lab_pluto }
+sr_site_boon_foundry_pluto = {
+	value = 1
+	if = { limit = { has_global_variable = sr_site_disc_pluto_antifreeze global_var:sr_site_disc_pluto_antifreeze = 2 } add = sr_site_boon_bonus }
+}
+sr_site_foundry_eff_pluto = { value = sr_site_foundry_staffed_pluto multiply = sr_site_boon_foundry_pluto }
 # Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).
 sr_site_ebase_room_pluto = {
 	value = 75
@@ -12940,7 +13146,8 @@ sr_mod_next_hab_cost_imbrium = {
 
 # ===== Facilities (colony management design § 7) =====
 # Country scope: sr_mod_units_<type>, THIS's staffed levels of the facility at the
-# colonies that serve it, the solar colonization entry's declared value for its
+# colonies that serve it, each doubled where a discovery there boosts the type
+# (sr_site_<type>_eff_<key>), the solar colonization entry's declared value for its
 # modifier (common/journal_entries/sr_sites_generated.txt).
 # Mining Complex
 sr_mod_units_mine = {
@@ -12950,19 +13157,19 @@ sr_mod_units_mine = {
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_mine_staffed_hellas_planitia }
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_mine_staffed_utopia_planitia }
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_mine_staffed_arcadia_planitia }
-	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_mine_staffed_ceres }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_mine_eff_ceres }
 	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_mine_staffed_vesta }
-	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_mine_staffed_psyche }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_mine_eff_psyche }
 	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_mine_staffed_pallas }
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_mine_staffed_hygiea }
-	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_mine_staffed_io }
+	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_mine_eff_io }
 	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_mine_staffed_europa }
 	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_mine_staffed_ganymede }
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_mine_staffed_callisto }
 	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_mine_staffed_himalia }
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_mine_staffed_amalthea }
 	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_mine_staffed_venus }
-	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_mine_staffed_mercury }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_mine_eff_mercury }
 	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_mine_staffed_titan }
 	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_mine_staffed_enceladus }
 	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_mine_staffed_rhea }
@@ -12993,15 +13200,15 @@ sr_mod_units_yard = {
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_yard_staffed_olympus_mons }
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_yard_staffed_hellas_planitia }
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_yard_staffed_utopia_planitia }
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_yard_staffed_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_yard_eff_arcadia_planitia }
 	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_yard_staffed_ceres }
 	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_yard_staffed_vesta }
 	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_yard_staffed_psyche }
 	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_yard_staffed_pallas }
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_yard_staffed_hygiea }
 	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_yard_staffed_io }
-	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_yard_staffed_europa }
-	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_yard_staffed_ganymede }
+	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_yard_eff_europa }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_yard_eff_ganymede }
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_yard_staffed_callisto }
 	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_yard_staffed_himalia }
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_yard_staffed_amalthea }
@@ -13016,7 +13223,7 @@ sr_mod_units_yard = {
 	if = { limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } } add = sr_site_yard_staffed_oberon }
 	if = { limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } } add = sr_site_yard_staffed_miranda }
 	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_yard_staffed_ariel }
-	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_yard_staffed_triton }
+	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_yard_eff_triton }
 	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_yard_staffed_proteus }
 	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_yard_staffed_pluto }
 	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_yard_staffed_eris }
@@ -13034,35 +13241,35 @@ sr_mod_units_yard = {
 sr_mod_units_lab = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_lab_staffed_valles_marineris }
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_lab_staffed_olympus_mons }
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_lab_staffed_hellas_planitia }
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_lab_staffed_utopia_planitia }
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_lab_staffed_arcadia_planitia }
-	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_lab_staffed_ceres }
-	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_lab_staffed_vesta }
-	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_lab_staffed_psyche }
-	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_lab_staffed_pallas }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_lab_eff_olympus_mons }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_lab_eff_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_lab_eff_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_lab_eff_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_lab_eff_ceres }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_lab_eff_vesta }
+	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_lab_eff_psyche }
+	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_lab_eff_pallas }
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_lab_staffed_hygiea }
-	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_lab_staffed_io }
-	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_lab_staffed_europa }
-	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_lab_staffed_ganymede }
-	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_lab_staffed_callisto }
+	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_lab_eff_io }
+	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_lab_eff_europa }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_lab_eff_ganymede }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_lab_eff_callisto }
 	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_lab_staffed_himalia }
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_lab_staffed_amalthea }
-	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_lab_staffed_venus }
-	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_lab_staffed_mercury }
-	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_lab_staffed_titan }
-	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_lab_staffed_enceladus }
+	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_lab_eff_venus }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_lab_eff_mercury }
+	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_lab_eff_titan }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_lab_eff_enceladus }
 	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_lab_staffed_rhea }
 	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_lab_staffed_mimas }
 	if = { limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } } add = sr_site_lab_staffed_iapetus }
-	if = { limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } } add = sr_site_lab_staffed_titania }
+	if = { limit = { global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_occupier_titania } } add = sr_site_lab_eff_titania }
 	if = { limit = { global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_occupier_oberon } } add = sr_site_lab_staffed_oberon }
 	if = { limit = { global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_occupier_miranda } } add = sr_site_lab_staffed_miranda }
 	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_lab_staffed_ariel }
-	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_lab_staffed_triton }
+	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_lab_eff_triton }
 	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_lab_staffed_proteus }
-	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_lab_staffed_pluto }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_lab_eff_pluto }
 	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_lab_staffed_eris }
 	if = { limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_occupier_makemake } } add = sr_site_lab_staffed_makemake }
 	if = { limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_occupier_haumea } } add = sr_site_lab_staffed_haumea }
@@ -13079,7 +13286,7 @@ sr_mod_units_culture = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_culture_staffed_valles_marineris }
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_culture_staffed_olympus_mons }
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_culture_staffed_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_culture_eff_hellas_planitia }
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_culture_staffed_utopia_planitia }
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_culture_staffed_arcadia_planitia }
 	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_culture_staffed_ceres }
@@ -13088,7 +13295,7 @@ sr_mod_units_culture = {
 	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_culture_staffed_pallas }
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_culture_staffed_hygiea }
 	if = { limit = { global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_occupier_io } } add = sr_site_culture_staffed_io }
-	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_culture_staffed_europa }
+	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_culture_eff_europa }
 	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_culture_staffed_ganymede }
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_culture_staffed_callisto }
 	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_culture_staffed_himalia }
@@ -13096,7 +13303,7 @@ sr_mod_units_culture = {
 	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_culture_staffed_venus }
 	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_culture_staffed_mercury }
 	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_culture_staffed_titan }
-	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_culture_staffed_enceladus }
+	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_culture_eff_enceladus }
 	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_culture_staffed_rhea }
 	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_culture_staffed_mimas }
 	if = { limit = { global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_occupier_iapetus } } add = sr_site_culture_staffed_iapetus }
@@ -13137,7 +13344,7 @@ sr_mod_units_resort = {
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_resort_staffed_callisto }
 	if = { limit = { global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } } add = sr_site_resort_staffed_himalia }
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_resort_staffed_amalthea }
-	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_resort_staffed_venus }
+	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_resort_eff_venus }
 	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_resort_staffed_mercury }
 	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_resort_staffed_titan }
 	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_resort_staffed_enceladus }
@@ -13303,7 +13510,7 @@ sr_mod_units_foundry = {
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_foundry_staffed_utopia_planitia }
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_foundry_staffed_arcadia_planitia }
 	if = { limit = { global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } } add = sr_site_foundry_staffed_ceres }
-	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_foundry_staffed_vesta }
+	if = { limit = { global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } } add = sr_site_foundry_eff_vesta }
 	if = { limit = { global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } } add = sr_site_foundry_staffed_psyche }
 	if = { limit = { global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } } add = sr_site_foundry_staffed_pallas }
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } } add = sr_site_foundry_staffed_hygiea }
@@ -13315,7 +13522,7 @@ sr_mod_units_foundry = {
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } } add = sr_site_foundry_staffed_amalthea }
 	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_foundry_staffed_venus }
 	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_foundry_staffed_mercury }
-	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_foundry_staffed_titan }
+	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_foundry_eff_titan }
 	if = { limit = { global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } } add = sr_site_foundry_staffed_enceladus }
 	if = { limit = { global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } } add = sr_site_foundry_staffed_rhea }
 	if = { limit = { global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } } add = sr_site_foundry_staffed_mimas }
@@ -13326,7 +13533,7 @@ sr_mod_units_foundry = {
 	if = { limit = { global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } } add = sr_site_foundry_staffed_ariel }
 	if = { limit = { global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } } add = sr_site_foundry_staffed_triton }
 	if = { limit = { global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } } add = sr_site_foundry_staffed_proteus }
-	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_foundry_staffed_pluto }
+	if = { limit = { global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } } add = sr_site_foundry_eff_pluto }
 	if = { limit = { global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } } add = sr_site_foundry_staffed_eris }
 	if = { limit = { global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } } add = sr_site_foundry_staffed_makemake }
 	if = { limit = { global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } } add = sr_site_foundry_staffed_haumea }
@@ -13388,7 +13595,7 @@ sr_mod_units_terra = {
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_terra_staffed_valles_marineris }
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_terra_staffed_olympus_mons }
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_terra_staffed_hellas_planitia }
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_terra_staffed_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_terra_eff_utopia_planitia }
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_terra_staffed_arcadia_planitia }
 	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_terra_staffed_ganymede }
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_terra_staffed_callisto }
@@ -14114,7 +14321,7 @@ sr_site_terra_share_utopia_planitia = {
 	divide = sr_terra_level_months
 }
 sr_site_terra_rate_utopia_planitia = {
-	value = sr_site_terra_staffed_utopia_planitia
+	value = sr_site_terra_eff_utopia_planitia
 	if = { limit = { has_global_variable = sr_site_occupier_utopia_planitia } value = 0 }
 }
 sr_mod_terra_used_utopia_planitia = {
@@ -14236,7 +14443,7 @@ sr_md_room_less_hab_olympus_mons = {
 	value = sr_site_hab_value_olympus_mons
 	subtract = 1
 	min = 0
-	multiply = sr_site_hab_share_value_olympus_mons
+	multiply = sr_site_hab_share_eff_olympus_mons
 	add = 1
 	add = sr_site_terra_share_olympus_mons
 	multiply = sr_site_base_room_olympus_mons
@@ -14338,7 +14545,7 @@ sr_md_room_less_hab_pallas = {
 	value = sr_site_hab_value_pallas
 	subtract = 1
 	min = 0
-	multiply = sr_site_hab_share_value_pallas
+	multiply = sr_site_hab_share_eff_pallas
 	add = 1
 	multiply = sr_site_base_room_pallas
 }
@@ -14409,7 +14616,7 @@ sr_md_room_less_hab_callisto = {
 	value = sr_site_hab_value_callisto
 	subtract = 1
 	min = 0
-	multiply = sr_site_hab_share_value_callisto
+	multiply = sr_site_hab_share_eff_callisto
 	add = 1
 	add = sr_site_terra_share_callisto
 	multiply = sr_site_base_room_callisto
@@ -14552,7 +14759,7 @@ sr_md_room_less_hab_titania = {
 	value = sr_site_hab_value_titania
 	subtract = 1
 	min = 0
-	multiply = sr_site_hab_share_value_titania
+	multiply = sr_site_hab_share_eff_titania
 	add = 1
 	multiply = sr_site_base_room_titania
 }

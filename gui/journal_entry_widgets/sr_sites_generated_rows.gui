@@ -7702,7 +7702,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_shackleton')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_shackleton'), '(CFixedPoint)1' )]"
@@ -8103,7 +8103,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_peary')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_peary'), '(CFixedPoint)1' )]"
@@ -8504,7 +8504,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_tranquility')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_tranquility'), '(CFixedPoint)1' )]"
@@ -8905,7 +8905,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_marius_hills')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_marius_hills'), '(CFixedPoint)1' )]"
@@ -9306,7 +9306,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_daedalus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_daedalus'), '(CFixedPoint)1' )]"
@@ -9707,7 +9707,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_imbrium')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_imbrium'), '(CFixedPoint)1' )]"
@@ -10121,7 +10121,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_venus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_venus'), '(CFixedPoint)1' )]"
@@ -10556,7 +10556,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_mercury')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_mercury'), '(CFixedPoint)1' )]"
@@ -10960,7 +10960,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_valles_marineris')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_valles_marineris'), '(CFixedPoint)1' )]"
@@ -11395,7 +11395,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_olympus_mons')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_olympus_mons'), '(CFixedPoint)1' )]"
@@ -11830,7 +11830,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_hellas_planitia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_hellas_planitia'), '(CFixedPoint)1' )]"
@@ -12265,7 +12265,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_utopia_planitia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_utopia_planitia'), '(CFixedPoint)1' )]"
@@ -12700,7 +12700,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_arcadia_planitia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_arcadia_planitia'), '(CFixedPoint)1' )]"
@@ -13135,7 +13135,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_ceres')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_ceres'), '(CFixedPoint)1' )]"
@@ -13539,7 +13539,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_vesta')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_vesta'), '(CFixedPoint)1' )]"
@@ -13943,7 +13943,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_psyche')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_psyche'), '(CFixedPoint)1' )]"
@@ -14347,7 +14347,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_pallas')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_pallas'), '(CFixedPoint)1' )]"
@@ -14751,7 +14751,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_hygiea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_hygiea'), '(CFixedPoint)1' )]"
@@ -15155,7 +15155,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_io')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_io'), '(CFixedPoint)1' )]"
@@ -15559,7 +15559,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_europa')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_europa'), '(CFixedPoint)1' )]"
@@ -15963,7 +15963,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_ganymede')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_ganymede'), '(CFixedPoint)1' )]"
@@ -16398,7 +16398,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_callisto')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_callisto'), '(CFixedPoint)1' )]"
@@ -16833,7 +16833,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_himalia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_himalia'), '(CFixedPoint)1' )]"
@@ -17237,7 +17237,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_amalthea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_amalthea'), '(CFixedPoint)1' )]"
@@ -17641,7 +17641,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_titan')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_titan'), '(CFixedPoint)1' )]"
@@ -18076,7 +18076,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_enceladus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_enceladus'), '(CFixedPoint)1' )]"
@@ -18480,7 +18480,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_rhea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_rhea'), '(CFixedPoint)1' )]"
@@ -18884,7 +18884,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_mimas')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_mimas'), '(CFixedPoint)1' )]"
@@ -19288,7 +19288,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_iapetus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_iapetus'), '(CFixedPoint)1' )]"
@@ -19692,7 +19692,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_titania')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_titania'), '(CFixedPoint)1' )]"
@@ -20096,7 +20096,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_oberon')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_oberon'), '(CFixedPoint)1' )]"
@@ -20500,7 +20500,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_miranda')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_miranda'), '(CFixedPoint)1' )]"
@@ -20904,7 +20904,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_ariel')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_ariel'), '(CFixedPoint)1' )]"
@@ -21308,7 +21308,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_triton')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_neptune"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_triton'), '(CFixedPoint)1' )]"
@@ -21712,7 +21712,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_proteus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_neptune"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_proteus'), '(CFixedPoint)1' )]"
@@ -22116,7 +22116,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_pluto')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_pluto'), '(CFixedPoint)1' )]"
@@ -22520,7 +22520,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_eris')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_eris'), '(CFixedPoint)1' )]"
@@ -22924,7 +22924,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_makemake')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_makemake'), '(CFixedPoint)1' )]"
@@ -23328,7 +23328,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_haumea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_haumea'), '(CFixedPoint)1' )]"
@@ -23732,7 +23732,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_sedna')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_sedna'), '(CFixedPoint)1' )]"
@@ -24793,7 +24793,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_shackleton')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_shackleton'), '(CFixedPoint)1' )]"
@@ -25368,7 +25368,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_peary')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_peary'), '(CFixedPoint)1' )]"
@@ -25943,7 +25943,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_tranquility')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_tranquility'), '(CFixedPoint)1' )]"
@@ -26518,7 +26518,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_marius_hills')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_marius_hills'), '(CFixedPoint)1' )]"
@@ -27093,7 +27093,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_daedalus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_daedalus'), '(CFixedPoint)1' )]"
@@ -27668,7 +27668,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_imbrium')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_moon"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_imbrium'), '(CFixedPoint)1' )]"
@@ -28267,7 +28267,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_venus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_venus'), '(CFixedPoint)1' )]"
@@ -28312,6 +28312,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_venus_waves'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_venus_waves'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_venus_waves"
+					tooltip = "sr_discovery_venus_waves_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_venus')|0]"
@@ -28360,6 +28368,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)17' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End ) ) )]"
+			}
+			blockoverride "mod_resort_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_venus_waves'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_venus_waves'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_venus_waves"
+					tooltip = "sr_discovery_venus_waves_b_tt"
+				}
 			}
 			blockoverride "mod_black_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_black_value_venus')|0]"
@@ -28890,9 +28906,17 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
+			blockoverride "mod_mine_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_mercury_archive'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_mercury_archive'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_mercury_archive"
+					tooltip = "sr_discovery_mercury_archive_b_tt"
+				}
+			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_mercury')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_mercury'), '(CFixedPoint)1' )]"
@@ -28937,6 +28961,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)18' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_mercury_archive'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_mercury_archive'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_mercury_archive"
+					tooltip = "sr_discovery_mercury_archive_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_mercury')|0]"
@@ -29475,7 +29507,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_valles_marineris')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_valles_marineris'), '(CFixedPoint)1' )]"
@@ -30026,6 +30058,14 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "mod_hab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_olympus_tubes'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_olympus_tubes'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_olympus_tubes"
+					tooltip = "sr_discovery_olympus_tubes_b_tt"
+				}
+			}
 			blockoverride "mod_def_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_olympus_mons')|0]"
 				tooltip = "je_space_race_widget_mod_def_tt"
@@ -30100,7 +30140,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_olympus_mons')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_olympus_mons'), '(CFixedPoint)1' )]"
@@ -30145,6 +30185,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)2' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_olympus_tubes'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_olympus_tubes'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_olympus_tubes"
+					tooltip = "sr_discovery_olympus_tubes_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_olympus_mons')|0]"
@@ -30725,7 +30773,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_hellas_planitia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_hellas_planitia'), '(CFixedPoint)1' )]"
@@ -30771,6 +30819,14 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_hellas_fossils'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_hellas_fossils'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_hellas_fossils"
+					tooltip = "sr_discovery_hellas_fossils_a_tt"
+				}
+			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_hellas_planitia')|0]"
 				tooltip = "je_space_race_widget_mod_culture_tt"
@@ -30794,6 +30850,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)3' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "mod_culture_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_hellas_fossils'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_hellas_fossils'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_hellas_fossils"
+					tooltip = "sr_discovery_hellas_fossils_b_tt"
+				}
 			}
 			blockoverride "mod_resort_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_resort_value_hellas_planitia')|0]"
@@ -31350,7 +31414,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_utopia_planitia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_utopia_planitia'), '(CFixedPoint)1' )]"
@@ -31395,6 +31459,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_utopia_glacier'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_utopia_glacier'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_utopia_glacier"
+					tooltip = "sr_discovery_utopia_glacier_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_utopia_planitia')|0]"
@@ -31587,6 +31659,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)4' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+			blockoverride "mod_terra_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_utopia_glacier'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_utopia_glacier'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_utopia_glacier"
+					tooltip = "sr_discovery_utopia_glacier_b_tt"
+				}
 			}
 			blockoverride "terra_visible" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_terra_shown_utopia_planitia'), '(CFixedPoint)1' )]"
@@ -31975,7 +32055,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_arcadia_planitia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_mars"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_arcadia_planitia'), '(CFixedPoint)1' )]"
@@ -31996,6 +32076,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "mod_yard_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_arcadia_brines'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_arcadia_brines'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_arcadia_brines"
+					tooltip = "sr_discovery_arcadia_brines_b_tt"
+				}
 			}
 			blockoverride "mod_lab_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_lab_value_arcadia_planitia')|0]"
@@ -32020,6 +32108,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)5' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_arcadia_brines'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_arcadia_brines'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_arcadia_brines"
+					tooltip = "sr_discovery_arcadia_brines_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_arcadia_planitia')|0]"
@@ -32598,9 +32694,17 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
+			blockoverride "mod_mine_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ceres_reservoir'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ceres_reservoir'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_ceres_reservoir"
+					tooltip = "sr_discovery_ceres_reservoir_b_tt"
+				}
+			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_ceres')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_ceres'), '(CFixedPoint)1' )]"
@@ -32645,6 +32749,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)6' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ceres_reservoir'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ceres_reservoir'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_ceres_reservoir"
+					tooltip = "sr_discovery_ceres_reservoir_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_ceres')|0]"
@@ -33183,7 +33295,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_vesta')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_vesta'), '(CFixedPoint)1' )]"
@@ -33228,6 +33340,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_vesta_impactor'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_vesta_impactor'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_vesta_impactor"
+					tooltip = "sr_discovery_vesta_impactor_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_vesta')|0]"
@@ -33372,6 +33492,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)7' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
+			}
+			blockoverride "mod_foundry_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_vesta_impactor'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_vesta_impactor'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_vesta_impactor"
+					tooltip = "sr_discovery_vesta_impactor_b_tt"
+				}
 			}
 			blockoverride "mod_admin_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_admin_value_vesta')|0]"
@@ -33764,9 +33892,17 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
+			blockoverride "mod_mine_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_psyche_metal'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_psyche_metal'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_psyche_metal"
+					tooltip = "sr_discovery_psyche_metal_b_tt"
+				}
+			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_psyche')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_psyche'), '(CFixedPoint)1' )]"
@@ -33811,6 +33947,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)8' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_psyche_metal'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_psyche_metal'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_psyche_metal"
+					tooltip = "sr_discovery_psyche_metal_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_psyche')|0]"
@@ -34275,6 +34419,14 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "mod_hab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pallas_water'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pallas_water'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_pallas_water"
+					tooltip = "sr_discovery_pallas_water_b_tt"
+				}
+			}
 			blockoverride "mod_def_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_pallas')|0]"
 				tooltip = "je_space_race_widget_mod_def_tt"
@@ -34349,7 +34501,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_pallas')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_pallas'), '(CFixedPoint)1' )]"
@@ -34394,6 +34546,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)9' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pallas_water'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pallas_water'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_pallas_water"
+					tooltip = "sr_discovery_pallas_water_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_pallas')|0]"
@@ -34932,7 +35092,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_hygiea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_hygiea'), '(CFixedPoint)1' )]"
@@ -35513,9 +35673,17 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
 			}
+			blockoverride "mod_mine_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_io_roof'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_io_roof'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_io_roof"
+					tooltip = "sr_discovery_io_roof_b_tt"
+				}
+			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_io')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_io'), '(CFixedPoint)1' )]"
@@ -35560,6 +35728,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)11' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_io_roof'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_io_roof'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_io_roof"
+					tooltip = "sr_discovery_io_roof_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_io')|0]"
@@ -36098,7 +36274,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_europa')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_europa'), '(CFixedPoint)1' )]"
@@ -36119,6 +36295,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "mod_yard_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_vents'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_vents'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_europa_vents"
+					tooltip = "sr_discovery_europa_vents_b_tt"
+				}
 			}
 			blockoverride "mod_lab_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_lab_value_europa')|0]"
@@ -36144,6 +36328,19 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
+			blockoverride "mod_lab_boons" {
+				visible = "[Or( EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_life'), '(CFixedPoint)1' ), EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_vents'), '(CFixedPoint)1' ) )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_life'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_europa_life"
+					tooltip = "sr_discovery_europa_life_a_tt"
+				}
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_vents'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_europa_vents"
+					tooltip = "sr_discovery_europa_vents_a_tt"
+				}
+			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_europa')|0]"
 				tooltip = "je_space_race_widget_mod_culture_tt"
@@ -36167,6 +36364,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)12' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "mod_culture_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_life'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_europa_life'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_europa_life"
+					tooltip = "sr_discovery_europa_life_b_tt"
+				}
 			}
 			blockoverride "mod_resort_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_resort_value_europa')|0]"
@@ -36681,7 +36886,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_ganymede')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_ganymede'), '(CFixedPoint)1' )]"
@@ -36702,6 +36907,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "mod_yard_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ganymede_layers'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ganymede_layers'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_ganymede_layers"
+					tooltip = "sr_discovery_ganymede_layers_b_tt"
+				}
 			}
 			blockoverride "mod_lab_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_lab_value_ganymede')|0]"
@@ -36726,6 +36939,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)13' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ganymede_layers'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_ganymede_layers'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_ganymede_layers"
+					tooltip = "sr_discovery_ganymede_layers_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_ganymede')|0]"
@@ -37232,6 +37453,14 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "mod_hab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_callisto_archive'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_callisto_archive'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_callisto_archive"
+					tooltip = "sr_discovery_callisto_archive_b_tt"
+				}
+			}
 			blockoverride "mod_def_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_callisto')|0]"
 				tooltip = "je_space_race_widget_mod_def_tt"
@@ -37306,7 +37535,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_callisto')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_callisto'), '(CFixedPoint)1' )]"
@@ -37351,6 +37580,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)14' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_callisto_archive'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_callisto_archive'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_callisto_archive"
+					tooltip = "sr_discovery_callisto_archive_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_callisto')|0]"
@@ -37931,7 +38168,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_himalia')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_himalia'), '(CFixedPoint)1' )]"
@@ -38514,7 +38751,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_amalthea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_jupiter"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_amalthea'), '(CFixedPoint)1' )]"
@@ -39097,7 +39334,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_titan')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_titan'), '(CFixedPoint)1' )]"
@@ -39142,6 +39379,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titan_chemistry'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titan_chemistry'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_titan_chemistry"
+					tooltip = "sr_discovery_titan_chemistry_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_titan')|0]"
@@ -39286,6 +39531,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)19' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
+			}
+			blockoverride "mod_foundry_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titan_chemistry'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titan_chemistry'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_titan_chemistry"
+					tooltip = "sr_discovery_titan_chemistry_b_tt"
+				}
 			}
 			blockoverride "mod_admin_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_admin_value_titan')|0]"
@@ -39722,7 +39975,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_enceladus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_enceladus'), '(CFixedPoint)1' )]"
@@ -39768,6 +40021,14 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_enceladus_life'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_enceladus_life'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_enceladus_life"
+					tooltip = "sr_discovery_enceladus_life_a_tt"
+				}
+			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_enceladus')|0]"
 				tooltip = "je_space_race_widget_mod_culture_tt"
@@ -39791,6 +40052,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)20' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "mod_culture_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_enceladus_life'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_enceladus_life'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_enceladus_life"
+					tooltip = "sr_discovery_enceladus_life_b_tt"
+				}
 			}
 			blockoverride "mod_resort_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_resort_value_enceladus')|0]"
@@ -40305,7 +40574,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_rhea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_rhea'), '(CFixedPoint)1' )]"
@@ -40888,7 +41157,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_mimas')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_mimas'), '(CFixedPoint)1' )]"
@@ -41471,7 +41740,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_iapetus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_saturn"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_iapetus'), '(CFixedPoint)1' )]"
@@ -41980,6 +42249,14 @@ types sr_sites_generated_rows_types
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "mod_hab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titania_ocean'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titania_ocean'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_titania_ocean"
+					tooltip = "sr_discovery_titania_ocean_b_tt"
+				}
+			}
 			blockoverride "mod_def_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_def_value_titania')|0]"
 				tooltip = "je_space_race_widget_mod_def_tt"
@@ -42054,7 +42331,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_titania')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_titania'), '(CFixedPoint)1' )]"
@@ -42099,6 +42376,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)24' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titania_ocean'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_titania_ocean'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_titania_ocean"
+					tooltip = "sr_discovery_titania_ocean_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_titania')|0]"
@@ -42637,7 +42922,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_oberon')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_oberon'), '(CFixedPoint)1' )]"
@@ -43220,7 +43505,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_miranda')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_miranda'), '(CFixedPoint)1' )]"
@@ -43803,7 +44088,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_ariel')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_uranus"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_ariel'), '(CFixedPoint)1' )]"
@@ -44386,7 +44671,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_triton')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_neptune"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_triton'), '(CFixedPoint)1' )]"
@@ -44407,6 +44692,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "mod_yard_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_triton_jet'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_triton_jet'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_triton_jet"
+					tooltip = "sr_discovery_triton_jet_b_tt"
+				}
 			}
 			blockoverride "mod_lab_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_lab_value_triton')|0]"
@@ -44431,6 +44724,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)28' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_triton_jet'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_triton_jet'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_triton_jet"
+					tooltip = "sr_discovery_triton_jet_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_triton')|0]"
@@ -44969,7 +45270,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_proteus')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_neptune"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_proteus'), '(CFixedPoint)1' )]"
@@ -45552,7 +45853,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_pluto')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_pluto'), '(CFixedPoint)1' )]"
@@ -45597,6 +45898,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "mod_lab_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pluto_antifreeze'), '(CFixedPoint)1' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pluto_antifreeze'), '(CFixedPoint)1' )]"
+					text = "je_space_race_widget_mod_boon_pluto_antifreeze"
+					tooltip = "sr_discovery_pluto_antifreeze_a_tt"
+				}
 			}
 			blockoverride "mod_culture_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_culture_value_pluto')|0]"
@@ -45741,6 +46050,14 @@ types sr_sites_generated_rows_types
 				enabled = "[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_colony_dismantle_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_colony_dismantle_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_colony_dismantle_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'site', MakeScopeValue( '(CFixedPoint)30' ) ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)14' ) ).End ) ) )]"
+			}
+			blockoverride "mod_foundry_boons" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pluto_antifreeze'), '(CFixedPoint)2' )]"
+				te_sr_page_boon_line = {
+					visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_site_disc_pluto_antifreeze'), '(CFixedPoint)2' )]"
+					text = "je_space_race_widget_mod_boon_pluto_antifreeze"
+					tooltip = "sr_discovery_pluto_antifreeze_b_tt"
+				}
 			}
 			blockoverride "mod_admin_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_admin_value_pluto')|0]"
@@ -46135,7 +46452,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_eris')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_eris'), '(CFixedPoint)1' )]"
@@ -46718,7 +47035,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_makemake')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_makemake'), '(CFixedPoint)1' )]"
@@ -47301,7 +47618,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_haumea')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_haumea'), '(CFixedPoint)1' )]"
@@ -47884,7 +48201,7 @@ types sr_sites_generated_rows_types
 			}
 			blockoverride "mod_yard_level" {
 				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_site_yard_value_sedna')|0]"
-				tooltip = "je_space_race_widget_mod_yard_tt"
+				tooltip = "je_space_race_widget_mod_yard_tt_alone"
 			}
 			blockoverride "mod_yard_pending" {
 				visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_mod_pending_yard_sedna'), '(CFixedPoint)1' )]"

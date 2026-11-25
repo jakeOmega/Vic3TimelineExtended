@@ -20,8 +20,8 @@ sr_mod_fab_per_month = { value = 4 }
 sr_mod_build_lead_months = { value = 1 }
 # Country scope. The months until the queue's first module is built for its
 # window (0 once its window is that near, for a world with none, or for one
-# built at an Orbital Yard on its world, which waits for no window: the owner,
-# 2026-11-24).
+# built at an Orbital Yard in its place, which waits for no window: the owner,
+# 2026-11-24; its place is its world, or any moon of its giant planet, gen_solar_sites.yard_mates).
 sr_mq_head_window_months = {
 	value = sr_mq_head_wait_months
 	subtract = sr_mod_build_lead_months

@@ -196,15 +196,21 @@ class RecordTest(unittest.TestCase):
         dispatched = set(re.findall(r"(?m)^sr_site_choose_(\w+) = \{", self.effects))
         self.assertEqual(granted, dispatched)
         self.assertNotIn("sr_grant_colony_modifier", events + _raw("common", "scripted_effects", "space_race_effects.txt"))
+        discoveries = {m for s in gss.SITES for d in s.discoveries for m in gss.discovery_modifiers(d)}
         for modifier in granted:
             body = _block(self.effects, f"sr_site_choose_{modifier}")
             with self.subTest(modifier=modifier):
                 # The option's tooltip shows the modifier the entry then declares (a
                 # preview: has_modifier can't see a declared one, and nothing adds it);
-                # the record, the held mark and the sync are bookkeeping, hidden.
-                self.assertTrue(body.strip().startswith(
-                    "show_as_tooltip = { je:je_space_race_solar_colonization ?= "
-                    f"{{ add_modifier = {{ name = {modifier} }} }} }}"))
+                # the record, the held mark and the sync are bookkeeping, hidden. A
+                # discovery's outcome shows its boon under simple and full colonies
+                # and its modifier under races only, which has no modules.
+                preview = ("show_as_tooltip = { je:je_space_race_solar_colonization ?= "
+                           f"{{ add_modifier = {{ name = {modifier} }} }} }}")
+                if modifier in discoveries:
+                    preview = (f"if = {{ limit = {{ sr_colonies_contested_enabled = yes }} custom_tooltip = {modifier}_tt }}"
+                               f"\n\telse = {{ {preview} }}")
+                self.assertTrue(body.strip().startswith(preview))
                 hidden = _block(body, "hidden_effect")
                 self.assertIn(f"set_variable = {{ name = {modifier}_held value = yes }}", hidden)
                 self.assertRegex(hidden, r"sr_site_sync_\w+ = yes\s*$")
@@ -1118,7 +1124,8 @@ class PopulationTest(unittest.TestCase):
                 # (colony people design § 4.4; half before the technologies).
                 room = _block(self.values, f"sr_site_room_{k}")
                 self.assertIn(f"value = sr_site_hab_value_{k}", room)
-                self.assertIn(f"multiply = sr_site_hab_share_value_{k}", room)
+                # ... doubled where a discovery there boosts Habitats (2026-11-25).
+                self.assertIn(f"multiply = {gss.hab_share_eff(site)}", room)
                 self.assertIn(f"multiply = sr_site_base_room_{k}", room)
                 for kind in ("sr_site_pop_value", "sr_site_free_room", "sr_site_crews", "sr_emig_prio_weight",
                              "sr_emig_weight"):
@@ -1532,9 +1539,11 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=k):
                 queued = re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)
                 terra = {"terra"} if gss.terraformable(site) else set()
+                # A facility a discovery here doubles, the always useful ones (2026-11-25).
+                boons = {t for t in gss.site_boons(site) if t in gss.AI_BOON_ALWAYS}
                 # The Off-World Resort since #1948, once the Resort Colony room is full.
                 self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "resort", "bunker", "yard", "lab"}
-                                 | terra)
+                                 | terra | boons)
                 self.assertEqual(body.count(f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}"), 1)
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
@@ -1574,7 +1583,9 @@ class ModulesTest(unittest.TestCase):
                 self.assertIn(f"{gss.site_serves(site)} }} add = sr_site_ebase_room_{k} }}", room)
                 world = _block(self.values, f"sr_site_ebase_room_{k}")
                 self.assertIn(f"value = {site.ebase_room}", world)
-                self.assertIn(f"add = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}", world)
+                # ... doubled where a discovery there boosts the Mining Complex (2026-11-25).
+                self.assertIn(f"add = {{ value = {gss.eff_value(site, 'mine')} multiply = sr_mod_mine_room floor = yes }}",
+                              world)
         # The order by grade, best first, the near-Earth room first among grade 0.
         grades = [0 if t is None else t.ebase_grade for t in gss.ebase_tiers()]
         self.assertEqual(len(grades), len(gss.SITES) + 1)
@@ -1925,7 +1936,7 @@ class ModulesTest(unittest.TestCase):
     def test_a_module_for_a_world_with_an_orbital_yard_is_built_there(self):
         """The owner, 2026-11-24: a module for a colony on a world where we have an
         Orbital Yard needs no delivery and comes on top of the month's four, for the
-        same points."""
+        same points. Since 2026-11-25 a giant planet's moons are one place for it."""
         mars = [s for s in gss.SITES if gss.world_of(s) == "mars"]
         self.assertEqual(len(mars), 5)
         for site in gss.SITES:
@@ -1933,16 +1944,33 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=k):
                 test = _block(self.triggers, f"sr_site_yard_builds_{k}")
                 # The site is ours, neither blockaded nor occupied, and a yard stands
-                # there or at a colony of ours on the same world that serves us.
+                # there or at a colony of ours in the same place that serves us.
                 self.assertIn(gss.site_serves(site), test)
                 self.assertIn(f"sr_site_yard_value_{k} >= 1", test)
-                for mate in gss.world_mates(site):
+                for mate in gss.yard_mates(site):
                     self.assertIn(f"AND = {{ {gss.site_serves(mate)} sr_site_yard_value_{mate.key} >= 1 }}", test)
-                others = [s for s in gss.SITES if s is not site and s not in gss.world_mates(site)]
+                others = [s for s in gss.SITES if s is not site and s not in gss.yard_mates(site)]
                 for other in others:
                     self.assertNotIn(f"sr_site_yard_value_{other.key} ", test)
-        # Jupiter's moons are worlds of their own: Europa's yard builds for Europa alone.
-        self.assertNotIn("sr_site_yard_value_ganymede", _block(self.triggers, "sr_site_yard_builds_europa"))
+        # Io's yard builds for Europa, and so does every other Jovian moon's.
+        europa = _block(self.triggers, "sr_site_yard_builds_europa")
+        for moon in ("io", "ganymede", "callisto", "himalia", "amalthea"):
+            self.assertIn(f"sr_site_yard_value_{moon} >= 1", europa)
+        self.assertNotIn("sr_site_yard_value_titan", europa)
+        # A yard's place: its world, and every moon of a giant planet with the others.
+        for site in gss.SITES:
+            with self.subTest(place=site.key):
+                mates = {t.key for t in gss.yard_mates(site)}
+                if site.location in ("jupiter", "saturn", "uranus", "neptune"):
+                    self.assertEqual(mates, {t.key for t in gss.SITES
+                                             if t.location == site.location and t is not site})
+                else:
+                    # The Moon, Mars, and a place of its own for each asteroid, Venus,
+                    # Mercury and each of the Kuiper Belt's.
+                    self.assertEqual(mates, {t.key for t in gss.world_mates(site)})
+                self.assertTrue(set(t.key for t in gss.world_mates(site)) <= mates)
+        self.assertEqual(gss.yard_mates(gss.SITES[[s.key for s in gss.SITES].index("ceres")]), [])
+        self.assertEqual(gss.yard_mates(gss.SITES[[s.key for s in gss.SITES].index("pluto")]), [])
         # Ready with no slot and no window, the yard's part first.
         ready = gss.ready_test("var:sr_mq_3_site", "var:sr_mq_3_type")
         yard = gss.yard_ready_test("var:sr_mq_3_site", "var:sr_mq_3_type")
@@ -1992,8 +2020,63 @@ class ModulesTest(unittest.TestCase):
         self.assertRegex(window, r"limit = \{ sr_mq_head_yard_ready = yes \}\s*value = 0")
         # The facility's hover says so.
         loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
-        tip = re.search(r'^ je_space_race_widget_mod_yard_tt:0 "(.*)"$', loc, re.M).group(1)
-        self.assertIn("no shipment slot, launch window or launch", tip)
+
+        def text(key):
+            return re.search(rf'^ {key}:0 "(.*)"$', loc, re.M).group(1)
+
+        self.assertIn("no shipment slot, launch window or launch", text("je_space_race_widget_mod_yard_tt_built"))
+        self.assertIn("$je_space_race_widget_mod_yard_tt_built$", text("je_space_race_widget_mod_yard_tt"))
+        self.assertIn("around Jupiter, Saturn, Uranus or Neptune on all of its planet's moons",
+                      text("je_space_race_widget_mod_yard_tt"))
+
+    def test_a_yard_s_hover_names_the_colonies_it_builds_for(self):
+        """Each site's Orbital Yard cell names its place (the owner, 2026-11-25:
+        "make this understandable in game from the module tooltips"): the giant
+        planets' hovers name the planet whose moons it serves, and say the moons'
+        Defenses and marines stay apart."""
+        loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
+
+        def text(key):
+            found = re.search(rf'^ {key}:0 "(.*)"$', loc, re.M)
+            self.assertIsNotNone(found, key)
+            return found.group(1)
+
+        rows = _raw("gui", "journal_entry_widgets", "sr_sites_generated_rows.gui")
+        self.assertNotIn('tooltip = "je_space_race_widget_mod_yard_tt"', rows)
+        for site in gss.SITES:
+            key = gss.yard_tooltip(site)
+            with self.subTest(site=site.key):
+                tip = text(key)
+                self.assertTrue(tip.startswith("$je_space_race_widget_mod_yard_tt_head$"))
+                self.assertIn("$je_space_race_widget_mod_yard_tt_built$", tip)
+                if not gss.yard_mates(site):
+                    self.assertEqual(key, "je_space_race_widget_mod_yard_tt_alone")
+                if site.location in gss.YARD_SYSTEMS:
+                    self.assertIn(f"on all of {gss.YARD_SYSTEMS[site.location]}'s moons", tip)
+                    self.assertIn("$je_space_race_widget_mod_yard_tt_moons_apart$", tip)
+        self.assertIn("Defenses and marines defend it alone", text("je_space_race_widget_mod_yard_tt_moons_apart"))
+        self.assertIn("on Mars", text("je_space_race_widget_mod_yard_tt_mars"))
+        self.assertIn("on the Moon", text("je_space_race_widget_mod_yard_tt_moon"))
+        # The Defenses hover says the moons stay apart.
+        self.assertIn("Each moon of Jupiter, Saturn, Uranus or Neptune is defended by its own alone",
+                      text("je_space_race_widget_mod_def_tt"))
+        # Every yard hover links Yard Reach, which lists each place's sites.
+        for key in {gss.yard_tooltip(site) for site in gss.SITES} | {"je_space_race_widget_mod_yard_tt"}:
+            self.assertIn("[concept_sr_yard_reach]", text(key), key)
+        self.assertIn("[concept_sr_yard_reach]", text("je_space_race_widget_mod_def_tt"))
+        concepts = _raw("localization", "english", "te_concepts_l_english.yml")
+        reach = re.search(r'^ concept_sr_yard_reach_desc:0 "(.*)"$', concepts, re.M).group(1)
+        lines = reach.split("\\n")
+        heads = {"moon": "#bold The Moon:#! ", "mars": "#bold Mars:#! ",
+                 **{loc: f"#bold {planet}'s moons:#! " for loc, planet in gss.YARD_SYSTEMS.items()}}
+        self.assertEqual(set(heads), set(gss.YARD_PLACES))
+        for place, head in heads.items():
+            with self.subTest(place=place):
+                line = next(x for x in lines if x.startswith(head))
+                listed = re.findall(r"\$sr_site_name_(\w+)\$", line)
+                self.assertEqual(listed, [t.key for t in gss.SITES if gss.yard_place_of(t) == place])
+        self.assertIn("each moon of Jupiter, Saturn, Uranus and Neptune is defended by its own alone", reach)
+        self.assertIn("concept_sr_yard_reach = {}", _raw("common", "game_concepts", "extra_concepts.txt"))
 
     def test_past_its_cap_a_habitat_needs_its_price_in_stock(self):
         """No top past the cap (the owner's call 7, colony people design § 4.3):

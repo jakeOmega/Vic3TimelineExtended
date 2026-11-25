@@ -772,6 +772,10 @@ CELLS = {
     "a module coming down on a colony's page (te_sr_page_mod_row)": (
         ("te_sr_page_mod_row", 'text = "je_space_race_widget_mod_coming_down"'),
         r"je_space_race_widget_mod_coming_down"),
+    # A discovery's boon under the module it doubles on a colony's page (2026-11-25).
+    "a discovery's boon on a colony's page (te_sr_page_boon_line)": (
+        ("te_sr_page_boon_line", None),
+        r"je_space_race_widget_mod_boon_\w+"),
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"

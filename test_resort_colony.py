@@ -102,8 +102,9 @@ class ResortRoomTest(unittest.TestCase):
             with self.subTest(site=k):
                 world = _block(values, f"sr_site_resort_room_{k}")
                 self.assertIn(f"value = {site.resort_room}", world)
-                self.assertIn(f"add = {{ value = sr_site_resort_staffed_{k} multiply = sr_mod_resort_room floor = yes }}",
-                              world)
+                # Doubled where a discovery there boosts the Off-World Resort (2026-11-25).
+                self.assertIn(f"add = {{ value = {gss.eff_value(site, 'resort')} multiply = sr_mod_resort_room "
+                              "floor = yes }", world)
 
     def test_fill_and_next_fill(self):
         effects = _effects()
@@ -137,7 +138,7 @@ class ResortRoomTest(unittest.TestCase):
             with self.subTest(site=k):
                 draw = _block(values, f"sr_site_resort_draw_{k}")
                 self.assertIn(f"value = {site.resort_draw}\n", draw)
-                self.assertIn(f"add = {{ value = sr_site_culture_staffed_{k} multiply = sr_mod_culture_draw }}", draw)
+                self.assertIn(f"add = {{ value = {gss.eff_value(site, 'culture')} multiply = sr_mod_culture_draw }}", draw)
         loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
         tip = re.search(r'^ je_space_race_widget_mod_culture_tt:0 "(.*)"$', loc, re.M).group(1)
         self.assertIn("#v +1#! point of [concept_sr_resort_draw]", tip)
@@ -221,10 +222,11 @@ class ResortBuildingTest(unittest.TestCase):
         self.assertEqual(inputs, {"electronic_components": 15, "radios": 30, "digital_access": 10,
                                   "advanced_materials": 0.5, "launch_capacity": 480, "wine": 50,
                                   "luxury_furniture": 30, "fruit": 30})
-        self.assertEqual(outputs, {"fine_art": 300, "tourism": 900})
+        # Tourism doubled, 900 to 1,800, on 2026-11-25 (the owner: "underpowered").
+        self.assertEqual(outputs, {"fine_art": 300, "tourism": 1800})
         cost = sum(n * goods[g][0] for g, n in inputs.items())
         value = sum(n * goods[g][0] for g, n in outputs.items())
-        self.assertEqual((cost, value, value - cost), (108000, 150000, 42000))
+        self.assertEqual((cost, value, value - cost), (108000, 240000, 132000))
         # Call 4: no services (a local good), and no local good added; Digital
         # Access, local, stays as the required input.
         self.assertNotIn("services", inputs)

@@ -766,7 +766,7 @@ colonies:
 | Facility | A staffed level gives |
 |---|---|
 | Mining Complex | +50 Extraplanetary Base room at the colony |
-| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month. Modules for your colonies on its world are built at the yard (see below) |
+| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
 | Research Station | +2% research speed |
 | Cultural Center | +3% cultural pull, +1% prestige, and +1 to the colony's Resort Draw |
 | Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
@@ -895,16 +895,24 @@ A module lands for whoever holds the colony then, and is lost if the site was
 released in the meantime, or its specializations' four levels or a finished
 world's Terraforming leave no room for it.
 
-A module for a colony on a world where you have an Orbital Yard is built at the
+A module for a colony within reach of one of your Orbital Yards is built at the
 yard instead. It costs the same points, but it is installed the month it is
 built: it takes no shipment slot, waits for no launch window and needs no launch
 from Earth, so a blockade of Earth doesn't hold it, except on the Moon: your
 Moon colonies count as blockaded while Earth is. It also doesn't count toward
 the four a month: once those are built, the first such module in the queue is
-built next, and so on while your stock covers them. The Moon is one world and
-Mars is another, so a yard at any of your colonies there builds for all of them;
-each of Jupiter's moons is a world of its own. The yard must be yours and neither
-blockaded nor occupied, and so must the colony. The next module reads "in N mo"
+built next, and so on while your stock covers them. A yard reaches every one
+of your colonies on its world, and around a giant planet every one on that
+planet's moons: a yard anywhere on the Moon builds for all your Moon colonies,
+one on Mars for all your Martian ones, and one on Io for Europa, Ganymede and
+Jupiter's other moons, as one on Titan does for Saturn's, and likewise around
+Uranus and Neptune. Each asteroid, Venus, Mercury and each world of the Kuiper
+Belt has only its own. The moons share nothing else: each moon's Defenses and
+marines defend that moon alone (see [Blockade, seizure and
+destruction](#blockade-seizure-and-destruction)). The yard's hover in the
+Modules view names the colonies it builds for, and its Yard Reach link lists the
+sites of every place. The yard must be yours and
+neither blockaded nor occupied, and so must the colony. The next module reads "in N mo"
 as usual, and its hover says it is built at a yard.
 
 Every level past the first needs a crew of 10,000 people (5,000 with Artificial
@@ -925,7 +933,7 @@ specialization level its crews can run, its founding specialization first, then
 a facility its crews can run: an Administration where autonomy has reached 25 and is heading for 45
 or more and it has 50 authority to spare, a Mining Complex when its bases outgrow their room, an Off-World Resort once
 its Resort Colonies, built and queued, fill all of its resort room, Terraforming once its
-people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. While
+people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, an Orbital Yard, Cultural Center or Materials Foundry that a discovery there doubles, otherwise a Research Station. While
 anything is queued it runs the best fabrication method it has whose cost fits
 in a twentieth of its government's weekly income, or its cheapest one if none
 does. It never builds Spaceports or Defenses, and never pays for a Habitat past
@@ -1046,7 +1054,7 @@ you lose for good drops its assignment, and its levels move to your other room.
 Space Colonization brings the Resort Colony, a building of its own. Its Luxury
 Resorts method makes Art and Entertainment and Tourism from Launch Capacity, a little
 electronics and Advanced Materials, and wine, furniture and fruit for the
-guests: about £42,000 a level a week at base prices. Under Simple Colonies and
+guests: about £132,000 a level a week at base prices. Under Simple Colonies and
 Full Colonies its levels need room, as bases do, but room of their own. Earth
 orbit gives every country room for 10 levels, and each colony you hold adds its
 own, from 10 levels on the small moons to 50 on Mars, and 10 more
@@ -1263,8 +1271,44 @@ colony's autonomy; leaving the colonists to it raises it.
 New colonies can also produce rare discoveries after their founding event.
 Twenty discoveries cover microbial life in Europa's or Enceladus's oceans,
 confirmed ancient Martian fossils, buried ice, mineral deposits, ocean
-layers, atmospheric waves and local geological hazards. Each discovery offers
-two choices with different small permanent bonuses on the colony journal entry.
+layers, atmospheric waves and local geological hazards.
+
+Each discovery makes one colony module stronger at its own colony: the first
+choice studies the find and doubles that colony's Research Stations, and the
+second puts it to use and doubles another module there (+100% to its effect).
+The bonus belongs to the colony, so it passes to whoever holds it and ends only
+when the colony itself does. It does nothing until the colony has
+that module, so choose the one you will build there. The colony's page shows
+each bonus under the module it doubles, with the discovery's name. Under the
+Races Only setting, which has no modules, each choice is instead a small
+permanent bonus on the colony journal entry.
+
+| Colony | Discovery | Second choice doubles |
+|---|---|---|
+| Europa | The Cultures Grew | Cultural Center |
+| Europa | Chimneys Beneath the Ice | Orbital Yard |
+| Enceladus | Life in the Ice Grains | Cultural Center |
+| Titan | An Impact-Born Chemical Laboratory | Materials Foundry |
+| Hellas Planitia | The Fossils of Hellas | Cultural Center |
+| Olympus Mons | Rooms Inside the Volcano | Habitat |
+| Utopia Planitia | The Buried Glacier | Terraforming |
+| Arcadia Planitia | Salt Water in the Drill | Orbital Yard |
+| Ceres | A Reservoir Below Ceres | Mining Complex |
+| 4 Vesta | A Visitor Preserved in Vesta | Materials Foundry |
+| 16 Psyche | A Rich Seam in Psyche | Mining Complex |
+| 2 Pallas | Water Bound in Stone | Habitat |
+| Venus Cloud Habitat | A Wave That Holds Its Ground | Off-World Resort |
+| Mercury | An Archive in Permanent Shadow | Mining Complex |
+| Io | The Moving Floor of Io | Mining Complex |
+| Ganymede | Oceans Between Layers | Orbital Yard |
+| Callisto | The Crater Under the Crater | Habitat |
+| Titania | Warmth Beneath Titania | Habitat |
+| Triton | A Jet Beneath the Landing Field | Orbital Yard |
+| Pluto-Charon | Antifreeze at the Edge of the System | Materials Foundry |
+
+A doubled Habitat adds twice the room for people, a doubled Mining Complex or
+Off-World Resort twice the room it adds, and doubled Terraforming works twice as
+fast. Europa's two discoveries can both double its Research Stations, for +200%.
 
 Each candidate has a hidden 10% chance of being possible when its colony is
 founded. A successful founding roll starts a year of surveying. After that,
@@ -1511,7 +1555,9 @@ So the colony with the most Defenses stays the hardest to take, and a colony
 with none of its own still holds out longer than it would alone. An occupied
 colony shares nothing: its occupier's garrison defends it alone, and its
 Defenses fire for no one. The Defenses view's Marines and the target's hover
-give the shared figures.
+give the shared figures. The moons of Jupiter, Saturn, Uranus and Neptune share
+none of this: each moon is a world of its own, though an Orbital Yard on one of
+them builds for all of its planet's moons.
 
 ### Interdiction
 

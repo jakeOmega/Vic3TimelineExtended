@@ -39,8 +39,9 @@
 # still gives its country points from a state it doesn't control); a blockade in
 # orbit doesn't stop fabrication, and the modules wait at Earth.
 #
-# A module for a colony on a world where we have an Orbital Yard (the owner,
-# 2026-11-24: sr_site_yard_builds_<key>, generated) is built there: installed the
+# A module for a colony an Orbital Yard of ours builds for (the owner,
+# 2026-11-24: sr_site_yard_builds_<key>, generated; on its world, or since
+# 2026-11-25 on any moon of the same giant planet) is built there: installed the
 # month it is built, with no shipment slot, launch window or launch, for the same
 # points, and on top of the month's four (sr_mq_head_yard_ready: it doesn't count
 # them). So while launches are barred, or once the four are built, the loop still
@@ -121,9 +122,9 @@ sr_mq_promote_next = {
 # INDEX) costs its points (local_var:sr_mq_head_cost_now, the head's price
 # before it left: past the world's slots it costs more, colony management
 # design § 5) and fills a shipment slot; the world counts it on its way at
-# once, so the queue's caps see it the same month. A module for a world with
-# one of our Orbital Yards on it (sr_site_yard_builds_<key>; the owner,
-# 2026-11-24) is built there instead and installed at once, with no slot.
+# once, so the queue's caps see it the same month. A module for a world one of
+# our Orbital Yards builds for (sr_site_yard_builds_<key>: its world, or its
+# giant planet's moons; the owner, 2026-11-24 and 25) is built there instead and installed at once, with no slot.
 sr_mod_fab_build = {
 	if = {
 		limit = { sr_site_yard_builds_$KEY$ = yes }

@@ -233,12 +233,13 @@ class DiscoveryTests(unittest.TestCase):
                     self.assertLess(found.start(), text.index('trigger_event', start))
 
     def test_twenty_deliveries_have_complete_choices_art_and_declarations(self):
-        # The entry declares each outcome while its holder's <modifier>_held is
-        # set (1.15 scaling modifiers, #1404): a revolution's winner inherits the
-        # variable, so no repair puts the modifier back.
+        # Under races only, the entry declares each outcome while its holder's
+        # <modifier>_held is set (1.15 scaling modifiers, #1404): a revolution's
+        # winner inherits the variable, so no repair puts the modifier back. Under
+        # simple and full colonies the outcome is its world's boon (BoonTests).
         declared = set(re.findall(
-            r'modifier = (sr_discovery_\w+)\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = \1_held \}'
-            r'\s*add = 1\s*\}',
+            r'modifier = (sr_discovery_\w+)\s*value = \{\s*value = 0\s*if = \{\s*limit = \{ has_variable = \1_held '
+            r'NOT = \{ sr_colonies_contested_enabled = yes \} \}\s*add = 1\s*\}',
             (ROOT / 'common/journal_entries/sr_sites_generated.txt').read_text('utf-8-sig')))
         self.assertEqual(len(declared), 40)
         all_loc = ''.join(p.read_text('utf-8-sig') for p in
@@ -274,6 +275,7 @@ class DiscoveryTests(unittest.TestCase):
                 self.assertIn(mod, self.modifiers)
                 self.assertIn(mod, declared)
                 self.assertIn(mod, loc_keys)
+                self.assertIn(f'{mod}_tt', loc_keys)
             trigger = value(event, 'trigger')
             state = self.state()
             state.variables[f'sr_discovery_{key}_pending'] = ('yes', None)
@@ -291,6 +293,142 @@ class DiscoveryTests(unittest.TestCase):
         self.assertNotIn('sr_solar_colonization_running', monthly)
         self.assertNotIn('sr_ai_should_participate', monthly)
         self.assertNotIn('sr_completed_solar_colonization', monthly)
+
+
+def _block(text, name):
+    """The body of `name = { ... }` (its first definition at a line start)."""
+    match = re.search(rf'(?m)^\s*{re.escape(name)} = \{{', text)
+    assert match, name
+    depth, start = 1, match.end()
+    for i in range(start, len(text)):
+        depth += {'{': 1, '}': -1}.get(text[i], 0)
+        if depth == 0:
+            return text[start:i]
+    raise AssertionError(name)
+
+
+class BoonTests(unittest.TestCase):
+    """A discovery's option is its world's boon under simple and full colonies
+    (the owner, 2026-11-25): +100% to one module's effect at that world
+    (gen_solar_sites.DISCOVERY_BOONS)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import sys
+        sys.path.insert(0, str(ROOT / 'scripts' / 'generators'))
+        import gen_solar_sites
+        cls.gss = gen_solar_sites
+        cls.values = (ROOT / 'common/script_values/sr_sites_generated.txt').read_text('utf-8-sig')
+        cls.display = (ROOT / 'common/script_values/sr_sites_display_generated.txt').read_text('utf-8-sig')
+        cls.rows = (ROOT / 'gui/journal_entry_widgets/sr_sites_generated_rows.gui').read_text('utf-8-sig')
+        cls.widget = (ROOT / 'gui/journal_entry_widgets/space_race_widget.gui').read_text('utf-8-sig')
+        loc = ''.join(p.read_text('utf-8-sig') for p in (ROOT / 'localization/english').glob('*.yml'))
+        cls.loc = dict(re.findall(r'(?m)^ ([\w.]+):\d* "(.*)"$', loc))
+
+    def test_every_discovery_names_a_module_its_world_takes(self):
+        gss = self.gss
+        seeded = {d for s in gss.SITES for d in s.discoveries}
+        self.assertEqual(set(gss.DISCOVERY_BOONS), seeded)
+        self.assertEqual(set(gss.DISCOVERY_BOONS), set(SITES))
+        for site in gss.SITES:
+            for d in site.discoveries:
+                with self.subTest(discovery=d):
+                    a, b = gss.DISCOVERY_BOONS[d]
+                    # The first option studies the find; the second puts it to use.
+                    self.assertEqual(a, 'lab')
+                    self.assertNotEqual(b, 'lab')
+                    for t in (a, b):
+                        self.assertIn(t, gss.BOON_TYPES)
+                        self.assertIn(t, gss.generic_types(site))
+        # Not the Administration (its staffed levels are its bill), nor the
+        # modules other generators read.
+        self.assertFalse({'admin', 'def', 'port'} & set(gss.BOON_TYPES))
+        self.assertEqual(gss.BOON_BONUS, 1)
+        self.assertRegex(self.values, rf'(?m)^sr_site_boon_bonus = \{{ value = {gss.BOON_BONUS} \}}')
+
+    def test_the_boon_reads_the_world_s_record(self):
+        gss = self.gss
+        for site in gss.SITES:
+            k = site.key
+            for t, sources in gss.site_boons(site).items():
+                with self.subTest(site=k, type=t):
+                    boon = _block(self.values, f'sr_site_boon_{t}_{k}')
+                    self.assertIn('value = 1', boon)
+                    found = re.findall(r'global_var:sr_site_disc_(\w+) = (\d) \} add = sr_site_boon_bonus', boon)
+                    self.assertEqual(found, [(d, str(o)) for d, o in sources])
+                    if t == 'hab':
+                        self.assertIn(f'sr_site_hab_share_eff_{k} = {{ value = sr_site_hab_share_value_{k} '
+                                      f'multiply = sr_site_boon_hab_{k} }}', self.values)
+                    else:
+                        self.assertIn(f'sr_site_{t}_eff_{k} = {{ value = sr_site_{t}_staffed_{k} '
+                                      f'multiply = sr_site_boon_{t}_{k} }}', self.values)
+            # No boon value where no discovery here can name the type.
+            for t in set(gss.BOON_TYPES) - set(gss.site_boons(site)):
+                self.assertNotIn(f'sr_site_boon_{t}_{k} =', self.values)
+
+    def test_every_effect_reads_the_effective_levels(self):
+        gss = self.gss
+        for f in gss.FACILITIES:
+            units = _block(self.values, f'sr_mod_units_{f.key}')
+            for site in gss.SITES:
+                if f.key not in gss.generic_types(site):
+                    continue
+                with self.subTest(facility=f.key, site=site.key):
+                    self.assertIn(f'add = {gss.eff_value(site, f.key)} }}', units)
+        for site in gss.SITES:
+            k = site.key
+            with self.subTest(site=k):
+                self.assertIn(gss.eff_value(site, 'mine'), _block(self.values, f'sr_site_ebase_room_{k}'))
+                self.assertIn(gss.eff_value(site, 'resort'), _block(self.values, f'sr_site_resort_room_{k}'))
+                self.assertIn(gss.eff_value(site, 'culture'), _block(self.values, f'sr_site_resort_draw_{k}'))
+                for name in (f'sr_site_room_{k}', f'sr_md_room_less_hab_{k}'):
+                    self.assertIn(f'multiply = {gss.hab_share_eff(site)}', _block(self.values, name))
+                if gss.terraformable(site):
+                    self.assertIn(f'value = {gss.eff_value(site, "terra")}', _block(self.values, f'sr_site_terra_rate_{k}'))
+        # The Administration's units are its authority bill: never boosted.
+        self.assertNotIn('sr_site_admin_eff_', self.values)
+
+    def test_the_tooltips_name_the_module_and_the_world(self):
+        gss = self.gss
+        pct = f'+{gss.BOON_BONUS:.0%}'
+        for site in gss.SITES:
+            for d in site.discoveries:
+                for m, t in zip(gss.discovery_modifiers(d), gss.DISCOVERY_BOONS[d]):
+                    with self.subTest(outcome=m):
+                        text = self.loc[f'{m}_tt']
+                        self.assertTrue(text.startswith(f'#G {pct}#! to '))
+                        self.assertIn(f'$je_space_race_widget_mod_name_{t}$', text)
+                        self.assertIn(f'$sr_site_name_{site.key}$', text)
+                with self.subTest(page_line=d):
+                    eid = gss_event(d)
+                    self.assertEqual(self.loc[f'je_space_race_widget_mod_boon_{d}'],
+                                     f'${eid}.t$: #G {pct}#!')
+
+    def test_the_colony_page_shows_each_boon(self):
+        gss = self.gss
+        start = self.widget.index('type te_sr_page_mod_row = flowcontainer {')
+        row = self.widget[start:self.widget.index('\ttype ', start + 1)]
+        self.assertIn('block "row_boons" {\n\t\t\t\tvisible = no\n\t\t\t}', row)
+        for t in gss.BOON_TYPES:
+            with self.subTest(type=t):
+                self.assertIn(f'blockoverride "row_boons" {{\n\t\t\t\t\t\tblock "mod_{t}_boons" {{\n'
+                              '\t\t\t\t\t\t\tvisible = no', self.widget)
+        for site in gss.SITES:
+            for d in site.discoveries:
+                for option, (m, t) in enumerate(zip(gss.discovery_modifiers(d), gss.DISCOVERY_BOONS[d]), start=1):
+                    with self.subTest(outcome=m):
+                        shown = (f"EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
+                                 f"'sr_disp_site_disc_{d}'), '(CFixedPoint){option}' )")
+                        line = (f'visible = "[{shown}]"', f'text = "je_space_race_widget_mod_boon_{d}"',
+                                f'tooltip = "{m}_tt"')
+                        self.assertTrue(all(part in self.rows for part in line))
+                        self.assertRegex(self.rows, rf'blockoverride "mod_{t}_boons" \{{[^}}]*{re.escape(shown)}')
+                self.assertIn(f'sr_disp_site_disc_{d} = {{', self.display)
+
+
+def gss_event(discovery):
+    effects = (ROOT / 'common/scripted_effects/space_race_discovery_effects.txt').read_text('utf-8-sig')
+    return re.search(rf'DISCOVERY = {discovery} EVENT = (\S+)', effects).group(1)
 
 
 if __name__ == '__main__':
