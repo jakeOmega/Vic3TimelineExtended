@@ -105,6 +105,9 @@ concept_sr_space_command = {
 concept_sr_drive = {}
 concept_sr_launch_window = {}
 concept_sr_module = {}
+# The colonies an Orbital Yard builds modules for: its world, and a giant planet's
+# moons (the owner, 2026-11-25; gen_solar_sites.yard_mates).
+concept_sr_yard_reach = {}
 # How rich a site's ground is for Extraplanetary Bases (the owner, 2026-10-30).
 concept_sr_base_grade = {}
 # Which goods a site's ground holds for Extraplanetary Bases (ground types design § 9.6).
