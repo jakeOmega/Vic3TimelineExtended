@@ -95,8 +95,11 @@ te_history_chart = {
 			}
 		}
 	}
+	### Empty, with its line, until a census has a year's step behind it (te_demog_stepped_sgui):
+	### the game-start census is a seed, with no births, deaths or moves, so the store's first
+	### sample holds none and the frame stood empty, axis and all, through the first year.
 	blockoverride "empty_visible" {
-		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+		visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), Not( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 	}
 	blockoverride "empty_text" {
 		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
@@ -201,8 +204,11 @@ te_history_chart = {
 			}
 		}
 	}
+	### Empty, with its line, until a census has a year's step behind it (te_demog_stepped_sgui):
+	### the game-start census is a seed, with no births, deaths or moves, so the store's first
+	### sample holds none and the frame stood empty, axis and all, through the first year.
 	blockoverride "empty_visible" {
-		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+		visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), Not( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 	}
 	blockoverride "empty_text" {
 		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"
@@ -588,8 +594,10 @@ te_history_chart = {
 			}
 		}
 	}
+	### Empty, with its line, until a census has counted deaths by cause (te_demog_dc_ready_sgui):
+	### the game-start census counts none, so the frame stood empty through the first year.
 	blockoverride "empty_visible" {
-		visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )]"
+		visible = "[Or( IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') ), Not( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 	}
 	blockoverride "empty_text" {
 		text = "[SelectLocalization( GetScriptedGui('te_history_tracked_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_hist_empty', 'te_history_untracked' )]"

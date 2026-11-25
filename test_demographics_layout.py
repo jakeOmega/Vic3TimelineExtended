@@ -866,6 +866,57 @@ class HistoryTest(unittest.TestCase):
             self.assertIn("limit = { var:te_hist_i = te_demog_year }", body, name)
             self.assertIn(f"set_variable = {{ name = {marker} value = 1 }}", body, name)
 
+    def test_a_chart_the_seed_census_leaves_empty_says_so(self):
+        """The game-start census is a seed: its sample holds no births, deaths, moves or deaths by cause
+        (te_demog_history_record copies those from a stepped census only), so in a new game's first year those three
+        charts drew an empty frame, axis and all, with nothing in it (2026-11-24, January 1836). Each says "Nothing
+        recorded yet" until the census that fills it, on the scripted GUI the overview's "Next count" reads; the
+        other five draw the game-start sample and keep the store's emptiness alone."""
+        store = "IsDataModelEmpty( Country.MakeScope.GetList('te_dg_hist') )"
+        ready = {"te_demog_hist_bd_title": "te_demog_stepped_sgui", "te_demog_hist_mig_title": "te_demog_stepped_sgui",
+                 "te_demog_hist_causes_title": "te_demog_dc_ready_sgui"}
+        for title, chart in zip(self.TITLES, self.charts):
+            visible = _override(chart, "empty_visible").strip()
+            with self.subTest(chart=title):
+                if title in ready:
+                    self.assertEqual(visible, f'visible = "[Or( {store}, Not( GetScriptedGui(\'{ready[title]}\').IsShown( '
+                                              'GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"')
+                else:
+                    self.assertEqual(visible, f'visible = "[{store}]"')
+        # the two gates are the conditions the sample's copies wait on
+        sguis = _read(SGUIS)
+        for name, test in (("te_demog_stepped_sgui", "var:te_dg_stepped > 0"),
+                           ("te_demog_dc_ready_sgui", "var:te_dg_dc_total > 0")):
+            m = re.search(rf"(?m)^{name} = \{{", sguis)
+            self.assertIn(test, _block_from(sguis, m.end() - 1), name)
+        record = _read(HISTORY).split("te_demog_history_record = {", 1)[1]
+        stepped = record.index("var:te_dg_stepped > 0")
+        self.assertLess(stepped, record.index("FROM = te_dg_cbr TO = te_dg_h_cbr"))
+        self.assertLess(stepped, record.index("FROM = te_dg_mig_rate TO = te_dg_h_mig"))
+        self.assertLess(record.index("var:te_dg_dc_total > 0"), record.index("te_demog_history_causes = yes"))
+
+
+class CausesPendingTest(unittest.TestCase):
+    """Causes of Death before the first stepped census: its Deaths row reads "At the next yearly census", so the line
+    on the pie's wait under it, which said the same (2026-11-24, January 1836), waits for the row's figure. The
+    country's and the state subtab's alike."""
+
+    def test_the_pies_wait_shows_once_the_deaths_row_has_a_figure(self):
+        widgets = _read(WIDGETS)
+        for section, root, stepped, ready, key in (
+                ("te_demog_sec_causes", "Country", "te_demog_stepped_sgui", "te_demog_dc_ready_sgui",
+                 "te_demog_cd_dc_pending"),
+                ("te_state_demog_causes", "State", "te_demog_state_stepped_sgui", "te_demog_state_dc_sgui",
+                 "te_demog_st_dc_pending")):
+            body = _type_body(widgets, section)
+            gui = f"GuiScope.SetRoot( {root}.MakeScope ).End"
+            with self.subTest(section=section):
+                # the row: its figure once stepped, else the wait
+                self.assertIn(f"[SelectLocalization( GetScriptedGui('{stepped}').IsShown( {gui} ), ", body)
+                (note,) = [b for b in _instances(body, "te_demog_text") if f'text = "{key}"' in b]
+                self.assertIn(f"visible = \"[And( GetScriptedGui('{stepped}').IsShown( {gui} ), "
+                              f"Not( GetScriptedGui('{ready}').IsShown( {gui} ) ) )]\"", note)
+
 
 class StatesTest(unittest.TestCase):
     @classmethod

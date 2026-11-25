@@ -1302,7 +1302,8 @@ types te_demographics_widgets
 	### by events as counted. Each legend row's hover gives its cause's rate against a poor country's and what sets it (by
 	### people across our states, and the capital's).
 	### Then Health Care Access, people-weighted. Open by default (rule 1), its own flag.
-	### The pie waits for a count with deaths by cause (te_demog_dc_ready_sgui); until then one line.
+	### The pie waits for a count with deaths by cause (te_demog_dc_ready_sgui); until then one line, once the
+	### Deaths row has a figure (before it, the row's "At the next yearly census" says it).
 	type te_demog_sec_causes = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -1337,8 +1338,11 @@ types te_demographics_widgets
 					text = "[SelectLocalization( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_cd_cdr_value', 'te_demog_ov_pending' )]"
 				}
 			}
+			### The pie's wait, once the Deaths row above has a figure: until the first stepped
+			### census that row already says "At the next yearly census", and the line under it
+			### said the same again (2026-11-24, a new game's January)
 			te_demog_text = {
-				visible = "[Not( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"
+				visible = "[And( GetScriptedGui('te_demog_stepped_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( GetScriptedGui('te_demog_dc_ready_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
 				text = "te_demog_cd_dc_pending"
 			}
 			### The pie and its legend: last year's deaths by cause
@@ -4770,7 +4774,8 @@ types te_demographics_widgets
 	### by events as counted. Each legend row's hover gives its cause's rate against a poor country's and what sets it, the
 	### factors the census multiplies.
 	### Then Health Care Access with where it is heading. Open by default (rule 1), its own flag.
-	### The pie waits for a count with deaths by cause (te_demog_state_dc_sgui); until then one line.
+	### The pie waits for a count with deaths by cause (te_demog_state_dc_sgui); until then one line, once the
+	### Deaths row has a figure (before it, the row's "At the next yearly census" says it).
 	type te_state_demog_causes = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -4805,8 +4810,10 @@ types te_demographics_widgets
 					text = "[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_cdr_value', 'te_demog_ov_pending' )]"
 				}
 			}
+			### The pie's wait, once the Deaths row above has a figure, as the country's
+			### (te_demog_sec_causes): before, the row's "At the next yearly census" said it
 			te_demog_text = {
-				visible = "[Not( GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) )]"
+				visible = "[And( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), Not( GetScriptedGui('te_demog_state_dc_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ) ) )]"
 				text = "te_demog_st_dc_pending"
 			}
 			### The pie and its legend: last year's deaths by cause
