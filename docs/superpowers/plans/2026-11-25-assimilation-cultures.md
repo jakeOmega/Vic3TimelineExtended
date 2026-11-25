@@ -272,7 +272,7 @@ def test_both_modifier_types_are_script_only_and_named(self):
 
 Nothing converts while `te_hc_has_host` is 0. "local" is the local variable `te_hc_has_local_<group>` for the pop's heritage group.
 
-- **The local culture** (spec § The pass, step 4). Under mode 1, after the host is picked, `te_hc_find_locals` (state scope) sets the ten locals `te_hc_has_local_<group>` to 0, then walks the owner's cultures (`every_scope_culture` on the country, which lists the cultures with people there) and, for each that shares no heritage group with any primary culture of the owner, speaks the host's language (`shares_language_trait_with_culture = scope:te_hc_host`) and has a homeland in a state the owner holds, saves it as `te_hc_l_<its group>` and sets that group's local to 1. A culture whose homeland this state is replaces one saved before it for the same group; otherwise the first found is kept. The cheap trait tests come before the walk of the owner's states.
+- **The local culture** (spec § The pass, step 4). Under mode 1, after the host is picked, `te_hc_find_locals` (state scope) sets the ten locals `te_hc_has_local_<group>` to 0, then walks the owner's cultures (`every_scope_culture` on the country, which lists the cultures with people there) and, for each that shares no heritage group with any primary culture of the owner, speaks the host's language (`shares_language_trait_with_culture = scope:te_hc_host`) and belongs here, saves it as `te_hc_l_<its group>` and sets that group's local to 1. It belongs here when this state is one of its homelands, or the owner holds a state that is a homeland of both it and one of the owner's primary cultures. A culture whose homeland this state is replaces one saved before it for the same group; otherwise the first found is kept. The cheap trait tests come before the walk of the owner's states.
 
 - [ ] **Step 1: The value tests** (`test_assimilation_cultures_values.py`; a Python twin `pop_rate(state_mult, status_mult=0, radicals=0, fervor=0, homeland=False)` built from the numbers the test reads out of the values file):
 
@@ -305,7 +305,7 @@ def test_the_status_ladder_covers_five_statuses_at_vanillas_thresholds(self):
 def test_a_state_without_a_primary_culture_takes_the_capitals_host(self):   # Review Focus 5
 def test_only_incorporated_states_are_walked(self):                        # Review Focus 5
 def test_under_one_person_converts_the_whole_pop_and_zero_converts_nobody(self):
-def test_a_local_culture_needs_people_language_group_and_a_homeland_in_the_country(self):
+def test_a_local_culture_needs_people_language_group_and_a_shared_homeland(self):   # this state its homeland, or an owned state a homeland of it and of a primary culture
 def test_local_flags_are_reset_in_every_state(self):                # Review Focus 2
 def test_the_local_search_names_no_culture(self):
 def test_the_pass_names_no_culture(self):                         # no `cu:` in the three hand-written files but the sentinel in the triggers file
