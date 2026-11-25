@@ -866,6 +866,23 @@ engine fact it rests on is in use elsewhere in the panel (two chained scopes on 
 `click_modifiers`: the Transfer popup; the selected-tab look: the Strategic Reserve's policies). Console option n of
 `event te_debug_space_race.6` fills the reserve, to tell built hulls from launched ones.
 
+**Seen in game 2026-11-25** (PR #2063; `game_qa` on a copy of the owner's USA save of June 2043, the branch in a
+variant mod, runs `20261125T215243Z`, `20261125T220413Z` and `20261125T221607Z`; 3840 x 2160, scale 1.5; shots in
+`/mnt/d/vic3te-data/sr-orders-2026-11-25/shots/`). Steps 1, 2 and 3's plain clicks, as written, with the hovers of
+an order's +, a weight's + at 3 (greyed, "Its weight is below 3" crossed) and the mode in force. Steps 4, 5, 7 and
+8 with the month run from a setup (`sr_sc_month = yes`), not by passing days: from Paused, Full read Resuming and
+the first step built nothing; orders of 30 Warships and 15 Siege at 17.8331 a month came down 2 to 1 (18.11127
+and 9.05564, then 6.22254 and 3.11128, Months to build them 2, then 1) and the fourth step moved both whole (Siege
+in the reserve exactly 15, neither order's variable left) with the rest to the mix; Orders Only with nothing on
+order built nothing at the next step and read Idle with Construction Paused on the building; an order placed
+while idle read Resuming, and withdrawn, Idle again; one hull ordered then built 1.0 and idled. Under the game's
+own monthly pulse the resume was seen to take effect (Resuming to building between 3 and 9 July). No line in
+`error.log` named the new script or panel. **Not seen:** shift-click and ctrl-click (the harness holds no key; the
+form is the Transfer popup's), an order built and launched under the game's own pulse, step 6 by hand
+(`OrdersRunTest` runs it) and step 9. Two of the runs ended in a crash while days passed, both in the engine's
+random lock as the harness's date read met a running tick (#1963, with the folders): the harness's, not the
+panel's, and the reason the month was run from a setup.
+
 1. **The layout.** Under the six cells: Launch, Auto-launch: On and Crews first: Hulls in one row, none cut short;
    the Construction heading; Full (drawn selected), Orders Only and Paused; then the table, its five heads each over
    its column and the rows not wider than the cells above; then Hulls on order: 0. Nothing ends in "...", and the −,
