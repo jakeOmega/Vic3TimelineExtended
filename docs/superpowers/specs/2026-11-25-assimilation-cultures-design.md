@@ -1,6 +1,6 @@
 # Assimilation cultures: heritage as a limit on assimilation, behind a game rule
 
-Status: design draft, 2026-11-25. The owner answered the eight decisions the same day (§ Decided) and raised three points that are still open (§ Still open). Nothing is built.
+Status: design draft, 2026-11-25. The owner answered the draft's questions the same day (§ Decided). One thing is open, which languages the roster adds for Africa and the Americas (§ Still open); it is a config list and holds up nothing else. Nothing is built.
 
 ## Why
 
@@ -46,7 +46,7 @@ Anti-goals:
 
 ## Approaches considered
 
-1. **The group define on for everyone, and one scripted pass that does all assimilation across heritage groups under every setting** (chosen by the owner, 2026-11-25: "I like it with the rule"). The engine keeps every assimilation within a heritage group, as now. Across groups it does nothing, and script converts: into the hybrid under Hybrid Cultures, into the majority primary culture under Unrestricted, and not at all under None. One pass, branching on the rule. Its cost is that Unrestricted is an imitation of the engine, not the engine (§ What Unrestricted gets wrong).
+1. **The group define on for everyone, and one scripted pass that does all assimilation across heritage groups under every setting** (chosen by the owner, 2026-11-25: "I like it with the rule"). The engine keeps every assimilation within a heritage group, as now. Across groups it does nothing, and script converts: into the hybrid under Hybrid Cultures, into the majority primary culture under Unrestricted, and under None not at all until a law allows it. One pass, branching on the rule. Its cost is that Unrestricted is an imitation of the engine, not the engine (§ What Unrestricted gets wrong).
 2. **No rule: the define on and hybrids for everyone**, as before 1.12. Nothing to imitate, and half the testing. No way out for a player who dislikes it, and the brief asks for a rule.
 3. **The define untouched, and script that gets to a pop before the engine does.** Off would then be vanilla itself, with no script at all. Rejected: nothing switches the engine's assimilation off for some pops of a state and not others (the levers are per state or per acceptance status), so with the rule on the engine would keep moving the same pops straight into the majority culture, a tenth to a fifth of them a year in a late game.
 4. **The heritage trait define** instead of the group one. Rejected: it would stop a Pole assimilating in Germany, and the hybrids would number 110 heritages times the languages. The group is the old rule's grain.
@@ -60,16 +60,16 @@ Anti-goals:
 ### The cultures
 
 - **One hybrid for each roster language and heritage group**, `hc_<language>_<group>` (`hc_anglophone_african`), less the group that is the only one the language's own cultures have: German needs no European hybrid. The prefix is for the reason `cm_` has one.
-- **Roster**, a list in the generator's config, where a language is one line. The rule: the 30 languages with the most people living under them in 1836 together with the 30 with the most speakers, 39 in all, since a count by rulers alone misses the languages of colonized peoples (Bengali's language is second in the world by speakers and 70th by rulers). With the five languages the tier-2 merges mint (`language_cm_latin` and its kin) that is 44 languages and 409 cultures; the hand list in § Still open would add 45. Every language that is primary somewhere in 1836 would be 130 languages and about 1,230 cultures; every language, 1,782.
+- **Roster**, a list in the generator's config, where a language is one line. The rule: the 30 languages with the most people living under them in 1836 together with the 30 with the most speakers, 39 in all, since a count by rulers alone misses the languages of colonized peoples (Bengali's language is second in the world by speakers and 70th by rulers). With the five languages the tier-2 merges mint (`language_cm_latin` and its kin) and the five the owner agreed by hand (Greek, South Slavic, Philippinic, Amharic, Burmic) that is 49 languages and 454 cultures; the ten proposed in § Still open would make 59 and 544. The count was taken over every country in the 1836 history, the 158 decentralized nations among them. Every language that is primary somewhere in 1836 would be 130 languages and about 1,230 cultures; every language, 1,782.
 
   | Region | Languages (vanilla's name, then its main cultures) |
   |---|---|
-  | Europe | Anglophone (English, Yankee, Dixie, Scottish), Germanophone, Francophone, Hispanophone (Spanish, Mexican and 17 more), Lusophone (Portuguese, Brazilian), Italian, Dutch (Dutch, Flemish, Boer), East Slavic (Russian, Ukrainian, Byelorussian), West Slavic (Polish, Czech, Slovak), Scandinavian, Hungarian, Eastern Romance (Romanian), Occitano-Romance (Occitan, Catalan), Gaelic (Irish, Gael) |
+  | Europe | Anglophone (English, Yankee, Dixie, Scottish), Germanophone, Francophone, Hispanophone (Spanish, Mexican and 17 more), Lusophone (Portuguese, Brazilian), Italian, Dutch (Dutch, Flemish, Boer), East Slavic (Russian, Ukrainian, Byelorussian), West Slavic (Polish, Czech, Slovak), Scandinavian, Hungarian, Eastern Romance (Romanian), Occitano-Romance (Occitan, Catalan), Gaelic (Irish, Gael), Greek, South Slavic (Serbian, Croatian, Bosniak) |
   | Middle East, North Africa | Arabic, Oghuz (Turkish, Azerbaijani, Turkmen), Persian, Berber |
   | South Asia | Hindustani, Magadhan (Bengali, Bihari, Oria), Tamil-Tulu (Tamil, Kannada, Malayalam), Southern Indic (Marathi, Sinhala), Western Indic (Rajput, Gujarati), Northwestern Indic (Punjabi, Sindi), South-Central (Telugu, Gondi), Pahari (Nepali) |
   | East Asia | Mandarin (Han), Yue, Min, Hakka, Jurchenic (Manchu), Japanese, Korean, Tibetan |
-  | Southeast Asia | Malay (Javan, Malay, Sumatran), Vietic (Vietnamese), Siamese (Thai) |
-  | Africa | Fulani, Hausa |
+  | Southeast Asia | Malay (Javan, Malay, Sumatran), Vietic (Vietnamese), Siamese (Thai), Philippinic (Tagalog, Visayan), Burmic (Burmese) |
+  | Africa | Fulani, Hausa, Amharic (Amhara) |
 - **Traits.** The language is the host's. The heritage is one diaspora trait for each group, minted in vanilla's group (`heritage_hc_east_asian` in `heritage_group_east_asian`), except that the African hybrids use vanilla's `heritage_african_diaspora`, Afro-American's own trait.
 - **Name**, spliced from vanilla's own names for the language and the group, so it follows any rename or translation: `$language_anglophone$ $heritage_group_african$` reads "Anglophone African"; "Lusophone East Asian", "Mandarin European". Where vanilla's word is a linguist's ("Oghuz European", "Jurchenic African", "Eastern Romance African"), the config gives that language or group a word of its own for the hybrids' names ("Turkic", "Manchu", "Romanian"), by the owner's rule: "we should try to make them sound good if there are any cases where the default rule makes something that sounds bad". The build's PR lists every name for a read-through.
 - **Other fields**, derived, none typed in: name lists and religion from the language's largest culture by 1836 population; ethnicities and graphics from the group's largest; a color between the two; no traditions, obsessions or homelands. The six static modifiers and three modifier types come from the functions `gen_culture_merges.py` already has, moved to a module both generators use.
@@ -79,7 +79,7 @@ Anti-goals:
 
 ### The pass
 
-One hand-written effect, run for each of a country's states from that country's yearly pulse (the engine spreads the countries' pulses over the year), under Hybrid Cultures and Unrestricted.
+One hand-written effect, run for each of a country's states from that country's yearly pulse (the engine spreads the countries' pulses over the year), under every setting.
 
 1. **Skip** a state where no culture of another heritage group lives (`any_scope_culture`, which walks the state's cultures, not its pops).
 2. **The host culture** of the state is the majority primary culture (the owner's correction, 2026-11-25): the owner's primary culture with the most people in that state. It sets both the language a hybrid takes and the culture a pop joins. No primary culture present: nothing converts, as in the engine, unless the state carries `state_allow_assimilation_without_presence_bool`. So Quebec's host is Franco-Canadian and Ontario's Anglo-Canadian. Counting costs one more pop walk for each primary culture, and only where the owner has more than one.
@@ -87,6 +87,8 @@ One hand-written effect, run for each of a country's states from that country's 
    - its culture shares no heritage group with any primary culture of the owner;
    - the state is not a homeland of its culture, or carries `state_allow_assimilation_in_homeland_bool`;
    - the owner's laws let its acceptance status assimilate (`country_allow_assimilation_<status>_bool`).
+
+   Under Ancestral Citizenship (`law_ethnostate`) no pop joins a culture of another heritage group, under any setting and whatever the Bodily Autonomy law (owner, 2026-11-25). The law carries a bool the pass reads, `country_cross_heritage_assimilation_blocked_bool`, so its tooltip says so. The language step still runs there. Under Unrestricted, where every conversion crosses heritage, that leaves nothing: an Ancestral Citizenship country assimilates only within its heritage group, which is not vanilla's behavior. Within a group the engine runs assimilation and no law can filter it by heritage trait; that is left to acceptance, where the law already puts a pop sharing only the group 20 points below one sharing the trait.
 
    | Minority Rights law | Statuses that assimilate |
    |---|---|
@@ -99,8 +101,10 @@ One hand-written effect, run for each of a country's states from that country's 
 
    | The pop | Hybrid Cultures | Unrestricted | None |
    |---|---|---|---|
-   | does not speak the host's language | the hybrid of the host's language and its own heritage group (the language step); nothing where the roster has no such hybrid | the host culture | nothing |
-   | speaks it: a hybrid, or a vanilla culture such as Afro-American under a Yankee host | the host culture (the heritage step), at the rate times the country's `country_cross_heritage_assimilation_add`, which is 0 without a Bodily Autonomy law | the host culture | nothing (§ Still open, 2) |
+   | does not speak the host's language | the hybrid of the host's language and its own heritage group (the language step) | the host culture | the host culture, at the rate times the crossing share |
+   | speaks it: a hybrid, or a vanilla culture such as Afro-American under a Yankee host | the host culture (the heritage step), at the rate times the crossing share | the host culture | the same |
+
+   The crossing share is the country's `country_cross_heritage_assimilation_add`, 0 without a Bodily Autonomy law. So None is Hybrid Cultures without the hybrids (owner, 2026-11-25): a wall until a law opens it, then straight across. A host whose language is off the roster is treated as under None *(my call)*, so that a Bodily Autonomy law opens the wall there too.
 
 5. **The rate**, the fraction of the pop that converts that year: 12 × 0.002 (the engine's monthly `ASSIMILATION_RATE`) × (1 + the state's `state_assimilation_mult`) × (1 + the owner's `country_assimilation_<status>_mult`), each factor no lower than 0, × (1 − the pop's radical share) × the culture's fervor factor (the mod's define, 0.0075 a point) × 0.75 in a homeland, capped at one half. It reads the engine's own sums, so every law, institution, decree and Cultural Hegemony bonus that speeds assimilation speeds this, with no second list to keep. With no modifiers that is 2.4% a year, half a community in 29 years; at the +690% of the owner's 2039 New York it is 19% a year.
 6. **The hybrids' scopes**, under Hybrid Cultures: a generated ladder with one branch per roster language tests the host's language trait once per state and saves that language's ten hybrids, each behind `exists = cu:<hybrid>`. It is the only generated script; the pass itself is written by hand, and its conversions name the saved scopes.
@@ -114,10 +118,10 @@ Cost: the old pulse ran about 300 blocks for every state every month, and two po
 - **"Assimilation Across Heritages"**, three settings (the third is the owner's, 2026-11-25: "a disabled rule, where there is just no assimilation across heritage groups"):
   - **Hybrid Cultures**: the language step, and the heritage step once a law opens it.
   - **Unrestricted**: the imitation of vanilla. The default in the release that adds the rule; Hybrid Cultures becomes the default once an observer run and a played game have been read.
-  - **None**: the bare define. No pop changes heritage group by assimilation, and the pass does nothing.
+  - **None**: Hybrid Cultures without the hybrids. No pop changes heritage group by assimilation until a Bodily Autonomy law opens it, and then it joins the host culture directly.
 - **Key** `assimilation_cultures_rule`, settings `assimilation_cultures_hybrid`, `assimilation_cultures_unrestricted` and `assimilation_cultures_none`. Each branch is a positive test of its own setting, and the hybrid branch also asks `exists = cu:hc_anglophone_african`; a game that names none of the three takes the Unrestricted branch.
 - **A game begun before the cultures existed** has no object for them and lists no setting for the rule. It goes on assimilating across heritage as it did, through the Unrestricted branch, and no hybrid is ever named.
-- **Changed mid-game**: nothing to tear down, since the system keeps no modifier, variable or journal entry. Hybrid pops stay hybrids. Under Unrestricted they are ordinary pops of another heritage group from the next pass, so they drain into the host culture at the yearly rate; under None they stay as they are. Back on Hybrid Cultures, the language step resumes.
+- **Changed mid-game**: nothing to tear down, since the system keeps no modifier, variable or journal entry. Hybrid pops stay hybrids. Under Unrestricted they are ordinary pops of another heritage group from the next pass, so they drain into the host culture at the yearly rate; under None they stay as they are until a law opens the wall. Back on Hybrid Cultures, the language step resumes.
 
 ### The Bodily Autonomy laws
 
@@ -171,29 +175,36 @@ The owner, 2026-11-25, on the draft's eight questions:
 
 1. **The shape**: the rule, with script doing the work across heritage groups ("I like it with the rule").
 2. **Name and default**: as recommended, with a third setting, None (§ The rule).
-3. **Which pairs get a culture**: a config roster of about 44 languages, on condition of seeing the list (§ The cultures; the hand list is open, below).
+3. **Which pairs get a culture**: a config roster, listed in § The cultures, with Greek, South Slavic, Philippinic, Amharic and Burmic added by hand ("good additions - agreed with all!"). More for Africa and the Americas are open, below.
 4. **Who may convert**: the Minority Rights laws' per-status switches.
 5. **The hybrids' heritage trait**: one diaspora trait per group, the African one vanilla's own.
 6. **The names**: spliced, with a word of the mod's own where vanilla's sounds bad.
 7. **The law table**: as drawn, the conversion reading the state's assimilation modifier.
 8. **The heritage step takes any culture that speaks the host's language**, not only a generated hybrid.
 
-Also the owner's: the host is the majority primary culture; the imitation's differences from the engine are acceptable ("That's fine").
+Also the owner's: the host is the majority primary culture; the imitation's differences from the engine are acceptable ("That's fine"); Ancestral Citizenship blocks joining a culture of another heritage group ("Good idea - agreed"); None "is hybrid cultures without the hybrids".
 
-Calls of mine the owner has seen and not overruled: the group define, not the trait one; slaves take the language step only; no patch for vanilla's share tests.
+Calls of mine the owner has seen and approved ("good"): the group define, not the trait one; slaves take the language step only; the host counted per state; no patch for vanilla's share tests.
 
 ## Still open
 
-1. **Ancestral Citizenship** (`law_ethnostate`; the owner: "we can allow people to assimilate across heritages (maybe law_ethnostate stops that?)"). Across heritage groups script runs the conversion, so the law can stop it exactly: a bool on the law that the pass reads, shown in the law's tooltip. Within a heritage group the engine runs it, and nothing lets one law filter by heritage trait: the define is for every country, and the per-country levers are by acceptance status or for a whole state. The law already puts a pop that shares only the group 20 points of acceptance below one that shares the trait, which a Minority Rights law then turns into assimilating or not. Proposed: the bool, stopping the heritage step under every setting, a Bodily Autonomy law notwithstanding; the language step still runs; within a group, left to acceptance.
-2. **None and the Bodily Autonomy laws.** Read literally, None lets nothing across whatever the laws say, and the laws' new line is then dead under two of the three settings. The other reading is Hybrid Cultures without the hybrids: a wall until a Bodily Autonomy law opens it. Proposed: the second.
-3. **The roster's hand list.** Proposed additions, nine cultures each: Greek, South Slavic (Serbian, Croatian, Bosniak), Philippinic (Tagalog, Visayan), Amharic and Burmic, for 49 languages and 454 cultures. Candidates to drop: Jurchenic (Manchu is seldom the majority primary culture of a state), Occitano-Romance and Gaelic (primary nowhere in 1836).
+**The roster's additions for Africa and the Americas.** The owner's concern is Africa, which the count leaves with Fulani, Hausa and Amharic: vanilla splits the continent into about 60 languages, and none of its own reaches the top 30 by speakers or by rulers except those. The mod's own formables make them matter: the African Union lists 49 primary cultures and the East African Federation 18, and under the majority rule each state's host is its largest one. Proposed, nine cultures each:
+
+- **Ethiopia and the Kushitic languages**: Oromo (vanilla's `language_galla`, 2.8 million speakers; the hybrids' names say "Oromo", "Galla" being a name the Oromo reject), Tigrinya (0.5 million), Somali (1.3 million). With Amharic these are all three of Ethiopia's primary cultures.
+- **Bantu**: Lacustrine Bantu (Baganda, Ruanda, Rundi; 4.5 million), Equatorial Bantu (3.6 million), Nguni (Zulu, Xhosa; 1.1 million), Swahili (0.7 million, the coast's language and the East African Federation's).
+- **West Africa**: Yoruba (2.1 million).
+- **The Americas**: Quechuan (1.8 million speakers, the largest by far; Iquicha in 1836, and vanilla's Tawantinsuyu) and Guarani (a primary culture of Paraguay from 1836, where the Guarani are the majority, so in use from the first day). Siouan (Lakota, Dakota, vanilla's Turtle Island) is the pick for one from North America.
+
+Next in line if more are wanted: Fluvial Bantu, Mande, Akan, Malagasy; Nahuan (vanilla's Anahuac).
+
+Not answered, so kept: the three candidates to drop (Jurchenic, Occitano-Romance, Gaelic).
 
 ## Left to the build
 
-Once the three open points are settled, this file is finished to them and read by a fresh reviewer before the plan.
+A fresh reviewer reads this file before the plan is written.
 
 - The generator `scripts/generators/gen_assimilation_cultures.py` and its config, reading `vanilla_parsed/` and `culture_merges_config.py`, never the live mod state; in `POST_LOAD_REGENERATORS` before `organize_loc`, `docs/auto_generated_files.md` and `scripts/nightly_audit_select.py`. The old `assimilation_cultures.py` and the orphaned script value are deleted.
 - The pass and its values by hand (`te_hc_*`), each engine figure it restates (`ASSIMILATION_RATE`, the fervor effect, the homeland factor) pinned to the define files by a test that runs where the game is installed.
-- The modifier type, the four law lines, the rule and its loc; `organize_loc.py`.
+- The two modifier types, the four Bodily Autonomy lines and Ancestral Citizenship's, the rule and its loc; `organize_loc.py`.
 - Tests: the roster and its derived fields; every hybrid's nine expected entries; the ladder against the roster; the pass's branches through a small interpreter, as Culture Merges tests its own; no vanilla culture named in the system's files.
 - A system doc in `docs/systems/mod_systems/` with its index row; the play-test list; the player guide (the rule in `01-introduction.md`'s table, the mechanics beside Culture Merges in `08-states.md`, the law lines where the Bodily Autonomy laws are listed).
