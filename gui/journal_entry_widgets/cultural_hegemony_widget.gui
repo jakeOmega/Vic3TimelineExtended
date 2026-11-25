@@ -90,7 +90,7 @@
 ### ---- ch_policy_sgui op table (mirrored in the sgui file and the system doc) --
 ###   0 / 1   programme funding   decrease / increase
 ###   2 / 3   International Cultural Outreach   begin / end
-###   4 / 5   Cultural Institutes               fund  / defund
+###   4 / 5   Cultural Institutes               fund  / end
 ###   6 / 7   Global Media Campaign             launch / end
 ###   8 / 9   Cultural Protectionism            enact / end
 ###

@@ -7728,8 +7728,8 @@
   "de": "Beendet das #b $ch_cultural_institutes_program$#!, seine Effekte und seine Kosten an [concept_influence]."
  },
  "ch_policy_institutes_off": {
-  "en": "Defund",
-  "de": "Finanzierung einstellen"
+  "en": "End",
+  "de": "Beenden"
  },
  "ch_policy_institutes_on": {
   "en": "Fund",
