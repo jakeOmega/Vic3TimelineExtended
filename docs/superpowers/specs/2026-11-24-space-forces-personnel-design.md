@@ -70,7 +70,7 @@ attraction from; whether pops read it from their workplace is unread.
 ## 3. The building
 
 `common/buildings/05_zz_te_sr_space_forces_base.txt`, `building_space_forces_base`:
-`bg_government`, Space Militarization, `potential` Full Colonies,
+`bg_government`, Space Militarization (Cislunar Infrastructure since 2026-11-25, § 10), `potential` Full Colonies,
 `construction_cost_low` (200), government-built only (`can_build_government`
 reads `sr_pers_may_build_government`), any state and any number of levels.
 One group (`pmg_space_forces_base`), one method (`pm_space_forces_training`):
@@ -249,6 +249,6 @@ follows; the system doc's personnel bullet names every hook.
 | Who is short first | Nobody: the modules join in service, and one share covers fleets, marines and modules | One figure in the Crewed cell explains all three. The modules take theirs when they land, with no gate, as a lost base level does; the gates keep stopping only launches and refills. |
 | What a shortfall does | The share multiplies the three facilities' and Defences' staffed levels, and a Spaceport's repair level. Docking and the integrity bonus need only a level | The staffed levels are what every effect already reads, so one factor reaches all of them. |
 | Simple Colonies | No personnel: the bases are Full only | |
-| Before Space Militarization | The modules wait at a share of 0 under Full; the + button says so, and the AI plans them only with the technology | The base is the building that does the work, a hard gate by the design defaults. A Black Site from a colony's first year now waits for the era 11 technology. |
+| When the base comes | With Cislunar Infrastructure, the technology of Orbital Assembly, the first Module Fabrication method, and of colonization itself; it came with Space Militarization until the same day. Space Command, and so fleets, stay on Space Militarization, and so do the Orbital Yards' hull points (`sr_sc_rate`) | A country can staff a personnel module from the first it can build, and Defenses fire on other countries' fleets before it has any. A base makes its owner a fleet power, whose month runs Space Command's build, so without the gate a base and a yard would build warships a technology early. The AI's plan then needs no gate: a module it can build is one it can build a base for (the owner, 2026-11-25: "fleets come with space militarization, but you can build black sites (or maybe defenses too?) before then and can build the space force base to cover them"). |
 | Holders with no fleet | `space_race_on_action` stores their share, since only a fleet power runs the fleets' month | Making them fleet powers would also run Space Command's month, whose Orbital Yard points would build hulls with no Space Command. |
 | Old saves | `sr_pers_modules_migrate_once`, once a save from the global step | § 8's migration runs per country at its first fleets month, which a holder with no fleet never has; and a save that ran it already needs the modules' levels too. Run per country, it would give a new game's first module holder a free base. |

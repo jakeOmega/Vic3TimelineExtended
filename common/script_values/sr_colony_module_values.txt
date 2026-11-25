@@ -157,7 +157,7 @@ sr_mod_mine_room = { value = 50 }
 # the average world's resort room as the Mining Complex's 50 is half its base room.
 sr_mod_resort_room = { value = 10 }
 # Orbital Yard: module fabrication points a month, and under Full Colonies
-# Space Command strength a month (sr_sc_rate).
+# with Space Militarization Space Command strength a month (sr_sc_rate).
 sr_mod_yard_points = { value = 4 }
 sr_mod_yard_ships = { value = 0.5 }
 # Nuclear Command Center: command reliability (nd_reliability_target), at most

@@ -546,15 +546,3 @@ sr_pers_can_crew_launch = {
 sr_mod_scope_pers_spare = {
 	sr_pers_room_value >= sr_mod_pers_next_need
 }
-
-# Country scope, the AI's module plan (sr_mod_ai_plan_<key>): it plans a Black
-# Site, Training Ground or Nuclear Command Center under Full Colonies only once
-# it can build the Space Forces Bases that staff them, whose builder then
-# follows the demand they add (sr_pers_may_build_government). It never plans
-# Defenses or a Spaceport.
-sr_pers_ai_may_staff_module = {
-	OR = {
-		NOT = { sr_colonies_full_enabled = yes }
-		has_technology_researched = space_militarization
-	}
-}

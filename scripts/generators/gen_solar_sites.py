@@ -2651,11 +2651,6 @@ def _module_ai(site: Site) -> list[str]:
                 f"\t\t\t\t{crew}"]
         if why:
             out.append(f"\t\t\t\t{why}")
-        if t in PERSONNEL_TYPES:
-            # Under Full Colonies, only once it can build the Space Forces Bases
-            # that staff it; its base builder follows the demand
-            # (sr_pers_may_build_government).
-            out.append("\t\t\t\tsr_pers_ai_may_staff_module = yes")
         out += ["\t\t\t}", f"\t\t\t{_queue_call(site, t)}", "\t\t}"]
     out += ["\t}", "}"]
     return out

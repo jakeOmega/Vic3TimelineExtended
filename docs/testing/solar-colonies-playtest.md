@@ -1432,7 +1432,7 @@ point), o puts an enemy fleet at Earth.
 | `TE_SR_PERS migrate country=… in_service=… grace_until_month=…` | once a country, its first fleets month, only when an old save's fleets need more personnel than its bases give | (a record, not a check) the levels the migration built, in Space Command's state or the capital | | |
 | `TE_SR_PERS migrate_modules country=… need=… grace_until_month=…` | once a save, its first month under Full Colonies after the colony modules took personnel (2026-11-25), for each country holding a Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center whose need tops its bases' capacity | (a record, not a check) the levels it built beyond those built and queued, in Space Command's state or the capital | | |
 
-1. **The building.** With Space Militarization under Full Colonies, the build menu offers Space Forces Base in any
+1. **The building.** With Cislunar Infrastructure under Full Colonies, the build menu offers Space Forces Base in any
    state, as a government building only. Its method's tooltip shows 1,000 Spacers a level and +1,000 Space Forces
    Personnel. A level hires Spacers (the state's pops list shows them, with the placeholder soldiers icon), and the
    Map Room's Classes row has Spacers' two maps.
@@ -1469,6 +1469,10 @@ point), o puts an enemy fleet at Earth.
     month base levels appear (`TE_SR_PERS migrate_modules`) and Crewed holds at 100% for six months.
 14. **The Research Station.** A staffed Research Station shows Off-World Research Stations on the Nation tab with
     +25 innovation cap and no research speed; the cap in the innovation tooltip rises by 25.
+15. **A base before fleets.** With Cislunar Infrastructure and without Space Militarization, build a Space Forces
+    Base and an Orbital Yard: Space Command's Built a month stays 0 and the reserve stays empty; with Space
+    Militarization, Built a month reads the yards' 0.5 a staffed level. A Black Site queued at the same time is
+    staffed once the base hires.
 
 ## A giant planet's moons share an Orbital Yard, not their Defenses (2026-11-25)
 

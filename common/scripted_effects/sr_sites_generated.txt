@@ -22380,7 +22380,6 @@ sr_mod_ai_plan_valles_marineris = {
 				sr_mod_can_queue_bunker_valles_marineris = yes
 				sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = valles_marineris TYPE = bunker INDEX = 1 CODE = 13 }
 		}
@@ -22621,7 +22620,6 @@ sr_mod_ai_plan_olympus_mons = {
 				sr_mod_can_queue_bunker_olympus_mons = yes
 				sr_site_crews_olympus_mons >= sr_site_levels_olympus_mons
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = olympus_mons TYPE = bunker INDEX = 2 CODE = 13 }
 		}
@@ -22862,7 +22860,6 @@ sr_mod_ai_plan_hellas_planitia = {
 				sr_mod_can_queue_bunker_hellas_planitia = yes
 				sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = hellas_planitia TYPE = bunker INDEX = 3 CODE = 13 }
 		}
@@ -23111,7 +23108,6 @@ sr_mod_ai_plan_utopia_planitia = {
 				sr_mod_can_queue_bunker_utopia_planitia = yes
 				sr_site_crews_utopia_planitia >= sr_site_levels_utopia_planitia
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = utopia_planitia TYPE = bunker INDEX = 4 CODE = 13 }
 		}
@@ -23352,7 +23348,6 @@ sr_mod_ai_plan_arcadia_planitia = {
 				sr_mod_can_queue_bunker_arcadia_planitia = yes
 				sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = arcadia_planitia TYPE = bunker INDEX = 5 CODE = 13 }
 		}
@@ -23588,7 +23583,6 @@ sr_mod_ai_plan_ceres = {
 				sr_mod_can_queue_bunker_ceres = yes
 				sr_site_crews_ceres >= sr_site_levels_ceres
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = ceres TYPE = bunker INDEX = 6 CODE = 13 }
 		}
@@ -23791,7 +23785,6 @@ sr_mod_ai_plan_vesta = {
 				sr_mod_can_queue_bunker_vesta = yes
 				sr_site_crews_vesta >= sr_site_levels_vesta
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = vesta TYPE = bunker INDEX = 7 CODE = 13 }
 		}
@@ -24002,7 +23995,6 @@ sr_mod_ai_plan_psyche = {
 				sr_mod_can_queue_bunker_psyche = yes
 				sr_site_crews_psyche >= sr_site_levels_psyche
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = psyche TYPE = bunker INDEX = 8 CODE = 13 }
 		}
@@ -24205,7 +24197,6 @@ sr_mod_ai_plan_pallas = {
 				sr_mod_can_queue_bunker_pallas = yes
 				sr_site_crews_pallas >= sr_site_levels_pallas
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = pallas TYPE = bunker INDEX = 9 CODE = 13 }
 		}
@@ -24408,7 +24399,6 @@ sr_mod_ai_plan_hygiea = {
 				sr_mod_can_queue_bunker_hygiea = yes
 				sr_site_crews_hygiea >= sr_site_levels_hygiea
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = hygiea TYPE = bunker INDEX = 10 CODE = 13 }
 		}
@@ -24611,7 +24601,6 @@ sr_mod_ai_plan_io = {
 				sr_mod_can_queue_bunker_io = yes
 				sr_site_crews_io >= sr_site_levels_io
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = io TYPE = bunker INDEX = 11 CODE = 13 }
 		}
@@ -24814,7 +24803,6 @@ sr_mod_ai_plan_europa = {
 				sr_mod_can_queue_bunker_europa = yes
 				sr_site_crews_europa >= sr_site_levels_europa
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = europa TYPE = bunker INDEX = 12 CODE = 13 }
 		}
@@ -25046,7 +25034,6 @@ sr_mod_ai_plan_ganymede = {
 				sr_mod_can_queue_bunker_ganymede = yes
 				sr_site_crews_ganymede >= sr_site_levels_ganymede
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = ganymede TYPE = bunker INDEX = 13 CODE = 13 }
 		}
@@ -25295,7 +25282,6 @@ sr_mod_ai_plan_callisto = {
 				sr_mod_can_queue_bunker_callisto = yes
 				sr_site_crews_callisto >= sr_site_levels_callisto
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = callisto TYPE = bunker INDEX = 14 CODE = 13 }
 		}
@@ -25523,7 +25509,6 @@ sr_mod_ai_plan_himalia = {
 				sr_mod_can_queue_bunker_himalia = yes
 				sr_site_crews_himalia >= sr_site_levels_himalia
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = himalia TYPE = bunker INDEX = 15 CODE = 13 }
 		}
@@ -25726,7 +25711,6 @@ sr_mod_ai_plan_amalthea = {
 				sr_mod_can_queue_bunker_amalthea = yes
 				sr_site_crews_amalthea >= sr_site_levels_amalthea
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = amalthea TYPE = bunker INDEX = 16 CODE = 13 }
 		}
@@ -25942,7 +25926,6 @@ sr_mod_ai_plan_venus = {
 				sr_mod_can_queue_bunker_venus = yes
 				sr_site_crews_venus >= sr_site_levels_venus
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = venus TYPE = bunker INDEX = 17 CODE = 13 }
 		}
@@ -26170,7 +26153,6 @@ sr_mod_ai_plan_mercury = {
 				sr_mod_can_queue_bunker_mercury = yes
 				sr_site_crews_mercury >= sr_site_levels_mercury
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = mercury TYPE = bunker INDEX = 18 CODE = 13 }
 		}
@@ -26386,7 +26368,6 @@ sr_mod_ai_plan_titan = {
 				sr_mod_can_queue_bunker_titan = yes
 				sr_site_crews_titan >= sr_site_levels_titan
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = titan TYPE = bunker INDEX = 19 CODE = 13 }
 		}
@@ -26622,7 +26603,6 @@ sr_mod_ai_plan_enceladus = {
 				sr_mod_can_queue_bunker_enceladus = yes
 				sr_site_crews_enceladus >= sr_site_levels_enceladus
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = enceladus TYPE = bunker INDEX = 20 CODE = 13 }
 		}
@@ -26833,7 +26813,6 @@ sr_mod_ai_plan_rhea = {
 				sr_mod_can_queue_bunker_rhea = yes
 				sr_site_crews_rhea >= sr_site_levels_rhea
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = rhea TYPE = bunker INDEX = 21 CODE = 13 }
 		}
@@ -27036,7 +27015,6 @@ sr_mod_ai_plan_mimas = {
 				sr_mod_can_queue_bunker_mimas = yes
 				sr_site_crews_mimas >= sr_site_levels_mimas
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = mimas TYPE = bunker INDEX = 22 CODE = 13 }
 		}
@@ -27239,7 +27217,6 @@ sr_mod_ai_plan_iapetus = {
 				sr_mod_can_queue_bunker_iapetus = yes
 				sr_site_crews_iapetus >= sr_site_levels_iapetus
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = iapetus TYPE = bunker INDEX = 23 CODE = 13 }
 		}
@@ -27442,7 +27419,6 @@ sr_mod_ai_plan_titania = {
 				sr_mod_can_queue_bunker_titania = yes
 				sr_site_crews_titania >= sr_site_levels_titania
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = titania TYPE = bunker INDEX = 24 CODE = 13 }
 		}
@@ -27645,7 +27621,6 @@ sr_mod_ai_plan_oberon = {
 				sr_mod_can_queue_bunker_oberon = yes
 				sr_site_crews_oberon >= sr_site_levels_oberon
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = oberon TYPE = bunker INDEX = 25 CODE = 13 }
 		}
@@ -27848,7 +27823,6 @@ sr_mod_ai_plan_miranda = {
 				sr_mod_can_queue_bunker_miranda = yes
 				sr_site_crews_miranda >= sr_site_levels_miranda
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = miranda TYPE = bunker INDEX = 26 CODE = 13 }
 		}
@@ -28051,7 +28025,6 @@ sr_mod_ai_plan_ariel = {
 				sr_mod_can_queue_bunker_ariel = yes
 				sr_site_crews_ariel >= sr_site_levels_ariel
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = ariel TYPE = bunker INDEX = 27 CODE = 13 }
 		}
@@ -28254,7 +28227,6 @@ sr_mod_ai_plan_triton = {
 				sr_mod_can_queue_bunker_triton = yes
 				sr_site_crews_triton >= sr_site_levels_triton
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = triton TYPE = bunker INDEX = 28 CODE = 13 }
 		}
@@ -28465,7 +28437,6 @@ sr_mod_ai_plan_proteus = {
 				sr_mod_can_queue_bunker_proteus = yes
 				sr_site_crews_proteus >= sr_site_levels_proteus
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = proteus TYPE = bunker INDEX = 29 CODE = 13 }
 		}
@@ -28668,7 +28639,6 @@ sr_mod_ai_plan_pluto = {
 				sr_mod_can_queue_bunker_pluto = yes
 				sr_site_crews_pluto >= sr_site_levels_pluto
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = pluto TYPE = bunker INDEX = 30 CODE = 13 }
 		}
@@ -28879,7 +28849,6 @@ sr_mod_ai_plan_eris = {
 				sr_mod_can_queue_bunker_eris = yes
 				sr_site_crews_eris >= sr_site_levels_eris
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = eris TYPE = bunker INDEX = 31 CODE = 13 }
 		}
@@ -29082,7 +29051,6 @@ sr_mod_ai_plan_makemake = {
 				sr_mod_can_queue_bunker_makemake = yes
 				sr_site_crews_makemake >= sr_site_levels_makemake
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = makemake TYPE = bunker INDEX = 32 CODE = 13 }
 		}
@@ -29285,7 +29253,6 @@ sr_mod_ai_plan_haumea = {
 				sr_mod_can_queue_bunker_haumea = yes
 				sr_site_crews_haumea >= sr_site_levels_haumea
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = haumea TYPE = bunker INDEX = 33 CODE = 13 }
 		}
@@ -29488,7 +29455,6 @@ sr_mod_ai_plan_sedna = {
 				sr_mod_can_queue_bunker_sedna = yes
 				sr_site_crews_sedna >= sr_site_levels_sedna
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = sedna TYPE = bunker INDEX = 34 CODE = 13 }
 		}
@@ -29686,7 +29652,6 @@ sr_mod_ai_plan_shackleton = {
 				sr_mod_can_queue_bunker_shackleton = yes
 				sr_site_crews_shackleton >= sr_site_levels_shackleton
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = shackleton TYPE = bunker INDEX = 35 CODE = 13 }
 		}
@@ -29884,7 +29849,6 @@ sr_mod_ai_plan_peary = {
 				sr_mod_can_queue_bunker_peary = yes
 				sr_site_crews_peary >= sr_site_levels_peary
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = peary TYPE = bunker INDEX = 36 CODE = 13 }
 		}
@@ -30082,7 +30046,6 @@ sr_mod_ai_plan_tranquility = {
 				sr_mod_can_queue_bunker_tranquility = yes
 				sr_site_crews_tranquility >= sr_site_levels_tranquility
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = tranquility TYPE = bunker INDEX = 37 CODE = 13 }
 		}
@@ -30280,7 +30243,6 @@ sr_mod_ai_plan_marius_hills = {
 				sr_mod_can_queue_bunker_marius_hills = yes
 				sr_site_crews_marius_hills >= sr_site_levels_marius_hills
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = marius_hills TYPE = bunker INDEX = 38 CODE = 13 }
 		}
@@ -30478,7 +30440,6 @@ sr_mod_ai_plan_daedalus = {
 				sr_mod_can_queue_bunker_daedalus = yes
 				sr_site_crews_daedalus >= sr_site_levels_daedalus
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = daedalus TYPE = bunker INDEX = 39 CODE = 13 }
 		}
@@ -30676,7 +30637,6 @@ sr_mod_ai_plan_imbrium = {
 				sr_mod_can_queue_bunker_imbrium = yes
 				sr_site_crews_imbrium >= sr_site_levels_imbrium
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
-				sr_pers_ai_may_staff_module = yes
 			}
 			sr_mod_queue = { KEY = imbrium TYPE = bunker INDEX = 40 CODE = 13 }
 		}

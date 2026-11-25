@@ -130,7 +130,7 @@ class BuildingTest(unittest.TestCase):
     def test_the_building(self):
         body = _block(_strip(_raw(BUILDING)), "building_space_forces_base")
         self.assertIn("building_group = bg_government", body)
-        self.assertRegex(body, r"unlocking_technologies = \{\s*space_militarization\s*\}")
+        self.assertRegex(body, r"unlocking_technologies = \{\s*cislunar_infrastructure\s*\}")
         self.assertRegex(body, r"production_method_groups = \{\s*pmg_space_forces_base\s*\}")
         self.assertIn("sr_colonies_full_enabled = yes", _block("x = {" + body.split("potential = {", 1)[1], "x"))
         self.assertIn("sr_pers_may_build_government = yes", body)
@@ -575,19 +575,29 @@ class ModulePersonnelTest(unittest.TestCase):
             self.assertRegex(loc, rf"(?m)^ {key}:0 ")
         self.assertIn("concept_sr_space_personnel = {}", _raw(ROOT / "common/game_concepts/extra_concepts.txt"))
 
-    def test_the_ai_plans_them_only_once_it_can_staff_them(self):
-        effects = _strip(_raw(gss.ROOT / gss.EFFECTS_OUT))
-        gate = _block(_strip(_raw(TRIGGERS)), "sr_pers_ai_may_staff_module")
-        self.assertIn("has_technology_researched = space_militarization", gate)
-        for site in gss.SITES:
-            plan = _block(effects, f"sr_mod_ai_plan_{site.key}")
-            for branch in re.split(r"\belse_if = \{", plan)[1:]:
-                m = re.search(r"TYPE = (\w+)", branch)
-                if not m:
-                    continue
-                with self.subTest(site=site.key, type=m.group(1)):
-                    self.assertEqual(m.group(1) in gss.PERSONNEL_TYPES, "sr_pers_ai_may_staff_module = yes" in branch)
+    def test_the_base_comes_with_the_first_fabrication_method(self):
+        """The owner, 2026-11-25: a country can staff a personnel module from the
+        first it can build, so the base and its method unlock with the technology
+        of the first Module Fabrication method, not with fleets'."""
+        fab = _block(_strip(_raw(ROOT / "common/production_methods/sr_colony_module_pms.txt")),
+                     "pm_sr_fabrication_orbital_assembly")
+        tech = re.search(r"unlocking_technologies = \{\s*(\w+)\s*\}", fab).group(1)
+        self.assertEqual(tech, "cislunar_infrastructure")
+        for body in (_block(_strip(_raw(BUILDING)), "building_space_forces_base"),
+                     _block(_strip(_raw(PMS)), "pm_space_forces_training")):
+            self.assertRegex(body, rf"unlocking_technologies = \{{\s*{tech}\s*\}}")
+        # So the AI's plan needs no personnel gate of its own: a module it can build
+        # is one it can build a base for.
+        self.assertNotIn("sr_pers_ai_may_staff_module", _raw(gss.ROOT / gss.EFFECTS_OUT))
 
+    def test_yards_build_hulls_only_with_space_militarization(self):
+        """A base makes its owner a fleet power, whose month runs Space Command's
+        build, so a base and an Orbital Yard would otherwise build warships a
+        technology early."""
+        rate = _block(self.values, "sr_sc_rate")
+        self.assertRegex(rate, r"if = \{\s*limit = \{ has_technology_researched = space_militarization \}\s*"
+                               r"add = \{\s*value = sr_mod_units_yard\s*multiply = sr_mod_yard_ships\s*\}")
+        self.assertEqual(rate.count("sr_mod_units_yard"), 1)
 
 if __name__ == "__main__":
     unittest.main()

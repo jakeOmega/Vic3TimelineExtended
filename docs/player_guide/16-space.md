@@ -766,7 +766,7 @@ colonies:
 | Facility | A staffed level gives |
 |---|---|
 | Mining Complex | +50 Extraplanetary Base room at the colony |
-| Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
+| Orbital Yard | +4 module fabrication points a month; under Full Colonies with Space Militarization, +0.5 Space Command strength a month. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
 | Research Station | +25 innovation cap, which pays only while your universities make more innovation than you can invest |
 | Cultural Center | +3% cultural pull, +1% prestige, and +1 to the colony's Resort Draw |
 | Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
@@ -939,7 +939,7 @@ specialization level its crews can run, its founding specialization first, then
 a facility its crews can run: an Administration where autonomy has reached 25 and is heading for 45
 or more and it has 50 authority to spare, a Mining Complex when its bases outgrow their room, an Off-World Resort once
 its Resort Colonies, built and queued, fill all of its resort room, Terraforming once its
-people fill half its room, a Nuclear Command Center with nuclear weapons (under Full Colonies, only once it has Space Militarization), an Orbital Yard with a Space Command, an Orbital Yard, Cultural Center or Materials Foundry that a discovery there doubles, otherwise a Research Station. While
+people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, an Orbital Yard, Cultural Center or Materials Foundry that a discovery there doubles, otherwise a Research Station. While
 anything is queued it runs the best fabrication method it has whose cost fits
 in a twentieth of its government's weekly income, or its cheapest one if none
 does. It never builds Spaceports or Defenses, and never pays for a Habitat past
@@ -1394,7 +1394,7 @@ last month's construction, so pause just after Built a month changes.
 ### Space Forces Personnel
 
 Every ship needs a crew and every marine is a person. The Space Forces Base, a
-government building unlocked by Space Militarization and built in any state,
+government building unlocked by Cislunar Infrastructure and built in any state,
 employs Spacers, the mod's own pop type, 1,000 a level, hired as barracks hire
 soldiers. It uses no goods. Each level gives 1,000 Space Forces Personnel,
 scaled by staffing, and a base in a state an enemy occupies still counts. Each
@@ -1411,9 +1411,11 @@ is in service needs them:
 The colony modules take theirs as soon as they land, whatever is spare, so
 building one with no personnel to spare leaves everything in service short.
 The module's + button says whether you have 1,000 to spare, counting those
-already queued and on their way. Before Space Militarization there are no
-bases to give any, so those five modules do nothing under Full Colonies until
-you build one. Under Simple Colonies they need none.
+already queued and on their way. The base comes with Cislunar Infrastructure,
+the technology that fabricates the first modules, so you can staff one from
+the first you build, a technology before your fleets. Until you build a base,
+those five modules do nothing under Full Colonies. Under Simple Colonies they
+need none.
 
 Space Command's Personnel cell gives those in service out of what your bases
 give. Personnel to spare are what launches the reserve and fills marines:

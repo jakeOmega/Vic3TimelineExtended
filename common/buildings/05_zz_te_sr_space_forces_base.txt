@@ -4,7 +4,9 @@
 # Design: docs/superpowers/specs/2026-11-24-space-forces-personnel-design.md
 # (scope: 2026-11-24-space-forces-personnel-scope.md). A government building,
 # under Full Colonies, in any state and at any number of levels: the people
-# who crew the fleets and serve as marines. A level employs 1,000 Spacers, a
+# who crew the fleets, serve as marines and staff the colonies' Spaceports,
+# Defenses, Black Sites, Training Grounds and Nuclear Command Centers (the
+# owner, 2026-11-25). A level employs 1,000 Spacers, a
 # pop type nothing else employs (common/pop_types/te_spacers.txt), so a kill by
 # pop type reaches only them; its method (sr_space_forces_base_pms.txt) grants
 # +1,000 Space Forces Personnel (state_sr_space_personnel_add, script-only,
@@ -26,8 +28,13 @@ building_space_forces_base = {
 	city_type = city
 	levels_per_mesh = -1
 
+	# Cislunar Infrastructure, the technology of the first Module Fabrication
+	# method (the owner, 2026-11-25): colony modules take personnel, so a country
+	# can staff one from the first it can build. Fleets still wait for Space
+	# Militarization's Space Command, and an Orbital Yard builds hulls only with
+	# it (sr_sc_rate).
 	unlocking_technologies = {
-		space_militarization
+		cislunar_infrastructure
 	}
 
 	production_method_groups = {
