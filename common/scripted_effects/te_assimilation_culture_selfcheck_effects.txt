@@ -20,21 +20,26 @@
 # and the play-test list's Self-checks rows.
 
 # hc_define_blocks: ALLOW_ASSIMILATION_REQUIRE_HERITAGE_GROUP does what its
-# comment in vanilla's defines says. A walk of every incorporated state's pops
-# that the engine is assimilating (has_ongoing_assimilation), in two counts:
-#   same    the pop's culture shares a heritage group with a primary culture of
-#           its country: the engine may assimilate it
-#   other   it shares none: the define should have stopped it
-#   kin     those of `other` whose state holds another culture of their own
-#           heritage group. The engine's target is the most accepted culture
-#           in the state, which need not be primary, so a pop may be
-#           assimilating into such a culture within its group: a BROKEN whose
-#           other equals kin may be only that.
-#   OK      same above 0 (the trigger reads, and there is assimilation to see) and other 0
+# comment in vanilla's defines says. A walk of every incorporated state's pops,
+# in four counts:
+#   same        pops the engine is assimilating (has_ongoing_assimilation) whose
+#               culture shares a heritage group with a primary culture of their
+#               country: the trigger reads, and there is assimilation to see
+#   candidates  pops the define should be stopping: of another heritage group,
+#               outside their homeland, at a status their country lets
+#               assimilate (te_hc_pop_taken, the pass's own test). Without any,
+#               "none is assimilating" proves nothing
+#   other       pops of another heritage group that the engine is assimilating
+#   kin         those of `other` whose state holds another culture of their own
+#               heritage group. The engine's target is the most accepted culture
+#               in the state, which need not be primary, so such a pop may be
+#               assimilating within its group: a BROKEN whose other equals kin
+#               may be only that, and is read by hand before anything is done
+#   OK      same above 0, candidates above 0 and other 0
 #   BROKEN  same above 0 and other above 0
-# Not judged while same is 0: the walk is tried again at the next monthly pulse,
-# three times in all, then gives up with a NOT_JUDGED line so that it never
-# walks the world again.
+# Not judged while same or candidates is 0: the walk is tried again at the next
+# monthly pulse, three times in all, then gives up with a NOT_JUDGED line so
+# that it never walks the world again.
 # Scope: none (the global on_monthly_pulse).
 te_hc_chk_define = {
 	if = {
@@ -56,34 +61,45 @@ te_hc_chk_define = {
 				NOT = { has_global_variable = te_hc_chk_define_wait }
 			}
 			set_local_variable = { name = te_hc_chk_same value = 0 }
+			set_local_variable = { name = te_hc_chk_candidates value = 0 }
 			set_local_variable = { name = te_hc_chk_other value = 0 }
 			set_local_variable = { name = te_hc_chk_kin value = 0 }
 			every_country = {
-				save_temporary_scope_as = te_hc_chk_owner
+				# The names te_hc_pop_taken reads.
+				save_temporary_scope_as = te_hc_owner
 				every_scope_state = {
 					limit = { is_incorporated = yes }
-					save_temporary_scope_as = te_hc_chk_state
+					save_temporary_scope_as = te_hc_state
 					every_scope_pop = {
-						limit = { has_ongoing_assimilation = yes }
 						if = {
 							limit = {
-								culture = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_chk_owner }
+								culture = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
 							}
-							change_local_variable = { name = te_hc_chk_same add = 1 }
+							if = {
+								limit = { has_ongoing_assimilation = yes }
+								change_local_variable = { name = te_hc_chk_same add = 1 }
+							}
 						}
 						else = {
-							change_local_variable = { name = te_hc_chk_other add = 1 }
-							culture = { save_temporary_scope_as = te_hc_chk_culture }
 							if = {
-								limit = {
-									scope:te_hc_chk_state = {
-										any_scope_culture = {
-											NOT = { this = scope:te_hc_chk_culture }
-											shares_heritage_trait_group_with_culture = scope:te_hc_chk_culture
+								limit = { te_hc_pop_taken = yes }
+								change_local_variable = { name = te_hc_chk_candidates add = 1 }
+							}
+							if = {
+								limit = { has_ongoing_assimilation = yes }
+								change_local_variable = { name = te_hc_chk_other add = 1 }
+								culture = { save_temporary_scope_as = te_hc_chk_culture }
+								if = {
+									limit = {
+										scope:te_hc_state = {
+											any_scope_culture = {
+												NOT = { this = scope:te_hc_chk_culture }
+												shares_heritage_trait_group_with_culture = scope:te_hc_chk_culture
+											}
 										}
 									}
+									change_local_variable = { name = te_hc_chk_kin add = 1 }
 								}
-								change_local_variable = { name = te_hc_chk_kin add = 1 }
 							}
 						}
 					}
@@ -91,50 +107,56 @@ te_hc_chk_define = {
 			}
 			change_global_variable = { name = te_hc_chk_define_armed add = 1 }
 			set_global_variable = { name = te_hc_chk_same value = local_var:te_hc_chk_same }
+			set_global_variable = { name = te_hc_chk_candidates value = local_var:te_hc_chk_candidates }
 			set_global_variable = { name = te_hc_chk_other value = local_var:te_hc_chk_other }
 			set_global_variable = { name = te_hc_chk_kin value = local_var:te_hc_chk_kin }
 			if = {
 				limit = {
 					local_var:te_hc_chk_same > 0
-					local_var:te_hc_chk_other = 0
+					local_var:te_hc_chk_other > 0
 				}
 				set_global_variable = { name = te_hc_chk_define_blocks_done value = yes }
-				debug_log = "TE_SELF_CHECK OK hc_define_blocks assimilating_same_group=[GetGlobalVariable('te_hc_chk_same').GetValue|0] assimilating_other_group=[GetGlobalVariable('te_hc_chk_other').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK BROKEN hc_define_blocks assimilating_same_group=[GetGlobalVariable('te_hc_chk_same').GetValue|0] assimilating_other_group=[GetGlobalVariable('te_hc_chk_other').GetValue|0] of_those_with_kin_in_state=[GetGlobalVariable('te_hc_chk_kin').GetValue|0] candidates=[GetGlobalVariable('te_hc_chk_candidates').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (other equal to with_kin may be the engine assimilating within the group into a culture that is not primary: read a pop's panel before acting)"
 			}
 			else_if = {
 				limit = {
 					local_var:te_hc_chk_same > 0
+					local_var:te_hc_chk_candidates > 0
 				}
 				set_global_variable = { name = te_hc_chk_define_blocks_done value = yes }
-				debug_log = "TE_SELF_CHECK BROKEN hc_define_blocks assimilating_same_group=[GetGlobalVariable('te_hc_chk_same').GetValue|0] assimilating_other_group=[GetGlobalVariable('te_hc_chk_other').GetValue|0] of_those_with_kin_in_state=[GetGlobalVariable('te_hc_chk_kin').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString] (other equal to with_kin may be the engine assimilating within the group into a culture that is not primary)"
+				debug_log = "TE_SELF_CHECK OK hc_define_blocks assimilating_same_group=[GetGlobalVariable('te_hc_chk_same').GetValue|0] candidates_the_define_stops=[GetGlobalVariable('te_hc_chk_candidates').GetValue|0] assimilating_other_group=[GetGlobalVariable('te_hc_chk_other').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			else_if = {
 				limit = {
 					global_var:te_hc_chk_define_armed >= 3
 				}
 				set_global_variable = { name = te_hc_chk_define_blocks_done value = yes }
-				debug_log = "TE_SELF_CHECK NOT_JUDGED hc_define_blocks no pop of its country's heritage group was assimilating at three monthly pulses, so the trigger was never seen to read; assimilating_other_group=[GetGlobalVariable('te_hc_chk_other').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+				debug_log = "TE_SELF_CHECK NOT_JUDGED hc_define_blocks three monthly pulses without both a pop of its country's heritage group assimilating and a pop the define should stop; assimilating_same_group=[GetGlobalVariable('te_hc_chk_same').GetValue|0] candidates=[GetGlobalVariable('te_hc_chk_candidates').GetValue|0] assimilating_other_group=[GetGlobalVariable('te_hc_chk_other').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 			}
 			remove_global_variable = te_hc_chk_same
+			remove_global_variable = te_hc_chk_candidates
 			remove_global_variable = te_hc_chk_other
 			remove_global_variable = te_hc_chk_kin
 		}
 	}
 }
 
-# hc_rate_inputs: what te_hc_pop_rate reads from pop scope. On the first taken
-# pop whose country carries an assimilation line of its own (the country's read
-# of state_assimilation_mult is not 0; without that the first half proves
-# nothing):
-#   OK      the state's read of state_assimilation_mult is not 0 either (a
-#           state's read includes its country's lines), the rate is between 0
-#           and te_hc_rate_cap, and the country's
+# hc_rate_inputs: what te_hc_pop_rate and te_hc_pop_status_allowed read. On a
+# taken pop whose country carries an assimilation line of its own (the
+# country's read of state_assimilation_mult is not 0):
+#   OK      the state's read of state_assimilation_mult, from pop scope, equals
+#           the country's: a state with no line of its own, so the read IS the
+#           country's line and nothing else (a state's own decree, obstinance
+#           or building would make the read non-zero whether or not the
+#           country's line reached it); and the country's
 #           country_allow_assimilation_full_acceptance_bool reads yes, as every
 #           Minority Rights law sets it
-#   BROKEN  any of the three fails
-# No line after a few years of a game with Hybrid Cultures or Unrestricted on:
-# the country-scope read of a state_ modifier gives 0 everywhere, and the first
-# half rests on the 2026-10-08 probe alone.
+#   BROKEN  the state's read is 0, or the bool does not read yes
+# A state with lines of its own decides nothing: the check waits for another
+# pop, 200 at most, then gives up with a NOT_JUDGED line. No line at all after
+# a few years under Hybrid Cultures or Unrestricted: the country-scope read of
+# a state_ modifier gives 0 everywhere, and the first half rests on the
+# 2026-10-08 probe alone.
 # Scope: pop (the one call is the first line of te_hc_convert_pop).
 te_hc_chk_rate_inputs = {
 	if = {
@@ -144,7 +166,6 @@ te_hc_chk_rate_inputs = {
 				NOT = { modifier:state_assimilation_mult = 0 }
 			}
 		}
-		set_global_variable = { name = te_hc_chk_rate_inputs_done value = yes }
 		set_global_variable = { name = te_hc_chk_state_mult value = state.modifier:state_assimilation_mult }
 		set_global_variable = { name = te_hc_chk_country_mult value = owner.modifier:state_assimilation_mult }
 		set_global_variable = { name = te_hc_chk_status_mult value = te_hc_status_mult }
@@ -158,15 +179,33 @@ te_hc_chk_rate_inputs = {
 		}
 		if = {
 			limit = {
-				NOT = { global_var:te_hc_chk_state_mult = 0 }
-				global_var:te_hc_chk_rate >= 0
-				global_var:te_hc_chk_rate <= te_hc_rate_cap
-				global_var:te_hc_chk_full = 1
+				OR = {
+					global_var:te_hc_chk_state_mult = 0
+					global_var:te_hc_chk_full = 0
+				}
 			}
+			set_global_variable = { name = te_hc_chk_rate_inputs_done value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN hc_rate_inputs state_assimilation=[GetGlobalVariable('te_hc_chk_state_mult').GetValue|3] country_part=[GetGlobalVariable('te_hc_chk_country_mult').GetValue|3] status_mult=[GetGlobalVariable('te_hc_chk_status_mult').GetValue|3] yearly_rate=[GetGlobalVariable('te_hc_chk_rate').GetValue|4] full_acceptance_may_assimilate=[GetGlobalVariable('te_hc_chk_full').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = {
+				global_var:te_hc_chk_state_mult = global_var:te_hc_chk_country_mult
+			}
+			set_global_variable = { name = te_hc_chk_rate_inputs_done value = yes }
 			debug_log = "TE_SELF_CHECK OK hc_rate_inputs state_assimilation=[GetGlobalVariable('te_hc_chk_state_mult').GetValue|3] country_part=[GetGlobalVariable('te_hc_chk_country_mult').GetValue|3] status_mult=[GetGlobalVariable('te_hc_chk_status_mult').GetValue|3] yearly_rate=[GetGlobalVariable('te_hc_chk_rate').GetValue|4] full_acceptance_may_assimilate=[GetGlobalVariable('te_hc_chk_full').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
 		}
 		else = {
-			debug_log = "TE_SELF_CHECK BROKEN hc_rate_inputs state_assimilation=[GetGlobalVariable('te_hc_chk_state_mult').GetValue|3] country_part=[GetGlobalVariable('te_hc_chk_country_mult').GetValue|3] status_mult=[GetGlobalVariable('te_hc_chk_status_mult').GetValue|3] yearly_rate=[GetGlobalVariable('te_hc_chk_rate').GetValue|4] full_acceptance_may_assimilate=[GetGlobalVariable('te_hc_chk_full').GetValue|0] date=[TimeKeeper.GetCurrentDate.GetString]"
+			# A state with assimilation lines of its own: try another pop.
+			if = {
+				limit = { NOT = { has_global_variable = te_hc_chk_rate_tries } }
+				set_global_variable = { name = te_hc_chk_rate_tries value = 0 }
+			}
+			change_global_variable = { name = te_hc_chk_rate_tries add = 1 }
+			if = {
+				limit = { global_var:te_hc_chk_rate_tries >= 200 }
+				set_global_variable = { name = te_hc_chk_rate_inputs_done value = yes }
+				debug_log = "TE_SELF_CHECK NOT_JUDGED hc_rate_inputs 200 pops, each in a state with assimilation lines of its own; last state_assimilation=[GetGlobalVariable('te_hc_chk_state_mult').GetValue|3] country_part=[GetGlobalVariable('te_hc_chk_country_mult').GetValue|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
 		}
 		remove_global_variable = te_hc_chk_state_mult
 		remove_global_variable = te_hc_chk_country_mult

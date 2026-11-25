@@ -42,6 +42,16 @@ te_hc_culture_lives_in = {
 	}
 }
 
+# Culture scope; reads scope:te_hc_owner. The culture has people in the country. A primary culture
+# need not: a culture that merged away stays primary for a time, and forming a country adds every
+# culture its definition lists. So the pass tests it wherever it would otherwise join pops to a
+# culture, or take its language, with nobody in it.
+te_hc_culture_lives_in_country = {
+	scope:te_hc_owner = {
+		culture_percent_country = { target = PREV value > 0 }
+	}
+}
+
 # Pop scope; reads scope:te_hc_owner and scope:te_hc_state. The pop is one the
 # pass converts: of another heritage group than every primary culture of its
 # country (the engine assimilates the rest itself), outside its homeland unless

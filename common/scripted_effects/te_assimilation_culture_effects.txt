@@ -33,6 +33,8 @@
 #                         fraction itself is the named value te_hc_pop_cross_step)
 #   te_hc_blocked         1 where the owner's laws block joining the host
 #   te_hc_can             0 where nothing can convert in this country this year
+#   te_hc_any_shared      1 where the country holds a homeland a primary culture shares
+#                         with a culture of another heritage group (Hybrid Cultures only)
 #   te_hc_capital_known   1 once te_hc_find_capital_host has run this pass
 #   te_hc_has_capital_host   1 where it found one
 #   te_hc_has_host, te_hc_has_targets, te_hc_has_local_<group>   per state, reset
@@ -75,6 +77,27 @@ te_hc_yearly_country = {
 		}
 		set_local_variable = { name = te_hc_capital_known value = 0 }
 		set_local_variable = { name = te_hc_has_capital_host value = 0 }
+		# Hybrid Cultures: does the country hold a state that is a homeland of both a
+		# primary culture and a culture of another heritage group living there? Asked
+		# once here, so that te_hc_find_locals walks the country's states for a
+		# candidate only where the answer can be yes (most countries hold none).
+		set_local_variable = { name = te_hc_any_shared value = 0 }
+		if = {
+			limit = {
+				local_var:te_hc_mode = 1
+				any_scope_state = {
+					save_temporary_scope_as = te_hc_shared_state
+					scope:te_hc_owner = {
+						any_primary_culture = { has_homeland = scope:te_hc_shared_state }
+					}
+					any_scope_culture = {
+						has_homeland = scope:te_hc_shared_state
+						NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
+					}
+				}
+			}
+			set_local_variable = { name = te_hc_any_shared value = 1 }
+		}
 		# Where nothing can convert, no state is walked: Unrestricted under a block, and
 		# None under a block or with no crossing share (every country before the Bodily
 		# Autonomy laws). Hybrid Cultures always has the language step.
@@ -201,8 +224,10 @@ te_hc_weigh_primary = {
 
 # Any scope; reads scope:te_hc_owner. Saves scope:te_hc_capital_host and sets
 # te_hc_has_capital_host: the capital's host by te_hc_pick_host's rule, or, with
-# no primary culture in the capital either, any primary culture. Run at most
-# once per country per pass (te_hc_capital_known).
+# no primary culture in the capital either, any primary culture that has people
+# in the country (one that merged away can still be primary); with none, no
+# host, and the states that needed one convert nobody. Run at most once per
+# country per pass (te_hc_capital_known).
 te_hc_find_capital_host = {
 	set_local_variable = { name = te_hc_capital_known value = 1 }
 	set_local_variable = { name = te_hc_best value = 0 }
@@ -218,6 +243,7 @@ te_hc_find_capital_host = {
 		if = {
 			limit = { local_var:te_hc_has_capital_host = 0 }
 			random_primary_culture = {
+				limit = { te_hc_culture_lives_in_country = yes }
 				save_temporary_scope_as = te_hc_capital_host
 				set_local_variable = { name = te_hc_has_capital_host value = 1 }
 			}
@@ -253,9 +279,10 @@ te_hc_reset_locals = {
 # in New York too, and a Britain that has taken Georgia makes them in Georgia
 # only. Found by trait, so none is named. For each heritage group the one saved
 # is the first found, unless a later one has its homeland here.
-# every_scope_culture on a country lists the cultures that have people there, so
-# a culture that has merged away (Afro-American into American) is not found, and
-# the merge is no way across the wall.
+# A culture that has merged away (Afro-American into American) has nobody left in
+# the country, so te_hc_culture_lives_in_country keeps it out, and the merge is no
+# way across the wall. The test is explicit because nobody has read in game
+# whether every_scope_culture on a country lists only the cultures with people.
 te_hc_find_locals = {
 	te_hc_reset_locals = yes
 	scope:te_hc_owner = {
@@ -263,6 +290,7 @@ te_hc_find_locals = {
 			limit = {
 				NOT = { shares_heritage_trait_group_with_any_primary_culture = scope:te_hc_owner }
 				shares_language_trait_with_culture = scope:te_hc_host
+				te_hc_culture_lives_in_country = yes
 			}
 			save_temporary_scope_as = te_hc_cand
 			set_local_variable = { name = te_hc_here value = 0 }
@@ -272,6 +300,7 @@ te_hc_find_locals = {
 			}
 			else_if = {
 				limit = {
+					local_var:te_hc_any_shared = 1
 					scope:te_hc_owner = {
 						any_scope_state = {
 							save_temporary_scope_as = te_hc_shared_state
@@ -324,39 +353,44 @@ te_hc_convert_pop = {
 	# TEMPORARY self-check hc_rate_inputs (te_assimilation_culture_selfcheck_effects.txt; delete after the play-test).
 	te_hc_chk_rate_inputs = yes
 	set_local_variable = { name = te_hc_done value = 0 }
+	# A rate of 0 (Clade Citizenship's -300% with under +200% of other assimilation, a pop that is
+	# all radicals) converts nobody, and change_pop_culture is not called with 0.
 	if = {
-		limit = {
-			local_var:te_hc_mode = 1
-			NOT = { te_hc_speaks_host = yes }
-		}
-		te_hc_language_step = { G = african }
-		te_hc_language_step = { G = central_asian }
-		te_hc_language_step = { G = east_asian }
-		te_hc_language_step = { G = european }
-		te_hc_language_step = { G = indigenous_american }
-		te_hc_language_step = { G = indigenous_oceanic }
-		te_hc_language_step = { G = middle_eastern }
-		te_hc_language_step = { G = north_asian }
-		te_hc_language_step = { G = south_asian }
-		te_hc_language_step = { G = southeast_asian }
-	}
-	# Joining the host: every pop under Unrestricted; under the other two a pop that
-	# took no language step (one that speaks the host's language, any pop under None,
-	# and under Hybrid Cultures a pop whose host's language has no hybrid and no
-	# local culture), at the crossing share.
-	if = {
-		limit = {
-			local_var:te_hc_done = 0
-			local_var:te_hc_blocked = 0
-			NOT = { is_pop_type = slaves }
-		}
+		limit = { te_hc_pop_rate > 0 }
 		if = {
-			limit = { local_var:te_hc_mode = 2 }
-			change_pop_culture = { target = scope:te_hc_host value = te_hc_pop_step }
+			limit = {
+				local_var:te_hc_mode = 1
+				NOT = { te_hc_speaks_host = yes }
+			}
+			te_hc_language_step = { G = african }
+			te_hc_language_step = { G = central_asian }
+			te_hc_language_step = { G = east_asian }
+			te_hc_language_step = { G = european }
+			te_hc_language_step = { G = indigenous_american }
+			te_hc_language_step = { G = indigenous_oceanic }
+			te_hc_language_step = { G = middle_eastern }
+			te_hc_language_step = { G = north_asian }
+			te_hc_language_step = { G = south_asian }
+			te_hc_language_step = { G = southeast_asian }
 		}
-		else_if = {
-			limit = { local_var:te_hc_cross > 0 }
-			change_pop_culture = { target = scope:te_hc_host value = te_hc_pop_cross_step }
+		# Joining the host: every pop under Unrestricted; under the other two a pop that
+		# took no language step (one that speaks the host's language, any pop under None,
+		# and under Hybrid Cultures a pop whose host's language has no hybrid and no
+		# local culture), at the crossing share.
+		if = {
+			limit = {
+				local_var:te_hc_done = 0
+				local_var:te_hc_blocked = 0
+				NOT = { is_pop_type = slaves }
+			}
+			if = {
+				limit = { local_var:te_hc_mode = 2 }
+				change_pop_culture = { target = scope:te_hc_host value = te_hc_pop_step }
+			}
+			else_if = {
+				limit = { local_var:te_hc_cross > 0 }
+				change_pop_culture = { target = scope:te_hc_host value = te_hc_pop_cross_step }
+			}
 		}
 	}
 }
@@ -364,7 +398,11 @@ te_hc_convert_pop = {
 # Pop scope: the language step for a pop of heritage group $G$. It joins the
 # local culture for the group where the state has one, else the group's hybrid
 # of the host's language where the roster has it (te_hc_has_targets, which only
-# te_hcg_save_targets sets, behind `exists` on the hybrid).
+# te_hcg_save_targets sets, behind `exists` on the hybrid). A language has no
+# hybrid for its own heritage group, so the ladder saves none for it and the
+# scope may still hold an earlier state's: the target is used only where it has
+# the host's language. That case needs a host whose own culture is of another
+# heritage group than its language's, a hybrid that became a primary culture.
 te_hc_language_step = {
 	if = {
 		limit = {
@@ -380,6 +418,7 @@ te_hc_language_step = {
 			limit = {
 				local_var:te_hc_has_targets = 1
 				exists = scope:te_hc_t_$G$
+				scope:te_hc_t_$G$ = { shares_language_trait_with_culture = scope:te_hc_host }
 			}
 			change_pop_culture = { target = scope:te_hc_t_$G$ value = te_hc_pop_step }
 			set_local_variable = { name = te_hc_done value = 1 }

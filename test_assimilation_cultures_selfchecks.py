@@ -29,7 +29,8 @@ PLAYTEST = ROOT / "docs/testing/assimilation-cultures-playtest.md"
 
 # name -> (effect, latch, the guard that keeps a degenerate input from giving a verdict)
 CHECKS_BY_NAME = {
-    "hc_define_blocks": ("te_hc_chk_define", "te_hc_chk_define_blocks_done", r"local_var:te_hc_chk_same > 0"),
+    "hc_define_blocks": ("te_hc_chk_define", "te_hc_chk_define_blocks_done",
+                         r"local_var:te_hc_chk_same > 0 local_var:te_hc_chk_candidates > 0"),
     "hc_rate_inputs": ("te_hc_chk_rate_inputs", "te_hc_chk_rate_inputs_done",
                        r"owner = \{ NOT = \{ modifier:state_assimilation_mult = 0 \} \}"),
 }
@@ -79,6 +80,36 @@ class VerdictTest(unittest.TestCase):
                 self.assertTrue(text.startswith(f"if = {{ limit = {{ NOT = {{ has_global_variable = {latch} }}"), text[:120])
                 self.assertIn(f"set_global_variable = {{ name = {latch} value = yes }}", text)
 
+    def test_the_latch_is_set_only_with_a_line(self):
+        # Each check sets its latch three times: beside OK, BROKEN and NOT_JUDGED, and nowhere else.
+        for name, (effect, latch, _) in CHECKS_BY_NAME.items():
+            with self.subTest(name=name):
+                text = body(effect)
+                sets = [m.end() for m in re.finditer(re.escape(f"set_global_variable = {{ name = {latch} value = yes }}"), text)]
+                self.assertEqual(len(sets), 3)
+                for end in sets:
+                    self.assertRegex(text[end:end + 60], rf'^ debug_log = "TE_SELF_CHECK (OK|BROKEN|NOT_JUDGED) {name} ')
+
+    def test_ok_needs_something_to_have_been_blocked(self):
+        # Review, 2026-11-25: "no pop of another group is assimilating" is true by default where there is none
+        # to stop. The OK branch needs candidates, counted by the pass's own test.
+        text = body("te_hc_chk_define")
+        self.assertIn("if = { limit = { te_hc_pop_taken = yes } change_local_variable = { name = te_hc_chk_candidates add = 1 } }", text)
+        ok = text.index('debug_log = "TE_SELF_CHECK OK hc_define_blocks')
+        self.assertIn("local_var:te_hc_chk_same > 0 local_var:te_hc_chk_candidates > 0", text[ok - 260:ok])
+        # The pass's test reads these two scopes, so the walk saves them under the pass's names.
+        self.assertIn("every_country = { save_temporary_scope_as = te_hc_owner", text)
+        self.assertIn("save_temporary_scope_as = te_hc_state", text)
+
+    def test_the_rate_check_judges_only_a_state_with_no_line_of_its_own(self):
+        # Review, 2026-11-25: a state's own decree or obstinance makes its read non-zero whether or not the
+        # country's line reached it. OK is the state's read equal to the country's.
+        text = body("te_hc_chk_rate_inputs")
+        ok = text.index('debug_log = "TE_SELF_CHECK OK hc_rate_inputs')
+        self.assertIn("global_var:te_hc_chk_state_mult = global_var:te_hc_chk_country_mult", text[ok - 200:ok])
+        self.assertIn("global_var:te_hc_chk_rate_tries >= 200", text)
+        self.assertEqual(len(re.findall(r'debug_log = "TE_SELF_CHECK NOT_JUDGED hc_rate_inputs ', text)), 1)
+
     def test_a_degenerate_input_gives_no_verdict(self):
         for name, (effect, _, guard) in CHECKS_BY_NAME.items():
             with self.subTest(name=name):
@@ -89,7 +120,6 @@ class VerdictTest(unittest.TestCase):
         text = body("te_hc_chk_define")
         self.assertIn("global_var:te_hc_chk_define_armed >= 3", text)
         self.assertEqual(len(re.findall(r'debug_log = "TE_SELF_CHECK NOT_JUDGED hc_define_blocks ', text)), 1)
-        self.assertEqual(text.count("set_global_variable = { name = te_hc_chk_define_blocks_done value = yes }"), 3)
 
     def test_the_define_check_waits_thirty_days(self):
         text = body("te_hc_chk_define")

@@ -112,38 +112,49 @@ te_hc_pop_rate = {
 }
 
 # ---- The fraction a conversion passes to change_pop_culture ----
-# A pop of fewer people than this converts whole, where its rate is above 0. At
-# the base rate a year's fraction of such a pop is about one person, the
-# engine's own minimum; converting it at once also keeps a state from filling
-# with pops of a few people.
-te_hc_small_pop = 50
+# Where the rate is above 0 at least one person converts, the engine's own rule
+# (NPops MIN_ASSIMILATION = 1). A floor of one person, never the whole pop: a
+# year's new hybrid pop is a few dozen people, and converting a small pop whole
+# sent it on into the host the next year whatever the crossing share (review,
+# 2026-11-25).
+
+# Pop scope. The pop's people, no fewer than 1, to divide by.
+te_hc_pop_size_floor = {
+	value = total_size
+	min = 1
+}
+
+# Pop scope. One person as a fraction of the pop.
+te_hc_one_person = {
+	value = 1
+	divide = te_hc_pop_size_floor
+}
 
 # Pop scope. The fraction for the language step, and for joining the host under
-# Unrestricted: the rate, or 1 for a small pop. 0 stays 0.
-# change_pop_culture takes a named value here, as the Culture Merges pass theirs.
+# Unrestricted: the rate, and no less than one person where the rate is above 0.
+# 0 stays 0. change_pop_culture takes a named value here, as the Culture Merges
+# pass theirs.
 te_hc_pop_step = {
 	value = te_hc_pop_rate
 	if = {
-		limit = {
-			total_size < te_hc_small_pop
-			te_hc_pop_rate > 0
-		}
-		value = 1
+		limit = { te_hc_pop_rate > 0 }
+		min = te_hc_one_person
 	}
+	max = 1
 }
 
 # Pop scope. The fraction for the heritage step: the rate times the owner's
-# crossing share, or 1 for a small pop where both are above 0. With no share
-# it is 0 for every pop.
+# crossing share, and no less than one person where both are above 0. With no
+# share it is 0 for every pop.
 te_hc_pop_cross_step = {
 	value = te_hc_pop_rate
 	multiply = owner.te_hc_cross_share
 	if = {
 		limit = {
-			total_size < te_hc_small_pop
 			te_hc_pop_rate > 0
 			owner = { te_hc_cross_share > 0 }
 		}
-		value = 1
+		min = te_hc_one_person
 	}
+	max = 1
 }
