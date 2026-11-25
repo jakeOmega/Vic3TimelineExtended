@@ -34,7 +34,7 @@
 2. **A temporary scope left over from the previous state or country** (the host, a target hybrid): the pass must not act on it. Pinned in Task 5: `te_hc_has_host` and `te_hc_has_targets` are set to 0 at the top of every state's pass and only read after.
 3. **Assimilation modifiers summing below −100%** (Clade Citizenship's −300% in a country with +100%): the rate is 0, never negative. Pinned in Task 5's value tests.
 4. **A country with primary cultures of two heritage groups** (Paraguay: Platinean and Guarani): a European pop is not taken, and an African pop takes the language of the state's majority primary culture. Pinned in Task 5's outcome table.
-5. **A state where no primary culture lives**: nothing converts, unless the state carries `state_allow_assimilation_without_presence_bool`. Pinned in Task 5's outcome table.
+5. **A state where no primary culture lives** (a newly incorporated colony): the host is the capital's, and an unincorporated state is never walked. Pinned in Task 5's shape tests.
 
 ---
 
@@ -248,13 +248,13 @@ def test_both_modifier_types_are_script_only_and_named(self):
   - Triggers: `te_hc_state_has_other_group` (state), `te_hc_pop_taken` (pop), `te_hc_pop_status_allowed` (pop), `te_hc_speaks_host` (pop).
   - Values: `te_hc_monthly_rate = 0.002`, `te_hc_months = 12`, `te_hc_fervor_effect = 0.0075`, `te_hc_homeland_factor = 0.75`, `te_hc_rate_cap = 0.5`; `te_hc_pop_rate` (pop); `te_hc_cross_share` (country).
   - Local variables, set in `te_hc_yearly_country` unless noted: `te_hc_mode` (1 Hybrid Cultures, 2 Unrestricted, 3 None), `te_hc_cross` (`te_hc_cross_share`), `te_hc_blocked` (1 when the bool reads yes); per state `te_hc_has_host`, `te_hc_has_targets`.
-  - Temporary scopes: `te_hc_owner`, `te_hc_state`, `te_hc_host`, and Task 3's `te_hc_t_<group>`.
+  - Temporary scopes: `te_hc_owner`, `te_hc_state`, `te_hc_host`, `te_hc_capital_host`, and Task 3's `te_hc_t_<group>`.
 
 **The rules the script implements** (spec § The pass):
 
-- `te_hc_yearly_country` does nothing for a country with no state. It walks the states that pass `te_hc_state_has_other_group`: `any_scope_culture` with `NOT = { shares_heritage_trait_group_with_any_primary_culture = <owner> }`.
+- `te_hc_yearly_country` does nothing for a country with no state. It walks the incorporated states (`is_incorporated = yes`) that pass `te_hc_state_has_other_group`: `any_scope_culture` with `NOT = { shares_heritage_trait_group_with_any_primary_culture = <owner> }`.
 - `te_hc_state_pass` first sets `te_hc_has_host` and `te_hc_has_targets` to 0, then picks the host, then, under mode 1, calls `te_hcg_save_targets`, then walks the pops that pass `te_hc_pop_taken`.
-- `te_hc_pick_host`: the owner's primary culture with the most people in the state. With one primary culture present, that one, with no pop walk. With several, each is counted by one pop walk (`total_size` into a local) and the largest kept. A primary culture with no pops in the state is not a candidate unless the state carries `state_allow_assimilation_without_presence_bool`.
+- `te_hc_pick_host`: the owner's primary culture with the most people in the state. With one primary culture present, that one, with no pop walk. With several, each is counted by one pop walk (`total_size` into a local) and the largest kept. With none in the state, the capital's host by the same rule, worked out at most once per country per pass and kept in the temporary scope `te_hc_capital_host`; with none in the capital either, any primary culture.
 - `te_hc_pop_taken`: the culture shares no heritage group with any primary culture of the owner; the state is not a homeland of the culture, or carries `state_allow_assimilation_in_homeland_bool`; `te_hc_pop_status_allowed`.
 - `te_hc_pop_status_allowed`: the owner's `country_allow_assimilation_<status>_bool` for the pop's status, by `pop_acceptance` against vanilla's `acceptance_status_2` to `_5` (20, 40, 60, 80): `violent_hostility`, `cultural_erasure`, `open_prejudice`, `second_rate_citizen`, `full_acceptance`.
 - `te_hc_pop_rate` = `te_hc_monthly_rate` × `te_hc_months` × max(0, 1 + `state.modifier:state_assimilation_mult`) × max(0, 1 + the owner's `country_assimilation_<status>_mult`) × (1 − `pop_radical_fraction`) × max(0, 1 − `te_hc_fervor_effect` × the culture's `culture_current_fervor`) × `te_hc_homeland_factor` in a homeland of the culture; 0 to `te_hc_rate_cap`.
@@ -295,11 +295,12 @@ def test_the_figures_match_the_defines(self):   # 0.0075 against the mod's CULTU
 def test_the_pulse_is_the_yearly_country_one(self):
 def test_the_pass_runs_under_every_setting(self):                 # te_hc_yearly_country has no rule test around its state walk
 def test_host_and_target_flags_are_reset_before_anything_reads_them(self):   # Review Focus 2
-def test_nothing_converts_without_a_host(self):                   # Review Focus 5
+def test_nothing_converts_without_a_host(self):
 def test_the_taken_test_is_by_heritage_group_against_every_primary_culture(self):   # Review Focus 4
 def test_a_pop_in_its_homeland_is_taken_only_with_the_state_bool(self):
 def test_the_status_ladder_covers_five_statuses_at_vanillas_thresholds(self):
-def test_the_host_needs_presence_unless_the_state_bool(self):
+def test_a_state_without_a_primary_culture_takes_the_capitals_host(self):   # Review Focus 5
+def test_only_incorporated_states_are_walked(self):                        # Review Focus 5
 def test_under_one_person_converts_the_whole_pop_and_zero_converts_nobody(self):
 def test_the_pass_names_no_culture(self):                         # no `cu:` in the three hand-written files but the sentinel in the triggers file
 def test_no_world_iterator(self):                                 # no every_state / any_state / every_country in the pass
@@ -314,21 +315,20 @@ def test_no_world_iterator(self):                                 # no every_sta
 
 **Files:**
 - Create: `common/scripted_effects/te_assimilation_culture_selfcheck_effects.txt`, `docs/testing/assimilation-cultures-playtest.md`
-- Modify: `common/on_actions/te_assimilation_culture_on_actions.txt`, `common/scripted_effects/te_assimilation_culture_effects.txt` (two one-line hooks)
+- Modify: `common/on_actions/te_assimilation_culture_on_actions.txt`, `common/scripted_effects/te_assimilation_culture_effects.txt` (one one-line hook)
 - Test: `test_assimilation_cultures_selfchecks.py`
 
 **Interfaces:**
-- Produces three once-a-game lines, each behind a latch global `te_hc_chk_<name>_done`, in the form of `te_culture_merge_selfcheck_effects.txt` (values copied to globals and printed with `GetGlobalVariable`):
+- Produces two once-a-game lines, each behind a latch global `te_hc_chk_<name>_done`, in the form of `te_culture_merge_selfcheck_effects.txt` (values copied to globals and printed with `GetGlobalVariable`):
 
 | Name | Hook | OK | Not judged (no line) |
 |---|---|---|---|
 | `hc_define_blocks` | the global monthly pulse, from 30 days into a game | at least one pop that shares a heritage group with a primary culture of its owner has `has_ongoing_assimilation`, and no pop that shares none has | while no pop of the first kind is assimilating; in a game where a hybrid already has pops |
 | `hc_rate_inputs` | `te_hc_convert_pop`, the first taken pop | from pop scope, `state.modifier:state_assimilation_mult` is not 0 where the owner's own sum of it is not 0, and the owner's `country_allow_assimilation_full_acceptance_bool` reads yes | an owner whose own sum is 0 |
-| `hc_scoped_target` | `te_hc_state_pass`, the first state that converts; the verdict on the monthly pulse 35 days later | the target culture has more people in that state than before the pass | a pass whose expected conversion is under 100 people |
 
 - [ ] **Step 1: Write the failing tests:** each name has an OK and a BROKEN `debug_log` line carrying its numbers; each sits behind its latch and sets it; each has the guard in its last column; the hooks are one call each; no check reads a variable before `has_variable`.
 - [ ] **Step 2: Run** `$PY -m pytest test_assimilation_cultures_selfchecks.py -q`. Expected: FAIL.
-- [ ] **Step 3: Write the checks and the play-test list.** The list has a Self-checks table (each line, what it means, the spec's fallback) and the rows of spec § Unverified, plus: the engine's `country_assimilation_delta_threshold_add`; a rule change mid-game in each direction; a 1.3.x save loaded on the build; Paraguay's first decade (Review Focus 4).
+- [ ] **Step 3: Write the checks and the play-test list.** The list has a Self-checks table (each line, what it means, the spec's fallback) and the rows of spec § Unverified, plus: whether the engine assimilates in an unincorporated state at all; the engine's `country_assimilation_delta_threshold_add`; a rule change mid-game in each direction; a 1.3.x save loaded on the build; Paraguay's first decade (Review Focus 4).
 - [ ] **Step 4: Run** the tests and `$PY scripts/preflight.py --only audits`. Expected: pass.
 - [ ] **Step 5: Commit** by path.
 

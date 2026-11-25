@@ -80,10 +80,10 @@ Anti-goals:
 
 ### The pass
 
-One hand-written effect, run for each of a country's states from that country's yearly pulse (the engine spreads the countries' pulses over the year), under every setting.
+One hand-written effect, run for each of a country's incorporated states from that country's yearly pulse (the engine spreads the countries' pulses over the year), under every setting. Unincorporated states are left out *(my call)*: the old pulse left them out, and the engine's own tooltip gives "live in an incorporated state" as a condition of assimilating.
 
 1. **Skip** a state where no culture of another heritage group lives (`any_scope_culture`, which walks the state's cultures, not its pops).
-2. **The host culture** of the state is the majority primary culture (the owner's correction, 2026-11-25): the owner's primary culture with the most people in that state. It sets both the language a hybrid takes and the culture a pop joins. No primary culture present: nothing converts, as in the engine, unless the state carries `state_allow_assimilation_without_presence_bool`. So Quebec's host is Franco-Canadian and Ontario's Anglo-Canadian. Counting costs one more pop walk for each primary culture, and only where the owner has more than one.
+2. **The host culture** of the state is the majority primary culture (the owner's correction, 2026-11-25): the owner's primary culture with the most people in that state. It sets both the language a hybrid takes and the culture a pop joins. So Quebec's host is Franco-Canadian and Ontario's Anglo-Canadian. Where no primary culture lives in the state, the host is the capital's *(my call)*: vanilla's `incorporated_state` modifier gives every incorporated state `state_allow_assimilation_without_presence_bool`, so the engine too assimilates into a primary culture that has nobody there. Counting costs one more pop walk for each primary culture, and only where the owner has more than one.
 3. **One walk of the state's pops.** A pop is taken when:
    - its culture shares no heritage group with any primary culture of the owner;
    - the state is not a homeland of its culture, or carries `state_allow_assimilation_in_homeland_bool`;
@@ -108,7 +108,7 @@ One hand-written effect, run for each of a country's states from that country's 
    The crossing share is the country's `country_cross_heritage_assimilation_add`, 0 without a Bodily Autonomy law. So None is Hybrid Cultures without the hybrids (owner, 2026-11-25): a wall until a law opens it, then straight across. A host whose language is off the roster is treated as under None (my call, which the owner approved), so that a Bodily Autonomy law opens the wall there too.
 
 5. **The rate**, the fraction of the pop that converts that year: 12 × 0.002 (the engine's monthly `ASSIMILATION_RATE`) × (1 + the state's `state_assimilation_mult`) × (1 + the owner's `country_assimilation_<status>_mult`), each factor no lower than 0, × (1 − the pop's radical share) × the culture's fervor factor (the mod's define, 0.0075 a point) × 0.75 in a homeland, capped at one half. It reads the engine's own sums, so every law, institution, decree and Cultural Hegemony bonus that speeds assimilation speeds this, with no second list to keep. With no modifiers that is 2.4% a year, half a community in 29 years; at the +690% of the owner's 2039 New York it is 19% a year.
-6. **The hybrids' scopes**, under Hybrid Cultures: a generated ladder with one branch per roster language tests the host's language trait once per state and saves that language's ten hybrids, each behind `exists = cu:<hybrid>`. It is the only generated script; the pass itself is written by hand, and its conversions name the saved scopes.
+6. **The hybrids' scopes**, under Hybrid Cultures: a generated ladder with one branch per roster language tests the host's language trait once per state and saves that language's ten hybrids, each behind `exists = cu:<hybrid>`. It is the only generated script; the pass itself is written by hand, and its conversions name the saved scopes, the form vanilla's own `change_pop_culture` calls take (`target = scope:new_national_culture`, `culture_south_america.txt`).
 
 Cost: the old pulse ran about 300 blocks for every state every month, and two pop walks for each block that matched the owner's language. This is one culture test per state per year, and one pop walk in a state that passes it.
 
@@ -142,7 +142,7 @@ The rates are before a pop's own factors (status, radicals, fervor). This is the
 
 - **Two grains of one idea.** A merge works on named peoples in their homelands, from a roster. This works on everyone else, by trait. A merge's tier 1b (Afro-American joining American) is the heritage step taken early for one named culture, on its own gates.
 - **A hybrid is never a merge part.** A merge measures everything in a part's homeland states, and a hybrid has none. The roster and its validation don't change.
-- **When a host's cultures merge.** A tier-1 or absorbing merge keeps the language, so its hybrids are unaffected; the state's host passes from the part to the result at the switch, since a host must have people in the state. The five tier-2 merges mint a language: after the switch the old hybrids no longer speak the host's language and take the language step again, at the yearly rate, into the new language's hybrids. That is why those five languages are in the roster.
+- **When a host's cultures merge.** Most tier-1 and absorbing merges keep the language, so their hybrids are unaffected; the state's host passes from the part to the result at the switch, as the part's people become the result's. Where the merge changes the language, the old hybrids no longer speak the host's language after the switch and take the language step again, at the yearly rate, into the new language's hybrids. That is the five tier-2 merges, which mint a language (why those five are in the roster), and the tier-1 parts with a language of their own: Occitan into French, Yue, Min and Hakka into Han, Ryukyuan into Japanese, Mazanderani into Persian. Four of those languages are on the roster (Occitano-Romance, Yue, Min, Hakka), so their hybrids stop being made once the French and Chinese merges complete.
 - **A part of another heritage group than its host** (Afro-American) can be converted by both systems. They don't conflict: a merge converts it into the result, and this into the host, which the merge then converts into the result.
 - **`test_culture_merge_mod_refs.py`** asks that a test naming a part also names what the part merges into. This system names no vanilla culture in script, only traits and `hc_` cultures, so it asks nothing, and a test of the system's own holds it to that. Its generated file must stay free of part names, or the pinned set of generated restatements fails.
 - The play-test row for the `cm_` cultures (24 mod files iterate cultures; do any divide by, average over or list the empty ones) now covers 584 more.
@@ -157,6 +157,7 @@ Compared with the engine doing the same assimilation itself:
 - **`country_assimilation_delta_threshold_add`** is not imitated: its base value is in no define, so how much more accepted the target must be is unknown. Affirmative Action carries −100 of it. A row on the play-test list.
 - **The fervor factor** is a guess at the formula from the define's comment.
 - **The engine's minimum of one person a month** has no counterpart; a pop too small for a fraction converts whole.
+- **Unincorporated states** are skipped. If the engine does assimilate there, slowly, the pass does not follow it.
 
 ## Unverified
 
@@ -166,9 +167,8 @@ Self-checks, once a game, `TE_SELF_CHECK OK|BROKEN <name>` with the numbers:
 |---|---|---|
 | `hc_define_blocks` | 30 days into a new game, before the first pass has run: some pop of its owner's heritage group has an ongoing assimilation (so the trigger is known to read), and no pop of another group has | the define does not do what its comment says; the rule ships hidden and off until it is read by hand |
 | `hc_rate_inputs` | from pop scope, the state's assimilation sum includes a law of the owner's, and the status switches read as the law in force sets them | read the country's sum and add the state's own; a `has_law` ladder for the switches |
-| `hc_scoped_target` | `change_pop_culture` with a saved scope as its target moved the people (the mod does this in two places; vanilla always names the culture) | a generated ladder of literal culture names |
 
-Play-test rows, in `docs/testing/assimilation-cultures-playtest.md`: the spliced names in the culture panel; whether a later pass merges into the hybrid pop an earlier one made (Culture Merges' pending `cm_conversion_merges_pops`); load time and the monthly tick with the extra cultures; the engine assimilating a pop into a hybrid of its own group that ties for the highest acceptance (harmless, the same direction); an old save.
+Play-test rows, in `docs/testing/assimilation-cultures-playtest.md`: whether the engine assimilates a pop in an unincorporated state at all (its concept text says "much slower", its tooltip that assimilating pops live in an incorporated state); the spliced names in the culture panel; whether a later pass merges into the hybrid pop an earlier one made (Culture Merges' pending `cm_conversion_merges_pops`); load time and the monthly tick with the extra cultures; the engine assimilating a pop into a hybrid of its own group that ties for the highest acceptance (harmless, the same direction); an old save.
 
 ## Decided
 
@@ -186,6 +186,13 @@ The owner, 2026-11-25, on the draft's eight questions:
 Also the owner's: the host is the majority primary culture; the imitation's differences from the engine are acceptable ("That's fine"); Ancestral Citizenship blocks joining a culture of another heritage group ("Good idea - agreed"); None "is hybrid cultures without the hybrids".
 
 Calls of mine the owner has seen and approved ("good"): the group define, not the trait one; slaves take the language step only; the host counted per state; no patch for vanilla's share tests.
+
+## Still open
+
+**A hybrid beside a vanilla culture with the same traits** (from the review of this file, 2026-11-25). The African hybrids carry vanilla's African Diaspora heritage, so `hc_anglophone_african` has exactly Afro-American's two traits, `hc_lusophone_african` Afro-Brazilian's and `hc_hispanophone_african` Afro-Caribeño's. As drawn, a Yoruba pop in Georgia becomes Anglophone African beside the Afro-Americans there, and the American merge later takes Afro-American and never the hybrid. Other vanilla cultures stand in the same place for other pairs (Griqua, Sudanese, Haratin, Maltese, Pathan, Turkmen, Hazara, the two Hispanophone Filipino cultures).
+
+- **A, as drawn:** always the hybrid.
+- **B, proposed:** in a state that is a homeland of a culture that lives there, speaks the host's language and is of the pop's heritage group, the pop joins that culture; anywhere else, the hybrid. Found by trait at each pass, so no culture is named. Yoruba in Georgia become Afro-American and ride the American merge; in New York or London they become Anglophone African. The cost: a pop that joined a local culture lives in its own homeland from then on, where nothing assimilates, so a Bodily Autonomy law does not reach it.
 
 ## Left to the build
 
