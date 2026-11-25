@@ -211,6 +211,15 @@ The Solar System tab opens on a map (`te_sr_system_map`; owner, 2026-11-23: "som
 
 A colony fleet on its way to a site is the transit track's dart (`track_ship.dds`, 9 px at the marker's corner). The map's key under it shows the same files at 14 px.
 
+## Top-bar alerts: placeholders for the next icon round (2026-11-25)
+
+The colony module queue's two alerts (`common/alert_types/te_space_race_alerts.txt`, PR #2051) borrow vanilla alert icons for now; the owner asked for painted ones in the next icon round (2026-11-25). A vanilla alert icon is one painted object on a transparent background, 150 × 150, which the game's round alert button frames; the rim's green or yellow comes from the alert's `color`, not the icon. `/placeholder-icons` does not read `common/alert_types/` (#2052), so this table is their place on the work list. Each is a literal `texture` line in the alert file; a new file goes in `gfx/interface/icons/space_race_icons/`.
+
+| Alert | Placeholder | Should show |
+|---|---|---|
+| No Colony Modules Queued (green: the queue is empty while the stock fills) | `gfx/interface/icons/alert_icons/wasted_construction.dds` (vanilla's hammer, from Insufficient Construction for Investment) | the panel's colony module (`module.dds`, the `space` category's `module` entry) waiting on an empty assembly cradle: fabrication with nothing to build |
+| Colony Module Stock Full (yellow: the stock is full and each month's points are lost) | `gfx/interface/icons/alert_icons/market_over_capacity.dds` (vanilla's crate under a falling red arrow, from Low Market Access) | the same module stacked high, under the falling red arrow vanilla draws over its crate: a full store losing value |
+
 ## Kept as they are
 
 The pie's frame (`gfx/interface/backgrounds/round_frame_dec.dds`) is vanilla's decoration, used as vanilla uses it. So are the Rivals rows' band marker (`gfx/interface/progressbar/progressbar_marker.dds`) and the transparent track under it (`generic_icons/transparent.dds`), drawn as the UN's authority bar draws them. The rows have no icons of their own.

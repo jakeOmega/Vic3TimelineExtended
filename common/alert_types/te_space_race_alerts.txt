@@ -25,6 +25,8 @@
 # the overview's Modules cell does ("Queue empty", red once the stock is full):
 # while it fills, nothing is lost yet (green); once it holds its cap,
 # sr_mod_month adds nothing more and each month's points are lost (yellow).
+# Both textures are vanilla stand-ins, queued for the next icon round
+# (docs/systems/space_race_gui_icons.md § "Top-bar alerts").
 sr_module_queue_empty = {
 	script_context = player_country
 	texture = "gfx/interface/icons/alert_icons/wasted_construction.dds"
