@@ -80,6 +80,15 @@
 ###                          marker on the map (te_popup = sr_colony,
 ###                          sr_colony_focus the colony's key; client-side);
 ###                          the page's blocks are the list row's, filled again
+###   a fleet's window    -> te_sr_fleet_popup (the owner, 2026-11-25), in
+###                          te_popups: a fleet's page (te_sr_fleet_page) with
+###                          every fleet we have listed beside it, opened by
+###                          the arrow at the head of its card (sr_fleet_focus
+###                          the slot; client-side, and the window's own key,
+###                          so the pickers its orders open on te_popup draw
+###                          over it and come back to it); the page's blocks
+###                          are the card's, filled again, and its fire is
+###                          sr_disp_fl_<n>_fire_fleets and _fire_defences
 ###   the system map      -> te_sr_system_map (the owner, 2026-11-23), at the
 ###                          head of Solar System: each site's marker reads
 ###                          sr_disp_site_<key>, _target_<key> and
@@ -7144,7 +7153,8 @@ types space_race_widget_types
 
 	### One fleet slot in Space Fleets, as a card (owner, 2026-11-14). Its head
 	### is always shown: the fleet's emblem and number, the world of where it is
-	### and its name (or "→ Mars" in transit), its drive (or its refit's months) and the button
+	### and its name (or "→ Mars" in transit), its drive (or its refit's months), the
+	### arrow that opens the Fleets window on it (te_sr_fleet_popup) and the button
 	### that rolls the card up or down (the flag sr_panel_fleet_<n>_closed, so
 	### a card starts open); rolled up, the head also gives its strength. In
 	### transit, a track under the head: the leg flown so far, the ship on it,
@@ -7155,8 +7165,10 @@ types space_race_widget_types
 	### hover), Go, Transfer (its popup, te_sr_xfer_popup), Land, Embark; and
 	### from 6b its posture's four buttons (UI pass design § 7), then its target
 	### world (it opens the target popup) and Seize / Destroy. The card is 480
-	### wide with a margin of 6, so each line has 468: the head 30 + 40 + 24 + 130 +
-	### 96 + 122 + 5 × 4 = 462; the track 200 + 4 + 264 = 468; the orders
+	### wide with a margin of 6, so each line has 468: the head 30 + 38 + 24 + 122 +
+	### 94 + 140 + 5 × 4 = 468 (each cell at its longest text's budget, since the
+	### arrow joined them: "VIII", "→ Merc./Venus", "Antimatter", "9999/9999");
+	### the track 200 + 4 + 264 = 468; the orders
 	### 108 + 80 + 98 + 2 × 80 + 4 × 4 = 462; target and Seize 190 + 98 + 4 =
 	### 292. Instances in te_sr_fleet_rows (sr_fleets_generated_rows.gui), one
 	### per slot; the scripted GUIs are sr_fleet_sguis.txt's, scope:op the slot
@@ -7194,13 +7206,13 @@ types space_race_widget_types
 				}
 			}
 			widget = {
-				size = { 40 30 }
+				size = { 38 30 }
 				parentanchor = vcenter
 
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 40
+					max_width = 38
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					default_format = "#title"
@@ -7270,13 +7282,13 @@ types space_race_widget_types
 				}
 			}
 			widget = {
-				size = { 130 30 }
+				size = { 122 30 }
 				parentanchor = vcenter
 
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 130
+					max_width = 122
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
@@ -7284,7 +7296,7 @@ types space_race_widget_types
 				}
 			}
 			widget = {
-				size = { 96 30 }
+				size = { 94 30 }
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_fl_drive_tt"
 
@@ -7295,7 +7307,7 @@ types space_race_widget_types
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 96
+					max_width = 94
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
@@ -7330,9 +7342,12 @@ types space_race_widget_types
 			}
 			### One slot at the head's end: the button that rolls the card up; or,
 			### rolled up, its strength (the bar shows it otherwise) and the button
-			### that rolls it down, on the flag's one bare test.
+			### that rolls it down, on the flag's one bare test. Left of either,
+			### vanilla's go-to arrow, as a colony's row has: it opens the Fleets
+			### window on this fleet (te_sr_fleet_popup). Last, so it draws over the
+			### rolled-up wrapper. 86 + 2 + 24 + 2 + 24 = 138, in 140.
 			widget = {
-				size = { 122 30 }
+				size = { 140 30 }
 				parentanchor = vcenter
 
 				button_icon_round_action = {
@@ -7354,7 +7369,7 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = left|vcenter
 						autoresize = yes
-						max_width = 92
+						max_width = 86
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
@@ -7372,6 +7387,13 @@ types space_race_widget_types
 						}
 						block "fl_roll_down" {}
 					}
+				}
+				button_icon_goto = {
+					size = { 24 24 }
+					position = { -26 0 }
+					parentanchor = right|vcenter
+					tooltip = "je_space_race_widget_fl_open_tt"
+					block "fl_open" {}
 				}
 			}
 		}
@@ -9770,6 +9792,1022 @@ types space_race_widget_types
 			visible = "[Not(GetVariableSystem.Exists('sr_panel_locations_closed'))]"
 
 			te_sr_location_cells = {}
+		}
+	}
+
+	### ======================================================================
+	### THE FLEETS WINDOW (the owner, 2026-11-25: "space fleets [should] have
+	### their own 'details' type popout window, like bases/colonies have now")
+	### ======================================================================
+
+	### The Fleets window's list of our fleets, one a line: the fleet's number,
+	### the world of where it is or is bound, that place's name and its
+	### strength now, on a button (clean_button, as the Colonies window's list),
+	### greyed for the fleet shown. 244 wide: 4 + 38 + 4 + 20 + 4 + 122 + 4 +
+	### 44 + 4, the number's and the name's cells the card's own. Instances in
+	### te_sr_fleet_switch_rows (sr_fleets_generated_rows.gui): every slot,
+	### shown while it holds a fleet.
+	type te_sr_fleet_switch_row = button {
+		using = clean_button
+		size = { 244 26 }
+		block "switch_row" {}
+
+		textbox = {
+			position = { 4 0 }
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 38
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			default_format = "#title"
+			block "switch_number" {}
+		}
+		widget = {
+			size = { 20 20 }
+			position = { 46 0 }
+			parentanchor = left|vcenter
+
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/location_earth.dds"
+				block "fl_place_earth" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
+				block "fl_place_inner" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+				block "fl_place_mars" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+				block "fl_place_asteroids" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+				block "fl_place_jupiter" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+				block "fl_place_saturn" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+				block "fl_place_uranus" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+				block "fl_place_neptune" {}
+			}
+			icon = {
+				size = { 100% 100% }
+				texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+				block "fl_place_kuiper" {}
+			}
+		}
+		textbox = {
+			position = { 70 0 }
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 122
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "fl_where" {}
+		}
+		textbox = {
+			position = { -4 0 }
+			parentanchor = right|vcenter
+			autoresize = yes
+			max_width = 44
+			align = right|nobaseline
+			using = te_sr_fontsize_row
+			default_format = "#v"
+			elide = right
+			block "switch_strength" {}
+		}
+	}
+
+	### A caption at the head of an orders line on a fleet's page: 104 wide,
+	### for "Destination" at the rows' 17.
+	type te_sr_fp_caption = widget {
+		size = { 104 26 }
+		parentanchor = vcenter
+
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 104
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			block "caption_text" {}
+		}
+	}
+
+	### A fleet's page in the Fleets window (te_sr_fleet_popup): everything its
+	### card in Space Fleets has, at once and with room, plus what the card
+	### keeps on hovers. Across the top the fleet's emblem, its number and
+	### where it is (or is bound, with the transit track under the head); then
+	### two columns. Left, 472: Ships (each role now of full on a tile, the
+	### drive, and Transfer on the heading) and Condition (the card's four
+	### bars, then its fire on fleets and on Defenses as combat counts them).
+	### Right, 480: Orders (destination and Go with the leg under them, the
+	### marines' Land and Embark, the posture's four buttons, the target with
+	### Seize / Destroy and what we know of it), then Locations, the panel's
+	### own strip (476), so the theatre is in view while the fleet gets its
+	### orders. The orders' buttons are the card's, with the card's blocks, so
+	### te_sr_fleet_pages (generated, sr_fleets_generated_rows.gui) fills a
+	### page from the card's own overrides; they open the same pickers, which
+	### draw over this window and leave it open under them. Shown while its
+	### slot is the window's (fp_visible: sr_fleet_focus its number, and a
+	### fleet in it).
+	type te_sr_fleet_page = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 6
+		block "fp_visible" {}
+
+		### The fleet: its emblem, its number, and the world and name of where it
+		### is, or is bound.
+		widget = {
+			size = { 960 58 }
+
+			widget = {
+				size = { 48 48 }
+				position = { 0 2 }
+
+				background = {
+					using = dark_area
+					alpha = 0.3
+				}
+				icon = {
+					size = { 40 40 }
+					parentanchor = center
+					texture = "gfx/interface/icons/space_race_icons/fleet.dds"
+				}
+			}
+			flowcontainer = {
+				position = { 58 3 }
+				direction = horizontal
+				spacing = 6
+
+				textbox = {
+					autoresize = yes
+					max_width = 200
+					align = left|nobaseline
+					using = te_sr_fontsize_heading
+					default_format = "#title"
+					text = "je_space_race_widget_fw_fleet"
+				}
+				textbox = {
+					autoresize = yes
+					max_width = 60
+					align = left|nobaseline
+					using = te_sr_fontsize_heading
+					default_format = "#title"
+					block "fp_number" {}
+				}
+			}
+			flowcontainer = {
+				position = { 58 30 }
+				direction = horizontal
+				spacing = 4
+
+				widget = {
+					size = { 20 20 }
+					parentanchor = vcenter
+
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/location_earth.dds"
+						block "fl_place_earth" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_venus.dds"
+						block "fl_place_inner" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_mars.dds"
+						block "fl_place_mars" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_asteroid.dds"
+						block "fl_place_asteroids" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_jovian.dds"
+						block "fl_place_jupiter" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_saturnian.dds"
+						block "fl_place_saturn" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_uranian.dds"
+						block "fl_place_uranus" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_neptunian.dds"
+						block "fl_place_neptune" {}
+					}
+					icon = {
+						size = { 100% 100% }
+						texture = "gfx/interface/icons/space_race_icons/colony_dwarf.dds"
+						block "fl_place_kuiper" {}
+					}
+				}
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					max_width = 400
+					align = left|nobaseline
+					using = te_sr_fontsize_overview
+					default_format = "#lore"
+					elide = right
+					block "fl_where" {}
+				}
+			}
+			divider_clean = {
+				parentanchor = bottom|left
+				blockoverride "size" {
+					size = { 960 2 }
+				}
+			}
+		}
+		### In transit: the leg flown so far, the ship on it, and when it lands
+		### (the card's track, at the page's width).
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
+			block "fl_transit_visible" {}
+
+			widget = {
+				size = { 472 18 }
+				parentanchor = vcenter
+
+				default_progressbar_horizontal = {
+					size = { 100% 100% }
+					blockoverride "values" {
+						block "fl_transit_frac" {}
+						min = 0
+						max = 1
+					}
+					blockoverride "on_top_of_the_progressbar" {
+						progressbar = {
+							noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+							size = { 100% 100% }
+							skip_initial_animation = yes
+							direction = horizontal
+							block "fl_transit_frac" {}
+							min = 0
+							max = 1
+							marker = {
+								icon = {
+									size = { 18 18 }
+									parentanchor = vcenter
+									widgetanchor = center
+									texture = "gfx/interface/icons/space_race_icons/track_ship.dds"
+								}
+							}
+						}
+					}
+				}
+			}
+			widget = {
+				size = { 480 24 }
+				parentanchor = vcenter
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 480
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					block "fl_transit" {}
+				}
+			}
+		}
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 8
+
+			### Left: its ships and its condition.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				minimumsize = { 472 -1 }
+
+				te_sr_page_heading = {
+					blockoverride "heading_text" {
+						text = "je_space_race_widget_fw_ships"
+					}
+					### Transfer, at a location: its popup moves ships and marines
+					### to a new fleet or another of ours here.
+					blockoverride "heading_controls" {
+						flowcontainer = {
+							parentanchor = vcenter
+							ignoreinvisible = yes
+							block "fl_orders_visible" {}
+
+							button = {
+								using = default_button_action
+								size = { 98 24 }
+								block "fl_transfer_button" {}
+
+								icon = {
+									size = { 16 16 }
+									position = { 3 0 }
+									parentanchor = left|vcenter
+									texture = "gfx/interface/icons/space_race_icons/order_transfer.dds"
+								}
+								textbox = {
+									position = { 21 0 }
+									parentanchor = left|vcenter
+									align = left|nobaseline
+									autoresize = yes
+									max_width = 76
+									elide = right
+									using = te_sr_fontsize_row
+									text = "je_space_race_widget_fl_transfer"
+								}
+							}
+						}
+					}
+				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_role_war_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/role_war.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_role_war"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "fp_role_war" {}
+							}
+						}
+					}
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_role_rapid_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/role_rapid.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_role_rapid"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "fp_role_rapid" {}
+							}
+						}
+					}
+				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_role_siege_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/role_siege.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_role_siege"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "fp_role_siege" {}
+							}
+						}
+					}
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_role_carrier_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/role_carrier.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_role_carrier"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "fp_role_carrier" {}
+							}
+						}
+					}
+				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_role_tender_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/role_tender.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_role_tender"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "fp_role_tender" {}
+							}
+						}
+					}
+					### The drive, or while a refit runs, "Refit" and its months in its
+					### place, as on the card.
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fl_drive_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/track_ship.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_drive"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								block "fl_drive" {}
+							}
+							flowcontainer = {
+								parentanchor = vcenter
+								direction = horizontal
+								spacing = 4
+								ignoreinvisible = yes
+								block "fl_refit_visible" {}
+
+								te_sr_page_value = {
+									text = "je_space_race_widget_fl_refit"
+								}
+								te_sr_page_value = {
+									default_format = "#v"
+									block "fl_refit" {}
+								}
+							}
+						}
+					}
+				}
+
+				te_sr_page_heading = {
+					blockoverride "heading_text" {
+						text = "je_space_race_widget_fw_condition"
+					}
+				}
+				### Strength, propellant, supply and marines, now of full: the card's bars.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 4
+
+					te_sr_fl_gauge = {
+						tooltip = "je_space_race_widget_fl_strength_tt"
+						blockoverride "fg_label" {
+							text = "je_space_race_widget_fl_col_strength"
+						}
+						blockoverride "fg_value" {
+							block "fl_strength_frac" {}
+						}
+						blockoverride "fg_figure" {
+							block "fl_strength" {}
+						}
+					}
+					te_sr_fl_gauge = {
+						tooltip = "je_space_race_widget_fl_dv_tt"
+						blockoverride "fg_label" {
+							text = "je_space_race_widget_fl_col_dv"
+						}
+						blockoverride "fg_value" {
+							block "fl_dv_frac" {}
+						}
+						blockoverride "fg_figure" {
+							block "fl_dv" {}
+						}
+					}
+					te_sr_fl_gauge = {
+						tooltip = "je_space_race_widget_fl_supply_tt"
+						blockoverride "fg_label" {
+							text = "je_space_race_widget_fl_col_supply"
+						}
+						blockoverride "fg_value" {
+							block "fl_supply_frac" {}
+						}
+						blockoverride "fg_figure" {
+							block "fl_supply" {}
+						}
+					}
+					te_sr_fl_gauge = {
+						tooltip = "je_space_race_widget_fl_marines_tt"
+						blockoverride "fg_label" {
+							text = "je_space_race_widget_fl_col_marines"
+						}
+						blockoverride "fg_value" {
+							block "fl_marines_frac" {}
+						}
+						blockoverride "fg_figure" {
+							block "fl_marines" {}
+						}
+					}
+				}
+				### What it brings to a battle (sr_disp_fl_<n>_fire_fleets, _fire_defences):
+				### its ships' fire as the combat step counts it, on fleets and on a
+				### colony's Defenses.
+				flowcontainer = {
+					direction = horizontal
+					spacing = 6
+
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_fire_fleets_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/warship.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_fire_fleets"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								default_format = "#v"
+								block "fp_fire_fleets" {}
+							}
+						}
+					}
+					te_sr_page_tile = {
+						blockoverride "tile_tooltip" {
+							tooltip = "je_space_race_widget_fw_fire_defences_tt"
+						}
+						blockoverride "tile_icon" {
+							texture = "gfx/interface/icons/space_race_icons/module_def.dds"
+						}
+						blockoverride "tile_caption" {
+							text = "je_space_race_widget_fw_fire_defences"
+						}
+						blockoverride "tile_value" {
+							te_sr_page_value = {
+								default_format = "#v"
+								block "fp_fire_defences" {}
+							}
+						}
+					}
+				}
+			}
+
+			### Right: its orders, then every location's forces.
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				minimumsize = { 480 -1 }
+
+				te_sr_page_heading = {
+					blockoverride "heading_text" {
+						text = "je_space_race_widget_fw_orders"
+					}
+				}
+				### In flight it takes none until it lands.
+				te_sr_note = {
+					text = "je_space_race_widget_fw_in_transit"
+					block "fl_transit_visible" {}
+				}
+				### Orders, at a location.
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+					block "fl_orders_visible" {}
+
+					### Destination: the button opens the destination popup (the leg
+					### on hover); Go sends it. Under them, the leg to the one picked.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+
+						te_sr_fp_caption = {
+							blockoverride "caption_text" {
+								text = "je_space_race_widget_fw_destination"
+							}
+						}
+						button = {
+							using = default_button_action
+							size = { 190 26 }
+							parentanchor = vcenter
+							block "fl_pick_button" {}
+
+							textbox = {
+								parentanchor = center
+								align = center|nobaseline
+								autoresize = yes
+								max_width = 184
+								elide = right
+								using = te_sr_fontsize_row
+								block "fl_pick" {}
+							}
+						}
+						te_sr_fl_button = {
+							blockoverride "fl_btn" {
+								block "fl_go_button" {}
+							}
+							blockoverride "fl_btn_icon" {
+								texture = "gfx/interface/icons/space_race_icons/order_go.dds"
+							}
+							blockoverride "fl_btn_label" {
+								text = "je_space_race_widget_fl_go"
+							}
+						}
+					}
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+						block "fp_leg_visible" {}
+
+						widget = {
+							size = { 104 20 }
+						}
+						textbox = {
+							autoresize = yes
+							max_width = 368
+							align = left|nobaseline
+							using = te_sr_fontsize_row
+							elide = right
+							block "fp_leg" {}
+						}
+					}
+					### Marines: Land and Embark open the Marines popup.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+
+						te_sr_fp_caption = {
+							blockoverride "caption_text" {
+								text = "je_space_race_widget_fl_col_marines"
+							}
+						}
+						te_sr_fl_button = {
+							blockoverride "fl_btn" {
+								block "fl_land_button" {}
+							}
+							blockoverride "fl_btn_icon" {
+								texture = "gfx/interface/icons/space_race_icons/order_land.dds"
+							}
+							blockoverride "fl_btn_label" {
+								text = "je_space_race_widget_fl_land"
+							}
+						}
+						te_sr_fl_button = {
+							blockoverride "fl_btn" {
+								block "fl_embark_button" {}
+							}
+							blockoverride "fl_btn_icon" {
+								texture = "gfx/interface/icons/space_race_icons/order_embark.dds"
+							}
+							blockoverride "fl_btn_label" {
+								text = "je_space_race_widget_fl_embark"
+							}
+						}
+					}
+					### Posture and target (6b), where the card shows them: away from
+					### Earth, or at Earth while a lunar site there may be closed in on.
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 4
+						block "fl_combat_visible" {}
+
+						flowcontainer = {
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+
+							te_sr_posture_choice = {
+								blockoverride "pc_icon" {
+									texture = "gfx/interface/icons/space_race_icons/posture_station.dds"
+								}
+								blockoverride "pc_label" {
+									text = "je_space_race_widget_fl_posture_1"
+								}
+								blockoverride "pc_shown" {
+									block "fl_posture_1_choice" {}
+								}
+								blockoverride "pc_selected" {
+									block "fl_posture_1_selected" {}
+								}
+								blockoverride "pc_held_tooltip" {
+									tooltip = "je_space_race_widget_fl_posture_1_held_tt"
+								}
+								blockoverride "pc_action" {
+									block "fl_posture_1_button" {}
+								}
+							}
+							te_sr_posture_choice = {
+								blockoverride "pc_icon" {
+									texture = "gfx/interface/icons/space_race_icons/posture_standoff.dds"
+								}
+								blockoverride "pc_label" {
+									text = "je_space_race_widget_fl_posture_2"
+								}
+								blockoverride "pc_shown" {
+									block "fl_posture_2_choice" {}
+								}
+								blockoverride "pc_selected" {
+									block "fl_posture_2_selected" {}
+								}
+								blockoverride "pc_held_tooltip" {
+									tooltip = "je_space_race_widget_fl_posture_2_held_tt"
+								}
+								blockoverride "pc_action" {
+									block "fl_posture_2_button" {}
+								}
+							}
+							te_sr_posture_choice = {
+								blockoverride "pc_icon" {
+									texture = "gfx/interface/icons/space_race_icons/posture_closein.dds"
+								}
+								blockoverride "pc_label" {
+									text = "je_space_race_widget_fl_posture_3"
+								}
+								blockoverride "pc_shown" {
+									block "fl_posture_3_choice" {}
+								}
+								blockoverride "pc_selected" {
+									block "fl_posture_3_selected" {}
+								}
+								blockoverride "pc_held_tooltip" {
+									tooltip = "je_space_race_widget_fl_posture_3_held_tt"
+								}
+								blockoverride "pc_action" {
+									block "fl_posture_3_button" {}
+								}
+							}
+							te_sr_posture_choice = {
+								blockoverride "pc_icon" {
+									texture = "gfx/interface/icons/space_race_icons/posture_interdict.dds"
+								}
+								blockoverride "pc_label" {
+									text = "je_space_race_widget_fl_posture_4"
+								}
+								blockoverride "pc_shown" {
+									block "fl_posture_4_choice" {}
+								}
+								blockoverride "pc_selected" {
+									block "fl_posture_4_selected" {}
+								}
+								blockoverride "pc_held_tooltip" {
+									tooltip = "je_space_race_widget_fl_posture_4_held_tt"
+								}
+								blockoverride "pc_action" {
+									block "fl_posture_4_button" {}
+								}
+							}
+						}
+						flowcontainer = {
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+
+							te_sr_fp_caption = {
+								blockoverride "caption_text" {
+									text = "je_space_race_widget_fw_target"
+								}
+							}
+							button = {
+								using = default_button_action
+								size = { 190 26 }
+								parentanchor = vcenter
+								block "fl_target_button" {}
+
+								textbox = {
+									parentanchor = center
+									align = center|nobaseline
+									autoresize = yes
+									max_width = 184
+									elide = right
+									using = te_sr_fontsize_row
+									block "fl_target" {}
+								}
+							}
+							### Seize, or Destroy: its icon and word change with the order.
+							button = {
+								using = default_button_action
+								size = { 98 26 }
+								parentanchor = vcenter
+								block "fl_destroy_button" {}
+
+								icon = {
+									size = { 16 16 }
+									position = { 3 0 }
+									parentanchor = left|vcenter
+									texture = "gfx/interface/icons/space_race_icons/order_seize.dds"
+									block "fl_destroy_off_visible" {}
+								}
+								icon = {
+									size = { 16 16 }
+									position = { 3 0 }
+									parentanchor = left|vcenter
+									texture = "gfx/interface/icons/space_race_icons/order_destroy.dds"
+									block "fl_destroy_on_visible" {}
+								}
+								textbox = {
+									position = { 21 0 }
+									parentanchor = left|vcenter
+									align = left|nobaseline
+									autoresize = yes
+									max_width = 76
+									elide = right
+									using = te_sr_fontsize_row
+									text = "je_space_race_widget_fl_seize"
+									block "fl_destroy_off_visible" {}
+								}
+								textbox = {
+									position = { 21 0 }
+									parentanchor = left|vcenter
+									align = left|nobaseline
+									autoresize = yes
+									max_width = 76
+									elide = right
+									using = te_sr_fontsize_row
+									text = "je_space_race_widget_fl_destroy"
+									block "fl_destroy_on_visible" {}
+								}
+							}
+						}
+						### What we know of the target: the target button's hover, in the open.
+						te_sr_text = {
+							block "fp_intel" {}
+						}
+					}
+				}
+
+				te_sr_page_heading = {
+					blockoverride "heading_text" {
+						text = "je_space_race_widget_locations_header"
+					}
+				}
+				te_sr_location_cells = {}
+			}
+		}
+	}
+
+	### The Fleets window's content (te_sr_fleet_popup): at the left how many
+	### fleets we have and each of them on a button (te_sr_fleet_switch_rows,
+	### generated), a click showing that fleet; beside them, what Space Fleets
+	### says once above its cards (no Space Command, short of personnel), then
+	### the shown fleet's page (te_sr_fleet_pages, one te_sr_fleet_page a slot,
+	### generated), or one line when the fleet the window was opened on is
+	### gone. 244 + 14 + 960 = 1218.
+	type te_sr_fleet_popup_body = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 14
+
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			minimumsize = { 244 -1 }
+
+			widget = {
+				size = { 244 30 }
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 150
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fw_count_label"
+				}
+				textbox = {
+					parentanchor = right|vcenter
+					autoresize = yes
+					max_width = 86
+					align = right|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fw_count_figure"
+				}
+				divider_clean = {
+					parentanchor = bottom|left
+					blockoverride "size" {
+						size = { 244 2 }
+					}
+				}
+			}
+			te_sr_fleet_switch_rows = {}
+		}
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
+			minimumsize = { 960 -1 }
+
+			te_sr_fleet_wide_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' )]"
+				text = "je_space_race_widget_space_fleets_no_sc"
+			}
+			te_sr_fleet_wide_note = {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_short'), '(CFixedPoint)1' )]"
+				text = "je_space_race_widget_space_fleets_short"
+			}
+			te_sr_fleet_pages = {}
+		}
+	}
+
+	### A line across the Fleets window's page column (te_sr_text at its 960).
+	type te_sr_fleet_wide_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 960 -1 }
+		maximumsize = { 960 -1 }
+		align = left|nobaseline
+		using = te_sr_fontsize_row
+	}
+
+	### The Fleets window (the owner, 2026-11-25): a fleet's page, with every
+	### fleet we have a click away at its left. Opened on a fleet by the arrow
+	### at the head of its card in Space Fleets; instanced in te_popups
+	### (gui/te_popups.gui). It is up while the client-side key sr_fleet_focus
+	### exists, its value the slot shown, and NOT on te_popup, which the
+	### pickers its orders open (destination, target, Transfer, Marines) take:
+	### they draw over this window, and closing one, or choosing in it, comes
+	### back here. While one is up this window's two close buttons are hidden,
+	### so its click outside and Escape (the header button's shortcut) reach the
+	### picker alone. The content sits under the entry's scope-free gate and its
+	### GetPlayerJournalEntry datacontext on a child, as the Colonies window's
+	### (gotchas #22, #29). 1218 of content, plus the window's margins
+	### (2 × 35), the list's (2 × 10) and a scrollbar: 1332. 720 high: the
+	### page's head (58), then the taller column, Orders over Locations
+	### (30 + 26 + 20 + 26 + 46 + 26 + 3 × 20 + 30 + 150, and the gaps).
+	type te_sr_fleet_popup = te_ui_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.Exists('sr_fleet_focus')]"
+		}
+		blockoverride "popup_title" {
+			text = "je_space_race_widget_fw_title"
+		}
+		blockoverride "popup_size" {
+			size = { 1332 720 }
+		}
+		blockoverride "popup_close" {
+			visible = "[Not( GetVariableSystem.Exists('te_popup') )]"
+			onclick = "[GetVariableSystem.Clear('sr_fleet_focus')]"
+		}
+		blockoverride "popup_list" {
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				datacontext = "[GetPlayer]"
+				direction = vertical
+				ignoreinvisible = yes
+
+				flowcontainer = {
+					datacontext = "[GetPlayerJournalEntry('je_space_race_solar_colonization')]"
+					direction = vertical
+					ignoreinvisible = yes
+
+					te_sr_fleet_popup_body = {}
+				}
+			}
+			te_sr_note = {
+				visible = "[Not( GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+				text = "je_space_race_widget_tp_gone"
+			}
 		}
 	}
 

@@ -37,7 +37,9 @@ common/scripted_effects/sr_fleet_effects.txt and sr_fleet_combat_effects.txt):
   slot's location, destination, target world and drive by name.
 - ``gui/journal_entry_widgets/sr_fleets_generated_rows.gui``: the Fleets and
   Locations rows (the colonies' Defenses are a view of gen_solar_sites' Colonies rows),
-  and the Transfer popup's bodies, one a slot (UI pass design § 6).
+  the Transfer popup's bodies, one a slot (UI pass design § 6), and the Fleets
+  window's list and pages (te_sr_fleet_popup; the owner, 2026-11-25), a page a
+  slot filled from its card's own blocks.
 
 Transfer (UI pass design § 6) took in Merge and Detach on the panel: the amounts
 are country variables (``sr_det_amt_<key>``, ``sr_det_to``) read only through
@@ -52,6 +54,7 @@ A post-load regenerator (``mod_state_server.POST_LOAD_REGENERATORS``).
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -2079,7 +2082,11 @@ def render_display() -> str:
            "#                               refitting, 2 below the minimum strength, 3 Earth's",
            "#                               launches barred",
            "#   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)",
-           "#   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)"]
+           "#   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)",
+           "#   sr_disp_fl_<n>_fire_fleets, _fire_defences  its fire as the combat step counts it",
+           "#                               (sr_fl_gather_at, sr_cb_add_target): the roles' fire x",
+           "#                               sr_fleet_quality x sr_fleet_readiness; on Defences before",
+           "#                               a survey's edge, which is the target's (the Fleets window)"]
     for n in range(1, SLOTS + 1):
         out += [f"sr_disp_fl_{n} = {{",
                 "\tvalue = 0",
@@ -2159,6 +2166,12 @@ def render_display() -> str:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'destroy')} }} value = 1 }}",
                 "}"]
+        for kind in ("fleets", "defences"):
+            out += [f"sr_disp_fl_{n}_fire_{kind} = {{",
+                    f"\tvalue = {var(n, f'fire_{kind}')}",
+                    "\tmultiply = sr_fleet_quality",
+                    "\tmultiply = sr_fleet_readiness",
+                    "}"]
     out += ["",
             "# Per location: our strength there, the strongest other power's, the",
             "# inbound record (as the Solar System rows), and our worlds there."]
@@ -2484,20 +2497,51 @@ def fleet_flag(n: int) -> str:
     return f"sr_panel_fleet_{n}_closed"
 
 
+# The Fleets window (te_sr_fleet_popup; the owner, 2026-11-25): the client-side
+# key that holds the slot it shows, and is the window's own "open" (not te_popup,
+# so the pickers a page's orders open on te_popup draw over the window).
+FLEET_FOCUS = "sr_fleet_focus"
+
+
+def _fleet_focus(n: int) -> str:
+    return f"GetVariableSystem.HasValue('{FLEET_FOCUS}', '{n}')"
+
+
+def _open_fleet(n: int) -> str:
+    """The click that opens the Fleets window on slot n, or shows it there."""
+    return f"onclick = \"[GetVariableSystem.Set('{FLEET_FOCUS}', '{n}')]\""
+
+
+def _place_icons(n: int) -> list[str]:
+    """The world of where slot n is, or is bound: nine icons taking turns."""
+    out: list[str] = []
+    for lc in LOCATIONS:
+        out += _override(f"fl_place_{lc.key}", f'visible = "[{_eq(f"sr_disp_fl_{n}_place", lc.code)}]"')
+    return out
+
+
 def _fleet_row(n: int) -> list[str]:
+    """Slot n's card in Space Fleets (te_sr_fleet_row)."""
+    return ["\t\tte_sr_fleet_row = {", *_fleet_blocks(n), "\t\t}"]
+
+
+def _fleet_blocks(n: int) -> list[str]:
+    """Slot n's blocks, for its card in Space Fleets (te_sr_fleet_row) and its page
+    in the Fleets window (te_sr_fleet_page): the card takes them all, the page
+    the ones its type has (_FLEET_ROW_ONLY out), with its own (_fleet_page)."""
     closed = f"GetVariableSystem.Exists('{fleet_flag(n)}')"
     toggle = f"onclick = \"[GetVariableSystem.Toggle('{fleet_flag(n)}')]\""
     strength = f'raw_text = "#v [{_sv(var(n, "strength"))}|0]/[{_sv(var(n, "strength_full"))}|0]#!"'
     roles_tt = f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"'
-    out = ["\t\tte_sr_fleet_row = {"]
-    out += _override("fl_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}", 1)}]"')
+    out = _override("fl_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}", 1)}]"')
     # The head: the slot's number, where it is, its strength while the card is
     # rolled up (its ships on hover, as each role cell), and the two buttons
     # that roll the card up and down, one shown.
     out += _override("fl_number", f'raw_text = "{NUMERALS[n - 1]}"')
-    for lc in LOCATIONS:
-        out += _override(f"fl_place_{lc.key}", f'visible = "[{_eq(f"sr_disp_fl_{n}_place", lc.code)}]"')
+    out += _place_icons(n)
     out += _override("fl_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
+    # The arrow at the head's end opens the Fleets window on this fleet.
+    out += _override("fl_open", _open_fleet(n))
     out += _override("fl_roll_up", f'visible = "[Not( {closed} )]"', toggle)
     out += _override("fl_rolled_visible", f'visible = "[{closed}]"')
     out += _override("fl_strength_brief", strength, roles_tt)
@@ -2576,6 +2620,61 @@ def _fleet_row(n: int) -> list[str]:
     out += _button("fl_destroy_button", "sr_fleet_destroy_sgui", n)
     out += _override("fl_destroy_off_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 0)}]"')
     out += _override("fl_destroy_on_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 1)}]"')
+    return out
+
+
+# The card's blocks its page in the Fleets window has no use for
+# (test_space_fleet_window.py holds both to their types): the card's own gate,
+# its number, the roll-up and what shows rolled up, its role cells (the page's
+# tiles give each role now of full) and the arrow that opens the window.
+_FLEET_ROW_ONLY = re.compile(r"fl_visible|fl_number|fl_open|fl_roll_(?:up|down)|fl_rolled_visible|fl_strength_brief|"
+                             r"fl_body_visible|fl_roles_tooltip|fl_role_\w+")
+
+
+def _fleet_page(n: int) -> list[str]:
+    """Slot n's page in the Fleets window (te_sr_fleet_page): shown while the
+    window is on this slot and a fleet is in it; the card's blocks, then what
+    the card keeps on hovers, in the open: each role now of full, its fire as
+    combat counts it, the leg to the destination picked and what we know of
+    its target."""
+    out = ["\t\tte_sr_fleet_page = {"]
+    out += _override("fp_visible", f'visible = "[And( {_fleet_focus(n)}, {_ge(f"sr_disp_fl_{n}", 1)} )]"')
+    out += _override("fp_number", f'raw_text = "{NUMERALS[n - 1]}"')
+    out += gss._without(_fleet_blocks(n), _FLEET_ROW_ONLY)
+    for role in ROLES:
+        now, full = var(n, f"{role.key}_value"), var(n, f"{role.key}_full_value")
+        out += _override(f"fp_role_{role.key}", f'raw_text = "#v [{_sv(now)}|0]#! / [{_sv(full)}|0]"')
+    for kind in ("fleets", "defences"):
+        out += _override(f"fp_fire_{kind}", f'raw_text = "[{_sv(f"sr_disp_fl_{n}_fire_{kind}")}|1]"')
+    out += _override("fp_leg_visible", f'visible = "[{_ge(f"sr_disp_fl_{n}_pick", 1)}]"')
+    out += _override("fp_leg", f'text = "je_space_race_widget_fw_{n}_leg"')
+    out += _override("fp_intel", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_target_intel')]\"")
+    return out + ["\t\t}"]
+
+
+def _fleet_gone(n: int) -> list[str]:
+    """The line the Fleets window shows in a page's place when the fleet it was
+    opened on is gone (lost, or all of it transferred away with the window open)."""
+    return ["\t\tte_sr_note = {",
+            f'\t\t\tvisible = "[And( {_fleet_focus(n)}, Not( {_ge(f"sr_disp_fl_{n}", 1)} ) )]"',
+            '\t\t\ttext = "je_space_race_widget_fw_gone"',
+            "\t\t}"]
+
+
+def _fleet_switch_row(n: int) -> list[str]:
+    """Slot n in the Fleets window's list (te_sr_fleet_switch_row): shown while it
+    holds a fleet, greyed while it is the fleet shown, a click showing it; its
+    hover the fleet's ships."""
+    out = ["\t\tte_sr_fleet_switch_row = {"]
+    out += _override("switch_row",
+                     f'visible = "[{_ge(f"sr_disp_fl_{n}", 1)}]"',
+                     f'enabled = "[Not( {_fleet_focus(n)} )]"',
+                     _open_fleet(n),
+                     f'tooltip = "je_space_race_widget_fl_{n}_roles_tt"')
+    out += _override("switch_number", f'raw_text = "{NUMERALS[n - 1]}"')
+    out += _place_icons(n)
+    out += _override("fl_where", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_where_name')]\"")
+    out += _override("switch_strength", f'raw_text = "[{_sv(var(n, "strength"))}|0]"')
     return out + ["\t\t}"]
 
 
@@ -2907,7 +3006,10 @@ def render_gui() -> str:
            "### sr_fleet_sguis.txt and take the slot as scope:op. Then the popups'",
            "### bodies: Transfer's (te_sr_xfer_popup_body), the destination's",
            "### (te_sr_dest_popup_body), the target's (te_sr_ftarget_popup_body) and",
-           "### the Marines popup's (te_sr_land_popup_body).",
+           "### the Marines popup's (te_sr_land_popup_body). Last, the Fleets window's",
+           "### (te_sr_fleet_popup; the owner, 2026-11-25): te_sr_fleet_switch_rows, its",
+           "### list of our fleets, and te_sr_fleet_pages, a page a slot (te_sr_fleet_page)",
+           "### filled from its card's own blocks, shown on the client-side sr_fleet_focus.",
            "### The colonies' Defenses",
            "### (sr_disp_def_*) show in gen_solar_sites' Colonies rows (audit SPC-5).",
            "",
@@ -2969,6 +3071,24 @@ def render_gui() -> str:
             "\t\tignoreinvisible = yes"]
     for n in range(1, SLOTS + 1):
         out += [""] + _land_slot(n)
+    out += ["\t}", "",
+            "\t### The Fleets window's list (te_sr_fleet_popup in space_race_widget.gui; the",
+            "\t### owner, 2026-11-25): a line a slot, the ones holding a fleet shown, a click",
+            "\t### setting sr_fleet_focus to its number.",
+            "\ttype te_sr_fleet_switch_rows = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes",
+            "\t\tspacing = 2"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _fleet_switch_row(n)
+    out += ["\t}", "",
+            "\t### The Fleets window's pages: one a slot, the one sr_fleet_focus names shown",
+            "\t### while a fleet is in it, else a line saying it is gone.",
+            "\ttype te_sr_fleet_pages = flowcontainer {",
+            "\t\tdirection = vertical",
+            "\t\tignoreinvisible = yes"]
+    for n in range(1, SLOTS + 1):
+        out += [""] + _fleet_page(n) + _fleet_gone(n)
     out += ["\t}", "}"]
     return "\n".join(out) + "\n"
 

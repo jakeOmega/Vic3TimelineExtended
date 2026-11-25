@@ -82,6 +82,8 @@ FREE_WORLDS = 40          # sr_disp_free_supplied_count: at most every world
 FREE_TRADE_RESEARCH = 5   # sr_disp_free_trade_research: sr_free_trade_max_units (5) x 1%
 SC_RATE_CEILING = 99.9    # sr_disp_sc_rate: 2 a level a month at most; ten levels for an AI, more for a player
 FLEET_STRENGTH = 99_999   # sr_disp_fl_strength / _full: every fleet's, unbounded by script; five digits
+SPACE_FLEETS = 9          # sr_disp_fl_count: gen_space_fleets.SLOTS
+LEG_DV_CEILING = 9999     # sr_disp_fl_<n>_leg_dv: gen_launch_windows.LEG_DV_CAP
 FLEET_UPKEEP_PCT = 9999 * 900   # sr_disp_sc_upkeep_pct: +900% a unit of full strength / 10 (sr_fleet_upkeep_points)
 # sr_disp_pers_in_service / _capacity (space forces personnel): 100 a point of strength and 1,000 a battalion, five-digit
 # strength and two battalions a carrier point; |K shows three figures, so the longest is any value past 100M.
@@ -255,6 +257,10 @@ def _longest_figure(name):
         return TRANSIT_CEILING
     if re.fullmatch(r"sr_window_wait_months_\w+", name):
         return WINDOW_WAIT
+    if re.fullmatch(r"sr_disp_fl_\d_leg_months", name):  # the Fleets window's leg line
+        return TRANSIT_CEILING
+    if re.fullmatch(r"sr_disp_fl_\d_leg_dv", name):  # gen_launch_windows.LEG_DV_CAP
+        return LEG_DV_CEILING
     if re.fullmatch(r"sr_transit_months_\w+", name):
         return TRANSIT_CEILING
     if re.fullmatch(r"sr_disp_win_premium_\w+", name):
@@ -285,6 +291,7 @@ def _longest_figure(name):
              "sr_disp_resort_next_draw": -75,
              "sr_disp_free_trade_research": FREE_TRADE_RESEARCH, "sr_disp_sc_rate": SC_RATE_CEILING,
              "sr_disp_fl_strength": FLEET_STRENGTH, "sr_disp_fl_strength_full": FLEET_STRENGTH,
+             "sr_disp_fl_count": SPACE_FLEETS,
              "sr_disp_sc_upkeep_pct": FLEET_UPKEEP_PCT, "sr_disp_reserve": FLEET_STRENGTH,
              "sr_disp_pers_in_service": PERSONNEL, "sr_disp_pers_capacity": PERSONNEL, "sr_disp_pers_share_pct": 100,
              "sr_disp_earth_hostile_total": FLEET_STRENGTH, "sr_disp_loc_ours_earth": FLEET_STRENGTH,
@@ -411,7 +418,7 @@ BOUNDED_WORDS = {"je_space_race_widget_ovc_ebase_word_split": _ebase_split_bound
 MULTILINE = (r"je_space_race_widget_(how_\w+|profile_\w+|colonies_(?:brief_)?empty|solar_system_note"
              r"|powers_(?:more|pending|none)|free_empty|sc_blockaded_note|sc_site_lost_note|space_fleets_empty|space_fleets_no_sc|space_fleets_short"
              r"|howc_(?!sub_)\w+|win_none|win_beyond|tp_intro|tp_none|tp_gone|xf_intro|xf_gone|dp_why_\w+|dp_gone|ft_intro"
-             r"|eb_no_gain|cw_gone|ld_intro)")
+             r"|eb_no_gain|cw_gone|ld_intro|fw_gone|fw_in_transit)")
 CELLS = {
     # (type, marker picking the textbox): patterns of the keys it shows
     "state, risk, first and stage (te_sr_ov_icon_label)": (
@@ -552,10 +559,11 @@ CELLS = {
     # A colony's page (colony management design § 8; the owner's review of 2026-10-30).
     "a section's heading on a colony's page (te_sr_page_heading)": (
         ("te_sr_page_heading", 'block "heading_text"'),
-        r"je_space_race_widget_cv_(people|modules|autonomy|defences)"),
+        r"je_space_race_widget_(cv_(people|modules|autonomy|defences)|fw_(ships|condition|orders))"),
     "a tile's caption on a colony's page (te_sr_page_tile)": (
         ("te_sr_page_tile", 'block "tile_caption"'),
-        r"je_space_race_widget_(page_(staffing|bases|resorts|status|terraformed)|ch_\w+|modules_col_slots)"),
+        r"je_space_race_widget_(page_(staffing|bases|resorts|status|terraformed)|ch_\w+|modules_col_slots"
+        r"|fw_role_(war|rapid|siege|carrier|tender)|fw_drive|fw_fire_(fleets|defences))"),
     "a word beside a page heading, or a page tile's word (te_sr_page_value)": (
         ("te_sr_page_value", None),
         r"je_space_race_widget_(page_settlers|autonomy_status_\w+|def_status_\w+"
@@ -648,6 +656,23 @@ CELLS = {
     "a fleet's Transfer (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_transfer"'),
         r"je_space_race_widget_fl_transfer"),
+    # The Fleets window (the owner, 2026-11-25): the count over its list, a page's
+    # title word, the captions of its orders lines and the leg to the destination picked.
+    "the Fleets window's count, its label (te_sr_fleet_popup_body)": (
+        ("te_sr_fleet_popup_body", 'text = "je_space_race_widget_fw_count_label"'),
+        r"je_space_race_widget_fw_count_label"),
+    "the Fleets window's count, its figure (te_sr_fleet_popup_body)": (
+        ("te_sr_fleet_popup_body", 'text = "je_space_race_widget_fw_count_figure"'),
+        r"je_space_race_widget_fw_count_figure"),
+    "a fleet's page, the word before its number (te_sr_fleet_page)": (
+        ("te_sr_fleet_page", 'text = "je_space_race_widget_fw_fleet"'),
+        r"je_space_race_widget_fw_fleet"),
+    "an orders line's caption on a fleet's page (te_sr_fp_caption)": (
+        ("te_sr_fp_caption", 'block "caption_text"'),
+        r"je_space_race_widget_(fw_destination|fw_target|fl_col_marines)"),
+    "the leg to the destination picked, on a fleet's page (te_sr_fleet_page)": (
+        ("te_sr_fleet_page", 'block "fp_leg"'),
+        r"je_space_race_widget_fw_\d_leg"),
     # The Transfer popup (UI pass design § 6).
     "the Transfer popup's Into (te_sr_xf_to_line)": (
         ("te_sr_xf_to_line", 'text = "je_space_race_widget_xf_to_label"'),
@@ -779,7 +804,8 @@ CELLS = {
 }
 SECTION_HEADERS = (r"je_space_race_widget_(control_header|rivals_header|colonies_header|solar_system_header|how_header"
                    r"|fleets_header|powers_header|orbit_header|howc_header"
-                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title|cw_title|ld_title)")
+                   r"|sc_header|space_fleets_header|locations_header|tp_title|xf_title|dp_title|ft_title|cw_title|ld_title"
+                   r"|fw_title)")
 
 
 # The Bases move area's lines that name a place, through the controls' custom
@@ -997,6 +1023,13 @@ class FigureBudgetTest(unittest.TestCase):
     DEST = {"dr_months": "999", "dr_dv_covered": "9999.0", "dr_dv_short": "9999.0", "dr_worlds": "6",
             "dr_enemy": "99999", "dr_inbound": "99999"}
     LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
+    # The Fleets window (the owner, 2026-11-25): a slot's number and strength in
+    # its list; on its page a role now of full, its fire to a tenth and, in the
+    # drive's tile, a refit's months.
+    FLEET_SWITCH = {"switch_number": "VIII", "switch_strength": "9999"}
+    FLEET_PAGE = {"fp_role_war": "9999 / 9999", "fp_role_rapid": "9999 / 9999", "fp_role_siege": "9999 / 9999",
+                  "fp_role_carrier": "9999 / 9999", "fp_role_tender": "9999 / 9999",
+                  "fp_fire_fleets": "99999.9", "fp_fire_defences": "99999.9", "fl_refit": "3"}
     SITE = {"site_inbound_ours": "9·999", "site_slots": "99"}
     QUEUE = {"mq_place": "20."}
 
@@ -1183,6 +1216,44 @@ class FigureBudgetTest(unittest.TestCase):
         self._check("te_sr_fl_role_cell", self.ROLE)
         self._check("te_sr_xf_role_row", self.TRANSFER)
         self._check("te_sr_location_cell", self.LOCATION)
+
+    def test_the_fleets_window(self):
+        """The Fleets window's list and a fleet's page (the owner, 2026-11-25):
+        the list's figures in their cells, the page's in its tiles'
+        te_sr_page_value, and the custom-loc names (where, drive, destination,
+        target) at their longest option, as on the card."""
+        gui = _read(GUI)
+        self._check("te_sr_fleet_switch_row", self.FLEET_SWITCH)
+        self._check("te_sr_fleet_page", {"fp_number": "VIII"})
+        page = _type_body(gui, "te_sr_fleet_page")
+        width, font = _width(_type_body(gui, "te_sr_page_value")), _font(_type_body(gui, "te_sr_page_value"))
+        shown = re.findall(r'te_sr_page_value = \{[^{}]*block "(\w+)"', page)
+        self.assertEqual(sorted(shown), sorted([*self.FLEET_PAGE, "fl_drive"]))
+        for block, figure in self.FLEET_PAGE.items():
+            with self.subTest(block=block):
+                need = len(figure) * UNITS_PER_CHAR[font] * MARGIN
+                self.assertLessEqual(need, width, f"{figure!r}: {need:.0f} units in a {width}-wide cell")
+        longest = max((_render(_loc(k)) for k in _custom_options("sr_fl_1_drive_name")), key=len)
+        self.assertLessEqual(len(longest) * UNITS_PER_CHAR[font] * MARGIN, width, longest)
+        for typ, blocks in (("te_sr_fleet_page", ("fl_where", "fl_target", "fl_pick")), ("te_sr_fleet_switch_row", ("fl_where",))):
+            body = _type_body(gui, typ)
+            for block in blocks:
+                with self.subTest(type=typ, block=block):
+                    box = _textbox_with(body, f'block "{block}"')
+                    options = _custom_options({"fl_where": "sr_fl_1_where_name", "fl_target": "sr_fl_1_target_name",
+                                               "fl_pick": "sr_fl_1_pick_name"}[block])
+                    longest = max((_render(_loc(k)) for k in options), key=len)
+                    need = len(longest) * UNITS_PER_CHAR[_font(box)] * MARGIN
+                    self.assertLessEqual(need, _width(box), f"{longest!r} in {block}")
+        # The list's line: its cells and gaps are the button's width.
+        switch = _type_body(gui, "te_sr_fleet_switch_row")
+        self.assertIn("size = { 244 26 }", switch)
+        cells = [_width(_textbox_with(switch, f'block "{block}"')) for block in ("switch_number", "fl_where", "switch_strength")]
+        self.assertEqual(4 + cells[0] + 4 + 20 + 4 + cells[1] + 4 + cells[2] + 4, 244)
+        # The window holds its content: the list, the gap and the page; the page its two columns.
+        self.assertEqual(244 + 14 + 960, 1218)
+        self.assertLessEqual(472 + 8 + 480, 960)
+        self.assertLessEqual(1218 + 2 * 35 + 2 * 10, 1332)
 
     def test_the_destination_popup(self):
         self._check("te_sr_dest_slot", self.DEST_FLEET)

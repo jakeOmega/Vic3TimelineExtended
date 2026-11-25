@@ -29,8 +29,10 @@ SR_GATE = ("GetScriptedGui('te_window_space_race_solar_colonization_sgui').IsSho
            "GuiScope.SetRoot( GetPlayer.MakeScope ).End )")
 SR_CONTEXT = "datacontext = \"[GetPlayerJournalEntry('je_space_race_solar_colonization')]\""
 CLEAR = "onclick = \"[GetVariableSystem.Clear('te_popup')]\""
+# Up while a popup is open (te_popup) or the Fleets window is (its own key, sr_fleet_focus, so that a
+# te_popup picker can open over it: test_space_fleet_window.py).
 ROOT_VISIBLE = ("[And( And( GetMetaPlayer.GetPlayedOrObservedCountry.IsValid, Not( GetMetaPlayer.IsObserver ) ), "
-                "GetVariableSystem.Exists('te_popup') )]")
+                "Or( GetVariableSystem.Exists('te_popup'), GetVariableSystem.Exists('sr_fleet_focus') ) )]")
 
 
 def _read(path):
