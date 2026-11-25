@@ -1,0 +1,30 @@
+﻿# ============================================================================
+# ASSIMILATION CULTURES: the yearly pulse
+# (docs/systems/mod_systems/assimilation_cultures.md)
+# ============================================================================
+# Each country's own yearly pulse, which the engine spreads over the year. No
+# rule gate here: the pass runs under every setting of assimilation_cultures_rule
+# and branches on it (te_hc_yearly_country), because the define that keeps the
+# engine's assimilation inside a heritage group holds for every game.
+
+on_yearly_pulse_country = {
+	on_actions = { te_hc_yearly_on_action }
+}
+
+te_hc_yearly_on_action = {
+	effect = {
+		te_hc_yearly_country = yes
+	}
+}
+
+# TEMPORARY self-check hc_define_blocks (te_assimilation_culture_selfcheck_effects.txt; delete after the
+# play-test): the global monthly pulse, scope none. It walks the world's pops at most three times a game.
+on_monthly_pulse = {
+	on_actions = { te_hc_chk_define_on_action }
+}
+
+te_hc_chk_define_on_action = {
+	effect = {
+		te_hc_chk_define = yes
+	}
+}

@@ -1,0 +1,148 @@
+﻿# ============================================================================
+# ASSIMILATION CULTURES: values
+# (docs/systems/mod_systems/assimilation_cultures.md;
+#  docs/superpowers/specs/2026-11-25-assimilation-cultures-design.md)
+# ============================================================================
+# The yearly pass (te_assimilation_culture_effects.txt) converts the pops the
+# engine no longer assimilates: those of another heritage group than every
+# primary culture of their country. Its rate is the engine's own, read from the
+# same modifier sums, so every law, institution and bonus that speeds
+# assimilation speeds this with no second list to keep.
+
+# ---- The engine's figures, restated (test_assimilation_cultures_values.py pins each) ----
+# NPops ASSIMILATION_RATE: the share of a pop that assimilates each month.
+te_hc_monthly_rate = 0.002
+# The pass runs once a year.
+te_hc_months = 12
+# NPops CULTURAL_FERVOR_ASSIMILATIOM_EFFECT, the mod's value (extra_defines.txt): a point of the
+# culture's fervor takes this much off the rate. The formula is a reading of the define's comment.
+te_hc_fervor_effect = 0.0075
+# NPops ASSIMILATION_IN_HOMELAND_MULT, for a state that lets pops assimilate in their homeland.
+te_hc_homeland_factor = 0.75
+# No pop converts more than half of itself in a year.
+te_hc_rate_cap = 0.5
+
+# ---- The crossing share ----
+# Country scope. The share of the usual rate at which a pop joins a culture of
+# another heritage group: country_cross_heritage_assimilation_add, which the
+# Bodily Autonomy laws carry, read between 0 and 1.
+te_hc_cross_share = {
+	value = modifier:country_cross_heritage_assimilation_add
+	min = 0
+	max = 1
+}
+
+# ---- The rate ----
+# Pop scope. The owner's multiplier for this pop's acceptance status
+# (country_assimilation_<status>_mult, which the Minority Rights laws carry),
+# by vanilla's thresholds: acceptance_status_2 to _5 are 20, 40, 60, 80.
+te_hc_status_mult = {
+	value = 0
+	if = {
+		limit = { pop_acceptance >= acceptance_status_5 }
+		add = owner.modifier:country_assimilation_full_acceptance_mult
+	}
+	else_if = {
+		limit = { pop_acceptance >= acceptance_status_4 }
+		add = owner.modifier:country_assimilation_second_rate_citizen_mult
+	}
+	else_if = {
+		limit = { pop_acceptance >= acceptance_status_3 }
+		add = owner.modifier:country_assimilation_open_prejudice_mult
+	}
+	else_if = {
+		limit = { pop_acceptance >= acceptance_status_2 }
+		add = owner.modifier:country_assimilation_cultural_erasure_mult
+	}
+	else = {
+		add = owner.modifier:country_assimilation_violent_hostility_mult
+	}
+}
+
+# Pop scope. Reads scope:te_hc_state (the pop's state; the caller saves it).
+# The fraction of the pop that converts this year, 0 to te_hc_rate_cap:
+#
+#   rate = monthly rate * 12
+#        * (1 + the state's state_assimilation_mult)        no lower than 0
+#        * (1 + the owner's multiplier for the pop's status) no lower than 0
+#        * (1 - the pop's radical share)
+#        * (1 - fervor effect * the culture's fervor)        no lower than 0
+#        * 0.75 in a homeland of the culture (reached only where the state
+#          carries state_allow_assimilation_in_homeland_bool)
+#
+# With no modifiers that is 2.4% a year. A state's modifier:state_* read
+# includes its country's lines (scripting_best_practices.md, Reading Pops,
+# Buildings and Wars for a Yearly Model), so a law's assimilation line counts.
+# A sum below -100% gives 0, never a negative fraction: Clade Citizenship's
+# -300% ends assimilation in a country with under +200% of its own.
+te_hc_pop_rate = {
+	value = te_hc_monthly_rate
+	multiply = te_hc_months
+	multiply = {
+		value = 1
+		add = state.modifier:state_assimilation_mult
+		min = 0
+	}
+	multiply = {
+		value = 1
+		add = te_hc_status_mult
+		min = 0
+	}
+	multiply = {
+		value = 1
+		subtract = pop_radical_fraction
+		min = 0
+	}
+	multiply = {
+		value = 1
+		subtract = {
+			value = culture.culture_current_fervor
+			multiply = te_hc_fervor_effect
+		}
+		min = 0
+	}
+	if = {
+		limit = {
+			culture = { has_homeland = scope:te_hc_state }
+		}
+		multiply = te_hc_homeland_factor
+	}
+	min = 0
+	max = te_hc_rate_cap
+}
+
+# ---- The fraction a conversion passes to change_pop_culture ----
+# A pop of fewer people than this converts whole, where its rate is above 0. At
+# the base rate a year's fraction of such a pop is about one person, the
+# engine's own minimum; converting it at once also keeps a state from filling
+# with pops of a few people.
+te_hc_small_pop = 50
+
+# Pop scope. The fraction for the language step, and for joining the host under
+# Unrestricted: the rate, or 1 for a small pop. 0 stays 0.
+# change_pop_culture takes a named value here, as the Culture Merges pass theirs.
+te_hc_pop_step = {
+	value = te_hc_pop_rate
+	if = {
+		limit = {
+			total_size < te_hc_small_pop
+			te_hc_pop_rate > 0
+		}
+		value = 1
+	}
+}
+
+# Pop scope. The fraction for the heritage step: the rate times the owner's
+# crossing share, or 1 for a small pop. The caller has checked that the share
+# is above 0 (te_hc_cross).
+te_hc_pop_cross_step = {
+	value = te_hc_pop_rate
+	multiply = owner.te_hc_cross_share
+	if = {
+		limit = {
+			total_size < te_hc_small_pop
+			te_hc_pop_rate > 0
+		}
+		value = 1
+	}
+}

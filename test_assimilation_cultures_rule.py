@@ -152,7 +152,7 @@ class LawTest(unittest.TestCase):
         for path in sorted((ROOT / "common").rglob("*.txt")):
             if path == TYPES:
                 continue
-            carriers += [path.name] * len(re.findall(rf"\b{SHARE}\s*=", code(path)))
+            carriers += [path.name] * len(re.findall(rf"(?<!modifier:)\b{SHARE}\s*=", code(path)))  # a line that grants it, not a read
         self.assertEqual(carriers, [BODILY.name] * 4)
 
     def test_ancestral_citizenship_blocks_the_crossing(self):
@@ -165,7 +165,7 @@ class LawTest(unittest.TestCase):
         for path in sorted((ROOT / "common").rglob("*.txt")):
             if path == TYPES:
                 continue
-            carriers += [path.name] * len(re.findall(rf"\b{BLOCKED}\s*=", code(path)))
+            carriers += [path.name] * len(re.findall(rf"(?<!modifier:)\b{BLOCKED}\s*=", code(path)))  # a line that grants it, not a read
         self.assertEqual(carriers, [CITIZENSHIP.name])
 
 
