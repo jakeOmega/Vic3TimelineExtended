@@ -28,9 +28,10 @@ Outputs:
   events); the revolution repoint, the panel snapshot, Cede
   Colony's apply and the console's helpers.
 - ``common/journal_entries/sr_sites_generated.txt``: the solar colonization
-  entry's declarations of the 80 specializations, the 40 discovery outcomes and
-  the six facilities (an ``INJECT:`` into the hand-written entry,
-  ``je_space_race.txt``).
+  entry's declarations of the 80 specializations, the 40 discovery outcomes
+  (under races only; under simple and full colonies an outcome is its world's
+  boon, ``DISCOVERY_BOONS``) and the six facilities (an ``INJECT:`` into the
+  hand-written entry, ``je_space_race.txt``).
 - ``common/scripted_triggers/sr_sites_generated.txt``: Cede Colony's input filter
   and ``sr_any_site_unclaimed``.
 - ``common/script_values/sr_sites_generated.txt``: ``sr_sites_held_count`` and the
@@ -252,6 +253,52 @@ RESORTS: dict[str, tuple[int, int]] = {
     "daedalus": (10, 0),  # the far side: no Earth in the sky
     "imbrium": (25, 10),  # Earth over the grey plains
 }
+
+# Discoveries' site boons (the owner, 2026-11-25: "module-specific modifiers that
+# can be applied to the sites ... boost the effect of that module at that specific
+# site"). Each discovery's two options, in option order, name the module type the
+# find makes stronger at its own world: the option chosen (the world's record,
+# sr_site_disc_<d>, 1 or 2) adds BOON_BONUS to that module's effect there, so its
+# staffed levels count double (sr_site_<type>_eff_<key>). The boon is the world's,
+# as the record is: a cession or an heir takes it, a release clears it. The first
+# option studies the find (a Research Station); the second puts it to use, the
+# module its text names. Until 2026-11-25 each option was a small national
+# modifier (sr_discovery_<d>_<a|b>, +1% research and the like); races only, which
+# has no modules, keeps it.
+DISCOVERY_BOONS: dict[str, tuple[str, str]] = {
+    "europa_life": ("lab", "culture"),  # a biology institute / an international consortium
+    "europa_vents": ("lab", "yard"),  # chemical research / instruments for hot, pressurized water
+    "enceladus_life": ("lab", "culture"),  # a biological reserve / samples shared abroad
+    "titan_chemistry": ("lab", "foundry"),  # the deposit's history / industrial synthesis
+    "hellas_fossils": ("lab", "culture"),  # a paleontology institute / the archive opened abroad
+    "olympus_tubes": ("lab", "hab"),  # an archive of volcanism / sealed habitat modules
+    "utopia_glacier": ("lab", "terra"),  # a climate core / the cleanest ice for water
+    "arcadia_brines": ("lab", "yard"),  # salt chemistry / corrosion-resistant equipment
+    "ceres_reservoir": ("lab", "mine"),  # geochemical research / brine extraction
+    "vesta_impactor": ("lab", "foundry"),  # a scientific collection / mineral sorting
+    "psyche_metal": ("lab", "mine"),  # the seam's context / selective mining
+    "pallas_water": ("lab", "hab"),  # early water chemistry / local water supplies
+    "venus_waves": ("lab", "resort"),  # an atmospheric observatory / aerostat navigation
+    "mercury_archive": ("lab", "mine"),  # volatile chemistry / a water and propellant source
+    "io_roof": ("lab", "mine"),  # monitoring from a distance / mobile foundations under the plant
+    "ganymede_layers": ("lab", "yard"),  # the ocean's structure / deep-ice pressure vessels
+    "callisto_archive": ("lab", "hab"),  # an impact chronology / shielding and construction
+    "titania_ocean": ("lab", "hab"),  # an observatory / colony engineering
+    "triton_jet": ("lab", "yard"),  # a geyser observatory / the landing field moved
+    "pluto_antifreeze": ("lab", "foundry"),  # the buried ocean / cryogenic systems
+}
+# What a boon adds to its module's effect at its world: +100%, double strength.
+BOON_BONUS = 1
+# The module types a boon may name: the Habitat (its share of the room) and every
+# facility whose effect is its world's levels at work. Not the Administration,
+# whose staffed levels are also its authority bill (Facility.bills), nor Defences
+# and Spaceport, whose levels other generators read (gen_space_fleets).
+BOON_TYPES = ("hab", "mine", "yard", "lab", "culture", "resort", "black", "train", "bunker", "foundry", "terra")
+# The boosted facilities the AI builds at their world whatever else it needs
+# (sr_mod_ai_plan_<key>, before its fallback Research Station): those of use to
+# any country. The others' boons work through the needs the plan already has.
+AI_BOON_ALWAYS = ("yard", "culture", "black", "train", "foundry")
+
 
 # The panel's locations, in its order: the owner's nine, Earth and the Moon
 # one (the fleets' location; its worlds are the Moon's, lunar colonization
@@ -653,7 +700,38 @@ def spec_modifiers(site: Site) -> tuple[str, str]:
 
 
 def discovery_modifiers(discovery: str) -> tuple[str, str]:
+    """A discovery's two outcomes, in option order: the events'
+    sr_site_choose_<name>, the boon's tooltip (<name>_tt) under simple and full
+    colonies (DISCOVERY_BOONS), and the modifier races only declares."""
     return f"sr_discovery_{discovery}_a", f"sr_discovery_{discovery}_b"
+
+
+def site_boons(site: Site) -> dict[str, list[tuple[str, int]]]:
+    """The module types the world's discoveries can boost, each with the
+    (discovery, option) pairs that boost it, in the table's order."""
+    out: dict[str, list[tuple[str, int]]] = {}
+    for d in site.discoveries:
+        for option, t in enumerate(DISCOVERY_BOONS[d], start=1):
+            out.setdefault(t, []).append((d, option))
+    return out
+
+
+def boosted(site: Site, t: str) -> bool:
+    return t in site_boons(site)
+
+
+def eff_value(site: Site, t: str) -> str:
+    """The any-scope value of a facility's effective levels at the world: its
+    staffed levels, times its boon where a discovery there can boost it."""
+    k = site.key
+    return f"sr_site_{t}_eff_{k}" if boosted(site, t) else f"sr_site_{t}_staffed_{k}"
+
+
+def hab_share_eff(site: Site) -> str:
+    """The share of the base room a Habitat level adds at the world, its boon
+    included where a discovery there can boost Habitats."""
+    k = site.key
+    return f"sr_site_hab_share_eff_{k}" if boosted(site, "hab") else f"sr_site_hab_share_value_{k}"
 
 
 def module_vars(site: Site) -> list[str]:
@@ -852,6 +930,10 @@ def _mirror_on(site: Site) -> list[str]:
                 "\telse = {",
                 f"\t\tsr_site_clear_held = {{ VAR = {modifier}_held }}",
                 "\t}"]
+    # A discovery made there is ours as made. Its outcome is the world's boon
+    # under simple and full colonies (DISCOVERY_BOONS, read from the record by
+    # sr_site_boon_<type>_<key>), and under races only, which has no modules, the
+    # outcome's modifier, which the entry declares while <modifier>_held is set.
     for d in site.discoveries:
         da, db = discovery_modifiers(d)
         out += ["\tif = {",
@@ -1185,18 +1267,27 @@ def _monthly(site: Site) -> list[str]:
 def render_dispatcher() -> list[str]:
     out = ["# ===== The choice dispatcher =====",
            "# sr_site_choose_<m>, an option of space_race_colony_events.1-40 or of",
-           "# space_race_discovery_events: a specialization records the world's choice, a",
-           "# discovery outcome the discovery's, and the world's sync marks <m>_held, which",
-           "# the entry's declaration reads (common/journal_entries/sr_sites_generated.txt).",
-           "# The option shows the modifier the entry declares from then on: a new colony's",
-           "# founding specialization is level 1, multiplier 1. ROOT = THIS is the country",
-           "# choosing. A world claimed under a save from before the record existed gets",
-           "# its holder here."]
+           "# space_race_discovery_events. A specialization records the world's choice and",
+           "# the world's sync marks <m>_held, which the entry's declaration reads",
+           "# (common/journal_entries/sr_sites_generated.txt); the option shows the modifier",
+           "# the entry declares from then on (a new colony's founding specialization is",
+           "# level 1, multiplier 1). A discovery outcome records the discovery's choice,",
+           "# which under simple and full colonies is the world's boon",
+           "# (gen_solar_sites.DISCOVERY_BOONS: the module it makes stronger there, read by",
+           "# sr_site_boon_<type>_<key>), the option's tooltip saying which, and under races",
+           "# only, with no modules, the outcome's modifier, declared as a specialization's",
+           "# is. ROOT = THIS is the country choosing. A world claimed under a save from",
+           "# before the record existed gets its holder here."]
+    show_modifier = "show_as_tooltip = {{ je:je_space_race_solar_colonization ?= {{ add_modifier = {{ name = {} }} }} }}"
     for modifier, site, kind, option in choices():
         k = site.key
-        out += [f"sr_site_choose_{modifier} = {{",
-                f"\tshow_as_tooltip = {{ je:je_space_race_solar_colonization ?= {{ add_modifier = {{ name = {modifier} }} }} }}",
-                "\thidden_effect = {",
+        out.append(f"sr_site_choose_{modifier} = {{")
+        if kind == "spec":
+            out.append(f"\t{show_modifier.format(modifier)}")
+        else:
+            out += [f"\tif = {{ limit = {{ sr_colonies_contested_enabled = yes }} custom_tooltip = {modifier}_tt }}",
+                    f"\telse = {{ {show_modifier.format(modifier)} }}"]
+        out += ["\thidden_effect = {",
                 f"\t\tset_variable = {{ name = {modifier}_held value = yes }}",
                 f"\t\tif = {{ limit = {{ NOT = {{ has_global_variable = sr_site_holder_{k} }} }} "
                 f"set_global_variable = {{ name = sr_site_holder_{k} value = root }} }}"]
@@ -2021,7 +2112,7 @@ def render_population_values() -> list[str]:
                 "}",
                 f"sr_site_room_{k} = {{",
                 f"\tvalue = sr_site_hab_value_{k}",
-                f"\tmultiply = sr_site_hab_share_value_{k}",
+                f"\tmultiply = {hab_share_eff(site)}",
                 "\tadd = 1",
                 *_terra_room_line(site),
                 f"\tmultiply = sr_site_base_room_{k}",
@@ -2094,6 +2185,9 @@ def _opt_var(name: str, var: str, *, global_: bool = True) -> list[str]:
 def render_module_values() -> list[str]:
     out = ["# ===== Modules (slice 4 design §§ 2-4, 7-8) =====",
            f"sr_mod_spec_budget = {{ value = {SPEC_BUDGET} }}",
+           "# What a discovery's boon adds to its module's effect at its world (the owner,",
+           "# 2026-11-25: double strength).",
+           f"sr_site_boon_bonus = {{ value = {BOON_BONUS} }}",
            "",
            "# Per world, any scope:",
            "#   sr_site_lvl_<a|b>_value_<key>  a specialization's level; the founding choice",
@@ -2107,6 +2201,13 @@ def render_module_values() -> list[str]:
            "#   sr_site_mult_<a|b>_<key>      a specialization's multiplier: level x staffing",
            "#                                  x the charter's share (slice 5 design § 2)",
            "#   sr_site_<spec|generic>_built_<key>  the levels against each cap",
+           "#   sr_site_<facility>_staffed_<key>  a facility's levels at the colony's staffing",
+           "#   sr_site_boon_<type>_<key>     1, plus sr_site_boon_bonus for each discovery there",
+           "#                                  whose recorded option boosts the type (only where",
+           "#                                  one can: gen_solar_sites.DISCOVERY_BOONS)",
+           "#   sr_site_<facility>_eff_<key>  ... the staffed levels times it, what the facility's",
+           "#                                  effect reads; sr_site_hab_share_eff_<key> the",
+           "#                                  Habitat's share times it",
            "# Country scope, counting THIS's queue and every shipment on its way:",
            "#   sr_mod_spec_used_<key> (against sr_mod_spec_budget), sr_mod_hab_used_<key> (against",
            "#   sr_site_hab_cap_<key>, colony people design § 4.3), sr_mod_crewed_pending_<key>",
@@ -2273,22 +2374,45 @@ def _hab_values(site: Site) -> list[str]:
     for t in FACILITY_TYPES:
         if t in generic_types(site):
             out.append(f"sr_site_{t}_staffed_{k} = {{ value = sr_site_{t}_value_{k} multiply = sr_site_staffing_{k} }}")
+    out += _boon_values(site)
     out += ["# Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).",
             f"sr_site_ebase_room_{k} = {{",
             f"\tvalue = {site.ebase_room}",
-            f"\tadd = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}",
+            f"\tadd = {{ value = {eff_value(site, 'mine')} multiply = sr_mod_mine_room floor = yes }}",
             "}",
             "# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).",
             f"sr_site_resort_room_{k} = {{",
             f"\tvalue = {site.resort_room}",
-            f"\tadd = {{ value = sr_site_resort_staffed_{k} multiply = sr_mod_resort_room floor = yes }}",
+            f"\tadd = {{ value = {eff_value(site, 'resort')} multiply = sr_mod_resort_room floor = yes }}",
             "}",
             "# Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a",
             "# staffed Cultural Center level (the owner, 2026-11-24).",
             f"sr_site_resort_draw_{k} = {{",
             f"\tvalue = {site.resort_draw}",
-            f"\tadd = {{ value = sr_site_culture_staffed_{k} multiply = sr_mod_culture_draw }}",
+            f"\tadd = {{ value = {eff_value(site, 'culture')} multiply = sr_mod_culture_draw }}",
             "}"]
+    return out
+
+
+def _boon_values(site: Site) -> list[str]:
+    """A world's boons (DISCOVERY_BOONS), any scope: per module type one of its
+    discoveries can boost, sr_site_boon_<type>_<key>, 1 plus sr_site_boon_bonus
+    for each of them whose recorded option names the type; and the facility's
+    effective levels, sr_site_<type>_eff_<key>, its staffed levels times that, or
+    for the Habitat the share of the base room a level adds,
+    sr_site_hab_share_eff_<key>. The record is the world's (sr_site_disc_<d>), so
+    the boon is whoever holds it, and a release clears it."""
+    k = site.key
+    out = []
+    for t, sources in site_boons(site).items():
+        out += [f"sr_site_boon_{t}_{k} = {{", "\tvalue = 1"]
+        out += [f"\tif = {{ limit = {{ has_global_variable = sr_site_disc_{d} global_var:sr_site_disc_{d} = {option} }} "
+                "add = sr_site_boon_bonus }" for d, option in sources]
+        out.append("}")
+        if t == "hab":
+            out.append(f"sr_site_hab_share_eff_{k} = {{ value = sr_site_hab_share_value_{k} multiply = sr_site_boon_hab_{k} }}")
+        else:
+            out.append(f"sr_site_{t}_eff_{k} = {{ value = sr_site_{t}_staffed_{k} multiply = sr_site_boon_{t}_{k} }}")
     return out
 
 
@@ -2324,7 +2448,7 @@ def render_terra_values() -> list[str]:
                 *share,
                 "}",
                 f"sr_site_terra_rate_{k} = {{",
-                f"	value = sr_site_terra_staffed_{k}",
+                f"	value = {eff_value(site, 'terra')}",
                 f"	if = {{ limit = {{ has_global_variable = sr_site_occupier_{k} }} value = 0 }}",
                 "}",
                 f"sr_mod_terra_used_{k} = {{",
@@ -2347,11 +2471,12 @@ def _facility_serves(site: Site, facility: Facility) -> str:
 def render_facility_values() -> list[str]:
     out = ["", "# ===== Facilities (colony management design § 7) =====",
            "# Country scope: sr_mod_units_<type>, THIS's staffed levels of the facility at the",
-           "# colonies that serve it, the solar colonization entry's declared value for its",
+           "# colonies that serve it, each doubled where a discovery there boosts the type",
+           "# (sr_site_<type>_eff_<key>), the solar colonization entry's declared value for its",
            "# modifier (common/journal_entries/sr_sites_generated.txt)."]
     for f in FACILITIES:
         out += [f"# {f.name}", f"sr_mod_units_{f.key} = {{", "\tvalue = 0"]
-        out += [f"\tif = {{ limit = {{ {_facility_serves(s, f)} }} add = sr_site_{f.key}_staffed_{s.key} }}" for s in SITES
+        out += [f"\tif = {{ limit = {{ {_facility_serves(s, f)} }} add = {eff_value(s, f.key)} }}" for s in SITES
                 if f.key in generic_types(s)]
         out.append("}")
     out += ["# The queue's head (sr_mq_1_site, sr_mq_1_type) costs this to build: a Habitat",
@@ -2463,6 +2588,12 @@ def _module_ai(site: Site) -> list[str]:
             ("terra", f"sr_site_fill_{k} >= sr_mod_ai_terra_fill"),
             ("bunker", "nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max"),
             ("yard", "any_scope_building = { is_building_type = building_space_command }"),
+            # A facility a discovery here doubles (DISCOVERY_BOONS; the owner,
+            # 2026-11-25), when the world's record names it, before the Research
+            # Station every colony falls back on: one that is always of use (the
+            # mine, resort, Terraforming and Habitat boons work through the needs
+            # above, and a Research Station boon through the fallback).
+            *((t, f"sr_site_boon_{t}_{k} > 1") for t in site_boons(site) if t in AI_BOON_ALWAYS),
             ("lab", None))
     for t, why in ((t, why) for t, why in plan if t in generic_types(site)):
         out += ["\t\telse_if = {",
@@ -2990,7 +3121,7 @@ def render_dismantle_values() -> list[str]:
                 f"\tvalue = sr_site_hab_value_{k}",
                 "\tsubtract = 1",
                 "\tmin = 0",
-                f"\tmultiply = sr_site_hab_share_value_{k}",
+                f"\tmultiply = {hab_share_eff(site)}",
                 "\tadd = 1",
                 *_terra_room_line(site),
                 f"\tmultiply = sr_site_base_room_{k}",
@@ -4132,9 +4263,11 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ sr_mod_hab_used_{k} > sr_site_hab_cap_{k} }} value = 1 }}",
                 "}",
                 f"sr_disp_mod_next_hab_cost_{k} = {{ value = sr_mod_next_hab_cost_{k} }}",
-                f"sr_disp_site_hab_share_{k} = {{ value = sr_site_hab_share_value_{k} multiply = 100 round = yes }}",
-                f"sr_disp_site_hab_people_{k} = {{ value = sr_site_hab_share_value_{k} multiply = sr_site_base_room_{k} }}",
+                f"sr_disp_site_hab_share_{k} = {{ value = {hab_share_eff(site)} multiply = 100 round = yes }}",
+                f"sr_disp_site_hab_people_{k} = {{ value = {hab_share_eff(site)} multiply = sr_site_base_room_{k} }}",
                 f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
+                # Its discoveries' recorded options, 0 for none: the page's boon lines.
+                *[line for d in site.discoveries for line in _opt_var(f"sr_disp_site_disc_{d}", f"sr_site_disc_{d}")],
                 f"sr_disp_site_resort_room_{k} = {{ value = sr_site_resort_room_{k} }}",
                 # Its draw with its Cultural Centers' points (the owner, 2026-11-24).
                 f"sr_disp_site_resort_draw_{k} = {{ value = sr_site_resort_draw_{k} }}",
@@ -4590,9 +4723,10 @@ def _switch_row(site: Site) -> list[str]:
 
 
 # The blocks only one of the two has (test_solar_sites.py holds both to the types):
-# a module's dismantling, Revoke, the Resort Colony room and the specializations'
-# full names are the page's; the crews cell in its three colors is the list's.
-_PAGE_ONLY = re.compile(r"mod_\w+_dismantl\w+|aut_revoke_button|module_(?:draw|resorts|resorts_tooltip)|page_name_[ab]")
+# a module's dismantling and its boons, Revoke, the Resort Colony room and the
+# specializations' full names are the page's; the crews cell in its three colors
+# is the list's.
+_PAGE_ONLY = re.compile(r"mod_\w+_dismantl\w+|mod_\w+_boons|aut_revoke_button|module_(?:draw|resorts|resorts_tooltip)|page_name_[ab]")
 _ROW_ONLY = re.compile(r"settler_crews(?:_exact|_short)?")
 
 
@@ -4608,6 +4742,23 @@ def _without(lines: list[str], names: re.Pattern) -> list[str]:
             out.append(line)
         elif line == "\t\t\t}":
             skipping = False
+    return out
+
+
+def _boon_lines(sources: list[tuple[str, int]]) -> list[str]:
+    """A module's boon lines on a colony's page (te_sr_page_mod_row's row_boons):
+    one for each (discovery, option) that boosts it, shown while the world's
+    record names that option; the line names the discovery, its hover the
+    outcome's tooltip, the event option's own."""
+    tests = [_eq(f"sr_disp_site_disc_{d}", option) for d, option in sources]
+    shown = tests[0] if len(tests) == 1 else f"Or( {', '.join(tests)} )"
+    out = [f'visible = "[{shown}]"']
+    for (d, option), test in zip(sources, tests):
+        out += ["te_sr_page_boon_line = {",
+                f'\tvisible = "[{test}]"',
+                f'\ttext = "je_space_race_widget_mod_boon_{d}"',
+                f'\ttooltip = "{discovery_modifiers(d)[option - 1]}_tt"',
+                "}"]
     return out
 
 
@@ -4687,6 +4838,10 @@ def _colony_blocks(site: Site) -> list[str]:
                          f"enabled = \"[GetScriptedGui('sr_colony_dismantle_sgui').IsValid( {site_op} )]\"",
                          f"onclick = \"[GetScriptedGui('sr_colony_dismantle_sgui').Execute( {site_op} )]\"",
                          f'tooltip = "{_reasoned("sr_colony_dismantle_sgui", site_op)}"')
+        if boosted(site, t):
+            # Its boons (DISCOVERY_BOONS; the owner, 2026-11-25), on the colony's page:
+            # a line under the name for each discovery here whose option boosts it.
+            out += _override(f"mod_{t}_boons", *_boon_lines(site_boons(site)[t]))
     if terraformable(site):
         # Terraforming (era 13 spec § 7.11): its line in the Modules view, its row and
         # tile on the page, once we have the technology or the world has work done
@@ -5097,9 +5252,11 @@ def _declaration(modifier: str, limit: str, value: str) -> list[str]:
 
 def entry_declarations() -> list[tuple[str, str, str]]:
     """(modifier, limit, value) for every modifier the generated file declares:
-    each world's two specializations at sr_site_mult_<a|b>_<key> and its
-    discoveries' two outcomes at 1, while the holder's <modifier>_held record
-    (the world's sync) names it; each facility's at its staffed levels under
+    each world's two specializations at sr_site_mult_<a|b>_<key>, and under
+    races only its discoveries' two outcomes at 1, while the holder's
+    <modifier>_held record (the world's sync) names it (under simple and full
+    colonies an outcome is its world's boon, DISCOVERY_BOONS, and declares
+    nothing); each facility's at its effective levels (boons included) under
     simple and full colonies, a hook's cost (Facility.bills) the same way."""
     out = []
     for site in SITES:
@@ -5107,7 +5264,8 @@ def entry_declarations() -> list[tuple[str, str, str]]:
             out.append((modifier, f"has_variable = {modifier}_held", f"sr_site_mult_{slot}_{site.key}"))
         for d in site.discoveries:
             for modifier in discovery_modifiers(d):
-                out.append((modifier, f"has_variable = {modifier}_held", "1"))
+                out.append((modifier, f"has_variable = {modifier}_held NOT = {{ sr_colonies_contested_enabled = yes }}",
+                            "1"))
     for f in FACILITIES:
         if f.modifier or f.bills:
             out.append((f"sr_module_{f.key}",
@@ -5127,8 +5285,10 @@ def render_entry_declarations() -> str:
            "# holder's <modifier>_held record names it: sr_site_sync_<key> marks it (the",
            "# world's mirror, sr_sites_generated.txt) and clears it when the world goes or is",
            "# occupied. A specialization is at its level times the colony's staffing and the",
-           "# charter's share (sr_site_mult_<a|b>_<key>), a discovery outcome at 1, a",
-           "# facility at its staffed levels at the colonies that serve us (sr_mod_units_<type>).",
+           "# charter's share (sr_site_mult_<a|b>_<key>), a discovery outcome at 1 under races",
+           "# only (under simple and full colonies it is its world's boon instead), a",
+           "# facility at its staffed levels at the colonies that serve us, doubled where a",
+           "# discovery there boosts it (sr_mod_units_<type>).",
            "# A declaration applies only while the entry is active; a colony holder's always",
            "# is (its `possible`). has_modifier cannot see a declared modifier: read the",
            "# record instead.",

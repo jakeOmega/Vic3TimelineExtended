@@ -196,15 +196,21 @@ class RecordTest(unittest.TestCase):
         dispatched = set(re.findall(r"(?m)^sr_site_choose_(\w+) = \{", self.effects))
         self.assertEqual(granted, dispatched)
         self.assertNotIn("sr_grant_colony_modifier", events + _raw("common", "scripted_effects", "space_race_effects.txt"))
+        discoveries = {m for s in gss.SITES for d in s.discoveries for m in gss.discovery_modifiers(d)}
         for modifier in granted:
             body = _block(self.effects, f"sr_site_choose_{modifier}")
             with self.subTest(modifier=modifier):
                 # The option's tooltip shows the modifier the entry then declares (a
                 # preview: has_modifier can't see a declared one, and nothing adds it);
-                # the record, the held mark and the sync are bookkeeping, hidden.
-                self.assertTrue(body.strip().startswith(
-                    "show_as_tooltip = { je:je_space_race_solar_colonization ?= "
-                    f"{{ add_modifier = {{ name = {modifier} }} }} }}"))
+                # the record, the held mark and the sync are bookkeeping, hidden. A
+                # discovery's outcome shows its boon under simple and full colonies
+                # and its modifier under races only, which has no modules.
+                preview = ("show_as_tooltip = { je:je_space_race_solar_colonization ?= "
+                           f"{{ add_modifier = {{ name = {modifier} }} }} }}")
+                if modifier in discoveries:
+                    preview = (f"if = {{ limit = {{ sr_colonies_contested_enabled = yes }} custom_tooltip = {modifier}_tt }}"
+                               f"\n\telse = {{ {preview} }}")
+                self.assertTrue(body.strip().startswith(preview))
                 hidden = _block(body, "hidden_effect")
                 self.assertIn(f"set_variable = {{ name = {modifier}_held value = yes }}", hidden)
                 self.assertRegex(hidden, r"sr_site_sync_\w+ = yes\s*$")
@@ -1118,7 +1124,8 @@ class PopulationTest(unittest.TestCase):
                 # (colony people design § 4.4; half before the technologies).
                 room = _block(self.values, f"sr_site_room_{k}")
                 self.assertIn(f"value = sr_site_hab_value_{k}", room)
-                self.assertIn(f"multiply = sr_site_hab_share_value_{k}", room)
+                # ... doubled where a discovery there boosts Habitats (2026-11-25).
+                self.assertIn(f"multiply = {gss.hab_share_eff(site)}", room)
                 self.assertIn(f"multiply = sr_site_base_room_{k}", room)
                 for kind in ("sr_site_pop_value", "sr_site_free_room", "sr_site_crews", "sr_emig_prio_weight",
                              "sr_emig_weight"):
@@ -1532,9 +1539,11 @@ class ModulesTest(unittest.TestCase):
             with self.subTest(site=k):
                 queued = re.findall(r"sr_mod_queue = \{ KEY = \w+ TYPE = (\w+) ", body)
                 terra = {"terra"} if gss.terraformable(site) else set()
+                # A facility a discovery here doubles, the always useful ones (2026-11-25).
+                boons = {t for t in gss.site_boons(site) if t in gss.AI_BOON_ALWAYS}
                 # The Off-World Resort since #1948, once the Resort Colony room is full.
                 self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "resort", "bunker", "yard", "lab"}
-                                 | terra)
+                                 | terra | boons)
                 self.assertEqual(body.count(f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}"), 1)
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
@@ -1574,7 +1583,9 @@ class ModulesTest(unittest.TestCase):
                 self.assertIn(f"{gss.site_serves(site)} }} add = sr_site_ebase_room_{k} }}", room)
                 world = _block(self.values, f"sr_site_ebase_room_{k}")
                 self.assertIn(f"value = {site.ebase_room}", world)
-                self.assertIn(f"add = {{ value = sr_site_mine_staffed_{k} multiply = sr_mod_mine_room floor = yes }}", world)
+                # ... doubled where a discovery there boosts the Mining Complex (2026-11-25).
+                self.assertIn(f"add = {{ value = {gss.eff_value(site, 'mine')} multiply = sr_mod_mine_room floor = yes }}",
+                              world)
         # The order by grade, best first, the near-Earth room first among grade 0.
         grades = [0 if t is None else t.ebase_grade for t in gss.ebase_tiers()]
         self.assertEqual(len(grades), len(gss.SITES) + 1)

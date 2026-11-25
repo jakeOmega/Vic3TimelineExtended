@@ -100,13 +100,15 @@ class GeneratedDeclarationTests(unittest.TestCase):
                         f"{modifier}_held }} add = sr_site_mult_{slot}_{site.key} }} }}"])
 
     def test_every_discovery_outcome_is_declared_once_at_one_while_held(self):
+        # Under races only: under simple and full colonies the outcome is its
+        # world's boon (gen_solar_sites.DISCOVERY_BOONS), not a modifier.
         for site in gss.SITES:
             for d in site.discoveries:
                 for modifier in gss.discovery_modifiers(d):
                     with self.subTest(modifier=modifier):
                         self.assertEqual(self.declared.get(modifier), [
                             f"modifier = {modifier} value = {{ value = 0 if = {{ limit = {{ has_variable = "
-                            f"{modifier}_held }} add = 1 }} }}"])
+                            f"{modifier}_held NOT = {{ {CONTESTED} }} }} add = 1 }} }}"])
 
     def test_every_facility_is_declared_once_at_its_staffed_levels(self):
         for f in gss.FACILITIES:

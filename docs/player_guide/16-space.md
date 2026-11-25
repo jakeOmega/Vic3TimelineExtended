@@ -933,7 +933,7 @@ specialization level its crews can run, its founding specialization first, then
 a facility its crews can run: an Administration where autonomy has reached 25 and is heading for 45
 or more and it has 50 authority to spare, a Mining Complex when its bases outgrow their room, an Off-World Resort once
 its Resort Colonies, built and queued, fill all of its resort room, Terraforming once its
-people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, otherwise a Research Station. While
+people fill half its room, a Nuclear Command Center with nuclear weapons, an Orbital Yard with a Space Command, an Orbital Yard, Cultural Center or Materials Foundry that a discovery there doubles, otherwise a Research Station. While
 anything is queued it runs the best fabrication method it has whose cost fits
 in a twentieth of its government's weekly income, or its cheapest one if none
 does. It never builds Spaceports or Defenses, and never pays for a Habitat past
@@ -1271,8 +1271,44 @@ colony's autonomy; leaving the colonists to it raises it.
 New colonies can also produce rare discoveries after their founding event.
 Twenty discoveries cover microbial life in Europa's or Enceladus's oceans,
 confirmed ancient Martian fossils, buried ice, mineral deposits, ocean
-layers, atmospheric waves and local geological hazards. Each discovery offers
-two choices with different small permanent bonuses on the colony journal entry.
+layers, atmospheric waves and local geological hazards.
+
+Each discovery makes one colony module stronger at its own colony: the first
+choice studies the find and doubles that colony's Research Stations, and the
+second puts it to use and doubles another module there (+100% to its effect).
+The bonus belongs to the colony, so it passes to whoever holds it and ends only
+when the colony itself does. It does nothing until the colony has
+that module, so choose the one you will build there. The colony's page shows
+each bonus under the module it doubles, with the discovery's name. Under the
+Races Only setting, which has no modules, each choice is instead a small
+permanent bonus on the colony journal entry.
+
+| Colony | Discovery | Second choice doubles |
+|---|---|---|
+| Europa | The Cultures Grew | Cultural Center |
+| Europa | Chimneys Beneath the Ice | Orbital Yard |
+| Enceladus | Life in the Ice Grains | Cultural Center |
+| Titan | An Impact-Born Chemical Laboratory | Materials Foundry |
+| Hellas Planitia | The Fossils of Hellas | Cultural Center |
+| Olympus Mons | Rooms Inside the Volcano | Habitat |
+| Utopia Planitia | The Buried Glacier | Terraforming |
+| Arcadia Planitia | Salt Water in the Drill | Orbital Yard |
+| Ceres | A Reservoir Below Ceres | Mining Complex |
+| 4 Vesta | A Visitor Preserved in Vesta | Materials Foundry |
+| 16 Psyche | A Rich Seam in Psyche | Mining Complex |
+| 2 Pallas | Water Bound in Stone | Habitat |
+| Venus Cloud Habitat | A Wave That Holds Its Ground | Off-World Resort |
+| Mercury | An Archive in Permanent Shadow | Mining Complex |
+| Io | The Moving Floor of Io | Mining Complex |
+| Ganymede | Oceans Between Layers | Orbital Yard |
+| Callisto | The Crater Under the Crater | Habitat |
+| Titania | Warmth Beneath Titania | Habitat |
+| Triton | A Jet Beneath the Landing Field | Orbital Yard |
+| Pluto-Charon | Antifreeze at the Edge of the System | Materials Foundry |
+
+A doubled Habitat adds twice the room for people, a doubled Mining Complex or
+Off-World Resort twice the room it adds, and doubled Terraforming works twice as
+fast. Europa's two discoveries can both double its Research Stations, for +200%.
 
 Each candidate has a hidden 10% chance of being possible when its colony is
 founded. A successful founding roll starts a year of surveying. After that,
