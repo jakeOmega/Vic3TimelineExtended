@@ -421,13 +421,10 @@ def _name(label: str) -> tuple[str, str]:
 
 
 def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED,
-          prefix: str = "te_systems_window", tooltip: str | None = None, enabled: str | None = None,
-          size: list[str] | None = None) -> list[str]:
+          prefix: str = "te_systems_window", tooltip: str | None = None, enabled: str | None = None) -> list[str]:
     """One tab_buttons slot: the window's (te_systems_window_tab, its
-    templates, its tooltip), or with stored_key, prefix, tooltip, enabled
-    (its open gate) and size (NI_TAB_SIZE) given, National Info's. `size`
-    goes on both halves of the slot, the tab and its selected face, in the
-    blocks that carry each one's visible."""
+    templates, its tooltip), or with stored_key, prefix, tooltip and enabled
+    (its open gate) given, National Info's."""
     def override(name, *lines):
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
     click = [] if tab.open_ is None else [f'enabled = "[{enabled or rooted(tab.open_, root)}]"']
@@ -435,14 +432,31 @@ def _slot(slot: str, tab: Tab, root: str = PLAYER_ROOT, stored_key: str = STORED
     return (override("button", *_name(tab.label))
             + override("button_tooltip", tooltip or _tooltip(tab, root))
             + override("button_click", *click)
-            + override("button_visibility", f"using = {prefix}_{tab.key}_selected", *(size or []))
-            + override("button_visibility_checked", f"using = {prefix}_{tab.key}_unselected", *(size or []))
+            + override("button_visibility", f"using = {prefix}_{tab.key}_selected")
+            + override("button_visibility_checked", f"using = {prefix}_{tab.key}_unselected")
             + override("button_selected", *_name(tab.label)))
 
 
 # The wide frame's strips keep the narrow slot width: 540, the Census
 # window's strip (pop_browser_panel.gui).
-WIDE_STRIP = ["minimumsize = { 540 -1 }", "maximumsize = { 540 -1 }"]
+STRIP_WIDTH = 540
+WIDE_STRIP = [f"minimumsize = {{ {STRIP_WIDTH} -1 }}", f"maximumsize = {{ {STRIP_WIDTH} -1 }}"]
+# Vanilla's tab_buttons (gui/shared/tab_bars.gui) spends 16 of its width on
+# its margin (3 a side) and its two end dividers (5 each), and shares the rest
+# among the tabs it shows, each layoutstretchfactor 1: five tabs at 540 are
+# 104.8 wide, but a strip of two at 540 drew each 262 (National Info's
+# Nuclear Weapons and Power Grids, 2026-11-24, seen in game).
+STRIP_FRAME = 2 * 3 + 2 * 5
+
+
+def strip_width(tabs: int, per_strip: int = len(SLOTS)) -> int:
+    """The width of a strip that lists `tabs` whose tabs, all showing, are as
+    wide as a full strip's of `per_strip` at STRIP_WIDTH."""
+    return round(STRIP_FRAME + tabs * (STRIP_WIDTH - STRIP_FRAME) / per_strip)
+
+
+def strip_size(width: int) -> list[str]:
+    return [f"minimumsize = {{ {width} -1 }}", f"maximumsize = {{ {width} -1 }}"]
 
 
 def _strip(tabs: list[Tab], wide: bool = False, root: str = PLAYER_ROOT) -> list[str]:
@@ -1046,59 +1060,48 @@ def ni_templates() -> list[str]:
     return out
 
 
-# National Info's tabs are each this wide, whatever their strip shows
-# (2026-11-24). Vanilla's tab_buttons (gui/shared/tab_bars.gui) spends 16 of
-# its width on its margin (3 a side) and its two end dividers (5 each) and
-# shares the rest among the tabs it SHOWS, each layoutstretchfactor 1. At a
-# fixed 540 a strip's tabs were 104.8 wide when all five showed, but a tab off
-# its strip (most of them follow a game rule: Tax Code's is off by default)
-# widened its neighbours: four at 131, two at 262, one at 524. So each half of
-# a slot, the tab and its selected face, is pinned to a full strip's share by
-# min and max (the form the strips' own 540 uses in te_ni_strips' hbox), and
-# the strip has no width of its own: `preferred` beside te_ni_strips' two
-# expands, it takes its children's, 16 + 105 a tab shown, and a hidden tab
-# (both halves hidden, as vanilla's unused slots are) narrows it.
-NI_TAB_WIDTH = 105
-NI_TAB_SIZE = [f"minimumsize = {{ {NI_TAB_WIDTH} -1 }}", f"maximumsize = {{ {NI_TAB_WIDTH} -1 }}"]
-
-
 def _ni_pops_slot(slot: str) -> list[str]:
     def override(name, *lines):
         return [f'blockoverride "{slot}_{name}" {{'] + [f"\t{ln}" for ln in lines] + ["}"]
     return (override("button", *_name(NI_POPS_LABEL))
             + override("button_tooltip", f'tooltip = "{NI_POPS_TOOLTIP}"')
             + override("button_click", f"onclick = \"[GetVariableSystem.Set('{NI_STORED}', '{NI_FALLBACK}')]\"")
-            + override("button_visibility", f"using = {NI_PREFIX}_pops_selected", *NI_TAB_SIZE)
-            + override("button_visibility_checked", f"using = {NI_PREFIX}_pops_unselected", *NI_TAB_SIZE)
+            + override("button_visibility", f"using = {NI_PREFIX}_pops_selected")
+            + override("button_visibility_checked", f"using = {NI_PREFIX}_pops_unselected")
             + override("button_selected", *_name(NI_POPS_LABEL)))
 
 
 def ni_strips() -> list[str]:
     """te_ni_strips: the window's strips side by side in one centered row,
-    one vanilla tab_buttons per five tabs. Each tab is NI_TAB_WIDTH wide and
-    each strip as wide as the tabs it shows, so a tab off its strip narrows
-    the strip, widens no neighbour, and the row stays centered on what it
-    draws."""
+    one vanilla tab_buttons per five tabs, each at the narrow width (540), as
+    the Timeline Extended window's full-screen frame has them. A last strip
+    of fewer is narrowed to its tabs (strip_width), so they are as wide as
+    the full strips' and the row stays centered on what it draws. That holds
+    while every tab a strip lists shows: the engine shares a strip's width
+    among the tabs it shows, so a tab its game rule hides still widens the
+    others on its strip (four at 131 with the Tax Code rule off, #2039;
+    pinning each tab instead drew no first strip in game, 2026-11-24)."""
     keys = [NI_FALLBACK] + [t.key for t in ni_tabs()]
     by_key = {t.key: t for t in TABS}
     out = ["### The strips: Pops, then each public tab in NI_ORDER, five a strip, side by",
-           "### side and centered. Each tab is 105 wide (NI_TAB_WIDTH, on both halves of its",
-           "### slot) and each strip as wide as the tabs it shows, so a tab off its strip",
-           "### narrows the strip rather than widening its neighbours.",
+           "### side and centered, each at the narrow strip width; a last strip of fewer",
+           "### narrowed to its tabs, so each tab is as wide as a full strip's while every",
+           "### tab its strip lists shows (a tab a game rule hides widens the rest: #2039).",
            "type te_ni_strips = hbox {",
            "\tlayoutpolicy_horizontal = expanding",
            "\tlayoutpolicy_vertical = fixed",
            "",
            "\texpand = {}"]
     for i in range(0, len(keys), NI_PER_STRIP):
-        out += ["\ttab_buttons = {", "\t\tlayoutpolicy_horizontal = preferred", ""]
+        width = strip_width(len(keys[i:i + NI_PER_STRIP]), NI_PER_STRIP)
+        out += ["\ttab_buttons = {"] + [f"\t\t{ln}" for ln in strip_size(width)] + [""]
         for j, (slot, key) in enumerate(zip(SLOTS, keys[i:i + NI_PER_STRIP])):
             if j:
                 out.append("")
             out.append(f"\t\t### {key}")
             lines = (_ni_pops_slot(slot) if key == NI_FALLBACK
                      else _slot(slot, by_key[key], COUNTRY_ROOT, NI_STORED, NI_PREFIX, ni_tooltip(by_key[key]),
-                                ni_open_gate(by_key[key]), NI_TAB_SIZE))
+                                ni_open_gate(by_key[key])))
             out += [f"\t\t{ln}" for ln in lines]
         out.append("\t}")
     return out + ["\texpand = {}", "}"]
