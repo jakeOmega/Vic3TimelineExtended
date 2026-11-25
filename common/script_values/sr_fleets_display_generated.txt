@@ -19,6 +19,15 @@
 #                               launches barred
 #   sr_disp_fl_<n>_pick         its picked destination's code, 0 none (the popup's Chosen)
 #   sr_disp_fl_<n>_target       its target world's index, 0 none (the target popup's Targeted)
+#   sr_disp_fl_<n>_fire_fleets, _fire_defences  its fire as the combat step counts it
+#                               (sr_fl_gather_at, sr_cb_add_target): the roles' fire x
+#                               sr_fleet_quality x sr_fleet_readiness; on Defences before
+#                               a survey's edge, which is the target's (the Fleets window)
+#   sr_disp_fl_<n>_dock         where it stands for refill and repair (the Fleets window): 0 at
+#                               a location with no dock, 1 docked at Earth, 2 at a Spaceport
+#                               of ours, 3 in flight
+#   sr_disp_fl_<n>_repair_pct   the share of its damage a month there repairs, in percent
+#                               (sr_fl_month_at: its dock's share, and only with a Space Command)
 sr_disp_fl_1 = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_loc } value = 1 }
@@ -123,6 +132,30 @@ sr_disp_fl_1_posture = { value = sr_fl_1_posture_value }
 sr_disp_fl_1_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_destroy } value = 1 }
+}
+sr_disp_fl_1_fire_fleets = {
+	value = sr_fl_1_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_1_fire_defences = {
+	value = sr_fl_1_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_1_dock = {
+	value = 0
+	if = { limit = { sr_fl_1_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_1_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_1_loc } has_variable = sr_fl_1_dest } value = 3 }
+}
+sr_disp_fl_1_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_1_docked = yes sr_sc_operational = yes }
+		value = sr_fl_1_repair_share
+		multiply = 100
+	}
 }
 sr_disp_fl_2 = {
 	value = 0
@@ -229,6 +262,30 @@ sr_disp_fl_2_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_destroy } value = 1 }
 }
+sr_disp_fl_2_fire_fleets = {
+	value = sr_fl_2_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_2_fire_defences = {
+	value = sr_fl_2_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_2_dock = {
+	value = 0
+	if = { limit = { sr_fl_2_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_2_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_2_loc } has_variable = sr_fl_2_dest } value = 3 }
+}
+sr_disp_fl_2_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_2_docked = yes sr_sc_operational = yes }
+		value = sr_fl_2_repair_share
+		multiply = 100
+	}
+}
 sr_disp_fl_3 = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_loc } value = 1 }
@@ -333,6 +390,30 @@ sr_disp_fl_3_posture = { value = sr_fl_3_posture_value }
 sr_disp_fl_3_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_destroy } value = 1 }
+}
+sr_disp_fl_3_fire_fleets = {
+	value = sr_fl_3_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_3_fire_defences = {
+	value = sr_fl_3_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_3_dock = {
+	value = 0
+	if = { limit = { sr_fl_3_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_3_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_3_loc } has_variable = sr_fl_3_dest } value = 3 }
+}
+sr_disp_fl_3_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_3_docked = yes sr_sc_operational = yes }
+		value = sr_fl_3_repair_share
+		multiply = 100
+	}
 }
 sr_disp_fl_4 = {
 	value = 0
@@ -439,6 +520,30 @@ sr_disp_fl_4_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_destroy } value = 1 }
 }
+sr_disp_fl_4_fire_fleets = {
+	value = sr_fl_4_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_4_fire_defences = {
+	value = sr_fl_4_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_4_dock = {
+	value = 0
+	if = { limit = { sr_fl_4_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_4_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_4_loc } has_variable = sr_fl_4_dest } value = 3 }
+}
+sr_disp_fl_4_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_4_docked = yes sr_sc_operational = yes }
+		value = sr_fl_4_repair_share
+		multiply = 100
+	}
+}
 sr_disp_fl_5 = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_loc } value = 1 }
@@ -543,6 +648,30 @@ sr_disp_fl_5_posture = { value = sr_fl_5_posture_value }
 sr_disp_fl_5_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_destroy } value = 1 }
+}
+sr_disp_fl_5_fire_fleets = {
+	value = sr_fl_5_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_5_fire_defences = {
+	value = sr_fl_5_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_5_dock = {
+	value = 0
+	if = { limit = { sr_fl_5_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_5_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_5_loc } has_variable = sr_fl_5_dest } value = 3 }
+}
+sr_disp_fl_5_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_5_docked = yes sr_sc_operational = yes }
+		value = sr_fl_5_repair_share
+		multiply = 100
+	}
 }
 sr_disp_fl_6 = {
 	value = 0
@@ -649,6 +778,30 @@ sr_disp_fl_6_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_destroy } value = 1 }
 }
+sr_disp_fl_6_fire_fleets = {
+	value = sr_fl_6_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_6_fire_defences = {
+	value = sr_fl_6_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_6_dock = {
+	value = 0
+	if = { limit = { sr_fl_6_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_6_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_6_loc } has_variable = sr_fl_6_dest } value = 3 }
+}
+sr_disp_fl_6_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_6_docked = yes sr_sc_operational = yes }
+		value = sr_fl_6_repair_share
+		multiply = 100
+	}
+}
 sr_disp_fl_7 = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_loc } value = 1 }
@@ -753,6 +906,30 @@ sr_disp_fl_7_posture = { value = sr_fl_7_posture_value }
 sr_disp_fl_7_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_destroy } value = 1 }
+}
+sr_disp_fl_7_fire_fleets = {
+	value = sr_fl_7_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_7_fire_defences = {
+	value = sr_fl_7_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_7_dock = {
+	value = 0
+	if = { limit = { sr_fl_7_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_7_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_7_loc } has_variable = sr_fl_7_dest } value = 3 }
+}
+sr_disp_fl_7_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_7_docked = yes sr_sc_operational = yes }
+		value = sr_fl_7_repair_share
+		multiply = 100
+	}
 }
 sr_disp_fl_8 = {
 	value = 0
@@ -859,6 +1036,30 @@ sr_disp_fl_8_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_destroy } value = 1 }
 }
+sr_disp_fl_8_fire_fleets = {
+	value = sr_fl_8_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_8_fire_defences = {
+	value = sr_fl_8_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_8_dock = {
+	value = 0
+	if = { limit = { sr_fl_8_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_8_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_8_loc } has_variable = sr_fl_8_dest } value = 3 }
+}
+sr_disp_fl_8_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_8_docked = yes sr_sc_operational = yes }
+		value = sr_fl_8_repair_share
+		multiply = 100
+	}
+}
 sr_disp_fl_9 = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_loc } value = 1 }
@@ -963,6 +1164,30 @@ sr_disp_fl_9_posture = { value = sr_fl_9_posture_value }
 sr_disp_fl_9_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_destroy } value = 1 }
+}
+sr_disp_fl_9_fire_fleets = {
+	value = sr_fl_9_fire_fleets
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_9_fire_defences = {
+	value = sr_fl_9_fire_defences
+	multiply = sr_fleet_quality
+	multiply = sr_fleet_readiness
+}
+sr_disp_fl_9_dock = {
+	value = 0
+	if = { limit = { sr_fl_9_at_earth = yes } value = 1 }
+	else_if = { limit = { sr_fl_9_docked = yes } value = 2 }
+	else_if = { limit = { NOT = { has_variable = sr_fl_9_loc } has_variable = sr_fl_9_dest } value = 3 }
+}
+sr_disp_fl_9_repair_pct = {
+	value = 0
+	if = {
+		limit = { sr_fl_9_docked = yes sr_sc_operational = yes }
+		value = sr_fl_9_repair_share
+		multiply = 100
+	}
 }
 
 # Per location: our strength there, the strongest other power's, the

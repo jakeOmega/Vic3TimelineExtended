@@ -22,7 +22,12 @@
 ###                               outside and the header's, with Escape):
 ###                               clearing te_popup by default; National
 ###                               Info's chart viewers clear te_ni_chart
-###                               (charts-help-national-info plan, PR F1)
+###                               (charts-help-national-info plan, PR F1).
+###                               The override lands in both buttons' bodies,
+###                               so it may carry more than the click: the
+###                               Fleets window's also hides both while a
+###                               picker is open over it (`visible`), and
+###                               clears its own key, sr_fleet_focus
 ###              Not yet seen in game (docs/testing/solar-colonies-playtest.md):
 ###              the layer over the journal panel and the Timeline Extended
 ###              window, Escape, and the panel behind still scrolling.
