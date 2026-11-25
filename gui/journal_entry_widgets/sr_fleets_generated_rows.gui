@@ -137,6 +137,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_1_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -383,6 +384,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_2_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -629,6 +631,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_3_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -875,6 +878,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_4_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -1121,6 +1125,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_5_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -1367,6 +1372,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_6_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -1613,6 +1619,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_7_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -1859,6 +1866,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_8_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
@@ -2105,6 +2113,7 @@ types sr_fleets_generated_rows_types
 				value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_strength_frac') )]"
 			}
 			blockoverride "fl_drive" {
+				visible = "[Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_refit_left'), '(CFixedPoint)1' ) )]"
 				text = "[JournalEntry.GetCountry.GetCustom('sr_fl_9_drive_name')]"
 			}
 			blockoverride "fl_refit_visible" {
