@@ -115,6 +115,12 @@ Earlier passes settled these words too, which are too short or too common for th
 | a common currency's adopter / issuer | adoptante, país que la adopta / emisor |
 | tooltip | descripción emergente |
 | the Full Demographics rule | la regla de Demografía completa |
+| Space Forces / Spacers (the pop type: warship crews and marines) | Fuerzas Espaciales / Tripulantes espaciales, not *colonos* |
+| a fleet's dock / the fleet stances / the Station posture | muelle / «Evitar», «Golpear y huir», «Entablar combate», «Luchar hasta el final» / «Estacionar» |
+| Space Command's build modes, named in prose / its build mix | quoted as their labels read: «Completo», «Solo pedidos», «En pausa» / mezcla (de construcción) |
+| Resort Draw (how many guests a world draws) | Atractivo turístico, and *atractivo* in prose |
+| default on debts ("only out of default") | impago: «si no está en impago» |
+| a hybrid culture's name / a minted diaspora | the language word as a capitalized masculine singular, then the insert: «Birmano $heritage_group_african$» / «Diáspora $heritage_group_african$» |
 
 Names and titles take a capital on the first word only, as the official Spanish writes them: «Libre comercio», «Bloque de poder», «Industrias de armamento», «Anotación en el diario». Don't copy English Title Case. Proper names of real organisations keep their capitals («Naciones Unidas», «Banco Mundial»).
 
