@@ -1089,10 +1089,7 @@ colonial_empire_je_cleanup_effect = {
 	# The Garrison's anger on the interest groups that oppose colonial
 	# exploitation (colonial_garrison_ig_refresh): added to the groups, so it
 	# does not leave with the entry the way the declared modifiers do.
-	every_interest_group = {
-		limit = { has_modifier = colonial_garrison_ig_modifier }
-		remove_modifier = colonial_garrison_ig_modifier
-	}
+	every_interest_group = { limit = { has_modifier = colonial_garrison_ig_modifier } remove_modifier = colonial_garrison_ig_modifier }
 
 	# Civil-rights movement radicalism modifiers reapplied each pulse while
 	# the JE was active. Remove from any civil-rights movement.
