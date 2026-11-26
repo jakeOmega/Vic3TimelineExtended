@@ -39,7 +39,7 @@ removes the folder (spec § 5.2, Review Focus 1).
                summary` reads the copies and needs no server
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event,
-               profiler-roots, wheel, drag, gui-show, gui-hide
+               profiler-roots, wheel, drag, gui-show, gui-hide, view, crop, hover
 
 An error inside a verb becomes a refusal, `{"refused": <code>, "detail": …}`, with `entered` for a console error
 and whatever else the error carries (a `SessionError`'s `info`), and the server keeps running.
@@ -82,7 +82,7 @@ HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for th
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
 START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules",
-              "game_args", "add_mods", "fixture_date", "unresponsive_s")
+              "game_args", "add_mods", "fixture_date", "unresponsive_s", "capture")
 FIXTURE_ARGS = ("permission", "until", "playset", "owner_confirmed_busy", "max_hours")
 SCRIPT_DOCS_ARGS = ("permission", "version", "out", "force", "owner_confirmed_busy")
 
@@ -188,6 +188,7 @@ class SessionServer:
             "profiler-roots": self._profiler_roots,
             "gui-show": self._gui_show, "gui-hide": self._gui_hide,
             "wheel": self._wheel, "drag": self._drag,
+            "view": self._view, "crop": self._crop, "hover": self._hover,
             "profile-start": self._profile_start,
             "profile-dump": self._profile_dump,
         }
@@ -416,6 +417,15 @@ class SessionServer:
             _arg(body, "type"), _arg(body, "repo"), context=body.get("context") or "player",
             width=body.get("width", 520), variables=body.get("variables") or {}, outlines=body.get("outlines") is True,
             scale=body.get("scale"), setup=body.get("setup"), keep=body.get("keep") is True), 0
+
+    def _view(self, body: dict) -> tuple[dict, int]:
+        return self._session.view(_arg(body, "steps")), 0
+
+    def _crop(self, body: dict) -> tuple[dict, int]:
+        return self._session.crop(body.get("box"), settle=body.get("settle") is True, label=body.get("label")), 0
+
+    def _hover(self, body: dict) -> tuple[dict, int]:
+        return self._session.hover(_arg(body, "x"), _arg(body, "y")), 0
 
     def _gui_hide(self, body: dict) -> tuple[dict, int]:
         return self._session.gui_hide(), 0

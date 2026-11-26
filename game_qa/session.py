@@ -51,7 +51,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-from game_qa import addmod, fixture, gui_preview, overlay, pixels, profiling, rules, script_docs, snapshot
+from game_qa import (addmod, capture_gui, fixture, gui_preview, overlay, pixels, profiling, rules, script_docs,
+                     snapshot)
 from game_qa.console import (CLEAR_BACKSPACES, KEYBOARD_AWAY, MAX_UNRESPONSIVE_S, MENU_PROBE_COMMAND, PROBE_COMMAND,
                              UNRESPONSIVE_S, Console, ConsoleError, Reply)
 from game_qa.dap import Debugger, DebuggerError
@@ -218,6 +219,17 @@ CLEAR_CREATE = "gui.createwidget %s %s" % (gui_preview.PREVIEW_FILE, gui_preview
 SETTINGS_FILE = "pdx_settings.json"     # under the user data: GUI.scale is the scale the settings menu set
 GUI_SCALE_RANGE = (0.25, 4.0)
 GUI_HIDE_NEXT = "gui-hide, to clear the preview left up (click --console first if a reply said keyboard_away)"
+# `view` (#2056): the scratch widgets that set a view's keys and open its panels, one a step, created in order.
+VIEW_CREATE = "gui.createwidget %s %s" % (gui_preview.PREVIEW_FILE, capture_gui.VIEW_WIDGET)
+VIEW_STEP_S = 0.5                       # after each step's create: its on_start lines have run, and a panel opened
+VIEW_SETTLE_S = 1.0                     # after the last: the panel laid out (a chart or a data model fills a frame late)
+# `crop` (#2056): a region of the window at its own resolution, and the settle test (two shots that agree).
+CROP_SETTLE_TRIES = 8
+CROP_SETTLE_GAP_S = 0.5
+# Two shots this close count as the same: an animation that never stops (live 2026-11-26, the glow behind the UN's
+# Security Council flag) changed 0.013% of the UN tab's pixels between shots, a chart filling in far more.
+CROP_SETTLE_SHARE = 0.002
+_LABEL = re.compile(r"[A-Za-z0-9_.-]{1,64}")
 ENTER_SETTLE_S = 10.0                   # after Start, before the console is looked for: the game loads (a guess; live
                                         # 2026-11-11 the console answered after Start, how soon is unmeasured)
 ENTER_WAIT_S = 90.0                     # then, for the console to take commands again (a guess, generous)
@@ -370,6 +382,10 @@ class _ProvedHelper:
         self._session._prove_game()
         return self._session._helper.drag(pid, x1, y1, x2, y2)
 
+    def move(self, pid: int, x: int, y: int) -> None:
+        self._session._prove_game()
+        return self._session._helper.move(pid, x, y)
+
 
 class Session:
     """One game's session. Single-threaded by contract: one call at a time, as the session server makes them (a
@@ -441,6 +457,7 @@ class Session:
         self._server_lines = 0              # the lines of it the run folder's copy holds
         self._profiler_window: dict = {"enlarged": False, "why": "the overlay has not been built"}
         self._crashes_before: set[str] | None = None     # script_docs: the crash folders there before the launch
+        self._capture_files: dict[str, bytes] | None = None     # start --capture: the overlay's console, error_deer
 
     # ---- start
 
@@ -448,8 +465,14 @@ class Session:
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
               switch_rules: Mapping[str, str] | None = None, game_args: Sequence[str] | None = None,
               add_mods: Sequence[str] | None = None, fixture_date: str | None = None,
-              unresponsive_s: float | None = None) -> dict:
+              unresponsive_s: float | None = None, capture: bool = False) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
+
+        `capture` (#2056) puts two copies of the game's own files into the overlay, made from the installed ones
+        (`capture_gui.capture_files`): the console see-through with its edit line drawing nothing, and debug mode's
+        counters (`error_deer.gui`) hidden while `capture_gui.CAPTURE_KEY` is set, so that a picture shows nothing
+        of the harness. Read before anything is done: `capture_gui_missing` or `capture_gui_changed` (a patch moved
+        an edited line) refuses the start. The reply's `capture` names them and the owner's UI scale.
 
         `unresponsive_s` (#1905) is how long the game's window may not respond before a verb calls the game gone
         (`game_gone`; console.UNRESPONSIVE_S, 10 s, by default, at most MAX_UNRESPONSIVE_S): a late save's tick can
@@ -519,6 +542,13 @@ class Session:
         self._unresponsive_s = _check_unresponsive(unresponsive_s)
         self._add_mods = self._check_add_mods(add_mods, playset)
         date = self._check_fixture_date(fixture_date, save, playset)
+        if capture is not False and capture is not True:
+            raise SessionError("bad_argument", "capture is true or false, not %r" % (capture,))
+        if capture:
+            try:
+                self._capture_files = capture_gui.capture_files(self._paths.base_game)
+            except capture_gui.CaptureGuiError as e:
+                raise SessionError(e.code, e.detail) from e
         self._add_mods_playset = playset
         self._add_mods_digest = fixture.add_mod_digest([Path(mod.wsl) for mod in self._add_mods]) \
             if self._add_mods else None
@@ -557,7 +587,8 @@ class Session:
         try:
             self._overlay = overlay.build(
                 self._paths.overlay_dir, setups, self._paths.game_version, profiler_gui=gui,
-                preview_gui=gui_preview.wrapper_text(None, "none", gui_preview.DEFAULT_WIDTH, 0, {}))
+                preview_gui=gui_preview.wrapper_text(None, "none", gui_preview.DEFAULT_WIDTH, 0, {}),
+                extra_gui=self._capture_files)
         except overlay.OverlayError as e:
             raise SessionError("overlay_refused", str(e)) from e
         if self._overlay.profiler_gui is not None:
@@ -609,6 +640,13 @@ class Session:
             if differs:
                 result["rules"] = dict(self._rules, lobby_differs=differs)
         result["profiler_window"] = self._profiler_window
+        if self._capture_files is not None:
+            try:
+                scale: float | None = self._owner_ui_scale()
+            except SessionError:
+                scale = None
+            result["capture"] = {"files": sorted(self._capture_files), "key": capture_gui.CAPTURE_KEY,
+                                 "ui_scale": scale}
         if self._game_args:
             result["game_args"] = list(self._game_args)
         if self._unresponsive_s != UNRESPONSIVE_S:
@@ -2195,6 +2233,145 @@ class Session:
                 result.update(crop=str(crop), scale=scale, crop_size=[part[0], part[1]])
             except (OSError, pixels.PixelsError) as e:
                 result.update(crop=None, crop_error=str(e))
+            out.update(result)
+        return result
+
+    def view(self, steps: Sequence[Sequence[str]]) -> dict:
+        """Open a view by script, not by clicks (#2056): `steps`, each a list of actions (`capture_gui.parse_action`:
+        `set:KEY=VALUE`, `clear:KEY`, `panel:NAME[:TAB]`, `market:TAB`, `close-panel`), run in order. The overlay's
+        preview file is rewritten with one zero-size widget per step whose `state` runs the step's actions when it is
+        created (`capture_gui.view_wrapper_text`), the game's reload of it is waited for (its revision token's line,
+        as `gui-show` waits: `not_reloaded` with nothing created when it does not come), and the widgets are created
+        one at a time, VIEW_STEP_S apart, then cleared. What they set outlives them: client-side keys stay set, and a
+        panel they opened stays open. Steps exist for an order the engine needs a frame between (a panel closed
+        before another opens). Nothing is clicked and nothing is aimed, so the keyboard stays the console's.
+
+        The reply has `revision`, `steps` (the actions as given) and `log` (the GUI lines the game logged since the
+        write: a binding the engine could not read is named there, `gui_preview.gui_log`). A kept preview is cleared
+        first, since both are written to the same file."""
+        self._require_game()
+        if self._overlay is None or self._overlay.preview_file is None:
+            raise SessionError("no_preview", "this session's overlay has no preview file to write a view into")
+        try:
+            parsed = capture_gui.parse_steps(steps)
+        except capture_gui.CaptureGuiError as e:
+            raise SessionError(e.code, e.detail) from e
+        texts = [[a.text for a in step] for step in parsed]
+        with self._step("view", steps=texts) as out:
+            if self._preview_kept:
+                self._clear_preview()
+            revision = self._overlay.preview_revision + 1
+            self._new_lines()
+            self._errors_seen = []
+            try:
+                try:
+                    overlay.write_preview(self._overlay, capture_gui.view_wrapper_text(parsed, revision), revision)
+                except overlay.OverlayError as e:
+                    raise SessionError("overlay_refused", str(e)) from e
+                self._await_preview(revision)
+                self._console.run(CLEAR_WIDGETS)
+                try:
+                    for i in range(len(parsed)):
+                        self._console.run(VIEW_CREATE % i)
+                        self._sleep(VIEW_STEP_S)
+                finally:
+                    self._console.run(CLEAR_WIDGETS)
+                self._sleep(VIEW_SETTLE_S)
+                self._new_lines()
+                log = gui_preview.gui_log(self._errors_seen, [gui_preview.PREVIEW_FILE])
+            finally:
+                self._errors_seen = None
+            result = {"revision": revision, "steps": texts, "log": log}
+            out.update(revision=revision, log_lines=len(log))
+        return result
+
+    def crop(self, box: Sequence[float] | None = None, settle: bool = False, label: str | None = None) -> dict:
+        """A region of the window at the window's own resolution, nothing typed and nothing scaled (#2056, #2015 item
+        2): `box` (left, top, right, bottom, fractions of the client area; the whole of it by default) is shot alone
+        by the helper (`screenshot`'s `box`), into the run folder as `crop_<n>[_<label>].png`. With `settle`, it is
+        shot again CROP_SETTLE_GAP_S later until two shots in a row agree, CROP_SETTLE_TRIES at most: the same bytes
+        (the helper writes its PNGs the same way each time), or no more than CROP_SETTLE_SHARE of the pixels changed
+        (`pixels.changed`), since a panel can hold an animation that never stops. `settled` says whether they
+        agreed, `tries` how many shots it took, `changed_share` what the last pair differed by. A panel that is still
+        filling (a chart, a data model a frame late) does not settle; the last shot is kept either way, and the
+        shots before it are deleted. The reply has `crop`, `crop_size`, `pixels` (the box in client pixels),
+        `window` (the client area's size) and `box`."""
+        self._require_game(types=False)
+        box = (0.0, 0.0, 1.0, 1.0) if box is None else _box(box)
+        if label is not None and (not isinstance(label, str) or _LABEL.fullmatch(label) is None):
+            raise SessionError("bad_argument", "a label is letters, digits, _, . and -, not %r" % (label,))
+        if settle is not True and settle is not False:
+            raise SessionError("bad_argument", "settle is true or false, not %r" % (settle,))
+        with self._step("crop", box=list(box), settle=settle, label=label) as out:
+            try:
+                _left, _top, width, height = self._helper.window(self._proc.pid).client
+            except HelperError as e:
+                raise SessionError("no_window", "%s: %s" % (e.code, e.detail)) from e
+            if width < 1 or height < 1:
+                raise SessionError("no_window", "the game's window has no client area (minimized?)")
+            x0, y0 = min(width - 1, int(round(box[0] * width))), min(height - 1, int(round(box[1] * height)))
+            x1, y1 = max(x0 + 1, int(round(box[2] * width))), max(y0 + 1, int(round(box[3] * height)))
+            x1, y1 = min(x1, width), min(y1, height)
+            region = (x0, y0, x1 - x0, y1 - y0)
+            tries, settled, previous, path, share = 0, False, None, None, None
+            while True:
+                tries += 1
+                self._shots += 1
+                name = "crop_%02d%s.png" % (self._shots, "_" + label if label else "")
+                try:
+                    shot = self._helper.screenshot(self._proc.pid, self._report.dir / name, max_width=region[2],
+                                                   box=region)
+                except HelperError as e:
+                    raise SessionError("shot_failed", "%s: %s" % (e.code, e.detail), tries=tries) from e
+                data = shot.read_bytes()
+                if path is not None and path != shot:
+                    path.unlink(missing_ok=True)        # only the last shot is kept
+                path = shot
+                if not settle:
+                    break
+                if previous is not None:
+                    if data == previous[0]:
+                        share = 0.0
+                    else:
+                        try:
+                            share = None if previous[1] is None else pixels.changed(previous[1],
+                                                                                    pixels.decode_png(data))
+                        except pixels.PixelsError:
+                            share = None
+                    if share is not None and share <= CROP_SETTLE_SHARE:
+                        settled = True
+                        break
+                if tries >= CROP_SETTLE_TRIES:
+                    break
+                try:
+                    previous = (data, pixels.decode_png(data))
+                except pixels.PixelsError:
+                    previous = (data, None)
+                self._sleep(CROP_SETTLE_GAP_S)
+            result: dict[str, Any] = {"crop": str(path), "crop_size": [region[2], region[3]], "box": list(box),
+                                      "pixels": [x0, y0, x1, y1], "window": [width, height]}
+            if settle:
+                result.update(settled=settled, tries=tries, changed_share=share)
+            out.update(result)
+        return result
+
+    def hover(self, x: float, y: float) -> dict:
+        """Leave the cursor at (x, y), fractions of the client area, pressing nothing, then a shot (#2056): a tooltip
+        for a picture. Aimed and checked by the helper as a click is (`move`), through the pid proof. Nothing is
+        pressed, so the keyboard stays the console's and no latch is set; the next `click --console` takes the
+        cursor back to the console's input line, and `crop` (which types nothing) shoots what the hover opened.
+        `hover_refused` moved nothing; `hover_unknown` may have moved the cursor."""
+        self._require_game(keyboard=False)
+        point = (_fraction("x", x), _fraction("y", y))
+        with self._step("hover", x=x, y=y) as out:
+            self._console.front()
+            px, py = self._point(point)
+            try:
+                self._sends.move(self._proc.pid, px, py)
+            except HelperError as e:
+                code = "hover_refused" if e.code in CLICK_REFUSED_BEFORE_PRESS else "hover_unknown"
+                raise SessionError(code, "%s: %s" % (e.code, e.detail), pixel=[px, py]) from e
+            result = self._shot_after({"pixel": [px, py]})
             out.update(result)
         return result
 

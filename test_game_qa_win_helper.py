@@ -609,9 +609,53 @@ class ScreenshotTest(BackendCase):
         self.assertEqual(self.call("screenshot", pid=7, path=path, max_width=100)["error"], "no_client_area")
         self.assertFalse(Path(path).exists())
 
+    def test_a_box_shoots_that_region_alone(self):
+        """#2056: `box` is [left, top, width, height] in client pixels, captured on its own, not cut from a shot."""
+        path = str(Path(self.tmp.name) / "d.png")
+        out = self.call("screenshot", pid=7, path=path, max_width=1600, box=[30, 40, 60, 50])
+        self.assertEqual((out["ok"], out["width"], out["height"]), (True, 60, 50))
+        self.assertEqual(self.backend.captured, [(40, 60, 60, 50)])
+        self.assertEqual(self.png_size(path), (60, 50))
+
+    def test_a_box_outside_the_client_area_is_a_bad_request(self):
+        path = str(Path(self.tmp.name) / "e.png")
+        for box in ([0, 0, 201, 10], [-1, 0, 5, 5], [0, 0, 0, 5], [0, 0, 5], [0, 0, 5.0, 5], [True, 0, 5, 5], "0 0 5 5"):
+            with self.subTest(box=box):
+                self.assertEqual(self.call("screenshot", pid=7, path=path, max_width=100, box=box)["error"],
+                                 "bad_request")
+        self.assertEqual(self.backend.captured, [])
+        self.assertFalse(Path(path).exists())
+
 
 
 DOWN, UP, WHEEL = win_helper.MOUSEEVENTF_LEFTDOWN, win_helper.MOUSEEVENTF_LEFTUP, win_helper.MOUSEEVENTF_WHEEL
+
+
+class MoveTest(BackendCase):
+    """#2056: the cursor left on a point for a tooltip, aimed and checked as a click is, nothing pressed."""
+
+    def test_the_cursor_goes_to_the_point_and_nothing_is_pressed(self):
+        out = self.call("move", pid=7, x=300, y=200)
+        self.assertTrue(out["ok"])
+        self.assertEqual(self.backend.mouse, [("move", 300, 200)])
+        self.assertEqual(self.state.helper_cursor, (300, 200))
+
+    def test_a_refusal_moves_nothing(self):
+        cases = {
+            "not_foreground": lambda: setattr(self.backend, "foreground", 999),
+            "covered": lambda: setattr(self.backend, "covered_by", 999),
+            "not_ours": lambda: self.backend.creation.__setitem__(7, fakes.REUSED_CREATED),
+        }
+        for code, arrange in cases.items():
+            with self.subTest(code):
+                self.setUp()
+                arrange()
+                out = self.call("move", pid=7, x=300, y=200)
+                self.assertEqual((out["ok"], out["error"]), (False, code))
+                self.assertNotIn(DOWN, [event[1] for event in self.backend.mouse if event[0] == "button"])
+        self.setUp()
+        self.assertEqual(self.call("move", pid=7, x=5000, y=1)["error"], "bad_point")
+        self.assertEqual(self.backend.mouse, [])
 
 
 class WheelTest(BackendCase):
@@ -1087,6 +1131,15 @@ class ProcessHelperTest(unittest.TestCase):
         ph.drag(7, 10, 20, 30, 40)
         self.assertEqual(self.sent(), [{"id": 1, "op": "wheel", "pid": 7, "x": 120, "y": 340, "notches": -3},
                                        {"id": 2, "op": "drag", "pid": 7, "x1": 10, "y1": 20, "x2": 30, "y2": 40}])
+
+    def test_move_and_a_boxed_screenshot_are_one_json_line_each(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            ph = self.make(reply_line(), reply_line(path="x", width=60, height=50))
+            ph.move(7, 120, 340)
+            ph.screenshot(7, Path(tmp) / "c.png", max_width=60, box=(1, 2, 60, 50))
+            move, shot = self.sent()
+            self.assertEqual(move, {"id": 1, "op": "move", "pid": 7, "x": 120, "y": 340})
+            self.assertEqual((shot["op"], shot["box"], shot["max_width"]), ("screenshot", [1, 2, 60, 50], 60))
 
     def test_a_refused_wheel_keeps_how_far_it_got(self):
         ph = self.make(json.dumps({"ok": False, "error": "cursor_misplaced", "notches_done": 2}).encode() + b"\n")

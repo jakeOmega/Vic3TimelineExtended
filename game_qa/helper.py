@@ -62,8 +62,12 @@ class Helper(Protocol):
     # wheel and drag: aimed and refused as click is. A wheel's refusal carries `notches_done` (0: nothing turned);
     # a drag's carries `pressed` (true: the button went down, and was released again where the cursor then was,
     # trying twice; `released: false` with backend_error when both releases failed, so the button may still be down).
+    def move(self, pid: int, x: int, y: int) -> None: ...
+    # move: the cursor left on (x, y) of the client area, nothing pressed (a hover); aimed and refused as click is.
     def presence(self) -> Presence: ...
-    def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path: ...
+    def screenshot(self, pid: int, path: Path, max_width: int = 1600,
+                   box: tuple[int, int, int, int] | None = None) -> Path: ...
+    # screenshot: `box` (left, top, width, height in client pixels) shoots that region alone; `max_width` still caps it.
     def kill(self, proc: ProcId) -> bool: ...      # True if the process had already exited
     def tcp_open(self, port: int) -> None: ...
     def tcp_send(self, data: bytes) -> None: ...
@@ -180,18 +184,23 @@ class ProcessHelper:
     def drag(self, pid: int, x1: int, y1: int, x2: int, y2: int) -> None:
         self._call("drag", pid=pid, x1=x1, y1=y1, x2=x2, y2=y2)
 
+    def move(self, pid: int, x: int, y: int) -> None:
+        self._call("move", pid=pid, x=x, y=y)
+
     def presence(self) -> Presence:
         r = self._call("presence")
         mine = r.get("helper_cursor")
         return Presence((int(r["cursor"][0]), int(r["cursor"][1])), int(r["foreground"]),
                         None if mine is None else (int(mine[0]), int(mine[1])))
 
-    def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path:
+    def screenshot(self, pid: int, path: Path, max_width: int = 1600,
+                   box: tuple[int, int, int, int] | None = None) -> Path:
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         # wslpath can fail on a file that does not exist yet, so convert the folder and add the name.
         folder = to_windows_path(path.parent, run=self._run)
-        self._call("screenshot", pid=pid, path=folder.rstrip("\\") + "\\" + path.name, max_width=max_width)
+        extra = {} if box is None else {"box": [int(v) for v in box]}
+        self._call("screenshot", pid=pid, path=folder.rstrip("\\") + "\\" + path.name, max_width=max_width, **extra)
         return path
 
     def kill(self, proc: ProcId) -> bool:

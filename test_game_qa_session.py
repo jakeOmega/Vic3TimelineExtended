@@ -259,11 +259,11 @@ class Game(fakes.FakeHelper):
                         continue
                     self.paused = not self.paused
 
-    def screenshot(self, pid, path, max_width=1600):
+    def screenshot(self, pid, path, max_width=1600, box=None):
         """A small picture of the country-select screen: the side panel on the right is dark until a country is
         selected, and a law window sits in the middle while one is up."""
-        if not self.panel_shots:
-            return super().screenshot(pid, path, max_width)
+        if not self.panel_shots or box is not None:
+            return super().screenshot(pid, path, max_width, box=box)
         width, height = 100, 60
         rows = []
         for y in range(height):

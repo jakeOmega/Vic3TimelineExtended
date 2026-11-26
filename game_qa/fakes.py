@@ -319,6 +319,11 @@ class FakeHelper:
         self.clicks: list[tuple[int, int]] = []         # client pixels, as given
         self.wheels: list[tuple[int, int, int]] = []    # (x, y, notches), client pixels
         self.drags: list[tuple[int, int, int, int]] = []        # (x1, y1, x2, y2), client pixels
+        self.moves: list[tuple[int, int]] = []          # hovers (`move`), client pixels
+        # What each screenshot shows: (width, height, RGB bytes) of the whole client area, popped one a shot, the
+        # last one held; empty, a black pixel. A shot with a `box` is cut from it; `max_width` is applied as the
+        # real helper does.
+        self.frames: deque[tuple[int, int, bytes]] = deque()
         self.focus_succeeds = True
         self.focus_calls = 0
         self.console_open = False               # Enter runs the typed text while this is set
@@ -351,6 +356,7 @@ class FakeHelper:
         self.adopted: list[ProcId] = []
         self.killed: list[ProcId] = []
         self.screenshots: list[tuple[int, Path, int]] = []
+        self.boxes: list[tuple[int, int, int, int] | None] = []      # each screenshot's box, None for the whole area
         self.tcp_port: int | None = None
         self.tcp_in: deque[bytes] = deque()     # what tcp_recv hands out, one chunk a call
         self.tcp_sent: list[bytes] = []
@@ -436,6 +442,12 @@ class FakeHelper:
     def wheel(self, pid: int, x: int, y: int, notches: int) -> None:
         self._aimed(x, y, notches_done=0)
         self.wheels.append((x, y, notches))
+        left, top, _width, _height = self.client
+        self.cursor = self.helper_cursor = (left + x, top + y)
+
+    def move(self, pid: int, x: int, y: int) -> None:
+        self._aimed(x, y)
+        self.moves.append((x, y))
         left, top, _width, _height = self.client
         self.cursor = self.helper_cursor = (left + x, top + y)
 
@@ -558,11 +570,22 @@ class FakeHelper:
                 (self.docs / name).write_bytes(self.docs_logs.get(name, default))
         return [DOCS_DONE], []
 
-    def screenshot(self, pid: int, path: Path, max_width: int = 1600) -> Path:
+    def screenshot(self, pid: int, path: Path, max_width: int = 1600,
+                   box: tuple[int, int, int, int] | None = None) -> Path:
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(win_helper.encode_png(1, 1, b"\x00\x00\x00"))
+        width, height, rgb = (self.frames.popleft() if len(self.frames) > 1 else self.frames[0]) if self.frames \
+            else (1, 1, b"\x00\x00\x00")
+        if box is not None:
+            left, top, w, h = box
+            if left < 0 or top < 0 or w < 1 or h < 1 or left + w > width or top + h > height:
+                raise HelperError("bad_request", "box %r is not inside the %dx%d client area" % (box, width, height))
+            rgb = b"".join(rgb[((top + y) * width + left) * 3:((top + y) * width + left + w) * 3] for y in range(h))
+            width, height = w, h
+        width, height, rgb = win_helper.scale_rgb(width, height, rgb, max_width)
+        path.write_bytes(win_helper.encode_png(width, height, rgb))
         self.screenshots.append((pid, path, max_width))
+        self.boxes.append(None if box is None else tuple(box))
         return path
 
     def kill(self, proc: ProcId) -> bool:
