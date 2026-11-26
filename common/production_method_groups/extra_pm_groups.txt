@@ -1,6 +1,8 @@
 ﻿INJECT:pmg_base_building_food_industry = {
 	production_methods = {
 		pm_food_additives
+		pm_enzymatic_processing
+		pm_precision_fermentation
 		pm_programmable_food_synthesis
 	}
 }
@@ -8,6 +10,13 @@ INJECT:pmg_canning = {
 	production_methods = {
 		pm_flexible_packaging
 		pm_self-healing_packaging
+	}
+}
+INJECT:pmg_distillery = {
+	production_methods = {
+		pm_industrial_fermentation
+		pm_engineered_yeast
+		pm_molecular_spirits
 	}
 }
 INJECT:pmg_automation_building_food_industry = {
@@ -19,6 +28,9 @@ INJECT:pmg_automation_building_food_industry = {
 }
 INJECT:pmg_base_building_textile_mill = {
 	production_methods = {
+		pm_permanent_press
+		pm_computerized_cutting
+		pm_whole_garment_knitting
 		pm_programmable_matter_clothing
 	}
 }
@@ -35,7 +47,17 @@ INJECT:pmg_automation_building_textile_mill = {
 }
 INJECT:pmg_base_building_furniture_manufactory = {
 	production_methods = {
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
 		pm_programmable_matter_furniture
+	}
+}
+INJECT:pmg_luxury_building_furniture_manufactory = {
+	production_methods = {
+		pm_modern_design_furniture
+		pm_made_to_order_furniture
 	}
 }
 INJECT:pmg_automation_building_furniture_manufactory = {
