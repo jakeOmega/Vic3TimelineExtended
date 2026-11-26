@@ -322,6 +322,24 @@ sr_bt_paired = {
 	}
 }
 
+# Country scope, a fleet power: a friend of scope:$WHO$ at a location
+# (2026-11-25 design § 5.3), for the AI's defence and the battle forecast.
+# Alive, not it, at peace with it, and at war with a power that brings fleets
+# there against it (marked sr_fc_foe by the sums' loop of theirs,
+# sr_fc_mark_foe), so it would fight them there: an ally in another war is
+# none (review of #2073). The battle's own test, sr_bt_ai_choose, asks the
+# same of the powers in the battle.
+sr_fl_friend_of = {
+	is_country_alive = yes
+	NOT = { this = scope:$WHO$ }
+	NOT = { has_war_with = scope:$WHO$ }
+	any_in_global_list = {
+		variable = sr_fleet_powers
+		has_variable = sr_fc_foe
+		has_war_with = prev
+	}
+}
+
 # It holds orbit there: stationed or standing off (a blockade's test, § 8).
 sr_cb_holds_orbit = {
 	has_variable = sr_cb_present

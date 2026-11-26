@@ -295,7 +295,8 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 12. **Battles (2026-11-25 design § 2).** Console option o (the strongest enemy puts a fleet at Earth) and b
     (100 strength of each role at Earth), then option i (a week's battles): the battle settles at once, not over
     months. Both fleets lose by the square law until one has lost half of what it brought and breaks; one that
-    breaks away from a dock flies to the nearest (Earth, or a Spaceport of its owner's); at Earth it stays.
+    breaks flies to the nearest dock other than where it is (Earth, or a Spaceport of its owner's): broken at
+    Earth with a Spaceport in reach it leaves Earth, and with none it stays (2026-11-25 design § 5.2).
     "Battle Over <location>" reports our losses, theirs and what's left, at most once a week; the location's status
     reads Battle; screens (warships, rapid response) take the losses before carriers and tenders. At Earth, any
     Orbital Battlestation fights for its owner (25 strength a level), never breaks, and regains 10% a month; the
@@ -306,6 +307,15 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
     colony with a fleet set to Avoid: our fleet, if it engages, catches theirs (tied to its colony). The button shows
     on the card in flight and where the posture line does, and in the Fleets window always; without a Space Command
     it is grayed with the reason. An AI fleet sets its own: it avoids a fight it would lose by strength × fire.
+    **Stances (§ 5.1).** The card's button reads the stance in force and a click sets the next (Avoid, Hit and Run,
+    Engage, Fight to the Last); "Fight to the Last" fits the 168-wide button, and in flight "Lands in N weeks"
+    still fits beside it with the track at 96. The Fleets window's page shows four buttons two to a line, the one in force lit. A Hit and Run fleet against
+    an equal Engage one breaks at about 73 of 100 while the other holds; a Fight to the Last fleet never breaks
+    (no retreat, destroyed if it loses). **Friends (§ 5.3).** Two AIs at war with one enemy, each weaker alone but
+    stronger together, both engage. **Forecast (§ 5.4).** Fleet Destination has a Battle column (popup 884 wide):
+    blank where no enemy is, else Clear win / Costly win / Defeat / Rout in green, yellow, gold, red; its hover gives
+    ours with this fleet and theirs and the winner's loss. An enemy fleet bound for our colony (.100) or Earth
+    (.111) adds Space Command's forecast to the alert, or "We have no fleet there" with none.
 13. **Postures and blockade.** Stand off at an enemy's colony with no enemy fleet holding orbit: its row in their
     Colony Defences, and our Locations row, read Blockaded / Blockading; their settlers and modules stop arriving,
     a mining or shipping specialization's modifier goes to nothing while an observatory's keeps running, and its
@@ -1758,3 +1768,15 @@ i (our first colony's autonomy to 100).
    holds by force once the hold has under a year left.
 9. **Simple Colonies.** Option i under Simple Colonies: next month the colony declares itself free, no hold.
 
+
+## Colonies Held counts worlds (2026-11-25)
+
+Fix for #2054: the overview's Colonies cell, Colonies Held above the Colonies list and the count over the Colonies
+window's list read `sr_disp_colonies_held`, which summed a value for each of a world's two specializations, so a world
+whose modules had raised both counted twice ("41 of 40 held"). It now adds 1 for each world where either is held.
+Simple or Full Colonies, with Colony Modules.
+
+1. **Both specializations raised.** On a colony with one specialization at level 1 or more, raise the other with a
+   module until both read a level. Colonies Held, the overview's Colonies cell and the Colonies window's count do not
+   move, and read the number of colonies in the list: `read sr_disp_colonies_held` equals the rows shown, and never
+   passes `sr_sites_world_count` (40).

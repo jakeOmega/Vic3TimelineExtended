@@ -106,6 +106,10 @@ sr_fl_1_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_posture } value = var:sr_fl_1_posture }
 }
+sr_fl_1_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_1_stance } value = var:sr_fl_1_stance }
+}
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_1_pace = {
 	value = sr_fl_1_drive_value
@@ -1153,6 +1157,10 @@ sr_fl_2_loc_value = {
 sr_fl_2_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_posture } value = var:sr_fl_2_posture }
+}
+sr_fl_2_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_2_stance } value = var:sr_fl_2_stance }
 }
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_2_pace = {
@@ -2202,6 +2210,10 @@ sr_fl_3_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_posture } value = var:sr_fl_3_posture }
 }
+sr_fl_3_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_3_stance } value = var:sr_fl_3_stance }
+}
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_3_pace = {
 	value = sr_fl_3_drive_value
@@ -3249,6 +3261,10 @@ sr_fl_4_loc_value = {
 sr_fl_4_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_posture } value = var:sr_fl_4_posture }
+}
+sr_fl_4_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_4_stance } value = var:sr_fl_4_stance }
 }
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_4_pace = {
@@ -4298,6 +4314,10 @@ sr_fl_5_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_posture } value = var:sr_fl_5_posture }
 }
+sr_fl_5_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_5_stance } value = var:sr_fl_5_stance }
+}
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_5_pace = {
 	value = sr_fl_5_drive_value
@@ -5345,6 +5365,10 @@ sr_fl_6_loc_value = {
 sr_fl_6_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_posture } value = var:sr_fl_6_posture }
+}
+sr_fl_6_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_6_stance } value = var:sr_fl_6_stance }
 }
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_6_pace = {
@@ -6394,6 +6418,10 @@ sr_fl_7_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_posture } value = var:sr_fl_7_posture }
 }
+sr_fl_7_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_7_stance } value = var:sr_fl_7_stance }
+}
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_7_pace = {
 	value = sr_fl_7_drive_value
@@ -7442,6 +7470,10 @@ sr_fl_8_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_posture } value = var:sr_fl_8_posture }
 }
+sr_fl_8_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_8_stance } value = var:sr_fl_8_stance }
+}
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_8_pace = {
 	value = sr_fl_8_drive_value
@@ -8489,6 +8521,10 @@ sr_fl_9_loc_value = {
 sr_fl_9_posture_value = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_posture } value = var:sr_fl_9_posture }
+}
+sr_fl_9_stance_value = {
+	value = 3
+	if = { limit = { has_variable = sr_fl_9_stance } value = var:sr_fl_9_stance }
 }
 # Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).
 sr_fl_9_pace = {
