@@ -58,43 +58,43 @@ Dynamic-modifier templates parameterized over canonical vocabularies (goods, bui
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1199; missing entries: 1199
+- Vocab size: 1203; missing entries: 1203
 
 ### `building_{building}_employees_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1199; missing entries: 1199
+- Vocab size: 1203; missing entries: 1203
 
 ### `building_{building}_max_level_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1199; missing entries: 1199
+- Vocab size: 1203; missing entries: 1203
 
 ### `building_{building}_mortality_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1199; missing entries: 1199
+- Vocab size: 1203; missing entries: 1203
 
 ### `building_{building}_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
-- Members in engine docs: **166**
-- Vocab size: 1199; missing entries: 1033
+- Members in engine docs: **167**
+- Vocab size: 1203; missing entries: 1036
 
 ### `building_{building}_throughput_mult`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1199; missing entries: 1199
+- Vocab size: 1203; missing entries: 1203
 
 ### `building_{building}_unincorporated_throughput_add`
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **0**
-- Vocab size: 1199; missing entries: 1199
+- Vocab size: 1203; missing entries: 1203
 
 ### `country_institution_impact_{institution}_mult`
 
@@ -115,7 +115,7 @@ _Per-culture migration pull modifier; instantiated for every culture used in mod
 
 - Placeholder: `culture` (vocab: `culture`)
 - Members in engine docs: **0**
-- Vocab size: 343; missing entries: 343
+- Vocab size: 927; missing entries: 927
 
 ### `goods_input_{good}_add`
 
@@ -180,15 +180,15 @@ _Multiplicative bonus to a specific good's output._
 
 - Placeholder: `poptype` (vocab: `poptype`)
 - Members in engine docs: **0**
-- Vocab size: 15; missing entries: 15
-  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`
+- Vocab size: 16; missing entries: 16
+  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`, `spacers`
 
 ### `pop_{poptype}_political_strength_mult`
 
 - Placeholder: `poptype` (vocab: `poptype`)
 - Members in engine docs: **0**
-- Vocab size: 15; missing entries: 15
-  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`
+- Vocab size: 16; missing entries: 16
+  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`, `spacers`
 
 ### `state_building_{building}_max_level_add`
 
@@ -196,21 +196,21 @@ _State-scoped cap on a specific building's level._
 
 - Placeholder: `building` (vocab: `building`)
 - Members in engine docs: **338**
-- Vocab size: 1199; missing entries: 861
+- Vocab size: 1203; missing entries: 865
 
 ### `state_pop_qualifications_{poptype}_mult`
 
 - Placeholder: `poptype` (vocab: `poptype`)
 - Members in engine docs: **0**
-- Vocab size: 15; missing entries: 15
-  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`
+- Vocab size: 16; missing entries: 16
+  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`, `spacers`
 
 ### `state_pop_type_{poptype}_mortality_mult`
 
 - Placeholder: `poptype` (vocab: `poptype`)
 - Members in engine docs: **0**
-- Vocab size: 15; missing entries: 15
-  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`
+- Vocab size: 16; missing entries: 16
+  - Missing values: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`, `engineers`, `farmers`, `laborers`, `machinists`, `officers`, `peasants`, `shopkeepers`, `slaves`, `soldiers`, `spacers`
 
 ### `unit_{combat_unit}_defense_add`
 
@@ -243,7 +243,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `building_employment_{poptype}_add`
 
 - Placeholder: `poptype` (vocab: `poptype`)
-- Members: **15**
+- Members: **16**
   - Examples: `academics`, `aristocrats`, `bureaucrats`, `capitalists`, `clergymen`, `clerks`
 
 ### `building_employment_{poptype}_mult`
@@ -849,7 +849,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_fervor_target_{culture}_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **342**
+- Members: **926**
   - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `country_institution_cost_{institution}_mult`
@@ -897,7 +897,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_{culture}_cultural_acceptance_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **342**
+- Members: **926**
   - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `country_{good}_export_tariffs_rate_add`
@@ -1029,7 +1029,7 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `state_{culture}_standard_of_living_add`
 
 - Placeholder: `culture` (vocab: `culture`)
-- Members: **342**
+- Members: **926**
   - Examples: `abkhazian`, `aborigine`, `afar`, `afro_american`, `afro_antillean`, `afro_brazilian`
 
 ### `state_{poptype}_dependent_wage_mult`
