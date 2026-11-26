@@ -659,6 +659,7 @@
  colonial_empire_crumbling_modifier_desc:0 "Our colonial empire is on the verge of collapse. Widespread unrest and radical movements threaten to tear our overseas territories away."
  colonial_empire_solidified_modifier_desc:0 "Our colonial territories have been fully integrated into the nation. Cultural acceptance is high and the overseas lands are now permanent parts of our country."
  colonial_empire_under_pressure_modifier_desc:0 "Our colonial empire is crumbling. International pressure and local unrest make every territory costlier to hold."
+ colonial_garrison_ig_modifier_desc:0 "Our Military Garrison holds the colonies by force, and this group opposes colonial exploitation. Its political strength is reduced."
  colonial_integration_progress_modifier_desc:0 "A colonial territory has reached a milestone in integration, with high cultural acceptance among the local population."
  colonial_military_garrison_modifier_desc:0 "Military forces are stationed in colonial territories to maintain order, reducing our available military projection."
  colonial_overreach_tt:0 "Imperial overreach (colonies vs. metropole size)"

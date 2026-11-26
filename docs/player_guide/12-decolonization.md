@@ -293,7 +293,7 @@ now; hover it for what one more level would add and for its costs.
 | Program | Requirement | Bar, per month at level 3 | Costs and side effects at level 3 |
 |---|---|---|---|
 | Colonial Development Investment | none | about +0.5 | Colonial Development Spending, a weekly cost of 5% a year of your colonies' GDP for each level, counted as at least 1% of your own GDP. Each step up also costs a one-off half a year of one level's spending. Your lower and middle strata expect a higher standard of living. Industrialists and Petite Bourgeoisie disapprove when you start it. Unincorporated states attract more migrants. |
-| Military Garrison | more than 100 authority for each step up | about +1.0 | 100 authority a level for as long as it runs, and 5 infamy when you start it. Infamy decays 20% slower. Small losses of bureaucracy and prestige from army projection, higher borrowing costs, weaker Intelligentsia and Trade Unions. |
+| Military Garrison | more than 100 authority for each step up | about +1.0 | 100 authority a level for as long as it runs, and 5 infamy when you start it. Infamy decays 20% slower. Small losses of bureaucracy and prestige from army projection, higher borrowing costs, and less political strength for every interest group that disapproves of Colonial Exploitation, judged by its stance now, so a new leader can change who pays. |
 | Cultural Assimilation Program | none | about +0.7 | Each step up costs a one-off quarter of a year of one Investment level's spending. −15% bureaucracy and 100 authority while running. Assimilation and conversion speed up, but movements radicalize more, and colonial states lose some qualifications while it runs. |
 
 Investment's cost follows the size of what you develop, not of your whole
