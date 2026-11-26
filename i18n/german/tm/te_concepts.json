@@ -8263,6 +8263,10 @@
   "en": "The government said nothing when a foreign power's nuclear weapons contaminated one of our states.",
   "de": "Die Regierung schwieg, als die Nuklearwaffen einer fremden Macht einen unserer Staaten kontaminierten."
  },
+ "nd_icbm_force": {
+  "en": "ICBM Force",
+  "de": "ICBM-Streitmacht"
+ },
  "nd_incident_coverup_exposed_desc": {
   "en": "A nuclear incident we tried to hide has come out.",
   "de": "Ein nuklearer Zwischenfall, den wir zu vertuschen versuchten, ist ans Licht gekommen."
@@ -10183,6 +10187,10 @@
   "en": "Resources from the space program have been redirected to domestic priorities, improving living standards at the cost of [concept_prestige].",
   "de": "Ressourcen aus dem Raumfahrtprogramm wurden zu innenpolitischen Prioritäten umgeleitet, was den Lebensstandard verbessert, aber [concept_prestige] kostet."
  },
+ "spacers_no_icon": {
+  "en": "Spacers",
+  "de": "Raumfahrer"
+ },
  "spiritual_diversity_modifier": {
   "en": "Spiritual Diversity",
   "de": "Spirituelle Vielfalt"
@@ -10726,6 +10734,62 @@
  "sr_funding_throughput_desc": {
   "en": "Additional [concept_throughput] from [concept_space_race] funding investment. Each funding level, past the cap too, contributes #P +25%#! [GetBuildingType('building_space_program').GetName] throughput per active milestone.",
   "de": "Zusätzlicher [concept_throughput] durch Finanzierungsinvestitionen in den [concept_space_race]. Jede Finanzierungsstufe, auch über der Obergrenze, bringt #P +25%#! [GetBuildingType('building_space_program').GetName]-Durchsatz pro aktivem Meilenstein."
+ },
+ "sr_ground_carbonaceous": {
+  "en": "Carbonaceous",
+  "de": "Kohlenstoffhaltig"
+ },
+ "sr_ground_carbonaceous_desc": {
+  "en": "Clays, carbonates, ammonia and organic compounds. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −17%#!\\n$tech_metals$: #v −7%#!\\n$gold$: #v −33%#!\\n$copper$: #v −7%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v +107%#!\\n$glass$: #v +117%#!",
+  "de": "Tone, Karbonate, Ammoniak und organische Verbindungen. Eine Basisstufe auf diesem Boden erzeugt im Vergleich zu einer auf Boden „$sr_ground_mixed$“ bei gleicher Güte:\\n$iron$: #v −17%#!\\n$tech_metals$: #v −7%#!\\n$gold$: #v −33%#!\\n$copper$: #v −7%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v +107%#!\\n$glass$: #v +117%#!"
+ },
+ "sr_ground_hydrocarbon": {
+  "en": "Hydrocarbon",
+  "de": "Kohlenwasserstoff"
+ },
+ "sr_ground_hydrocarbon_desc": {
+  "en": "Hydrocarbon lakes, organic ices and tholin tars. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −25%#!\\n$tech_metals$: #v −15%#!\\n$gold$: #v −50%#!\\n$copper$: #v −20%#!\\n$lead$: #v −20%#!\\n$sulfur$: #v +80%#!\\n$glass$: #v +249%#!",
+  "de": "Kohlenwasserstoffseen, organische Eise und Tholin-Teere. Eine Basisstufe auf diesem Boden erzeugt im Vergleich zu einer auf Boden „$sr_ground_mixed$“ bei gleicher Güte:\\n$iron$: #v −25%#!\\n$tech_metals$: #v −15%#!\\n$gold$: #v −50%#!\\n$copper$: #v −20%#!\\n$lead$: #v −20%#!\\n$sulfur$: #v +80%#!\\n$glass$: #v +249%#!"
+ },
+ "sr_ground_icy": {
+  "en": "Icy",
+  "de": "Eisig"
+ },
+ "sr_ground_icy_desc": {
+  "en": "Water ice over rock, with some volatiles. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +0%#!\\n$tech_metals$: #v −5%#!\\n$gold$: #v −40%#!\\n$copper$: #v −10%#!\\n$lead$: #v −10%#!\\n$sulfur$: #v +61%#!\\n$glass$: #v +81%#!",
+  "de": "Wassereis über Gestein, mit einigen flüchtigen Stoffen. Eine Basisstufe auf diesem Boden erzeugt im Vergleich zu einer auf Boden „$sr_ground_mixed$“ bei gleicher Güte:\\n$iron$: #v +0%#!\\n$tech_metals$: #v −5%#!\\n$gold$: #v −40%#!\\n$copper$: #v −10%#!\\n$lead$: #v −10%#!\\n$sulfur$: #v +61%#!\\n$glass$: #v +81%#!"
+ },
+ "sr_ground_metallic": {
+  "en": "Metallic",
+  "de": "Metallisch"
+ },
+ "sr_ground_metallic_desc": {
+  "en": "Iron-nickel metal, with platinum-group metals and gold. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +12%#!\\n$tech_metals$: #v +2%#!\\n$gold$: #v +30%#!\\n$copper$: #v +12%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v −72%#!\\n$glass$: #v −91%#!",
+  "de": "Eisen-Nickel-Metall mit Platingruppenmetallen und Gold. Eine Basisstufe auf diesem Boden erzeugt im Vergleich zu einer auf Boden „$sr_ground_mixed$“ bei gleicher Güte:\\n$iron$: #v +12%#!\\n$tech_metals$: #v +2%#!\\n$gold$: #v +30%#!\\n$copper$: #v +12%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v −72%#!\\n$glass$: #v −91%#!"
+ },
+ "sr_ground_mixed": {
+  "en": "Mixed",
+  "de": "Gemischt"
+ },
+ "sr_ground_mixed_desc": {
+  "en": "The rubble of the $sr_site_name_near_earth$, a little of every kind of ground. A base level on it makes each good as its production method lists it, and the other types are measured against it:\\n$iron$: #v +0%#!\\n$tech_metals$: #v +0%#!\\n$gold$: #v +0%#!\\n$copper$: #v +0%#!\\n$lead$: #v +0%#!\\n$sulfur$: #v +0%#!\\n$glass$: #v +0%#!",
+  "de": "Das Geröll der Gruppe „$sr_site_name_near_earth$“, von jeder Bodenart ein wenig. Eine Basisstufe darauf erzeugt jedes Gut so, wie es ihre Produktionsmethode angibt, und die anderen Arten werden an ihr gemessen:\\n$iron$: #v +0%#!\\n$tech_metals$: #v +0%#!\\n$gold$: #v +0%#!\\n$copper$: #v +0%#!\\n$lead$: #v +0%#!\\n$sulfur$: #v +0%#!\\n$glass$: #v +0%#!"
+ },
+ "sr_ground_rocky": {
+  "en": "Rocky",
+  "de": "Felsig"
+ },
+ "sr_ground_rocky_desc": {
+  "en": "Basalt and other silicate rock, which yields iron, titanium, aluminum and silica for glass. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +26%#!\\n$tech_metals$: #v −3%#!\\n$gold$: #v −51%#!\\n$copper$: #v −17%#!\\n$lead$: #v −17%#!\\n$sulfur$: #v +7%#!\\n$glass$: #v +36%#!",
+  "de": "Basalt und anderes Silikatgestein, das Eisen, Titan, Aluminium und Kieselsäure für Glas liefert. Eine Basisstufe auf diesem Boden erzeugt im Vergleich zu einer auf Boden „$sr_ground_mixed$“ bei gleicher Güte:\\n$iron$: #v +26%#!\\n$tech_metals$: #v −3%#!\\n$gold$: #v −51%#!\\n$copper$: #v −17%#!\\n$lead$: #v −17%#!\\n$sulfur$: #v +7%#!\\n$glass$: #v +36%#!"
+ },
+ "sr_ground_sulfurous": {
+  "en": "Sulfurous",
+  "de": "Schwefelhaltig"
+ },
+ "sr_ground_sulfurous_desc": {
+  "en": "Sulfur, sulfates and sulfuric acid. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −16%#!\\n$tech_metals$: #v −11%#!\\n$gold$: #v −37%#!\\n$copper$: #v +5%#!\\n$lead$: #v +5%#!\\n$sulfur$: #v +320%#!\\n$glass$: #v +26%#!",
+  "de": "Schwefel, Sulfate und Schwefelsäure. Eine Basisstufe auf diesem Boden erzeugt im Vergleich zu einer auf Boden „$sr_ground_mixed$“ bei gleicher Güte:\\n$iron$: #v −16%#!\\n$tech_metals$: #v −11%#!\\n$gold$: #v −37%#!\\n$copper$: #v +5%#!\\n$lead$: #v +5%#!\\n$sulfur$: #v +320%#!\\n$glass$: #v +26%#!"
  },
  "sr_improved_safety_protocols_desc": {
   "en": "Enhanced fire suppression and emergency procedures reduce the risk of future incidents.",

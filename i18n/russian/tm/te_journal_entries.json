@@ -2967,6 +2967,10 @@
   "en": "#tooltip_header Nuclear Crisis#!\\n$TOOLTIP_DELIMITER$\\nStage: [Country.GetCustom('nd_crisis_stage_word')]\\nDanger: [Country.GetCustom('nd_crisis_danger_word')] #lore ([Country.MakeScope.ScriptValue('nd_display_crisis_danger')|0])#!\\nWeeks to the deadline: #v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#!\\n\\nWorld Crises names both parties and the dispute.",
   "ru": "#tooltip_header Ядерный кризис#!\\n$TOOLTIP_DELIMITER$\\nЭтап: [Country.GetCustom('nd_crisis_stage_word')]\\nОпасность: [Country.GetCustom('nd_crisis_danger_word')] #lore ([Country.MakeScope.ScriptValue('nd_display_crisis_danger')|0])#!\\nНедель до срока: #v [Country.MakeScope.ScriptValue('nd_display_crisis_weeks_left')|0]#!\\n\\nВ «Мировых кризисах» названы обе стороны и предмет спора."
  },
+ "je_nuclear_ov_delivery_caption": {
+  "en": "Delivery",
+  "ru": "Результативность"
+ },
  "je_nuclear_ov_doctrine_change_in": {
   "en": "Change in #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! mo",
   "ru": "Смена через #v [Country.MakeScope.ScriptValue('nd_display_doctrine_months_left')|0]#! мес."
@@ -2990,6 +2994,10 @@
  "je_nuclear_ov_prog_1": {
   "en": "Developing",
   "ru": "Разработка"
+ },
+ "je_nuclear_ov_prog_10": {
+  "en": "Sub Project",
+  "ru": "Проект подлодок"
  },
  "je_nuclear_ov_prog_2": {
   "en": "Producing",
@@ -3018,6 +3026,10 @@
  "je_nuclear_ov_prog_8": {
   "en": "Disarmed",
   "ru": "Разоружена"
+ },
+ "je_nuclear_ov_prog_9": {
+  "en": "ICBM Project",
+  "ru": "Проект МБР"
  },
  "je_nuclear_ov_prog_tt": {
   "en": "#tooltip_header Program#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nuclear_program_status_line')]",
@@ -3067,6 +3079,10 @@
   "en": "Nuclear Weapons",
   "ru": "Ядерное оружие"
  },
+ "je_nuclear_program_progress": {
+  "en": "Progress toward [ROOT.GetCountry.GetCustom('nd_prog_focus_object')]",
+  "ru": "Прогресс: [ROOT.GetCountry.GetCustom('nd_prog_focus_object')]"
+ },
  "je_nuclear_program_reason": {
   "en": "A weapons program is the most expensive thing a state can build out of pure research, and whoever finishes first changes every calculation made about them. Once built, an arsenal is not only a stock of weapons. It is a promise about when they will be used, a standing force that must be paid for and kept ready, and a chain of command that has to hold under pressure. Every choice here buys something abroad or at home, and every one of them changes how likely it is that something goes wrong.",
   "ru": "Программа создания оружия — самое дорогое, что государство может построить из одних лишь исследований, и тот, кто закончит её первым, меняет все расчёты, которые делают на его счёт. Построенный арсенал — не просто запас оружия. Это обещание о том, когда его применят, постоянная сила, за которую надо платить и которую надо держать в готовности, и цепочка командования, которая должна выдерживать давление. Каждый выбор здесь что-то покупает за рубежом или дома, и каждый меняет вероятность того, что что-то пойдёт не так."
@@ -3074,6 +3090,10 @@
  "je_nuclear_program_status_line": {
   "en": "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')][ROOT.GetCountry.GetCustom('nuclear_program_status_line')] Warheads held: #N [ROOT.GetCountry.MakeScope.ScriptValue('nuclear_program_display_stockpile')|0]#!.[ROOT.GetCountry.GetCustom('nd_status_line')]",
   "ru": "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')][ROOT.GetCountry.GetCustom('nuclear_program_status_line')] Боезарядов: #N [ROOT.GetCountry.MakeScope.ScriptValue('nuclear_program_display_stockpile')|0]#!.[ROOT.GetCountry.GetCustom('nd_status_line')]"
+ },
+ "je_nuclear_program_widget_counterforce_label": {
+  "en": "Counterforce ratio",
+  "ru": "Контрсиловое соотношение"
  },
  "je_nuclear_program_widget_defence_label": {
   "en": "Home defense",
@@ -3094,6 +3114,10 @@
  "je_nuclear_program_widget_first_device_label": {
   "en": "First device",
   "ru": "Первое устройство"
+ },
+ "je_nuclear_program_widget_focus_sub": {
+  "en": "What Funding Builds",
+  "ru": "На что идут средства"
  },
  "je_nuclear_program_widget_funding_label": {
   "en": "Program funding",
@@ -4043,6 +4067,170 @@
   "en": "#header Garrison#!\\nOur troops hold the colony for ten years. Each garrisoned colony adds #v 2%#! to the Space Program's throughput, and the colony's resentment adds #v 0.2#! autonomy a month.",
   "ru": "#header Гарнизон#!\\nНаши войска удерживают колонию десять лет. Каждая колония с гарнизоном добавляет #v 2%#! к пропускной способности Космической программы, а недовольство колонии добавляет #v 0,2#! автономии в месяц."
  },
+ "je_space_race_widget_autonomy_held_months_amalthea": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_amalthea')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_amalthea')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_arcadia_planitia": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_arcadia_planitia')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_arcadia_planitia')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_ariel": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_ariel')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_ariel')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_callisto": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_callisto')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_callisto')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_ceres": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_ceres')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_ceres')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_daedalus": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_daedalus')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_daedalus')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_enceladus": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_enceladus')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_enceladus')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_eris": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_eris')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_eris')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_europa": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_europa')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_europa')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_ganymede": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_ganymede')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_ganymede')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_haumea": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_haumea')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_haumea')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_hellas_planitia": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_hellas_planitia')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_hellas_planitia')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_himalia": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_himalia')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_himalia')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_hygiea": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_hygiea')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_hygiea')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_iapetus": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_iapetus')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_iapetus')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_imbrium": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_imbrium')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_imbrium')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_io": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_io')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_io')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_makemake": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_makemake')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_makemake')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_marius_hills": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_marius_hills')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_marius_hills')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_mercury": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_mercury')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_mercury')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_mimas": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_mimas')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_mimas')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_miranda": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_miranda')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_miranda')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_oberon": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_oberon')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_oberon')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_olympus_mons": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_olympus_mons')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_olympus_mons')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_pallas": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_pallas')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_pallas')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_peary": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_peary')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_peary')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_pluto": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_pluto')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_pluto')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_proteus": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_proteus')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_proteus')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_psyche": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_psyche')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_psyche')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_rhea": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_rhea')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_rhea')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_sedna": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_sedna')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_sedna')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_shackleton": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_shackleton')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_shackleton')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_titan": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_titan')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_titan')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_titania": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_titania')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_titania')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_tranquility": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_tranquility')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_tranquility')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_triton": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_triton')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_triton')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_utopia_planitia": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_utopia_planitia')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_utopia_planitia')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_valles_marineris": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_valles_marineris')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_valles_marineris')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_venus": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_venus')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_venus')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_held_months_vesta": {
+  "en": "Held: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_vesta')|0]#! months",
+  "ru": "Удерживается: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_hold_months_vesta')|0]#! мес."
+ },
+ "je_space_race_widget_autonomy_revoke": {
+  "en": "Revoke",
+  "ru": "Отозвать"
+ },
  "je_space_race_widget_autonomy_status_both": {
   "en": "Both",
   "ru": "Оба"
@@ -4054,6 +4242,10 @@
  "je_space_race_widget_autonomy_status_garrison": {
   "en": "Garrison",
   "ru": "Гарнизон"
+ },
+ "je_space_race_widget_autonomy_status_held": {
+  "en": "Held",
+  "ru": "Удерживается"
  },
  "je_space_race_widget_autonomy_status_none": {
   "en": "Ruled",
@@ -4403,6 +4595,10 @@
   "en": "Each colony's [concept_sr_colony_autonomy], charter or garrison; the [concept_sr_free_colony]s below them. Click a colony's name for everything about it on one page.",
   "ru": "[concept_sr_colony_autonomy] каждой колонии, хартия или гарнизон; ниже — [Concept('concept_sr_free_colony','свободные колонии')]. Щёлкните по названию колонии, чтобы увидеть всё о ней на одной странице."
  },
+ "je_space_race_widget_cv_bases": {
+  "en": "Bases",
+  "ru": "Базы"
+ },
  "je_space_race_widget_cv_defences": {
   "en": "Defenses",
   "ru": "Оборонительные сооружения"
@@ -4426,6 +4622,10 @@
  "je_space_race_widget_cv_people_tt": {
   "en": "Each colony's people and room, its crews, and its priority for our settlers; the emigration program above them. Click a colony's name for everything about it on one page.",
   "ru": "Население и место каждой колонии, её экипажи и её приоритет для наших поселенцев; выше — программа эмиграции. Щёлкните по названию колонии, чтобы увидеть всё о ней на одной странице."
+ },
+ "je_space_race_widget_cw_title": {
+  "en": "Our Colonies",
+  "ru": "Наши колонии"
  },
  "je_space_race_widget_def_assault_tt": {
   "en": "#header Under Assault#!\\nAn enemy fleet is closing in on this site. Its integrity falls each month the attack goes on.",
@@ -4479,6 +4679,10 @@
   "en": "The fleet's chosen destination: Go, on its row, sends it here.",
   "ru": "Выбранное место назначения флота: «Вперёд» в его строке отправляет его сюда."
  },
+ "je_space_race_widget_dp_col_battle": {
+  "en": "Battle",
+  "ru": "Бой"
+ },
  "je_space_race_widget_dp_col_dv": {
   "en": "km/s",
   "ru": "км/с"
@@ -4510,6 +4714,10 @@
  "je_space_race_widget_dp_col_ours_tt": {
   "en": "#header Ours#!\\nOur colonies there, occupied ones included.",
   "ru": "#header Наши#!\\nНаши колонии там, включая оккупированные."
+ },
+ "je_space_race_widget_dp_col_weeks": {
+  "en": "Weeks",
+  "ru": "Недели"
  },
  "je_space_race_widget_dp_col_where": {
   "en": "Location",
@@ -4551,6 +4759,70 @@
   "en": "Below the minimum strength: it can choose now and leave once it is repaired or merged.",
   "ru": "Ниже минимальной силы: флот может выбрать сейчас и отправиться, когда будет отремонтирован или объединён."
  },
+ "je_space_race_widget_eb_a_level": {
+  "en": "a level",
+  "ru": "за уровень"
+ },
+ "je_space_race_widget_eb_at_assignments": {
+  "en": "At our assignments",
+  "ru": "На наших назначениях"
+ },
+ "je_space_race_widget_eb_auto": {
+  "en": "Assign for the most profit",
+  "ru": "Назначать для наибольшей прибыли"
+ },
+ "je_space_race_widget_eb_elsewhere": {
+  "en": "working elsewhere until freed",
+  "ru": "работают в другом месте, пока не освободятся"
+ },
+ "je_space_race_widget_eb_end_profit": {
+  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_profit')|K+=] a week",
+  "ru": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_end_profit')|K+=] в неделю"
+ },
+ "je_space_race_widget_eb_from_to": {
+  "en": "From [JournalEntry.GetCountry.GetCustom('sr_eb_place_move_from')] to [JournalEntry.GetCountry.GetCustom('sr_eb_place_move_to')]",
+  "ru": "Из [JournalEntry.GetCountry.GetCustom('sr_eb_place_move_from')] в [JournalEntry.GetCountry.GetCustom('sr_eb_place_move_to')]"
+ },
+ "je_space_race_widget_eb_gain": {
+  "en": "[JournalEntry.GetCountry.GetCustom('sr_eb_place_move_to')] earns #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_gap')|%0]#! more a level",
+  "ru": "[JournalEntry.GetCountry.GetCustom('sr_eb_place_move_to')] получает на каждом уровне на #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_gap')|%0]#! больше"
+ },
+ "je_space_race_widget_eb_if_prices_hold": {
+  "en": "If prices hold",
+  "ru": "Если цены удержатся"
+ },
+ "je_space_race_widget_eb_last_from_to": {
+  "en": "From [JournalEntry.GetCountry.GetCustom('sr_eb_place_last_from')] to [JournalEntry.GetCountry.GetCustom('sr_eb_place_last_to')]",
+  "ru": "Из [JournalEntry.GetCountry.GetCustom('sr_eb_place_last_from')] в [JournalEntry.GetCountry.GetCustom('sr_eb_place_last_to')]"
+ },
+ "je_space_race_widget_eb_loss": {
+  "en": "[JournalEntry.GetCountry.GetCustom('sr_eb_place_move_from')] loses money a level",
+  "ru": "[JournalEntry.GetCountry.GetCustom('sr_eb_place_move_from')] теряет деньги на каждом уровне"
+ },
+ "je_space_race_widget_eb_next_month": {
+  "en": "Levels start moving next month",
+  "ru": "Уровни начнут перемещаться в следующем месяце"
+ },
+ "je_space_race_widget_eb_now": {
+  "en": "Now",
+  "ru": "Сейчас"
+ },
+ "je_space_race_widget_eb_now_profit": {
+  "en": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_profit')|K+=] a week",
+  "ru": "@money![JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_eb_now_profit')|K+=] в неделю"
+ },
+ "je_space_race_widget_eb_stay": {
+  "en": "Levels stay where they are",
+  "ru": "Уровни остаются на местах"
+ },
+ "je_space_race_widget_eb_totals_header": {
+  "en": "Output a Week, Before Other Modifiers",
+  "ru": "Выпуск в неделю до прочих модификаторов"
+ },
+ "je_space_race_widget_eb_unassigned_label": {
+  "en": "Unassigned levels",
+  "ru": "Нераспределённые уровни"
+ },
  "je_space_race_widget_ebase_label": {
   "en": "Extraplanetary Base levels / room",
   "ru": "Уровни внепланетных баз / места"
@@ -4562,6 +4834,22 @@
  "je_space_race_widget_ebase_tt": {
   "en": "#header Extraplanetary Base Room#!\\nWith $asteroid_mining$, the near-Earth asteroids give room for 10 Extraplanetary Base levels, and each colony we hold adds its own, from 50 levels to 300 at 16 Psyche, and 50 more a staffed level of its Mining Complexes. Our levels work the best room first, at its [concept_sr_base_grade]: the metal asteroids raise their output, the outer moons lower it. A level past all of our room works at -75%. Our levels now work at [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_grade')|+1]% throughput on average.",
   "ru": "#header Зал внепланетной базы#!\\nС технологией $asteroid_mining$ околоземные астероиды дают место для 10 уровней внепланетных баз, а каждая наша колония добавляет своё — от 50 уровней до 300 на 16 Психее — и ещё 50 за каждый укомплектованный уровень её горнодобывающих комплексов. Наши уровни занимают лучшее место первыми, на его [Concept('concept_sr_base_grade','классе базы')]: металлические астероиды повышают выработку, внешние луны снижают её. Уровень сверх всего нашего места работает на -75%. Наши уровни сейчас в среднем работают с пропускной способностью [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_ebase_grade')|+1]%."
+ },
+ "je_space_race_widget_effects_header": {
+  "en": "Program Effects",
+  "ru": "Эффекты программы"
+ },
+ "je_space_race_widget_effects_ongoing": {
+  "en": "Ongoing",
+  "ru": "Постоянные"
+ },
+ "je_space_race_widget_effects_timed": {
+  "en": "Timed",
+  "ru": "Временные"
+ },
+ "je_space_race_widget_emig_bill_label": {
+  "en": "Launch Capacity a week",
+  "ru": "Пусковые мощности в неделю"
  },
  "je_space_race_widget_emig_label": {
   "en": "Emigration",
@@ -4590,6 +4878,10 @@
  "je_space_race_widget_emig_prio_3": {
   "en": "High",
   "ru": "Высокая"
+ },
+ "je_space_race_widget_emig_sent_label": {
+  "en": "Sent last month",
+  "ru": "Отправлено в прошлом месяце"
  },
  "je_space_race_widget_eta_interstellar_probe": {
   "en": "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_eta_months_interstellar_probe')|0] months",
@@ -4891,6 +5183,10 @@
   "en": "Go",
   "ru": "Вперёд"
  },
+ "je_space_race_widget_fl_intel_shared": {
+  "en": "On the Moon and Mars, its Defenses and marines count its holder's at its other colonies there.",
+  "ru": "На Луне и Марсе его оборона и морпехи засчитываются как силы его владельца на других тамошних колониях."
+ },
  "je_space_race_widget_fl_land": {
   "en": "Land",
   "ru": "Высадить"
@@ -4967,6 +5263,22 @@
   "en": "Seize",
   "ru": "Захватить"
  },
+ "je_space_race_widget_fl_stance_1": {
+  "en": "Avoid",
+  "ru": "Уклонение"
+ },
+ "je_space_race_widget_fl_stance_2": {
+  "en": "Hit and Run",
+  "ru": "Удар и отход"
+ },
+ "je_space_race_widget_fl_stance_3": {
+  "en": "Engage",
+  "ru": "Вступление в бой"
+ },
+ "je_space_race_widget_fl_stance_4": {
+  "en": "Fight to the Last",
+  "ru": "Бой до последнего"
+ },
  "je_space_race_widget_fl_strength_tt": {
   "en": "#header Strength#!\\nThe fleet's strength now, and at full. A battle's losses are half ships destroyed and half damage that a dock repairs. The icons above it are its [concept_sr_ship_role]s.",
   "ru": "#header Сила#!\\nНынешняя сила флота и полная. Потери боя — наполовину уничтоженные корабли и наполовину повреждения, которые чинит док. Значки над ней — [Concept('concept_sr_ship_role','роли кораблей')]."
@@ -5030,6 +5342,174 @@
  "je_space_race_widget_ft_title": {
   "en": "Fleet Target",
   "ru": "Цель флота"
+ },
+ "je_space_race_widget_fw_1_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_1_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_2_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_2_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_3_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_3_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_4_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_4_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_5_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_5_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_6_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_6_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_7_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_7_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_8_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_8_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_9_leg": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_weeks')|0]#!, propellant: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_weeks')|0]#!, топливо: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_9_leg_short": {
+  "en": "Weeks: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_weeks')|0]#!, propellant: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_dv')|1]#! km/s",
+  "ru": "Недель: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_weeks')|0]#!, топливо: #R [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_leg_dv')|1]#! км/с"
+ },
+ "je_space_race_widget_fw_battle": {
+  "en": "Battle",
+  "ru": "Бой"
+ },
+ "je_space_race_widget_fw_condition": {
+  "en": "Condition",
+  "ru": "Состояние"
+ },
+ "je_space_race_widget_fw_count_label": {
+  "en": "Fleets",
+  "ru": "Флоты"
+ },
+ "je_space_race_widget_fw_destination": {
+  "en": "Destination",
+  "ru": "Назначение"
+ },
+ "je_space_race_widget_fw_dock": {
+  "en": "Dock",
+  "ru": "Причал"
+ },
+ "je_space_race_widget_fw_dock_earth": {
+  "en": "Earth",
+  "ru": "Земля"
+ },
+ "je_space_race_widget_fw_dock_flight": {
+  "en": "In flight",
+  "ru": "В полёте"
+ },
+ "je_space_race_widget_fw_dock_none": {
+  "en": "None here",
+  "ru": "Здесь нет"
+ },
+ "je_space_race_widget_fw_dock_port": {
+  "en": "Spaceport",
+  "ru": "Космодром"
+ },
+ "je_space_race_widget_fw_drive": {
+  "en": "Drive",
+  "ru": "Двигатель"
+ },
+ "je_space_race_widget_fw_fire_defences": {
+  "en": "Fire on Defenses",
+  "ru": "Огонь по обороне"
+ },
+ "je_space_race_widget_fw_fire_fleets": {
+  "en": "Fire on Fleets",
+  "ru": "Огонь по флотам"
+ },
+ "je_space_race_widget_fw_fleet": {
+  "en": "Fleet",
+  "ru": "Флот"
+ },
+ "je_space_race_widget_fw_orders": {
+  "en": "Orders",
+  "ru": "Приказы"
+ },
+ "je_space_race_widget_fw_posture": {
+  "en": "Posture",
+  "ru": "Позиция"
+ },
+ "je_space_race_widget_fw_repair": {
+  "en": "Repair a Month",
+  "ru": "Ремонт в месяц"
+ },
+ "je_space_race_widget_fw_role_carrier": {
+  "en": "Assault Carriers",
+  "ru": "Штурмовые носители"
+ },
+ "je_space_race_widget_fw_role_rapid": {
+  "en": "Rapid Response",
+  "ru": "Быстрое реагирование"
+ },
+ "je_space_race_widget_fw_role_siege": {
+  "en": "Siege Ships",
+  "ru": "Осадные корабли"
+ },
+ "je_space_race_widget_fw_role_tender": {
+  "en": "Tenders",
+  "ru": "Суда снабжения"
+ },
+ "je_space_race_widget_fw_role_war": {
+  "en": "Warships",
+  "ru": "Боевые корабли"
+ },
+ "je_space_race_widget_fw_ships": {
+  "en": "Ships",
+  "ru": "Корабли"
+ },
+ "je_space_race_widget_fw_target": {
+  "en": "Target",
+  "ru": "Цель"
+ },
+ "je_space_race_widget_fw_title": {
+  "en": "Our Fleets",
+  "ru": "Наши флоты"
  },
  "je_space_race_widget_how_approach": {
   "en": "Every milestone starts on the Standard [concept_sr_approach], and you can switch between the three at any time. Approach, funding and mission choices count for the whole program, not only for the milestone they sit on: every running milestone moves at the same pace, and the risk and pace changes add up across milestones.",
@@ -5131,6 +5611,10 @@
   "en": "Autonomy and Free Colonies",
   "ru": "Автономия и свободные колонии"
  },
+ "je_space_race_widget_howc_sub_bases": {
+  "en": "Extraplanetary Bases",
+  "ru": "Внепланетные базы"
+ },
  "je_space_race_widget_howc_sub_defences": {
   "en": "Defenses and Seizure",
   "ru": "Оборона и захват"
@@ -5158,6 +5642,34 @@
  "je_space_race_widget_howc_windows": {
   "en": "Chemical-drive colony fleets and modules leave in their site's [concept_sr_launch_window]; Mission Control's Next Windows lists each destination's next one. Progress past the goal waits as fleets staged in orbit until one opens, and a setback takes one colony's progress at most.",
   "ru": "Колониальные флоты и модули на химических двигателях отправляются в [Concept('concept_sr_launch_window','стартовое окно')] своего объекта; «Следующие окна» Центра управления полётами показывают следующее окно для каждого пункта назначения. Прогресс сверх цели ждёт в виде флотов, подготовленных на орбите, пока окно не откроется, а неудача отнимает прогресс не более чем одной колонии."
+ },
+ "je_space_race_widget_ld_button": {
+  "en": "Land",
+  "ru": "Высадить"
+ },
+ "je_space_race_widget_ld_col_colony": {
+  "en": "Colony",
+  "ru": "Колония"
+ },
+ "je_space_race_widget_ld_col_garrison": {
+  "en": "Garrison",
+  "ru": "Гарнизон"
+ },
+ "je_space_race_widget_ld_col_marines": {
+  "en": "Marines",
+  "ru": "Морпехи"
+ },
+ "je_space_race_widget_ld_due": {
+  "en": "Due",
+  "ru": "Причитается"
+ },
+ "je_space_race_widget_ld_embark_button": {
+  "en": "Embark",
+  "ru": "Погрузить"
+ },
+ "je_space_race_widget_ld_title": {
+  "en": "Marines",
+  "ru": "Морпехи"
  },
  "je_space_race_widget_loc_battle_tt": {
   "en": "#header Battle#!\\nFleets fought here this month.",
@@ -5202,6 +5714,54 @@
  "je_space_race_widget_locations_header": {
   "en": "Locations",
   "ru": "Местоположения"
+ },
+ "je_space_race_widget_map_key_inbound": {
+  "en": "Inbound",
+  "ru": "Летят к нам"
+ },
+ "je_space_race_widget_map_key_other": {
+  "en": "Others",
+  "ru": "Прочие"
+ },
+ "je_space_race_widget_map_key_target": {
+  "en": "Target",
+  "ru": "Цель"
+ },
+ "je_space_race_widget_map_loc_asteroids": {
+  "en": "Belt",
+  "ru": "Пояс"
+ },
+ "je_space_race_widget_map_loc_earth": {
+  "en": "Moon",
+  "ru": "Луна"
+ },
+ "je_space_race_widget_map_loc_inner": {
+  "en": "Inner",
+  "ru": "Внутренние"
+ },
+ "je_space_race_widget_map_loc_jupiter": {
+  "en": "Jupiter",
+  "ru": "Юпитер"
+ },
+ "je_space_race_widget_map_loc_kuiper": {
+  "en": "Kuiper",
+  "ru": "Койпер"
+ },
+ "je_space_race_widget_map_loc_mars": {
+  "en": "Mars",
+  "ru": "Марс"
+ },
+ "je_space_race_widget_map_loc_neptune": {
+  "en": "Neptune",
+  "ru": "Нептун"
+ },
+ "je_space_race_widget_map_loc_saturn": {
+  "en": "Saturn",
+  "ru": "Сатурн"
+ },
+ "je_space_race_widget_map_loc_uranus": {
+  "en": "Uranus",
+  "ru": "Уран"
  },
  "je_space_race_widget_mod_admin_tt": {
   "en": "#header Administration#!\\nA governor's office and the clerks who answer to Earth: #v -0.15#! a month to the colony's [concept_sr_colony_autonomy] a staffed level.",
@@ -5324,8 +5884,8 @@
   "ru": "#header Учебный полигон#!\\nУчения в условиях низкой гравитации и вакуума для наших солдат: #v +4%#! к приросту опыта армии за каждый укомплектованный уровень."
  },
  "je_space_race_widget_mod_upkeep_label": {
-  "en": "Module upkeep (throughput)",
-  "ru": "Содержание модулей (пропускная способность)"
+  "en": "Upkeep, Launch Capacity a week",
+  "ru": "Содержание, пусковые мощности в неделю"
  },
  "je_space_race_widget_mod_upkeep_tt": {
   "en": "#header Module Upkeep#!\\nEvery module level past each colony's first raises the Space Program's Launch Capacity bill:\\n[GetStaticModifier('sr_module_upkeep').GetDesc]",
@@ -5334,6 +5894,18 @@
  "je_space_race_widget_mod_yard_tt": {
   "en": "#header Orbital Yard#!\\nA yard in the colony's orbit that builds [concept_sr_module]s from local material: each staffed level adds #v 4#! points a month to our Module Fabrication, and under Full Colonies #v 0.5#! strength a month to Space Command's construction. Nothing while it is blockaded or occupied.",
   "ru": "#header Орбитальная верфь#!\\nВерфь на орбите колонии строит [Concept('concept_sr_module','модули')] из местных материалов: каждый укомплектованный уровень добавляет #v 4#! очка в месяц к нашему изготовлению модулей, а в режиме «полноценные колонии» ещё #v 0,5#! силы в месяц к строительству Космического командования. Не действует, пока она блокирована или оккупирована."
+ },
+ "je_space_race_widget_mod_yard_tt_built": {
+  "en": "They cost the same points as at Earth, but need no shipment slot, launch window or launch, and come on top of the modules a month built there. None while the yard or the colony is blockaded or occupied.",
+  "ru": "Они стоят столько же очков, что и на Земле, но не требуют ни места для отправки, ни стартового окна, ни запуска, и добавляются к модулям, построенным там за месяц. Ничего, пока верфь или колония блокирована или оккупирована."
+ },
+ "je_space_race_widget_mod_yard_tt_head": {
+  "en": "#header Orbital Yard#!\\nEach staffed level adds #v 4#! points a month to our Module Fabrication, and #v 0.5#! fleet strength a month to Space Command while we have one.",
+  "ru": "#header Орбитальная верфь#!\\nКаждый укомплектованный уровень добавляет #v 4#! очка в месяц к нашему Изготовлению модулей и #v 0,5#! силы флота в месяц Космическому командованию, пока оно у нас есть."
+ },
+ "je_space_race_widget_mod_yard_tt_moons_apart": {
+  "en": "Each moon's Defenses and marines defend it alone.",
+  "ru": "Оборона и морпехи каждой луны защищают только её."
  },
  "je_space_race_widget_modules_col_admin": {
   "en": "Gov",
@@ -5354,6 +5926,10 @@
  "je_space_race_widget_modules_col_bunker": {
   "en": "Nuke",
   "ru": "Ядер."
+ },
+ "je_space_race_widget_modules_col_crews": {
+  "en": "Crews",
+  "ru": "Экипажи"
  },
  "je_space_race_widget_modules_col_culture": {
   "en": "Arts",
@@ -5388,8 +5964,8 @@
   "ru": "Тур."
  },
  "je_space_race_widget_modules_col_slots": {
-  "en": "Slots",
-  "ru": "Слоты"
+  "en": "Habitats",
+  "ru": "Жилые модули"
  },
  "je_space_race_widget_modules_col_spec_tt": {
   "en": "#header Specializations I and II#!\\nThe two specializations the colony's founding event offered, in that order. They share four levels of [concept_sr_module]: one at 4, both at 2, or 1 and 3. Each level adds the specialization's bonus once more. Hover a colony's level to see what it gives. A colony builds its own levels too, as its [concept_sr_colony_autonomy] allows.",
@@ -5450,6 +6026,10 @@
  "je_space_race_widget_mq_tt_full_moon": {
   "en": "A module for the Moon further down the queue needs no slot, so it goes ahead of this one once the stock covers it.",
   "ru": "Модуль для Луны дальше в очереди не требует слота, поэтому пойдёт раньше этого, как только склад покроет его цену."
+ },
+ "je_space_race_widget_mq_tt_held": {
+  "en": "#header On Hold#!\\n[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_launches_barred'), '(CFixedPoint)0' ), 'je_space_race_widget_mq_tt_held_earth', 'je_space_race_widget_mq_tt_held_moon' )]",
+  "ru": "#header На удержании#!\\n[SelectLocalization( GreaterThan_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_launches_barred'), '(CFixedPoint)0' ), 'je_space_race_widget_mq_tt_held_earth', 'je_space_race_widget_mq_tt_held_moon' )]"
  },
  "je_space_race_widget_mq_tt_month": {
   "en": "month",
@@ -5663,6 +6243,14 @@
   "en": "Loyal",
   "ru": "Лояльны"
  },
+ "je_space_race_widget_ovc_crews_cap": {
+  "en": "Crews",
+  "ru": "Экипажи"
+ },
+ "je_space_race_widget_ovc_crews_fig": {
+  "en": "of crews",
+  "ru": "экипажей"
+ },
  "je_space_race_widget_ovc_def_fig_calm": {
   "en": "colonies secure",
   "ru": "колонии в безопасности"
@@ -5756,8 +6344,8 @@
   "ru": "#header Враждебные флоты, идущие к Земле#!\\nВ полёте от держав, воюющих с нами:\\n[GetScriptedGui('sr_colony_overview_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]\\nИх уже у Земли: #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_present')|0]#!. Наших у Земли: #v [Country.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( Country.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )]\\n\\nКрасный, пока высадка склонила бы чашу весов: у Земли нет нашего флота и блокады ещё нет, либо наш флот сейчас держится против их флота, но не против того, что приближается."
  },
  "je_space_race_widget_ovc_earth_word": {
-  "en": "Earth in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! mo",
-  "ru": "До Земли: #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0]#! мес."
+  "en": "Earth in #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_weeks')|0]#! wk",
+  "ru": "До Земли: #v [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_weeks')|0]#! нед."
  },
  "je_space_race_widget_ovc_earth_word_loud": {
   "en": "#R Earth in [Country.MakeScope.ScriptValue('sr_disp_earth_hostile_months')|0] mo#!",
@@ -5799,13 +6387,37 @@
   "en": "#v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#! queued",
   "ru": "в очереди: #v [Country.MakeScope.ScriptValue('sr_disp_mq_count')|0]#!"
  },
+ "je_space_race_widget_ovc_resort_cap": {
+  "en": "Resort Room",
+  "ru": "Места для курорта"
+ },
+ "je_space_race_widget_ovc_sc_crewed_cap": {
+  "en": "Crewed",
+  "ru": "С экипажем"
+ },
+ "je_space_race_widget_ovc_sc_personnel_cap": {
+  "en": "Personnel",
+  "ru": "Личный состав"
+ },
+ "je_space_race_widget_ovc_sc_personnel_word": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_in_service')|K]#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_capacity')|K]",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_in_service')|K]#! из [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_capacity')|K]"
+ },
  "je_space_race_widget_ovc_sc_rate_cap": {
   "en": "Built a month",
   "ru": "Строится в месяц"
  },
+ "je_space_race_widget_ovc_sc_rate_word_idle": {
+  "en": "Idle",
+  "ru": "Простой"
+ },
  "je_space_race_widget_ovc_sc_rate_word_paused": {
   "en": "Paused",
   "ru": "Приостановлено"
+ },
+ "je_space_race_widget_ovc_sc_rate_word_resuming": {
+  "en": "Resuming",
+  "ru": "Возобновляется"
  },
  "je_space_race_widget_ovc_sc_reserve_cap": {
   "en": "Reserve",
@@ -5866,6 +6478,10 @@
  "je_space_race_widget_page_bases": {
   "en": "Base Room",
   "ru": "Место для баз"
+ },
+ "je_space_race_widget_page_resorts": {
+  "en": "Resort Room",
+  "ru": "Места для курорта"
  },
  "je_space_race_widget_page_settlers": {
   "en": "Settlers",
@@ -6131,6 +6747,14 @@
   "en": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/mo)",
   "ru": "#v [Country.MakeScope.ScriptValue('sr_progress_suborbital_value')|0]#! / [Country.MakeScope.ScriptValue('sr_suborbital_goal')|0] (+[Country.MakeScope.ScriptValue('sr_pace_rate_suborbital')|1]/мес.)"
  },
+ "je_space_race_widget_resort_label": {
+  "en": "$building_space_resort$ levels / room",
+  "ru": "$building_space_resort$: уровней на место"
+ },
+ "je_space_race_widget_resort_queued_label": {
+  "en": "$building_space_resort$ levels queued",
+  "ru": "$building_space_resort$: уровней в очереди"
+ },
  "je_space_race_widget_reward_interstellar_probe": {
   "en": "#header Interstellar Probe#!\\n#bold If we are the first nation to do this:#!\\n[GetStaticModifier('sr_first_interstellar_probe').GetDesc]\\n#bold If another power gets there first:#!\\n[GetStaticModifier('sr_interstellar_probe').GetDesc]",
   "ru": "#header Межзвёздный зонд#!\\n#bold Если мы первыми среди стран сделаем это:#!\\n[GetStaticModifier('sr_first_interstellar_probe').GetDesc]\\n#bold Если другая держава окажется там раньше:#!\\n[GetStaticModifier('sr_interstellar_probe').GetDesc]"
@@ -6228,24 +6852,84 @@
   "ru": "Безопасный"
  },
  "je_space_race_widget_sc_auto_off": {
-  "en": "Auto: off",
-  "ru": "Авто: выкл."
+  "en": "Auto-launch: Off",
+  "ru": "Автозапуск: выкл."
  },
  "je_space_race_widget_sc_auto_on": {
-  "en": "Auto: on",
-  "ru": "Авто: вкл."
+  "en": "Auto-launch: On",
+  "ru": "Автозапуск: вкл."
  },
  "je_space_race_widget_sc_blockaded_note": {
   "en": "#R Earth is blockaded.#! Nothing leaves Earth for us, and our colonies have no contact, until a fleet of ours is in orbit: Launch the reserve.",
   "ru": "#R Земля в блокаде.#! Ничто не покидает Землю для нас, и наши колонии остаются без связи, пока наш флот не выйдет на орбиту: запустите резерв."
  },
+ "je_space_race_widget_sc_build_header": {
+  "en": "Construction",
+  "ru": "Строительство"
+ },
+ "je_space_race_widget_sc_col_fleets": {
+  "en": "Fleets",
+  "ru": "Флоты"
+ },
+ "je_space_race_widget_sc_col_mix": {
+  "en": "Mix",
+  "ru": "Состав"
+ },
+ "je_space_race_widget_sc_col_order": {
+  "en": "Order",
+  "ru": "Заказ"
+ },
+ "je_space_race_widget_sc_col_reserve": {
+  "en": "Reserve",
+  "ru": "Резерв"
+ },
+ "je_space_race_widget_sc_col_role": {
+  "en": "Role",
+  "ru": "Роль"
+ },
  "je_space_race_widget_sc_header": {
   "en": "Space Command",
   "ru": "Космическое командование"
  },
+ "je_space_race_widget_sc_hulls_first": {
+  "en": "Crews first: Hulls",
+  "ru": "Сначала экипажи: корпуса"
+ },
  "je_space_race_widget_sc_launch": {
   "en": "Launch",
   "ru": "Запуск"
+ },
+ "je_space_race_widget_sc_marines_first": {
+  "en": "Crews first: Marines",
+  "ru": "Сначала экипажи: морпехи"
+ },
+ "je_space_race_widget_sc_mode_full": {
+  "en": "Full",
+  "ru": "Полный"
+ },
+ "je_space_race_widget_sc_mode_orders": {
+  "en": "Orders Only",
+  "ru": "Только заказы"
+ },
+ "je_space_race_widget_sc_mode_paused": {
+  "en": "Paused",
+  "ru": "Приостановлено"
+ },
+ "je_space_race_widget_sc_order_months_figure": {
+  "en": "about [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_months')|0]",
+  "ru": "около [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_sc_order_months')|0]"
+ },
+ "je_space_race_widget_sc_order_months_label": {
+  "en": "Months to build them",
+  "ru": "Месяцев на постройку"
+ },
+ "je_space_race_widget_sc_orders_label": {
+  "en": "Hulls on order",
+  "ru": "Корпуса в заказе"
+ },
+ "je_space_race_widget_sc_personnel_tt_plain": {
+  "en": "#header Space Forces Personnel#!\\nIn service: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_in_service')|0]#! of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_capacity')|0]#!. Our crews take #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_crews')|0]#!, #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_per_point')|0]#! a point of fleet strength at full; our marines #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_aboard')|0]#! aboard and #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_garrison')|0]#! in our garrisons, #v 1,000#! a battalion; our colonies' modules #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_modules')|0]#!, #v 1,000#! for each of #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_module_levels')|0]#! levels of Spaceport, Defenses, Black Site, Training Ground and Nuclear Command Center. #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_levels')|0]#! levels of $building_space_forces_base$ train #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_capacity_bases')|0]#! at their staffing, occupied states included.\\n\\nThe ground reserve needs no crew until it launches: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_reserve_waiting')|1]#! of its strength awaits crews. $spacers_no_icon$ killed in the last year: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_killed_year')|0]#!.",
+  "ru": "#header Личный состав космических сил#!\\nНа службе: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_in_service')|0]#! из #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_capacity')|0]#!. Наши экипажи забирают #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_crews')|0]#!, по #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_per_point')|0]#! на очко силы флота при полном составе; наши морпехи: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_aboard')|0]#! на борту и #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_marines_garrison')|0]#! в гарнизонах, по #v 1 000#! на батальон; модули наших колоний: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_modules')|0]#!, по #v 1 000#! за каждый из #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_module_levels')|0]#! уровней космодромов, обороны, секретных объектов, учебных полигонов и ядерных командных центров. Уровней здания $building_space_forces_base$: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_levels')|0]#!; при своей укомплектованности они обучают #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_capacity_bases')|0]#!, включая оккупированные области.\\n\\nНаземному резерву экипаж не нужен до запуска: экипажей ожидает #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_reserve_waiting')|1]#! его силы. $spacers_no_icon$, погибшие за последний год: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_pers_killed_year')|0]#!."
  },
  "je_space_race_widget_sc_rate_paused_tt": {
   "en": "#header Fleet Strength Built a Month#!\\nNothing while construction is paused: our $building_space_command$ builds no fleet strength, nor do our colonies' Orbital Yards, and its yards buy no $launch_capacity$, $advanced_materials$ or $electricity$. It still uses its maintenance goods, and the fleets' upkeep is still paid. Resume ends the pause at the next month's construction, which builds nothing; the month after builds again.",
@@ -6311,6 +6995,10 @@
   "en": "All [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
   "ru": "Показаны все объекты: [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0]"
  },
+ "je_space_race_widget_ss_all_locations": {
+  "en": "All locations",
+  "ru": "Все места"
+ },
  "je_space_race_widget_ss_filtered": {
   "en": "#v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! of [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0] sites shown",
   "ru": "Показано объектов: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_ss_filtered')|0]#! из [GetPlayer.MakeScope.ScriptValue('sr_sites_world_count')|0]"
@@ -6374,6 +7062,10 @@
  "je_space_race_widget_ss_occupied_tt": {
   "en": "#header Occupied#!\\nAn enemy's marines hold this colony. It gives its holder nothing until the peace returns it, or a fleet frees it.",
   "ru": "#header Оккупирована#!\\nМорпехи противника удерживают эту колонию. Она ничего не даёт своему владельцу, пока мир не вернёт её или флот не освободит."
+ },
+ "je_space_race_widget_ss_one_location": {
+  "en": "One location's sites shown",
+  "ru": "Показаны площадки одного места"
  },
  "je_space_race_widget_ss_ours": {
   "en": "Ours",
@@ -9660,12 +10352,16 @@
   "ru": "[GetStaticModifier('un_regime_npt_inspection_modifier').GetName|v]\\n[GetStaticModifier('un_regime_npt_inspection_modifier').GetDesc]\\n#lore Показано при ×1: наш масштабируется в зависимости от [Concept('concept_un_enforcement','принуждения ООН')].#!"
  },
  "je_un_chamber_regime_nuclear_ban_ceiling": {
-  "en": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R Arsenal held#!#!: to #v [THIS.ScriptValue('nd_disp_ban_ceiling')|0]#! warheads, lower again in #v [THIS.ScriptValue('nd_disp_ban_months_to_step')|0]#! months.",
-  "ru": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R Арсенал ограничен#!#!: до #v [THIS.ScriptValue('nd_disp_ban_ceiling')|0]#! боезарядов, снова снизится через #v [THIS.ScriptValue('nd_disp_ban_months_to_step')|0]#! мес."
+  "en": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R Arsenal held#!#!: #v [THIS.ScriptValue('nd_disp_ban_ceiling')|0]#! warheads",
+  "ru": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R Арсенал ограничен#!#!: #v [THIS.ScriptValue('nd_disp_ban_ceiling')|0]#! боезарядов"
  },
  "je_un_chamber_regime_nuclear_ban_none": {
   "en": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R No warheads#!#!: we may hold or build none.",
   "ru": "    #tooltippable;tooltip:je_un_chamber_regime_nuclear_ban_tt #R Без боезарядов#!#!: мы не можем ни держать их, ни создавать."
+ },
+ "je_un_chamber_regime_nuclear_ban_step": {
+  "en": "    Lowered again in: #v [THIS.ScriptValue('nd_disp_ban_months_to_step')|0]#! months",
+  "ru": "    Снова снизится через: #v [THIS.ScriptValue('nd_disp_ban_months_to_step')|0]#! мес."
  },
  "je_un_chamber_regime_nuclear_ban_tt": {
   "en": "The Treaty on the Prohibition of Nuclear Weapons holds us to the #v [GetPlayer.MakeScope.ScriptValue('nd_disp_ban_base')|0]#! warheads we held when we ratified it, a fifth less every five years and none after 25 years. Warheads above the ceiling are taken apart, a tenth of the excess a month, and our program builds nothing while our arsenal is at or above the ceiling, which is for as long as we are a party. The ceiling is not scaled by [concept_un_enforcement], but it does not step down while the UN is Moribund. Leaving the United Nations ends it, and the world counts that as walking out of an arms-control treaty.",
@@ -9756,8 +10452,8 @@
   "ru": "#bold Правило принятия:#! [concept_un_passage_two_thirds] из #v [THIS.ScriptValue('un_vote_eligible_member_count')|0]#!"
  },
  "je_un_chamber_seabed_cooling": {
-  "en": "    #bold Returning#!: we are a party to the seabed terms again in [THIS.ScriptValue('te_seabed_party_cooldown_left')|0] months.",
-  "ru": "    #bold Возвращение#!: мы снова станем стороной условий по морскому дну через [THIS.ScriptValue('te_seabed_party_cooldown_left')|0] мес."
+  "en": "    #tooltippable;tooltip:je_un_chamber_seabed_cooling_tt #bold Returning#!#!: in #v [THIS.ScriptValue('te_seabed_party_cooldown_left')|0]#! months",
+  "ru": "    #tooltippable;tooltip:je_un_chamber_seabed_cooling_tt #bold Возвращение#!#!: через #v [THIS.ScriptValue('te_seabed_party_cooldown_left')|0]#! мес."
  },
  "je_un_chamber_seabed_defected": {
   "en": "    #R Defected#!: we license on our own terms, so we hold no place in the reserved half.",
@@ -9776,8 +10472,8 @@
   "ru": "    #G Зарезервированная половина#!: наш ВВП на душу населения ниже среднего по членам, поэтому мы претендуем в ней."
  },
  "je_un_chamber_seabed_royalty": {
-  "en": "    #R Royalties#!: @money![THIS.Var('te_seabed_royalty_cached').GetValue|0] a week on our $building_ocean_mine$ levels.",
-  "ru": "    #R Роялти#!: @money![THIS.Var('te_seabed_royalty_cached').GetValue|0] в неделю за наши уровни здания $building_ocean_mine$."
+  "en": "    #tooltippable;tooltip:je_un_chamber_seabed_royalty_tt #R Royalties#!#!: @money!#v [THIS.Var('te_seabed_royalty_cached').GetValue|D]#! a week",
+  "ru": "    #tooltippable;tooltip:je_un_chamber_seabed_royalty_tt #R Роялти#!#!: @money!#v [THIS.Var('te_seabed_royalty_cached').GetValue|D]#! в неделю"
  },
  "je_un_chamber_seabed_scramble": {
   "en": "    #R The seabed is in a Scramble#!: two or more great powers license it on their own terms. Every pool is open to all, every navy counts double, and no royalties are owed.",
@@ -10203,6 +10899,10 @@
   "en": "Members at or below the cutoff that hold their seat in the Assembly and pay their [concept_un_dues]. A member withholding its dues is not paid, however poor.",
   "ru": "Члены на уровне порога или ниже, которые удерживают место в Ассамблее и платят [concept_un_dues|l]. Член, удерживающий взносы, не получает выплат, каким бы бедным он ни был."
  },
+ "je_un_dev_fund_goodwill_label": {
+  "en": "Lobbying with recipients",
+  "ru": "Лоббирование среди получателей"
+ },
  "je_un_dev_fund_line_floored_tt": {
   "en": "#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! of the members' average [concept_gdp_per_capita] would be @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_base')|1]#!, below every member that holds its seat and pays its [concept_un_dues]. So the cutoff rises to the poorest such member's, @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_floor')|1]#!, and the Fund always pays at least one member. The grants are shared by population among the members at or below it, and worked out again each month.",
   "ru": "#v [THIS.ScriptValue('un_disp_dev_fund_line_pct')|0]%#! от среднего по членам [Concept('concept_gdp_per_capita','ВВП на душу населения')] составили бы @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_base')|1]#!, что ниже, чем у любого члена, который удерживает место и платит [concept_un_dues|l]. Поэтому порог поднимается до уровня беднейшего такого члена, @money!#v [THIS.ScriptValue('un_disp_dev_fund_line_floor')|1]#!, и Фонд всегда платит хотя бы одному члену. Гранты делятся по населению между членами на этом уровне или ниже и пересчитываются каждый месяц."
@@ -10231,9 +10931,33 @@
   "en": "Nobody is paid: under the founding charter the Fund pays out only what members contribute through Development Programs, and none does.",
   "ru": "Никому не платят: по учредительному уставу Фонд выплачивает только то, что члены вносят через программы развития, а никто не вносит."
  },
+ "je_un_dev_fund_our_gdp_ph_label": {
+  "en": "Our GDP per head",
+  "ru": "Наш ВВП на душу населения"
+ },
+ "je_un_dev_fund_ours_label": {
+  "en": "Our contribution",
+  "ru": "Наш взнос"
+ },
+ "je_un_dev_fund_ours_weekly_label": {
+  "en": "Our contribution, a week",
+  "ru": "Наш взнос в неделю"
+ },
+ "je_un_dev_fund_paid_in_label": {
+  "en": "Paid into the Fund",
+  "ru": "Внесено в Фонд"
+ },
  "je_un_dev_fund_paid_label": {
   "en": "Paid out a week",
   "ru": "Выплачивается в неделю"
+ },
+ "je_un_dev_fund_receive_label": {
+  "en": "We receive, a week",
+  "ru": "Мы получаем в неделю"
+ },
+ "je_un_dev_fund_receive_none": {
+  "en": "None",
+  "ru": "Нет"
  },
  "je_un_dev_fund_recipient": {
   "en": "[THIS.GetCountry.GetName]: @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
@@ -10243,9 +10967,109 @@
   "en": "#bold [THIS.GetCountry.GetName] (us):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! a week (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] a head)",
   "ru": "#bold [THIS.GetCountry.GetName] (мы):#! @money!#v [THIS.ScriptValue('un_disp_dev_fund_our_grant')|D]#! в неделю (@money![THIS.ScriptValue('un_disp_dev_fund_our_gdp_ph')|1] на душу)"
  },
+ "je_un_dev_fund_share_label": {
+  "en": "Share of GDP, a year",
+  "ru": "Доля ВВП в год"
+ },
+ "je_un_dev_fund_show_all": {
+  "en": "Show All ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_recipients')|0])",
+  "ru": "Показать все ([JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_dev_fund_recipients')|0])"
+ },
+ "je_un_dev_fund_show_top": {
+  "en": "Show the 10 Largest",
+  "ru": "Показать 10 крупнейших"
+ },
+ "je_un_dev_fund_size_generous": {
+  "en": "Generous",
+  "ru": "Щедрый"
+ },
+ "je_un_dev_fund_size_modest": {
+  "en": "Modest",
+  "ru": "Скромный"
+ },
+ "je_un_dev_fund_size_none": {
+  "en": "None",
+  "ru": "Нет"
+ },
+ "je_un_dev_fund_size_small": {
+  "en": "Small",
+  "ru": "Небольшой"
+ },
+ "je_un_dev_fund_size_substantial": {
+  "en": "Substantial",
+  "ru": "Существенный"
+ },
+ "je_un_dev_fund_size_token": {
+  "en": "Token",
+  "ru": "Символический"
+ },
  "je_un_dev_fund_sub_recipients": {
   "en": "Recipients",
   "ru": "Получатели"
+ },
+ "je_un_dues_arrears_months_label": {
+  "en": "Months in arrears",
+  "ru": "Месяцев задолженности"
+ },
+ "je_un_dues_carried_label": {
+  "en": "Seats we carry",
+  "ru": "Места, которые мы покрываем"
+ },
+ "je_un_dues_carried_many": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_carried_seat_count')|0]#! subjects",
+  "ru": "Зависимых: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_carried_seat_count')|0]#!"
+ },
+ "je_un_dues_carried_one": {
+  "en": "#v 1#! subject",
+  "ru": "Зависимых: #v 1#!"
+ },
+ "je_un_dues_ours_label": {
+  "en": "Our [concept_un_dues]",
+  "ru": "Наши [concept_un_dues|l]"
+ },
+ "je_un_dues_owed_label": {
+  "en": "Arrears owed",
+  "ru": "Задолженность к уплате"
+ },
+ "je_un_dues_rate_label": {
+  "en": "Share of GDP, a year",
+  "ru": "Доля ВВП в год"
+ },
+ "je_un_dues_vote_lost_in_label": {
+  "en": "Vote lost in",
+  "ru": "Голос будет утрачен через"
+ },
+ "je_un_dues_vote_lost_in_many": {
+  "en": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_article_19_months_left')|0]#! months",
+  "ru": "#v [JournalEntry.GetCountry.MakeScope.ScriptValue('un_disp_article_19_months_left')|0]#! мес."
+ },
+ "je_un_dues_vote_lost_in_one": {
+  "en": "#v 1#! month",
+  "ru": "#v 1#! мес."
+ },
+ "je_un_dues_weekly_label": {
+  "en": "Our dues, a week",
+  "ru": "Наши взносы в неделю"
+ },
+ "je_un_food_drawn_label": {
+  "en": "Drawn from us so far",
+  "ru": "С нас уже списано"
+ },
+ "je_un_food_grain_label": {
+  "en": "Grain in our Strategic Reserve",
+  "ru": "Зерно в нашем Стратегическом резерве"
+ },
+ "je_un_food_offer_label": {
+  "en": "Next aid mission draws at most",
+  "ru": "Следующая миссия помощи заберёт не более"
+ },
+ "je_un_food_pledge_label": {
+  "en": "Pledged, of our reserve's grain",
+  "ru": "Обещано, от зерна нашего резерва"
+ },
+ "je_un_food_pledge_none": {
+  "en": "None",
+  "ru": "Нет"
  },
  "je_un_how_header": {
   "en": "How the UN Works",

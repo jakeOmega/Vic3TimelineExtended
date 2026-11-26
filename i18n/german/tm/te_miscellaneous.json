@@ -6115,6 +6115,10 @@
   "en": "#header Rate Target#!\\nEach month the rate closes #v [Country.MakeScope.ScriptValue('te_mon_drift_gap_share_pct')|0]%#! of the gap or of how far inflation is from its own target, whichever is less, and never less than #v [Country.MakeScope.ScriptValue('te_mon_drift_step')|2]#! of a point. A central bank running its mandate makes that least step #v [Country.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! as large when it cuts in #yellow Stagnation#! or worse.\\n$TOOLTIP_DELIMITER$\\n#title The monetary law allows:#! #v [Country.MakeScope.ScriptValue('te_mon_target_min')|1]%#! to #v [Country.MakeScope.ScriptValue('te_mon_target_max')|1]%#!\\n[Country.GetCustom('te_mon_dial_range_note')]",
   "de": "#header Zielzins#!\\nJeden Monat schließt der Zinssatz #v [Country.MakeScope.ScriptValue('te_mon_drift_gap_share_pct')|0]%#! der Lücke oder des Abstands der Inflation von ihrem eigenen Ziel, je nachdem, was weniger ist, und nie weniger als #v [Country.MakeScope.ScriptValue('te_mon_drift_step')|2]#! eines Punktes. Eine Zentralbank, die ihr Mandat ausführt, macht diesen kleinsten Schritt #v [Country.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! so groß, wenn sie in #yellow Stagnation#! oder schlimmer senkt.\\n$TOOLTIP_DELIMITER$\\n#title Das Geldgesetz erlaubt:#! #v [Country.MakeScope.ScriptValue('te_mon_target_min')|1]%#! bis #v [Country.MakeScope.ScriptValue('te_mon_target_max')|1]%#!\\n[Country.GetCustom('te_mon_dial_range_note')]"
  },
+ "banking_dash_mon_union_grp_hover": {
+  "en": "$TOOLTIP_DELIMITER$\\nEach adds under 0.01 points to the leader's [concept_banking_risk_premium] for its backing. Hover a flag for its figure; a member that adds more has a row of its own above.",
+  "de": "$TOOLTIP_DELIMITER$\\nJede fügt der [concept_banking_risk_premium] des Anführers für ihre Unterstützung weniger als 0,01 Punkte hinzu. Für den genauen Wert eine Flagge anfahren; ein Mitglied, das mehr beiträgt, hat oben eine eigene Zeile."
+ },
  "banking_dash_mon_union_issuer_note": {
   "en": "\\n$TOOLTIP_DELIMITER$\\n#v [Country.MakeScope.ScriptValue('te_mon_union_adopters_display')|0]#! of its members have adopted its currency. Its reach is #v [Country.MakeScope.ScriptValue('te_mon_union_reach_pct_display')|0]%#!: that share of its tier's seigniorage and of its cut in [concept_banking_risk_premium]. Each further adopter raises it.",
   "de": "\\n$TOOLTIP_DELIMITER$\\n#v [Country.MakeScope.ScriptValue('te_mon_union_adopters_display')|0]#! seiner Mitglieder haben seine Währung eingeführt. Seine Reichweite beträgt #v [Country.MakeScope.ScriptValue('te_mon_union_reach_pct_display')|0]%#!: dieser Anteil der Seigniorage seiner Stufe und seiner Senkung der [concept_banking_risk_premium]. Jeder weitere Einführer erhöht sie."
@@ -8303,9 +8307,17 @@
   "en": "Free Colony",
   "de": "Freie Kolonie"
  },
+ "concept_sr_ground_type": {
+  "en": "Ground Type",
+  "de": "Bodenart"
+ },
  "concept_sr_launch_window": {
   "en": "Launch Window",
   "de": "Startfenster"
+ },
+ "concept_sr_resort_draw": {
+  "en": "Resort Draw",
+  "de": "Ferienkolonie-Zugkraft"
  },
  "concept_sr_role_carrier": {
   "en": "Assault Carrier",
@@ -8342,6 +8354,14 @@
  "concept_sr_space_fleet": {
   "en": "Space Fleet",
   "de": "Weltraumflotte"
+ },
+ "concept_sr_space_personnel": {
+  "en": "Space Forces Personnel",
+  "de": "Weltraumstreitkräfte-Personal"
+ },
+ "concept_sr_yard_reach": {
+  "en": "Yard Reach",
+  "de": "Werftreichweite"
  },
  "concept_st_res_active_rate": {
   "en": "Active",
@@ -21443,6 +21463,10 @@
   "en": "#tooltip_header Target#!\\n$TOOLTIP_DELIMITER$\\nA country we are at war with, or in a peacetime nuclear exchange with. The buttons beside it go through them in turn. A single city of our choosing is still the [concept_nuclear_strike] diplomatic action.",
   "de": "#tooltip_header Ziel#!\\n$TOOLTIP_DELIMITER$\\nEin Land, mit dem wir im Krieg oder in einem nuklearen Schlagabtausch in Friedenszeiten stehen. Die Schaltflächen daneben gehen sie der Reihe nach durch. Eine einzelne Stadt nach unserer Wahl ist weiterhin die Diplomatenaktion [concept_nuclear_strike]."
  },
+ "nd_w_surv_part_bombers": {
+  "en": "Dispersed bombers: #v ×[Country.MakeScope.ScriptValue('nd_display_exposure_factor_bombers')|2]#!",
+  "de": "Verteilte Bomber: #v ×[Country.MakeScope.ScriptValue('nd_display_exposure_factor_bombers')|2]#!"
+ },
  "nd_w_survivability_bar_tt": {
   "en": "While we pay for hardening it grows toward the ceiling our technology sets, the line, and the green stretch is the rise still to come; without, it erodes slowly, and the red one is the fall still to come.",
   "de": "Solange wir für die Härtung zahlen, wächst sie auf die Obergrenze zu, die unsere Technologie setzt, die Linie, und der grüne Abschnitt ist der noch kommende Anstieg; ohne Härtung schwindet sie langsam, und der rote ist der noch kommende Abfall."
@@ -23899,6 +23923,26 @@
   "en": "The fleet has at least the minimum strength, and carries the propellant the leg needs this month",
   "de": "Die Flotte hat mindestens die Mindeststärke und führt den Treibstoff mit, den die Etappe in diesem Monat braucht"
  },
+ "sr_fl_stance_1_rule": {
+  "en": "It doesn't seek battle: it fights only an enemy fleet that engages it and is at least as fast, or catches it where it can't slip away (a colony of ours, Earth, closing in, interdicting or blockading). Where we hold no colony it lands on Station. Caught, it breaks off once it has lost a quarter of the strength it brought.",
+  "de": "Sie sucht keine Schlacht: Sie kämpft nur gegen eine feindliche Flotte, die sie stellt und mindestens ebenso schnell ist, oder wenn sie sie dort einholt, wo sie nicht entkommen kann (eine Kolonie von uns, die Erde, beim Anflug, Abfangen oder Blockieren). Wo wir keine Kolonie haben, wechselt sie zu „Stationieren“. Eingeholt, bricht sie ab, sobald sie ein Viertel der mitgebrachten Stärke verloren hat."
+ },
+ "sr_fl_stance_2_rule": {
+  "en": "It fights every enemy fleet at its location that it can catch: one no faster than it, or one that can't slip away. It breaks off once it has lost a quarter of the strength it brought, before the fight turns against it.",
+  "de": "Sie kämpft gegen jede feindliche Flotte an ihrem Standort, die sie einholen kann: eine, die nicht schneller ist als sie, oder eine, die nicht entkommen kann. Sie bricht ab, sobald sie ein Viertel der mitgebrachten Stärke verloren hat, bevor das Gefecht sich gegen sie wendet."
+ },
+ "sr_fl_stance_3_rule": {
+  "en": "It fights every enemy fleet at its location that it can catch: one no faster than it, or one that can't slip away, at a colony of its country, at Earth, or while it closes in, interdicts or blockades. It breaks off once it has lost half of the strength it brought.",
+  "de": "Sie kämpft gegen jede feindliche Flotte an ihrem Standort, die sie einholen kann: eine, die nicht schneller ist als sie, oder eine, die nicht entkommen kann, bei einer Kolonie ihres Landes, bei der Erde oder beim Anflug, Abfangen oder Blockieren. Sie bricht ab, sobald sie die Hälfte der mitgebrachten Stärke verloren hat."
+ },
+ "sr_fl_stance_4_rule": {
+  "en": "It fights every enemy fleet at its location that it can catch, and never breaks off: it fights until the enemy breaks or it is destroyed. Two fleets that won't break off can fight on into the next week.",
+  "de": "Sie kämpft gegen jede feindliche Flotte an ihrem Standort, die sie einholen kann, und bricht nie ab: Sie kämpft, bis der Feind aufgibt oder sie vernichtet ist. Zwei Flotten, die nicht abbrechen, können bis in die nächste Woche weiterkämpfen."
+ },
+ "sr_fl_stance_break_note": {
+  "en": "Broken off, it leaves for the nearest other dock it can reach (Earth, or a $je_space_race_widget_mod_name_port$ of ours), or stays if it has none.",
+  "de": "Nach dem Abbruch fliegt sie zum nächsten erreichbaren anderen Liegeplatz (die Erde oder ein $je_space_race_widget_mod_name_port$ von uns) oder bleibt, wenn sie keinen hat."
+ },
  "sr_fl_target_free_price_tt": {
   "en": "\\nWhile the fleet closes in, targeting a free colony costs #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_infamy_cost')|0]#! [concept_infamy] and adds #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_dossier_cost')|0]#! to our hostile acts in space in the UN's record, at once (twice as much for a party to the Convention on the Settlement of Outer Space).",
   "de": "\\nSolange die Flotte heranrückt, kostet das Anvisieren einer freien Kolonie #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_infamy_cost')|0]#! [concept_infamy] und erhöht sofort #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_dossier_cost')|0]#! zu unseren feindseligen Handlungen im All in der Akte der UN (doppelt so viel für eine Vertragspartei des Übereinkommens über die Besiedlung des Weltraums)."
@@ -24587,6 +24631,10 @@
   "en": "[concept_sr_role_warship]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#! now. One more, or from #v 3#! back to #v 0#!.\\n[concept_sr_space_command] shares each month's construction among the [concept_sr_ship_role]s by weight.",
   "de": "[Concept('concept_sr_role_warship','Kriegsschiffe')]: Gewicht jetzt #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!. Eins mehr, oder von #v 3#! zurück auf #v 0#!.\\n[concept_sr_space_command] teilt die Bauleistung jedes Monats nach Gewicht auf die [Concept('concept_sr_ship_role','Schiffsrollen')] auf."
  },
+ "sr_sc_mode_full_tt": {
+  "en": "Each month [concept_sr_space_command] builds what is on order first, then shares the rest of the month's construction among the [concept_sr_ship_role]s by the build mix.",
+  "de": "Jeden Monat baut das [concept_sr_space_command] zuerst, was in Auftrag ist, und verteilt den Rest der Monatsproduktion nach der Baumischung auf die [Concept('concept_sr_ship_role', 'Schiffsrollen')]."
+ },
  "sr_sc_one_per_nation_tt": {
   "en": "We have no other $building_space_command$: a nation runs one, so expand the one we have, or demolish it first",
   "de": "Wir haben kein weiteres $building_space_command$: Eine Nation betreibt eines, also bauen wir das vorhandene aus oder reißen es zuerst ab"
@@ -24694,6 +24742,10 @@
  "sr_site_name_miranda": {
   "en": "Miranda",
   "de": "Miranda"
+ },
+ "sr_site_name_near_earth": {
+  "en": "Near-Earth Asteroids",
+  "de": "Erdnahe Asteroiden"
  },
  "sr_site_name_oberon": {
   "en": "Oberon",
@@ -32710,6 +32762,14 @@
  "te_jmap_ch_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on the political models, each country in its model's color. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "de": "#b Auf der Karte zeigen#!\\nÖffnet den Kartenraum bei den politischen Modellen, jedes Land in der Farbe seines Modells. Die Karte wird angezeigt, solange ihre Seite geöffnet ist; das Auge oben links auf der Seite macht sie durchsichtig, sodass die ganze Karte zu sehen ist."
+ },
+ "te_jmap_classes_count": {
+  "en": "Count",
+  "de": "Anzahl"
+ },
+ "te_jmap_classes_share": {
+  "en": "Share",
+  "de": "Anteil"
  },
  "te_jmap_color_grey": {
   "en": "Grayscale",

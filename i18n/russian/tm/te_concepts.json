@@ -8259,6 +8259,10 @@
   "en": "The government said nothing when a foreign power's nuclear weapons contaminated one of our states.",
   "ru": "Правительство промолчало, когда ядерное оружие иностранной державы загрязнило одну из наших областей."
  },
+ "nd_icbm_force": {
+  "en": "ICBM Force",
+  "ru": "Силы МБР"
+ },
  "nd_incident_coverup_exposed_desc": {
   "en": "A nuclear incident we tried to hide has come out.",
   "ru": "Ядерный инцидент, который мы пытались скрыть, вышел наружу."
@@ -10179,6 +10183,10 @@
   "en": "Resources from the space program have been redirected to domestic priorities, improving living standards at the cost of [concept_prestige].",
   "ru": "Ресурсы космической программы перенаправлены на внутренние приоритеты, что повышает уровень жизни ценой [Concept('concept_prestige','престижа')]."
  },
+ "spacers_no_icon": {
+  "en": "Spacers",
+  "ru": "Космонавты"
+ },
  "spiritual_diversity_modifier": {
   "en": "Spiritual Diversity",
   "ru": "Духовное разнообразие"
@@ -10722,6 +10730,62 @@
  "sr_funding_throughput_desc": {
   "en": "Additional [concept_throughput] from [concept_space_race] funding investment. Each funding level, past the cap too, contributes #P +25%#! [GetBuildingType('building_space_program').GetName] throughput per active milestone.",
   "ru": "Дополнительная [Concept('concept_throughput','пропускная способность')] от вложений в финансирование [Concept('concept_space_race','космической гонки')]. Каждый уровень финансирования, в том числе сверх предела, даёт #P +25%#! пропускной способности здания [GetBuildingType('building_space_program').GetName] за каждую активную веху."
+ },
+ "sr_ground_carbonaceous": {
+  "en": "Carbonaceous",
+  "ru": "Углистый"
+ },
+ "sr_ground_carbonaceous_desc": {
+  "en": "Clays, carbonates, ammonia and organic compounds. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −17%#!\\n$tech_metals$: #v −7%#!\\n$gold$: #v −33%#!\\n$copper$: #v −7%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v +107%#!\\n$glass$: #v +117%#!",
+  "ru": "Глины, карбонаты, аммиак и органические соединения. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v −17%#!\\n$tech_metals$: #v −7%#!\\n$gold$: #v −33%#!\\n$copper$: #v −7%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v +107%#!\\n$glass$: #v +117%#!"
+ },
+ "sr_ground_hydrocarbon": {
+  "en": "Hydrocarbon",
+  "ru": "Углеводородный"
+ },
+ "sr_ground_hydrocarbon_desc": {
+  "en": "Hydrocarbon lakes, organic ices and tholin tars. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −25%#!\\n$tech_metals$: #v −15%#!\\n$gold$: #v −50%#!\\n$copper$: #v −20%#!\\n$lead$: #v −20%#!\\n$sulfur$: #v +80%#!\\n$glass$: #v +249%#!",
+  "ru": "Углеводородные озёра, органические льды и толиновые смолы. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v −25%#!\\n$tech_metals$: #v −15%#!\\n$gold$: #v −50%#!\\n$copper$: #v −20%#!\\n$lead$: #v −20%#!\\n$sulfur$: #v +80%#!\\n$glass$: #v +249%#!"
+ },
+ "sr_ground_icy": {
+  "en": "Icy",
+  "ru": "Ледяной"
+ },
+ "sr_ground_icy_desc": {
+  "en": "Water ice over rock, with some volatiles. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +0%#!\\n$tech_metals$: #v −5%#!\\n$gold$: #v −40%#!\\n$copper$: #v −10%#!\\n$lead$: #v −10%#!\\n$sulfur$: #v +61%#!\\n$glass$: #v +81%#!",
+  "ru": "Водяной лёд поверх камня с некоторым количеством летучих веществ. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v +0%#!\\n$tech_metals$: #v −5%#!\\n$gold$: #v −40%#!\\n$copper$: #v −10%#!\\n$lead$: #v −10%#!\\n$sulfur$: #v +61%#!\\n$glass$: #v +81%#!"
+ },
+ "sr_ground_metallic": {
+  "en": "Metallic",
+  "ru": "Металлический"
+ },
+ "sr_ground_metallic_desc": {
+  "en": "Iron-nickel metal, with platinum-group metals and gold. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +12%#!\\n$tech_metals$: #v +2%#!\\n$gold$: #v +30%#!\\n$copper$: #v +12%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v −72%#!\\n$glass$: #v −91%#!",
+  "ru": "Железоникелевый металл с металлами платиновой группы и золотом. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v +12%#!\\n$tech_metals$: #v +2%#!\\n$gold$: #v +30%#!\\n$copper$: #v +12%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v −72%#!\\n$glass$: #v −91%#!"
+ },
+ "sr_ground_mixed": {
+  "en": "Mixed",
+  "ru": "Смешанный"
+ },
+ "sr_ground_mixed_desc": {
+  "en": "The rubble of the $sr_site_name_near_earth$, a little of every kind of ground. A base level on it makes each good as its production method lists it, and the other types are measured against it:\\n$iron$: #v +0%#!\\n$tech_metals$: #v +0%#!\\n$gold$: #v +0%#!\\n$copper$: #v +0%#!\\n$lead$: #v +0%#!\\n$sulfur$: #v +0%#!\\n$glass$: #v +0%#!",
+  "ru": "Россыпь обломков («$sr_site_name_near_earth$»), понемногу всех видов грунта. Базовый уровень на нём даёт каждый товар так, как указано в его методе производства; остальные типы сравниваются с ним:\\n$iron$: #v +0%#!\\n$tech_metals$: #v +0%#!\\n$gold$: #v +0%#!\\n$copper$: #v +0%#!\\n$lead$: #v +0%#!\\n$sulfur$: #v +0%#!\\n$glass$: #v +0%#!"
+ },
+ "sr_ground_rocky": {
+  "en": "Rocky",
+  "ru": "Каменистый"
+ },
+ "sr_ground_rocky_desc": {
+  "en": "Basalt and other silicate rock, which yields iron, titanium, aluminum and silica for glass. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +26%#!\\n$tech_metals$: #v −3%#!\\n$gold$: #v −51%#!\\n$copper$: #v −17%#!\\n$lead$: #v −17%#!\\n$sulfur$: #v +7%#!\\n$glass$: #v +36%#!",
+  "ru": "Базальт и другие силикатные породы, дающие железо, титан, алюминий и кремнезём для стекла. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v +26%#!\\n$tech_metals$: #v −3%#!\\n$gold$: #v −51%#!\\n$copper$: #v −17%#!\\n$lead$: #v −17%#!\\n$sulfur$: #v +7%#!\\n$glass$: #v +36%#!"
+ },
+ "sr_ground_sulfurous": {
+  "en": "Sulfurous",
+  "ru": "Сернистый"
+ },
+ "sr_ground_sulfurous_desc": {
+  "en": "Sulfur, sulfates and sulfuric acid. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −16%#!\\n$tech_metals$: #v −11%#!\\n$gold$: #v −37%#!\\n$copper$: #v +5%#!\\n$lead$: #v +5%#!\\n$sulfur$: #v +320%#!\\n$glass$: #v +26%#!",
+  "ru": "Сера, сульфаты и серная кислота. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v −16%#!\\n$tech_metals$: #v −11%#!\\n$gold$: #v −37%#!\\n$copper$: #v +5%#!\\n$lead$: #v +5%#!\\n$sulfur$: #v +320%#!\\n$glass$: #v +26%#!"
  },
  "sr_improved_safety_protocols_desc": {
   "en": "Enhanced fire suppression and emergency procedures reduce the risk of future incidents.",

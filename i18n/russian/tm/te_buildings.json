@@ -491,6 +491,10 @@
   "en": "Additional employment positions for deportee laborers in this building",
   "ru": "Дополнительные рабочие места для депортированных работников в этом здании"
  },
+ "building_employment_spacers_add": {
+  "en": "$spacers$ Per Level",
+  "ru": "$spacers$ на уровень"
+ },
  "building_eni_palazzo": {
   "en": "Palazzo ENI",
   "ru": "Палаццо ENI"
@@ -2107,6 +2111,10 @@
   "en": "A bonus or penalty to both input and output of $building_space_elevator$ buildings",
   "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий группы «$building_space_elevator$»"
  },
+ "building_space_forces_base": {
+  "en": "Space Forces Base",
+  "ru": "База космических сил"
+ },
  "building_space_mine": {
   "en": "Extraplanetary Base",
   "ru": "Внепланетная база"
@@ -2126,6 +2134,10 @@
  "building_space_program_throughput_add_desc": {
   "en": "Space Program [concept_throughput]",
   "ru": "Космическая программа: [concept_throughput]"
+ },
+ "building_space_resort": {
+  "en": "Resort Colony",
+  "ru": "Курортная колония"
  },
  "building_spacex_starbase": {
   "en": "Starbase",

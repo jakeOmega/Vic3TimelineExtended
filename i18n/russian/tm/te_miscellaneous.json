@@ -5999,6 +5999,10 @@
   "en": "#header Rate Target#!\\nEach month the rate closes #v [Country.MakeScope.ScriptValue('te_mon_drift_gap_share_pct')|0]%#! of the gap or of how far inflation is from its own target, whichever is less, and never less than #v [Country.MakeScope.ScriptValue('te_mon_drift_step')|2]#! of a point. A central bank running its mandate makes that least step #v [Country.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! as large when it cuts in #yellow Stagnation#! or worse.\\n$TOOLTIP_DELIMITER$\\n#title The monetary law allows:#! #v [Country.MakeScope.ScriptValue('te_mon_target_min')|1]%#! to #v [Country.MakeScope.ScriptValue('te_mon_target_max')|1]%#!\\n[Country.GetCustom('te_mon_dial_range_note')]",
   "ru": "#header Целевая ставка#!\\nКаждый месяц ставка сокращает #v [Country.MakeScope.ScriptValue('te_mon_drift_gap_share_pct')|0]%#! разрыва или расстояния между инфляцией и её собственной целью, смотря что меньше, но не менее #v [Country.MakeScope.ScriptValue('te_mon_drift_step')|2]#! пункта. Центральный банк, исполняющий мандат, делает этот наименьший шаг в #v [Country.MakeScope.ScriptValue('te_mon_emergency_cut_factor')|0]×#! больше, когда снижает ставку в состоянии #yellow Стагнации#! или хуже.\\n$TOOLTIP_DELIMITER$\\n#title Денежный закон допускает:#! от #v [Country.MakeScope.ScriptValue('te_mon_target_min')|1]%#! до #v [Country.MakeScope.ScriptValue('te_mon_target_max')|1]%#!\\n[Country.GetCustom('te_mon_dial_range_note')]"
  },
+ "banking_dash_mon_union_grp_hover": {
+  "en": "$TOOLTIP_DELIMITER$\\nEach adds under 0.01 points to the leader's [concept_banking_risk_premium] for its backing. Hover a flag for its figure; a member that adds more has a row of its own above.",
+  "ru": "$TOOLTIP_DELIMITER$\\nКаждый добавляет менее 0,01 пункта к [Concept('concept_banking_risk_premium','премии за риск')] лидера за его поддержку. Наведите на флаг, чтобы увидеть его значение; участник, дающий больше, имеет собственную строку выше."
+ },
  "banking_dash_mon_union_issuer_note": {
   "en": "\\n$TOOLTIP_DELIMITER$\\n#v [Country.MakeScope.ScriptValue('te_mon_union_adopters_display')|0]#! of its members have adopted its currency. Its reach is #v [Country.MakeScope.ScriptValue('te_mon_union_reach_pct_display')|0]%#!: that share of its tier's seigniorage and of its cut in [concept_banking_risk_premium]. Each further adopter raises it.",
   "ru": "\\n$TOOLTIP_DELIMITER$\\nЕго валюту приняли члены союза, число которых: #v [Country.MakeScope.ScriptValue('te_mon_union_adopters_display')|0]#!. Охват — #v [Country.MakeScope.ScriptValue('te_mon_union_reach_pct_display')|0]%#!: такая доля сеньоража его уровня и его вклада в снижение [Concept('concept_banking_risk_premium','премии за риск')]. Каждый новый участник его повышает."
@@ -8147,9 +8151,17 @@
   "en": "Free Colony",
   "ru": "Свободная колония"
  },
+ "concept_sr_ground_type": {
+  "en": "Ground Type",
+  "ru": "Тип грунта"
+ },
  "concept_sr_launch_window": {
   "en": "Launch Window",
   "ru": "Стартовое окно"
+ },
+ "concept_sr_resort_draw": {
+  "en": "Resort Draw",
+  "ru": "Приток на курорт"
  },
  "concept_sr_role_carrier": {
   "en": "Assault Carrier",
@@ -8186,6 +8198,14 @@
  "concept_sr_space_fleet": {
   "en": "Space Fleet",
   "ru": "Космический флот"
+ },
+ "concept_sr_space_personnel": {
+  "en": "Space Forces Personnel",
+  "ru": "Личный состав космических сил"
+ },
+ "concept_sr_yard_reach": {
+  "en": "Yard Reach",
+  "ru": "Радиус верфи"
  },
  "concept_st_res_active_rate": {
   "en": "Active",
@@ -21207,6 +21227,10 @@
   "en": "#tooltip_header Target#!\\n$TOOLTIP_DELIMITER$\\nA country we are at war with, or in a peacetime nuclear exchange with. The buttons beside it go through them in turn. A single city of our choosing is still the [concept_nuclear_strike] diplomatic action.",
   "ru": "#tooltip_header Цель#!\\n$TOOLTIP_DELIMITER$\\nСтрана, с которой мы воюем или с которой обмениваемся ядерными ударами в мирное время. Кнопки рядом последовательно перебирают такие страны. Единичный город по нашему выбору по-прежнему остаётся дипломатическим действием [concept_nuclear_strike|l]."
  },
+ "nd_w_surv_part_bombers": {
+  "en": "Dispersed bombers: #v ×[Country.MakeScope.ScriptValue('nd_display_exposure_factor_bombers')|2]#!",
+  "ru": "Рассредоточенные бомбардировщики: #v ×[Country.MakeScope.ScriptValue('nd_display_exposure_factor_bombers')|2]#!"
+ },
  "nd_w_survivability_bar_tt": {
   "en": "While we pay for hardening it grows toward the ceiling our technology sets, the line, and the green stretch is the rise still to come; without, it erodes slowly, and the red one is the fall still to come.",
   "ru": "Пока мы платим за укрепление, она растёт к потолку, заданному нашей технологией: это линия, а зелёный участок — предстоящий рост; без платы она медленно снижается, и красный участок — предстоящее падение."
@@ -23663,6 +23687,26 @@
   "en": "The fleet has at least the minimum strength, and carries the propellant the leg needs this month",
   "ru": "У флота есть хотя бы минимальная сила, и он несёт топливо, нужное для этого участка пути в этом месяце"
  },
+ "sr_fl_stance_1_rule": {
+  "en": "It doesn't seek battle: it fights only an enemy fleet that engages it and is at least as fast, or catches it where it can't slip away (a colony of ours, Earth, closing in, interdicting or blockading). Where we hold no colony it lands on Station. Caught, it breaks off once it has lost a quarter of the strength it brought.",
+  "ru": "Он не ищет боя: сражается только с вражеским флотом, который вступил с ним в бой и не медленнее него, либо настигнут там, где не может уйти (наша колония, Земля, при сближении, перехвате или блокаде). Если у нас нет колонии, он переходит к позиции «Дежурство». Настигнутый, он выходит из боя, потеряв четверть приведённой силы."
+ },
+ "sr_fl_stance_2_rule": {
+  "en": "It fights every enemy fleet at its location that it can catch: one no faster than it, or one that can't slip away. It breaks off once it has lost a quarter of the strength it brought, before the fight turns against it.",
+  "ru": "Он сражается с каждым вражеским флотом на своей позиции, который может настичь: не быстрее него или не способным уйти. Он выходит из боя, потеряв четверть приведённой силы, пока бой не обернулся против него."
+ },
+ "sr_fl_stance_3_rule": {
+  "en": "It fights every enemy fleet at its location that it can catch: one no faster than it, or one that can't slip away, at a colony of its country, at Earth, or while it closes in, interdicts or blockades. It breaks off once it has lost half of the strength it brought.",
+  "ru": "Он сражается с каждым вражеским флотом на своей позиции, который может настичь: не быстрее него или не способным уйти, у колонии своей страны, у Земли либо при сближении, перехвате или блокаде. Он выходит из боя, потеряв половину приведённой силы."
+ },
+ "sr_fl_stance_4_rule": {
+  "en": "It fights every enemy fleet at its location that it can catch, and never breaks off: it fights until the enemy breaks or it is destroyed. Two fleets that won't break off can fight on into the next week.",
+  "ru": "Он сражается с каждым вражеским флотом на своей позиции, который может настичь, и никогда не выходит из боя: он бьётся, пока враг не дрогнет или он не будет уничтожен. Два флота, не выходящие из боя, могут сражаться и на следующей неделе."
+ },
+ "sr_fl_stance_break_note": {
+  "en": "Broken off, it leaves for the nearest other dock it can reach (Earth, or a $je_space_race_widget_mod_name_port$ of ours), or stays if it has none.",
+  "ru": "Выйдя из боя, он уходит к ближайшему другому причалу, до которого может добраться (Земля или наш $je_space_race_widget_mod_name_port$), либо остаётся, если такого нет."
+ },
  "sr_fl_target_free_price_tt": {
   "en": "\\nWhile the fleet closes in, targeting a free colony costs #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_infamy_cost')|0]#! [concept_infamy] and adds #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_dossier_cost')|0]#! to our hostile acts in space in the UN's record, at once (twice as much for a party to the Convention on the Settlement of Outer Space).",
   "ru": "\\nПока флот сближается, нацеливание на свободную колонию стоит #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_infamy_cost')|0]#! [Concept('concept_infamy','дурной славы')] и сразу добавляет #v [GetPlayer.MakeScope.ScriptValue('sr_free_assault_dossier_cost')|0]#! к нашим враждебным действиям в космосе в записи ООН (вдвое больше для участника Конвенции о заселении космического пространства)."
@@ -24351,6 +24395,10 @@
   "en": "[concept_sr_role_warship]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#! now. One more, or from #v 3#! back to #v 0#!.\\n[concept_sr_space_command] shares each month's construction among the [concept_sr_ship_role]s by weight.",
   "ru": "[concept_sr_role_warship]: вес сейчас #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!. Ещё на один или с #v 3#! обратно на #v 0#!.\\n[concept_sr_space_command] распределяет строительство каждого месяца между [Concept('concept_sr_ship_role','ролями кораблей')] по весу."
  },
+ "sr_sc_mode_full_tt": {
+  "en": "Each month [concept_sr_space_command] builds what is on order first, then shares the rest of the month's construction among the [concept_sr_ship_role]s by the build mix.",
+  "ru": "Каждый месяц [concept_sr_space_command] сначала строит заказанное, затем делит остаток строительства месяца между [Concept('concept_sr_ship_role','ролями кораблей')] по заданному составу."
+ },
  "sr_sc_one_per_nation_tt": {
   "en": "We have no other $building_space_command$: a nation runs one, so expand the one we have, or demolish it first",
   "ru": "У нас нет другого здания: $building_space_command$. Нация содержит только одно, поэтому нужно расширять имеющееся или сначала снести его"
@@ -24458,6 +24506,10 @@
  "sr_site_name_miranda": {
   "en": "Miranda",
   "ru": "Миранда"
+ },
+ "sr_site_name_near_earth": {
+  "en": "Near-Earth Asteroids",
+  "ru": "Околоземные астероиды"
  },
  "sr_site_name_oberon": {
   "en": "Oberon",
@@ -32406,6 +32458,14 @@
  "te_jmap_ch_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on the political models, each country in its model's color. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
   "ru": "#b Показать на карте#!\\nОткрывает Зал карт на политических моделях, каждая страна — в цвете своей модели. Карта видна, пока открыта её страница; глаз в левом верхнем углу страницы делает её прозрачной, чтобы была видна вся карта."
+ },
+ "te_jmap_classes_count": {
+  "en": "Count",
+  "ru": "Число"
+ },
+ "te_jmap_classes_share": {
+  "en": "Share",
+  "ru": "Доля"
  },
  "te_jmap_color_grey": {
   "en": "Grayscale",

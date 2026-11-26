@@ -1,4 +1,8 @@
 {
+ "rule_assimilation_cultures_rule": {
+  "en": "Assimilation Across Heritages",
+  "es": "Asimilación entre herencias"
+ },
  "rule_banking_system_rule": {
   "en": "Banking System",
   "es": "Sistema bancario"
@@ -82,6 +86,18 @@
  "rule_world_war_rule": {
   "en": "World War",
   "es": "Guerra Mundial"
+ },
+ "setting_assimilation_cultures_hybrid": {
+  "en": "Hybrid Cultures",
+  "es": "Culturas híbridas"
+ },
+ "setting_assimilation_cultures_none": {
+  "en": "None",
+  "es": "Ninguna"
+ },
+ "setting_assimilation_cultures_unrestricted": {
+  "en": "Unrestricted",
+  "es": "Sin restricciones"
  },
  "setting_banking_system_disabled": {
   "en": "Banking System Disabled",

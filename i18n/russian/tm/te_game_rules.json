@@ -1,4 +1,8 @@
 {
+ "rule_assimilation_cultures_rule": {
+  "en": "Assimilation Across Heritages",
+  "ru": "Ассимиляция между наследиями"
+ },
  "rule_banking_system_rule": {
   "en": "Banking System",
   "ru": "Банковская система"
@@ -82,6 +86,18 @@
  "rule_world_war_rule": {
   "en": "World War",
   "ru": "Мировая война"
+ },
+ "setting_assimilation_cultures_hybrid": {
+  "en": "Hybrid Cultures",
+  "ru": "Гибридные культуры"
+ },
+ "setting_assimilation_cultures_none": {
+  "en": "None",
+  "ru": "Нет"
+ },
+ "setting_assimilation_cultures_unrestricted": {
+  "en": "Unrestricted",
+  "ru": "Без ограничений"
  },
  "setting_banking_system_disabled": {
   "en": "Banking System Disabled",

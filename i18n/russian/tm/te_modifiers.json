@@ -1015,6 +1015,10 @@
   "en": "How often a false warning, a weapons accident or a commander cut off from the capital comes up, against Routine readiness. A crisis adds misreadings of its own.",
   "ru": "Как часто возникают ложная тревога, авария оружия или командир, отрезанный от столицы, при обычной готовности. Кризис добавляет собственные ошибочные прочтения."
  },
+ "country_nd_k_ratio_add": {
+  "en": "Counterforce Ratio",
+  "ru": "Контрсиловое соотношение"
+ },
  "country_nd_launch_credit_add": {
   "en": "Launch Credit",
   "ru": "Зачёт запуска"
@@ -6042,6 +6046,10 @@
  "state_sr_ship_construction_add_desc": {
   "en": "Warship strength this state's Space Command adds to its owner's home fleet each month, while its owner controls the state",
   "ru": "Боевая сила, которую Космическое командование этой области добавляет домашнему флоту владельца каждый месяц, пока владелец контролирует область"
+ },
+ "state_sr_space_personnel_add": {
+  "en": "Space Forces Personnel",
+  "ru": "Личный состав космических сил"
  },
  "state_urban_fertility_relief_add": {
   "en": "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",

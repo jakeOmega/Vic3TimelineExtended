@@ -515,6 +515,10 @@
   "en": "Additional employment positions for deportee laborers in this building",
   "de": "Zusätzliche Arbeitsplätze für deportierte Arbeitskräfte in diesem Gebäude"
  },
+ "building_employment_spacers_add": {
+  "en": "$spacers$ Per Level",
+  "de": "$spacers$ pro Stufe"
+ },
  "building_eni_palazzo": {
   "en": "Palazzo ENI",
   "de": "Palazzo ENI"
@@ -2131,6 +2135,10 @@
   "en": "A bonus or penalty to both input and output of $building_space_elevator$ buildings",
   "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $building_space_elevator$-Gebäude"
  },
+ "building_space_forces_base": {
+  "en": "Space Forces Base",
+  "de": "Weltraumstreitkräfte-Basis"
+ },
  "building_space_mine": {
   "en": "Extraplanetary Base",
   "de": "Außerplanetarer Stützpunkt"
@@ -2154,6 +2162,10 @@
  "building_space_program_throughput_add_desc": {
   "en": "Space Program [concept_throughput]",
   "de": "[concept_throughput] – Raumfahrtprogramm"
+ },
+ "building_space_resort": {
+  "en": "Resort Colony",
+  "de": "Ferienkolonie"
  },
  "building_spacex_starbase": {
   "en": "Starbase",
