@@ -277,9 +277,11 @@ REPLACE:law_ethnostate = {
 	on_enact = {
 		if = {
 			limit = {
-				has_law = law_type:law_minority_rights_cultural_assimilation
-				has_law = law_type:law_minority_rights_protection
-				has_law = law_type:law_minority_rights_affirmative_action
+				OR = {
+					has_law = law_type:law_minority_rights_cultural_assimilation
+					has_law = law_type:law_minority_rights_protection
+					has_law = law_type:law_minority_rights_affirmative_action
+				}
 			}
 			activate_law = law_type:law_minority_rights_indifference
 		}
