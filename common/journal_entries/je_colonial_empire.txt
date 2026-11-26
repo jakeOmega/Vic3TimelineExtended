@@ -680,6 +680,12 @@
 				colonial_ai_review_programmes = yes
 			}
 
+			# The Garrison's anger, on the interest groups that oppose colonial
+			# exploitation at this moment (their stance, so a leader's change
+			# moves it within a month). The one call site: the effect removes,
+			# then adds, and a second run in this block would stack.
+			colonial_garrison_ig_refresh = yes
+
 			# The pressuring-great-powers leaderboard used to be built here, into
 			# seven colonial_condemner_rank_N slot variables read by the
 			# status_desc. It is gone: the widget's International Pressure

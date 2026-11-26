@@ -2325,14 +2325,29 @@ colonial_military_garrison_modifier = {
 	country_bureaucracy_mult = -0.03
 	# Modest money cost: credit dries up when you're shooting people
 	country_risk_premium_add = 0.01
-	# IG anger: the universities and unions don't like brutality
-	interest_group_ig_intelligentsia_pol_str_mult = -0.05
-	interest_group_ig_trade_unions_pol_str_mult = -0.03
+	# IG anger is not here: it falls on whichever groups oppose colonial
+	# exploitation, which a country modifier cannot name. It is
+	# colonial_garrison_ig_modifier below, added to each of them by
+	# colonial_garrison_ig_refresh (#2060).
 	# International standing is expressed through suppressed infamy decay —
 	# every infamy hit the country has taken (and will take, e.g. wars, the
 	# +5 spike on starting it) lingers longer while the garrison is on. The
 	# old flat prestige penalty was too small to matter and is dropped.
 	country_infamy_decay_mult = -0.20
+}
+
+# Interest group scope: the Military Garrison's anger, on every group that
+# opposes colonial exploitation (its stance on law_colonial_exploitation is
+# disapprove or worse, sr_ig_anticolonial, the rule the space colonies' hold
+# reads too), at the programme's level (colonial_garrison_modifier_scale: a
+# third of this a level). Before #2060 the Intelligentsia (-5%) and the Trade
+# Unions (-3%) paid it whatever their leaders thought. Added by
+# colonial_garrison_ig_refresh from je_colonial_empire's monthly pulse, so it
+# follows a leader's change within a month, and removed when the entry ends
+# (colonial_empire_je_cleanup_effect).
+colonial_garrison_ig_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	interest_group_pol_str_mult = -0.05
 }
 
 colonial_cultural_assimilation_modifier = {

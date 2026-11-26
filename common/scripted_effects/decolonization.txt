@@ -1086,6 +1086,13 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_garrison_level
 	remove_variable = colonial_assim_level
 	remove_variable = colonial_dev_colonial_gdp
+	# The Garrison's anger on the interest groups that oppose colonial
+	# exploitation (colonial_garrison_ig_refresh): added to the groups, so it
+	# does not leave with the entry the way the declared modifiers do.
+	every_interest_group = {
+		limit = { has_modifier = colonial_garrison_ig_modifier }
+		remove_modifier = colonial_garrison_ig_modifier
+	}
 
 	# Civil-rights movement radicalism modifiers reapplied each pulse while
 	# the JE was active. Remove from any civil-rights movement.
@@ -1685,6 +1692,32 @@ colonial_programme_garrison_down = {
 		}
 		change_variable = { name = colonial_garrison_level subtract = 1 }
 		clamp_variable = { name = colonial_garrison_level min = 0 max = colonial_programme_max_level }
+	}
+}
+
+# Country scope, monthly from je_colonial_empire's pulse (its one call site, so
+# the remove-then-add below never runs twice in one effect and stacks): the one
+# refresh site of colonial_garrison_ig_modifier (#2060). Off every interest
+# group, then, while the Military Garrison runs, on each group that opposes
+# colonial exploitation (sr_ig_anticolonial: its stance on
+# law_colonial_exploitation is disapprove or worse, the rule the space
+# colonies' hold reads too, so it follows its leader's ideology), at the
+# programme's level (colonial_garrison_modifier_scale, 0.333 / 0.667 / 1).
+# Rebuilt from the level variable, which a revolution's winner inherits, so
+# the winner has it again within a month; the entry's end removes it
+# (colonial_empire_je_cleanup_effect).
+colonial_garrison_ig_refresh = {
+	every_interest_group = {
+		limit = { has_modifier = colonial_garrison_ig_modifier }
+		remove_modifier = colonial_garrison_ig_modifier
+	}
+	if = {
+		limit = { colonial_garrison_level_value >= 1 }
+		set_local_variable = { name = colonial_garrison_ig_scale value = colonial_garrison_modifier_scale }
+		every_interest_group = {
+			limit = { sr_ig_anticolonial = yes }
+			add_modifier = { name = colonial_garrison_ig_modifier multiplier = local_var:colonial_garrison_ig_scale }
+		}
 	}
 }
 

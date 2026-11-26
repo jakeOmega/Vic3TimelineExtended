@@ -82,6 +82,9 @@ NOT_RECORDED = {
     "colonial_overlord_strained_subject_ld_modifier",
     "colonial_crumbling_movement_radicalism",
     "colonial_pressure_movement_radicalism",
+    # on the interest groups that oppose colonial exploitation, rebuilt every
+    # month from the Garrison's level variable, which a winner inherits (#2060)
+    "colonial_garrison_ig_modifier",
 }
 
 
