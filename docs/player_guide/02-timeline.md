@@ -567,7 +567,14 @@ Hormones (which buy Drugs) and Gene-Edited Livestock, with Mechanized Feeding
 Lines and Robotic Barns in Herd Management, the base game's Fencing, and
 Antibiotic Growth Promoters (which also buy Drugs) in a Feed Additives group of
 their own, on top of any wool method; and
-automation groups end in AI-managed methods such as AI Managed Fab. A few
+automation groups end in AI-managed methods such as AI Managed Fab. Consumer
+industries climb too: textile mills through Permanent Press, Computerized
+Cutting and Whole-Garment Knitting; furniture manufactories through Tubular
+Steel Furniture, Molded Plywood and Plastics, Flat-Pack Furniture and
+Bio-Composite Panels, with Modern Design and Made-to-Order Furniture for luxury
+furniture; and food industries through Enzymatic Processing and Precision
+Fermentation, with Industrial Fermentation, Engineered Yeast and Molecular
+Spirits in their distilleries. A few
 polluting buildings get pollution-control groups
 ([Pollution-control methods](15-climate.md#pollution-control-methods)), and many get a hidden maintenance
 group used by the construction market ([Construction maintenance and
