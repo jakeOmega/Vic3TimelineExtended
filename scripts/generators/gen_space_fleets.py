@@ -119,10 +119,16 @@ DRIVES = tuple(d.key for d in glw.DRIVES)
 PACE_LEGS = {0: "chemical", 1: "fusion", 2: "torch", 3: "antimatter", 4: "rapid_antimatter"}
 PACE_CAPACITY = {0: "chemical", 1: "fusion", 2: "torch", 3: "antimatter", 4: "antimatter"}
 POSTURES = {1: "station", 2: "standoff", 3: "closein", 4: "interdict"}
+# A fleet's stance in battle (sr_fl_<n>_stance, 2026-11-25 design § 5.1), its
+# code and loc suffix, least to most: Avoid fights only when caught, Hit and Run
+# and Avoid break at a quarter lost, Engage at half, Fight to the Last never.
+# Absent is Engage, a new fleet's.
+STANCES = {1: "avoid", 2: "hit_and_run", 3: "engage", 4: "last"}
+STANCE_DEFAULT = 3
 
 # Every variable of a slot, cleared together (sr_fl_clear_at).
 SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_quarters", "dv", "supply", "marines", "drive",
-             "refit_until", "posture", "target", "destroy", "charged", "icpt", "avoid")
+             "refit_until", "posture", "target", "destroy", "charged", "icpt", "stance")
 
 # A slot's variable lists, cleared with it, and on each new leg and landing
 # (sr_fl_dispatch, sr_fl_arrive_at): the players already told of the leg, by
@@ -144,12 +150,12 @@ SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marine
                 "xfer_open", "xfer_step", "transfer", "land_pick", "embark_pick",
                 "ld_open_land", "ld_open_embark", "ld_step", "migrate_ticks",
                 "bt_setup", "bt_target", "bt_battery", "bt_ready", "bt_ai", "bt_snap", "bt_count", "bt_apply", "bt_left", "bt_end",
-                "retreat", "toggle_avoid", "ai_threat", "ai_guard")
+                "retreat", "set_stance", "cycle_stance", "ai_threat", "ai_guard", "fc_slot")
 # A slot's battle figures (sr_fl_<n>_bt_*, 2026-11-25 design § 2;
 # sr_fleet_combat_effects.txt's sr_battle_at), cleared after each battle: in
 # the battle, pace, engaging, tied, the strength it brought, this step's
 # strength, fire, fire per point engaged, paired or not and loss, and broken.
-BT_VARS = ("in", "pace", "eng", "tied", "brought", "s", "f", "r", "p", "l", "broke")
+BT_VARS = ("in", "pace", "eng", "keep", "tied", "brought", "s", "f", "r", "p", "l", "broke")
 # The siege's per-power variables (sr_fleet_combat_effects.txt's sr_combat_at),
 # and per world closing in.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "hs", "lost", "bs")
@@ -224,6 +230,7 @@ def render_slot_values(n: int) -> list[str]:
     out += _opt(var(n, "marines_value"), var(n, "marines"))
     out += _opt(var(n, "loc_value"), var(n, "loc"))
     out += _opt(var(n, "posture_value"), var(n, "posture"))
+    out += _opt(var(n, "stance_value"), var(n, "stance"), str(STANCE_DEFAULT))
     out += ["# Its pace: its drive, one ahead for rapid response hulls alone (4: antimatter's).",
             f"{var(n, 'pace')} = {{",
             f"\tvalue = {var(n, 'drive_value')}",
@@ -481,8 +488,15 @@ def render_slot_triggers(n: int) -> list[str]:
            f"{var(n, 'exists')} = {{ OR = {{ has_variable = {loc} has_variable = {var(n, 'dest')} }} }}",
            f"{var(n, 'at_location')} = {{ has_variable = {loc} }}",
            f"{var(n, 'at_earth')} = {{ has_variable = {loc} var:{loc} = {EARTH} }}",
-           "# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).",
-           f"{var(n, 'avoiding')} = {{ has_variable = {var(n, 'avoid')} }}",
+           "# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).",
+           f"{var(n, 'avoiding')} = {{ {var(n, 'stance_value')} = 1 }}",
+           *[f"{var(n, f'stance_{c}')} = {{ {var(n, 'stance_value')} = {c} }}" for c in STANCES],
+           "# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.",
+           f"{var(n, 'pick_is_stance')} = {{",
+           "\tOR = {",
+           *[f"\t\tAND = {{ scope:pick = {c} {var(n, 'stance_value')} = {c} }}" for c in STANCES],
+           "\t}",
+           "}",
            "# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.",
            f"{var(n, 'target_lunar')} = {{",
            f"\thas_variable = {var(n, 'target')}",
@@ -1449,7 +1463,7 @@ def render_transfer() -> list[str]:
 def render_location_effects() -> list[str]:
     out = ["# ===== A slot and its location ($N$) =====",
            "# On arrival, its posture: Station where we hold a colony (and at Earth), Stand",
-           "# off elsewhere (design § 6), except a fleet set to Avoid, which stations",
+           "# off elsewhere (design § 6), except a fleet whose stance is Avoid, which stations",
            "# there too: standing off where there is a hostile world ties a fleet to the",
            "# location (sr_bt_fleet_tied), and the battle of its landing tick would catch",
            "# it (review of #2069). Its player stands it off to blockade.",
@@ -1457,7 +1471,7 @@ def render_location_effects() -> list[str]:
     cases = [(f"var:sr_fl_$N$_loc = {EARTH}", ["set_variable = { name = sr_fl_$N$_posture value = 1 }"])]
     cases += [(f"var:sr_fl_$N$_loc = {lc.code} sr_loc_held_{lc.key} = yes",
                ["set_variable = { name = sr_fl_$N$_posture value = 1 }"]) for lc in LOCATIONS[1:]]
-    out += _chain(cases, else_body=["if = { limit = { has_variable = sr_fl_$N$_avoid } set_variable = { name = sr_fl_$N$_posture value = 1 } }",
+    out += _chain(cases, else_body=["if = { limit = { sr_fl_$N$_avoiding = yes } set_variable = { name = sr_fl_$N$_posture value = 1 } }",
                                     "else = { set_variable = { name = sr_fl_$N$_posture value = 2 } }"])
     out += ["}", "",
             "# On arrival, contact for every world of ours at the location (slice 5's",
@@ -1970,13 +1984,14 @@ def render_battle() -> list[str]:
            "sr_fl_bt_end_at = {",
            *[f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_bt_{v} }} remove_variable = sr_fl_$N$_bt_{v} }}" for v in BT_VARS],
            "}",
-           "# A broken fleet not at a dock leaves for the nearest it may depart for (§ 2.4):",
+           "# A broken fleet leaves for the nearest dock it may depart for (§§ 2.4, 5.2):",
            "# Earth, or a location where we hold a Spaceport, nearest by the leg's quarters,",
-           "# through the same sr_fl_<n>_may_depart_<loc> an order passes. With none in",
-           "# reach it stays, out of this battle, and can be caught at the next tick.",
+           "# through the same sr_fl_<n>_may_depart_<loc> an order passes, which is never",
+           "# where it is: a fleet broken at a dock goes to another (owner, 2026-11-25). With",
+           "# none in reach it stays, out of this battle, and can be caught at the next tick.",
            "sr_fl_retreat_at = {",
            "\tif = {",
-           "\t\tlimit = { has_variable = sr_fl_$N$_bt_broke NOT = { sr_fl_$N$_docked = yes } }",
+           "\t\tlimit = { has_variable = sr_fl_$N$_bt_broke }",
            f"\t\tset_local_variable = {{ name = sr_bt_best value = {TICK_CEILING} }}",
            "\t\tset_local_variable = { name = sr_bt_to value = 0 }"]
     for lc in LOCATIONS:
@@ -2001,9 +2016,10 @@ def _defend_eligible(n: int, k: str) -> str:
 
 def render_ai_defend() -> list[str]:
     """The AI's defence of a threatened location, on the battle's win test
-    (2026-11-25 design § 2.7): hostile, the fleets there and on their way of
-    every power at war with us or interdicting us there; ours, ours there and
-    on our way; each strength x fire. Already winning (ours at least theirs x
+    (2026-11-25 design §§ 2.7, 5.3): hostile, the fleets there and on their way
+    of every power at war with us or interdicting us there; ours, ours and our
+    friends' there and on their way (sr_fl_friend_of: at war with a power at
+    war with us); each strength x fire. Already winning (ours at least theirs x
     sr_fl_ai_engage_margin, with a fleet of ours there or bound): nothing is
     sent. Else the strongest free fleet that reaches in time, if it makes ours
     win; else, if together they would, the free fleets that reach, strongest
@@ -2044,6 +2060,11 @@ def render_ai_defend() -> list[str]:
                 "\t\t\tsr_fl_each_slot = { DO = ai_threat }",
                 "\t\t}",
                 "\t\tsr_fl_each_slot = { DO = ai_guard }",
+                "\t\tevery_in_global_list = {",
+                "\t\t\tvariable = sr_fleet_powers",
+                "\t\t\tlimit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }",
+                "\t\t\tsr_fl_each_slot = { DO = ai_guard }",
+                "\t\t}",
                 "\t\tset_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf "
                 "multiply = sr_fl_ai_engage_margin } }",
                 "\t\tset_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }",
@@ -2102,6 +2123,65 @@ def render_ai_defend() -> list[str]:
             out += [f"\t\t\t\tif = {{ limit = {{ local_var:sr_fl_el_{n} = 2 {var(n, f'may_depart_{k}')} = yes }} "
                     f"sr_fl_dispatch = {{ N = {n} LOC = {k} CODE = {lc.code} }} }}"]
         out += ["\t\t\t}", "\t\t}", "\t}", "}"]
+    return out
+
+
+def render_forecast() -> list[str]:
+    """The battle forecast (2026-11-25 design § 5.4): at each location, the
+    square law's sums for the country reading it (sr_fc_sums_<loc>, into the
+    AI defence's locals: theirs sr_fl_ts and _tf, every power at war with us
+    there and on its way; ours sr_fl_os and _of, ours and our friends'; at
+    Earth each side's Orbital Battlestations), and slot N's forecast at every
+    location but its own, with it added to ours (sr_fl_fc_slot_at, from the
+    destination button), kept for the destination popup."""
+    out = ["# ===== The battle forecast (2026-11-25 design § 5.4) ====="]
+    for lc in LOCATIONS:
+        k = lc.key
+        out += [f"sr_fc_sums_{k} = {{",
+                "\tsave_temporary_scope_as = sr_fc_side",
+                f"\tset_local_variable = {{ name = sr_fl_code value = {lc.code} }}",
+                *[f"\tset_local_variable = {{ name = sr_fl_{v} value = 0 }}" for v in ("ts", "tf", "os", "of")],
+                "\tevery_in_global_list = {",
+                "\t\tvariable = sr_fleet_powers",
+                "\t\tlimit = { is_country_alive = yes has_war_with = scope:sr_fc_side }",
+                "\t\tsr_fl_each_slot = { DO = ai_threat }",
+                *(["\t\tsr_fc_bs_add = { SIDE = t }"] if lc.code == EARTH else []),
+                "\t}",
+                "\tsr_fl_each_slot = { DO = ai_guard }",
+                *(["\tsr_fc_bs_add = { SIDE = o }"] if lc.code == EARTH else []),
+                "\tevery_in_global_list = {",
+                "\t\tvariable = sr_fleet_powers",
+                "\t\tlimit = { sr_fl_friend_of = { WHO = sr_fc_side } }",
+                "\t\tsr_fl_each_slot = { DO = ai_guard }",
+                *(["\t\tsr_fc_bs_add = { SIDE = o }"] if lc.code == EARTH else []),
+                "\t}",
+                "}"]
+    out += ["# A location's sums and verdict (sr_fc_judge) by its code, for the alerts",
+            "# (space_race_events.100 and .111): local_var:sr_fc_at the location's code.",
+            "sr_fc_at_code = {"]
+    out += _chain([(f"local_var:sr_fc_at = {lc.code}", [f"sr_fc_sums_{lc.key} = yes"]) for lc in LOCATIONS], 1)
+    out += ["\tsr_fc_judge = yes", "}"]
+    fire = "{ value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness }"
+    out += ["# Slot N's forecast at each location but where it is, with it on our side.",
+            "sr_fl_fc_slot_at = {",
+            "\tif = {",
+            "\t\tlimit = { has_variable = sr_fl_$N$_loc }",
+            "\t\tset_local_variable = { name = sr_fc_own_s value = sr_fl_$N$_strength }",
+            f"\t\tset_local_variable = {{ name = sr_fc_own_f value = {fire} }}"]
+    for lc in LOCATIONS:
+        k = lc.key
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ NOT = {{ var:sr_fl_$N$_loc = {lc.code} }} }}",
+                f"\t\t\tsr_fc_sums_{k} = yes",
+                "\t\t\tchange_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }",
+                "\t\t\tchange_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }",
+                "\t\t\tsr_fc_judge = yes",
+                f"\t\t\tset_variable = {{ name = sr_fc_tier_{k} value = local_var:sr_fc_tier }}",
+                f"\t\t\tset_variable = {{ name = sr_fc_loss_{k} value = local_var:sr_fc_loss }}",
+                f"\t\t\tset_variable = {{ name = sr_fc_os_{k} value = local_var:sr_fl_os }}",
+                f"\t\t\tset_variable = {{ name = sr_fc_ts_{k} value = local_var:sr_fl_ts }}",
+                "\t\t}"]
+    out += ["\t}", "}"]
     return out
 
 
@@ -2259,7 +2339,7 @@ def render_effects() -> str:
     for block in (render_dispatchers(), render_role_effects(), render_transfer_effects(),
                   render_location_effects(),
                   render_finders(), render_records(), render_ai_effects(), render_combat(), render_battle(),
-                  render_ai_defend(),
+                  render_ai_defend(), render_forecast(),
                   render_ai_attack(), render_debug(), render_overview_list(), render_earth_alert()):
         parts += block + [""]
     return "\n".join(parts)
@@ -2439,10 +2519,7 @@ def render_display() -> str:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'destroy')} }} value = 1 }}",
                 "}",
-                f"sr_disp_fl_{n}_avoid = {{",
-                "\tvalue = 0",
-                f"\tif = {{ limit = {{ has_variable = {var(n, 'avoid')} }} value = 1 }}",
-                "}"]
+                f"sr_disp_fl_{n}_stance = {{ value = {var(n, 'stance_value')} }}"]
         for kind in ("fleets", "defences"):
             out += [f"sr_disp_fl_{n}_fire_{kind} = {{",
                     f"\tvalue = {var(n, f'fire_{kind}')}",
@@ -2503,6 +2580,13 @@ def render_display() -> str:
                 "\tvalue = 0",
                 *[f"\tif = {{ limit = {{ global_var:sr_site_holder_{w.key} ?= this }} add = 1 }}" for w in worlds_at(k)],
                 "}"]
+        # The destination popup's Battle (2026-11-25 design § 5.4): the forecast
+        # sr_fl_fc_slot_at kept when the popup opened; the loss as a percentage.
+        out += _opt(f"sr_disp_fc_tier_{k}", f"sr_fc_tier_{k}")
+        out += _opt(f"sr_disp_fc_os_{k}", f"sr_fc_os_{k}")
+        out += _opt(f"sr_disp_fc_ts_{k}", f"sr_fc_ts_{k}")
+        out += [f"sr_disp_fc_loss_{k} = {{", "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = sr_fc_loss_{k} }} value = var:sr_fc_loss_{k} multiply = 100 }}", "}"]
     out += ["", "# Per location, the viewer's status there (6b): 1 a battle this month or last,",
             "# 2 a colony of ours blockaded, 3 an enemy's blockaded by us; 6c: 4 a colony of",
             "# ours interdicted (blockaded by a country at peace with us), 5 we interdict;",
@@ -2887,8 +2971,11 @@ def _fleet_blocks(n: int) -> list[str]:
     # is_valid, a gate with no effect. Its hover is the leg to the destination
     # picked (sr_disp_fl_<n>_leg_weeks / _dv); the key opens with that gate's
     # IsValidTooltip, so a greyed button says why it can't pick (a key that
-    # reads JournalEntry can't go through Localize, gotcha #16).
+    # reads JournalEntry can't go through Localize, gotcha #16). The click
+    # first keeps the fleet's battle forecast at each location for the popup
+    # (sr_fl_fc_slot_at; 2026-11-25 design § 5.4).
     out += _override("fl_pick_button", f'enabled = "{_op("sr_fleet_pick_sgui", "IsValid", n)}"',
+                     f'onclick = "{_op("sr_fleet_pick_sgui", "Execute", n)}"',
                      f"onclick = \"[GetVariableSystem.Set('te_popup', '{_popup_key('dest', n)}')]\"",
                      f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"')
     out += _override("fl_pick", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_pick_name')]\"")
@@ -2929,11 +3016,13 @@ def _fleet_blocks(n: int) -> list[str]:
                      f'tooltip = "je_space_race_widget_fl_{n}_target_tt"')
     out += _override("fl_target", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_target_name')]\"")
     out += _button("fl_destroy_button", "sr_fleet_destroy_sgui", n)
-    # Engage / Avoid (2026-11-25 design § 2.9): the word the setting in force, the
-    # click switches it; at a location and in flight.
-    out += _button("fl_avoid_button", "sr_fleet_avoid_sgui", n)
-    out += _override("fl_avoid_off_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_avoid", 0)}]"')
-    out += _override("fl_avoid_on_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_avoid", 1)}]"')
+    # The stance (2026-11-25 design § 5.1), at a location and in flight. On the
+    # card one button, its word the stance in force, the click the next
+    # (sr_fleet_stance_sgui); on the Fleets window's page a button each, the
+    # one in force lit (sr_fleet_set_stance_sgui, scope:pick the stance).
+    out += _button("fl_stance_button", "sr_fleet_stance_sgui", n)
+    for c in STANCES:
+        out += _override(f"fl_stance_{c}_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_stance", c)}]"')
     out += _override("fl_destroy_off_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 0)}]"')
     out += _override("fl_destroy_on_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 1)}]"')
     return out
@@ -2944,6 +3033,7 @@ def _fleet_blocks(n: int) -> list[str]:
 # its number, the roll-up and what shows rolled up, its role cells (the page's
 # tiles give each role now of full) and the arrow that opens the window.
 _FLEET_ROW_ONLY = re.compile(r"fl_visible|fl_number|fl_open|fl_roll_(?:up|down)|fl_rolled_visible|fl_strength_brief|"
+                             r"fl_stance_button|fl_stance_\d_visible|"
                              r"fl_body_visible|fl_roles_tooltip|fl_role_\w+")
 
 
@@ -2963,6 +3053,16 @@ def _fleet_page(n: int) -> list[str]:
         out += _override(f"fp_banner_{drive}", f'visible = "[{test(var(n, "drive_value"), code)}]"')
     out += _override("fp_number", f'raw_text = "{NUMERALS[n - 1]}"')
     out += gss._without(_fleet_blocks(n), _FLEET_ROW_ONLY)
+    # The stance, a button each (2026-11-25 design § 5.1; the card has one that
+    # steps): sr_fleet_set_stance_sgui, scope:pick the stance; the one in force lit.
+    for c in STANCES:
+        held = _eq(f"sr_disp_fl_{n}_stance", c)
+        out += _override(f"fp_stance_{c}_choice", f'visible = "[Not( {held} )]"')
+        out += _override(f"fp_stance_{c}_selected", f'visible = "[{held}]"')
+        out += _override(f"fp_stance_{c}_button",
+                         f'enabled = "{_pick_call("sr_fleet_set_stance_sgui", "IsValid", n, c)}"',
+                         f'onclick = "{_pick_call("sr_fleet_set_stance_sgui", "Execute", n, c)}"',
+                         f'tooltip = "{_pick_reasoned("sr_fleet_set_stance_sgui", n, c)}"')
     for role in ROLES:
         now, full = var(n, f"{role.key}_value"), var(n, f"{role.key}_full_value")
         out += _override(f"fp_role_{role.key}", f'raw_text = "#v [{_sv(now)}|0]#! / [{_sv(full)}|0]"')
@@ -3198,6 +3298,11 @@ def _dest_row(n: int, b: glw.Location) -> list[str]:
     rows += _override("dr_worlds", f'raw_text = "[{_sv(f"sr_disp_loc_worlds_{k}")}|0]"')
     rows += _override("dr_enemy", f'raw_text = "[{_sv(f"sr_loc_ai_enemy_fleets_{k}")}|0]"')
     rows += _override("dr_inbound", f'raw_text = "[{_sv(f"sr_loc_hostile_inbound_strength_{k}")}|0]"')
+    # The battle forecast with this fleet there (2026-11-25 design § 5.4): its
+    # verdict, kept when the popup opened; the hover gives the sums and the loss.
+    for tier in range(5):
+        rows += _override(f"dr_battle_{tier}_visible", f'visible = "[{_eq(f"sr_disp_fc_tier_{k}", tier)}]"')
+    rows += _override("dr_battle_tooltip", f'tooltip = "je_space_race_widget_fc_{k}_tt"')
     rows += _pick_button("dr_button", "sr_fleet_set_dest_sgui", n, b.code)
     rows += _override("dr_choose_visible", f'visible = "[Not( {_eq(f"sr_disp_fl_{n}_pick", b.code)} )]"')
     rows += _override("dr_chosen_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_pick", b.code)}]"')

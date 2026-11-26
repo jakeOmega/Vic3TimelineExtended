@@ -231,8 +231,10 @@ class FullColoniesGateTest(unittest.TestCase):
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
         # 21 since the personnel priority (sr_pers_priority_sgui, 2026-11-24); 22 since
         # orders and the modes took the pause's place (sr_sc_order_sgui, sr_sc_mode_sgui, 2026-11-25);
-        # 23 with Engage / Avoid (sr_fleet_avoid_sgui, 2026-11-25 design § 2.9)
-        self.assertEqual(len(names), 23)
+        # 23 with Engage / Avoid (sr_fleet_avoid_sgui, 2026-11-25 design § 2.9); 24 with the
+        # stances in its place, the card's step and the page's four (sr_fleet_stance_sgui,
+        # sr_fleet_set_stance_sgui, § 5.1)
+        self.assertEqual(len(names), 24)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -5027,9 +5029,15 @@ class ButtonGateTest(unittest.TestCase):
     def test_each_gate_keeps_its_reasons_and_has_no_effect(self):
         for name, (_, _, reasons) in self.GATES.items():
             body = _block(self.sguis, name)
+            # The destination gate's click keeps the battle forecast for its popup
+            # (2026-11-25 design § 5.4), and does nothing else.
+            forecast = name == "sr_fleet_pick_sgui"
             with self.subTest(sgui=name):
                 self.assertEqual(re.findall(r"(?m)^\t(\w+) = ", body),
-                                 ["scope", "saved_scopes", "is_shown", "ai_is_valid", "is_valid"])
+                                 ["scope", "saved_scopes", "is_shown", "ai_is_valid", "is_valid"] + ["effect"] * forecast)
+                if forecast:
+                    self.assertEqual(" ".join(_block(body.replace("\n\t", "\n"), "effect").split()),
+                                     "hidden_effect = { sr_fl_by_op = { DO = fc_slot } }")
                 self.assertIn("saved_scopes = { op }", body)
                 self.assertIn("sr_colonies_full_enabled = yes", _block(body.replace("\n\t", "\n"), "is_shown"))
                 valid = _block(body.replace("\n\t", "\n"), "is_valid")
@@ -5046,7 +5054,11 @@ class ButtonGateTest(unittest.TestCase):
                 with self.subTest(sgui=name, slot=n):
                     self.assertEqual(re.findall(r'(?m)^\s*enabled = "(.*)"$', button),
                                      [f"[GetScriptedGui('{name}').IsValid( {scope} )]"])
-                    self.assertNotIn("Execute", button)
+                    if name == "sr_fleet_pick_sgui":
+                        self.assertLess(button.index(f"GetScriptedGui('{name}').Execute( {scope} )"),
+                                        button.index("GetVariableSystem.Set('te_popup'"))
+                    else:
+                        self.assertNotIn("Execute", button)
                     self.assertIn(f'tooltip = "je_space_race_widget_fl_{n}_{hover}"', button)
                     text = re.search(rf"(?m)^ je_space_race_widget_fl_{n}_{hover}:0 \"(.*)\"$", self.loc).group(1)
                     self.assertTrue(text.startswith(f"[GetScriptedGui('{name}').IsValidTooltip( {scope} )]$te_tt_break$"))

@@ -3,8 +3,9 @@ docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md), run
 from the script files as they are.
 
 _FxWorld is test_space_fleets._Fx with countries: every_in_global_list and
-any_in_global_list over a list of them, has_war_with = prev, is_player, a
-while with the engine's 1,000-pass stop, and stand-ins for what reads the map
+any_in_global_list over a list of them, has_war_with = prev, this = scope:,
+is_player, a while with the engine's 1,000-pass stop, te_set_sqrt, and
+stand-ins for what reads the map
 (buildings, colonies, docks, the legs' tables), each named in its fixture. The
 arithmetic is the engine's fixed point, cut toward zero, as _Fx's.
 """
@@ -51,8 +52,9 @@ class _FxWorld(_Fx):
         self.saved = {}
 
     # -- fixtures --------------------------------------------------------------
-    def fleet(self, tag, n, loc, drive=1, posture=1, avoid=False, **roles):
-        """Slot n of tag at loc, each role (now, full) or now."""
+    def fleet(self, tag, n, loc, drive=1, posture=1, avoid=False, stance=None, **roles):
+        """Slot n of tag at loc, each role (now, full) or now; its stance 1 to 4
+        (avoid=True is 1, Avoid; none is Engage)."""
         v = self.world[tag]
         v[f"sr_fl_{n}_loc"] = _fxn(CODE[loc])
         total = 0
@@ -62,8 +64,8 @@ class _FxWorld(_Fx):
             total += now
         v[f"sr_fl_{n}_drive"] = _fxn(drive)
         v[f"sr_fl_{n}_posture"] = _fxn(posture)
-        if avoid:
-            v[f"sr_fl_{n}_avoid"] = _FX_SCALE
+        if avoid or stance:
+            v[f"sr_fl_{n}_stance"] = _fxn(stance or 1)
         # What sr_loc_rebuild sets (stubbed): the country's strength there.
         v[f"sr_fl_at_{loc}"] = v.get(f"sr_fl_at_{loc}", 0) + _fxn(total)
 
@@ -129,6 +131,11 @@ class _FxWorld(_Fx):
             return frozenset((self.stack[-1], other)) in self.wars
         if key == "is_country_alive":
             return v == "yes"
+        if key == "hidden_trigger":
+            return self.test(v)
+        if key == "this":
+            assert v.startswith("scope:"), v
+            return self._here() == self.saved[v[len("scope:"):]]
         if key == "is_player":
             return (self._here() in self.players) == (v == "yes")
         if key == "has_local_variable":
@@ -172,6 +179,10 @@ class _FxWorld(_Fx):
                 self.dispatched.append((self._here(), dict((k, x) for k, _, x in v)))
             elif key in ("save_temporary_scope_as", "save_scope_as"):
                 self.saved[v] = self._here()
+            elif key == "te_set_sqrt":
+                d = {k: x for k, _, x in v}
+                x = Decimal(self.num(d["IN"])) / _FX_SCALE
+                self.vars[d["OUT"]] = int(x.sqrt() * _FX_SCALE)
             elif key == "te_debris_add":
                 self.debris.append({k: self.num(x) for k, _, x in v})
             elif key == "set_global_variable":
@@ -235,10 +246,11 @@ class EvenFightTest(unittest.TestCase):
 
 
 class UnevenFightTest(unittest.TestCase):
-    """2:1: the weaker breaks, the stronger stays and pays about a tenth (§ 3)."""
+    """2:1: the weaker breaks, the stronger stays and pays about a tenth (§ 3).
+    Players both, so each keeps Engage (an AI's loser would avoid, § 5.1)."""
 
     def test_two_to_one(self):
-        w = _two(values={r"sr_fl_\d_leg_quarters_\w+": lambda t, n: 5},
+        w = _two(players=["A", "B"], values={r"sr_fl_\d_leg_quarters_\w+": lambda t, n: 5},
                  triggers={r"sr_fl_\d_may_depart_earth": lambda t, n: True})
         w.fleet("A", 1, "mars", war=200)
         w.fleet("B", 1, "mars", posture=2, war=100)
@@ -376,17 +388,19 @@ class AiTest(unittest.TestCase):
         w.fleet("A", 1, "mars", drive=2, war=100)
         w.fleet("B", 1, "mars", drive=1, war=60)
         w.battle("mars")
-        # B, weaker, avoids, but A is faster: caught. A engages.
-        self.assertNotIn("sr_fl_1_avoid", w.world["A"])
-        self.assertIn("sr_fl_1_avoid", w.world["B"])
-        self.assertLess(w.strength("B", 1), 60)
+        # B, weaker, avoids, but A is faster: caught, and as an avoider it
+        # breaks off at a quarter lost (§ 5.1). A engages.
+        self.assertNotIn("sr_fl_1_stance", w.world["A"])
+        self.assertEqual(w.var("B", "sr_fl_1_stance"), 1)
+        self.assertLessEqual(w.strength("B", 1), 45)
+        self.assertGreater(w.strength("B", 1), 40)
 
     def test_a_player_s_setting_is_its_own(self):
         w = _two(players=["B"])
         w.fleet("A", 1, "mars", war=100)
         w.fleet("B", 1, "mars", war=10)
         w.battle("mars")
-        self.assertNotIn("sr_fl_1_avoid", w.world["B"])
+        self.assertNotIn("sr_fl_1_stance", w.world["B"])
 
 
 class AiDefendTest(unittest.TestCase):
@@ -479,7 +493,7 @@ class ReviewFixesTest(unittest.TestCase):
         w.fleet("B", 1, "mars", war=60)
         w.battle("mars")
         # B, weaker, would avoid; with no Space Command it keeps Engage and fights.
-        self.assertNotIn("sr_fl_1_avoid", w.world["B"])
+        self.assertNotIn("sr_fl_1_stance", w.world["B"])
         self.assertLessEqual(w.strength("B", 1), 30)
 
     def test_one_report_a_tick_a_battle_taking_over_the_batteries(self):
@@ -498,9 +512,220 @@ class ReviewFixesTest(unittest.TestCase):
         from test_space_fleets import _block, _strip
         import gen_space_fleets as gsf
         arrival = _block(_strip(_raw(ROOT / gsf.EFFECTS_OUT)), "sr_fl_arrival_posture_at")
-        self.assertRegex(arrival, r"else = \{\s*if = \{ limit = \{ has_variable = sr_fl_\$N\$_avoid \} "
+        self.assertRegex(arrival, r"else = \{\s*if = \{ limit = \{ sr_fl_\$N\$_avoiding = yes \} "
                                   r"set_variable = \{ name = sr_fl_\$N\$_posture value = 1 \} \}\s*"
                                   r"else = \{ set_variable = \{ name = sr_fl_\$N\$_posture value = 2 \} \}")
+
+
+class StanceTest(unittest.TestCase):
+    """2026-11-25 design § 5.1: four stances. Avoid and Hit and Run break off at
+    a quarter lost, Engage at half, Fight to the Last never; Avoid alone
+    doesn't seek the fight. Both sides players, so each keeps its stance."""
+
+    def _fight(self, a, b=3, war_a=100, war_b=100, drive_a=1):
+        w = _two(players=["A", "B"], values={r"sr_fl_\d_leg_quarters_\w+": lambda t, n: 5},
+                 triggers={r"sr_fl_\d_may_depart_earth": lambda t, n: True})
+        w.fleet("A", 1, "mars", drive=drive_a, stance=a, war=war_a)
+        w.fleet("B", 1, "mars", posture=2, stance=b, war=war_b)
+        w.battle("mars")
+        return w
+
+    def test_hit_and_run_breaks_at_a_quarter(self):
+        w = self._fight(2)
+        self.assertLessEqual(w.strength("A", 1), 75)
+        self.assertGreater(w.strength("A", 1), 70)
+        # B, at Engage, fought on and didn't break.
+        self.assertGreater(w.strength("B", 1), 70)
+        self.assertEqual([(t, d["N"]) for t, d in w.dispatched], [("A", "1")])
+
+    def test_avoid_caught_breaks_at_a_quarter(self):
+        w = self._fight(1)
+        self.assertLessEqual(w.strength("A", 1), 75)
+        self.assertGreater(w.strength("A", 1), 70)
+
+    def test_avoid_escapes_a_slower_engager(self):
+        w = self._fight(1, drive_a=2)
+        self.assertEqual(w.strength("A", 1), 100)
+        self.assertEqual(w.strength("B", 1), 100)
+
+    def test_fight_to_the_last_never_breaks(self):
+        w = self._fight(4)
+        # B breaks at half; A, never breaking, fights it there and stays.
+        self.assertLessEqual(w.strength("B", 1), 50)
+        self.assertGreater(w.strength("A", 1), 40)
+        self.assertEqual([(t, d["N"]) for t, d in w.dispatched], [("B", "1")])
+
+    def test_fight_to_the_last_is_destroyed_rather_than_break(self):
+        w = self._fight(4, war_a=40)
+        self.assertLess(w.strength("A", 1), Decimal("0.05"))
+        self.assertGreater(w.strength("B", 1), 85)
+        self.assertEqual(w.dispatched, [])
+
+    def test_two_that_never_break_reach_the_ceiling_quietly(self):
+        w = self._fight(4, 4)
+        self.assertEqual(w.locals["sr_bt_steps"], _fxn(60))
+        self.assertFalse(any("BROKEN" in line for line, _ in w.logs))
+        for tag in "AB":
+            with self.subTest(country=tag):
+                self.assertLess(w.strength(tag, 1), 10)
+                self.assertGreater(w.strength(tag, 1), Decimal("0.05"))
+
+    def test_the_card_steps_and_the_page_sets(self):
+        w = _two(players=["A"])
+        w.fleet("A", 1, "mars", war=100)
+        seen = []
+        with w._in("A"):
+            for _ in range(4):
+                self.assertTrue(w.click("sr_fleet_stance_sgui", op=1))
+                seen.append(w.vars.get("sr_fl_1_stance"))
+            self.assertEqual(seen, [_fxn(4), _fxn(1), _fxn(2), None])
+            self.assertTrue(w.click("sr_fleet_set_stance_sgui", op=1, pick=4))
+            self.assertEqual(w.vars.get("sr_fl_1_stance"), _fxn(4))
+            # The stance in force is lit, not a button.
+            self.assertFalse(w.click("sr_fleet_set_stance_sgui", op=1, pick=4))
+            self.assertTrue(w.click("sr_fleet_set_stance_sgui", op=1, pick=3))
+            self.assertNotIn("sr_fl_1_stance", w.vars)
+
+
+class RetreatTest(unittest.TestCase):
+    """§ 5.2 (owner, 2026-11-25): a fleet broken at a dock leaves for another,
+    and stays only where it has none it can reach. B breaks at Mars."""
+
+    def _broken_at_mars(self, port_mars=True, earth_open=True):
+        departs = _always(("B", r"sr_fl_1_may_depart_earth")) if earth_open else (lambda t, n: False)
+        w = _two(players=["A", "B"], values={r"sr_fl_\d_leg_quarters_\w+": lambda t, n: 5},
+                 triggers={r"sr_loc_port_mars": _always(("B", r"sr_loc_port_mars")) if port_mars else (lambda t, n: False),
+                           r"sr_fl_\d_may_depart_earth": departs})
+        w.fleet("A", 1, "mars", war=200)
+        w.fleet("B", 1, "mars", war=100)
+        w.battle("mars")
+        return [(t, d["N"], d["LOC"]) for t, d in w.dispatched]
+
+    def test_broken_at_its_spaceport_it_goes_home(self):
+        self.assertEqual(self._broken_at_mars(), [("B", "1", "earth")])
+
+    def test_broken_at_its_spaceport_with_nowhere_else_it_stays(self):
+        self.assertEqual(self._broken_at_mars(earth_open=False), [])
+
+    def test_the_gate_is_where_it_may_depart_for(self):
+        from test_space_fleets import _block, _strip
+        import gen_space_fleets as gsf
+        retreat = _block(_strip(_raw(ROOT / gsf.EFFECTS_OUT)), "sr_fl_retreat_at")
+        self.assertIn("limit = { has_variable = sr_fl_$N$_bt_broke }", retreat)
+        self.assertNotIn("docked", retreat)
+        # may_depart is never where the fleet is, so the dock it is at is out.
+        may = _block(_strip(_raw(ROOT / gsf.TRIGGERS_OUT)), "sr_fl_1_may_depart_mars")
+        self.assertIn("NOT = { var:sr_fl_1_loc = 3 }", may)
+
+
+class FriendsTest(unittest.TestCase):
+    """§ 5.3: the AI counts its friends' fleets (powers at peace with it at war
+    with its enemy) in its win tests. A and C, AIs, are both at war with B."""
+
+    def _world(self, players=()):
+        return _FxWorld(("A", "B", "C", "D"), wars=[("A", "B"), ("C", "B")], players=players)
+
+    def test_together_they_engage(self):
+        w = self._world(players=["B"])
+        w.fleet("A", 1, "mars", war=60)
+        w.fleet("C", 1, "mars", war=60)
+        w.fleet("B", 1, "mars", war=100)
+        w.battle("mars")
+        # Each alone loses to B (60 x 60 < 100 x 100); together (120 x 120) they win.
+        self.assertNotIn("sr_fl_1_stance", w.world["A"])
+        self.assertNotIn("sr_fl_1_stance", w.world["C"])
+
+    def test_the_other_side_sees_them_together(self):
+        w = self._world(players=["A", "C"])
+        w.fleet("A", 1, "mars", war=60)
+        w.fleet("C", 1, "mars", war=60)
+        w.fleet("B", 1, "mars", war=100)
+        w.battle("mars")
+        self.assertEqual(w.var("B", "sr_fl_1_stance"), 1)
+
+    def test_a_power_at_peace_with_all_is_no_friend(self):
+        w = self._world(players=["B"])
+        w.fleet("A", 1, "mars", war=60)
+        w.fleet("D", 1, "mars", war=200)
+        w.fleet("B", 1, "mars", war=100)
+        w.battle("mars")
+        self.assertEqual(w.var("A", "sr_fl_1_stance"), 1)
+
+    def test_the_defence_counts_a_friend_there(self):
+        w = self._world()
+        w.ov_triggers.insert(0, (r"sr_fl_ai_threatened_mars", lambda t, n: True))
+        w.ov_triggers.insert(0, (r"sr_icpt_interdicts_at|sr_fl_ai_earth_threatened", lambda t, n: False))
+        w.ov_triggers.insert(0, (r"sr_fl_\d_ai_free|sr_fl_\d_ai_reaches_mars|sr_fl_\d_may_depart_mars",
+                                 lambda t, n: w.world[t].get(f"sr_fl_{n[6]}_loc") == _fxn(CODE["earth"])))
+        w.fleet("B", 1, "mars", war=100)
+        del w.world["B"]["sr_fl_1_loc"]
+        w.world["B"]["sr_fl_1_dest"] = _fxn(CODE["mars"])
+        w.fleet("A", 1, "earth", war=150)
+        w.fleet("C", 1, "mars", war=120)
+        with w._in("A"):
+            w.locals = {}
+            w.run(_parse("sr_fl_ai_defend_mars = yes"))
+        # C's 120 at Mars already beats B's 100: A sends nothing.
+        self.assertEqual(w.dispatched, [])
+
+
+class ForecastTest(unittest.TestCase):
+    """§ 5.4: the battle forecast, the square law's ratio of ours to theirs
+    (strength x fire) and the winner's loss while the loser loses half."""
+
+    def _judge(self, os_, of, ts, tf):
+        w = _two()
+        w.locals = {f"sr_fl_{k}": _fxn(x) for k, x in (("os", os_), ("of", of), ("ts", ts), ("tf", tf))}
+        with w._in("A"):
+            w.run(_parse("sr_fc_judge = yes"))
+            self.assertNotIn("sr_fc_rest", w.vars)
+        return int(w.locals["sr_fc_tier"] // _FX_SCALE), float(Decimal(w.locals["sr_fc_loss"]) / _FX_SCALE)
+
+    def test_the_tiers_and_the_loss(self):
+        for (os_, of, ts, tf), (tier, loss) in (((200, 200, 100, 100), (1, 0.0986)),   # 4:1, the 2:1 fight's 9.9%
+                                                 ((150, 100, 100, 100), (2, 0.2929)),   # 1.5: 1 - sqrt(0.5)
+                                                 ((100, 50, 100, 100), (3, 0.2094)),    # 0.5: their loss
+                                                 ((50, 50, 100, 100), (4, 0.0982)),     # 0.25
+                                                 ((0, 0, 100, 100), (4, 0.0)),
+                                                 ((100, 100, 0, 0), (0, 0.0))):
+            with self.subTest(ours=(os_, of), theirs=(ts, tf)):
+                got = self._judge(os_, of, ts, tf)
+                self.assertEqual(got[0], tier)
+                self.assertAlmostEqual(got[1], loss, places=3)
+
+    def test_the_destination_popup_counts_this_fleet_and_friends(self):
+        w = _FxWorld(("A", "B", "C"), wars=[("A", "B"), ("C", "B")])
+        w.fleet("A", 1, "earth", war=60)
+        w.fleet("C", 1, "mars", war=60)
+        w.fleet("B", 1, "mars", war=100)
+        with w._in("A"):
+            w.locals = {}
+            w.scopes = {"op": _fxn(1)}
+            w.run(_parse("sr_fl_by_op = { DO = fc_slot }"))
+        self.assertEqual(w.var("A", "sr_fc_tier_mars"), 2)   # 120 x 120 against 100 x 100
+        self.assertEqual(w.var("A", "sr_fc_os_mars"), 120)
+        self.assertEqual(w.var("A", "sr_fc_ts_mars"), 100)
+        self.assertEqual(w.var("A", "sr_fc_tier_inner"), 0)
+        self.assertNotIn("sr_fc_tier_earth", w.world["A"])
+
+    def test_the_alert_with_nothing_of_ours_there(self):
+        w = _two()
+        w.fleet("B", 1, "mars", war=100)
+        with w._in("A"):
+            w.locals = {}
+            w.run(_parse("sr_fc_note_alert = { CODE = 3 }"))
+        self.assertEqual(w.var("A", "sr_fc_alert_tier"), 5)
+
+    def test_the_wiring(self):
+        from test_space_fleets import _block, _strip
+        events = _strip(_raw(ROOT / "events/space_race_events.txt"))
+        for eid, code in (("100", "var:sr_fl_alert_loc"), ("111", "1")):
+            with self.subTest(event=eid):
+                body = _block(events, f"space_race_events.{eid}")
+                self.assertIn(f"sr_fc_note_alert = {{ CODE = {code} }}", body)
+                self.assertIn("sr_fc_clear_alert = yes", body)
+        rows = _raw(ROOT / "gui/journal_entry_widgets/sr_fleets_generated_rows.gui")
+        self.assertIn("GetScriptedGui('sr_fleet_pick_sgui').Execute(", rows)
 
 
 class CeilingTest(unittest.TestCase):

@@ -134,10 +134,7 @@ sr_disp_fl_1_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_destroy } value = 1 }
 }
-sr_disp_fl_1_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_1_avoid } value = 1 }
-}
+sr_disp_fl_1_stance = { value = sr_fl_1_stance_value }
 sr_disp_fl_1_fire_fleets = {
 	value = sr_fl_1_fire_fleets
 	multiply = sr_fleet_quality
@@ -267,10 +264,7 @@ sr_disp_fl_2_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_destroy } value = 1 }
 }
-sr_disp_fl_2_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_2_avoid } value = 1 }
-}
+sr_disp_fl_2_stance = { value = sr_fl_2_stance_value }
 sr_disp_fl_2_fire_fleets = {
 	value = sr_fl_2_fire_fleets
 	multiply = sr_fleet_quality
@@ -400,10 +394,7 @@ sr_disp_fl_3_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_destroy } value = 1 }
 }
-sr_disp_fl_3_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_3_avoid } value = 1 }
-}
+sr_disp_fl_3_stance = { value = sr_fl_3_stance_value }
 sr_disp_fl_3_fire_fleets = {
 	value = sr_fl_3_fire_fleets
 	multiply = sr_fleet_quality
@@ -533,10 +524,7 @@ sr_disp_fl_4_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_destroy } value = 1 }
 }
-sr_disp_fl_4_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_4_avoid } value = 1 }
-}
+sr_disp_fl_4_stance = { value = sr_fl_4_stance_value }
 sr_disp_fl_4_fire_fleets = {
 	value = sr_fl_4_fire_fleets
 	multiply = sr_fleet_quality
@@ -666,10 +654,7 @@ sr_disp_fl_5_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_destroy } value = 1 }
 }
-sr_disp_fl_5_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_5_avoid } value = 1 }
-}
+sr_disp_fl_5_stance = { value = sr_fl_5_stance_value }
 sr_disp_fl_5_fire_fleets = {
 	value = sr_fl_5_fire_fleets
 	multiply = sr_fleet_quality
@@ -799,10 +784,7 @@ sr_disp_fl_6_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_destroy } value = 1 }
 }
-sr_disp_fl_6_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_6_avoid } value = 1 }
-}
+sr_disp_fl_6_stance = { value = sr_fl_6_stance_value }
 sr_disp_fl_6_fire_fleets = {
 	value = sr_fl_6_fire_fleets
 	multiply = sr_fleet_quality
@@ -932,10 +914,7 @@ sr_disp_fl_7_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_destroy } value = 1 }
 }
-sr_disp_fl_7_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_7_avoid } value = 1 }
-}
+sr_disp_fl_7_stance = { value = sr_fl_7_stance_value }
 sr_disp_fl_7_fire_fleets = {
 	value = sr_fl_7_fire_fleets
 	multiply = sr_fleet_quality
@@ -1065,10 +1044,7 @@ sr_disp_fl_8_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_destroy } value = 1 }
 }
-sr_disp_fl_8_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_8_avoid } value = 1 }
-}
+sr_disp_fl_8_stance = { value = sr_fl_8_stance_value }
 sr_disp_fl_8_fire_fleets = {
 	value = sr_fl_8_fire_fleets
 	multiply = sr_fleet_quality
@@ -1198,10 +1174,7 @@ sr_disp_fl_9_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_destroy } value = 1 }
 }
-sr_disp_fl_9_avoid = {
-	value = 0
-	if = { limit = { has_variable = sr_fl_9_avoid } value = 1 }
-}
+sr_disp_fl_9_stance = { value = sr_fl_9_stance_value }
 sr_disp_fl_9_fire_fleets = {
 	value = sr_fl_9_fire_fleets
 	multiply = sr_fleet_quality
@@ -1265,6 +1238,22 @@ sr_disp_loc_worlds_earth = {
 	if = { limit = { global_var:sr_site_holder_daedalus ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_imbrium ?= this } add = 1 }
 }
+sr_disp_fc_tier_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_earth } value = var:sr_fc_tier_earth }
+}
+sr_disp_fc_os_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_earth } value = var:sr_fc_os_earth }
+}
+sr_disp_fc_ts_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_earth } value = var:sr_fc_ts_earth }
+}
+sr_disp_fc_loss_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_earth } value = var:sr_fc_loss_earth multiply = 100 }
+}
 sr_disp_loc_ours_inner = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_inner } value = var:sr_fl_at_inner }
@@ -1296,6 +1285,22 @@ sr_disp_loc_worlds_inner = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_venus ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_mercury ?= this } add = 1 }
+}
+sr_disp_fc_tier_inner = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_inner } value = var:sr_fc_tier_inner }
+}
+sr_disp_fc_os_inner = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_inner } value = var:sr_fc_os_inner }
+}
+sr_disp_fc_ts_inner = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_inner } value = var:sr_fc_ts_inner }
+}
+sr_disp_fc_loss_inner = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_inner } value = var:sr_fc_loss_inner multiply = 100 }
 }
 sr_disp_loc_ours_mars = {
 	value = 0
@@ -1332,6 +1337,22 @@ sr_disp_loc_worlds_mars = {
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } add = 1 }
 }
+sr_disp_fc_tier_mars = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_mars } value = var:sr_fc_tier_mars }
+}
+sr_disp_fc_os_mars = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_mars } value = var:sr_fc_os_mars }
+}
+sr_disp_fc_ts_mars = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_mars } value = var:sr_fc_ts_mars }
+}
+sr_disp_fc_loss_mars = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_mars } value = var:sr_fc_loss_mars multiply = 100 }
+}
 sr_disp_loc_ours_asteroids = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_asteroids } value = var:sr_fl_at_asteroids }
@@ -1366,6 +1387,22 @@ sr_disp_loc_worlds_asteroids = {
 	if = { limit = { global_var:sr_site_holder_psyche ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_pallas ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_hygiea ?= this } add = 1 }
+}
+sr_disp_fc_tier_asteroids = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_asteroids } value = var:sr_fc_tier_asteroids }
+}
+sr_disp_fc_os_asteroids = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_asteroids } value = var:sr_fc_os_asteroids }
+}
+sr_disp_fc_ts_asteroids = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_asteroids } value = var:sr_fc_ts_asteroids }
+}
+sr_disp_fc_loss_asteroids = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_asteroids } value = var:sr_fc_loss_asteroids multiply = 100 }
 }
 sr_disp_loc_ours_jupiter = {
 	value = 0
@@ -1403,6 +1440,22 @@ sr_disp_loc_worlds_jupiter = {
 	if = { limit = { global_var:sr_site_holder_himalia ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_amalthea ?= this } add = 1 }
 }
+sr_disp_fc_tier_jupiter = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_jupiter } value = var:sr_fc_tier_jupiter }
+}
+sr_disp_fc_os_jupiter = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_jupiter } value = var:sr_fc_os_jupiter }
+}
+sr_disp_fc_ts_jupiter = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_jupiter } value = var:sr_fc_ts_jupiter }
+}
+sr_disp_fc_loss_jupiter = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_jupiter } value = var:sr_fc_loss_jupiter multiply = 100 }
+}
 sr_disp_loc_ours_saturn = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_saturn } value = var:sr_fl_at_saturn }
@@ -1438,6 +1491,22 @@ sr_disp_loc_worlds_saturn = {
 	if = { limit = { global_var:sr_site_holder_mimas ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_iapetus ?= this } add = 1 }
 }
+sr_disp_fc_tier_saturn = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_saturn } value = var:sr_fc_tier_saturn }
+}
+sr_disp_fc_os_saturn = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_saturn } value = var:sr_fc_os_saturn }
+}
+sr_disp_fc_ts_saturn = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_saturn } value = var:sr_fc_ts_saturn }
+}
+sr_disp_fc_loss_saturn = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_saturn } value = var:sr_fc_loss_saturn multiply = 100 }
+}
 sr_disp_loc_ours_uranus = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_uranus } value = var:sr_fl_at_uranus }
@@ -1472,6 +1541,22 @@ sr_disp_loc_worlds_uranus = {
 	if = { limit = { global_var:sr_site_holder_miranda ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_ariel ?= this } add = 1 }
 }
+sr_disp_fc_tier_uranus = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_uranus } value = var:sr_fc_tier_uranus }
+}
+sr_disp_fc_os_uranus = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_uranus } value = var:sr_fc_os_uranus }
+}
+sr_disp_fc_ts_uranus = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_uranus } value = var:sr_fc_ts_uranus }
+}
+sr_disp_fc_loss_uranus = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_uranus } value = var:sr_fc_loss_uranus multiply = 100 }
+}
 sr_disp_loc_ours_neptune = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_at_neptune } value = var:sr_fl_at_neptune }
@@ -1503,6 +1588,22 @@ sr_disp_loc_worlds_neptune = {
 	value = 0
 	if = { limit = { global_var:sr_site_holder_triton ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_proteus ?= this } add = 1 }
+}
+sr_disp_fc_tier_neptune = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_neptune } value = var:sr_fc_tier_neptune }
+}
+sr_disp_fc_os_neptune = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_neptune } value = var:sr_fc_os_neptune }
+}
+sr_disp_fc_ts_neptune = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_neptune } value = var:sr_fc_ts_neptune }
+}
+sr_disp_fc_loss_neptune = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_neptune } value = var:sr_fc_loss_neptune multiply = 100 }
 }
 sr_disp_loc_ours_kuiper = {
 	value = 0
@@ -1538,6 +1639,22 @@ sr_disp_loc_worlds_kuiper = {
 	if = { limit = { global_var:sr_site_holder_makemake ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_haumea ?= this } add = 1 }
 	if = { limit = { global_var:sr_site_holder_sedna ?= this } add = 1 }
+}
+sr_disp_fc_tier_kuiper = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_tier_kuiper } value = var:sr_fc_tier_kuiper }
+}
+sr_disp_fc_os_kuiper = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_os_kuiper } value = var:sr_fc_os_kuiper }
+}
+sr_disp_fc_ts_kuiper = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_ts_kuiper } value = var:sr_fc_ts_kuiper }
+}
+sr_disp_fc_loss_kuiper = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_loss_kuiper } value = var:sr_fc_loss_kuiper multiply = 100 }
 }
 
 # Per location, the viewer's status there (6b): 1 a battle this month or last,

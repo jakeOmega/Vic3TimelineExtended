@@ -5113,7 +5113,8 @@ space_race_events.99 = {
 # clears it.
 
 # A hostile fleet is on its way to a location where we hold a colony
-# (sr_fl_dispatch_alert).
+# (sr_fl_dispatch_alert), with Space Command's battle forecast there
+# (2026-11-25 design § 5.4, sr_fc_note_alert).
 space_race_events.100 = {
 	type = country_event
 	placement = root
@@ -5135,6 +5136,10 @@ space_race_events.100 = {
 			limit = { has_variable = sr_fl_alert_by }
 			var:sr_fl_alert_by = { save_scope_as = sr_alert_power }
 		}
+		if = {
+			limit = { has_variable = sr_fl_alert_loc }
+			sr_fc_note_alert = { CODE = var:sr_fl_alert_loc }
+		}
 	}
 
 	option = {
@@ -5147,6 +5152,7 @@ space_race_events.100 = {
 		if = { limit = { has_variable = sr_fl_alert_loc } remove_variable = sr_fl_alert_loc }
 		if = { limit = { has_variable = sr_fl_alert_arrive } remove_variable = sr_fl_alert_arrive }
 		if = { limit = { has_variable = sr_fl_alert_by } remove_variable = sr_fl_alert_by }
+		sr_fc_clear_alert = yes
 	}
 }
 
@@ -5516,7 +5522,8 @@ space_race_events.112 = {
 # A hostile fleet bound for our Earth whose landing would tip the balance (UI
 # pass design § 9, sr_earth_alert_loud): we have no fleet at Earth and it isn't
 # blockaded already, or ours holds against theirs there now but not with what
-# is coming. sr_earth_alert_step sets
+# is coming; with Space Command's battle forecast at Earth (2026-11-25 design
+# § 5.4, sr_fc_note_alert). sr_earth_alert_step sets
 # sr_earth_alert_by (the fleet's owner) and sr_earth_alert_arrive (its landing
 # month) and sends it once a leg, one a month: the other loud fleets that month
 # are marked told, and get the feed notice if they had none. A hostile fleet
@@ -5542,6 +5549,7 @@ space_race_events.111 = {
 			limit = { has_variable = sr_earth_alert_by }
 			var:sr_earth_alert_by = { save_scope_as = sr_earth_alert_power }
 		}
+		sr_fc_note_alert = { CODE = 1 }
 	}
 
 	option = {
@@ -5553,6 +5561,7 @@ space_race_events.111 = {
 	after = {
 		if = { limit = { has_variable = sr_earth_alert_by } remove_variable = sr_earth_alert_by }
 		if = { limit = { has_variable = sr_earth_alert_arrive } remove_variable = sr_earth_alert_arrive }
+		sr_fc_clear_alert = yes
 	}
 }
 

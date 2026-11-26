@@ -8,9 +8,9 @@
 # 2026-11-25-space-fleet-clock-and-battles-design.md):
 #   - the battle, on each of the fleets' ticks, four a month (sr_battle_at,
 #     below: § 2): fleets of countries at war meet at a location and fight it
-#     out within the tick, Engage / Avoid, pace and ties deciding who fights
-#     whom, each fleet breaking for the nearest dock at half its strength; the
-#     ground-to-orbit batteries fire once a tick at Earth;
+#     out within the tick, stances (§ 5.1), pace and ties deciding who fights
+#     whom, each fleet breaking for the nearest other dock at the share its
+#     stance keeps; the ground-to-orbit batteries fire once a tick at Earth;
 #   - the siege, each month, from the global step after the 1st's battle
 #     (sr_combat_at, with LOC and CODE: § 2.6):
 #   0. every power's forces there by posture into country variables (sr_cb_*):
@@ -122,17 +122,20 @@ sr_combat_at = {
 # powers at war meet (sr_battle_at = { LOC CODE }):
 #   1. each power's units there join (sr_fl_<n>_bt_*; its Orbital Battlestation
 #      at Earth as sr_fl_bs_bt_*): in the battle, its pace, tied or not (§ 2.3:
-#      sr_bt_fleet_tied), Engage or Avoid (sr_fl_<n>_avoid), and the power's
+#      sr_bt_fleet_tied), its stance (sr_fl_<n>_stance, § 5.1: engaging or
+#      not, and the share it keeps before it breaks), and the power's
 #      strength before (sr_bt_before);
 #   2. at Earth, the ground-to-orbit batteries fire once (§ 2.5);
 #   3. the strength each unit brings (the break's measure) and each power's
-#      totals; an AI sets Engage or Avoid by its win test (§ 2.7);
+#      totals; an AI sets Engage or Avoid by its side's win test (§§ 2.7, 5.3);
 #   4. the battle (§ 2.4): steps of the square law per unit, each unit's fire
 #      shared among the hostile units it is paired with (sr_bt_paired) by their
-#      strength, until no pair is left or sr_bt_max_steps; a unit breaks at
-#      sr_bt_break_share of what it brought, or is destroyed below
-#      sr_fl_minimum_strength, and drops out (the battlestation never breaks);
-#   5. the broken fleets leave for the nearest dock they may (sr_fl_retreat_at);
+#      strength, until no pair is left or sr_bt_max_steps; a unit breaks once
+#      it keeps no more than its stance's share of what it brought, or is
+#      destroyed below sr_fl_minimum_strength, and drops out (the battlestation
+#      and a fleet fighting to the last never break);
+#   5. the broken fleets leave for the nearest dock they may, never the one
+#      they are at (sr_fl_retreat_at, § 5.2);
 #   6. the records: war support, the report (.101), the location's battle
 #      stamp, debris at Earth, the self-check; everything cleared, and the
 #      location records rebuilt.
@@ -337,7 +340,10 @@ sr_bt_each_unit = {
 }
 
 # 1. Slot N at the location (local_var:sr_cb_code), not all but destroyed,
-# joins: its pace, tied or not, Engage (a new fleet's) or Avoid.
+# joins: its pace, tied or not, whether it engages (every stance but Avoid),
+# and the share of what it brings it keeps before it breaks (sr_fl_<n>_bt_keep,
+# 2026-11-25 design § 5.1): Engage, a new fleet's, half; Avoid and Hit and Run
+# three quarters; Fight to the Last none, so it never breaks.
 sr_fl_bt_setup_at = {
 	if = {
 		limit = {
@@ -347,11 +353,7 @@ sr_fl_bt_setup_at = {
 		}
 		set_variable = { name = sr_fl_$N$_bt_in value = yes }
 		set_variable = { name = sr_fl_$N$_bt_pace value = sr_fl_$N$_pace }
-		set_variable = { name = sr_fl_$N$_bt_eng value = 1 }
-		if = {
-			limit = { has_variable = sr_fl_$N$_avoid }
-			set_variable = { name = sr_fl_$N$_bt_eng value = 0 }
-		}
+		sr_bt_set_stance = { N = $N$ }
 		set_variable = { name = sr_fl_$N$_bt_tied value = 0 }
 		if = {
 			limit = { sr_bt_fleet_tied = { N = $N$ } }
@@ -359,6 +361,26 @@ sr_fl_bt_setup_at = {
 		}
 		change_variable = { name = sr_bt_before add = sr_fl_$N$_strength }
 		change_local_variable = { name = sr_bt_units add = 1 }
+	}
+}
+
+# Slot N's stance into its battle figures: engaging or not, and the share it
+# keeps before it breaks (sr_fl_bt_setup_at; again after an AI's choice).
+sr_bt_set_stance = {
+	set_variable = { name = sr_fl_$N$_bt_eng value = 1 }
+	set_variable = { name = sr_fl_$N$_bt_keep value = { value = 1 subtract = sr_bt_break_share } }
+	if = {
+		limit = { sr_fl_$N$_stance_value = 1 }
+		set_variable = { name = sr_fl_$N$_bt_eng value = 0 }
+		set_variable = { name = sr_fl_$N$_bt_keep value = { value = 1 subtract = sr_bt_break_share_early } }
+	}
+	else_if = {
+		limit = { sr_fl_$N$_stance_value = 2 }
+		set_variable = { name = sr_fl_$N$_bt_keep value = { value = 1 subtract = sr_bt_break_share_early } }
+	}
+	else_if = {
+		limit = { sr_fl_$N$_stance_value = 4 }
+		set_variable = { name = sr_fl_$N$_bt_keep value = 0 }
 	}
 }
 
@@ -498,11 +520,35 @@ sr_bt_ready_bs = {
 	}
 }
 
-# Country scope, an AI power in the battle (§ 2.7): it engages when its
-# strength there x its fire is at least the same product for every power at
-# war with it there (x sr_fl_ai_engage_margin), its battlestation counted, and
-# avoids otherwise. The setting is its fleets' own, kept after the battle.
+# Country scope, an AI power in the battle (§§ 2.7, 5.3): it engages when its
+# side's strength there x its side's fire is at least the same product for
+# every power at war with it there (x sr_fl_ai_engage_margin), and avoids
+# otherwise. Its side is it and its friends there: each power in the battle at
+# peace with it and at war with a power there at war with it, whatever their
+# stances (a player's Avoid can still be caught). Battlestations count. The
+# stance is its fleets' own, kept after the battle: Engage or Avoid; the AI
+# leaves Hit and Run and Fight to the Last to players.
 sr_bt_ai_choose = {
+	save_temporary_scope_as = sr_bt_side
+	set_local_variable = { name = sr_bt_us_s value = var:sr_bt_s }
+	set_local_variable = { name = sr_bt_us_f value = var:sr_bt_f }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = {
+			has_variable = sr_bt_present
+			has_variable = sr_bt_s
+			NOT = { this = scope:sr_bt_side }
+			NOT = { has_war_with = scope:sr_bt_side }
+			any_in_global_list = {
+				variable = sr_fleet_powers
+				has_variable = sr_bt_present
+				has_war_with = scope:sr_bt_side
+				has_war_with = prev
+			}
+		}
+		change_local_variable = { name = sr_bt_us_s add = var:sr_bt_s }
+		change_local_variable = { name = sr_bt_us_f add = var:sr_bt_f }
+	}
 	set_local_variable = { name = sr_bt_them_s value = 0 }
 	set_local_variable = { name = sr_bt_them_f value = 0 }
 	every_in_global_list = {
@@ -515,7 +561,7 @@ sr_bt_ai_choose = {
 		change_local_variable = { name = sr_bt_them_s add = var:sr_bt_s }
 		change_local_variable = { name = sr_bt_them_f add = var:sr_bt_f }
 	}
-	set_local_variable = { name = sr_bt_ours value = { value = var:sr_bt_s multiply = var:sr_bt_f } }
+	set_local_variable = { name = sr_bt_ours value = { value = local_var:sr_bt_us_s multiply = local_var:sr_bt_us_f } }
 	set_local_variable = {
 		name = sr_bt_theirs
 		value = {
@@ -538,15 +584,14 @@ sr_fl_bt_ai_at = {
 		if = {
 			limit = { local_var:sr_bt_ai_eng = 1 }
 			if = {
-				limit = { has_variable = sr_fl_$N$_avoid }
-				remove_variable = sr_fl_$N$_avoid
+				limit = { has_variable = sr_fl_$N$_stance }
+				remove_variable = sr_fl_$N$_stance
 			}
-			set_variable = { name = sr_fl_$N$_bt_eng value = 1 }
 		}
 		else = {
-			set_variable = { name = sr_fl_$N$_avoid value = yes }
-			set_variable = { name = sr_fl_$N$_bt_eng value = 0 }
+			set_variable = { name = sr_fl_$N$_stance value = 1 }
 		}
+		sr_bt_set_stance = { N = $N$ }
 	}
 }
 
@@ -706,8 +751,9 @@ sr_bt_add_fire = {
 }
 
 # Slot N's loss taken; destroyed below sr_fl_minimum_strength, or broken at
-# sr_bt_break_share of what it brought: either way out of the battle, a broken
-# one marked to leave (sr_fl_retreat_at).
+# the share of what it brought its stance keeps (sr_fl_<n>_bt_keep; never at
+# Fight to the Last's none): either way out of the battle, a broken one marked
+# to leave (sr_fl_retreat_at).
 sr_fl_bt_apply_at = {
 	if = {
 		limit = {
@@ -728,8 +774,7 @@ sr_fl_bt_apply_at = {
 		else_if = {
 			limit = {
 				sr_fl_$N$_strength <= {
-					value = 1
-					subtract = sr_bt_break_share
+					value = var:sr_fl_$N$_bt_keep
 					multiply = var:sr_fl_$N$_bt_brought
 				}
 			}
@@ -891,14 +936,17 @@ sr_bt_self_check = {
 	}
 }
 
-# A fleet still paired at the ceiling (the battlestation, which never breaks,
-# doesn't count: review of #2069), and a fleet paired this step (sr_bt_step).
+# A fleet still paired at the ceiling that could have broken (the
+# battlestation and a fleet fighting to the last never break, and two that
+# don't can grind on past the ceiling: review of #2069, design § 5.1), and a
+# fleet paired this step (sr_bt_step).
 sr_fl_bt_left_at = {
 	if = {
 		limit = {
 			has_variable = sr_fl_$N$_bt_in
 			has_variable = sr_fl_$N$_bt_p
 			var:sr_fl_$N$_bt_p = 1
+			var:sr_fl_$N$_bt_keep > 0
 		}
 		change_local_variable = { name = sr_bt_pf add = var:sr_fl_$N$_bt_f }
 		change_local_variable = { name = sr_bt_ps add = var:sr_fl_$N$_bt_s }
@@ -940,16 +988,150 @@ sr_bt_end_bs = {
 	if = { limit = { has_variable = sr_fl_bs_bt_l } remove_variable = sr_fl_bs_bt_l }
 }
 
-# Slot N's Engage / Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui):
-# Avoid on, or off.
-sr_fl_toggle_avoid_at = {
+# Slot N's stance (2026-11-25 design § 5.1): sr_fl_<n>_stance 1 Avoid, 2 Hit
+# and Run, 4 Fight to the Last; Engage, a new fleet's, is none. Set to
+# scope:pick (sr_fleet_set_stance_sgui, the Fleets window's buttons), or to the
+# next in that order, Fight to the Last back to Avoid (sr_fleet_stance_sgui,
+# the card's button).
+sr_fl_set_stance_at = {
 	if = {
-		limit = { has_variable = sr_fl_$N$_avoid }
-		remove_variable = sr_fl_$N$_avoid
+		limit = { scope:pick = 1 }
+		set_variable = { name = sr_fl_$N$_stance value = 1 }
+	}
+	else_if = {
+		limit = { scope:pick = 2 }
+		set_variable = { name = sr_fl_$N$_stance value = 2 }
+	}
+	else_if = {
+		limit = { scope:pick = 4 }
+		set_variable = { name = sr_fl_$N$_stance value = 4 }
+	}
+	else_if = {
+		limit = { has_variable = sr_fl_$N$_stance }
+		remove_variable = sr_fl_$N$_stance
+	}
+}
+sr_fl_cycle_stance_at = {
+	if = {
+		limit = { sr_fl_$N$_stance_value = 1 }
+		set_variable = { name = sr_fl_$N$_stance value = 2 }
+	}
+	else_if = {
+		limit = { sr_fl_$N$_stance_value = 2 }
+		remove_variable = sr_fl_$N$_stance
+	}
+	else_if = {
+		limit = { sr_fl_$N$_stance_value = 3 }
+		set_variable = { name = sr_fl_$N$_stance value = 4 }
 	}
 	else = {
-		set_variable = { name = sr_fl_$N$_avoid value = yes }
+		set_variable = { name = sr_fl_$N$_stance value = 1 }
 	}
+}
+
+# ---- The battle forecast (2026-11-25 design § 5.4) ---------------------------------------------------
+# A fleet power at Earth: its Orbital Battlestation, while its state is held,
+# into the sums sr_fc_sums_earth builds (generated): theirs (SIDE t, local_var
+# sr_fl_ts and _tf) or ours (SIDE o, sr_fl_os and _of). Its strength is
+# sr_battlestation_full until a battle first sets it.
+sr_fc_bs_add = {
+	if = {
+		limit = { sr_battlestation_held = yes }
+		if = {
+			limit = { has_variable = sr_battlestation_strength }
+			change_local_variable = { name = sr_fl_$SIDE$s add = var:sr_battlestation_strength }
+		}
+		else = {
+			change_local_variable = { name = sr_fl_$SIDE$s add = sr_battlestation_full }
+		}
+		change_local_variable = { name = sr_fl_$SIDE$f add = sr_battlestation_fire }
+	}
+}
+
+# The verdict from the sums (local_var:sr_fl_ts, _tf, _os, _of): the square
+# law's ratio of ours to theirs, strength x fire (local_var:sr_fc_r);
+# local_var:sr_fc_tier 0 nothing of theirs, 1 a clear win (ours at least
+# sr_fc_clear times theirs), 2 a costly win, 3 a defeat, 4 a rout (theirs at
+# least sr_fc_clear times ours, or nothing of ours); and local_var:sr_fc_loss,
+# the share of its strength the winner loses while the loser loses half:
+# 1 - sqrt(1 - sr_fc_break_loss / ratio), by the square law with both sides
+# engaging. Country scope (te_set_sqrt's variable is set and removed here).
+sr_fc_judge = {
+	set_local_variable = { name = sr_fc_tier value = 0 }
+	set_local_variable = { name = sr_fc_loss value = 0 }
+	set_local_variable = { name = sr_fc_r value = 0 }
+	if = {
+		limit = {
+			local_var:sr_fl_ts > 0
+			local_var:sr_fl_tf > 0
+		}
+		if = {
+			limit = {
+				local_var:sr_fl_os > 0
+				local_var:sr_fl_of > 0
+			}
+			set_local_variable = {
+				name = sr_fc_r
+				value = {
+					value = local_var:sr_fl_os
+					divide = local_var:sr_fl_ts
+					multiply = { value = local_var:sr_fl_of divide = local_var:sr_fl_tf }
+				}
+			}
+		}
+		if = {
+			limit = { local_var:sr_fc_r >= 1 }
+			set_local_variable = { name = sr_fc_tier value = 2 }
+			if = {
+				limit = { local_var:sr_fc_r >= sr_fc_clear }
+				set_local_variable = { name = sr_fc_tier value = 1 }
+			}
+			set_local_variable = {
+				name = sr_fc_sq
+				value = { value = 1 subtract = { value = sr_fc_break_loss divide = local_var:sr_fc_r } min = 0 }
+			}
+		}
+		else = {
+			set_local_variable = { name = sr_fc_tier value = 3 }
+			if = {
+				limit = { local_var:sr_fc_r <= { value = 1 divide = sr_fc_clear } }
+				set_local_variable = { name = sr_fc_tier value = 4 }
+			}
+			set_local_variable = {
+				name = sr_fc_sq
+				value = { value = 1 subtract = { value = sr_fc_break_loss multiply = local_var:sr_fc_r } min = 0 }
+			}
+		}
+		te_set_sqrt = { IN = local_var:sr_fc_sq OUT = sr_fc_rest }
+		if = {
+			limit = { has_variable = sr_fc_rest }
+			set_local_variable = { name = sr_fc_loss value = { value = 1 subtract = var:sr_fc_rest } }
+			remove_variable = sr_fc_rest
+		}
+	}
+}
+
+# The alerts' forecast (space_race_events.100 and .111, immediate): at the
+# location of code CODE, ours there and on our way against theirs, kept for
+# the text (sr_fc_alert_tier: the verdict, or 5 with nothing of ours to meet
+# them; the after block clears it, sr_fc_clear_alert).
+sr_fc_note_alert = {
+	set_local_variable = { name = sr_fc_at value = $CODE$ }
+	sr_fc_at_code = yes
+	set_variable = { name = sr_fc_alert_tier value = local_var:sr_fc_tier }
+	if = {
+		limit = {
+			local_var:sr_fc_tier = 4
+			OR = {
+				local_var:sr_fl_os <= 0
+				local_var:sr_fl_of <= 0
+			}
+		}
+		set_variable = { name = sr_fc_alert_tier value = 5 }
+	}
+}
+sr_fc_clear_alert = {
+	if = { limit = { has_variable = sr_fc_alert_tier } remove_variable = sr_fc_alert_tier }
 }
 
 # ---- One slot's part ($N$; the power's scope) ---------------------------------------------------

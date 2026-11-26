@@ -7022,15 +7022,15 @@ types space_race_widget_types
 		}
 	}
 
-	### Engage / Avoid (2026-11-25 design § 2.9): a fleet's setting, which
-	### decides whom it fights (§ 2.3). Its word is the setting in force, the
-	### click switches it, the hover gives the rule. 80 wide, as
-	### te_sr_fl_button, whose icon and label sit the same.
-	type te_sr_avoid_button = button {
+	### A fleet's stance (2026-11-25 design §§ 2.9, 5.1), on its card: whom it
+	### fights and when it breaks off. Its word is the stance in force, the
+	### click sets the next, the hover gives both. 156 wide, for Fight to the
+	### Last; icon and label sit as te_sr_fl_button's.
+	type te_sr_stance_button = button {
 		using = default_button_action
-		size = { 80 26 }
+		size = { 156 26 }
 		parentanchor = vcenter
-		block "av_btn" {}
+		block "sb_btn" {}
 
 		icon = {
 			size = { 16 16 }
@@ -7043,22 +7043,88 @@ types space_race_widget_types
 			parentanchor = left|vcenter
 			align = left|nobaseline
 			autoresize = yes
-			max_width = 58
+			max_width = 132
 			elide = right
 			using = te_sr_fontsize_row
-			text = "je_space_race_widget_fl_engage"
-			block "av_engage" {}
+			text = "je_space_race_widget_fl_stance_1"
+			block "sb_1" {}
 		}
 		textbox = {
 			position = { 21 0 }
 			parentanchor = left|vcenter
 			align = left|nobaseline
 			autoresize = yes
-			max_width = 58
+			max_width = 132
 			elide = right
 			using = te_sr_fontsize_row
-			text = "je_space_race_widget_fl_avoid"
-			block "av_avoid" {}
+			text = "je_space_race_widget_fl_stance_2"
+			block "sb_2" {}
+		}
+		textbox = {
+			position = { 21 0 }
+			parentanchor = left|vcenter
+			align = left|nobaseline
+			autoresize = yes
+			max_width = 132
+			elide = right
+			using = te_sr_fontsize_row
+			text = "je_space_race_widget_fl_stance_3"
+			block "sb_3" {}
+		}
+		textbox = {
+			position = { 21 0 }
+			parentanchor = left|vcenter
+			align = left|nobaseline
+			autoresize = yes
+			max_width = 132
+			elide = right
+			using = te_sr_fontsize_row
+			text = "je_space_race_widget_fl_stance_4"
+			block "sb_4" {}
+		}
+	}
+
+	### One stance on a fleet's page in the Fleets window (design § 5.1): its
+	### word, two to the line beside the caption (104 + 4 + 2 × 180 + 4 = 472).
+	### The button while the stance isn't the fleet's; the stance in force in
+	### vanilla's selected-tab look, as te_sr_posture_choice's, with its own
+	### hover (what the stance does).
+	type te_sr_stance_choice = widget {
+		size = { 180 26 }
+		parentanchor = vcenter
+
+		button = {
+			using = default_button_action
+			size = { 100% 100% }
+			block "sc_shown" {}
+			block "sc_action" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 172
+				elide = right
+				using = te_sr_fontsize_row
+				block "sc_label" {}
+			}
+		}
+		icon = {
+			using = selected_tabs
+			size = { 100% 100% }
+			block "sc_selected" {}
+			block "sc_held_tooltip" {}
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 172
+				elide = right
+				using = te_sr_fontsize_row
+				default_format = "#variable"
+				block "sc_label" {}
+			}
 		}
 	}
 
@@ -7470,7 +7536,7 @@ types space_race_widget_types
 			block "fl_transit_visible" {}
 
 			widget = {
-				size = { 190 18 }
+				size = { 150 18 }
 				parentanchor = vcenter
 
 				default_progressbar_horizontal = {
@@ -7502,32 +7568,38 @@ types space_race_widget_types
 					}
 				}
 			}
-			### "Lands in N weeks", 190 wide for Engage / Avoid's 80 beside it:
-			### 190 + 4 + 190 + 4 + 80 = 468, the card's width.
+			### "Lands in N weeks", 150 wide for the stance's 156 beside it:
+			### 150 + 4 + 150 + 4 + 156 = 464, in the card's 468.
 			widget = {
-				size = { 190 24 }
+				size = { 150 24 }
 				parentanchor = vcenter
 
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 190
+					max_width = 150
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
 					block "fl_transit" {}
 				}
 			}
-			### Engage / Avoid in flight: it decides whom the fleet fights on landing.
-			te_sr_avoid_button = {
-				blockoverride "av_btn" {
-					block "fl_avoid_button" {}
+			### The stance in flight: whom the fleet fights on landing.
+			te_sr_stance_button = {
+				blockoverride "sb_btn" {
+					block "fl_stance_button" {}
 				}
-				blockoverride "av_engage" {
-					block "fl_avoid_off_visible" {}
+				blockoverride "sb_1" {
+					block "fl_stance_1_visible" {}
 				}
-				blockoverride "av_avoid" {
-					block "fl_avoid_on_visible" {}
+				blockoverride "sb_2" {
+					block "fl_stance_2_visible" {}
+				}
+				blockoverride "sb_3" {
+					block "fl_stance_3_visible" {}
+				}
+				blockoverride "sb_4" {
+					block "fl_stance_4_visible" {}
 				}
 			}
 		}
@@ -7943,15 +8015,21 @@ types space_race_widget_types
 							block "fl_destroy_on_visible" {}
 						}
 					}
-					te_sr_avoid_button = {
-						blockoverride "av_btn" {
-							block "fl_avoid_button" {}
+					te_sr_stance_button = {
+						blockoverride "sb_btn" {
+							block "fl_stance_button" {}
 						}
-						blockoverride "av_engage" {
-							block "fl_avoid_off_visible" {}
+						blockoverride "sb_1" {
+							block "fl_stance_1_visible" {}
 						}
-						blockoverride "av_avoid" {
-							block "fl_avoid_on_visible" {}
+						blockoverride "sb_2" {
+							block "fl_stance_2_visible" {}
+						}
+						blockoverride "sb_3" {
+							block "fl_stance_3_visible" {}
+						}
+						blockoverride "sb_4" {
+							block "fl_stance_4_visible" {}
 						}
 					}
 				}
@@ -7976,10 +8054,10 @@ types space_race_widget_types
 		blockoverride "popup_title" {
 			text = "je_space_race_widget_dp_title"
 		}
-		### The rows' 656, plus the window's margins (2 × 35), the list's
-		### (2 × 10) and a scrollbar: 784.
+		### The rows' 756, plus the window's margins (2 × 35), the list's
+		### (2 × 10) and a scrollbar: 884.
 		blockoverride "popup_size" {
-			size = { 784 600 }
+			size = { 884 600 }
 		}
 		blockoverride "popup_list" {
 			flowcontainer = {
@@ -8013,7 +8091,7 @@ types space_race_widget_types
 	type te_sr_dest_slot = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		minimumsize = { 656 -1 }
+		minimumsize = { 756 -1 }
 		spacing = 2
 		block "dp_visible" {}
 
@@ -8216,6 +8294,14 @@ types space_race_widget_types
 			text = "je_space_race_widget_dp_col_inbound"
 			tooltip = "je_space_race_widget_dp_col_inbound_tt"
 		}
+		textbox = {
+			size = { 96 20 }
+			align = left|nobaseline
+			using = te_sr_fontsize_row
+			elide = right
+			text = "je_space_race_widget_dp_col_battle"
+			tooltip = "je_space_race_widget_dp_col_battle_tt"
+		}
 	}
 
 	### One location in a fleet's destination popup: its name, the leg's weeks
@@ -8225,11 +8311,12 @@ types space_race_widget_types
 	### UI pass design § 4; and blank for a fleet at a torch or antimatter pace
 	### (sr_fl_<n>_pace >= 2), which leaves in any month, so the cell would read
 	### as a wait it doesn't have), our worlds there, the strength there and on its way
-	### of countries at war with us, and Choose, greyed with the reason where
+	### of countries at war with us, the battle forecast, and Choose, greyed with the reason where
 	### the fleet can't choose; the destination already chosen reads Chosen in
 	### vanilla's selected-tab look (the Strategic Reserve's policy choice).
-	### Picking closes the popup; Go on the fleet's row sends it. 146 + 60 + 60 +
-	### 116 + 44 + 56 + 66 + 72 + 7 × 4 + 2 × 4 = 656.
+	### Picking closes the popup; Go on the fleet's row sends it. Between the
+	### strength on its way and Choose, the battle forecast. 146 + 60 + 60 +
+	### 116 + 44 + 56 + 66 + 96 + 72 + 8 × 4 + 2 × 4 = 756.
 	type te_sr_dest_row = flowcontainer {
 		direction = horizontal
 		ignoreinvisible = yes
@@ -8354,6 +8441,65 @@ types space_race_widget_types
 				elide = right
 				block "dr_inbound" {}
 			}
+		}
+		### The battle forecast with this fleet there (2026-11-25 design
+		### § 5.4): the verdict, kept when the popup opened; the hover gives
+		### the sums and the loss. Blank with no enemy fleet there or on its way.
+		widget = {
+			size = { 96 24 }
+			parentanchor = vcenter
+			block "dr_battle_tooltip" {}
+
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 96
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fc_tier_0"
+					block "dr_battle_0_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 96
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fc_tier_1"
+					block "dr_battle_1_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 96
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fc_tier_2"
+					block "dr_battle_2_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 96
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fc_tier_3"
+					block "dr_battle_3_visible" {}
+				}
+				textbox = {
+					parentanchor = left|vcenter
+					autoresize = yes
+					max_width = 96
+					align = left|nobaseline
+					using = te_sr_fontsize_row
+					elide = right
+					text = "je_space_race_widget_fc_tier_4"
+					block "dr_battle_4_visible" {}
+				}
 		}
 		widget = {
 			size = { 72 24 }
@@ -10937,8 +11083,10 @@ types space_race_widget_types
 					text = "je_space_race_widget_fw_in_transit"
 					block "fl_transit_visible" {}
 				}
-				### Engage or Avoid (2026-11-25 design § 2.9), at a location and in
-				### flight: whom the fleet fights.
+				### The stance (2026-11-25 design §§ 2.9, 5.1), at a location and in
+				### flight: whom the fleet fights and when it breaks off. Two to
+				### the line, Avoid and Hit and Run, then Engage and Fight to the
+				### Last, the one in force lit.
 				flowcontainer = {
 					direction = horizontal
 					ignoreinvisible = yes
@@ -10949,15 +11097,90 @@ types space_race_widget_types
 							text = "je_space_race_widget_fw_battle"
 						}
 					}
-					te_sr_avoid_button = {
-						blockoverride "av_btn" {
-							block "fl_avoid_button" {}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 4
+
+						flowcontainer = {
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+
+							te_sr_stance_choice = {
+								blockoverride "sc_shown" {
+									block "fp_stance_1_choice" {}
+								}
+								blockoverride "sc_selected" {
+									block "fp_stance_1_selected" {}
+								}
+								blockoverride "sc_held_tooltip" {
+									tooltip = "sr_fl_stance_1_held_tt"
+								}
+								blockoverride "sc_action" {
+									block "fp_stance_1_button" {}
+								}
+								blockoverride "sc_label" {
+									text = "je_space_race_widget_fl_stance_1"
+								}
+							}
+							te_sr_stance_choice = {
+								blockoverride "sc_shown" {
+									block "fp_stance_2_choice" {}
+								}
+								blockoverride "sc_selected" {
+									block "fp_stance_2_selected" {}
+								}
+								blockoverride "sc_held_tooltip" {
+									tooltip = "sr_fl_stance_2_held_tt"
+								}
+								blockoverride "sc_action" {
+									block "fp_stance_2_button" {}
+								}
+								blockoverride "sc_label" {
+									text = "je_space_race_widget_fl_stance_2"
+								}
+							}
 						}
-						blockoverride "av_engage" {
-							block "fl_avoid_off_visible" {}
-						}
-						blockoverride "av_avoid" {
-							block "fl_avoid_on_visible" {}
+						flowcontainer = {
+							direction = horizontal
+							ignoreinvisible = yes
+							spacing = 4
+
+							te_sr_stance_choice = {
+								blockoverride "sc_shown" {
+									block "fp_stance_3_choice" {}
+								}
+								blockoverride "sc_selected" {
+									block "fp_stance_3_selected" {}
+								}
+								blockoverride "sc_held_tooltip" {
+									tooltip = "sr_fl_stance_3_held_tt"
+								}
+								blockoverride "sc_action" {
+									block "fp_stance_3_button" {}
+								}
+								blockoverride "sc_label" {
+									text = "je_space_race_widget_fl_stance_3"
+								}
+							}
+							te_sr_stance_choice = {
+								blockoverride "sc_shown" {
+									block "fp_stance_4_choice" {}
+								}
+								blockoverride "sc_selected" {
+									block "fp_stance_4_selected" {}
+								}
+								blockoverride "sc_held_tooltip" {
+									tooltip = "sr_fl_stance_4_held_tt"
+								}
+								blockoverride "sc_action" {
+									block "fp_stance_4_button" {}
+								}
+								blockoverride "sc_label" {
+									text = "je_space_race_widget_fl_stance_4"
+								}
+							}
 						}
 					}
 				}

@@ -10,16 +10,17 @@
 # Transfer below). Full Colonies only;
 # player-only: the AI orders its fleets through the same effects from its
 # monthly review (sr_fl_ai_review). Each is_valid is the trigger its effect's
-# dispatcher checks (sr_fl_<n>_can_go and the rest, generated). Two have no
-# effect: sr_fleet_pick_sgui and sr_fleet_target_sgui, the gates of the buttons
-# that open the destination and target popups, read only for the buttons'
-# greyed state and reason (never executed).
+# dispatcher checks (sr_fl_<n>_can_go and the rest, generated). One has no
+# effect: sr_fleet_target_sgui, the gate of the button that opens the target
+# popup, read only for the button's greyed state and reason (never executed).
+# sr_fleet_pick_sgui, the destination button's gate, runs only the battle
+# forecast the popup reads.
 # ============================================================================
 
 # A fleet's destination button's gate. The button opens the slot's destination
 # popup (UI pass design § 4, te_popup sr_dest_<n>) and reads only this
 # is_valid: it greys, with this reason, while the fleet is not at a location.
-# No effect: never executed (the old step to the next location went, #1298).
+# Its effect, run by the click, keeps the battle forecast (below).
 sr_fleet_pick_sgui = {
 	scope = country
 	saved_scopes = { op }
@@ -37,6 +38,15 @@ sr_fleet_pick_sgui = {
 		custom_tooltip = {
 			text = sr_fl_not_at_location_tt
 			sr_fl_op_check = { TEST = at_location }
+		}
+	}
+
+	# The click keeps the fleet's battle forecast at every other location for
+	# the popup's Battle column (2026-11-25 design § 5.4; sr_fl_fc_slot_at).
+	# The button's hover is its own key, not this.
+	effect = {
+		hidden_effect = {
+			sr_fl_by_op = { DO = fc_slot }
 		}
 	}
 }
@@ -827,13 +837,17 @@ sr_fleet_destroy_sgui = {
 	}
 }
 
-# Engage / Avoid (2026-11-25 design §§ 2.3, 2.9): scope:op the slot. Set to
-# Avoid, a fleet fights only a fleet that engages it and is at least as fast,
-# or one that engages it where it is tied (a colony of ours there, Earth,
-# closing in, interdicting, blockading); set to Engage, every enemy fleet there
-# it can catch. Like a posture, only with a Space Command (UI pass design
-# § 10); in flight as well as at a location. It takes effect at the next tick.
-sr_fleet_avoid_sgui = {
+# A fleet's stance (2026-11-25 design §§ 2.3, 2.9, 5.1): scope:op the slot.
+# Whom it fights and when it breaks off: Avoid fights only a fleet that
+# catches it, the others every enemy fleet there they can catch; Avoid and Hit
+# and Run break off at a quarter lost, Engage at half, Fight to the Last never.
+# Like a posture, only with a Space Command (UI pass design § 10); in flight as
+# well as at a location. It takes effect at the next tick.
+#
+# The card's button: its word the stance in force, the click the next (Avoid,
+# Hit and Run, Engage, Fight to the Last, then Avoid again); its hover says
+# both.
+sr_fleet_stance_sgui = {
 	scope = country
 	saved_scopes = { op }
 
@@ -855,14 +869,70 @@ sr_fleet_avoid_sgui = {
 
 	effect = {
 		if = {
-			limit = { sr_fl_op_check = { TEST = avoiding } }
-			custom_tooltip = sr_fl_avoid_off_tt
+			limit = { sr_fl_op_check = { TEST = stance_1 } }
+			custom_tooltip = sr_fl_stance_cycle_1_tt
+		}
+		else_if = {
+			limit = { sr_fl_op_check = { TEST = stance_2 } }
+			custom_tooltip = sr_fl_stance_cycle_2_tt
+		}
+		else_if = {
+			limit = { sr_fl_op_check = { TEST = stance_4 } }
+			custom_tooltip = sr_fl_stance_cycle_4_tt
 		}
 		else = {
-			custom_tooltip = sr_fl_avoid_on_tt
+			custom_tooltip = sr_fl_stance_cycle_3_tt
 		}
 		hidden_effect = {
-			sr_fl_by_op = { DO = toggle_avoid }
+			sr_fl_by_op = { DO = cycle_stance }
+		}
+	}
+}
+
+# The Fleets window's stance buttons: scope:pick the stance (1 Avoid, 2 Hit and
+# Run, 3 Engage, 4 Fight to the Last). The one in force is lit, not a button.
+sr_fleet_set_stance_sgui = {
+	scope = country
+	saved_scopes = { op pick }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		hidden_trigger = {
+			NOT = { sr_fl_op_check = { TEST = pick_is_stance } }
+		}
+		custom_tooltip = {
+			text = sr_fl_req_space_command_tt
+			sr_sc_operational = yes
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:pick = 1 }
+			custom_tooltip = sr_fl_stance_1_tt
+		}
+		else_if = {
+			limit = { scope:pick = 2 }
+			custom_tooltip = sr_fl_stance_2_tt
+		}
+		else_if = {
+			limit = { scope:pick = 3 }
+			custom_tooltip = sr_fl_stance_3_tt
+		}
+		else_if = {
+			limit = { scope:pick = 4 }
+			custom_tooltip = sr_fl_stance_4_tt
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = set_stance }
 		}
 	}
 }
