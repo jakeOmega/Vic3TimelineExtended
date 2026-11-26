@@ -544,11 +544,41 @@ class BannerTests(unittest.TestCase):
         Image.fromarray(mask, "RGBA").save(path)
         gw, gh = spec["gen_size"]
         out = np.asarray(icon_render.compose_banner(Image.new("RGB", (gw, gh), (200, 100, 50)),
-                                                    dict(spec, mask=str(path))))
+                                                    dict(spec, mask=str(path), alpha=1.0)))   # the mask alone
         self.assertEqual(out.shape, (H, W, 4))
         self.assertTrue((out[:, :W // 2 - 2, 3] == 0).all())               # the left fades out
         self.assertTrue((out[:, W // 2 + 2:, 3] == 255).all())
         self.assertEqual(tuple(out[H // 2, W - 5, :3]), (200, 100, 50))      # the picture itself is untouched
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_a_banner_s_alpha_scales_its_opacity_and_keeps_its_fade(self):
+        import icon_render
+        spec = ip.CATEGORIES["mobilization_group"]
+        W, H = spec["size"]
+        mask = np.zeros((H, W, 4), dtype=np.uint8)
+        mask[:, W // 2:, 3] = 255                                          # clear left, opaque right
+        path = Path(tempfile.mkdtemp()) / "mask.png"
+        Image.fromarray(mask, "RGBA").save(path)
+        raw = Image.new("RGB", spec["gen_size"], (200, 100, 50))
+        plain = dict(spec, mask=str(path))
+        plain.pop("alpha", None)
+        faded = np.asarray(icon_render.compose_banner(raw, dict(plain, alpha=0.4)))
+        self.assertTrue((faded[:, :W // 2 - 2, 3] == 0).all())             # the fade's clear part stays clear
+        self.assertTrue((faded[:, W // 2 + 2:, 3] == 102).all())           # 0.4 of the opaque part
+        self.assertEqual(tuple(faded[H // 2, W - 5, :3]), (200, 100, 50))  # the colour is untouched
+        same = np.asarray(icon_render.compose_banner(raw, plain))
+        self.assertTrue((same[:, W // 2 + 2:, 3] == 255).all())            # no alpha, no change
+
+    @unittest.skipIf(icon_dds is None, "Pillow is not installed")
+    def test_the_training_background_is_drawn_at_the_specs_alpha(self):
+        """The raw render is not in the repo, so the committed DDS had its alpha scaled in place (2026-11-26);
+        this holds the file to the spec's `alpha`, so a re-render and the file agree."""
+        spec = ip.CATEGORIES["mobilization_group"]
+        path = Path(MOD_ROOT, ip.icon_path("mobilization_group", "training"))
+        if not path.is_file():
+            self.skipTest("gfx/ is not checked out")
+        alpha = np.asarray(Image.open(path).convert("RGBA"))[..., 3]
+        self.assertAlmostEqual(alpha.max() / 255, spec["alpha"], delta=0.01)
 
     def test_the_mobilization_groups_shape(self):
         spec = ip.CATEGORIES["mobilization_group"]

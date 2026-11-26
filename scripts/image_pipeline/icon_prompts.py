@@ -638,10 +638,12 @@ CATEGORIES = {
     # does the fading, so the brushed edge is vanilla's own. Rendered wide (1792 x 512), the
     # scene placed on the right, then graded toward vanilla's six: FLUX painted Training's brighter
     # and more photographic than their dim, muted scenes. DXT5 (BC3) through texconv, as vanilla's are.
+    # `alpha` scales the mask's alpha after grading: the group's toggles sit over the picture, and at full
+    # strength it overwhelmed them (owner, 2026-11-26); 0.4 reads as faint as vanilla's.
     "mobilization_group": dict(
         folder="mobilization_options", root="gfx/interface/illustrations", size=(780, 224),
         gen_size=(1792, 512), mode="banner", mask="mobilisation_support_equipment.dds", grade_strength=0.8,
-        dds_format="BC3_UNORM",
+        alpha=0.4, dds_format="BC3_UNORM",
         entity_dir="common/mobilization_option_groups", field="background",
         style="{subject}, the scene filling the right half of a wide picture, oil painting, historical "
               "realism, muted earthy colours, soft diffuse light, visible brushwork"),
