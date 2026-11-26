@@ -139,6 +139,10 @@
   "en": "Antimatter Facility Construction Site",
   "es": "Instalación de antimateria en construcción"
  },
+ "building_antimatter_sub_any_slot_tt": {
+  "en": "An [concept_antimatter_facility] slot that no built Antimatter Engine or Antimatter Warhead Plant takes: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country once levels [concept_under_construction] count as taken",
+  "es": "Una plaza de [concept_antimatter_facility|l] que no ocupa ningún Motor de antimateria ni Planta de ojivas de antimateria construidos: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! libres en todo el país una vez que los niveles [concept_under_construction|l] se cuentan como ocupados"
+ },
  "building_antimatter_sub_slots_tt": {
   "en": "A free [concept_antimatter_facility] slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
   "es": "Un espacio libre de [concept_antimatter_facility|l]: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! libres en todo el país (los niveles [concept_under_construction|l] cuentan como ocupados)"
@@ -494,6 +498,10 @@
  "building_employment_spacers_add": {
   "en": "$spacers$ Per Level",
   "es": "$spacers$ por nivel"
+ },
+ "building_employment_spacers_add_desc": {
+  "en": "Modifies the amount of $spacers$ a building can hire per level",
+  "es": "Modifica la cantidad de $spacers$ que un edificio puede contratar por nivel"
  },
  "building_eni_palazzo": {
   "en": "Palazzo ENI",
@@ -968,8 +976,8 @@
   "es": "Alcance del cable submarino"
  },
  "building_grid_undersea_cable_range_add_desc": {
-  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, landing on a coast that touches both. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
-  "es": "Cuántos [Concept('concept_sea_node', '$concept_sea_nodes|q$')|l] puede cruzar el cable de un $building_grid_hvdc_interconnector$. Con 1, el cable llega a los estados costeros de un $concept_sea_node$ que toque este estado. Cada punto más cruza un $concept_sea_node$ más, hasta llegar a una costa que toque ambos. Solo cuenta en un $building_grid_hvdc_interconnector$: la tecnología alarga un cable, pero no tiende ninguno."
+  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, open ocean included. No cable crosses the $STATE_SOUTHERN_OCEAN_01$. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
+  "es": "Cuántos [Concept('concept_sea_node', '$concept_sea_nodes|q$')|l] puede cruzar el cable de un $building_grid_hvdc_interconnector$. Con 1, el cable llega a los estados costeros de un $concept_sea_node$ que toque este estado. Cada punto más cruza un $concept_sea_node$ más, océano abierto incluido. Ningún cable cruza el $STATE_SOUTHERN_OCEAN_01$. Solo cuenta en un $building_grid_hvdc_interconnector$: la tecnología alarga un cable, pero no tiende ninguno."
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -2079,6 +2087,10 @@
   "en": "Solar Power Receiver",
   "es": "Receptor de energía solar"
  },
+ "building_solar_receiver_any_slot_tt": {
+  "en": "An Orbital Solar Collector slot that no built Solar Power Receiver takes: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country once levels [concept_under_construction] count as taken",
+  "es": "Una plaza de Colector solar orbital que no ocupa ningún Receptor de energía solar construido: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! libres en todo el país una vez que los niveles [concept_under_construction|l] se cuentan como ocupados"
+ },
  "building_solar_receiver_slots_tt": {
   "en": "A free Solar Receiver slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
   "es": "Un espacio libre de receptor de energía solar: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! libres en todo el país (los niveles [concept_under_construction|l] cuentan como ocupados)"
@@ -2114,6 +2126,10 @@
  "building_space_forces_base": {
   "en": "Space Forces Base",
   "es": "Base de Fuerzas Espaciales"
+ },
+ "building_space_forces_base_desc": {
+  "en": "Barracks and training halls for the people who crew our warships in space and fight as their marines. Each staffed level trains #v 1,000#! [concept_sr_space_personnel]. A point of fleet strength needs #v 100#! of them to crew it, #v 50#! with $artificial_intelligence$, and a marine battalion, or a level of Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center at a colony of ours, #v 1,000#!. When ships are destroyed or marines lost, the base's $spacers_no_icon$ die with them.",
+  "es": "Cuarteles y salas de instrucción para las personas que dotan nuestras naves de guerra en el espacio y combaten como sus infantes de marina. Cada nivel con personal adiestra a #v 1 000#! de [concept_sr_space_personnel|l]. Un punto de fuerza de la flota necesita #v 100#! de ellos para dotarlo, #v 50#! con $artificial_intelligence$, y un batallón de infantes de marina, o un nivel de Puerto espacial, Defensas, Sitio clandestino, Campo de entrenamiento o Centro de mando nuclear en una colonia nuestra, #v 1 000#!. Cuando se destruyen naves o se pierden infantes de marina, mueren con ellos los $spacers_no_icon$ de la base."
  },
  "building_space_mine": {
   "en": "Extraplanetary Base",
