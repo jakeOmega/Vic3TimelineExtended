@@ -484,9 +484,24 @@ class ColoniesTest(unittest.TestCase):
                     self.assertRegex(body, rf"limit = \{{ has_variable = {mod}_held \}} value = 1")
                     self.assertEqual(self.loc[f"je_space_race_widget_colony_{sx}_tt"],
                                      f"#header ${mod}$#!\\n[GetStaticModifier('{mod}').GetDesc]")
-        held = _strip_comments(_block(self.values, "sr_disp_colonies_held"))
-        self.assertEqual(sorted(re.findall(r"add = sr_disp_colony_(\w+)", held)),
-                         sorted(m[len("sr_colony_"):] for m in self.mods))
+
+    def test_colonies_held_counts_worlds_not_specializations(self):
+        """A module raises a world's second specialization too, so both of its
+        <modifier>_held records can be set; summing the 80 per-specialization
+        values read "41 of 40 held" (#2054). The figure the overview's Colonies
+        cell, Colonies Held and the Colonies window's count read adds 1 for each
+        world where either of its two is held, so it can't pass
+        sr_sites_world_count."""
+        self.assertNotRegex(self.values, r"(?m)^sr_disp_colonies_held = \{",
+                            "a hand-written copy would shadow or be dropped for the generated one")
+        held = _strip_comments(_block(_read(SITES_DISPLAY), "sr_disp_colonies_held"))
+        self.assertNotIn("sr_disp_colony_", held, "the figure must not sum specializations")
+        worlds = re.findall(r"limit = \{ OR = \{ has_variable = (\w+)_held has_variable = (\w+)_held \} \} add = 1", held)
+        self.assertEqual(len(re.findall(r"add = ", held)), len(worlds), "a term that is not one world's")
+        self.assertEqual(worlds, [gss.spec_modifiers(s) for s in gss.SITES], "one term a world, in the table's order")
+        self.assertEqual(len(worlds), 40)
+        # the two each world reads are the two the events grant
+        self.assertEqual(sorted(m for pair in worlds for m in pair), sorted(self.mods))
 
     def test_the_section_is_solar_colonizations_alone(self):
         self.assertEqual(len(re.findall(r"te_sr_sec_colonies = \{\}", self.gui)), 1)
