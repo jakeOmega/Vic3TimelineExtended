@@ -244,16 +244,81 @@ sr_icpt_interdicts_at = {
 	is_target_in_variable_list = { name = sr_icpt_$LOC$ target = scope:sr_icpt_victim }
 }
 
-# Country scope, a power at the location being fought over (its sr_cb_* record
-# standing). It fought this month: it lost strength, or its enemies did.
-sr_cb_fought = {
-	has_variable = sr_cb_present
+# Country scope, a power in the battle at the location (sr_bt_present, while
+# sr_battle_at runs). It fought this tick: it lost strength, or its enemies
+# did (to its fleets, its Orbital Battlestation or its batteries).
+sr_bt_fought = {
+	has_variable = sr_bt_present
 	OR = {
 		AND = {
-			has_variable = sr_cb_lost
-			var:sr_cb_lost > 0
+			has_variable = sr_bt_lost
+			var:sr_bt_lost > 0
 		}
-		sr_cb_enemy_lost > 0
+		sr_bt_enemy_lost > 0
+	}
+}
+
+# Country scope, in the battle's search (sr_battle_at; at Earth while
+# local_var:sr_cb_code is 1): it has a fleet at LOC, or at Earth an Orbital
+# Battlestation (armed); or, also, at Earth, ground-to-orbit batteries.
+sr_bt_armed_here = {
+	OR = {
+		has_variable = sr_fl_at_$LOC$
+		AND = {
+			local_var:sr_cb_code = 1
+			sr_battlestation_held = yes
+		}
+	}
+}
+sr_bt_here = {
+	OR = {
+		sr_bt_armed_here = { LOC = $LOC$ }
+		AND = {
+			local_var:sr_cb_code = 1
+			sr_has_battery = yes
+		}
+	}
+}
+
+# Country scope, the owner of a fleet in the battle (2026-11-25 design § 2.3):
+# the fleet in slot N is tied to the location, and can be caught by any fleet
+# that engages it. Its owner holds a colony there (local_var:sr_bt_held; at
+# Earth everyone does), or it closes in, interdicts, or stands off where there
+# is a hostile world (the blockade's case).
+sr_bt_fleet_tied = {
+	OR = {
+		local_var:sr_bt_held = 1
+		sr_fl_$N$_posture_value = 3
+		sr_fl_$N$_posture_value = 4
+		AND = {
+			sr_fl_$N$_posture_value = 2
+			sr_fl_$N$_has_hostile_world = yes
+		}
+	}
+}
+
+# Country scope, a power at war with the unit's owner. Its unit N (a slot, or
+# bs: its Orbital Battlestation) is still in the battle and fights the unit
+# whose figures are in local_var:sr_bt_my_eng, _tied and _pace (§ 2.3): both
+# engage; or one engages and is at least as fast, or the other is tied.
+sr_bt_paired = {
+	has_variable = sr_fl_$N$_bt_in
+	OR = {
+		AND = {
+			local_var:sr_bt_my_eng = 1
+			OR = {
+				var:sr_fl_$N$_bt_eng = 1
+				var:sr_fl_$N$_bt_tied = 1
+				local_var:sr_bt_my_pace >= var:sr_fl_$N$_bt_pace
+			}
+		}
+		AND = {
+			var:sr_fl_$N$_bt_eng = 1
+			OR = {
+				local_var:sr_bt_my_tied = 1
+				var:sr_fl_$N$_bt_pace >= local_var:sr_bt_my_pace
+			}
+		}
 	}
 }
 

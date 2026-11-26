@@ -266,6 +266,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -515,6 +526,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_destroy'), '(CFixedPoint)0' )]"
@@ -766,6 +788,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -1015,6 +1048,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_destroy'), '(CFixedPoint)0' )]"
@@ -1266,6 +1310,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -1515,6 +1570,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_destroy'), '(CFixedPoint)0' )]"
@@ -1766,6 +1832,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -2016,6 +2093,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -2265,6 +2353,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_destroy'), '(CFixedPoint)0' )]"
@@ -39079,6 +39178,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -39326,6 +39436,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_destroy'), '(CFixedPoint)0' )]"
@@ -39575,6 +39696,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -39822,6 +39954,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_destroy'), '(CFixedPoint)0' )]"
@@ -40071,6 +40214,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -40318,6 +40472,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_destroy'), '(CFixedPoint)0' )]"
@@ -40567,6 +40732,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -40815,6 +40991,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -41062,6 +41249,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_destroy'), '(CFixedPoint)0' )]"

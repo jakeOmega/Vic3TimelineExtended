@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer, land_pick, embark_pick, ld_open_land, ld_open_embark, ld_step, migrate_ticks:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer, land_pick, embark_pick, ld_open_land, ld_open_embark, ld_step, migrate_ticks, bt_setup, bt_target, bt_battery, bt_ready, bt_ai, bt_snap, bt_apply, bt_end, retreat, toggle_avoid, ai_threat, ai_guard:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -112,6 +112,7 @@ sr_fl_clear_at = {
 	if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
 	if = { limit = { has_variable = sr_fl_$N$_charged } remove_variable = sr_fl_$N$_charged }
 	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
+	if = { limit = { has_variable = sr_fl_$N$_avoid } remove_variable = sr_fl_$N$_avoid }
 	if = { limit = { has_variable = sr_fl_$N$_war } remove_variable = sr_fl_$N$_war }
 	if = { limit = { has_variable = sr_fl_$N$_rapid } remove_variable = sr_fl_$N$_rapid }
 	if = { limit = { has_variable = sr_fl_$N$_siege } remove_variable = sr_fl_$N$_siege }
@@ -6623,20 +6624,9 @@ sr_cb_clear_earth = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_shackleton } remove_variable = sr_cb_s3_shackleton }
 	if = { limit = { has_variable = sr_cb_fd3_shackleton } remove_variable = sr_cb_fd3_shackleton }
 	if = { limit = { has_variable = sr_cb_mar_shackleton } remove_variable = sr_cb_mar_shackleton }
@@ -6737,20 +6727,9 @@ sr_cb_clear_inner = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_venus } remove_variable = sr_cb_s3_venus }
 	if = { limit = { has_variable = sr_cb_fd3_venus } remove_variable = sr_cb_fd3_venus }
 	if = { limit = { has_variable = sr_cb_mar_venus } remove_variable = sr_cb_mar_venus }
@@ -6799,20 +6778,9 @@ sr_cb_clear_mars = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_valles_marineris } remove_variable = sr_cb_s3_valles_marineris }
 	if = { limit = { has_variable = sr_cb_fd3_valles_marineris } remove_variable = sr_cb_fd3_valles_marineris }
 	if = { limit = { has_variable = sr_cb_mar_valles_marineris } remove_variable = sr_cb_mar_valles_marineris }
@@ -6900,20 +6868,9 @@ sr_cb_clear_asteroids = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_ceres } remove_variable = sr_cb_s3_ceres }
 	if = { limit = { has_variable = sr_cb_fd3_ceres } remove_variable = sr_cb_fd3_ceres }
 	if = { limit = { has_variable = sr_cb_mar_ceres } remove_variable = sr_cb_mar_ceres }
@@ -7001,20 +6958,9 @@ sr_cb_clear_jupiter = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_io } remove_variable = sr_cb_s3_io }
 	if = { limit = { has_variable = sr_cb_fd3_io } remove_variable = sr_cb_fd3_io }
 	if = { limit = { has_variable = sr_cb_mar_io } remove_variable = sr_cb_mar_io }
@@ -7115,20 +7061,9 @@ sr_cb_clear_saturn = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_titan } remove_variable = sr_cb_s3_titan }
 	if = { limit = { has_variable = sr_cb_fd3_titan } remove_variable = sr_cb_fd3_titan }
 	if = { limit = { has_variable = sr_cb_mar_titan } remove_variable = sr_cb_mar_titan }
@@ -7216,20 +7151,9 @@ sr_cb_clear_uranus = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_titania } remove_variable = sr_cb_s3_titania }
 	if = { limit = { has_variable = sr_cb_fd3_titania } remove_variable = sr_cb_fd3_titania }
 	if = { limit = { has_variable = sr_cb_mar_titania } remove_variable = sr_cb_mar_titania }
@@ -7304,20 +7228,9 @@ sr_cb_clear_neptune = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_triton } remove_variable = sr_cb_s3_triton }
 	if = { limit = { has_variable = sr_cb_fd3_triton } remove_variable = sr_cb_fd3_triton }
 	if = { limit = { has_variable = sr_cb_mar_triton } remove_variable = sr_cb_mar_triton }
@@ -7366,20 +7279,9 @@ sr_cb_clear_kuiper = {
 	if = { limit = { has_variable = sr_cb_f1 } remove_variable = sr_cb_f1 }
 	if = { limit = { has_variable = sr_cb_f2 } remove_variable = sr_cb_f2 }
 	if = { limit = { has_variable = sr_cb_f3 } remove_variable = sr_cb_f3 }
-	if = { limit = { has_variable = sr_cb_e1 } remove_variable = sr_cb_e1 }
-	if = { limit = { has_variable = sr_cb_e2 } remove_variable = sr_cb_e2 }
-	if = { limit = { has_variable = sr_cb_e3 } remove_variable = sr_cb_e3 }
 	if = { limit = { has_variable = sr_cb_hs } remove_variable = sr_cb_hs }
-	if = { limit = { has_variable = sr_cb_r1 } remove_variable = sr_cb_r1 }
-	if = { limit = { has_variable = sr_cb_r2 } remove_variable = sr_cb_r2 }
-	if = { limit = { has_variable = sr_cb_r3 } remove_variable = sr_cb_r3 }
-	if = { limit = { has_variable = sr_cb_l1 } remove_variable = sr_cb_l1 }
-	if = { limit = { has_variable = sr_cb_l2 } remove_variable = sr_cb_l2 }
-	if = { limit = { has_variable = sr_cb_l3 } remove_variable = sr_cb_l3 }
-	if = { limit = { has_variable = sr_cb_before } remove_variable = sr_cb_before }
 	if = { limit = { has_variable = sr_cb_lost } remove_variable = sr_cb_lost }
 	if = { limit = { has_variable = sr_cb_bs } remove_variable = sr_cb_bs }
-	if = { limit = { has_variable = sr_cb_kf } remove_variable = sr_cb_kf }
 	if = { limit = { has_variable = sr_cb_s3_pluto } remove_variable = sr_cb_s3_pluto }
 	if = { limit = { has_variable = sr_cb_fd3_pluto } remove_variable = sr_cb_fd3_pluto }
 	if = { limit = { has_variable = sr_cb_mar_pluto } remove_variable = sr_cb_mar_pluto }
@@ -9875,7 +9777,115 @@ sr_site_lose_shared_marines_imbrium = {
 	if = { limit = { has_global_variable = sr_site_marines_imbrium } remove_global_variable = sr_site_marines_imbrium }
 }
 
-# ===== The AI's defence (6b; sr_fl_ai_defend) =====
+# ===== The battle (2026-11-25 design § 2; sr_fleet_combat_effects.txt's sr_battle_at) =====
+# A slot's battle figures cleared, after each battle (BT_VARS).
+sr_fl_bt_end_at = {
+	if = { limit = { has_variable = sr_fl_$N$_bt_in } remove_variable = sr_fl_$N$_bt_in }
+	if = { limit = { has_variable = sr_fl_$N$_bt_pace } remove_variable = sr_fl_$N$_bt_pace }
+	if = { limit = { has_variable = sr_fl_$N$_bt_eng } remove_variable = sr_fl_$N$_bt_eng }
+	if = { limit = { has_variable = sr_fl_$N$_bt_tied } remove_variable = sr_fl_$N$_bt_tied }
+	if = { limit = { has_variable = sr_fl_$N$_bt_brought } remove_variable = sr_fl_$N$_bt_brought }
+	if = { limit = { has_variable = sr_fl_$N$_bt_s } remove_variable = sr_fl_$N$_bt_s }
+	if = { limit = { has_variable = sr_fl_$N$_bt_f } remove_variable = sr_fl_$N$_bt_f }
+	if = { limit = { has_variable = sr_fl_$N$_bt_r } remove_variable = sr_fl_$N$_bt_r }
+	if = { limit = { has_variable = sr_fl_$N$_bt_p } remove_variable = sr_fl_$N$_bt_p }
+	if = { limit = { has_variable = sr_fl_$N$_bt_l } remove_variable = sr_fl_$N$_bt_l }
+	if = { limit = { has_variable = sr_fl_$N$_bt_broke } remove_variable = sr_fl_$N$_bt_broke }
+}
+# A broken fleet not at a dock leaves for the nearest it may depart for (§ 2.4):
+# Earth, or a location where we hold a Spaceport, nearest by the leg's quarters,
+# through the same sr_fl_<n>_may_depart_<loc> an order passes. With none in
+# reach it stays, out of this battle, and can be caught at the next tick.
+sr_fl_retreat_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_broke NOT = { sr_fl_$N$_docked = yes } }
+		set_local_variable = { name = sr_bt_best value = 999999 }
+		set_local_variable = { name = sr_bt_to value = 0 }
+		if = {
+			limit = { sr_fl_$N$_may_depart_earth = yes sr_fl_$N$_leg_quarters_earth < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_earth }
+			set_local_variable = { name = sr_bt_to value = 1 }
+		}
+		if = {
+			limit = { sr_loc_port_inner = yes sr_fl_$N$_may_depart_inner = yes sr_fl_$N$_leg_quarters_inner < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_inner }
+			set_local_variable = { name = sr_bt_to value = 2 }
+		}
+		if = {
+			limit = { sr_loc_port_mars = yes sr_fl_$N$_may_depart_mars = yes sr_fl_$N$_leg_quarters_mars < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_mars }
+			set_local_variable = { name = sr_bt_to value = 3 }
+		}
+		if = {
+			limit = { sr_loc_port_asteroids = yes sr_fl_$N$_may_depart_asteroids = yes sr_fl_$N$_leg_quarters_asteroids < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_asteroids }
+			set_local_variable = { name = sr_bt_to value = 4 }
+		}
+		if = {
+			limit = { sr_loc_port_jupiter = yes sr_fl_$N$_may_depart_jupiter = yes sr_fl_$N$_leg_quarters_jupiter < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_jupiter }
+			set_local_variable = { name = sr_bt_to value = 5 }
+		}
+		if = {
+			limit = { sr_loc_port_saturn = yes sr_fl_$N$_may_depart_saturn = yes sr_fl_$N$_leg_quarters_saturn < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_saturn }
+			set_local_variable = { name = sr_bt_to value = 6 }
+		}
+		if = {
+			limit = { sr_loc_port_uranus = yes sr_fl_$N$_may_depart_uranus = yes sr_fl_$N$_leg_quarters_uranus < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_uranus }
+			set_local_variable = { name = sr_bt_to value = 7 }
+		}
+		if = {
+			limit = { sr_loc_port_neptune = yes sr_fl_$N$_may_depart_neptune = yes sr_fl_$N$_leg_quarters_neptune < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_neptune }
+			set_local_variable = { name = sr_bt_to value = 8 }
+		}
+		if = {
+			limit = { sr_loc_port_kuiper = yes sr_fl_$N$_may_depart_kuiper = yes sr_fl_$N$_leg_quarters_kuiper < local_var:sr_bt_best }
+			set_local_variable = { name = sr_bt_best value = sr_fl_$N$_leg_quarters_kuiper }
+			set_local_variable = { name = sr_bt_to value = 9 }
+		}
+		if = {
+			limit = { local_var:sr_bt_to = 1 sr_fl_$N$_may_depart_earth = yes }
+			sr_fl_dispatch = { N = $N$ LOC = earth CODE = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 2 sr_fl_$N$_may_depart_inner = yes }
+			sr_fl_dispatch = { N = $N$ LOC = inner CODE = 2 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 3 sr_fl_$N$_may_depart_mars = yes }
+			sr_fl_dispatch = { N = $N$ LOC = mars CODE = 3 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 4 sr_fl_$N$_may_depart_asteroids = yes }
+			sr_fl_dispatch = { N = $N$ LOC = asteroids CODE = 4 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 5 sr_fl_$N$_may_depart_jupiter = yes }
+			sr_fl_dispatch = { N = $N$ LOC = jupiter CODE = 5 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 6 sr_fl_$N$_may_depart_saturn = yes }
+			sr_fl_dispatch = { N = $N$ LOC = saturn CODE = 6 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 7 sr_fl_$N$_may_depart_uranus = yes }
+			sr_fl_dispatch = { N = $N$ LOC = uranus CODE = 7 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 8 sr_fl_$N$_may_depart_neptune = yes }
+			sr_fl_dispatch = { N = $N$ LOC = neptune CODE = 8 }
+		}
+		else_if = {
+			limit = { local_var:sr_bt_to = 9 sr_fl_$N$_may_depart_kuiper = yes }
+			sr_fl_dispatch = { N = $N$ LOC = kuiper CODE = 9 }
+		}
+	}
+}
+
+# ===== The AI's defence (6b; sr_fl_ai_defend; its win test, 2026-11-25 design § 2.7) =====
 sr_fl_ai_defend_all = {
 	sr_fl_ai_defend_inner = yes
 	sr_fl_ai_defend_mars = yes
@@ -9886,707 +9896,1531 @@ sr_fl_ai_defend_all = {
 	sr_fl_ai_defend_neptune = yes
 	sr_fl_ai_defend_kuiper = yes
 }
+# Slot N's strength and fire, at the location in local_var:sr_fl_code or on its
+# way there: a hostile's (sr_fl_ts, _tf) and ours (sr_fl_os, _of).
+sr_fl_ai_threat_at = {
+	if = {
+		limit = { OR = { AND = { has_variable = sr_fl_$N$_loc var:sr_fl_$N$_loc = local_var:sr_fl_code } AND = { NOT = { has_variable = sr_fl_$N$_loc } has_variable = sr_fl_$N$_dest var:sr_fl_$N$_dest = local_var:sr_fl_code } } }
+		change_local_variable = { name = sr_fl_ts add = sr_fl_$N$_strength }
+		change_local_variable = { name = sr_fl_tf add = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+	}
+}
+sr_fl_ai_guard_at = {
+	if = {
+		limit = { OR = { AND = { has_variable = sr_fl_$N$_loc var:sr_fl_$N$_loc = local_var:sr_fl_code } AND = { NOT = { has_variable = sr_fl_$N$_loc } has_variable = sr_fl_$N$_dest var:sr_fl_$N$_dest = local_var:sr_fl_code } } }
+		change_local_variable = { name = sr_fl_os add = sr_fl_$N$_strength }
+		change_local_variable = { name = sr_fl_of add = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+	}
+}
 sr_fl_ai_defend_inner = {
 	if = {
-		limit = { sr_fl_ai_threatened_inner = yes NOT = { sr_fl_any_at_or_bound = { CODE = 2 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_inner = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 2 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = inner } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_inner = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_inner = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_inner = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_inner = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_inner = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_inner = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_inner = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_inner = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_inner = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_inner = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_inner = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_inner = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_inner = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_inner = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_inner = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_inner = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_inner = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_inner = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = inner CODE = 2 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = inner CODE = 2 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_inner = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_inner = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_inner = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_inner = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_inner = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_inner = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_inner = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_inner = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_inner = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_inner = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 1 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 2 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 3 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 4 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 5 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 6 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 7 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 8 LOC = inner CODE = 2 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_inner = yes }
+					sr_fl_dispatch = { N = 9 LOC = inner CODE = 2 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_inner = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_inner = yes } sr_fl_dispatch = { N = 1 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_2_may_depart_inner = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_inner = yes } sr_fl_dispatch = { N = 2 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_3_may_depart_inner = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_inner = yes } sr_fl_dispatch = { N = 3 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_4_may_depart_inner = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_inner = yes } sr_fl_dispatch = { N = 4 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_5_may_depart_inner = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_inner = yes } sr_fl_dispatch = { N = 5 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_6_may_depart_inner = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_inner = yes } sr_fl_dispatch = { N = 6 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_7_may_depart_inner = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_inner = yes } sr_fl_dispatch = { N = 7 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_8_may_depart_inner = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_inner = yes } sr_fl_dispatch = { N = 8 LOC = inner CODE = 2 } }
+				if = { limit = { sr_fl_9_may_depart_inner = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_inner = yes } sr_fl_dispatch = { N = 9 LOC = inner CODE = 2 } }
+			}
 		}
 	}
 }
 sr_fl_ai_defend_mars = {
 	if = {
-		limit = { sr_fl_ai_threatened_mars = yes NOT = { sr_fl_any_at_or_bound = { CODE = 3 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_mars = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 3 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = mars } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_mars = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_mars = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_mars = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_mars = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_mars = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_mars = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_mars = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_mars = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_mars = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_mars = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_mars = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_mars = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_mars = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_mars = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_mars = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_mars = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_mars = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_mars = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = mars CODE = 3 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = mars CODE = 3 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_mars = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_mars = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_mars = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_mars = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_mars = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_mars = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_mars = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_mars = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_mars = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_mars = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 1 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 2 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 3 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 4 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 5 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 6 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 7 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 8 LOC = mars CODE = 3 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_mars = yes }
+					sr_fl_dispatch = { N = 9 LOC = mars CODE = 3 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_mars = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_mars = yes } sr_fl_dispatch = { N = 1 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_2_may_depart_mars = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_mars = yes } sr_fl_dispatch = { N = 2 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_3_may_depart_mars = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_mars = yes } sr_fl_dispatch = { N = 3 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_4_may_depart_mars = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_mars = yes } sr_fl_dispatch = { N = 4 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_5_may_depart_mars = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_mars = yes } sr_fl_dispatch = { N = 5 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_6_may_depart_mars = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_mars = yes } sr_fl_dispatch = { N = 6 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_7_may_depart_mars = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_mars = yes } sr_fl_dispatch = { N = 7 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_8_may_depart_mars = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_mars = yes } sr_fl_dispatch = { N = 8 LOC = mars CODE = 3 } }
+				if = { limit = { sr_fl_9_may_depart_mars = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_mars = yes } sr_fl_dispatch = { N = 9 LOC = mars CODE = 3 } }
+			}
 		}
 	}
 }
 sr_fl_ai_defend_asteroids = {
 	if = {
-		limit = { sr_fl_ai_threatened_asteroids = yes NOT = { sr_fl_any_at_or_bound = { CODE = 4 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_asteroids = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 4 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = asteroids } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_asteroids = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_asteroids = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_asteroids = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_asteroids = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_asteroids = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_asteroids = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_asteroids = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_asteroids = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_asteroids = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_asteroids = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_asteroids = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_asteroids = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_asteroids = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_asteroids = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_asteroids = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_asteroids = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_asteroids = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_asteroids = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = asteroids CODE = 4 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = asteroids CODE = 4 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_asteroids = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_asteroids = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_asteroids = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_asteroids = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_asteroids = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_asteroids = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_asteroids = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_asteroids = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_asteroids = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_asteroids = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 1 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 2 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 3 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 4 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 5 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 6 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 7 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 8 LOC = asteroids CODE = 4 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_asteroids = yes }
+					sr_fl_dispatch = { N = 9 LOC = asteroids CODE = 4 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_asteroids = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 1 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_2_may_depart_asteroids = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 2 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_3_may_depart_asteroids = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 3 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_4_may_depart_asteroids = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 4 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_5_may_depart_asteroids = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 5 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_6_may_depart_asteroids = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 6 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_7_may_depart_asteroids = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 7 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_8_may_depart_asteroids = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 8 LOC = asteroids CODE = 4 } }
+				if = { limit = { sr_fl_9_may_depart_asteroids = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_asteroids = yes } sr_fl_dispatch = { N = 9 LOC = asteroids CODE = 4 } }
+			}
 		}
 	}
 }
 sr_fl_ai_defend_jupiter = {
 	if = {
-		limit = { sr_fl_ai_threatened_jupiter = yes NOT = { sr_fl_any_at_or_bound = { CODE = 5 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_jupiter = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 5 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = jupiter } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_jupiter = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_jupiter = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_jupiter = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_jupiter = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_jupiter = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_jupiter = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_jupiter = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_jupiter = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_jupiter = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_jupiter = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_jupiter = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_jupiter = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_jupiter = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_jupiter = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_jupiter = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_jupiter = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_jupiter = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_jupiter = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = jupiter CODE = 5 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = jupiter CODE = 5 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_jupiter = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_jupiter = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_jupiter = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_jupiter = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_jupiter = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_jupiter = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_jupiter = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_jupiter = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_jupiter = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_jupiter = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 1 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 2 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 3 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 4 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 5 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 6 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 7 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 8 LOC = jupiter CODE = 5 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_jupiter = yes }
+					sr_fl_dispatch = { N = 9 LOC = jupiter CODE = 5 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_jupiter = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 1 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_2_may_depart_jupiter = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 2 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_3_may_depart_jupiter = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 3 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_4_may_depart_jupiter = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 4 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_5_may_depart_jupiter = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 5 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_6_may_depart_jupiter = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 6 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_7_may_depart_jupiter = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 7 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_8_may_depart_jupiter = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 8 LOC = jupiter CODE = 5 } }
+				if = { limit = { sr_fl_9_may_depart_jupiter = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_jupiter = yes } sr_fl_dispatch = { N = 9 LOC = jupiter CODE = 5 } }
+			}
 		}
 	}
 }
 sr_fl_ai_defend_saturn = {
 	if = {
-		limit = { sr_fl_ai_threatened_saturn = yes NOT = { sr_fl_any_at_or_bound = { CODE = 6 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_saturn = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 6 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = saturn } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_saturn = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_saturn = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_saturn = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_saturn = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_saturn = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_saturn = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_saturn = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_saturn = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_saturn = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_saturn = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_saturn = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_saturn = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_saturn = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_saturn = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_saturn = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_saturn = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_saturn = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_saturn = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = saturn CODE = 6 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = saturn CODE = 6 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_saturn = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_saturn = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_saturn = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_saturn = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_saturn = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_saturn = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_saturn = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_saturn = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_saturn = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_saturn = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 1 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 2 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 3 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 4 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 5 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 6 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 7 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 8 LOC = saturn CODE = 6 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_saturn = yes }
+					sr_fl_dispatch = { N = 9 LOC = saturn CODE = 6 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_saturn = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 1 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_2_may_depart_saturn = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 2 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_3_may_depart_saturn = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 3 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_4_may_depart_saturn = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 4 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_5_may_depart_saturn = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 5 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_6_may_depart_saturn = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 6 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_7_may_depart_saturn = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 7 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_8_may_depart_saturn = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 8 LOC = saturn CODE = 6 } }
+				if = { limit = { sr_fl_9_may_depart_saturn = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_saturn = yes } sr_fl_dispatch = { N = 9 LOC = saturn CODE = 6 } }
+			}
 		}
 	}
 }
 sr_fl_ai_defend_uranus = {
 	if = {
-		limit = { sr_fl_ai_threatened_uranus = yes NOT = { sr_fl_any_at_or_bound = { CODE = 7 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_uranus = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 7 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = uranus } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_uranus = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_uranus = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_uranus = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_uranus = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_uranus = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_uranus = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_uranus = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_uranus = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_uranus = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_uranus = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_uranus = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_uranus = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_uranus = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_uranus = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_uranus = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_uranus = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_uranus = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_uranus = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = uranus CODE = 7 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = uranus CODE = 7 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_uranus = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_uranus = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_uranus = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_uranus = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_uranus = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_uranus = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_uranus = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_uranus = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_uranus = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_uranus = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 1 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 2 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 3 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 4 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 5 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 6 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 7 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 8 LOC = uranus CODE = 7 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_uranus = yes }
+					sr_fl_dispatch = { N = 9 LOC = uranus CODE = 7 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_uranus = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 1 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_2_may_depart_uranus = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 2 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_3_may_depart_uranus = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 3 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_4_may_depart_uranus = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 4 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_5_may_depart_uranus = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 5 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_6_may_depart_uranus = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 6 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_7_may_depart_uranus = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 7 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_8_may_depart_uranus = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 8 LOC = uranus CODE = 7 } }
+				if = { limit = { sr_fl_9_may_depart_uranus = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_uranus = yes } sr_fl_dispatch = { N = 9 LOC = uranus CODE = 7 } }
+			}
 		}
 	}
 }
 sr_fl_ai_defend_neptune = {
 	if = {
-		limit = { sr_fl_ai_threatened_neptune = yes NOT = { sr_fl_any_at_or_bound = { CODE = 8 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_neptune = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 8 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = neptune } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_neptune = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_neptune = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_neptune = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_neptune = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_neptune = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_neptune = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_neptune = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_neptune = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_neptune = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_neptune = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_neptune = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_neptune = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_neptune = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_neptune = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_neptune = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_neptune = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_neptune = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_neptune = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = neptune CODE = 8 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = neptune CODE = 8 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_neptune = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_neptune = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_neptune = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_neptune = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_neptune = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_neptune = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_neptune = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_neptune = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_neptune = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_neptune = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 1 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 2 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 3 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 4 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 5 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 6 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 7 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 8 LOC = neptune CODE = 8 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_neptune = yes }
+					sr_fl_dispatch = { N = 9 LOC = neptune CODE = 8 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_neptune = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 1 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_2_may_depart_neptune = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 2 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_3_may_depart_neptune = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 3 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_4_may_depart_neptune = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 4 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_5_may_depart_neptune = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 5 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_6_may_depart_neptune = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 6 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_7_may_depart_neptune = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 7 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_8_may_depart_neptune = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 8 LOC = neptune CODE = 8 } }
+				if = { limit = { sr_fl_9_may_depart_neptune = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_neptune = yes } sr_fl_dispatch = { N = 9 LOC = neptune CODE = 8 } }
+			}
 		}
 	}
 }
 sr_fl_ai_defend_kuiper = {
 	if = {
-		limit = { sr_fl_ai_threatened_kuiper = yes NOT = { sr_fl_any_at_or_bound = { CODE = 9 } } }
-		set_local_variable = { name = sr_fl_best value = 0 }
-		set_local_variable = { name = sr_fl_n value = 0 }
+		limit = { sr_fl_ai_threatened_kuiper = yes }
+		save_temporary_scope_as = sr_icpt_victim
+		set_local_variable = { name = sr_fl_code value = 9 }
+		set_local_variable = { name = sr_fl_ts value = 0 }
+		set_local_variable = { name = sr_fl_tf value = 0 }
+		set_local_variable = { name = sr_fl_os value = 0 }
+		set_local_variable = { name = sr_fl_of value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = kuiper } } }
+			sr_fl_each_slot = { DO = ai_threat }
+		}
+		sr_fl_each_slot = { DO = ai_guard }
+		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
+		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
-			limit = { sr_fl_1_may_depart_kuiper = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_kuiper = yes sr_fl_1_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
-			set_local_variable = { name = sr_fl_n value = 1 }
-		}
-		if = {
-			limit = { sr_fl_2_may_depart_kuiper = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_kuiper = yes sr_fl_2_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
-			set_local_variable = { name = sr_fl_n value = 2 }
-		}
-		if = {
-			limit = { sr_fl_3_may_depart_kuiper = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_kuiper = yes sr_fl_3_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
-			set_local_variable = { name = sr_fl_n value = 3 }
-		}
-		if = {
-			limit = { sr_fl_4_may_depart_kuiper = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_kuiper = yes sr_fl_4_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
-			set_local_variable = { name = sr_fl_n value = 4 }
-		}
-		if = {
-			limit = { sr_fl_5_may_depart_kuiper = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_kuiper = yes sr_fl_5_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
-			set_local_variable = { name = sr_fl_n value = 5 }
-		}
-		if = {
-			limit = { sr_fl_6_may_depart_kuiper = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_kuiper = yes sr_fl_6_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
-			set_local_variable = { name = sr_fl_n value = 6 }
-		}
-		if = {
-			limit = { sr_fl_7_may_depart_kuiper = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_kuiper = yes sr_fl_7_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
-			set_local_variable = { name = sr_fl_n value = 7 }
-		}
-		if = {
-			limit = { sr_fl_8_may_depart_kuiper = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_kuiper = yes sr_fl_8_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
-			set_local_variable = { name = sr_fl_n value = 8 }
-		}
-		if = {
-			limit = { sr_fl_9_may_depart_kuiper = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_kuiper = yes sr_fl_9_strength > local_var:sr_fl_best }
-			set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
-			set_local_variable = { name = sr_fl_n value = 9 }
-		}
-		if = {
-			limit = { local_var:sr_fl_n = 1 }
-			sr_fl_dispatch = { N = 1 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 2 }
-			sr_fl_dispatch = { N = 2 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 3 }
-			sr_fl_dispatch = { N = 3 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 4 }
-			sr_fl_dispatch = { N = 4 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 5 }
-			sr_fl_dispatch = { N = 5 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 6 }
-			sr_fl_dispatch = { N = 6 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 7 }
-			sr_fl_dispatch = { N = 7 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 8 }
-			sr_fl_dispatch = { N = 8 LOC = kuiper CODE = 9 }
-		}
-		else_if = {
-			limit = { local_var:sr_fl_n = 9 }
-			sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 }
+			limit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }
+			set_local_variable = { name = sr_fl_best value = 0 }
+			set_local_variable = { name = sr_fl_bf value = 0 }
+			set_local_variable = { name = sr_fl_n value = 0 }
+			set_local_variable = { name = sr_fl_all_s value = 0 }
+			set_local_variable = { name = sr_fl_all_f value = 0 }
+			set_local_variable = { name = sr_fl_cnt value = 0 }
+			if = {
+				limit = { sr_fl_1_may_depart_kuiper = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_1_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_1_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_1_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_1_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 1 }
+				}
+			}
+			if = {
+				limit = { sr_fl_2_may_depart_kuiper = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_2_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_2_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_2_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_2_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 2 }
+				}
+			}
+			if = {
+				limit = { sr_fl_3_may_depart_kuiper = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_3_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_3_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_3_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_3_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 3 }
+				}
+			}
+			if = {
+				limit = { sr_fl_4_may_depart_kuiper = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_4_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_4_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_4_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_4_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 4 }
+				}
+			}
+			if = {
+				limit = { sr_fl_5_may_depart_kuiper = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_5_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_5_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_5_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_5_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 5 }
+				}
+			}
+			if = {
+				limit = { sr_fl_6_may_depart_kuiper = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_6_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_6_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_6_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_6_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 6 }
+				}
+			}
+			if = {
+				limit = { sr_fl_7_may_depart_kuiper = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_7_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_7_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_7_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_7_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 7 }
+				}
+			}
+			if = {
+				limit = { sr_fl_8_may_depart_kuiper = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_8_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_8_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_8_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_8_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 8 }
+				}
+			}
+			if = {
+				limit = { sr_fl_9_may_depart_kuiper = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_kuiper = yes }
+				change_local_variable = { name = sr_fl_all_s add = sr_fl_9_strength }
+				change_local_variable = { name = sr_fl_all_f add = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+				change_local_variable = { name = sr_fl_cnt add = 1 }
+				if = {
+					limit = { sr_fl_9_strength > local_var:sr_fl_best }
+					set_local_variable = { name = sr_fl_best value = sr_fl_9_strength }
+					set_local_variable = { name = sr_fl_bf value = { value = sr_fl_9_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+					set_local_variable = { name = sr_fl_n value = 9 }
+				}
+			}
+			set_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }
+			set_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }
+			if = {
+				limit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }
+				if = {
+					limit = { local_var:sr_fl_n = 1 sr_fl_1_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 1 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 2 sr_fl_2_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 2 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 3 sr_fl_3_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 3 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 4 sr_fl_4_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 4 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 5 sr_fl_5_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 5 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 6 sr_fl_6_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 6 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 7 sr_fl_7_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 7 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 8 sr_fl_8_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 8 LOC = kuiper CODE = 9 }
+				}
+				else_if = {
+					limit = { local_var:sr_fl_n = 9 sr_fl_9_may_depart_kuiper = yes }
+					sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 }
+				}
+			}
+			else_if = {
+				limit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }
+				if = { limit = { sr_fl_1_may_depart_kuiper = yes sr_fl_1_ai_free = yes sr_fl_1_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 1 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_2_may_depart_kuiper = yes sr_fl_2_ai_free = yes sr_fl_2_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 2 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_3_may_depart_kuiper = yes sr_fl_3_ai_free = yes sr_fl_3_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 3 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_4_may_depart_kuiper = yes sr_fl_4_ai_free = yes sr_fl_4_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 4 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_5_may_depart_kuiper = yes sr_fl_5_ai_free = yes sr_fl_5_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 5 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_6_may_depart_kuiper = yes sr_fl_6_ai_free = yes sr_fl_6_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 6 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_7_may_depart_kuiper = yes sr_fl_7_ai_free = yes sr_fl_7_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 7 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_8_may_depart_kuiper = yes sr_fl_8_ai_free = yes sr_fl_8_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 8 LOC = kuiper CODE = 9 } }
+				if = { limit = { sr_fl_9_may_depart_kuiper = yes sr_fl_9_ai_free = yes sr_fl_9_ai_reaches_kuiper = yes } sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 } }
+			}
 		}
 	}
 }

@@ -7100,6 +7100,8 @@
  sr_first_moon_base:0 "First Lunar Colony"
  sr_first_moon_landing:0 "First on the Moon"
  sr_fl_alert_tt:0 "Our fleets and the colony's Defenses are listed in the Space Race panel."
+ sr_fl_avoid_off_tt:0 "The fleet will seek battle. It fights every enemy fleet at its location that it can catch: one no faster than it, or one that can't slip away, where its country holds a colony, at Earth, or while it closes in, interdicts or blockades. From the next week."
+ sr_fl_avoid_on_tt:0 "The fleet will avoid battle. It fights only an enemy fleet that engages it and is at least as fast, or one that engages it where it can't slip away: where we hold a colony, at Earth, or while it closes in, interdicts or blockades. From the next week."
  sr_fl_destroy_price_tt:0 "The fleet closes in to destroy its target. After #v 3#! months with no enemy fleet stationed there and more fire than its Defenses, the colony and its people are lost, and the site lies ruined for #v 25#! years. It costs #v [GetPlayer.MakeScope.ScriptValue('sr_destroy_infamy_cost')|0]#! [concept_infamy], #v [GetPlayer.MakeScope.ScriptValue('sr_destroy_dossier_cost')|0]#! on our UN record of hostile acts in space (twice as much for a party to the Convention on the Settlement of Outer Space), and our own colonies' loyalty."
  sr_fl_drive_antimatter:0 "Antimatter"
  sr_fl_drive_chemical:0 "Chemical"

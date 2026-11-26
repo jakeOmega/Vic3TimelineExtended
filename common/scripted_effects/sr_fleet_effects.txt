@@ -539,9 +539,10 @@ sr_loc_add_inbound = {
 # ---- The global monthly step (sr_sites_global_monthly; no ROOT) -------------------------------------
 # Full colonies: the month's first tick of the fleets' clock (an old save's
 # fleets in flight converted first, and last month's clock checked), every
-# fleet whose tick has come lands, the location records are rebuilt, then the
-# month's fighting (6b, sr_fleet_combat_effects.txt); then the month's other
-# three ticks are queued.
+# fleet whose tick has come lands, the location records are rebuilt, the
+# tick's battles are fought (2026-11-25 design § 2, sr_battle_global_tick), the
+# players' Earth alert, then the month's siege (6b, sr_fleet_combat_effects.txt);
+# then the month's other three ticks are queued.
 sr_fl_global_month = {
 	if = {
 		limit = { has_global_variable_list = sr_fleet_powers }
@@ -554,6 +555,7 @@ sr_fl_global_month = {
 			sr_fl_each_slot = { DO = arrive }
 		}
 		sr_loc_rebuild = yes
+		sr_battle_global_tick = yes
 		sr_fl_tick_alerts = yes
 		sr_combat_global_monthly = yes
 		sr_fl_prune_powers = yes
@@ -600,7 +602,8 @@ sr_fl_clock_queue = {
 
 # Any scope (space_race_events.120-.122): the tick Q, once. A tick already run
 # (a save loaded with the events queued, a second queue) does nothing. Fleets
-# land and the location records follow.
+# land, the location records follow, then the tick's battles (sr_battle_global_tick)
+# and the players' Earth alert.
 sr_fl_tick_step = {
 	if = {
 		limit = {
@@ -623,6 +626,7 @@ sr_fl_tick_step = {
 			sr_fl_each_slot = { DO = arrive }
 		}
 		sr_loc_rebuild = yes
+		sr_battle_global_tick = yes
 		sr_fl_tick_alerts = yes
 	}
 }

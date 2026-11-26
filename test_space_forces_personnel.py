@@ -428,13 +428,17 @@ class ReviewFixesTest(unittest.TestCase):
         self.assertIn("sr_pers_room_points >= sr_fl_minimum_strength", _block(self.triggers, "sr_pers_can_crew_launch"))
 
     def test_the_battle_report_gives_what_was_booked(self):
-        record = _block(self.combat, "sr_cb_battle_record")
-        self.assertIn("set_variable = { name = sr_battle_dead value = local_var:sr_pers_noted }", record)
+        """Each cut in a battle (2026-11-25 design § 2) books its crews on the
+        power's record, the report reading the battle's sum."""
+        record = _block(self.combat, "sr_bt_record")
+        self.assertIn("set_variable = { name = sr_battle_dead value = var:sr_bt_dead }", record)
         self.assertIn("change_local_variable = { name = sr_pers_noted add = local_var:sr_pers_lost }",
                       _block(self.pers, "sr_pers_note_people"))
-        step = self.combat[:self.combat.index("sr_cb_battle_record = { CODE = $CODE$ }")]
-        self.assertLess(step.rindex("set_local_variable = { name = sr_pers_noted value = 0 }"),
-                        step.rindex("sr_fl_each_slot = { DO = apply_losses }"))
+        cut = _block(self.combat, "sr_bt_cut_slot")
+        self.assertLess(cut.index("set_local_variable = { name = sr_pers_noted value = 0 }"),
+                        cut.index("sr_fl_take_losses_at = { N = $N$ }"))
+        self.assertLess(cut.index("sr_fl_take_losses_at = { N = $N$ }"),
+                        cut.index("change_variable = { name = sr_bt_dead add = local_var:sr_pers_noted }"))
 
     def test_the_year_s_dead_go_stale(self):
         shown = _block(_strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt")), "sr_disp_pers_killed_year")

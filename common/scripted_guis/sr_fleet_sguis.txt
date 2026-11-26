@@ -827,6 +827,46 @@ sr_fleet_destroy_sgui = {
 	}
 }
 
+# Engage / Avoid (2026-11-25 design §§ 2.3, 2.9): scope:op the slot. Set to
+# Avoid, a fleet fights only a fleet that engages it and is at least as fast,
+# or one that engages it where it is tied (a colony of ours there, Earth,
+# closing in, interdicting, blockading); set to Engage, every enemy fleet there
+# it can catch. Like a posture, only with a Space Command (UI pass design
+# § 10); in flight as well as at a location. It takes effect at the next tick.
+sr_fleet_avoid_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_space_race_solar_colonization
+		sr_colonies_full_enabled = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		custom_tooltip = {
+			text = sr_fl_req_space_command_tt
+			sr_sc_operational = yes
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { sr_fl_op_check = { TEST = avoiding } }
+			custom_tooltip = sr_fl_avoid_off_tt
+		}
+		else = {
+			custom_tooltip = sr_fl_avoid_on_tt
+		}
+		hidden_effect = {
+			sr_fl_by_op = { DO = toggle_avoid }
+		}
+	}
+}
+
 # Space Command's build mix (the owner, 2026-11-25: - and + in the table's Mix
 # column; one button a role until then, stepping 0, 1, 2, 3, 0): scope:op the
 # role (gen_space_fleets.ROLE_CODE), scope:pick 1 a step off its weight, 2 a
