@@ -133,6 +133,11 @@ defaults (September 2026, ~350 icons):
 - A colour that is also a thing can be drawn as the thing: "two big round orange
   propellant tank spheres" drew an orange with a cap on one seed in four (the fleet
   cards, 2026-11-14).
+- An arrow's direction is a coin toss: "one bold red zigzag arrow falling" drew it rising on
+  three seeds in four, and a two-headed arrow on a reroll (the Stock Full alert, 2026-11-26).
+  Check which way it points at game size.
+- "An L-shaped hexagonal Allen wrench" drew an open-ended spanner on every seed, and a "hex
+  key" a door key (Flat-Pack Furniture, 2026-11-26). Name a tool FLUX knows.
 - A plain pale face inside a rim cuts out to the rim alone (a bare steel shield,
   three seeds in four): pick the candidate whose face is a solid mid-tone.
 - A long ship seen from the side is a sliver at 24 px. Of the candidates, the one
