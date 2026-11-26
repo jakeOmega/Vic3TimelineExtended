@@ -27,10 +27,10 @@
 INJECT:war_support_from_journal_entries = {
 	# ---- Space (solar colonization fleets design § 10) ----
 	# Occupied colonies (each world we occupy from an enemy, less each of ours an
-	# enemy occupies, 0.1 to 0.25 by its people) and the month's battles (+-0.1,
+	# enemy occupies, 0.1 to 0.25 by its people) and the last battle (+-0.1,
 	# +-0.25 for a fleet destroyed, for thirty days), one country variable each,
-	# refreshed by the fleets' monthly step (sr_fl_ws_refresh,
-	# sr_cb_battle_record). A colony is a rounding error beside a city on Earth.
+	# refreshed by the fleets' monthly step and each battle (sr_fl_ws_refresh,
+	# sr_bt_record). A colony is a rounding error beside a city on Earth.
 	if = {
 		limit = {
 			has_variable = sr_ws_colonies_net

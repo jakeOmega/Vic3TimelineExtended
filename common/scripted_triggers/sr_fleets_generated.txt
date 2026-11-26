@@ -10,6 +10,8 @@
 sr_fl_1_exists = { OR = { has_variable = sr_fl_1_loc has_variable = sr_fl_1_dest } }
 sr_fl_1_at_location = { has_variable = sr_fl_1_loc }
 sr_fl_1_at_earth = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_1_avoiding = { has_variable = sr_fl_1_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_1_target_lunar = {
 	has_variable = sr_fl_1_target
@@ -817,6 +819,8 @@ sr_fl_1_ai_attacks_kuiper = {
 sr_fl_2_exists = { OR = { has_variable = sr_fl_2_loc has_variable = sr_fl_2_dest } }
 sr_fl_2_at_location = { has_variable = sr_fl_2_loc }
 sr_fl_2_at_earth = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_2_avoiding = { has_variable = sr_fl_2_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_2_target_lunar = {
 	has_variable = sr_fl_2_target
@@ -1624,6 +1628,8 @@ sr_fl_2_ai_attacks_kuiper = {
 sr_fl_3_exists = { OR = { has_variable = sr_fl_3_loc has_variable = sr_fl_3_dest } }
 sr_fl_3_at_location = { has_variable = sr_fl_3_loc }
 sr_fl_3_at_earth = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_3_avoiding = { has_variable = sr_fl_3_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_3_target_lunar = {
 	has_variable = sr_fl_3_target
@@ -2431,6 +2437,8 @@ sr_fl_3_ai_attacks_kuiper = {
 sr_fl_4_exists = { OR = { has_variable = sr_fl_4_loc has_variable = sr_fl_4_dest } }
 sr_fl_4_at_location = { has_variable = sr_fl_4_loc }
 sr_fl_4_at_earth = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_4_avoiding = { has_variable = sr_fl_4_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_4_target_lunar = {
 	has_variable = sr_fl_4_target
@@ -3238,6 +3246,8 @@ sr_fl_4_ai_attacks_kuiper = {
 sr_fl_5_exists = { OR = { has_variable = sr_fl_5_loc has_variable = sr_fl_5_dest } }
 sr_fl_5_at_location = { has_variable = sr_fl_5_loc }
 sr_fl_5_at_earth = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_5_avoiding = { has_variable = sr_fl_5_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_5_target_lunar = {
 	has_variable = sr_fl_5_target
@@ -4045,6 +4055,8 @@ sr_fl_5_ai_attacks_kuiper = {
 sr_fl_6_exists = { OR = { has_variable = sr_fl_6_loc has_variable = sr_fl_6_dest } }
 sr_fl_6_at_location = { has_variable = sr_fl_6_loc }
 sr_fl_6_at_earth = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_6_avoiding = { has_variable = sr_fl_6_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_6_target_lunar = {
 	has_variable = sr_fl_6_target
@@ -4852,6 +4864,8 @@ sr_fl_6_ai_attacks_kuiper = {
 sr_fl_7_exists = { OR = { has_variable = sr_fl_7_loc has_variable = sr_fl_7_dest } }
 sr_fl_7_at_location = { has_variable = sr_fl_7_loc }
 sr_fl_7_at_earth = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_7_avoiding = { has_variable = sr_fl_7_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_7_target_lunar = {
 	has_variable = sr_fl_7_target
@@ -5659,6 +5673,8 @@ sr_fl_7_ai_attacks_kuiper = {
 sr_fl_8_exists = { OR = { has_variable = sr_fl_8_loc has_variable = sr_fl_8_dest } }
 sr_fl_8_at_location = { has_variable = sr_fl_8_loc }
 sr_fl_8_at_earth = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_8_avoiding = { has_variable = sr_fl_8_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_8_target_lunar = {
 	has_variable = sr_fl_8_target
@@ -6466,6 +6482,8 @@ sr_fl_8_ai_attacks_kuiper = {
 sr_fl_9_exists = { OR = { has_variable = sr_fl_9_loc has_variable = sr_fl_9_dest } }
 sr_fl_9_at_location = { has_variable = sr_fl_9_loc }
 sr_fl_9_at_earth = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 }
+# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
+sr_fl_9_avoiding = { has_variable = sr_fl_9_avoid }
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_9_target_lunar = {
 	has_variable = sr_fl_9_target
@@ -7728,6 +7746,37 @@ sr_fl_9_xf_room = {
 	OR = { sr_fl_9_xf_left <= 0 sr_fl_9_xf_stay_over <= sr_fl_9_xf_now_over }
 }
 
+# Its fleets are tied at the location (2026-11-25 design § 2.3): it holds a
+# colony there, so any fleet that engages them catches them. Earth counts as
+# everyone's colony.
+sr_loc_tied_earth = {
+	always = yes
+}
+sr_loc_tied_inner = {
+	sr_loc_held_inner = yes
+}
+sr_loc_tied_mars = {
+	sr_loc_held_mars = yes
+}
+sr_loc_tied_asteroids = {
+	sr_loc_held_asteroids = yes
+}
+sr_loc_tied_jupiter = {
+	sr_loc_held_jupiter = yes
+}
+sr_loc_tied_saturn = {
+	sr_loc_held_saturn = yes
+}
+sr_loc_tied_uranus = {
+	sr_loc_held_uranus = yes
+}
+sr_loc_tied_neptune = {
+	sr_loc_held_neptune = yes
+}
+sr_loc_tied_kuiper = {
+	sr_loc_held_kuiper = yes
+}
+
 # An Into button's choice (scope:pick, 0 a new fleet or a slot) is already the
 # transfer's (sr_det_to): the button greys, as the approach selector's does.
 sr_xf_pick_chosen = {
@@ -8603,6 +8652,18 @@ sr_loc_held_earth = { always = no }
 #                                 our marines on its world don't make one already;
 #                                 or one held at the break level by force for fewer
 #                                 than sr_hold_ai_reinforce_months (owner, 2026-11-25)
+# The AI's defence keeps its fleets at Earth home (sr_fl_ai_defend_<loc>): a
+# fleet of a power at war with it is at Earth or on its way there (review of
+# #2069: sending every free fleet could leave Earth to the enemy).
+sr_fl_ai_earth_threatened = {
+	save_temporary_scope_as = sr_icpt_victim
+	any_in_global_list = {
+		variable = sr_fleet_powers
+		is_country_alive = yes
+		has_war_with = scope:sr_icpt_victim
+		OR = { has_variable = sr_fl_at_earth sr_fl_any_bound = { CODE = 1 } }
+	}
+}
 # The Moon's colonies, at Earth: Land and Embark there (owner, 2026-11-24).
 sr_loc_held_lunar = {
 	OR = {

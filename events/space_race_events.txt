@@ -5150,7 +5150,7 @@ space_race_events.100 = {
 	}
 }
 
-# A battle at a location (sr_cb_battle_record): our losses and theirs.
+# A battle at a location (sr_bt_record): our losses and theirs.
 space_race_events.101 = {
 	type = country_event
 	placement = root

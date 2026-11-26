@@ -230,8 +230,9 @@ class FullColoniesGateTest(unittest.TestCase):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
         # 21 since the personnel priority (sr_pers_priority_sgui, 2026-11-24); 22 since
-        # orders and the modes took the pause's place (sr_sc_order_sgui, sr_sc_mode_sgui, 2026-11-25)
-        self.assertEqual(len(names), 22)
+        # orders and the modes took the pause's place (sr_sc_order_sgui, sr_sc_mode_sgui, 2026-11-25);
+        # 23 with Engage / Avoid (sr_fleet_avoid_sgui, 2026-11-25 design § 2.9)
+        self.assertEqual(len(names), 23)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -1429,7 +1430,9 @@ class InterdictionTest(unittest.TestCase):
                 self.assertIn(line, body)
 
     def test_interdict_fights_as_standing_off(self):
-        for name in ("sr_fl_gather_at", "sr_fl_apply_losses_at"):
+        # The siege's gather counts it standing off (its losses are only a
+        # closing-in fleet's since the 2026-11-25 design § 2.6).
+        for name in ("sr_fl_gather_at",):
             with self.subTest(helper=name):
                 self.assertRegex(_block(self.combat, name),
                                  r"limit = \{ local_var:sr_cb_p = 4 \}[^}]*\}?\s*"
@@ -1502,7 +1505,8 @@ class InterdictionTest(unittest.TestCase):
             self.assertTrue(names)
             ai += "".join(_block(text, name) for name in names)
         self.assertNotIn("set_posture", ai)
-        self.assertNotIn("interdict", ai)
+        # The defence reads who interdicts us (sr_icpt_interdicts_at), never sets it.
+        self.assertNotIn("interdict", ai.replace("sr_icpt_interdicts_at", ""))
 
     def test_cede_colony_costs_no_infamy_against_an_interdictor(self):
         wargoal = _block("x = {" + _strip(_raw(CEDE_COLONY)).split("wargoal = {", 1)[1], "x")
@@ -1736,16 +1740,24 @@ class BatteryTest(unittest.TestCase):
                 self.assertNotIn("modifier:state_orbital", _strip(_raw(path)))
 
     def test_batteries_fire_in_the_earth_battle_and_take_no_losses(self):
-        at = _block(self.combat, "sr_combat_at")
-        self.assertRegex(at, r"limit = \{ local_var:sr_cb_code = 1 \}\s*sr_cb_battlestation_gather = yes\s*"
-                             r"sr_cb_battery_gather = yes")
-        gather = _block(self.combat, "sr_cb_battery_gather")
-        self.assertIn("sr_cb_add = { VAR = sr_cb_f1 AMOUNT = local_var:sr_cb_bf }", gather)
-        self.assertNotIn("sr_cb_s1", gather)
-        self.assertIn("set_variable = { name = sr_cb_kf value = sr_battery_fire_kinetic }", gather)
-        self.assertIn("kf", gsf.CB_VARS)
-        self.assertIn("te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }", at)
+        """Once a tick, before the battle at Earth (2026-11-25 design § 2.5): a
+        quarter of a month's fire, shared by strength among the fleets of every
+        power at war with the owner; no fleet of theirs, so nothing to lose."""
+        run = _block(self.combat, "sr_battle_run")
+        self.assertRegex(run, r"limit = \{ local_var:sr_cb_code = 1 \}\s*every_in_global_list = \{\s*"
+                              r"variable = sr_fleet_powers\s*limit = \{\s*is_country_alive = yes\s*sr_has_battery = yes\s*\}\s*"
+                              r"sr_bt_battery_fire = yes")
+        self.assertLess(run.index("sr_bt_battery_fire = yes"), run.index("sr_bt_step = yes"))
+        fire = _block(self.combat, "sr_bt_battery_fire")
+        self.assertRegex(fire, r"value = local_var:sr_bt_bf\s*multiply = sr_fleet_k\s*multiply = sr_battery_tick_share\s*"
+                               r"divide = local_var:sr_bt_targets")
+        self.assertIn("add = { value = sr_battery_fire_kinetic multiply = sr_battery_tick_share }", fire)
+        self.assertNotIn("sr_fl_bs_bt_in", fire)
+        self.assertNotIn("sr_cb_battery_gather", self.combat)
+        self.assertNotIn("sr_cb_battery_gather", _block(self.combat, "sr_combat_at"))
+        self.assertIn("te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }", run)
         self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_debris_low"), 0.02)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_tick_share"), 0.25)
 
     def test_the_sweep_takes_from_the_low_pool_alone_after_removal(self):
         monthly = _block(_strip(_raw(DEBRIS_EFFECTS)), "te_debris_global_monthly")
@@ -1935,7 +1947,11 @@ class LunarAtEarthTest(unittest.TestCase):
     def test_posture_3_survives_gathering_at_earth_only_for_a_lunar_target(self):
         gather = _block(self.combat, "sr_fl_gather_at")
         losses = _block(self.combat, "sr_fl_apply_losses_at")
-        for name, body in (("gather", gather), ("losses", losses)):
+        # The siege's losses are a closing-in fleet's alone, and at Earth only
+        # one closing in on a lunar world (the gather's rule).
+        self.assertRegex(losses, r"sr_fl_\$N\$_posture_value = 3\s*OR = \{\s*NOT = \{ local_var:sr_cb_code = 1 \}\s*"
+                                 r"sr_fl_\$N\$_target_lunar = yes")
+        for name, body in (("gather", gather),):
             with self.subTest(helper=name):
                 # Earth stations everything else; the same rule in both, so the
                 # strength gathered closing in is the strength whose losses close in.
@@ -2572,11 +2588,21 @@ class ReadinessTest(unittest.TestCase):
     def test_only_the_fleets_fire_is_halved(self):
         """The battlestation and the batteries are buildings: their fire and
         every loss are as before."""
+        # Every read of it is a fleet's fire: the siege's two, the panel's, the
+        # battle's two (2026-11-25 design § 2) and the AI defence's estimates.
         everything = self.combat + self.values + _strip(_raw(EARTH_EFFECTS)) + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)) \
             + _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
-        self.assertEqual(everything.count("multiply = sr_fleet_readiness"), 3)
+        for m in re.finditer(r"multiply = sr_fleet_readiness", everything):
+            before = everything[max(0, m.start() - 120):m.start()]
+            self.assertRegex(before, r"(sr_fl_(\$N\$|\d)_fire_(fleets|defences)\s*multiply = sr_fleet_quality|"
+                                     r"value = var:sr_fl_at_earth|name = sr_bt_qr value = \{ value = sr_fleet_quality)\s*$")
+        # The battle's, once a power (sr_bt_qr, review of #2069): only a fleet's fire.
+        for m in re.finditer(r"multiply = var:sr_bt_qr", everything):
+            self.assertRegex(everything[max(0, m.start() - 120):m.start()],
+                             r"value = sr_fl_\$N\$_fire_fleets\s*if = \{ limit = \{ has_variable = sr_bt_qr \}\s*$")
         self.assertNotIn("sr_fleet_readiness", _block(self.values, "sr_battlestation_fire"))
-        self.assertNotIn("sr_fleet_readiness", _block(self.combat, "sr_cb_battery_gather"))
+        for name in ("sr_bt_battery_fire", "sr_bt_snap_bs", "sr_bt_ready_bs"):
+            self.assertNotIn("sr_fleet_readiness", _block(self.combat, name))
         self.assertNotIn("sr_fleet_readiness", _strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt")))
 
     def test_earth_weighs_ours_at_it(self):

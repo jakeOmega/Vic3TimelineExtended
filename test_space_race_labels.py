@@ -691,7 +691,7 @@ CELLS = {
         r"je_space_race_widget_fw_fleet"),
     "an orders line's caption on a fleet's page (te_sr_fp_caption)": (
         ("te_sr_fp_caption", 'block "caption_text"'),
-        r"je_space_race_widget_(fw_destination|fw_posture|fw_target|fl_col_marines)"),
+        r"je_space_race_widget_(fw_destination|fw_posture|fw_target|fw_battle|fl_col_marines)"),
     "the leg to the destination picked, on a fleet's page (te_sr_fleet_page)": (
         ("te_sr_fleet_page", 'block "fp_leg"'),
         r"je_space_race_widget_fw_\d_leg"),
@@ -723,6 +723,9 @@ CELLS = {
     "a fleet's posture (te_sr_posture_choice, UI pass design § 7)": (
         ("te_sr_posture_choice", 'block "pc_label"'),
         r"je_space_race_widget_fl_posture_\d"),
+    "Engage or Avoid (te_sr_avoid_button, 2026-11-25 design § 2.9)": (
+        ("te_sr_avoid_button", 'text = "je_space_race_widget_fl_engage"'),
+        r"je_space_race_widget_fl_(engage|avoid)"),
     "seize or destroy (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_seize"'),
         r"je_space_race_widget_fl_(seize|destroy)"),

@@ -134,6 +134,10 @@ sr_disp_fl_1_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_1_destroy } value = 1 }
 }
+sr_disp_fl_1_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_1_avoid } value = 1 }
+}
 sr_disp_fl_1_fire_fleets = {
 	value = sr_fl_1_fire_fleets
 	multiply = sr_fleet_quality
@@ -262,6 +266,10 @@ sr_disp_fl_2_posture = { value = sr_fl_2_posture_value }
 sr_disp_fl_2_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_2_destroy } value = 1 }
+}
+sr_disp_fl_2_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_2_avoid } value = 1 }
 }
 sr_disp_fl_2_fire_fleets = {
 	value = sr_fl_2_fire_fleets
@@ -392,6 +400,10 @@ sr_disp_fl_3_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_3_destroy } value = 1 }
 }
+sr_disp_fl_3_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_3_avoid } value = 1 }
+}
 sr_disp_fl_3_fire_fleets = {
 	value = sr_fl_3_fire_fleets
 	multiply = sr_fleet_quality
@@ -520,6 +532,10 @@ sr_disp_fl_4_posture = { value = sr_fl_4_posture_value }
 sr_disp_fl_4_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_4_destroy } value = 1 }
+}
+sr_disp_fl_4_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_4_avoid } value = 1 }
 }
 sr_disp_fl_4_fire_fleets = {
 	value = sr_fl_4_fire_fleets
@@ -650,6 +666,10 @@ sr_disp_fl_5_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_5_destroy } value = 1 }
 }
+sr_disp_fl_5_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_5_avoid } value = 1 }
+}
 sr_disp_fl_5_fire_fleets = {
 	value = sr_fl_5_fire_fleets
 	multiply = sr_fleet_quality
@@ -778,6 +798,10 @@ sr_disp_fl_6_posture = { value = sr_fl_6_posture_value }
 sr_disp_fl_6_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_6_destroy } value = 1 }
+}
+sr_disp_fl_6_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_6_avoid } value = 1 }
 }
 sr_disp_fl_6_fire_fleets = {
 	value = sr_fl_6_fire_fleets
@@ -908,6 +932,10 @@ sr_disp_fl_7_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_7_destroy } value = 1 }
 }
+sr_disp_fl_7_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_7_avoid } value = 1 }
+}
 sr_disp_fl_7_fire_fleets = {
 	value = sr_fl_7_fire_fleets
 	multiply = sr_fleet_quality
@@ -1037,6 +1065,10 @@ sr_disp_fl_8_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_8_destroy } value = 1 }
 }
+sr_disp_fl_8_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_8_avoid } value = 1 }
+}
 sr_disp_fl_8_fire_fleets = {
 	value = sr_fl_8_fire_fleets
 	multiply = sr_fleet_quality
@@ -1165,6 +1197,10 @@ sr_disp_fl_9_posture = { value = sr_fl_9_posture_value }
 sr_disp_fl_9_destroy = {
 	value = 0
 	if = { limit = { has_variable = sr_fl_9_destroy } value = 1 }
+}
+sr_disp_fl_9_avoid = {
+	value = 0
+	if = { limit = { has_variable = sr_fl_9_avoid } value = 1 }
 }
 sr_disp_fl_9_fire_fleets = {
 	value = sr_fl_9_fire_fleets

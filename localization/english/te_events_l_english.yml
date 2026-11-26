@@ -6244,7 +6244,7 @@
  te_debug_space_race.6.f:0 "docs/testing/solar-colonies-playtest.md, Fleets."
  te_debug_space_race.6.g:0 "Raise our fleets' drive by one (a docked fleet refits back)"
  te_debug_space_race.6.h:0 "Our first colony's integrity to 0"
- te_debug_space_race.6.i:0 "Run this month's combat now"
+ te_debug_space_race.6.i:0 "Run a week's battles and this month's siege now"
  te_debug_space_race.6.j:0 "Occupy our first colony by our strongest enemy, or return it"
  te_debug_space_race.6.m:0 "6c: our first fleet that may interdict begins an interdiction (at its price)"
  te_debug_space_race.6.n:0 "6d: add 100 strength of each role to our ground reserve"

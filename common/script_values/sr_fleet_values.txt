@@ -237,8 +237,26 @@ sr_hold_months_none = { value = 999 }
 sr_hold_ai_reinforce_months = { value = 12 }
 
 # ---- Combat (design § 7) ----------------------------------------------------------------
-# Lanchester's square law: a month, each side loses k x the other's fire.
+# Lanchester's square law: a month, each side loses k x the other's fire. Since
+# the 2026-11-25 design § 2 it is the siege's (the Defences' fire on fleets
+# closing in) and, at a quarter a tick, the ground-to-orbit batteries'.
 sr_fleet_k = { value = 0.1 }
+# The battle (§ 2.4): the square law in steps of sr_bt_k, repeated within a
+# tick until no fighting pair is left or sr_bt_max_steps is reached (a fight
+# of fleets with almost no fire, which goes on at the next tick). An even
+# fight breaks in about 14 steps. A fleet breaks, and drops out, once it has
+# lost sr_bt_break_share of the strength it brought to the battle (§ 3's first
+# guesses: the owner, 2026-11-25, asked for those to be set and tuned later).
+sr_bt_k = { value = 0.05 }
+sr_bt_max_steps = { value = 60 }
+sr_bt_break_share = { value = 0.5 }
+# The batteries fire once a tick (§ 2.5): a quarter of a month's, so a month
+# of ticks deals what a month's round dealt.
+sr_battery_tick_share = { value = 0.25 }
+# The AI engages where its win test holds (§ 2.7): our strength there x our
+# fire against the same product for every power at war with us there, times
+# this margin. Its defence sends a fleet on the same test.
+sr_fl_ai_engage_margin = { value = 1 }
 # Fleet quality: +25% for each of Directed Energy Weapons, Orbital Weapon
 # Platforms and Antimatter Production. Country scope.
 sr_fleet_quality_step = { value = 0.25 }
@@ -346,7 +364,7 @@ sr_fl_ai_attack_margin = { value = 1.5 }
 sr_ws_colony_base = { value = 0.1 }
 sr_ws_colony_growth = { value = 0.15 }
 sr_ws_colony_full_people = { value = 75000 }
-# A month's battle: who lost the larger share, and a fleet destroyed outright.
+# A battle's verdict: who lost the larger share, and a fleet destroyed outright.
 sr_ws_battle = { value = 0.1 }
 sr_ws_battle_rout = { value = 0.25 }
 
@@ -378,34 +396,9 @@ sr_cb_assault_value = {
 	add = sr_cb_s3_value
 }
 
-# The hostile strength each posture engages (design § 7.1): stationed, every
-# hostile fleet; standing off, the hostiles stationed or standing off; closing
-# in, the hostiles stationed or closing in. sr_cb_hs_calc: the hostiles
-# stationed, which draw a closing-in fleet's defence fire and bar a seizure.
-sr_cb_e1_value = {
-	value = 0
-	every_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_war_with = prev }
-		add = sr_cb_all_value
-	}
-}
-sr_cb_e2_value = {
-	value = 0
-	every_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_war_with = prev }
-		add = sr_cb_hold_value
-	}
-}
-sr_cb_e3_value = {
-	value = 0
-	every_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_war_with = prev }
-		add = sr_cb_assault_value
-	}
-}
+# The hostiles stationed (sr_cb_hs_calc), which draw a closing-in fleet's
+# defence fire and bar a seizure: the siege's one read of the fleets against it
+# (the battle is sr_battle_at's, 2026-11-25 design § 2.6).
 sr_cb_hs_calc = {
 	value = 0
 	every_in_global_list = {
@@ -415,63 +408,32 @@ sr_cb_hs_calc = {
 	}
 }
 
-# The hostiles' fire per point engaged that reaches each of our postures:
-# stationed, all three of theirs; standing off, their stationed and standing
-# off; closing in, their stationed and closing in. Times our strength there
-# and k, our losses (the square law: each fleet's fire shared by strength among
-# what it engages, so the losses sum to the fire).
-sr_cb_hostile_r1_value = {
+# ---- The battle's reads (2026-11-25 design § 2; sr_battle_at) ---------------------------------
+# Country scope, a power in the battle at the location (sr_bt_present): the
+# hostiles' losses in it (the batteries' before it included), and their share
+# of the strength they had at the tick's start.
+sr_bt_enemy_lost = {
 	value = 0
 	every_in_global_list = {
 		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_war_with = prev }
-		add = var:sr_cb_r1
-		add = var:sr_cb_r2
-		add = var:sr_cb_r3
+		limit = { has_variable = sr_bt_present has_variable = sr_bt_lost has_war_with = prev }
+		add = var:sr_bt_lost
 	}
 }
-sr_cb_hostile_r2_value = {
+sr_bt_enemy_before = {
 	value = 0
 	every_in_global_list = {
 		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_war_with = prev }
-		add = var:sr_cb_r1
-		add = var:sr_cb_r2
+		limit = { has_variable = sr_bt_present has_variable = sr_bt_before has_war_with = prev }
+		add = var:sr_bt_before
 	}
 }
-sr_cb_hostile_r3_value = {
-	value = 0
-	every_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_war_with = prev }
-		add = var:sr_cb_r1
-		add = var:sr_cb_r3
-	}
-}
-
-# The hostiles' losses this month, and their share of their strength.
-sr_cb_enemy_lost = {
-	value = 0
-	every_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_variable = sr_cb_lost has_war_with = prev }
-		add = var:sr_cb_lost
-	}
-}
-sr_cb_enemy_before = {
-	value = 0
-	every_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present has_variable = sr_cb_before has_war_with = prev }
-		add = var:sr_cb_before
-	}
-}
-sr_cb_enemy_lost_share = {
+sr_bt_enemy_lost_share = {
 	value = 0
 	if = {
-		limit = { sr_cb_enemy_before > 0 }
-		value = sr_cb_enemy_lost
-		divide = sr_cb_enemy_before
+		limit = { sr_bt_enemy_before > 0 }
+		value = sr_bt_enemy_lost
+		divide = sr_bt_enemy_before
 	}
 }
 

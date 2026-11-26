@@ -4,34 +4,31 @@
 # Design: docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md
 # (slice 6b, §§ 7-11, 14; 6c, §§ 12-14; 6d, § 15). Full Colonies only.
 #
-# Each month, from the global step (sr_fl_global_month, after the fleets land
-# and before the worlds' step), at each of the nine locations
-# (sr_combat_at = { LOC CODE }):
+# Two steps (2026-11-25 design, docs/superpowers/specs/
+# 2026-11-25-space-fleet-clock-and-battles-design.md):
+#   - the battle, on each of the fleets' ticks, four a month (sr_battle_at,
+#     below: § 2): fleets of countries at war meet at a location and fight it
+#     out within the tick, Engage / Avoid, pace and ties deciding who fights
+#     whom, each fleet breaking for the nearest dock at half its strength; the
+#     ground-to-orbit batteries fire once a tick at Earth;
+#   - the siege, each month, from the global step after the 1st's battle
+#     (sr_combat_at, with LOC and CODE: § 2.6):
 #   0. every power's forces there by posture into country variables (sr_cb_*):
-#      strength and fire on fleets by posture (1 station, 2 stand off, 3 close
-#      in; 4 interdict, 6c, fights as standing off; at Earth every fleet counts
-#      as stationed, since everything there engages everything, except one
-#      closing in on a lunar world (lunar colonization § 8.1), and the Orbital
-#      Battlestation and, 6d, the ground-to-orbit batteries join), and for each
-#      world its closing-in fleets target,
-#      their strength, fire on defences, marines and fire to destroy;
+#      strength by posture (1 station, 2 stand off, 3 close in; 4 interdict,
+#      6c, counts as standing off; at Earth every fleet counts as stationed
+#      except one closing in on a lunar world (lunar colonization § 8.1), and
+#      the Orbital Battlestation joins as stationed), and for each world its
+#      closing-in fleets target, their strength, fire on defences, marines and
+#      fire to destroy;
 #   1. each world's closing-in strength (global sr_cb_c_<key>);
-#   2. each power's engaged hostile strength by posture (sr_cb_e1..3: station
-#      engages every hostile fleet, stand off the stationed and standing off,
-#      close in the stationed and closing in) and its fire per point engaged
-#      (sr_cb_r1..3 = fire / engaged);
-#   3. its losses (Lanchester's square law, § 7.2): posture p loses
-#      k x its strength x the hostiles' fire per point engaged, summed over the
-#      postures that engage it (sr_cb_l1..3), and closing in on a world, the
-#      world's Defences' fire shared by strength (sr_cb_ld_<key>), so each
-#      fleet's losses are exactly the fire allocated to it;
-#   4. the losses applied slot by slot (screens first, half destroyed, half
-#      damage: sr_fl_take_losses_at), the Orbital Battlestation's share at
-#      Earth, debris at Earth (6d: and the kinetic batteries'), war support's
-#      battle record, the notice;
-#   5. each world: integrity, seizure, destruction, blockade (sr_site_*_step;
+#   2. each power's hostile stationed strength (sr_cb_hs), which shares a
+#      closing-in fleet's fire on Defences and bars a seizure;
+#   3. the Defences' fire on the fleets closing in, shared by strength
+#      (sr_cb_ld_<key>), applied slot by slot (screens first, half destroyed,
+#      half damage: sr_fl_take_losses_at), debris at Earth;
+#   4. each world: integrity, seizure, destruction, blockade (sr_site_*_step;
 #      a lunar world's blockade follows its holder's Earth's, § 8.2);
-#   6. the records cleared.
+#   5. the records cleared.
 # Hostile means at war (has_war_with); a fleet closing in on a free colony is
 # hostile to its Defences alone (§ 9.5). An interdiction (6c, § 12) fires no
 # shot: it blockades the worlds of the country it interdicts, a country at
@@ -39,7 +36,7 @@
 # are generated (sr_fleets_generated.txt); the numbers are sr_fleet_values.txt's.
 # ============================================================================
 
-# ---- The month (global scope) -------------------------------------------------------------
+# ---- The siege's month (global scope) ------------------------------------------------------
 sr_combat_global_monthly = {
 	sr_combat_at = { LOC = earth CODE = 1 }
 	sr_combat_at = { LOC = inner CODE = 2 }
@@ -66,70 +63,31 @@ sr_combat_at = {
 		if = {
 			limit = { local_var:sr_cb_code = 1 }
 			sr_cb_battlestation_gather = yes
-			sr_cb_battery_gather = yes
 		}
 	}
 	# 1. Each world's closing-in strength.
 	sr_cb_world_sums_$LOC$ = yes
-	# 2. Engaged strength and fire per point engaged.
+	# 2. The hostiles stationed against each power.
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { has_variable = sr_cb_present }
-		set_variable = { name = sr_cb_e1 value = sr_cb_e1_value }
-		set_variable = { name = sr_cb_e2 value = sr_cb_e2_value }
-		set_variable = { name = sr_cb_e3 value = sr_cb_e3_value }
 		set_variable = { name = sr_cb_hs value = sr_cb_hs_calc }
-		set_variable = { name = sr_cb_r1 value = 0 }
-		set_variable = { name = sr_cb_r2 value = 0 }
-		set_variable = { name = sr_cb_r3 value = 0 }
-		if = { limit = { var:sr_cb_e1 > 0 } set_variable = { name = sr_cb_r1 value = { value = sr_cb_f1_value divide = var:sr_cb_e1 } } }
-		if = { limit = { var:sr_cb_e2 > 0 } set_variable = { name = sr_cb_r2 value = { value = sr_cb_f2_value divide = var:sr_cb_e2 } } }
-		if = { limit = { var:sr_cb_e3 > 0 } set_variable = { name = sr_cb_r3 value = { value = sr_cb_f3_value divide = var:sr_cb_e3 } } }
 	}
-	# 3. Losses.
-	every_in_global_list = {
-		variable = sr_fleet_powers
-		limit = { has_variable = sr_cb_present }
-		set_variable = { name = sr_cb_l1 value = { value = sr_cb_s1_value multiply = sr_cb_hostile_r1_value multiply = sr_fleet_k } }
-		set_variable = { name = sr_cb_l2 value = { value = sr_cb_s2_value multiply = sr_cb_hostile_r2_value multiply = sr_fleet_k } }
-		set_variable = { name = sr_cb_l3 value = { value = sr_cb_s3_value multiply = sr_cb_hostile_r3_value multiply = sr_fleet_k } }
-		sr_cb_def_losses_$LOC$ = yes
-		set_variable = { name = sr_cb_before value = sr_cb_all_value }
-		set_variable = { name = sr_cb_lost value = { value = var:sr_cb_l1 add = var:sr_cb_l2 add = var:sr_cb_l3 add = sr_cb_ld_total_$LOC$ } }
-	}
-	# 4. Applied; the records.
+	# 3. The Defences' fire on the fleets closing in; debris at Earth.
 	set_local_variable = { name = sr_cb_debris value = 0 }
-	set_local_variable = { name = sr_cb_kinetic value = 0 }
-	set_local_variable = { name = sr_cb_battle value = 0 }
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { has_variable = sr_cb_present }
-		# 6d: Kinetic Interceptors' fire, when there was a hostile fleet to fire on.
-		if = {
-			limit = {
-				has_variable = sr_cb_kf
-				var:sr_cb_e1 > 0
-			}
-			change_local_variable = { name = sr_cb_kinetic add = var:sr_cb_kf }
-		}
-		# The crews the cuts book die (sr_pers_note_people adds them), for the
-		# battle report; reset for each power, as a local runs on through the list.
-		set_local_variable = { name = sr_pers_noted value = 0 }
+		sr_cb_def_losses_$LOC$ = yes
+		set_variable = { name = sr_cb_lost value = sr_cb_ld_total_$LOC$ }
 		if = {
 			limit = { var:sr_cb_lost > 0 }
-			set_local_variable = { name = sr_cb_battle value = 1 }
 			sr_fl_each_slot = { DO = apply_losses }
 			if = {
 				limit = { local_var:sr_cb_code = 1 }
-				sr_cb_battlestation_losses = yes
 				change_local_variable = { name = sr_cb_debris add = var:sr_cb_lost }
 			}
 		}
-		sr_cb_battle_record = { CODE = $CODE$ }
-	}
-	if = {
-		limit = { local_var:sr_cb_battle = 1 }
-		set_global_variable = { name = sr_loc_battle_$LOC$ value = te_history_month_index }
 	}
 	if = {
 		limit = { local_var:sr_cb_debris > 0 }
@@ -145,17 +103,9 @@ sr_combat_at = {
 		}
 		te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = local_var:sr_cb_debris_high }
 	}
-	if = {
-		limit = { local_var:sr_cb_kinetic > 0 }
-		set_local_variable = {
-			name = sr_cb_debris_low
-			value = { value = local_var:sr_cb_kinetic multiply = sr_battery_debris_low }
-		}
-		te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }
-	}
-	# 5. Each world.
+	# 4. Each world.
 	sr_cb_worlds_after_$LOC$ = yes
-	# 6. Cleared.
+	# 5. Cleared.
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { has_variable = sr_cb_present }
@@ -163,6 +113,843 @@ sr_combat_at = {
 	}
 	sr_cb_world_clear_$LOC$ = yes
 	sr_loc_rebuild = yes
+}
+
+# ---- The battle (2026-11-25 design § 2; each of the fleets' ticks, global scope) --------------
+# docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md. From
+# each tick (sr_fl_tick_step; on the 1st, sr_fl_global_month, before the siege),
+# after the landings and the location records, at each location where two
+# powers at war meet (sr_battle_at = { LOC CODE }):
+#   1. each power's units there join (sr_fl_<n>_bt_*; its Orbital Battlestation
+#      at Earth as sr_fl_bs_bt_*): in the battle, its pace, tied or not (§ 2.3:
+#      sr_bt_fleet_tied), Engage or Avoid (sr_fl_<n>_avoid), and the power's
+#      strength before (sr_bt_before);
+#   2. at Earth, the ground-to-orbit batteries fire once (§ 2.5);
+#   3. the strength each unit brings (the break's measure) and each power's
+#      totals; an AI sets Engage or Avoid by its win test (§ 2.7);
+#   4. the battle (§ 2.4): steps of the square law per unit, each unit's fire
+#      shared among the hostile units it is paired with (sr_bt_paired) by their
+#      strength, until no pair is left or sr_bt_max_steps; a unit breaks at
+#      sr_bt_break_share of what it brought, or is destroyed below
+#      sr_fl_minimum_strength, and drops out (the battlestation never breaks);
+#   5. the broken fleets leave for the nearest dock they may (sr_fl_retreat_at);
+#   6. the records: war support, the report (.101), the location's battle
+#      stamp, debris at Earth, the self-check; everything cleared, and the
+#      location records rebuilt.
+# A unit is a slot 1-9 or bs; the passes that read only its battle figures go
+# through sr_bt_each_unit, the ones that read or cut a fleet through
+# sr_fl_each_slot and the battlestation's own.
+sr_battle_global_tick = {
+	sr_battle_at = { LOC = earth CODE = 1 }
+	sr_battle_at = { LOC = inner CODE = 2 }
+	sr_battle_at = { LOC = mars CODE = 3 }
+	sr_battle_at = { LOC = asteroids CODE = 4 }
+	sr_battle_at = { LOC = jupiter CODE = 5 }
+	sr_battle_at = { LOC = saturn CODE = 6 }
+	sr_battle_at = { LOC = uranus CODE = 7 }
+	sr_battle_at = { LOC = neptune CODE = 8 }
+	sr_battle_at = { LOC = kuiper CODE = 9 }
+}
+
+sr_battle_at = {
+	set_local_variable = { name = sr_cb_code value = $CODE$ }
+	set_local_variable = { name = sr_bt_war value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = {
+			is_country_alive = yes
+			sr_bt_armed_here = { LOC = $LOC$ }
+		}
+		if = {
+			limit = {
+				any_in_global_list = {
+					variable = sr_fleet_powers
+					is_country_alive = yes
+					has_war_with = prev
+					sr_bt_here = { LOC = $LOC$ }
+				}
+			}
+			set_local_variable = { name = sr_bt_war value = 1 }
+		}
+	}
+	if = {
+		limit = { local_var:sr_bt_war = 1 }
+		sr_battle_run = { LOC = $LOC$ CODE = $CODE$ }
+	}
+}
+
+sr_battle_run = {
+	set_local_variable = { name = sr_bt_battle value = 0 }
+	set_local_variable = { name = sr_bt_fired value = 0 }
+	set_local_variable = { name = sr_bt_debris value = 0 }
+	set_local_variable = { name = sr_bt_kinetic value = 0 }
+	set_local_variable = { name = sr_bt_ends value = 0 }
+	set_local_variable = { name = sr_bt_steps value = 0 }
+	# 1. The units.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = {
+			is_country_alive = yes
+			sr_bt_here = { LOC = $LOC$ }
+		}
+		set_variable = { name = sr_bt_before value = 0 }
+		set_variable = { name = sr_bt_lost value = 0 }
+		set_variable = { name = sr_bt_dead value = 0 }
+		set_local_variable = { name = sr_bt_held value = 0 }
+		if = {
+			limit = { sr_loc_tied_$LOC$ = yes }
+			set_local_variable = { name = sr_bt_held value = 1 }
+		}
+		set_local_variable = { name = sr_bt_units value = 0 }
+		sr_fl_each_slot = { DO = bt_setup }
+		if = {
+			limit = { local_var:sr_cb_code = 1 }
+			sr_bt_setup_bs = yes
+		}
+		if = {
+			limit = { local_var:sr_bt_units > 0 }
+			set_variable = { name = sr_bt_present value = yes }
+		}
+	}
+	# 2. The batteries, at Earth.
+	if = {
+		limit = { local_var:sr_cb_code = 1 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = {
+				is_country_alive = yes
+				sr_has_battery = yes
+			}
+			sr_bt_battery_fire = yes
+		}
+	}
+	# 3. What each brings; the AI's Engage or Avoid.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_present }
+		set_variable = { name = sr_bt_s value = 0 }
+		set_variable = { name = sr_bt_f value = 0 }
+		# Its fleets' quality x readiness, once a battle (readiness reads its
+		# Space Command; review of #2069).
+		set_variable = { name = sr_bt_qr value = { value = sr_fleet_quality multiply = sr_fleet_readiness } }
+		sr_fl_each_slot = { DO = bt_ready }
+		sr_bt_ready_bs = yes
+	}
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = {
+			has_variable = sr_bt_present
+			is_player = no
+			var:sr_bt_s > 0
+			# Without a Space Command its fleets keep the setting they had, as a
+			# player's do (design § 2.9; review of #2069).
+			sr_sc_operational = yes
+		}
+		sr_bt_ai_choose = yes
+	}
+	# 4. The battle: until no pair is left, at most sr_bt_max_steps steps (a
+	# counted ceiling: the engine stops a while at 1,000 passes).
+	set_local_variable = { name = sr_bt_pairs value = 1 }
+	while = {
+		limit = {
+			local_var:sr_bt_pairs > 0
+			local_var:sr_bt_steps < sr_bt_max_steps
+		}
+		sr_bt_step = yes
+	}
+	# 5. The broken fleets leave.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_present }
+		sr_fl_each_slot = { DO = retreat }
+	}
+	# 6. The records.
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_present }
+		sr_bt_record = { CODE = $CODE$ }
+	}
+	if = {
+		limit = {
+			OR = {
+				local_var:sr_bt_battle = 1
+				local_var:sr_bt_fired = 1
+			}
+		}
+		set_global_variable = { name = sr_loc_battle_$LOC$ value = te_history_month_index }
+	}
+	if = {
+		limit = {
+			local_var:sr_cb_code = 1
+			local_var:sr_bt_debris > 0
+		}
+		# An argument is one token (a block there breaks the file: #1096), so the
+		# two shares go through local variables.
+		set_local_variable = {
+			name = sr_cb_debris_low
+			value = { value = local_var:sr_bt_debris multiply = sr_battle_debris_low }
+		}
+		set_local_variable = {
+			name = sr_cb_debris_high
+			value = { value = local_var:sr_bt_debris multiply = sr_battle_debris_high }
+		}
+		te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = local_var:sr_cb_debris_high }
+	}
+	if = {
+		limit = { local_var:sr_bt_kinetic > 0 }
+		set_local_variable = {
+			name = sr_cb_debris_low
+			value = { value = local_var:sr_bt_kinetic multiply = sr_battery_debris_low }
+		}
+		te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }
+	}
+	sr_bt_self_check = { CODE = $CODE$ }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_before }
+		sr_fl_each_slot = { DO = bt_end }
+		sr_bt_end_power = yes
+	}
+	if = {
+		limit = {
+			OR = {
+				local_var:sr_bt_battle = 1
+				local_var:sr_bt_fired = 1
+			}
+		}
+		sr_loc_rebuild = yes
+	}
+}
+
+# Every unit: slots 1-9 and the battlestation (bs), for the passes that read
+# only a unit's battle figures (sr_fl_<n>_bt_*).
+sr_bt_each_unit = {
+	sr_bt_$DO$ = { N = 1 }
+	sr_bt_$DO$ = { N = 2 }
+	sr_bt_$DO$ = { N = 3 }
+	sr_bt_$DO$ = { N = 4 }
+	sr_bt_$DO$ = { N = 5 }
+	sr_bt_$DO$ = { N = 6 }
+	sr_bt_$DO$ = { N = 7 }
+	sr_bt_$DO$ = { N = 8 }
+	sr_bt_$DO$ = { N = 9 }
+	sr_bt_$DO$ = { N = bs }
+}
+
+# 1. Slot N at the location (local_var:sr_cb_code), not all but destroyed,
+# joins: its pace, tied or not, Engage (a new fleet's) or Avoid.
+sr_fl_bt_setup_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_loc
+			var:sr_fl_$N$_loc = local_var:sr_cb_code
+			sr_fl_$N$_strength >= sr_fl_minimum_strength
+		}
+		set_variable = { name = sr_fl_$N$_bt_in value = yes }
+		set_variable = { name = sr_fl_$N$_bt_pace value = sr_fl_$N$_pace }
+		set_variable = { name = sr_fl_$N$_bt_eng value = 1 }
+		if = {
+			limit = { has_variable = sr_fl_$N$_avoid }
+			set_variable = { name = sr_fl_$N$_bt_eng value = 0 }
+		}
+		set_variable = { name = sr_fl_$N$_bt_tied value = 0 }
+		if = {
+			limit = { sr_bt_fleet_tied = { N = $N$ } }
+			set_variable = { name = sr_fl_$N$_bt_tied value = 1 }
+		}
+		change_variable = { name = sr_bt_before add = sr_fl_$N$_strength }
+		change_local_variable = { name = sr_bt_units add = 1 }
+	}
+}
+
+# The Orbital Battlestation, at Earth, for its owner while its state is held
+# (design § 7.5): it always engages, is always tied, and is the slowest.
+sr_bt_setup_bs = {
+	if = {
+		limit = { sr_battlestation_held = yes }
+		if = {
+			limit = { NOT = { has_variable = sr_battlestation_strength } }
+			set_variable = { name = sr_battlestation_strength value = sr_battlestation_full }
+		}
+		if = {
+			limit = { var:sr_battlestation_strength >= sr_fl_minimum_strength }
+			set_variable = { name = sr_fl_bs_bt_in value = yes }
+			set_variable = { name = sr_fl_bs_bt_pace value = 0 }
+			set_variable = { name = sr_fl_bs_bt_eng value = 1 }
+			set_variable = { name = sr_fl_bs_bt_tied value = 1 }
+			change_variable = { name = sr_bt_before add = var:sr_battlestation_strength }
+			change_local_variable = { name = sr_bt_units add = 1 }
+		}
+	}
+}
+
+# 2. Country scope, a battery owner at Earth: a tick's fire (sr_fleet_k x
+# sr_battery_tick_share x its fire) on the fleets in the battle of every power
+# at war with it, shared by strength. Its kinetic part's debris, a quarter of a
+# month's, only when there was a fleet to fire on. It is no fleet: nothing
+# fires back (design § 15).
+sr_bt_battery_fire = {
+	set_local_variable = { name = sr_bt_bf value = sr_battery_fire }
+	if = {
+		limit = { local_var:sr_bt_bf > 0 }
+		set_local_variable = { name = sr_bt_targets value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = {
+				has_variable = sr_bt_present
+				has_war_with = prev
+			}
+			sr_fl_each_slot = { DO = bt_target }
+		}
+		if = {
+			limit = { local_var:sr_bt_targets > 0 }
+			set_local_variable = {
+				name = sr_bt_per
+				value = {
+					value = local_var:sr_bt_bf
+					multiply = sr_fleet_k
+					multiply = sr_battery_tick_share
+					divide = local_var:sr_bt_targets
+				}
+			}
+			every_in_global_list = {
+				variable = sr_fleet_powers
+				limit = {
+					has_variable = sr_bt_present
+					has_war_with = prev
+				}
+				sr_fl_each_slot = { DO = bt_battery }
+			}
+			change_local_variable = {
+				name = sr_bt_kinetic
+				add = { value = sr_battery_fire_kinetic multiply = sr_battery_tick_share }
+			}
+			set_local_variable = { name = sr_bt_fired value = 1 }
+			if = {
+				limit = { NOT = { has_variable = sr_bt_present } }
+				set_variable = { name = sr_bt_present value = yes }
+			}
+		}
+	}
+}
+
+sr_fl_bt_target_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_in }
+		change_local_variable = { name = sr_bt_targets add = sr_fl_$N$_strength }
+	}
+}
+
+sr_fl_bt_battery_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_in }
+		set_local_variable = {
+			name = sr_fl_loss
+			value = {
+				value = sr_fl_$N$_strength
+				multiply = local_var:sr_bt_per
+				max = sr_fl_$N$_strength
+			}
+		}
+		sr_bt_cut_slot = { N = $N$ }
+		if = {
+			limit = { sr_fl_$N$_strength < sr_fl_minimum_strength }
+			remove_variable = sr_fl_$N$_bt_in
+		}
+	}
+}
+
+# Slot N loses local_var:sr_fl_loss (screens first, half destroyed, half
+# damage: sr_fl_take_losses_at); its owner's record takes the loss and the
+# crews that died with the hulls (sr_pers_note_people adds them to
+# local_var:sr_pers_noted).
+sr_bt_cut_slot = {
+	set_local_variable = { name = sr_pers_noted value = 0 }
+	sr_fl_take_losses_at = { N = $N$ }
+	change_variable = { name = sr_bt_lost add = local_var:sr_fl_loss }
+	change_variable = { name = sr_bt_dead add = local_var:sr_pers_noted }
+	change_local_variable = { name = sr_bt_debris add = local_var:sr_fl_loss }
+}
+
+# 3. What slot N brings to the battle (its break is measured against it), and
+# its owner's totals for the AI's win test.
+sr_fl_bt_ready_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_in }
+		set_variable = { name = sr_fl_$N$_bt_brought value = sr_fl_$N$_strength }
+		change_variable = { name = sr_bt_s add = sr_fl_$N$_strength }
+		change_variable = {
+			name = sr_bt_f
+			add = {
+				value = sr_fl_$N$_fire_fleets
+				# Set by step 3 before this; a tooltip's walk writes nothing (tooltip_walk).
+				if = { limit = { has_variable = sr_bt_qr } multiply = var:sr_bt_qr }
+			}
+		}
+	}
+}
+
+sr_bt_ready_bs = {
+	if = {
+		limit = { has_variable = sr_fl_bs_bt_in }
+		set_variable = { name = sr_fl_bs_bt_brought value = var:sr_battlestation_strength }
+		change_variable = { name = sr_bt_s add = var:sr_battlestation_strength }
+		change_variable = { name = sr_bt_f add = sr_battlestation_fire }
+	}
+}
+
+# Country scope, an AI power in the battle (§ 2.7): it engages when its
+# strength there x its fire is at least the same product for every power at
+# war with it there (x sr_fl_ai_engage_margin), its battlestation counted, and
+# avoids otherwise. The setting is its fleets' own, kept after the battle.
+sr_bt_ai_choose = {
+	set_local_variable = { name = sr_bt_them_s value = 0 }
+	set_local_variable = { name = sr_bt_them_f value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = {
+			has_variable = sr_bt_present
+			has_variable = sr_bt_s
+			has_war_with = prev
+		}
+		change_local_variable = { name = sr_bt_them_s add = var:sr_bt_s }
+		change_local_variable = { name = sr_bt_them_f add = var:sr_bt_f }
+	}
+	set_local_variable = { name = sr_bt_ours value = { value = var:sr_bt_s multiply = var:sr_bt_f } }
+	set_local_variable = {
+		name = sr_bt_theirs
+		value = {
+			value = local_var:sr_bt_them_s
+			multiply = local_var:sr_bt_them_f
+			multiply = sr_fl_ai_engage_margin
+		}
+	}
+	set_local_variable = { name = sr_bt_ai_eng value = 0 }
+	if = {
+		limit = { local_var:sr_bt_ours >= local_var:sr_bt_theirs }
+		set_local_variable = { name = sr_bt_ai_eng value = 1 }
+	}
+	sr_fl_each_slot = { DO = bt_ai }
+}
+
+sr_fl_bt_ai_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_in }
+		if = {
+			limit = { local_var:sr_bt_ai_eng = 1 }
+			if = {
+				limit = { has_variable = sr_fl_$N$_avoid }
+				remove_variable = sr_fl_$N$_avoid
+			}
+			set_variable = { name = sr_fl_$N$_bt_eng value = 1 }
+		}
+		else = {
+			set_variable = { name = sr_fl_$N$_avoid value = yes }
+			set_variable = { name = sr_fl_$N$_bt_eng value = 0 }
+		}
+	}
+}
+
+# 4. One step (global scope, the location in local_var:sr_cb_code): every
+# unit's strength and fire now; each unit's engaged strength (the hostile
+# units it is paired with) and its fire per point engaged; each unit's loss,
+# sr_bt_k x its strength x the fire per point engaged of every unit paired
+# with it, so each unit's fire is dealt out exactly; then the losses, all
+# reckoned before any is taken, and the breaks. local_var:sr_bt_pairs counts
+# the units with a pair.
+sr_bt_step = {
+	set_local_variable = { name = sr_bt_pairs value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_present }
+		sr_fl_each_slot = { DO = bt_snap }
+		sr_bt_snap_bs = yes
+	}
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_present }
+		sr_bt_each_unit = { DO = engaged }
+	}
+	# Fleets keep a battle going: they can break. Battlestations, which can't,
+	# alone exchange one step a tick, at a quarter of a month's fire (the
+	# batteries' share), not sixty (review of #2069).
+	set_local_variable = { name = sr_bt_fleet_pairs value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_present }
+		sr_fl_each_slot = { DO = bt_count }
+	}
+	set_local_variable = { name = sr_bt_step_k value = sr_bt_k }
+	if = {
+		limit = {
+			local_var:sr_bt_pairs > 0
+			local_var:sr_bt_fleet_pairs = 0
+		}
+		if = {
+			limit = { local_var:sr_bt_steps > 0 }
+			set_local_variable = { name = sr_bt_pairs value = 0 }
+		}
+		else = {
+			set_local_variable = { name = sr_bt_step_k value = { value = sr_fleet_k multiply = sr_battery_tick_share } }
+		}
+	}
+	if = {
+		limit = { local_var:sr_bt_pairs > 0 }
+		set_local_variable = { name = sr_bt_battle value = 1 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { has_variable = sr_bt_present }
+			sr_bt_each_unit = { DO = loss }
+		}
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { has_variable = sr_bt_present }
+			sr_fl_each_slot = { DO = bt_apply }
+			sr_bt_apply_bs = yes
+		}
+		change_local_variable = { name = sr_bt_steps add = 1 }
+	}
+}
+
+sr_fl_bt_snap_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_in }
+		set_variable = { name = sr_fl_$N$_bt_s value = sr_fl_$N$_strength }
+		set_variable = {
+			name = sr_fl_$N$_bt_f
+			value = {
+				value = sr_fl_$N$_fire_fleets
+				if = { limit = { has_variable = sr_bt_qr } multiply = var:sr_bt_qr }
+			}
+		}
+	}
+}
+
+sr_bt_snap_bs = {
+	if = {
+		limit = { has_variable = sr_fl_bs_bt_in }
+		set_variable = { name = sr_fl_bs_bt_s value = var:sr_battlestation_strength }
+		set_variable = { name = sr_fl_bs_bt_f value = sr_battlestation_fire }
+	}
+}
+
+# Unit N's figures as the pair test's "mine" (sr_bt_paired reads them).
+sr_bt_me = {
+	set_local_variable = { name = sr_bt_my_eng value = var:sr_fl_$N$_bt_eng }
+	set_local_variable = { name = sr_bt_my_tied value = var:sr_fl_$N$_bt_tied }
+	set_local_variable = { name = sr_bt_my_pace value = var:sr_fl_$N$_bt_pace }
+}
+
+sr_bt_engaged = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_in }
+		sr_bt_me = { N = $N$ }
+		set_local_variable = { name = sr_bt_sum value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = {
+				has_variable = sr_bt_present
+				has_war_with = prev
+			}
+			sr_bt_each_unit = { DO = add_engaged }
+		}
+		set_variable = { name = sr_fl_$N$_bt_r value = 0 }
+		set_variable = { name = sr_fl_$N$_bt_p value = 0 }
+		if = {
+			limit = { local_var:sr_bt_sum > 0 }
+			set_variable = {
+				name = sr_fl_$N$_bt_r
+				value = { value = var:sr_fl_$N$_bt_f divide = local_var:sr_bt_sum }
+			}
+			set_variable = { name = sr_fl_$N$_bt_p value = 1 }
+			change_local_variable = { name = sr_bt_pairs add = 1 }
+		}
+	}
+}
+
+sr_bt_add_engaged = {
+	if = {
+		limit = { sr_bt_paired = { N = $N$ } }
+		change_local_variable = { name = sr_bt_sum add = var:sr_fl_$N$_bt_s }
+	}
+}
+
+sr_bt_loss = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_bt_in }
+		sr_bt_me = { N = $N$ }
+		set_local_variable = { name = sr_bt_sum value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = {
+				has_variable = sr_bt_present
+				has_war_with = prev
+			}
+			sr_bt_each_unit = { DO = add_fire }
+		}
+		set_variable = {
+			name = sr_fl_$N$_bt_l
+			value = {
+				value = var:sr_fl_$N$_bt_s
+				multiply = local_var:sr_bt_sum
+				multiply = local_var:sr_bt_step_k
+			}
+		}
+	}
+}
+
+sr_bt_add_fire = {
+	if = {
+		limit = { sr_bt_paired = { N = $N$ } }
+		change_local_variable = { name = sr_bt_sum add = var:sr_fl_$N$_bt_r }
+	}
+}
+
+# Slot N's loss taken; destroyed below sr_fl_minimum_strength, or broken at
+# sr_bt_break_share of what it brought: either way out of the battle, a broken
+# one marked to leave (sr_fl_retreat_at).
+sr_fl_bt_apply_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_bt_in
+			has_variable = sr_fl_$N$_bt_l
+			var:sr_fl_$N$_bt_l > 0
+		}
+		set_local_variable = {
+			name = sr_fl_loss
+			value = { value = var:sr_fl_$N$_bt_l max = sr_fl_$N$_strength }
+		}
+		sr_bt_cut_slot = { N = $N$ }
+		if = {
+			limit = { sr_fl_$N$_strength < sr_fl_minimum_strength }
+			remove_variable = sr_fl_$N$_bt_in
+			change_local_variable = { name = sr_bt_ends add = 1 }
+		}
+		else_if = {
+			limit = {
+				sr_fl_$N$_strength <= {
+					value = 1
+					subtract = sr_bt_break_share
+					multiply = var:sr_fl_$N$_bt_brought
+				}
+			}
+			remove_variable = sr_fl_$N$_bt_in
+			set_variable = { name = sr_fl_$N$_bt_broke value = yes }
+			change_local_variable = { name = sr_bt_ends add = 1 }
+		}
+	}
+}
+
+# The battlestation's loss, from its strength (not the building); it fights
+# until that is gone, and regains 10% a month (sr_cb_battlestation_month).
+sr_bt_apply_bs = {
+	if = {
+		limit = {
+			has_variable = sr_fl_bs_bt_in
+			has_variable = sr_fl_bs_bt_l
+			var:sr_fl_bs_bt_l > 0
+		}
+		set_local_variable = {
+			name = sr_bt_cut
+			value = { value = var:sr_fl_bs_bt_l max = var:sr_battlestation_strength }
+		}
+		change_variable = { name = sr_battlestation_strength subtract = local_var:sr_bt_cut }
+		change_variable = { name = sr_bt_lost add = local_var:sr_bt_cut }
+		change_local_variable = { name = sr_bt_debris add = local_var:sr_bt_cut }
+		if = {
+			limit = { var:sr_battlestation_strength < sr_fl_minimum_strength }
+			remove_variable = sr_fl_bs_bt_in
+			change_local_variable = { name = sr_bt_ends add = 1 }
+		}
+	}
+}
+
+# 6. Country scope, a power in the battle: war support's record, for thirty
+# days, the later battle's verdict standing (+0.1 a beat when the enemy lost
+# the larger share of its strength, -0.1 when we did; +-0.25 when a side's
+# force there was destroyed outright), and a player's report (.101): one a
+# battle, at most one a tick (sr_battle_notice_pending, 6 days); after a tick
+# of the batteries' fire alone, at most one a month (sr_battery_notice_pending).
+sr_bt_record = {
+	if = {
+		limit = { sr_bt_fought = yes }
+		set_local_variable = { name = sr_cb_ours value = 0 }
+		if = {
+			limit = { var:sr_bt_before > 0 }
+			set_local_variable = { name = sr_cb_ours value = { value = var:sr_bt_lost divide = var:sr_bt_before } }
+		}
+		set_local_variable = { name = sr_cb_theirs value = sr_bt_enemy_lost_share }
+		if = {
+			limit = { local_var:sr_cb_theirs >= 0.99 }
+			set_variable = { name = sr_ws_battle value = sr_ws_battle_rout days = 30 }
+		}
+		else_if = {
+			limit = { local_var:sr_cb_ours >= 0.99 }
+			set_variable = { name = sr_ws_battle value = { value = sr_ws_battle_rout multiply = -1 } days = 30 }
+		}
+		else_if = {
+			limit = { local_var:sr_cb_theirs > local_var:sr_cb_ours }
+			set_variable = { name = sr_ws_battle value = sr_ws_battle days = 30 }
+		}
+		else = {
+			set_variable = { name = sr_ws_battle value = { value = sr_ws_battle multiply = -1 } days = 30 }
+		}
+		# One report a tick: a battle's, or the batteries' fire alone at most once a
+		# month. The report reads its figures a day later, so a battle elsewhere
+		# in the same tick takes over a batteries' report already queued instead
+		# of queuing a second (sr_battle_notice_batteries, a day; review of #2069).
+		if = {
+			limit = {
+				is_player = yes
+				local_var:sr_bt_battle = 1
+				has_variable = sr_battle_notice_batteries
+			}
+			remove_variable = sr_battle_notice_batteries
+			set_variable = { name = sr_battle_loc value = $CODE$ }
+			sr_bt_note_figures = yes
+		}
+		else_if = {
+			limit = {
+				is_player = yes
+				NOT = { has_variable = sr_battle_notice_pending }
+				OR = {
+					local_var:sr_bt_battle = 1
+					NOT = { has_variable = sr_battery_notice_pending }
+				}
+			}
+			set_variable = { name = sr_battle_notice_pending value = yes days = 6 }
+			if = {
+				limit = { local_var:sr_bt_battle = 0 }
+				set_variable = { name = sr_battery_notice_pending value = yes days = 25 }
+				set_variable = { name = sr_battle_notice_batteries value = yes days = 1 }
+			}
+			set_variable = { name = sr_battle_loc value = $CODE$ }
+			sr_bt_note_figures = yes
+			trigger_event = { id = space_race_events.101 days = 1 }
+		}
+	}
+}
+# The report's figures beside sr_battle_loc, read by space_race_events.101 a
+# day later.
+sr_bt_note_figures = {
+	set_variable = { name = sr_battle_lost value = var:sr_bt_lost }
+	set_variable = { name = sr_battle_dealt value = sr_bt_enemy_lost }
+	set_variable = { name = sr_battle_left value = { value = var:sr_bt_before subtract = var:sr_bt_lost min = 0 } }
+	# The crews that died with the destroyed half (space forces personnel
+	# design § 7): what sr_fl_cut_role booked in this battle, so the
+	# Orbital Battlestation's share of the losses (no crew) and the
+	# full-strength floor are left out (review of #2020).
+	set_variable = { name = sr_battle_dead value = var:sr_bt_dead }
+}
+
+# Global scope, after the battle (§ 2.10): TE_SELF_CHECK fleet_battle, once a
+# game each way. OK at the first battle that ends with a break or a unit
+# destroyed inside the step ceiling. BROKEN at the first that reaches the
+# ceiling with units still paired whose fire is at least half their strength:
+# fleets with real fire that the steps didn't settle, so sr_bt_k or
+# sr_bt_max_steps is wrong (fleets with almost no fire, tenders on tenders,
+# may reach it rightly).
+sr_bt_self_check = {
+	if = {
+		limit = {
+			local_var:sr_bt_steps >= sr_bt_max_steps
+			local_var:sr_bt_pairs > 0
+			NOT = { has_global_variable = sr_bt_broken_logged }
+		}
+		set_local_variable = { name = sr_bt_pf value = 0 }
+		set_local_variable = { name = sr_bt_ps value = 0 }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { has_variable = sr_bt_present }
+			sr_fl_each_slot = { DO = bt_left }
+		}
+		if = {
+			limit = {
+				local_var:sr_bt_ps > 0
+				local_var:sr_bt_pf >= { value = local_var:sr_bt_ps multiply = 0.5 }
+			}
+			set_global_variable = { name = sr_bt_broken_logged value = yes }
+			set_global_variable = { name = sr_bt_log_loc value = $CODE$ }
+			set_global_variable = { name = sr_bt_log_steps value = local_var:sr_bt_steps }
+			set_global_variable = { name = sr_bt_log_fire value = local_var:sr_bt_pf }
+			set_global_variable = { name = sr_bt_log_strength value = local_var:sr_bt_ps }
+			debug_log = "TE_SELF_CHECK BROKEN fleet_battle location=[GetGlobalVariable('sr_bt_log_loc').GetValue|0] steps=[GetGlobalVariable('sr_bt_log_steps').GetValue|0] fire=[GetGlobalVariable('sr_bt_log_fire').GetValue|1] strength=[GetGlobalVariable('sr_bt_log_strength').GetValue|1] (the step ceiling, sr_bt_max_steps, reached with fleets still paired whose fire is at least half their strength: raise sr_bt_k or the ceiling; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	else_if = {
+		limit = {
+			local_var:sr_bt_battle = 1
+			local_var:sr_bt_ends > 0
+			local_var:sr_bt_steps < sr_bt_max_steps
+			NOT = { has_global_variable = sr_bt_ok_logged }
+		}
+		set_global_variable = { name = sr_bt_ok_logged value = yes }
+		set_global_variable = { name = sr_bt_log_loc value = $CODE$ }
+		set_global_variable = { name = sr_bt_log_steps value = local_var:sr_bt_steps }
+		set_global_variable = { name = sr_bt_log_ends value = local_var:sr_bt_ends }
+		debug_log = "TE_SELF_CHECK OK fleet_battle location=[GetGlobalVariable('sr_bt_log_loc').GetValue|0] steps=[GetGlobalVariable('sr_bt_log_steps').GetValue|0] ended=[GetGlobalVariable('sr_bt_log_ends').GetValue|0] (a battle settled within its tick: units broke or were destroyed inside the ceiling of sr_bt_max_steps; an even fight takes about 14) date=[TimeKeeper.GetCurrentDate.GetString]"
+	}
+}
+
+# A fleet still paired at the ceiling (the battlestation, which never breaks,
+# doesn't count: review of #2069), and a fleet paired this step (sr_bt_step).
+sr_fl_bt_left_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_bt_in
+			has_variable = sr_fl_$N$_bt_p
+			var:sr_fl_$N$_bt_p = 1
+		}
+		change_local_variable = { name = sr_bt_pf add = var:sr_fl_$N$_bt_f }
+		change_local_variable = { name = sr_bt_ps add = var:sr_fl_$N$_bt_s }
+	}
+}
+sr_fl_bt_count_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_bt_p
+			var:sr_fl_$N$_bt_p = 1
+		}
+		change_local_variable = { name = sr_bt_fleet_pairs add = 1 }
+	}
+}
+
+# Country scope: the power's battle record and its battlestation's cleared
+# (each slot's by sr_fl_bt_end_at, generated).
+sr_bt_end_power = {
+	if = { limit = { has_variable = sr_bt_present } remove_variable = sr_bt_present }
+	if = { limit = { has_variable = sr_bt_before } remove_variable = sr_bt_before }
+	if = { limit = { has_variable = sr_bt_lost } remove_variable = sr_bt_lost }
+	if = { limit = { has_variable = sr_bt_dead } remove_variable = sr_bt_dead }
+	if = { limit = { has_variable = sr_bt_s } remove_variable = sr_bt_s }
+	if = { limit = { has_variable = sr_bt_f } remove_variable = sr_bt_f }
+	if = { limit = { has_variable = sr_bt_qr } remove_variable = sr_bt_qr }
+	sr_bt_end_bs = yes
+}
+
+sr_bt_end_bs = {
+	if = { limit = { has_variable = sr_fl_bs_bt_in } remove_variable = sr_fl_bs_bt_in }
+	if = { limit = { has_variable = sr_fl_bs_bt_pace } remove_variable = sr_fl_bs_bt_pace }
+	if = { limit = { has_variable = sr_fl_bs_bt_eng } remove_variable = sr_fl_bs_bt_eng }
+	if = { limit = { has_variable = sr_fl_bs_bt_tied } remove_variable = sr_fl_bs_bt_tied }
+	if = { limit = { has_variable = sr_fl_bs_bt_brought } remove_variable = sr_fl_bs_bt_brought }
+	if = { limit = { has_variable = sr_fl_bs_bt_s } remove_variable = sr_fl_bs_bt_s }
+	if = { limit = { has_variable = sr_fl_bs_bt_f } remove_variable = sr_fl_bs_bt_f }
+	if = { limit = { has_variable = sr_fl_bs_bt_r } remove_variable = sr_fl_bs_bt_r }
+	if = { limit = { has_variable = sr_fl_bs_bt_p } remove_variable = sr_fl_bs_bt_p }
+	if = { limit = { has_variable = sr_fl_bs_bt_l } remove_variable = sr_fl_bs_bt_l }
+}
+
+# Slot N's Engage / Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui):
+# Avoid on, or off.
+sr_fl_toggle_avoid_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_avoid }
+		remove_variable = sr_fl_$N$_avoid
+	}
+	else = {
+		set_variable = { name = sr_fl_$N$_avoid value = yes }
+	}
 }
 
 # ---- One slot's part ($N$; the power's scope) ---------------------------------------------------
@@ -270,45 +1057,22 @@ sr_cb_add = {
 	change_variable = { name = $VAR$ add = $AMOUNT$ }
 }
 
-# 4. The slot's losses: its posture's, by its share of that posture's strength,
-# and closing in, the target's Defences' too, by its share of ours closing in
-# on it. At Earth, stationed unless closing in on a lunar world, as gathered.
+# 3. The slot's losses to its target's Defences, by its share of ours closing in
+# on it; only a fleet closing in takes them (at Earth, on a lunar world).
 sr_fl_apply_losses_at = {
 	if = {
 		limit = {
 			has_variable = sr_fl_$N$_loc
 			var:sr_fl_$N$_loc = local_var:sr_cb_code
 			sr_fl_$N$_strength > 0
-		}
-		set_local_variable = { name = sr_cb_p value = sr_fl_$N$_posture_value }
-		if = {
-			limit = {
-				local_var:sr_cb_code = 1
-				NOT = {
-					AND = {
-						local_var:sr_cb_p = 3
-						sr_fl_$N$_target_lunar = yes
-					}
-				}
+			sr_fl_$N$_posture_value = 3
+			OR = {
+				NOT = { local_var:sr_cb_code = 1 }
+				sr_fl_$N$_target_lunar = yes
 			}
-			set_local_variable = { name = sr_cb_p value = 1 }
 		}
-		if = { limit = { local_var:sr_cb_p < 1 } set_local_variable = { name = sr_cb_p value = 1 } }
-		if = { limit = { local_var:sr_cb_p = 4 } set_local_variable = { name = sr_cb_p value = 2 } }
 		set_local_variable = { name = sr_fl_loss value = 0 }
-		if = {
-			limit = { local_var:sr_cb_p = 1 sr_cb_s1_value > 0 }
-			set_local_variable = { name = sr_fl_loss value = { value = var:sr_cb_l1 multiply = sr_fl_$N$_strength divide = sr_cb_s1_value } }
-		}
-		else_if = {
-			limit = { local_var:sr_cb_p = 2 sr_cb_s2_value > 0 }
-			set_local_variable = { name = sr_fl_loss value = { value = var:sr_cb_l2 multiply = sr_fl_$N$_strength divide = sr_cb_s2_value } }
-		}
-		else_if = {
-			limit = { local_var:sr_cb_p = 3 sr_cb_s3_value > 0 }
-			set_local_variable = { name = sr_fl_loss value = { value = var:sr_cb_l3 multiply = sr_fl_$N$_strength divide = sr_cb_s3_value } }
-			sr_fl_target_loss_at = { N = $N$ }
-		}
+		sr_fl_target_loss_at = { N = $N$ }
 		if = {
 			limit = { local_var:sr_fl_loss > 0 }
 			set_local_variable = { name = sr_fl_loss value = { value = local_var:sr_fl_loss max = sr_fl_$N$_strength } }
@@ -521,6 +1285,8 @@ sr_icpt_note = {
 # Country scope, at Earth: 25 warship strength a level, fighting for its
 # owner while its state is under its control (§ 5.1), regaining 10% of full a
 # month (sr_cb_battlestation_month). Its losses take nothing from the building.
+# In the siege it counts as stationed (it bars a seizure and holds orbit); in
+# the battle it is a unit of its own (sr_bt_setup_bs).
 sr_cb_battlestation_gather = {
 	if = {
 		limit = { sr_battlestation_held = yes }
@@ -536,26 +1302,6 @@ sr_cb_battlestation_gather = {
 			if = {
 				limit = { NOT = { has_variable = sr_cb_present } }
 				set_variable = { name = sr_cb_present value = yes }
-			}
-		}
-	}
-}
-
-sr_cb_battlestation_losses = {
-	if = {
-		limit = {
-			has_variable = sr_cb_bs
-			sr_cb_s1_value > 0
-		}
-		set_variable = {
-			name = sr_battlestation_strength
-			value = {
-				value = var:sr_cb_l1
-				multiply = var:sr_cb_bs
-				divide = sr_cb_s1_value
-				multiply = -1
-				add = var:sr_battlestation_strength
-				min = 0
 			}
 		}
 	}
@@ -586,75 +1332,10 @@ sr_cb_battlestation_month = {
 }
 
 # ---- Ground-to-orbit batteries (design § 15, 6d) -----------------------------------------------
-# Country scope, at Earth: the batteries' fire joins their owner's side, from
-# the states it controls (sr_battery_fire; § 5.1). They are no fleet: no
-# strength, so no losses, and they don't hold orbit (a blockade of Earth
-# stands while they fire on it). The kinetic part leaves debris when there was
-# something to fire at (sr_cb_kf; the step's pass 4).
-sr_cb_battery_gather = {
-	if = {
-		limit = { sr_has_battery = yes }
-		set_local_variable = { name = sr_cb_bf value = sr_battery_fire }
-		if = {
-			limit = { local_var:sr_cb_bf > 0 }
-			sr_cb_add = { VAR = sr_cb_f1 AMOUNT = local_var:sr_cb_bf }
-			set_variable = { name = sr_cb_kf value = sr_battery_fire_kinetic }
-			if = {
-				limit = { NOT = { has_variable = sr_cb_present } }
-				set_variable = { name = sr_cb_present value = yes }
-			}
-		}
-	}
-}
-
-# ---- The month's records (a power at the location; design §§ 7.4, 10) ---------------------------
-# War support's battle record: a month in which we fought, +0.1 a beat for
-# thirty days when the enemy lost the larger share of its strength, -0.1 when
-# we did; +-0.25 when a side's fleet there was destroyed outright. A player
-# who fought gets the battle report (.101), once a month.
-sr_cb_battle_record = {
-	if = {
-		limit = { sr_cb_fought = yes }
-		set_local_variable = { name = sr_cb_ours value = 0 }
-		if = {
-			limit = { var:sr_cb_before > 0 }
-			set_local_variable = { name = sr_cb_ours value = { value = var:sr_cb_lost divide = var:sr_cb_before } }
-		}
-		set_local_variable = { name = sr_cb_theirs value = sr_cb_enemy_lost_share }
-		if = {
-			limit = { local_var:sr_cb_theirs >= 0.99 }
-			set_variable = { name = sr_ws_battle value = sr_ws_battle_rout days = 30 }
-		}
-		else_if = {
-			limit = { local_var:sr_cb_ours >= 0.99 }
-			set_variable = { name = sr_ws_battle value = { value = sr_ws_battle_rout multiply = -1 } days = 30 }
-		}
-		else_if = {
-			limit = { local_var:sr_cb_theirs > local_var:sr_cb_ours }
-			set_variable = { name = sr_ws_battle value = sr_ws_battle days = 30 }
-		}
-		else = {
-			set_variable = { name = sr_ws_battle value = { value = sr_ws_battle multiply = -1 } days = 30 }
-		}
-		if = {
-			limit = {
-				is_player = yes
-				NOT = { has_variable = sr_battle_notice_pending }
-			}
-			set_variable = { name = sr_battle_notice_pending value = yes days = 25 }
-			set_variable = { name = sr_battle_loc value = $CODE$ }
-			set_variable = { name = sr_battle_lost value = var:sr_cb_lost }
-			set_variable = { name = sr_battle_dealt value = sr_cb_enemy_lost }
-			set_variable = { name = sr_battle_left value = { value = var:sr_cb_before subtract = var:sr_cb_lost min = 0 } }
-			# The crews that died with the destroyed half (space forces personnel
-			# design § 7): what sr_fl_cut_role booked this month's battle, so the
-			# Orbital Battlestation's share of the losses (no crew) and the
-			# full-strength floor are left out (review of #2020).
-			set_variable = { name = sr_battle_dead value = local_var:sr_pers_noted }
-			trigger_event = { id = space_race_events.101 days = 1 }
-		}
-	}
-}
+# They fire once a tick in the battle at Earth (sr_bt_battery_fire, 2026-11-25
+# design § 2.5), from the states their owner controls (sr_battery_fire; § 5.1).
+# They are no fleet: no strength, so no losses, and they don't hold orbit (a
+# blockade of Earth stands while they fire on it).
 
 # ---- A world's month (global scope; KEY, INDEX; generated sr_cb_worlds_after_<loc>) --------------
 # Integrity falls by 100 x k x the defence fire aimed at it / its hardness; at

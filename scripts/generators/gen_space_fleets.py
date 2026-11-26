@@ -122,7 +122,7 @@ POSTURES = {1: "station", 2: "standoff", 3: "closein", 4: "interdict"}
 
 # Every variable of a slot, cleared together (sr_fl_clear_at).
 SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_quarters", "dv", "supply", "marines", "drive",
-             "refit_until", "posture", "target", "destroy", "charged", "icpt")
+             "refit_until", "posture", "target", "destroy", "charged", "icpt", "avoid")
 
 # A slot's variable lists, cleared with it, and on each new leg and landing
 # (sr_fl_dispatch, sr_fl_arrive_at): the players already told of the leg, by
@@ -142,11 +142,17 @@ SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marine
                 "gather", "apply_losses", "toggle_destroy", "ai_recall", "debug_drive",
                 "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick", "set_posture", "set_target",
                 "xfer_open", "xfer_step", "transfer", "land_pick", "embark_pick",
-                "ld_open_land", "ld_open_embark", "ld_step", "migrate_ticks")
-# The combat record's per-power variables (sr_fleet_combat_effects.txt), and
-# per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
-CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
-           "l1", "l2", "l3", "before", "lost", "bs", "kf")
+                "ld_open_land", "ld_open_embark", "ld_step", "migrate_ticks",
+                "bt_setup", "bt_target", "bt_battery", "bt_ready", "bt_ai", "bt_snap", "bt_count", "bt_apply", "bt_left", "bt_end",
+                "retreat", "toggle_avoid", "ai_threat", "ai_guard")
+# A slot's battle figures (sr_fl_<n>_bt_*, 2026-11-25 design § 2;
+# sr_fleet_combat_effects.txt's sr_battle_at), cleared after each battle: in
+# the battle, pace, engaging, tied, the strength it brought, this step's
+# strength, fire, fire per point engaged, paired or not and loss, and broken.
+BT_VARS = ("in", "pace", "eng", "tied", "brought", "s", "f", "r", "p", "l", "broke")
+# The siege's per-power variables (sr_fleet_combat_effects.txt's sr_combat_at),
+# and per world closing in.
+CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "hs", "lost", "bs")
 CB_WORLD_VARS = ("s3", "fd3", "mar", "dfd", "ld")
 
 
@@ -475,6 +481,8 @@ def render_slot_triggers(n: int) -> list[str]:
            f"{var(n, 'exists')} = {{ OR = {{ has_variable = {loc} has_variable = {var(n, 'dest')} }} }}",
            f"{var(n, 'at_location')} = {{ has_variable = {loc} }}",
            f"{var(n, 'at_earth')} = {{ has_variable = {loc} var:{loc} = {EARTH} }}",
+           "# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).",
+           f"{var(n, 'avoiding')} = {{ has_variable = {var(n, 'avoid')} }}",
            "# Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.",
            f"{var(n, 'target_lunar')} = {{",
            f"\thas_variable = {var(n, 'target')}",
@@ -752,6 +760,12 @@ def render_triggers() -> str:
         out += render_slot_triggers(n) + [""]
     for n in range(1, SLOTS + 1):
         out += render_transfer_triggers(n) + [""]
+    out += ["# Its fleets are tied at the location (2026-11-25 design § 2.3): it holds a",
+            "# colony there, so any fleet that engages them catches them. Earth counts as",
+            "# everyone's colony."]
+    for lc in LOCATIONS:
+        out += [f"sr_loc_tied_{lc.key} = {{", "\talways = yes" if lc.code == EARTH else f"\tsr_loc_held_{lc.key} = yes", "}"]
+    out += [""]
     out += ["# An Into button's choice (scope:pick, 0 a new fleet or a slot) is already the",
             "# transfer's (sr_det_to): the button greys, as the approach selector's does.",
             "sr_xf_pick_chosen = {", "\tOR = {",
@@ -827,6 +841,18 @@ def render_triggers() -> str:
                 *[f"\t\tAND = {{ {held(s)} has_global_variable = sr_site_resisting_{s.key} "
                   f"sr_site_hold_months_{s.key} < sr_hold_ai_reinforce_months }}" for s in ws], "\t}", "}"]
 
+    out += ["# The AI's defence keeps its fleets at Earth home (sr_fl_ai_defend_<loc>): a",
+            "# fleet of a power at war with it is at Earth or on its way there (review of",
+            "# #2069: sending every free fleet could leave Earth to the enemy).",
+            "sr_fl_ai_earth_threatened = {",
+            "\tsave_temporary_scope_as = sr_icpt_victim",
+            "\tany_in_global_list = {",
+            "\t\tvariable = sr_fleet_powers",
+            "\t\tis_country_alive = yes",
+            "\t\thas_war_with = scope:sr_icpt_victim",
+            f"\t\tOR = {{ has_variable = sr_fl_at_earth sr_fl_any_bound = {{ CODE = {EARTH} }} }}",
+            "\t}",
+            "}"]
     out += ["# The Moon's colonies, at Earth: Land and Embark there (owner, 2026-11-24).",
             "sr_loc_held_lunar = {", "\tOR = {", *[f"\t\tAND = {{ {held(s)} }}" for s in LUNAR], "\t}", "}",
             *marine_triggers("earth", list(LUNAR))]
@@ -1423,12 +1449,16 @@ def render_transfer() -> list[str]:
 def render_location_effects() -> list[str]:
     out = ["# ===== A slot and its location ($N$) =====",
            "# On arrival, its posture: Station where we hold a colony (and at Earth), Stand",
-           "# off elsewhere (design § 6).",
+           "# off elsewhere (design § 6), except a fleet set to Avoid, which stations",
+           "# there too: standing off where there is a hostile world ties a fleet to the",
+           "# location (sr_bt_fleet_tied), and the battle of its landing tick would catch",
+           "# it (review of #2069). Its player stands it off to blockade.",
            "sr_fl_arrival_posture_at = {"]
     cases = [(f"var:sr_fl_$N$_loc = {EARTH}", ["set_variable = { name = sr_fl_$N$_posture value = 1 }"])]
     cases += [(f"var:sr_fl_$N$_loc = {lc.code} sr_loc_held_{lc.key} = yes",
                ["set_variable = { name = sr_fl_$N$_posture value = 1 }"]) for lc in LOCATIONS[1:]]
-    out += _chain(cases, else_body=["set_variable = { name = sr_fl_$N$_posture value = 2 }"])
+    out += _chain(cases, else_body=["if = { limit = { has_variable = sr_fl_$N$_avoid } set_variable = { name = sr_fl_$N$_posture value = 1 } }",
+                                    "else = { set_variable = { name = sr_fl_$N$_posture value = 2 } }"])
     out += ["}", "",
             "# On arrival, contact for every world of ours at the location (slice 5's",
             "# sr_site_contact_<key>), unless it is blockaded or occupied, or (6d) our",
@@ -1932,26 +1962,146 @@ def render_ai_attack() -> list[str]:
     return out
 
 
+def render_battle() -> list[str]:
+    """The battle's per-slot pieces that need the slot's or the locations' names
+    (2026-11-25 design § 2; the loop is sr_fleet_combat_effects.txt's)."""
+    out = ["# ===== The battle (2026-11-25 design § 2; sr_fleet_combat_effects.txt's sr_battle_at) =====",
+           "# A slot's battle figures cleared, after each battle (BT_VARS).",
+           "sr_fl_bt_end_at = {",
+           *[f"\tif = {{ limit = {{ has_variable = sr_fl_$N$_bt_{v} }} remove_variable = sr_fl_$N$_bt_{v} }}" for v in BT_VARS],
+           "}",
+           "# A broken fleet not at a dock leaves for the nearest it may depart for (§ 2.4):",
+           "# Earth, or a location where we hold a Spaceport, nearest by the leg's quarters,",
+           "# through the same sr_fl_<n>_may_depart_<loc> an order passes. With none in",
+           "# reach it stays, out of this battle, and can be caught at the next tick.",
+           "sr_fl_retreat_at = {",
+           "\tif = {",
+           "\t\tlimit = { has_variable = sr_fl_$N$_bt_broke NOT = { sr_fl_$N$_docked = yes } }",
+           f"\t\tset_local_variable = {{ name = sr_bt_best value = {TICK_CEILING} }}",
+           "\t\tset_local_variable = { name = sr_bt_to value = 0 }"]
+    for lc in LOCATIONS:
+        dock = "" if lc.code == EARTH else f"sr_loc_port_{lc.key} = yes "
+        out += ["\t\tif = {",
+                f"\t\t\tlimit = {{ {dock}sr_fl_$N$_may_depart_{lc.key} = yes sr_fl_$N$_leg_quarters_{lc.key} < local_var:sr_bt_best }}",
+                f"\t\t\tset_local_variable = {{ name = sr_bt_best value = sr_fl_$N$_leg_quarters_{lc.key} }}",
+                f"\t\t\tset_local_variable = {{ name = sr_bt_to value = {lc.code} }}",
+                "\t\t}"]
+    out += _chain([(f"local_var:sr_bt_to = {lc.code} sr_fl_$N$_may_depart_{lc.key} = yes",
+                    [f"sr_fl_dispatch = {{ N = $N$ LOC = {lc.key} CODE = {lc.code} }}"]) for lc in LOCATIONS], 2)
+    out += ["\t}", "}"]
+    return out
+
+
+def _defend_eligible(n: int, k: str) -> str:
+    """Free, reaching in time, able to leave, and not a fleet at Earth while an
+    enemy fleet is there or on its way (local_var:sr_fl_earth_threat)."""
+    return (f"{var(n, f'may_depart_{k}')} = yes {var(n, 'ai_free')} = yes {var(n, f'ai_reaches_{k}')} = yes "
+            f"NOT = {{ AND = {{ local_var:sr_fl_earth_threat = 1 {var(n, 'at_earth')} = yes }} }}")
+
+
 def render_ai_defend() -> list[str]:
-    out = ["# ===== The AI's defence (6b; sr_fl_ai_defend) =====",
-           "sr_fl_ai_defend_all = {", *[f"\tsr_fl_ai_defend_{lc.key} = yes" for lc in LOCATIONS[1:]], "}"]
+    """The AI's defence of a threatened location, on the battle's win test
+    (2026-11-25 design § 2.7): hostile, the fleets there and on their way of
+    every power at war with us or interdicting us there; ours, ours there and
+    on our way; each strength x fire. Already winning (ours at least theirs x
+    sr_fl_ai_engage_margin, with a fleet of ours there or bound): nothing is
+    sent. Else the strongest free fleet that reaches in time, if it makes ours
+    win; else, if together they would, the free fleets that reach, strongest
+    first, until ours wins; else none. Which fleets may go is settled before any
+    is sent (a dispatch rebuilds the location records the reach test reads),
+    and while an enemy fleet is at Earth or on its way none leaves Earth
+    (review of #2069)."""
+    fire = "{ value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness }"
+    here = ("OR = { AND = { has_variable = sr_fl_$N$_loc var:sr_fl_$N$_loc = local_var:sr_fl_code } "
+            "AND = { NOT = { has_variable = sr_fl_$N$_loc } has_variable = sr_fl_$N$_dest var:sr_fl_$N$_dest = local_var:sr_fl_code } }")
+    out = ["# ===== The AI's defence (6b; sr_fl_ai_defend; its win test, 2026-11-25 design § 2.7) =====",
+           "sr_fl_ai_defend_all = {", *[f"\tsr_fl_ai_defend_{lc.key} = yes" for lc in LOCATIONS[1:]], "}",
+           "# Slot N's strength and fire, at the location in local_var:sr_fl_code or on its",
+           "# way there: a hostile's (sr_fl_ts, _tf) and ours (sr_fl_os, _of).",
+           "sr_fl_ai_threat_at = {",
+           "\tif = {",
+           f"\t\tlimit = {{ {here} }}",
+           "\t\tchange_local_variable = { name = sr_fl_ts add = sr_fl_$N$_strength }",
+           f"\t\tchange_local_variable = {{ name = sr_fl_tf add = {fire} }}",
+           "\t}", "}",
+           "sr_fl_ai_guard_at = {",
+           "\tif = {",
+           f"\t\tlimit = {{ {here} }}",
+           "\t\tchange_local_variable = { name = sr_fl_os add = sr_fl_$N$_strength }",
+           f"\t\tchange_local_variable = {{ name = sr_fl_of add = {fire} }}",
+           "\t}", "}"]
     for lc in LOCATIONS[1:]:
         k = lc.key
         out += [f"sr_fl_ai_defend_{k} = {{",
                 "\tif = {",
-                f"\t\tlimit = {{ sr_fl_ai_threatened_{k} = yes NOT = {{ sr_fl_any_at_or_bound = {{ CODE = {lc.code} }} }} }}",
-                "\t\tset_local_variable = { name = sr_fl_best value = 0 }",
-                "\t\tset_local_variable = { name = sr_fl_n value = 0 }"]
+                f"\t\tlimit = {{ sr_fl_ai_threatened_{k} = yes }}",
+                "\t\tsave_temporary_scope_as = sr_icpt_victim",
+                f"\t\tset_local_variable = {{ name = sr_fl_code value = {lc.code} }}",
+                *[f"\t\tset_local_variable = {{ name = sr_fl_{v} value = 0 }}" for v in ("ts", "tf", "os", "of")],
+                "\t\tevery_in_global_list = {",
+                "\t\t\tvariable = sr_fleet_powers",
+                f"\t\t\tlimit = {{ is_country_alive = yes OR = {{ has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = {{ LOC = {k} }} }} }}",
+                "\t\t\tsr_fl_each_slot = { DO = ai_threat }",
+                "\t\t}",
+                "\t\tsr_fl_each_slot = { DO = ai_guard }",
+                "\t\tset_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf "
+                "multiply = sr_fl_ai_engage_margin } }",
+                "\t\tset_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }",
+                "\t\tif = {",
+                "\t\t\tlimit = { OR = { local_var:sr_fl_os <= 0 local_var:sr_fl_have < local_var:sr_fl_need } }",
+                *[f"\t\t\tset_local_variable = {{ name = sr_fl_{v} value = 0 }}" for v in ("best", "bf", "n", "all_s", "all_f", "cnt",
+                                                                                              "earth_threat")],
+                "\t\t\tif = { limit = { sr_fl_ai_earth_threatened = yes } set_local_variable = { name = sr_fl_earth_threat value = 1 } }",
+                *[f"\t\t\tset_local_variable = {{ name = sr_fl_el_{n} value = 0 }}" for n in range(1, SLOTS + 1)]]
         for n in range(1, SLOTS + 1):
-            out += ["\t\tif = {",
-                    f"\t\t\tlimit = {{ {var(n, f'may_depart_{k}')} = yes {var(n, 'ai_free')} = yes {var(n, f'ai_reaches_{k}')} = yes "
-                    f"{var(n, 'strength')} > local_var:sr_fl_best }}",
-                    f"\t\t\tset_local_variable = {{ name = sr_fl_best value = {var(n, 'strength')} }}",
-                    f"\t\t\tset_local_variable = {{ name = sr_fl_n value = {n} }}",
-                    "\t\t}"]
-        out += _chain([(f"local_var:sr_fl_n = {n}", [f"sr_fl_dispatch = {{ N = {n} LOC = {k} CODE = {lc.code} }}"])
-                       for n in range(1, SLOTS + 1)], 2)
-        out += ["\t}", "}"]
+            out += ["\t\t\tif = {",
+                    f"\t\t\t\tlimit = {{ {_defend_eligible(n, k)} }}",
+                    f"\t\t\t\tset_local_variable = {{ name = sr_fl_el_{n} value = 1 }}",
+                    f"\t\t\t\tchange_local_variable = {{ name = sr_fl_all_s add = {var(n, 'strength')} }}",
+                    f"\t\t\t\tchange_local_variable = {{ name = sr_fl_all_f add = {fire.replace('$N$', str(n))} }}",
+                    "\t\t\t\tchange_local_variable = { name = sr_fl_cnt add = 1 }",
+                    "\t\t\t\tif = {",
+                    f"\t\t\t\t\tlimit = {{ {var(n, 'strength')} > local_var:sr_fl_best }}",
+                    f"\t\t\t\t\tset_local_variable = {{ name = sr_fl_best value = {var(n, 'strength')} }}",
+                    f"\t\t\t\t\tset_local_variable = {{ name = sr_fl_bf value = {fire.replace('$N$', str(n))} }}",
+                    f"\t\t\t\t\tset_local_variable = {{ name = sr_fl_n value = {n} }}",
+                    "\t\t\t\t}",
+                    "\t\t\t}"]
+        out += ["\t\t\tset_local_variable = { name = sr_fl_win1 value = { value = local_var:sr_fl_os add = local_var:sr_fl_best "
+                "multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_bf } } }",
+                "\t\t\tset_local_variable = { name = sr_fl_win_all value = { value = local_var:sr_fl_os add = local_var:sr_fl_all_s "
+                "multiply = { value = local_var:sr_fl_of add = local_var:sr_fl_all_f } } }",
+                "\t\t\tif = {",
+                "\t\t\t\tlimit = { local_var:sr_fl_n > 0 local_var:sr_fl_win1 >= local_var:sr_fl_need }"]
+        out += _chain([(f"local_var:sr_fl_n = {n} {var(n, f'may_depart_{k}')} = yes",
+                        [f"sr_fl_dispatch = {{ N = {n} LOC = {k} CODE = {lc.code} }}"]) for n in range(1, SLOTS + 1)], 4)
+        # Strongest first, each pass the strongest eligible fleet not yet picked
+        # (sr_fl_el_<n> 1 eligible, 2 picked), until ours with those picked wins.
+        pick = ["\t\t\t\t\tset_local_variable = { name = sr_fl_best value = 0 }",
+                "\t\t\t\t\tset_local_variable = { name = sr_fl_bf value = 0 }",
+                "\t\t\t\t\tset_local_variable = { name = sr_fl_n value = 0 }"]
+        for n in range(1, SLOTS + 1):
+            pick += [f"\t\t\t\t\tif = {{ limit = {{ local_var:sr_fl_el_{n} = 1 {var(n, 'strength')} > local_var:sr_fl_best }} "
+                     f"set_local_variable = {{ name = sr_fl_best value = {var(n, 'strength')} }} "
+                     f"set_local_variable = {{ name = sr_fl_bf value = {fire.replace('$N$', str(n))} }} "
+                     f"set_local_variable = {{ name = sr_fl_n value = {n} }} }}"]
+        pick += ["\t\t\t\t\tchange_local_variable = { name = sr_fl_os add = local_var:sr_fl_best }",
+                 "\t\t\t\t\tchange_local_variable = { name = sr_fl_of add = local_var:sr_fl_bf }",
+                 *[f"\t\t\t\t\tif = {{ limit = {{ local_var:sr_fl_n = {n} }} set_local_variable = {{ name = sr_fl_el_{n} value = 2 }} }}"
+                   for n in range(1, SLOTS + 1)]]
+        out += ["\t\t\t}",
+                "\t\t\telse_if = {",
+                "\t\t\t\tlimit = { local_var:sr_fl_cnt > 1 local_var:sr_fl_win_all >= local_var:sr_fl_need }",
+                "\t\t\t\tset_local_variable = { name = sr_fl_n value = 1 }",
+                "\t\t\t\twhile = {",
+                "\t\t\t\t\tlimit = { local_var:sr_fl_n > 0 local_var:sr_fl_have < local_var:sr_fl_need }",
+                *pick,
+                "\t\t\t\t\tset_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }",
+                "\t\t\t\t}"]
+        for n in range(1, SLOTS + 1):
+            out += [f"\t\t\t\tif = {{ limit = {{ local_var:sr_fl_el_{n} = 2 {var(n, f'may_depart_{k}')} = yes }} "
+                    f"sr_fl_dispatch = {{ N = {n} LOC = {k} CODE = {lc.code} }} }}"]
+        out += ["\t\t\t}", "\t\t}", "\t}", "}"]
     return out
 
 
@@ -2108,7 +2258,8 @@ def render_effects() -> str:
              ""]
     for block in (render_dispatchers(), render_role_effects(), render_transfer_effects(),
                   render_location_effects(),
-                  render_finders(), render_records(), render_ai_effects(), render_combat(), render_ai_defend(),
+                  render_finders(), render_records(), render_ai_effects(), render_combat(), render_battle(),
+                  render_ai_defend(),
                   render_ai_attack(), render_debug(), render_overview_list(), render_earth_alert()):
         parts += block + [""]
     return "\n".join(parts)
@@ -2287,6 +2438,10 @@ def render_display() -> str:
                 f"sr_disp_fl_{n}_destroy = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'destroy')} }} value = 1 }}",
+                "}",
+                f"sr_disp_fl_{n}_avoid = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ has_variable = {var(n, 'avoid')} }} value = 1 }}",
                 "}"]
         for kind in ("fleets", "defences"):
             out += [f"sr_disp_fl_{n}_fire_{kind} = {{",
@@ -2774,6 +2929,11 @@ def _fleet_blocks(n: int) -> list[str]:
                      f'tooltip = "je_space_race_widget_fl_{n}_target_tt"')
     out += _override("fl_target", f"text = \"[JournalEntry.GetCountry.GetCustom('sr_fl_{n}_target_name')]\"")
     out += _button("fl_destroy_button", "sr_fleet_destroy_sgui", n)
+    # Engage / Avoid (2026-11-25 design § 2.9): the word the setting in force, the
+    # click switches it; at a location and in flight.
+    out += _button("fl_avoid_button", "sr_fleet_avoid_sgui", n)
+    out += _override("fl_avoid_off_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_avoid", 0)}]"')
+    out += _override("fl_avoid_on_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_avoid", 1)}]"')
     out += _override("fl_destroy_off_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 0)}]"')
     out += _override("fl_destroy_on_visible", f'visible = "[{_eq(f"sr_disp_fl_{n}_destroy", 1)}]"')
     return out

@@ -451,6 +451,8 @@ change to the race, not to the fleets.
 
 ## 7. Combat at a location (6b)
 
+> Since 2026-11-25, fleets fight each other on contact, on each of the fleets' four ticks a month, by Engage / Avoid, pace and ties rather than posture, and break and retreat: `docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md` § 2. What follows on the Defences, integrity, seizure and destruction (the siege) still holds.
+
 ### 7.1 Who fights
 
 Each month, at each location, every fleet fights every **hostile** fleet it is

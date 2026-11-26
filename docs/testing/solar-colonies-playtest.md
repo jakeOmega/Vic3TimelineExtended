@@ -227,6 +227,7 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 | `TE_SELF_CHECK OK/BROKEN fleet_upkeep_line country=… units=… robotics_mult=… telephones_mult=… software_mult=… want=…` | once a game, the month after a Space Command first carries the upkeep with units above 0 (Space Race UI pass design § 10) | the building's Robotics, Wired Telecommunication Gear and Software input multipliers are each 9 × its units: the newly registered mults reach the building (that they multiply the unscaled line is item 2's tooltip read) | one reads 0 (unregistered, or not on the building) or another figure (other lines reach that input) | for 0, check the `goods_input_<good>_mult` with `/modifier-search`; for another figure, read the building's input tooltip and compare the six goods' lines |
 | `TE_SELF_CHECK OK/BROKEN fleet_leg location=… drive=… leg=… flown=…` | OK once a game, on the first fleet that lands on an 8th, 15th or 22nd having flown its whole leg (never an old save's converted fleet or the console's landing); BROKEN once, if any fleet lands four ticks (a month) or more late. A dead mid-month clock leaves fleets at most three ticks late, so only `fleet_clock` shows the mid-month ticks run | `flown` equals `leg`, in ticks of the fleets' clock (four a month): the quarters `docs/engine/launch_windows_report.md` gives that leg and drive | the clock missed an arrival | read `fleet_clock`; land fleets from the country pulse as well |
 | `TE_SELF_CHECK OK/BROKEN fleet_clock last_quarter=…` | once a game each way, on a 1st when last month's clock was queued on a power (`sr_fl_clock_power`, the same country, not a revolution's winner) that lived through the month (2026-11-25 design § 1.6) | `last_quarter` is 3: the 22nd's hidden tick event (`space_race_events.120`-`.122`, queued with `days = 7/14/21` on one fleet power) fired; it is noted before the rules are read, so a rule switched off and on again doesn't count | the 22nd never ran on a power still alive | queue the three ticks on every fleet power (`sr_fl_clock_queue`); the guard in `sr_fl_tick_step` keeps each tick once |
+| `TE_SELF_CHECK OK/BROKEN fleet_battle location=… steps=… ended=…` (OK) / `… fire=… strength=…` (BROKEN) | once a game each way (2026-11-25 design § 2.10) | a battle settled within its tick: a unit broke or was destroyed inside the ceiling of 60 steps (`sr_bt_max_steps`; an even fight takes about 14) | the ceiling was reached with units still paired whose fire is at least half their strength: the steps didn't settle a real fight | raise `sr_bt_k` (0.05) or `sr_bt_max_steps`; `test_space_fleet_battle.py` runs the loop in fixed point |
 | `TE_SELF_CHECK OK/BROKEN xfer_step_scope … slot=… role=… [amount=…]` | once a game, the first − or + clicked in a fleet's Transfer popup | the step code, the third chained `AddScope` (`scope:step`, after `op` and `pick`), reached `sr_fleet_xfer_step_sgui`; `slot` is the fleet's slot, `role` the row's code (1 warships … 6 marines), `amount` the figure after the click | no step code matched: the third scope didn't arrive, and the amount didn't move. **No line at all** after a click means `op` or `pick` didn't arrive (no case of `sr_fl_by_op` or `sr_fl_xfer_step_at` matched) or the button never ran | for BROKEN, pass two scopes: `pick` = role × 100 + step code, decoded in `sr_fl_xfer_step_at`; for no line, check the button's `enabled` and the Into buttons, which use `op` and `pick` too |
 
 **What checks itself, and what needs a hand.**
@@ -240,6 +241,14 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
 - **Logged after one action:**
   - `fleet_leg` logs on the first fleet that lands, so send one (AI fleets seldom leave Earth outside a war).
   - `fleet_clock` logs on the second 1st after the first fleet power appears: any Full Colonies game with a Space Command.
+  - `fleet_battle` logs on the first battle: console options o and b at Earth, then i.
+    **Seen OK 2026-11-25** (harness session on a copy of the owner's June 2043 save, build `1e902f0d4` as a side
+    mod): a setup put 100 warships of Aceh and 50 of the Aceh White Army, at war, at Mars and ran `sr_battle_at`.
+    `TE_SELF_CHECK OK fleet_battle location=3 steps=11 ended=1`; the White Army broke at 23.96 and stayed (no dock in
+    reach), Aceh kept 89.57; neither AI switched to Avoid (no Space Command). The same fleets placed without a battle
+    were fought by the July 1 monthly step with the same figures, and the July 7 hidden tick advanced
+    `sr_fl_tick_now` to month × 4 + 1. Not seen: the pace escape and an AI with a Space Command choosing Avoid, a
+    player's Engage / Avoid button, a broken fleet's retreat to a dock, the batteries' weekly fire.
   - `TE_SR_FLEET` and `TE_SR_LOC` are console option a's.
   - `TE_SR_COMBAT` lines log every occupation, liberation, seizure and destruction as it happens.
 - **Set up by hand and read by eye:** steps 1 to 22 below. Console option b gives a fleet, h and i force an assault
@@ -283,12 +292,20 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
     short of supply or propellant.
 11. **A hostile fleet's alert.** An AI at war with us sends a fleet to a location where we hold a colony (or, from a
     second player's seat, send one): we get "Hostile Fleet Bound for <location>" with the months to its landing.
-12. **Combat.** Two fleets at war at one location, both Station: each month both lose strength by the square law
-    (losses = 0.1 × the other side's fire, fire = strength × role factor × quality; 100 against 50 ends near 87 left).
-    "Battle Over <location>" reports our losses, theirs and what's left, at most once a month; the location's status
+12. **Battles (2026-11-25 design § 2).** Console option o (the strongest enemy puts a fleet at Earth) and b
+    (100 strength of each role at Earth), then option i (a week's battles): the battle settles at once, not over
+    months. Both fleets lose by the square law until one has lost half of what it brought and breaks; one that
+    breaks away from a dock flies to the nearest (Earth, or a Spaceport of its owner's); at Earth it stays.
+    "Battle Over <location>" reports our losses, theirs and what's left, at most once a week; the location's status
     reads Battle; screens (warships, rapid response) take the losses before carriers and tenders. At Earth, any
-    Orbital Battlestation fights for its owner (25 strength a level) and regains 10% a month; a battle there adds
-    debris (Orbit section).
+    Orbital Battlestation fights for its owner (25 strength a level), never breaks, and regains 10% a month; the
+    batteries fire a quarter of their month's figure each week; a battle there adds debris (Orbit section).
+    **Engage / Avoid.** Set a fleet to Avoid and send it to an enemy location held by a slower enemy fleet that
+    engages: it lands on Station (not Stand off) and nobody fights; set it to Stand off and it is caught the next
+    week (it blockades, so it is tied). Send it against a faster one: it is caught. Send it where the enemy holds a
+    colony with a fleet set to Avoid: our fleet, if it engages, catches theirs (tied to its colony). The button shows
+    on the card in flight and where the posture line does, and in the Fleets window always; without a Space Command
+    it is grayed with the reason. An AI fleet sets its own: it avoids a fight it would lose by strength × fire.
 13. **Postures and blockade.** Stand off at an enemy's colony with no enemy fleet holding orbit: its row in their
     Colony Defences, and our Locations row, read Blockaded / Blockading; their settlers and modules stop arriving,
     a mining or shipping specialization's modifier goes to nothing while an observatory's keeps running, and its
