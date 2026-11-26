@@ -7024,59 +7024,53 @@ types space_race_widget_types
 
 	### A fleet's stance (2026-11-25 design §§ 2.9, 5.1), on its card: whom it
 	### fights and when it breaks off. Its word is the stance in force, the
-	### click sets the next, the hover gives both. 156 wide, for Fight to the
-	### Last; icon and label sit as te_sr_fl_button's.
+	### click sets the next, the hover gives both. 168 wide, its word alone
+	### (no icon), for Fight to the Last's 159.
 	type te_sr_stance_button = button {
 		using = default_button_action
-		size = { 156 26 }
+		size = { 168 26 }
 		parentanchor = vcenter
 		block "sb_btn" {}
 
-		icon = {
-			size = { 16 16 }
-			position = { 3 0 }
-			parentanchor = left|vcenter
-			texture = "gfx/interface/icons/space_race_icons/status_battle.dds"
-		}
 		textbox = {
-			position = { 21 0 }
+			position = { 4 0 }
 			parentanchor = left|vcenter
 			align = left|nobaseline
 			autoresize = yes
-			max_width = 132
+			max_width = 160
 			elide = right
 			using = te_sr_fontsize_row
 			text = "je_space_race_widget_fl_stance_1"
 			block "sb_1" {}
 		}
 		textbox = {
-			position = { 21 0 }
+			position = { 4 0 }
 			parentanchor = left|vcenter
 			align = left|nobaseline
 			autoresize = yes
-			max_width = 132
+			max_width = 160
 			elide = right
 			using = te_sr_fontsize_row
 			text = "je_space_race_widget_fl_stance_2"
 			block "sb_2" {}
 		}
 		textbox = {
-			position = { 21 0 }
+			position = { 4 0 }
 			parentanchor = left|vcenter
 			align = left|nobaseline
 			autoresize = yes
-			max_width = 132
+			max_width = 160
 			elide = right
 			using = te_sr_fontsize_row
 			text = "je_space_race_widget_fl_stance_3"
 			block "sb_3" {}
 		}
 		textbox = {
-			position = { 21 0 }
+			position = { 4 0 }
 			parentanchor = left|vcenter
 			align = left|nobaseline
 			autoresize = yes
-			max_width = 132
+			max_width = 160
 			elide = right
 			using = te_sr_fontsize_row
 			text = "je_space_race_widget_fl_stance_4"
@@ -7536,7 +7530,7 @@ types space_race_widget_types
 			block "fl_transit_visible" {}
 
 			widget = {
-				size = { 150 18 }
+				size = { 96 18 }
 				parentanchor = vcenter
 
 				default_progressbar_horizontal = {
@@ -7568,16 +7562,17 @@ types space_race_widget_types
 					}
 				}
 			}
-			### "Lands in N weeks", 150 wide for the stance's 156 beside it:
-			### 150 + 4 + 150 + 4 + 156 = 464, in the card's 468.
+			### "Lands in N weeks", 190 wide (its longest, 9999 weeks, 187), the
+			### track before it 96 for the stance's 168 after it:
+			### 96 + 4 + 190 + 4 + 168 = 462, in the card's 468.
 			widget = {
-				size = { 150 24 }
+				size = { 190 24 }
 				parentanchor = vcenter
 
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 150
+					max_width = 190
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right

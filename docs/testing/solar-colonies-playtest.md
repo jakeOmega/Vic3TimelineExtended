@@ -308,8 +308,8 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
     on the card in flight and where the posture line does, and in the Fleets window always; without a Space Command
     it is grayed with the reason. An AI fleet sets its own: it avoids a fight it would lose by strength × fire.
     **Stances (§ 5.1).** The card's button reads the stance in force and a click sets the next (Avoid, Hit and Run,
-    Engage, Fight to the Last); "Fight to the Last" fits the 156-wide button, and "Lands in N weeks" its 150 beside
-    it. The Fleets window's page shows four buttons two to a line, the one in force lit. A Hit and Run fleet against
+    Engage, Fight to the Last); "Fight to the Last" fits the 168-wide button, and in flight "Lands in N weeks"
+    still fits beside it with the track at 96. The Fleets window's page shows four buttons two to a line, the one in force lit. A Hit and Run fleet against
     an equal Engage one breaks at about 73 of 100 while the other holds; a Fight to the Last fleet never breaks
     (no retreat, destroyed if it loses). **Friends (§ 5.3).** Two AIs at war with one enemy, each weaker alone but
     stronger together, both engage. **Forecast (§ 5.4).** Fleet Destination has a Battle column (popup 884 wide):

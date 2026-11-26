@@ -159,7 +159,7 @@ The owner, 2026-11-25, after #2068 and #2069 merged: "A broken fleet at a dock s
 
 - Avoid still lands on Station where its country holds no colony (§ 2.11).
 - The BROKEN self-check leaves out fleets that can't break (`bt_keep` 0), as it does the battlestation: two fleets fighting to the last take about 150 steps from even to the minimum strength, past the ceiling of 60, rightly.
-- **The panel.** The card keeps one button (156 wide, the transit track and its words 150 each beside it in flight): its word the stance in force, a click the next, Fight to the Last back to Avoid (`sr_fleet_stance_sgui`); its hover names both and gives the next one's rule. The Fleets window's page has four buttons, two to a line beside the caption, the one in force lit (`sr_fleet_set_stance_sgui`, scope:pick), as the posture buttons. Only with a Space Command, as before.
+- **The panel.** The card keeps one button (168 wide, its word alone, for Fight to the Last; in flight the transit track shrinks to 96 beside it): its word the stance in force, a click the next, Fight to the Last back to Avoid (`sr_fleet_stance_sgui`); its hover names both and gives the next one's rule. The Fleets window's page has four buttons, two to a line beside the caption, the one in force lit (`sr_fleet_set_stance_sgui`, scope:pick), as the posture buttons. Only with a Space Command, as before.
 - **The AI** sets Engage or Avoid as before (§ 2.7), now by its side's test (§ 5.3); it leaves Hit and Run and Fight to the Last to players. An AI that avoids and is caught breaks at a quarter.
 
 ### 5.2 The retreat

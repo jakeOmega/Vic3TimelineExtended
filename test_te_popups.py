@@ -218,8 +218,9 @@ class PopupHostTest(unittest.TestCase):
                 self.assertEqual(slots, [str(n) for n in range(1, SLOTS + 1)])
 
     def test_the_pick_button_opens_the_popup(self):
-        """A fleet row's destination button opens its slot's popup in place of
-        stepping; it greys, with its reason, on sr_fleet_pick_sgui's is_valid."""
+        """A fleet row's destination button keeps the battle forecast and opens
+        its slot's popup in place of stepping; it greys, with its reason, on
+        sr_fleet_pick_sgui's is_valid."""
         rows = _strip_comments(_read(SR_FLEET_ROWS))
         fleet_rows = _type_body(rows, "te_sr_fleet_rows")
         found = []
@@ -228,13 +229,16 @@ class PopupHostTest(unittest.TestCase):
         self.assertEqual(len(found), SLOTS)
         for n, override in enumerate(found, 1):
             with self.subTest(slot=n):
+                # First the battle forecast the popup's Battle column reads (2026-11-25
+                # design § 5.4, the gate's effect), then the popup.
                 self.assertEqual(re.findall(r'onclick = "(.*)"', override),
-                                 [f"[GetVariableSystem.Set('te_popup', 'sr_dest_{n}')]"])
+                                 [f"[GetScriptedGui('sr_fleet_pick_sgui').Execute( GuiScope.SetRoot( "
+                                  f"JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )]",
+                                  f"[GetVariableSystem.Set('te_popup', 'sr_dest_{n}')]"])
                 self.assertIn(f"enabled = \"[GetScriptedGui('sr_fleet_pick_sgui').IsValid( GuiScope.SetRoot( "
                               f"JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint){n}' ) ).End )]\"",
                               override)
                 self.assertIn(f'tooltip = "je_space_race_widget_fl_{n}_leg_tt"', override)
-                self.assertNotIn("Execute", override)
 
     def test_every_popup_is_in_the_root(self):
         self.assertTrue(self.popups)
