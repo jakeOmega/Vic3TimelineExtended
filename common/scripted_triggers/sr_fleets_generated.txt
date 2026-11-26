@@ -10,8 +10,21 @@
 sr_fl_1_exists = { OR = { has_variable = sr_fl_1_loc has_variable = sr_fl_1_dest } }
 sr_fl_1_at_location = { has_variable = sr_fl_1_loc }
 sr_fl_1_at_earth = { has_variable = sr_fl_1_loc var:sr_fl_1_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_1_avoiding = { has_variable = sr_fl_1_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_1_avoiding = { sr_fl_1_stance_value = 1 }
+sr_fl_1_stance_1 = { sr_fl_1_stance_value = 1 }
+sr_fl_1_stance_2 = { sr_fl_1_stance_value = 2 }
+sr_fl_1_stance_3 = { sr_fl_1_stance_value = 3 }
+sr_fl_1_stance_4 = { sr_fl_1_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_1_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_1_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_1_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_1_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_1_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_1_target_lunar = {
 	has_variable = sr_fl_1_target
@@ -819,8 +832,21 @@ sr_fl_1_ai_attacks_kuiper = {
 sr_fl_2_exists = { OR = { has_variable = sr_fl_2_loc has_variable = sr_fl_2_dest } }
 sr_fl_2_at_location = { has_variable = sr_fl_2_loc }
 sr_fl_2_at_earth = { has_variable = sr_fl_2_loc var:sr_fl_2_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_2_avoiding = { has_variable = sr_fl_2_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_2_avoiding = { sr_fl_2_stance_value = 1 }
+sr_fl_2_stance_1 = { sr_fl_2_stance_value = 1 }
+sr_fl_2_stance_2 = { sr_fl_2_stance_value = 2 }
+sr_fl_2_stance_3 = { sr_fl_2_stance_value = 3 }
+sr_fl_2_stance_4 = { sr_fl_2_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_2_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_2_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_2_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_2_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_2_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_2_target_lunar = {
 	has_variable = sr_fl_2_target
@@ -1628,8 +1654,21 @@ sr_fl_2_ai_attacks_kuiper = {
 sr_fl_3_exists = { OR = { has_variable = sr_fl_3_loc has_variable = sr_fl_3_dest } }
 sr_fl_3_at_location = { has_variable = sr_fl_3_loc }
 sr_fl_3_at_earth = { has_variable = sr_fl_3_loc var:sr_fl_3_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_3_avoiding = { has_variable = sr_fl_3_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_3_avoiding = { sr_fl_3_stance_value = 1 }
+sr_fl_3_stance_1 = { sr_fl_3_stance_value = 1 }
+sr_fl_3_stance_2 = { sr_fl_3_stance_value = 2 }
+sr_fl_3_stance_3 = { sr_fl_3_stance_value = 3 }
+sr_fl_3_stance_4 = { sr_fl_3_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_3_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_3_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_3_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_3_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_3_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_3_target_lunar = {
 	has_variable = sr_fl_3_target
@@ -2437,8 +2476,21 @@ sr_fl_3_ai_attacks_kuiper = {
 sr_fl_4_exists = { OR = { has_variable = sr_fl_4_loc has_variable = sr_fl_4_dest } }
 sr_fl_4_at_location = { has_variable = sr_fl_4_loc }
 sr_fl_4_at_earth = { has_variable = sr_fl_4_loc var:sr_fl_4_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_4_avoiding = { has_variable = sr_fl_4_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_4_avoiding = { sr_fl_4_stance_value = 1 }
+sr_fl_4_stance_1 = { sr_fl_4_stance_value = 1 }
+sr_fl_4_stance_2 = { sr_fl_4_stance_value = 2 }
+sr_fl_4_stance_3 = { sr_fl_4_stance_value = 3 }
+sr_fl_4_stance_4 = { sr_fl_4_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_4_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_4_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_4_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_4_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_4_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_4_target_lunar = {
 	has_variable = sr_fl_4_target
@@ -3246,8 +3298,21 @@ sr_fl_4_ai_attacks_kuiper = {
 sr_fl_5_exists = { OR = { has_variable = sr_fl_5_loc has_variable = sr_fl_5_dest } }
 sr_fl_5_at_location = { has_variable = sr_fl_5_loc }
 sr_fl_5_at_earth = { has_variable = sr_fl_5_loc var:sr_fl_5_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_5_avoiding = { has_variable = sr_fl_5_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_5_avoiding = { sr_fl_5_stance_value = 1 }
+sr_fl_5_stance_1 = { sr_fl_5_stance_value = 1 }
+sr_fl_5_stance_2 = { sr_fl_5_stance_value = 2 }
+sr_fl_5_stance_3 = { sr_fl_5_stance_value = 3 }
+sr_fl_5_stance_4 = { sr_fl_5_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_5_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_5_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_5_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_5_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_5_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_5_target_lunar = {
 	has_variable = sr_fl_5_target
@@ -4055,8 +4120,21 @@ sr_fl_5_ai_attacks_kuiper = {
 sr_fl_6_exists = { OR = { has_variable = sr_fl_6_loc has_variable = sr_fl_6_dest } }
 sr_fl_6_at_location = { has_variable = sr_fl_6_loc }
 sr_fl_6_at_earth = { has_variable = sr_fl_6_loc var:sr_fl_6_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_6_avoiding = { has_variable = sr_fl_6_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_6_avoiding = { sr_fl_6_stance_value = 1 }
+sr_fl_6_stance_1 = { sr_fl_6_stance_value = 1 }
+sr_fl_6_stance_2 = { sr_fl_6_stance_value = 2 }
+sr_fl_6_stance_3 = { sr_fl_6_stance_value = 3 }
+sr_fl_6_stance_4 = { sr_fl_6_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_6_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_6_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_6_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_6_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_6_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_6_target_lunar = {
 	has_variable = sr_fl_6_target
@@ -4864,8 +4942,21 @@ sr_fl_6_ai_attacks_kuiper = {
 sr_fl_7_exists = { OR = { has_variable = sr_fl_7_loc has_variable = sr_fl_7_dest } }
 sr_fl_7_at_location = { has_variable = sr_fl_7_loc }
 sr_fl_7_at_earth = { has_variable = sr_fl_7_loc var:sr_fl_7_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_7_avoiding = { has_variable = sr_fl_7_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_7_avoiding = { sr_fl_7_stance_value = 1 }
+sr_fl_7_stance_1 = { sr_fl_7_stance_value = 1 }
+sr_fl_7_stance_2 = { sr_fl_7_stance_value = 2 }
+sr_fl_7_stance_3 = { sr_fl_7_stance_value = 3 }
+sr_fl_7_stance_4 = { sr_fl_7_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_7_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_7_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_7_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_7_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_7_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_7_target_lunar = {
 	has_variable = sr_fl_7_target
@@ -5673,8 +5764,21 @@ sr_fl_7_ai_attacks_kuiper = {
 sr_fl_8_exists = { OR = { has_variable = sr_fl_8_loc has_variable = sr_fl_8_dest } }
 sr_fl_8_at_location = { has_variable = sr_fl_8_loc }
 sr_fl_8_at_earth = { has_variable = sr_fl_8_loc var:sr_fl_8_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_8_avoiding = { has_variable = sr_fl_8_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_8_avoiding = { sr_fl_8_stance_value = 1 }
+sr_fl_8_stance_1 = { sr_fl_8_stance_value = 1 }
+sr_fl_8_stance_2 = { sr_fl_8_stance_value = 2 }
+sr_fl_8_stance_3 = { sr_fl_8_stance_value = 3 }
+sr_fl_8_stance_4 = { sr_fl_8_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_8_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_8_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_8_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_8_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_8_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_8_target_lunar = {
 	has_variable = sr_fl_8_target
@@ -6482,8 +6586,21 @@ sr_fl_8_ai_attacks_kuiper = {
 sr_fl_9_exists = { OR = { has_variable = sr_fl_9_loc has_variable = sr_fl_9_dest } }
 sr_fl_9_at_location = { has_variable = sr_fl_9_loc }
 sr_fl_9_at_earth = { has_variable = sr_fl_9_loc var:sr_fl_9_loc = 1 }
-# Set to Avoid (2026-11-25 design § 2.3; sr_fleet_avoid_sgui).
-sr_fl_9_avoiding = { has_variable = sr_fl_9_avoid }
+# Its stance is Avoid (2026-11-25 design §§ 2.3, 5.1; sr_fleet_stance_sgui).
+sr_fl_9_avoiding = { sr_fl_9_stance_value = 1 }
+sr_fl_9_stance_1 = { sr_fl_9_stance_value = 1 }
+sr_fl_9_stance_2 = { sr_fl_9_stance_value = 2 }
+sr_fl_9_stance_3 = { sr_fl_9_stance_value = 3 }
+sr_fl_9_stance_4 = { sr_fl_9_stance_value = 4 }
+# The stance buttons' pick (scope:pick, 1 to 4) is the stance it holds.
+sr_fl_9_pick_is_stance = {
+	OR = {
+		AND = { scope:pick = 1 sr_fl_9_stance_value = 1 }
+		AND = { scope:pick = 2 sr_fl_9_stance_value = 2 }
+		AND = { scope:pick = 3 sr_fl_9_stance_value = 3 }
+		AND = { scope:pick = 4 sr_fl_9_stance_value = 4 }
+	}
+}
 # Its target is a lunar world (lunar colonization § 8.1): the only close-in at Earth.
 sr_fl_9_target_lunar = {
 	has_variable = sr_fl_9_target

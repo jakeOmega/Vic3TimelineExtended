@@ -143,6 +143,18 @@ sr_disp_earth_alert_weeks = {
 	}
 }
 
+# The alerts' battle forecast (space_race_events.100, loc, and .111, earth;
+# 2026-11-25 design § 5.4): 0 none, 1 a clear win, 2 a costly win, 3 a
+# defeat, 4 a rout, 5 nothing of ours there that can fight (sr_fc_note_alert).
+sr_disp_fc_alert_tier_loc = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_alert_tier_loc } value = var:sr_fc_alert_tier_loc }
+}
+sr_disp_fc_alert_tier_earth = {
+	value = 0
+	if = { limit = { has_variable = sr_fc_alert_tier_earth } value = var:sr_fc_alert_tier_earth }
+}
+
 # The notices (space_race_events.100 and .101), read in their text: weeks
 # until a hostile fleet lands; a battle's strength lost, dealt and left.
 sr_disp_fl_alert_weeks = {

@@ -250,6 +250,22 @@ sr_fleet_k = { value = 0.1 }
 sr_bt_k = { value = 0.05 }
 sr_bt_max_steps = { value = 60 }
 sr_bt_break_share = { value = 0.5 }
+# That is Engage's. Avoid and Hit and Run break at this share, Fight to the
+# Last never (design § 5.1, a first guess as § 3's, 2026-11-25).
+sr_bt_break_share_early = { value = 0.25 }
+# The battle forecast (design § 5.4): a clear win where ours is at least this
+# many times theirs, strength x fire (a 1.75 : 1 force of like ships), a rout
+# where theirs is as many times ours. The winner's share lost while the loser
+# loses sr_bt_break_share, by the square law: 1 - sqrt(1 - this / the ratio).
+sr_fc_clear = { value = 3 }
+sr_fc_break_loss = {
+	value = 1
+	subtract = {
+		value = 1
+		subtract = sr_bt_break_share
+		multiply = { value = 1 subtract = sr_bt_break_share }
+	}
+}
 # The batteries fire once a tick (§ 2.5): a quarter of a month's, so a month
 # of ticks deals what a month's round dealt.
 sr_battery_tick_share = { value = 0.25 }

@@ -723,9 +723,12 @@ CELLS = {
     "a fleet's posture (te_sr_posture_choice, UI pass design § 7)": (
         ("te_sr_posture_choice", 'block "pc_label"'),
         r"je_space_race_widget_fl_posture_\d"),
-    "Engage or Avoid (te_sr_avoid_button, 2026-11-25 design § 2.9)": (
-        ("te_sr_avoid_button", 'text = "je_space_race_widget_fl_engage"'),
-        r"je_space_race_widget_fl_(engage|avoid)"),
+    "a fleet's stance on its card (te_sr_stance_button, 2026-11-25 design § 5.1)": (
+        ("te_sr_stance_button", 'text = "je_space_race_widget_fl_stance_1"'),
+        r"je_space_race_widget_fl_stance_\d"),
+    "a fleet's stance on its page (te_sr_stance_choice, 2026-11-25 design § 5.1)": (
+        ("te_sr_stance_choice", 'block "sc_label"'),
+        r"je_space_race_widget_fl_stance_\d"),
     "seize or destroy (te_sr_fleet_row)": (
         ("te_sr_fleet_row", 'text = "je_space_race_widget_fl_seize"'),
         r"je_space_race_widget_fl_(seize|destroy)"),
@@ -736,7 +739,10 @@ CELLS = {
        for col in ("where", "strength", "dv", "supply")},
     **{f"the destination popup's {col} column head (te_sr_dest_header_row)": (
         ("te_sr_dest_header_row", f'text = "je_space_race_widget_dp_col_{col}"'), f"je_space_race_widget_dp_col_{col}")
-       for col in ("where", "weeks", "dv", "window", "ours", "enemy", "inbound")},
+       for col in ("where", "weeks", "dv", "window", "ours", "enemy", "inbound", "battle")},
+    "a destination's battle forecast (te_sr_dest_row, 2026-11-25 design § 5.4)": (
+        ("te_sr_dest_row", 'text = "je_space_race_widget_fc_tier_1"'),
+        r"je_space_race_widget_fc_tier_\d"),
     "a destination's window, open (te_sr_dest_row)": (
         ("te_sr_dest_row", 'text = "je_space_race_widget_win_open"'),
         r"je_space_race_widget_win_open"),
@@ -1319,11 +1325,11 @@ class FigureBudgetTest(unittest.TestCase):
         # The body holds the widest row: the rows' cells and their gaps.
         row = _type_body(gui, "te_sr_dest_row")
         cells = [int(w) for w in re.findall(r"(?m)^\t\twidget = \{\n\t\t\tsize = \{ (\d+) 24 \}", row)]
-        self.assertEqual(len(cells), 8)
+        self.assertEqual(len(cells), 9)
         width = sum(cells) + 4 * (len(cells) - 1) + 2 * 4
         self.assertEqual(width, int(re.search(r"minimumsize = \{ (\d+) -1 \}", _type_body(gui, "te_sr_dest_slot")).group(1)))
         heads = [int(w) for w in re.findall(r"size = \{ (\d+) 20 \}", _type_body(gui, "te_sr_dest_header_row"))]
-        self.assertEqual(heads, cells[:7])
+        self.assertEqual(heads, cells[:8])
 
     def test_the_target_popup(self):
         """Every world's name fits the target row's name cell (UI pass design § 7)."""

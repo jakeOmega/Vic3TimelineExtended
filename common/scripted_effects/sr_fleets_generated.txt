@@ -4,7 +4,7 @@
 # common/scripted_effects/sr_fleet_effects.txt; country scope unless said.
 
 # ===== Slot dispatchers =====
-# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer, land_pick, embark_pick, ld_open_land, ld_open_embark, ld_step, migrate_ticks, bt_setup, bt_target, bt_battery, bt_ready, bt_ai, bt_snap, bt_count, bt_apply, bt_left, bt_end, retreat, toggle_avoid, ai_threat, ai_guard:
+# sr_fl_<DO>_at = { N = <n> }, DO one of clear, month, arrive, note, new_at_earth, take_marines, go, land, fill, debug_strength, debug_land, ai_home, gather, apply_losses, toggle_destroy, ai_recall, debug_drive, ai_assault, debug_icpt, icpt_repoint, reserve_in, set_pick, set_posture, set_target, xfer_open, xfer_step, transfer, land_pick, embark_pick, ld_open_land, ld_open_embark, ld_step, migrate_ticks, bt_setup, bt_target, bt_battery, bt_ready, bt_ai, bt_snap, bt_count, bt_apply, bt_left, bt_end, retreat, set_stance, cycle_stance, ai_threat, ai_guard, fc_slot:
 # every slot; the scripted GUIs' slot (scope:op); local_var:sr_fl_n's.
 sr_fl_each_slot = {
 	sr_fl_$DO$_at = { N = 1 }
@@ -112,7 +112,7 @@ sr_fl_clear_at = {
 	if = { limit = { has_variable = sr_fl_$N$_destroy } remove_variable = sr_fl_$N$_destroy }
 	if = { limit = { has_variable = sr_fl_$N$_charged } remove_variable = sr_fl_$N$_charged }
 	if = { limit = { has_variable = sr_fl_$N$_icpt } remove_variable = sr_fl_$N$_icpt }
-	if = { limit = { has_variable = sr_fl_$N$_avoid } remove_variable = sr_fl_$N$_avoid }
+	if = { limit = { has_variable = sr_fl_$N$_stance } remove_variable = sr_fl_$N$_stance }
 	if = { limit = { has_variable = sr_fl_$N$_war } remove_variable = sr_fl_$N$_war }
 	if = { limit = { has_variable = sr_fl_$N$_rapid } remove_variable = sr_fl_$N$_rapid }
 	if = { limit = { has_variable = sr_fl_$N$_siege } remove_variable = sr_fl_$N$_siege }
@@ -1898,7 +1898,7 @@ sr_fl_transfer_into = {
 
 # ===== A slot and its location ($N$) =====
 # On arrival, its posture: Station where we hold a colony (and at Earth), Stand
-# off elsewhere (design § 6), except a fleet set to Avoid, which stations
+# off elsewhere (design § 6), except a fleet whose stance is Avoid, which stations
 # there too: standing off where there is a hostile world ties a fleet to the
 # location (sr_bt_fleet_tied), and the battle of its landing tick would catch
 # it (review of #2069). Its player stands it off to blockade.
@@ -1940,7 +1940,7 @@ sr_fl_arrival_posture_at = {
 		set_variable = { name = sr_fl_$N$_posture value = 1 }
 	}
 	else = {
-		if = { limit = { has_variable = sr_fl_$N$_avoid } set_variable = { name = sr_fl_$N$_posture value = 1 } }
+		if = { limit = { sr_fl_$N$_avoiding = yes } set_variable = { name = sr_fl_$N$_posture value = 1 } }
 		else = { set_variable = { name = sr_fl_$N$_posture value = 2 } }
 	}
 }
@@ -9787,6 +9787,7 @@ sr_fl_bt_end_at = {
 	if = { limit = { has_variable = sr_fl_$N$_bt_in } remove_variable = sr_fl_$N$_bt_in }
 	if = { limit = { has_variable = sr_fl_$N$_bt_pace } remove_variable = sr_fl_$N$_bt_pace }
 	if = { limit = { has_variable = sr_fl_$N$_bt_eng } remove_variable = sr_fl_$N$_bt_eng }
+	if = { limit = { has_variable = sr_fl_$N$_bt_keep } remove_variable = sr_fl_$N$_bt_keep }
 	if = { limit = { has_variable = sr_fl_$N$_bt_tied } remove_variable = sr_fl_$N$_bt_tied }
 	if = { limit = { has_variable = sr_fl_$N$_bt_brought } remove_variable = sr_fl_$N$_bt_brought }
 	if = { limit = { has_variable = sr_fl_$N$_bt_s } remove_variable = sr_fl_$N$_bt_s }
@@ -9796,13 +9797,14 @@ sr_fl_bt_end_at = {
 	if = { limit = { has_variable = sr_fl_$N$_bt_l } remove_variable = sr_fl_$N$_bt_l }
 	if = { limit = { has_variable = sr_fl_$N$_bt_broke } remove_variable = sr_fl_$N$_bt_broke }
 }
-# A broken fleet not at a dock leaves for the nearest it may depart for (§ 2.4):
+# A broken fleet leaves for the nearest dock it may depart for (§§ 2.4, 5.2):
 # Earth, or a location where we hold a Spaceport, nearest by the leg's quarters,
-# through the same sr_fl_<n>_may_depart_<loc> an order passes. With none in
-# reach it stays, out of this battle, and can be caught at the next tick.
+# through the same sr_fl_<n>_may_depart_<loc> an order passes, which is never
+# where it is: a fleet broken at a dock goes to another (owner, 2026-11-25). With
+# none in reach it stays, out of this battle, and can be caught at the next tick.
 sr_fl_retreat_at = {
 	if = {
-		limit = { has_variable = sr_fl_$N$_bt_broke NOT = { sr_fl_$N$_docked = yes } }
+		limit = { has_variable = sr_fl_$N$_bt_broke }
 		set_local_variable = { name = sr_bt_best value = 999999 }
 		set_local_variable = { name = sr_bt_to value = 0 }
 		if = {
@@ -9928,9 +9930,17 @@ sr_fl_ai_defend_inner = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = inner } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = inner } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10165,9 +10175,17 @@ sr_fl_ai_defend_mars = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = mars } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = mars } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10402,9 +10420,17 @@ sr_fl_ai_defend_asteroids = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = asteroids } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = asteroids } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10639,9 +10665,17 @@ sr_fl_ai_defend_jupiter = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = jupiter } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = jupiter } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10876,9 +10910,17 @@ sr_fl_ai_defend_saturn = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = saturn } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = saturn } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11113,9 +11155,17 @@ sr_fl_ai_defend_uranus = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = uranus } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = uranus } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11350,9 +11400,17 @@ sr_fl_ai_defend_neptune = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = neptune } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = neptune } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11587,9 +11645,17 @@ sr_fl_ai_defend_kuiper = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = kuiper } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = kuiper } } }
+			sr_fl_each_slot = { DO = ai_guard }
+		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11809,6 +11875,357 @@ sr_fl_ai_defend_kuiper = {
 				if = { limit = { local_var:sr_fl_el_8 = 2 sr_fl_8_may_depart_kuiper = yes } sr_fl_dispatch = { N = 8 LOC = kuiper CODE = 9 } }
 				if = { limit = { local_var:sr_fl_el_9 = 2 sr_fl_9_may_depart_kuiper = yes } sr_fl_dispatch = { N = 9 LOC = kuiper CODE = 9 } }
 			}
+		}
+	}
+}
+
+# ===== The battle forecast (2026-11-25 design § 5.4) =====
+sr_fc_sums_earth = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 1 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_bs_add = { SIDE = t }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	sr_fc_bs_add = { SIDE = o }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+		sr_fc_bs_add = { SIDE = o }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_inner = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 2 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_mars = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 3 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_asteroids = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 4 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_jupiter = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 5 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_saturn = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 6 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_uranus = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 7 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_neptune = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 8 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+sr_fc_sums_kuiper = {
+	save_temporary_scope_as = sr_fc_side
+	set_local_variable = { name = sr_fl_code value = 9 }
+	set_local_variable = { name = sr_fl_ts value = 0 }
+	set_local_variable = { name = sr_fl_tf value = 0 }
+	set_local_variable = { name = sr_fl_os value = 0 }
+	set_local_variable = { name = sr_fl_of value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
+		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
+	}
+	sr_fl_each_slot = { DO = ai_guard }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
+		sr_fl_each_slot = { DO = ai_guard }
+	}
+	sr_fc_clear_foes = yes
+}
+# A location's sums and verdict (sr_fc_judge) by its code, for the alerts
+# (space_race_events.100 and .111): local_var:sr_fc_at the location's code.
+sr_fc_at_code = {
+	if = {
+		limit = { local_var:sr_fc_at = 1 }
+		sr_fc_sums_earth = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 2 }
+		sr_fc_sums_inner = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 3 }
+		sr_fc_sums_mars = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 4 }
+		sr_fc_sums_asteroids = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 5 }
+		sr_fc_sums_jupiter = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 6 }
+		sr_fc_sums_saturn = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 7 }
+		sr_fc_sums_uranus = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 8 }
+		sr_fc_sums_neptune = yes
+	}
+	else_if = {
+		limit = { local_var:sr_fc_at = 9 }
+		sr_fc_sums_kuiper = yes
+	}
+	sr_fc_judge = yes
+}
+# Slot N's forecast at each location but where it is, with it on our side.
+sr_fl_fc_slot_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_loc }
+		set_local_variable = { name = sr_fc_own_s value = sr_fl_$N$_strength }
+		set_local_variable = { name = sr_fc_own_f value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness } }
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 1 } }
+			sr_fc_sums_earth = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_earth value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_earth value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_earth value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_earth value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 2 } }
+			sr_fc_sums_inner = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_inner value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_inner value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_inner value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_inner value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 3 } }
+			sr_fc_sums_mars = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_mars value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_mars value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_mars value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_mars value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 4 } }
+			sr_fc_sums_asteroids = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_asteroids value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_asteroids value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_asteroids value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_asteroids value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 5 } }
+			sr_fc_sums_jupiter = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_jupiter value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_jupiter value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_jupiter value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_jupiter value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 6 } }
+			sr_fc_sums_saturn = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_saturn value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_saturn value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_saturn value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_saturn value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 7 } }
+			sr_fc_sums_uranus = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_uranus value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_uranus value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_uranus value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_uranus value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 8 } }
+			sr_fc_sums_neptune = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_neptune value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_neptune value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_neptune value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_neptune value = local_var:sr_fl_ts }
+		}
+		if = {
+			limit = { NOT = { var:sr_fl_$N$_loc = 9 } }
+			sr_fc_sums_kuiper = yes
+			change_local_variable = { name = sr_fl_os add = local_var:sr_fc_own_s }
+			change_local_variable = { name = sr_fl_of add = local_var:sr_fc_own_f }
+			sr_fc_judge = yes
+			set_variable = { name = sr_fc_tier_kuiper value = local_var:sr_fc_tier }
+			set_variable = { name = sr_fc_loss_kuiper value = local_var:sr_fc_loss }
+			set_variable = { name = sr_fc_os_kuiper value = local_var:sr_fl_os }
+			set_variable = { name = sr_fc_ts_kuiper value = local_var:sr_fl_ts }
 		}
 	}
 }

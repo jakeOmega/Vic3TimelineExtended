@@ -1546,17 +1546,17 @@ one brings you back to the fleet.
 
 | Order | What it does |
 |---|---|
-| The destination button | Opens Fleet Destination, a row for each other location: the trip's weeks and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
+| The destination button | Opens Fleet Destination, a row for each other location: the trip's weeks and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there, the enemy's strength there and on its way, and Battle, a forecast of a fight there (see [Battles in space](#battles-in-space)). Choose picks it; the button's hover then gives that trip |
 | Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
 | Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. The marines stay within what the assault carriers on each side can hold, so moving carriers can change them too. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
-| Engage, Avoid | The fleet's setting for battle, shown on the button; a click switches it from the next week (see [Battles in space](#battles-in-space)). On the card it shows while the fleet flies and where its posture buttons do; in the Fleets window, always. A new fleet engages |
+| Stance | Avoid, Hit and Run, Engage or Fight to the Last: whom the fleet fights and when it breaks off, from the next week (see [Battles in space](#battles-in-space)). On the card one button shows the stance and a click sets the next, while the fleet flies and where its posture buttons show; in the Fleets window a button for each, always. A new fleet engages |
 | Land, Embark | Each opens Marines: your colonies at the fleet's location, with your marines at each and Due where a garrison you ordered waits for them, and an amount, which starts at every marine aboard for Land and at the room aboard for Embark (− and + as in Transfer). Land on a row puts up to that many of the marines aboard at that colony; Embark takes up to that many of yours there back aboard, as many as the carriers hold. The window stays open, so you can split the marines between colonies. At Earth, your colonies on the Moon | <!-- style: allow ai-vocab -->
 
 Your fleets take orders only while you have a Space Command level in a state
-you control. Without one, none can leave, change posture, target or Engage and Avoid, start a
+you control. Without one, none can leave, change posture, target or stance, start a
 refit or be repaired, and a refit under way pauses; Space Fleets says so above
 its rows. Fleets already on their way land, every fleet fights where it is with the
-posture and the Engage or Avoid it had, at half strength, and a docked fleet still takes on supply,
+posture and the stance it had, at half strength, and a docked fleet still takes on supply,
 propellant and marines. Demolishing Space Command ends the upkeep and grounds
 your fleets: one at Earth still fights there at half strength and keeps Earth
 from being blockaded, but can't leave or be repaired.
@@ -1571,17 +1571,25 @@ in three months. Away from a dock supply runs down, and a fleet without it loses
 Space Forces Personnel allow. A fleet that arrives
 where you hold a colony counts as contact for the colony's autonomy. When an
 enemy fleet sets out for a location where you hold a colony, you are warned
-with the weeks until it arrives.
+with the weeks until it arrives and Space Command's forecast of the fight.
 
 ### Battles in space
 
 Fleets of countries at war that meet at a location fight it out on the spot, on
 any of the four days a month fleets move: a fleet that lands fights that day.
-Who fights whom is each fleet's setting, Engage or Avoid, on a button among its
-orders:
+Each fleet's stance, among its orders, decides whom it fights and when it
+breaks off:
 
-- Two fleets that both engage fight; two that both avoid don't.
-- A fleet that engages catches one that avoids if it is at least as fast, or if
+| Stance | Fights | Breaks off after losing |
+|---|---|---|
+| Avoid | Only a fleet that catches it | A quarter of what it brought |
+| Hit and Run | Every enemy fleet it can catch | A quarter |
+| Engage | Every enemy fleet it can catch | Half |
+| Fight to the Last | Every enemy fleet it can catch | Never: it fights until the enemy breaks or it is destroyed |
+
+- Two fleets that avoid don't fight; any other pair does if one can catch the
+  other.
+- A fleet catches one that avoids if it is at least as fast, or if
   the other can't slip away: it is where its country holds a colony, at Earth,
   or closing in, interdicting, or standing off where there is a colony it may
   attack. A fleet set to Avoid that lands where you hold no colony takes Station
@@ -1594,12 +1602,21 @@ Each fleet shares its fire among the enemy fleets it fights by their strength,
 and the fight goes on until no pair is left. Losses follow the square law: each
 side loses in proportion to the other's fire, so concentration pays. Warships
 and rapid response take the losses before the other roles, and half of every
-loss is damage a dock repairs. A fleet breaks once it has lost half the strength
-it brought to the battle: it drops out and heads for the nearest dock it can
-reach, Earth or a location where you hold a Spaceport. One already at a dock
-stays there, and one with no dock in reach stays where it is and can be caught
-again the next week. Two equal fleets both break; at two to one the weaker
-breaks, having cost the stronger about a tenth of its strength.
+loss is damage a dock repairs. A fleet breaks once it has lost its stance's
+share of the strength it brought to the battle: it drops out and heads for the
+nearest dock it can reach other than the one it is at, Earth or a location where
+you hold a Spaceport. One with no such dock in reach stays where it is and can be
+caught again the next week. Two equal fleets that engage both break; at two to
+one the weaker breaks, having cost the stronger about a tenth of its strength.
+Two that fight to the last can fight on into the next week.
+
+Fleet Destination's Battle column and the warnings of an enemy fleet on its way
+give Space Command's forecast: your fleets there and on their way, with the
+fleets of any country at war with an enemy that has fleets there, against the enemy's, each by
+strength times fire, Orbital Battlestations counted at Earth. It reads Clear win,
+Costly win, Defeat or Rout, and the column's hover gives the strengths and what
+the winner would lose if both sides engage. It leaves out the batteries and each
+fleet's stance, and the column is worked out when Fleet Destination opens.
 
 Posture decides what a fleet does to the colonies there, set by the four posture
 buttons under its orders. The one in force is lit, and one the fleet can't take
@@ -1782,13 +1799,14 @@ shut down a space program.
 AI fleet powers keep their fleets at home in peace, bring fleets home short of
 supply or propellant, and land marines for the garrisons they order. Where they
 hold colonies and an enemy fleet is there or on its way, or a fleet interdicts
-them there, they weigh their fleets there and on their way against the enemy's,
-each by strength times fire: winning already, they send nothing; else their
+them there, they weigh their fleets and their friends' there and on their way (a friend is a
+country at war with an enemy that has fleets there) against the enemy's, each by
+strength times fire: winning already, they send nothing; else their
 strongest free fleet if it would win alone, else its free fleets that can reach
 it, strongest first, until together they would win, else none; while an enemy
 fleet is at Earth or on its way, its fleets at Earth stay home. In a battle an AI engages where its
-fleets' strength times fire is at least the enemy's there, and avoids
-otherwise; without a Space Command its fleets keep the setting they had. At war,
+fleets' and its friends' strength times fire is at least the enemy's there, and avoids
+otherwise; it uses only those two stances, and without a Space Command its fleets keep the one they had. At war,
 once a month, an AI sends one fleet from a dock to the nearest enemy location
 within a year's flight, when the fleet is at least half again as strong as the
 enemy's fleets and its colonies' Defenses there and can fly home again or dock
