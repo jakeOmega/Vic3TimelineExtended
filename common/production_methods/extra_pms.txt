@@ -4370,6 +4370,9 @@ pm_regional_branding_building_textile_mill = {
 	unlocking_production_methods = {
 		pm_sewing_machines
 		pm_electric_sewing_machines
+		pm_permanent_press
+		pm_computerized_cutting
+		pm_whole_garment_knitting
 		pm_programmable_matter_clothing
 	}
 
@@ -4405,6 +4408,9 @@ pm_mass_marketing_building_textile_mill = {
 
 	unlocking_production_methods = {
 		pm_electric_sewing_machines
+		pm_permanent_press
+		pm_computerized_cutting
+		pm_whole_garment_knitting
 		pm_programmable_matter_clothing
 	}
 
@@ -4430,6 +4436,187 @@ pm_mass_marketing_building_textile_mill = {
 			building_employment_shopkeepers_add = 250
 		}
 	}
+}
+
+# Furniture Manufactories: the furniture ladder between vanilla's Mechanized
+# Workshops (era 2) and Programmable Matter (era 13), on the technologies the
+# glassworks and paper mill ladders step on (Workshop request, 2026-11-25;
+# docs/systems/mod_systems/production_methods.md § "Consumer industries"). Each
+# keeps Mechanized Workshops' staff, which the automation methods cut at most,
+# and every method gated on Mechanized Workshops unlocks on each
+# (test_consumer_industry_methods.py).
+pm_tubular_steel_furniture = {
+	texture = "gfx/interface/icons/production_method_icons/steel_frame_buildings.dds"
+
+	unlocking_technologies = {
+		arc_welding
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 40                            # Price:   20, Total cost:   800.0 (37.21%)
+			goods_input_fabric_add = 15                          # Price:   20, Total cost:   300.0 (13.95%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (23.26%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (18.60%)
+			goods_input_electricity_add = 5                      # Price:   30, Total cost:   150.0 (6.98%)
+			# Output goods
+			goods_output_furniture_add = 150                     # Price:   30, Total cost:  4500.0 (100.00%)
+			# Total input cost: 2150.0
+			# Total output cost: 4500.0
+			# Profit: 2350.0
+			# Profit margin: 109.30%
+			# Zero profit price multiplier: 0.48
+			# Employment: 5500
+			# Wage breakeven: 0.43
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 1250
+			building_employment_engineers_add = 750
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_molded_plywood_and_plastics = {
+	texture = "gfx/interface/icons/production_method_icons/houseware_plastics.dds"
+
+	unlocking_technologies = {
+		plastic_mass_production
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 40                            # Price:   20, Total cost:   800.0 (26.23%)
+			goods_input_fabric_add = 15                          # Price:   20, Total cost:   300.0 (9.84%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (16.39%)
+			goods_input_glass_add = 15                           # Price:   40, Total cost:   600.0 (19.67%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (4.92%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (13.11%)
+			goods_input_electricity_add = 10                     # Price:   30, Total cost:   300.0 (9.84%)
+			# Output goods
+			goods_output_furniture_add = 205                     # Price:   30, Total cost:  6150.0 (100.00%)
+			# Total input cost: 3050.0
+			# Total output cost: 6150.0
+			# Profit: 3100.0
+			# Profit margin: 101.64%
+			# Zero profit price multiplier: 0.50
+			# Employment: 5500
+			# Wage breakeven: 0.56
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 1250
+			building_employment_engineers_add = 750
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_flat_pack_furniture = {
+	texture = "gfx/interface/icons/production_method_icons/horizontal_drawer_cabinets.dds"
+
+	unlocking_technologies = {
+		computer_aided_design
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 10
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 60                            # Price:   20, Total cost:  1200.0 (30.08%)
+			goods_input_fabric_add = 15                          # Price:   20, Total cost:   300.0 (7.52%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (12.53%)
+			goods_input_glass_add = 15                           # Price:   40, Total cost:   600.0 (15.04%)
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (7.52%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (10.03%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (11.28%)
+			goods_input_electronic_components_add = 3            # Price:   80, Total cost:   240.0 (6.02%)
+			# Output goods
+			goods_output_furniture_add = 265                     # Price:   30, Total cost:  7950.0 (100.00%)
+			# Total input cost: 3990.0
+			# Total output cost: 7950.0
+			# Profit: 3960.0
+			# Profit margin: 99.25%
+			# Zero profit price multiplier: 0.50
+			# Employment: 5500
+			# Wage breakeven: 0.72
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 1250
+			building_employment_engineers_add = 750
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_bio_composite_panels = {
+	texture = "gfx/interface/icons/production_method_icons/pm_bioplastics.dds"
+
+	unlocking_technologies = {
+		synthetic_biology
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_wood_add = 70                            # Price:   20, Total cost:  1400.0 (31.82%)
+			goods_input_fabric_add = 15                          # Price:   20, Total cost:   300.0 (6.82%)
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (11.36%)
+			goods_input_glass_add = 15                           # Price:   40, Total cost:   600.0 (13.64%)
+			goods_input_grain_add = 10                           # Price:   20, Total cost:   200.0 (4.55%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (9.09%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (13.64%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (9.09%)
+			# Output goods
+			goods_output_furniture_add = 325                     # Price:   30, Total cost:  9750.0 (100.00%)
+			# Total input cost: 4400.0
+			# Total output cost: 9750.0
+			# Profit: 5350.0
+			# Profit margin: 121.59%
+			# Zero profit price multiplier: 0.45
+			# Employment: 5500
+			# Wage breakeven: 0.97
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 1250
+			building_employment_engineers_add = 750
+		}
+	}
+
+	required_input_goods = electricity
 }
 
 pm_programmable_matter_furniture = {
@@ -4472,7 +4659,100 @@ pm_programmable_matter_furniture = {
 
 INJECT:pm_precision_tools = {
 	unlocking_production_methods = {
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
 		pm_programmable_matter_furniture
+	}
+}
+
+# Furniture Manufactories' Luxury Production after vanilla's Precision Tools
+# (era 2): Modern Design Furniture beside the glassworks' Modern Design
+# Porcelain, Made-to-Order Furniture beside the textile mill's Customized
+# Clothing. Each takes 25 wood off the base method, as Precision Tools does, so
+# it needs a base method that buys at least that much.
+pm_modern_design_furniture = {
+	texture = "gfx/interface/icons/production_method_icons/luxury_furniture.dds"
+
+	unlocking_technologies = {
+		art_deco_architecture
+	}
+
+	unlocking_production_methods = {
+		pm_mechanized_workshops
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
+		pm_programmable_matter_furniture
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_hardwood_add = 30                        # Price:   40, Total cost:  1200.0 (77.42%)
+			goods_input_steel_add = 5                            # Price:   50, Total cost:   250.0 (16.13%)
+			goods_input_glass_add = 5                            # Price:   40, Total cost:   200.0 (12.90%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (25.81%)
+			goods_input_wood_add = -25                           # Price:   20, Total cost:  -500.0 (-32.26%)
+			# Output goods
+			goods_output_furniture_add = -70                     # Price:   30, Total cost: -2100.0 (-77.78%)
+			goods_output_luxury_furniture_add = 80               # Price:   60, Total cost:  4800.0 (177.78%)
+			# Total input cost: 1550.0
+			# Total output cost: 2700.0
+			# Profit: 1150.0
+			# Profit margin: 74.19%
+			# Zero profit price multiplier: 0.57
+			# Employment: 1000
+			# Wage breakeven: 1.15
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 1000
+		}
+	}
+}
+
+pm_made_to_order_furniture = {
+	texture = "gfx/interface/icons/production_method_icons/precision_tools.dds"
+
+	unlocking_technologies = {
+		e-commerce
+	}
+
+	unlocking_production_methods = {
+		pm_mechanized_workshops
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
+		pm_programmable_matter_furniture
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_hardwood_add = 30                        # Price:   40, Total cost:  1200.0 (73.17%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (24.39%)
+			goods_input_transportation_add = 10                  # Price:   30, Total cost:   300.0 (18.29%)
+			goods_input_digital_access_add = 2                   # Price:  120, Total cost:   240.0 (14.63%)
+			goods_input_wood_add = -25                           # Price:   20, Total cost:  -500.0 (-30.49%)
+			# Output goods
+			goods_output_furniture_add = -60                     # Price:   30, Total cost: -1800.0 (-54.55%)
+			goods_output_luxury_furniture_add = 85               # Price:   60, Total cost:  5100.0 (154.55%)
+			# Total input cost: 1640.0
+			# Total output cost: 3300.0
+			# Profit: 1660.0
+			# Profit margin: 101.22%
+			# Zero profit price multiplier: 0.50
+			# Employment: 750
+			# Wage breakeven: 2.21
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 750
+		}
 	}
 }
 
@@ -4486,6 +4766,10 @@ pm_regional_branding_building_furniture_manufactory = {
 	unlocking_production_methods = {
 		pm_lathe
 		pm_mechanized_workshops
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
 		pm_programmable_matter_furniture
 	}
 
@@ -4521,6 +4805,10 @@ pm_mass_marketing_building_furniture_manufactory = {
 
 	unlocking_production_methods = {
 		pm_mechanized_workshops
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
 		pm_programmable_matter_furniture
 	}
 
@@ -6740,6 +7028,8 @@ pm_robotic_food_processing = {
 	unlocking_production_methods = {
 		pm_baking_powder
 		pm_food_additives
+		pm_enzymatic_processing
+		pm_precision_fermentation
 		pm_sweeteners
 	}
 
@@ -13144,6 +13434,91 @@ pm_food_additives = {
 	required_input_goods = electricity
 }
 
+# Food Industries: the grocery ladder between Food Additives (era 6) and
+# Programmable Food Synthesis (era 13), whose output rose from 400 to 500 a
+# level so it stays the top tier (Workshop request, 2026-11-25;
+# docs/systems/mod_systems/production_methods.md § "Consumer industries").
+# Each keeps Food Additives' staff, which Robotic Food Processing cuts, and
+# buys at least the 30 grain Vacuum Packaging takes off.
+pm_enzymatic_processing = {
+	texture = "gfx/interface/icons/production_method_icons/pm_electroenzymatic_synthesis.dds"
+
+	unlocking_technologies = {
+		biotechnology
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 160                          # Price:   20, Total cost:  3200.0 (65.98%)
+			goods_input_sugar_add = 25                           # Price:   30, Total cost:   750.0 (15.46%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (9.28%)
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (9.28%)
+			# Output goods
+			goods_output_groceries_add = 255                     # Price:   30, Total cost:  7650.0 (100.00%)
+			# Total input cost: 4850.0
+			# Total output cost: 7650.0
+			# Profit: 2800.0
+			# Profit margin: 57.73%
+			# Zero profit price multiplier: 0.63
+			# Employment: 4750
+			# Wage breakeven: 0.59
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 250
+			building_employment_laborers_add = 3500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_precision_fermentation = {
+	texture = "gfx/interface/icons/production_method_icons/pm_pharma_antibiotic_fermentation.dds"
+
+	unlocking_technologies = {
+		synthetic_biology
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 160                          # Price:   20, Total cost:  3200.0 (53.33%)
+			goods_input_sugar_add = 40                           # Price:   30, Total cost:  1200.0 (20.00%)
+			goods_input_electricity_add = 25                     # Price:   30, Total cost:   750.0 (12.50%)
+			goods_input_fertilizer_add = 15                      # Price:   30, Total cost:   450.0 (7.50%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (6.67%)
+			# Output goods
+			goods_output_groceries_add = 325                     # Price:   30, Total cost:  9750.0 (100.00%)
+			# Total input cost: 6000.0
+			# Total output cost: 9750.0
+			# Profit: 3750.0
+			# Profit margin: 62.50%
+			# Zero profit price multiplier: 0.62
+			# Employment: 4750
+			# Wage breakeven: 0.79
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 250
+			building_employment_laborers_add = 3500
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 pm_programmable_food_synthesis = {
 	texture = "gfx/interface/icons/production_method_icons/pm_programmable_food_synthesis.dds"
 
@@ -13161,14 +13536,14 @@ pm_programmable_food_synthesis = {
 			goods_input_electronic_components_add = 20           # Price:   80, Total cost:  1600.0 (17.78%)
 			goods_input_digital_access_add = 20                  # Price:  120, Total cost:  2400.0 (26.67%)
 			# Output goods
-			goods_output_groceries_add = 400                     # Price:   30, Total cost: 12000.0 (100.00%)
+			goods_output_groceries_add = 500                     # Price:   30, Total cost: 15000.0 (100.00%)
 			# Total input cost: 9000.0
-			# Total output cost: 12000.0
-			# Profit: 3000.0
-			# Profit margin: 33.33%
-			# Zero profit price multiplier: 0.75
+			# Total output cost: 15000.0
+			# Profit: 6000.0
+			# Profit margin: 66.67%
+			# Zero profit price multiplier: 0.60
 			# Employment: 4010
-			# Wage breakeven: 0.75
+			# Wage breakeven: 1.50
 		}
 
 		level_scaled = {
@@ -13181,6 +13556,112 @@ pm_programmable_food_synthesis = {
 
 	required_input_goods = electricity
 	required_input_goods = digital_access
+}
+
+# Food Industries' Distilleries after vanilla's Patent Stills (era 2), with
+# the grocery ladder's technologies from era 9 (Workshop request, 2026-11-25).
+# Like the stills, each turns some of the building's groceries into liquor.
+pm_industrial_fermentation = {
+	texture = "gfx/interface/icons/production_method_icons/vaccum_evaporation.dds"
+
+	unlocking_technologies = {
+		stainless_steel_mass_production
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sugar_add = 30                           # Price:   30, Total cost:   900.0 (51.43%)
+			goods_input_grain_add = 10                           # Price:   20, Total cost:   200.0 (11.43%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (22.86%)
+			goods_input_steel_add = 5                            # Price:   50, Total cost:   250.0 (14.29%)
+			# Output goods
+			goods_output_liquor_add = 110                        # Price:   30, Total cost:  3300.0 (129.41%)
+			goods_output_groceries_add = -25                     # Price:   30, Total cost:  -750.0 (-29.41%)
+			# Total input cost: 1750.0
+			# Total output cost: 2550.0
+			# Profit: 800.0
+			# Profit margin: 45.71%
+			# Zero profit price multiplier: 0.69
+			# Employment: 900
+			# Wage breakeven: 0.89
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 200
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 200
+		}
+	}
+}
+
+pm_engineered_yeast = {
+	texture = "gfx/interface/icons/production_method_icons/pm_pharma_biologics.dds"
+
+	unlocking_technologies = {
+		biotechnology
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sugar_add = 30                           # Price:   30, Total cost:   900.0 (47.37%)
+			goods_input_grain_add = 10                           # Price:   20, Total cost:   200.0 (10.53%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (21.05%)
+			goods_input_steel_add = 5                            # Price:   50, Total cost:   250.0 (13.16%)
+			goods_input_fertilizer_add = 5                       # Price:   30, Total cost:   150.0 (7.89%)
+			# Output goods
+			goods_output_liquor_add = 125                        # Price:   30, Total cost:  3750.0 (125.00%)
+			goods_output_groceries_add = -25                     # Price:   30, Total cost:  -750.0 (-25.00%)
+			# Total input cost: 1900.0
+			# Total output cost: 3000.0
+			# Profit: 1100.0
+			# Profit margin: 57.89%
+			# Zero profit price multiplier: 0.63
+			# Employment: 900
+			# Wage breakeven: 1.22
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 200
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 200
+		}
+	}
+}
+
+pm_molecular_spirits = {
+	texture = "gfx/interface/icons/production_method_icons/pm_biotech_dyes.dds"
+
+	unlocking_technologies = {
+		synthetic_biology
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_sugar_add = 20                           # Price:   30, Total cost:   600.0 (35.29%)
+			goods_input_grain_add = 20                           # Price:   20, Total cost:   400.0 (23.53%)
+			goods_input_glass_add = 10                           # Price:   40, Total cost:   400.0 (23.53%)
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (17.65%)
+			# Output goods
+			goods_output_liquor_add = 130                        # Price:   30, Total cost:  3900.0 (123.81%)
+			goods_output_groceries_add = -25                     # Price:   30, Total cost:  -750.0 (-23.81%)
+			# Total input cost: 1700.0
+			# Total output cost: 3150.0
+			# Profit: 1450.0
+			# Profit margin: 85.29%
+			# Zero profit price multiplier: 0.54
+			# Employment: 900
+			# Wage breakeven: 1.61
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 200
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 200
+		}
+	}
 }
 
 INJECT:pm_vacuum_canning_principle_3 = {
@@ -13276,6 +13757,10 @@ pm_advanced_assembly_lines_building_furniture_manufactory = {
 	unlocking_production_methods = {
 		pm_lathe
 		pm_mechanized_workshops
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
 		pm_programmable_matter_furniture
 	}
 
@@ -13513,6 +13998,10 @@ pm_robotic_assembly_lines_building_furniture_manufactory = {
 	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
 	unlocking_production_methods = {
 		pm_mechanized_workshops
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
 		pm_programmable_matter_furniture
 	}
 
@@ -13678,6 +14167,10 @@ pm_ai_managed_building_furniture_manufactory = {
 	# gate, low-tier base PMs drive employment negative. See pm_employment_audit.
 	unlocking_production_methods = {
 		pm_mechanized_workshops
+		pm_tubular_steel_furniture
+		pm_molded_plywood_and_plastics
+		pm_flat_pack_furniture
+		pm_bio_composite_panels
 		pm_programmable_matter_furniture
 	}
 
@@ -14230,6 +14723,147 @@ pm_ai_managed_building_munition_plant_shells = {
 	required_input_goods = digital_access
 }
 
+# Textile Mills: the clothing ladder between vanilla's Electric Sewing Machines
+# (era 4) and Programmable Matter (era 13), a tier every two eras (Workshop
+# request, 2026-11-25; docs/systems/mod_systems/production_methods.md
+# § "Consumer industries"). Each keeps Electric Sewing Machines' staff, which
+# the automation methods cut at most, so no combination goes below zero, and
+# Elastics, Textile Finishing Machinery, the AI-managed factory and both
+# branding methods unlock on each (test_consumer_industry_methods.py).
+pm_permanent_press = {
+	texture = "gfx/interface/icons/production_method_icons/electric_sewing_machines.dds"
+
+	unlocking_technologies = {
+		modern_chemical_processes
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 80                          # Price:   20, Total cost:  1600.0 (41.78%)
+			goods_input_dye_add = 25                             # Price:   40, Total cost:  1000.0 (26.11%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (10.44%)
+			goods_input_copper_add = 2                           # Price:   40, Total cost:    80.0 (2.09%)
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (7.83%)
+			goods_input_electricity_add = 15                     # Price:   30, Total cost:   450.0 (11.75%)
+			# Output goods
+			goods_output_clothes_add = 200                       # Price:   30, Total cost:  6000.0 (100.00%)
+			# Total input cost: 3830.0
+			# Total output cost: 6000.0
+			# Profit: 2170.0
+			# Profit margin: 56.66%
+			# Zero profit price multiplier: 0.64
+			# Employment: 5000
+			# Wage breakeven: 0.43
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_computerized_cutting = {
+	texture = "gfx/interface/icons/production_method_icons/pm_computer_aided_design.dds"
+
+	unlocking_technologies = {
+		computer_aided_design
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 90                          # Price:   20, Total cost:  1800.0 (37.66%)
+			goods_input_dye_add = 30                             # Price:   40, Total cost:  1200.0 (25.10%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (8.37%)
+			goods_input_copper_add = 2                           # Price:   40, Total cost:    80.0 (1.67%)
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (6.28%)
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (12.55%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (8.37%)
+			# Output goods
+			goods_output_clothes_add = 260                       # Price:   30, Total cost:  7800.0 (100.00%)
+			# Total input cost: 4780.0
+			# Total output cost: 7800.0
+			# Profit: 3020.0
+			# Profit margin: 63.18%
+			# Zero profit price multiplier: 0.61
+			# Employment: 5000
+			# Wage breakeven: 0.60
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
+pm_whole_garment_knitting = {
+	texture = "gfx/interface/icons/production_method_icons/pm_performance_textiles.dds"
+
+	unlocking_technologies = {
+		additive_manufacturing
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_pollution_generation_add = 5
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fabric_add = 100                         # Price:   20, Total cost:  2000.0 (32.52%)
+			goods_input_dye_add = 35                             # Price:   40, Total cost:  1400.0 (22.76%)
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (6.50%)
+			goods_input_fertilizer_add = 10                      # Price:   30, Total cost:   300.0 (4.88%)
+			goods_input_electricity_add = 25                     # Price:   30, Total cost:   750.0 (12.20%)
+			goods_input_electronic_components_add = 10           # Price:   80, Total cost:   800.0 (13.01%)
+			goods_input_digital_assets_add = 5                   # Price:  100, Total cost:   500.0 (8.13%)
+			# Output goods
+			goods_output_clothes_add = 340                       # Price:   30, Total cost: 10200.0 (100.00%)
+			# Total input cost: 6150.0
+			# Total output cost: 10200.0
+			# Profit: 4050.0
+			# Profit margin: 65.85%
+			# Zero profit price multiplier: 0.60
+			# Employment: 5000
+			# Wage breakeven: 0.81
+		}
+
+		level_scaled = {
+			building_employment_shopkeepers_add = 500
+			building_employment_laborers_add = 3000
+			building_employment_machinists_add = 1000
+			building_employment_engineers_add = 500
+		}
+	}
+
+	required_input_goods = electricity
+}
+
 pm_programmable_matter_clothing = {
 	texture = "gfx/interface/icons/production_method_icons/pm_programmable_matter_clothing.dds"
 
@@ -14276,6 +14910,9 @@ pm_programmable_matter_clothing = {
 # for the furniture manufactory's Programmable Matter Furniture.
 INJECT:pm_elastics = {
 	unlocking_production_methods = {
+		pm_permanent_press
+		pm_computerized_cutting
+		pm_whole_garment_knitting
 		pm_programmable_matter_clothing
 	}
 }
@@ -14320,6 +14957,9 @@ pm_textile_finishing_machinery = {
 		pm_sewing_machines
 		pm_dye_workshops
 		pm_electric_sewing_machines
+		pm_permanent_press
+		pm_computerized_cutting
+		pm_whole_garment_knitting
 		pm_programmable_matter_clothing
 	}
 
@@ -14363,6 +15003,9 @@ pm_ai_managed_textile_factory = {
 	# cut (laborers -3000 / machinists -1000 / engineers -500). See pm_employment_audit.
 	unlocking_production_methods = {
 		pm_electric_sewing_machines
+		pm_permanent_press
+		pm_computerized_cutting
+		pm_whole_garment_knitting
 		pm_programmable_matter_clothing
 	}
 

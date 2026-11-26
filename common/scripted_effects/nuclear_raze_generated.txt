@@ -784,6 +784,8 @@ nd_raze_pms_building_food_industry = {
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_sweeteners }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_baking_powder }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_food_additives }
+	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_enzymatic_processing }
+	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_precision_fermentation }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_programmable_food_synthesis }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_disabled_canning }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_cannery }
@@ -795,6 +797,9 @@ nd_raze_pms_building_food_industry = {
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_disabled_distillery }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_pot_stills }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_patent_stills }
+	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_industrial_fermentation }
+	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_engineered_yeast }
+	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_molecular_spirits }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_manual_dough_processing }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_automated_bakery }
 	nd_raze_pm_$MODE$ = { BUILDING = building_food_industry PM = pm_mass_produced_packaged_food }
@@ -813,10 +818,16 @@ nd_raze_pms_building_furniture_manufactory = {
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_handcrafted_furniture }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_lathe }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_mechanized_workshops }
+	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_tubular_steel_furniture }
+	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_molded_plywood_and_plastics }
+	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_flat_pack_furniture }
+	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_bio_composite_panels }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_programmable_matter_furniture }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_no_luxuries }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_luxury_furniture }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_precision_tools }
+	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_modern_design_furniture }
+	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_made_to_order_furniture }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_automation_disabled }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_watertube_boiler_building_furniture_manufactory }
 	nd_raze_pm_$MODE$ = { BUILDING = building_furniture_manufactory PM = pm_rotary_valve_engine_building_furniture_manufactory }
@@ -1415,6 +1426,9 @@ nd_raze_pms_building_textile_mill = {
 	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_dye_workshops }
 	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_sewing_machines }
 	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_electric_sewing_machines }
+	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_permanent_press }
+	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_computerized_cutting }
+	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_whole_garment_knitting }
 	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_programmable_matter_clothing }
 	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_no_luxury_clothes }
 	nd_raze_pm_$MODE$ = { BUILDING = building_textile_mill PM = pm_craftsman_sewing }

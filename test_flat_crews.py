@@ -67,7 +67,8 @@ NEW_FLAT_CREWS = (
 # Methods split by base, with every base the single method ran on before the split.
 SPLITS = {
     ("pm_robotic_food_processing", "pm_robotic_food_processing_synthesis"): {
-        "pm_baking_powder", "pm_food_additives", "pm_sweeteners", "pm_programmable_food_synthesis"},
+        "pm_baking_powder", "pm_food_additives", "pm_sweeteners", "pm_enzymatic_processing",
+        "pm_precision_fermentation", "pm_programmable_food_synthesis"},
     ("pm_3d_printed_buildings", "pm_3d_printed_buildings_nanomaterial"): {
         "pm_reinforced_concrete_buildings", "pm_arc_welded_buildings", "pm_advanced_construction",
         "pm_nanomaterial_buildings", "pm_self_replicating_construction",
