@@ -199,6 +199,10 @@
   "en": "The least lenders will charge you for what your country is, however sound its finances become. Standing earned past this point buys nothing further, so lowering the floor is the only way to be priced any finer.",
   "es": "Lo mínimo que te cobrarán los prestamistas por lo que es tu país, por muy sanas que lleguen a estar sus finanzas. La solvencia ganada más allá de este punto no aporta nada más, así que bajar el mínimo es la única forma de conseguir un precio más ajustado."
  },
+ "country_cross_heritage_assimilation_add_desc": {
+  "en": "The share of their usual [concept_assimilation] rate at which pops join a [concept_culture] of another heritage group, 100% at most. It counts under the $setting_assimilation_cultures_hybrid$ and $setting_assimilation_cultures_none$ settings of the $rule_assimilation_cultures_rule$ game rule. Under $setting_assimilation_cultures_unrestricted$ every pop crosses at its full rate.",
+  "es": "La parte de su tasa de [concept_assimilation|l] habitual a la que los colectivos se unen a una [concept_culture|l] de otro grupo de herencia, como máximo 100%. Cuenta con los ajustes $setting_assimilation_cultures_hybrid$ y $setting_assimilation_cultures_none$ de la regla de juego $rule_assimilation_cultures_rule$. Con $setting_assimilation_cultures_unrestricted$, todo colectivo cruza a su tasa completa."
+ },
  "country_cultural_hegemony_art_mult": {
   "en": "Cultural Pull from Art",
   "es": "Atractivo cultural del arte"
@@ -999,6 +1003,14 @@
   "en": "The share of the arsenal that goes missing when it changes hands, in a civil war or when an arsenal passes to another country. Commanders who hold launch authority can also take their weapons with them.",
   "es": "La parte del arsenal que desaparece al cambiar de manos, en una guerra civil o cuando un arsenal pasa a otro país. Los mandos con autoridad de lanzamiento también pueden llevarse sus armas."
  },
+ "country_nd_exposure_mult": {
+  "en": "Share Exposed to a First Strike",
+  "es": "Proporción expuesta a un primer ataque"
+ },
+ "country_nd_exposure_mult_desc": {
+  "en": "How much this part cuts the share of our warheads a first strike could destroy, as a share of what the other parts leave exposed.",
+  "es": "En cuánto reduce esta parte la proporción de nuestras ojivas que un primer ataque podría destruir, como proporción de lo que dejan expuesto las demás partes."
+ },
  "country_nd_halt_chance_add": {
   "en": "Chance of a Halt",
   "es": "Probabilidad de detención"
@@ -1019,6 +1031,10 @@
   "en": "Counterforce Ratio",
   "es": "Proporción de contrafuerza"
  },
+ "country_nd_k_ratio_add_desc": {
+  "en": "How many more of an enemy's exposed warheads each of our warheads that lands on its forces destroys.",
+  "es": "Cuántas ojivas expuestas más de un enemigo destruye cada una de nuestras ojivas que impacta en sus fuerzas."
+ },
  "country_nd_launch_credit_add": {
   "en": "Launch Credit",
   "es": "Crédito de lanzamiento"
@@ -1026,6 +1042,22 @@
  "country_nd_launch_credit_add_desc": {
   "en": "The share of the warheads a first strike would destroy that get away before it lands. A crisis counts them among the warheads that would survive to answer.",
   "es": "La parte de las ojivas que un primer ataque destruiría y que logran escapar antes de que impacte. Una crisis las cuenta entre las ojivas que sobrevivirían para responder."
+ },
+ "country_nd_reliability_target_add": {
+  "en": "Command Reliability Target",
+  "es": "Objetivo de fiabilidad del mando"
+ },
+ "country_nd_reliability_target_add_desc": {
+  "en": "The level command reliability moves toward each month.",
+  "es": "El nivel hacia el que se mueve cada mes la fiabilidad del mando."
+ },
+ "country_nd_silo_penetration_add": {
+  "en": "Silo Penetration",
+  "es": "Penetración de silos"
+ },
+ "country_nd_silo_penetration_add_desc": {
+  "en": "Against a country with missiles in silos, how much more of its force a first strike from us could reach: added to the share its silos leave exposed.",
+  "es": "Contra un país con misiles en silos, cuánto más de su fuerza podría alcanzar un primer ataque nuestro: se suma a la proporción que sus silos dejan expuesta."
  },
  "country_nd_threat_pressure_add": {
   "en": "Pressure Our Threats Exert",
@@ -1316,12 +1348,28 @@
   "es": "Ajuste multiplicativo del riesgo de fracaso de la [concept_space_race|l]. El enfoque seguro en los hitos activos reduce el riesgo de fracaso a costa de un progreso más lento."
  },
  "country_sr_colony_growth_add": {
-  "en": "Colony Growth a Month",
-  "es": "Crecimiento de la colonia al mes"
+  "en": "Space Colony Growth a Month",
+  "es": "Crecimiento de colonias espaciales al mes"
  },
  "country_sr_colony_growth_add_desc": {
-  "en": "How much faster the people of every colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
-  "es": "Cuánto más rápido crece cada mes la población de cada colonia que tenemos, además del #v 0,2%#! en que crece toda colonia, con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
+  "en": "How much faster the people of every space colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
+  "es": "Cuánto más rápido crece cada mes la población de cada colonia espacial que tenemos, además del #v 0,2%#! en que crece toda colonia, con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
+ },
+ "country_sr_colony_room_add": {
+  "en": "Space Colony Room",
+  "es": "Espacio de colonia espacial"
+ },
+ "country_sr_colony_room_add_desc": {
+  "en": "How much more room for people every space colony we hold has before its Habitats and Terraforming, beyond its world's own, under the Simple and Full Colonies settings of the Space Race rule. Habitats and Terraforming each add a share of this room, so they hold more people too. A colony keeps the most room it has had if it changes hands.",
+  "es": "Cuánto más espacio para personas tiene cada colonia espacial que tenemos antes de sus Hábitats y su Terraformación, además del propio de su mundo, con los ajustes de colonias simples y completas de la regla de la Carrera espacial. Los Hábitats y la Terraformación suman cada uno una parte de este espacio, así que también albergan más gente. Una colonia conserva el máximo espacio que ha tenido si cambia de manos."
+ },
+ "country_sr_habitat_room_add": {
+  "en": "Habitat Room",
+  "es": "Espacio de hábitat"
+ },
+ "country_sr_habitat_room_add_desc": {
+  "en": "How much of its world's starting room each Habitat at our colonies adds for people, beyond the half every Habitat holds, under the Simple and Full Colonies settings of the Space Race rule. A colony keeps the room its Habitats were built with if it changes hands.",
+  "es": "Cuánto del espacio inicial de su mundo añade para personas cada Hábitat de nuestras colonias, además de la mitad que aporta todo Hábitat, con los ajustes de colonias simples y completas de la regla de la Carrera espacial. Una colonia conserva el espacio con el que se construyeron sus Hábitats si cambia de manos."
  },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
@@ -2003,6 +2051,14 @@
   "en": "The amount of @luxury_clothes! $luxury_clothes$ consumed by buildings",
   "es": "Cantidad de $luxury_clothes$ @luxury_clothes! que consumen los edificios"
  },
+ "goods_input_luxury_furniture_add": {
+  "en": "@luxury_furniture! $luxury_furniture$ Input",
+  "es": "Insumo de $luxury_furniture$ @luxury_furniture!"
+ },
+ "goods_input_luxury_furniture_add_desc": {
+  "en": "The amount of @luxury_furniture! $luxury_furniture$ consumed by buildings",
+  "es": "La cantidad de $luxury_furniture$ @luxury_furniture! que consumen los edificios"
+ },
  "goods_input_magnetic_drive_ships_add": {
   "en": "@magnetic_drive_ships! $magnetic_drive_ships$ Input",
   "es": "Insumo de $magnetic_drive_ships$ @magnetic_drive_ships!"
@@ -2314,6 +2370,14 @@
  "goods_output_launch_capacity_mult_desc": {
   "en": "A bonus or penalty to the amount of @launch_capacity! $launch_capacity$ produced by buildings",
   "es": "Bonificación o penalización a la cantidad de $launch_capacity$ @launch_capacity! que producen los edificios"
+ },
+ "goods_output_lead_mult": {
+  "en": "Building @lead! $lead$ output",
+  "es": "Producción de $lead$ @lead! de los edificios"
+ },
+ "goods_output_lead_mult_desc": {
+  "en": "A bonus or penalty to the amount of @lead! $lead$ produced by buildings",
+  "es": "Una bonificación o penalización a la cantidad de $lead$ @lead! que producen los edificios"
  },
  "goods_output_luxury_clothes_mult": {
   "en": "Building @luxury_clothes! $luxury_clothes$ output",
@@ -6050,6 +6114,10 @@
  "state_sr_space_personnel_add": {
   "en": "Space Forces Personnel",
   "es": "Personal de las Fuerzas Espaciales"
+ },
+ "state_sr_space_personnel_add_desc": {
+  "en": "People this state's $building_space_forces_base$ trains to crew its owner's fleets, fight as its marines and staff its colonies' personnel modules: a point of fleet strength needs #v 100#!, a marine battalion or a module level #v 1,000#!. They count while the state is occupied too, since they are already in orbit.",
+  "es": "Personas que forma la $building_space_forces_base$ de este estado para dotar las flotas de su propietario, combatir como sus infantes de marina y atender los módulos de personal de sus colonias: un punto de fuerza de flota necesita #v 100#!, un batallón de infantes de marina o un nivel de módulo #v 1 000#!. Cuentan también mientras el estado está ocupado, pues ya están en órbita."
  },
  "state_urban_fertility_relief_add": {
   "en": "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",

@@ -3443,9 +3443,33 @@
   "en": "#header Buy Less Construction#!\\n#v Click#!: -1 per week\\n#v Shift+Click#!: -10\\n#v Ctrl+Click#!: -100\\n#v Alt+Click#!: -1,000\\n#v Right-click#!: set to 0",
   "de": "#header Weniger Bau kaufen#!\\n#v Klick#!: -1 pro Woche\\n#v Umschalt+Klick#!: -10\\n#v Strg+Klick#!: -100\\n#v Alt+Klick#!: -1.000\\n#v Rechtsklick#!: auf 0 setzen"
  },
+ "TE_CM_HOW_DELIVERY": {
+  "en": "Construction Sites, placed automatically where construction is under way, turn purchased construction into construction points. The private/government split of those points follows the two purchases instead of your economic-system law.",
+  "de": "Baustellen, die automatisch dort platziert werden, wo gebaut wird, wandeln gekaufte Bauleistung in Baupunkte um. Die Aufteilung dieser Punkte in privat und staatlich folgt den beiden Käufen statt dem Gesetz zum Wirtschaftssystem."
+ },
  "TE_CM_HOW_IT_WORKS": {
   "en": "How the Construction Market Works",
   "de": "Wie der Baumarkt funktioniert"
+ },
+ "TE_CM_HOW_MARKET": {
+  "en": "You set how much the government buys, or spends, on [concept_construction] each week; private investors buy for their own projects from the [concept_investment_pool]. In brief: [concept_te_construction_market].",
+  "de": "Eingestellt wird, wie viel die Regierung jede Woche für [concept_construction] kauft oder ausgibt; private Investoren kaufen für ihre eigenen Projekte aus dem [concept_investment_pool]. Kurz gesagt: [concept_te_construction_market]."
+ },
+ "TE_CM_HOW_PRIVATE": {
+  "en": "Investors buy for private projects automatically, spending a 24th of the investment pool each week, up to what the private queue can use: about the pool's weekly income once it settles, and still some when the income stops.",
+  "de": "Investoren kaufen automatisch für private Projekte und geben jede Woche ein Vierundzwanzigstel des Investitionsfonds aus, höchstens so viel, wie die private Warteschlange nutzen kann: etwa das wöchentliche Einkommen des Fonds, sobald es sich eingependelt hat, und noch etwas, wenn das Einkommen aufhört."
+ },
+ "TE_CM_HOW_PURCHASE": {
+  "en": "The government buys construction from the treasury each week, set in one of two ways. Under #v $TE_CM_MODE_QUANTITY$#! you set how many points it buys, and the cost follows the price. Under #v $TE_CM_MODE_BUDGET$#! you set how much it spends, and the number of points follows the price, moving toward what the budget buys each week. A raise is phased in over a few weeks so the purchase doesn't chase its own effect on the price; a cut takes hold faster.",
+  "de": "Die Regierung kauft jede Woche Bauleistung aus der Staatskasse, auf eine von zwei Arten eingestellt. Unter #v $TE_CM_MODE_QUANTITY$#! wird festgelegt, wie viele Punkte sie kauft, und die Kosten folgen dem Preis. Unter #v $TE_CM_MODE_BUDGET$#! wird festgelegt, wie viel sie ausgibt, und die Zahl der Punkte folgt dem Preis und bewegt sich jede Woche auf das zu, was das Budget kauft. Eine Erhöhung wird über einige Wochen eingeführt, damit der Kauf nicht der eigenen Wirkung auf den Preis hinterherjagt; eine Kürzung greift schneller."
+ },
+ "TE_CM_HOW_PURCHASE_CAP": {
+  "en": "Only what the government queue can use that week is bought (the [concept_te_construction_queue_cap]), so a large setting is harmless but buys nothing extra when the queue is short. Set it to 0 to stop government construction without idling the construction sector: the construction it would have bought stays on the market for private investors. AI countries choose their own purchase, as a number of points, from their income, reserves and debt.",
+  "de": "Gekauft wird nur, was die Warteschlange der Regierung in der Woche nutzen kann (die [concept_te_construction_queue_cap]), eine hohe Einstellung ist also harmlos, kauft aber nichts extra, wenn die Warteschlange kurz ist. Auf 0 gesetzt, stoppt sie die staatliche Bautätigkeit, ohne den Bausektor stillzulegen: Die Bauleistung, die sie gekauft hätte, bleibt auf dem Markt für private Investoren. KI-Länder wählen ihren Kauf selbst, als Zahl von Punkten, nach Einkommen, Reserven und Schulden."
+ },
+ "TE_CM_HOW_SHORTAGES": {
+  "en": "Unless the Free Market Construction game rule has turned it off, factories and infrastructure also use a little construction as maintenance, and much more while they retool after switching production methods. When everyone together wants more than is on sale, the price rises. Every buyer still gets all it buys, only at a higher price per point: the government's purchase costs the treasury more, and the investment pool's spending buys fewer points. Watch the panel's #b $TE_CM_STAT_MARKET$#! row, and add $building_construction_sector$ levels if demand keeps outrunning supply.",
+  "de": "Sofern die Spielregel „Freie Marktbauwirtschaft“ es nicht abgeschaltet hat, nutzen Fabriken und Infrastruktur auch ein wenig Bauleistung als Instandhaltung, und viel mehr, während sie nach einem Wechsel der Produktionsmethoden umgerüstet werden. Wollen alle zusammen mehr, als im Angebot ist, steigt der Preis. Jeder Käufer bekommt weiterhin alles, was er kauft, nur zu einem höheren Preis pro Punkt: Der Kauf der Regierung kostet die Staatskasse mehr, und die Ausgaben des Investitionsfonds kaufen weniger Punkte. Die Zeile #b $TE_CM_STAT_MARKET$#! der Übersicht im Auge behalten und Stufen des Gebäudes $building_construction_sector$ hinzufügen, wenn die Nachfrage dem Angebot weiter davonläuft."
  },
  "TE_CM_INCREASE_TT": {
   "en": "#header Buy More Construction#!\\n#v Click#!: +1 per week\\n#v Shift+Click#!: +10\\n#v Ctrl+Click#!: +100\\n#v Alt+Click#!: +1,000\\n#v Right-click#!: +10,000",

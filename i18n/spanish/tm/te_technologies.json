@@ -308,8 +308,8 @@
   "es": "Captura y almacenamiento de carbono"
  },
  "carbon_capture_and_storage_desc": {
-  "en": "Capturing carbon at stationary sources and storing it, or removing it directly from the atmosphere. Unlocks 50% source capture, Carbon Conversion Works with Direct Air Capture, and the technology requirement for Managed Fossil Phaseout.",
-  "es": "Captura de carbono en fuentes estacionarias y su almacenamiento, o su eliminación directa de la atmósfera. Desbloquea una captura en origen del 50%, la Planta de conversión de carbono con Captura directa del aire y el requisito tecnológico para la Eliminación fósil gestionada."
+  "en": "We can now catch the carbon dioxide in the flues of power plants, steelworks and other factories that burn coal and oil, compress it, and pump it into depleted oil fields and deep rock, where it stays. Machines with fans and chemical filters can also draw it straight out of the open air, though every ton taken that way costs far more power than catching it at the chimney.",
+  "es": "Ahora podemos captar el dióxido de carbono de las chimeneas de las centrales eléctricas, las acerías y otras fábricas que queman carbón y petróleo, comprimirlo y bombearlo a yacimientos de petróleo agotados y a roca profunda, donde permanece. Máquinas con ventiladores y filtros químicos también pueden extraerlo directamente del aire libre, aunque cada tonelada obtenida así cuesta mucha más energía que captarla en la chimenea."
  },
  "cellular_networks": {
   "en": "Cellular Networks",
@@ -356,8 +356,8 @@
   "es": "Armas combinadas"
  },
  "combined_arms_desc": {
-  "en": "By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique [concept_combined_arms] traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.",
-  "es": "Al hacer que las distintas ramas del ejército trabajen juntas, podemos ser mucho más eficaces en combate. Cada general de ejército cuya formación despliegue al menos dos grupos de unidades distintos (infantería, artillería, caballería, tanques o aviación), cada uno de ellos con al menos un 5% de la formación, obtiene rasgos únicos de [concept_combined_arms|l] que otorgan bonificaciones de combate. Desplegar los cinco grupos en una misma formación desbloquea la bonificación definitiva de Dominio de espectro completo."
+  "en": "Our infantry, artillery and armor have trained to fight their own battles. Planned as one force, each covers the others' weaknesses: the guns lift their fire just ahead of the advancing infantry, the tanks drive through the gaps the infantry opens, and the infantry follows to hold the ground.",
+  "es": "Nuestra infantería, artillería y blindados se han entrenado para librar sus propias batallas. Planificados como una sola fuerza, cada uno cubre las debilidades de los demás: los cañones alargan su fuego justo por delante de la infantería que avanza, los tanques se abren paso por los huecos que abre la infantería, y la infantería los sigue para mantener el terreno."
  },
  "commercial_aviation": {
   "en": "Commercial Aviation",
@@ -600,8 +600,8 @@
   "es": "Geoingeniería"
  },
  "geoengineering_desc": {
-  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls. Unlocks the Stratospheric Aerosol Injection climate policy.",
-  "es": "Llevamos dos siglos cambiando el clima por accidente. Solo nuestra audacia nos impide hacerlo a propósito: los aviones podrían llevar aerosoles de sulfato a la estratosfera y velar el sol en menos de un año, a un precio que cualquier gran economía podría pagar. La neblina ocultaría el calentamiento, no lo eliminaría, y habría que mantenerla mientras el carbono permanezca en el aire. Con ella vienen artes menores: sembrar nubes para traer lluvia en una sequía y convertir el granizo en lluvia antes de que caiga. Desbloquea la política climática de Inyección de aerosoles estratosféricos."
+  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls.",
+  "es": "Llevamos dos siglos cambiando el clima por accidente. Solo nuestra audacia nos impide hacerlo a propósito: los aviones podrían llevar aerosoles de sulfato a la estratosfera y velar el sol en menos de un año, a un precio que cualquier gran economía podría pagar. La neblina ocultaría el calentamiento, no lo eliminaría, y habría que mantenerla mientras el carbono permanezca en el aire. Con ella vienen artes menores: sembrar nubes para traer lluvia en una sequía y convertir el granizo en lluvia antes de que caiga."
  },
  "globalization": {
   "en": "Globalization",
@@ -1240,8 +1240,8 @@
   "es": "Evolución autodirigida"
  },
  "self_directed_evolution_desc": {
-  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and they give their children bodies made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family may be a different kind of creature, and one it chose to become.",
-  "es": "La edición genética ha ido mucho más allá de la superficie. La gente desarrolla nuevos sentidos y funciona con metabolismos diseñados, y da a sus hijos cuerpos hechos para las profundidades del océano, el frío polar, la baja gravedad o el vacío total. En dos generaciones, una familia puede ser una especie de criatura distinta, y una que eligió llegar a ser."
+  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and parents can now give a child a body made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family could be a different kind of creature, and one it chose to become.",
+  "es": "La edición genética ha ido mucho más allá de la superficie. La gente desarrolla nuevos sentidos y funciona con metabolismos diseñados, y los padres ya pueden dar a un hijo un cuerpo hecho para las profundidades del océano, el frío polar, la baja gravedad o el vacío total. En dos generaciones, una familia podría ser una especie de criatura distinta, y una que eligió llegar a ser."
  },
  "self_driving_laboratories": {
   "en": "Self-Driving Laboratories",
@@ -1432,8 +1432,8 @@
   "es": "Terraformación"
  },
  "terraforming_desc": {
-  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born. Unlocks the Terraforming colony module.",
-  "es": "La geoingeniería demostró que el clima de un planeta puede cambiarse a propósito. La terraformación aplica el mismo oficio a otros mundos: espejos en órbita para calentar Marte, fábricas para espesar su aire, una pantalla solar para enfriar Venus. La obra lleva décadas y la recompensa siglos, y los primeros niños que caminarán bajo un cielo marciano sin casco aún no han nacido. Desbloquea el módulo de colonia de Terraformación."
+  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born.",
+  "es": "La geoingeniería demostró que el clima de un planeta puede cambiarse a propósito. La terraformación aplica el mismo oficio a otros mundos: espejos en órbita para calentar Marte, fábricas para espesar su aire, una pantalla solar para enfriar Venus. La obra lleva décadas y la recompensa siglos, y los primeros niños que caminarán bajo un cielo marciano sin casco aún no han nacido."
  },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",

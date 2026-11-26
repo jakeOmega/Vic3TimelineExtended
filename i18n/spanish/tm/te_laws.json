@@ -112,8 +112,8 @@
   "es": "Ciudadanía por clado"
  },
  "law_clade_citizenship_desc": {
-  "en": "A citizen who has left the human body plan behind keeps every right the law gives anyone else, whether they breathe water, see by heat or were built for low gravity. The state no longer asks what a person is made like, and the old lines of descent mean little where so many people have chosen their own.",
-  "es": "Un ciudadano que ha dejado atrás el plan corporal humano conserva todos los derechos que la ley da a cualquier otro, ya respire agua, vea por el calor o haya sido construido para la baja gravedad. El Estado ya no pregunta cómo está hecha una persona, y los antiguos linajes significan poco allí donde tanta gente ha elegido el suyo propio."
+  "en": "A change of body may be passed to one's children, and people born to a different body plan are citizens from birth, whether they breathe water or were built for low gravity. The state builds its schools, workplaces, housing and medicine for them as for anyone.",
+  "es": "Un cambio de cuerpo puede transmitirse a los hijos, y las personas nacidas con un plan corporal distinto son ciudadanas desde el nacimiento, ya respiren agua o hayan sido construidas para la baja gravedad. El Estado construye sus escuelas, lugares de trabajo, viviendas y medicina para ellas como para cualquier otra."
  },
  "law_command_cooperative_economy": {
   "en": "Command/Cooperative Economy",
@@ -672,8 +672,8 @@
   "es": "Libertad morfológica"
  },
  "law_morphological_freedom_desc": {
-  "en": "A person's body is theirs to remake. Adults may change their appearance, sex characteristics and shape as they choose, and the state asks only that the work be done safely. A citizen with a tail is still a citizen.",
-  "es": "El cuerpo de una persona es suyo para rehacerlo. Los adultos pueden cambiar su apariencia, sus características sexuales y su forma como deseen, y el Estado solo exige que el trabajo se haga con seguridad. Un ciudadano con cola sigue siendo un ciudadano."
+  "en": "An adult may remake their own body as they choose, with no board to ask. The change ends with them: it may not be passed to a child or chosen for one, and schools, workplaces and housing stay built for the body people are born with.",
+  "es": "Un adulto puede rehacer su propio cuerpo como desee, sin ninguna junta a la que pedir permiso. El cambio termina con él: no puede transmitirse a un hijo ni elegirse por él, y las escuelas, los lugares de trabajo y las viviendas siguen construidos para el cuerpo con el que nace la gente."
  },
  "law_multilingual_federalism": {
   "en": "Multilingual Federalism",
@@ -1384,8 +1384,8 @@
   "es": "Autonomía corporal"
  },
  "lawgroup_bodily_autonomy_desc": {
-  "en": "How far people may change the way their bodies look, from skin and sex characteristics to fur and tails, and at the last whether someone who leaves the human body plan behind is still a citizen. What a body can do is a separate question, for the [concept_human_augmentation_system] laws.",
-  "es": "Hasta dónde pueden cambiar las personas el aspecto de su cuerpo, desde la piel y los caracteres sexuales hasta el pelaje y las colas, y, en última instancia, si quien abandona el plan corporal humano sigue siendo ciudadano. Lo que puede hacer un cuerpo es otra cuestión, que corresponde a las leyes de [concept_human_augmentation_system|l]."
+  "en": "How far people may change the way their bodies look, from skin and sex characteristics to fur and tails, and at the last whether a change may be passed on to children, who are then born citizens in a body of their own. What a body can do is a separate question, for the [concept_human_augmentation_system] laws.",
+  "es": "Hasta dónde pueden cambiar las personas el aspecto de su cuerpo, desde la piel y los caracteres sexuales hasta el pelaje y las colas, y, en última instancia, si un cambio puede transmitirse a los hijos, que entonces nacen ciudadanos en un cuerpo propio. Lo que puede hacer un cuerpo es otra cuestión, que corresponde a las leyes de [concept_human_augmentation_system|l]."
  },
  "lawgroup_criminal_justice": {
   "en": "Criminal Justice",
