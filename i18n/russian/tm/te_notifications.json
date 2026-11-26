@@ -1,4 +1,36 @@
 {
+ "alert_sr_module_queue_empty_action": {
+  "en": "Journal Panel",
+  "ru": "Панель журнала"
+ },
+ "alert_sr_module_queue_empty_desc": {
+  "en": "Our [concept_sr_module] queue is empty, and our module fabrication makes #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points a month. The points wait in the module stock, which now holds #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock')|0]#! of the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! it can keep. Once it is full, each month's points are lost.",
+  "ru": "Очередь наших [Concept('concept_sr_module','колониальных модулей')] пуста, а изготовление модулей даёт очков в месяц: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#!. Очки ждут на складе модулей, где сейчас #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock')|0]#! из #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! возможных. Когда он заполнится, очки каждого месяца теряются."
+ },
+ "alert_sr_module_queue_empty_hint": {
+  "en": "Each colony's row in the $je_space_race_widget_cv_modules$ view of the $je_space_race_widget_colonies_header$ section in $je_space_race_solar_colonization$ has buttons that add a module to the end of the queue.",
+  "ru": "В строке каждой колонии в виде «$je_space_race_widget_cv_modules$» раздела «$je_space_race_widget_colonies_header$» записи «$je_space_race_solar_colonization$» есть кнопки, добавляющие модуль в конец очереди."
+ },
+ "alert_sr_module_queue_empty_name": {
+  "en": "No [concept_sr_module]s Queued",
+  "ru": "Нет [Concept('concept_sr_module','колониальных модулей')] в очереди"
+ },
+ "alert_sr_module_stock_full_action": {
+  "en": "Journal Panel",
+  "ru": "Панель журнала"
+ },
+ "alert_sr_module_stock_full_desc": {
+  "en": "Our module stock is full at #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! points and our [concept_sr_module] queue is empty, so the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points our module fabrication makes each month are lost.",
+  "ru": "Наш склад модулей заполнен до предела (#v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#!), а очередь [Concept('concept_sr_module','колониальных модулей')] пуста, поэтому очки изготовления модулей, которые мы получаем каждый месяц (#v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#!), теряются."
+ },
+ "alert_sr_module_stock_full_hint": {
+  "en": "Each colony's row in the $je_space_race_widget_cv_modules$ view of the $je_space_race_widget_colonies_header$ section in $je_space_race_solar_colonization$ has buttons that add a module to the end of the queue. A $pmg_space_program_module_storage$ method on our $building_space_program$ makes the stock larger, and switching its $pmg_space_program_module_fabrication$ to $pm_sr_fabrication_none$ ends the method's cost until we want modules again.",
+  "ru": "В строке каждой колонии в виде «$je_space_race_widget_cv_modules$» раздела «$je_space_race_widget_colonies_header$» записи «$je_space_race_solar_colonization$» есть кнопки, добавляющие модуль в конец очереди. Группа методов «$pmg_space_program_module_storage$» нашего здания «$building_space_program$» увеличивает склад, а переключение группы «$pmg_space_program_module_fabrication$» на «$pm_sr_fabrication_none$» прекращает расходы метода, пока нам снова не понадобятся модули."
+ },
+ "alert_sr_module_stock_full_name": {
+  "en": "[concept_sr_module] Stock Full",
+  "ru": "Склад [Concept('concept_sr_module','колониальных модулей')] заполнен"
+ },
  "notification_arms_race_pressure_desc": {
   "en": "[SCOPE.sCountry('arms_race_rival').GetName] is matching our military buildup, increasing pressure on our defense budget.",
   "ru": "[SCOPE.sCountry('arms_race_rival').GetName] отвечает тем же на наше военное наращивание, усиливая давление на наш оборонный бюджет."
@@ -470,6 +502,22 @@
  "notification_gp_support_declined_notice_name": {
   "en": "A Colonial Power Keeps Its Distance",
   "ru": "Колониальная держава держится в стороне"
+ },
+ "notification_headlines_nd_icbms_fielded_desc": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has put the world's first intercontinental missiles in silos. A nuclear warhead launched from one can reach any country in the world.",
+  "ru": "Страна [SCOPE.sCountry('nd_leg_fielder').GetName] первой в мире разместила в шахтах межконтинентальные ракеты. Ядерная боеголовка, запущенная с такой ракеты, может достичь любой страны мира."
+ },
+ "notification_headlines_nd_icbms_fielded_name": {
+  "en": "#b THE FIRST INTERCONTINENTAL MISSILES ARE DEPLOYED #!",
+  "ru": "#b РАЗВЁРНУТЫ ПЕРВЫЕ МЕЖКОНТИНЕНТАЛЬНЫЕ РАКЕТЫ #!"
+ },
+ "notification_headlines_nd_subs_fielded_desc": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has sent the world's first missile submarines to sea. From there a nuclear warhead can reach any coastal state in the world.",
+  "ru": "Страна [SCOPE.sCountry('nd_leg_fielder').GetName] первой в мире отправила в море ракетные подлодки. Оттуда ядерная боеголовка может достичь любой прибрежной области мира."
+ },
+ "notification_headlines_nd_subs_fielded_name": {
+  "en": "#b THE FIRST MISSILE SUBMARINES PUT TO SEA #!",
+  "ru": "#b ПЕРВЫЕ РАКЕТНЫЕ ПОДЛОДКИ ВЫШЛИ В МОРЕ #!"
  },
  "notification_headlines_tech_ICBMs_desc": {
   "en": "A successful test of an ICBM has been reported out of [SCOPE.sCountry('headlines_ICBMs_researcher').GetName]. #lore The development of rockets powerful enough to carry a payload between continents has staggering geopolitical implications. International analysts warn this technology could fundamentally alter the nature of warfare and global power dynamics... #!",
@@ -1887,6 +1935,14 @@
   "en": "Foreign Assets Nationalized",
   "ru": "Иностранные активы национализированы"
  },
+ "notification_nd_authority_bound_by_delivery_desc": {
+  "en": "#bold Launch on Warning#! and #bold Automatic Retaliation#! launch fielded ICBMs, and we no longer field them, so our launch authority is back under #v Central Authorization#!. The loss of the missiles made this change, not our government, so the wait before we may next choose a launch authority runs on from our own last choice.",
+  "ru": "#bold Пуск по предупреждению#! и #bold Автоматическое возмездие#! запускают развёрнутые МБР, а у нас их больше нет, поэтому наше право на запуск возвращается к режиму #v Централизованное разрешение#!. Это изменение вызвала потеря ракет, а не наше правительство, поэтому срок ожидания до нового выбора права на запуск считается от нашего последнего собственного выбора."
+ },
+ "notification_nd_authority_bound_by_delivery_name": {
+  "en": "Launch Authority Returns to Central",
+  "ru": "Право на запуск возвращается к централизованному"
+ },
  "notification_nd_crisis_ultimatum_issued_desc": {
   "en": "[SCOPE.sCountry('nd_issuer').GetName] has issued [SCOPE.sCountry('nd_target').GetName] a public nuclear ultimatum. It will reach them within two or three weeks, and the deadline runs from then. A $nuclear_guarantee$ for [SCOPE.sCountry('nd_target').GetNameNoFlag] from an armed country lowers the pressure on it to concede.",
   "ru": "Страна [SCOPE.sCountry('nd_issuer').GetName] выдвинула стране [SCOPE.sCountry('nd_target').GetName] публичный ядерный ультиматум. Он дойдёт до неё через две-три недели, и срок отсчитывается с этого момента. Если вооружённая страна даст стране [SCOPE.sCountry('nd_target').GetNameNoFlag] $nuclear_guarantee$, давление на неё с требованием уступить ослабнет."
@@ -1974,6 +2030,14 @@
  "notification_sr_earth_hostile_notice_name": {
   "en": "A Hostile Fleet Is Bound for Earth",
   "ru": "К Земле движется враждебный флот"
+ },
+ "notification_sr_ebase_move_notice_desc": {
+  "en": "Assign for the most profit is moving our $building_space_mine$ levels from #b [GetPlayer.GetCustom('sr_eb_place_notice_from')]#! to #b [GetPlayer.GetCustom('sr_eb_place_notice_to')]#!, which earns more a level at today's prices, above all from its #b [GetPlayer.GetCustom('sr_eb_notice_good_name')]#!. Up to #v [GetPlayer.MakeScope.ScriptValue('sr_eb_pace')|0]#! levels a month move while the gain is worth a move; the Colonies section's Bases view follows the move.",
+  "ru": "Режим «Назначать для наибольшей прибыли» переносит уровни здания «$building_space_mine$» с объекта #b [GetPlayer.GetCustom('sr_eb_place_notice_from')]#! на #b [GetPlayer.GetCustom('sr_eb_place_notice_to')]#!, который при сегодняшних ценах даёт больше за уровень, прежде всего благодаря товару #b [GetPlayer.GetCustom('sr_eb_notice_good_name')]#!. До #v [GetPlayer.MakeScope.ScriptValue('sr_eb_pace')|0]#! уровней в месяц переносятся, пока выигрыш стоит перемещения; вид «Базы» раздела «Колонии» следует за переносом."
+ },
+ "notification_sr_ebase_move_notice_name": {
+  "en": "Extraplanetary Base Levels Moving",
+  "ru": "Уровни внепланетной базы перемещаются"
  },
  "notification_sr_space_command_dismantled_notice_desc": {
   "en": "The $building_space_command$ in [SCOPE.sState('sr_sc_dismantled').GetName] was dismantled: a nation runs one $building_space_command$, and ours stays in [SCOPE.sState('sr_sc_keeper').GetName], the larger (or the capital's, if they are the same size).",
@@ -2646,5 +2710,13 @@
  "notification_wonder_construction_complete_space_elevator_name": {
   "en": "Space Elevator Completed",
   "ru": "Космический лифт построен"
+ },
+ "sr_module_queue_empty_setting_name": {
+  "en": "Colony Module Queue Empty",
+  "ru": "Очередь колониальных модулей пуста"
+ },
+ "sr_module_stock_full_setting_name": {
+  "en": "Colony Module Stock Full",
+  "ru": "Склад колониальных модулей заполнен"
  }
 }

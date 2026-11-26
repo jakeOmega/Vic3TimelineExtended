@@ -2155,6 +2155,10 @@
   "en": "Resort Colony",
   "ru": "Курортная колония"
  },
+ "building_space_resort_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_space_resort$ buildings",
+  "ru": "Бонус или штраф к входящим и выпускаемым товарам зданий группы «$building_space_resort$»"
+ },
  "building_spacex_starbase": {
   "en": "Starbase",
   "ru": "Старбейс"

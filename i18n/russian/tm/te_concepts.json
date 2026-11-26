@@ -8469,7 +8469,7 @@
  },
  "nd_safeguards_slow_launch_desc": {
   "en": "What each level of safeguards takes off a fast launch authority's launch credit: a launch that can be halted is a slower launch.",
-  "ru": "Что каждый уровень мер безопасности отнимает у пускового кредита быстрого «Права на запуск»: пуск, который можно остановить, — это более медленный пуск."
+  "ru": "Что каждый уровень мер безопасности отнимает у зачёта пуска быстрого «Права на запуск»: пуск, который можно остановить, — это более медленный пуск."
  },
  "nd_status_armed": {
   "en": "\\nDoctrine: #v [ROOT.GetCountry.GetCustom('nd_doctrine_name')]#! · Readiness: #v [ROOT.GetCountry.GetCustom('nd_readiness_name')]#! · Authority: #v [ROOT.GetCountry.GetCustom('nd_authority_name')]#!",
@@ -10679,6 +10679,54 @@
   "en": "The sites where our Extraplanetary Base levels work hold less $copper$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
   "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$copper$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
  },
+ "sr_ebase_mix_glass_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$glass$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_glass_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$glass$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_gold_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$gold$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_gold_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$gold$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_iron_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$iron$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_iron_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$iron$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_lead_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$lead$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_lead_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$lead$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_sulfur_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$sulfur$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_sulfur_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$sulfur$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_tech_metals_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$tech_metals$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_tech_metals_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$tech_metals$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
  "sr_ebase_room_bonus_desc": {
   "en": "Our $building_space_mine$ levels work at their sites' [concept_sr_base_grade], and the sites the Colonies section's Bases view puts them on are rich.",
   "ru": "Наши уровни «$building_space_mine$» работают с [Concept('concept_sr_base_grade','классом базы')] своих участков, а участки, на которые их ставит вид «Базы» раздела «Колонии», богаты."
@@ -11102,6 +11150,10 @@
  "sr_resort_state_fine_art_penalty_desc": {
   "en": "Our $building_space_resort$ hotels are off-world, so the studios that lift this state's own $fine_art$ do not reach them.",
   "ru": "Наши отели «$building_space_resort$» находятся вне Земли, поэтому студии, поднимающие товар «$fine_art$» в этой области, на них не распространяются."
+ },
+ "sr_resort_state_tourism_bonus_desc": {
+  "en": "Our $building_space_resort$ hotels are off-world, so what holds this state's own $tourism$ down does not reach them.",
+  "ru": "Наши отели «$building_space_resort$» находятся вне Земли, поэтому то, что сдерживает товар «$tourism$» в этой области, на них не распространяется."
  },
  "sr_resort_state_tourism_penalty_desc": {
   "en": "Our $building_space_resort$ hotels are off-world, so what lifts this state's own $tourism$ does not reach them.",
@@ -12676,6 +12728,14 @@
   "ru": "Космические силы"
  },
  "te_spacers_class_caste_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "ru": "Люди баз космических сил, составляющие экипажи флотов и воюющие как их морпехи."
+ },
+ "te_spacers_class_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "ru": "Люди баз космических сил, составляющие экипажи флотов и воюющие как их морпехи."
+ },
+ "te_spacers_class_edo_desc": {
   "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
   "ru": "Люди баз космических сил, составляющие экипажи флотов и воюющие как их морпехи."
  },

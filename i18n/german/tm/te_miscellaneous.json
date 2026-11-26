@@ -26069,7 +26069,7 @@
  },
  "sr_pers_ai_cap_tt": {
   "en": "An AI country builds Space Forces Bases only while its fleets, its ground reserve and its carriers' empty room need more personnel than its bases train, and only out of default.",
-  "de": "Ein KI-Land baut Weltraumstreitkräfte-Basen nur, solange seine Flotten, seine Bodenreserve und der leere Platz seiner Träger mehr Personal brauchen, als seine Basen ausbilden, und nur aus dem Standard heraus."
+  "de": "Ein KI-Land baut Weltraumstreitkräfte-Basen nur, solange seine Flotten, seine Bodenreserve und der leere Platz seiner Träger mehr Personal brauchen, als seine Basen ausbilden, und nur, solange es nicht im Zahlungsausfall ist."
  },
  "sr_pers_priority_to_hulls_tt": {
   "en": "Our marines take their personnel first now. Switch to hulls first: each month the ground reserve's hulls take their crews before the marines at Earth come aboard, so a shortage holds back the marines.",

@@ -507,6 +507,14 @@
   "en": "Mount Whaleback Mine",
   "ru": "Рудник Маунт-Уэйлбэк"
  },
+ "pm_bio_composite_panels": {
+  "en": "Bio-Composite Panels",
+  "ru": "Биокомпозитные панели"
+ },
+ "pm_bio_composite_panels_desc": {
+  "en": "Panels are pressed from wood fiber and crop waste, bound with resins that engineered microbes make from grain starch in place of the glues the chemical works supplied. The boards give off no formaldehyde.",
+  "ru": "Панели прессуют из древесного волокна и отходов зерновых культур, склеивая смолами, которые сконструированные микробы получают из зернового крахмала вместо клеёв, поставлявшихся химическими заводами. Плиты не выделяют формальдегида."
+ },
  "pm_biocon_park": {
   "en": "Biocon Park",
   "ru": "Парк Biocon"
@@ -4943,6 +4951,14 @@
   "en": "Computer-Aided Design",
   "ru": "Автоматизированное проектирование"
  },
+ "pm_computerized_cutting": {
+  "en": "Computerized Cutting",
+  "ru": "Компьютерный раскрой"
+ },
+ "pm_computerized_cutting_desc": {
+  "en": "Patterns are laid out on a screen to waste as little cloth as possible, and a computer-guided blade cuts a whole stack of layers at once. Each bolt of fabric yields more garments than when cutters traced the patterns by hand.",
+  "ru": "Выкройки раскладывают на экране так, чтобы тратить как можно меньше ткани, а лезвие под управлением компьютера режет сразу целую стопку слоёв. Из каждого рулона ткани выходит больше одежды, чем когда закройщики обводили выкройки вручную."
+ },
  "pm_concrete_bunkers": {
   "en": "Concrete Bunkers",
   "ru": "Бетонные бункеры"
@@ -5343,6 +5359,14 @@
   "en": "Első Budapesti Steam Mill",
   "ru": "Паровая мельница Первого Будапештского общества"
  },
+ "pm_engineered_yeast": {
+  "en": "Engineered Yeast",
+  "ru": "Сконструированные дрожжи"
+ },
+ "pm_engineered_yeast_desc": {
+  "en": "Yeast strains engineered to ferment faster and to survive stronger alcohol yield more spirit from each tank of mash. The tanks are fed nutrients and enzymes from the chemical works.",
+  "ru": "Штаммы дрожжей, выведенные так, чтобы бродить быстрее и выдерживать более крепкий спирт, дают больше спирта из каждого чана сусла. Чаны питают питательными веществами и ферментами с химических заводов."
+ },
  "pm_engineering_and_logistics_no_effect": {
   "en": "No Effect",
   "ru": "Без эффекта"
@@ -5350,6 +5374,14 @@
  "pm_eni_palazzo": {
   "en": "Palazzo ENI",
   "ru": "Палаццо ENI"
+ },
+ "pm_enzymatic_processing": {
+  "en": "Enzymatic Processing",
+  "ru": "Ферментативная обработка"
+ },
+ "pm_enzymatic_processing_desc": {
+  "en": "Enzymes grown in industrial fermenters break grain starch down into syrups, which replace much of the cane and beet sugar in bread, sauces and sweets. Other enzymes keep bread soft for days and clear fruit juice.",
+  "ru": "Ферменты, выращенные в промышленных ферментёрах, расщепляют зерновой крахмал на сиропы, которые заменяют значительную часть тростникового и свекловичного сахара в хлебе, соусах и сладостях. Другие ферменты на несколько дней сохраняют хлеб мягким и осветляют фруктовые соки."
  },
  "pm_ericsson_telefonplan": {
   "en": "Ericsson Telefonplan",
@@ -5414,6 +5446,14 @@
  "pm_fiber_optics": {
   "en": "Fiber Optics",
   "ru": "Оптоволокно"
+ },
+ "pm_flat_pack_furniture": {
+  "en": "Flat-Pack Furniture",
+  "ru": "Мебель в плоской упаковке"
+ },
+ "pm_flat_pack_furniture_desc": {
+  "en": "Computer-controlled saws and drills cut particleboard panels to standard sizes, and each piece ships flat in a box with its fittings, for the buyer to put together at home. The board is made from wood chips and sawdust glued under pressure.",
+  "ru": "Пилы и сверла с компьютерным управлением режут плиты из ДСП стандартных размеров, а каждое изделие отправляется плоским, в коробке с фурнитурой, чтобы покупатель собрал его дома. Плиту делают из щепы и опилок, склеенных под давлением."
  },
  "pm_flexible_packaging": {
   "en": "Flexible Packaging",
@@ -6015,6 +6055,14 @@
   "en": "Herds are finished in pens on grain rations instead of on open range, and artificial insemination spreads a few high-yielding breeds. Each animal reaches slaughter weight sooner, and runoff from the pens fouls the water nearby.",
   "ru": "Скот доращивают в загонах на зерновом рационе вместо вольного выпаса, а искусственное осеменение распространяет несколько высокопродуктивных пород. Каждое животное быстрее достигает убойного веса, а стоки из загонов загрязняют воду поблизости."
  },
+ "pm_industrial_fermentation": {
+  "en": "Industrial Fermentation",
+  "ru": "Промышленное брожение"
+ },
+ "pm_industrial_fermentation_desc": {
+  "en": "Grain and molasses ferment in stainless steel tanks seeded with one cultured strain of yeast, so every batch comes out the same, and the column stills run around the clock.",
+  "ru": "Зерно и меласса бродят в чанах из нержавеющей стали, заправленных одним культурным штаммом дрожжей, так что каждая партия выходит одинаковой, а ректификационные колонны работают круглые сутки."
+ },
  "pm_industrial_highway": {
   "en": "Industrial Highway",
   "ru": "Промышленное шоссе"
@@ -6250,6 +6298,14 @@
  "pm_machine_learning_assisted_code_generation": {
   "en": "ML Assisted Code Generation",
   "ru": "Генерация кода с помощью машинного обучения"
+ },
+ "pm_made_to_order_furniture": {
+  "en": "Made-to-Order Furniture",
+  "ru": "Мебель на заказ"
+ },
+ "pm_made_to_order_furniture_desc": {
+  "en": "Buyers choose the size, wood and upholstery of a sofa or a cabinet online, and the factory cuts each order by machine and delivers it to the buyer's door.",
+  "ru": "Покупатели выбирают размер, дерево и обивку дивана или шкафа в интернете, а фабрика режет каждый заказ на станках и доставляет к двери покупателя."
  },
  "pm_madura_mills_madurai_complex": {
   "en": "Madura Mills Madurai Complex",
@@ -6607,6 +6663,14 @@
   "en": "Modern Cruise Ships",
   "ru": "Современные круизные суда"
  },
+ "pm_modern_design_furniture": {
+  "en": "Modern Design Furniture",
+  "ru": "Мебель современного дизайна"
+ },
+ "pm_modern_design_furniture_desc": {
+  "en": "Design studios draw furniture in teak and walnut veneer, chrome and glass, and the factory builds it in short runs to their drawings. Each piece is sold under its designer's name.",
+  "ru": "Дизайнерские студии рисуют мебель из тика и орехового шпона, хрома и стекла, а фабрика строит её небольшими сериями по их чертежам. Каждое изделие продаётся под именем своего автора."
+ },
  "pm_modern_design_porcelain": {
   "en": "Modern Design Porcelain",
   "ru": "Фарфор современного дизайна"
@@ -6647,9 +6711,25 @@
   "en": "Mokta el Hadid Beni Saf Mine",
   "ru": "Рудник Мокта-эль-Хадид в Бени-Сафе"
  },
+ "pm_molded_plywood_and_plastics": {
+  "en": "Molded Plywood and Plastics",
+  "ru": "Формованная фанера и пластик"
+ },
+ "pm_molded_plywood_and_plastics_desc": {
+  "en": "Thin wood veneers are glued and pressed into curved shells, tabletops are faced with plastic laminate, and some chairs are molded from plastic in one piece. The glues and resins come from the chemical works.",
+  "ru": "Тонкий древесный шпон склеивают и прессуют в изогнутые оболочки, столешницы облицовывают пластиковым ламинатом, а некоторые стулья отливают из пластика целиком. Клеи и смолы поступают с химических заводов."
+ },
  "pm_molecular_foundry": {
   "en": "Molecular Foundry",
   "ru": "Молекулярная литейная"
+ },
+ "pm_molecular_spirits": {
+  "en": "Molecular Spirits",
+  "ru": "Молекулярные спиртные напитки"
+ },
+ "pm_molecular_spirits_desc": {
+  "en": "Whiskey, rum and brandy are made without barrels: neutral spirit is blended with the flavor compounds that years of aging would have given, each made separately and measured in.",
+  "ru": "Виски, ром и бренди делают без бочек: нейтральный спирт смешивают с ароматическими соединениями, которые дали бы годы выдержки, — каждое получают отдельно и дозируют."
  },
  "pm_monsanto_chesterfield_center": {
   "en": "Monsanto Chesterfield Research Center",
@@ -7527,6 +7607,14 @@
   "en": "Performance Textiles",
   "ru": "Функциональный текстиль"
  },
+ "pm_permanent_press": {
+  "en": "Permanent Press",
+  "ru": "Немнущаяся ткань"
+ },
+ "pm_permanent_press_desc": {
+  "en": "Cotton and blended cloth is soaked in resin and cured in heated presses, so a garment keeps its shape and its creases through the wash. The resins come from the chemical works, and the curing ovens give off formaldehyde.",
+  "ru": "Хлопковую и смесовую ткань пропитывают смолой и закрепляют в нагретых прессах, чтобы одежда сохраняла форму и стрелки после стирки. Смолы поступают с химических заводов, а печи для закрепления выделяют формальдегид."
+ },
  "pm_pernambuco_recife_cotton_mill": {
   "en": "Pernambuco Recife Cotton Mill",
   "ru": "Хлопкопрядильная фабрика Пернамбуку в Ресифи"
@@ -7642,6 +7730,14 @@
  "pm_precision_agriculture": {
   "en": "Precision Agriculture",
   "ru": "Точное земледелие"
+ },
+ "pm_precision_fermentation": {
+  "en": "Precision Fermentation",
+  "ru": "Точная ферментация"
+ },
+ "pm_precision_fermentation_desc": {
+  "en": "Engineered yeasts and bacteria in steel tanks turn sugar and grain into milk proteins, egg white and fats, made without cows or hens. Food plants blend them into cheese, baked goods and ready meals.",
+  "ru": "Сконструированные дрожжи и бактерии в стальных чанах превращают сахар и зерно в молочные белки, яичный белок и жиры, которые получают без коров и кур. Пищевые заводы смешивают их в сыр, выпечку и готовые блюда."
  },
  "pm_precision_guided_shells": {
   "en": "Precision-Guided Shells",
@@ -8308,8 +8404,8 @@
   "ru": "Добывающая колония"
  },
  "pm_space_colony_vacation": {
-  "en": "Resort Colony",
-  "ru": "Курортная колония"
+  "en": "Luxury Resorts",
+  "ru": "Роскошные курорты"
  },
  "pm_space_elevator": {
   "en": "Space Elevator",
@@ -8330,6 +8426,10 @@
  "pm_space_elevator_construction_slow": {
   "en": "Space Elevator Construction (4 years)",
   "ru": "Строительство космического лифта (4 года)"
+ },
+ "pm_space_forces_training": {
+  "en": "Space Forces Training",
+  "ru": "Подготовка космических сил"
  },
  "pm_space_mine": {
   "en": "Asteroid Mine",
@@ -8699,6 +8799,14 @@
   "en": "TSMC Fab 18",
   "ru": "Фабрика Fab 18 компании TSMC"
  },
+ "pm_tubular_steel_furniture": {
+  "en": "Tubular Steel Furniture",
+  "ru": "Мебель из стальных труб"
+ },
+ "pm_tubular_steel_furniture_desc": {
+  "en": "Chairs, desks and kitchen tables are built on frames of bent and welded steel tube, with wood and upholstery only for the seats and tops. A frame comes off the welding line ready to plate or paint.",
+  "ru": "Стулья, письменные и кухонные столы строят на каркасах из гнутых и сваренных стальных труб, а дерево и обивку используют только для сидений и столешниц. Каркас сходит со сварочной линии готовым к покрытию или покраске."
+ },
  "pm_turkish_petroleum_kirkuk_depot": {
   "en": "Turkish Petroleum Kirkuk Depot",
   "ru": "Склад Турецкой нефтяной компании в Киркуке"
@@ -8810,6 +8918,14 @@
  "pm_white_star_albion_house": {
   "en": "White Star Albion House",
   "ru": "Олбион-хаус компании «Уайт Стар»"
+ },
+ "pm_whole_garment_knitting": {
+  "en": "Whole-Garment Knitting",
+  "ru": "Вязание цельных изделий"
+ },
+ "pm_whole_garment_knitting_desc": {
+  "en": "Programmed knitting machines make a sweater or a dress in one piece, sleeves and collar included, so there are no panels to cut and no seams to sew. A new design is a program loaded into the machines.",
+  "ru": "Программируемые вязальные машины делают свитер или платье целиком, с рукавами и воротником, поэтому не нужно ни выкраивать детали, ни сшивать швы. Новая модель — это программа, загруженная в машины."
  },
  "pm_witkowitzer_ostrava_ironworks": {
   "en": "Witkowitzer Ostrava Ironworks",
@@ -9242,6 +9358,10 @@
  "pmg_base_building_space_program": {
   "en": "Space Program",
   "ru": "Космическая программа"
+ },
+ "pmg_base_building_space_resort": {
+  "en": "Base Building Space Resort",
+  "ru": "Базовое здание: космический курорт"
  },
  "pmg_base_te_construction_market_site": {
   "en": "Construction Site",
@@ -10838,6 +10958,10 @@
  "pmg_space_command_yards": {
   "en": "Yards",
   "ru": "Верфи"
+ },
+ "pmg_space_forces_base": {
+  "en": "Training",
+  "ru": "Подготовка"
  },
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",
