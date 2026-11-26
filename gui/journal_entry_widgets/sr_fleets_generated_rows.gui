@@ -266,6 +266,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -515,6 +526,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_destroy'), '(CFixedPoint)0' )]"
@@ -766,6 +788,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -1015,6 +1048,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_destroy'), '(CFixedPoint)0' )]"
@@ -1266,6 +1310,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -1515,6 +1570,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_destroy'), '(CFixedPoint)0' )]"
@@ -1766,6 +1832,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -2015,6 +2092,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_destroy'), '(CFixedPoint)0' )]"
@@ -2266,6 +2354,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -2306,11 +2405,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_earth'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_earth')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_earth')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_earth')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_earth')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_earth'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_earth')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_earth')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_earth')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_earth')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_earth'), '(CFixedPoint)1' )]"
@@ -2359,11 +2458,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_inner'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_inner')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_inner')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_inner')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_inner')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_inner'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_inner')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_inner')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_inner')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_inner')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_inner'), '(CFixedPoint)1' )]"
@@ -2412,11 +2511,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_mars'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_mars')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_mars')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_mars')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_mars')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_mars'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_mars')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_mars')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_mars')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_mars')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_mars'), '(CFixedPoint)1' )]"
@@ -2465,11 +2564,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_asteroids'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_asteroids')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_asteroids')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_asteroids')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_asteroids')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_asteroids'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_asteroids')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_asteroids')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_asteroids')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_asteroids')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_asteroids'), '(CFixedPoint)1' )]"
@@ -2518,11 +2617,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_jupiter'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_jupiter')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_jupiter')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_jupiter')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_jupiter')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_jupiter'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_jupiter')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_jupiter')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_jupiter')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_jupiter')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_jupiter'), '(CFixedPoint)1' )]"
@@ -2571,11 +2670,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_saturn'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_saturn')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_saturn')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_saturn')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_saturn')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_saturn'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_saturn')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_saturn')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_saturn')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_saturn')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_saturn'), '(CFixedPoint)1' )]"
@@ -2624,11 +2723,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_uranus'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_uranus')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_uranus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_uranus')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_uranus')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_uranus'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_uranus')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_uranus')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_uranus')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_uranus')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_uranus'), '(CFixedPoint)1' )]"
@@ -2677,11 +2776,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_neptune'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_neptune')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_neptune')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_neptune')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_neptune')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_neptune'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_neptune')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_neptune')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_neptune')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_neptune')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_neptune'), '(CFixedPoint)1' )]"
@@ -2730,11 +2829,11 @@ types sr_fleets_generated_rows_types
 			}
 			blockoverride "loc_inbound_ours" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_kuiper'), '(CFixedPoint)1' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_kuiper')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_kuiper')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_kuiper')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_kuiper')|0]"
 			}
 			blockoverride "loc_inbound_rival" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_ours_kuiper'), '(CFixedPoint)0' )]"
-				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_kuiper')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_months_kuiper')|0]"
+				raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_kuiper')|0]·[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_inbound_weeks_kuiper')|0]"
 			}
 			blockoverride "loc_battle_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_loc_status_kuiper'), '(CFixedPoint)1' )]"
@@ -6479,8 +6578,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_earth') )]"
@@ -6525,8 +6624,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_inner') )]"
@@ -6572,8 +6671,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_mars') )]"
@@ -6619,8 +6718,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_asteroids') )]"
@@ -6666,8 +6765,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_jupiter') )]"
@@ -6713,8 +6812,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_saturn') )]"
@@ -6760,8 +6859,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_uranus') )]"
@@ -6807,8 +6906,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_neptune') )]"
@@ -6854,8 +6953,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_1_leg_dv_kuiper') )]"
@@ -6940,8 +7039,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_earth') )]"
@@ -6986,8 +7085,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_inner') )]"
@@ -7033,8 +7132,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_mars') )]"
@@ -7080,8 +7179,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_asteroids') )]"
@@ -7127,8 +7226,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_jupiter') )]"
@@ -7174,8 +7273,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_saturn') )]"
@@ -7221,8 +7320,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_uranus') )]"
@@ -7268,8 +7367,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_neptune') )]"
@@ -7315,8 +7414,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_2_leg_dv_kuiper') )]"
@@ -7401,8 +7500,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_earth') )]"
@@ -7447,8 +7546,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_inner') )]"
@@ -7494,8 +7593,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_mars') )]"
@@ -7541,8 +7640,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_asteroids') )]"
@@ -7588,8 +7687,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_jupiter') )]"
@@ -7635,8 +7734,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_saturn') )]"
@@ -7682,8 +7781,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_uranus') )]"
@@ -7729,8 +7828,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_neptune') )]"
@@ -7776,8 +7875,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_3_leg_dv_kuiper') )]"
@@ -7862,8 +7961,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_earth') )]"
@@ -7908,8 +8007,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_inner') )]"
@@ -7955,8 +8054,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_mars') )]"
@@ -8002,8 +8101,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_asteroids') )]"
@@ -8049,8 +8148,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_jupiter') )]"
@@ -8096,8 +8195,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_saturn') )]"
@@ -8143,8 +8242,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_uranus') )]"
@@ -8190,8 +8289,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_neptune') )]"
@@ -8237,8 +8336,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_4_leg_dv_kuiper') )]"
@@ -8323,8 +8422,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_earth') )]"
@@ -8369,8 +8468,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_inner') )]"
@@ -8416,8 +8515,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_mars') )]"
@@ -8463,8 +8562,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_asteroids') )]"
@@ -8510,8 +8609,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_jupiter') )]"
@@ -8557,8 +8656,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_saturn') )]"
@@ -8604,8 +8703,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_uranus') )]"
@@ -8651,8 +8750,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_neptune') )]"
@@ -8698,8 +8797,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_5_leg_dv_kuiper') )]"
@@ -8784,8 +8883,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_earth') )]"
@@ -8830,8 +8929,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_inner') )]"
@@ -8877,8 +8976,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_mars') )]"
@@ -8924,8 +9023,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_asteroids') )]"
@@ -8971,8 +9070,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_jupiter') )]"
@@ -9018,8 +9117,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_saturn') )]"
@@ -9065,8 +9164,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_uranus') )]"
@@ -9112,8 +9211,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_neptune') )]"
@@ -9159,8 +9258,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_6_leg_dv_kuiper') )]"
@@ -9245,8 +9344,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_earth') )]"
@@ -9291,8 +9390,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_inner') )]"
@@ -9338,8 +9437,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_mars') )]"
@@ -9385,8 +9484,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_asteroids') )]"
@@ -9432,8 +9531,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_jupiter') )]"
@@ -9479,8 +9578,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_saturn') )]"
@@ -9526,8 +9625,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_uranus') )]"
@@ -9573,8 +9672,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_neptune') )]"
@@ -9620,8 +9719,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_7_leg_dv_kuiper') )]"
@@ -9706,8 +9805,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_earth') )]"
@@ -9752,8 +9851,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_inner') )]"
@@ -9799,8 +9898,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_mars') )]"
@@ -9846,8 +9945,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_asteroids') )]"
@@ -9893,8 +9992,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_jupiter') )]"
@@ -9940,8 +10039,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_saturn') )]"
@@ -9987,8 +10086,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_uranus') )]"
@@ -10034,8 +10133,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_neptune') )]"
@@ -10081,8 +10180,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_8_leg_dv_kuiper') )]"
@@ -10167,8 +10266,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_earth"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_earth')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_earth')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_earth') )]"
@@ -10213,8 +10312,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_inner"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_inner')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_inner')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_inner') )]"
@@ -10260,8 +10359,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_mars"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_mars')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_mars')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_mars') )]"
@@ -10307,8 +10406,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_asteroids"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_asteroids')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_asteroids')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_asteroids') )]"
@@ -10354,8 +10453,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_jupiter"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_jupiter')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_jupiter')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_jupiter') )]"
@@ -10401,8 +10500,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_saturn"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_saturn')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_saturn')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_saturn') )]"
@@ -10448,8 +10547,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_uranus"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_uranus')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_uranus')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_uranus') )]"
@@ -10495,8 +10594,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_neptune"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_neptune')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_neptune')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_neptune') )]"
@@ -10542,8 +10641,8 @@ types sr_fleets_generated_rows_types
 					blockoverride "dr_name" {
 						text = "sr_loc_name_kuiper"
 					}
-					blockoverride "dr_months" {
-						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_months_kuiper')|0]"
+					blockoverride "dr_weeks" {
+						raw_text = "[JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_quarters_kuiper')|0]"
 					}
 					blockoverride "dr_dv_covered" {
 						visible = "[GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_9_leg_dv_kuiper') )]"
@@ -39079,6 +39178,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_1_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -39326,6 +39436,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_2_destroy'), '(CFixedPoint)0' )]"
@@ -39575,6 +39696,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_3_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -39822,6 +39954,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_4_destroy'), '(CFixedPoint)0' )]"
@@ -40071,6 +40214,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_5_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -40318,6 +40472,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_6_destroy'), '(CFixedPoint)0' )]"
@@ -40567,6 +40732,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_7_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -40815,6 +40991,17 @@ types sr_fleets_generated_rows_types
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
 			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_avoid'), '(CFixedPoint)1' )]"
+			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_8_destroy'), '(CFixedPoint)0' )]"
 			}
@@ -41062,6 +41249,17 @@ types sr_fleets_generated_rows_types
 				enabled = "[GetScriptedGui('sr_fleet_destroy_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				onclick = "[GetScriptedGui('sr_fleet_destroy_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
 				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_destroy_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_destroy_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_button" {
+				enabled = "[GetScriptedGui('sr_fleet_avoid_sgui').IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				onclick = "[GetScriptedGui('sr_fleet_avoid_sgui').Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+				tooltip = "[Concatenate( GetScriptedGui('sr_fleet_avoid_sgui').IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('sr_fleet_avoid_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End ) ) )]"
+			}
+			blockoverride "fl_avoid_off_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "fl_avoid_on_visible" {
+				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_avoid'), '(CFixedPoint)1' )]"
 			}
 			blockoverride "fl_destroy_off_visible" {
 				visible = "[EqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue('sr_disp_fl_9_destroy'), '(CFixedPoint)0' )]"

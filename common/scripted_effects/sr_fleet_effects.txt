@@ -20,6 +20,13 @@
 # country one (sr_fl_country_month, from the country pulse) builds, docks,
 # refits, refuels, resupplies and repairs. Both walk the global list
 # sr_fleet_powers, never every_country.
+#
+# Fleets move on the fleets' clock (2026-11-25 design § 1,
+# docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md):
+# four ticks a month, the 1st (the global step) and the 8th, 15th and 22nd
+# (space_race_events.120-.122, sr_fl_tick_step). A leg takes quarters
+# (sr_fl_<n>_leg_quarters_<loc>), and _depart and _arrive are tick indexes
+# (sr_fl_tick_now): a fleet lands at the first tick at or past its _arrive.
 # ============================================================================
 
 # ---- The fleet powers (design § 4) ----------------------------------------------------
@@ -141,12 +148,13 @@ sr_fl_fill_at = {
 
 # ---- Orders (design § 6) ------------------------------------------------------------------
 # The fleet leaves for LOC (its code CODE): the leg's delta-v spent, its
-# destination and landing month set, its location and posture cleared, the
-# location records rebuilt. The caller has checked sr_fl_<n>_may_depart_<loc>.
-# The leg is read before the location is cleared: it reads where the fleet is.
+# destination and landing tick set (from the last tick: an order between ticks
+# counts from it), its location and posture cleared, the location records
+# rebuilt. The caller has checked sr_fl_<n>_may_depart_<loc>. The leg is read
+# before the location is cleared: it reads where the fleet is.
 sr_fl_dispatch = {
 	set_local_variable = { name = sr_fl_leg_dv value = sr_fl_$N$_leg_dv_$LOC$ }
-	set_local_variable = { name = sr_fl_leg_months value = sr_fl_$N$_leg_months_$LOC$ }
+	set_local_variable = { name = sr_fl_leg_quarters value = sr_fl_$N$_leg_quarters_$LOC$ }
 	set_variable = {
 		name = sr_fl_$N$_dv
 		value = {
@@ -156,13 +164,13 @@ sr_fl_dispatch = {
 		}
 	}
 	set_variable = { name = sr_fl_$N$_dest value = $CODE$ }
-	set_variable = { name = sr_fl_$N$_depart value = te_history_month_index }
-	set_variable = { name = sr_fl_$N$_leg_months value = local_var:sr_fl_leg_months }
+	set_variable = { name = sr_fl_$N$_depart value = sr_fl_tick_now }
+	set_variable = { name = sr_fl_$N$_leg_quarters value = local_var:sr_fl_leg_quarters }
 	set_variable = {
 		name = sr_fl_$N$_arrive
 		value = {
-			value = te_history_month_index
-			add = local_var:sr_fl_leg_months
+			value = sr_fl_tick_now
+			add = local_var:sr_fl_leg_quarters
 		}
 	}
 	set_local_variable = { name = sr_fl_alert_arr value = var:sr_fl_$N$_arrive }
@@ -180,9 +188,10 @@ sr_fl_dispatch = {
 	sr_loc_rebuild = yes
 }
 
-# Its landing, from the global monthly step: at its destination, posture by the
-# location (Station where we hold a colony, Stand off elsewhere), contact for
-# our colonies there. The fleet_leg self-check reads the months it flew. The
+# Its landing, from every tick of the fleets' clock: at its destination,
+# posture by the location (Station where we hold a colony, Stand off
+# elsewhere), contact for our colonies there. The fleet_leg self-check reads
+# the ticks it flew. The
 # AI lands its marines where it holds a colony; at Earth, where they refill
 # free each month, only for a lunar garrison that is due (owner, 2026-11-24),
 # so a fleet coming home doesn't pile them up on the Moon.
@@ -191,14 +200,14 @@ sr_fl_arrive_at = {
 		limit = {
 			has_variable = sr_fl_$N$_dest
 			has_variable = sr_fl_$N$_arrive
-			var:sr_fl_$N$_arrive <= te_history_month_index
+			var:sr_fl_$N$_arrive <= sr_fl_tick_now
 		}
 		set_variable = { name = sr_fl_$N$_loc value = var:sr_fl_$N$_dest }
 		sr_fl_leg_self_check = { N = $N$ }
 		remove_variable = sr_fl_$N$_dest
 		remove_variable = sr_fl_$N$_arrive
 		if = { limit = { has_variable = sr_fl_$N$_depart } remove_variable = sr_fl_$N$_depart }
-		if = { limit = { has_variable = sr_fl_$N$_leg_months } remove_variable = sr_fl_$N$_leg_months }
+		if = { limit = { has_variable = sr_fl_$N$_leg_quarters } remove_variable = sr_fl_$N$_leg_quarters }
 		# Landed: the Earth alert's record of the leg goes with it.
 		if = { limit = { has_variable_list = sr_fl_$N$_warned_quiet } clear_variable_list = sr_fl_$N$_warned_quiet }
 		if = { limit = { has_variable_list = sr_fl_$N$_warned_loud } clear_variable_list = sr_fl_$N$_warned_loud }
@@ -528,19 +537,236 @@ sr_loc_add_inbound = {
 }
 
 # ---- The global monthly step (sr_sites_global_monthly; no ROOT) -------------------------------------
-# Full colonies: every fleet whose month has come lands, the location records
-# are rebuilt, then the month's fighting (6b, sr_fleet_combat_effects.txt).
+# Full colonies: the month's first tick of the fleets' clock (an old save's
+# fleets in flight converted first, and last month's clock checked), every
+# fleet whose tick has come lands, the location records are rebuilt, the
+# tick's battles are fought (2026-11-25 design § 2, sr_battle_global_tick), the
+# players' Earth alert, then the month's siege (6b, sr_fleet_combat_effects.txt);
+# then the month's other three ticks are queued.
 sr_fl_global_month = {
 	if = {
 		limit = { has_global_variable_list = sr_fleet_powers }
+		sr_fl_ticks_migrate_once = yes
+		sr_fl_clock_self_check = yes
+		sr_fl_tick_set = { Q = 0 }
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes }
 			sr_fl_each_slot = { DO = arrive }
 		}
 		sr_loc_rebuild = yes
+		sr_battle_global_tick = yes
+		sr_fl_tick_alerts = yes
 		sr_combat_global_monthly = yes
 		sr_fl_prune_powers = yes
+		sr_fl_clock_queue = yes
+	}
+}
+
+# ---- The fleets' clock (2026-11-25 design § 1.2) ------------------------------------------------
+# The tick Q of this month (0 the 1st, 1 the 8th, 2 the 15th, 3 the 22nd): its
+# index, which sr_fl_tick_now reads.
+sr_fl_tick_set = {
+	set_global_variable = {
+		name = sr_fl_tick
+		value = {
+			value = te_history_month_index
+			multiply = 4
+			add = $Q$
+		}
+	}
+}
+
+# Global scope (the 1st, after the fighting): the 8th, 15th and 22nd queued on
+# one fleet power, the first alive in the list, since the global pulse has no
+# ROOT to queue on (te_pm_retooling_weekly_schedule's pattern). The month and
+# the power are noted (global variables) for the clock's self-check. A power
+# that dies takes its queue with it: the next 1st lands every fleet overdue and
+# queues again.
+sr_fl_clock_queue = {
+	set_local_variable = { name = sr_fl_clock_set value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { is_country_alive = yes }
+		if = {
+			limit = { local_var:sr_fl_clock_set = 0 }
+			set_local_variable = { name = sr_fl_clock_set value = 1 }
+			set_global_variable = { name = sr_fl_clock_month value = te_history_month_index }
+			set_global_variable = { name = sr_fl_clock_power value = this }
+			trigger_event = { id = space_race_events.120 days = 7 }
+			trigger_event = { id = space_race_events.121 days = 14 }
+			trigger_event = { id = space_race_events.122 days = 21 }
+		}
+	}
+}
+
+# Any scope (space_race_events.120-.122): the tick Q, once. A tick already run
+# (a save loaded with the events queued, a second queue) does nothing. Fleets
+# land, the location records follow, then the tick's battles (sr_battle_global_tick)
+# and the players' Earth alert.
+sr_fl_tick_step = {
+	if = {
+		limit = {
+			sr_space_race_on = yes
+			sr_colonies_full_enabled = yes
+			has_global_variable_list = sr_fleet_powers
+			OR = {
+				NOT = { has_global_variable = sr_fl_tick }
+				global_var:sr_fl_tick < {
+					value = te_history_month_index
+					multiply = 4
+					add = $Q$
+				}
+			}
+		}
+		sr_fl_tick_set = { Q = $Q$ }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			limit = { is_country_alive = yes }
+			sr_fl_each_slot = { DO = arrive }
+		}
+		sr_loc_rebuild = yes
+		sr_battle_global_tick = yes
+		sr_fl_tick_alerts = yes
+	}
+}
+
+# Global scope, each tick after the location records: the players' Earth
+# alert (sr_earth_alert_step), so a fleet on a leg of a few weeks is heard of
+# before it lands (on the players' monthly pulse it could land between two:
+# review of #2068).
+sr_fl_tick_alerts = {
+	every_country = {
+		limit = {
+			is_player = yes
+			OR = {
+				sr_has_space_program = yes
+				sr_fleet_power = yes
+				has_variable = sr_launch_site_noted
+			}
+		}
+		sr_earth_alert_step = yes
+	}
+}
+
+# Any scope (space_race_events.120-.122, first): the tick Q's event fired, for
+# the clock's self-check, before sr_fl_tick_step's rule gates (a rule switched
+# off and on within the month leaves the clock working: review of #2068).
+sr_fl_clock_note = {
+	set_global_variable = {
+		name = sr_fl_clock_fired
+		value = {
+			value = te_history_month_index
+			multiply = 4
+			add = $Q$
+		}
+	}
+}
+
+# Once a save, before the first landing: fleets shipped in 1.3.4 with
+# _depart and _arrive as month indexes and the leg in _leg_months. A month
+# index is under 30,000 in any game year and a tick index over 88,000, so a
+# figure under sr_fl_tick_floor is a month's and goes to its month's first
+# tick (x 4); one this build set is left alone. The players' alert landings
+# likewise.
+sr_fl_ticks_migrate_once = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_fl_ticks_migrated } }
+		set_global_variable = { name = sr_fl_ticks_migrated value = yes }
+		every_in_global_list = {
+			variable = sr_fleet_powers
+			sr_fl_each_slot = { DO = migrate_ticks }
+		}
+		every_country = {
+			limit = {
+				OR = {
+					AND = { has_variable = sr_fl_alert_arrive var:sr_fl_alert_arrive < sr_fl_tick_floor }
+					AND = { has_variable = sr_earth_alert_arrive var:sr_earth_alert_arrive < sr_fl_tick_floor }
+				}
+			}
+			if = {
+				limit = { has_variable = sr_fl_alert_arrive var:sr_fl_alert_arrive < sr_fl_tick_floor }
+				set_variable = { name = sr_fl_alert_arrive value = { value = var:sr_fl_alert_arrive multiply = 4 } }
+			}
+			if = {
+				limit = { has_variable = sr_earth_alert_arrive var:sr_earth_alert_arrive < sr_fl_tick_floor }
+				set_variable = { name = sr_earth_alert_arrive value = { value = var:sr_earth_alert_arrive multiply = 4 } }
+			}
+		}
+	}
+}
+sr_fl_migrate_ticks_at = {
+	if = {
+		limit = { has_variable = sr_fl_$N$_arrive var:sr_fl_$N$_arrive < sr_fl_tick_floor }
+		set_variable = { name = sr_fl_$N$_arrive value = { value = var:sr_fl_$N$_arrive multiply = 4 } }
+	}
+	if = {
+		limit = { has_variable = sr_fl_$N$_depart var:sr_fl_$N$_depart < sr_fl_tick_floor }
+		set_variable = { name = sr_fl_$N$_depart value = { value = var:sr_fl_$N$_depart multiply = 4 } }
+	}
+	# The leg, from the two (the old leg was arrive - depart in months): the old
+	# _leg_months is left unread, so the engine's never-set check has nothing
+	# to report (review of #2068), and nothing reads it.
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_arrive
+			has_variable = sr_fl_$N$_depart
+			NOT = { has_variable = sr_fl_$N$_leg_quarters }
+		}
+		set_variable = {
+			name = sr_fl_$N$_leg_quarters
+			value = {
+				value = var:sr_fl_$N$_arrive
+				subtract = var:sr_fl_$N$_depart
+				min = 1
+			}
+		}
+	}
+}
+
+# Global scope, the 1st, before its tick: the clock queued last month on a
+# power still alive (the same country: a revolution's winner, which inherits
+# its variables but not its queued events, is another) fired its 22nd
+# (sr_fl_clock_fired, noted before the rules are read, at last month's quarter
+# 3). TE_SELF_CHECK fleet_clock, once a game each way. The fallback, if BROKEN:
+# queue the three ticks on every fleet power, the guard in sr_fl_tick_step
+# keeping each tick once.
+sr_fl_clock_self_check = {
+	if = {
+		limit = {
+			has_global_variable = sr_fl_clock_month
+			global_var:sr_fl_clock_month < te_history_month_index
+			global_var:sr_fl_clock_month >= { value = te_history_month_index subtract = 1 }
+			has_global_variable = sr_fl_clock_power
+			global_var:sr_fl_clock_power ?= { is_country_alive = yes }
+		}
+		set_global_variable = { name = sr_fl_log_clock value = 0 }
+		if = {
+			limit = { has_global_variable = sr_fl_clock_fired }
+			set_global_variable = {
+				name = sr_fl_log_clock
+				value = {
+					value = global_var:sr_fl_clock_fired
+					subtract = { value = global_var:sr_fl_clock_month multiply = 4 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				global_var:sr_fl_log_clock >= 3
+				NOT = { has_global_variable = sr_fl_clock_ok_logged }
+			}
+			set_global_variable = { name = sr_fl_clock_ok_logged value = yes }
+			debug_log = "TE_SELF_CHECK OK fleet_clock last_quarter=[GetGlobalVariable('sr_fl_log_clock').GetValue|0] (last month's 8th, 15th and 22nd tick events fired: 3 is the 22nd's) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = {
+				global_var:sr_fl_log_clock < 3
+				NOT = { has_global_variable = sr_fl_clock_broken_logged }
+			}
+			set_global_variable = { name = sr_fl_clock_broken_logged value = yes }
+			debug_log = "TE_SELF_CHECK BROKEN fleet_clock last_quarter=[GetGlobalVariable('sr_fl_log_clock').GetValue|0] (the clock's power lived through last month and its 22nd's tick event never fired: 3 expected; queue space_race_events.120-.122 on every fleet power instead, sr_fl_clock_queue; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
 	}
 }
 
@@ -1117,15 +1343,15 @@ sr_sc_self_check = {
 }
 
 # Country scope, from sr_fl_arrive_at before the slot's legs are cleared.
-# TE_SELF_CHECK fleet_leg: OK once a game on the first fleet that lands in
-# its month, with the months it flew against its leg's; BROKEN once if a fleet
-# lands two or more months late (the step missed it). The figures go through
-# globals: a debug line reads no local variable.
+# TE_SELF_CHECK fleet_leg: OK once a game on the first fleet that lands on
+# its tick, with the ticks it flew against its leg's quarters; BROKEN once if a
+# fleet lands four ticks (a month) or more late (the clock missed it). The
+# figures go through globals: a debug line reads no local variable.
 sr_fl_leg_self_check = {
 	set_global_variable = {
 		name = sr_fl_log_late
 		value = {
-			value = te_history_month_index
+			value = sr_fl_tick_now
 			subtract = var:sr_fl_$N$_arrive
 		}
 	}
@@ -1135,33 +1361,38 @@ sr_fl_leg_self_check = {
 		set_global_variable = {
 			name = sr_fl_log_flown
 			value = {
-				value = te_history_month_index
+				value = sr_fl_tick_now
 				subtract = var:sr_fl_$N$_depart
 			}
 		}
 	}
 	set_global_variable = { name = sr_fl_log_leg value = 0 }
 	if = {
-		limit = { has_variable = sr_fl_$N$_leg_months }
-		set_global_variable = { name = sr_fl_log_leg value = var:sr_fl_$N$_leg_months }
+		limit = { has_variable = sr_fl_$N$_leg_quarters }
+		set_global_variable = { name = sr_fl_log_leg value = var:sr_fl_$N$_leg_quarters }
 	}
 	set_global_variable = { name = sr_fl_log_dest value = var:sr_fl_$N$_dest }
 	set_global_variable = { name = sr_fl_log_drive value = sr_fl_$N$_drive_value }
 	if = {
 		limit = {
-			global_var:sr_fl_log_late >= 2
+			global_var:sr_fl_log_late >= 4
 			NOT = { has_global_variable = sr_fl_leg_broken_logged }
 		}
 		set_global_variable = { name = sr_fl_leg_broken_logged value = yes }
-		debug_log = "TE_SELF_CHECK BROKEN fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] late=[GetGlobalVariable('sr_fl_log_late').GetValue|0] country=[THIS.GetCountry.GetTagName] (a fleet landed two or more months after its month: the global step missed it; land fleets from the country pulse as well; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log = "TE_SELF_CHECK BROKEN fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] late=[GetGlobalVariable('sr_fl_log_late').GetValue|0] country=[THIS.GetCountry.GetTagName] (in ticks, four a month: a fleet landed a month or more after its tick, so the fleets' clock missed it; see the fleet_clock self-check; docs/testing/solar-colonies-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 	else_if = {
+		# OK only for a landing on a mid-month tick that flew its whole leg:
+		# never an old save's fleet converted to a 1st, nor the console's
+		# landing (review of #2068).
 		limit = {
 			global_var:sr_fl_log_late < 1
+			global_var:sr_fl_log_flown >= global_var:sr_fl_log_leg
+			sr_fl_tick_now > { value = te_history_month_index multiply = 4 }
 			NOT = { has_global_variable = sr_fl_leg_ok_logged }
 		}
 		set_global_variable = { name = sr_fl_leg_ok_logged value = yes }
-		debug_log = "TE_SELF_CHECK OK fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] country=[THIS.GetCountry.GetTagName] (a fleet landed in its month; flown should equal leg, the months docs/engine/launch_windows_report.md gives the leg) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log = "TE_SELF_CHECK OK fleet_leg location=[GetGlobalVariable('sr_fl_log_dest').GetValue|0] drive=[GetGlobalVariable('sr_fl_log_drive').GetValue|0] leg=[GetGlobalVariable('sr_fl_log_leg').GetValue|0] flown=[GetGlobalVariable('sr_fl_log_flown').GetValue|0] country=[THIS.GetCountry.GetTagName] (in ticks, four a month: a fleet landed on its tick, the 8th, 15th or 22nd; flown should equal leg, the quarters docs/engine/launch_windows_report.md gives the leg) date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 }
 

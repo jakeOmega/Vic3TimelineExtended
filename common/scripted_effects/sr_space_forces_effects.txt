@@ -41,8 +41,9 @@ sr_pers_note_lost = {
 }
 
 # Country scope, the loser. local_var:sr_pers_lost people, already at the share:
-# owed to the month's kill. Also added to local_var:sr_pers_noted where a caller
-# has set it, so the battle report gives what was booked (sr_cb_battle_record).
+# owed to the battle's kill. Also added to local_var:sr_pers_noted where a caller
+# has set it, so the battle report gives what was booked (sr_bt_cut_slot,
+# sr_bt_record).
 sr_pers_note_people = {
 	if = {
 		limit = { local_var:sr_pers_lost > 0 }

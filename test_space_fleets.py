@@ -230,8 +230,9 @@ class FullColoniesGateTest(unittest.TestCase):
         sguis = _strip(_raw(SGUIS))
         names = re.findall(r"(?m)^(sr_\w+_sgui) = \{", sguis)
         # 21 since the personnel priority (sr_pers_priority_sgui, 2026-11-24); 22 since
-        # orders and the modes took the pause's place (sr_sc_order_sgui, sr_sc_mode_sgui, 2026-11-25)
-        self.assertEqual(len(names), 22)
+        # orders and the modes took the pause's place (sr_sc_order_sgui, sr_sc_mode_sgui, 2026-11-25);
+        # 23 with Engage / Avoid (sr_fleet_avoid_sgui, 2026-11-25 design § 2.9)
+        self.assertEqual(len(names), 23)
         for name in names:
             with self.subTest(sgui=name):
                 self.assertIn("sr_colonies_full_enabled = yes", _block(sguis, name))
@@ -1183,6 +1184,160 @@ class ShippingTest(unittest.TestCase):
                     self.assertEqual(blockade in body, ships)
 
 
+class FleetClockTest(unittest.TestCase):
+    """Fleets move on a quarter-month clock (2026-11-25 design § 1,
+    docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md):
+    ticks on the 1st, 8th, 15th and 22nd, an index of month x 4 + quarter, legs
+    in quarters, a guard against a tick running twice, and an old save's
+    fleets in flight converted once."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.fleet = _strip(_raw(FLEET_EFFECTS))
+        cls.values = _strip(_raw(FLEET_VALUES))
+        cls.events = _strip(_raw(SPACE_RACE_EVENTS))
+        cls.generated_values = _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
+
+    def test_the_index_is_the_month_s_quarter_and_never_below_the_month(self):
+        body = _block(self.values, "sr_fl_tick_now")
+        self.assertRegex(body, r"^\s*value = te_history_month_index\s*multiply = 4\s*if = \{\s*limit = \{\s*"
+                               r"has_global_variable = sr_fl_tick\s*"
+                               r"global_var:sr_fl_tick > \{ value = te_history_month_index multiply = 4 \}\s*\}\s*"
+                               r"value = global_var:sr_fl_tick\s*\}\s*$")
+        self.assertRegex(_block(self.fleet, "sr_fl_tick_set"),
+                         r"name = sr_fl_tick\s*value = \{\s*value = te_history_month_index\s*multiply = 4\s*add = \$Q\$")
+
+    def test_the_first_is_the_global_step_and_queues_the_other_three(self):
+        month = _block(self.fleet, "sr_fl_global_month")
+        order = ["sr_fl_ticks_migrate_once = yes", "sr_fl_clock_self_check = yes", "sr_fl_tick_set = { Q = 0 }",
+                 "sr_fl_each_slot = { DO = arrive }", "sr_loc_rebuild = yes", "sr_combat_global_monthly = yes",
+                 "sr_fl_prune_powers = yes", "sr_fl_clock_queue = yes"]
+        idx = [month.index(x) for x in order]
+        self.assertEqual(idx, sorted(idx))
+        queue = _block(self.fleet, "sr_fl_clock_queue")
+        for q, days in ((120, 7), (121, 14), (122, 21)):
+            self.assertEqual(queue.count(f"trigger_event = {{ id = space_race_events.{q} days = {days} }}"), 1)
+        # On one power: the first alive, by a local flag; it and the month are
+        # global, for the self-check (a revolution's winner inherits a country
+        # variable but not the queue: review of #2068).
+        self.assertRegex(queue, r"limit = \{ local_var:sr_fl_clock_set = 0 \}\s*"
+                                r"set_local_variable = \{ name = sr_fl_clock_set value = 1 \}")
+        self.assertIn("set_global_variable = { name = sr_fl_clock_power value = this }", queue)
+        self.assertNotIn("set_variable = { name = sr_fl_clock_month", queue)
+
+    def test_the_mid_month_ticks_are_hidden_with_no_trigger(self):
+        for q in (1, 2, 3):
+            with self.subTest(event=119 + q):
+                body = _block(self.events, f"space_race_events.{119 + q}")
+                self.assertIn("hidden = yes", body)
+                self.assertNotIn("trigger =", body)
+                self.assertRegex(body, rf"immediate = \{{\s*sr_fl_clock_note = \{{ Q = {q} \}}\s*"
+                                       rf"sr_fl_tick_step = \{{ Q = {q} \}}\s*\}}")
+        note = _block(self.fleet, "sr_fl_clock_note")
+        self.assertRegex(note, r"name = sr_fl_clock_fired\s*value = \{\s*value = te_history_month_index\s*"
+                               r"multiply = 4\s*add = \$Q\$")
+
+    def test_a_tick_runs_once_under_full_colonies_and_lands_the_fleets(self):
+        step = _block(self.fleet, "sr_fl_tick_step")
+        self.assertRegex(step, r"limit = \{\s*sr_space_race_on = yes\s*sr_colonies_full_enabled = yes\s*"
+                               r"has_global_variable_list = sr_fleet_powers\s*OR = \{\s*"
+                               r"NOT = \{ has_global_variable = sr_fl_tick \}\s*"
+                               r"global_var:sr_fl_tick < \{\s*value = te_history_month_index\s*multiply = 4\s*add = \$Q\$")
+        body = step[step.index("sr_fl_tick_set"):]
+        self.assertLess(body.index("sr_fl_tick_set = { Q = $Q$ }"), body.index("sr_fl_each_slot = { DO = arrive }"))
+        self.assertLess(body.index("sr_fl_each_slot = { DO = arrive }"), body.index("sr_loc_rebuild = yes"))
+
+    def test_orders_and_landings_read_the_clock(self):
+        dispatch = _block(self.fleet, "sr_fl_dispatch")
+        self.assertIn("set_local_variable = { name = sr_fl_leg_quarters value = sr_fl_$N$_leg_quarters_$LOC$ }", dispatch)
+        self.assertIn("set_variable = { name = sr_fl_$N$_depart value = sr_fl_tick_now }", dispatch)
+        self.assertRegex(dispatch, r"name = sr_fl_\$N\$_arrive\s*value = \{\s*value = sr_fl_tick_now\s*"
+                                   r"add = local_var:sr_fl_leg_quarters")
+        self.assertIn("var:sr_fl_$N$_arrive <= sr_fl_tick_now", _block(self.fleet, "sr_fl_arrive_at"))
+        for name in ("sr_fl_dispatch", "sr_fl_arrive_at", "sr_fl_leg_self_check"):
+            with self.subTest(block=name):
+                # The leg check reads the month only to tell a mid-month tick.
+                body = _block(self.fleet, name).replace("sr_fl_tick_now > { value = te_history_month_index multiply = 4 }", "")
+                self.assertNotIn("te_history_month_index", body)
+                self.assertNotIn("leg_months", body)
+        # Every slot's leg reader is in quarters, from every location at every pace.
+        for n in range(1, gsf.SLOTS + 1):
+            for lc in gsf.LOCATIONS:
+                with self.subTest(slot=n, loc=lc.key):
+                    body = _block(self.generated_values, f"sr_fl_{n}_leg_quarters_{lc.key}")
+                    self.assertIn("sr_leg_quarters_", body)
+                    self.assertNotIn("sr_leg_months_", body)
+        self.assertIn("leg_quarters", gsf.SLOT_VARS)
+        self.assertNotIn("leg_months", gsf.SLOT_VARS)
+
+    def test_the_ai_s_reach_and_attack_in_quarters(self):
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_fl_ai_reach_quarters"), 24)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_fl_ai_attack_quarters"), 48)
+        triggers = _strip(_raw(gsf.ROOT / gsf.TRIGGERS_OUT))
+        for lc in gsf.LOCATIONS[1:]:
+            body = _block(triggers, f"sr_fl_1_ai_reaches_{lc.key}")
+            self.assertIn(f"sr_fl_1_leg_quarters_{lc.key} <= sr_fl_ai_reach_quarters", body)
+            self.assertIn(f"global_var:sr_loc_inbound_first_{lc.key} >= {{ value = sr_fl_tick_now add = sr_fl_1_leg_quarters_{lc.key} }}",
+                          body)
+
+    def test_an_old_save_s_fleets_in_flight_convert_once(self):
+        migrate = _block(self.fleet, "sr_fl_ticks_migrate_once")
+        self.assertRegex(migrate, r"limit = \{ NOT = \{ has_global_variable = sr_fl_ticks_migrated \} \}\s*"
+                                  r"set_global_variable = \{ name = sr_fl_ticks_migrated value = yes \}")
+        self.assertIn("sr_fl_each_slot = { DO = migrate_ticks }", migrate)
+        slot = _block(self.fleet, "sr_fl_migrate_ticks_at")
+        for name in ("arrive", "depart"):
+            self.assertIn(f"has_variable = sr_fl_$N$_{name} var:sr_fl_$N$_{name} < sr_fl_tick_floor", slot)
+            self.assertIn(f"value = {{ value = var:sr_fl_$N$_{name} multiply = 4 }}", slot)
+        # The leg from the converted arrive and depart: the old _leg_months is
+        # never read, so the engine's never-set check stays quiet.
+        self.assertRegex(slot, r"NOT = \{ has_variable = sr_fl_\$N\$_leg_quarters \}\s*\}\s*set_variable = \{\s*"
+                               r"name = sr_fl_\$N\$_leg_quarters\s*value = \{\s*value = var:sr_fl_\$N\$_arrive\s*"
+                               r"subtract = var:sr_fl_\$N\$_depart")
+        for path in (FLEET_EFFECTS, gsf.ROOT / gsf.EFFECTS_OUT, gsf.ROOT / gsf.VALUES_OUT, gsf.ROOT / gsf.TRIGGERS_OUT):
+            with self.subTest(file=path.name):
+                self.assertNotIn("leg_months", _strip(_raw(path)))
+        # The floor lies between the last game month's index and the first tick's.
+        floor = _number(_raw(FLEET_VALUES), "sr_fl_tick_floor")
+        self.assertGreater(floor, 2200 * 12)
+        self.assertLess(floor, 1836 * 12 * 4)
+
+    def test_the_landing_ceiling_is_above_the_last_tick(self):
+        """An earliest-landing value starts at TICK_CEILING and each leg lowers
+        it: the ceiling must be above any tick the game reaches (99,999 was
+        passed in November 2083: review of #2068)."""
+        defines = _raw(gsf.ROOT / "common/defines/extra_defines.txt")
+        end_year = int(re.search(r"END_DATE\s*=\s*\"(\d+)", defines).group(1))
+        self.assertGreater(gsf.TICK_CEILING, (end_year * 12 + 11) * 4 + 3)
+        for path in (gsf.VALUES_OUT, gsf.DISPLAY_OUT):
+            with self.subTest(file=path):
+                self.assertNotIn("value = 99999\n", _raw(gsf.ROOT / path))
+
+    def test_the_clock_check_reads_the_events_and_a_living_power(self):
+        check = _block(self.fleet, "sr_fl_clock_self_check")
+        self.assertIn("global_var:sr_fl_clock_power ?= { is_country_alive = yes }", check)
+        self.assertIn("value = global_var:sr_fl_clock_fired", check)
+        self.assertNotIn("var:sr_fl_clock_month = global_var", check)
+
+    def test_the_leg_check_s_ok_needs_a_mid_month_landing_that_flew_its_leg(self):
+        leg = _block(self.fleet, "sr_fl_leg_self_check")
+        ok = leg[leg.index("else_if"):]
+        self.assertIn("global_var:sr_fl_log_flown >= global_var:sr_fl_log_leg", ok)
+        self.assertIn("sr_fl_tick_now > { value = te_history_month_index multiply = 4 }", ok)
+
+    def test_the_weeks_the_panel_shows_are_ticks(self):
+        display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
+        for lc in gsf.LOCATIONS:
+            self.assertIn("max = 999", _block(display, f"sr_disp_loc_inbound_weeks_{lc.key}"))
+        hand = _strip(_raw(gsf.ROOT / "common/script_values/sr_fleet_display_values.txt"))
+        for n in range(1, gsf.SLOTS + 1):
+            self.assertIn(f"value = var:sr_fl_{n}_arrive subtract = sr_fl_tick_now", _block(display, f"sr_disp_fl_{n}_weeks_left"))
+        for lc in gsf.LOCATIONS:
+            self.assertIn("subtract = sr_fl_tick_now", _block(display, f"sr_disp_loc_inbound_weeks_{lc.key}"))
+        for name in ("sr_disp_earth_hostile_weeks", "sr_disp_earth_alert_weeks", "sr_disp_fl_alert_weeks"):
+            self.assertIn("subtract = sr_fl_tick_now", _block(hand, name))
+
+
 class CombatModelTest(unittest.TestCase):
     """The square law as the combat step applies it (§ 7.2), with the script's
     own k: each side loses k x the other side's fire a month."""
@@ -1275,7 +1430,9 @@ class InterdictionTest(unittest.TestCase):
                 self.assertIn(line, body)
 
     def test_interdict_fights_as_standing_off(self):
-        for name in ("sr_fl_gather_at", "sr_fl_apply_losses_at"):
+        # The siege's gather counts it standing off (its losses are only a
+        # closing-in fleet's since the 2026-11-25 design § 2.6).
+        for name in ("sr_fl_gather_at",):
             with self.subTest(helper=name):
                 self.assertRegex(_block(self.combat, name),
                                  r"limit = \{ local_var:sr_cb_p = 4 \}[^}]*\}?\s*"
@@ -1348,7 +1505,8 @@ class InterdictionTest(unittest.TestCase):
             self.assertTrue(names)
             ai += "".join(_block(text, name) for name in names)
         self.assertNotIn("set_posture", ai)
-        self.assertNotIn("interdict", ai)
+        # The defence reads who interdicts us (sr_icpt_interdicts_at), never sets it.
+        self.assertNotIn("interdict", ai.replace("sr_icpt_interdicts_at", ""))
 
     def test_cede_colony_costs_no_infamy_against_an_interdictor(self):
         wargoal = _block("x = {" + _strip(_raw(CEDE_COLONY)).split("wargoal = {", 1)[1], "x")
@@ -1395,7 +1553,7 @@ class AiOffenceTest(unittest.TestCase):
                     self.assertIn(f"sr_fl_{n}_ai_free = yes sr_fl_{n}_ai_attacks_{lc.key} = yes", attack)
                     body = _block(self.gen_triggers, f"sr_fl_{n}_ai_attacks_{lc.key}")
                     for line in (f"sr_fl_{n}_docked = yes", f"sr_fl_{n}_may_depart_{lc.key} = yes",
-                                 f"sr_fl_{n}_leg_months_{lc.key} <= sr_fl_ai_attack_months",
+                                 f"sr_fl_{n}_leg_quarters_{lc.key} <= sr_fl_ai_attack_quarters",
                                  f"sr_loc_port_{lc.key} = yes",
                                  f"sr_fl_{n}_dv_value >= {{ value = sr_fl_{n}_leg_dv_{lc.key} add = sr_fl_{n}_return_dv_{lc.key} }}",
                                  f"sr_fl_{n}_strength >= {{ value = sr_loc_ai_enemy_force_{lc.key} multiply = sr_fl_ai_attack_margin }}"):
@@ -1405,7 +1563,7 @@ class AiOffenceTest(unittest.TestCase):
                          (len(gsf.LOCATIONS) - 1) * gsf.SLOTS)
         self.assertEqual(attack.count("limit = { local_var:sr_fl_ai_sent = 0 "), len(gsf.LOCATIONS) - 1)
         values = _raw(FLEET_VALUES)
-        self.assertEqual(_number(values, "sr_fl_ai_attack_months"), 12)
+        self.assertEqual(_number(values, "sr_fl_ai_attack_quarters"), 48)  # twelve months, four ticks a month
         self.assertEqual(_number(values, "sr_fl_ai_attack_margin"), 1.5)
 
     def test_it_never_destroys_or_takes_a_free_colony(self):
@@ -1582,16 +1740,24 @@ class BatteryTest(unittest.TestCase):
                 self.assertNotIn("modifier:state_orbital", _strip(_raw(path)))
 
     def test_batteries_fire_in_the_earth_battle_and_take_no_losses(self):
-        at = _block(self.combat, "sr_combat_at")
-        self.assertRegex(at, r"limit = \{ local_var:sr_cb_code = 1 \}\s*sr_cb_battlestation_gather = yes\s*"
-                             r"sr_cb_battery_gather = yes")
-        gather = _block(self.combat, "sr_cb_battery_gather")
-        self.assertIn("sr_cb_add = { VAR = sr_cb_f1 AMOUNT = local_var:sr_cb_bf }", gather)
-        self.assertNotIn("sr_cb_s1", gather)
-        self.assertIn("set_variable = { name = sr_cb_kf value = sr_battery_fire_kinetic }", gather)
-        self.assertIn("kf", gsf.CB_VARS)
-        self.assertIn("te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }", at)
+        """Once a tick, before the battle at Earth (2026-11-25 design § 2.5): a
+        quarter of a month's fire, shared by strength among the fleets of every
+        power at war with the owner; no fleet of theirs, so nothing to lose."""
+        run = _block(self.combat, "sr_battle_run")
+        self.assertRegex(run, r"limit = \{ local_var:sr_cb_code = 1 \}\s*every_in_global_list = \{\s*"
+                              r"variable = sr_fleet_powers\s*limit = \{\s*is_country_alive = yes\s*sr_has_battery = yes\s*\}\s*"
+                              r"sr_bt_battery_fire = yes")
+        self.assertLess(run.index("sr_bt_battery_fire = yes"), run.index("sr_bt_step = yes"))
+        fire = _block(self.combat, "sr_bt_battery_fire")
+        self.assertRegex(fire, r"value = local_var:sr_bt_bf\s*multiply = sr_fleet_k\s*multiply = sr_battery_tick_share\s*"
+                               r"divide = local_var:sr_bt_targets")
+        self.assertIn("add = { value = sr_battery_fire_kinetic multiply = sr_battery_tick_share }", fire)
+        self.assertNotIn("sr_fl_bs_bt_in", fire)
+        self.assertNotIn("sr_cb_battery_gather", self.combat)
+        self.assertNotIn("sr_cb_battery_gather", _block(self.combat, "sr_combat_at"))
+        self.assertIn("te_debris_add = { LOW = local_var:sr_cb_debris_low HIGH = 0 }", run)
         self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_debris_low"), 0.02)
+        self.assertEqual(_number(_raw(FLEET_VALUES), "sr_battery_tick_share"), 0.25)
 
     def test_the_sweep_takes_from_the_low_pool_alone_after_removal(self):
         monthly = _block(_strip(_raw(DEBRIS_EFFECTS)), "te_debris_global_monthly")
@@ -1781,7 +1947,11 @@ class LunarAtEarthTest(unittest.TestCase):
     def test_posture_3_survives_gathering_at_earth_only_for_a_lunar_target(self):
         gather = _block(self.combat, "sr_fl_gather_at")
         losses = _block(self.combat, "sr_fl_apply_losses_at")
-        for name, body in (("gather", gather), ("losses", losses)):
+        # The siege's losses are a closing-in fleet's alone, and at Earth only
+        # one closing in on a lunar world (the gather's rule).
+        self.assertRegex(losses, r"sr_fl_\$N\$_posture_value = 3\s*OR = \{\s*NOT = \{ local_var:sr_cb_code = 1 \}\s*"
+                                 r"sr_fl_\$N\$_target_lunar = yes")
+        for name, body in (("gather", gather),):
             with self.subTest(helper=name):
                 # Earth stations everything else; the same rule in both, so the
                 # strength gathered closing in is the strength whose losses close in.
@@ -2289,20 +2459,20 @@ class EarthAlertTest(unittest.TestCase):
         self.assertIn("remove_variable = sr_earth_alert_by", body)
 
     def test_the_first_landing_is_a_running_minimum(self):
-        """From a 99999 ceiling, each leg in flight caps it at its landing
-        month: the earliest."""
+        """From a ceiling above any game's last tick (TICK_CEILING), each leg
+        in flight caps it at its landing tick: the earliest."""
         display = _strip(_raw(gsf.ROOT / gsf.DISPLAY_OUT))
         for name, text in ((f"sr_loc_hostile_inbound_first_{lc.key}", self.values) for lc in gsf.LOCATIONS):
             with self.subTest(value=name):
                 body = _block(text, name)
-                self.assertIn("value = 99999", body)
+                self.assertIn(f"value = {gsf.TICK_CEILING}", body)
                 for n in range(1, gsf.SLOTS + 1):
                     self.assertIn(f"max = var:sr_fl_{n}_arrive", body)
-        body = _block(display, "sr_disp_earth_power_months")
-        self.assertLess(body.index("value = 99999"), body.index("max = var:sr_fl_1_arrive"))
+        body = _block(display, "sr_disp_earth_power_weeks")
+        self.assertLess(body.index(f"value = {gsf.TICK_CEILING}"), body.index("max = var:sr_fl_1_arrive"))
         for n in range(1, gsf.SLOTS + 1):
             self.assertIn(f"if = {{ limit = {{ {self._bound(n, gsf.EARTH)} }} max = var:sr_fl_{n}_arrive }}", body)
-        self.assertIn("subtract = te_history_month_index", body)
+        self.assertIn("subtract = sr_fl_tick_now", body)
 
     def test_the_hover_has_a_line_a_power(self):
         """I2 (#1280 review): the cell's hover names each power with a fleet
@@ -2327,7 +2497,7 @@ class EarthAlertTest(unittest.TestCase):
         self.assertIn("ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )", tt)
         line = re.search(r"(?m)^ je_space_race_widget_ovc_earth_line:0 \"(.*)\"$", loc).group(1)
         self.assertIn("[THIS.GetCountry.GetName]", line)
-        for name in ("count", "strength", "months"):
+        for name in ("count", "strength", "weeks"):
             self.assertIn(f"[THIS.ScriptValue('sr_disp_earth_power_{name}')|0]", line)
 
     def test_the_cell_s_state(self):
@@ -2365,9 +2535,21 @@ class EarthAlertTest(unittest.TestCase):
         self.assertIn("remove_variable = sr_earth_alert_by", body)
         self.assertIn("default_option = yes", body)
 
-    def test_the_step_runs_beside_the_blockade_notice(self):
+    def test_the_step_runs_on_every_tick_not_the_monthly_pulse(self):
+        """A leg can be a few weeks, so a player's monthly pulse could miss a
+        fleet that sets out and lands between two (review of #2068): the
+        alert runs on each of the fleets' ticks, after the location records."""
         on = _strip(_raw(ON_ACTIONS))
-        self.assertRegex(on, r"sr_earth_notice_step = yes\s*sr_earth_alert_step = yes")
+        self.assertIn("sr_earth_notice_step = yes", on)
+        self.assertNotIn("sr_earth_alert_step", on)
+        fleet = _strip(_raw(FLEET_EFFECTS))
+        alerts = _block(fleet, "sr_fl_tick_alerts")
+        self.assertRegex(alerts, r"every_country = \{\s*limit = \{\s*is_player = yes")
+        self.assertIn("sr_earth_alert_step = yes", alerts)
+        for name in ("sr_fl_global_month", "sr_fl_tick_step"):
+            with self.subTest(step=name):
+                body = _block(fleet, name)
+                self.assertLess(body.index("sr_loc_rebuild = yes"), body.index("sr_fl_tick_alerts = yes"))
 
 class ReadinessTest(unittest.TestCase):
     """Half fire without a Space Command (owner, 2026-10-31): a country with no
@@ -2406,11 +2588,21 @@ class ReadinessTest(unittest.TestCase):
     def test_only_the_fleets_fire_is_halved(self):
         """The battlestation and the batteries are buildings: their fire and
         every loss are as before."""
+        # Every read of it is a fleet's fire: the siege's two, the panel's, the
+        # battle's two (2026-11-25 design § 2) and the AI defence's estimates.
         everything = self.combat + self.values + _strip(_raw(EARTH_EFFECTS)) + _strip(_raw(gsf.ROOT / gsf.EFFECTS_OUT)) \
             + _strip(_raw(gsf.ROOT / gsf.VALUES_OUT))
-        self.assertEqual(everything.count("multiply = sr_fleet_readiness"), 3)
+        for m in re.finditer(r"multiply = sr_fleet_readiness", everything):
+            before = everything[max(0, m.start() - 120):m.start()]
+            self.assertRegex(before, r"(sr_fl_(\$N\$|\d)_fire_(fleets|defences)\s*multiply = sr_fleet_quality|"
+                                     r"value = var:sr_fl_at_earth|name = sr_bt_qr value = \{ value = sr_fleet_quality)\s*$")
+        # The battle's, once a power (sr_bt_qr, review of #2069): only a fleet's fire.
+        for m in re.finditer(r"multiply = var:sr_bt_qr", everything):
+            self.assertRegex(everything[max(0, m.start() - 120):m.start()],
+                             r"value = sr_fl_\$N\$_fire_fleets\s*if = \{ limit = \{ has_variable = sr_bt_qr \}\s*$")
         self.assertNotIn("sr_fleet_readiness", _block(self.values, "sr_battlestation_fire"))
-        self.assertNotIn("sr_fleet_readiness", _block(self.combat, "sr_cb_battery_gather"))
+        for name in ("sr_bt_battery_fire", "sr_bt_snap_bs", "sr_bt_ready_bs"):
+            self.assertNotIn("sr_fleet_readiness", _block(self.combat, name))
         self.assertNotIn("sr_fleet_readiness", _strip(_raw(ROOT / "common/script_values/sr_fleet_display_values.txt")))
 
     def test_earth_weighs_ours_at_it(self):
@@ -3962,7 +4154,7 @@ class DestinationPopupTest(unittest.TestCase):
                     self.assertEqual(set(re.findall(r"GetScriptedGui\('(\w+)'\)", button)), {"sr_fleet_set_dest_sgui"})
                     self.assertIn(".IsValidTooltip(", button)
                     # the leg's own figures, at this slot's pace from where it is
-                    self.assertIn(f"ScriptValue('sr_fl_{n}_leg_months_{lc.key}')|0]", _override_body(row, "dr_months"))
+                    self.assertIn(f"ScriptValue('sr_fl_{n}_leg_quarters_{lc.key}')|0]", _override_body(row, "dr_weeks"))
                     short = _override_body(row, "dr_dv_short")
                     self.assertIn(f"Not( GreaterThanOrEqualTo_CFixedPoint( JournalEntry.GetCountry.MakeScope.ScriptValue("
                                   f"'sr_fl_{n}_dv_value'), JournalEntry.GetCountry.MakeScope.ScriptValue('sr_fl_{n}_leg_dv_{lc.key}') ) )",

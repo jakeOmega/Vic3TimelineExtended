@@ -7022,6 +7022,46 @@ types space_race_widget_types
 		}
 	}
 
+	### Engage / Avoid (2026-11-25 design § 2.9): a fleet's setting, which
+	### decides whom it fights (§ 2.3). Its word is the setting in force, the
+	### click switches it, the hover gives the rule. 80 wide, as
+	### te_sr_fl_button, whose icon and label sit the same.
+	type te_sr_avoid_button = button {
+		using = default_button_action
+		size = { 80 26 }
+		parentanchor = vcenter
+		block "av_btn" {}
+
+		icon = {
+			size = { 16 16 }
+			position = { 3 0 }
+			parentanchor = left|vcenter
+			texture = "gfx/interface/icons/space_race_icons/status_battle.dds"
+		}
+		textbox = {
+			position = { 21 0 }
+			parentanchor = left|vcenter
+			align = left|nobaseline
+			autoresize = yes
+			max_width = 58
+			elide = right
+			using = te_sr_fontsize_row
+			text = "je_space_race_widget_fl_engage"
+			block "av_engage" {}
+		}
+		textbox = {
+			position = { 21 0 }
+			parentanchor = left|vcenter
+			align = left|nobaseline
+			autoresize = yes
+			max_width = 58
+			elide = right
+			using = te_sr_fontsize_row
+			text = "je_space_race_widget_fl_avoid"
+			block "av_avoid" {}
+		}
+	}
+
 	### One posture button on a fleet's card (UI pass design § 7; the fleet
 	### cards, owner 2026-11-14): its icon over its word, four to the line
 	### (4 × 114 + 3 × 4 = 468). The button while its posture isn't the
@@ -7430,7 +7470,7 @@ types space_race_widget_types
 			block "fl_transit_visible" {}
 
 			widget = {
-				size = { 200 18 }
+				size = { 190 18 }
 				parentanchor = vcenter
 
 				default_progressbar_horizontal = {
@@ -7462,18 +7502,32 @@ types space_race_widget_types
 					}
 				}
 			}
+			### "Lands in N weeks", 190 wide for Engage / Avoid's 80 beside it:
+			### 190 + 4 + 190 + 4 + 80 = 468, the card's width.
 			widget = {
-				size = { 264 24 }
+				size = { 190 24 }
 				parentanchor = vcenter
 
 				textbox = {
 					parentanchor = left|vcenter
 					autoresize = yes
-					max_width = 264
+					max_width = 190
 					align = left|nobaseline
 					using = te_sr_fontsize_row
 					elide = right
 					block "fl_transit" {}
+				}
+			}
+			### Engage / Avoid in flight: it decides whom the fleet fights on landing.
+			te_sr_avoid_button = {
+				blockoverride "av_btn" {
+					block "fl_avoid_button" {}
+				}
+				blockoverride "av_engage" {
+					block "fl_avoid_off_visible" {}
+				}
+				blockoverride "av_avoid" {
+					block "fl_avoid_on_visible" {}
 				}
 			}
 		}
@@ -7889,6 +7943,17 @@ types space_race_widget_types
 							block "fl_destroy_on_visible" {}
 						}
 					}
+					te_sr_avoid_button = {
+						blockoverride "av_btn" {
+							block "fl_avoid_button" {}
+						}
+						blockoverride "av_engage" {
+							block "fl_avoid_off_visible" {}
+						}
+						blockoverride "av_avoid" {
+							block "fl_avoid_on_visible" {}
+						}
+					}
 				}
 			}
 		}
@@ -8108,8 +8173,8 @@ types space_race_widget_types
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
-			text = "je_space_race_widget_dp_col_months"
-			tooltip = "je_space_race_widget_dp_col_months_tt"
+			text = "je_space_race_widget_dp_col_weeks"
+			tooltip = "je_space_race_widget_dp_col_weeks_tt"
 		}
 		textbox = {
 			size = { 60 20 }
@@ -8153,8 +8218,8 @@ types space_race_widget_types
 		}
 	}
 
-	### One location in a fleet's destination popup: its name, the leg's months
-	### and delta-v at the fleet's pace (red when the fleet carries less), from
+	### One location in a fleet's destination popup: its name, the leg's weeks
+	### (ticks of the fleets' clock) and delta-v at the fleet's pace (red when the fleet carries less), from
 	### Earth the launch window toward it (Next Windows' "Open now" and "In N
 	### months"; blank for other legs: a closed window only raises the delta-v,
 	### UI pass design § 4; and blank for a fleet at a torch or antimatter pace
@@ -8197,7 +8262,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				block "dr_months" {}
+				block "dr_weeks" {}
 			}
 		}
 		widget = {
@@ -10871,6 +10936,30 @@ types space_race_widget_types
 				te_sr_note = {
 					text = "je_space_race_widget_fw_in_transit"
 					block "fl_transit_visible" {}
+				}
+				### Engage or Avoid (2026-11-25 design § 2.9), at a location and in
+				### flight: whom the fleet fights.
+				flowcontainer = {
+					direction = horizontal
+					ignoreinvisible = yes
+					spacing = 4
+
+					te_sr_fp_caption = {
+						blockoverride "caption_text" {
+							text = "je_space_race_widget_fw_battle"
+						}
+					}
+					te_sr_avoid_button = {
+						blockoverride "av_btn" {
+							block "fl_avoid_button" {}
+						}
+						blockoverride "av_engage" {
+							block "fl_avoid_off_visible" {}
+						}
+						blockoverride "av_avoid" {
+							block "fl_avoid_on_visible" {}
+						}
+					}
 				}
 				### Orders, at a location.
 				flowcontainer = {

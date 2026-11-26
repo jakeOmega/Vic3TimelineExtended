@@ -121,34 +121,36 @@ sr_disp_earth_hostile_present = {
 sr_disp_earth_hostile_total = {
 	value = sr_earth_hostile_total
 }
-sr_disp_earth_hostile_months = {
+# Weeks until the first lands: ticks of the fleets' clock, four a month (the
+# 2026-11-25 design § 1.4: the panel calls a tick a week).
+sr_disp_earth_hostile_weeks = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_earth > 0 }
 		value = sr_loc_hostile_inbound_first_earth
-		subtract = te_history_month_index
+		subtract = sr_fl_tick_now
 		min = 0
 	}
 }
-# .111's own fleet: months until it lands.
-sr_disp_earth_alert_months = {
+# .111's own fleet: weeks until it lands.
+sr_disp_earth_alert_weeks = {
 	value = 0
 	if = {
 		limit = { has_variable = sr_earth_alert_arrive }
 		value = var:sr_earth_alert_arrive
-		subtract = te_history_month_index
+		subtract = sr_fl_tick_now
 		min = 0
 	}
 }
 
-# The notices (space_race_events.100 and .101), read in their text: months
+# The notices (space_race_events.100 and .101), read in their text: weeks
 # until a hostile fleet lands; a battle's strength lost, dealt and left.
-sr_disp_fl_alert_months = {
+sr_disp_fl_alert_weeks = {
 	value = 0
 	if = {
 		limit = { has_variable = sr_fl_alert_arrive }
 		value = var:sr_fl_alert_arrive
-		subtract = te_history_month_index
+		subtract = sr_fl_tick_now
 		min = 0
 	}
 }

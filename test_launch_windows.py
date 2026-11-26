@@ -869,9 +869,10 @@ def legs_interpreter():
 
 
 class FleetLegsTest(unittest.TestCase):
-    """The fleets' legs between the nine locations (solar colonization slice 6 design § 1.2): every
-    ordered pair and drive has its readers; a better drive is never slower; Earth's outbound months are
-    the colony fleets' transit; the script's mean-cycle phase is the generator's for every month."""
+    """The fleets' legs between the nine locations (solar colonization slice 6 design § 1.2), in
+    quarter-months (the fleets' clock, 2026-11-25 design § 1.3): every ordered pair and drive has its
+    readers; a better drive is never slower; Earth's outbound quarters come from the colony fleets'
+    transit departures; the script's mean-cycle phase is the generator's for every month."""
 
     @classmethod
     def setUpClass(cls):
@@ -893,7 +894,7 @@ class FleetLegsTest(unittest.TestCase):
     def test_every_ordered_pair_and_drive_has_both_readers(self):
         for a, b, _ in glw.LEGS:
             for drive in glw.DRIVES:
-                for name in ("months", "dv", "months_rapid", "dv_rapid"):
+                for name in ("quarters", "dv", "quarters_rapid", "dv_rapid"):
                     stem, rapid = (name.split("_") + [""])[:2]
                     reader = f"sr_leg_{stem}_{'rapid_' if rapid else ''}{drive.key}_{a}_{b}"
                     with self.subTest(reader=reader):
@@ -902,26 +903,43 @@ class FleetLegsTest(unittest.TestCase):
     def test_a_better_drive_is_never_slower(self):
         keys = [d.key for d in glw.DRIVES]
         for p in legs():
-            for off in p.months["chemical"]:
-                months = [p.months[k][off] for k in keys]
+            for off in p.quarters["chemical"]:
+                quarters = [p.quarters[k][off] for k in keys]
                 with self.subTest(leg=(p.a, p.b), offset=off):
-                    self.assertEqual(months, sorted(months, reverse=True))
-                    self.assertGreaterEqual(min(months), 1)
+                    self.assertEqual(quarters, sorted(quarters, reverse=True))
+                    self.assertGreaterEqual(min(quarters), 1)
 
-    def test_earth_s_outbound_months_are_the_colony_fleets_transit(self):
+    def test_a_quarter_is_a_quarter_month_rounded_half_up(self):
+        self.assertAlmostEqual(glw.QUARTER_DAYS, 7.609375)
+        # The issue's medians (#2065): antimatter 18, 22, 28, 38, 51 days; the torch 32, 39, 49, 70, 107.
+        self.assertEqual([glw.quarters_of(d) for d in (18, 22, 28, 38, 51)], [2, 3, 4, 5, 7])
+        self.assertEqual([glw.quarters_of(d) for d in (32, 39, 49, 70, 107)], [4, 5, 6, 9, 14])
+        self.assertEqual(glw.quarters_of(0.5), 1)
+        self.assertEqual(glw.quarters_of(glw.MONTH_DAYS), 4)
+
+    def test_earth_s_outbound_quarters_come_from_the_colony_fleets_transit_days(self):
         bodies = {p.body.key: p for p in plans()[0]}
         for p in legs():
             if p.kind != "exact":
                 continue
             body = glw.LOCATION[p.b].body
+            bp = bodies[body]
             for drive in glw.DRIVES:
                 with self.subTest(leg=p.b, drive=drive.key):
-                    self.assertEqual(p.months[drive.key], bodies[body].transit[drive.key])
-                    self.assertEqual(_block(self.text, f"sr_leg_months_{drive.key}_earth_{p.b}").strip(),
-                                     f"value = sr_transit_{drive.key}_{body}")
-                    if len({glw._dv_text(drive, v) for v in p.dv[drive.key].values()}) > 1:
-                        self.assertIn(f"sr_launch_offset_{body}",
-                                      _block(self.text, f"sr_leg_dv_{drive.key}_earth_{p.b}"))
+                    self.assertEqual(p.quarters[drive.key], bp.transit_quarters[drive.key])
+                    self.assertEqual(set(p.quarters[drive.key]), set(bp.transit[drive.key]))
+                    # Each offset's quarters is its months' to within a month's rounding.
+                    for off, q in p.quarters[drive.key].items():
+                        self.assertLessEqual(abs(q - 4 * bp.transit[drive.key][off]), 4, off)
+                    self.assertNotIn("sr_transit_", _block(self.text, f"sr_leg_quarters_{drive.key}_earth_{p.b}"))
+                    for name, table in (("quarters", {o: str(v) for o, v in p.quarters[drive.key].items()}),
+                                        ("dv", {o: glw._dv_text(drive, v) for o, v in p.dv[drive.key].items()})):
+                        if len(set(table.values())) > 1:
+                            self.assertIn(f"sr_launch_offset_{body}",
+                                          _block(self.text, f"sr_leg_{name}_{drive.key}_earth_{p.b}"))
+        for bp in plans()[0]:
+            self.assertEqual(set(bp.transit_quarters["chemical"].values()), {glw.quarters_of(bp.hohmann_days)},
+                             bp.body.key)
 
     def test_the_phase_is_integer_arithmetic_on_a_positive_dividend(self):
         game_start = glw.month_index(1836, 1)
@@ -945,8 +963,8 @@ class FleetLegsTest(unittest.TestCase):
             with self.subTest(leg=(p.a, p.b)):
                 if p.kind == "fixed":
                     for drive in glw.DRIVES:
-                        self.assertEqual(interp.value(f"sr_leg_months_{drive.key}_{p.a}_{p.b}", first),
-                                         p.months[drive.key][0])
+                        self.assertEqual(interp.value(f"sr_leg_quarters_{drive.key}_{p.a}_{p.b}", first),
+                                         p.quarters[drive.key][0])
                     continue
                 for month in range(first, last + 1, 1 if p.kind == "cycle" else 5):
                     if p.kind == "cycle":
@@ -956,13 +974,13 @@ class FleetLegsTest(unittest.TestCase):
                     else:
                         off = interp.value(f"sr_launch_offset_{glw.LOCATION[p.b].body}", month)
                     for drive in glw.DRIVES:
-                        months = interp.value(f"sr_leg_months_{drive.key}_{p.a}_{p.b}", month)
+                        quarters = interp.value(f"sr_leg_quarters_{drive.key}_{p.a}_{p.b}", month)
                         dv = interp.value(f"sr_leg_dv_{drive.key}_{p.a}_{p.b}", month)
-                        self.assertEqual(months, p.months[drive.key][off], (drive.key, month))
+                        self.assertEqual(quarters, p.quarters[drive.key][off], (drive.key, month))
                         self.assertAlmostEqual(dv, float(glw._dv_text(drive, p.dv[drive.key][off])), places=6,
                                                msg=(drive.key, month))
-                    rapid = interp.value(f"sr_leg_months_rapid_antimatter_{p.a}_{p.b}", month)
-                    self.assertEqual(rapid, max(1, math.ceil(0.75 * p.months["antimatter"][off])), month)
+                    rapid = interp.value(f"sr_leg_quarters_rapid_antimatter_{p.a}_{p.b}", month)
+                    self.assertEqual(rapid, max(1, math.ceil(0.75 * p.quarters["antimatter"][off])), month)
         self.assertTrue(bodies)
 
     def test_rapid_response_flies_one_drive_ahead(self):
@@ -970,8 +988,8 @@ class FleetLegsTest(unittest.TestCase):
             for i, drive in enumerate(glw.DRIVES[:-1]):
                 ahead = glw.DRIVES[i + 1].key
                 with self.subTest(leg=(a, b), drive=drive.key):
-                    self.assertEqual(_block(self.text, f"sr_leg_months_rapid_{drive.key}_{a}_{b}").strip(),
-                                     f"value = sr_leg_months_{ahead}_{a}_{b}")
+                    self.assertEqual(_block(self.text, f"sr_leg_quarters_rapid_{drive.key}_{a}_{b}").strip(),
+                                     f"value = sr_leg_quarters_{ahead}_{a}_{b}")
                     self.assertEqual(_block(self.text, f"sr_leg_dv_rapid_{drive.key}_{a}_{b}").strip(),
                                      f"value = sr_leg_dv_{ahead}_{a}_{b}")
 
@@ -982,11 +1000,11 @@ class FleetLegsTest(unittest.TestCase):
             for drive in glw.DRIVES:
                 m_lo, m_hi, dv_lo, dv_hi = p.sampled_range[drive.key]
                 with self.subTest(leg=(p.a, p.b), drive=drive.key):
-                    self.assertLessEqual(p.months[drive.key][0], m_hi)
+                    self.assertLessEqual(p.quarters[drive.key][0], m_hi)
                     self.assertGreaterEqual(p.dv[drive.key][0], dv_lo - 1e-9)
                     self.assertLessEqual(p.dv[drive.key][0], dv_hi + 1e-9)
                     if drive.key == "chemical":
-                        self.assertGreaterEqual(p.months[drive.key][0], m_lo)
+                        self.assertGreaterEqual(p.quarters[drive.key][0], m_lo)
 
     def test_a_planet_s_capture_orbit_by_hand(self):
         # Mars: GM 42,828.37 km^3/s^2, periapsis a tenth of its 3,389.5 km radius up, e = 0.9. At an
@@ -1006,8 +1024,9 @@ class FleetLegsTest(unittest.TestCase):
         self.assertGreater(trip("earth", "jupiter") + trip("jupiter", "earth"), 12)
 
     def test_the_file_stays_a_sane_size(self):
+        # 12,400 lines in months; about 15,000 in quarters (2026-11-25), whose curves have more steps.
         lines = _raw("common", "script_values", "sr_fleet_legs_generated.txt").count("\n")
-        self.assertLess(lines, 15_000)
+        self.assertLess(lines, 17_500)
 
 
 class StagedBankTest(unittest.TestCase):

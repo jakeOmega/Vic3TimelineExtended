@@ -334,9 +334,11 @@ class SlotsTest(unittest.TestCase):
         buttons = [int(w) for w in re.findall(r"using = default_button_action\s*size = \{ (\d+) 26 \}", page)]
         self.assertEqual(sorted(buttons), [98, 190, 190])
         self.assertLessEqual(caption + 4 + max(buttons) + 4 + min(buttons), columns[1])
-        # A caption a line, in the order a fleet is used: where to, how it fights, what at, its marines.
+        # A caption a line, in the order a fleet is used: Engage or Avoid first, the
+        # one order it takes in flight too (2026-11-25 design § 2.9); then where to,
+        # how it fights, what at, its marines.
         captions = re.findall(r'te_sr_fp_caption = \{\s*blockoverride "caption_text" \{\s*text = "je_space_race_widget_(\w+)"', page)
-        self.assertEqual(captions, ["fw_destination", "fw_posture", "fw_target", "fl_col_marines"])
+        self.assertEqual(captions, ["fw_battle", "fw_destination", "fw_posture", "fw_target", "fl_col_marines"])
         # Locations, the panel's own strip, in the right column: its captions' column and a column a location.
         self.assertEqual(page.count("te_sr_location_cells = {}"), 1)
         cell = int(re.search(r"size = \{ (\d+) \d+ \}", _type_body(self.gui, "te_sr_location_cell")).group(1))
@@ -461,7 +463,7 @@ class TextTest(unittest.TestCase):
             with self.subTest(slot=n):
                 for key in (f"je_space_race_widget_fw_{n}_leg", f"je_space_race_widget_fw_{n}_leg_short"):
                     self.assertEqual(re.findall(r"ScriptValue\('(\w+)'\)", self.loc[key]),
-                                     [f"sr_disp_fl_{n}_leg_months", f"sr_disp_fl_{n}_leg_dv"])
+                                     [f"sr_disp_fl_{n}_leg_weeks", f"sr_disp_fl_{n}_leg_dv"])
                 # One text, the propellant's figure red in the second.
                 self.assertEqual(self.loc[f"je_space_race_widget_fw_{n}_leg"].replace("propellant: #v ", "propellant: #R "),
                                  self.loc[f"je_space_race_widget_fw_{n}_leg_short"])
