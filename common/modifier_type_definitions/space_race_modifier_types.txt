@@ -55,6 +55,20 @@ country_sr_module_fabrication_add = {
 	script_only = yes
 }
 
+# Colony module fabrication from every source, as a share (the owner,
+# 2026-11-26): Von Neumann Machines gives +100%, doubling the method's, the
+# Mass Driver's and the Orbital Yards' points. sr_mod_fab_rate multiplies its
+# total by 1 + this. The engine consumes nothing.
+country_sr_module_fabrication_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	game_data = {
+		ai_value = 0
+	}
+	script_only = yes
+}
+
 # The module stock's cap beyond its base and a year of fabrication (the owner,
 # 2026-11-15): the Space Program's Module Storage methods give it, workforce-scaled,
 # and sr_mod_fab_stock_cap reads it. The engine consumes nothing.

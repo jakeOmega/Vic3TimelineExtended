@@ -850,7 +850,10 @@ cheaper, so take it to get modules sooner, not to save money.
 
 Each module costs 100 points (a Habitat past its colony's cap more), so a fully staffed Space Program builds one every
 20, 8 or 4 months, more often with higher funding. Mare Imbrium's Mass Driver
-adds 3 points a month a level of its own, with or without a fabrication method. Fabrication builds the queue
+adds 3 points a month a level of its own, with or without a fabrication method.
+Von Neumann Machines (era 13) doubles the points from every source, the methods,
+the Mass Driver and Orbital Yards alike, so each method builds a module in half
+the time and for half the cost in the table. Fabrication builds the queue
 in order, first in first out: the module at the top is next. The arrow on each
 line from the second on moves that module up a place; Alt+Click moves it to the
 top.
