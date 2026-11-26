@@ -242,6 +242,13 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
   - `fleet_leg` logs on the first fleet that lands, so send one (AI fleets seldom leave Earth outside a war).
   - `fleet_clock` logs on the second 1st after the first fleet power appears: any Full Colonies game with a Space Command.
   - `fleet_battle` logs on the first battle: console options o and b at Earth, then i.
+    **Seen OK 2026-11-25** (harness session on a copy of the owner's June 2043 save, build `1e902f0d4` as a side
+    mod): a setup put 100 warships of Aceh and 50 of the Aceh White Army, at war, at Mars and ran `sr_battle_at`.
+    `TE_SELF_CHECK OK fleet_battle location=3 steps=11 ended=1`; the White Army broke at 23.96 and stayed (no dock in
+    reach), Aceh kept 89.57; neither AI switched to Avoid (no Space Command). The same fleets placed without a battle
+    were fought by the July 1 monthly step with the same figures, and the July 7 hidden tick advanced
+    `sr_fl_tick_now` to month × 4 + 1. Not seen: the pace escape and an AI with a Space Command choosing Avoid, a
+    player's Engage / Avoid button, a broken fleet's retreat to a dock, the batteries' weekly fire.
   - `TE_SR_FLEET` and `TE_SR_LOC` are console option a's.
   - `TE_SR_COMBAT` lines log every occupation, liberation, seizure and destruction as it happens.
 - **Set up by hand and read by eye:** steps 1 to 22 below. Console option b gives a fleet, h and i force an assault
