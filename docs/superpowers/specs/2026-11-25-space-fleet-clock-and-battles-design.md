@@ -77,7 +77,7 @@ A per-fleet setting, **Engage / Avoid** (`sr_fl_<n>_avoid`; absent is Engage, a 
 ### 2.4 The battle
 
 - **Settled in one call.** Every fleet in a fighting pair at the location joins. The round repeats in small steps inside a bounded `while` until no fighting pair is left. In each step, each fleet's fire is shared among the hostile fleets it is paired with in proportion to their strength, and each fleet loses `sr_bt_k` (0.05) × its strength × the sum, over the fleets it is paired with, of their fire per point they engage. That is the square law of today's round, per fleet instead of per posture, so allies and three-way wars work as they do now. Losses go on through `sr_fl_take_losses_at` (screens first, half destroyed, half damage). Strength and fire are read again each step. The step size sets how fine-grained the fight is, not how long it takes: an even fight breaks in about 14 steps. A ceiling of 60 steps (`sr_bt_max_steps`) stops a fight of fleets with almost no fire (tenders against tenders); it goes on at the next tick.
-- **Each fleet breaks on its own.** A fleet breaks once it has lost `sr_bt_break_share` (0.5) of the strength it brought to this battle, and drops out of it. After the battle it heads for the nearest dock it may depart for (Earth, or a location where its owner holds a Spaceport; nearest by its quarters), through the same `sr_fl_<n>_may_depart_<loc>` an order passes. A fleet already at a dock (Earth, or its own Spaceport) stays there. With no dock in reach it stays where it is, out of this battle, and can be caught again at the next tick. The break share is counted afresh in each battle.
+- **Each fleet breaks on its own.** A fleet breaks once it has lost `sr_bt_break_share` (0.5) of the strength it brought to this battle (measured after the batteries' fire at Earth), and drops out of it. After the battle it heads for the nearest dock it may depart for (Earth, or a location where its owner holds a Spaceport; nearest by its quarters), through the same `sr_fl_<n>_may_depart_<loc>` an order passes. A fleet already at a dock (Earth, or its own Spaceport) stays there. With no dock in reach it stays where it is, out of this battle, and can be caught again at the next tick. The break share is counted afresh in each battle.
 - A fleet below `sr_fl_minimum_strength` drops out as destroyed; the monthly step clears it, as today.
 - **The Orbital Battlestation** is in the loop at Earth, for its owner: it always engages, is always tied, never breaks, and fights until its strength is gone. It regains 10% a month as today.
 
@@ -97,7 +97,7 @@ The siege stays on the 1st: the Defences' fire on fleets closing in, integrity, 
 
 ### 2.8 Records against the new cadence
 
-- **`.101`**, the battle report: one per battle, at most one a tick for a country (`sr_battle_notice_pending` for 6 days, where it was 25).
+- **`.101`**, the battle report: one per battle, at most one a tick for a country (`sr_battle_notice_pending` for 6 days, where it was 25). A tick of the batteries' fire alone, with no battle, still makes a report and a war support verdict, as a month's round did, but at most once a month (`sr_battery_notice_pending`, 25 days), so a fleet sitting under a blockade isn't reported weekly.
 - **`sr_loc_battle_<loc>`** stays a month stamp: the Locations strip reads it as "a battle this month or last".
 - **`sr_site_bombard_<key>`** against `sr_destroy_months`: unchanged, as the siege stays monthly.
 - **War support's `sr_ws_battle`**: set by each battle for 30 days, as each month's round set it; the later battle's verdict stands.
@@ -105,14 +105,14 @@ The siege stays on the 1st: the Defences' fire on fleets closing in, integrity, 
 
 ### 2.9 The panel and the guide
 
-- An **Engage / Avoid** button among a fleet's orders, on the card and the Fleets window's page, its hover giving the rule of § 2.3. It takes effect at the next tick. Like a posture, it can be changed only with a Space Command; without one a fleet keeps the setting it had.
+- An **Engage / Avoid** button among a fleet's orders, on the card (in flight beside the landing, and on the posture line's target row where that shows: the card's orders line is full) and on the Fleets window's page (always, under the Orders heading), its hover giving the rule of § 2.3. It takes effect at the next tick. Like a posture, it can be changed only with a Space Command; without one a fleet keeps the setting it had.
 - The player guide's Battles in space is rewritten: battles on contact, Engage / Avoid, pace and ties, the break and the retreat, the batteries once a week; the posture table keeps what each posture does to colonies.
 - The system doc's combat section and the fleets design's § 7 point here.
 
 ### 2.10 Checks
 
-- Self-check **`fleet_battle`**: OK at the first battle that ends with a break or a fleet destroyed inside the step ceiling; BROKEN at the first that reaches the ceiling with two fleets each above half their fire still paired (the step size or the ceiling is wrong), with the figures.
-- Tests: the battle's wiring (every tick, after the landings and the batteries; the siege only on the 1st), the pair rule, the break, the retreat's gate, the batteries' share, the AI's two tests, the records.
+- Self-check **`fleet_battle`**: OK at the first battle that ends with a break or a fleet destroyed inside the step ceiling; BROKEN at the first that reaches the ceiling with units still paired whose fire is at least half their strength (fleets with real fire the steps didn't settle: the step size or the ceiling is wrong), with the figures. Tenders on tenders reach the ceiling rightly and don't count.
+- Tests: the battle's wiring (every tick, after the landings and the batteries; the siege only on the 1st), the pair rule, the break, the retreat's gate, the batteries' share, the AI's two tests, the records. `test_space_fleet_battle.py` runs the loop itself from the script files in fixed point (test_space_fleets' `_Fx` with countries): an even fight breaks both in 12 to 16 steps, a 2:1 costs the winner 11.4% (the continuous square law's 9.9%), and tenders reach the ceiling.
 - Play-test list: `event te_debug_space_race.6` option o (the strongest enemy puts a fleet at Earth) and n (fill the reserve), then watch a battle settle within the tick, a break and a retreat, an Avoid that escapes and one that is caught.
 
 ## 3. The open questions: first guesses

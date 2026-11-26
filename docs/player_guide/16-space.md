@@ -1549,13 +1549,14 @@ one brings you back to the fleet.
 | The destination button | Opens Fleet Destination, a row for each other location: the trip's weeks and propellant (in red when the fleet carries too little), from Earth its launch window (blank for a fleet with torch or antimatter engines, which leaves in any month), your colonies there and the enemy's strength there and on its way. Choose picks it; the button's hover then gives that trip |
 | Go | Sends the fleet to the destination chosen. It can't leave while it refits, when it is all but destroyed (below the minimum strength), when its propellant doesn't cover this month's trip (leaving Earth outside a launch window takes more), from Earth while Earth is blockaded or your launch site occupied, or without a Space Command (below). You can choose a destination before it can leave, and Fleet Destination says what holds it back |
 | Transfer | Opens a window to move ships and marines into a new fleet, or into another of your fleets at the same location. Each role and the marines start at half; − and + change an amount by 1, with Shift, Ctrl and Alt by 10, 100 and 1,000, and a right-click sets none or all. The marines stay within what the assault carriers on each side can hold, so moving carriers can change them too. Ships moved into another fleet give it the slower drive and the lower share of propellant and supply; moving all of a fleet merges the two |
+| Engage, Avoid | The fleet's setting for battle, shown on the button; a click switches it from the next week (see [Battles in space](#battles-in-space)). On the card it shows while the fleet flies and where its posture buttons do; in the Fleets window, always. A new fleet engages |
 | Land, Embark | Each opens Marines: your colonies at the fleet's location, with your marines at each and Due where a garrison you ordered waits for them, and an amount, which starts at every marine aboard for Land and at the room aboard for Embark (− and + as in Transfer). Land on a row puts up to that many of the marines aboard at that colony; Embark takes up to that many of yours there back aboard, as many as the carriers hold. The window stays open, so you can split the marines between colonies. At Earth, your colonies on the Moon | <!-- style: allow ai-vocab -->
 
 Your fleets take orders only while you have a Space Command level in a state
-you control. Without one, none can leave, change posture or target, start a
+you control. Without one, none can leave, change posture, target or Engage and Avoid, start a
 refit or be repaired, and a refit under way pauses; Space Fleets says so above
-its rows. Fleets already on their way land, every fleet fights where it is at the
-posture it had, at half strength, and a docked fleet still takes on supply,
+its rows. Fleets already on their way land, every fleet fights where it is with the
+posture and the Engage or Avoid it had, at half strength, and a docked fleet still takes on supply,
 propellant and marines. Demolishing Space Command ends the upkeep and grounds
 your fleets: one at Earth still fights there at half strength and keeps Earth
 from being blockaded, but can't leave or be repaired.
@@ -1574,16 +1575,39 @@ with the weeks until it arrives.
 
 ### Battles in space
 
-Each month, fleets of countries at war fight at every location where they meet.
-What a fleet fights depends on its posture, set by the four posture buttons under its
-orders. The one in force is lit, and one the fleet can't take is grayed, its
-hover saying why:
+Fleets of countries at war that meet at a location fight it out on the spot, on
+any of the four days a month fleets move: a fleet that lands fights that day.
+Who fights whom is each fleet's setting, Engage or Avoid, on a button among its
+orders:
 
-| Posture | Fights | Use it to |
+- Two fleets that both engage fight; two that both avoid don't.
+- A fleet that engages catches one that avoids if it is at least as fast, or if
+  the other can't slip away: it is where its country holds a colony, at Earth,
+  or closing in, interdicting or blockading there.
+- A fleet's speed is its drive's, one step more for a fleet of rapid response
+  alone. Fleets are matched one by one, so a slow fleet can be caught while a
+  faster one of the same country gets away.
+
+Each fleet shares its fire among the enemy fleets it fights by their strength,
+and the fight goes on until no pair is left. Losses follow the square law: each
+side loses in proportion to the other's fire, so concentration pays. Warships
+and rapid response take the losses before the other roles, and half of every
+loss is damage a dock repairs. A fleet breaks once it has lost half the strength
+it brought to the battle: it drops out and heads for the nearest dock it can
+reach, Earth or a location where you hold a Spaceport. One already at a dock
+stays there, and one with no dock in reach stays where it is and can be caught
+again the next week. Two equal fleets both break; at two to one the weaker
+breaks, having cost the stronger about a tenth of its strength.
+
+Posture decides what a fleet does to the colonies there, set by the four posture
+buttons under its orders. The one in force is lit, and one the fleet can't take
+is grayed, its hover saying why:
+
+| Posture | What it does | Use it to |
 |---|---|---|
-| Station | Every enemy fleet there | Guard your colonies. A fleet arriving where you hold a colony stations |
-| Stand off | Enemy fleets that stand off or are stationed, out of the colonies' guns | Blockade an enemy's colonies |
-| Close in | The target site's Defenses and the enemy fleets stationed there | Seize or destroy a colony |
+| Station | Holds orbit; a fleet arriving where you hold a colony stations | Guard your colonies: while it is there, they can't be seized or destroyed |
+| Stand off | Holds orbit out of the colonies' guns | Blockade an enemy's colonies |
+| Close in | Attacks the target site, whose Defenses fire on it each month | Seize or destroy a colony |
 | Interdict | As Stand off. Offered where a country at peace with you that is not your ally holds a colony; the target button picks its site | Blockade that country's colonies there without a war (see [Interdiction](#interdiction)) |
 
 The target button beside them opens Fleet Target: the sites where the fleet is,
@@ -1593,22 +1617,20 @@ free colony or yours under an enemy's occupation; interdicting, a country's at
 peace with you that is not your ally. Choosing Close in or Interdict without such
 a target takes the first site there that fits.
 
-At Earth every fleet is stationed and fights every enemy fleet, an Orbital
-Battlestation fights for its owner (25 strength a level, regaining 10% a month;
-none in a state its owner doesn't control), and so do its ground-to-orbit
-batteries (see [Holding Earth orbit](#holding-earth-orbit)). The one exception
-is a fleet closing in on a colony on the Moon: at Earth the posture buttons show
-while there is a lunar colony you can close in on (an enemy's, a free one, or
-yours under an enemy's occupation), and only Station and Close in can be chosen. A fleet
-closing in there takes fire from every enemy fleet, battlestation and battery at
-Earth, and no longer guards your own lunar colonies, which can't be seized or
-destroyed while a fleet of yours or your Orbital Battlestation is stationed at
-Earth. Losses follow the square law: each side loses
-in proportion to the other's fire, so concentration pays (100 strength against
-50 ends with about 87 left). Warships and rapid response take the losses before
-the other roles, and half of every loss is damage a dock repairs. A battle at
-Earth adds to orbital debris. A battle report comes after each month of
-fighting, and the war support breakdown shows Battles in space.
+At Earth every fleet is stationed and none can slip away, so a fleet that
+engages there fights every enemy fleet. An Orbital Battlestation fights for its
+owner: it always engages and never breaks, fighting until its strength is gone
+(25 strength a level, regaining 10% a month; none in a state its owner doesn't
+control). Its owner's ground-to-orbit batteries fire once a week before the
+battle (see [Holding Earth orbit](#holding-earth-orbit)). The one exception to
+Station at Earth is a fleet closing in on a colony on the Moon: the posture
+buttons show while there is a lunar colony you can close in on (an enemy's, a
+free one, or yours under an enemy's occupation), and only Station and Close in
+can be chosen. A fleet closing in there takes the colony's Defenses' fire, and
+no longer guards your own lunar colonies, which can't be seized or destroyed
+while a fleet of yours or your Orbital Battlestation is stationed at Earth. A
+battle at Earth adds to orbital debris. A battle report comes after each battle,
+at most one a week, and the war support breakdown shows Battles in space.
 
 ### Blockade, seizure and destruction
 
@@ -1722,7 +1744,7 @@ country's fleets on their way.
 
 Ground-to-orbit batteries are a government building, unlocked by Space
 Militarization and built in any state. Each level fires on every enemy fleet at
-Earth every month and takes no losses:
+Earth, a quarter of its month's fire each week, and takes no losses:
 
 | Method | Technology | Each level a month |
 |---|---|---|
@@ -1754,10 +1776,15 @@ shut down a space program.
 
 ### How the AI fights in space
 
-AI fleet powers keep their fleets at home in peace, send their strongest fleet
-to defend a location where they hold colonies when an enemy fleet is there or on
-its way, or when a fleet interdicts them there, bring fleets home short of
-supply or propellant, and land marines for the garrisons they order. At war,
+AI fleet powers keep their fleets at home in peace, bring fleets home short of
+supply or propellant, and land marines for the garrisons they order. Where they
+hold colonies and an enemy fleet is there or on its way, or a fleet interdicts
+them there, they weigh their fleets there and on their way against the enemy's,
+each by strength times fire: winning already, they send nothing; else their
+strongest free fleet if it would win alone, else every free fleet that can reach
+it if together they would, else none. In a battle an AI engages where its
+fleets' strength times fire is at least the enemy's there, and avoids
+otherwise. At war,
 once a month, an AI sends one fleet from a dock to the nearest enemy location
 within a year's flight, when the fleet is at least half again as strong as the
 enemy's fleets and its colonies' Defenses there and can fly home again or dock
