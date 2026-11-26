@@ -8417,7 +8417,7 @@
  },
  "concept_sr_resort_draw": {
   "en": "Resort Draw",
-  "es": "Consumo turístico"
+  "es": "Atractivo turístico"
  },
  "concept_sr_role_carrier": {
   "en": "Assault Carrier",
@@ -26105,27 +26105,27 @@
  },
  "sr_sc_mix_step_carrier_tt": {
   "en": "[concept_sr_role_carrier]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_carrier')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_carrier')|0]%#! of the build mix.",
-  "es": "[concept_sr_role_carrier]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_carrier')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_carrier')|0]%#! de la combinación de construcción."
+  "es": "[concept_sr_role_carrier]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_carrier')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_carrier')|0]%#! de la mezcla de construcción."
  },
  "sr_sc_mix_step_rapid_tt": {
   "en": "[concept_sr_role_rapid]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_rapid')|0]%#! of the build mix.",
-  "es": "[concept_sr_role_rapid]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_rapid')|0]%#! de la combinación de construcción."
+  "es": "[concept_sr_role_rapid]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_rapid')|0]%#! de la mezcla de construcción."
  },
  "sr_sc_mix_step_siege_tt": {
   "en": "[concept_sr_role_siege]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_siege')|0]%#! of the build mix.",
-  "es": "[concept_sr_role_siege]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_siege')|0]%#! de la combinación de construcción."
+  "es": "[concept_sr_role_siege]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_siege')|0]%#! de la mezcla de construcción."
  },
  "sr_sc_mix_step_tender_tt": {
   "en": "[concept_sr_role_tender]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_tender')|0]%#! of the build mix.",
-  "es": "[concept_sr_role_tender]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_tender')|0]%#! de la combinación de construcción."
+  "es": "[concept_sr_role_tender]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_tender')|0]%#! de la mezcla de construcción."
  },
  "sr_sc_mix_step_war_tt": {
   "en": "[concept_sr_role_warship]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_war')|0]%#! of the build mix.",
-  "es": "[concept_sr_role_warship]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_war')|0]%#! de la combinación de construcción."
+  "es": "[concept_sr_role_warship]: peso #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_war')|0]%#! de la mezcla de construcción."
  },
  "sr_sc_mix_unused_tt": {
   "en": "The yards build Orders Only now, so the mix is not used until we choose Full.",
-  "es": "Los astilleros construyen en modo Solo pedidos ahora, así que la combinación no se usa hasta que elijamos Completo."
+  "es": "Los astilleros construyen en modo «Solo pedidos» ahora, así que la mezcla no se usa hasta que elijamos «Completo»."
  },
  "sr_sc_mix_up_tt": {
   "en": "One step more, up to #v 3#!. [concept_sr_space_command] shares what each month's construction has left after the orders among the [concept_sr_ship_role]s by weight.",
@@ -26141,7 +26141,7 @@
  },
  "sr_sc_mode_orders_tt": {
   "en": "[concept_sr_space_command] builds what is on order and nothing else; what a month has left after the last order is lost. Once a month's construction leaves nothing on order, the yards stand idle: they buy no $launch_capacity$, $advanced_materials$ or $electricity$, as when paused, until a new order starts them again as a resume does. A month that had nothing on order at all builds nothing though its inputs were bought, so to stop the yards at once, choose Paused.",
-  "es": "[concept_sr_space_command] construye lo que está en pedido y nada más; lo que sobra de un mes tras el último pedido se pierde. Cuando la construcción de un mes no deja nada en pedido, los astilleros quedan inactivos: no compran $launch_capacity$, $advanced_materials$ ni $electricity$, como en pausa, hasta que un pedido nuevo los pone en marcha otra vez, como hace una reanudación. Un mes que no tuvo nada en pedido no construye nada aunque se hayan comprado sus insumos, así que, para detener los astilleros de inmediato, elige Pausado."
+  "es": "[concept_sr_space_command] construye lo que está en pedido y nada más; lo que sobra de un mes tras el último pedido se pierde. Cuando la construcción de un mes no deja nada en pedido, los astilleros quedan inactivos: no compran $launch_capacity$, $advanced_materials$ ni $electricity$, como en pausa, hasta que un pedido nuevo los pone en marcha otra vez, como hace una reanudación. Un mes que no tuvo nada en pedido no construye nada aunque se hayan comprado sus insumos, así que, para detener los astilleros de inmediato, elige «En pausa»."
  },
  "sr_sc_mode_paused_tt": {
   "en": "$building_space_command$ stops building: no new fleet strength from it or from our colonies' Orbital Yards, and its yards buy no $launch_capacity$, $advanced_materials$ or $electricity$. Its maintenance goods and the fleets' upkeep are still paid. Our fleets still take their commands, and the reserve still launches. What is on order is kept. Leaving the pause waits for the next month's construction, which builds nothing.",
@@ -26149,7 +26149,7 @@
  },
  "sr_sc_mode_resume_tt": {
   "en": "The yards are stopped now, so they resume at the next month's construction, which builds nothing: they buy their inputs again from then, and the month after builds. Until then Built a month reads Resuming, and choosing Paused cancels.",
-  "es": "Los astilleros están detenidos ahora, así que se reanudan en la construcción del mes siguiente, que no construye nada: vuelven a comprar sus insumos desde entonces, y el mes después construyen. Hasta entonces Construido al mes dice Reanudando, y elegir Pausado lo cancela."
+  "es": "Los astilleros están detenidos ahora, así que se reanudan en la construcción del mes siguiente, que no construye nada: vuelven a comprar sus insumos desde entonces, y el mes después construyen. Hasta entonces Construido al mes dice «Reanudando», y elegir «En pausa» lo cancela."
  },
  "sr_sc_one_per_nation_tt": {
   "en": "We have no other $building_space_command$: a nation runs one, so expand the one we have, or demolish it first",

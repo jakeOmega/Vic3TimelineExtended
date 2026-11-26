@@ -14669,38 +14669,38 @@
  },
  "heritage_hc_central_asian": {
   "en": "$heritage_group_central_asian$ Diaspora",
-  "de": "$heritage_group_central_asian$ Diaspora"
+  "de": "Diaspora ($heritage_group_central_asian$)"
  },
  "heritage_hc_east_asian": {
   "en": "$heritage_group_east_asian$ Diaspora",
-  "de": "$heritage_group_east_asian$ Diaspora"
+  "de": "Diaspora ($heritage_group_east_asian$)"
  },
  "heritage_hc_european": {
   "en": "$heritage_group_european$ Diaspora",
-  "de": "$heritage_group_european$ Diaspora"
+  "de": "Diaspora ($heritage_group_european$)"
  },
  "heritage_hc_indigenous_american": {
   "en": "$heritage_group_indigenous_american$ Diaspora",
-  "de": "$heritage_group_indigenous_american$ Diaspora"
+  "de": "Diaspora ($heritage_group_indigenous_american$)"
  },
  "heritage_hc_indigenous_oceanic": {
   "en": "$heritage_group_indigenous_oceanic$ Diaspora",
-  "de": "$heritage_group_indigenous_oceanic$ Diaspora"
+  "de": "Diaspora ($heritage_group_indigenous_oceanic$)"
  },
  "heritage_hc_middle_eastern": {
   "en": "$heritage_group_middle_eastern$ Diaspora",
-  "de": "$heritage_group_middle_eastern$ Diaspora"
+  "de": "Diaspora ($heritage_group_middle_eastern$)"
  },
  "heritage_hc_north_asian": {
   "en": "$heritage_group_north_asian$ Diaspora",
-  "de": "$heritage_group_north_asian$ Diaspora"
+  "de": "Diaspora ($heritage_group_north_asian$)"
  },
  "heritage_hc_south_asian": {
   "en": "$heritage_group_south_asian$ Diaspora",
-  "de": "$heritage_group_south_asian$ Diaspora"
+  "de": "Diaspora ($heritage_group_south_asian$)"
  },
  "heritage_hc_southeast_asian": {
   "en": "$heritage_group_southeast_asian$ Diaspora",
-  "de": "$heritage_group_southeast_asian$ Diaspora"
+  "de": "Diaspora ($heritage_group_southeast_asian$)"
  }
 }

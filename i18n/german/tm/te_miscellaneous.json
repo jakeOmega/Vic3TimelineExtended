@@ -21641,7 +21641,7 @@
  },
  "nd_tt_worlds_view": {
   "en": "#tooltip_header What the World Can See#!\\n$TOOLTIP_DELIMITER$\\nOf another country we see its estimated arsenal, doctrine, launch authority, technology and delivery, and its readiness in a crisis with us. Its true count, hardening and safeguards are hidden.\\n\\nA figure about it takes the worst case for us: forces as secure as its technology allows, at $nd_readiness_2$ readiness outside a crisis with us, with full launch credit. A range runs from there to forces at their floor, with safeguards at their highest.",
-  "de": "#tooltip_header Was die Welt sehen kann#!\\n$TOOLTIP_DELIMITER$\\nVon einem anderen Land sehen wir sein geschätztes Arsenal, seine Doktrin, Einsatzbefugnis, Technologie und Trägersysteme sowie seine Bereitschaft in einer Krise mit uns. Seine wahre Zahl, Härtung und Sicherungen sind verborgen.\\n\\nEine Angabe dazu geht vom ungünstigsten Fall für uns aus: Streitkräfte, so gesichert, wie ihre Technologie erlaubt, bei der Bereitschaftsstufe „$nd_readiness_2$“ außerhalb einer Krise mit uns, mit voller Startanrechnung. Eine Spanne reicht von dort bis zu Streitkräften auf ihrem Mindestwert, mit Sicherungen auf ihrem Höchststand."
+  "de": "#tooltip_header Was die Welt sehen kann#!\\n$TOOLTIP_DELIMITER$\\nVon einem anderen Land sehen wir sein geschätztes Arsenal, seine Doktrin, Einsatzbefugnis, Technologie und Trägersysteme sowie seine Bereitschaft in einer Krise mit uns. Seine wahre Zahl, Härtung und Sicherungen sind verborgen.\\n\\nEine Angabe dazu geht vom ungünstigsten Fall für uns aus: Streitkräfte, so gesichert, wie ihre Technologie erlaubt, bei der Bereitschaftsstufe „$nd_readiness_2$“ außerhalb einer Krise mit uns, mit voller Startgutschrift. Eine Spanne reicht von dort bis zu Streitkräften auf ihrem Mindestwert, mit Sicherungen auf ihrem Höchststand."
  },
  "nd_tt_yield_alert": {
   "en": "Our forces stand down to #v Routine#! and are held there for #v 24#! months",
@@ -22153,11 +22153,11 @@
  },
  "nd_w_launch_credit_label": {
   "en": "Launch credit",
-  "de": "Startanrechnung"
+  "de": "Startgutschrift"
  },
  "nd_w_launch_credit_tt": {
   "en": "#tooltip_header Launch Credit#!\\n$TOOLTIP_DELIMITER$\\nThe share of the warheads a first strike would destroy that our launch authority gets into the air before impact: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit')|%0]#!.\\n\\nOur launch authority's: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit_unguarded')|%0]#!\\nTaken by our safeguards: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit_cut')|%0]#!\\n\\n$nd_authority_2$ gets #v [Country.MakeScope.ScriptValue('nd_launch_credit_delegation')|%0]#! and $nd_authority_3$ #v [Country.MakeScope.ScriptValue('nd_launch_credit_launch_on_warning')|%0]#!, each #v [Country.MakeScope.ScriptValue('nd_launch_credit_safeguards_cut')|%0]#! less for each level of safeguards, since a launch that can be halted is slower. $nd_authority_1$ and $nd_authority_4$ get none: they answer with what survives.",
-  "de": "#tooltip_header Startanrechnung#!\\n$TOOLTIP_DELIMITER$\\nDer Anteil der Sprengköpfe, die ein Erstschlag zerstören würde, den unsere Einsatzbefugnis vor dem Einschlag in die Luft bringt: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit')|%0]#!.\\n\\nAus unserer Einsatzbefugnis: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit_unguarded')|%0]#!\\nAbgezogen durch unsere Sicherungen: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit_cut')|%0]#!\\n\\n$nd_authority_2$ erhält #v [Country.MakeScope.ScriptValue('nd_launch_credit_delegation')|%0]#! und $nd_authority_3$ #v [Country.MakeScope.ScriptValue('nd_launch_credit_launch_on_warning')|%0]#!, jeweils #v [Country.MakeScope.ScriptValue('nd_launch_credit_safeguards_cut')|%0]#! weniger je Stufe der Sicherungen, da ein Start, der gestoppt werden kann, langsamer ist. $nd_authority_1$ und $nd_authority_4$ erhalten keine: Sie antworten mit dem, was überlebt."
+  "de": "#tooltip_header Startgutschrift#!\\n$TOOLTIP_DELIMITER$\\nDer Anteil der Sprengköpfe, die ein Erstschlag zerstören würde, den unsere Einsatzbefugnis vor dem Einschlag in die Luft bringt: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit')|%0]#!.\\n\\nAus unserer Einsatzbefugnis: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit_unguarded')|%0]#!\\nAbgezogen durch unsere Sicherungen: #v [Country.MakeScope.ScriptValue('nd_display_launch_credit_cut')|%0]#!\\n\\n$nd_authority_2$ erhält #v [Country.MakeScope.ScriptValue('nd_launch_credit_delegation')|%0]#! und $nd_authority_3$ #v [Country.MakeScope.ScriptValue('nd_launch_credit_launch_on_warning')|%0]#!, jeweils #v [Country.MakeScope.ScriptValue('nd_launch_credit_safeguards_cut')|%0]#! weniger je Stufe der Sicherungen, da ein Start, der gestoppt werden kann, langsamer ist. $nd_authority_1$ und $nd_authority_4$ erhalten keine: Sie antworten mit dem, was überlebt."
  },
  "nd_w_loose_label": {
   "en": "Unaccounted for",
@@ -26305,7 +26305,7 @@
  },
  "sr_sc_mix_unused_tt": {
   "en": "The yards build Orders Only now, so the mix is not used until we choose Full.",
-  "de": "Die Werften bauen jetzt „Nur Aufträge“, daher wird die Mischung nicht genutzt, bis wir „Voll“ wählen."
+  "de": "Die Werften bauen jetzt „Nur Aufträge“, daher wird die Mischung nicht genutzt, bis wir „Vollständig“ wählen."
  },
  "sr_sc_mix_up_tt": {
   "en": "One step more, up to #v 3#!. [concept_sr_space_command] shares what each month's construction has left after the orders among the [concept_sr_ship_role]s by weight.",
