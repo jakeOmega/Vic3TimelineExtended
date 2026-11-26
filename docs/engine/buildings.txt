@@ -6,6 +6,9 @@ Food Industries (bg_light_industry):
 		Baking Powder
 		Food Additives
 			Monthly Pollution: 5
+		Enzymatic Processing
+			Monthly Pollution: 5
+		Precision Fermentation
 		Programmable Food Synthesis
 	Canning:
 		Jars
@@ -19,6 +22,9 @@ Food Industries (bg_light_industry):
 		Prioritize Grocery Production
 		Pot Stills
 		Patent Stills
+		Industrial Fermentation
+		Engineered Yeast
+		Molecular Spirits
 	Automation:
 		Manual Dough Processing
 		Automated Bakery
@@ -43,6 +49,12 @@ Textile Mills (bg_light_industry):
 		Dye Workshops
 		Sewing Machines
 		Electric Sewing Machines
+		Permanent Press
+			Monthly Pollution: 5
+		Computerized Cutting
+			Monthly Pollution: 5
+		Whole-Garment Knitting
+			Monthly Pollution: 5
 		Programmable Matter
 	Luxury Production:
 		Prioritize Non-Luxury Clothing
@@ -70,11 +82,20 @@ Furniture Manufacturies (bg_light_industry):
 		Lathes
 		Mechanized Workshops
 			Monthly Pollution: 5
+		Tubular Steel Furniture
+			Monthly Pollution: 5
+		Molded Plywood and Plastics
+			Monthly Pollution: 10
+		Flat-Pack Furniture
+			Monthly Pollution: 10
+		Bio-Composite Panels
 		Programmable Matter
 	Luxury Production:
 		Prioritize Non-Luxury Furniture
 		Luxury Furniture Production
 		Precision Tools
+		Modern Design Furniture
+		Made-to-Order Furniture
 	Automation:
 		Hand Assembly
 		Water-tube Boiler
@@ -2046,6 +2067,8 @@ Power Bloc Statue (bg_monuments):
 		No Effect
 		Cultural Coalition
 		Diplomatic Framework
+		$identity_creditors_consortium$
+		Research Commons
 
 Castle Dracula (bg_monuments_hidden):
 	Dummy PM group for graphics-only buildings. Should never be shown in UI.:
@@ -3991,6 +4014,12 @@ Space Command (bg_government):
 		Torch Yards
 		Antimatter Yards
 
+Space Forces Base (bg_government):
+	Barracks and training halls for the people who crew our warships in space and fight as their marines. Each staffed level trains #v 1,000#! [concept_sr_space_personnel]. A point of fleet strength needs #v 100#! of them to crew it, #v 50#! with $artificial_intelligence$, and a marine battalion, or a level of Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center at a colony of ours, #v 1,000#!. When ships are destroyed or marines lost, the base's $spacers_no_icon$ die with them.
+	Unlocking Technology: Cislunar Infrastructure
+	Training:
+		Space Forces Training
+
 Hydro Plant (bg_clean_power):
 	Unlocking Technology: Public Works Programs
 	Hydro Power:
@@ -4207,6 +4236,8 @@ Power Bloc Headquarters (bg_bureaucracy):
 		Central Committee Headquarters
 		World Cultural Center
 		Palace of Nations
+		Clearing House
+		Joint Research Institute
 
 Golden Gate Bridge (bg_monuments):
 	Unlocking Technology: Marketing Research
@@ -6035,8 +6066,21 @@ Extraplanetary Base (bg_exotic):
 		Regolith Processing
 		Asteroid Mine
 		Mining Colony
-		Resort Colony
 		Self-Replicating Miners
+	Launch to Orbit:
+		Chemical Launch
+		Tethered Launch
+	Transport in Space:
+		Chemical Tugs
+		Fusion Tugs
+	Maintenance:
+		Intensive Maintenance
+		No Maintenance
+
+Resort Colony (bg_exotic):
+	Unlocking Technology: Space Colonization
+	Base Building Space Resort:
+		Luxury Resorts
 	Launch to Orbit:
 		Chemical Launch
 		Tethered Launch
@@ -6066,6 +6110,18 @@ Space Program (bg_monuments):
 		Orbital Assembly
 		Orbital Foundries
 		Fusion Shipyards
+	Module Storage:
+		No Module Storage
+		Component Depot
+		Orbital Depot
+	Mission Limit:
+		Any Mission
+		Up to $pm_earth_orbit$
+		Up to the $pm_moon_mission$
+		Up to the $pm_mars_mission$
+		Up to $pm_solar_colonization$
+		Up to $pm_deep_space_exploration$
+		Up to the $pm_interstellar_mission$
 
 Solar Collector Construction Site (bg_government):
 	Unlocking Technology: Space-Based Solar Power

@@ -287,7 +287,7 @@ class EventsAndPanelTest(unittest.TestCase):
         events = _strip(_raw("events", "space_race_events.txt"))
         body = _flat(_block(events, "space_race_events.114"))
         self.assertIn("trigger = { has_variable = sr_rising_site }", body)
-        self.assertIn("event_image = { texture = \"gfx/event_pictures/colony_hellas_planitia.dds\" }", body)
+        self.assertIn("event_image = { texture = \"gfx/event_pictures/colony_uprising_marines.dds\" }", body)
         self.assertIn("default_option = yes custom_tooltip = sr_hold_tt", body)
         self.assertIn("custom_tooltip = { text = sr_hold_let_go_tt sr_site_idx_from = { VAR = sr_rising_site } "
                       "sr_site_by_index = { DO = let_go } }", body)

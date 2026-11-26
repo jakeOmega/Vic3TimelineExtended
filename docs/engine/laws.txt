@@ -648,11 +648,11 @@ Resource Transition:
 Automation Policy:
 	Unrestricted Automation
 		Owners put machines to work wherever they pay, and keep what the machines make.
-	Robot Tax [progressiveness=25] - Unlocking Technology: Humanoid Robotics
+	Robot Tax [progressiveness=25] - Unlocking Technology: Industrial Robotics
 		A machine that does a worker's job pays toward the state the worker once paid for. The robots stay at their posts, and their owners pay for the privilege.
-	Human Labor Quotas [progressiveness=50] - Unlocking Technology: Humanoid Robotics
+	Human Labor Quotas [progressiveness=50] - Unlocking Technology: Industrial Robotics
 		Work that people can do is kept for people. Factories, shops and farms keep their staff and give up what the machines would have made.
-	Automation Dividend [progressiveness=75] - Unlocking Technology: Humanoid Robotics
+	Automation Dividend [progressiveness=75] - Unlocking Technology: Industrial Robotics
 		What the machines make belongs to everyone, paid out as a dividend on the nation's robots and code.
 Bodily Autonomy:
 	Natural Form [progressiveness=20]
@@ -660,9 +660,9 @@ Bodily Autonomy:
 	Licensed Modification [progressiveness=40] - Unlocking Technology: Morphological Freedom
 		Licensed clinics may reshape an adult's body on request, after counseling and a waiting period. Boards decide which changes are safe and which go too far, and a modified citizen's papers record what was done.
 	Morphological Freedom [progressiveness=60] - Unlocking Technology: Morphological Freedom
-		A person's body is theirs to remake. Adults may change their appearance, sex characteristics and shape as they choose, and the state asks only that the work be done safely. A citizen with a tail is still a citizen.
+		An adult may remake their own body as they choose, with no board to ask. The change ends with them: it may not be passed to a child or chosen for one, and schools, workplaces and housing stay built for the body people are born with.
 	Clade Citizenship [progressiveness=80] - Unlocking Technology: Self-Directed Evolution
-		A citizen who has left the human body plan behind keeps every right the law gives anyone else, whether they breathe water, see by heat or were built for low gravity. The state no longer asks what a person is made like, and the old lines of descent mean little where so many people have chosen their own.
+		A change of body may be passed to one's children, and people born to a different body plan are citizens from birth, whether they breathe water or were built for low gravity. The state builds its schools, workplaces, housing and medicine for them as for anyone.
 	Prescribed Form [progressiveness=10] - Unlocking Technology: Morphological Freedom
 		The state decides what a citizen looks like, and the clinics that once sold change now enforce sameness. No one can be told apart by face, skin or frame, and no one may choose otherwise.
 Frontier AI Control:

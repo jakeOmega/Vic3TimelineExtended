@@ -4446,7 +4446,7 @@ pm_mass_marketing_building_textile_mill = {
 # and every method gated on Mechanized Workshops unlocks on each
 # (test_consumer_industry_methods.py).
 pm_tubular_steel_furniture = {
-	texture = "gfx/interface/icons/production_method_icons/steel_frame_buildings.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_tubular_steel_furniture.dds"
 
 	unlocking_technologies = {
 		arc_welding
@@ -4489,7 +4489,7 @@ pm_tubular_steel_furniture = {
 }
 
 pm_molded_plywood_and_plastics = {
-	texture = "gfx/interface/icons/production_method_icons/houseware_plastics.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_molded_plywood_and_plastics.dds"
 
 	unlocking_technologies = {
 		plastic_mass_production
@@ -4534,7 +4534,7 @@ pm_molded_plywood_and_plastics = {
 }
 
 pm_flat_pack_furniture = {
-	texture = "gfx/interface/icons/production_method_icons/horizontal_drawer_cabinets.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_flat_pack_furniture.dds"
 
 	unlocking_technologies = {
 		computer_aided_design
@@ -4580,7 +4580,7 @@ pm_flat_pack_furniture = {
 }
 
 pm_bio_composite_panels = {
-	texture = "gfx/interface/icons/production_method_icons/pm_bioplastics.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_bio_composite_panels.dds"
 
 	unlocking_technologies = {
 		synthetic_biology
@@ -4673,7 +4673,7 @@ INJECT:pm_precision_tools = {
 # Clothing. Each takes 25 wood off the base method, as Precision Tools does, so
 # it needs a base method that buys at least that much.
 pm_modern_design_furniture = {
-	texture = "gfx/interface/icons/production_method_icons/luxury_furniture.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_modern_design_furniture.dds"
 
 	unlocking_technologies = {
 		art_deco_architecture
@@ -4715,7 +4715,7 @@ pm_modern_design_furniture = {
 }
 
 pm_made_to_order_furniture = {
-	texture = "gfx/interface/icons/production_method_icons/precision_tools.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_made_to_order_furniture.dds"
 
 	unlocking_technologies = {
 		e-commerce
@@ -13441,7 +13441,7 @@ pm_food_additives = {
 # Each keeps Food Additives' staff, which Robotic Food Processing cuts, and
 # buys at least the 30 grain Vacuum Packaging takes off.
 pm_enzymatic_processing = {
-	texture = "gfx/interface/icons/production_method_icons/pm_electroenzymatic_synthesis.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_enzymatic_processing.dds"
 
 	unlocking_technologies = {
 		biotechnology
@@ -13483,7 +13483,7 @@ pm_enzymatic_processing = {
 }
 
 pm_precision_fermentation = {
-	texture = "gfx/interface/icons/production_method_icons/pm_pharma_antibiotic_fermentation.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_precision_fermentation.dds"
 
 	unlocking_technologies = {
 		synthetic_biology
@@ -13562,7 +13562,7 @@ pm_programmable_food_synthesis = {
 # the grocery ladder's technologies from era 9 (Workshop request, 2026-11-25).
 # Like the stills, each turns some of the building's groceries into liquor.
 pm_industrial_fermentation = {
-	texture = "gfx/interface/icons/production_method_icons/vaccum_evaporation.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_industrial_fermentation.dds"
 
 	unlocking_technologies = {
 		stainless_steel_mass_production
@@ -13596,7 +13596,7 @@ pm_industrial_fermentation = {
 }
 
 pm_engineered_yeast = {
-	texture = "gfx/interface/icons/production_method_icons/pm_pharma_biologics.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_engineered_yeast.dds"
 
 	unlocking_technologies = {
 		biotechnology
@@ -13631,7 +13631,7 @@ pm_engineered_yeast = {
 }
 
 pm_molecular_spirits = {
-	texture = "gfx/interface/icons/production_method_icons/pm_biotech_dyes.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_molecular_spirits.dds"
 
 	unlocking_technologies = {
 		synthetic_biology
@@ -14731,7 +14731,7 @@ pm_ai_managed_building_munition_plant_shells = {
 # Elastics, Textile Finishing Machinery, the AI-managed factory and both
 # branding methods unlock on each (test_consumer_industry_methods.py).
 pm_permanent_press = {
-	texture = "gfx/interface/icons/production_method_icons/electric_sewing_machines.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_permanent_press.dds"
 
 	unlocking_technologies = {
 		modern_chemical_processes
@@ -14775,7 +14775,7 @@ pm_permanent_press = {
 }
 
 pm_computerized_cutting = {
-	texture = "gfx/interface/icons/production_method_icons/pm_computer_aided_design.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_computerized_cutting.dds"
 
 	unlocking_technologies = {
 		computer_aided_design
@@ -14820,7 +14820,7 @@ pm_computerized_cutting = {
 }
 
 pm_whole_garment_knitting = {
-	texture = "gfx/interface/icons/production_method_icons/pm_performance_textiles.dds"
+	texture = "gfx/interface/icons/production_method_icons/pm_whole_garment_knitting.dds"
 
 	unlocking_technologies = {
 		additive_manufacturing

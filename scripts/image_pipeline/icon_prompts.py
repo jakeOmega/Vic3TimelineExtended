@@ -133,6 +133,11 @@ defaults (September 2026, ~350 icons):
 - A colour that is also a thing can be drawn as the thing: "two big round orange
   propellant tank spheres" drew an orange with a cap on one seed in four (the fleet
   cards, 2026-11-14).
+- An arrow's direction is a coin toss: "one bold red zigzag arrow falling" drew it rising on
+  three seeds in four, and a two-headed arrow on a reroll (the Stock Full alert, 2026-11-26).
+  Check which way it points at game size.
+- "An L-shaped hexagonal Allen wrench" drew an open-ended spanner on every seed, and a "hex
+  key" a door key (Flat-Pack Furniture, 2026-11-26). Name a tool FLUX knows.
 - A plain pale face inside a rim cuts out to the rim alone (a bare steel shield,
   three seeds in four): pick the candidate whose face is a solid mid-tone.
 - A long ship seen from the side is a sliver at 24 px. Of the candidates, the one
@@ -2420,6 +2425,21 @@ ICONS: dict[str, dict[str, dict]] = {
                                     "round grey helmet with a dark tinted visor, leaping high in mid-air, a rifle held "
                                     "across his chest",
                          "seed": 2, "now": f"{_BI}/building_barracks.dds"},
+        # The colony module queue's two top-bar alerts (#2051; common/alert_types/te_space_race_alerts.txt,
+        # wired by hand: alerts are not a `gui` file). Vanilla's alert icons are one painted object, sometimes
+        # with a small mark; these show the panel's own module. Queue Empty: the module idle on its cradle,
+        # fabrication with nowhere to send it. Stock Full: the store piled high under vanilla's falling red
+        # arrow (market_over_capacity's crate).
+        "module_queue_empty": {"subject": "a squat silver-grey cylindrical spacecraft habitat module wrapped in gold foil "
+                                          "bands, a round docking ring at one end and two short dark blue solar panels, "
+                                          "resting idle on a low dark steel assembly cradle with two curved arms",
+                               "seed": 1, "now": f"{_GI}/alert_icons/wasted_construction.dds"},
+        # Stock Full s1-s3 drew the arrow rising; a pile naming the module's docking rings and panels
+        # (raws module_stock_full_v2) drew a two-headed arrow. s0's modules are softer than the panel's.
+        "module_stock_full": {"subject": "three squat silver-grey cylindrical spacecraft habitat modules wrapped in gold "
+                                         "foil bands, stacked high in a pile, one bold red zigzag arrow falling past "
+                                         "them down to the lower right",
+                              "seed": 0, "now": f"{_GI}/alert_icons/market_over_capacity.dds"},
         # The trefoil on a sign, not the door's round face: on a round face it draws as fan blades.
         "module_bunker": {"subject": "a heavy rectangular steel blast door with thick bolts set into a low grey "
                                      "concrete bunker, a yellow sign with a black radiation trefoil beside the door",
@@ -3055,6 +3075,33 @@ ICONS: dict[str, dict[str, dict]] = {
                              "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "pm_cultured_tobacco_leaf": {"subject": "a broad tobacco leaf growing up out of a round laboratory flask", "seed": 2,
                                      "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        # Consumer industry methods (#2076), on other methods' icons until now. The clothing,
+        # furniture and grocery ladders are bronze as vanilla's base methods are; luxury furniture
+        # and the distilleries purple, as vanilla's luxury_furniture and patent_stills are.
+        "pm_permanent_press": {"subject": "a neatly folded crisp dress shirt with a sharp collar lying flat, a round glass chemical flask standing beside it", "seed": 1},
+        # "A cutting head on a gantry over a stack of cloth" drew a sewing machine on all four seeds (raws
+        # pm_computerized_cutting_r1), and a robot arm with a rotary blade was a lamp on a table: the shears
+        # beside a monitor read at 52 px, the monitor as vanilla's Computer-Aided Design draws it.
+        "pm_computerized_cutting": {"subject": "a big pair of open steel tailor's shears beside a computer monitor whose glowing green screen shows the bold outline of a shirt", "seed": 1},
+        "pm_whole_garment_knitting": {"subject": "a long boxy knitting machine with a row of fat yarn spools on top, a whole seamless knitted sweater coming out of its front", "seed": 1},
+        "pm_tubular_steel_furniture": {"subject": "a cantilever chair made of thick bent shiny steel tubes with a brown leather seat and back, seen at an angle", "seed": 3},
+        "pm_molded_plywood_and_plastics": {"subject": "a stack of three molded one-piece plastic shell chairs on short thick legs, seen at an angle", "seed": 2},
+        # Every seed drew an open-ended spanner for the "Allen wrench"; the boards and a tool still say
+        # flat-pack. The first subject (raws pm_flat_pack_furniture_r1) drew a door key or a crate.
+        "pm_flat_pack_furniture": {"subject": "a short stack of flat wooden furniture boards lying at an angle, one big bold L-shaped hexagonal Allen wrench lying across the top board", "seed": 3},
+        "pm_bio_composite_panels": {"subject": "a short stack of thick rough plant-fibre boards, one big sprouting leaf growing up out of the top board", "seed": 1},
+        "pm_modern_design_furniture": {"subject": "an Art Deco lacquered cabinet with a stepped top and a fan-shaped sunburst inlay on its two doors, on short tapered legs", "seed": 1,
+                                       "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_made_to_order_furniture": {"subject": "an upholstered wingback armchair, beside it a tablet computer whose glowing blue screen shows the same armchair's outline", "seed": 3,
+                                       "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_enzymatic_processing": {"subject": "a big wedge of holey cheese beside an upright glass test tube of green liquid", "seed": 1},
+        "pm_precision_fermentation": {"subject": "a glass milk bottle beside a squat round steel fermentation tank with a round porthole window", "seed": 3},
+        "pm_industrial_fermentation": {"subject": "two tall round stainless steel fermentation tanks with domed tops on short legs, joined by a thick pipe", "seed": 0,
+                                       "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_engineered_yeast": {"subject": "a round laboratory flask full of frothy bubbling amber liquid, a short twisted DNA double helix standing beside it", "seed": 2,
+                                "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
+        "pm_molecular_spirits": {"subject": "a plain unlabelled glass spirits bottle of amber liquid beside a big ball-and-stick molecule model", "seed": 2,
+                                 "color": (260, 208, 252), "color_bottom": (198, 93, 215)},
     },
     "carbon_capture": {
         "carbon_capture_none": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p0.dds", "subject": "a factory chimney with a capture hood on top inside a thick round ring with one thick diagonal bar across it", "seed": 4},

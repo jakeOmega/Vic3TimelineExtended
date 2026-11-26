@@ -2611,6 +2611,17 @@ IMAGES = {
         "style": "oil painting, cold war realism, cold blue dawn light",
         "events": ["nuclear_weapon_events.36"],
     },
+    # A colony at full autonomy rises and our marines hold it (#2064); on a calm Hellas Planitia
+    # settlement until now. The event window shows the left half only: a first prompt with the crowd
+    # "facing" the marines put the crowd under the text panel on all four seeds, three of them with a
+    # lettered sign or plate. This one names both halves. Retouched (the committed DDS is the record; the raw is in
+    # ~/flux_runs/originals/): three raised single fingers that read as a rude gesture painted into
+    # fists, and faint marks like lettering on the wall at the top left filled.
+    "colony_uprising_marines": {
+        "prompt": "At the left of the frame, a crowd of colonists in grey work coveralls, shouting and raising their fists, presses up against a short line of armored marines in sand-tan pressure suits with dark visors who hold their rifles across their chests before the sealed doors of the colony council hall, the marines and the crowd face to face, both in the left half of the picture. The right of the frame is the inside of a great pressurized dome, rows of habitat modules and a life-support plant venting steam under the dome's panes, a dusty red Martian sky beyond.",
+        "style": "digital painting, cinematic light, hard sci-fi",
+        "events": ["space_race_events.114"],
+    },
 }
 
 
