@@ -123,7 +123,7 @@ The siege stays on the 1st: the Defences' fire on fleets closing in, integrity, 
 - **The AI's defence** settles which fleets may go before sending any, sends them strongest first until the win test passes (not all), and keeps its fleets at Earth home while an enemy fleet is at Earth or on its way (`sr_fl_ai_earth_threatened`).
 - **One report a tick:** a batteries-only report queued at Earth is taken over by a battle elsewhere in the same tick (`sr_battle_notice_batteries`, a day), not followed by a second.
 - Quality × readiness is read once a power a battle (`sr_bt_qr`), and the building searches start with `has_building`.
-- Left as designed: a broken fleet at a dock (Earth or a Spaceport) stays and is fought again the next week, losing half of what it then brings each time; allies don't pool in the AI's two tests.
+- Left as designed in #2069, and changed in § 5 at the owner's word: a broken fleet at a dock (Earth or a Spaceport) stays and is fought again the next week, losing half of what it then brings each time; allies don't pool in the AI's two tests.
 
 ## 3. The open questions: first guesses
 
@@ -138,6 +138,46 @@ The siege stays on the 1st: the Defences' fire on fleets closing in, integrity, 
 
 ## 4. Follow-ups, separate
 
-- Stances in place of Engage / Avoid: Avoid, Hit and run (breaks early), Regular, Fight to the last (never breaks) (issue #2065).
-- A battle forecast in the destination popup and the alerts (§ 3).
+- Stances in place of Engage / Avoid: Avoid, Hit and run (breaks early), Regular, Fight to the last (never breaks) (issue #2065). Done in § 5.1.
+- A battle forecast in the destination popup and the alerts (§ 3). Done in § 5.4.
 - #2057 (supply in flight) touches the same transit code; #2053 (the Fleets tab's frame rate) matters now that the card gains a control.
+
+## 5. The third PR: stances, the retreat, friends, the forecast
+
+The owner, 2026-11-25, after #2068 and #2069 merged: "A broken fleet at a dock stays there and is fought again the next week. This doesn't seem right, unless you have no other docks. Can we swap?"; the AI's not counting allies "would be nice to change, if it is straightforward"; and the forecast and the stances, "hit and run, fight to the last". The figures below are first guesses, as § 3's.
+
+### 5.1 Stances
+
+`sr_fl_<n>_stance` takes the place of `sr_fl_<n>_avoid`: 1 Avoid, 2 Hit and Run, none Engage (a new fleet's), 4 Fight to the Last; `sr_fl_<n>_stance_value` reads 3 for none. A stance sets two things in the battle (`sr_bt_set_stance`): whether the fleet engages (all but Avoid, so § 2.3's pair rule is unchanged) and the share of what it brought that it keeps before it breaks (`sr_fl_<n>_bt_keep`):
+
+| Stance | Engages | Breaks after losing |
+|---|---|---|
+| Avoid | No | A quarter (`sr_bt_break_share_early`, 0.25): caught, it wants out |
+| Hit and Run | Yes | A quarter |
+| Engage | Yes | Half (`sr_bt_break_share`, 0.5) |
+| Fight to the Last | Yes | Never: it fights until destroyed, the enemy breaks, or the step ceiling, and goes on the next week |
+
+- Avoid still lands on Station where its country holds no colony (§ 2.11).
+- The BROKEN self-check leaves out fleets that can't break (`bt_keep` 0), as it does the battlestation: two fleets fighting to the last take about 150 steps from even to the minimum strength, past the ceiling of 60, rightly.
+- **The panel.** The card keeps one button (156 wide, the transit track and its words 150 each beside it in flight): its word the stance in force, a click the next, Fight to the Last back to Avoid (`sr_fleet_stance_sgui`); its hover names both and gives the next one's rule. The Fleets window's page has four buttons, two to a line beside the caption, the one in force lit (`sr_fleet_set_stance_sgui`, scope:pick), as the posture buttons. Only with a Space Command, as before.
+- **The AI** sets Engage or Avoid as before (§ 2.7), now by its side's test (§ 5.3); it leaves Hit and Run and Fight to the Last to players. An AI that avoids and is caught breaks at a quarter.
+
+### 5.2 The retreat
+
+A broken fleet leaves for the nearest dock it may depart for, wherever it is: `sr_fl_<n>_may_depart_<loc>` is never its own location, so a fleet broken at a dock goes to another, and one with none in reach stays (and can be caught the next week). A fleet broken at Earth with a Spaceport in reach leaves Earth.
+
+### 5.3 Friends in the AI's tests
+
+A friend of a power is another fleet power at peace with it and at war with a fleet power at war with it (`sr_fl_friend_of`). In the battle (`sr_bt_ai_choose`) the AI's side is it and its friends there, against every power there at war with it, each by strength × fire, whatever the friends' stances (a player's Avoid can still be caught). In the defence (`sr_fl_ai_defend_<loc>`) ours is ours and our friends' there and on their way. Two AIs on one side each run the same pooled test, so they agree.
+
+### 5.4 The forecast
+
+- **The sums** (`sr_fc_sums_<loc>`, generated, into the defence's locals): theirs, every power at war with us there and on its way; ours, ours and our friends'; at Earth each side's Orbital Battlestations (`sr_fc_bs_add`). Fire is `fire_fleets` × quality × readiness, as the battle's.
+- **The verdict** (`sr_fc_judge`): the ratio R = (ours' strength ÷ theirs) × (ours' fire ÷ theirs). Clear win at R ≥ 3 (`sr_fc_clear`; a 1.75 : 1 force of like ships), costly win at 1 ≤ R < 3, defeat at ⅓ < R < 1, rout at R ≤ ⅓ or with nothing of ours. The winner's loss, while the loser loses half (both engaging): 1 − √(1 − 0.75 / R) when we win, 1 − √(1 − 0.75 R) theirs when they do (`sr_fc_break_loss`, 1 − (1 − `sr_bt_break_share`)²; `te_set_sqrt`). At 2 : 1 strength (R = 4) it is 9.9%, § 3's tenth.
+- **The destination popup** gains a Battle column (96 wide; the rows 756, the popup 884): the verdict word on the tier ladder's colours (rout red, defeat gold, costly win yellow, clear win green), blank with no enemy there or on its way, its hover the sums with this fleet added and the loss. It is worked out on the destination button's click (`sr_fleet_pick_sgui`'s effect, `sr_fl_fc_slot_at`), since a square root is an effect's and a live script value per row and frame would cost the panel; a popup left open over a week shows the figures of when it opened, and its hover says so.
+- **The alerts**, `.100` (a hostile fleet bound for our colony) and `.111` (Earth threatened), add a sentence with the verdict, or that we have no fleet there or on the way (tier 5), worked out in their immediate (`sr_fc_note_alert`) and cleared after. Their text gives the verdict only: a key named in `AddLocalizationIf` can't read the event's scope.
+- The forecast leaves out the batteries at Earth and each fleet's stance; the hover says so.
+
+### 5.5 Checks
+
+Tests in `test_space_fleet_battle.py`: each stance's break (Hit and Run and a caught Avoid at about 73 of 100, Fight to the Last never, destroyed rather than break when it loses, two that never break reaching the ceiling with no BROKEN), the card's step and the page's set; the retreat from a Spaceport home, and staying with nowhere else; friends engaging together, the enemy seeing them together, a power at peace with all no friend, the defence counting a friend there; the forecast's tiers and losses, the popup counting this fleet and friends, the alert with nothing of ours. In game (the play-test list's step 12): the buttons' fit, the column, the alerts' sentence.
