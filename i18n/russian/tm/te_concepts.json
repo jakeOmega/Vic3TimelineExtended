@@ -439,10 +439,6 @@
   "en": "Deselect this name for your custom religion.",
   "ru": "Отменить выбор этого названия для вашей собственной религии."
  },
- "GDPPERCAPITA": {
-  "en": "$GDP_SHORT$ per Capita:\\n     Local/National\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!",
-  "ru": "$GDP_SHORT$ на душу населения:\\n     Местный/национальный\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!"
- },
  "GM_ARCH_SUBJECT": {
   "en": "from being their subject",
   "ru": "из-за подчинённого положения по отношению к ним"
@@ -3556,8 +3552,8 @@
   "ru": "Как проводится [concept_space_milestone|l]. #bold Стандартный#!, с которого начинается каждая веха, не имеет ни модификатора, ни стоимости. #bold Безопасный#! вдвое снижает [Concept('concept_sr_setback_risk','риск неудачи')] за столько же инноваций, сколько стоит один дополнительный уровень финансирования; #bold Амбициозный#! добавляет ещё половину к темпу за столько, сколько стоят два. Они действуют на всю программу: безопасная веха снижает риск на каждой вехе, амбициозная ускоряет их все."
  },
  "concept_sr_base_grade_desc": {
-  "en": "How rich a site's ground is for $building_space_mine$s: the throughput a base level in its room works at, from #v +30%#! at 16 Psyche, a metal asteroid, down to #v −45%#! at Sedna. Our levels fill the best room first, the near-Earth asteroids' #v 10#! levels at #v +0%#! (with $asteroid_mining$), then each colony we hold at its grade, and a level past all of our room works at #v −75%#!. Our bases' throughput is the average over all of our levels. A colony's Mining Complexes add room at its grade.",
-  "ru": "Насколько богата почва участка для зданий «$building_space_mine$»: пропускная способность, с которой работает базовый уровень в его зале, от #v +30%#! на 16 Психее, металлическом астероиде, до #v −45%#! на Седне. Наши уровни заполняют лучший зал первым: околоземные астероиды — #v 10#! уровней при #v +0%#! (при технологии $asteroid_mining$), затем каждая наша колония по её градации, а уровень сверх всего нашего места работает на #v −75%#!. Пропускная способность наших баз — среднее по всем нашим уровням. «Добывающие комплексы» колонии добавляют место по её градации."
+  "en": "How rich a site's ground is for $building_space_mine$s: the throughput a base level in its room works at, from #v +30%#! at $sr_site_name_psyche$ down to #v −45%#! at $sr_site_name_sedna$. Throughput scales a level's inputs as well as its outputs, so the grade raises or lowers its profit by the same share. A site's [concept_sr_ground_type] changes which goods it makes but not what it earns at base prices, which the grade alone sets. The $sr_site_name_near_earth$ give #v 10#! levels at #v +0%#! with $asteroid_mining$, a colony's Mining Complexes add room at its grade, and a level past all of our room works at #v −75%#!. Our bases' throughput is the average over all of our levels. The Colonies section's Bases view sets which room each level works: where it earns most, by default, or where we assign it, with any level we have not assigned taking the best grade with room.",
+  "ru": "Насколько богат грунт участка для зданий «$building_space_mine$»: пропускная способность, с которой работает уровень базы в его зале, от #v +30%#! на участке $sr_site_name_psyche$ до #v −45%#! на участке $sr_site_name_sedna$. Пропускная способность масштабирует и затраты уровня, и его выпуск, поэтому класс повышает или снижает его прибыль на ту же долю. [concept_sr_ground_type] участка меняет то, какие товары он даёт, но не то, сколько он приносит по базовым ценам: это определяет один лишь класс. Объект «$sr_site_name_near_earth$» даёт #v 10#! уровней при #v +0%#!, если изучена технология $asteroid_mining$, «Добывающие комплексы» колонии добавляют место по её классу, а уровень сверх всего нашего места работает на #v −75%#!. Пропускная способность наших баз — среднее по всем нашим уровням. Вид «Базы» раздела «Колонии» определяет, в каком зале работает каждый уровень: по умолчанию там, где он приносит больше всего, или там, где мы его назначим; не назначенный нами уровень занимает лучший класс, в котором есть место."
  },
  "concept_sr_blockade": {
   "en": "Blockade",
@@ -3568,8 +3564,8 @@
   "ru": "Враждебный флот, стоящий у места, где ни один наш флот не удерживает орбиту, блокирует там наши колонии: ни поселенцы, ни модули до них не доходят, их добыча и перевозки прекращаются, а каждый месяц считается месяцем без связи с домом. Страна, с которой мы в мире, может сделать то же самое путём перехвата, что даёт нам повод к войне против неё. У Земли флот, воюющий с нами, находящийся на орбите, пока там нет нашего, останавливает отправку всего нашего с Земли, блокирует наши колонии на Луне и прерывает связь каждой колонии с домом."
  },
  "concept_sr_colony_autonomy_desc": {
-  "en": "How far a colony runs its own affairs, from #v 0#! to #v 100#!. Each month it rises with the colony's people (#v +0.05#! a 10,000), its distance by our drive (#v +0.01#! a month of transit, at most #v +0.5#!), a year with no settlers or modules (#v +0.25#!), our wars (#v +0.25#!) and a garrison (#v +0.2#!), and falls with the pull of home (#v -0.25#!) and a charter (#v -0.4#!). It also settles: #v 1%#! of the autonomy itself comes off each month, so it levels out where the rest of its terms balance that, at #v 100#! times their sum. A colony of fewer than #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people has none of these terms: its autonomy only settles, and it makes no demands. Autonomy has its use: a colony builds modules of its own, faster the more autonomy and people it has. At #v 50#! the colony demands self-government: a charter, a garrison, or its freedom. At #v 100#! it declares itself a [concept_sr_free_colony].",
-  "ru": "Насколько самостоятельно колония ведёт свои дела, от #v 0#! до #v 100#!. Каждый месяц автономия растёт с населением колонии (#v +0,05#! на каждые 10 000 жителей), её удалённостью по нашему двигателю (#v +0,01#! за месяц перелёта, не более #v +0,5#!), годом без поселенцев и модулей (#v +0,25#!), нашими войнами (#v +0,25#!) и гарнизоном (#v +0,2#!), а падает от притяжения дома (#v -0,25#!) и хартии (#v -0,4#!). Она также затухает: #v 1%#! самой автономии снимается каждый месяц, так что она выравнивается там, где остальные члены уравновешивают это, на уровне #v 100#!, умноженном на их сумму. У колонии с населением менее #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! человек этих членов нет: её автономия лишь затухает, и она ничего не требует. У автономии есть польза: колония строит собственные модули тем быстрее, чем больше у неё автономии и людей. На #v 50#! колония требует самоуправления: хартии, гарнизона или свободы. На #v 100#! она объявляет себя [Concept('concept_sr_free_colony','свободной колонией')]."
+  "en": "How far a colony runs its own affairs, from #v 0#! to #v 100#!. Each month it rises with the colony's people (#v +0.05#! a 10,000), its distance by our drive (#v +0.01#! a month of transit, at most #v +0.5#!), a year with no settlers or modules (#v +0.25#!), our wars (#v +0.25#!) and a garrison (#v +0.2#!), and falls with the pull of home (#v -0.25#!) and a charter (#v -0.4#!). It also settles: #v 1%#! of the autonomy itself comes off each month, so it levels out where the rest of its terms balance that, at #v 100#! times their sum. A colony of fewer than #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! people has none of these terms: its autonomy only settles, and it makes no demands. Autonomy has its use: a colony builds modules of its own, faster the more autonomy and people it has. At #v 50#! the colony demands self-government: a charter, a garrison, or its freedom. A charter can be revoked from the colony's page: that colony goes to #v 99#! and every other one gains #v 10#!. At #v 100#! it declares itself a [concept_sr_free_colony]. Under Full Colonies our marines there can hold it instead: a battalion for every #v 100,000#! of its people, and on the Moon and Mars our marines at all our colonies there hold every colony of ours there at #v 100#! together. Each month they lose #v 0.5#! battalions for each point by which its terms exceed the #v 1#! a month that settling takes off at #v 100#!, so one that would settle at #v 120#! costs a battalion about every ten months. If they fall short, it declares itself free, with every colony held beside it. While we hold one, the interest groups that oppose colonial exploitation lose approval, and each battalion lost adds radicals among them.",
+  "ru": "Насколько самостоятельно колония ведёт свои дела, от #v 0#! до #v 100#!. Каждый месяц автономия растёт с населением колонии (#v +0,05#! на каждые 10 000 жителей), её удалённостью по нашему двигателю (#v +0,01#! за месяц перелёта, не более #v +0,5#!), годом без поселенцев и модулей (#v +0,25#!), нашими войнами (#v +0,25#!) и гарнизоном (#v +0,2#!), а падает от притяжения дома (#v -0,25#!) и хартии (#v -0,4#!). Она также затухает: #v 1%#! самой автономии снимается каждый месяц, так что она выравнивается там, где остальные члены уравновешивают это, на уровне #v 100#!, умноженном на их сумму. У колонии с населением менее #v [GetPlayer.MakeScope.ScriptValue('sr_free_colony_minimum')|D]#! человек этих членов нет: её автономия лишь затухает, и она ничего не требует. У автономии есть польза: колония строит собственные модули тем быстрее, чем больше у неё автономии и людей. На #v 50#! колония требует самоуправления: хартии, гарнизона или свободы. Хартию можно отозвать на странице колонии: эта колония переходит на #v 99#!, а каждая другая получает #v 10#!. На #v 100#! она объявляет себя [Concept('concept_sr_free_colony','свободной колонией')]. При полноценных колониях наши морпехи могут вместо этого удерживать её: батальон на каждые #v 100 000#! её жителей, а на Луне и Марсе наши морпехи во всех наших тамошних колониях вместе удерживают все наши тамошние колонии на уровне #v 100#!. Каждый месяц они теряют #v 0,5#! батальона за каждый пункт, на который её члены превышают #v 1#! в месяц, снимаемую затуханием на уровне #v 100#!, поэтому колония, которая затухала бы на уровне #v 120#!, обходится примерно в один батальон каждые десять месяцев. Если морпехов не хватает, она объявляет себя свободной вместе со всеми колониями, удерживаемыми рядом с ней. Пока мы удерживаем колонию, группы интересов, выступающие против колониальной эксплуатации, теряют одобрение, а каждый потерянный батальон добавляет среди них радикалов."
  },
  "concept_sr_colony_fleet_desc": {
   "en": "The ships that found a colony in [concept_solar_colonization], paid for by the program's progress. A colony fleet leaves Earth in its site's [concept_sr_launch_window] and flies at our [concept_sr_drive]'s pace. The first fleet to land claims the site; any others go on to another free site of the same planet or belt, or are lost. It carries no guns: warships are [concept_sr_space_fleet]s.",
@@ -3592,8 +3588,8 @@
   "ru": "Прогресс другой державы по [Concept('concept_space_milestone','космической вехе')], каким мы его видим: диапазон вокруг маркера, потому что программы объявляются, а их графики — нет. Диапазон составляет #v ±25%#! цели, и истинное значение всегда внутри него; где именно внутри диапазона лежит истинное значение, определяется заново раз в год. Разведывательная сеть в стране сужает диапазон до #v ±10%#! при силе 50 и #v ±5%#! при 75."
  },
  "concept_sr_free_colony_desc": {
-  "en": "A colony with no holder: it broke away, was abandoned or let go, or outlived its holder. It gives no one its specialization. Any space program can supply it, for #v 3%#! of its Space Program's throughput. Its ties with a supplier rise #v 2#! a month and fall #v 1#! a month without supply; its trade gives its suppliers research speed and influence; and at full ties it asks to join.",
-  "ru": "Колония без владельца: она отделилась, была брошена или отпущена либо пережила своего владельца. Она никому не даёт свою специализацию. Любая космическая программа может её снабжать, затрачивая #v 3%#! пропускной способности своей «Космической программы». Связи с поставщиком растут на #v 2#! в месяц и падают на #v 1#! в месяц без снабжения; её торговля даёт поставщикам скорость исследований и влияние; а при полных связях она просит присоединиться."
+  "en": "A colony with no holder: it broke away, was abandoned or let go, or outlived its holder. It gives no one its specialization. Any space program can supply it, for #v 300#! Launch Capacity a week. Its ties with a supplier rise #v 2#! a month and fall #v 1#! a month without supply; its trade gives its suppliers research speed and influence; and at full ties it asks to join.",
+  "ru": "Колония без владельца: она отделилась, была брошена или отпущена либо пережила своего владельца. Она никому не даёт свою специализацию. Любая космическая программа может её снабжать ценой #v 300#! пусковых мощностей в неделю. Связи с поставщиком растут на #v 2#! в месяц и падают на #v 1#! в месяц без снабжения; её торговля даёт поставщикам скорость исследований и влияние; а при полных связях она просит присоединиться."
  },
  "concept_sr_funding": {
   "en": "Program Funding",
@@ -3602,6 +3598,10 @@
  "concept_sr_funding_desc": {
   "en": "The level at which a [concept_space_milestone] is funded, from 0 to six levels past a cap that rises with technology. Each level up to the cap adds 0.5 a month to the pace of every running milestone. Each level past it adds less: the first 1/2 of a level, the next 1/3, down to 1/7. Every level costs innovation every week, in full.",
   "ru": "Уровень, на котором финансируется [concept_space_milestone|l], от 0 до шести уровней сверх предела, растущего с технологиями. Каждый уровень до предела добавляет 0,5 в месяц к темпу каждой идущей вехи. Каждый уровень сверх него добавляет меньше: первый — 1/2 уровня, следующий — 1/3, и так далее до 1/7. Каждый уровень каждую неделю стоит инноваций, полностью."
+ },
+ "concept_sr_ground_type_desc": {
+  "en": "Which goods a site's ground holds for $building_space_mine$s. A base level on it makes more of some goods and less of others than the same level on $sr_ground_mixed$ ground, and its [concept_sr_base_grade] then scales all of it. At base prices every type earns the same a level, so which is best depends on which goods are expensive. What each type is rich and poor in:\\n#b $sr_ground_mixed$#!: the $sr_site_name_near_earth$, every good as the production method lists it.\\n#b $sr_ground_metallic$#!: rich in $gold$, $iron$ and $copper$; poor in $sulfur$ and $glass$.\\n#b $sr_ground_rocky$#!: rich in $iron$ and $glass$; poor in $gold$.\\n#b $sr_ground_carbonaceous$#!: rich in $sulfur$ and $glass$; poor in $gold$.\\n#b $sr_ground_sulfurous$#!: very rich in $sulfur$; poor in $gold$.\\n#b $sr_ground_hydrocarbon$#!: very rich in $glass$ and rich in $sulfur$; poor in every metal.\\n#b $sr_ground_icy$#!: fairly rich in $sulfur$ and $glass$; poor in $gold$.\\nAmong sites of one type the better grade makes more of every good, so it earns more a level whenever the type makes money. Levels past all of our room count as $sr_ground_mixed$. Each site's hover in Solar System gives its type's figures.",
+  "ru": "Какие товары содержит грунт участка для зданий «$building_space_mine$». Уровень базы на нём даёт одних товаров больше, а других меньше, чем такой же уровень на грунте типа $sr_ground_mixed$, и затем всё это масштабирует его [concept_sr_base_grade|l]. По базовым ценам любой тип приносит с уровня одно и то же, поэтому лучший зависит от того, какие товары дороги. Чем богат и беден каждый тип:\\n#b $sr_ground_mixed$#!: объект «$sr_site_name_near_earth$», каждый товар в том виде, как его перечисляет метод производства.\\n#b $sr_ground_metallic$#!: много: $gold$, $iron$, $copper$; мало: $sulfur$, $glass$.\\n#b $sr_ground_rocky$#!: много: $iron$, $glass$; мало: $gold$.\\n#b $sr_ground_carbonaceous$#!: много: $sulfur$, $glass$; мало: $gold$.\\n#b $sr_ground_sulfurous$#!: очень много: $sulfur$; мало: $gold$.\\n#b $sr_ground_hydrocarbon$#!: очень много: $glass$; много: $sulfur$; мало любых металлов.\\n#b $sr_ground_icy$#!: довольно много: $sulfur$, $glass$; мало: $gold$.\\nСреди участков одного типа лучший класс даёт больше каждого товара, поэтому он приносит с уровня больше, пока тип приносит прибыль. Уровни сверх всего нашего места считаются грунтом типа $sr_ground_mixed$. Подсказка каждого участка в разделе «Солнечная система» показывает цифры его типа."
  },
  "concept_sr_integrity": {
   "en": "Colony Integrity",
@@ -3620,16 +3620,20 @@
   "ru": "Морпехи"
  },
  "concept_sr_marines_desc": {
-  "en": "Marine battalions, carried by assault carriers (#v 2#! a point of strength, filled at Earth). Landed at a colony of ours they defend it: to seize it once its [concept_sr_integrity] is gone, an enemy must land more than these and the colony's militia, a battalion for every 20,000 people and at least one. A fleet closing in with more marines than an occupier's frees the colony.",
-  "ru": "Батальоны морской пехоты, перевозимые «Штурмовыми носителями» (#v 2#! на очко силы, набираются на Земле). Высаженные в нашей колонии, они её защищают: чтобы захватить колонию после потери её [Concept('concept_sr_integrity','целостности')], противник должен высадить больше, чем эти морпехи и ополчение колонии, — батальон на каждые 20 000 жителей и не менее одного. Флот, приближающийся с большим числом морпехов, чем у оккупанта, освобождает колонию."
+  "en": "Marine battalions of #v 1,000#! $spacers$ each, carried by assault carriers (#v 2#! a point of strength, filled at Earth as far as our [concept_sr_space_personnel] allow). Landed at a colony of ours they defend it, and on the Moon and Mars every colony of ours there: to seize one once its [concept_sr_integrity] is gone, an enemy must bring more than half again these and the colony's militia, a battalion for every 20,000 people and at least one, and loses half as many taking it; every one of ours is lost with it. A fleet closing in with more than half again an occupier's marines frees the colony. Short of personnel, marines count only at the share crewed. Each side's marines count #v 5%#! more for every staffed level of its colonies' Training Grounds, at most #v +25%#!, so trained marines need fewer battalions to take a colony or to hold one, and fewer die taking it.",
+  "ru": "Батальоны морпехов (в каждом #v 1 000#! человек типа «$spacers$»), перевозимые штурмовыми носителями (#v 2#! на очко силы, набираются на Земле, насколько позволяет наш [concept_sr_space_personnel|l]). Высаженные в нашей колонии, они её защищают, а на Луне и Марсе — все наши тамошние колонии: чтобы захватить колонию после потери её [Concept('concept_sr_integrity','целостности')], противник должен высадить более чем в полтора раза больше, чем эти морпехи вместе с ополчением колонии (батальон на каждые 20 000 жителей и не менее одного), и теряет при захвате вдвое меньше; все наши морпехи там при этом гибнут. Флот, приближающийся с морпехами, более чем в полтора раза превосходящими числом морпехов оккупанта, освобождает колонию. При нехватке личного состава морпехи считаются лишь в той доле, в какой они укомплектованы. Морпехи каждой стороны считаются на #v 5%#! сильнее за каждый укомплектованный уровень «Учебных полигонов» её колоний, не более чем на #v +25%#!, поэтому обученным морпехам нужно меньше батальонов, чтобы захватить колонию или удержать её, и меньше их гибнет при захвате."
  },
  "concept_sr_module": {
   "en": "Colony Module",
   "ru": "Колониальный модуль"
  },
  "concept_sr_module_desc": {
-  "en": "A colony's equipment, built in queue order by the Space Program's Module Fabrication method, #v 100#! points a module, and shipped from Earth in its site's [concept_sr_launch_window], or at once to the Moon; it is installed for whoever holds the site when it lands. A colony's two specializations share four levels, and its Habitats, Spaceports, Defenses and facilities share its slots: #v 1#! to #v 4#! by its size, #v +1#! each with $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ and $molecular_assemblers$, and up to #v 8#! past them at #v 100#! points more than the last, while the module stock can hold the price. The facilities each give their bonus a staffed level: a Mining Complex (Extraplanetary Base room), an Orbital Yard (fabrication and ships), a Research Station, a Cultural Center, an Off-World Resort, a Black Site, a Training Ground, a Nuclear Command Center, a Materials Foundry and an Administration (less autonomy). Every level past the first needs a crew of 5,000 of the colony's people, except Habitats, which house the crews; an understaffed colony's specializations and facilities give that share of their bonus. Spaceports and Defenses serve and fight [concept_sr_space_fleet]s, so they work only under Full Colonies.",
-  "ru": "Оборудование колонии, которое строится в порядке очереди методом «Изготовление модулей» Космической программы, по #v 100#! очков за модуль, и отправляется с Земли в [Concept('concept_sr_launch_window','стартовом окне')] своего объекта или сразу на Луну; устанавливается для того, кто владеет объектом на момент посадки. Две специализации колонии делят четыре уровня, а её «Жилые модули», «Космодромы», «Оборонительные сооружения» и объекты делят её слоты: от #v 1#! до #v 4#! по размеру, по #v +1#! с каждой из технологий $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ и $molecular_assemblers$ и до #v 8#! сверх них, по #v 100#! очков больше, чем предыдущий, пока склад модулей способен вместить цену. Каждый объект даёт свой бонус за каждый укомплектованный уровень: «Добывающий комплекс» («Зал внепланетной базы»), «Орбитальная верфь» (производство и корабли), «Исследовательская станция», «Культурный центр», «Внеземной курорт», «Секретный объект», «Учебный полигон», «Ядерный командный центр», «Материаловедческая литейная» и «Администрация» (снижает автономию). Каждый уровень после первого требует экипажа в 5 000 человек из жителей колонии, кроме «Жилых модулей», в которых живут экипажи; специализации и объекты недоукомплектованной колонии дают лишь соответствующую долю своего бонуса. «Космодромы» и «Оборонительные сооружения» обслуживают и поддерживают в бою [Concept('concept_sr_space_fleet','космические флоты')], поэтому работают только при полноценных колониях."
+  "en": "A colony's equipment, built in queue order by the Space Program's Module Fabrication method, #v 100#! points a module, and shipped from Earth in its site's [concept_sr_launch_window], or at once to the Moon, unless the site is in the [concept_sr_yard_reach] of one of our Orbital Yards, which builds it on the spot; it is installed for whoever holds the site when it lands. A colony takes as many modules as its people can crew. Every module but the Habitat needs a crew of #v 10,000#! of the colony's people, or #v 5,000#! with $artificial_intelligence$, and its founding specialization runs without one. Short of crews, every crewed module runs below full strength (5 crews for 8 crewed levels run each at #v 75%#!), and its specializations and facilities give that share of their bonus. A colony's two specializations share four levels. Each Habitat holds half the colony's starting room, and #v 10#! points more with each of $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ and $molecular_assemblers$. The starting room itself, the colony's room for people before its modules, is #v 50%#! larger with $space_colonization$ and #v 50%#! more with $terraforming$, double with both. The world's size caps its Habitats at #v 1#! to #v 4#!; past the cap each costs #v 100#! points more than the last, while the module stock can hold the price. The facilities each give their bonus a staffed level: a Mining Complex (Extraplanetary Base room), an Orbital Yard (fabrication, ships, and the modules for the colonies in its reach), a Research Station, a Cultural Center, an Off-World Resort (Resort Colony room), a Black Site, a Training Ground, a Nuclear Command Center, a Materials Foundry and an Administration (less autonomy, for #v 25#! authority a staffed level). Spaceports and Defenses serve and fight [concept_sr_space_fleet]s, so they work only under Full Colonies.",
+  "ru": "Оборудование колонии, которое строится в порядке очереди методом «Изготовление модулей» Космической программы, по #v 100#! очков за модуль, и отправляется с Земли в [Concept('concept_sr_launch_window','стартовом окне')] своего объекта или сразу на Луну, если только объект не находится в [Concept('concept_sr_yard_reach','радиусе верфи')] одной из наших «Орбитальных верфей»: тогда она строит его на месте; устанавливается для того, кто владеет объектом на момент посадки. Колония принимает столько модулей, сколько её жители способны укомплектовать. Каждому модулю, кроме «Жилого модуля», нужен экипаж из #v 10 000#! жителей колонии, а с технологией $artificial_intelligence$ — из #v 5 000#!; основополагающая специализация колонии работает без него. При нехватке экипажей каждый укомплектованный модуль работает не в полную силу (при 5 экипажах на 8 уровней, требующих экипажа, каждый работает на #v 75%#!), а специализации и объекты колонии дают соответствующую долю своего бонуса. Две специализации колонии делят четыре уровня. Каждый «Жилой модуль» вмещает половину начального места колонии и на #v 10#! очков больше с каждой из технологий $nuclear_thermal_propulsion$, $orbital_manufacturing$, $advanced_nanofabrication$, $space_colonization$ и $molecular_assemblers$. Само начальное место, то есть место колонии для людей до её модулей, на #v 50%#! больше с технологией $space_colonization$ и ещё на #v 50%#! с технологией $terraforming$, а с обеими — вдвое. Размер мира ограничивает число его «Жилых модулей» от #v 1#! до #v 4#!; сверх предела каждый стоит на #v 100#! очков больше предыдущего, пока склад модулей способен вместить цену. Каждый объект даёт свой бонус за каждый укомплектованный уровень: «Добывающий комплекс» («Зал внепланетной базы»), «Орбитальная верфь» (производство, корабли и модули для колоний в её радиусе), «Исследовательская станция», «Культурный центр», «Внеземной курорт» (место для «Курортной колонии»), «Секретный объект», «Учебный полигон», «Ядерный командный центр», «Материаловедческая литейная» и «Администрация» (снижает автономию, за #v 25#! авторитета за каждый укомплектованный уровень). «Космодромы» и «Оборонительные сооружения» обслуживают и поддерживают в бою [Concept('concept_sr_space_fleet','космические флоты')], поэтому работают только при полноценных колониях."
+ },
+ "concept_sr_resort_draw_desc": {
+  "en": "How many guests a world draws to a $building_space_resort$: the throughput a level in its room works at, from #v +30%#! at Tranquility Base, Apollo 11's landing site three days from home, down to #v −35%#! at Sedna. Spectacle counts, and so does the length of the trip. Our levels fill the best room first, by each colony's draw before its Cultural Centers: each colony we hold at its draw, and Earth orbit's #v 10#! levels at #v +0%#!, ahead of the colonies that draw less. A level past all of our room works at #v −75%#!. Our Resort Colonies' throughput is the average over all of our levels. A colony's Off-World Resorts add room at its draw, and each staffed level of its Cultural Centers adds #v 1#! point to its draw. The $tourism$ and $fine_art$ bonuses and penalties of the Earth state a $building_space_resort$ stands in don't reach it, but each staffed $pm_spaceport$ level there gives it #v +1%#! throughput.",
+  "ru": "Сколько гостей привлекает мир в «$building_space_resort$»: пропускная способность, с которой работает уровень в его зале, от #v +30%#! на Базе Транквилити, месте посадки «Аполлона-11» в трёх днях пути от дома, до #v −35%#! на Седне. Значение имеют зрелищность и длительность поездки. Наши уровни заполняют лучший зал первым, по привлекательности каждой колонии до учёта её «Культурных центров»: каждая наша колония по своей привлекательности и #v 10#! уровней околоземной орбиты при #v +0%#! — раньше колоний с меньшей привлекательностью. Уровень сверх всего нашего места работает на #v −75%#!. Пропускная способность наших «Курортных колоний» — среднее по всем нашим уровням. «Внеземные курорты» колонии добавляют место по её привлекательности, а каждый укомплектованный уровень её «Культурных центров» добавляет к ней #v 1#! очко. Бонусы и штрафы по товарам «$tourism$» и «$fine_art$» земной области, где стоит «$building_space_resort$», на него не распространяются, но каждый укомплектованный уровень метода «$pm_spaceport$» там даёт ему #v +1%#! пропускной способности."
  },
  "concept_sr_role_carrier_desc": {
   "en": "Troopships: fire #v 0.25#! on fleets and on Defenses, #v 12#! months of supply, and #v 2#! battalions of [concept_sr_marines] for each point of strength, to land at a colony and seize it.",
@@ -3656,16 +3660,24 @@
   "ru": "Шанс каждый месяц, что идущая [concept_space_milestone|l] потерпит неудачу и потеряет несколько месяцев прогресса, от 1% до 50%. Бросок делается каждый месяц, пока идёт веха, включая месяц после неудачи."
  },
  "concept_sr_ship_role_desc": {
-  "en": "What a [concept_sr_space_fleet]'s ships do, in five roles. [concept_sr_space_command] builds them in the build mix's proportions.\\n• [concept_sr_role_warship]s: the line of battle, taking losses first.\\n• [concept_sr_role_rapid]s: fast escorts.\\n• [concept_sr_role_siege]s: for wearing colonies down.\\n• [concept_sr_role_carrier]s: carry [concept_sr_marines].\\n• [concept_sr_role_tender]s: carry propellant and supply.",
-  "ru": "Что делают корабли [Concept('concept_sr_space_fleet','космического флота')], в пяти ролях. [concept_sr_space_command] строит их в пропорциях состава постройки.\\n• [Concept('concept_sr_role_warship','Боевые корабли')]: линия боя, первыми принимающая потери.\\n• [Concept('concept_sr_role_rapid','Корабли быстрого реагирования')]: быстрые эскорты.\\n• [Concept('concept_sr_role_siege','Осадные корабли')]: для изнурения колоний.\\n• [Concept('concept_sr_role_carrier','Штурмовые носители')]: перевозят [Concept('concept_sr_marines','морпехов')].\\n• [Concept('concept_sr_role_tender','Суда снабжения')]: перевозят топливо и снабжение."
+  "en": "What a [concept_sr_space_fleet]'s ships do, in five roles. [concept_sr_space_command] builds what we order of each, and the rest in the build mix's proportions.\\n• [concept_sr_role_warship]s: the line of battle, taking losses first.\\n• [concept_sr_role_rapid]s: fast escorts.\\n• [concept_sr_role_siege]s: for wearing colonies down.\\n• [concept_sr_role_carrier]s: carry [concept_sr_marines].\\n• [concept_sr_role_tender]s: carry propellant and supply.",
+  "ru": "Что делают корабли [Concept('concept_sr_space_fleet','космического флота')], в пяти ролях. [concept_sr_space_command] строит то, что мы закажем из каждой, а остальное — в пропорциях состава постройки.\\n• [Concept('concept_sr_role_warship','Боевые корабли')]: линия боя, первыми принимающая потери.\\n• [Concept('concept_sr_role_rapid','Корабли быстрого реагирования')]: быстрые эскорты.\\n• [Concept('concept_sr_role_siege','Осадные корабли')]: для изнурения колоний.\\n• [Concept('concept_sr_role_carrier','Штурмовые носители')]: перевозят [Concept('concept_sr_marines','морпехов')].\\n• [Concept('concept_sr_role_tender','Суда снабжения')]: перевозят ракетное топливо и снабжение."
  },
  "concept_sr_space_command_desc": {
-  "en": "The $building_space_command$ building, under Full Colonies. Each level in a state we control builds fleet strength each month by its production method, scaled by its staffing: #v 0.5#! with Orbital Shipyards, #v 1#! with Fusion Yards, #v 1.5#! with Torch Yards, #v 2#! with Antimatter Yards. The build mix shares the month's construction among the [concept_sr_ship_role]s by weight, #v 0#! to #v 3#! each. New hulls wait on the ground in the reserve and go up together: each month by themselves while no hostile fleet is at Earth, or when we Launch them, through a blockade too. Every building also uses a maintenance line, the same whatever its method or levels, which the fleets' upkeep raises.",
-  "ru": "Здание «$building_space_command$» при полноценных колониях. Каждый уровень в области под нашим контролем ежемесячно строит силу флота по своему методу производства в зависимости от укомплектованности: #v 0,5#! с «Орбитальными верфями», #v 1#! с «Термоядерными верфями», #v 1,5#! с «Факельными верфями», #v 2#! с «Антиматерийными верфями». Состав постройки распределяет строительство месяца между [Concept('concept_sr_ship_role','ролями кораблей')] по весам, от #v 0#! до #v 3#! на каждую. Новые корпуса ждут на земле в резерве и поднимаются вместе: каждый месяц сами, пока у Земли нет враждебного флота, либо когда мы их запускаем, в том числе через блокаду. Каждое здание также использует линию обслуживания, одинаковую при любом методе и уровнях, которую повышает содержание флотов."
+  "en": "The $building_space_command$ building, under Full Colonies. Each level in a state we control builds fleet strength each month by its production method, scaled by its staffing: #v 0.5#! with Orbital Shipyards, #v 1#! with Fusion Yards, #v 1.5#! with Torch Yards, #v 2#! with Antimatter Yards. A month's construction goes first to the hulls we have on order; the build mix then shares the rest among the [concept_sr_ship_role]s by weight, #v 0#! to #v 3#! each, unless the yards build Orders Only. New hulls wait on the ground in the reserve and go up together: each month by themselves while no hostile fleet is at Earth, or when we Launch them, through a blockade too. Every building also uses a maintenance line, the same whatever its method or levels, which the fleets' upkeep raises.",
+  "ru": "Здание $building_space_command$ при полноценных колониях. Каждый уровень в области под нашим контролем ежемесячно строит силу флота по своему методу производства в зависимости от укомплектованности: #v 0,5#! с «Орбитальными верфями», #v 1#! с «Термоядерными верфями», #v 1,5#! с «Факельными верфями», #v 2#! с «Антиматерийными верфями». Строительство месяца сначала идёт на корпуса, которые мы заказали; затем состав постройки распределяет остаток между [Concept('concept_sr_ship_role','ролями кораблей')] по весам, от #v 0#! до #v 3#! на каждую, если только верфи не строят в режиме «Только заказы». Новые корпуса ждут на земле в резерве и поднимаются вместе: каждый месяц сами, пока у Земли нет враждебного флота, либо когда мы их запускаем, в том числе через блокаду. Каждое здание также использует линию обслуживания, одинаковую при любом методе и уровнях, которую повышает содержание флотов."
  },
  "concept_sr_space_fleet_desc": {
   "en": "Warships in space, under Full Colonies. [concept_sr_space_command] builds them, in five [concept_sr_ship_role]s. A fleet flies between locations at its [concept_sr_drive]'s pace, spending propellant, and can't be stopped or recalled on the way. Away from a dock its supply counts down; it docks at Earth, or at a colony of ours with a Spaceport, to refill, repair and refit. It fights other fleets and colonies' Defenses, blockades enemy colonies ([concept_sr_blockade]) and carries [concept_sr_marines].",
   "ru": "Боевые корабли в космосе, при полноценных колониях. Их строит [concept_sr_space_command|l], в пяти [Concept('concept_sr_ship_role','ролях кораблей')]. Флот летает между локациями в темпе своего [Concept('concept_sr_drive','двигателя')], расходуя топливо, и не может быть остановлен или отозван в пути. Вдали от дока его снабжение убывает; он стыкуется на Земле или в нашей колонии с «Космодромом», чтобы пополниться, починиться и переоснаститься. Он сражается с другими флотами и «Оборонительными сооружениями» колоний, блокирует вражеские колонии ([concept_sr_blockade|l]) и перевозит [Concept('concept_sr_marines','морпехов')]."
+ },
+ "concept_sr_space_personnel_desc": {
+  "en": "The $spacers_no_icon$ who crew our [concept_sr_space_fleet]s, fight as our [concept_sr_marines] and staff our colonies' military and covert modules, under Full Colonies. Each staffed level of a $building_space_forces_base$ ($cislunar_infrastructure$, the technology that fabricates the first modules) trains #v 1,000#!. In service:\\n• A point of fleet strength: #v 100#!, #v 50#! with $artificial_intelligence$\\n• A marine battalion, aboard or in a garrison: #v 1,000#!\\n• A level of Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center at a colony we hold: #v 1,000#!, as well as its crew\\nShort of personnel, everything in service works at the share we can man. The ground reserve needs none until it launches, and a launch takes only those to spare.",
+  "ru": "Население типа «$spacers_no_icon$» составляет экипажи наших [Concept('concept_sr_space_fleet','космических флотов')], воюет как наши [Concept('concept_sr_marines','морпехи')] и укомплектовывает военные и тайные модули наших колоний при полноценных колониях. Каждый укомплектованный уровень «$building_space_forces_base$» ($cislunar_infrastructure$ — технология, которая изготавливает первые модули) готовит #v 1 000#!. На службе:\\n• Пункт силы флота: #v 100#!, а с технологией $artificial_intelligence$ — #v 50#!\\n• Батальон морпехов на борту или в гарнизоне: #v 1 000#!\\n• Уровень «Космодрома», «Оборонительных сооружений», «Секретного объекта», «Учебного полигона» или «Ядерного командного центра» в колонии, которую мы удерживаем: #v 1 000#! помимо его экипажа\\nПри нехватке личного состава всё, что на службе, работает в той доле, которую мы можем укомплектовать. Наземный резерв не нуждается в нём до запуска, а запуск берёт только лишних."
+ },
+ "concept_sr_yard_reach_desc": {
+  "en": "The colonies an Orbital Yard builds [concept_sr_module]s for: every colony of ours in the same place as the yard. Such a module costs the same points as at Earth, but needs no shipment slot, launch window or launch. The places with several sites:\\n#bold The Moon:#! $sr_site_name_shackleton$, $sr_site_name_peary$, $sr_site_name_tranquility$, $sr_site_name_marius_hills$, $sr_site_name_daedalus$ and $sr_site_name_imbrium$\\n#bold Mars:#! $sr_site_name_valles_marineris$, $sr_site_name_olympus_mons$, $sr_site_name_hellas_planitia$, $sr_site_name_utopia_planitia$ and $sr_site_name_arcadia_planitia$\\n#bold Jupiter's moons:#! $sr_site_name_io$, $sr_site_name_europa$, $sr_site_name_ganymede$, $sr_site_name_callisto$, $sr_site_name_himalia$ and $sr_site_name_amalthea$\\n#bold Saturn's moons:#! $sr_site_name_titan$, $sr_site_name_enceladus$, $sr_site_name_rhea$, $sr_site_name_mimas$ and $sr_site_name_iapetus$\\n#bold Uranus's moons:#! $sr_site_name_titania$, $sr_site_name_oberon$, $sr_site_name_miranda$ and $sr_site_name_ariel$\\n#bold Neptune's moons:#! $sr_site_name_triton$ and $sr_site_name_proteus$\\nEvery other site is a place of its own: each asteroid, Venus, Mercury and each world of the Kuiper Belt. The yard and the colony must both be ours, and neither blockaded nor occupied.\\n\\nOnly a yard reaches across a planet's moons. Defenses and [concept_sr_marines] at one of our colonies on the Moon, or on Mars, defend every colony of ours there, but each moon of Jupiter, Saturn, Uranus and Neptune is defended by its own alone.",
+  "ru": "Колонии, для которых «Орбитальная верфь» строит [Concept('concept_sr_module','колониальные модули')]: каждая наша колония в том же месте, что и верфь. Такой модуль стоит столько же очков, как на Земле, но не требует места для отправки, стартового окна и запуска. Места с несколькими участками:\\n#bold Луна:#! $sr_site_name_shackleton$, $sr_site_name_peary$, $sr_site_name_tranquility$, $sr_site_name_marius_hills$, $sr_site_name_daedalus$ и $sr_site_name_imbrium$\\n#bold Марс:#! $sr_site_name_valles_marineris$, $sr_site_name_olympus_mons$, $sr_site_name_hellas_planitia$, $sr_site_name_utopia_planitia$ и $sr_site_name_arcadia_planitia$\\n#bold Спутники Юпитера:#! $sr_site_name_io$, $sr_site_name_europa$, $sr_site_name_ganymede$, $sr_site_name_callisto$, $sr_site_name_himalia$ и $sr_site_name_amalthea$\\n#bold Спутники Сатурна:#! $sr_site_name_titan$, $sr_site_name_enceladus$, $sr_site_name_rhea$, $sr_site_name_mimas$ и $sr_site_name_iapetus$\\n#bold Спутники Урана:#! $sr_site_name_titania$, $sr_site_name_oberon$, $sr_site_name_miranda$ и $sr_site_name_ariel$\\n#bold Спутники Нептуна:#! $sr_site_name_triton$ и $sr_site_name_proteus$\\nКаждый остальной участок — отдельное место: каждый астероид, Венера, Меркурий и каждый мир пояса Койпера. И верфь, и колония должны быть нашими, и ни та ни другая не должна быть блокирована или оккупирована.\\n\\nМежду спутниками планеты действует только верфь. «Оборонительные сооружения» и [Concept('concept_sr_marines','морпехи')] в одной из наших колоний на Луне или на Марсе защищают все наши тамошние колонии, а каждый спутник Юпитера, Сатурна, Урана и Нептуна защищается только своими."
  },
  "concept_st_res_active_rate_desc": {
   "en": "What the Strategic Reserve Hub actually trades on the market in a week: the [concept_st_res_rate_setting] plus the week's decay, which the hub replaces, so a rate of 0 still buys enough to hold a stockpile steady. Capped by the [concept_st_res_flow_cap] and scaled by the hub's [concept_throughput] modifiers.",
@@ -3736,8 +3748,8 @@
   "ru": "Оценка доходов при сегодняшней экономике, а не прогноз. Поступления по каждой строке бюджета сегодня масштабируются по ставке, которую задают действующий закон и проект в соответствующем месяце, относительно ставки, действовавшей на момент снимка экономики. Предполагается, что группы населения, зарплаты, цены и покупки остаются прежними. Поступления считаются там, где их собирает закон; часть налога может передаваться дальше через цены и зарплаты.\\n\\nНе учитываются: облагаемые товары и сельскохозяйственные льготы; прочие модификаторы сбора, принимаемые неизменными; любые налоги вне кодекса, которые собирает та же строка бюджета, масштабируются вместе с остальным. Сельский сбор и подушный налог делят строку «Подушный налог», поэтому пока собираются оба, она показывает диапазон, допускаемый любым разделом между ними, а введение или отмена сельского сбора или подушного налога переносит часть плательщиков другого. Поступления могут отставать от новой ставки несколько дней после вступления её в силу."
  },
  "concept_te_construction_market_desc": {
-  "en": "In Timeline Extended, [concept_construction] is a tradeable good rather than a fixed national pool of points. Each $building_construction_sector$ buys wood, iron, steel and the like and sells construction on the [concept_market]. Every week the government buys some, paid from the [concept_treasury], and private investors buy some from the [concept_investment_pool]. Construction Sites, placed automatically where construction is under way, turn what is bought into construction points. Factories and infrastructure also use a little as upkeep, and the price rises when buyers want more than is on sale.\\n\\nThe construction panel's #b How the Construction Market Works#! has the detail.\\n\\nThe Free Market Construction game rule can waive the retooling cost or all upkeep at game setup, or turn all of this off for base-game construction: the Construction Site then becomes your construction sector, built and expanded like any government building.",
-  "ru": "В Timeline Extended [concept_construction|l] — торгуемый товар, а не фиксированный национальный пул очков. Каждое здание $building_construction_sector$ покупает древесину, железо, сталь и тому подобное и продаёт строительство на [Concept('concept_market','рынке')]. Каждую неделю правительство покупает часть, платя из [Concept('concept_treasury','казны')], а частные инвесторы покупают часть из [Concept('concept_investment_pool','инвестиционного пула')]. «Строительные площадки», которые автоматически размещаются там, где идёт строительство, превращают купленное в очки строительства. Фабрики и инфраструктура тоже понемногу расходуют его на содержание, а цена растёт, когда покупатели хотят больше, чем продаётся.\\n\\nПодробности — в разделе #b Как работает рынок строительства#! панели строительства.\\n\\nИгровое правило «Рыночное строительство» может отменить затраты на переоснащение или всё содержание при создании игры либо отключить всё это в пользу строительства базовой игры: тогда «Строительная площадка» становится вашим строительным сектором и строится и расширяется как любое государственное здание."
+  "en": "In Timeline Extended, [concept_construction] is a tradeable good rather than a fixed national pool of points. Each $building_construction_sector$ buys wood, iron, steel and the like and sells construction on the [concept_market]. Every week the government buys some, paid from the [concept_treasury], and private investors buy some from the [concept_investment_pool]. Construction Sites, placed automatically where construction is under way, turn what is bought into construction points. Factories and infrastructure also use a little as upkeep, and the price rises when buyers want more than is on sale.\\n\\nThe Help page, #b $TE_CM_HOW_IT_WORKS$#!, has the detail: the \\\"?\\\" at the right of the construction panel's $TE_CM_SECTION_HEADER$ header opens it.\\n\\nThe Free Market Construction game rule can waive the retooling cost or all upkeep at game setup, or turn all of this off for base-game construction: the Construction Site then becomes your construction sector, built and expanded like any government building.",
+  "ru": "В Timeline Extended [concept_construction|l] — торгуемый товар, а не фиксированный национальный пул очков. Каждое здание $building_construction_sector$ покупает древесину, железо, сталь и тому подобное и продаёт строительство на [Concept('concept_market','рынке')]. Каждую неделю правительство покупает часть, платя из [Concept('concept_treasury','казны')], а частные инвесторы покупают часть из [Concept('concept_investment_pool','инвестиционного пула')]. «Строительные площадки», которые автоматически размещаются там, где идёт строительство, превращают купленное в очки строительства. Фабрики и инфраструктура тоже понемногу расходуют его на содержание, а цена растёт, когда покупатели хотят больше, чем продаётся.\\n\\nПодробности — на странице справки #b $TE_CM_HOW_IT_WORKS$#!: её открывает значок «?» справа от заголовка $TE_CM_SECTION_HEADER$ панели строительства.\\n\\nИгровое правило «Рыночное строительство» может отменить затраты на переоснащение или всё содержание при создании игры либо отключить всё это в пользу строительства базовой игры: тогда «Строительная площадка» становится вашим строительным сектором и строится и расширяется как любое государственное здание."
  },
  "concept_te_construction_queue_cap_desc": {
   "en": "Each week a construction queue can use at most one week's maximum progress for each level it has queued. The government's purchase and the private investors' are each held to their own queue's figure, so buying more than that costs nothing extra, and nothing is bought while construction is paused.",
@@ -4308,8 +4320,8 @@
   "ru": "Позволяет [concept_great_power|l] основать [concept_united_nations_system|l], пока её нет, или созвать учредительную конференцию после роспуска. Также позволяет лидеру [concept_power_bloc|l] ввести эту страну в Организацию Объединённых Наций по договору. Вступление в уже существующую Организацию Объединённых Наций не требует технологии."
  },
  "country_can_peacefully_annex_subjects_bool_desc": {
-  "en": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] can peacefully annex [Concept('concept_subject', '$concept_subjects|q$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
-  "ru": "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short|q$')] может мирно аннексировать [Concept('concept_subject', '$concept_subjects|q$')|l] без [Concept('concept_diplomatic_play','дипломатической игры')], если [concept_liberty_desire|l] и [Concept('concept_gdp', 'ВВП')] зависимого государства достаточно низки."
+  "en": "Can annex its own [Concept('concept_subject', '$concept_subjects|q$')] through Peaceful Integration, a [concept_diplomatic_action], without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')].",
+  "ru": "Может аннексировать собственные [Concept('concept_subject', '$concept_subjects|q$')|l] мирным путём через «Мирную интеграцию» — [concept_diplomatic_action|l], без [Concept('concept_diplomatic_play','дипломатической игры')], если [concept_liberty_desire|l] зависимого государства низко, а его [Concept('concept_gdp', 'ВВП')] достаточно мал."
  },
  "country_can_use_asset_relief_bool_desc": {
   "en": "A [concept_banking_cycle] tool that purchases non-performing assets from private ledgers. Improves financial conditions and reduces [concept_bubble_pressure], at the cost of tax revenue and [concept_bureaucracy].",
@@ -4352,8 +4364,8 @@
   "ru": "Инструмент [concept_banking_cycle|l], вливающий наличные в банковскую систему через покупку государственных ценных бумаг. Повышает выпуск услуг, но увеличивает финансовый импульс и [concept_bubble_pressure|l]. Требует необеспеченной или цифровой валюты — банк платит деньгами, которые сам создаёт, чего валюта, обмениваемая на металл, не может, — и ключевой ставки, уже достигшей нижнего предела. Он не меняет ставку, по которой занимает само государство: её задают ключевая ставка и надбавки к ней."
  },
  "country_combined_arms_bonus_enabled_bool_desc": {
-  "en": "Generals commanding formations with a diverse mix of unit groups gain [concept_combined_arms] commander traits. Each group that makes up at least 5% of the formation grants a unique trait when at least two groups are present.",
-  "ru": "Генералы, командующие соединениями с разнообразным составом групп войск, получают черты командира [concept_combined_arms|l]. Каждая группа, составляющая не менее 5% соединения, даёт уникальную черту, когда присутствуют как минимум две группы."
+  "en": "Generals commanding formations with a diverse mix of unit groups gain [concept_combined_arms] commander traits. Each group that makes up at least 5% of the formation grants a unique trait when at least two groups are present, and all five groups present grant a sixth, Full Spectrum Dominance.",
+  "ru": "Генералы, командующие соединениями с разнообразным составом групп войск, получают черты командира [concept_combined_arms|l]. Каждая группа, составляющая не менее 5% соединения, даёт уникальную черту, когда присутствуют как минимум две группы, а присутствие всех пяти групп даёт шестую — «Полное господство»."
  },
  "country_court_challenges_ignored_bool_desc": {
   "en": "No court challenges a change to the constitution, whatever the Judiciary law.",
@@ -4362,6 +4374,10 @@
  "country_court_reviews_forced_laws_bool_desc": {
   "en": "A law forced through by Forceful Legislation goes to the courts once it passes. Six months later they strike it down if [concept_judicial_independence] is at least #v 90#! when the law was only expedited, #v 60#! when it was pushed forward decisively or #v 30#! when it was forced through. The government can then comply, defy the court or pack it.",
   "ru": "Закон, проведённый Принудительным законодательством, после принятия отправляется в суды. Через шесть месяцев они отменяют его, если [concept_judicial_independence|l] не ниже #v 90#!, когда закон лишь ускоряли, #v 60#!, когда его продвигали решительно, или #v 30#!, когда его проталкивали силой. Правительство тогда может подчиниться, пренебречь судом или подчинить его себе."
+ },
+ "country_cross_heritage_assimilation_blocked_bool_desc": {
+  "en": "This holds under every setting of the $rule_assimilation_cultures_rule$ game rule, whatever the $lawgroup_bodily_autonomy$ law in force. Under $setting_assimilation_cultures_hybrid$ pops still take up the majority's language in a hybrid culture.",
+  "ru": "Это действует при любой настройке игрового правила «$rule_assimilation_cultures_rule$», при любом действующем законе из группы «$lawgroup_bodily_autonomy$». При настройке «$setting_assimilation_cultures_hybrid$» группы населения всё же перенимают язык большинства в гибридной культуре."
  },
  "country_gw_aerosol_injection_bool_desc": {
   "en": "Unlocks the Stratospheric Aerosol Injection [Concept('concept_climate_policy','climate policy')] in the Global Warming journal entry, once there is #v 1.0 °C#! of warming beneath any haze already flying. The countries running it mask a degree of the world's warming for each fifth of world GDP among them, at most #v 2 °C#!, at a running cost of one percent of GDP a year.",
@@ -4391,9 +4407,25 @@
   "en": "Only the government may order a launch.",
   "ru": "Приказать запуск может только правительство."
  },
+ "country_nd_reach_every_coast_bool_desc": {
+  "en": "Missile submarines can strike any state on a coast, however far away.",
+  "ru": "Ракетные подлодки могут нанести удар по любой прибрежной области, как бы далеко она ни находилась."
+ },
+ "country_nd_reach_every_state_bool_desc": {
+  "en": "Range no longer limits which countries we can strike.",
+  "ru": "Дальность больше не ограничивает, по каким странам мы можем нанести удар."
+ },
  "country_nd_unapproved_launch_bool_desc": {
   "en": "A false warning or a commander cut off from the capital can start a launch the government never approved. Only someone in the chain refusing stands in the way.",
   "ru": "Ложное предупреждение или командир, отрезанный от столицы, могут начать запуск, который правительство никогда не одобряло. Помешать может лишь тот, кто в цепочке откажется."
+ },
+ "country_nd_unlocks_automatic_retaliation_bool_desc": {
+  "en": "Automatic Retaliation needs missiles, Radar to see an attack and Mainframe Computers to answer it.",
+  "ru": "«Автоматическое возмездие» требует ракет, радара, чтобы увидеть нападение, и «Мейнфреймов», чтобы ответить на него."
+ },
+ "country_nd_unlocks_launch_on_warning_bool_desc": {
+  "en": "Launch on Warning needs missiles that can fly on a warning, and Radar to give it.",
+  "ru": "«Пуск по предупреждению» требует ракет, способных взлететь по предупреждению, и радара, чтобы его дать."
  },
  "country_nuclear_disarmament_bool_desc": {
   "en": "This country has agreed to give up its nuclear weapons.",
@@ -8095,9 +8127,9 @@
   "en": "People here look however they choose, and the world takes notice.",
   "ru": "Люди здесь выглядят так, как выбирают, и мир это замечает."
  },
- "morphological_freedom_unsettled_modifier_desc": {
-  "en": "Twenty years of argument have left a licensing regime nobody quite wanted, and neither side has stopped arguing.",
-  "ru": "Двадцать лет споров оставили режим лицензирования, который никто по-настоящему не хотел, и ни одна сторона не перестала спорить."
+ "morphological_freedom_settled_modifier_desc": {
+  "en": "The licensing boards are at work, and the argument over who may change their body has died down.",
+  "ru": "Лицензионные комиссии работают, а спор о том, кому позволено менять своё тело, утих."
  },
  "motor_ships": {
   "en": "Motor Ships",
@@ -8255,6 +8287,14 @@
   "en": "The cost of exercises, scrambles and emergency repairs to our nuclear forces.",
   "ru": "Расходы на учения, боевые вылеты и аварийный ремонт наших ядерных сил."
  },
+ "nd_focus_terms_icbms_desc": {
+  "en": "What an intercontinental missile force gives once it is fielded.",
+  "ru": "Что даёт группировка межконтинентальных ракет после развёртывания."
+ },
+ "nd_focus_terms_submarines_desc": {
+  "en": "What missile submarines give once they are at sea.",
+  "ru": "Что дают ракетные подлодки, как только они вышли в море."
+ },
  "nd_guarantee_abandoned": {
   "en": "Abandoned a Nuclear Guarantee",
   "ru": "Брошенная ядерная гарантия"
@@ -8266,6 +8306,14 @@
  "nd_host_accident_silence_desc": {
   "en": "The government said nothing when a foreign power's nuclear weapons contaminated one of our states.",
   "ru": "Правительство промолчало, когда ядерное оружие иностранной державы загрязнило одну из наших областей."
+ },
+ "nd_icbm_force": {
+  "en": "ICBM Force",
+  "ru": "Силы МБР"
+ },
+ "nd_icbm_force_desc": {
+  "en": "Our intercontinental ballistic missiles stand in hardened silos, able to reach any country in the world.",
+  "ru": "Наши межконтинентальные баллистические ракеты стоят в укреплённых шахтах и способны достичь любой страны мира."
  },
  "nd_incident_coverup_exposed_desc": {
   "en": "A nuclear incident we tried to hide has come out.",
@@ -8415,9 +8463,13 @@
   "en": "[COUNTRY.GetName] has repudiated its nuclear non-use pledge with [TARGET_COUNTRY.GetName]",
   "ru": "Страна [COUNTRY.GetName] отказалась от своего обязательства о неприменении ядерного оружия перед страной [TARGET_COUNTRY.GetName]"
  },
+ "nd_safeguards_level_terms_desc": {
+  "en": "What each level of safeguards adds to the command of our nuclear forces.",
+  "ru": "Что добавляет каждый уровень мер безопасности к управлению нашими ядерными силами."
+ },
  "nd_safeguards_slow_launch_desc": {
   "en": "What each level of safeguards takes off a fast launch authority's launch credit: a launch that can be halted is a slower launch.",
-  "ru": "Что каждый уровень мер безопасности отнимает у пускового кредита быстрого «Права на запуск»: пуск, который можно остановить, — это более медленный пуск."
+  "ru": "Что каждый уровень мер безопасности отнимает у зачёта пуска быстрого «Права на запуск»: пуск, который можно остановить, — это более медленный пуск."
  },
  "nd_status_armed": {
   "en": "\\nDoctrine: #v [ROOT.GetCountry.GetCustom('nd_doctrine_name')]#! · Readiness: #v [ROOT.GetCountry.GetCustom('nd_readiness_name')]#! · Authority: #v [ROOT.GetCountry.GetCustom('nd_authority_name')]#!",
@@ -8524,8 +8576,8 @@
   "ru": "Ядерное оружие, размещённое за рубежом: бомбардировщики в Британии, ракеты на Кубе и в Турции. Оно доносит силу владельца до порога принимающей стороны и стоит на страже, а принимающая сторона живёт под угрозой."
  },
  "nuclear_basing_effects_desc": {
-  "en": "• The country stationing the weapons can strike every country it could reach from the host's states.\\n• The host counts as protected by a ready nuclear arsenal: countries threatening it must reckon with it, and a strike on the host frees the owner to answer.\\n• A country next to the host has less warning of a strike from the owner, and its own warheads are easier to destroy.\\n• Some of the owner's weapons accidents happen on the host's soil. The warheads stay the owner's.\\n• A war between the two ends the article.",
-  "ru": "• Страна, размещающая оружие, может нанести удар по любой стране, до которой способна дотянуться из областей принимающей стороны.\\n• Принимающая сторона считается защищённой готовым ядерным арсеналом: страны, угрожающие ей, должны считаться с ним, а удар по ней развязывает владельцу руки для ответа.\\n• У страны, граничащей с принимающей, остаётся меньше времени на предупреждение об ударе владельца, а её собственные боеголовки легче уничтожить.\\n• Часть аварий с оружием владельца происходит на земле принимающей стороны. Боеголовки при этом остаются во владении владельца.\\n• Война между ними прекращает действие статьи."
+  "en": "• The country stationing the weapons can strike every country it could reach from the host's states.\\n• The host counts as protected by a ready nuclear arsenal: countries threatening it must reckon with it, and a strike on the host frees the owner to answer.\\n• A country next to the host has less warning of a strike from the owner: #R 10#! less survivability against it, so its own warheads are easier to destroy.\\n• Of the owner's weapons accidents with a bomber or at a missile silo, one in three happens on the host's soil. The warheads stay the owner's.\\n• A war between the two ends the article. Ending it has no cost of its own beyond what breaking any treaty costs.",
+  "ru": "• Страна, размещающая оружие, может нанести удар по любой стране, до которой способна дотянуться из областей принимающей стороны.\\n• Принимающая сторона считается защищённой готовым ядерным арсеналом: страны, угрожающие ей, должны считаться с ним, а удар по ней развязывает владельцу руки для ответа.\\n• У страны, граничащей с принимающей, остаётся меньше времени на предупреждение об ударе владельца: против него её живучесть ниже на #R 10#!, поэтому её собственные боеголовки легче уничтожить.\\n• Из аварий с оружием владельца, связанных с бомбардировщиком или ракетной шахтой, каждая третья происходит на земле принимающей стороны. Боеголовки при этом остаются во владении владельца.\\n• Война между ними прекращает действие статьи. Прекращение не влечёт собственной платы сверх той, что влечёт разрыв любого договора."
  },
  "nuclear_brinkmanship_modifier": {
   "en": "Nuclear Brinkmanship",
@@ -8588,8 +8640,8 @@
   "ru": "Обещание ответить на угрозы другой стране нашим собственным ядерным арсеналом — расширенное сдерживание. Это не неуязвимость и не автоматическая война: когда придёт время, гаранту предстоит сделать выбор."
  },
  "nuclear_guarantee_effects_desc": {
-  "en": "• The protected country no longer loses war support for facing a nuclear-armed enemy without weapons of its own.\\n• Countries threatening it must reckon with the guarantor's arsenal, and their pressure on it is weaker.\\n• The guarantor may issue nuclear warnings over attacks on the protected country, and is asked to honor the guarantee when it is threatened or struck — walking away costs it dearly with every country it protects.",
-  "ru": "• Защищаемая страна больше не теряет поддержку войны из-за противостояния ядерному противнику без собственного оружия.\\n• Страны, угрожающие ей, должны считаться с арсеналом гаранта, и их давление на неё слабее.\\n• Гарант может выдвигать ядерные предупреждения в связи с нападениями на защищаемую страну, и от него ждут выполнения гарантий, когда ей угрожают или наносят удар: отступить для него дорого обходится в глазах всех защищаемых им стран."
+  "en": "• The protected country no longer loses war support for facing a nuclear-armed enemy without weapons of its own.\\n• Countries threatening it must reckon with the guarantor's arsenal: #R -20#! to the pressure on it to concede while the guarantor's forces are ready, #R -10#! while its warheads are in storage, and #R -15#! more once it has said publicly that it stands by the guarantee.\\n• The guarantor may issue nuclear warnings over attacks on the protected country, and is asked to honor the guarantee when it is threatened or struck. Walking away costs it #R 15#! credibility, #R 30#! relations with the country it abandoned, and prestige and leverage for five years; every other country it protects hears of it.\\n• Leaving the treaty has no cost of its own beyond what breaking any treaty costs.",
+  "ru": "• Защищаемая страна больше не теряет поддержку войны из-за противостояния ядерному противнику без собственного оружия.\\n• Страны, угрожающие ей, должны считаться с арсеналом гаранта: #R -20#! к давлению на неё с требованием уступить, пока силы гаранта готовы, #R -10#!, пока его боезаряды на хранении, и ещё #R -15#!, после того как он публично заявил, что стоит за гарантией.\\n• Гарант может выдвигать ядерные предупреждения в связи с нападениями на защищаемую страну, и от него ждут выполнения гарантий, когда ей угрожают или наносят удар. Отступив, он теряет #R 15#! доверия, #R 30#! отношений со страной, которую бросил, а также престиж и рычаги влияния на пять лет; об этом узнаёт каждая другая страна, которую он защищает.\\n• Выход из договора не влечёт собственной платы сверх той, что влечёт разрыв любого договора."
  },
  "nuclear_mobilization_modifier": {
   "en": "Nuclear Mobilization",
@@ -10187,6 +10239,14 @@
   "en": "Resources from the space program have been redirected to domestic priorities, improving living standards at the cost of [concept_prestige].",
   "ru": "Ресурсы космической программы перенаправлены на внутренние приоритеты, что повышает уровень жизни ценой [Concept('concept_prestige','престижа')]."
  },
+ "spacers_desc": {
+  "en": "The crews of the nation's warships in space and the marines they carry, trained at Space Forces Bases. Only those bases employ them, so when ships are destroyed or marines lost, it is these people who die.",
+  "ru": "Экипажи боевых кораблей страны в космосе и перевозимые ими морпехи, обученные на базах космических сил. Только эти базы их нанимают, поэтому, когда корабли уничтожены или морпехи потеряны, погибают именно эти люди."
+ },
+ "spacers_no_icon": {
+  "en": "Spacers",
+  "ru": "Космонавты"
+ },
  "spiritual_diversity_modifier": {
   "en": "Spiritual Diversity",
   "ru": "Духовное разнообразие"
@@ -10280,8 +10340,8 @@
   "ru": "Колониальные гарнизоны"
  },
  "sr_colonial_garrisons_desc": {
-  "en": "Troops holding our restless colonies, shipped and supplied from Earth through the Space Program.",
-  "ru": "Войска, удерживающие наши беспокойные колонии, которых отправляют и снабжают с Земли через Космическую программу."
+  "en": "Troops holding our restless colonies, shipped and supplied from Earth: each garrison takes #v 200#! Launch Capacity a week, whatever the Space Program's mission and funding.",
+  "ru": "Войска, удерживающие наши беспокойные колонии, которых отправляют и снабжают с Земли: каждый гарнизон требует #v 200#! пусковых мощностей в неделю, какими бы ни были задача и финансирование Космической программы."
  },
  "sr_colony_amalthea_physics_desc": {
   "en": "A physics laboratory on Amalthea studying Jupiter's magnetosphere and radiation environment.",
@@ -10352,8 +10412,8 @@
   "ru": "Подповерхностное бурение, пробивающее ледяную оболочку Европы, чтобы добраться до океана под ней."
  },
  "sr_colony_europa_surface_desc": {
-  "en": "A surface habitat on Europa supporting the search for extraterrestrial life beneath the ice.",
-  "ru": "Поверхностное жилище на Европе, поддерживающее поиски внеземной жизни под льдом."
+  "en": "Our outpost on Europa studies the ocean only through the ice it pushes up, and drills nowhere deep enough to reach it.",
+  "ru": "Наш форпост на Европе изучает океан лишь через лёд, который он выталкивает наверх, и нигде не бурит достаточно глубоко, чтобы до него добраться."
  },
  "sr_colony_ganymede_command_desc": {
   "en": "A command center on Ganymede coordinating operations across the Jovian system.",
@@ -10604,28 +10664,76 @@
   "ru": "Научный форпост, изучающий уникальную геологическую историю Весты и её освещённую зарёй поверхность."
  },
  "sr_commercial_space_dividend_desc": {
-  "en": "With the race run, the rockets, crews and contractors that once competed for milestones haul ore from the asteroids. Each point of monthly space race progress our sources still give adds +5% Extraplanetary Base throughput, up to +50%, recalculated every month. Funding and progress bonuses do not count.",
-  "ru": "Когда гонка окончена, ракеты, экипажи и подрядчики, которые прежде соревновались за вехи, возят руду с астероидов. Каждый пункт месячного прогресса космической гонки, который всё ещё дают наши источники, добавляет +5% к пропускной способности Внепланетной базы, до +50%; пересчитывается каждый месяц. Бонусы за финансирование и прогресс не учитываются."
+  "en": "With the race run, the rockets, crews and contractors that once competed for milestones haul ore from the asteroids and guests to our colonies. Each point of monthly space race progress our sources still give adds +5% $building_space_mine$ and $building_space_resort$ throughput, up to +50%, recalculated every month. Funding and progress bonuses do not count.",
+  "ru": "Когда гонка окончена, ракеты, экипажи и подрядчики, которые прежде соревновались за вехи, возят руду с астероидов и гостей в наши колонии. Каждый пункт месячного прогресса космической гонки, который всё ещё дают наши источники, добавляет +5% к пропускной способности зданий «$building_space_mine$» и «$building_space_resort$», до +50%; пересчитывается каждый месяц. Бонусы за финансирование и прогресс не учитываются."
  },
  "sr_dome_breach_repairs_desc": {
-  "en": "Replacement domes, seals and life support for a colony that lost its air, launched from Earth.",
-  "ru": "Сменные купола, уплотнения и системы жизнеобеспечения для колонии, потерявшей воздух, запускаемые с Земли."
+  "en": "Replacement domes, seals and life support for a colony that lost its air, launched from Earth: #v 1,000#! Launch Capacity a week, whatever the Space Program's mission and funding.",
+  "ru": "Сменные купола, уплотнения и системы жизнеобеспечения для колонии, потерявшей воздух, запускаемые с Земли: #v 1 000#! пусковых мощностей в неделю, какими бы ни были задача и финансирование Космической программы."
+ },
+ "sr_ebase_mix_copper_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $copper$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$copper$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_copper_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $copper$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$copper$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_glass_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$glass$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_glass_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$glass$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_gold_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$gold$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_gold_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$gold$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_iron_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$iron$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_iron_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$iron$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_lead_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$lead$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_lead_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$lead$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_sulfur_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$sulfur$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_sulfur_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$sulfur$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_tech_metals_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», больше товара «$tech_metals$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
+ },
+ "sr_ebase_mix_tech_metals_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "ru": "В грунте участков, где работают наши уровни «Внепланетной базы», меньше товара «$tech_metals$», чем на околоземных астероидах. Это действует поверх «$sr_ebase_room_bonus$», который несёт класс участков."
  },
  "sr_ebase_room_bonus_desc": {
-  "en": "Our Extraplanetary Base levels work the room of our colonies and, with $asteroid_mining$, the near-Earth asteroids, the richest first. The metal asteroids raise their output.",
-  "ru": "Уровни нашей Внепланетной базы осваивают пространство наших колоний и, с технологией $asteroid_mining$, околоземные астероиды, начиная с самых богатых. Металлические астероиды повышают их выпуск."
+  "en": "Our $building_space_mine$ levels work at their sites' [concept_sr_base_grade], and the sites the Colonies section's Bases view puts them on are rich.",
+  "ru": "Наши уровни «$building_space_mine$» работают с [Concept('concept_sr_base_grade','классом базы')] своих участков, а участки, на которые их ставит вид «Базы» раздела «Колонии», богаты."
  },
  "sr_ebase_room_penalty_desc": {
-  "en": "Our Extraplanetary Base levels work the room of our colonies and, with $asteroid_mining$, the near-Earth asteroids, the richest first. The outer sites' room is poor, and a level past all of our room works at -75%.",
-  "ru": "Уровни нашей Внепланетной базы осваивают пространство наших колоний и, с технологией $asteroid_mining$, околоземные астероиды, начиная с самых богатых. Пространства на дальних площадках мало, и уровень сверх всего нашего пространства работает с -75%."
- },
- "sr_emigration_programme": {
-  "en": "Emigration Program",
-  "ru": "Программа эмиграции"
- },
- "sr_emigration_programme_desc": {
-  "en": "Our program sends settlers to our colonies each month. Each level raises the Space Program's throughput, and its Launch Capacity bill with it.",
-  "ru": "Наша программа ежемесячно отправляет поселенцев в наши колонии. Каждый уровень повышает пропускную способность Космической программы, а вместе с ней и её счёт за пусковые мощности."
+  "en": "Our $building_space_mine$ levels work at their sites' [concept_sr_base_grade], and the sites the Colonies section's Bases view puts them on are poor, or our room has run out: a level past all of it works at −75%.",
+  "ru": "Наши уровни «$building_space_mine$» работают с [Concept('concept_sr_base_grade','классом базы')] своих участков, а участки, на которые их ставит вид «Базы» раздела «Колонии», бедны, либо наше место закончилось: уровень сверх всего его работает на −75%."
  },
  "sr_engineering_breakthrough": {
   "en": "Engineering Breakthrough",
@@ -10716,8 +10824,8 @@
   "ru": "Содержание космических флотов страны: больше товаров обслуживания, которые использует здание $building_space_command$, #v +900%#! на каждые 10 единиц силы при полной силе, включая резерв"
  },
  "sr_free_colony_supply_desc": {
-  "en": "Supplies we ship to the free colonies in the solar system. Each one raises the Space Program's throughput, and its Launch Capacity bill with it.",
-  "ru": "Припасы, которые мы отправляем свободным колониям в Солнечной системе. Каждая повышает пропускную способность Космической программы, а вместе с ней и её счёт за пусковые мощности."
+  "en": "Supplies we ship to the free colonies in the solar system: each one takes #v 300#! Launch Capacity a week, whatever the Space Program's mission and funding.",
+  "ru": "Припасы, которые мы отправляем свободным колониям в Солнечной системе: каждая партия требует #v 300#! пусковых мощностей в неделю, какими бы ни были задача и финансирование Космической программы."
  },
  "sr_free_colony_trade_desc": {
   "en": "Trade with the free colonies we supply, shared with their other suppliers.",
@@ -10738,6 +10846,70 @@
  "sr_funding_throughput_desc": {
   "en": "Additional [concept_throughput] from [concept_space_race] funding investment. Each funding level, past the cap too, contributes #P +25%#! [GetBuildingType('building_space_program').GetName] throughput per active milestone.",
   "ru": "Дополнительная [Concept('concept_throughput','пропускная способность')] от вложений в финансирование [Concept('concept_space_race','космической гонки')]. Каждый уровень финансирования, в том числе сверх предела, даёт #P +25%#! пропускной способности здания [GetBuildingType('building_space_program').GetName] за каждую активную веху."
+ },
+ "sr_ground_carbonaceous": {
+  "en": "Carbonaceous",
+  "ru": "Углистый"
+ },
+ "sr_ground_carbonaceous_desc": {
+  "en": "Clays, carbonates, ammonia and organic compounds. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −17%#!\\n$tech_metals$: #v −7%#!\\n$gold$: #v −33%#!\\n$copper$: #v −7%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v +107%#!\\n$glass$: #v +117%#!",
+  "ru": "Глины, карбонаты, аммиак и органические соединения. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v −17%#!\\n$tech_metals$: #v −7%#!\\n$gold$: #v −33%#!\\n$copper$: #v −7%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v +107%#!\\n$glass$: #v +117%#!"
+ },
+ "sr_ground_hydrocarbon": {
+  "en": "Hydrocarbon",
+  "ru": "Углеводородный"
+ },
+ "sr_ground_hydrocarbon_desc": {
+  "en": "Hydrocarbon lakes, organic ices and tholin tars. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −25%#!\\n$tech_metals$: #v −15%#!\\n$gold$: #v −50%#!\\n$copper$: #v −20%#!\\n$lead$: #v −20%#!\\n$sulfur$: #v +80%#!\\n$glass$: #v +249%#!",
+  "ru": "Углеводородные озёра, органические льды и толиновые смолы. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v −25%#!\\n$tech_metals$: #v −15%#!\\n$gold$: #v −50%#!\\n$copper$: #v −20%#!\\n$lead$: #v −20%#!\\n$sulfur$: #v +80%#!\\n$glass$: #v +249%#!"
+ },
+ "sr_ground_icy": {
+  "en": "Icy",
+  "ru": "Ледяной"
+ },
+ "sr_ground_icy_desc": {
+  "en": "Water ice over rock, with some volatiles. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +0%#!\\n$tech_metals$: #v −5%#!\\n$gold$: #v −40%#!\\n$copper$: #v −10%#!\\n$lead$: #v −10%#!\\n$sulfur$: #v +61%#!\\n$glass$: #v +81%#!",
+  "ru": "Водяной лёд поверх камня с некоторым количеством летучих веществ. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v +0%#!\\n$tech_metals$: #v −5%#!\\n$gold$: #v −40%#!\\n$copper$: #v −10%#!\\n$lead$: #v −10%#!\\n$sulfur$: #v +61%#!\\n$glass$: #v +81%#!"
+ },
+ "sr_ground_metallic": {
+  "en": "Metallic",
+  "ru": "Металлический"
+ },
+ "sr_ground_metallic_desc": {
+  "en": "Iron-nickel metal, with platinum-group metals and gold. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +12%#!\\n$tech_metals$: #v +2%#!\\n$gold$: #v +30%#!\\n$copper$: #v +12%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v −72%#!\\n$glass$: #v −91%#!",
+  "ru": "Железоникелевый металл с металлами платиновой группы и золотом. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v +12%#!\\n$tech_metals$: #v +2%#!\\n$gold$: #v +30%#!\\n$copper$: #v +12%#!\\n$lead$: #v −7%#!\\n$sulfur$: #v −72%#!\\n$glass$: #v −91%#!"
+ },
+ "sr_ground_mixed": {
+  "en": "Mixed",
+  "ru": "Смешанный"
+ },
+ "sr_ground_mixed_desc": {
+  "en": "The rubble of the $sr_site_name_near_earth$, a little of every kind of ground. A base level on it makes each good as its production method lists it, and the other types are measured against it:\\n$iron$: #v +0%#!\\n$tech_metals$: #v +0%#!\\n$gold$: #v +0%#!\\n$copper$: #v +0%#!\\n$lead$: #v +0%#!\\n$sulfur$: #v +0%#!\\n$glass$: #v +0%#!",
+  "ru": "Россыпь обломков («$sr_site_name_near_earth$»), понемногу всех видов грунта. Базовый уровень на нём даёт каждый товар так, как указано в его методе производства; остальные типы сравниваются с ним:\\n$iron$: #v +0%#!\\n$tech_metals$: #v +0%#!\\n$gold$: #v +0%#!\\n$copper$: #v +0%#!\\n$lead$: #v +0%#!\\n$sulfur$: #v +0%#!\\n$glass$: #v +0%#!"
+ },
+ "sr_ground_rocky": {
+  "en": "Rocky",
+  "ru": "Каменистый"
+ },
+ "sr_ground_rocky_desc": {
+  "en": "Basalt and other silicate rock, which yields iron, titanium, aluminum and silica for glass. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v +26%#!\\n$tech_metals$: #v −3%#!\\n$gold$: #v −51%#!\\n$copper$: #v −17%#!\\n$lead$: #v −17%#!\\n$sulfur$: #v +7%#!\\n$glass$: #v +36%#!",
+  "ru": "Базальт и другие силикатные породы, дающие железо, титан, алюминий и кремнезём для стекла. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v +26%#!\\n$tech_metals$: #v −3%#!\\n$gold$: #v −51%#!\\n$copper$: #v −17%#!\\n$lead$: #v −17%#!\\n$sulfur$: #v +7%#!\\n$glass$: #v +36%#!"
+ },
+ "sr_ground_sulfurous": {
+  "en": "Sulfurous",
+  "ru": "Сернистый"
+ },
+ "sr_ground_sulfurous_desc": {
+  "en": "Sulfur, sulfates and sulfuric acid. A base level on this ground makes, against one on $sr_ground_mixed$ ground at the same grade:\\n$iron$: #v −16%#!\\n$tech_metals$: #v −11%#!\\n$gold$: #v −37%#!\\n$copper$: #v +5%#!\\n$lead$: #v +5%#!\\n$sulfur$: #v +320%#!\\n$glass$: #v +26%#!",
+  "ru": "Сера, сульфаты и серная кислота. Базовый уровень на этом грунте даёт по сравнению с уровнем на грунте типа $sr_ground_mixed$ того же качества:\\n$iron$: #v −16%#!\\n$tech_metals$: #v −11%#!\\n$gold$: #v −37%#!\\n$copper$: #v +5%#!\\n$lead$: #v +5%#!\\n$sulfur$: #v +320%#!\\n$glass$: #v +26%#!"
+ },
+ "sr_hold_by_force_ig_desc": {
+  "en": "Our marines hold colonies that have declared themselves free, and this group opposes colonial exploitation.",
+  "ru": "Наши морпехи удерживают колонии, объявившие себя свободными, а эта группа выступает против колониальной эксплуатации."
+ },
+ "sr_hold_tt": {
+  "en": "Our marines stay and hold the colony at #v 100#! autonomy. Each month they lose battalions, more the harder its terms push past that, and each battalion lost adds radicals among the interest groups that oppose colonial exploitation, who also think less of us for every colony we hold by force. If our marines fall below a battalion for every #v 100,000#! of its people, it declares itself free.",
+  "ru": "Наши морпехи остаются и удерживают колонию на уровне автономии #v 100#!. Каждый месяц они теряют батальоны, тем больше, чем сильнее её члены превышают этот уровень, и каждый потерянный батальон добавляет радикалов среди групп интересов, выступающих против колониальной эксплуатации, которые к тому же хуже о нас думают за каждую колонию, удерживаемую силой. Если морпехов становится меньше батальона на каждые #v 100 000#! её жителей, она объявляет себя свободной."
  },
  "sr_improved_safety_protocols_desc": {
   "en": "Enhanced fire suppression and emergency procedures reduce the risk of future incidents.",
@@ -10807,6 +10979,14 @@
   "en": "A space mission failure has set back progress and damaged public confidence in the program.",
   "ru": "Провал космической миссии замедлил прогресс и подорвал доверие общества к программе."
  },
+ "sr_module_admin": {
+  "en": "Off-World Administrations",
+  "ru": "Внеземные администрации"
+ },
+ "sr_module_admin_desc": {
+  "en": "Our colonies' Administrations answer to ministries at home, which must find the officials to oversee them.",
+  "ru": "Администрации наших колоний подчиняются министерствам дома, которые должны найти чиновников для надзора за ними."
+ },
  "sr_module_black": {
   "en": "Off-World Black Sites",
   "ru": "Внеземные секретные объекты"
@@ -10839,14 +11019,6 @@
   "en": "Our colonies' Research Stations radio their findings home.",
   "ru": "Исследовательские станции наших колоний передают свои открытия домой по радио."
  },
- "sr_module_resort": {
-  "en": "Off-World Resorts",
-  "ru": "Внеземные курорты"
- },
- "sr_module_resort_desc": {
-  "en": "Our colonies' resorts draw tourists who can afford the fare.",
-  "ru": "Курорты наших колоний привлекают туристов, способных оплатить дорогу."
- },
  "sr_module_train": {
   "en": "Off-World Training Grounds",
   "ru": "Внеземные учебные полигоны"
@@ -10860,8 +11032,8 @@
   "ru": "Модули колоний"
  },
  "sr_module_upkeep_desc": {
-  "en": "Our colonies' modules past each colony's first are kept up from Earth. Each level raises the Space Program's throughput, and its Launch Capacity bill with it.",
-  "ru": "Модули наших колоний сверх первого в каждой колонии содержатся с Земли. Каждый уровень повышает пропускную способность Космической программы, а вместе с ней и её счёт за пусковые мощности."
+  "en": "Our colonies' modules past each colony's first are kept up from Earth: each level takes #v 100#! Launch Capacity a week, whatever the Space Program's mission and funding.",
+  "ru": "Модули наших колоний сверх первого в каждой колонии содержатся с Земли: каждый уровень требует #v 100#! пусковых мощностей в неделю, какими бы ни были задача и финансирование Космической программы."
  },
  "sr_moon_base": {
   "en": "Lunar Colony",
@@ -10963,6 +11135,34 @@
   "en": "The program is between stages.",
   "ru": "Программа между этапами."
  },
+ "sr_resort_room_bonus_desc": {
+  "en": "Our $building_space_resort$ levels fill the hotels in Earth orbit and at our colonies, the best draw first. Guests pay most to see the Moon's landing sites and the wonders of Mars.",
+  "ru": "Наши уровни «$building_space_resort$» заполняют отели на околоземной орбите и в наших колониях, сначала с лучшей привлекательностью. Больше всего гости платят за то, чтобы увидеть места посадок на Луне и чудеса Марса."
+ },
+ "sr_resort_room_penalty_desc": {
+  "en": "Our $building_space_resort$ levels fill the hotels in Earth orbit and at our colonies, the best draw first. Few guests will make the trip to the outer worlds, and a level past all of our room works at -75%.",
+  "ru": "Наши уровни «$building_space_resort$» заполняют отели на околоземной орбите и в наших колониях, сначала с лучшей привлекательностью. Немногие гости решатся на поездку к внешним мирам, а уровень сверх всего нашего места работает на -75%."
+ },
+ "sr_resort_state_fine_art_bonus_desc": {
+  "en": "Our $building_space_resort$ hotels are off-world, so what holds this state's own $fine_art$ down does not reach them.",
+  "ru": "Наши отели «$building_space_resort$» находятся вне Земли, поэтому то, что сдерживает товар «$fine_art$» в этой области, на них не распространяется."
+ },
+ "sr_resort_state_fine_art_penalty_desc": {
+  "en": "Our $building_space_resort$ hotels are off-world, so the studios that lift this state's own $fine_art$ do not reach them.",
+  "ru": "Наши отели «$building_space_resort$» находятся вне Земли, поэтому студии, поднимающие товар «$fine_art$» в этой области, на них не распространяются."
+ },
+ "sr_resort_state_tourism_bonus_desc": {
+  "en": "Our $building_space_resort$ hotels are off-world, so what holds this state's own $tourism$ down does not reach them.",
+  "ru": "Наши отели «$building_space_resort$» находятся вне Земли, поэтому то, что сдерживает товар «$tourism$» в этой области, на них не распространяется."
+ },
+ "sr_resort_state_tourism_penalty_desc": {
+  "en": "Our $building_space_resort$ hotels are off-world, so what lifts this state's own $tourism$ does not reach them.",
+  "ru": "Наши отели «$building_space_resort$» находятся вне Земли, поэтому то, что поднимает товар «$tourism$» в этой области, на них не распространяется."
+ },
+ "sr_revoke_tt": {
+  "en": "The colony loses its charter: its specializations work at #v 100%#! for us again, and the charter's #v 0.4#! a month off its autonomy ends.",
+  "ru": "Колония теряет хартию: её специализации снова работают на нас на #v 100%#!, а снимаемые хартией #v 0,4#! автономии в месяц прекращаются."
+ },
  "sr_rivals_none": {
   "en": "No other power is working on this milestone at the moment.",
   "ru": "Сейчас ни одна другая держава не работает над этой вехой."
@@ -10979,6 +11179,14 @@
   "en": "Landing in the Sea of Tranquility captured the world's imagination with its iconic symbolism.",
   "ru": "Посадка в Море Спокойствия захватила воображение мира своей знаковой символикой."
  },
+ "sr_settler_launches": {
+  "en": "Settler Launches",
+  "ru": "Запуски поселенцев"
+ },
+ "sr_settler_launches_desc": {
+  "en": "Each settler we send to our colonies takes 3 Launch Capacity, bought by our Space Program.",
+  "ru": "Каждый поселенец, которого мы отправляем в наши колонии, требует 3 пусковых мощностей, закупаемых нашей Космической программой."
+ },
  "sr_shackleton_crater": {
   "en": "Shackleton Crater Scientific Windfall",
   "ru": "Научная удача кратера Шеклтон"
@@ -10992,8 +11200,8 @@
   "ru": "Торговля между Землёй и внеземными колониями приносит существенные экономические и стратегические выгоды."
  },
  "sr_space_command_paused_desc": {
-  "en": "Construction is paused: this $building_space_command$ buys none of the goods its yards build with, and builds no fleet strength. Its maintenance goods are still used.",
-  "ru": "Строительство приостановлено: это здание $building_space_command$ не закупает товары, из которых его верфи строят, и не наращивает силу флота. Товары для обслуживания по-прежнему используются."
+  "en": "Construction is paused, or idle in Orders Only with nothing on order: this $building_space_command$ buys none of the goods its yards build with, and builds no fleet strength. Its maintenance goods are still used.",
+  "ru": "Строительство приостановлено либо простаивает в режиме «Только заказы» без заказов: это здание $building_space_command$ не закупает товары, из которых его верфи строят, и не наращивает силу флота. Товары для обслуживания по-прежнему используются."
  },
  "sr_space_program_cost_desc": {
   "en": "Resources allocated to active space program milestones reduce weekly innovation.",
@@ -11016,8 +11224,8 @@
   "ru": "Урегулирование забастовки в колонии"
  },
  "sr_strike_settlement_desc": {
-  "en": "The pay and conditions we granted the strikers on one of our colonies, shipped out with every Space Program launch.",
-  "ru": "Оплата и условия, которые мы дали забастовщикам в одной из наших колоний, отправляются с каждым запуском Космической программы."
+  "en": "The pay and conditions we granted the strikers on one of our colonies, shipped out with the Space Program's launches: #v 500#! Launch Capacity a week, whatever its mission and funding.",
+  "ru": "Оплата и условия, которые мы дали забастовщикам в одной из наших колоний, отправляются с запусками Космической программы: #v 500#! пусковых мощностей в неделю, какими бы ни были её задача и финансирование."
  },
  "sr_suborbital": {
   "en": "Suborbital Flight Achieved",
@@ -11464,24 +11672,24 @@
   "ru": "Государственные институты мобилизовали аварийное реагирование на расплавление активной зоны, ограничив ущерб, но ценой значительных расходов казны и доверия общества."
  },
  "ste_misinfo_free_speech_desc": {
-  "en": "Free speech protections remain paramount, even in the age of viral misinformation.",
-  "ru": "Защита свободы слова остаётся первостепенной даже в эпоху вирусной дезинформации."
+  "en": "We have declined to order the platforms to remove false posts, and left the newspapers to answer them.",
+  "ru": "Мы отказались приказывать платформам удалять ложные публикации и предоставили газетам отвечать на них."
  },
  "ste_misinfo_literacy": {
   "en": "Media Literacy Programs",
   "ru": "Программы медиаграмотности"
  },
  "ste_misinfo_literacy_desc": {
-  "en": "Government-funded media [concept_literacy] programs help citizens navigate the information landscape.",
-  "ru": "Финансируемые государством программы медийной [Concept('concept_literacy','грамотности')] помогают гражданам ориентироваться в информационном ландшафте."
+  "en": "We are paying for classes that teach people to check where a story came from before they share it.",
+  "ru": "Мы оплачиваем занятия, которые учат людей проверять, откуда взялась история, прежде чем делиться ею."
  },
  "ste_misinfo_regulate": {
   "en": "Platform Regulation",
   "ru": "Регулирование платформ"
  },
  "ste_misinfo_regulate_desc": {
-  "en": "Social media platforms face new regulations to combat misinformation.",
-  "ru": "Для платформ социальных сетей вводятся новые правила борьбы с дезинформацией."
+  "en": "We have ordered the social media platforms to take down posts that our officials judge false.",
+  "ru": "Мы приказали платформам социальных сетей удалять публикации, которые наши чиновники сочтут ложными."
  },
  "ste_outsourcing_embrace": {
   "en": "Outsourcing Embraced",
@@ -11899,14 +12107,6 @@
   "en": "Outliers",
   "ru": "Выбросы"
  },
- "te_jmap_pick_academics_desc": {
-  "en": "Color each state by its Academics as a share of its people. Universities and a literate, urban people draw them. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_academics_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле учёных среди их населения. Их привлекают университеты и грамотное городское население. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_academics_colors', 'te_jmap_color_in_force' )]"
- },
- "te_jmap_pick_aristocrats_desc": {
-  "en": "Color each state by its Aristocrats as a share of its people. Landed estates and serfdom keep them many; land reform and industry thin them. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_aristocrats_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле аристократов среди их населения. Помещичьи имения и крепостничество приумножают их; земельная реформа и промышленность сокращают. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_aristocrats_colors', 'te_jmap_color_in_force' )]"
- },
  "te_jmap_pick_armed_forces_desc": {
   "en": "Color each state by its Soldiers and Officers, in people. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_armed_forces_colors', 'te_jmap_color_in_force_none' )]",
   "ru": "Окрасить области по числу солдат и офицеров, в людях. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_armed_forces_colors', 'te_jmap_color_in_force_none' )]"
@@ -11915,21 +12115,17 @@
   "en": "Color each state by what its [concept_local_climate] does to its [concept_migration_pull] before any technology eases it, as a penalty in percent. The midpoint is none: a mild or sunny winter draws people, and a draw counts below 0. Worked out once a year, at the world's warming then.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_lo')|0]%#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_hi')|0]%#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid_s_38_71', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_base_comfort_colors', 'te_jmap_color_in_force_mid' )]",
   "ru": "Окрасить области по тому, как их [concept_local_climate|l] влияет на их [concept_migration_pull|l] до того, как технологии смягчат его, в виде штрафа в процентах. Середина шкалы — отсутствие штрафа: мягкая или солнечная зима привлекает людей, и такое привлечение считается ниже 0. Рассчитывается раз в год по потеплению мира на тот момент.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_lo')|0]%#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_comfort_base_hi')|0]%#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid_s_38_71', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_base_comfort_colors', 'te_jmap_color_in_force_mid' )]"
  },
+ "te_jmap_pick_below_expected_sol_desc": {
+  "en": "Color each state by the share of its people living below their [concept_expected_sol], read as the game runs. People below it turn radical.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_below_sol_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_below_sol_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_below_expected_sol_colors', 'te_jmap_color_in_force' )]",
+  "ru": "Раскрасить каждую область по доле её жителей, живущих хуже, чем они ожидают ([concept_expected_sol|l]), по данным в ходе игры. Те, кто живёт ниже этого уровня, становятся радикалами.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_below_sol_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_below_sol_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_below_expected_sol_colors', 'te_jmap_color_in_force' )]"
+ },
  "te_jmap_pick_birth_rate_desc": {
   "en": "Color each state by its births per 1,000 people last year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_birth_rate_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по числу рождений на 1 000 человек за прошлый год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_birth_rate_colors', 'te_jmap_color_in_force' )]"
  },
- "te_jmap_pick_capitalists_desc": {
-  "en": "Color each state by its Capitalists as a share of its people. They gather where industry and finance do, so a few great cities hold most of them. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_capitalists_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле капиталистов среди их населения. Они собираются там, где промышленность и финансы, поэтому большинство из них сосредоточено в нескольких великих городах. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_capitalists_colors', 'te_jmap_color_in_force' )]"
- },
  "te_jmap_pick_city_rank_desc": {
   "en": "Color each state by its city's place in the world's ranking, the one tourism's [concept_tourism_cities] bonus reads: the 20 largest from amber at 20th to crimson at 1st, the rest steel blue, paler with each doubling of the rank. A state past 501st has no rank and is pale. The ranking is recalculated every month.",
   "ru": "Окрасить области по месту их города в мировом рейтинге, по которому считается бонус [concept_tourism_cities] туризма: 20 крупнейших — от янтарного на 20-м месте до малинового на 1-м, остальные — стально-синие, бледнее с каждым удвоением ранга. Область за пределами 501-го места не имеет ранга и окрашена бледно. Рейтинг пересчитывается каждый месяц."
- },
- "te_jmap_pick_clergy_desc": {
-  "en": "Color each state by its Clergymen as a share of its people. A state church and devout people keep them many. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_clergy_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле священнослужителей среди их населения. Государственная церковь и набожное население приумножают их. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_clergy_colors', 'te_jmap_color_in_force' )]"
  },
  "te_jmap_pick_colonies_desc": {
   "en": "Color each colony, and each colonial subject's state, by its empire's [concept_colonial_stability]: red while it collapses, then orange, yellow and green up to solidified. An empire's home states are taupe.",
@@ -11955,6 +12151,10 @@
   "en": "Color each state by its [concept_devastation], the share of it devastated.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_devastation_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по уровню [Concept('concept_devastation','опустошения')], то есть по доле разорённой их части.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_devastation_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_devastation_colors', 'te_jmap_color_in_force' )]"
  },
+ "te_jmap_pick_discrimination_desc": {
+  "en": "Color each state by the share of its people short of full [concept_acceptance], below Full Acceptance for their culture or their religion. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unacc_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unacc_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_discrimination_colors', 'te_jmap_color_in_force' )]",
+  "ru": "Раскрасить каждую область по доле её жителей, у которых [concept_acceptance|l] неполное: ниже уровня «Полное принятие» для их культуры или религии. Считается раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unacc_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unacc_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_discrimination_colors', 'te_jmap_color_in_force' )]"
+ },
  "te_jmap_pick_dynastic_wealth_desc": {
   "en": "Color each state by its [concept_inheritance_concentration]. The midpoint is 50: property is dispersed below it and concentrated above.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_dynastic_wealth_colors', 'te_jmap_color_in_force_mid' )]",
   "ru": "Окрасить области по их [Concept('concept_inheritance_concentration','династическому богатству')]. Середина шкалы — 50: ниже неё собственность рассредоточена, выше — сконцентрирована.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wc_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_dynastic_wealth_colors', 'te_jmap_color_in_force_mid' )]"
@@ -11974,6 +12174,10 @@
  "te_jmap_pick_fighting_age_men_desc": {
   "en": "Color each state by its men aged 20 to 39 in the last census, the pool conscription draws on, as a share of its people. War and emigration thin it.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_fighting_age_men_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по доле мужчин в возрасте от 20 до 39 лет в последней переписи населения, из которых берётся призыв, среди их населения. Война и эмиграция сокращают её.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_fam_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_fighting_age_men_colors', 'te_jmap_color_in_force' )]"
+ },
+ "te_jmap_pick_gdp_desc": {
+  "en": "Color each state by its [concept_gdp], a year's output of its economy, read as the game runs.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdp_lo')|K] to @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdp_hi')|K]. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_gdp_colors', 'te_jmap_color_in_force_none' )]",
+  "ru": "Раскрасить каждую область по её [concept_gdp] — годовому выпуску её экономики, по данным в ходе игры.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdp_lo')|K] до @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdp_hi')|K]. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_gdp_colors', 'te_jmap_color_in_force_none' )]"
  },
  "te_jmap_pick_gdp_per_capita_desc": {
   "en": "Color each state by its [Concept('concept_gdp_per_capita', 'GDP per capita')], a year's GDP over its people. A rich country stands near @money!1 in 1836.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdppc_lo')|2] to @money![GetPlayer.MakeScope.ScriptValue('te_jmap_gdppc_hi')|2]. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_gdp_per_capita_colors', 'te_jmap_color_in_force' )]",
@@ -11995,6 +12199,10 @@
   "en": "Color each state by how many of every 1,000 babies die in their first year, in the last census.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_infant_mortality_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по тому, сколько из каждых 1 000 младенцев умирает в первый год жизни, в последней переписи населения.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_imr_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_infant_mortality_colors', 'te_jmap_color_in_force' )]"
  },
+ "te_jmap_pick_infrastructure_desc": {
+  "en": "Color each state by its [concept_infrastructure] less its [concept_infrastructure_usage], read as the game runs. A state that uses more than it has loses [concept_market_access]. The midpoint is none; where every state is on one side of it, the midpoint's color marks the one nearest.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_infra_lo')|+0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_infra_hi')|+0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_infrastructure_colors', 'te_jmap_color_in_force_mid' )]",
+  "ru": "Раскрасить каждую область по запасу инфраструктуры: её [concept_infrastructure|l] за вычетом её [concept_infrastructure_usage|l], по данным в ходе игры. Область, которая использует больше, чем имеет, теряет [concept_market_access|l]. Середина — нуль; если все области по одну её сторону, цвет середины отмечает ближайшую.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_infra_lo')|+0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_infra_hi')|+0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_infrastructure_colors', 'te_jmap_color_in_force_mid' )]"
+ },
  "te_jmap_pick_investment_desc": {
   "en": "Color each state by what its owners pay into the [concept_investment_pool] each week. An estimate: the profit of its financial districts, manor houses and company headquarters, times the share their owners reinvest. Worker-owned buildings and the government's dividends are not counted.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_lo')|K] to @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_hi')|K]. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_investment_colors', 'te_jmap_color_in_force_none' )]",
   "ru": "Окрасить области по тому, сколько их владельцы вносят в [concept_investment_pool|l] каждую неделю. Оценка: прибыль финансовых районов, усадеб и штаб-квартир компаний, умноженная на долю, которую их владельцы реинвестируют. Здания, принадлежащие рабочим, и дивиденды правительства не учитываются.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_lo')|K] до @money![GetPlayer.MakeScope.ScriptValue('te_jmap_invest_hi')|K]. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_investment_colors', 'te_jmap_color_in_force_none' )]"
@@ -12006,6 +12214,14 @@
  "te_jmap_pick_life_expectancy_desc": {
   "en": "Color each state by its life expectancy at birth in the last census, in years.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_life_expectancy_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по ожидаемой продолжительности жизни при рождении в последней переписи населения, в годах.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_e0_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_life_expectancy_colors', 'te_jmap_color_in_force' )]"
+ },
+ "te_jmap_pick_literacy_desc": {
+  "en": "Color each state by its [concept_literacy], the share of its people who can read and write, read as the game runs. Schools, laws on education and wealth raise it.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_literacy_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_literacy_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_literacy_colors', 'te_jmap_color_in_force' )]",
+  "ru": "Раскрасить каждую область по её [Concept('concept_literacy','грамотности')], то есть доле жителей, умеющих читать и писать, по данным в ходе игры. Её повышают школы, законы об образовании и богатство.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_literacy_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_literacy_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_literacy_colors', 'te_jmap_color_in_force' )]"
+ },
+ "te_jmap_pick_market_access_desc": {
+  "en": "Color each state by its [concept_market_access], read as the game runs. It falls where a state uses more [concept_infrastructure] than it has, and a state cut off from its market's capital has none.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_access_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_access_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_market_access_colors', 'te_jmap_color_in_force' )]",
+  "ru": "Раскрасить каждую область по её [Concept('concept_market_access','доступу к рынку')], по данным в ходе игры. Он падает там, где область использует больше [Concept('concept_infrastructure','инфраструктуры')], чем имеет, а область, отрезанная от столицы своего рынка, его лишена.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_access_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_access_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_market_access_colors', 'te_jmap_color_in_force' )]"
  },
  "te_jmap_pick_median_age_desc": {
   "en": "Color each state by the median age of its people in the last census, in years.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_median_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_median_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_median_age_colors', 'te_jmap_color_in_force' )]",
@@ -12043,9 +12259,17 @@
   "en": "Color each country by its political model at the last census of models, in the colors of the Cultural Hegemony panel's model chart.",
   "ru": "Окрасить каждую страну по её политической модели в последней переписи моделей, в цветах диаграммы моделей панели «Культурная гегемония»."
  },
+ "te_jmap_pick_pollution_desc": {
+  "en": "Color each state by its region's pollution, 0 to 255, read as the game runs, so every state of a region shares it. Industry raises it, and it drives the region's [concept_pollution_impact], which costs health, living standards and migration attraction.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_pollution_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_pollution_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_33_67', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_pollution_colors', 'te_jmap_color_in_force_none' )]",
+  "ru": "Раскрасить каждую область по загрязнению её региона, от 0 до 255, по данным в ходе игры, так что все области региона разделяют его. Его повышает промышленность, и оно определяет [concept_pollution_impact|l] региона, которое сказывается на здоровье, уровне жизни и миграционной привлекательности.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_pollution_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_pollution_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_33_67', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_pollution_colors', 'te_jmap_color_in_force_none' )]"
+ },
  "te_jmap_pick_population_density_desc": {
   "en": "Color each state by its people per km² of land: its population over its area, where a region split between countries gives each part the region's land in proportion to its provinces.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_lo')|2]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_hi')|0]#! people per km². $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_density_colors', 'te_jmap_color_in_force_none' )]",
   "ru": "Окрасить каждую область по числу жителей на км² суши: население области, делённое на её площадь; если регион разделён между странами, каждая часть получает землю региона пропорционально числу своих провинций.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_lo')|2]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_density_hi')|0]#! человек на км². $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_density_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_population_desc": {
+  "en": "Color each state by its population, read as the game runs.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_people_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_people_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_colors', 'te_jmap_color_in_force_none' )]",
+  "ru": "Раскрасить каждую область по численности её населения, по данным в ходе игры.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_people_lo')|K]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_people_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_colors', 'te_jmap_color_in_force_none' )]"
  },
  "te_jmap_pick_population_growth_desc": {
   "en": "Color each state by how far its people grew or shrank over the last year, per 1,000. The midpoint is none. Births, deaths and migration all count, and so does land: a state that gained or lost provinces jumps. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_growth_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid_25_57_40_73', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_population_growth_colors', 'te_jmap_color_in_force_mid' )]",
@@ -12055,9 +12279,25 @@
   "en": "Color each state with a $building_grid_transfer_station$ by its [concept_power_grid], each grid in a color of its own and bordering grids apart. A grid's hub, its largest producer of $electricity$, is striped white; a station on no grid this month is gray.",
   "ru": "Окрасить каждую область со зданием $building_grid_transfer_station$ по её [Concept('concept_power_grid','энергосети')], каждую сеть своим цветом, соседние сети различаются. Узел сети — её крупнейший производитель товара $electricity$ — отмечен белыми полосами; станция, не входящая в сеть в этом месяце, — серая."
  },
+ "te_jmap_pick_radicals_loyalists_desc": {
+  "en": "Color each state by the share of its people who are [Concept('concept_loyalist', 'loyalists')] less the share who are [Concept('concept_radical', 'radicals')], read as the game runs. Radicals drive turmoil; loyalists hold a state steady. The midpoint is none; where every state is on one side of it, the midpoint's color marks the one nearest.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_loyal_lo')|+%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_loyal_hi')|+%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_radicals_loyalists_colors', 'te_jmap_color_in_force_mid' )]",
+  "ru": "Раскрасить каждую область по доле [Concept('concept_loyalist', 'лоялистов')] среди её жителей за вычетом доли [Concept('concept_radical', 'радикалов')], по данным в ходе игры. Радикалы порождают беспорядки; лоялисты удерживают область в равновесии. Середина — нуль; если все области по одну её сторону, цвет середины отмечает ближайшую.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_loyal_lo')|+%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_loyal_hi')|+%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_radicals_loyalists_colors', 'te_jmap_color_in_force_mid' )]"
+ },
  "te_jmap_pick_sex_balance_desc": {
   "en": "Color each state by its men per 100 women aged 20 to 59 in the last census. The midpoint is even, 100.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_sex_balance_colors', 'te_jmap_color_in_force_mid' )]",
   "ru": "Окрасить области по числу мужчин на 100 женщин в возрасте от 20 до 59 лет в последней переписи населения. Середина шкалы — равенство, 100.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sex_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_sex_balance_colors', 'te_jmap_color_in_force_mid' )]"
+ },
+ "te_jmap_pick_sol_vs_expected_desc": {
+  "en": "Color each state by its people's [concept_sol] less the one they expect ([concept_expected_sol]), read as the game runs. People living below what they expect turn radical. The midpoint is none; where every state is on one side of it, the midpoint's color marks the one nearest.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_expected_lo')|+1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_expected_hi')|+1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_sol_vs_expected_colors', 'te_jmap_color_in_force_mid' )]",
+  "ru": "Раскрасить каждую область по разности: [concept_sol|l] её жителей за вычетом того, который они ожидают ([concept_expected_sol|l]), по данным в ходе игры. Жители, живущие хуже, чем ожидают, становятся радикалами. Середина — нуль; если все области по одну её сторону, цвет середины отмечает ближайшую.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_expected_lo')|+1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_expected_hi')|+1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_sol_vs_expected_colors', 'te_jmap_color_in_force_mid' )]"
+ },
+ "te_jmap_pick_sol_vs_wealth_desc": {
+  "en": "Color each state by its people's [concept_sol] less their [concept_wealth], both at the yearly count: what the place adds to living standards or takes from them beyond what its people can afford, from pollution, health institutions, laws, rulers, principles and events. Small at the start, it grows through the game. The midpoint is none; where every state is on one side of it, the midpoint's color marks the one nearest.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_wealth_lo')|+1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_wealth_hi')|+1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_sol_vs_wealth_colors', 'te_jmap_color_in_force_mid' )]",
+  "ru": "Раскрасить каждую область по разности: [concept_sol|l] её жителей за вычетом их [Concept('concept_wealth','богатства')], оба по годовому подсчёту: то, что место добавляет к уровню жизни или отнимает у него сверх того, что люди могут себе позволить, из-за загрязнения, учреждений здравоохранения, законов, правителей, принципов и событий. В начале игры оно невелико, но по ходу игры растёт. Середина — нуль; если все области по одну её сторону, цвет середины отмечает ближайшую.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_wealth_lo')|+1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_wealth_hi')|+1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_mid', 'te_jmap_scale_in_force_mid' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_sol_vs_wealth_colors', 'te_jmap_color_in_force_mid' )]"
+ },
+ "te_jmap_pick_standard_of_living_desc": {
+  "en": "Color each state by its people's [concept_sol], their mean at the yearly count, whatever the Demographics rule. A pop's comes from its [concept_wealth], raised or lowered by where it lives and the laws it lives under.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_lo')|1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_hi')|1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_standard_of_living_colors', 'te_jmap_color_in_force' )]",
+  "ru": "Раскрасить каждую область по следующему показателю: [concept_sol|l] её жителей, средний на годовой подсчёт, при любой настройке правила «Демография». У группы населения он берётся из её [Concept('concept_wealth','богатства')], повышаемого или понижаемого местом, где она живёт, и законами, под которыми она живёт.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_lo')|1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_sol_hi')|1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_standard_of_living_colors', 'te_jmap_color_in_force' )]"
  },
  "te_jmap_pick_tourism_appeal_desc": {
   "en": "Color each state by its [concept_tourism_base_appeal], the score its scenery, climate and townscape give its tourism. As on the state panel, the share its monuments stand for counts under them instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_tourism_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_tourism_appeal_colors', 'te_jmap_color_in_force' )]",
@@ -12071,6 +12311,10 @@
   "en": "Color each state by its [concept_turmoil], the share of its people who are radical.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_turmoil_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по уровню [concept_turmoil|l] — доле радикально настроенного населения.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_turmoil_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_turmoil_colors', 'te_jmap_color_in_force' )]"
  },
+ "te_jmap_pick_unemployment_desc": {
+  "en": "Color each state by the share of its [concept_workforce] without work, counted when the map is picked and each month while it is.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unemp_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unemp_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_33_67', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_unemployment_colors', 'te_jmap_color_in_force' )]",
+  "ru": "Раскрасить каждую область по доле её [Concept('concept_workforce','рабочей силы')] без работы, подсчитанной при выборе карты и каждый месяц, пока она выбрана.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unemp_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_unemp_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_33_67', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_unemployment_colors', 'te_jmap_color_in_force' )]"
+ },
  "te_jmap_pick_united_nations_desc": {
   "en": "Members of the United Nations in blue, permanent members of the [concept_un_security_council] darker, the headquarters gold, and every state where a [concept_un_mission] is at work in its mission's color: peacekeeping cyan, aid orange, stabilization red, electoral observers green.",
   "ru": "Члены Организации Объединённых Наций — синим, постоянные члены [Concept('concept_un_security_council','Совета Безопасности')] — темнее, штаб-квартира — золотым, а каждая область, где работает [Concept('concept_un_mission','миссия ООН')], — цветом своей миссии: миротворческая — голубой, помощи — оранжевый, стабилизационная — красный, избирательных наблюдателей — зелёный."
@@ -12079,9 +12323,17 @@
   "en": "Color each state by its share of urban people, those not working at a farm, plantation, ranch, mine or other rural workplace.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_lo')|%0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_urban_share_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по доле городского населения — тех, кто не работает на ферме, плантации, ранчо, руднике или ином сельском рабочем месте.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_lo')|%0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_urban_hi')|%0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_urban_share_colors', 'te_jmap_color_in_force' )]"
  },
+ "te_jmap_pick_vacant_jobs_desc": {
+  "en": "Color each state by the jobs open in its buildings, subsistence farms aside, read as the game runs: work waiting for workers, which draws migrants, while the buildings make less than they could.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_jobs_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_jobs_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_vacant_jobs_colors', 'te_jmap_color_in_force_none' )]",
+  "ru": "Раскрасить каждую область по числу открытых рабочих мест в её зданиях, кроме натуральных хозяйств, по данным в ходе игры: работа ждёт работников, что привлекает мигрантов, пока здания производят меньше, чем могли бы.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_jobs_lo')|K]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_jobs_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_vacant_jobs_colors', 'te_jmap_color_in_force_none' )]"
+ },
  "te_jmap_pick_war_dead_desc": {
   "en": "Color each state by its dead to war and devastation last year, from the census's Causes of Death. The census shares a country's war dead out to its states by their soldiers, so the map shows where the dead came from, not where they fell; under the Full setting the civilians devastation kills count too.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_war_dead_colors', 'te_jmap_color_in_force_none' )]",
   "ru": "Окрасить области по числу погибших от войны и разорения за прошлый год по данным «Причин смерти» переписи населения. Перепись распределяет военные потери страны по её областям пропорционально числу их солдат, так что карта показывает, откуда родом погибшие, а не где они пали; при настройке «Полная» учитываются и гражданские, убитые разорением.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_lo')|K]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_war_dead_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_war_dead_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_wealth_desc": {
+  "en": "Color each state by its people's [concept_wealth], their mean at the yearly count, whatever the Demographics rule: what they can afford, before anything the place adds to their [concept_sol] or takes from it.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wealth_lo')|1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wealth_hi')|1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_wealth_colors', 'te_jmap_color_in_force' )]",
+  "ru": "Раскрасить каждую область по следующему показателю: [concept_wealth|l] её жителей, средний на годовой подсчёт, при любой настройке правила «Демография»: то, что они могут себе позволить, до всего, что место добавляет к их [Concept('concept_sol','уровню жизни')] или отнимает у него.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wealth_lo')|1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_wealth_hi')|1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_wealth_colors', 'te_jmap_color_in_force' )]"
  },
  "te_jmap_scale": {
   "en": "Scale",
@@ -12199,17 +12451,9 @@
   "en": "Public Confidence Shaken",
   "ru": "Общественное доверие подорвано"
  },
- "te_map_mode_overlay_desc": {
-  "en": "Migration-attraction map-mode overlay. The displayed [concept_migration_pull] is being overridden to color the world map by the metric you chose in the Cartographic Survey.",
-  "ru": "Накладка режима карты привлекательности миграции. Отображаемое [concept_migration_pull|l] подменяется, чтобы окрасить карту мира по метрике, выбранной вами в «Картографической съёмке»."
- },
  "te_officer_academies_standing_desc": {
   "en": "Officers schooled in the national academies form a confident, close-knit caste with a voice in politics. Scales with the share of your regular battalions trained under $pm_officer_academies$.",
   "ru": "Офицеры, обученные в национальных академиях, образуют уверенную сплочённую касту с голосом в политике. Масштабируется долей ваших регулярных батальонов, обученных по методу $pm_officer_academies$."
- },
- "te_open_map_mode_survey_desc": {
-  "en": "Hijack the [concept_migration_pull] map mode to color the world map by an arbitrary metric.\\n\\n#b The game must be paused.#! Pick a metric, then switch to the #b Migration Attraction#! map mode to view it. Re-open this decision to pick #b Clear#! before switching to another metric. The overlay self-cleans within 5 in-game days of unpausing.",
-  "ru": "Подменить режим карты [concept_migration_pull|l], чтобы окрасить карту мира по произвольной метрике.\\n\\n#b Игра должна стоять на паузе.#! Выберите метрику, затем переключитесь на режим карты #b Привлекательность миграции#!, чтобы увидеть её. Откройте это решение снова и выберите #b Очистить#!, прежде чем переходить к другой метрике. Накладка сама очищается в течение 5 игровых дней после снятия паузы."
  },
  "te_orbital_debris": {
   "en": "Orbital Debris",
@@ -12479,6 +12723,22 @@
   "en": "This country is party to the Convention on the Law of the Sea while it regulates the seabed, and pays royalties on its $building_ocean_mine$ levels: 4% of their base output value a week. The money goes to the World Development Fund while it stands, otherwise to the UN budget.",
   "ru": "Эта страна участвует в Конвенции по морскому праву, пока та регулирует морское дно, и платит роялти за уровни здания $building_ocean_mine$: 4% их базовой стоимости продукции в неделю. Деньги идут во Всемирный фонд развития, пока он существует, в противном случае — в бюджет ООН."
  },
+ "te_spacers_class": {
+  "en": "Space Forces",
+  "ru": "Космические силы"
+ },
+ "te_spacers_class_caste_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "ru": "Люди баз космических сил, составляющие экипажи флотов и воюющие как их морпехи."
+ },
+ "te_spacers_class_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "ru": "Люди баз космических сил, составляющие экипажи флотов и воюющие как их морпехи."
+ },
+ "te_spacers_class_edo_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "ru": "Люди баз космических сил, составляющие экипажи флотов и воюющие как их морпехи."
+ },
  "tech_metals": {
   "en": "Tech-Critical Metals",
   "ru": "Критические для технологий металлы"
@@ -12664,8 +12924,8 @@
   "ru": "Организация Объединённых Наций переживает кризис, идут поэтапные реформы."
  },
  "un_authority_progress_desc": {
-  "en": "[concept_un_authority] represents the [concept_legitimacy] and enforcement power of the United Nations. Higher authority means resolutions carry more weight and members gain greater benefits.",
-  "ru": "[concept_un_authority] отражает [concept_legitimacy|l] и принудительную силу Организации Объединённых Наций. Чем выше авторитет, тем больший вес имеют резолюции и тем больше выгод получают члены."
+  "en": "[concept_un_authority]: #v [ROOT.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! of 100",
+  "ru": "[concept_un_authority]: #v [ROOT.GetCountry.MakeScope.ScriptValue('un_disp_authority')|0]#! из 100"
  },
  "un_authority_restored_modifier_desc": {
   "en": "This country has successfully rallied support to restore the United Nations' authority and [concept_legitimacy].",

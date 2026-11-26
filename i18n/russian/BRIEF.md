@@ -182,6 +182,11 @@ The first run settled these mod words too, which are too short or too common for
 | the Map Room's color scale (Linear, Logarithmic, Ranked) | шкала, agreeing in the feminine: Линейная, Логарифмическая, Ранговая |
 | a game rule's Early / Late Unlock setting | «раннее открытие» / «позднее открытие», as the rules' labels read, not *разблокировка* |
 | the Full Demographics rule | правило «Демография» в режиме «Полное»; outside it, «вне режима «Полное» правила «Демография»» |
+| Space Forces / Spacers (the pop type: warship crews and marines) | космические силы / Космонавты |
+| a fleet's dock / the fleet stances / the Station posture | причал / «Уклонение», «Удар и отход», «Вступление в бой», «Бой до последнего» / «Дежурство» |
+| Launch Credit (nuclear) | зачёт пуска: *пуск*, the missile-launch word, not *запуск* or *кредит* |
+| a world's room for Resort Colony levels | Место для курортных колоний |
+| a hybrid culture's name | the language word as a capitalized feminine adjective agreeing with *культура*, then the insert: «Бирманская $heritage_group_african$» |
 
 Level and band names read as their labels do, quoted or agreeing with *уровень*: UN authority — Угасающий / Оспариваемый / Устоявшийся / Сильный / Надгосударственный; tradecraft — Необстрелянный / Новичок / Состоявшийся / Опытный / Ветеран; nuclear readiness — пониженная / обычная / усиленная; colonial stability — Упрочена / Стабильна / Напряжена / Рушится / Разваливается; UN standing — Образцовый / Уважаемый / Нейтральный / Плохой / Опозоренный; the UN authority pillars — Участие / Приверженность / Финансирование / Политика / Доверие / Результативность; seabed regimes — Открытый / Регулируемый / Схватка.
 

@@ -22,3 +22,12 @@ The run had no game install, so the base game's Russian terms were not looked up
 | **Quotes and numbers.** An event that quotes someone, and a tooltip with a figure over 999 in its prose. | «…» quotation marks, with „…“ inside; 1 000 with no line break inside it, decimals with a comma (2,5). | A stray `"` cuts the line short: find it in the TM and replace it with « or ». |
 | **Cyrillic in custom fonts.** The mod's own panels that set a font (the Banking dashboard, `docs/testing/banking-font-playtest.md`). | Cyrillic renders, no boxes or blanks. | A font without Cyrillic glyphs: the panel needs vanilla's default font for this language. |
 | **debug.log.** After a year of play. | No loc errors the English session doesn't have. | Fix the line in the TM. |
+
+## The eleventh update pass (2026-11-26)
+
+Run with no game install, so the hybrid cultures' language words and the space race's new words were not checked against vanilla's Russian.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Hybrid culture names.** Under the Assimilation Across Heritages rule's Hybrid Cultures setting, a pop that takes up another heritage's language: hover its culture. The mod writes some names itself («Бирманская $heritage_group_african$», «Банту Великих озёр …»), and the rest insert vanilla's own language and heritage-group names (`$language_akan$ $heritage_group_central_asian$`). | Both kinds read alike: the language word, then the heritage group, in the same case and gender. | Change the mod-written names in `i18n/russian/tm/te_hybrid_cultures_generated.json` to vanilla's form. Each language word repeats in all nine of its heritage-group names (`hc_<language>_<group>`), so swap it in every one, by a script-written correction chunk merged like any other (`i18n/README.md` § Running a translation pass, step 6). |
+| **A world's "room".** The Space Race tab's Extraplanetary Bases tooltips and the colony pages. | One word for the room a world has for base levels and for Resort Colony levels. | The memory calls the bases' room «зал» (hall) in 12 lines and the resorts' «Место для курортных колоний»; settle one and correct the other lines with a correction chunk. |

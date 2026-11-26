@@ -1,4 +1,8 @@
 {
+ "rule_assimilation_cultures_rule": {
+  "en": "Assimilation Across Heritages",
+  "es": "Asimilación entre herencias"
+ },
  "rule_banking_system_rule": {
   "en": "Banking System",
   "es": "Sistema bancario"
@@ -82,6 +86,30 @@
  "rule_world_war_rule": {
   "en": "World War",
   "es": "Guerra Mundial"
+ },
+ "setting_assimilation_cultures_hybrid": {
+  "en": "Hybrid Cultures",
+  "es": "Culturas híbridas"
+ },
+ "setting_assimilation_cultures_hybrid_desc": {
+  "en": "A [concept_pop] living among a people of another heritage group takes up their language and keeps its heritage, in a hybrid culture such as $hc_anglophone_african$. It joins the majority only where the $lawgroup_bodily_autonomy$ law in force allows it. A game begun before these cultures were added plays as $setting_assimilation_cultures_unrestricted$.",
+  "es": "Un [concept_pop|l] que vive entre un pueblo de otro grupo de herencia adopta su idioma y conserva su herencia, en una cultura híbrida como $hc_anglophone_african$. Solo se une a la mayoría donde lo permite la ley $lawgroup_bodily_autonomy$ en vigor. Una partida iniciada antes de que se añadieran estas culturas se juega como $setting_assimilation_cultures_unrestricted$."
+ },
+ "setting_assimilation_cultures_none": {
+  "en": "None",
+  "es": "Ninguna"
+ },
+ "setting_assimilation_cultures_none_desc": {
+  "en": "No [concept_pop] joins a [concept_culture] of another heritage group, and no hybrid cultures form, unless the $lawgroup_bodily_autonomy$ law in force allows it. Within a heritage group pops assimilate as before. Hybrid pops from another setting stay as they are.",
+  "es": "Ningún [concept_pop|l] se une a una [concept_culture|l] de otro grupo de herencia, y no se forman culturas híbridas, salvo que lo permita la ley $lawgroup_bodily_autonomy$ en vigor. Dentro de un grupo de herencia, los colectivos se asimilan como antes. Los colectivos híbridos de otro ajuste se quedan como están."
+ },
+ "setting_assimilation_cultures_unrestricted": {
+  "en": "Unrestricted",
+  "es": "Sin restricciones"
+ },
+ "setting_assimilation_cultures_unrestricted_desc": {
+  "en": "A [concept_pop] can join the largest primary [concept_culture] in its state whatever its heritage, as in the base game. For a pop of another heritage group the mod does this once a year, so the pop's panel does not show it. Hybrid pops from another setting join the majority at the usual rate.",
+  "es": "Un [concept_pop|l] puede unirse a la [concept_culture|l] primaria más grande de su estado sea cual sea su herencia, como en el juego base. Para un colectivo de otro grupo de herencia, el mod lo hace una vez al año, así que el panel del colectivo no lo muestra. Los colectivos híbridos de otro ajuste se unen a la mayoría al ritmo habitual."
  },
  "setting_banking_system_disabled": {
   "en": "Banking System Disabled",

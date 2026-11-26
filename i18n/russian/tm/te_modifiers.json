@@ -199,6 +199,14 @@
   "en": "The least lenders will charge you for what your country is, however sound its finances become. Standing earned past this point buys nothing further, so lowering the floor is the only way to be priced any finer.",
   "ru": "Наименьшая плата, которую кредиторы возьмут с вас за то, чем является ваша страна, какими бы здоровыми ни стали её финансы. Авторитет, заработанный сверх этого предела, ничего не даёт, поэтому единственный способ получить более выгодные условия — понизить предел."
  },
+ "country_cross_heritage_assimilation_add": {
+  "en": "Assimilation Across Heritages",
+  "ru": "Ассимиляция между наследиями"
+ },
+ "country_cross_heritage_assimilation_add_desc": {
+  "en": "The share of their usual [concept_assimilation] rate at which pops join a [concept_culture] of another heritage group, 100% at most. It counts under the $setting_assimilation_cultures_hybrid$ and $setting_assimilation_cultures_none$ settings of the $rule_assimilation_cultures_rule$ game rule. Under $setting_assimilation_cultures_unrestricted$ every pop crosses at its full rate.",
+  "ru": "Доля обычной скорости [Concept('concept_assimilation','ассимиляции')], с которой группы населения переходят в [Concept('concept_culture','культуру')] другой группы наследия, не более 100%. Учитывается при настройках «$setting_assimilation_cultures_hybrid$» и «$setting_assimilation_cultures_none$» игрового правила «$rule_assimilation_cultures_rule$». При настройке «$setting_assimilation_cultures_unrestricted$» каждая группа населения переходит на полной скорости."
+ },
  "country_cultural_hegemony_art_mult": {
   "en": "Cultural Pull from Art",
   "ru": "Культурное притяжение от искусства"
@@ -999,6 +1007,14 @@
   "en": "The share of the arsenal that goes missing when it changes hands, in a civil war or when an arsenal passes to another country. Commanders who hold launch authority can also take their weapons with them.",
   "ru": "Доля арсенала, которая пропадает при смене рук, во время гражданской войны или когда арсенал переходит к другой стране. Командиры, имеющие право на запуск, могут также унести своё оружие с собой."
  },
+ "country_nd_exposure_mult": {
+  "en": "Share Exposed to a First Strike",
+  "ru": "Доля, уязвимая для первого удара"
+ },
+ "country_nd_exposure_mult_desc": {
+  "en": "How much this part cuts the share of our warheads a first strike could destroy, as a share of what the other parts leave exposed.",
+  "ru": "Насколько эта часть сокращает долю наших боеголовок, которую мог бы уничтожить первый удар, от доли, которую оставляют уязвимой остальные части."
+ },
  "country_nd_halt_chance_add": {
   "en": "Chance of a Halt",
   "ru": "Шанс остановки"
@@ -1015,13 +1031,37 @@
   "en": "How often a false warning, a weapons accident or a commander cut off from the capital comes up, against Routine readiness. A crisis adds misreadings of its own.",
   "ru": "Как часто возникают ложная тревога, авария оружия или командир, отрезанный от столицы, при обычной готовности. Кризис добавляет собственные ошибочные прочтения."
  },
+ "country_nd_k_ratio_add": {
+  "en": "Counterforce Ratio",
+  "ru": "Контрсиловое соотношение"
+ },
+ "country_nd_k_ratio_add_desc": {
+  "en": "How many more of an enemy's exposed warheads each of our warheads that lands on its forces destroys.",
+  "ru": "На сколько больше уязвимых боеголовок противника уничтожает каждая наша боеголовка, попавшая в его силы."
+ },
  "country_nd_launch_credit_add": {
   "en": "Launch Credit",
-  "ru": "Зачёт запуска"
+  "ru": "Зачёт пуска"
  },
  "country_nd_launch_credit_add_desc": {
   "en": "The share of the warheads a first strike would destroy that get away before it lands. A crisis counts them among the warheads that would survive to answer.",
   "ru": "Доля боеголовок, которые уничтожил бы первый удар, но которые уходят до его нанесения. Кризис считает их среди боеголовок, которые уцелели бы для ответа."
+ },
+ "country_nd_reliability_target_add": {
+  "en": "Command Reliability Target",
+  "ru": "Цель надёжности командования"
+ },
+ "country_nd_reliability_target_add_desc": {
+  "en": "The level command reliability moves toward each month.",
+  "ru": "Уровень, к которому надёжность командования движется каждый месяц."
+ },
+ "country_nd_silo_penetration_add": {
+  "en": "Silo Penetration",
+  "ru": "Пробитие шахт"
+ },
+ "country_nd_silo_penetration_add_desc": {
+  "en": "Against a country with missiles in silos, how much more of its force a first strike from us could reach: added to the share its silos leave exposed.",
+  "ru": "Против страны с ракетами в шахтах: насколько большую часть её сил мог бы достать наш первый удар; добавляется к доле, которую оставляют уязвимой её шахты."
  },
  "country_nd_threat_pressure_add": {
   "en": "Pressure Our Threats Exert",
@@ -1312,20 +1352,28 @@
   "ru": "Мультипликативная корректировка риска провала в [Concept('concept_space_race','космической гонке')]. Безопасный подход на активных этапах снижает риск провала ценой более медленного прогресса."
  },
  "country_sr_colony_growth_add": {
-  "en": "Colony Growth a Month",
-  "ru": "Рост колоний за месяц"
+  "en": "Space Colony Growth a Month",
+  "ru": "Рост космических колоний за месяц"
  },
  "country_sr_colony_growth_add_desc": {
-  "en": "How much faster the people of every colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
-  "ru": "Насколько быстрее каждый месяц растёт население каждой нашей колонии сверх #v 0,2%#!, на которые растёт любая колония, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка»."
+  "en": "How much faster the people of every space colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
+  "ru": "На сколько быстрее каждый месяц растёт население каждой удерживаемой нами космической колонии сверх #v 0,2%#!, на которые растёт любая колония, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка»."
  },
- "country_sr_colony_slots_add": {
-  "en": "Colony Module Slots",
-  "ru": "Ячейки модулей колоний"
+ "country_sr_colony_room_add": {
+  "en": "Space Colony Room",
+  "ru": "Место космических колоний"
  },
- "country_sr_colony_slots_add_desc": {
-  "en": "Module slots at every colony we hold, beside those its size gives, under the Simple and Full Colonies settings of the Space Race rule. Habitats, Spaceports, Defenses and the facilities share them, and a colony takes up to #v 4#! [concept_sr_module]s past them at a rising price.",
-  "ru": "Ячейки модулей в каждой нашей колонии сверх тех, что даёт её размер, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Жилые модули, космодромы, оборонительные сооружения и объекты делят их между собой, а колония может взять до #v 4#! [Concept('concept_sr_module','колониальных модулей')] сверх них по растущей цене."
+ "country_sr_colony_room_add_desc": {
+  "en": "How much more room for people every space colony we hold has before its Habitats and Terraforming, beyond its world's own, under the Simple and Full Colonies settings of the Space Race rule. Habitats and Terraforming each add a share of this room, so they hold more people too. A colony keeps the most room it has had if it changes hands.",
+  "ru": "На сколько больше места для людей есть в каждой удерживаемой нами космической колонии до её Жилых модулей и Терраформирования сверх места её собственного мира, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Жилые модули и Терраформирование добавляют каждый долю этого места, поэтому вмещают больше людей. Колония сохраняет наибольшее место, какое имела, если переходит из рук в руки."
+ },
+ "country_sr_habitat_room_add": {
+  "en": "Habitat Room",
+  "ru": "Место жилых модулей"
+ },
+ "country_sr_habitat_room_add_desc": {
+  "en": "How much of its world's starting room each Habitat at our colonies adds for people, beyond the half every Habitat holds, under the Simple and Full Colonies settings of the Space Race rule. A colony keeps the room its Habitats were built with if it changes hands.",
+  "ru": "Сколько начального места своего мира добавляет для людей каждый Жилой модуль в наших колониях сверх половины, которую вмещает каждый Жилой модуль, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Колония сохраняет место, с которым построены её Жилые модули, если переходит из рук в руки."
  },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
@@ -2007,6 +2055,14 @@
   "en": "The amount of @luxury_clothes! $luxury_clothes$ consumed by buildings",
   "ru": "Количество @luxury_clothes! $luxury_clothes$, потребляемое зданиями"
  },
+ "goods_input_luxury_furniture_add": {
+  "en": "@luxury_furniture! $luxury_furniture$ Input",
+  "ru": "@luxury_furniture! $luxury_furniture$: затраты"
+ },
+ "goods_input_luxury_furniture_add_desc": {
+  "en": "The amount of @luxury_furniture! $luxury_furniture$ consumed by buildings",
+  "ru": "Количество @luxury_furniture! $luxury_furniture$, потребляемое зданиями"
+ },
  "goods_input_magnetic_drive_ships_add": {
   "en": "@magnetic_drive_ships! $magnetic_drive_ships$ Input",
   "ru": "@magnetic_drive_ships! $magnetic_drive_ships$: расход"
@@ -2318,6 +2374,14 @@
  "goods_output_launch_capacity_mult_desc": {
   "en": "A bonus or penalty to the amount of @launch_capacity! $launch_capacity$ produced by buildings",
   "ru": "Бонус или штраф к количеству @launch_capacity! $launch_capacity$, производимому зданиями"
+ },
+ "goods_output_lead_mult": {
+  "en": "Building @lead! $lead$ output",
+  "ru": "@lead! $lead$: выпуск зданий"
+ },
+ "goods_output_lead_mult_desc": {
+  "en": "A bonus or penalty to the amount of @lead! $lead$ produced by buildings",
+  "ru": "Бонус или штраф к количеству @lead! $lead$, производимому зданиями"
  },
  "goods_output_luxury_clothes_mult": {
   "en": "Building @luxury_clothes! $luxury_clothes$ output",
@@ -6050,6 +6114,14 @@
  "state_sr_ship_construction_add_desc": {
   "en": "Warship strength this state's Space Command adds to its owner's home fleet each month, while its owner controls the state",
   "ru": "Боевая сила, которую Космическое командование этой области добавляет домашнему флоту владельца каждый месяц, пока владелец контролирует область"
+ },
+ "state_sr_space_personnel_add": {
+  "en": "Space Forces Personnel",
+  "ru": "Личный состав космических сил"
+ },
+ "state_sr_space_personnel_add_desc": {
+  "en": "People this state's $building_space_forces_base$ trains to crew its owner's fleets, fight as its marines and staff its colonies' personnel modules: a point of fleet strength needs #v 100#!, a marine battalion or a module level #v 1,000#!. They count while the state is occupied too, since they are already in orbit.",
+  "ru": "Люди, которых обучает здание «$building_space_forces_base$» этой области, чтобы укомплектовывать флоты её владельца, сражаться в качестве его морпехов и обслуживать модули личного состава его колоний: пункту силы флота нужно #v 100#!, батальону морпехов или уровню модуля — #v 1 000#!. Они учитываются и пока область оккупирована, ведь они уже на орбите."
  },
  "state_urban_fertility_relief_add": {
   "en": "Family Housing in Cities[SelectLocalization(GetPlayer.IsValid,'te_demog_census_off_name_ingame','te_demog_census_off_none')]",

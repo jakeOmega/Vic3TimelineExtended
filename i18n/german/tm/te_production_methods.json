@@ -571,6 +571,14 @@
   "en": "Mount Whaleback Mine",
   "de": "Mount-Whaleback-Mine"
  },
+ "pm_bio_composite_panels": {
+  "en": "Bio-Composite Panels",
+  "de": "Bioverbundplatten"
+ },
+ "pm_bio_composite_panels_desc": {
+  "en": "Panels are pressed from wood fiber and crop waste, bound with resins that engineered microbes make from grain starch in place of the glues the chemical works supplied. The boards give off no formaldehyde.",
+  "de": "Platten werden aus Holzfasern und Ernteabfällen gepresst, gebunden mit Harzen, die gentechnisch veränderte Mikroben aus Getreidestärke herstellen, anstelle der Leime, die das Chemiewerk lieferte. Die Platten geben kein Formaldehyd ab."
+ },
  "pm_biocon_park": {
   "en": "Biocon Park",
   "de": "Biocon Park"
@@ -5007,6 +5015,14 @@
   "en": "Computer-Aided Design",
   "de": "Computerunterstütztes Design"
  },
+ "pm_computerized_cutting": {
+  "en": "Computerized Cutting",
+  "de": "Computergesteuerter Zuschnitt"
+ },
+ "pm_computerized_cutting_desc": {
+  "en": "Patterns are laid out on a screen to waste as little cloth as possible, and a computer-guided blade cuts a whole stack of layers at once. Each bolt of fabric yields more garments than when cutters traced the patterns by hand.",
+  "de": "Schnittmuster werden am Bildschirm so gelegt, dass möglichst wenig Stoff verschwendet wird, und eine computergeführte Klinge schneidet einen ganzen Stapel Lagen auf einmal. Jeder Stoffballen ergibt mehr Kleidungsstücke als damals, als Zuschneider die Muster von Hand nachzogen."
+ },
  "pm_concrete_bunkers": {
   "en": "Concrete Bunkers",
   "de": "Betonbunker"
@@ -5607,6 +5623,14 @@
   "en": "Első Budapesti Steam Mill",
   "de": "Első-Budapesti-Dampfmühle"
  },
+ "pm_engineered_yeast": {
+  "en": "Engineered Yeast",
+  "de": "Gentechnische Hefe"
+ },
+ "pm_engineered_yeast_desc": {
+  "en": "Yeast strains engineered to ferment faster and to survive stronger alcohol yield more spirit from each tank of mash. The tanks are fed nutrients and enzymes from the chemical works.",
+  "de": "Hefestämme, die so entwickelt wurden, dass sie schneller gären und stärkeren Alkohol überstehen, liefern mehr Sprit aus jedem Tank Maische. Die Tanks werden mit Nährstoffen und Enzymen aus dem Chemiewerk versorgt."
+ },
  "pm_engineering_and_logistics_no_effect": {
   "en": "No Effect",
   "de": "Kein Effekt"
@@ -5614,6 +5638,14 @@
  "pm_eni_palazzo": {
   "en": "Palazzo ENI",
   "de": "Palazzo ENI"
+ },
+ "pm_enzymatic_processing": {
+  "en": "Enzymatic Processing",
+  "de": "Enzymatische Verarbeitung"
+ },
+ "pm_enzymatic_processing_desc": {
+  "en": "Enzymes grown in industrial fermenters break grain starch down into syrups, which replace much of the cane and beet sugar in bread, sauces and sweets. Other enzymes keep bread soft for days and clear fruit juice.",
+  "de": "In industriellen Fermentern gezüchtete Enzyme spalten Getreidestärke in Sirupe, die einen großen Teil des Rohr- und Rübenzuckers in Brot, Soßen und Süßwaren ersetzen. Andere Enzyme halten Brot tagelang weich und klären Fruchtsaft."
  },
  "pm_ericsson_telefonplan": {
   "en": "Ericsson Telefonplan",
@@ -5678,6 +5710,14 @@
  "pm_fiber_optics": {
   "en": "Fiber Optics",
   "de": "Glasfaseroptik"
+ },
+ "pm_flat_pack_furniture": {
+  "en": "Flat-Pack Furniture",
+  "de": "Flat-Pack-Möbel"
+ },
+ "pm_flat_pack_furniture_desc": {
+  "en": "Computer-controlled saws and drills cut particleboard panels to standard sizes, and each piece ships flat in a box with its fittings, for the buyer to put together at home. The board is made from wood chips and sawdust glued under pressure.",
+  "de": "Computergesteuerte Sägen und Bohrer schneiden Spanplatten auf Normmaße, und jedes Stück wird mit seinen Beschlägen flach im Karton verschickt, damit der Käufer es zu Hause zusammenbaut. Die Platte wird aus Holzspänen und Sägemehl unter Druck verleimt."
  },
  "pm_flexible_packaging": {
   "en": "Flexible Packaging",
@@ -6359,6 +6399,14 @@
   "en": "Herds are finished in pens on grain rations instead of on open range, and artificial insemination spreads a few high-yielding breeds. Each animal reaches slaughter weight sooner, and runoff from the pens fouls the water nearby.",
   "de": "Die Herden werden in Pferchen mit Getreiderationen statt auf offener Weide fertig gemästet, und künstliche Besamung verbreitet einige wenige ertragreiche Rassen. Jedes Tier erreicht früher das Schlachtgewicht, und der Abfluss aus den Pferchen verschmutzt das Wasser in der Nähe."
  },
+ "pm_industrial_fermentation": {
+  "en": "Industrial Fermentation",
+  "de": "Industrielle Fermentation"
+ },
+ "pm_industrial_fermentation_desc": {
+  "en": "Grain and molasses ferment in stainless steel tanks seeded with one cultured strain of yeast, so every batch comes out the same, and the column stills run around the clock.",
+  "de": "Getreide und Melasse gären in Edelstahltanks, die mit einem einzigen gezüchteten Hefestamm angeimpft sind, sodass jede Charge gleich ausfällt, und die Kolonnenbrennereien laufen rund um die Uhr."
+ },
  "pm_industrial_highway": {
   "en": "Industrial Highway",
   "de": "Industriestraße"
@@ -6674,6 +6722,14 @@
  "pm_machine_learning_assisted_code_generation": {
   "en": "ML Assisted Code Generation",
   "de": "ML-gestützte Codegenerierung"
+ },
+ "pm_made_to_order_furniture": {
+  "en": "Made-to-Order Furniture",
+  "de": "Möbel nach Maß"
+ },
+ "pm_made_to_order_furniture_desc": {
+  "en": "Buyers choose the size, wood and upholstery of a sofa or a cabinet online, and the factory cuts each order by machine and delivers it to the buyer's door.",
+  "de": "Käufer wählen Größe, Holz und Polsterung eines Sofas oder Schranks online, und die Fabrik schneidet jede Bestellung maschinell zu und liefert sie an die Haustür des Käufers."
  },
  "pm_madura_mills_madurai_complex": {
   "en": "Madura Mills Madurai Complex",
@@ -7071,6 +7127,14 @@
   "en": "Modern Cruise Ships",
   "de": "Moderne Kreuzfahrtschiffe"
  },
+ "pm_modern_design_furniture": {
+  "en": "Modern Design Furniture",
+  "de": "Möbel im modernen Design"
+ },
+ "pm_modern_design_furniture_desc": {
+  "en": "Design studios draw furniture in teak and walnut veneer, chrome and glass, and the factory builds it in short runs to their drawings. Each piece is sold under its designer's name.",
+  "de": "Designstudios entwerfen Möbel aus Teak- und Nussbaumfurnier, Chrom und Glas, und die Fabrik baut sie in kleinen Serien nach ihren Zeichnungen. Jedes Stück wird unter dem Namen seines Designers verkauft."
+ },
  "pm_modern_design_porcelain": {
   "en": "Modern Design Porcelain",
   "de": "Porzellan im modernen Design"
@@ -7111,9 +7175,25 @@
   "en": "Mokta el Hadid Beni Saf Mine",
   "de": "Mokta-el-Hadid-Mine Beni Saf"
  },
+ "pm_molded_plywood_and_plastics": {
+  "en": "Molded Plywood and Plastics",
+  "de": "Formsperrholz und Kunststoffe"
+ },
+ "pm_molded_plywood_and_plastics_desc": {
+  "en": "Thin wood veneers are glued and pressed into curved shells, tabletops are faced with plastic laminate, and some chairs are molded from plastic in one piece. The glues and resins come from the chemical works.",
+  "de": "Dünne Holzfurniere werden verleimt und zu geschwungenen Schalen gepresst, Tischplatten mit Kunststofflaminat belegt, und manche Stühle werden aus einem Stück Kunststoff geformt. Die Leime und Harze stammen aus dem Chemiewerk."
+ },
  "pm_molecular_foundry": {
   "en": "Molecular Foundry",
   "de": "Molekulargießerei"
+ },
+ "pm_molecular_spirits": {
+  "en": "Molecular Spirits",
+  "de": "Molekulare Spirituosen"
+ },
+ "pm_molecular_spirits_desc": {
+  "en": "Whiskey, rum and brandy are made without barrels: neutral spirit is blended with the flavor compounds that years of aging would have given, each made separately and measured in.",
+  "de": "Whiskey, Rum und Weinbrand werden ohne Fässer hergestellt: Neutraler Sprit wird mit den Aromastoffen verschnitten, die jahrelange Reifung ergeben hätte, jeder einzeln hergestellt und zudosiert."
  },
  "pm_monsanto_chesterfield_center": {
   "en": "Monsanto Chesterfield Research Center",
@@ -8055,6 +8135,14 @@
   "en": "Performance Textiles",
   "de": "Funktionstextilien"
  },
+ "pm_permanent_press": {
+  "en": "Permanent Press",
+  "de": "Bügelfreie Appretur"
+ },
+ "pm_permanent_press_desc": {
+  "en": "Cotton and blended cloth is soaked in resin and cured in heated presses, so a garment keeps its shape and its creases through the wash. The resins come from the chemical works, and the curing ovens give off formaldehyde.",
+  "de": "Baumwoll- und Mischgewebe werden in Harz getränkt und in beheizten Pressen ausgehärtet, sodass ein Kleidungsstück Form und Bügelfalten durch die Wäsche behält. Die Harze stammen aus dem Chemiewerk, und die Härteöfen geben Formaldehyd ab."
+ },
  "pm_pernambuco_recife_cotton_mill": {
   "en": "Pernambuco Recife Cotton Mill",
   "de": "Pernambuco-Baumwollspinnerei Recife"
@@ -8194,6 +8282,14 @@
  "pm_precision_agriculture": {
   "en": "Precision Agriculture",
   "de": "Präzisionslandwirtschaft"
+ },
+ "pm_precision_fermentation": {
+  "en": "Precision Fermentation",
+  "de": "Präzisionsfermentation"
+ },
+ "pm_precision_fermentation_desc": {
+  "en": "Engineered yeasts and bacteria in steel tanks turn sugar and grain into milk proteins, egg white and fats, made without cows or hens. Food plants blend them into cheese, baked goods and ready meals.",
+  "de": "Gentechnisch veränderte Hefen und Bakterien in Stahltanks verwandeln Zucker und Getreide in Milcheiweiße, Eiklar und Fette, hergestellt ohne Kühe oder Hennen. Nahrungsmittelwerke mischen sie zu Käse, Backwaren und Fertiggerichten."
  },
  "pm_precision_guided_shells": {
   "en": "Precision-Guided Shells",
@@ -8900,8 +8996,8 @@
   "de": "Bergbaukolonie"
  },
  "pm_space_colony_vacation": {
-  "en": "Resort Colony",
-  "de": "Ferienkolonie"
+  "en": "Luxury Resorts",
+  "de": "Luxusresorts"
  },
  "pm_space_elevator": {
   "en": "Space Elevator",
@@ -8922,6 +9018,10 @@
  "pm_space_elevator_construction_slow": {
   "en": "Space Elevator Construction (4 years)",
   "de": "Bau des Weltraumaufzugs (4 Jahre)"
+ },
+ "pm_space_forces_training": {
+  "en": "Space Forces Training",
+  "de": "Training der Weltraumstreitkräfte"
  },
  "pm_space_mine": {
   "en": "Asteroid Mine",
@@ -9295,6 +9395,14 @@
   "en": "TSMC Fab 18",
   "de": "TSMC Fab 18"
  },
+ "pm_tubular_steel_furniture": {
+  "en": "Tubular Steel Furniture",
+  "de": "Stahlrohrmöbel"
+ },
+ "pm_tubular_steel_furniture_desc": {
+  "en": "Chairs, desks and kitchen tables are built on frames of bent and welded steel tube, with wood and upholstery only for the seats and tops. A frame comes off the welding line ready to plate or paint.",
+  "de": "Stühle, Schreibtische und Küchentische werden auf Rahmen aus gebogenem und geschweißtem Stahlrohr gebaut, Holz und Polster nur für Sitze und Platten. Ein Rahmen verlässt die Schweißlinie fertig zum Verchromen oder Lackieren."
+ },
  "pm_turkish_petroleum_kirkuk_depot": {
   "en": "Turkish Petroleum Kirkuk Depot",
   "de": "Turkish-Petroleum-Depot Kirkuk"
@@ -9406,6 +9514,14 @@
  "pm_white_star_albion_house": {
   "en": "White Star Albion House",
   "de": "White Star Albion House"
+ },
+ "pm_whole_garment_knitting": {
+  "en": "Whole-Garment Knitting",
+  "de": "Ganzteilstrickerei"
+ },
+ "pm_whole_garment_knitting_desc": {
+  "en": "Programmed knitting machines make a sweater or a dress in one piece, sleeves and collar included, so there are no panels to cut and no seams to sew. A new design is a program loaded into the machines.",
+  "de": "Programmierte Strickmaschinen fertigen einen Pullover oder ein Kleid in einem Stück, Ärmel und Kragen inklusive, sodass keine Teile zuzuschneiden und keine Nähte zu nähen sind. Ein neuer Entwurf ist ein Programm, das in die Maschinen geladen wird."
  },
  "pm_witkowitzer_ostrava_ironworks": {
   "en": "Witkowitzer Ostrava Ironworks",
@@ -9846,6 +9962,10 @@
  "pmg_base_building_space_program": {
   "en": "Space Program",
   "de": "Raumfahrtprogramm"
+ },
+ "pmg_base_building_space_resort": {
+  "en": "Base Building Space Resort",
+  "de": "Basisgebäude Ferienkolonie"
  },
  "pmg_base_te_construction_market_site": {
   "en": "Construction Site",
@@ -11522,6 +11642,10 @@
  "pmg_space_command_yards": {
   "en": "Yards",
   "de": "Werften"
+ },
+ "pmg_space_forces_base": {
+  "en": "Training",
+  "de": "Ausbildung"
  },
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",

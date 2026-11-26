@@ -844,8 +844,8 @@
   "ru": "Слияние завершено. Культура $cm_arab$ стала национальной во всей сфере, а вошедшие в неё культуры — единый народ."
  },
  "je_te_cm_arab_reason": {
-  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$. Over the decades their pops become $cm_arab$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $sudanese$, $haratin$ and $bidan$ pops can join once they qualify as well. The merge begins only once we are not a subject of another country, and the $law_public_schools$ law is in force. It pauses whenever that stops being true.\\n\\n#b Where each optional culture stands:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_sudanese')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_haratin')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_bidan')]",
-  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$. Со временем их население переходит в культуру «$cm_arab$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $sudanese$, $haratin$ и $bidan$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы не являемся зависимым государством другой страны и действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться.\\n\\n#b Положение каждой дополнительной культуры:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_sudanese')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_haratin')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_bidan')]"
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $maghrebi$, $misri$, $mashriqi$, $bedouin$ and $yemenite$. Over the decades their pops become $cm_arab$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $sudanese$, $haratin$ and $bidan$ pops can join once they qualify as well. The merge begins only once we are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. It pauses whenever that stops being true.\\n\\n#b Where each optional culture stands:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_sudanese')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_haratin')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_bidan')]",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$. Со временем их население переходит в культуру $cm_arab$, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $sudanese$, $haratin$ и $bidan$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы не являемся зависимым государством другой страны и действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. Оно приостанавливается, как только это перестаёт выполняться.\\n\\n#b Положение каждой дополнительной культуры:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_sudanese')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_haratin')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_arab_opt_bidan')]"
  },
  "je_te_cm_arab_status_accept_bedouin": {
   "en": "$bedouin$ pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",
@@ -892,8 +892,8 @@
   "ru": "Слияние завершено: культура $cm_arab$ стала национальной во всей сфере. Культуры, которые соответствуют условиям позже, всё равно смогут присоединиться."
  },
  "je_te_cm_arab_status_gate": {
-  "en": "The shared standard language spread through the schools and broadcasts of independent states, not under foreign rule. The merge begins once we are not a subject of another country and the $law_public_schools$ law is in force.",
-  "ru": "Общий литературный язык распространился через школы и вещание независимых государств, а не под иностранной властью. Слияние начнётся, когда мы не будем зависимым государством другой страны и будет действовать закон «$law_public_schools$»."
+  "en": "The shared standard language spread through the schools, whoever ran them, and the broadcasts of independent states, not under foreign rule. The merge begins once we are not a subject of another country, and once the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Общий литературный язык распространился через школы, кто бы их ни держал, и вещание независимых государств, а не под иностранной властью. Слияние начнётся, когда мы не будем зависимым государством другой страны и когда будет действовать закон «$law_public_schools$» либо наша грамотность составит не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_arab_status_hold_bedouin": {
   "en": "$bedouin$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_arab_bedouin').GetValue|%0] of them in their homeland, and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.",
@@ -920,8 +920,8 @@
   "ru": "Слияние завершено для основных культур, и $cm_arab$ — их национальная культура. Культура, присоединившаяся позже, всё ещё переходит: в её исторической родине культура $cm_arab$ насчитывает [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_arab_lowest_dom_all')|%0] населения, а при [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] переходит всё оставшееся население этой культуры. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
  },
  "je_te_cm_arab_status_paused": {
-  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country, and the $law_public_schools$ law is in force.",
-  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$»."
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_arab_status_running": {
   "en": "The merge is running. In the homeland of the least converted constituent culture, $cm_arab$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_arab_lowest_dom')|%0] of the pops; at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
@@ -1096,8 +1096,8 @@
   "ru": "Слияние завершено. Культура $han$ стала национальной во всей сфере, а вошедшие в неё культуры — единый народ."
  },
  "je_te_cm_chinese_reason": {
-  "en": "Closely related peoples can come to see themselves as one nation. Here $yue$, $min$ and $hakka$ pops would become part of the existing $han$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once the $law_public_schools$ law is in force. It pauses whenever that stops being true.",
-  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культур $yue$, $min$ и $hakka$ вольётся в существующую культуру $han$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться."
+  "en": "Closely related peoples can come to see themselves as one nation. Here $yue$, $min$ and $hakka$ pops would become part of the existing $han$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. The merge begins only once the $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. It pauses whenever that stops being true.",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культур $yue$, $min$ и $hakka$ вольётся в существующую культуру $han$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Слияние начнётся, только когда действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. Оно приостанавливается, как только это перестаёт выполняться."
  },
  "je_te_cm_chinese_status_accept_hakka": {
   "en": "$hakka$ pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",
@@ -1136,8 +1136,8 @@
   "ru": "Слияние завершено: культура $han$ стала национальной во всей сфере. Культуры, которые соответствуют условиям позже, всё равно смогут присоединиться."
  },
  "je_te_cm_chinese_status_gate": {
-  "en": "Spoken languages this far apart gave way to one only once schools taught the national standard in every village. The merge begins once the $law_public_schools$ law is in force.",
-  "ru": "Столь разные разговорные языки уступили единому лишь тогда, когда школы стали учить национальному стандарту в каждой деревне. Слияние начнётся, когда будет действовать закон «$law_public_schools$»."
+  "en": "Spoken languages this far apart gave way to one only once schools taught the national standard in every village, whoever ran them. The merge begins once the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Столь разные разговорные языки уступили единому лишь тогда, когда школы стали учить национальному стандарту в каждой деревне, кто бы их ни держал. Слияние начнётся, когда будет действовать закон «$law_public_schools$» либо наша грамотность составит не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_chinese_status_hold_hakka": {
   "en": "$hakka$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_chinese_hakka').GetValue|%0] of them in their homeland, and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.",
@@ -1160,8 +1160,8 @@
   "ru": "Слияние завершено для основных культур, и $han$ — их национальная культура. Культура, присоединившаяся позже, всё ещё переходит: в её исторической родине культура $han$ насчитывает [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_chinese_lowest_dom_all')|%0] населения, а при [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] переходит всё оставшееся население этой культуры. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
  },
  "je_te_cm_chinese_status_paused": {
-  "en": "The merge is paused: no constituent culture joins or converts until this holds again. The $law_public_schools$ law is in force.",
-  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Действует закон «$law_public_schools$»."
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. The $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_chinese_status_running": {
   "en": "The merge is running. In the homeland of the least converted constituent culture, $han$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_chinese_lowest_dom')|%0] of the pops; at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
@@ -1372,8 +1372,8 @@
   "ru": "Слияние завершено. Культура $cm_east_african$ стала национальной во всей сфере, а вошедшие в неё культуры — единый народ."
  },
  "je_te_cm_east_african_reason": {
-  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $swahili$, $nyamwezi$ and $sukuma$. Over the decades their pops become $cm_east_african$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $yao$, $makua$, $lacustrine_bantu$ and $kikuyu$ pops can join once they qualify as well. The merge begins only once we are not a subject of another country, and the $law_public_schools$ law is in force. It pauses whenever that stops being true.\\n\\n#b Where each optional culture stands:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_yao')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_makua')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_lacustrine_bantu')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_kikuyu')]",
-  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $swahili$, $nyamwezi$ и $sukuma$. Со временем их население переходит в культуру «$cm_east_african$», а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $yao$, $makua$, $lacustrine_bantu$ и $kikuyu$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы не являемся зависимым государством другой страны и действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться.\\n\\n#b Положение каждой дополнительной культуры:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_yao')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_makua')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_lacustrine_bantu')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_kikuyu')]"
+  "en": "Closely related peoples can come to see themselves as one nation. The core of this merge is $swahili$, $nyamwezi$ and $sukuma$. Over the decades their pops become $cm_east_african$, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $yao$, $makua$, $lacustrine_bantu$ and $kikuyu$ pops can join once they qualify as well. The merge begins only once we are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. It pauses whenever that stops being true.\\n\\n#b Where each optional culture stands:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_yao')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_makua')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_lacustrine_bantu')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_kikuyu')]",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Ядро этого слияния — $swahili$, $nyamwezi$ и $sukuma$. Со временем их население переходит в культуру $cm_east_african$, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $yao$, $makua$, $lacustrine_bantu$ и $kikuyu$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда мы не являемся зависимым государством другой страны и действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. Оно приостанавливается, как только это перестаёт выполняться.\\n\\n#b Положение каждой дополнительной культуры:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_yao')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_makua')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_lacustrine_bantu')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_east_african_opt_kikuyu')]"
  },
  "je_te_cm_east_african_status_accept_nyamwezi": {
   "en": "$nyamwezi$ pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",
@@ -1404,8 +1404,8 @@
   "ru": "Слияние завершено: культура $cm_east_african$ стала национальной во всей сфере. Культуры, которые соответствуют условиям позже, всё равно смогут присоединиться."
  },
  "je_te_cm_east_african_status_gate": {
-  "en": "The shared standard language spread through the schools and broadcasts of independent states, not under foreign rule. The merge begins once we are not a subject of another country and the $law_public_schools$ law is in force.",
-  "ru": "Общий литературный язык распространился через школы и вещание независимых государств, а не под иностранной властью. Слияние начнётся, когда мы не будем зависимым государством другой страны и будет действовать закон «$law_public_schools$»."
+  "en": "The shared standard language spread through the schools, whoever ran them, and the broadcasts of independent states, not under foreign rule. The merge begins once we are not a subject of another country, and once the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Общий литературный язык распространился через школы, кто бы их ни держал, и вещание независимых государств, а не под иностранной властью. Слияние начнётся, когда мы не будем зависимым государством другой страны и когда будет действовать закон «$law_public_schools$» либо наша грамотность составит не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_east_african_status_hold_nyamwezi": {
   "en": "$nyamwezi$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_east_african_nyamwezi').GetValue|%0] of them in their homeland, and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.",
@@ -1424,8 +1424,8 @@
   "ru": "Слияние завершено для основных культур, и $cm_east_african$ — их национальная культура. Культура, присоединившаяся позже, всё ещё переходит: в её исторической родине культура $cm_east_african$ насчитывает [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_east_african_lowest_dom_all')|%0] населения, а при [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] переходит всё оставшееся население этой культуры. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
  },
  "je_te_cm_east_african_status_paused": {
-  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country, and the $law_public_schools$ law is in force.",
-  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$»."
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_east_african_status_running": {
   "en": "The merge is running. In the homeland of the least converted constituent culture, $cm_east_african$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_east_african_lowest_dom')|%0] of the pops; at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
@@ -1680,8 +1680,8 @@
   "ru": "Слияние завершено. Культура $french$ стала национальной во всей сфере, а вошедшие в неё культуры — единый народ."
  },
  "je_te_cm_french_reason": {
-  "en": "Closely related peoples can come to see themselves as one nation. Here $occitan$ pops would become part of the existing $french$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $wallonian$ and $catalan$ pops can join once they qualify as well. The merge begins only once the $law_public_schools$ law is in force. It pauses whenever that stops being true.\\n\\n#b Where each optional culture stands:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_wallonian')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_catalan')]",
-  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культуры $occitan$ вольётся в существующую культуру $french$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $wallonian$ и $catalan$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда действует закон «$law_public_schools$». Оно приостанавливается, как только это перестаёт выполняться.\\n\\n#b Положение каждой дополнительной культуры:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_wallonian')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_catalan')]"
+  "en": "Closely related peoples can come to see themselves as one nation. Here $occitan$ pops would become part of the existing $french$ culture: over the decades they assimilate into it, and once it holds most of a constituent culture's homeland, every remaining pop of that culture follows. $wallonian$ and $catalan$ pops can join once they qualify as well. The merge begins only once the $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. It pauses whenever that stops being true.\\n\\n#b Where each optional culture stands:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_wallonian')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_catalan')]",
+  "ru": "Близкородственные народы могут осознать себя единой нацией. Здесь население культуры $occitan$ вольётся в существующую культуру $french$: со временем оно ассимилируется в неё, а когда она охватывает большую часть исторической родины составляющей культуры, к ней переходит и всё оставшееся население этой культуры. Население культур $wallonian$ и $catalan$ тоже может присоединиться, когда будет соответствовать условиям. Слияние начнётся, только когда действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]. Оно приостанавливается, как только это перестаёт выполняться.\\n\\n#b Положение каждой дополнительной культуры:#!\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_wallonian')]\\n\\n[ROOT.GetCountry.GetCustom('te_cmg_french_opt_catalan')]"
  },
  "je_te_cm_french_status_accept_french": {
   "en": "$french$ pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",
@@ -1704,8 +1704,8 @@
   "ru": "Слияние завершено: культура $french$ стала национальной во всей сфере. Культуры, которые соответствуют условиям позже, всё равно смогут присоединиться."
  },
  "je_te_cm_french_status_gate": {
-  "en": "Spoken languages this far apart gave way to one only once schools taught the national standard in every village. The merge begins once the $law_public_schools$ law is in force.",
-  "ru": "Столь разные разговорные языки уступили единому лишь тогда, когда школы стали учить национальному стандарту в каждой деревне. Слияние начнётся, когда будет действовать закон «$law_public_schools$»."
+  "en": "Spoken languages this far apart gave way to one only once schools taught the national standard in every village, whoever ran them. The merge begins once the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Столь разные разговорные языки уступили единому лишь тогда, когда школы стали учить национальному стандарту в каждой деревне, кто бы их ни держал. Слияние начнётся, когда будет действовать закон «$law_public_schools$» либо наша грамотность составит не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_french_status_hold_french": {
   "en": "$french$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_french_french').GetValue|%0] of them in their homeland, and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.",
@@ -1720,8 +1720,8 @@
   "ru": "Слияние завершено для основных культур, и $french$ — их национальная культура. Культура, присоединившаяся позже, всё ещё переходит: в её исторической родине культура $french$ насчитывает [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_french_lowest_dom_all')|%0] населения, а при [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] переходит всё оставшееся население этой культуры. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
  },
  "je_te_cm_french_status_paused": {
-  "en": "The merge is paused: no constituent culture joins or converts until this holds again. The $law_public_schools$ law is in force.",
-  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Действует закон «$law_public_schools$»."
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. The $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Слияние приостановлено: ни одна составляющая культура не присоединяется и не переходит, пока это условие не выполнится вновь. Действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_french_status_running": {
   "en": "The merge is running. In the homeland of the least converted constituent culture, $french$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_french_lowest_dom')|%0] of the pops; at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
@@ -3672,8 +3672,8 @@
   "ru": "Всё население, принадлежавшее к $maghrebi$, $misri$, $mashriqi$, $bedouin$ и $yemenite$, перешло в культуру «$cm_arab$»."
  },
  "te_cmg_arab_gate_tt": {
-  "en": "We are not a subject of another country, and the $law_public_schools$ law is in force.",
-  "ru": "Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$»."
+  "en": "We are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "te_cmg_arab_opt_bidan_accept": {
   "en": "#b $bidan$#! pops are not accepted highly enough where many of them live: their acceptance in our sphere is below [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_high_open')|0], beyond the $full_acceptance$ a more closely related culture needs.",
@@ -4104,8 +4104,8 @@
   "ru": "Всё население, принадлежавшее к $yue$, $min$ и $hakka$, перешло в культуру $han$."
  },
  "te_cmg_chinese_gate_tt": {
-  "en": "The $law_public_schools$ law is in force.",
-  "ru": "Действует закон «$law_public_schools$»."
+  "en": "The $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "te_cmg_chinese_primary_tt": {
   "en": "A core culture of the merge, or its result, is a primary culture here: $han$, $yue$, $min$ or $hakka$.",
@@ -4392,8 +4392,8 @@
   "ru": "Всё население, принадлежавшее к $swahili$, $nyamwezi$ и $sukuma$, перешло в культуру $cm_east_african$."
  },
  "te_cmg_east_african_gate_tt": {
-  "en": "We are not a subject of another country, and the $law_public_schools$ law is in force.",
-  "ru": "Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$»."
+  "en": "We are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Мы не являемся зависимым государством другой страны, и действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "te_cmg_east_african_opt_kikuyu_accept": {
   "en": "#b $kikuyu$#! pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",
@@ -4844,8 +4844,8 @@
   "ru": "Всё население, принадлежавшее к $occitan$, перешло в культуру $french$."
  },
  "te_cmg_french_gate_tt": {
-  "en": "The $law_public_schools$ law is in force.",
-  "ru": "Действует закон «$law_public_schools$»."
+  "en": "The $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "ru": "Действует закон «$law_public_schools$» либо наша грамотность составляет не менее [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "te_cmg_french_opt_catalan_accept": {
   "en": "#b $catalan$#! pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",

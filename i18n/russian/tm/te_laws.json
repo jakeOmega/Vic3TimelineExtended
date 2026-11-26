@@ -112,8 +112,8 @@
   "ru": "Гражданство по кладе"
  },
  "law_clade_citizenship_desc": {
-  "en": "A citizen who has left the human body plan behind keeps every right the law gives anyone else, whether they breathe water, see by heat or were built for low gravity. The state no longer asks what a person is made like, and the old lines of descent mean little where so many people have chosen their own.",
-  "ru": "Гражданин, оставивший позади человеческий план строения тела, сохраняет все права, которые закон даёт любому другому, дышит ли он водой, видит ли тепло или создан для малой гравитации. Государство больше не спрашивает, каким устроен человек, а старые линии происхождения мало значат там, где столь многие выбрали свои собственные."
+  "en": "A change of body may be passed to one's children, and people born to a different body plan are citizens from birth, whether they breathe water or were built for low gravity. The state builds its schools, workplaces, housing and medicine for them as for anyone.",
+  "ru": "Изменение тела может передаваться детям, а люди, рождённые с другим планом строения тела, — граждане с рождения, дышат ли они водой или созданы для малой гравитации. Государство строит для них школы, места работы, жильё и медицину так же, как для любого другого."
  },
  "law_command_cooperative_economy": {
   "en": "Command/Cooperative Economy",
@@ -672,8 +672,8 @@
   "ru": "Морфологическая свобода"
  },
  "law_morphological_freedom_desc": {
-  "en": "A person's body is theirs to remake. Adults may change their appearance, sex characteristics and shape as they choose, and the state asks only that the work be done safely. A citizen with a tail is still a citizen.",
-  "ru": "Тело человека принадлежит ему, и он вправе его переделывать. Взрослые могут менять внешность, половые признаки и облик по своему выбору, а государство требует лишь, чтобы работа была сделана безопасно. Гражданин с хвостом остаётся гражданином."
+  "en": "An adult may remake their own body as they choose, with no board to ask. The change ends with them: it may not be passed to a child or chosen for one, and schools, workplaces and housing stay built for the body people are born with.",
+  "ru": "Взрослый может переделать собственное тело как пожелает, не спрашивая никакой комиссии. Изменение заканчивается на нём: его нельзя передать ребёнку или выбрать за него, а школы, места работы и жильё остаются построенными для тела, с которым рождаются люди."
  },
  "law_multilingual_federalism": {
   "en": "Multilingual Federalism",
@@ -1384,8 +1384,8 @@
   "ru": "Телесная автономия"
  },
  "lawgroup_bodily_autonomy_desc": {
-  "en": "How far people may change the way their bodies look, from skin and sex characteristics to fur and tails, and at the last whether someone who leaves the human body plan behind is still a citizen. What a body can do is a separate question, for the [concept_human_augmentation_system] laws.",
-  "ru": "Насколько люди могут менять внешний вид своего тела, от кожи и половых признаков до меха и хвостов, и, в пределе, остаётся ли гражданином тот, кто оставил позади человеческий план строения тела. Что тело способно делать, является отдельным вопросом, для законов об [Concept('concept_human_augmentation_system','аугментации человека')]."
+  "en": "How far people may change the way their bodies look, from skin and sex characteristics to fur and tails, and at the last whether a change may be passed on to children, who are then born citizens in a body of their own. What a body can do is a separate question, for the [concept_human_augmentation_system] laws.",
+  "ru": "Насколько люди могут менять внешний вид своего тела, от кожи и половых признаков до меха и хвостов, и, в пределе, можно ли передавать изменение детям, которые затем рождаются гражданами с собственным телом. Что тело способно делать, является отдельным вопросом, для законов об [Concept('concept_human_augmentation_system','аугментации человека')]."
  },
  "lawgroup_criminal_justice": {
   "en": "Criminal Justice",

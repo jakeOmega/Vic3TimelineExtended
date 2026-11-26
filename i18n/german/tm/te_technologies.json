@@ -308,8 +308,8 @@
   "de": "CO2-Abscheidung und -Speicherung"
  },
  "carbon_capture_and_storage_desc": {
-  "en": "Capturing carbon at stationary sources and storing it, or removing it directly from the atmosphere. Unlocks 50% source capture, Carbon Conversion Works with Direct Air Capture, and the technology requirement for Managed Fossil Phaseout.",
-  "de": "Das Abscheiden von Kohlenstoff an ortsfesten Quellen und dessen Speicherung oder die direkte Entnahme aus der Atmosphäre. Schaltet 50% Abscheidung an der Quelle, Kohlenstoffumwandlungswerke mit Direktabscheidung aus der Luft und die Technologievoraussetzung für den Gesteuerten Fossilausstieg frei."
+  "en": "We can now catch the carbon dioxide in the flues of power plants, steelworks and other factories that burn coal and oil, compress it, and pump it into depleted oil fields and deep rock, where it stays. Machines with fans and chemical filters can also draw it straight out of the open air, though every ton taken that way costs far more power than catching it at the chimney.",
+  "de": "Wir können nun das Kohlendioxid in den Abgasen von Kraftwerken, Stahlwerken und anderen Fabriken, die Kohle und Öl verbrennen, auffangen, verdichten und in erschöpfte Ölfelder und tiefes Gestein pumpen, wo es bleibt. Maschinen mit Ventilatoren und chemischen Filtern können es auch direkt aus der freien Luft ziehen, wobei jede so entnommene Tonne weit mehr Energie kostet, als sie am Schornstein aufzufangen."
  },
  "cellular_networks": {
   "en": "Cellular Networks",
@@ -356,8 +356,8 @@
   "de": "Verbundene Waffengattungen"
  },
  "combined_arms_desc": {
-  "en": "By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique [concept_combined_arms] traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.",
-  "de": "Indem verschiedene Truppengattungen zusammenarbeiten, können wir im Gefecht deutlich wirksamer sein. Jeder Armeegeneral, dessen Formation mindestens zwei verschiedene Einheitengruppen aufstellt - Infanterie, Artillerie, Kavallerie, Panzer oder Flugzeuge -, von denen jede mindestens 5% der Formation ausmacht, erhält einzigartige [concept_combined_arms]-Eigenschaften, die Gefechtsboni gewähren. Wer alle fünf Gruppen in einer einzigen Formation aufstellt, schaltet den ultimativen Bonus „Umfassende Dominanz“ frei."
+  "en": "Our infantry, artillery and armor have trained to fight their own battles. Planned as one force, each covers the others' weaknesses: the guns lift their fire just ahead of the advancing infantry, the tanks drive through the gaps the infantry opens, and the infantry follows to hold the ground.",
+  "de": "Unsere Infanterie, Artillerie und Panzertruppen haben gelernt, ihre eigenen Schlachten zu schlagen. Als eine Streitmacht geplant, deckt jede die Schwächen der anderen: Die Geschütze verlegen ihr Feuer knapp vor die vorrückende Infanterie, die Panzer stoßen durch die Lücken, die die Infanterie öffnet, und die Infanterie folgt, um das Gelände zu halten."
  },
  "commercial_aviation": {
   "en": "Commercial Aviation",
@@ -600,8 +600,8 @@
   "de": "Geoengineering"
  },
  "geoengineering_desc": {
-  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls. Unlocks the Stratospheric Aerosol Injection climate policy.",
-  "de": "Seit zwei Jahrhunderten verändern wir das Klima aus Versehen. Nur unser Mut hält uns davon ab, es mit Absicht zu tun: Flugzeuge könnten Sulfataerosole in die Stratosphäre bringen und die Sonne binnen eines Jahres verschleiern, zu einem Preis, den jede große Volkswirtschaft zahlen könnte. Der Dunst würde die Erwärmung verbergen, nicht beseitigen, und müsste so lange aufrechterhalten werden, wie der Kohlenstoff in der Luft bleibt. Kleinere Künste kommen hinzu: Wolken impfen, um in einer Dürre Regen zu bringen, und Hagel zu Regen machen, bevor er fällt. Schaltet die Klimapolitik „Stratosphärische Aerosolinjektion“ frei."
+  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls.",
+  "de": "Seit zwei Jahrhunderten verändern wir das Klima aus Versehen. Nur unser Mut hält uns davon ab, es mit Absicht zu tun: Flugzeuge könnten Sulfataerosole in die Stratosphäre bringen und die Sonne binnen eines Jahres verschleiern, zu einem Preis, den jede große Volkswirtschaft zahlen könnte. Der Dunst würde die Erwärmung verbergen, nicht beseitigen, und müsste so lange aufrechterhalten werden, wie der Kohlenstoff in der Luft bleibt. Kleinere Künste kommen hinzu: Wolken impfen, um in einer Dürre Regen zu bringen, und Hagel zu Regen machen, bevor er fällt."
  },
  "globalization": {
   "en": "Globalization",
@@ -1240,8 +1240,8 @@
   "de": "Selbstgesteuerte Evolution"
  },
  "self_directed_evolution_desc": {
-  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and they give their children bodies made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family may be a different kind of creature, and one it chose to become.",
-  "de": "Die Genbearbeitung reicht längst weit über die Oberfläche hinaus. Menschen entwickeln neue Sinne und leben mit konstruierten Stoffwechseln, und sie geben ihren Kindern Körper mit, die für die Tiefsee, die Polarkälte, geringe Schwerkraft oder hartes Vakuum gemacht sind. In zwei Generationen kann eine Familie eine andere Art von Geschöpf sein, und zwar eine, zu der sie sich selbst gemacht hat."
+  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and parents can now give a child a body made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family could be a different kind of creature, and one it chose to become.",
+  "de": "Die Genbearbeitung reicht längst weit über die Oberfläche hinaus. Menschen entwickeln neue Sinne und leben mit konstruierten Stoffwechseln, und Eltern können ihrem Kind nun einen Körper mitgeben, der für die Tiefsee, die Polarkälte, geringe Schwerkraft oder hartes Vakuum gemacht ist. In zwei Generationen könnte eine Familie eine andere Art von Geschöpf sein, und zwar eine, zu der sie sich selbst gemacht hat."
  },
  "self_driving_laboratories": {
   "en": "Self-Driving Laboratories",
@@ -1432,8 +1432,8 @@
   "de": "Terraforming"
  },
  "terraforming_desc": {
-  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born. Unlocks the Terraforming colony module.",
-  "de": "Das Geoengineering hat bewiesen, dass sich das Klima eines Planeten absichtlich verändern lässt. Das Terraforming wendet dieselbe Kunst auf andere Welten an: Spiegel im Orbit, um den Mars zu erwärmen, Fabriken, um seine Luft zu verdichten, einen Sonnenschirm, um die Venus zu kühlen. Die Arbeit dauert Jahrzehnte und der Lohn Jahrhunderte, und die ersten Kinder, die ohne Helm unter einem Marshimmel gehen werden, sind noch nicht geboren. Schaltet das Koloniemodul „Terraforming“ frei."
+  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born.",
+  "de": "Das Geoengineering hat bewiesen, dass sich das Klima eines Planeten absichtlich verändern lässt. Das Terraforming wendet dieselbe Kunst auf andere Welten an: Spiegel im Orbit, um den Mars zu erwärmen, Fabriken, um seine Luft zu verdichten, einen Sonnenschirm, um die Venus zu kühlen. Die Arbeit dauert Jahrzehnte und der Lohn Jahrhunderte, und die ersten Kinder, die ohne Helm unter einem Marshimmel gehen werden, sind noch nicht geboren."
  },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",

@@ -13095,6 +13095,22 @@
   "en": "Fair Play",
   "ru": "Честная игра"
  },
+ "morphological_freedom_events.300.a": {
+  "en": "Let the boards get on with their work.",
+  "ru": "Пусть комиссии занимаются своим делом."
+ },
+ "morphological_freedom_events.300.d": {
+  "en": "The argument over who may change their body has run out. Licensed clinics do the work, a board decides which changes are safe, and a modified [ROOT.GetCountry.GetAdjective] citizen's papers record what was done. Those who wanted no clinics at all, and those who wanted no boards, have stopped marching about it.",
+  "ru": "Спор о том, кому позволено менять своё тело, исчерпан. Работу делают лицензированные клиники, комиссия решает, какие изменения безопасны, а [ROOT.GetCountry.GetAdjective] гражданин с изменённым телом получает документ, в котором записано, что было сделано. Те, кто вообще не хотел клиник, и те, кто не хотел комиссий, перестали из-за этого маршировать."
+ },
+ "morphological_freedom_events.300.f": {
+  "en": "A notice posted at the door of a licensed clinic.\\n\\nWe work on adults only, and only with the board's approval in hand. Bring your papers: the law requires us to enter on them what was done. You will see a counselor before you see a surgeon, because the board will ask whether you understood the change you requested. After that there is a waiting period, and we cannot shorten it for anyone. If the board refuses a change, we cannot perform it, and asking our staff to do so puts their license at risk. The fee and the length of the wait are listed inside.",
+  "ru": "Объявление на двери лицензированной клиники.\\n\\nМы работаем только со взрослыми и только при наличии одобрения комиссии. Принесите свои документы: закон требует, чтобы мы вписали в них, что было сделано. Перед хирургом вы увидитесь с консультантом, потому что комиссия спросит, понимаете ли вы запрашиваемое изменение. После этого наступает срок ожидания, который мы не можем сократить ни для кого. Если комиссия отказывает в изменении, мы не можем его выполнить, а просьба к нашему персоналу сделать это ставит под угрозу его лицензию. Плата и длительность ожидания указаны внутри."
+ },
+ "morphological_freedom_events.300.t": {
+  "en": "A Matter for the Boards",
+  "ru": "Дело для комиссий"
+ },
  "morphological_freedom_events.4.a": {
   "en": "Not before eighteen",
   "ru": "Не раньше восемнадцати"
@@ -16055,6 +16071,66 @@
   "en": "An Answer on Reparations",
   "ru": "Ответ о репарациях"
  },
+ "nuclear_weapon_events.35.a": {
+  "en": "Keep the crews at their posts.",
+  "ru": "Оставить экипажи на постах."
+ },
+ "nuclear_weapon_events.35.b": {
+  "en": "Have our planners work out what this means for us.",
+  "ru": "Пусть наши планировщики выяснят, что это значит для нас."
+ },
+ "nuclear_weapon_events.35.d_own": {
+  "en": "Our first intercontinental missiles are in their silos. A warhead launched from one can reach any country in the world, and with warheads in silos our arsenal is harder to destroy in a first strike. The program's focus returns to warheads. Our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the missiles within a week.",
+  "ru": "Наши первые межконтинентальные ракеты стоят в шахтах. Боезаряд, запущенный с любой из них, способен достичь любой страны мира, а при боезарядах в шахтах наш арсенал труднее уничтожить первым ударом. Основное внимание программы снова переключается на боезаряды. Наши соперники, соседи и все страны, которые считаются обладающими ядерным оружием, узнают о ракетах в течение недели."
+ },
+ "nuclear_weapon_events.35.d_own_held": {
+  "en": "Our first intercontinental missiles are in their silos. A warhead launched from one can reach any country in the world, and with warheads in silos our arsenal is harder to destroy in a first strike. The program's focus returns to warheads, but while our arsenal is at its ceiling the program builds none. Our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the missiles within a week.",
+  "ru": "Наши первые межконтинентальные ракеты стоят в шахтах. Боезаряд, запущенный с любой из них, способен достичь любой страны мира, а при боезарядах в шахтах наш арсенал труднее уничтожить первым ударом. Основное внимание программы возвращается к боезарядам, но пока наш арсенал на потолке, программа их не строит. Наши соперники, соседи и все страны, которые считаются обладающими ядерным оружием, узнают о ракетах в течение недели."
+ },
+ "nuclear_weapon_events.35.d_world": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has put intercontinental missiles in silos. A warhead launched from one can reach any country in the world, ours among them, and with warheads in silos its arsenal is harder to destroy in a first strike.",
+  "ru": "Страна [SCOPE.sCountry('nd_leg_fielder').GetName] разместила межконтинентальные ракеты в шахтах. Боезаряд, запущенный с любой из них, способен достичь любой страны мира, в том числе нашей, а при боезарядах в шахтах её арсенал труднее уничтожить первым ударом."
+ },
+ "nuclear_weapon_events.35.f_own": {
+  "en": "Below the silo field, the relief crew came down the shaft at six and signed the log. The two officers they replaced opened their safes in front of them, counted the keys and the sealed orders aloud, and locked the safes again before they went up. At set hours a telephone rang, and the officer on duty lifted it, read back the number given and wrote the time beside it. Between calls the crew went along the panels row by row and noted each reading in the log.",
+  "ru": "Под полем шахт сменный расчёт спустился по стволу в шесть часов и расписался в журнале. Двое офицеров, которых они сменяли, открыли перед ними свои сейфы, вслух пересчитали ключи и запечатанные приказы и снова заперли сейфы, прежде чем подняться наверх. В установленные часы звонил телефон, дежурный офицер снимал трубку, повторял названный номер и записывал рядом время. Между звонками расчёт шёл вдоль щитов ряд за рядом и отмечал каждое показание в журнале."
+ },
+ "nuclear_weapon_events.35.f_world": {
+  "en": "Remarks heard in our capital in the week [SCOPE.sCountry('nd_leg_fielder').GetName]'s missiles went into their silos.\\n\\n\\\"The newspapers have printed a map with rings drawn around their silos. Every capital in the world is inside the last ring.\\\"\\n\\n\\\"A bomber can be seen coming for hours. A missile takes minutes, and once it has flown there is no calling it back.\\\"\\n\\n\\\"A missile in a silo under the ground is far harder to destroy than an aircraft on a runway. Any plan to strike their arsenal first would now take many more warheads.\\\"",
+  "ru": "Реплики, услышанные в нашей столице на той неделе, когда ракеты страны [SCOPE.sCountry('nd_leg_fielder').GetName] встали в шахты.\\n\\n«Газеты напечатали карту с кругами вокруг их шахт. Каждая столица мира лежит внутри последнего круга».\\n\\n«Бомбардировщик видно за несколько часов. Ракета летит минуты, и, раз взлетев, её не вернуть».\\n\\n«Ракету в шахте под землёй уничтожить гораздо труднее, чем самолёт на полосе. Любой план нанести первый удар по их арсеналу теперь потребовал бы гораздо больше боезарядов»."
+ },
+ "nuclear_weapon_events.35.t": {
+  "en": "Missiles in Their Silos",
+  "ru": "Ракеты в шахтах"
+ },
+ "nuclear_weapon_events.36.a": {
+  "en": "Keep their orders sealed and their patrols long.",
+  "ru": "Хранить приказы запечатанными, а патрули — долгими."
+ },
+ "nuclear_weapon_events.36.b": {
+  "en": "Ask our planners what a missile from the sea changes for us.",
+  "ru": "Спросить наших планировщиков, что меняет для нас ракета с моря."
+ },
+ "nuclear_weapon_events.36.d_own": {
+  "en": "Our first missile submarines have left port. From the sea a warhead can reach any coastal state in the world, and a submarine on patrol is the hardest part of an arsenal to find and destroy. The boats add to our upkeep and need a coastal state of ours to sail from. The program's focus returns to warheads, and our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the submarines within a week.",
+  "ru": "Наши первые ракетные подлодки вышли из порта. С моря боезаряд может достичь любой прибрежной области мира, а подлодка на патрулировании — самая трудная для обнаружения и уничтожения часть арсенала. Лодки увеличивают наши расходы на содержание и требуют нашей прибрежной области, откуда они могли бы выходить. Основное внимание программы возвращается к боезарядам, а наши соперники, соседи и все страны, которые считаются обладающими ядерным оружием, узнают о подлодках в течение недели."
+ },
+ "nuclear_weapon_events.36.d_own_held": {
+  "en": "Our first missile submarines have left port. From the sea a warhead can reach any coastal state in the world, and a submarine on patrol is the hardest part of an arsenal to find and destroy. The boats add to our upkeep and need a coastal state of ours to sail from. The program's focus returns to warheads, but while our arsenal is at its ceiling the program builds none. Our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the submarines within a week.",
+  "ru": "Наши первые ракетные подлодки вышли из порта. С моря боезаряд может достичь любой прибрежной области мира, а подлодка на патрулировании — самая трудная для обнаружения и уничтожения часть арсенала. Лодки увеличивают наши расходы на содержание и требуют нашей прибрежной области, откуда они могли бы выходить. Основное внимание программы возвращается к боезарядам, но пока наш арсенал на потолке, программа их не строит. Наши соперники, соседи и все страны, которые считаются обладающими ядерным оружием, узнают о подлодках в течение недели."
+ },
+ "nuclear_weapon_events.36.d_world": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has sent its first missile submarines to sea. From there a warhead can reach any coastal state in the world, and a submarine on patrol is the hardest part of an arsenal for an enemy to find and destroy.",
+  "ru": "Страна [SCOPE.sCountry('nd_leg_fielder').GetName] вывела в море свои первые ракетные подлодки. Оттуда боезаряд может достичь любой прибрежной области мира, а подлодка на патрулировании — самая трудная для обнаружения и уничтожения противником часть арсенала."
+ },
+ "nuclear_weapon_events.36.f": {
+  "en": "The pilot brought the submarine out of the harbor an hour before dawn, as its orders required, with every light aboard put out. At the outer buoy he climbed down into his launch, and a sailor pulled the ladder up behind him. The submarine made its turn, settled lower in the water and was out of sight before the launch reached the quay. The pilot entered the hour in the harbor log.",
+  "ru": "Лоцман вывел подводную лодку из гавани за час до рассвета, как требовали приказы, при погашенных на борту огнях. У внешнего буя он спустился в свой катер, и матрос вытянул за ним трап. Лодка развернулась, глубже села в воду и скрылась из виду раньше, чем катер дошёл до причала. Лоцман записал время в журнал гавани."
+ },
+ "nuclear_weapon_events.36.t": {
+  "en": "Submarines at Sea",
+  "ru": "Подлодки в море"
+ },
  "nuclear_weapon_events.4.a": {
   "en": "We must strengthen our resolve and prepare for what comes next.",
   "ru": "Мы должны укрепить решимость и подготовиться к тому, что будет дальше."
@@ -17716,28 +17792,28 @@
   "ru": "Кто следит за надзирающими?"
  },
  "society_technology_events.13.a": {
-  "en": "Regulate the platforms.",
-  "ru": "Регулировать платформы."
+  "en": "Make the platforms take down what is false.",
+  "ru": "Заставить платформы убирать ложное."
  },
  "society_technology_events.13.b": {
-  "en": "Free speech must prevail.",
-  "ru": "Свобода слова должна победить."
+  "en": "Leave the posts up and let the papers answer them.",
+  "ru": "Оставить публикации и пусть газеты отвечают на них."
  },
  "society_technology_events.13.c": {
-  "en": "Educate the public.",
-  "ru": "Просвещать общество."
+  "en": "Pay for classes that teach people to check a story first.",
+  "ru": "Оплатить занятия, которые учат сначала проверять историю."
  },
  "society_technology_events.13.d": {
-  "en": "False stories are spreading on social media faster than newspapers and broadcasters can correct them: invented crimes, fake cures, claims about officials. People who believe one are quicker to believe the next. The platforms say they cannot check everything their users post, and many citizens want the government to act.",
-  "ru": "Ложные истории распространяются в социальных сетях быстрее, чем газеты и вещатели успевают их опровергать: выдуманные преступления, поддельные лекарства, измышления о чиновниках. Тот, кто поверил одной, охотнее верит следующей. Платформы говорят, что не могут проверять всё, что публикуют пользователи, и многие граждане хотят, чтобы правительство действовало."
+  "en": "False stories are spreading on social media faster than newspapers and broadcasters can check them: crimes that never happened, cures that do not work, statements no official made. A correction reaches fewer people than the story did. The companies that run the platforms say they cannot review everything their users post. Doctors and newspaper editors have asked the government to make the platforms remove false posts. Academics object that an official would then decide what counts as false.",
+  "ru": "Ложные истории распространяются в социальных сетях быстрее, чем газеты и вещатели успевают их проверять: преступления, которых не было, лекарства, которые не действуют, заявления, которых не делал ни один чиновник. Опровержение доходит до меньшего числа людей, чем сама история. Компании, управляющие платформами, говорят, что не могут проверять всё, что публикуют пользователи. Врачи и редакторы газет попросили правительство заставить платформы удалять ложные публикации. Учёные возражают, что тогда чиновник будет решать, что считать ложью."
  },
  "society_technology_events.13.f": {
-  "en": "\\\"I run the corrections desk at this paper, and this is what my week looked like. On Monday a story went round that the water in the eastern districts had been poisoned. By lunchtime it had been shared more times than we have readers. We checked it with the water board in an hour and published a correction by two. By evening the correction had been read by about one person for every ten who saw the story, and some of those who replied to it said we had been paid to deny it. On Wednesday the same story came round again with a different district in it. I have six people on this desk, and I have asked the editor for six more.\\\"",
-  "ru": "«Я руковожу отделом опровержений в этой газете, и вот как выглядела моя неделя. В понедельник пошла история, что в восточных районах отравили воду. К обеду её репостнули больше раз, чем у нас читателей. Мы проверили её в водоканале за час и к двум опубликовали опровержение. К вечеру опровержение прочёл примерно один человек на десять видевших историю, а некоторые из ответивших на него написали, что нам заплатили за отрицание. В среду та же история пошла снова, уже с другим районом. В отделе у меня шесть человек, и я попросила у редактора ещё шестерых»."
+  "en": "Remarks heard in our cities in one week, about stories going round on social media.\\n\\n\\\"A post said the water in our district had been poisoned. I kept the children home and bought bottled water for four days. The water board says there was never anything wrong with it.\\\"\\n\\n\\\"We checked the story about the police chief in an afternoon and printed that it was false. By then it had been shared far more often than our paper is read.\\\"\\n\\n\\\"If an office decides which posts are false, who runs that office after the next change of government? Leave the posts up and answer them.\\\"\\n\\n\\\"Every day this week someone has asked at my counter for the tablets a post said would cure the fever going round. There are no such tablets, and I have put a notice in the window saying so.\\\"",
+  "ru": "Реплики, услышанные в наших городах за одну неделю, об историях, ходящих по социальным сетям.\\n\\n«В публикации писали, что воду в нашем районе отравили. Дети сидели дома, и четыре дня мы покупали бутилированную воду. Водоканал говорит, что с ней никогда ничего не было».\\n\\n«Историю про начальника полиции мы проверили за полдня и напечатали, что она ложна. К тому времени её переслали куда чаще, чем читают нашу газету».\\n\\n«Если контора решает, какие публикации ложные, кто будет управлять этой конторой после смены правительства? Оставьте публикации и отвечайте на них».\\n\\n«Каждый день на этой неделе у прилавка спрашивали таблетки, которые, как писали в публикации, лечат ходящую лихорадку. Таких таблеток нет, и в окне висит объявление об этом»."
  },
  "society_technology_events.13.t": {
-  "en": "The Poisoned Well",
-  "ru": "Отравленный колодец"
+  "en": "False Stories Online",
+  "ru": "Ложные истории в сети"
  },
  "society_technology_events.14.a": {
   "en": "Retaliate in kind.",
@@ -19768,8 +19844,8 @@
   "ru": "Приготовиться."
  },
  "space_race_events.100.d": {
-  "en": "Our tracking stations report a burn out of [SCOPE.sCountry('sr_alert_power').GetName]'s parking orbit. The fleet is bound for [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], where we hold colonies, and will arrive in #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_months')|0]#! months. Nothing can catch it on the way.",
-  "ru": "Наши станции слежения сообщают о включении двигателей флота на парковочной орбите страны [SCOPE.sCountry('sr_alert_power').GetName]. Флот направляется к [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], где у нас есть колонии, и прибудет через #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_months')|0]#! мес. По дороге его ничто не остановит."
+  "en": "Our tracking stations report a burn out of [SCOPE.sCountry('sr_alert_power').GetName]'s parking orbit. The fleet is bound for [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], where we hold colonies, and will arrive in #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_weeks')|0]#! weeks. Nothing can catch it on the way.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )]",
+  "ru": "Наши станции слежения сообщают о включении двигателей флота на парковочной орбите страны [SCOPE.sCountry('sr_alert_power').GetName]. Флот направляется к [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], где у нас есть колонии, и прибудет через #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_weeks')|0]#! нед. По дороге его ничто не остановит.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )]"
  },
  "space_race_events.100.f": {
   "en": "\\\"We picked up the burn on the first pass after it began, and we have tracked the fleet on every pass since. Its course is set for our colonies, and the arrival time is on the board. It cannot change course enough to miss them without a second burn, and we would see that too. I have sent the figures to Space Command and to the colony's defense staff, and we will report every change in the fleet's course or speed as soon as we have it.\\\"\\n\\n— Duty Officer, Orbital Tracking Command",
@@ -19956,8 +20032,8 @@
   "ru": "Приготовиться к встрече."
  },
  "space_race_events.111.d": {
-  "en": "Our tracking stations report a fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName] on its way to Earth. Months until it lands: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_months')|0]#!. With what is there already, the fleets of powers at war with us at Earth or bound for it come to a strength of #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; what we have at Earth comes to #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] A fleet that lands to find our orbits empty, or wins them from what we have there, blockades our launch sites: until a fleet of ours holds them again, no colony fleet, module, settler or outbound fleet leaves Earth.",
-  "ru": "Наши станции слежения сообщают о флоте страны [SCOPE.sCountry('sr_earth_alert_power').GetName], идущем к Земле. Месяцев до посадки: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_months')|0]#!. С учётом уже имеющихся сил флоты держав, воюющих с нами, у Земли или идущие к ней, составляют в сумме #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; наши силы у Земли составляют #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] Флот, который, приземлившись, найдёт наши орбиты пустыми или отвоюет их у наших сил, блокирует наши стартовые площадки: пока наш флот снова не удержит их, ни колониальный флот, ни модуль, ни поселенцы, ни исходящий флот не покинут Землю."
+  "en": "Our tracking stations report a fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName] on its way to Earth. Weeks until it lands: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_weeks')|0]#!. With what is there already, the fleets of powers at war with us at Earth or bound for it come to a strength of #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; what we have at Earth comes to #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] A fleet that lands to find our orbits empty, or wins them from what we have there, blockades our launch sites: until a fleet of ours holds them again, no colony fleet, module, settler or outbound fleet leaves Earth.",
+  "ru": "Наши станции слежения сообщают о флоте страны [SCOPE.sCountry('sr_earth_alert_power').GetName], идущем к Земле. Недель до посадки: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_weeks')|0]#!. С учётом уже имеющихся сил флоты держав, воюющих с нами, у Земли или идущие к ней, составляют в сумме #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; наши силы у Земли составляют #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] Флот, который, приземлившись, найдёт наши орбиты пустыми или отвоюет их у наших сил, блокирует наши стартовые площадки: пока наш флот снова не удержит их, ни колониальный флот, ни модуль, ни поселенцы, ни исходящий флот не покинут Землю."
  },
  "space_race_events.111.f": {
   "en": "\\\"Orbital Tracking Command, reporting to the government. Of every trajectory we follow, this is the one that ends at Earth. The fleet's arrival time is on the board, with its strength and what we have in orbit to meet it. We have checked the figures on three passes in a row, and they have not changed. If it arrives to find our orbits empty, or wins them from what we have there, nothing leaves our launch sites until we take them back. We will report each change in its course as we see it.\\\"",
@@ -19966,6 +20042,46 @@
  "space_race_events.111.t": {
   "en": "Earth Is Threatened",
   "ru": "Земле грозит опасность"
+ },
+ "space_race_events.113.a": {
+  "en": "Revoke the charter. The colony answers to us.",
+  "ru": "Отозвать хартию. Колония подчиняется нам."
+ },
+ "space_race_events.113.b": {
+  "en": "Leave the council its charter.",
+  "ru": "Оставить совету его хартию."
+ },
+ "space_race_events.113.d": {
+  "en": "We have before us a proposal to revoke the charter of [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]. The charter lets the colony's elected council make its own laws and keep a fifth of what the colony produces. Without it, all of the colony's output would work for us and its laws would come from us again. The council would not accept that quietly, and our other settled colonies would read the order as a warning to them.",
+  "ru": "Перед нами предложение отозвать хартию колонии [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]. Хартия позволяет избранному совету колонии принимать собственные законы и оставлять себе пятую часть того, что колония производит. Без неё весь выпуск колонии работал бы на нас, а законы снова исходили бы от нас. Совет не примет этого молча, а другие наши обжитые колонии сочтут приказ предупреждением себе."
+ },
+ "space_race_events.113.f": {
+  "en": "The steps the Space Program's administrators have drafted, in case the government revokes the charter:\\n\\nOur administrator at the colony takes back its accounts from the council's treasurer. Under the charter the council kept a fifth of the colony's output to spend on the colony, and that share now comes to us.\\nThe council's laws stay in force until our own replace them, so that the colony is not left without rules while new ones are written.\\nOur administrator tells the council in person before the order is announced, so that it does not learn from the news that its powers are gone.\\nOur administrators at the other colonies are told the same day, since their colonies will ask whether their own rights are to go the same way.",
+  "ru": "Шаги, которые администраторы Космической программы набросали на случай, если правительство отзовёт хартию:\\n\\nНаш администратор в колонии забирает её счета у казначея совета. По хартии совет оставлял себе пятую часть выпуска колонии на нужды колонии, и теперь эта доля идёт нам.\\nЗаконы совета остаются в силе, пока их не заменят наши собственные, чтобы колония не осталась без правил, пока пишутся новые.\\nНаш администратор лично сообщает совету до объявления приказа, чтобы тот не узнал из новостей, что его полномочий больше нет.\\nНашим администраторам в других колониях сообщают в тот же день, поскольку их колонии спросят, не лишатся ли и они своих прав."
+ },
+ "space_race_events.113.t": {
+  "en": "Revoke the Charter of [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]?",
+  "ru": "Отозвать хартию колонии [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]?"
+ },
+ "space_race_events.114.a": {
+  "en": "Hold the colony. The marines stay.",
+  "ru": "Удержать колонию. Морпехи остаются."
+ },
+ "space_race_events.114.b": {
+  "en": "Let it go, and bring our marines home.",
+  "ru": "Отпустить её и вернуть наших морпехов домой."
+ },
+ "space_race_events.114.d": {
+  "en": "The council of [ROOT.GetCountry.GetCustom('sr_rising_site_name')] has declared that the colony no longer answers to us. Our marines there have taken the council's hall and the life-support plant, and the colony is still ours. Every month we hold it will cost the garrison some of its marines, more the harder the colonists push, and at home the interest groups that oppose colonial exploitation are asking why we hold it at all.",
+  "ru": "Совет колонии [ROOT.GetCountry.GetCustom('sr_rising_site_name')] объявил, что колония больше не подчиняется нам. Наши морпехи там заняли зал совета и станцию жизнеобеспечения, и колония всё ещё наша. Каждый месяц удержания будет стоить гарнизону части его морпехов, тем больше, чем сильнее давят колонисты, а дома группы интересов, выступающие против колониальной эксплуатации, спрашивают, зачем мы вообще её удерживаем."
+ },
+ "space_race_events.114.f": {
+  "en": "At the inner door of the council hall a marine sergeant held the list of the council's members and checked each one against it before opening the lock. The members came in ones and twos over an hour. Most of them looked past the sergeant to the window, where a squad was carrying crates of rations from the landing pad to the store under the hall. The last member to arrive asked to see the officer in charge and was told to wait with the others. When the list was complete, the sergeant closed the outer door and entered the time in the guard log.",
+  "ru": "У внутренней двери зала совета сержант морской пехоты держал список членов совета и сверял с ним каждого, прежде чем открыть замок. Члены входили по одному и по двое в течение часа. Большинство смотрело мимо сержанта в окно, где отряд носил ящики с пайками от посадочной площадки в склад под залом. Последний из прибывших попросил позвать старшего офицера, и ему велели ждать вместе со всеми. Когда список был полон, сержант закрыл внешнюю дверь и записал время в журнал караула."
+ },
+ "space_race_events.114.t": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_rising_site_name')] Rises Against Us",
+  "ru": "Колония [ROOT.GetCountry.GetCustom('sr_rising_site_name')] восстаёт против нас"
  },
  "space_race_events.12.a": {
   "en": "Rebuild the pad and investigate the cause.",
@@ -21883,13 +21999,45 @@
   "en": "The council of [ROOT.GetCountry.GetCustom('sr_freed_site_name')] has declared that the colony no longer answers to us. Its people, its works and everything it found there are its own. Our officials there have been asked to leave on the next ship home.",
   "ru": "Совет [ROOT.GetCountry.GetCustom('sr_freed_site_name')] объявил, что колония больше не подчиняется нам. Её люди, её сооружения и всё, что она там нашла, принадлежат ей самой. Наших чиновников там попросили покинуть колонию на ближайшем корабле домой."
  },
+ "space_race_events.98.d_mars": {
+  "en": "Our colonies on Mars have risen together. Their councils declared, one after another, that they no longer answer to us, and our marines there were too few to hold them all. Each colony now keeps its own people, its works and what it has found, and our officials there have been told to take the next ship home.",
+  "ru": "Наши колонии на Марсе восстали все вместе. Их советы один за другим объявили, что больше не подчиняются нам, а наших морпехов там оказалось слишком мало, чтобы удержать их все. Теперь каждая колония оставляет себе своих людей, свои сооружения и всё найденное, а нашим чиновникам там велено отправляться домой первым же кораблём."
+ },
+ "space_race_events.98.d_moon": {
+  "en": "Our colonies on the Moon have risen together. Their councils declared, one after another, that they no longer answer to us, and our marines there were too few to hold them all. Each colony now keeps its own people, its works and what it has found, and our officials there have been told to take the next ship home.",
+  "ru": "Наши колонии на Луне восстали все вместе. Их советы один за другим объявили, что больше не подчиняются нам, а наших морпехов там оказалось слишком мало, чтобы удержать их все. Теперь каждая колония оставляет себе своих людей, свои сооружения и всё найденное, а нашим чиновникам там велено отправляться домой первым же кораблём."
+ },
+ "space_race_events.98.d_more": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('sr_freed_count').GetValue|0] of our colonies have declared that they no longer answer to us, [ROOT.GetCountry.GetCustom('sr_freed_site_name')] first among them. Each keeps its own people, its works and what it has found, and our officials at each have been told to take the next ship home.",
+  "ru": "Колоний, объявивших, что больше не подчиняются нам: [ROOT.GetCountry.MakeScope.Var('sr_freed_count').GetValue|0], первой среди них — [ROOT.GetCountry.GetCustom('sr_freed_site_name')]. Каждая оставляет себе своих людей, свои сооружения и всё найденное, а нашим чиновникам в каждой велено отправляться домой первым же кораблём."
+ },
+ "space_race_events.98.d_overrun": {
+  "en": "The council of [ROOT.GetCountry.GetCustom('sr_freed_site_name')] has declared that the colony no longer answers to us, and our marines there were too few to stop it. The garrison is lost to us. The colony's people, its works and everything it found there are its own, and our officials have been told to take the next ship home.",
+  "ru": "Совет колонии [ROOT.GetCountry.GetCustom('sr_freed_site_name')] объявил, что колония больше не подчиняется нам, а наших морпехов там оказалось слишком мало, чтобы этому помешать. Гарнизон потерян. Люди колонии, её сооружения и всё, что там найдено, теперь принадлежат ей, а нашим чиновникам велено отправляться домой первым же кораблём."
+ },
  "space_race_events.98.f": {
   "en": "\\\"This is the council of the colony, speaking to the government that founded it. From today this council makes the colony's laws, keeps its accounts, and decides what it sends and to whom. The habitats, the works and what we have found here are ours, and we will go on running them as we have been. Your officials have seats booked on the next ship home, and we thank them for their work. We will still trade with you, and we would rather do it as friends. Our first proposal for a supply contract is attached to this message.\\\"",
   "ru": "«Это совет колонии, обращающийся к правительству, которое её основало. С сегодняшнего дня этот совет принимает законы колонии, ведёт её счета и решает, что и кому она отправляет. Модули, сооружения и всё найденное здесь принадлежит нам, и мы продолжим управлять ими, как и прежде. Места ваших чиновников забронированы на ближайший корабль домой, и мы благодарим их за труд. Мы по-прежнему будем торговать с вами и предпочли бы делать это как друзья. Наше первое предложение по контракту на снабжение приложено к этому сообщению»."
  },
+ "space_race_events.98.f_together": {
+  "en": "To the government that founded us, from the councils of its former colonies on this world, sitting together.\\n\\nEach of our councils has voted to govern its own colony, and we have agreed to act as one in what concerns us all: the landing pads, the water and the routes between our settlements. The marines who held us have been disarmed and are under our guard. Our first joint session will set the terms on which we trade with you, and with anyone else who calls on us.",
+  "ru": "Правительству, основавшему нас, от советов его бывших колоний на этом мире, заседающих вместе.\\n\\nКаждый из наших советов проголосовал за самоуправление своей колонии, и мы договорились действовать сообща в том, что касается нас всех: посадочных площадок, воды и путей между нашими поселениями. Морпехи, державшие нас, разоружены и находятся под нашей охраной. На первом совместном заседании мы определим условия, на которых будем торговать с вами и с любым другим, кто к нам обратится."
+ },
  "space_race_events.98.t": {
   "en": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] Declares Itself Free",
   "ru": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] объявляет о своей свободе"
+ },
+ "space_race_events.98.t_mars": {
+  "en": "Our Martian Colonies Break Away",
+  "ru": "Наши марсианские колонии отделяются"
+ },
+ "space_race_events.98.t_moon": {
+  "en": "Our Lunar Colonies Break Away",
+  "ru": "Наши лунные колонии отделяются"
+ },
+ "space_race_events.98.t_more": {
+  "en": "Our Colonies Declare Themselves Free",
+  "ru": "Наши колонии объявляют себя свободными"
  },
  "space_race_events.99.a": {
   "en": "Welcome them.",
@@ -24244,8 +24392,8 @@
   "ru": "Консольные команды для проверки колониальных флотов и поселенцев при простых и полноценных колониях. Строки идут в debug.log как TE_SR_FLEETS и TE_SR_SETTLERS."
  },
  "te_debug_space_race.3.e": {
-  "en": "Set emigration to High and send this month's settlers now",
-  "ru": "Установить эмиграцию «Высокая» и отправить поселенцев этого месяца сейчас"
+  "en": "Set settlers to 2,000 a month and send this month's settlers now",
+  "ru": "Установить поток поселенцев 2 000 в месяц и отправить поселенцев этого месяца сейчас"
  },
  "te_debug_space_race.3.f": {
   "en": "\\\"Every ship in the sky, and every soul on every rock. Count them.\\\"",
@@ -24331,6 +24479,10 @@
   "en": "Ask whether to abandon our first colony",
   "ru": "Спросить, отказываться ли от нашей первой колонии"
  },
+ "te_debug_space_race.5.i": {
+  "en": "Set our first colony's autonomy to 100 (held or freed next month)",
+  "ru": "Установить автономию нашей первой колонии на 100 (удерживается или освобождается в следующем месяце)"
+ },
  "te_debug_space_race.5.t": {
   "en": "Colony Autonomy Console",
   "ru": "Консоль автономии колоний"
@@ -24368,8 +24520,8 @@
   "ru": "Целостность нашей первой колонии — до 0"
  },
  "te_debug_space_race.6.i": {
-  "en": "Run this month's combat now",
-  "ru": "Выполнить бои этого месяца сейчас"
+  "en": "Run a week's battles and this month's siege now",
+  "ru": "Провести бои недели и осаду месяца сейчас"
  },
  "te_debug_space_race.6.j": {
   "en": "Occupy our first colony by our strongest enemy, or return it",
@@ -25318,38 +25470,6 @@
  "te_mandate.1.t": {
   "en": "What the Bank Is For",
   "ru": "Для чего нужен банк"
- },
- "te_map_modes.1.a": {
-  "en": "Tourism appeal",
-  "ru": "Привлекательность для туристов"
- },
- "te_map_modes.1.b": {
-  "en": "GDP per capita",
-  "ru": "ВВП на душу населения"
- },
- "te_map_modes.1.c": {
-  "en": "Greenhouse gas emissions",
-  "ru": "Выбросы парниковых газов"
- },
- "te_map_modes.1.d": {
-  "en": "Our cartographers can redraw the world map by whatever measure we choose. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode: its colors will show the metric we chose instead of migration appeal.\\n\\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!",
-  "ru": "Наши картографы могут перерисовать карту мира по любому выбранному нами показателю. Выберите показатель ниже, затем переключитесь на режим карты #b [concept_migration_pull]#!: его цвета покажут выбранный показатель вместо миграционной привлекательности.\\n\\n#italic Прежде чем перейти к другому показателю, снова откройте это решение и выберите #b Сбросить наложение#!.#!"
- },
- "te_map_modes.1.e_clear": {
-  "en": "Clear overlay",
-  "ru": "Сбросить наложение"
- },
- "te_map_modes.1.f": {
-  "en": "\\\"The map office can color the map by any figure the other offices send us: how strongly each state draws visitors, what each person there produces, what each country puts into the air. Tell us which, and we will lay it over the migration map, since that is the only sheet the printers have set up for colors. When you want a different figure, tell us to clear the sheet first, or the two will run together.\\\"",
-  "ru": "«Картографическое бюро может раскрасить карту по любой цифре, которую пришлют нам другие бюро: насколько сильно каждая область притягивает посетителей, сколько производит каждый её житель, сколько выбрасывает в воздух каждая страна. Скажите нам, по какой, и мы наложим её на карту миграции, потому что это единственный лист, под который у типографов настроены цвета. Когда понадобится другая цифра, прикажите сначала очистить лист, иначе они сольются»."
- },
- "te_map_modes.1.f_dismiss": {
-  "en": "Never mind.",
-  "ru": "Не важно."
- },
- "te_map_modes.1.t": {
-  "en": "Cartographic Survey",
-  "ru": "Картографическая съёмка"
  },
  "te_orbital_debris.1.a": {
   "en": "Keep the climbers running",

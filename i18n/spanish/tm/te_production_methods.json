@@ -571,6 +571,14 @@
   "en": "Mount Whaleback Mine",
   "es": "Mina de Mount Whaleback"
  },
+ "pm_bio_composite_panels": {
+  "en": "Bio-Composite Panels",
+  "es": "Paneles biocompuestos"
+ },
+ "pm_bio_composite_panels_desc": {
+  "en": "Panels are pressed from wood fiber and crop waste, bound with resins that engineered microbes make from grain starch in place of the glues the chemical works supplied. The boards give off no formaldehyde.",
+  "es": "Los paneles se prensan con fibra de madera y residuos agrícolas, aglutinados con resinas que microbios modificados fabrican a partir del almidón de cereal, en lugar de los pegamentos que suministraban las fábricas químicas. Los tableros no desprenden formaldehído."
+ },
  "pm_biocon_park": {
   "en": "Biocon Park",
   "es": "Parque Biocon"
@@ -5007,6 +5015,14 @@
   "en": "Computer-Aided Design",
   "es": "Diseño asistido por ordenador"
  },
+ "pm_computerized_cutting": {
+  "en": "Computerized Cutting",
+  "es": "Corte informatizado"
+ },
+ "pm_computerized_cutting_desc": {
+  "en": "Patterns are laid out on a screen to waste as little cloth as possible, and a computer-guided blade cuts a whole stack of layers at once. Each bolt of fabric yields more garments than when cutters traced the patterns by hand.",
+  "es": "Los patrones se disponen en una pantalla para desperdiciar la menor tela posible, y una cuchilla guiada por ordenador corta de una vez toda una pila de capas. Cada pieza de tela da más prendas que cuando los cortadores trazaban los patrones a mano."
+ },
  "pm_concrete_bunkers": {
   "en": "Concrete Bunkers",
   "es": "Búnkeres de hormigón"
@@ -5607,6 +5623,14 @@
   "en": "Első Budapesti Steam Mill",
   "es": "Molino de vapor Első Budapesti"
  },
+ "pm_engineered_yeast": {
+  "en": "Engineered Yeast",
+  "es": "Levaduras modificadas"
+ },
+ "pm_engineered_yeast_desc": {
+  "en": "Yeast strains engineered to ferment faster and to survive stronger alcohol yield more spirit from each tank of mash. The tanks are fed nutrients and enzymes from the chemical works.",
+  "es": "Las cepas de levadura modificadas para fermentar más rápido y sobrevivir a un alcohol más fuerte dan más destilado por cada cuba de mosto. Las cubas reciben nutrientes y enzimas de las fábricas químicas."
+ },
  "pm_engineering_and_logistics_no_effect": {
   "en": "No Effect",
   "es": "Sin efecto"
@@ -5614,6 +5638,14 @@
  "pm_eni_palazzo": {
   "en": "Palazzo ENI",
   "es": "Palazzo ENI"
+ },
+ "pm_enzymatic_processing": {
+  "en": "Enzymatic Processing",
+  "es": "Procesado enzimático"
+ },
+ "pm_enzymatic_processing_desc": {
+  "en": "Enzymes grown in industrial fermenters break grain starch down into syrups, which replace much of the cane and beet sugar in bread, sauces and sweets. Other enzymes keep bread soft for days and clear fruit juice.",
+  "es": "Enzimas cultivadas en fermentadores industriales descomponen el almidón del cereal en siropes, que sustituyen buena parte del azúcar de caña y de remolacha en el pan, las salsas y los dulces. Otras enzimas mantienen blando el pan durante días y clarifican el zumo de fruta."
  },
  "pm_ericsson_telefonplan": {
   "en": "Ericsson Telefonplan",
@@ -5678,6 +5710,14 @@
  "pm_fiber_optics": {
   "en": "Fiber Optics",
   "es": "Fibra óptica"
+ },
+ "pm_flat_pack_furniture": {
+  "en": "Flat-Pack Furniture",
+  "es": "Muebles en paquete plano"
+ },
+ "pm_flat_pack_furniture_desc": {
+  "en": "Computer-controlled saws and drills cut particleboard panels to standard sizes, and each piece ships flat in a box with its fittings, for the buyer to put together at home. The board is made from wood chips and sawdust glued under pressure.",
+  "es": "Sierras y taladros controlados por ordenador cortan paneles de aglomerado a medidas estándar, y cada pieza se envía plana en una caja con sus herrajes, para que el comprador la monte en casa. El tablero se fabrica con virutas y serrín de madera encolados a presión."
  },
  "pm_flexible_packaging": {
   "en": "Flexible Packaging",
@@ -6359,6 +6399,14 @@
   "en": "Herds are finished in pens on grain rations instead of on open range, and artificial insemination spreads a few high-yielding breeds. Each animal reaches slaughter weight sooner, and runoff from the pens fouls the water nearby.",
   "es": "Los rebaños se terminan de engordar en corrales con raciones de grano en lugar de en pastos abiertos, y la inseminación artificial extiende unas pocas razas de alto rendimiento. Cada animal alcanza antes el peso de sacrificio, y la escorrentía de los corrales ensucia el agua cercana."
  },
+ "pm_industrial_fermentation": {
+  "en": "Industrial Fermentation",
+  "es": "Fermentación industrial"
+ },
+ "pm_industrial_fermentation_desc": {
+  "en": "Grain and molasses ferment in stainless steel tanks seeded with one cultured strain of yeast, so every batch comes out the same, and the column stills run around the clock.",
+  "es": "El grano y la melaza fermentan en cubas de acero inoxidable sembradas con una sola cepa cultivada de levadura, así que todo lote sale igual, y las columnas de destilación funcionan día y noche."
+ },
  "pm_industrial_highway": {
   "en": "Industrial Highway",
   "es": "Autopista industrial"
@@ -6674,6 +6722,14 @@
  "pm_machine_learning_assisted_code_generation": {
   "en": "ML Assisted Code Generation",
   "es": "Generación de código asistida por aprendizaje automático"
+ },
+ "pm_made_to_order_furniture": {
+  "en": "Made-to-Order Furniture",
+  "es": "Muebles a medida"
+ },
+ "pm_made_to_order_furniture_desc": {
+  "en": "Buyers choose the size, wood and upholstery of a sofa or a cabinet online, and the factory cuts each order by machine and delivers it to the buyer's door.",
+  "es": "Los compradores eligen en línea el tamaño, la madera y la tapicería de un sofá o un armario, y la fábrica corta cada pedido a máquina y lo entrega en la puerta del comprador."
  },
  "pm_madura_mills_madurai_complex": {
   "en": "Madura Mills Madurai Complex",
@@ -7071,6 +7127,14 @@
   "en": "Modern Cruise Ships",
   "es": "Cruceros modernos"
  },
+ "pm_modern_design_furniture": {
+  "en": "Modern Design Furniture",
+  "es": "Muebles de diseño moderno"
+ },
+ "pm_modern_design_furniture_desc": {
+  "en": "Design studios draw furniture in teak and walnut veneer, chrome and glass, and the factory builds it in short runs to their drawings. Each piece is sold under its designer's name.",
+  "es": "Estudios de diseño dibujan muebles en teca y chapa de nogal, cromo y vidrio, y la fábrica los construye en tiradas cortas según sus planos. Cada pieza se vende con el nombre de su diseñador."
+ },
  "pm_modern_design_porcelain": {
   "en": "Modern Design Porcelain",
   "es": "Porcelana de diseño moderno"
@@ -7111,9 +7175,25 @@
   "en": "Mokta el Hadid Beni Saf Mine",
   "es": "Mina Mokta el Hadid Beni Saf"
  },
+ "pm_molded_plywood_and_plastics": {
+  "en": "Molded Plywood and Plastics",
+  "es": "Contrachapado moldeado y plásticos"
+ },
+ "pm_molded_plywood_and_plastics_desc": {
+  "en": "Thin wood veneers are glued and pressed into curved shells, tabletops are faced with plastic laminate, and some chairs are molded from plastic in one piece. The glues and resins come from the chemical works.",
+  "es": "Finas chapas de madera se encolan y prensan en carcasas curvas, los tableros de mesa se recubren de laminado plástico y algunas sillas se moldean de plástico en una sola pieza. Los pegamentos y las resinas proceden de las fábricas químicas."
+ },
  "pm_molecular_foundry": {
   "en": "Molecular Foundry",
   "es": "Fundición molecular"
+ },
+ "pm_molecular_spirits": {
+  "en": "Molecular Spirits",
+  "es": "Destilados moleculares"
+ },
+ "pm_molecular_spirits_desc": {
+  "en": "Whiskey, rum and brandy are made without barrels: neutral spirit is blended with the flavor compounds that years of aging would have given, each made separately and measured in.",
+  "es": "El whisky, el ron y el brandy se elaboran sin barricas: el alcohol neutro se mezcla con los compuestos aromáticos que habrían dado años de envejecimiento, cada uno fabricado por separado y dosificado."
  },
  "pm_monsanto_chesterfield_center": {
   "en": "Monsanto Chesterfield Research Center",
@@ -8055,6 +8135,14 @@
   "en": "Performance Textiles",
   "es": "Textiles técnicos"
  },
+ "pm_permanent_press": {
+  "en": "Permanent Press",
+  "es": "Planchado permanente"
+ },
+ "pm_permanent_press_desc": {
+  "en": "Cotton and blended cloth is soaked in resin and cured in heated presses, so a garment keeps its shape and its creases through the wash. The resins come from the chemical works, and the curing ovens give off formaldehyde.",
+  "es": "El algodón y las telas mezcladas se empapan en resina y se curan en prensas calientes, de modo que una prenda conserva su forma y sus pliegues tras el lavado. Las resinas proceden de las fábricas químicas, y los hornos de curado desprenden formaldehído."
+ },
  "pm_pernambuco_recife_cotton_mill": {
   "en": "Pernambuco Recife Cotton Mill",
   "es": "Fábrica de algodón Pernambuco Recife"
@@ -8194,6 +8282,14 @@
  "pm_precision_agriculture": {
   "en": "Precision Agriculture",
   "es": "Agricultura de precisión"
+ },
+ "pm_precision_fermentation": {
+  "en": "Precision Fermentation",
+  "es": "Fermentación de precisión"
+ },
+ "pm_precision_fermentation_desc": {
+  "en": "Engineered yeasts and bacteria in steel tanks turn sugar and grain into milk proteins, egg white and fats, made without cows or hens. Food plants blend them into cheese, baked goods and ready meals.",
+  "es": "Levaduras y bacterias modificadas en cubas de acero convierten el azúcar y el cereal en proteínas lácteas, clara de huevo y grasas, producidas sin vacas ni gallinas. Las plantas de alimentación las mezclan para hacer queso, bollería y platos preparados."
  },
  "pm_precision_guided_shells": {
   "en": "Precision-Guided Shells",
@@ -8900,8 +8996,8 @@
   "es": "Colonia minera"
  },
  "pm_space_colony_vacation": {
-  "en": "Resort Colony",
-  "es": "Colonia turística"
+  "en": "Luxury Resorts",
+  "es": "Complejos turísticos de lujo"
  },
  "pm_space_elevator": {
   "en": "Space Elevator",
@@ -8922,6 +9018,10 @@
  "pm_space_elevator_construction_slow": {
   "en": "Space Elevator Construction (4 years)",
   "es": "Ascensor espacial en construcción (4 años)"
+ },
+ "pm_space_forces_training": {
+  "en": "Space Forces Training",
+  "es": "Formación de las Fuerzas Espaciales"
  },
  "pm_space_mine": {
   "en": "Asteroid Mine",
@@ -9295,6 +9395,14 @@
   "en": "TSMC Fab 18",
   "es": "TSMC Fab 18"
  },
+ "pm_tubular_steel_furniture": {
+  "en": "Tubular Steel Furniture",
+  "es": "Muebles de tubo de acero"
+ },
+ "pm_tubular_steel_furniture_desc": {
+  "en": "Chairs, desks and kitchen tables are built on frames of bent and welded steel tube, with wood and upholstery only for the seats and tops. A frame comes off the welding line ready to plate or paint.",
+  "es": "Sillas, escritorios y mesas de cocina se montan sobre armazones de tubo de acero doblado y soldado, con madera y tapicería solo para los asientos y los tableros. Un armazón sale de la línea de soldadura listo para cromar o pintar."
+ },
  "pm_turkish_petroleum_kirkuk_depot": {
   "en": "Turkish Petroleum Kirkuk Depot",
   "es": "Depósito Turkish Petroleum Kirkuk"
@@ -9406,6 +9514,14 @@
  "pm_white_star_albion_house": {
   "en": "White Star Albion House",
   "es": "Casa White Star Albion"
+ },
+ "pm_whole_garment_knitting": {
+  "en": "Whole-Garment Knitting",
+  "es": "Tejido de prenda completa"
+ },
+ "pm_whole_garment_knitting_desc": {
+  "en": "Programmed knitting machines make a sweater or a dress in one piece, sleeves and collar included, so there are no panels to cut and no seams to sew. A new design is a program loaded into the machines.",
+  "es": "Máquinas de tejer programadas hacen un jersey o un vestido de una sola pieza, con mangas y cuello incluidos, así que no hay paneles que cortar ni costuras que coser. Un diseño nuevo es un programa que se carga en las máquinas."
  },
  "pm_witkowitzer_ostrava_ironworks": {
   "en": "Witkowitzer Ostrava Ironworks",
@@ -9838,6 +9954,10 @@
  "pmg_base_building_space_program": {
   "en": "Space Program",
   "es": "Programa espacial"
+ },
+ "pmg_base_building_space_resort": {
+  "en": "Base Building Space Resort",
+  "es": "Edificio base: colonia turística"
  },
  "pmg_base_te_construction_market_site": {
   "en": "Construction Site",
@@ -11514,6 +11634,10 @@
  "pmg_space_command_yards": {
   "en": "Yards",
   "es": "Astilleros"
+ },
+ "pmg_space_forces_base": {
+  "en": "Training",
+  "es": "Entrenamiento"
  },
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",

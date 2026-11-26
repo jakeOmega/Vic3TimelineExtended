@@ -1,4 +1,36 @@
 {
+ "alert_sr_module_queue_empty_action": {
+  "en": "Journal Panel",
+  "es": "Panel del diario"
+ },
+ "alert_sr_module_queue_empty_desc": {
+  "en": "Our [concept_sr_module] queue is empty, and our module fabrication makes #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points a month. The points wait in the module stock, which now holds #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock')|0]#! of the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! it can keep. Once it is full, each month's points are lost.",
+  "es": "Nuestra cola de [concept_sr_module|l] está vacía, y nuestra fabricación de módulos produce #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! puntos al mes. Los puntos esperan en el almacén de módulos, que ahora contiene #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock')|0]#! de los #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! que puede guardar. Cuando se llena, los puntos de cada mes se pierden."
+ },
+ "alert_sr_module_queue_empty_hint": {
+  "en": "Each colony's row in the $je_space_race_widget_cv_modules$ view of the $je_space_race_widget_colonies_header$ section in $je_space_race_solar_colonization$ has buttons that add a module to the end of the queue.",
+  "es": "La fila de cada colonia en la vista $je_space_race_widget_cv_modules$ de la sección $je_space_race_widget_colonies_header$ de $je_space_race_solar_colonization$ tiene botones que añaden un módulo al final de la cola."
+ },
+ "alert_sr_module_queue_empty_name": {
+  "en": "No [concept_sr_module]s Queued",
+  "es": "Sin [Concept('concept_sr_module','módulos de colonia')] en cola"
+ },
+ "alert_sr_module_stock_full_action": {
+  "en": "Journal Panel",
+  "es": "Panel del diario"
+ },
+ "alert_sr_module_stock_full_desc": {
+  "en": "Our module stock is full at #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! points and our [concept_sr_module] queue is empty, so the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points our module fabrication makes each month are lost.",
+  "es": "Nuestro almacén de módulos está lleno, con #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! puntos, y nuestra cola de [concept_sr_module|l] está vacía, así que los #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! puntos que produce cada mes nuestra fabricación de módulos se pierden."
+ },
+ "alert_sr_module_stock_full_hint": {
+  "en": "Each colony's row in the $je_space_race_widget_cv_modules$ view of the $je_space_race_widget_colonies_header$ section in $je_space_race_solar_colonization$ has buttons that add a module to the end of the queue. A $pmg_space_program_module_storage$ method on our $building_space_program$ makes the stock larger, and switching its $pmg_space_program_module_fabrication$ to $pm_sr_fabrication_none$ ends the method's cost until we want modules again.",
+  "es": "La fila de cada colonia en la vista $je_space_race_widget_cv_modules$ de la sección $je_space_race_widget_colonies_header$ de $je_space_race_solar_colonization$ tiene botones que añaden un módulo al final de la cola. Un método de $pmg_space_program_module_storage$ en nuestro $building_space_program$ agranda el almacén, y cambiar su $pmg_space_program_module_fabrication$ a $pm_sr_fabrication_none$ termina el coste del método hasta que volvamos a querer módulos."
+ },
+ "alert_sr_module_stock_full_name": {
+  "en": "[concept_sr_module] Stock Full",
+  "es": "Almacén de [Concept('concept_sr_module','módulos de colonia')] lleno"
+ },
  "notification_arms_race_pressure_desc": {
   "en": "[SCOPE.sCountry('arms_race_rival').GetName] is matching our military buildup, increasing pressure on our defense budget.",
   "es": "[SCOPE.sCountry('arms_race_rival').GetName] está igualando nuestro aumento militar, lo que incrementa la presión sobre nuestro presupuesto de defensa."
@@ -470,6 +502,22 @@
  "notification_gp_support_declined_notice_name": {
   "en": "A Colonial Power Keeps Its Distance",
   "es": "Un poder colonial mantiene las distancias"
+ },
+ "notification_headlines_nd_icbms_fielded_desc": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has put the world's first intercontinental missiles in silos. A nuclear warhead launched from one can reach any country in the world.",
+  "es": "[SCOPE.sCountry('nd_leg_fielder').GetName] ha puesto en silos los primeros misiles intercontinentales del mundo. Una ojiva nuclear lanzada desde uno de ellos puede alcanzar cualquier país del mundo."
+ },
+ "notification_headlines_nd_icbms_fielded_name": {
+  "en": "#b THE FIRST INTERCONTINENTAL MISSILES ARE DEPLOYED #!",
+  "es": "#b DESPLEGADOS LOS PRIMEROS MISILES INTERCONTINENTALES #!"
+ },
+ "notification_headlines_nd_subs_fielded_desc": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has sent the world's first missile submarines to sea. From there a nuclear warhead can reach any coastal state in the world.",
+  "es": "[SCOPE.sCountry('nd_leg_fielder').GetName] ha enviado al mar los primeros submarinos con misiles del mundo. Desde allí, una ojiva nuclear puede alcanzar cualquier estado costero del mundo."
+ },
+ "notification_headlines_nd_subs_fielded_name": {
+  "en": "#b THE FIRST MISSILE SUBMARINES PUT TO SEA #!",
+  "es": "#b LOS PRIMEROS SUBMARINOS CON MISILES SE HACEN A LA MAR #!"
  },
  "notification_headlines_tech_ICBMs_desc": {
   "en": "A successful test of an ICBM has been reported out of [SCOPE.sCountry('headlines_ICBMs_researcher').GetName]. #lore The development of rockets powerful enough to carry a payload between continents has staggering geopolitical implications. International analysts warn this technology could fundamentally alter the nature of warfare and global power dynamics... #!",
@@ -1887,6 +1935,14 @@
   "en": "Foreign Assets Nationalized",
   "es": "Activos extranjeros nacionalizados"
  },
+ "notification_nd_authority_bound_by_delivery_desc": {
+  "en": "#bold Launch on Warning#! and #bold Automatic Retaliation#! launch fielded ICBMs, and we no longer field them, so our launch authority is back under #v Central Authorization#!. The loss of the missiles made this change, not our government, so the wait before we may next choose a launch authority runs on from our own last choice.",
+  "es": "#bold Lanzamiento ante alerta#! y #bold Represalia automática#! lanzan ICBM desplegados, y ya no los desplegamos, así que nuestra autoridad de lanzamiento vuelve a estar bajo #v Autorización central#!. Este cambio lo ha causado la pérdida de los misiles, no nuestro gobierno, así que la espera antes de poder elegir de nuevo una autoridad de lanzamiento sigue contando desde nuestra última elección."
+ },
+ "notification_nd_authority_bound_by_delivery_name": {
+  "en": "Launch Authority Returns to Central",
+  "es": "La autoridad de lanzamiento vuelve a la central"
+ },
  "notification_nd_crisis_ultimatum_issued_desc": {
   "en": "[SCOPE.sCountry('nd_issuer').GetName] has issued [SCOPE.sCountry('nd_target').GetName] a public nuclear ultimatum. It will reach them within two or three weeks, and the deadline runs from then. A $nuclear_guarantee$ for [SCOPE.sCountry('nd_target').GetNameNoFlag] from an armed country lowers the pressure on it to concede.",
   "es": "[SCOPE.sCountry('nd_issuer').GetName] ha lanzado a [SCOPE.sCountry('nd_target').GetName] un ultimátum nuclear público. Les llegará en dos o tres semanas, y el plazo corre a partir de entonces. Una $nuclear_guarantee$ para [SCOPE.sCountry('nd_target').GetNameNoFlag] por parte de un país armado reduce la presión que sufre para ceder."
@@ -1974,6 +2030,14 @@
  "notification_sr_earth_hostile_notice_name": {
   "en": "A Hostile Fleet Is Bound for Earth",
   "es": "Una flota hostil se dirige a la Tierra"
+ },
+ "notification_sr_ebase_move_notice_desc": {
+  "en": "Assign for the most profit is moving our $building_space_mine$ levels from #b [GetPlayer.GetCustom('sr_eb_place_notice_from')]#! to #b [GetPlayer.GetCustom('sr_eb_place_notice_to')]#!, which earns more a level at today's prices, above all from its #b [GetPlayer.GetCustom('sr_eb_notice_good_name')]#!. Up to #v [GetPlayer.MakeScope.ScriptValue('sr_eb_pace')|0]#! levels a month move while the gain is worth a move; the Colonies section's Bases view follows the move.",
+  "es": "Asignar para el máximo beneficio está trasladando nuestros niveles de $building_space_mine$ de #b [GetPlayer.GetCustom('sr_eb_place_notice_from')]#! a #b [GetPlayer.GetCustom('sr_eb_place_notice_to')]#!, que rinde más por nivel a los precios de hoy, sobre todo por su #b [GetPlayer.GetCustom('sr_eb_notice_good_name')]#!. Cada mes se trasladan hasta #v [GetPlayer.MakeScope.ScriptValue('sr_eb_pace')|0]#! niveles mientras la ganancia compense el traslado; la vista Bases de la sección Colonias sigue el traslado."
+ },
+ "notification_sr_ebase_move_notice_name": {
+  "en": "Extraplanetary Base Levels Moving",
+  "es": "Niveles de base extraplanetaria en traslado"
  },
  "notification_sr_space_command_dismantled_notice_desc": {
   "en": "The $building_space_command$ in [SCOPE.sState('sr_sc_dismantled').GetName] was dismantled: a nation runs one $building_space_command$, and ours stays in [SCOPE.sState('sr_sc_keeper').GetName], the larger (or the capital's, if they are the same size).",
@@ -2646,5 +2710,13 @@
  "notification_wonder_construction_complete_space_elevator_name": {
   "en": "Space Elevator Completed",
   "es": "Ascensor espacial completado"
+ },
+ "sr_module_queue_empty_setting_name": {
+  "en": "Colony Module Queue Empty",
+  "es": "Cola de módulos de colonia vacía"
+ },
+ "sr_module_stock_full_setting_name": {
+  "en": "Colony Module Stock Full",
+  "es": "Almacén de módulos de colonia lleno"
  }
 }

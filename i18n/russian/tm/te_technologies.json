@@ -308,8 +308,8 @@
   "ru": "Улавливание и хранение углерода"
  },
  "carbon_capture_and_storage_desc": {
-  "en": "Capturing carbon at stationary sources and storing it, or removing it directly from the atmosphere. Unlocks 50% source capture, Carbon Conversion Works with Direct Air Capture, and the technology requirement for Managed Fossil Phaseout.",
-  "ru": "Улавливание углерода на стационарных источниках и его хранение или извлечение прямо из атмосферы. Открывает 50% улавливания на источнике, Завод переработки углерода с прямым улавливанием из воздуха и технологическое требование для «Управляемого отказа от ископаемого топлива»."
+  "en": "We can now catch the carbon dioxide in the flues of power plants, steelworks and other factories that burn coal and oil, compress it, and pump it into depleted oil fields and deep rock, where it stays. Machines with fans and chemical filters can also draw it straight out of the open air, though every ton taken that way costs far more power than catching it at the chimney.",
+  "ru": "Теперь мы можем улавливать углекислый газ в дымоходах электростанций, сталелитейных заводов и других фабрик, сжигающих уголь и нефть, сжимать его и закачивать в истощённые нефтяные месторождения и глубокие породы, где он остаётся. Машины с вентиляторами и химическими фильтрами могут также извлекать его прямо из открытого воздуха, хотя каждая тонна, добытая так, требует гораздо больше энергии, чем улавливание у трубы."
  },
  "cellular_networks": {
   "en": "Cellular Networks",
@@ -356,8 +356,8 @@
   "ru": "Общевойсковые операции"
  },
  "combined_arms_desc": {
-  "en": "By having different branches of the military work together, we can be much more effective in combat. Each army general whose formation fields at least two different unit groups - infantry, artillery, cavalry, tanks, or aircraft - with each comprising at least 5% of the formation gains unique [concept_combined_arms] traits that provide combat bonuses. Fielding all five groups in a single formation unlocks the ultimate Full Spectrum Dominance bonus.",
-  "ru": "Заставив разные рода войск действовать сообща, мы можем быть гораздо эффективнее в бою. Каждый армейский генерал, в соединении которого есть не менее двух разных групп подразделений — пехота, артиллерия, кавалерия, танки или авиация, — причём каждая составляет не менее 5% соединения, получает уникальные черты [Concept('concept_combined_arms','общевойскового боя')], дающие боевые бонусы. Если в одном соединении выставлены все пять групп, открывается высший бонус «Полное доминирование»."
+  "en": "Our infantry, artillery and armor have trained to fight their own battles. Planned as one force, each covers the others' weaknesses: the guns lift their fire just ahead of the advancing infantry, the tanks drive through the gaps the infantry opens, and the infantry follows to hold the ground.",
+  "ru": "Наша пехота, артиллерия и бронетехника учились вести каждая свой бой. Если планировать их как единую силу, каждая прикрывает слабости остальных: орудия переносят огонь прямо перед наступающей пехотой, танки прорываются через бреши, которые открывает пехота, а пехота идёт следом, чтобы удержать рубеж."
  },
  "commercial_aviation": {
   "en": "Commercial Aviation",
@@ -600,8 +600,8 @@
   "ru": "Геоинженерия"
  },
  "geoengineering_desc": {
-  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls. Unlocks the Stratospheric Aerosol Injection climate policy.",
-  "ru": "Два столетия мы меняли климат случайно. Ничто, кроме нашей решимости, не мешает делать это намеренно: самолёты могли бы разбрасывать в стратосфере сульфатные аэрозоли и затмить солнце за год, по цене, которую потянет любая крупная экономика. Дымка скроет потепление, но не устранит его, и поддерживать её придётся, пока углерод остаётся в воздухе. С этим приходят и малые искусства: засев облаков, чтобы вызвать дождь в засуху, и превращение града в дождь до падения. Открывает климатическую политику «Стратосферная закачка аэрозолей»."
+  "en": "We have been changing the climate by accident for two centuries. Nothing but our nerve stops us doing it on purpose: aircraft could fly sulfate aerosols into the stratosphere and veil the sun within a year, at a price any large economy could pay. The haze would hide the warming, not remove it, and it would have to be kept up for as long as the carbon stays in the air. Smaller arts come with it: seeding clouds to bring rain in a drought, and to turn hail to rain before it falls.",
+  "ru": "Два столетия мы меняли климат случайно. Ничто, кроме нашей решимости, не мешает делать это намеренно: самолёты могли бы разбрасывать в стратосфере сульфатные аэрозоли и затмить солнце за год, по цене, которую потянет любая крупная экономика. Дымка скроет потепление, но не устранит его, и поддерживать её придётся, пока углерод остаётся в воздухе. С этим приходят и малые искусства: засев облаков, чтобы вызвать дождь в засуху, и превращение града в дождь до падения."
  },
  "globalization": {
   "en": "Globalization",
@@ -1240,8 +1240,8 @@
   "ru": "Самонаправляемая эволюция"
  },
  "self_directed_evolution_desc": {
-  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and they give their children bodies made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family may be a different kind of creature, and one it chose to become.",
-  "ru": "Редактирование генов зашло далеко за пределы поверхности. Люди выращивают новые чувства, обзаводятся сконструированным обменом веществ, а своим детям дают тела, приспособленные к океанским глубинам, полярному холоду, слабой гравитации или жёсткому вакууму. За два поколения семья может стать существами иного рода, и избранного ими самими."
+  "en": "Gene editing has gone far past the surface. People grow new senses and run on engineered metabolisms, and parents can now give a child a body made for the deep ocean, the polar cold, low gravity or hard vacuum. In two generations a family could be a different kind of creature, and one it chose to become.",
+  "ru": "Редактирование генов зашло далеко за пределы поверхности. Люди выращивают новые чувства, обзаводятся сконструированным обменом веществ, а родители теперь могут дать ребёнку тело, приспособленное к океанским глубинам, полярному холоду, слабой гравитации или жёсткому вакууму. За два поколения семья могла бы стать существами иного рода, и избранного ими самими."
  },
  "self_driving_laboratories": {
   "en": "Self-Driving Laboratories",
@@ -1432,8 +1432,8 @@
   "ru": "Терраформирование"
  },
  "terraforming_desc": {
-  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born. Unlocks the Terraforming colony module.",
-  "ru": "Геоинженерия доказала, что климат планеты можно изменить намеренно. Терраформирование обращает то же ремесло на другие миры: зеркала на орбите, чтобы согреть Марс, заводы, чтобы сгустить его воздух, солнцезащитный экран, чтобы охладить Венеру. Работа занимает десятилетия, а награда — века, и первые дети, которые пройдут под марсианским небом без шлема, ещё не родились. Открывает колониальный модуль «Терраформирование»."
+  "en": "Geoengineering proved that a planet's climate can be changed on purpose. Terraforming turns the same craft on other worlds: mirrors in orbit to warm Mars, factories to thicken its air, a sunshade to cool Venus. The work takes decades and the reward centuries, and the first children to walk under a Martian sky without a helmet have not yet been born.",
+  "ru": "Геоинженерия доказала, что климат планеты можно изменить намеренно. Терраформирование обращает то же ремесло на другие миры: зеркала на орбите, чтобы согреть Марс, заводы, чтобы сгустить его воздух, солнцезащитный экран, чтобы охладить Венеру. Работа занимает десятилетия, а награда — века, и первые дети, которые пройдут под марсианским небом без шлема, ещё не родились."
  },
  "terrorism_and_anti_terrorism": {
   "en": "Terrorism and Antiterrorism",

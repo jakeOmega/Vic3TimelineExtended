@@ -142,6 +142,12 @@ Earlier passes settled these words too, which are too short or too common for th
 | infamy (plain text, and the gender around `[concept_infamy]`) | Verrufenheit, feminine: „die [concept_infamy], die wir gezahlt haben“ |
 | the Full Demographics rule | die Demografieregel „Voll“ (the setting's label), not „Volle Demografie“ |
 | a nuclear salvo / the Leadership mission | Salve / Führung |
+| Space Forces / Spacers (the pop type: warship crews and marines) | Weltraumstreitkräfte / Raumfahrer |
+| a fleet's dock / the fleet stances / the Station posture | Liegeplatz / „Ausweichen“, „Zuschlagen und Rückzug“, „Gefecht suchen“, „Kampf bis zum Letzten“ / „Stationieren“ |
+| Space Command's build modes, named in prose | quoted as their labels read: „Vollständig“, „Nur Aufträge“, „Pausiert“, „Autostart“ |
+| Launch Credit (nuclear) | Startgutschrift, as the modifier reads |
+| default on debts ("only out of default") | Zahlungsausfall: „solange es nicht im Zahlungsausfall ist“ |
+| a hybrid culture's name / a minted diaspora | the language word as a capitalized, uninflected adjective, then the insert: „Burmesisch $heritage_group_african$“ / „Diaspora ($heritage_group_african$)“ |
 
 Proper names stay as they are: companies, people, places, historical buildings, products, real political parties ("Bharatiya Janata Party", "En Marche!"). A generic descriptive name is not a proper name and is translated, as the official German does ("Communist Party" → „Kommunistische Partei", "Technocratic Party" → „Technokratische Partei"). Use an established German name where one exists ("Eiffelturm", "Vereinte Nationen"), and translate the descriptive part of a compound name ("Getzner Bludenz Textile Works" → „Textilwerke Getzner Bludenz“).
 

@@ -18,3 +18,9 @@ What the next play-test in Spanish should look at. The Spanish is machine-transl
 | **Quotes and numbers.** An event that quotes someone, and a tooltip with a figure over 999 in its prose. | «…» quotation marks; 1 000 with no line break inside it, decimals with a comma (2,5). | A stray `"` cuts the line short: find it in the TM and replace it with « or ». |
 | **Country names.** An event or tooltip that names another country. | The bare name, with *de* or *a* before it («Protege a Francia»), never a raw `GetAltName`. | Report the key; merge rejects `GetAltName` for Spanish, so it would have come in by hand. |
 | **debug.log.** After a year of play. | No loc errors the English session doesn't have. | Fix the line in the TM. |
+
+## The eleventh update pass (2026-11-26)
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Hybrid culture names.** Under the Assimilation Across Heritages rule's Hybrid Cultures setting, a pop that takes up another heritage's language: hover its culture. The mod writes some names itself («Birmano $heritage_group_african$», «Bantú de los Grandes Lagos …»), and the rest insert vanilla's own language and heritage-group names (`$language_akan$ $heritage_group_central_asian$`). | Both kinds read alike: the language word, then the heritage group, agreeing as vanilla's names do. | Change the mod-written names in `i18n/spanish/tm/te_hybrid_cultures_generated.json` to vanilla's form. Each language word repeats in all nine of its heritage-group names (`hc_<language>_<group>`), so swap it in every one, by a script-written correction chunk merged like any other (`i18n/README.md` § Running a translation pass, step 6). |

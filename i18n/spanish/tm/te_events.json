@@ -13095,6 +13095,22 @@
   "en": "Fair Play",
   "es": "Juego limpio"
  },
+ "morphological_freedom_events.300.a": {
+  "en": "Let the boards get on with their work.",
+  "es": "Que las juntas sigan con su trabajo."
+ },
+ "morphological_freedom_events.300.d": {
+  "en": "The argument over who may change their body has run out. Licensed clinics do the work, a board decides which changes are safe, and a modified [ROOT.GetCountry.GetAdjective] citizen's papers record what was done. Those who wanted no clinics at all, and those who wanted no boards, have stopped marching about it.",
+  "es": "La discusión sobre quién puede cambiar su cuerpo se ha agotado. Clínicas con licencia hacen el trabajo, una junta decide qué cambios son seguros, y los papeles de un ciudadano [ROOT.GetCountry.GetAdjective] modificado registran lo que se hizo. Quienes no querían clínicas en absoluto, y quienes no querían juntas, han dejado de manifestarse por ello."
+ },
+ "morphological_freedom_events.300.f": {
+  "en": "A notice posted at the door of a licensed clinic.\\n\\nWe work on adults only, and only with the board's approval in hand. Bring your papers: the law requires us to enter on them what was done. You will see a counselor before you see a surgeon, because the board will ask whether you understood the change you requested. After that there is a waiting period, and we cannot shorten it for anyone. If the board refuses a change, we cannot perform it, and asking our staff to do so puts their license at risk. The fee and the length of the wait are listed inside.",
+  "es": "Un aviso colgado en la puerta de una clínica con licencia.\\n\\nSolo trabajamos con adultos, y solo con la aprobación de la junta en la mano. Trae tus papeles: la ley nos obliga a anotar en ellos lo que se hizo. Verás a un consejero antes que a un cirujano, porque la junta preguntará si comprendiste el cambio que pediste. Después hay un periodo de espera, y no podemos acortarlo para nadie. Si la junta rechaza un cambio, no podemos realizarlo, y pedírselo a nuestro personal pone en riesgo su licencia. La tarifa y la duración de la espera figuran en el interior."
+ },
+ "morphological_freedom_events.300.t": {
+  "en": "A Matter for the Boards",
+  "es": "Un asunto para las juntas"
+ },
  "morphological_freedom_events.4.a": {
   "en": "Not before eighteen",
   "es": "No antes de los dieciocho"
@@ -16055,6 +16071,66 @@
   "en": "An Answer on Reparations",
   "es": "Una respuesta sobre las reparaciones"
  },
+ "nuclear_weapon_events.35.a": {
+  "en": "Keep the crews at their posts.",
+  "es": "Que las dotaciones sigan en sus puestos."
+ },
+ "nuclear_weapon_events.35.b": {
+  "en": "Have our planners work out what this means for us.",
+  "es": "Que nuestros planificadores calculen qué significa esto para nosotros."
+ },
+ "nuclear_weapon_events.35.d_own": {
+  "en": "Our first intercontinental missiles are in their silos. A warhead launched from one can reach any country in the world, and with warheads in silos our arsenal is harder to destroy in a first strike. The program's focus returns to warheads. Our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the missiles within a week.",
+  "es": "Nuestros primeros misiles intercontinentales están en sus silos. Una ojiva lanzada desde uno puede alcanzar cualquier país del mundo, y con las ojivas en silos nuestro arsenal es más difícil de destruir en un primer ataque. El programa vuelve a centrarse en las ojivas. Nuestros rivales, nuestros vecinos y todos los países que se cree que tienen armas nucleares sabrán de los misiles en el plazo de una semana."
+ },
+ "nuclear_weapon_events.35.d_own_held": {
+  "en": "Our first intercontinental missiles are in their silos. A warhead launched from one can reach any country in the world, and with warheads in silos our arsenal is harder to destroy in a first strike. The program's focus returns to warheads, but while our arsenal is at its ceiling the program builds none. Our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the missiles within a week.",
+  "es": "Nuestros primeros misiles intercontinentales están en sus silos. Una ojiva lanzada desde uno puede alcanzar cualquier país del mundo, y con las ojivas en silos nuestro arsenal es más difícil de destruir en un primer ataque. El programa vuelve a centrarse en las ojivas, pero mientras nuestro arsenal esté en su tope el programa no construye ninguna. Nuestros rivales, nuestros vecinos y todos los países que se cree que tienen armas nucleares sabrán de los misiles en el plazo de una semana."
+ },
+ "nuclear_weapon_events.35.d_world": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has put intercontinental missiles in silos. A warhead launched from one can reach any country in the world, ours among them, and with warheads in silos its arsenal is harder to destroy in a first strike.",
+  "es": "[SCOPE.sCountry('nd_leg_fielder').GetName] ha puesto misiles intercontinentales en silos. Una ojiva lanzada desde uno puede alcanzar cualquier país del mundo, el nuestro entre ellos, y con las ojivas en silos su arsenal es más difícil de destruir en un primer ataque."
+ },
+ "nuclear_weapon_events.35.f_own": {
+  "en": "Below the silo field, the relief crew came down the shaft at six and signed the log. The two officers they replaced opened their safes in front of them, counted the keys and the sealed orders aloud, and locked the safes again before they went up. At set hours a telephone rang, and the officer on duty lifted it, read back the number given and wrote the time beside it. Between calls the crew went along the panels row by row and noted each reading in the log.",
+  "es": "Abajo, en el campo de silos, el relevo bajó por el pozo a las seis y firmó el registro. Los dos oficiales a quienes sustituían abrieron sus cajas fuertes delante de ellos, contaron en voz alta las llaves y las órdenes selladas, y volvieron a cerrarlas antes de subir. A horas fijas sonaba un teléfono, y el oficial de guardia lo cogía, repetía el número que le daban y anotaba la hora a su lado. Entre llamada y llamada, la dotación recorría los paneles fila por fila y anotaba cada lectura en el registro."
+ },
+ "nuclear_weapon_events.35.f_world": {
+  "en": "Remarks heard in our capital in the week [SCOPE.sCountry('nd_leg_fielder').GetName]'s missiles went into their silos.\\n\\n\\\"The newspapers have printed a map with rings drawn around their silos. Every capital in the world is inside the last ring.\\\"\\n\\n\\\"A bomber can be seen coming for hours. A missile takes minutes, and once it has flown there is no calling it back.\\\"\\n\\n\\\"A missile in a silo under the ground is far harder to destroy than an aircraft on a runway. Any plan to strike their arsenal first would now take many more warheads.\\\"",
+  "es": "Comentarios oídos en nuestra capital la semana en que los misiles de [SCOPE.sCountry('nd_leg_fielder').GetName] entraron en sus silos.\\n\\n«Los periódicos han publicado un mapa con anillos trazados alrededor de sus silos. Todas las capitales del mundo están dentro del último anillo.»\\n\\n«Un bombardero se ve venir durante horas. Un misil tarda minutos, y una vez que ha volado no hay forma de hacerlo volver.»\\n\\n«Un misil en un silo bajo tierra es mucho más difícil de destruir que un avión en una pista. Cualquier plan para atacar primero su arsenal requeriría ahora muchas más ojivas.»"
+ },
+ "nuclear_weapon_events.35.t": {
+  "en": "Missiles in Their Silos",
+  "es": "Misiles en sus silos"
+ },
+ "nuclear_weapon_events.36.a": {
+  "en": "Keep their orders sealed and their patrols long.",
+  "es": "Que mantengan selladas sus órdenes y largas sus patrullas."
+ },
+ "nuclear_weapon_events.36.b": {
+  "en": "Ask our planners what a missile from the sea changes for us.",
+  "es": "Preguntar a nuestros planificadores qué cambia para nosotros un misil lanzado desde el mar."
+ },
+ "nuclear_weapon_events.36.d_own": {
+  "en": "Our first missile submarines have left port. From the sea a warhead can reach any coastal state in the world, and a submarine on patrol is the hardest part of an arsenal to find and destroy. The boats add to our upkeep and need a coastal state of ours to sail from. The program's focus returns to warheads, and our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the submarines within a week.",
+  "es": "Nuestros primeros submarinos de misiles han zarpado. Desde el mar una ojiva puede alcanzar cualquier estado costero del mundo, y un submarino en patrulla es la parte de un arsenal más difícil de encontrar y destruir. Los submarinos aumentan nuestro mantenimiento y necesitan un estado costero nuestro desde el que zarpar. El programa vuelve a centrarse en las ojivas, y nuestros rivales, nuestros vecinos y todos los países que se cree que tienen armas nucleares sabrán de los submarinos en el plazo de una semana."
+ },
+ "nuclear_weapon_events.36.d_own_held": {
+  "en": "Our first missile submarines have left port. From the sea a warhead can reach any coastal state in the world, and a submarine on patrol is the hardest part of an arsenal to find and destroy. The boats add to our upkeep and need a coastal state of ours to sail from. The program's focus returns to warheads, but while our arsenal is at its ceiling the program builds none. Our rivals, our neighbors and every country thought to hold nuclear weapons will hear of the submarines within a week.",
+  "es": "Nuestros primeros submarinos de misiles han zarpado. Desde el mar una ojiva puede alcanzar cualquier estado costero del mundo, y un submarino en patrulla es la parte de un arsenal más difícil de encontrar y destruir. Los submarinos aumentan nuestro mantenimiento y necesitan un estado costero nuestro desde el que zarpar. El programa vuelve a centrarse en las ojivas, pero mientras nuestro arsenal esté en su tope el programa no construye ninguna. Nuestros rivales, nuestros vecinos y todos los países que se cree que tienen armas nucleares sabrán de los submarinos en el plazo de una semana."
+ },
+ "nuclear_weapon_events.36.d_world": {
+  "en": "[SCOPE.sCountry('nd_leg_fielder').GetName] has sent its first missile submarines to sea. From there a warhead can reach any coastal state in the world, and a submarine on patrol is the hardest part of an arsenal for an enemy to find and destroy.",
+  "es": "[SCOPE.sCountry('nd_leg_fielder').GetName] ha enviado al mar sus primeros submarinos de misiles. Desde allí una ojiva puede alcanzar cualquier estado costero del mundo, y un submarino en patrulla es la parte de un arsenal más difícil de encontrar y destruir para un enemigo."
+ },
+ "nuclear_weapon_events.36.f": {
+  "en": "The pilot brought the submarine out of the harbor an hour before dawn, as its orders required, with every light aboard put out. At the outer buoy he climbed down into his launch, and a sailor pulled the ladder up behind him. The submarine made its turn, settled lower in the water and was out of sight before the launch reached the quay. The pilot entered the hour in the harbor log.",
+  "es": "El práctico sacó el submarino del puerto una hora antes del amanecer, como exigían sus órdenes, con todas las luces de a bordo apagadas. En la boya exterior bajó a su lancha, y un marinero recogió la escala tras él. El submarino hizo su giro, se hundió un poco más en el agua y estaba fuera de la vista antes de que la lancha llegara al muelle. El práctico anotó la hora en el diario del puerto."
+ },
+ "nuclear_weapon_events.36.t": {
+  "en": "Submarines at Sea",
+  "es": "Submarinos en el mar"
+ },
  "nuclear_weapon_events.4.a": {
   "en": "We must strengthen our resolve and prepare for what comes next.",
   "es": "Debemos reforzar nuestra determinación y prepararnos para lo que venga."
@@ -17716,28 +17792,28 @@
   "es": "¿Quién vigila a los vigilantes?"
  },
  "society_technology_events.13.a": {
-  "en": "Regulate the platforms.",
-  "es": "Regular las plataformas."
+  "en": "Make the platforms take down what is false.",
+  "es": "Obligar a las plataformas a retirar lo que es falso."
  },
  "society_technology_events.13.b": {
-  "en": "Free speech must prevail.",
-  "es": "Debe prevalecer la libertad de expresión."
+  "en": "Leave the posts up and let the papers answer them.",
+  "es": "Dejar las publicaciones y que los periódicos las rebatan."
  },
  "society_technology_events.13.c": {
-  "en": "Educate the public.",
-  "es": "Educar a la población."
+  "en": "Pay for classes that teach people to check a story first.",
+  "es": "Pagar clases que enseñen a comprobar una noticia primero."
  },
  "society_technology_events.13.d": {
-  "en": "False stories are spreading on social media faster than newspapers and broadcasters can correct them: invented crimes, fake cures, claims about officials. People who believe one are quicker to believe the next. The platforms say they cannot check everything their users post, and many citizens want the government to act.",
-  "es": "Las historias falsas se difunden por las redes sociales más rápido de lo que los periódicos y las emisoras pueden desmentirlas: delitos inventados, curas falsas, afirmaciones sobre cargos públicos. Quien se cree una se cree antes la siguiente. Las plataformas dicen que no pueden comprobar todo lo que publican sus usuarios, y muchos ciudadanos quieren que el gobierno actúe."
+  "en": "False stories are spreading on social media faster than newspapers and broadcasters can check them: crimes that never happened, cures that do not work, statements no official made. A correction reaches fewer people than the story did. The companies that run the platforms say they cannot review everything their users post. Doctors and newspaper editors have asked the government to make the platforms remove false posts. Academics object that an official would then decide what counts as false.",
+  "es": "Las noticias falsas se difunden por las redes sociales más rápido de lo que los periódicos y las emisoras pueden comprobarlas: delitos que nunca ocurrieron, curas que no funcionan, declaraciones que ningún cargo público hizo. Una rectificación llega a menos gente que la noticia. Las empresas que gestionan las plataformas dicen que no pueden revisar todo lo que publican sus usuarios. Médicos y directores de periódicos han pedido al gobierno que obligue a las plataformas a retirar las publicaciones falsas. Los académicos objetan que entonces un funcionario decidiría qué cuenta como falso."
  },
  "society_technology_events.13.f": {
-  "en": "\\\"I run the corrections desk at this paper, and this is what my week looked like. On Monday a story went round that the water in the eastern districts had been poisoned. By lunchtime it had been shared more times than we have readers. We checked it with the water board in an hour and published a correction by two. By evening the correction had been read by about one person for every ten who saw the story, and some of those who replied to it said we had been paid to deny it. On Wednesday the same story came round again with a different district in it. I have six people on this desk, and I have asked the editor for six more.\\\"",
-  "es": "«Dirijo la sección de rectificaciones de este periódico, y así fue mi semana. El lunes circuló una historia según la cual el agua de los barrios del este había sido envenenada. A la hora de comer se había compartido más veces que lectores tenemos. La comprobamos con la junta de aguas en una hora y publicamos una rectificación a las dos. Por la tarde la rectificación la había leído una persona por cada diez que vieron la historia, y algunos de quienes respondieron dijeron que se nos había pagado por desmentirla. El miércoles la misma historia volvió a circular con otro barrio. Tengo seis personas en esta sección y he pedido seis más al director.»"
+  "en": "Remarks heard in our cities in one week, about stories going round on social media.\\n\\n\\\"A post said the water in our district had been poisoned. I kept the children home and bought bottled water for four days. The water board says there was never anything wrong with it.\\\"\\n\\n\\\"We checked the story about the police chief in an afternoon and printed that it was false. By then it had been shared far more often than our paper is read.\\\"\\n\\n\\\"If an office decides which posts are false, who runs that office after the next change of government? Leave the posts up and answer them.\\\"\\n\\n\\\"Every day this week someone has asked at my counter for the tablets a post said would cure the fever going round. There are no such tablets, and I have put a notice in the window saying so.\\\"",
+  "es": "Comentarios oídos en nuestras ciudades en una semana, sobre noticias que circulan por las redes sociales.\\n\\n«Una publicación decía que el agua de nuestro barrio había sido envenenada. Mantuve a los niños en casa y compré agua embotellada durante cuatro días. La junta de aguas dice que nunca tuvo nada malo.»\\n\\n«Comprobamos la noticia sobre el jefe de policía en una tarde e imprimimos que era falsa. Para entonces se había compartido muchísimas más veces de las que se lee nuestro periódico.»\\n\\n«Si una oficina decide qué publicaciones son falsas, ¿quién dirige esa oficina tras el próximo cambio de gobierno? Dejemos las publicaciones y rebatámoslas.»\\n\\n«Cada día de esta semana alguien ha preguntado en mi mostrador por las pastillas que una publicación decía que curarían la fiebre que anda por ahí. No existen tales pastillas, y he puesto un aviso en el escaparate diciéndolo.»"
  },
  "society_technology_events.13.t": {
-  "en": "The Poisoned Well",
-  "es": "El pozo envenenado"
+  "en": "False Stories Online",
+  "es": "Noticias falsas en línea"
  },
  "society_technology_events.14.a": {
   "en": "Retaliate in kind.",
@@ -19768,8 +19844,8 @@
   "es": "Prepararse."
  },
  "space_race_events.100.d": {
-  "en": "Our tracking stations report a burn out of [SCOPE.sCountry('sr_alert_power').GetName]'s parking orbit. The fleet is bound for [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], where we hold colonies, and will arrive in #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_months')|0]#! months. Nothing can catch it on the way.",
-  "es": "Nuestras estaciones de seguimiento informan de un encendido de motores desde la órbita de estacionamiento de [SCOPE.sCountry('sr_alert_power').GetName]. La flota se dirige a [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], donde tenemos colonias, y llegará en #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_months')|0]#! meses. Nada puede interceptarla por el camino."
+  "en": "Our tracking stations report a burn out of [SCOPE.sCountry('sr_alert_power').GetName]'s parking orbit. The fleet is bound for [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], where we hold colonies, and will arrive in #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_weeks')|0]#! weeks. Nothing can catch it on the way.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )]",
+  "es": "Nuestras estaciones de seguimiento informan de un encendido de motores desde la órbita de estacionamiento de [SCOPE.sCountry('sr_alert_power').GetName]. La flota se dirige a [ROOT.GetCountry.GetCustom('sr_fl_alert_loc_name')], donde tenemos colonias, y llegará en #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fl_alert_weeks')|0]#! semanas. Nada puede interceptarla por el camino.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_loc'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )]"
  },
  "space_race_events.100.f": {
   "en": "\\\"We picked up the burn on the first pass after it began, and we have tracked the fleet on every pass since. Its course is set for our colonies, and the arrival time is on the board. It cannot change course enough to miss them without a second burn, and we would see that too. I have sent the figures to Space Command and to the colony's defense staff, and we will report every change in the fleet's course or speed as soon as we have it.\\\"\\n\\n— Duty Officer, Orbital Tracking Command",
@@ -19956,8 +20032,8 @@
   "es": "Preparémonos para recibirla."
  },
  "space_race_events.111.d": {
-  "en": "Our tracking stations report a fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName] on its way to Earth. Months until it lands: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_months')|0]#!. With what is there already, the fleets of powers at war with us at Earth or bound for it come to a strength of #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; what we have at Earth comes to #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] A fleet that lands to find our orbits empty, or wins them from what we have there, blockades our launch sites: until a fleet of ours holds them again, no colony fleet, module, settler or outbound fleet leaves Earth.",
-  "es": "Nuestras estaciones de seguimiento informan de que una flota de [SCOPE.sCountry('sr_earth_alert_power').GetName] se dirige a la Tierra. Meses hasta que llegue: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_months')|0]#!. Con lo que ya hay allí, las flotas de las potencias en guerra con nosotros que están en la Tierra o rumbo a ella suman una fuerza de #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; lo que tenemos en la Tierra suma #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] Una flota que llegue y encuentre vacías nuestras órbitas, o que se las arrebate a lo que tenemos allí, bloquea nuestros centros de lanzamiento: hasta que una flota nuestra vuelva a controlarlas, ninguna flota colonial, módulo, colono ni flota con destino al exterior sale de la Tierra."
+  "en": "Our tracking stations report a fleet of [SCOPE.sCountry('sr_earth_alert_power').GetName] on its way to Earth. Weeks until it lands: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_weeks')|0]#!. With what is there already, the fleets of powers at war with us at Earth or bound for it come to a strength of #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; what we have at Earth comes to #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] A fleet that lands to find our orbits empty, or wins them from what we have there, blockades our launch sites: until a fleet of ours holds them again, no colony fleet, module, settler or outbound fleet leaves Earth.",
+  "es": "Nuestras estaciones de seguimiento informan de que una flota de [SCOPE.sCountry('sr_earth_alert_power').GetName] se dirige a la Tierra. Semanas hasta que llegue: #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_alert_weeks')|0]#!. Con lo que ya hay allí, las flotas de las potencias en guerra con nosotros que están en la Tierra o rumbo a ella suman una fuerza de #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_earth_hostile_total')|0]#!; lo que tenemos en la Tierra suma #v [ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_loc_ours_earth')|0]#!.[AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)1' ), 'sr_fc_alert_1' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)2' ), 'sr_fc_alert_2' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)3' ), 'sr_fc_alert_3' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)4' ), 'sr_fc_alert_4' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_fc_alert_tier_earth'), '(CFixedPoint)5' ), 'sr_fc_alert_5' )][AddLocalizationIf( EqualTo_CFixedPoint( ROOT.GetCountry.MakeScope.ScriptValue('sr_disp_sc_operational'), '(CFixedPoint)0' ), 'sr_earth_alert_half_fire' )] Una flota que llegue y encuentre vacías nuestras órbitas, o que se las arrebate a lo que tenemos allí, bloquea nuestros centros de lanzamiento: hasta que una flota nuestra vuelva a controlarlas, ninguna flota colonial, módulo, colono ni flota con destino al exterior sale de la Tierra."
  },
  "space_race_events.111.f": {
   "en": "\\\"Orbital Tracking Command, reporting to the government. Of every trajectory we follow, this is the one that ends at Earth. The fleet's arrival time is on the board, with its strength and what we have in orbit to meet it. We have checked the figures on three passes in a row, and they have not changed. If it arrives to find our orbits empty, or wins them from what we have there, nothing leaves our launch sites until we take them back. We will report each change in its course as we see it.\\\"",
@@ -19966,6 +20042,46 @@
  "space_race_events.111.t": {
   "en": "Earth Is Threatened",
   "es": "La Tierra está amenazada"
+ },
+ "space_race_events.113.a": {
+  "en": "Revoke the charter. The colony answers to us.",
+  "es": "Revocar la carta. La colonia responde ante nosotros."
+ },
+ "space_race_events.113.b": {
+  "en": "Leave the council its charter.",
+  "es": "Dejar al consejo su carta."
+ },
+ "space_race_events.113.d": {
+  "en": "We have before us a proposal to revoke the charter of [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]. The charter lets the colony's elected council make its own laws and keep a fifth of what the colony produces. Without it, all of the colony's output would work for us and its laws would come from us again. The council would not accept that quietly, and our other settled colonies would read the order as a warning to them.",
+  "es": "Tenemos ante nosotros una propuesta para revocar la carta de [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]. La carta permite al consejo electo de la colonia dictar sus propias leyes y quedarse con una quinta parte de lo que produce la colonia. Sin ella, toda la producción de la colonia trabajaría para nosotros y sus leyes volverían a venir de nosotros. El consejo no lo aceptaría en silencio, y nuestras otras colonias asentadas leerían la orden como una advertencia para ellas."
+ },
+ "space_race_events.113.f": {
+  "en": "The steps the Space Program's administrators have drafted, in case the government revokes the charter:\\n\\nOur administrator at the colony takes back its accounts from the council's treasurer. Under the charter the council kept a fifth of the colony's output to spend on the colony, and that share now comes to us.\\nThe council's laws stay in force until our own replace them, so that the colony is not left without rules while new ones are written.\\nOur administrator tells the council in person before the order is announced, so that it does not learn from the news that its powers are gone.\\nOur administrators at the other colonies are told the same day, since their colonies will ask whether their own rights are to go the same way.",
+  "es": "Los pasos que han redactado los administradores del Programa espacial por si el gobierno revoca la carta:\\n\\nNuestro administrador en la colonia recupera sus cuentas del tesorero del consejo. Con la carta, el consejo se quedaba una quinta parte de la producción de la colonia para gastarla en ella, y esa parte pasa ahora a nosotros.\\nLas leyes del consejo siguen en vigor hasta que las nuestras las sustituyan, para que la colonia no se quede sin normas mientras se redactan las nuevas.\\nNuestro administrador informa al consejo en persona antes de anunciar la orden, para que no se entere por las noticias de que sus poderes han desaparecido.\\nNuestros administradores en las otras colonias son informados el mismo día, pues sus colonias preguntarán si sus propios derechos van a correr la misma suerte."
+ },
+ "space_race_events.113.t": {
+  "en": "Revoke the Charter of [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]?",
+  "es": "¿Revocar la carta de [ROOT.GetCountry.GetCustom('sr_revoke_site_name')]?"
+ },
+ "space_race_events.114.a": {
+  "en": "Hold the colony. The marines stay.",
+  "es": "Retener la colonia. Los infantes de marina se quedan."
+ },
+ "space_race_events.114.b": {
+  "en": "Let it go, and bring our marines home.",
+  "es": "Dejarla ir y traer a casa a nuestros infantes de marina."
+ },
+ "space_race_events.114.d": {
+  "en": "The council of [ROOT.GetCountry.GetCustom('sr_rising_site_name')] has declared that the colony no longer answers to us. Our marines there have taken the council's hall and the life-support plant, and the colony is still ours. Every month we hold it will cost the garrison some of its marines, more the harder the colonists push, and at home the interest groups that oppose colonial exploitation are asking why we hold it at all.",
+  "es": "El consejo de [ROOT.GetCountry.GetCustom('sr_rising_site_name')] ha declarado que la colonia ya no responde ante nosotros. Nuestros infantes de marina allí han tomado el salón del consejo y la planta de soporte vital, y la colonia sigue siendo nuestra. Cada mes que la retengamos costará a la guarnición parte de sus infantes de marina, más cuanto más presionen los colonos, y en casa los grupos de interés que se oponen a la explotación colonial preguntan por qué la retenemos siquiera."
+ },
+ "space_race_events.114.f": {
+  "en": "At the inner door of the council hall a marine sergeant held the list of the council's members and checked each one against it before opening the lock. The members came in ones and twos over an hour. Most of them looked past the sergeant to the window, where a squad was carrying crates of rations from the landing pad to the store under the hall. The last member to arrive asked to see the officer in charge and was told to wait with the others. When the list was complete, the sergeant closed the outer door and entered the time in the guard log.",
+  "es": "En la puerta interior del salón del consejo, un sargento de infantes de marina sostenía la lista de los miembros del consejo y comprobaba a cada uno contra ella antes de abrir la cerradura. Los miembros entraron de uno en uno o de dos en dos a lo largo de una hora. La mayoría miraba más allá del sargento, hacia la ventana, donde un pelotón llevaba cajas de raciones de la plataforma de aterrizaje al almacén bajo el salón. El último miembro en llegar pidió ver al oficial al mando y le dijeron que esperase con los demás. Cuando la lista estuvo completa, el sargento cerró la puerta exterior y anotó la hora en el registro de guardia."
+ },
+ "space_race_events.114.t": {
+  "en": "[ROOT.GetCountry.GetCustom('sr_rising_site_name')] Rises Against Us",
+  "es": "[ROOT.GetCountry.GetCustom('sr_rising_site_name')] se alza contra nosotros"
  },
  "space_race_events.12.a": {
   "en": "Rebuild the pad and investigate the cause.",
@@ -21883,13 +21999,45 @@
   "en": "The council of [ROOT.GetCountry.GetCustom('sr_freed_site_name')] has declared that the colony no longer answers to us. Its people, its works and everything it found there are its own. Our officials there have been asked to leave on the next ship home.",
   "es": "El consejo de [ROOT.GetCountry.GetCustom('sr_freed_site_name')] ha declarado que la colonia ya no responde ante nosotros. Su gente, sus obras y todo lo que encontró allí son suyos. A nuestros funcionarios allí se les ha pedido que se marchen en la próxima nave de vuelta a casa."
  },
+ "space_race_events.98.d_mars": {
+  "en": "Our colonies on Mars have risen together. Their councils declared, one after another, that they no longer answer to us, and our marines there were too few to hold them all. Each colony now keeps its own people, its works and what it has found, and our officials there have been told to take the next ship home.",
+  "es": "Nuestras colonias de Marte se han alzado a la vez. Sus consejos declararon, uno tras otro, que ya no responden ante nosotros, y nuestros infantes de marina allí eran demasiado pocos para retenerlas todas. Cada colonia conserva ahora a su gente, sus obras y lo que ha encontrado, y a nuestros funcionarios allí se les ha dicho que tomen la próxima nave de regreso."
+ },
+ "space_race_events.98.d_moon": {
+  "en": "Our colonies on the Moon have risen together. Their councils declared, one after another, that they no longer answer to us, and our marines there were too few to hold them all. Each colony now keeps its own people, its works and what it has found, and our officials there have been told to take the next ship home.",
+  "es": "Nuestras colonias de la Luna se han alzado a la vez. Sus consejos declararon, uno tras otro, que ya no responden ante nosotros, y nuestros infantes de marina allí eran demasiado pocos para retenerlas todas. Cada colonia conserva ahora a su gente, sus obras y lo que ha encontrado, y a nuestros funcionarios allí se les ha dicho que tomen la próxima nave de regreso."
+ },
+ "space_race_events.98.d_more": {
+  "en": "[ROOT.GetCountry.MakeScope.Var('sr_freed_count').GetValue|0] of our colonies have declared that they no longer answer to us, [ROOT.GetCountry.GetCustom('sr_freed_site_name')] first among them. Each keeps its own people, its works and what it has found, and our officials at each have been told to take the next ship home.",
+  "es": "[ROOT.GetCountry.MakeScope.Var('sr_freed_count').GetValue|0] de nuestras colonias han declarado que ya no responden ante nosotros, [ROOT.GetCountry.GetCustom('sr_freed_site_name')] la primera entre ellas. Cada una conserva a su gente, sus obras y lo que ha encontrado, y a nuestros funcionarios en cada una se les ha dicho que tomen la próxima nave de regreso."
+ },
+ "space_race_events.98.d_overrun": {
+  "en": "The council of [ROOT.GetCountry.GetCustom('sr_freed_site_name')] has declared that the colony no longer answers to us, and our marines there were too few to stop it. The garrison is lost to us. The colony's people, its works and everything it found there are its own, and our officials have been told to take the next ship home.",
+  "es": "El consejo de [ROOT.GetCountry.GetCustom('sr_freed_site_name')] ha declarado que la colonia ya no responde ante nosotros, y nuestros infantes de marina allí eran demasiado pocos para impedirlo. La guarnición está perdida para nosotros. La gente de la colonia, sus obras y todo lo que encontró allí son suyos, y a nuestros funcionarios se les ha dicho que tomen la próxima nave de regreso."
+ },
  "space_race_events.98.f": {
   "en": "\\\"This is the council of the colony, speaking to the government that founded it. From today this council makes the colony's laws, keeps its accounts, and decides what it sends and to whom. The habitats, the works and what we have found here are ours, and we will go on running them as we have been. Your officials have seats booked on the next ship home, and we thank them for their work. We will still trade with you, and we would rather do it as friends. Our first proposal for a supply contract is attached to this message.\\\"",
   "es": "«Este es el consejo de la colonia, que habla al gobierno que la fundó. Desde hoy este consejo dicta las leyes de la colonia, lleva sus cuentas y decide qué envía y a quién. Los hábitats, las obras y lo que hemos encontrado aquí son nuestros, y seguiremos gestionándolos como hasta ahora. Sus funcionarios tienen plaza reservada en la próxima nave de vuelta a casa, y les agradecemos su trabajo. Seguiremos comerciando con ustedes, y preferiríamos hacerlo como amigos. Con este mensaje adjuntamos nuestra primera propuesta de contrato de suministro.»"
  },
+ "space_race_events.98.f_together": {
+  "en": "To the government that founded us, from the councils of its former colonies on this world, sitting together.\\n\\nEach of our councils has voted to govern its own colony, and we have agreed to act as one in what concerns us all: the landing pads, the water and the routes between our settlements. The marines who held us have been disarmed and are under our guard. Our first joint session will set the terms on which we trade with you, and with anyone else who calls on us.",
+  "es": "Al gobierno que nos fundó, de los consejos de sus antiguas colonias en este mundo, reunidos en sesión conjunta.\\n\\nCada uno de nuestros consejos ha votado gobernar su propia colonia, y hemos acordado actuar como uno solo en lo que nos concierne a todos: las plataformas de aterrizaje, el agua y las rutas entre nuestros asentamientos. Los infantes de marina que nos retenían han sido desarmados y están bajo nuestra custodia. Nuestra primera sesión conjunta fijará los términos en que comerciaremos con ese gobierno, y con cualquiera que acuda a nosotros."
+ },
  "space_race_events.98.t": {
   "en": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] Declares Itself Free",
   "es": "[ROOT.GetCountry.GetCustom('sr_freed_site_name')] se declara libre"
+ },
+ "space_race_events.98.t_mars": {
+  "en": "Our Martian Colonies Break Away",
+  "es": "Nuestras colonias marcianas se independizan"
+ },
+ "space_race_events.98.t_moon": {
+  "en": "Our Lunar Colonies Break Away",
+  "es": "Nuestras colonias lunares se independizan"
+ },
+ "space_race_events.98.t_more": {
+  "en": "Our Colonies Declare Themselves Free",
+  "es": "Nuestras colonias se declaran libres"
  },
  "space_race_events.99.a": {
   "en": "Welcome them.",
@@ -24244,8 +24392,8 @@
   "es": "Atajos solo para consola para probar las flotas coloniales y los colonos con colonias simples y colonias completas. Las líneas se escriben en debug.log como TE_SR_FLEETS y TE_SR_SETTLERS."
  },
  "te_debug_space_race.3.e": {
-  "en": "Set emigration to High and send this month's settlers now",
-  "es": "Fijar la emigración en Alta y enviar ya los colonos de este mes"
+  "en": "Set settlers to 2,000 a month and send this month's settlers now",
+  "es": "Fijar los colonos en 2 000 al mes y enviar ya los colonos de este mes"
  },
  "te_debug_space_race.3.f": {
   "en": "\\\"Every ship in the sky, and every soul on every rock. Count them.\\\"",
@@ -24331,6 +24479,10 @@
   "en": "Ask whether to abandon our first colony",
   "es": "Preguntar si abandonar nuestra primera colonia"
  },
+ "te_debug_space_race.5.i": {
+  "en": "Set our first colony's autonomy to 100 (held or freed next month)",
+  "es": "Fijar la autonomía de nuestra primera colonia en 100 (retenida o liberada el mes que viene)"
+ },
  "te_debug_space_race.5.t": {
   "en": "Colony Autonomy Console",
   "es": "Consola de autonomía de las colonias"
@@ -24368,8 +24520,8 @@
   "es": "La integridad de nuestra primera colonia, a 0"
  },
  "te_debug_space_race.6.i": {
-  "en": "Run this month's combat now",
-  "es": "Ejecutar ahora el combate de este mes"
+  "en": "Run a week's battles and this month's siege now",
+  "es": "Ejecutar ahora las batallas de una semana y el asedio de este mes"
  },
  "te_debug_space_race.6.j": {
   "en": "Occupy our first colony by our strongest enemy, or return it",
@@ -25318,38 +25470,6 @@
  "te_mandate.1.t": {
   "en": "What the Bank Is For",
   "es": "Para qué sirve el banco"
- },
- "te_map_modes.1.a": {
-  "en": "Tourism appeal",
-  "es": "Atractivo turístico"
- },
- "te_map_modes.1.b": {
-  "en": "GDP per capita",
-  "es": "PIB per cápita"
- },
- "te_map_modes.1.c": {
-  "en": "Greenhouse gas emissions",
-  "es": "Emisiones de gases de efecto invernadero"
- },
- "te_map_modes.1.d": {
-  "en": "Our cartographers can redraw the world map by whatever measure we choose. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode: its colors will show the metric we chose instead of migration appeal.\\n\\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!",
-  "es": "Nuestros cartógrafos pueden redibujar el mapa del mundo según la medida que elijamos. Elige abajo una métrica y cambia después al modo de mapa de #b [concept_migration_pull|l]#!: sus colores mostrarán la métrica elegida en lugar de la atracción migratoria.\\n\\n#italic Vuelve a abrir esta decisión y elige #b Quitar#! antes de pasar a otra métrica.#!"
- },
- "te_map_modes.1.e_clear": {
-  "en": "Clear overlay",
-  "es": "Quitar la superposición"
- },
- "te_map_modes.1.f": {
-  "en": "\\\"The map office can color the map by any figure the other offices send us: how strongly each state draws visitors, what each person there produces, what each country puts into the air. Tell us which, and we will lay it over the migration map, since that is the only sheet the printers have set up for colors. When you want a different figure, tell us to clear the sheet first, or the two will run together.\\\"",
-  "es": "«La oficina de mapas puede colorear el mapa con cualquier cifra que nos envíen las demás oficinas: cuánto atrae cada estado a los visitantes, cuánto produce cada persona que vive en él, cuánto vierte cada país al aire. Díganos cuál, y la superpondremos al mapa de migración, porque es la única hoja que los impresores han preparado para colores. Cuando quieran otra cifra, díganos que limpiemos antes la hoja, o se mezclarán las dos.»"
- },
- "te_map_modes.1.f_dismiss": {
-  "en": "Never mind.",
-  "es": "Da igual."
- },
- "te_map_modes.1.t": {
-  "en": "Cartographic Survey",
-  "es": "Levantamiento cartográfico"
  },
  "te_orbital_debris.1.a": {
   "en": "Keep the climbers running",
