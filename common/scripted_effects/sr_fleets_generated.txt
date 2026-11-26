@@ -9930,14 +9930,17 @@ sr_fl_ai_defend_inner = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = inner } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = inner } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10172,14 +10175,17 @@ sr_fl_ai_defend_mars = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = mars } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = mars } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10414,14 +10420,17 @@ sr_fl_ai_defend_asteroids = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = asteroids } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = asteroids } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10656,14 +10665,17 @@ sr_fl_ai_defend_jupiter = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = jupiter } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = jupiter } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -10898,14 +10910,17 @@ sr_fl_ai_defend_saturn = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = saturn } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = saturn } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11140,14 +11155,17 @@ sr_fl_ai_defend_uranus = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = uranus } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = uranus } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11382,14 +11400,17 @@ sr_fl_ai_defend_neptune = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = neptune } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = neptune } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11624,14 +11645,17 @@ sr_fl_ai_defend_kuiper = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes OR = { has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = { LOC = kuiper } } }
+			set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 			sr_fl_each_slot = { DO = ai_threat }
+			sr_fc_mark_foe = yes
 		}
 		sr_fl_each_slot = { DO = ai_guard }
 		every_in_global_list = {
 			variable = sr_fleet_powers
-			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }
+			limit = { sr_fl_friend_of = { WHO = sr_icpt_victim } NOT = { sr_icpt_interdicts_at = { LOC = kuiper } } }
 			sr_fl_each_slot = { DO = ai_guard }
 		}
+		sr_fc_clear_foes = yes
 		set_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf multiply = sr_fl_ai_engage_margin } }
 		set_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }
 		if = {
@@ -11866,8 +11890,10 @@ sr_fc_sums_earth = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
 		sr_fc_bs_add = { SIDE = t }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	sr_fc_bs_add = { SIDE = o }
@@ -11877,6 +11903,7 @@ sr_fc_sums_earth = {
 		sr_fl_each_slot = { DO = ai_guard }
 		sr_fc_bs_add = { SIDE = o }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_inner = {
 	save_temporary_scope_as = sr_fc_side
@@ -11888,7 +11915,9 @@ sr_fc_sums_inner = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -11896,6 +11925,7 @@ sr_fc_sums_inner = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_mars = {
 	save_temporary_scope_as = sr_fc_side
@@ -11907,7 +11937,9 @@ sr_fc_sums_mars = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -11915,6 +11947,7 @@ sr_fc_sums_mars = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_asteroids = {
 	save_temporary_scope_as = sr_fc_side
@@ -11926,7 +11959,9 @@ sr_fc_sums_asteroids = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -11934,6 +11969,7 @@ sr_fc_sums_asteroids = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_jupiter = {
 	save_temporary_scope_as = sr_fc_side
@@ -11945,7 +11981,9 @@ sr_fc_sums_jupiter = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -11953,6 +11991,7 @@ sr_fc_sums_jupiter = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_saturn = {
 	save_temporary_scope_as = sr_fc_side
@@ -11964,7 +12003,9 @@ sr_fc_sums_saturn = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -11972,6 +12013,7 @@ sr_fc_sums_saturn = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_uranus = {
 	save_temporary_scope_as = sr_fc_side
@@ -11983,7 +12025,9 @@ sr_fc_sums_uranus = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -11991,6 +12035,7 @@ sr_fc_sums_uranus = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_neptune = {
 	save_temporary_scope_as = sr_fc_side
@@ -12002,7 +12047,9 @@ sr_fc_sums_neptune = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -12010,6 +12057,7 @@ sr_fc_sums_neptune = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 sr_fc_sums_kuiper = {
 	save_temporary_scope_as = sr_fc_side
@@ -12021,7 +12069,9 @@ sr_fc_sums_kuiper = {
 	every_in_global_list = {
 		variable = sr_fleet_powers
 		limit = { is_country_alive = yes has_war_with = scope:sr_fc_side }
+		set_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }
 		sr_fl_each_slot = { DO = ai_threat }
+		sr_fc_mark_foe = yes
 	}
 	sr_fl_each_slot = { DO = ai_guard }
 	every_in_global_list = {
@@ -12029,6 +12079,7 @@ sr_fc_sums_kuiper = {
 		limit = { sr_fl_friend_of = { WHO = sr_fc_side } }
 		sr_fl_each_slot = { DO = ai_guard }
 	}
+	sr_fc_clear_foes = yes
 }
 # A location's sums and verdict (sr_fc_judge) by its code, for the alerts
 # (space_race_events.100 and .111): local_var:sr_fc_at the location's code.

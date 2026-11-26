@@ -1048,6 +1048,23 @@ sr_fc_bs_add = {
 	}
 }
 
+# The sums' loop of theirs, after a hostile power's fleets: it brought some
+# there (local_var:sr_fl_ts grew from sr_fc_ts0), so it is a foe there whose
+# enemies are our friends (sr_fl_friend_of). Cleared once the sums are done.
+sr_fc_mark_foe = {
+	if = {
+		limit = { local_var:sr_fl_ts > local_var:sr_fc_ts0 }
+		set_variable = { name = sr_fc_foe value = yes }
+	}
+}
+sr_fc_clear_foes = {
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_fc_foe }
+		remove_variable = sr_fc_foe
+	}
+}
+
 # The verdict from the sums (local_var:sr_fl_ts, _tf, _os, _of): the square
 # law's ratio of ours to theirs, strength x fire (local_var:sr_fc_r);
 # local_var:sr_fc_tier 0 nothing of theirs, 1 a clear win (ours at least
@@ -1111,14 +1128,16 @@ sr_fc_judge = {
 	}
 }
 
-# The alerts' forecast (space_race_events.100 and .111, immediate): at the
-# location of code CODE, ours there and on our way against theirs, kept for
-# the text (sr_fc_alert_tier: the verdict, or 5 with nothing of ours to meet
-# them; the after block clears it, sr_fc_clear_alert).
+# The alerts' forecast (space_race_events.100, WHO loc, and .111, WHO earth;
+# immediate): at the location of code CODE, ours there and on our way against
+# theirs, kept for the text (sr_fc_alert_tier_<who>: the verdict, or 5 with
+# nothing of ours there that can fight; the after block clears it,
+# sr_fc_clear_alert). One variable each, so the two popups open at once keep
+# their own (review of #2073).
 sr_fc_note_alert = {
 	set_local_variable = { name = sr_fc_at value = $CODE$ }
 	sr_fc_at_code = yes
-	set_variable = { name = sr_fc_alert_tier value = local_var:sr_fc_tier }
+	set_variable = { name = sr_fc_alert_tier_$WHO$ value = local_var:sr_fc_tier }
 	if = {
 		limit = {
 			local_var:sr_fc_tier = 4
@@ -1127,11 +1146,11 @@ sr_fc_note_alert = {
 				local_var:sr_fl_of <= 0
 			}
 		}
-		set_variable = { name = sr_fc_alert_tier value = 5 }
+		set_variable = { name = sr_fc_alert_tier_$WHO$ value = 5 }
 	}
 }
 sr_fc_clear_alert = {
-	if = { limit = { has_variable = sr_fc_alert_tier } remove_variable = sr_fc_alert_tier }
+	if = { limit = { has_variable = sr_fc_alert_tier_$WHO$ } remove_variable = sr_fc_alert_tier_$WHO$ }
 }
 
 # ---- One slot's part ($N$; the power's scope) ---------------------------------------------------

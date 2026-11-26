@@ -5138,7 +5138,7 @@ space_race_events.100 = {
 		}
 		if = {
 			limit = { has_variable = sr_fl_alert_loc }
-			sr_fc_note_alert = { CODE = var:sr_fl_alert_loc }
+			sr_fc_note_alert = { CODE = var:sr_fl_alert_loc WHO = loc }
 		}
 	}
 
@@ -5152,7 +5152,7 @@ space_race_events.100 = {
 		if = { limit = { has_variable = sr_fl_alert_loc } remove_variable = sr_fl_alert_loc }
 		if = { limit = { has_variable = sr_fl_alert_arrive } remove_variable = sr_fl_alert_arrive }
 		if = { limit = { has_variable = sr_fl_alert_by } remove_variable = sr_fl_alert_by }
-		sr_fc_clear_alert = yes
+		sr_fc_clear_alert = { WHO = loc }
 	}
 }
 
@@ -5549,7 +5549,7 @@ space_race_events.111 = {
 			limit = { has_variable = sr_earth_alert_by }
 			var:sr_earth_alert_by = { save_scope_as = sr_earth_alert_power }
 		}
-		sr_fc_note_alert = { CODE = 1 }
+		sr_fc_note_alert = { CODE = 1 WHO = earth }
 	}
 
 	option = {
@@ -5561,7 +5561,7 @@ space_race_events.111 = {
 	after = {
 		if = { limit = { has_variable = sr_earth_alert_by } remove_variable = sr_earth_alert_by }
 		if = { limit = { has_variable = sr_earth_alert_arrive } remove_variable = sr_earth_alert_arrive }
-		sr_fc_clear_alert = yes
+		sr_fc_clear_alert = { WHO = earth }
 	}
 }
 

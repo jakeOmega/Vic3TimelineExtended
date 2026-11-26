@@ -8438,12 +8438,12 @@ types space_race_widget_types
 			}
 		}
 		### The battle forecast with this fleet there (2026-11-25 design
-		### § 5.4): the verdict, kept when the popup opened; the hover gives
-		### the sums and the loss. Blank with no enemy fleet there or on its way.
+		### § 5.4): the verdict, kept when the popup opened; its hover gives
+		### the sums and the loss. Blank, with no hover, where nothing of the
+		### enemy's is there or on its way.
 		widget = {
 			size = { 96 24 }
 			parentanchor = vcenter
-			block "dr_battle_tooltip" {}
 
 				textbox = {
 					parentanchor = left|vcenter
@@ -8464,6 +8464,7 @@ types space_race_widget_types
 					elide = right
 					text = "je_space_race_widget_fc_tier_1"
 					block "dr_battle_1_visible" {}
+					block "dr_battle_tooltip" {}
 				}
 				textbox = {
 					parentanchor = left|vcenter
@@ -8474,6 +8475,7 @@ types space_race_widget_types
 					elide = right
 					text = "je_space_race_widget_fc_tier_2"
 					block "dr_battle_2_visible" {}
+					block "dr_battle_tooltip" {}
 				}
 				textbox = {
 					parentanchor = left|vcenter
@@ -8484,6 +8486,7 @@ types space_race_widget_types
 					elide = right
 					text = "je_space_race_widget_fc_tier_3"
 					block "dr_battle_3_visible" {}
+					block "dr_battle_tooltip" {}
 				}
 				textbox = {
 					parentanchor = left|vcenter
@@ -8494,6 +8497,7 @@ types space_race_widget_types
 					elide = right
 					text = "je_space_race_widget_fc_tier_4"
 					block "dr_battle_4_visible" {}
+					block "dr_battle_tooltip" {}
 				}
 		}
 		widget = {

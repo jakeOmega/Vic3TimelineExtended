@@ -4,8 +4,8 @@ from the script files as they are.
 
 _FxWorld is test_space_fleets._Fx with countries: every_in_global_list and
 any_in_global_list over a list of them, has_war_with = prev, this = scope:,
-is_player, a while with the engine's 1,000-pass stop, te_set_sqrt, and
-stand-ins for what reads the map
+is_player, a while with the engine's 1,000-pass stop, the mod's own square
+root (te_set_sqrt and te_sqrt's table), and stand-ins for what reads the map
 (buildings, colonies, docks, the legs' tables), each named in its fixture. The
 arithmetic is the engine's fixed point, cut toward zero, as _Fx's.
 """
@@ -20,15 +20,24 @@ from decimal import Decimal
 from test_space_fleets import (COMBAT_EFFECTS, ROOT, _Fx, _FX_SCALE, _fx_top_raw, _fxn, _raw)
 
 PERS_EFFECTS = ROOT / "common/scripted_effects/sr_space_forces_effects.txt"
+MATH_EFFECTS = ROOT / "common/scripted_effects/te_math_effects.txt"
+MATH_VALUES = ROOT / "common/script_values/te_math_generated.txt"
 CODE = {"earth": 1, "inner": 2, "mars": 3}
 
 
 class _FxWorld(_Fx):
     STUBS = ("sr_loc_rebuild",)
+    _math = None
 
     def __init__(self, tags, wars=(), players=(), values=None, triggers=None):
         super().__init__()
-        self.effects = {**self.effects, **_fx_top_raw(_raw(COMBAT_EFFECTS)), **_fx_top_raw(_raw(PERS_EFFECTS))}
+        if _FxWorld._math is None:
+            from test_space_fleets import _fx_parse, _fx_tokens
+            _FxWorld._math = ({k: _fx_parse(_fx_tokens(v))[0] for k, v in _fx_top_raw(_raw(MATH_VALUES)).items()},
+                              _fx_top_raw(_raw(MATH_EFFECTS)))
+        self.values = {**self.values, **_FxWorld._math[0]}
+        self.effects = {**self.effects, **_fx_top_raw(_raw(COMBAT_EFFECTS)), **_fx_top_raw(_raw(PERS_EFFECTS)),
+                        **_FxWorld._math[1]}
         self.tags = list(tags)
         self.world = {t: {} for t in self.tags}
         self.stack = []
@@ -179,10 +188,6 @@ class _FxWorld(_Fx):
                 self.dispatched.append((self._here(), dict((k, x) for k, _, x in v)))
             elif key in ("save_temporary_scope_as", "save_scope_as"):
                 self.saved[v] = self._here()
-            elif key == "te_set_sqrt":
-                d = {k: x for k, _, x in v}
-                x = Decimal(self.num(d["IN"])) / _FX_SCALE
-                self.vars[d["OUT"]] = int(x.sqrt() * _FX_SCALE)
             elif key == "te_debris_add":
                 self.debris.append({k: self.num(x) for k, _, x in v})
             elif key == "set_global_variable":
@@ -607,6 +612,15 @@ class RetreatTest(unittest.TestCase):
     def test_broken_at_its_spaceport_with_nowhere_else_it_stays(self):
         self.assertEqual(self._broken_at_mars(earth_open=False), [])
 
+    def test_broken_at_earth_it_leaves_for_a_spaceport(self):
+        w = _two(players=["A", "B"], values={r"sr_fl_\d_leg_quarters_\w+": lambda t, n: 5},
+                 triggers={r"sr_loc_port_mars": _always(("B", r"sr_loc_port_mars")),
+                           r"sr_fl_\d_may_depart_mars": _always(("B", r"sr_fl_1_may_depart_mars"))})
+        w.fleet("A", 1, "earth", war=200)
+        w.fleet("B", 1, "earth", war=100)
+        w.battle("earth")
+        self.assertEqual([(t, d["N"], d["LOC"]) for t, d in w.dispatched], [("B", "1", "mars")])
+
     def test_the_gate_is_where_it_may_depart_for(self):
         from test_space_fleets import _block, _strip
         import gen_space_fleets as gsf
@@ -651,6 +665,44 @@ class FriendsTest(unittest.TestCase):
         w.battle("mars")
         self.assertEqual(w.var("A", "sr_fl_1_stance"), 1)
 
+    def _defend(self, w):
+        """A's defence of its Mars colony against B's 100 bound there; A's 150
+        free at Earth. The fixtures add the rest."""
+        w.ov_triggers.insert(0, (r"sr_fl_ai_threatened_mars", lambda t, n: True))
+        w.ov_triggers.insert(0, (r"sr_fl_ai_earth_threatened", lambda t, n: False))
+        w.ov_triggers.insert(0, (r"sr_fl_\d_ai_free|sr_fl_\d_ai_reaches_mars|sr_fl_\d_may_depart_mars",
+                                 lambda t, n: w.world[t].get(f"sr_fl_{n[6]}_loc") == _fxn(CODE["earth"])))
+        w.fleet("B", 1, "mars", war=100)
+        del w.world["B"]["sr_fl_1_loc"]
+        w.world["B"]["sr_fl_1_dest"] = _fxn(CODE["mars"])
+        w.fleet("A", 1, "earth", war=150)
+        with w._in("A"):
+            w.locals = {}
+            w.run(_parse("sr_fl_ai_defend_mars = yes"))
+        self.assertFalse([t for t in w.tags if "sr_fc_foe" in w.world[t]])
+        return w
+
+    def test_an_ally_in_another_war_is_no_friend_there(self):
+        # The review of #2073's case: C is at war with E, not with B, whose fleet
+        # is the one coming. C's 120 at Mars won't fight it: A defends.
+        w = _FxWorld(("A", "B", "C", "E"), wars=[("A", "B"), ("A", "E"), ("C", "E")])
+        w.ov_triggers.insert(0, (r"sr_icpt_interdicts_at", lambda t, n: False))
+        w.fleet("C", 1, "mars", war=120)
+        w.fleet("E", 1, "inner", war=10)
+        w = self._defend(w)
+        self.assertEqual([(t, d["N"]) for t, d in w.dispatched], [("A", "1")])
+
+    def test_an_interdicting_power_is_never_a_friend_there(self):
+        # C is at war with B but interdicts A at Mars: on theirs (100 + 120), not
+        # on ours, so A's 150 alone can't win and nothing is sent.
+        w = _FxWorld(("A", "B", "C"), wars=[("A", "B"), ("C", "B")])
+        w.ov_triggers.insert(0, (r"sr_icpt_interdicts_at", _always(("C", r"sr_icpt_interdicts_at"))))
+        w.fleet("C", 1, "mars", war=120)
+        w = self._defend(w)
+        self.assertEqual(w.locals["sr_fl_ts"], _fxn(220))
+        self.assertEqual(w.locals["sr_fl_os"], 0)
+        self.assertEqual(w.dispatched, [])
+
     def test_the_defence_counts_a_friend_there(self):
         w = self._world()
         w.ov_triggers.insert(0, (r"sr_fl_ai_threatened_mars", lambda t, n: True))
@@ -691,7 +743,9 @@ class ForecastTest(unittest.TestCase):
             with self.subTest(ours=(os_, of), theirs=(ts, tf)):
                 got = self._judge(os_, of, ts, tf)
                 self.assertEqual(got[0], tier)
-                self.assertAlmostEqual(got[1], loss, places=3)
+                # te_sqrt's table is good to about 0.004 near 1: half a point of
+                # a loss the hover gives in whole percent.
+                self.assertAlmostEqual(got[1], loss, delta=0.005)
 
     def test_the_destination_popup_counts_this_fleet_and_friends(self):
         w = _FxWorld(("A", "B", "C"), wars=[("A", "B"), ("C", "B")])
@@ -708,22 +762,70 @@ class ForecastTest(unittest.TestCase):
         self.assertEqual(w.var("A", "sr_fc_tier_inner"), 0)
         self.assertNotIn("sr_fc_tier_earth", w.world["A"])
 
+    def test_the_popup_leaves_out_an_ally_in_another_war(self):
+        w = _FxWorld(("A", "B", "C", "E"), wars=[("A", "B"), ("A", "E"), ("C", "E")])
+        w.fleet("A", 1, "earth", war=60)
+        w.fleet("C", 1, "mars", war=60)
+        w.fleet("B", 1, "mars", war=100)
+        w.fleet("E", 1, "inner", war=10)
+        with w._in("A"):
+            w.locals = {}
+            w.scopes = {"op": _fxn(1)}
+            w.run(_parse("sr_fl_by_op = { DO = fc_slot }"))
+        self.assertEqual(w.var("A", "sr_fc_os_mars"), 60)
+        self.assertEqual(w.var("A", "sr_fc_tier_mars"), 3)
+        self.assertFalse([t for t in w.tags if "sr_fc_foe" in w.world[t]])
+
+    def test_battlestations_count_at_earth(self):
+        vals = {r"sr_battlestation_full": lambda t, n: 50, r"sr_battlestation_fire": lambda t, n: 50}
+        w = _two(values=vals, triggers={r"sr_battlestation_held": _always(("B", r"sr_battlestation_held"))})
+        w.fleet("A", 1, "earth", war=60)
+        w.fleet("B", 1, "earth", war=10)
+        with w._in("A"):
+            w.locals = {}
+            w.run(_parse("sr_fc_sums_earth = yes"))
+        self.assertEqual(w.locals["sr_fl_ts"], _fxn(60))
+        self.assertEqual(w.locals["sr_fl_os"], _fxn(60))
+        w.world["B"]["sr_battlestation_strength"] = _fxn(20)
+        with w._in("A"):
+            w.run(_parse("sr_fc_sums_earth = yes"))
+        self.assertEqual(w.locals["sr_fl_ts"], _fxn(30))
+
+    def test_the_two_alerts_keep_their_own(self):
+        w = _two()
+        w.fleet("A", 1, "earth", war=200)
+        w.fleet("B", 1, "mars", war=100)
+        w.fleet("B", 2, "earth", war=100)
+        with w._in("A"):
+            w.locals = {}
+            w.run(_parse("sr_fc_note_alert = { CODE = 3 WHO = loc }"))
+            w.run(_parse("sr_fc_note_alert = { CODE = 1 WHO = earth }"))
+            self.assertEqual(w.vars["sr_fc_alert_tier_loc"], _fxn(5))
+            self.assertEqual(w.vars["sr_fc_alert_tier_earth"], _fxn(1))
+            w.run(_parse("sr_fc_clear_alert = { WHO = earth }"))
+            self.assertEqual(w.vars["sr_fc_alert_tier_loc"], _fxn(5))
+            self.assertNotIn("sr_fc_alert_tier_earth", w.vars)
+
     def test_the_alert_with_nothing_of_ours_there(self):
         w = _two()
         w.fleet("B", 1, "mars", war=100)
         with w._in("A"):
             w.locals = {}
-            w.run(_parse("sr_fc_note_alert = { CODE = 3 }"))
-        self.assertEqual(w.var("A", "sr_fc_alert_tier"), 5)
+            w.run(_parse("sr_fc_note_alert = { CODE = 3 WHO = loc }"))
+        self.assertEqual(w.var("A", "sr_fc_alert_tier_loc"), 5)
 
     def test_the_wiring(self):
         from test_space_fleets import _block, _strip
         events = _strip(_raw(ROOT / "events/space_race_events.txt"))
-        for eid, code in (("100", "var:sr_fl_alert_loc"), ("111", "1")):
+        loc = _raw(ROOT / "localization/english/te_events_l_english.yml")
+        for eid, code, who in (("100", "var:sr_fl_alert_loc", "loc"), ("111", "1", "earth")):
             with self.subTest(event=eid):
                 body = _block(events, f"space_race_events.{eid}")
-                self.assertIn(f"sr_fc_note_alert = {{ CODE = {code} }}", body)
-                self.assertIn("sr_fc_clear_alert = yes", body)
+                self.assertIn(f"sr_fc_note_alert = {{ CODE = {code} WHO = {who} }}", body)
+                self.assertIn(f"sr_fc_clear_alert = {{ WHO = {who} }}", body)
+                desc = next(l for l in loc.split("\n") if l.startswith(f" space_race_events.{eid}.d:"))
+                self.assertEqual(len(re.findall(rf"sr_disp_fc_alert_tier_{who}'", desc)), 5)
+                self.assertNotIn("sr_disp_fc_alert_tier'", desc)
         rows = _raw(ROOT / "gui/journal_entry_widgets/sr_fleets_generated_rows.gui")
         self.assertIn("GetScriptedGui('sr_fleet_pick_sgui').Execute(", rows)
 

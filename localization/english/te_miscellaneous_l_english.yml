@@ -7099,7 +7099,7 @@
  sr_fc_alert_2:0 " Space Command's forecast, if the enemy fleets there and on their way meet ours: #yellow a costly win#!."
  sr_fc_alert_3:0 " Space Command's forecast, if the enemy fleets there and on their way meet ours: #gold a defeat#!: ours would break off."
  sr_fc_alert_4:0 " Space Command's forecast, if the enemy fleets there and on their way meet ours: #red a rout#!: ours would break off."
- sr_fc_alert_5:0 " We have no fleet there or on the way to meet them."
+ sr_fc_alert_5:0 " We have nothing there or on the way that can fight them."
  sr_fc_verdict_1:0 " #green a clear win#!."
  sr_fc_verdict_2:0 " #yellow a costly win#!."
  sr_fc_verdict_3:0 " #gold a defeat#!: ours would break off."

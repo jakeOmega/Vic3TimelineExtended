@@ -2018,8 +2018,9 @@ def render_ai_defend() -> list[str]:
     """The AI's defence of a threatened location, on the battle's win test
     (2026-11-25 design §§ 2.7, 5.3): hostile, the fleets there and on their way
     of every power at war with us or interdicting us there; ours, ours and our
-    friends' there and on their way (sr_fl_friend_of: at war with a power at
-    war with us); each strength x fire. Already winning (ours at least theirs x
+    friends' there and on their way (sr_fl_friend_of: at war with one of those
+    powers that brings fleets there, sr_fc_mark_foe; never one interdicting us
+    there, already on theirs); each strength x fire. Already winning (ours at least theirs x
     sr_fl_ai_engage_margin, with a fleet of ours there or bound): nothing is
     sent. Else the strongest free fleet that reaches in time, if it makes ours
     win; else, if together they would, the free fleets that reach, strongest
@@ -2057,14 +2058,17 @@ def render_ai_defend() -> list[str]:
                 "\t\tevery_in_global_list = {",
                 "\t\t\tvariable = sr_fleet_powers",
                 f"\t\t\tlimit = {{ is_country_alive = yes OR = {{ has_war_with = scope:sr_icpt_victim sr_icpt_interdicts_at = {{ LOC = {k} }} }} }}",
+                "\t\t\tset_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }",
                 "\t\t\tsr_fl_each_slot = { DO = ai_threat }",
+                "\t\t\tsr_fc_mark_foe = yes",
                 "\t\t}",
                 "\t\tsr_fl_each_slot = { DO = ai_guard }",
                 "\t\tevery_in_global_list = {",
                 "\t\t\tvariable = sr_fleet_powers",
-                "\t\t\tlimit = { sr_fl_friend_of = { WHO = sr_icpt_victim } }",
+                f"\t\t\tlimit = {{ sr_fl_friend_of = {{ WHO = sr_icpt_victim }} NOT = {{ sr_icpt_interdicts_at = {{ LOC = {k} }} }} }}",
                 "\t\t\tsr_fl_each_slot = { DO = ai_guard }",
                 "\t\t}",
+                "\t\tsr_fc_clear_foes = yes",
                 "\t\tset_local_variable = { name = sr_fl_need value = { value = local_var:sr_fl_ts multiply = local_var:sr_fl_tf "
                 "multiply = sr_fl_ai_engage_margin } }",
                 "\t\tset_local_variable = { name = sr_fl_have value = { value = local_var:sr_fl_os multiply = local_var:sr_fl_of } }",
@@ -2130,7 +2134,8 @@ def render_forecast() -> list[str]:
     """The battle forecast (2026-11-25 design § 5.4): at each location, the
     square law's sums for the country reading it (sr_fc_sums_<loc>, into the
     AI defence's locals: theirs sr_fl_ts and _tf, every power at war with us
-    there and on its way; ours sr_fl_os and _of, ours and our friends'; at
+    there and on its way; ours sr_fl_os and _of, ours and our friends', who
+    must be at war with one of those that brings fleets there; at
     Earth each side's Orbital Battlestations), and slot N's forecast at every
     location but its own, with it added to ours (sr_fl_fc_slot_at, from the
     destination button), kept for the destination popup."""
@@ -2144,8 +2149,10 @@ def render_forecast() -> list[str]:
                 "\tevery_in_global_list = {",
                 "\t\tvariable = sr_fleet_powers",
                 "\t\tlimit = { is_country_alive = yes has_war_with = scope:sr_fc_side }",
+                "\t\tset_local_variable = { name = sr_fc_ts0 value = local_var:sr_fl_ts }",
                 "\t\tsr_fl_each_slot = { DO = ai_threat }",
                 *(["\t\tsr_fc_bs_add = { SIDE = t }"] if lc.code == EARTH else []),
+                "\t\tsr_fc_mark_foe = yes",
                 "\t}",
                 "\tsr_fl_each_slot = { DO = ai_guard }",
                 *(["\tsr_fc_bs_add = { SIDE = o }"] if lc.code == EARTH else []),
@@ -2155,6 +2162,7 @@ def render_forecast() -> list[str]:
                 "\t\tsr_fl_each_slot = { DO = ai_guard }",
                 *(["\t\tsr_fc_bs_add = { SIDE = o }"] if lc.code == EARTH else []),
                 "\t}",
+                "\tsr_fc_clear_foes = yes",
                 "}"]
     out += ["# A location's sums and verdict (sr_fc_judge) by its code, for the alerts",
             "# (space_race_events.100 and .111): local_var:sr_fc_at the location's code.",

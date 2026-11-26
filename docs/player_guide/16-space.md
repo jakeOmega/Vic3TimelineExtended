@@ -1612,7 +1612,7 @@ Two that fight to the last can fight on into the next week.
 
 Fleet Destination's Battle column and the warnings of an enemy fleet on its way
 give Space Command's forecast: your fleets there and on their way, with the
-fleets of any country at war with the same enemy, against the enemy's, each by
+fleets of any country at war with an enemy that has fleets there, against the enemy's, each by
 strength times fire, Orbital Battlestations counted at Earth. It reads Clear win,
 Costly win, Defeat or Rout, and the column's hover gives the strengths and what
 the winner would lose if both sides engage. It leaves out the batteries and each
@@ -1800,8 +1800,8 @@ AI fleet powers keep their fleets at home in peace, bring fleets home short of
 supply or propellant, and land marines for the garrisons they order. Where they
 hold colonies and an enemy fleet is there or on its way, or a fleet interdicts
 them there, they weigh their fleets and their friends' there and on their way (a friend is a
-country at war with the same enemy) against the enemy's, each by strength times
-fire: winning already, they send nothing; else their
+country at war with an enemy that has fleets there) against the enemy's, each by
+strength times fire: winning already, they send nothing; else their
 strongest free fleet if it would win alone, else its free fleets that can reach
 it, strongest first, until together they would win, else none; while an enemy
 fleet is at Earth or on its way, its fleets at Earth stay home. In a battle an AI engages where its
