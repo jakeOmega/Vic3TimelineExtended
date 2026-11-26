@@ -9,8 +9,11 @@ that does not fit it. Multicultural's ``on_enact`` wrapped its three in ``OR``; 
 ``OR``, ``NOR`` and ``NAND`` blocks may list several laws of a group, and so may ``NOT`` (several
 children read as a NOR). Every other block, ``limit`` and ``AND`` among them, may not.
 
-The scan covers ``common/laws/``. ``country_is_fascist`` (``common/scripted_triggers/world_war_triggers.txt``)
-has the same shape, Autocracy with Single-Party State, and is tracked apart: it is a design decision.
+The scan covers ``common/laws/`` and ``common/scripted_triggers/``, and reads ``has_law`` and
+``has_law_or_variant`` alike. ``country_is_fascist`` (``common/scripted_triggers/world_war_triggers.txt``)
+had the same shape, Autocracy with Single-Party State, both in ``lawgroup_distribution_of_power``, so its
+second branch never held; its truth table is in ``test_country_is_fascist.py``. Scripted effects, journal
+entries, buttons, script values, decisions and events are clean today and are not scanned.
 
 Run: python3 -m pytest test_law_has_law_same_group.py
 """
@@ -22,11 +25,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 LAWS_DIR = ROOT / "common/laws"
+TRIGGERS_DIR = ROOT / "common/scripted_triggers"
 VANILLA_LAWS = ROOT / "vanilla_parsed/common/laws.json"
 CITIZENSHIP = LAWS_DIR / "modified.txt"
 
 # Blocks in which several laws of one group are fine: at least one child is enough, or none may hold.
 ANY_OF_BLOCKS = frozenset({"OR", "NOR", "NAND", "NOT"})
+
+LAW_TESTS = frozenset({"has_law", "has_law_or_variant"})
 
 TOKEN = re.compile(r'"[^"\n]*"|[{}]|[^\s{}=]+|=')
 
@@ -48,7 +54,7 @@ def block_laws(text):
         elif token == "}":
             if stack:
                 found.append(stack.pop())
-        elif token == "has_law" and i + 2 < len(tokens) and tokens[i + 1] == "=" and stack:
+        elif token in LAW_TESTS and i + 2 < len(tokens) and tokens[i + 1] == "=" and stack:
             m = re.fullmatch(r"law_type:(\w+)", tokens[i + 2])
             if m:
                 stack[-1][1].append(m.group(1))
@@ -95,6 +101,10 @@ class DetectorTest(unittest.TestCase):
         text = "trigger = { AND = { has_law = law_type:law_a has_law = law_type:law_b } }"
         self.assertEqual(impossible_ands(text, self.GROUPS), [("AND", "lawgroup_x", ["law_a", "law_b"])])
 
+    def test_flags_has_law_or_variant_as_well(self):
+        text = "limit = { has_law_or_variant = law_type:law_a has_law = law_type:law_b }"
+        self.assertEqual(impossible_ands(text, self.GROUPS), [("limit", "lawgroup_x", ["law_a", "law_b"])])
+
     def test_accepts_the_group_inside_or_nor_nand_and_not(self):
         for wrapper in sorted(ANY_OF_BLOCKS):
             with self.subTest(wrapper=wrapper):
@@ -132,10 +142,20 @@ class LawFilesTest(unittest.TestCase):
 
     def test_no_law_file_ands_two_laws_of_one_group(self):
         problems = []
-        for path in sorted(LAWS_DIR.glob("*.txt")):
-            for name, group, laws in impossible_ands(code(path), self.groups):
-                problems.append(f"{path.name}: a `{name}` block asks for {', '.join(laws)} ({group}) at once")
+        for directory in (LAWS_DIR, TRIGGERS_DIR):
+            for path in sorted(directory.glob("*.txt")):
+                for name, group, laws in impossible_ands(code(path), self.groups):
+                    problems.append(
+                        f"{directory.name}/{path.name}: a `{name}` block asks for {', '.join(laws)} ({group}) at once"
+                    )
         self.assertEqual(problems, [], "\n".join(problems))
+
+    def test_the_scan_reaches_the_trigger_files(self):
+        """An empty directory (a rename, a bad path) would pass the scan above with nothing in it."""
+        self.assertTrue(
+            [p for p in TRIGGERS_DIR.glob("*.txt") if "has_law" in code(p)],
+            "common/scripted_triggers/ holds no law test: the scan no longer looks where it should",
+        )
 
     def test_ancestral_citizenship_clears_a_minority_rights_law_that_does_not_fit(self):
         text = code(CITIZENSHIP)
