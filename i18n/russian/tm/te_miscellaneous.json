@@ -3443,9 +3443,33 @@
   "en": "#header Buy Less Construction#!\\n#v Click#!: -1 per week\\n#v Shift+Click#!: -10\\n#v Ctrl+Click#!: -100\\n#v Alt+Click#!: -1,000\\n#v Right-click#!: set to 0",
   "ru": "#header Покупать меньше строительства#!\\n#v Клик#!: -1 в неделю\\n#v Shift+клик#!: -10\\n#v Ctrl+клик#!: -100\\n#v Alt+клик#!: -1 000\\n#v Правый клик#!: установить 0"
  },
+ "TE_CM_HOW_DELIVERY": {
+  "en": "Construction Sites, placed automatically where construction is under way, turn purchased construction into construction points. The private/government split of those points follows the two purchases instead of your economic-system law.",
+  "ru": "«Строительные площадки», размещаемые автоматически там, где идёт строительство, превращают закупленное строительство в очки строительства. Разделение этих очков на частные и государственные следует двум закупкам, а не вашему закону об экономической системе."
+ },
  "TE_CM_HOW_IT_WORKS": {
   "en": "How the Construction Market Works",
   "ru": "Как работает рынок строительства"
+ },
+ "TE_CM_HOW_MARKET": {
+  "en": "You set how much the government buys, or spends, on [concept_construction] each week; private investors buy for their own projects from the [concept_investment_pool]. In brief: [concept_te_construction_market].",
+  "ru": "Вы задаёте, сколько правительство покупает или тратит на [Concept('concept_construction','строительство')] каждую неделю; частные инвесторы покупают для своих проектов из [Concept('concept_investment_pool','инвестиционного фонда')]. Вкратце: [concept_te_construction_market]."
+ },
+ "TE_CM_HOW_PRIVATE": {
+  "en": "Investors buy for private projects automatically, spending a 24th of the investment pool each week, up to what the private queue can use: about the pool's weekly income once it settles, and still some when the income stops.",
+  "ru": "Инвесторы покупают для частных проектов автоматически, тратя каждую неделю 1/24 инвестиционного фонда, в пределах того, что может использовать частная очередь: примерно еженедельный доход фонда, когда он установится, и ещё немного, когда доход прекращается."
+ },
+ "TE_CM_HOW_PURCHASE": {
+  "en": "The government buys construction from the treasury each week, set in one of two ways. Under #v $TE_CM_MODE_QUANTITY$#! you set how many points it buys, and the cost follows the price. Under #v $TE_CM_MODE_BUDGET$#! you set how much it spends, and the number of points follows the price, moving toward what the budget buys each week. A raise is phased in over a few weeks so the purchase doesn't chase its own effect on the price; a cut takes hold faster.",
+  "ru": "Правительство покупает строительство из казны каждую неделю, одним из двух способов. В режиме #v $TE_CM_MODE_QUANTITY$#! вы задаёте, сколько очков оно покупает, а стоимость следует за ценой. В режиме #v $TE_CM_MODE_BUDGET$#! вы задаёте, сколько оно тратит, а число очков следует за ценой, приближаясь каждую неделю к тому, что покупает бюджет. Повышение вводится в течение нескольких недель, чтобы покупка не гналась за собственным влиянием на цену; снижение действует быстрее."
+ },
+ "TE_CM_HOW_PURCHASE_CAP": {
+  "en": "Only what the government queue can use that week is bought (the [concept_te_construction_queue_cap]), so a large setting is harmless but buys nothing extra when the queue is short. Set it to 0 to stop government construction without idling the construction sector: the construction it would have bought stays on the market for private investors. AI countries choose their own purchase, as a number of points, from their income, reserves and debt.",
+  "ru": "Покупается только то, что правительственная очередь может использовать на этой неделе (это [concept_te_construction_queue_cap|l]), поэтому большое значение безвредно, но ничего лишнего не покупает, когда очередь короткая. Установите 0, чтобы остановить государственное строительство, не простаивая строительный сектор: строительство, которое оно купило бы, остаётся на рынке для частных инвесторов. Страны под управлением ИИ выбирают собственную закупку, в очках, исходя из дохода, резервов и долга."
+ },
+ "TE_CM_HOW_SHORTAGES": {
+  "en": "Unless the Free Market Construction game rule has turned it off, factories and infrastructure also use a little construction as maintenance, and much more while they retool after switching production methods. When everyone together wants more than is on sale, the price rises. Every buyer still gets all it buys, only at a higher price per point: the government's purchase costs the treasury more, and the investment pool's spending buys fewer points. Watch the panel's #b $TE_CM_STAT_MARKET$#! row, and add $building_construction_sector$ levels if demand keeps outrunning supply.",
+  "ru": "Если игровое правило «Рыночное строительство» не отключило это, фабрики и инфраструктура также используют немного строительства на обслуживание, а при перестройке после смены методов производства — гораздо больше. Когда всем вместе нужно больше, чем продаётся, цена растёт. Каждый покупатель всё равно получает всё, что покупает, только по более высокой цене за очко: покупка правительства обходится казне дороже, а траты инвестиционного фонда покупают меньше очков. Следите за строкой #b $TE_CM_STAT_MARKET$#! на панели и добавляйте уровни $building_construction_sector$, если спрос продолжает опережать предложение."
  },
  "TE_CM_INCREASE_TT": {
   "en": "#header Buy More Construction#!\\n#v Click#!: +1 per week\\n#v Shift+Click#!: +10\\n#v Ctrl+Click#!: +100\\n#v Alt+Click#!: +1,000\\n#v Right-click#!: +10,000",
