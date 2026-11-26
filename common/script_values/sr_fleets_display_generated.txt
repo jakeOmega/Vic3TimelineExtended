@@ -1214,6 +1214,7 @@ sr_disp_loc_inbound_weeks_earth = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_earth } value = global_var:sr_loc_inbound_first_earth subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_earth = {
 	value = 0
@@ -1249,6 +1250,7 @@ sr_disp_loc_inbound_weeks_inner = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_inner } value = global_var:sr_loc_inbound_first_inner subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_inner = {
 	value = 0
@@ -1280,6 +1282,7 @@ sr_disp_loc_inbound_weeks_mars = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_mars } value = global_var:sr_loc_inbound_first_mars subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_mars = {
 	value = 0
@@ -1314,6 +1317,7 @@ sr_disp_loc_inbound_weeks_asteroids = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_asteroids } value = global_var:sr_loc_inbound_first_asteroids subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_asteroids = {
 	value = 0
@@ -1348,6 +1352,7 @@ sr_disp_loc_inbound_weeks_jupiter = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_jupiter } value = global_var:sr_loc_inbound_first_jupiter subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_jupiter = {
 	value = 0
@@ -1383,6 +1388,7 @@ sr_disp_loc_inbound_weeks_saturn = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_saturn } value = global_var:sr_loc_inbound_first_saturn subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_saturn = {
 	value = 0
@@ -1417,6 +1423,7 @@ sr_disp_loc_inbound_weeks_uranus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_uranus } value = global_var:sr_loc_inbound_first_uranus subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_uranus = {
 	value = 0
@@ -1450,6 +1457,7 @@ sr_disp_loc_inbound_weeks_neptune = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_neptune } value = global_var:sr_loc_inbound_first_neptune subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_neptune = {
 	value = 0
@@ -1481,6 +1489,7 @@ sr_disp_loc_inbound_weeks_kuiper = {
 	value = 0
 	if = { limit = { has_global_variable = sr_loc_inbound_first_kuiper } value = global_var:sr_loc_inbound_first_kuiper subtract = sr_fl_tick_now }
 	min = 0
+	max = 999
 }
 sr_disp_loc_inbound_ours_kuiper = {
 	value = 0
@@ -3714,7 +3723,7 @@ sr_disp_earth_power_weeks = {
 				AND = { has_variable = sr_fl_9_dest var:sr_fl_9_dest = 1 NOT = { has_variable = sr_fl_9_loc } }
 			}
 		}
-		value = 99999
+		value = 999999
 		if = { limit = { has_variable = sr_fl_1_dest var:sr_fl_1_dest = 1 NOT = { has_variable = sr_fl_1_loc } } max = var:sr_fl_1_arrive }
 		if = { limit = { has_variable = sr_fl_2_dest var:sr_fl_2_dest = 1 NOT = { has_variable = sr_fl_2_loc } } max = var:sr_fl_2_arrive }
 		if = { limit = { has_variable = sr_fl_3_dest var:sr_fl_3_dest = 1 NOT = { has_variable = sr_fl_3_loc } } max = var:sr_fl_3_arrive }

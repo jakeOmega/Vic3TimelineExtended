@@ -12896,7 +12896,7 @@ sr_loc_hostile_inbound_first_earth = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_earth > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -12954,7 +12954,7 @@ sr_loc_hostile_inbound_first_inner = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_inner > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -13012,7 +13012,7 @@ sr_loc_hostile_inbound_first_mars = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_mars > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -13070,7 +13070,7 @@ sr_loc_hostile_inbound_first_asteroids = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_asteroids > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -13128,7 +13128,7 @@ sr_loc_hostile_inbound_first_jupiter = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_jupiter > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -13186,7 +13186,7 @@ sr_loc_hostile_inbound_first_saturn = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_saturn > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -13244,7 +13244,7 @@ sr_loc_hostile_inbound_first_uranus = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_uranus > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -13302,7 +13302,7 @@ sr_loc_hostile_inbound_first_neptune = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_neptune > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }
@@ -13360,7 +13360,7 @@ sr_loc_hostile_inbound_first_kuiper = {
 	value = 0
 	if = {
 		limit = { sr_loc_hostile_inbound_count_kuiper > 0 }
-		value = 99999
+		value = 999999
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { is_country_alive = yes has_war_with = prev }

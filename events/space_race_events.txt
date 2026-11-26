@@ -5650,12 +5650,14 @@ space_race_events.114 = {
 # docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md):
 # the 8th's, 15th's and 22nd's ticks, queued on the 1st on one fleet power
 # (sr_fl_clock_queue). Hidden, and no trigger, so the queue can't drop them;
+# each notes that it fired (sr_fl_clock_note, for the clock's self-check), then
 # sr_fl_tick_step checks the rules and that the tick has not run.
 space_race_events.120 = {
 	type = country_event
 	hidden = yes
 
 	immediate = {
+		sr_fl_clock_note = { Q = 1 }
 		sr_fl_tick_step = { Q = 1 }
 	}
 }
@@ -5665,6 +5667,7 @@ space_race_events.121 = {
 	hidden = yes
 
 	immediate = {
+		sr_fl_clock_note = { Q = 2 }
 		sr_fl_tick_step = { Q = 2 }
 	}
 }
@@ -5674,6 +5677,7 @@ space_race_events.122 = {
 	hidden = yes
 
 	immediate = {
+		sr_fl_clock_note = { Q = 3 }
 		sr_fl_tick_step = { Q = 3 }
 	}
 }

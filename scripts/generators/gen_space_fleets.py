@@ -129,6 +129,11 @@ SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_quarters", "dv", "supply", 
 # volume (the Earth alert, UI pass design § 9).
 SLOT_LISTS = ("warned_quiet", "warned_loud")
 
+# The ceiling an earliest-landing value starts from before each leg lowers it
+# (max =): above the last tick of any game (2136 x 48 + 47 = 102,575), where
+# 99,999 was not (review of #2068: ticks pass it in November 2083).
+TICK_CEILING = 999999
+
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
 # takes the dispatchers' one argument (script_argument_audit).
@@ -309,7 +314,7 @@ def _hostile_inbound(lc: glw.Location) -> list[str]:
     return [f"sr_loc_hostile_inbound_count_{lc.key} = {{", "\tvalue = 0", *listed, *count, "\t\t}", "\t}", "}",
             f"sr_loc_hostile_inbound_strength_{lc.key} = {{", "\tvalue = 0", *listed, *each, "\t\t}", "\t}", "}",
             f"sr_loc_hostile_inbound_first_{lc.key} = {{", "\tvalue = 0",
-            "\tif = {", f"\t\tlimit = {{ sr_loc_hostile_inbound_count_{lc.key} > 0 }}", "\t\tvalue = 99999",
+            "\tif = {", f"\t\tlimit = {{ sr_loc_hostile_inbound_count_{lc.key} > 0 }}", f"\t\tvalue = {TICK_CEILING}",
             *head, *first, "\t\t}", "\t}", "}"]
 
 
@@ -1958,7 +1963,7 @@ def render_debug() -> list[str]:
         out += ["\tif = {",
                 f"\t\tlimit = {{ {var(n, 'exists')} = yes }}",
                 f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.ScriptValue('{var(n, 'loc_value')}')|0] "
-                f"(0 in transit, bound for [THIS.Var('{var(n, 'dest')}').GetValue|0], landing at month "
+                f"(0 in transit, bound for [THIS.Var('{var(n, 'dest')}').GetValue|0], landing at tick "
                 f"[THIS.Var('{var(n, 'arrive')}').GetValue|0]) "
                 f"strength [THIS.ScriptValue('{var(n, 'strength')}')|1] of [THIS.ScriptValue('{var(n, 'strength_full')}')|1] "
                 f"drive [THIS.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.ScriptValue('{var(n, 'dv_value')}')|1] "
@@ -1977,7 +1982,7 @@ def render_debug() -> list[str]:
                 "\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_loc_inbound_{k} }}",
                 f"\t\tdebug_log = \"TE_SR_FLEET location {lc.code} ({k}): [GetGlobalVariable('sr_loc_inbound_{k}').GetValue|0] inbound, "
-                f"the first at month [GetGlobalVariable('sr_loc_inbound_first_{k}').GetValue|0]\"",
+                f"the first at tick [GetGlobalVariable('sr_loc_inbound_first_{k}').GetValue|0]\"",
                 "\t}"]
     out += ["}",
             "# Every fleet of ours in transit lands now.",
@@ -1989,13 +1994,15 @@ def render_debug() -> list[str]:
 
 
 def render_earth_alert() -> list[str]:
-    """The Earth alert (UI pass design § 9), for a player in its country pulse:
+    """The Earth alert (UI pass design § 9), for a player, on each of the fleets'
+    ticks (sr_fl_tick_alerts; it ran on the country pulse until a leg could be
+    shorter than a month, review of #2068):
     every slot of a power at war with it, in flight to Earth, is told once per
     leg at each volume. Loud (space_race_events.111) while a landing would tip
     the balance at Earth (sr_earth_alert_loud), in place of the quiet notice;
-    quiet (a feed notice) otherwise. One popup a month, given first to a loud
+    quiet (a feed notice) otherwise. One popup a tick, given first to a loud
     fleet nobody has been told of (the first pass), else to the first loud one;
-    the month's other loud fleets are marked told, and each not yet told
+    the tick's other loud fleets are marked told, and each not yet told
     quietly gets its feed notice, so every hostile owner is named somewhere.
     The players told are on the moving fleet's lists (SLOT_LISTS), cleared with
     each new leg and landing, so a war declared mid-flight is heard the next
@@ -2023,15 +2030,15 @@ def render_earth_alert() -> list[str]:
             "\t\tevery_in_global_list = {",
             "\t\t\tvariable = sr_fleet_powers",
             "\t\t\tlimit = { is_country_alive = yes has_war_with = scope:sr_alert_viewer }"]
-    out = ["# ===== The Earth alert (UI pass design § 9), a player's country pulse =====",
+    out = ["# ===== The Earth alert (UI pass design § 9), a player's, each tick (sr_fl_tick_alerts) =====",
            "# Each hostile fleet in flight to Earth, once per leg: loud (.111) while a",
            "# landing would tip the balance at Earth (sr_earth_alert_loud, read once: it",
            "# reads the location records and the fleets' strengths, which nothing here",
            "# changes), else quiet (sr_earth_hostile_notice). The players told sit on the",
-           "# fleet's sr_fl_<n>_warned_<volume> lists. One popup a month, naming its",
+           "# fleet's sr_fl_<n>_warned_<volume> lists. One popup a tick, naming its",
            "# fleet's owner (sr_earth_alert_by) and landing (sr_earth_alert_arrive): first",
            "# pass, a loud fleet nobody was told of; second, the first loud one left. The",
-           "# month's other loud fleets are marked told, and each not yet told quietly",
+           "# tick's other loud fleets are marked told, and each not yet told quietly",
            "# gets its feed notice.",
            "sr_earth_alert_step = {",
            "\tsave_scope_as = sr_alert_viewer",
@@ -2328,6 +2335,9 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_global_variable = sr_loc_inbound_first_{k} }} value = global_var:sr_loc_inbound_first_{k} "
                 "subtract = sr_fl_tick_now }",
                 "\tmin = 0",
+                # The strip's cell is nine to a line, 50 wide: a chemical leg to
+                # Neptune or the Kuiper Belt runs past 999 weeks (#2068 review).
+                "\tmax = 999",
                 "}",
                 f"sr_disp_loc_inbound_ours_{k} = {{",
                 "\tvalue = 0",
@@ -2447,7 +2457,7 @@ def render_display() -> str:
             *[f"\tif = {{ limit = {{ {b} }} add = sr_fl_{n}_strength }}" for n, b in enumerate(bound, 1)], "}",
             "sr_disp_earth_power_weeks = {", "\tvalue = 0", "\tif = {",
             "\t\tlimit = {", "\t\t\tOR = {", *[f"\t\t\t\tAND = {{ {b} }}" for b in bound], "\t\t\t}", "\t\t}",
-            "\t\tvalue = 99999",
+            f"\t\tvalue = {TICK_CEILING}",
             *[f"\t\tif = {{ limit = {{ {b} }} max = var:sr_fl_{n}_arrive }}" for n, b in enumerate(bound, 1)],
             "\t\tsubtract = sr_fl_tick_now", "\t\tmin = 0", "\t}", "}"]
     out += render_transfer_display()

@@ -1057,7 +1057,7 @@ class FigureBudgetTest(unittest.TestCase):
     DEST_FLEET = {"dp_strength": "9999/9999", "dp_dv": "5000.0", "dp_supply": "36"}
     DEST = {"dr_weeks": "9999", "dr_dv_covered": "9999.0", "dr_dv_short": "9999.0", "dr_worlds": "6",
             "dr_enemy": "99999", "dr_inbound": "99999"}
-    LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
+    LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}  # weeks held to 999 (sr_disp_loc_inbound_weeks_<loc>)
     # The Fleets window (the owner, 2026-11-25): a slot's number and strength in
     # its list; on its page a role now of full, its fire to a tenth and, in the
     # drive's tile, a refit's months.
