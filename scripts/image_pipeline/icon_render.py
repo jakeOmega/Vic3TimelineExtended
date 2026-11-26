@@ -1720,7 +1720,8 @@ def compose_banner(raw: Image.Image, spec: dict, target: dict | None = None) -> 
     file's alpha, its fade included (the mobilization groups' brushed left
     edge). With a `target` (banner_grade_target of a vanilla folder holding
     pictures of the kind; the Space Fleets' banners have none) the shown part
-    is graded toward it at the spec's `grade_strength`.
+    is graded toward it at the spec's `grade_strength`. An `alpha` (0 to 1) then scales the picture's
+    opacity, fade included, so a banner with controls drawn over it can sit back from them.
     """
     W, H = spec["size"]
     k = max(W / raw.width, H / raw.height)
@@ -1733,6 +1734,8 @@ def compose_banner(raw: Image.Image, spec: dict, target: dict | None = None) -> 
         out.putalpha(alpha if alpha.size == (W, H) else alpha.resize((W, H), Image.LANCZOS))
     if target is not None:
         out = grade_spread(out, target, strength=spec.get("grade_strength", 0.8))
+    if spec.get("alpha", 1.0) != 1.0:
+        out.putalpha(out.getchannel("A").point(lambda v: round(v * spec["alpha"])))
     return out
 
 
