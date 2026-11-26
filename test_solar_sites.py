@@ -729,8 +729,10 @@ class PanelTest(unittest.TestCase):
         for n, row in enumerate(slots, start=1):
             self.assertIn(f"GetCustom('sr_cf_slot_{n}_name')", row)
             self.assertIn(f"je_space_race_widget_cf_slot_{n}_eta", row)
-        for section in ("te_sr_sec_colony_fleets", "te_sr_sec_colonies"):
-            self.assertIn(f"\t\t{section} = {{}}", _gui_type(self.widget, "te_sr_solar_colonization_status"))
+        # each in its tab's part, which the status shows on its tab (test_space_race_layout.TabTest)
+        for section, tab in (("te_sr_sec_colony_fleets", "fleets"), ("te_sr_sec_colonies", "colonies")):
+            self.assertIn(f"\t\t{section} = {{}}", _gui_type(self.widget, f"te_sr_solar_colonization_{tab}"))
+            self.assertIn(f"te_sr_solar_colonization_{tab} = {{", _gui_type(self.widget, "te_sr_solar_colonization_status"))
 
     def test_the_solar_system_list_is_filtered_by_its_own_values(self):
         """Audit SPC-7: a world shows while Solar System lists all, or while it is

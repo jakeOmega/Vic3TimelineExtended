@@ -31,9 +31,11 @@ GUTTER = 30
 # why (each system's own test holds it: assert_wide_matches_narrow's `split`
 # or `extra`).
 WIDE_ONLY = {
-    # Solar System Colonization's four tabs, in a column of their own full
-    # screen (owner, 2026-11-05), inside the milestone's frame in the side panel
-    "te_sr_window_solar_colonization_live": "space_race",
+    # Solar System Colonization's Colonies and Fleets tabs, in columns of their
+    # own full screen (owner, 2026-11-26), inside the milestone's frame behind
+    # tab buttons in the side panel
+    "te_sr_window_solar_colonization_colonies": "space_race",
+    "te_sr_window_solar_colonization_fleets": "space_race",
     # another country's copy of column 3's taboo and Nuclear Powers, in column
     # 2 for National Info, where column 3 (the player's own) closes up
     "te_nuclear_world_column": "nuclear_weapons",
