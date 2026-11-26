@@ -25,11 +25,11 @@
 # the overview's Modules cell does ("Queue empty", red once the stock is full):
 # while it fills, nothing is lost yet (green); once it holds its cap,
 # sr_mod_month adds nothing more and each month's points are lost (yellow).
-# Both textures are vanilla stand-ins, queued for the next icon round
-# (docs/systems/space_race_gui_icons.md § "Top-bar alerts").
+# Both icons show the panel's colony module (docs/systems/space_race_gui_icons.md
+# § "Top-bar alerts"; the `space` category in icon_prompts.py).
 sr_module_queue_empty = {
 	script_context = player_country
-	texture = "gfx/interface/icons/alert_icons/wasted_construction.dds"
+	texture = "gfx/interface/icons/space_race_icons/module_queue_empty.dds"
 
 	valid = {
 		sr_colonies_contested_enabled = yes
@@ -46,7 +46,7 @@ sr_module_queue_empty = {
 
 sr_module_stock_full = {
 	script_context = player_country
-	texture = "gfx/interface/icons/alert_icons/market_over_capacity.dds"
+	texture = "gfx/interface/icons/space_race_icons/module_stock_full.dds"
 
 	valid = {
 		sr_colonies_contested_enabled = yes
