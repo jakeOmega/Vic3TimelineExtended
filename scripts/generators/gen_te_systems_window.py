@@ -753,7 +753,7 @@ def _milestone(m: str) -> list[str]:
         overview = f"te_sr_{m}_overview = {{}}"
         status = _sr_status(m)
     if m in SR_OWN_COLUMN:
-        status = ([f"### Full screen, the tabs side by side (te_sr_wide_sections fills it).",
+        status = (["### Full screen, the tabs side by side (te_sr_wide_sections fills it).",
                    f'block "sr_window_{m}_live" {{']
                   + [f"\t{ln}" for ln in status] + ["}"])
     own = _sr_own(m, status + [SR_EFFECTS] + SR_OPEN_JOURNAL)
