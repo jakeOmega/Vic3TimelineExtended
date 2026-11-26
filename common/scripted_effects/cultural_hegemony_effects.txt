@@ -534,7 +534,10 @@ ch_effect_disable_cultural_protectionism = {
 # sense, and it resolves on the country's other laws.
 # The journal entry's legend hovers restate these tests in words
 # (ch_model_<model>_tt and ch_model_order_tt in te_miscellaneous_l_english.yml);
-# a change here needs the matching change there.
+# a change here needs the matching change there. country_is_fascist
+# (world_war_triggers.txt) restates the Fascist test for a one-party state or an
+# autocracy, so a change to that test needs the matching change there too;
+# test_country_is_fascist.py holds its table.
 # Scope: country. Writes var:ch_model.
 ch_set_political_model = {
 	# Anarchist, even in a council republic. Vanilla's Anarchy needs Cooperative
