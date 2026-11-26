@@ -237,6 +237,10 @@ were last on stays chosen while you play:
 | Colonies | Colonies. |
 | Solar System | Solar System. The colonies' rules come last on the Space Race's Help page, under How Solar Colonization Works. |
 
+In the Timeline Extended window's Full Screen the four show at once, with no
+tab buttons: Mission Control and Solar System under the overview, Colonies in
+the middle column, and Fleets in the right-hand column above Space Powers.
+
 Colonies (open) has a box for every site you hold, with Colonies Held (out of
 40) at the top. Each box has a small icon for the kind of body it is on (the Moon, Mars,
 the asteroids, a moon of Jupiter, Saturn, Uranus or Neptune, Venus, Mercury, or a
