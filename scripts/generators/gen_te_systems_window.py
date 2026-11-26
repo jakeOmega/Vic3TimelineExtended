@@ -25,9 +25,9 @@ launcher and the root, and instances what this writes:
     te_sr_window_milestones          the Space Race body's entries: a note
                                      while none runs, then one
                                      te_system_tab_frame per milestone
-    te_sr_window_<m>_live            an SR_OWN_COLUMN milestone's live
-                                     sections, for the full-screen column
-                                     te_sr_wide_sections gives them
+    te_sr_window_<m>_<part>          one of an SR_OWN_COLUMN milestone's
+                                     tabs, for the full-screen column
+                                     te_sr_wide_sections gives it
 
 WHICH TAB IS SHOWN. U = the tab is open (its `open_` gate: for a system tab,
 te_window_<system>_tab_sgui, or a mirrored tab's host gate (te_<host>_<system>_
@@ -342,13 +342,16 @@ SR_TRANSIT = {"interstellar_results"}
 # overview: solar colonization's colonies, to read (te_sr_sec_colonies_brief,
 # which shows only for another country).
 SR_FOREIGN = {"solar_colonization": "te_sr_sec_colonies_brief"}
-# The milestones whose live sections take a column of their own full screen
-# (owner, 2026-11-05): solar colonization's, its four tabs (Mission Control,
-# Fleets, Colonies, Solar System), which run far longer than its overview. The
-# frame draws them in a block, sr_window_<m>_live, that te_sr_wide_sections
-# empties in its first column, and te_sr_window_<m>_live draws them for its
-# second, under the frame's gates. The side panel keeps them in the frame.
-SR_OWN_COLUMN = ["solar_colonization"]
+# The milestones whose live sections full screen lays out side by side
+# rather than behind tab buttons (owner, 2026-11-26; the tabs had a column of
+# their own from 2026-11-05): solar colonization's four tabs, each a type of
+# its own (te_sr_<m>_<tab>, space_race_widget.gui). The frame draws the tabbed
+# status in a block, sr_window_<m>_live, that te_sr_wide_sections fills in its
+# first column with the tabs that stay under the overview (Mission Control,
+# Solar System); te_sr_window_<m>_<part> draws each tab named here for a column
+# of its own, under the frame's gates: Colonies the second, Fleets the third,
+# above Space Powers. The side panel keeps the tabs in the frame.
+SR_OWN_COLUMN = {"solar_colonization": ("colonies", "fleets")}
 
 TAX_PROBES = and_(stored("tax_probes"), shown("te_tp_tab_sgui"))
 
@@ -750,7 +753,7 @@ def _milestone(m: str) -> list[str]:
         overview = f"te_sr_{m}_overview = {{}}"
         status = _sr_status(m)
     if m in SR_OWN_COLUMN:
-        status = ([f"### Full screen, in a column of their own (te_sr_window_{m}_live).",
+        status = (["### Full screen, the tabs side by side (te_sr_wide_sections fills it).",
                    f'block "sr_window_{m}_live" {{']
                   + [f"\t{ln}" for ln in status] + ["}"])
     own = _sr_own(m, status + [SR_EFFECTS] + SR_OPEN_JOURNAL)
@@ -824,27 +827,29 @@ def sr_milestones() -> list[str]:
         out.append("")
         out += [f"\t{ln}" if ln else "" for ln in _milestone(m)]
     out.append("}")
-    for m in SR_OWN_COLUMN:
-        out += [""] + _sr_live(m)
+    for m, parts in SR_OWN_COLUMN.items():
+        for part in parts:
+            out += [""] + _sr_live(m, part)
     return out
 
 
-def _sr_live(m: str) -> list[str]:
-    """A milestone's live sections for a full-screen column of their own
-    (SR_OWN_COLUMN): what its frame's sr_window_<m>_live block draws, under the
-    frame's gates (the entry shown for the Country, then the player's own). No
-    header and no Open Journal Entry: both stay in the frame, in column 1."""
-    return ([f"### {m}'s live sections in a full-screen column of their own",
-             f"### (te_sr_wide_sections), which empties the frame's sr_window_{m}_live",
+def _sr_live(m: str, part: str) -> list[str]:
+    """One of a milestone's tabs for a full-screen column of its own
+    (SR_OWN_COLUMN): a part of what its frame's sr_window_<m>_live block draws,
+    under the frame's gates (the entry shown for the Country, then the
+    player's own). No header and no Open Journal Entry: both stay in the
+    frame, in column 1."""
+    return ([f"### {m}'s {part} tab in a full-screen column of its own",
+             f"### (te_sr_wide_sections), out of the frame's sr_window_{m}_live",
              "### block in column 1: under the frame's gates, the player's own.",
-             f"type te_sr_window_{m}_live = flowcontainer {{",
+             f"type te_sr_window_{m}_{part} = flowcontainer {{",
              f'\tvisible = "[{shown(f"te_window_space_race_{m}_sgui", COUNTRY_ROOT)}]"',
              "\tparentanchor = hcenter",
              "\tdirection = vertical",
              "\tignoreinvisible = yes",
              "\tminimumsize = { 520 -1 }",
              ""]
-            + [f"\t{ln}" if ln else "" for ln in _sr_own(m, _sr_status(m), spacing=False)]
+            + [f"\t{ln}" if ln else "" for ln in _sr_own(m, [f"te_sr_{m}_{part} = {{}}"], spacing=False)]
             + ["}"])
 
 

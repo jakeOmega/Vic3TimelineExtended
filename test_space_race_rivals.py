@@ -62,7 +62,11 @@ def _root(text, name):
     root = _body(text[start:], "flowcontainer")
     # the root holds it in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
     for wrapped in re.findall(r"^\t\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
-        root += "\n" + _body(text, wrapped, prefix=r"\ttype ")
+        body = _body(text, wrapped, prefix=r"\ttype ")
+        root += "\n" + body
+        # solar colonization's status draws its tabs as types of their own (te_sr_<m>_mission and the rest)
+        for part in re.findall(r"^\t\t(te_sr_\w+_(?:mission|fleets|colonies|system)) = \{", body, re.M):
+            root += "\n" + _body(text, part, prefix=r"\ttype ")
     return root
 
 

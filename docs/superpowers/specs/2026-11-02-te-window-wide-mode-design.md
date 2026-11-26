@@ -205,7 +205,11 @@ Nuclear Weapons on 2026-11-03; their composers and
 `docs/testing/te-window-wide-playtest.md` § "The owner's column balance" hold
 the current columns. On 2026-11-05 the owner gave the Space Race three: the
 milestones, Solar System Colonization's four tabs, then Space Powers and Orbit
-(the same file, § "The Space Race in three columns").
+(the same file, § "The Space Race in three columns"). On 2026-11-26 the tabs
+gave way to their parts side by side: Mission Control and the Solar System in
+the milestone's frame in column 1, Colonies in column 2, Fleets above Space
+Powers and Orbit in column 3 (the same file, § "The Space Race's tabs side by
+side"; `docs/superpowers/specs/2026-11-26-space-race-full-screen-tabs-design.md`).
 
 The table is the 2026-11-02 proposal; § 7.1 gives the rules since
 2026-11-24 and the columns they changed (Nation, Power Grids, Global Warming).

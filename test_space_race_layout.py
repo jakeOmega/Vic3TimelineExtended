@@ -154,8 +154,24 @@ def _root(text, name):
     root = text[start:_close(text, brace) + 1]
     # the root holds it in te_je_country, the entry's Country (test_te_system_tab_bodies.py)
     for wrapped in re.findall(r"^\t\t(te_sr_\w+_(?:overview|status)) = \{\}$", root, re.M):
-        root += "\n" + _type_body(text, wrapped)
+        root += "\n" + (_status_with_tabs(text, wrapped[len("te_sr_"):-len("_status")])
+                        if wrapped.endswith("_status") else _type_body(text, wrapped))
     return root
+
+
+# Solar colonization's tabs, in the status's order: each a type of its own,
+# te_sr_solar_colonization_<tab>, which the status shows one at a time and the
+# Timeline Extended window's full screen lays out side by side.
+SC_TABS = ("mission", "fleets", "colonies", "system")
+
+
+def _status_with_tabs(text, m):
+    """A milestone's live sections as drawn: te_sr_<m>_status's body, then the
+    body of each tab part it instances (solar colonization's), in order."""
+    body = _type_body(text, f"te_sr_{m}_status")
+    for part in re.findall(rf"^\t\t(te_sr_{m}_(?:{'|'.join(SC_TABS)})) = \{{", body, re.M):
+        body += "\n" + _type_body(text, part)
+    return body
 
 
 def _block(text, name):
@@ -505,7 +521,7 @@ class ColoniesTest(unittest.TestCase):
 
     def test_the_section_is_solar_colonizations_alone(self):
         self.assertEqual(len(re.findall(r"te_sr_sec_colonies = \{\}", self.gui)), 1)
-        self.assertIn("te_sr_sec_colonies = {}", _type_body(self.gui, "te_sr_solar_colonization_status"))
+        self.assertIn("te_sr_sec_colonies = {}", _status_with_tabs(self.gui, "solar_colonization"))
         for m in ALL:
             if m != "solar_colonization" and m != "interstellar_results":
                 self.assertNotIn("te_sr_sec_colonies", _type_body(self.gui, f"te_sr_{m}_status"), m)
@@ -515,7 +531,7 @@ class ColoniesTest(unittest.TestCase):
         System (moved down by the owner, 2026-10-31); the old per-aspect
         sections are gone (SPC-5), and How Solar Colonization Works is the
         Help page."""
-        status = _type_body(self.gui, "te_sr_solar_colonization_status")
+        status = _status_with_tabs(self.gui, "solar_colonization")
         self.assertIn("direction = vertical", status.split("\n\n")[0])
         # Across the tabs (UI pass design § 11), Mission Control's own launch
         # windows aside.
@@ -1209,6 +1225,13 @@ class OrbitTest(unittest.TestCase):
                          r'blockoverride "control_debris" \{\s*block "status_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
         for m in CONTROLLED:
             with self.subTest(milestone=m):
+                if m == "solar_colonization":
+                    # in its Mission Control part, which the status passes its sr_debris to (TabTest)
+                    self.assertRegex(_type_body(gui, f"te_sr_{m}_mission"),
+                                     r'blockoverride "status_debris" \{\s*block "sr_mission_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
+                    self.assertRegex(_type_body(gui, f"te_sr_{m}_status"),
+                                     r'blockoverride "sr_mission_debris" \{\s*block "sr_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
+                    continue
                 self.assertRegex(_type_body(gui, f"te_sr_{m}_status"),
                                  r'blockoverride "status_debris" \{\s*block "sr_debris" \{\s*te_sr_debris_row = \{\}\s*\}\s*\}')
 
@@ -1997,9 +2020,12 @@ class QueueNextModuleTest(unittest.TestCase):
 
 class TabTest(unittest.TestCase):
     """The colonization status's tabs (UI pass design § 11): a row of four
-    buttons on the client-side sr_tab (absent for Mission Control), and one
-    wrapper per tab around its sections, inside te_sr_solar_colonization_status
-    so both hosts draw them."""
+    buttons on the client-side sr_tab (absent for Mission Control), over one
+    part per tab, inside te_sr_solar_colonization_status so both hosts draw
+    them. Each part is a type of its own, te_sr_solar_colonization_<tab>, so
+    the window's full screen can lay the four out side by side (owner,
+    2026-11-26; WideLayoutTest); the status's instance of each carries its
+    tab's visible."""
 
     TABS = (("mission", "[Not( GetVariableSystem.Exists('sr_tab') )]", ["te_sr_status_sections"]),
             ("fleets", "[GetVariableSystem.HasValue('sr_tab', 'fleets')]",
@@ -2012,43 +2038,61 @@ class TabTest(unittest.TestCase):
         cls.gui = _read(GUI)
         cls.status = _type_body(cls.gui, "te_sr_solar_colonization_status")
 
-    def _wrapper(self, visible):
-        i = self.status.index(f'visible = "{visible}"')
-        opener = self.status.rindex("flowcontainer = {", 0, i)
-        depth, j = 0, opener + len("flowcontainer = ")
-        while True:
-            depth += {"{": 1, "}": -1}.get(self.status[j], 0)
-            if depth == 0:
-                return self.status[opener:j]
-            j += 1
+    def _instance(self, key):
+        found = _instances(self.status, f"te_sr_solar_colonization_{key}")
+        self.assertEqual(len(found), 1, key)
+        return found[0]
 
     def test_each_tab_holds_its_sections(self):
         starts = []
-        for key, visible, sections in self.TABS:
+        for key, _, sections in self.TABS:
             with self.subTest(tab=key):
-                body = self._wrapper(visible)
-                found = [x for x in re.findall(r"^\t+(te_sr_sec_\w+|te_sr_status_sections) = \{", body, re.M)
+                self.assertEqual(SC_TABS[len(starts)], key)
+                part = _type_body(self.gui, f"te_sr_solar_colonization_{key}")
+                found = [x for x in re.findall(r"^\t+(te_sr_sec_\w+|te_sr_status_sections) = \{", part, re.M)
                          if x != "te_sr_sec_windows"]
                 self.assertEqual(found, sections)
-                starts.append(self.status.index(body))
-        self.assertEqual(starts, sorted(starts), "the tabs' wrappers are out of order")
+                # as the status: its milestone's scripted GUI, the column's 520, the tabs' spacing
+                for line in ("datacontext = \"[GetScriptedGui('sr_milestone_solar_colonization_sgui')]\"",
+                             "minimumsize = { 520 -1 }", "direction = vertical", "spacing = 4"):
+                    self.assertIn(line, part)
+                starts.append(self.status.index(f"te_sr_solar_colonization_{key} = {{"))
+        self.assertEqual(starts, sorted(starts), "the tabs' parts are out of order")
         # Every section sits in a tab: none left at the status's own level.
         self.assertEqual(re.findall(r"^\t\t(te_sr_sec_\w+|te_sr_status_sections) = \{", self.status, re.M), [])
 
-    def test_each_wrapper_has_one_visible(self):
-        """A second visible on a widget overrides the first (gui gotcha #17)."""
+    def test_each_part_shows_on_its_tab(self):
+        """The status's instance carries the tab's visible, the part none of
+        its own: a second visible would override the first (gui gotcha #17)."""
         for key, visible, _ in self.TABS:
             with self.subTest(tab=key):
-                body = self._wrapper(visible)
-                own = re.search(rf'(?m)^(\t*)visible = "{re.escape(visible)}"', body).group(1)
-                self.assertEqual(len(re.findall(rf"(?m)^{own}visible = ", body)), 1)
+                instance = self._instance(key)
+                self.assertEqual(re.findall(r'(?m)^\t\t\tvisible = "(.*)"$', instance), [visible])
+                part = _type_body(self.gui, f"te_sr_solar_colonization_{key}")
+                self.assertNotRegex(part, r'(?m)^\t\tvisible = ')
+
+    def test_mission_control_keeps_the_debris_row_in_the_journal(self):
+        """The part's debris row sits in its own block, which the status fills
+        with its sr_debris, the block every milestone's status has and the
+        window's hosts empty (Orbit shows the row once); full screen empties
+        the part's block itself (WideLayoutTest)."""
+        part = _type_body(self.gui, "te_sr_solar_colonization_mission")
+        self.assertRegex(part, r'blockoverride "status_debris" \{\s*block "sr_mission_debris" \{\s*'
+                               r'te_sr_debris_row = \{\}\s*\}\s*\}')
+        self.assertRegex(self._instance("mission"), r'blockoverride "sr_mission_debris" \{\s*block "sr_debris" \{\s*'
+                                                    r'te_sr_debris_row = \{\}\s*\}\s*\}')
+        self.assertEqual(self.gui.count('block "sr_mission_debris"'), 1)
 
     def test_the_default_tab_is_mission_control(self):
-        first = re.search(r'flowcontainer = \{\s*visible = "([^"]+)"\s*direction = vertical', self.status)
-        self.assertEqual(first.group(1), "[Not( GetVariableSystem.Exists('sr_tab') )]")
+        first = re.search(r"^\t\t(te_sr_solar_colonization_\w+) = \{", self.status, re.M)
+        self.assertEqual(first.group(1), "te_sr_solar_colonization_mission")
+        self.assertIn('visible = "[Not( GetVariableSystem.Exists(\'sr_tab\') )]"', self._instance("mission"))
+
+    def _row(self):
+        return self.status[:self.status.index("te_sr_solar_colonization_mission = {")]
 
     def test_each_button_sets_its_tab_and_greys_on_it(self):
-        row = self.status[:self.status.index(self._wrapper(self.TABS[0][1]))]
+        row = self._row()
         buttons = _instances(row, r"te_sr_tab_button(?:_wide)?")
         self.assertEqual(len(buttons), 4)
         # Mission Control and Solar System need the wide button (the labels
@@ -2069,7 +2113,7 @@ class TabTest(unittest.TestCase):
         self.assertNotIn("Toggle('sr_tab')", self.gui)
 
     def test_the_tab_row_shows_while_the_entry_runs(self):
-        row = self.status[:self.status.index(self._wrapper(self.TABS[0][1]))]
+        row = self._row()
         m = re.search(r'flowcontainer = \{\s*direction = horizontal\s*parentanchor = hcenter\s*spacing = 4\s*visible = "([^"]+)"', row)
         self.assertIsNotNone(m)
         self.assertEqual(m.group(1), "[JournalEntry.IsActive]")
@@ -2530,14 +2574,20 @@ class ScriptTooltipTest(unittest.TestCase):
 class WideLayoutTest(unittest.TestCase):
     """te_sr_wide_sections, the window's full-screen Space Race (spec
     2026-11-02-te-window-wide-mode § 7), in three columns
-    (te_ui_columns_three), each under the gate its narrow run carries: the
-    milestones under way; solar colonization's four tabs (Mission Control,
-    Fleets, Colonies, Solar System) in a column of their own (owner,
-    2026-11-05), split out of its frame, which keeps its overview and Open
-    Journal Entry in the first; then Space Powers and Orbit. How the Space
-    Race Works is the Help page."""
+    (te_ui_columns_three), each under the gate its narrow run carries. Solar
+    colonization's four tabs lie side by side with no tab buttons (owner,
+    2026-11-26, after a column of their own from 2026-11-05): Mission Control
+    and the Solar System stay in its frame, under the overview and above
+    Program Effects and Open Journal Entry, in the first column with the
+    other milestones under way; Colonies takes the second; Fleets heads the
+    third, above Space Powers and Orbit. How the Space Race Works is the Help
+    page."""
 
-    LIVE = {f"te_sr_window_{m}_live": m for m in window_gen.SR_OWN_COLUMN}
+    # te_sr_window_<m>_<part>: (m, part), the generated wrappers of the tabs moved out of the frame
+    LIVE = {f"te_sr_window_{m}_{part}": (m, part)
+            for m, parts in window_gen.SR_OWN_COLUMN.items() for part in parts}
+    # the tabs the frame keeps in its first column: what te_sr_wide_sections fills its block with
+    KEPT = {"solar_colonization": ("mission", "system")}
 
     def setUp(self):
         self.wide = _strip_comments(_type_body(_read(GUI), "te_sr_wide_sections"))
@@ -2548,24 +2598,49 @@ class WideLayoutTest(unittest.TestCase):
                                              split={name: "te_sr_window_milestones" for name in self.LIVE})
         self.assertEqual(columns, [
             ["te_sr_window_milestones"],
-            ["te_sr_window_solar_colonization_live"],
-            ["te_sr_sec_powers", "te_sr_sec_orbit"]])
+            ["te_sr_window_solar_colonization_colonies"],
+            ["te_sr_window_solar_colonization_fleets", "te_sr_sec_powers", "te_sr_sec_orbit"]])
         self.assertIn("type te_sr_wide_sections = te_ui_columns_three", _read(GUI))
 
-    def test_the_tabs_leave_the_first_column(self):
-        """The first column's milestones empty each split-out frame block, and
-        only those: the frame keeps its header, overview and Open Journal
-        Entry. The side panel's te_sr_tab_body leaves the blocks alone."""
+    def test_every_tab_once_and_no_tab_buttons(self):
+        """Each of the four tabs full screen exactly once, in the frame's block
+        or in a column of its own, so none hides behind a button."""
+        self.assertEqual(set(window_gen.SR_OWN_COLUMN), set(self.KEPT))
+        for m, kept in self.KEPT.items():
+            with self.subTest(milestone=m):
+                self.assertEqual(sorted(kept + window_gen.SR_OWN_COLUMN[m]), sorted(SC_TABS))
+        drawn = re.findall(r"\b(te_sr_(?:window_)?solar_colonization_\w+) = \{", self.wide)
+        self.assertEqual(drawn, ["te_sr_solar_colonization_mission", "te_sr_solar_colonization_system",
+                                 "te_sr_window_solar_colonization_colonies", "te_sr_window_solar_colonization_fleets"])
+        self.assertNotIn("te_sr_tab_button", self.wide)
+
+    def test_the_first_column_keeps_mission_control_and_the_solar_system(self):
+        """The first column's milestones fill each split frame's block with the
+        tabs it keeps, Mission Control's debris row out (Orbit shows it once),
+        and nothing else besides each header's width: the frame keeps its
+        header, overview, Program Effects and Open Journal Entry. The side
+        panel's te_sr_tab_body leaves the blocks alone."""
         milestones = _instances(self.wide, "te_sr_window_milestones")
         self.assertEqual(len(milestones), 1)
-        self.assertEqual(re.findall(r'blockoverride "(\w+)" \{\s*\}', milestones[0]),
-                         [f"sr_window_{m}_live" for m in self.LIVE.values()])
-        # and, besides, each header's width at the column's 520 (spec § 7.1: sr_window_header_size, generated)
-        rest = re.sub(r'blockoverride "\w+" \{\s*\}', "", milestones[0][:-1])
+        for m, kept in self.KEPT.items():
+            with self.subTest(milestone=m):
+                opener = f'blockoverride "sr_window_{m}_live" {{'
+                self.assertEqual(milestones[0].count(opener), 1)
+                at = milestones[0].index(opener) + len(opener) - 1
+                filled = [milestones[0][at + 1:_close(milestones[0], at)]]
+                self.assertEqual(re.findall(r"\b(te_\w+) = \{", filled[0]), [f"te_sr_{m}_{t}" for t in kept])
+                mission = _instances(filled[0], f"te_sr_{m}_mission")
+                self.assertEqual(len(mission), 1)
+                self.assertRegex(mission[0], r'^\s*blockoverride "sr_mission_debris" \{\s*\}\s*\}$')
+                self.assertRegex(filled[0], rf'te_sr_{m}_system = \{{\}}')
+        rest = milestones[0][:-1]
+        for m in self.KEPT:
+            opener = rest.index(f'blockoverride "sr_window_{m}_live" {{')
+            rest = rest[:opener] + rest[_close(rest, rest.index("{", opener)) + 1:]
         rest = re.sub(r'blockoverride "sr_window_header_size" \{\s*size = \{ 520 44 \}\s*\}', "", rest, count=1)
         self.assertEqual(rest.strip(), "")
         frames = _type_body(self.generated, "te_sr_window_milestones")
-        for m in self.LIVE.values():
+        for m in self.KEPT:
             with self.subTest(milestone=m):
                 opener = f'block "sr_window_{m}_live" {{'
                 self.assertEqual(frames.count(opener), 1)
@@ -2573,15 +2648,19 @@ class WideLayoutTest(unittest.TestCase):
                 block = frames[start:_close(frames, start) + 1]
                 self.assertEqual(re.findall(r"\b(te_\w+) = \{", block), [f"te_sr_{m}_status"])
                 self.assertNotIn("OpenJournalEntryPanel", block)
+                # under the overview, above Program Effects and Open Journal Entry
+                self.assertLess(frames.index(f"te_sr_{m}_overview = {{}}"), frames.index(opener))
+                after = frames[frames.index(opener):]
+                self.assertLess(after.index("te_sr_program_effects = {}"), after.index("OpenJournalEntryPanel"))
         narrow = _type_body(_read(GUI), "te_sr_tab_body")
         self.assertIn("te_sr_window_milestones = {}", narrow)
         self.assertNotIn('blockoverride "sr_window_', narrow)
 
-    def test_the_tabs_column_is_the_frames_live_part(self):
-        """te_sr_window_<m>_live draws what the frame's block held, under the
-        frame's gates: the entry shown for the Country on its root, then the
-        player's own, with the entry's datacontext on the guard's child."""
-        for name, m in self.LIVE.items():
+    def test_each_moved_tab_is_the_frames_live_part(self):
+        """te_sr_window_<m>_<part> draws its tab under the frame's gates: the
+        entry shown for the Country on its root, then the player's own, with
+        the entry's datacontext on the guard's child."""
+        for name, (m, part) in self.LIVE.items():
             with self.subTest(type=name):
                 body = _type_body(self.generated, name)
                 gate = (f"GetScriptedGui('te_window_space_race_{m}_sgui')"
@@ -2593,18 +2672,22 @@ class WideLayoutTest(unittest.TestCase):
                     r"flowcontainer = \{\s*using = te_own_country_only\s*parentanchor = hcenter\s*direction = vertical"
                     r"\s*ignoreinvisible = yes\s*flowcontainer = \{\s*"
                     rf"datacontext = \"\[GetPlayerJournalEntry\('je_space_race_{m}'\)\]\"", re.S))
-                self.assertEqual(re.findall(r"\b(te_\w+) = \{", body), [f"te_sr_{m}_status"])
-                self.assertRegex(body, rf'te_sr_{m}_status = \{{\s*blockoverride "sr_debris" \{{\}}\s*\}}')
+                self.assertEqual(re.findall(r"\b(te_\w+) = \{", body), [f"te_sr_{m}_{part}"])
+                self.assertRegex(body, rf"te_sr_{m}_{part} = \{{\}}")
 
-    def test_the_tabs_column_closes_up_without_them(self):
-        """Column 2 shows only while its type would draw: the entry shown for
+    def test_the_colonies_column_closes_up_without_them(self):
+        """Column 2 shows only while Colonies would draw: the entry shown for
         the Country, and the Country the player's own (te_own_country_only), so
         another milestone, or another country's in National Info, leaves two
-        columns, not an empty 520 between them."""
-        (name, _), = self.LIVE.items()
-        own = re.search(r'^\s*visible = "\[(.*)\]"$', _type_body(self.generated, name), re.M).group(1)
+        columns, not an empty 520 between them. Fleets, in column 3, gates
+        itself the same way and leaves Space Powers and Orbit there."""
+        own = re.search(r'^\s*visible = "\[(.*)\]"$',
+                        _type_body(self.generated, "te_sr_window_solar_colonization_colonies"), re.M).group(1)
         shown = re.findall(r'blockoverride "column_2_visible" \{\s*visible = "(.*)"\s*\}', self.wide)
         self.assertEqual(shown, [f"[And( {own}, Country.IsLocalPlayer )]"])
+        fleets = re.search(r'^\s*visible = "\[(.*)\]"$',
+                           _type_body(self.generated, "te_sr_window_solar_colonization_fleets"), re.M).group(1)
+        self.assertEqual(fleets, own)
         self.assertNotIn("column_1_visible", self.wide)
         self.assertNotIn("column_3_visible", self.wide)
 
