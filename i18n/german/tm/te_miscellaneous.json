@@ -3491,6 +3491,10 @@
   "en": "Shortages",
   "de": "Engpässe"
  },
+ "TE_CM_HOW_SUB_SUPPLY": {
+  "en": "Supply",
+  "de": "Angebot"
+ },
  "TE_CM_HOW_SUPPLY": {
   "en": "Construction comes from $building_construction_sector$ buildings, which sell it on the market like any factory. More levels and better production methods mean more construction; cheap wood, iron and steel make it cheaper.",
   "de": "Bauleistung stammt aus $building_construction_sector$-Gebäuden, die sie wie jede Fabrik auf dem Markt verkaufen. Mehr Stufen und bessere Produktionsmethoden bedeuten mehr Bauleistung; billiges Holz, Eisen und Stahl machen sie günstiger."
@@ -3834,6 +3838,10 @@
  "TE_STATE_GDP_PC_ROW_LOCAL": {
   "en": "Local",
   "de": "Lokal"
+ },
+ "TE_STATE_GDP_PC_ROW_NATIONAL": {
+  "en": "National",
+  "de": "National"
  },
  "TE_STATE_GDP_PC_STATUS": {
   "en": "$GDP_SHORT$ per Capita",
@@ -5807,9 +5815,21 @@
   "en": "nothing now",
   "de": "derzeit nichts"
  },
+ "banking_dash_mon_bs_fig_receivership": {
+  "en": "#R +[Country.MakeScope.Var('te_mon_bs_cost_receivership').GetValue|3]#! points",
+  "de": "#R +[Country.MakeScope.Var('te_mon_bs_cost_receivership').GetValue|3]#! Punkte"
+ },
  "banking_dash_mon_bs_fig_small": {
   "en": "under 0.001 points",
   "de": "unter 0,001 Punkte"
+ },
+ "banking_dash_mon_bs_fig_swap": {
+  "en": "#R +[Country.MakeScope.Var('te_mon_bs_cost_swap').GetValue|3]#! points",
+  "de": "#R +[Country.MakeScope.Var('te_mon_bs_cost_swap').GetValue|3]#! Punkte"
+ },
+ "banking_dash_mon_bs_fig_union": {
+  "en": "#R +[Country.MakeScope.Var('te_mon_bs_cost_union').GetValue|3]#! points",
+  "de": "#R +[Country.MakeScope.Var('te_mon_bs_cost_union').GetValue|3]#! Punkte"
  },
  "banking_dash_mon_bs_flag_lolr_tt": {
   "en": "#header [Country.GetNameNoFlag]#!\\nGuarantee extended. It adds [SelectLocalization( GreaterThanOrEqualTo_CFixedPoint( Country.MakeScope.Var('te_mon_bs_cost_lolr').GetValue, '(CFixedPoint)0.001' ), 'banking_dash_mon_bs_fig_lolr', SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.Var('te_mon_bs_cost_lolr').GetValue, '(CFixedPoint)0' ), 'banking_dash_mon_bs_fig_small', 'banking_dash_mon_bs_fig_none' ) )] to the guarantor's [concept_banking_risk_premium].\\n$TOOLTIP_DELIMITER$\\nA guarantee or a receivership takes part of the premium lenders charge for the partner's debt, so it costs nothing while that debt is under a quarter of the partner's GDP.",
@@ -12495,13 +12515,25 @@
   "en": "#v 1#! taken from the country's lands stands abroad",
   "de": "#v 1#! Trophäe aus den Gebieten des Landes steht im Ausland"
  },
+ "gm_je_abroad_view_collapsed": {
+  "en": "Collapsed",
+  "de": "Eingeklappt"
+ },
  "gm_je_abroad_view_collapsed_tt": {
   "en": "#b Collapsed#!\\nOnly how many trophies taken from the country's lands stand abroad.",
   "de": "#b Eingeklappt#!\\nNur die Zahl der Trophäen aus den Gebieten des Landes, die im Ausland stehen."
  },
+ "gm_je_abroad_view_full": {
+  "en": "Full",
+  "de": "Voll"
+ },
  "gm_je_abroad_view_full_tt": {
   "en": "#b Full#!\\nEach trophy with its picture, what it was, where it came from and when, and who holds it where.",
   "de": "#b Vollständig#!\\nJede Trophäe mit Bild, was sie war, woher und wann sie stammt und wer sie wo hält."
+ },
+ "gm_je_abroad_view_short": {
+  "en": "Short",
+  "de": "Kurz"
  },
  "gm_je_abroad_view_short_tt": {
   "en": "#b Short#!\\nOne line for each trophy, with its holder. Hover a line for the rest.",
@@ -12819,13 +12851,25 @@
   "en": "#b What they count for#!\\nEach monument listed here counts its [concept_grandeur] toward [concept_prestige], [concept_cultural_pull] and tourism. An upheld one also gives its dedication's effect, the approval of the groups that share its message, and [concept_legitimacy] if it honors the regime or its leader. National Effects shows what they come to.",
   "de": "#b Wofür sie zählen#!\\nJedes hier aufgeführte Monument bringt seine [concept_grandeur] für [concept_prestige], [concept_cultural_pull] und Tourismus ein. Ein aufrechterhaltenes gibt zudem den Effekt seiner Widmung, die Zustimmung der Gruppen, die seine Botschaft teilen, und [concept_legitimacy], wenn es das Regime oder seinen Anführer ehrt. Was das zusammen ergibt, zeigt „Nationale Effekte“."
  },
+ "gm_je_mon_view_collapsed": {
+  "en": "Collapsed",
+  "de": "Eingeklappt"
+ },
  "gm_je_mon_view_collapsed_tt": {
   "en": "#b Collapsed#!\\nOnly how many monuments are listed here and their grandeur together.",
   "de": "#b Eingeklappt#!\\nNur wie viele Monumente hier aufgeführt sind und wie viel Grandeur sie zusammen haben."
  },
+ "gm_je_mon_view_full": {
+  "en": "Full",
+  "de": "Voll"
+ },
  "gm_je_mon_view_full_tt": {
   "en": "#b Full#!\\nEach monument with its picture and status, its dedication, where it stands and its grandeur, and the buttons under it.",
   "de": "#b Vollständig#!\\nJedes Monument mit Bild und Status, seiner Widmung, seinem Standort und seiner Grandeur sowie den Schaltflächen darunter."
+ },
+ "gm_je_mon_view_short": {
+  "en": "Short",
+  "de": "Kurz"
  },
  "gm_je_mon_view_short_tt": {
   "en": "#b Short#!\\nOne line for each monument, with its status and grandeur. Hover a line for the rest. Rename and Name It are in the Full view.",
@@ -13003,13 +13047,29 @@
   "en": "Each trophy counts for half the grandeur carried off, its levels and its years, rounded up, toward the standing [concept_grandeur] that gives [concept_prestige] and [concept_cultural_pull], and the Armed Forces approve of them. Each stands in the capital it was carried to: whoever holds that state holds it.",
   "de": "Jede Trophäe zählt mit der Hälfte der fortgeschafften Grandeur, ihrer Stufen und ihrer Jahre, aufgerundet, zur bestehenden [concept_grandeur], die [concept_prestige] und [Concept('concept_cultural_pull', 'kulturelle Anziehungskraft')] gewährt, und die Streitkräfte befürworten sie. Jede steht in der Hauptstadt, in die sie gebracht wurde: Wer diesen Staat hält, hält sie."
  },
+ "gm_je_tr_view_collapsed": {
+  "en": "Collapsed",
+  "de": "Eingeklappt"
+ },
  "gm_je_tr_view_collapsed_tt": {
   "en": "#b Collapsed#!\\nOnly how many trophies are held and what they count for together.",
   "de": "#b Eingeklappt#!\\nNur wie viele Trophäen gehalten werden und wofür sie zusammen zählen."
  },
+ "gm_je_tr_view_full": {
+  "en": "Full",
+  "de": "Voll"
+ },
  "gm_je_tr_view_full_tt": {
   "en": "#b Full#!\\nEach trophy with its picture, what it was, where it came from and when, its worth, who claims it, and the button under it.",
   "de": "#b Vollständig#!\\nJede Trophäe mit Bild, was sie war, woher und wann sie stammt, ihr Wert, wer sie beansprucht und die Schaltfläche darunter."
+ },
+ "gm_je_tr_view_short": {
+  "en": "Short",
+  "de": "Kurz"
+ },
+ "gm_je_tr_view_short_tt": {
+  "en": "#b Short#!\\nOne line for each trophy, with what it counts for. Hover a line for the rest.",
+  "de": "#b Kurz#!\\nEine Zeile für jede Trophäe, mit dem, wofür sie zählt. Der Mauszeiger über einer Zeile zeigt den Rest."
  },
  "gm_je_trophies_header": {
   "en": "Trophies",
@@ -13039,6 +13099,10 @@
   "en": "#b $gm_boon_defeat$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_defeat')|0]#! more months",
   "de": "#b $gm_boon_defeat$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_defeat')|0]#! Monate lang"
  },
+ "gm_je_tt_boon_defeat_count_one": {
+  "en": "#b $gm_boon_defeat$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_defeat$#!, noch #v 1#! Monat"
+ },
  "gm_je_tt_boon_faith": {
   "en": "$gm_je_tt_boon_faith_count$\\n[GetStaticModifier('gm_boon_faith').GetDesc]\\n$gm_boon_faith_desc$",
   "de": "$gm_je_tt_boon_faith_count$\\n[GetStaticModifier('gm_boon_faith').GetDesc]\\n$gm_boon_faith_desc$"
@@ -13046,6 +13110,10 @@
  "gm_je_tt_boon_faith_count_many": {
   "en": "#b $gm_boon_faith$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_faith')|0]#! more months",
   "de": "#b $gm_boon_faith$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_faith')|0]#! Monate lang"
+ },
+ "gm_je_tt_boon_faith_count_one": {
+  "en": "#b $gm_boon_faith$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_faith$#!, noch #v 1#! Monat"
  },
  "gm_je_tt_boon_great_power": {
   "en": "$gm_je_tt_boon_great_power_count$\\n[GetStaticModifier('gm_boon_great_power').GetDesc]\\n$gm_boon_great_power_desc$",
@@ -13055,6 +13123,10 @@
   "en": "#b $gm_boon_great_power$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_great_power')|0]#! more months",
   "de": "#b $gm_boon_great_power$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_great_power')|0]#! Monate lang"
  },
+ "gm_je_tt_boon_great_power_count_one": {
+  "en": "#b $gm_boon_great_power$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_great_power$#!, noch #v 1#! Monat"
+ },
  "gm_je_tt_boon_homecoming": {
   "en": "$gm_je_tt_boon_homecoming_count$\\n[GetStaticModifier('gm_boon_homecoming').GetDesc]\\n$gm_boon_homecoming_desc$",
   "de": "$gm_je_tt_boon_homecoming_count$\\n[GetStaticModifier('gm_boon_homecoming').GetDesc]\\n$gm_boon_homecoming_desc$"
@@ -13062,6 +13134,10 @@
  "gm_je_tt_boon_homecoming_count_many": {
   "en": "#b $gm_boon_homecoming$#!, for #v [Country.MakeScope.ScriptValue('gm_tr_disp_boon_homecoming')|0]#! more months",
   "de": "#b $gm_boon_homecoming$#!, noch #v [Country.MakeScope.ScriptValue('gm_tr_disp_boon_homecoming')|0]#! Monate lang"
+ },
+ "gm_je_tt_boon_homecoming_count_one": {
+  "en": "#b $gm_boon_homecoming$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_homecoming$#!, noch #v 1#! Monat"
  },
  "gm_je_tt_boon_regime": {
   "en": "$gm_je_tt_boon_regime_count$\\n[GetStaticModifier('gm_boon_regime').GetDesc]\\n$gm_boon_regime_desc$",
@@ -13071,6 +13147,10 @@
   "en": "#b $gm_boon_regime$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_regime')|0]#! more months",
   "de": "#b $gm_boon_regime$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_regime')|0]#! Monate lang"
  },
+ "gm_je_tt_boon_regime_count_one": {
+  "en": "#b $gm_boon_regime$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_regime$#!, noch #v 1#! Monat"
+ },
  "gm_je_tt_boon_reign": {
   "en": "$gm_je_tt_boon_reign_count$\\n[GetStaticModifier('gm_boon_reign').GetDesc]\\n$gm_boon_reign_desc$",
   "de": "$gm_je_tt_boon_reign_count$\\n[GetStaticModifier('gm_boon_reign').GetDesc]\\n$gm_boon_reign_desc$"
@@ -13078,6 +13158,10 @@
  "gm_je_tt_boon_reign_count_many": {
   "en": "#b $gm_boon_reign$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_reign')|0]#! more months",
   "de": "#b $gm_boon_reign$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_reign')|0]#! Monate lang"
+ },
+ "gm_je_tt_boon_reign_count_one": {
+  "en": "#b $gm_boon_reign$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_reign$#!, noch #v 1#! Monat"
  },
  "gm_je_tt_boon_ruler_death": {
   "en": "$gm_je_tt_boon_ruler_death_count$\\n[GetStaticModifier('gm_boon_ruler_death').GetDesc]\\n$gm_boon_ruler_death_desc$",
@@ -13087,6 +13171,10 @@
   "en": "#b $gm_boon_ruler_death$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_ruler_death')|0]#! more months",
   "de": "#b $gm_boon_ruler_death$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_ruler_death')|0]#! Monate lang"
  },
+ "gm_je_tt_boon_ruler_death_count_one": {
+  "en": "#b $gm_boon_ruler_death$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_ruler_death$#!, noch #v 1#! Monat"
+ },
  "gm_je_tt_boon_space": {
   "en": "$gm_je_tt_boon_space_count$\\n[GetStaticModifier('gm_boon_space').GetDesc]\\n$gm_boon_space_desc$",
   "de": "$gm_je_tt_boon_space_count$\\n[GetStaticModifier('gm_boon_space').GetDesc]\\n$gm_boon_space_desc$"
@@ -13094,6 +13182,10 @@
  "gm_je_tt_boon_space_count_many": {
   "en": "#b $gm_boon_space$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_space')|0]#! more months",
   "de": "#b $gm_boon_space$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_space')|0]#! Monate lang"
+ },
+ "gm_je_tt_boon_space_count_one": {
+  "en": "#b $gm_boon_space$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_space$#!, noch #v 1#! Monat"
  },
  "gm_je_tt_boon_tech_artistic": {
   "en": "$gm_je_tt_boon_tech_artistic_count$\\n[GetStaticModifier('gm_boon_tech_artistic').GetDesc]\\n$gm_boon_tech_artistic_desc$",
@@ -13103,6 +13195,10 @@
   "en": "#b $gm_boon_tech_artistic$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_artistic')|0]#! more months",
   "de": "#b $gm_boon_tech_artistic$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_artistic')|0]#! Monate lang"
  },
+ "gm_je_tt_boon_tech_artistic_count_one": {
+  "en": "#b $gm_boon_tech_artistic$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_tech_artistic$#!, noch #v 1#! Monat"
+ },
  "gm_je_tt_boon_tech_athletic": {
   "en": "$gm_je_tt_boon_tech_athletic_count$\\n[GetStaticModifier('gm_boon_tech_athletic').GetDesc]\\n$gm_boon_tech_athletic_desc$",
   "de": "$gm_je_tt_boon_tech_athletic_count$\\n[GetStaticModifier('gm_boon_tech_athletic').GetDesc]\\n$gm_boon_tech_athletic_desc$"
@@ -13110,6 +13206,10 @@
  "gm_je_tt_boon_tech_athletic_count_many": {
   "en": "#b $gm_boon_tech_athletic$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_athletic')|0]#! more months",
   "de": "#b $gm_boon_tech_athletic$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_athletic')|0]#! Monate lang"
+ },
+ "gm_je_tt_boon_tech_athletic_count_one": {
+  "en": "#b $gm_boon_tech_athletic$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_tech_athletic$#!, noch #v 1#! Monat"
  },
  "gm_je_tt_boon_tech_industrial": {
   "en": "$gm_je_tt_boon_tech_industrial_count$\\n[GetStaticModifier('gm_boon_tech_industrial').GetDesc]\\n$gm_boon_tech_industrial_desc$",
@@ -13119,6 +13219,10 @@
   "en": "#b $gm_boon_tech_industrial$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_industrial')|0]#! more months",
   "de": "#b $gm_boon_tech_industrial$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_industrial')|0]#! Monate lang"
  },
+ "gm_je_tt_boon_tech_industrial_count_one": {
+  "en": "#b $gm_boon_tech_industrial$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_tech_industrial$#!, noch #v 1#! Monat"
+ },
  "gm_je_tt_boon_tech_naturalist": {
   "en": "$gm_je_tt_boon_tech_naturalist_count$\\n[GetStaticModifier('gm_boon_tech_naturalist').GetDesc]\\n$gm_boon_tech_naturalist_desc$",
   "de": "$gm_je_tt_boon_tech_naturalist_count$\\n[GetStaticModifier('gm_boon_tech_naturalist').GetDesc]\\n$gm_boon_tech_naturalist_desc$"
@@ -13126,6 +13230,10 @@
  "gm_je_tt_boon_tech_naturalist_count_many": {
   "en": "#b $gm_boon_tech_naturalist$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_naturalist')|0]#! more months",
   "de": "#b $gm_boon_tech_naturalist$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_naturalist')|0]#! Monate lang"
+ },
+ "gm_je_tt_boon_tech_naturalist_count_one": {
+  "en": "#b $gm_boon_tech_naturalist$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_tech_naturalist$#!, noch #v 1#! Monat"
  },
  "gm_je_tt_boon_tech_scientific": {
   "en": "$gm_je_tt_boon_tech_scientific_count$\\n[GetStaticModifier('gm_boon_tech_scientific').GetDesc]\\n$gm_boon_tech_scientific_desc$",
@@ -13135,6 +13243,10 @@
   "en": "#b $gm_boon_tech_scientific$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_scientific')|0]#! more months",
   "de": "#b $gm_boon_tech_scientific$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_tech_scientific')|0]#! Monate lang"
  },
+ "gm_je_tt_boon_tech_scientific_count_one": {
+  "en": "#b $gm_boon_tech_scientific$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_tech_scientific$#!, noch #v 1#! Monat"
+ },
  "gm_je_tt_boon_victory": {
   "en": "$gm_je_tt_boon_victory_count$\\n[GetStaticModifier('gm_boon_victory').GetDesc]\\n$gm_boon_victory_desc$",
   "de": "$gm_je_tt_boon_victory_count$\\n[GetStaticModifier('gm_boon_victory').GetDesc]\\n$gm_boon_victory_desc$"
@@ -13142,6 +13254,10 @@
  "gm_je_tt_boon_victory_count_many": {
   "en": "#b $gm_boon_victory$#!, for #v [Country.MakeScope.ScriptValue('gm_disp_boon_victory')|0]#! more months",
   "de": "#b $gm_boon_victory$#!, noch #v [Country.MakeScope.ScriptValue('gm_disp_boon_victory')|0]#! Monate lang"
+ },
+ "gm_je_tt_boon_victory_count_one": {
+  "en": "#b $gm_boon_victory$#!, for #v 1#! more month",
+  "de": "#b $gm_boon_victory$#!, noch #v 1#! Monat"
  },
  "gm_je_tt_culture": {
   "en": "#b Cultural Pull#! #G +[Country.MakeScope.ScriptValue('gm_display_culture')|1]#!\\nStanding [concept_grandeur]: #v [Country.MakeScope.ScriptValue('gm_display_g_standing')|0]#!, every monument that is not contested, in steps of 10.\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_culture')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_culture')|0]#! a step.[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('gm_policy_factor_culture_standing'), '(CFixedPoint)1' ), 'gm_policy_culture_standing_tt_line', 'te_tt_blank' )]",
@@ -13235,6 +13351,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_archive')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_archive')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_archive')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_archive')|0]#!."
  },
+ "gm_je_tt_sig_archive_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_archive')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_archive')|0]#!."
+ },
  "gm_je_tt_sig_concert_of_nations": {
   "en": "#b $gm_sig_concert_of_nations$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_concert_of_nations')|%1]#!\\n$gm_je_tt_sig_concert_of_nations_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_concert_of_nations')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_concert_of_nations')|%1]#! [concept_influence] a step.",
   "de": "#b $gm_sig_concert_of_nations$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_concert_of_nations')|%1]#!\\n$gm_je_tt_sig_concert_of_nations_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_concert_of_nations')|0]#!, für #G +[Country.MakeScope.ScriptValue('gm_step_sig_concert_of_nations')|%1]#! [concept_influence] je Schritt."
@@ -13242,6 +13362,10 @@
  "gm_je_tt_sig_concert_of_nations_count_many": {
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_concert_of_nations')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_concert_of_nations')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!."
+ },
+ "gm_je_tt_sig_concert_of_nations_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_concert_of_nations')|0]#!."
  },
  "gm_je_tt_sig_conquerors_of_space": {
   "en": "#b $gm_sig_conquerors_of_space$#!: [concept_innovation] #G +[Country.MakeScope.ScriptValue('gm_display_sig_conquerors_of_space')|%1]#!\\n$gm_je_tt_sig_conquerors_of_space_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_conquerors_of_space')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_conquerors_of_space')|%1]#! [concept_innovation] a step.",
@@ -13251,6 +13375,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_conquerors_of_space')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_conquerors_of_space')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_conquerors_of_space')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_conquerors_of_space')|0]#!."
  },
+ "gm_je_tt_sig_conquerors_of_space_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_conquerors_of_space')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_conquerors_of_space')|0]#!."
+ },
  "gm_je_tt_sig_glory_of_athens": {
   "en": "#b $gm_sig_glory_of_athens$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_glory_of_athens')|%1]#!\\n$gm_je_tt_sig_glory_of_athens_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_glory_of_athens')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_glory_of_athens')|%1]#! [concept_influence] a step.",
   "de": "#b $gm_sig_glory_of_athens$#!: [concept_influence] #G +[Country.MakeScope.ScriptValue('gm_display_sig_glory_of_athens')|%1]#!\\n$gm_je_tt_sig_glory_of_athens_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_glory_of_athens')|0]#!, für #G +[Country.MakeScope.ScriptValue('gm_step_sig_glory_of_athens')|%1]#! [concept_influence] je Schritt."
@@ -13259,6 +13387,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_glory_of_athens')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_glory_of_athens')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_glory_of_athens')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_glory_of_athens')|0]#!."
  },
+ "gm_je_tt_sig_glory_of_athens_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_glory_of_athens')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_glory_of_athens')|0]#!."
+ },
  "gm_je_tt_sig_grande_armee": {
   "en": "#b $gm_sig_grande_armee$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_grande_armee')|%1]#!\\n$gm_je_tt_sig_grande_armee_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_grande_armee')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_grande_armee')|%1]#! [concept_prestige] a step.",
   "de": "#b $gm_sig_grande_armee$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_grande_armee')|%1]#!\\n$gm_je_tt_sig_grande_armee_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_grande_armee')|0]#!, für #G +[Country.MakeScope.ScriptValue('gm_step_sig_grande_armee')|%1]#! [concept_prestige] je Schritt."
@@ -13266,6 +13398,10 @@
  "gm_je_tt_sig_grande_armee_count_many": {
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_grande_armee')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_grande_armee')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_grande_armee')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_grande_armee')|0]#!."
+ },
+ "gm_je_tt_sig_grande_armee_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_grande_armee')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_grande_armee')|0]#!."
  },
  "gm_je_tt_sig_held_concert_of_nations": {
   "en": "#b $gm_sig_concert_of_nations$#!, held\\nA unique dedication of $pm_monument_civic$ won from an opportunity, waiting for a monument to carry it: the dedication ceremony of the next monument dedicated $pm_monument_civic$ offers it. Each monument takes one.\\n$gm_sig_concert_of_nations_effect$ for each step of its [concept_grandeur].",
@@ -13295,6 +13431,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_heroes')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_heroes')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_heroes')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_heroes')|0]#!."
  },
+ "gm_je_tt_sig_heroes_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_heroes')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_heroes')|0]#!."
+ },
  "gm_je_tt_sig_liberty": {
   "en": "#b $gm_sig_liberty$#!: [concept_migration_pull] #G +[Country.MakeScope.ScriptValue('gm_display_sig_liberty')|%1]#!\\n$gm_je_tt_sig_liberty_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_liberty')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_liberty')|%1]#! [concept_migration_pull] a step.",
   "de": "#b $gm_sig_liberty$#!: [concept_migration_pull] #G +[Country.MakeScope.ScriptValue('gm_display_sig_liberty')|%1]#!\\n$gm_je_tt_sig_liberty_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_liberty')|0]#!, für #G +[Country.MakeScope.ScriptValue('gm_step_sig_liberty')|%1]#! [concept_migration_pull] je Schritt."
@@ -13302,6 +13442,10 @@
  "gm_je_tt_sig_liberty_count_many": {
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_liberty')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_liberty')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_liberty')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_liberty')|0]#!."
+ },
+ "gm_je_tt_sig_liberty_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_liberty')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_liberty')|0]#!."
  },
  "gm_je_tt_sig_mandate_of_heaven": {
   "en": "#b $gm_sig_mandate_of_heaven$#!: [concept_legitimacy] #G +[Country.MakeScope.ScriptValue('gm_display_sig_mandate_of_heaven')|1]#!\\n$gm_je_tt_sig_mandate_of_heaven_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_mandate_of_heaven')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_mandate_of_heaven')|1]#! [concept_legitimacy] a step.",
@@ -13311,6 +13455,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_mandate_of_heaven')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_mandate_of_heaven')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_mandate_of_heaven')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_mandate_of_heaven')|0]#!."
  },
+ "gm_je_tt_sig_mandate_of_heaven_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_mandate_of_heaven')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_mandate_of_heaven')|0]#!."
+ },
  "gm_je_tt_sig_martial_glory": {
   "en": "#b $gm_sig_martial_glory$#!: $unit_morale_recovery_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_martial_glory')|%0]#!\\n$gm_je_tt_sig_martial_glory_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_martial_glory')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_martial_glory')|%0]#! $unit_morale_recovery_mult$ a step.",
   "de": "#b $gm_sig_martial_glory$#!: $unit_morale_recovery_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_martial_glory')|%0]#!\\n$gm_je_tt_sig_martial_glory_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_martial_glory')|0]#!, für #G +[Country.MakeScope.ScriptValue('gm_step_sig_martial_glory')|%0]#! $unit_morale_recovery_mult$ je Schritt."
@@ -13318,6 +13466,10 @@
  "gm_je_tt_sig_martial_glory_count_many": {
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_martial_glory')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_martial_glory')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!."
+ },
+ "gm_je_tt_sig_martial_glory_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_martial_glory')|0]#!."
  },
  "gm_je_tt_sig_olympic": {
   "en": "#b $gm_sig_olympic$#!: $state_mortality_mult$ #G [Country.MakeScope.ScriptValue('gm_display_sig_olympic')|%1]#!\\n$gm_je_tt_sig_olympic_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_olympic')|0]#!, for #G [Country.MakeScope.ScriptValue('gm_step_sig_olympic')|%1]#! $state_mortality_mult$ a step.",
@@ -13327,6 +13479,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_olympic')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_olympic')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_olympic')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_olympic')|0]#!."
  },
+ "gm_je_tt_sig_olympic_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_olympic')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_olympic')|0]#!."
+ },
  "gm_je_tt_sig_royal_pantheon": {
   "en": "#b $gm_sig_royal_pantheon$#!: $country_loyalists_from_legitimacy_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_royal_pantheon')|%0]#!\\n$gm_je_tt_sig_royal_pantheon_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_royal_pantheon')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_royal_pantheon')|%0]#! $country_loyalists_from_legitimacy_mult$ a step.",
   "de": "#b $gm_sig_royal_pantheon$#!: $country_loyalists_from_legitimacy_mult$ #G +[Country.MakeScope.ScriptValue('gm_display_sig_royal_pantheon')|%0]#!\\n$gm_je_tt_sig_royal_pantheon_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_royal_pantheon')|0]#!, für #G +[Country.MakeScope.ScriptValue('gm_step_sig_royal_pantheon')|%0]#! $country_loyalists_from_legitimacy_mult$ je Schritt."
@@ -13334,6 +13490,10 @@
  "gm_je_tt_sig_royal_pantheon_count_many": {
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_royal_pantheon')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_royal_pantheon')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_royal_pantheon')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_royal_pantheon')|0]#!."
+ },
+ "gm_je_tt_sig_royal_pantheon_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_royal_pantheon')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_royal_pantheon')|0]#!."
  },
  "gm_je_tt_sig_throne": {
   "en": "#b $gm_sig_throne$#!: [concept_authority] #G +[Country.MakeScope.ScriptValue('gm_display_sig_throne')|%1]#!\\n$gm_je_tt_sig_throne_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_throne')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_throne')|%1]#! [concept_authority] a step.",
@@ -13343,6 +13503,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_throne')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_throne')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_throne')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_throne')|0]#!."
  },
+ "gm_je_tt_sig_throne_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_throne')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_throne')|0]#!."
+ },
  "gm_je_tt_sig_to_victory": {
   "en": "#b $gm_sig_to_victory$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_to_victory')|%1]#!\\n$gm_je_tt_sig_to_victory_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_to_victory')|0]#!, for #G +[Country.MakeScope.ScriptValue('gm_step_sig_to_victory')|%1]#! [concept_prestige] a step.",
   "de": "#b $gm_sig_to_victory$#!: [concept_prestige] #G +[Country.MakeScope.ScriptValue('gm_display_sig_to_victory')|%1]#!\\n$gm_je_tt_sig_to_victory_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_to_victory')|0]#!, für #G +[Country.MakeScope.ScriptValue('gm_step_sig_to_victory')|%1]#! [concept_prestige] je Schritt."
@@ -13351,6 +13515,10 @@
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_to_victory')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_to_victory')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_to_victory')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_to_victory')|0]#!."
  },
+ "gm_je_tt_sig_to_victory_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_to_victory')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_to_victory')|0]#!."
+ },
  "gm_je_tt_sig_unknown_soldier": {
   "en": "#b $gm_sig_unknown_soldier$#!: $country_radicals_from_legitimacy_mult$ #G [Country.MakeScope.ScriptValue('gm_display_sig_unknown_soldier')|%0]#!\\n$gm_je_tt_sig_unknown_soldier_count$\\nNext step at #v [Country.MakeScope.ScriptValue('gm_display_n_sig_unknown_soldier')|0]#!, for #G [Country.MakeScope.ScriptValue('gm_step_sig_unknown_soldier')|%0]#! $country_radicals_from_legitimacy_mult$ a step.",
   "de": "#b $gm_sig_unknown_soldier$#!: $country_radicals_from_legitimacy_mult$ #G [Country.MakeScope.ScriptValue('gm_display_sig_unknown_soldier')|%0]#!\\n$gm_je_tt_sig_unknown_soldier_count$\\nNächster Schritt bei #v [Country.MakeScope.ScriptValue('gm_display_n_sig_unknown_soldier')|0]#!, für #G [Country.MakeScope.ScriptValue('gm_step_sig_unknown_soldier')|%0]#! $country_radicals_from_legitimacy_mult$ je Schritt."
@@ -13358,6 +13526,10 @@
  "gm_je_tt_sig_unknown_soldier_count_many": {
   "en": "A unique dedication, from #v [Country.MakeScope.ScriptValue('gm_display_c_sig_unknown_soldier')|0]#! monuments upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_unknown_soldier')|0]#!.",
   "de": "Eine einzigartige Widmung, aus #v [Country.MakeScope.ScriptValue('gm_display_c_sig_unknown_soldier')|0]#! Monumenten, die auf der Widmung, auf der sie vergeben wurde, gewahrt sind, und den gehaltenen Trophäen davon: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_unknown_soldier')|0]#!."
+ },
+ "gm_je_tt_sig_unknown_soldier_count_one": {
+  "en": "A unique dedication, from #v 1#! monument upheld on the dedication it was given on, and the trophies of it held: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_unknown_soldier')|0]#!.",
+  "de": "Eine einzigartige Widmung, aus #v 1#! Monument, das auf der ihm gegebenen Widmung aufrechterhalten wird, und deren gehaltenen Trophäen: [concept_grandeur] #v [Country.MakeScope.ScriptValue('gm_display_g_sig_unknown_soldier')|0]#!."
  },
  "gm_je_tt_teardown": {
   "en": "#b The Old Order Torn Down#! #G +[Country.MakeScope.ScriptValue('gm_display_teardown')|1]#! [concept_legitimacy]\\nFrom the contested monuments pulled down, through the same steps as grandeur. It fades by about half every 17 months.",
@@ -16255,13 +16427,25 @@
   "en": "#v 1#! more monument, adding #v [State.MakeScope.ScriptValue('gm_state_secondary_grandeur')|0]#! of the building's #v [State.MakeScope.ScriptValue('gm_state_grandeur')|0]#! [concept_grandeur]",
   "de": "#v 1#! weiteres Monument, das #v [State.MakeScope.ScriptValue('gm_state_secondary_grandeur')|0]#! von den #v [State.MakeScope.ScriptValue('gm_state_grandeur')|0]#! [concept_grandeur] des Gebäudes beisteuert"
  },
+ "gm_state_mon_view_collapsed": {
+  "en": "Collapsed",
+  "de": "Eingeklappt"
+ },
  "gm_state_mon_view_collapsed_tt": {
   "en": "#b Collapsed#!\\nOnly how many more monuments stand here and what they add to the building.",
   "de": "#b Eingeklappt#!\\nNur wie viele weitere Monumente hier stehen und was sie dem Gebäude hinzufügen."
  },
+ "gm_state_mon_view_full": {
+  "en": "Full",
+  "de": "Voll"
+ },
  "gm_state_mon_view_full_tt": {
   "en": "#b Full#!\\nEach monument with its picture, its form and dedication, its status and grandeur, and the buttons under it.",
   "de": "#b Vollständig#!\\nJedes Monument mit Bild, Form und Widmung, Status und Grandeur sowie den Schaltflächen darunter."
+ },
+ "gm_state_mon_view_short": {
+  "en": "Short",
+  "de": "Kurz"
  },
  "gm_state_mon_view_short_tt": {
   "en": "#b Short#!\\nOne line for each monument, with its status and grandeur. Hover a line for the rest.",
@@ -19167,9 +19351,21 @@
   "en": "    Our warheads that would survive their first strike: #v [THIS.Var('nd_cs_answer_survivors').GetValue|1]#!",
   "de": "    Unsere Sprengköpfe, die ihren Erstschlag überstehen würden: #v [THIS.Var('nd_cs_answer_survivors').GetValue|1]#!"
  },
+ "nd_cs_exposure_accuracy_line_issuer": {
+  "en": "    Their $precision_guided_munitions$ against our silos: #R ×[THIS.Var('nd_cs_exposure_accuracy').GetValue|2]#! the share within reach",
+  "de": "    Ihre Technologie $precision_guided_munitions$ gegen unsere Silos: #R ×[THIS.Var('nd_cs_exposure_accuracy').GetValue|2]#! auf den erreichbaren Anteil"
+ },
+ "nd_cs_exposure_accuracy_line_target": {
+  "en": "    Our $precision_guided_munitions$ against their silos: #G ×[THIS.Var('nd_cs_exposure_accuracy').GetValue|2]#! the share within reach",
+  "de": "    Unsere Technologie $precision_guided_munitions$ gegen ihre Silos: #G ×[THIS.Var('nd_cs_exposure_accuracy').GetValue|2]#! auf den erreichbaren Anteil"
+ },
  "nd_cs_exposure_line_issuer": {
   "en": "    Our warheads that would survive their first strike, as they can count them: #tooltippable;tooltip:nd_tt_worlds_view up to#! #v [THIS.Var('nd_cs_exposure_survivors').GetValue|1]#!",
   "de": "    Unsere Sprengköpfe, die ihren Erstschlag überstehen würden, wie sie sie zählen können: #tooltippable;tooltip:nd_tt_worlds_view bis zu#! #v [THIS.Var('nd_cs_exposure_survivors').GetValue|1]#!"
+ },
+ "nd_cs_exposure_line_target": {
+  "en": "    Their warheads that would survive our first strike: #tooltippable;tooltip:nd_tt_worlds_view up to#! #v [THIS.Var('nd_cs_exposure_survivors').GetValue|1]#!",
+  "de": "    Ihre Sprengköpfe, die unseren Erstschlag überstehen würden: #tooltippable;tooltip:nd_tt_worlds_view bis zu#! #v [THIS.Var('nd_cs_exposure_survivors').GetValue|1]#!"
  },
  "nd_danger_word_0": {
   "en": "#G Contained#!",
@@ -21243,9 +21439,17 @@
   "en": "Delivery already in service has been counted",
   "de": "Bereits in Dienst gestellte Trägersysteme wurden mitgezählt"
  },
+ "nd_tt_proj_missiles_tech": {
+  "en": "We have researched #v $guided_missiles$#!",
+  "de": "Wir haben die Technologie #v $guided_missiles$#! erforscht"
+ },
  "nd_tt_proj_subs_not_fielded": {
   "en": "We do not field missile submarines yet",
   "de": "Wir haben noch keine Raketen-U-Boote in Dienst"
+ },
+ "nd_tt_proj_subs_tech": {
+  "en": "We have researched #v $advanced_submarine_technology$#!",
+  "de": "Wir haben die Technologie #v $advanced_submarine_technology$#! erforscht"
  },
  "nd_tt_readiness_locked": {
   "en": "No stand-down agreement or concession holds our readiness at Routine or below",
@@ -21542,6 +21746,14 @@
  "nd_w_authority_strike_1": {
   "en": "\\nUnder it, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_auth_1').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
   "de": "\\nDabei würde ein voller Schlag [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetAltNameNoFormatting('GEN')] #tooltippable;tooltip:nd_tt_worlds_estimate etwa#! #v [Country.MakeScope.Var('nd_lost_main_auth_1').GetValue|1]#! unserer #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! Sprengköpfe vernichten."
+ },
+ "nd_w_authority_strike_2": {
+  "en": "\\nUnder it, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_auth_2').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
+  "de": "\\nDabei würde ein voller Schlag [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetAltNameNoFormatting('GEN')] #tooltippable;tooltip:nd_tt_worlds_estimate etwa#! #v [Country.MakeScope.Var('nd_lost_main_auth_2').GetValue|1]#! unserer #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! Sprengköpfe vernichten."
+ },
+ "nd_w_authority_strike_3": {
+  "en": "\\nUnder it, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_auth_3').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
+  "de": "\\nDabei würde ein voller Schlag [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetAltNameNoFormatting('GEN')] #tooltippable;tooltip:nd_tt_worlds_estimate etwa#! #v [Country.MakeScope.Var('nd_lost_main_auth_3').GetValue|1]#! unserer #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! Sprengköpfe vernichten."
  },
  "nd_w_authority_strike_4": {
   "en": "\\n\\nUnder it, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_auth_4').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
@@ -21995,6 +22207,10 @@
   "en": "#v [Country.MakeScope.Var('nd_reach_count').GetValue|0]#! countries",
   "de": "#v [Country.MakeScope.Var('nd_reach_count').GetValue|0]#! Länder"
  },
+ "nd_w_reach_value_every": {
+  "en": "Every country",
+  "de": "Jedes Land"
+ },
  "nd_w_reach_value_subs": {
   "en": "#v [Country.MakeScope.Var('nd_reach_count').GetValue|0]#! and coasts",
   "de": "#v [Country.MakeScope.Var('nd_reach_count').GetValue|0]#! und Küsten"
@@ -22070,6 +22286,18 @@
  "nd_w_readiness_strike_0": {
   "en": "\\n\\nAt this readiness, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_ready_0').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
   "de": "\\n\\nBei dieser Bereitschaft würde ein voller Schlag [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetAltNameNoFormatting('GEN')] #tooltippable;tooltip:nd_tt_worlds_estimate etwa#! #v [Country.MakeScope.Var('nd_lost_main_ready_0').GetValue|1]#! unserer #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! Sprengköpfe vernichten."
+ },
+ "nd_w_readiness_strike_1": {
+  "en": "\\n\\nAt this readiness, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_ready_1').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
+  "de": "\\n\\nBei dieser Bereitschaft würde ein voller Schlag [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetAltNameNoFormatting('GEN')] #tooltippable;tooltip:nd_tt_worlds_estimate etwa#! #v [Country.MakeScope.Var('nd_lost_main_ready_1').GetValue|1]#! unserer #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! Sprengköpfe vernichten."
+ },
+ "nd_w_readiness_strike_2": {
+  "en": "\\n\\nAt this readiness, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_ready_2').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
+  "de": "\\n\\nBei dieser Bereitschaft würde ein voller Schlag [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetAltNameNoFormatting('GEN')] #tooltippable;tooltip:nd_tt_worlds_estimate etwa#! #v [Country.MakeScope.Var('nd_lost_main_ready_2').GetValue|1]#! unserer #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! Sprengköpfe vernichten."
+ },
+ "nd_w_readiness_strike_3": {
+  "en": "\\n\\nAt this readiness, a full strike by [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetNameNoFormatting] would destroy #tooltippable;tooltip:nd_tt_worlds_estimate about#! #v [Country.MakeScope.Var('nd_lost_main_ready_3').GetValue|1]#! of our #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! warheads.",
+  "de": "\\n\\nBei dieser Bereitschaft würde ein voller Schlag [Country.MakeScope.Var('nd_main_rival_capital').GetState.GetCountry.GetAltNameNoFormatting('GEN')] #tooltippable;tooltip:nd_tt_worlds_estimate etwa#! #v [Country.MakeScope.Var('nd_lost_main_ready_3').GetValue|1]#! unserer #v [Country.MakeScope.ScriptValue('nd_display_stockpile')|0]#! Sprengköpfe vernichten."
  },
  "nd_w_readiness_tt": {
   "en": "#tooltip_header Readiness: [Country.GetCustom('nd_readiness_name')][Country.GetCustom('nd_readiness_moving')]#!\\n$TOOLTIP_DELIMITER$\\n[Country.GetCustom('nd_readiness_effects')]\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('nd_display_readiness_lock_months'), '(CFixedPoint)0' ), 'nd_w_readiness_locked', 'nd_w_readiness_steps' )]",
@@ -22231,13 +22459,37 @@
   "en": "#tooltippable;tooltip:nd_tt_worlds_view up to #v [Country.MakeScope.Var('nd_plan_pv_flown_lo').GetValue|1]#!#!",
   "de": "#tooltippable;tooltip:nd_tt_worlds_view bis zu #v [Country.MakeScope.Var('nd_plan_pv_flown_lo').GetValue|1]#!#!"
  },
+ "nd_w_strike_pv_flown_range": {
+  "en": "#tooltippable;tooltip:nd_tt_worlds_view #v [Country.MakeScope.Var('nd_plan_pv_flown_lo').GetValue|1]–[Country.MakeScope.Var('nd_plan_pv_flown_hi').GetValue|1]#!#!",
+  "de": "#tooltippable;tooltip:nd_tt_worlds_view #v [Country.MakeScope.Var('nd_plan_pv_flown_lo').GetValue|1]–[Country.MakeScope.Var('nd_plan_pv_flown_hi').GetValue|1]#!#!"
+ },
  "nd_w_strike_pv_k_force": {
   "en": "\\n  #v +[Country.MakeScope.ScriptValue('nd_k_ratio_force_part')|1]#! for our $nd_icbm_force$",
   "de": "\\n  #v +[Country.MakeScope.ScriptValue('nd_k_ratio_force_part')|1]#! durch $nd_icbm_force$"
  },
+ "nd_w_strike_pv_k_tech": {
+  "en": "\\n  #v +[Country.MakeScope.ScriptValue('nd_k_ratio_tech_part')|1]#! for our $precision_guided_munitions$",
+  "de": "\\n  #v +[Country.MakeScope.ScriptValue('nd_k_ratio_tech_part')|1]#! durch $precision_guided_munitions$"
+ },
+ "nd_w_strike_pv_kept_one": {
+  "en": "#tooltippable;tooltip:nd_tt_worlds_view up to #v [Country.MakeScope.Var('nd_plan_pv_kept_lo').GetValue|1]#!#!",
+  "de": "#tooltippable;tooltip:nd_tt_worlds_view bis zu #v [Country.MakeScope.Var('nd_plan_pv_kept_lo').GetValue|1]#!#!"
+ },
+ "nd_w_strike_pv_kept_range": {
+  "en": "#tooltippable;tooltip:nd_tt_worlds_view #v [Country.MakeScope.Var('nd_plan_pv_kept_lo').GetValue|1]–[Country.MakeScope.Var('nd_plan_pv_kept_hi').GetValue|1]#!#!",
+  "de": "#tooltippable;tooltip:nd_tt_worlds_view #v [Country.MakeScope.Var('nd_plan_pv_kept_lo').GetValue|1]–[Country.MakeScope.Var('nd_plan_pv_kept_hi').GetValue|1]#!#!"
+ },
  "nd_w_strike_pv_label": {
   "en": "Estimate",
   "de": "Schätzung"
+ },
+ "nd_w_strike_pv_redundancy_one": {
+  "en": "#tooltippable;tooltip:nd_tt_worlds_view up to #v [Country.MakeScope.Var('nd_plan_pv_redundancy_lo').GetValue|1]#!#!",
+  "de": "#tooltippable;tooltip:nd_tt_worlds_view bis zu #v [Country.MakeScope.Var('nd_plan_pv_redundancy_lo').GetValue|1]#!#!"
+ },
+ "nd_w_strike_pv_redundancy_range": {
+  "en": "#tooltippable;tooltip:nd_tt_worlds_view #v [Country.MakeScope.Var('nd_plan_pv_redundancy_lo').GetValue|1]–[Country.MakeScope.Var('nd_plan_pv_redundancy_hi').GetValue|1]#!#!",
+  "de": "#tooltippable;tooltip:nd_tt_worlds_view #v [Country.MakeScope.Var('nd_plan_pv_redundancy_lo').GetValue|1]–[Country.MakeScope.Var('nd_plan_pv_redundancy_hi').GetValue|1]#!#!"
  },
  "nd_w_strike_pv_silo_line": {
   "en": "\\nOur $precision_guided_munitions$ against their silos: #G ×[Country.MakeScope.Var('nd_plan_pv_accuracy').GetValue|2]#! the share within reach",
@@ -22279,6 +22531,10 @@
   "en": "$missile_defense_systems$: not researched",
   "de": "$missile_defense_systems$: nicht erforscht"
  },
+ "nd_w_surv_part_radar_missing": {
+  "en": "$radar$: not researched",
+  "de": "$radar$: nicht erforscht"
+ },
  "nd_w_surv_part_submarines_held": {
   "en": "Missile submarines at sea: #v ×[Country.MakeScope.ScriptValue('nd_display_exposure_factor_submarines')|2]#!",
   "de": "Raketen-U-Boote auf See: #v ×[Country.MakeScope.ScriptValue('nd_display_exposure_factor_submarines')|2]#!"
@@ -22314,6 +22570,10 @@
  "nd_w_survivors_k_force": {
   "en": "\\n    #v +[Country.MakeScope.Var('nd_main_rival_k_force').GetValue|1]#! for its $nd_icbm_force$",
   "de": "\\n    #v +[Country.MakeScope.Var('nd_main_rival_k_force').GetValue|1]#! durch $nd_icbm_force$"
+ },
+ "nd_w_survivors_k_pgm": {
+  "en": "\\n    #v +[Country.MakeScope.Var('nd_main_rival_pgm').GetValue|1]#! for its $precision_guided_munitions$",
+  "de": "\\n    #v +[Country.MakeScope.Var('nd_main_rival_pgm').GetValue|1]#! durch $precision_guided_munitions$"
  },
  "nd_w_survivors_label": {
   "en": "First-strike survivors",
@@ -22594,6 +22854,10 @@
  "nuclear_program_pause_source_eligible_tt": {
   "en": "The freezing country has researched $nuclear_weapons$, its program is not already frozen or dismantled, and it is not receiving $nuclear_program_aid$",
   "de": "Das einfrierende Land hat $nuclear_weapons$ erforscht, sein Programm ist noch nicht eingefroren oder demontiert, und es erhält nicht $nuclear_program_aid$"
+ },
+ "nuclear_program_power_authority_tt": {
+  "en": "#tooltip_header [State.GetOwner.GetCustom('nd_authority_name')]#!\\n$TOOLTIP_DELIMITER$\\nTheir [concept_launch_authority], public as their doctrine is: who may order a launch of their weapons.",
+  "de": "#tooltip_header [State.GetOwner.GetCustom('nd_authority_name')]#!\\n$TOOLTIP_DELIMITER$\\nIhre [concept_launch_authority], so öffentlich wie ihre Doktrin: wer den Start ihrer Waffen anordnen darf."
  },
  "nuclear_program_power_doctrine_tt": {
   "en": "#tooltip_header [State.GetOwner.GetCustom('nd_doctrine_name')]#!\\n$TOOLTIP_DELIMITER$\\nTheir public [concept_nuclear_doctrine]: every government knows it, and weighs their threats by it.",
@@ -24439,6 +24703,10 @@
   "en": "The Crater Under the Crater: Research",
   "de": "Der Krater unter dem Krater: Forschung"
  },
+ "sr_discovery_callisto_archive_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_callisto$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_callisto$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_callisto_archive_b": {
   "en": "The Crater Under the Crater: Colony Infrastructure",
   "de": "Der Krater unter dem Krater: Kolonieinfrastruktur"
@@ -24450,6 +24718,10 @@
  "sr_discovery_ceres_reservoir_a": {
   "en": "A Reservoir Below Ceres: Research",
   "de": "Ein Reservoir unter Ceres: Forschung"
+ },
+ "sr_discovery_ceres_reservoir_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_ceres$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_ceres$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_ceres_reservoir_b": {
   "en": "A Reservoir Below Ceres: Resource Development",
@@ -24463,6 +24735,10 @@
   "en": "Life in the Ice Grains: Research",
   "de": "Leben in den Eiskörnern: Forschung"
  },
+ "sr_discovery_enceladus_life_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_enceladus$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_enceladus$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_enceladus_life_b": {
   "en": "Life in the Ice Grains: International Cooperation",
   "de": "Leben in den Eiskörnern: Internationale Zusammenarbeit"
@@ -24475,69 +24751,137 @@
   "en": "A Second Living World: Research",
   "de": "Eine zweite lebendige Welt: Forschung"
  },
+ "sr_discovery_europa_life_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_europa$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_europa$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_europa_life_b": {
   "en": "A Second Living World: International Cooperation",
   "de": "Eine zweite lebendige Welt: Internationale Zusammenarbeit"
+ },
+ "sr_discovery_europa_life_b_tt": {
+  "en": "#G +100%#! to the cultural pull, prestige and [concept_sr_resort_draw] from every $je_space_race_widget_mod_name_culture$ at $sr_site_name_europa$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf kulturelle Anziehungskraft, Prestige und [concept_sr_resort_draw] von jedem $je_space_race_widget_mod_name_culture$ bei $sr_site_name_europa$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_europa_vents_a": {
   "en": "Chimneys Beneath the Ice: Research",
   "de": "Schlote unter dem Eis: Forschung"
  },
+ "sr_discovery_europa_vents_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_europa$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_europa$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_europa_vents_b": {
   "en": "Chimneys Beneath the Ice: Engineering",
   "de": "Schlote unter dem Eis: Technik"
+ },
+ "sr_discovery_europa_vents_b_tt": {
+  "en": "#G +100%#! to the Module Fabrication points and Space Command construction from every $je_space_race_widget_mod_name_yard$ at $sr_site_name_europa$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf die Punkte der Modulfertigung und den Bau des Weltraumkommandos von jeder $je_space_race_widget_mod_name_yard$ bei $sr_site_name_europa$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_ganymede_layers_a": {
   "en": "Oceans Between Layers: Research",
   "de": "Ozeane zwischen Schichten: Forschung"
  },
+ "sr_discovery_ganymede_layers_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_ganymede$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_ganymede$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_ganymede_layers_b": {
   "en": "Oceans Between Layers: Engineering",
   "de": "Ozeane zwischen Schichten: Technik"
+ },
+ "sr_discovery_ganymede_layers_b_tt": {
+  "en": "#G +100%#! to the Module Fabrication points and Space Command construction from every $je_space_race_widget_mod_name_yard$ at $sr_site_name_ganymede$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf die Punkte der Modulfertigung und den Bau des Weltraumkommandos von jeder $je_space_race_widget_mod_name_yard$ bei $sr_site_name_ganymede$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_hellas_fossils_a": {
   "en": "The Fossils of Hellas: Research",
   "de": "Die Fossilien von Hellas: Forschung"
  },
+ "sr_discovery_hellas_fossils_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_hellas_planitia$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_hellas_planitia$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_hellas_fossils_b": {
   "en": "The Fossils of Hellas: International Cooperation",
   "de": "Die Fossilien von Hellas: Internationale Zusammenarbeit"
+ },
+ "sr_discovery_hellas_fossils_b_tt": {
+  "en": "#G +100%#! to the cultural pull, prestige and [concept_sr_resort_draw] from every $je_space_race_widget_mod_name_culture$ at $sr_site_name_hellas_planitia$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf kulturelle Anziehungskraft, Prestige und [concept_sr_resort_draw] von jedem $je_space_race_widget_mod_name_culture$ bei $sr_site_name_hellas_planitia$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_io_roof_a": {
   "en": "The Moving Floor of Io: Research",
   "de": "Der bewegte Boden von Io: Forschung"
  },
+ "sr_discovery_io_roof_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_io$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_io$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_io_roof_b": {
   "en": "The Moving Floor of Io: Engineering",
   "de": "Der bewegte Boden von Io: Technik"
+ },
+ "sr_discovery_io_roof_b_tt": {
+  "en": "#G +100%#! to the $building_space_mine$ room from every $je_space_race_widget_mod_name_mine$ at $sr_site_name_io$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Platz für das Gebäude $building_space_mine$ von jedem $je_space_race_widget_mod_name_mine$ bei $sr_site_name_io$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_mercury_archive_a": {
   "en": "An Archive in Permanent Shadow: Research",
   "de": "Ein Archiv im ewigen Schatten: Forschung"
  },
+ "sr_discovery_mercury_archive_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_mercury$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_mercury$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_mercury_archive_b": {
   "en": "An Archive in Permanent Shadow: Resource Development",
   "de": "Ein Archiv im ewigen Schatten: Ressourcenerschließung"
+ },
+ "sr_discovery_mercury_archive_b_tt": {
+  "en": "#G +100%#! to the $building_space_mine$ room from every $je_space_race_widget_mod_name_mine$ at $sr_site_name_mercury$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Platz für das Gebäude $building_space_mine$ von jedem $je_space_race_widget_mod_name_mine$ bei $sr_site_name_mercury$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_olympus_tubes_a": {
   "en": "Rooms Inside the Volcano: Research",
   "de": "Räume im Inneren des Vulkans: Forschung"
  },
+ "sr_discovery_olympus_tubes_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_olympus_mons$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_olympus_mons$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_olympus_tubes_b": {
   "en": "Rooms Inside the Volcano: Colony Infrastructure",
   "de": "Räume im Inneren des Vulkans: Kolonieinfrastruktur"
+ },
+ "sr_discovery_olympus_tubes_b_tt": {
+  "en": "#G +100%#! to the room for people from every $je_space_race_widget_mod_name_hab$ at $sr_site_name_olympus_mons$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Platz für Menschen von jedem $je_space_race_widget_mod_name_hab$ bei $sr_site_name_olympus_mons$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_pallas_water_a": {
   "en": "Water Bound in Stone: Research",
   "de": "Wasser, im Stein gebunden: Forschung"
  },
+ "sr_discovery_pallas_water_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_pallas$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_pallas$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_pallas_water_b": {
   "en": "Water Bound in Stone: Resource Development",
   "de": "Wasser, im Stein gebunden: Ressourcenerschließung"
  },
+ "sr_discovery_pallas_water_b_tt": {
+  "en": "#G +100%#! to the room for people from every $je_space_race_widget_mod_name_hab$ at $sr_site_name_pallas$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Platz für Menschen von jedem $je_space_race_widget_mod_name_hab$ bei $sr_site_name_pallas$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_pluto_antifreeze_a": {
   "en": "Antifreeze at the Edge of the System: Research",
   "de": "Frostschutz am Rand des Systems: Forschung"
+ },
+ "sr_discovery_pluto_antifreeze_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_pluto$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_pluto$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_pluto_antifreeze_b": {
   "en": "Antifreeze at the Edge of the System: Engineering",
@@ -24551,37 +24895,73 @@
   "en": "A Rich Seam in Psyche: Research",
   "de": "Eine reiche Ader in Psyche: Forschung"
  },
+ "sr_discovery_psyche_metal_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_psyche$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_psyche$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_psyche_metal_b": {
   "en": "A Rich Seam in Psyche: Materials Processing",
   "de": "Eine reiche Ader in Psyche: Materialverarbeitung"
+ },
+ "sr_discovery_psyche_metal_b_tt": {
+  "en": "#G +100%#! to the $building_space_mine$ room from every $je_space_race_widget_mod_name_mine$ at $sr_site_name_psyche$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Platz für das Gebäude $building_space_mine$ von jedem $je_space_race_widget_mod_name_mine$ bei $sr_site_name_psyche$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_titan_chemistry_a": {
   "en": "An Impact-Born Chemical Laboratory: Research",
   "de": "Ein im Einschlag geborenes Chemielabor: Forschung"
  },
+ "sr_discovery_titan_chemistry_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_titan$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_titan$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_titan_chemistry_b": {
   "en": "An Impact-Born Chemical Laboratory: Materials Processing",
   "de": "Ein im Einschlag geborenes Chemielabor: Materialverarbeitung"
+ },
+ "sr_discovery_titan_chemistry_b_tt": {
+  "en": "#G +100%#! to the advanced materials output from every $je_space_race_widget_mod_name_foundry$ at $sr_site_name_titan$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Ausstoß an Hochleistungswerkstoffen von jeder $je_space_race_widget_mod_name_foundry$ bei $sr_site_name_titan$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_titania_ocean_a": {
   "en": "Warmth Beneath Titania: Research",
   "de": "Wärme unter Titania: Forschung"
  },
+ "sr_discovery_titania_ocean_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_titania$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_titania$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_titania_ocean_b": {
   "en": "Warmth Beneath Titania: Engineering",
   "de": "Wärme unter Titania: Technik"
+ },
+ "sr_discovery_titania_ocean_b_tt": {
+  "en": "#G +100%#! to the room for people from every $je_space_race_widget_mod_name_hab$ at $sr_site_name_titania$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Platz für Menschen von jedem $je_space_race_widget_mod_name_hab$ bei $sr_site_name_titania$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_triton_jet_a": {
   "en": "A Jet Beneath the Landing Field: Research",
   "de": "Ein Strahl unter dem Landefeld: Forschung"
  },
+ "sr_discovery_triton_jet_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_triton$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_triton$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_triton_jet_b": {
   "en": "A Jet Beneath the Landing Field: Engineering",
   "de": "Ein Strahl unter dem Landefeld: Technik"
  },
+ "sr_discovery_triton_jet_b_tt": {
+  "en": "#G +100%#! to the Module Fabrication points and Space Command construction from every $je_space_race_widget_mod_name_yard$ at $sr_site_name_triton$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf die Punkte der Modulfertigung und den Bau des Weltraumkommandos von jeder $je_space_race_widget_mod_name_yard$ bei $sr_site_name_triton$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_utopia_glacier_a": {
   "en": "The Buried Glacier: Research",
   "de": "Der verschüttete Gletscher: Forschung"
+ },
+ "sr_discovery_utopia_glacier_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_utopia_planitia$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_utopia_planitia$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_discovery_utopia_glacier_b": {
   "en": "The Buried Glacier: Resource Development",
@@ -24611,9 +24991,17 @@
   "en": "A Visitor Preserved in Vesta: Research",
   "de": "Ein Besucher, bewahrt in Vesta: Forschung"
  },
+ "sr_discovery_vesta_impactor_a_tt": {
+  "en": "#G +100%#! to the research speed from every $je_space_race_widget_mod_name_lab$ at $sr_site_name_vesta$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! Forschungsgeschwindigkeit von jeder $je_space_race_widget_mod_name_lab$ bei $sr_site_name_vesta$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
+ },
  "sr_discovery_vesta_impactor_b": {
   "en": "A Visitor Preserved in Vesta: Materials Processing",
   "de": "Ein Besucher, bewahrt in Vesta: Materialverarbeitung"
+ },
+ "sr_discovery_vesta_impactor_b_tt": {
+  "en": "#G +100%#! to the advanced materials output from every $je_space_race_widget_mod_name_foundry$ at $sr_site_name_vesta$. It belongs to the colony, whoever holds it.",
+  "de": "#G +100%#! auf den Ausstoß an Hochleistungswerkstoffen von jeder $je_space_race_widget_mod_name_foundry$ bei $sr_site_name_vesta$. Der Bonus bleibt bei der Kolonie, wer sie auch hält."
  },
  "sr_dome_breach_repairs": {
   "en": "Dome Breach Repairs",
@@ -24688,6 +25076,58 @@
   "de": "Wieder für den höchsten Gewinn zuweisen: Unsere Zuweisungen entfallen, und jeden Monat wechseln bis zu #v [GetPlayer.MakeScope.ScriptValue('sr_eb_pace')|0]#! Stufen vom Standort, der je Stufe am wenigsten einbringt, zu dem, der am meisten einbringt, solange sich der Gewinn für einen Wechsel lohnt."
  },
  "sr_ebase_mix_copper_bonus": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_copper_penalty": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_glass_bonus": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_glass_penalty": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_gold_bonus": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_gold_penalty": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_iron_bonus": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_iron_penalty": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_lead_bonus": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_lead_penalty": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_sulfur_bonus": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_sulfur_penalty": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_tech_metals_bonus": {
+  "en": "Extraplanetary Base Ground",
+  "de": "Boden des Außerplanetaren Stützpunkts"
+ },
+ "sr_ebase_mix_tech_metals_penalty": {
   "en": "Extraplanetary Base Ground",
   "de": "Boden des Außerplanetaren Stützpunkts"
  },
@@ -25483,6 +25923,10 @@
   "en": "The module queue has a free place (of 20)",
   "de": "Die Modulwarteschlange hat einen freien Platz (von 20)"
  },
+ "sr_mod_req_resort_tech_tt": {
+  "en": "We have [GetTechnology('space_colonization').GetName]",
+  "de": "Wir haben [GetTechnology('space_colonization').GetName]"
+ },
  "sr_mod_req_spec_chosen_tt": {
   "en": "The colony's founding specialization is chosen",
   "de": "Die Gründungsspezialisierung der Kolonie ist gewählt"
@@ -25771,7 +26215,23 @@
   "en": "Our $building_space_resort$ levels, built and queued, are within our room: 10 levels in Earth orbit, and the room of each colony we hold",
   "de": "Unsere Stufen von $building_space_resort$, gebaut und eingereiht, liegen innerhalb unseres Platzes: 10 Stufen im Erdorbit und der Platz jeder Kolonie, die wir halten"
  },
+ "sr_resort_room_penalty": {
+  "en": "Resort Colony Room",
+  "de": "Platz der Ferienkolonie"
+ },
  "sr_resort_state_fine_art_bonus": {
+  "en": "Off-World Hotels",
+  "de": "Außerplanetare Hotels"
+ },
+ "sr_resort_state_fine_art_penalty": {
+  "en": "Off-World Hotels",
+  "de": "Außerplanetare Hotels"
+ },
+ "sr_resort_state_tourism_bonus": {
+  "en": "Off-World Hotels",
+  "de": "Außerplanetare Hotels"
+ },
+ "sr_resort_state_tourism_penalty": {
   "en": "Off-World Hotels",
   "de": "Außerplanetare Hotels"
  },
@@ -25828,20 +26288,20 @@
   "de": "[concept_sr_role_carrier]: Gewicht #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_carrier')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_carrier')|0]%#! des Bauverhältnisses."
  },
  "sr_sc_mix_step_rapid_tt": {
-  "en": "[concept_sr_role_rapid]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]#! now. One more, or from #v 3#! back to #v 0#!.\\n[concept_sr_space_command] shares each month's construction among the [concept_sr_ship_role]s by weight.",
-  "de": "[Concept('concept_sr_role_rapid','Schnelle Eingreifschiffe')]: Gewicht jetzt #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]#!. Eins mehr, oder von #v 3#! zurück auf #v 0#!.\\n[concept_sr_space_command] teilt die Bauleistung jedes Monats nach Gewicht auf die [Concept('concept_sr_ship_role','Schiffsrollen')] auf."
+  "en": "[concept_sr_role_rapid]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_rapid')|0]%#! of the build mix.",
+  "de": "[concept_sr_role_rapid]: Gewicht #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_rapid')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_rapid')|0]%#! des Bauverhältnisses."
  },
  "sr_sc_mix_step_siege_tt": {
-  "en": "[concept_sr_role_siege]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]#! now. One more, or from #v 3#! back to #v 0#!.\\n[concept_sr_space_command] shares each month's construction among the [concept_sr_ship_role]s by weight.",
-  "de": "[Concept('concept_sr_role_siege','Belagerungsschiffe')]: Gewicht jetzt #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]#!. Eins mehr, oder von #v 3#! zurück auf #v 0#!.\\n[concept_sr_space_command] teilt die Bauleistung jedes Monats nach Gewicht auf die [Concept('concept_sr_ship_role','Schiffsrollen')] auf."
+  "en": "[concept_sr_role_siege]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_siege')|0]%#! of the build mix.",
+  "de": "[concept_sr_role_siege]: Gewicht #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_siege')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_siege')|0]%#! des Bauverhältnisses."
  },
  "sr_sc_mix_step_tender_tt": {
-  "en": "[concept_sr_role_tender]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]#! now. One more, or from #v 3#! back to #v 0#!.\\n[concept_sr_space_command] shares each month's construction among the [concept_sr_ship_role]s by weight.",
-  "de": "[Concept('concept_sr_role_tender','Tender')]: Gewicht jetzt #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]#!. Eins mehr, oder von #v 3#! zurück auf #v 0#!.\\n[concept_sr_space_command] teilt die Bauleistung jedes Monats nach Gewicht auf die [Concept('concept_sr_ship_role','Schiffsrollen')] auf."
+  "en": "[concept_sr_role_tender]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_tender')|0]%#! of the build mix.",
+  "de": "[concept_sr_role_tender]: Gewicht #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_tender')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_tender')|0]%#! des Bauverhältnisses."
  },
  "sr_sc_mix_step_war_tt": {
-  "en": "[concept_sr_role_warship]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#! now. One more, or from #v 3#! back to #v 0#!.\\n[concept_sr_space_command] shares each month's construction among the [concept_sr_ship_role]s by weight.",
-  "de": "[Concept('concept_sr_role_warship','Kriegsschiffe')]: Gewicht jetzt #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!. Eins mehr, oder von #v 3#! zurück auf #v 0#!.\\n[concept_sr_space_command] teilt die Bauleistung jedes Monats nach Gewicht auf die [Concept('concept_sr_ship_role','Schiffsrollen')] auf."
+  "en": "[concept_sr_role_warship]s: weight #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_war')|0]%#! of the build mix.",
+  "de": "[concept_sr_role_warship]: Gewicht #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_war')|0]#!, #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_mix_pct_war')|0]%#! des Bauverhältnisses."
  },
  "sr_sc_mix_unused_tt": {
   "en": "The yards build Orders Only now, so the mix is not used until we choose Full.",
@@ -25895,13 +26355,29 @@
   "en": "Order more:\\n#v Click#!: +1\\n#v Shift+Click#!: +10\\n#v Ctrl+Click#!: +100\\nEach month's construction fills the orders first. An order costs nothing to place.",
   "de": "Mehr bestellen:\\n#v Klick#!: +1\\n#v Umschalt+Klick#!: +10\\n#v Strg+Klick#!: +100\\nDie Bauleistung jedes Monats erfüllt zuerst die Aufträge. Einen Auftrag zu erteilen kostet nichts."
  },
+ "sr_sc_order_rapid_tt": {
+  "en": "[concept_sr_role_rapid]s on order: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_rapid')|0]#!",
+  "de": "[concept_sr_role_rapid] in Auftrag: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_rapid')|0]#!"
+ },
  "sr_sc_order_restarts_tt": {
   "en": "The yards are idle, so this order starts them again as a resume does: the next month's construction builds nothing, and the month after builds.",
   "de": "Die Werften stehen still, daher startet dieser Auftrag sie wieder, wie es eine Wiederaufnahme tut: Die Bauleistung des nächsten Monats baut nichts, und der Monat danach baut."
  },
+ "sr_sc_order_siege_tt": {
+  "en": "[concept_sr_role_siege]s on order: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_siege')|0]#!",
+  "de": "[concept_sr_role_siege] in Auftrag: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_siege')|0]#!"
+ },
  "sr_sc_order_some_tt": {
   "en": "It has hulls on order",
   "de": "Er hat Rümpfe in Auftrag"
+ },
+ "sr_sc_order_tender_tt": {
+  "en": "[concept_sr_role_tender]s on order: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_tender')|0]#!",
+  "de": "[concept_sr_role_tender] in Auftrag: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_tender')|0]#!"
+ },
+ "sr_sc_order_war_tt": {
+  "en": "[concept_sr_role_warship]s on order: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_war')|0]#!",
+  "de": "[concept_sr_role_warship] in Auftrag: #v [GetPlayer.MakeScope.ScriptValue('sr_disp_sc_order_war')|0]#!"
  },
  "sr_sea_of_tranquility": {
   "en": "Sea of Tranquility Landing",
@@ -30755,6 +31231,10 @@
   "en": "#b Sex Balance, All Ages#!\\nMen per 100 women of every age, at the last count. Women live longer than men, so where many people are old there are fewer men in all than at working age. Only the balance at 20 to 59 counts toward the sex balance's effects.",
   "de": "#b Geschlechterverhältnis, alle Altersgruppen#!\\nMänner je 100 Frauen aller Altersstufen, bei der letzten Zählung. Frauen leben länger als Männer, daher gibt es dort, wo viele Menschen alt sind, insgesamt weniger Männer als im Erwerbsalter. Nur das Verhältnis bei 20 bis 59 zählt für die Effekte des Geschlechterverhältnisses."
  },
+ "te_demog_ov_sex_all_value": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_demog_country_sex_balance_all')|0]#! men per 100 women",
+  "de": "#v [Country.MakeScope.ScriptValue('te_demog_country_sex_balance_all')|0]#! Männer je 100 Frauen"
+ },
  "te_demog_ov_sex_fewer": {
   "en": "At this balance: children per woman ×#v [Country.MakeScope.ScriptValue('te_demog_sex_births_shown')|2]#!, women at work +#v [Country.MakeScope.ScriptValue('te_demog_sex_women_shown')|2]#!, feminist movement support +#v [Country.MakeScope.ScriptValue('te_demog_sex_feminist_shown')|%0]#!. Each state takes its own.",
   "de": "Bei diesem Verhältnis: Kinder je Frau ×#v [Country.MakeScope.ScriptValue('te_demog_sex_births_shown')|2]#!, Frauen in Arbeit +#v [Country.MakeScope.ScriptValue('te_demog_sex_women_shown')|2]#!, Unterstützung der Feministenbewegung +#v [Country.MakeScope.ScriptValue('te_demog_sex_feminist_shown')|%0]#!. Jeder Staat erhält seinen eigenen Wert."
@@ -31771,6 +32251,10 @@
   "en": "#v [State.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! points",
   "de": "#v [State.MakeScope.ScriptValue('te_demog_lx_gap_points')|0]#! Prozentpunkte"
  },
+ "te_demog_st_lx_gap_value_one": {
+  "en": "#v 1#! point",
+  "de": "#v 1#! Punkt"
+ },
  "te_demog_st_lx_l100_tt": {
   "en": "#b Living to 100#!\\nThe share of children born now who would live to 100 at this year's death rates in this state, women's and men's averaged: a figure that still reads when lives run to centuries, where life expectancy stops meaning much.[SelectLocalization( GetScriptedGui('te_demog_um_state_l100_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_um_l100_line', 'te_tt_blank' )]\\n In longevity care: #v [State.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#!\\n Not in care: #v [State.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!\\nThe difference is the Longevity Gap, under Longevity.",
   "de": "#b Hundert werden#!\\nDer Anteil der heute geborenen Kinder, die bei den Sterberaten dieses Jahres in diesem Staat 100 Jahre alt würden, Frauen und Männer gemittelt: eine Zahl, die noch aussagekräftig bleibt, wenn Leben Jahrhunderte währen und die Lebenserwartung kaum noch etwas bedeutet.[SelectLocalization( GetScriptedGui('te_demog_um_state_l100_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_um_l100_line', 'te_tt_blank' )]\\n In Langlebigkeitsmedizin: #v [State.MakeScope.Var('te_dg_lx_l100t').GetValue|%0]#!\\n Nicht in Behandlung: #v [State.MakeScope.Var('te_dg_lx_l100u').GetValue|%0]#!\\nDer Unterschied ist die Langlebigkeitslücke, siehe „Langlebigkeit“."
@@ -32147,6 +32631,10 @@
   "en": "#b Ages 45–49#!\\nMen: #v [State.MakeScope.Var('te_dg_bm9').GetValue|D]#!\\nWomen: #v [State.MakeScope.Var('te_dg_bf9').GetValue|D]#!",
   "de": "#b Alter 45–49#!\\nMänner: #v [State.MakeScope.Var('te_dg_bm9').GetValue|D]#!\\nFrauen: #v [State.MakeScope.Var('te_dg_bf9').GetValue|D]#!"
  },
+ "te_demog_st_sex_all_value": {
+  "en": "#v [State.MakeScope.ScriptValue('te_demog_state_sex_balance_all')|0]#! men per 100 women",
+  "de": "#v [State.MakeScope.ScriptValue('te_demog_state_sex_balance_all')|0]#! Männer je 100 Frauen"
+ },
  "te_demog_st_sex_fewer": {
   "en": "Here: children per woman ×#v [State.MakeScope.ScriptValue('te_demog_sex_births_shown')|2]#!, women at work +#v [State.MakeScope.ScriptValue('te_demog_sex_women_shown')|2]#!, feminist movement support +#v [State.MakeScope.ScriptValue('te_demog_sex_feminist_shown')|%0]#! (#b $te_demog_census_fewer_men$#!, in the Modifiers section).",
   "de": "Hier: Kinder je Frau ×#v [State.MakeScope.ScriptValue('te_demog_sex_births_shown')|2]#!, Frauen in Arbeit +#v [State.MakeScope.ScriptValue('te_demog_sex_women_shown')|2]#!, Unterstützung der Feministenbewegung +#v [State.MakeScope.ScriptValue('te_demog_sex_feminist_shown')|%0]#! (#b $te_demog_census_fewer_men$#!, im Abschnitt „Modifikatoren“)."
@@ -32164,8 +32652,8 @@
   "de": "#grey (letzte Volkszählung: [State.MakeScope.Var('te_dg_prev_sex_balance').GetValue|0])#!"
  },
  "te_demog_st_sex_tt": {
-  "en": "#b Sex Balance#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)2' ) ), 'te_demog_st_sex_prev', '' )]\\nMen per 100 women aged 20 to 59. War dead are nearly all young men, and work that draws migrants can draw more of one sex than the other.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_sex_effects'), '(CFixedPoint)0' ), 'te_demog_st_sex_effects', 'te_demog_sex_held' )]",
-  "de": "#b Geschlechterverhältnis#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)2' ) ), 'te_demog_st_sex_prev', '' )]\\nMänner je 100 Frauen im Alter von 20 bis 59 Jahren. Kriegstote sind fast alle junge Männer, und Arbeit, die Migranten anzieht, kann mehr von einem Geschlecht anziehen als vom anderen.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_sex_effects'), '(CFixedPoint)0' ), 'te_demog_st_sex_effects', 'te_demog_sex_held' )]"
+  "en": "#b Sex Balance, Ages 20 to 59#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)2' ) ), 'te_demog_st_sex_prev', '' )]\\nMen per 100 women aged 20 to 59. War dead are nearly all young men, and work that draws migrants can draw more of one sex than the other.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_sex_effects'), '(CFixedPoint)0' ), 'te_demog_st_sex_effects', 'te_demog_sex_held' )]",
+  "de": "#b Geschlechterverhältnis, Alter 20 bis 59#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_sex_balance'), '(CFixedPoint)2' ) ), 'te_demog_st_sex_prev', '' )]\\nMänner je 100 Frauen im Alter von 20 bis 59 Jahren. Kriegstote sind fast alle junge Männer, und Arbeit, die Migranten anzieht, kann mehr von einem Geschlecht anziehen als vom anderen.\\n\\n[SelectLocalization( GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_demog_k_sex_effects'), '(CFixedPoint)0' ), 'te_demog_st_sex_effects', 'te_demog_sex_held' )]"
  },
  "te_demog_st_sex_value": {
   "en": "#v [State.MakeScope.Var('te_dg_sex_balance').GetValue|0]#! men per 100 women",
@@ -33259,6 +33747,10 @@
   "en": "[State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|K] a week",
   "de": "[State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|K] pro Woche"
  },
+ "te_grid_bld_flow_small": {
+  "en": "[State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|0] a week",
+  "de": "[State.MakeScope.ScriptValue('te_grid_electricity_moved_disp')|0] pro Woche"
+ },
  "te_grid_bld_open_tab": {
   "en": "View Power Grids",
   "de": "Stromnetze ansehen"
@@ -33315,6 +33807,10 @@
   "en": "Delivered: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|K]#!",
   "de": "Geliefert: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|K]#!"
  },
+ "te_grid_card_delivered_small": {
+  "en": "Delivered: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|0]#!",
+  "de": "Geliefert: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|0]#!"
+ },
  "te_grid_card_delivered_tt": {
   "en": "#b Delivered#!\\nThe $electricity$ the grid's receiving stations deliver each week: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|1]#!. Another #v [State.MakeScope.ScriptValue('te_grid_rec_losses_disp')|1]#! is lost on the way.",
   "de": "#b Geliefert#!\\nDie $electricity$, die die empfangenden Stationen des Netzes jede Woche liefern: #v [State.MakeScope.ScriptValue('te_grid_rec_delivered_disp')|1]#!. Weitere #v [State.MakeScope.ScriptValue('te_grid_rec_losses_disp')|1]#! gehen unterwegs verloren."
@@ -33359,6 +33855,10 @@
   "en": "#b $te_grid_mix_renewable$#!\\nMade each week on this grid: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_renewable_disp')|1]#!\\nShare of the grid's generation: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_renewable_share_disp')|%0]#!",
   "de": "#b $te_grid_mix_renewable$#!\\nJede Woche in diesem Netz erzeugt: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_renewable_disp')|1]#!\\nAnteil an der Erzeugung des Netzes: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_renewable_share_disp')|%0]#!"
  },
+ "te_grid_card_mix_small": {
+  "en": "Grid generation: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_total_disp')|0]#! a week",
+  "de": "Netzerzeugung: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_total_disp')|0]#! pro Woche"
+ },
  "te_grid_card_mix_space_solar_tt": {
   "en": "#b $te_grid_mix_space_solar$#!\\nMade each week on this grid: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_space_solar_disp')|1]#!\\nShare of the grid's generation: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_space_solar_share_disp')|%0]#!",
   "de": "#b $te_grid_mix_space_solar$#!\\nJede Woche in diesem Netz erzeugt: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_space_solar_disp')|1]#!\\nAnteil an der Erzeugung des Netzes: #v [State.MakeScope.ScriptValue('te_grid_rec_mix_space_solar_share_disp')|%0]#!"
@@ -33382,6 +33882,10 @@
  "te_grid_card_sent": {
   "en": "Sent: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|K]#!",
   "de": "Gesendet: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|K]#!"
+ },
+ "te_grid_card_sent_small": {
+  "en": "Sent: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|0]#!",
+  "de": "Gesendet: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|0]#!"
  },
  "te_grid_card_sent_tt": {
   "en": "#b Sent#!\\nThe $electricity$ the grid's sending stations put on it each week: #v [State.MakeScope.ScriptValue('te_grid_rec_sent_disp')|1]#!.",
@@ -33575,6 +34079,10 @@
   "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|K]#! a week",
   "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|K]#! pro Woche"
  },
+ "te_grid_mix_total_small": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|0]#! a week",
+  "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|0]#! pro Woche"
+ },
  "te_grid_mix_total_tt": {
   "en": "#b National Generation#!\\nMade each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|1]#!\\nThe $electricity$ the country's power plants made each week, by kind of plant. States on a grid are counted when it is balanced on the 1st of the month, and the rest once a month. Power its stations delivered from a grid isn't counted.",
   "de": "#b Nationale Erzeugung#!\\nJede Woche erzeugt: #v [Country.MakeScope.ScriptValue('te_grid_tab_mix_total_disp')|1]#!\\nDas $electricity$, das die Kraftwerke des Landes jede Woche erzeugt haben, nach Kraftwerkstyp. Staaten in einem Netz werden gezählt, wenn es am 1. des Monats ausgeglichen wird, die übrigen einmal im Monat. Strom, den seine Stationen aus einem Netz bezogen haben, wird nicht gezählt."
@@ -33671,6 +34179,10 @@
   "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|K]#! a week",
   "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|K]#! pro Woche"
  },
+ "te_grid_ov_received_fig_small": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|0]#! a week",
+  "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|0]#! pro Woche"
+ },
  "te_grid_ov_received_tt": {
   "en": "#b Received#!\\nThe $electricity$ the country's receiving stations deliver each week, after losses: #v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|1]#!, at #v [Country.MakeScope.ScriptValue('te_grid_tab_receivers_disp')|0]#! stations.\\nA station receives where $electricity$ is expensive. It sells the power in its state and pays the grid what that power sells for, in $grid_power$.",
   "de": "#b Empfangen#!\\nDie $electricity$, die die empfangenden Stationen des Landes jede Woche nach Verlusten liefern: #v [Country.MakeScope.ScriptValue('te_grid_tab_received_disp')|1]#!, an #v [Country.MakeScope.ScriptValue('te_grid_tab_receivers_disp')|0]#! Stationen.\\nEine Station empfängt dort, wo $electricity$ teuer ist. Sie verkauft den Strom in ihrem Staat und zahlt dem Netz in $grid_power$, wofür dieser Strom verkauft wird."
@@ -33686,6 +34198,10 @@
  "te_grid_ov_sent_fig": {
   "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|K]#! a week",
   "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|K]#! pro Woche"
+ },
+ "te_grid_ov_sent_fig_small": {
+  "en": "#v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|0]#! a week",
+  "de": "#v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|0]#! pro Woche"
  },
  "te_grid_ov_sent_tt": {
   "en": "#b Sent#!\\nThe $electricity$ the country's sending stations put on their grids each week: #v [Country.MakeScope.ScriptValue('te_grid_tab_sent_disp')|1]#!, from #v [Country.MakeScope.ScriptValue('te_grid_tab_senders_disp')|0]#! stations.\\nA station sends where $electricity$ is cheap. It buys its state's spare power and is paid for it in $grid_power$ at the grid's price.",
@@ -34082,6 +34598,10 @@
  "te_jmap_cat_politics": {
   "en": "Politics",
   "de": "Politik"
+ },
+ "te_jmap_cat_population": {
+  "en": "Population",
+  "de": "Bevölkerung"
  },
  "te_jmap_ce_button_tt": {
   "en": "#b Show on the Map#!\\nOpens the Map Room on the colonies, each colored by its empire's colonial stability. The map shows while its page is open; the eye at the page's top left fades it so the whole map shows.",
@@ -34487,6 +35007,10 @@
   "en": "$te_jmap_color_text_own$ From teal at the low end through amber halfway to oxblood at the high.",
   "de": "$te_jmap_color_text_own$ Von Petrol am unteren Ende über Bernstein in der Mitte bis Ochsenblutrot am oberen."
  },
+ "te_jmap_pick_infrastructure": {
+  "en": "Infrastructure",
+  "de": "Infrastruktur"
+ },
  "te_jmap_pick_infrastructure_colors": {
   "en": "$te_jmap_color_text_own$ Orange where the state uses more than it has, cream at none, blue where it has room to spare.",
   "de": "$te_jmap_color_text_own$ Orange, wo der Staat mehr nutzt, als er hat, Creme bei null, Blau, wo er Spielraum übrig hat."
@@ -34586,6 +35110,10 @@
  "te_jmap_pick_pollution_colors": {
   "en": "$te_jmap_color_text_own$ From pale yellow at the low end to soot at the high. A region with none is pale.",
   "de": "$te_jmap_color_text_own$ Von blassem Gelb am unteren Ende bis Ruß am oberen. Eine Region ohne Verschmutzung ist blass."
+ },
+ "te_jmap_pick_population": {
+  "en": "Population",
+  "de": "Bevölkerung"
  },
  "te_jmap_pick_population_colors": {
   "en": "$te_jmap_color_text_own$ From pale lavender at the low end to deep violet at the high. A state with no people is pale.",
@@ -34710,6 +35238,10 @@
  "te_jmap_pick_war_dead_colors": {
   "en": "$te_jmap_color_text_own$ From pale rose at the low end to dark red at the high. A state that lost none is pale.",
   "de": "$te_jmap_color_text_own$ Von blassem Rosa am unteren Ende bis dunklem Rot am oberen. Ein Staat ohne Verluste ist blass."
+ },
+ "te_jmap_pick_wealth": {
+  "en": "Wealth",
+  "de": "Vermögen"
  },
  "te_jmap_pick_wealth_colors": {
   "en": "$te_jmap_color_text_own$ From cream at the low end to deep amber at the high.",
@@ -38130,6 +38662,14 @@
  "te_sp_tt_why_town": {
   "en": "Its largest city has about #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! people, under the #v [State.MakeScope.ScriptValue('te_state_picture_k_city')|K]#! of a city.",
   "de": "Seine größte Stadt hat etwa #v [State.MakeScope.ScriptValue('te_state_picture_hover_people')|K]#! Einwohner, weniger als die #v [State.MakeScope.ScriptValue('te_state_picture_k_city')|K]#! einer Stadt."
+ },
+ "te_spacers_class_caste": {
+  "en": "Space Forces",
+  "de": "Weltraumstreitkräfte"
+ },
+ "te_spacers_class_edo": {
+  "en": "Space Forces",
+  "de": "Weltraumstreitkräfte"
  },
  "te_state_climate_comfort_none": {
   "en": "#v None#!",

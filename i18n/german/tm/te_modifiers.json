@@ -199,6 +199,10 @@
   "en": "The least lenders will charge you for what your country is, however sound its finances become. Standing earned past this point buys nothing further, so lowering the floor is the only way to be priced any finer.",
   "de": "Das Mindeste, was Gläubiger Ihnen für das, was Ihr Land ist, berechnen — ganz gleich, wie solide seine Finanzen werden. Über diesen Punkt hinaus erworbenes Ansehen bringt nichts weiter, sodass nur eine Absenkung der Untergrenze zu besseren Konditionen führt."
  },
+ "country_cross_heritage_assimilation_add": {
+  "en": "Assimilation Across Heritages",
+  "de": "Assimilation über Kulturerben hinweg"
+ },
  "country_cross_heritage_assimilation_add_desc": {
   "en": "The share of their usual [concept_assimilation] rate at which pops join a [concept_culture] of another heritage group, 100% at most. It counts under the $setting_assimilation_cultures_hybrid$ and $setting_assimilation_cultures_none$ settings of the $rule_assimilation_cultures_rule$ game rule. Under $setting_assimilation_cultures_unrestricted$ every pop crosses at its full rate.",
   "de": "Der Anteil ihrer üblichen [concept_assimilation]-Rate, mit dem Pops einer [concept_culture] einer anderen Herkunftsgruppe beitreten, höchstens 100%. Er zählt bei den Einstellungen „$setting_assimilation_cultures_hybrid$“ und „$setting_assimilation_cultures_none$“ der Spielregel „$rule_assimilation_cultures_rule$“. Bei „$setting_assimilation_cultures_unrestricted$“ wechselt jeder Pop mit seiner vollen Rate."

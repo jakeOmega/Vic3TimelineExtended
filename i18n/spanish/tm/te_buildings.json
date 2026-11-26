@@ -2155,6 +2155,10 @@
   "en": "Resort Colony",
   "es": "Colonia turística"
  },
+ "building_space_resort_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_space_resort$ buildings",
+  "es": "Una bonificación o penalización a los insumos y a la producción de los edificios de $building_space_resort$"
+ },
  "building_spacex_starbase": {
   "en": "Starbase",
   "es": "Starbase"

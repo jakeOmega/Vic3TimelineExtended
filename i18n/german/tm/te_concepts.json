@@ -10683,6 +10683,54 @@
   "en": "The sites where our Extraplanetary Base levels work hold less $copper$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
   "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten weniger $copper$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
  },
+ "sr_ebase_mix_glass_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten mehr $glass$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_glass_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten weniger $glass$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_gold_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten mehr $gold$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_gold_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten weniger $gold$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_iron_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten mehr $iron$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_iron_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten weniger $iron$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_lead_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten mehr $lead$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_lead_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten weniger $lead$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_sulfur_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten mehr $sulfur$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_sulfur_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten weniger $sulfur$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_tech_metals_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten mehr $tech_metals$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
+ "sr_ebase_mix_tech_metals_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "de": "Die Standorte, an denen unsere Stufen des Außerplanetaren Stützpunkts arbeiten, enthalten weniger $tech_metals$ in ihrem Boden als die erdnahen Asteroiden. Das gilt zusätzlich zu $sr_ebase_room_bonus$, der die Güteklasse der Standorte trägt."
+ },
  "sr_ebase_room_bonus_desc": {
   "en": "Our $building_space_mine$ levels work at their sites' [concept_sr_base_grade], and the sites the Colonies section's Bases view puts them on are rich.",
   "de": "Unsere Stufen des Gebäudes $building_space_mine$ arbeiten mit der [concept_sr_base_grade] ihrer Standorte, und die Standorte, auf die die Ansicht „Stützpunkte“ im Abschnitt „Kolonien“ sie setzt, sind reich."
@@ -11106,6 +11154,10 @@
  "sr_resort_state_fine_art_penalty_desc": {
   "en": "Our $building_space_resort$ hotels are off-world, so the studios that lift this state's own $fine_art$ do not reach them.",
   "de": "Unsere Hotels der $building_space_resort$ liegen außerhalb der Erde, sodass die Studios, die $fine_art$ in diesem Staat heben, sie nicht erreichen."
+ },
+ "sr_resort_state_tourism_bonus_desc": {
+  "en": "Our $building_space_resort$ hotels are off-world, so what holds this state's own $tourism$ down does not reach them.",
+  "de": "Unsere Hotels der $building_space_resort$ liegen außerhalb der Erde, sodass das, was $tourism$ in diesem Staat niederhält, sie nicht erreicht."
  },
  "sr_resort_state_tourism_penalty_desc": {
   "en": "Our $building_space_resort$ hotels are off-world, so what lifts this state's own $tourism$ does not reach them.",
@@ -12680,6 +12732,14 @@
   "de": "Weltraumstreitkräfte"
  },
  "te_spacers_class_caste_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "de": "Die Menschen der Weltraumstreitkräfte-Basen, die die Flotten bemannen und als deren Marineinfanterie kämpfen."
+ },
+ "te_spacers_class_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "de": "Die Menschen der Weltraumstreitkräfte-Basen, die die Flotten bemannen und als deren Marineinfanterie kämpfen."
+ },
+ "te_spacers_class_edo_desc": {
   "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
   "de": "Die Menschen der Weltraumstreitkräfte-Basen, die die Flotten bemannen und als deren Marineinfanterie kämpfen."
  },

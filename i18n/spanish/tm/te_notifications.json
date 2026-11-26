@@ -15,6 +15,10 @@
   "en": "No [concept_sr_module]s Queued",
   "es": "Sin [Concept('concept_sr_module','módulos de colonia')] en cola"
  },
+ "alert_sr_module_stock_full_action": {
+  "en": "Journal Panel",
+  "es": "Panel del diario"
+ },
  "alert_sr_module_stock_full_desc": {
   "en": "Our module stock is full at #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! points and our [concept_sr_module] queue is empty, so the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points our module fabrication makes each month are lost.",
   "es": "Nuestro almacén de módulos está lleno, con #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! puntos, y nuestra cola de [concept_sr_module|l] está vacía, así que los #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! puntos que produce cada mes nuestra fabricación de módulos se pierden."

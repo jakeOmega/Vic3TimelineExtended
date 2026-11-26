@@ -10683,6 +10683,54 @@
   "en": "The sites where our Extraplanetary Base levels work hold less $copper$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
   "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno menos $copper$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
  },
+ "sr_ebase_mix_glass_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno más $glass$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_glass_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $glass$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno menos $glass$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_gold_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno más $gold$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_gold_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $gold$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno menos $gold$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_iron_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno más $iron$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_iron_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $iron$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno menos $iron$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_lead_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno más $lead$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_lead_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $lead$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno menos $lead$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_sulfur_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno más $sulfur$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_sulfur_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $sulfur$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno menos $sulfur$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_tech_metals_bonus_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold more $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno más $tech_metals$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
+ "sr_ebase_mix_tech_metals_penalty_desc": {
+  "en": "The sites where our Extraplanetary Base levels work hold less $tech_metals$ in their ground than the near-Earth asteroids do. This applies on top of $sr_ebase_room_bonus$, which carries the sites' grade.",
+  "es": "Los emplazamientos donde trabajan los niveles de nuestra Base extraplanetaria tienen en su terreno menos $tech_metals$ que los asteroides cercanos a la Tierra. Esto se aplica además de $sr_ebase_room_bonus$, que lleva la categoría de los emplazamientos."
+ },
  "sr_ebase_room_bonus_desc": {
   "en": "Our $building_space_mine$ levels work at their sites' [concept_sr_base_grade], and the sites the Colonies section's Bases view puts them on are rich.",
   "es": "Nuestros niveles de $building_space_mine$ trabajan con la [concept_sr_base_grade|l] de sus emplazamientos, y los emplazamientos en los que los pone la vista Bases de la sección Colonias son ricos."
@@ -11106,6 +11154,10 @@
  "sr_resort_state_fine_art_penalty_desc": {
   "en": "Our $building_space_resort$ hotels are off-world, so the studios that lift this state's own $fine_art$ do not reach them.",
   "es": "Nuestros hoteles de $building_space_resort$ son extraterrestres, así que los estudios que elevan el $fine_art$ propio de este estado no los alcanzan."
+ },
+ "sr_resort_state_tourism_bonus_desc": {
+  "en": "Our $building_space_resort$ hotels are off-world, so what holds this state's own $tourism$ down does not reach them.",
+  "es": "Nuestros hoteles de $building_space_resort$ son extraterrestres, así que lo que frena el $tourism$ propio de este estado no los alcanza."
  },
  "sr_resort_state_tourism_penalty_desc": {
   "en": "Our $building_space_resort$ hotels are off-world, so what lifts this state's own $tourism$ does not reach them.",
@@ -12680,6 +12732,14 @@
   "es": "Fuerzas Espaciales"
  },
  "te_spacers_class_caste_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "es": "La gente de las Bases de Fuerzas Espaciales, que dota las flotas y combate como sus infantes de marina."
+ },
+ "te_spacers_class_desc": {
+  "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
+  "es": "La gente de las Bases de Fuerzas Espaciales, que dota las flotas y combate como sus infantes de marina."
+ },
+ "te_spacers_class_edo_desc": {
   "en": "The people of the Space Forces Bases, who crew the fleets and fight as their marines.",
   "es": "La gente de las Bases de Fuerzas Espaciales, que dota las flotas y combate como sus infantes de marina."
  },

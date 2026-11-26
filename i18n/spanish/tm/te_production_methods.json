@@ -11635,6 +11635,10 @@
   "en": "Yards",
   "es": "Astilleros"
  },
+ "pmg_space_forces_base": {
+  "en": "Training",
+  "es": "Entrenamiento"
+ },
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",
   "es": "Retirada de basura espacial"

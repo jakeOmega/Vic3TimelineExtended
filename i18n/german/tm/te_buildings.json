@@ -2183,6 +2183,10 @@
   "en": "Resort Colony",
   "de": "Ferienkolonie"
  },
+ "building_space_resort_throughput_add_desc": {
+  "en": "A bonus or penalty to both input and output of $building_space_resort$ buildings",
+  "de": "Ein Bonus oder Malus auf Ein- und Ausgabe der $building_space_resort$-Gebäude"
+ },
  "building_spacex_starbase": {
   "en": "Starbase",
   "de": "Starbase"

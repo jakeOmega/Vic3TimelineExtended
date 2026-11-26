@@ -11643,6 +11643,10 @@
   "en": "Yards",
   "de": "Werften"
  },
+ "pmg_space_forces_base": {
+  "en": "Training",
+  "de": "Ausbildung"
+ },
  "pmg_space_program_debris_removal": {
   "en": "Debris Removal",
   "de": "Schrottbeseitigung"

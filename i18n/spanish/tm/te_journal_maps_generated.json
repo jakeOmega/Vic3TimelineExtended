@@ -11,6 +11,10 @@
   "en": "Color each state by its Academics, in people. Universities and a literate, urban people draw them. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_academics_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_academics_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_academics_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Académicos, en personas. Las universidades y una población alfabetizada y urbana los atraen. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_academics_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_academics_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_academics_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_academics_share": {
+  "en": "Academics",
+  "es": "Académicos"
+ },
  "te_jmap_pick_class_academics_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale pink at the low end to wine at the high.",
   "es": "$te_jmap_color_text_own$ De rosa pálido en el extremo bajo a burdeos en el alto."
@@ -31,6 +35,14 @@
   "en": "Color each state by its Aristocrats, in people. Landed estates and serfdom keep them many; land reform and industry thin them. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_aristocrats_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Aristócratas, en personas. Las propiedades terratenientes y la servidumbre los mantienen numerosos; la reforma agraria y la industria los reducen. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_aristocrats_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_aristocrats_share": {
+  "en": "Aristocrats",
+  "es": "Aristócratas"
+ },
+ "te_jmap_pick_class_aristocrats_share_colors": {
+  "en": "$te_jmap_color_text_own$ From pale blue at the low end to deep blue at the high.",
+  "es": "$te_jmap_color_text_own$ Del azul pálido en el extremo bajo al azul intenso en el alto."
+ },
  "te_jmap_pick_class_aristocrats_share_desc": {
   "en": "Color each state by its Aristocrats as a share of its people. Landed estates and serfdom keep them many; land reform and industry thin them. Counted once a year. Map Options' Classes row colors them by their people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_share_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_share_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_aristocrats_share_colors', 'te_jmap_color_in_force' )]",
   "es": "Colorea cada estado según sus Aristócratas como proporción de su población. Las propiedades terratenientes y la servidumbre los mantienen numerosos; la reforma agraria y la industria los reducen. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_share_lo')|%1]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_aristocrats_share_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_aristocrats_share_colors', 'te_jmap_color_in_force' )]"
@@ -46,6 +58,10 @@
  "te_jmap_pick_class_bureaucrats_count_desc": {
   "en": "Color each state by its Bureaucrats, in people. Government administration employs them, so capitals and well-run states hold the most. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_bureaucrats_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_bureaucrats_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_bureaucrats_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Burócratas, en personas. La administración del gobierno los emplea, así que las capitales y los estados bien gobernados tienen más. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_bureaucrats_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_bureaucrats_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_bureaucrats_count_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_class_bureaucrats_share": {
+  "en": "Bureaucrats",
+  "es": "Burócratas"
  },
  "te_jmap_pick_class_bureaucrats_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale sage at the low end to olive at the high.",
@@ -67,6 +83,10 @@
   "en": "Color each state by its Capitalists, in people. They gather where industry and finance do, so a few great cities hold most of them. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_capitalists_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_capitalists_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_capitalists_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Capitalistas, en personas. Se reúnen donde están la industria y las finanzas, así que unas pocas grandes ciudades concentran a la mayoría. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_capitalists_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_capitalists_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_capitalists_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_capitalists_share": {
+  "en": "Capitalists",
+  "es": "Capitalistas"
+ },
  "te_jmap_pick_class_capitalists_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale aqua at the low end to teal at the high.",
   "es": "$te_jmap_color_text_own$ De aguamarina pálido en el extremo bajo a verde azulado en el alto."
@@ -86,6 +106,10 @@
  "te_jmap_pick_class_clergymen_count_desc": {
   "en": "Color each state by its Clergymen, in people. A state church and devout people keep them many. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clergymen_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clergymen_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_clergymen_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Clérigos, en personas. Una iglesia estatal y una población devota los mantienen numerosos. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clergymen_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clergymen_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_clergymen_count_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_class_clergymen_share": {
+  "en": "Clergymen",
+  "es": "Clérigos"
  },
  "te_jmap_pick_class_clergymen_share_colors": {
   "en": "$te_jmap_color_text_own$ From cream at the low end to gold at the high.",
@@ -107,6 +131,10 @@
   "en": "Color each state by its Clerks, in people. Offices, shops, railways and services employ them, more as an economy grows. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clerks_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clerks_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_clerks_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Oficinistas, en personas. Las oficinas, los comercios, los ferrocarriles y los servicios los emplean, más cuanto más crece una economía. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clerks_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_clerks_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_clerks_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_clerks_share": {
+  "en": "Clerks",
+  "es": "Oficinistas"
+ },
  "te_jmap_pick_class_clerks_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale green at the low end to forest green at the high.",
   "es": "$te_jmap_color_text_own$ De verde pálido en el extremo bajo a verde bosque en el alto."
@@ -126,6 +154,10 @@
  "te_jmap_pick_class_engineers_count_desc": {
   "en": "Color each state by its Engineers, in people. Modern industry and its research employ them, so they follow the factories. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_engineers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_engineers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_engineers_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Ingenieros, en personas. La industria moderna y su investigación los emplean, así que siguen a las fábricas. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_engineers_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_engineers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_engineers_count_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_class_engineers_share": {
+  "en": "Engineers",
+  "es": "Ingenieros"
  },
  "te_jmap_pick_class_engineers_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale peach at the low end to burnt orange at the high.",
@@ -147,6 +179,10 @@
   "en": "Color each state by its Farmers, in people. Commercial farms and ranches keep them, where the land feeds a market rather than a household. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_farmers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_farmers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_farmers_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Agricultores, en personas. Las granjas y los ranchos comerciales los mantienen, allí donde la tierra alimenta a un mercado y no a un hogar. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_farmers_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_farmers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_farmers_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_farmers_share": {
+  "en": "Farmers",
+  "es": "Agricultores"
+ },
  "te_jmap_pick_class_farmers_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale sky blue at the low end to deep cerulean at the high.",
   "es": "$te_jmap_color_text_own$ De azul cielo pálido en el extremo bajo a cerúleo intenso en el alto."
@@ -166,6 +202,10 @@
  "te_jmap_pick_class_laborers_count_desc": {
   "en": "Color each state by its Laborers, in people. Mines, plantations, ports and the first factories employ them; machines and better methods thin them. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_laborers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_laborers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_laborers_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Obreros, en personas. Las minas, las plantaciones, los puertos y las primeras fábricas los emplean; las máquinas y los mejores métodos los reducen. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_laborers_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_laborers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_laborers_count_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_class_laborers_share": {
+  "en": "Laborers",
+  "es": "Obreros"
  },
  "te_jmap_pick_class_laborers_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale rose at the low end to brick red at the high.",
@@ -187,6 +227,10 @@
   "en": "Color each state by its Machinists, in people. Factories and mechanized industry employ them, more as the machines spread. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_machinists_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_machinists_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_machinists_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Operarios de máquinas, en personas. Las fábricas y la industria mecanizada los emplean, más cuanto más se extienden las máquinas. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_machinists_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_machinists_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_machinists_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_machinists_share": {
+  "en": "Machinists",
+  "es": "Operarios de máquinas"
+ },
  "te_jmap_pick_class_machinists_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale pink at the low end to raspberry at the high.",
   "es": "$te_jmap_color_text_own$ De rosa pálido en el extremo bajo a frambuesa en el alto."
@@ -206,6 +250,10 @@
  "te_jmap_pick_class_officers_count_desc": {
   "en": "Color each state by its Officers, in people. Barracks and naval bases employ them to lead the soldiers. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_officers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_officers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_officers_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Oficiales, en personas. Los cuarteles y las bases navales los emplean para dirigir a los soldados. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_officers_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_officers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_officers_count_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_class_officers_share": {
+  "en": "Officers",
+  "es": "Oficiales"
  },
  "te_jmap_pick_class_officers_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale straw at the low end to bronze at the high.",
@@ -227,6 +275,10 @@
   "en": "Color each state by its Peasants, in people. Subsistence farming keeps them, outside the market economy; work elsewhere draws them off the land. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_peasants_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_peasants_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_peasants_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Campesinos, en personas. La agricultura de subsistencia los mantiene, fuera de la economía de mercado; el trabajo en otros lugares los aparta de la tierra. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_peasants_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_peasants_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_peasants_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_peasants_share": {
+  "en": "Peasants",
+  "es": "Campesinos"
+ },
  "te_jmap_pick_class_peasants_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale blue at the low end to steel blue at the high.",
   "es": "$te_jmap_color_text_own$ De azul pálido en el extremo bajo a azul acero en el alto."
@@ -246,6 +298,10 @@
  "te_jmap_pick_class_shopkeepers_count_desc": {
   "en": "Color each state by its Shopkeepers, in people. Towns and trade keep them, selling what the farms and the factories make. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_shopkeepers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_shopkeepers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_shopkeepers_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Comerciantes, en personas. Las ciudades y el comercio los mantienen, vendiendo lo que producen las granjas y las fábricas. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_shopkeepers_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_shopkeepers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_shopkeepers_count_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_class_shopkeepers_share": {
+  "en": "Shopkeepers",
+  "es": "Comerciantes"
  },
  "te_jmap_pick_class_shopkeepers_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale mint at the low end to emerald at the high.",
@@ -267,6 +323,10 @@
   "en": "Color each state by its Slaves, in people. Only where the law allows slavery: plantations, mines and households hold them. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_slaves_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_slaves_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_slaves_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Esclavos, en personas. Solo donde la ley permite la esclavitud: las plantaciones, las minas y los hogares los tienen. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_slaves_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_slaves_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_slaves_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_slaves_share": {
+  "en": "Slaves",
+  "es": "Esclavos"
+ },
  "te_jmap_pick_class_slaves_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale sand at the low end to umber at the high.",
   "es": "$te_jmap_color_text_own$ De arena pálido en el extremo bajo a tierra de sombra en el alto."
@@ -287,6 +347,10 @@
   "en": "Color each state by its Soldiers, in people. Barracks and naval bases employ them; Armed Forces counts them with their Officers. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_soldiers_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Soldados, en personas. Los cuarteles y las bases navales los emplean; Fuerzas armadas los cuenta junto con sus Oficiales. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_soldiers_count_colors', 'te_jmap_color_in_force_none' )]"
  },
+ "te_jmap_pick_class_soldiers_share": {
+  "en": "Soldiers",
+  "es": "Soldados"
+ },
  "te_jmap_pick_class_soldiers_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale lilac at the low end to plum at the high.",
   "es": "$te_jmap_color_text_own$ De lila pálido en el extremo bajo a ciruela en el alto."
@@ -295,6 +359,10 @@
   "en": "Color each state by its Soldiers as a share of its people. Barracks and naval bases employ them; Armed Forces counts them with their Officers. Counted once a year. Map Options' Classes row colors them by their people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_share_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_share_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_soldiers_share_colors', 'te_jmap_color_in_force' )]",
   "es": "Colorea cada estado según sus Soldados como proporción de su población. Los cuarteles y las bases navales los emplean; Fuerzas armadas los cuenta junto con sus Oficiales. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_share_lo')|%1]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_soldiers_share_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_soldiers_share_colors', 'te_jmap_color_in_force' )]"
  },
+ "te_jmap_pick_class_spacers_count": {
+  "en": "Spacers",
+  "es": "Tripulantes espaciales"
+ },
  "te_jmap_pick_class_spacers_count_colors": {
   "en": "$te_jmap_color_text_own$ From pale periwinkle at the low end to indigo at the high. A state with none is pale.",
   "es": "$te_jmap_color_text_own$ De lavanda pálido en el extremo bajo a índigo en el alto. Un estado sin ninguno aparece pálido."
@@ -302,6 +370,10 @@
  "te_jmap_pick_class_spacers_count_desc": {
   "en": "Color each state by its Spacers, in people. Only Space Forces Bases employ them, to crew the fleets and fight as marines, so few states hold any. Counted once a year. Map Options' Classes row colors them by their share of the people instead.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_spacers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_spacers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_spacers_count_colors', 'te_jmap_color_in_force_none' )]",
   "es": "Colorea cada estado según sus Tripulantes espaciales, en personas. Solo las Bases de Fuerzas Espaciales los emplean, para dotar las flotas y combatir como infantes de marina, así que pocos estados tienen alguno. Se cuentan una vez al año. La fila Clases de las Opciones del mapa los colorea, en cambio, según su proporción de la población.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_spacers_lo')|K]#! a #v [GetPlayer.MakeScope.ScriptValue('te_jmap_class_spacers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_class_spacers_count_colors', 'te_jmap_color_in_force_none' )]"
+ },
+ "te_jmap_pick_class_spacers_share": {
+  "en": "Spacers",
+  "es": "Tripulantes espaciales"
  },
  "te_jmap_pick_class_spacers_share_colors": {
   "en": "$te_jmap_color_text_own$ From pale periwinkle at the low end to indigo at the high.",

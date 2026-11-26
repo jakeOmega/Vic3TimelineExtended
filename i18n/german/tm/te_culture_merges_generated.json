@@ -1404,8 +1404,8 @@
   "de": "Die Verschmelzung ist abgeschlossen: $cm_east_african$ ist in der gesamten Einflusssphäre die Nationalkultur. Kulturen, welche die Bedingungen später erfüllen, können sich noch anschließen."
  },
  "je_te_cm_east_african_status_gate": {
-  "en": "The shared standard language spread through the schools and broadcasts of independent states, not under foreign rule. The merge begins once we are not a subject of another country and the $law_public_schools$ law is in force.",
-  "de": "Die gemeinsame Standardsprache verbreitete sich durch die Schulen und Sendungen unabhängiger Staaten, nicht unter Fremdherrschaft. Die Verschmelzung beginnt, sobald wir nicht Klientelstaat eines anderen Landes sind und das Gesetz $law_public_schools$ in Kraft ist."
+  "en": "The shared standard language spread through the schools, whoever ran them, and the broadcasts of independent states, not under foreign rule. The merge begins once we are not a subject of another country, and once the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "de": "Die gemeinsame Standardsprache verbreitete sich durch die Schulen, wer auch immer sie betrieb, und die Sendungen unabhängiger Staaten, nicht unter Fremdherrschaft. Die Verschmelzung beginnt, sobald wir nicht Klientelstaat eines anderen Landes sind und das Gesetz $law_public_schools$ in Kraft ist oder unsere Alphabetisierung mindestens [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0] beträgt."
  },
  "je_te_cm_east_african_status_hold_nyamwezi": {
   "en": "$nyamwezi$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_east_african_nyamwezi').GetValue|%0] of them in their homeland, and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.",
@@ -1424,8 +1424,8 @@
   "de": "Die Verschmelzung ist für ihre Kernkulturen abgeschlossen, und $cm_east_african$ ist ihre Nationalkultur. Eine Kultur, die sich später angeschlossen hat, wandelt sich noch um: In ihrem Heimatland stellt $cm_east_african$ [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_east_african_lowest_dom_all')|%0] der Pops, und bei [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] wechselt jeder verbliebene Pop dieser Kultur. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
  },
  "je_te_cm_east_african_status_paused": {
-  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country, and the $law_public_schools$ law is in force.",
-  "de": "Die Verschmelzung pausiert: Keine Teilkultur schließt sich an oder wandelt sich um, bis das wieder zutrifft. Wir sind nicht Klientelstaat eines anderen Landes, und das Gesetz $law_public_schools$ ist in Kraft."
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. We are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "de": "Die Verschmelzung pausiert: Keine Teilkultur schließt sich an oder wandelt sich um, bis das wieder zutrifft. Wir sind nicht Klientelstaat eines anderen Landes, und das Gesetz $law_public_schools$ ist in Kraft oder unsere Alphabetisierung beträgt mindestens [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_east_african_status_running": {
   "en": "The merge is running. In the homeland of the least converted constituent culture, $cm_east_african$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_east_african_lowest_dom')|%0] of the pops; at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
@@ -1704,8 +1704,8 @@
   "de": "Die Verschmelzung ist abgeschlossen: $french$ ist in der gesamten Einflusssphäre die Nationalkultur. Kulturen, welche die Bedingungen später erfüllen, können sich noch anschließen."
  },
  "je_te_cm_french_status_gate": {
-  "en": "Spoken languages this far apart gave way to one only once schools taught the national standard in every village. The merge begins once the $law_public_schools$ law is in force.",
-  "de": "So weit auseinanderliegende gesprochene Sprachen wichen erst einer einzigen, als Schulen in jedem Dorf den nationalen Standard lehrten. Die Verschmelzung beginnt, sobald das Gesetz $law_public_schools$ in Kraft ist."
+  "en": "Spoken languages this far apart gave way to one only once schools taught the national standard in every village, whoever ran them. The merge begins once the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "de": "So weit auseinanderliegende gesprochene Sprachen wichen erst einer einzigen, als Schulen in jedem Dorf den nationalen Standard lehrten, wer auch immer sie betrieb. Die Verschmelzung beginnt, sobald das Gesetz $law_public_schools$ in Kraft ist oder unsere Alphabetisierung mindestens [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0] beträgt."
  },
  "je_te_cm_french_status_hold_french": {
   "en": "$french$ pops are out of reach: our sphere holds only [ROOT.GetCountry.MakeScope.Var('te_cm_held_french_french').GetValue|%0] of them in their homeland, and [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_hold_open')|%0] is needed.",
@@ -1720,8 +1720,8 @@
   "de": "Die Verschmelzung ist für ihre Kernkulturen abgeschlossen, und $french$ ist ihre Nationalkultur. Eine Kultur, die sich später angeschlossen hat, wandelt sich noch um: In ihrem Heimatland stellt $french$ [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_french_lowest_dom_all')|%0] der Pops, und bei [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] wechselt jeder verbliebene Pop dieser Kultur. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!."
  },
  "je_te_cm_french_status_paused": {
-  "en": "The merge is paused: no constituent culture joins or converts until this holds again. The $law_public_schools$ law is in force.",
-  "de": "Die Verschmelzung pausiert: Keine Teilkultur schließt sich an oder wandelt sich um, bis das wieder zutrifft. Das Gesetz $law_public_schools$ ist in Kraft."
+  "en": "The merge is paused: no constituent culture joins or converts until this holds again. The $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "de": "Die Verschmelzung pausiert: Keine Teilkultur schließt sich an oder wandelt sich um, bis das wieder zutrifft. Das Gesetz $law_public_schools$ ist in Kraft, oder unsere Alphabetisierung beträgt mindestens [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "je_te_cm_french_status_running": {
   "en": "The merge is running. In the homeland of the least converted constituent culture, $french$ holds [ROOT.GetCountry.MakeScope.ScriptValue('te_cmg_french_lowest_dom')|%0] of the pops; at [ROOT.GetCountry.MakeScope.ScriptValue('te_cm_switch_share')|%0] every remaining pop of that culture switches. #tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +[ROOT.GetCountry.MakeScope.ScriptValue('te_cm_speed_display')|%0]#!.",
@@ -4392,8 +4392,8 @@
   "de": "Die Pops der Kulturen $swahili$, $nyamwezi$ und $sukuma$ sind alle zu $cm_east_african$ gewechselt."
  },
  "te_cmg_east_african_gate_tt": {
-  "en": "We are not a subject of another country, and the $law_public_schools$ law is in force.",
-  "de": "Wir sind nicht Klientelstaat eines anderen Landes, und das Gesetz $law_public_schools$ ist in Kraft."
+  "en": "We are not a subject of another country, and the $law_public_schools$ law is in force or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "de": "Wir sind nicht Klientelstaat eines anderen Landes, und das Gesetz $law_public_schools$ ist in Kraft oder unsere Alphabetisierung beträgt mindestens [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "te_cmg_east_african_opt_kikuyu_accept": {
   "en": "#b $kikuyu$#! pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",
@@ -4844,8 +4844,8 @@
   "de": "Die Pops der Kultur $occitan$ sind alle zu $french$ gewechselt."
  },
  "te_cmg_french_gate_tt": {
-  "en": "The $law_public_schools$ law is in force.",
-  "de": "Das Gesetz $law_public_schools$ ist in Kraft."
+  "en": "The $law_public_schools$ law is in force, or our literacy is at least [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0].",
+  "de": "Das Gesetz $law_public_schools$ ist in Kraft, oder unsere Alphabetisierung beträgt mindestens [GetPlayer.MakeScope.ScriptValue('te_cm_gate_literacy')|%0]."
  },
  "te_cmg_french_opt_catalan_accept": {
   "en": "#b $catalan$#! pops are not fully accepted where many of them live: their acceptance in our sphere is below $full_acceptance$ ([ROOT.GetCountry.MakeScope.ScriptValue('te_cm_accept_open')|0]), and $second_rate_citizen$ is not enough.",

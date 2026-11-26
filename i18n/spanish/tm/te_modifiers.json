@@ -199,6 +199,10 @@
   "en": "The least lenders will charge you for what your country is, however sound its finances become. Standing earned past this point buys nothing further, so lowering the floor is the only way to be priced any finer.",
   "es": "Lo mínimo que te cobrarán los prestamistas por lo que es tu país, por muy sanas que lleguen a estar sus finanzas. La solvencia ganada más allá de este punto no aporta nada más, así que bajar el mínimo es la única forma de conseguir un precio más ajustado."
  },
+ "country_cross_heritage_assimilation_add": {
+  "en": "Assimilation Across Heritages",
+  "es": "Asimilación entre herencias"
+ },
  "country_cross_heritage_assimilation_add_desc": {
   "en": "The share of their usual [concept_assimilation] rate at which pops join a [concept_culture] of another heritage group, 100% at most. It counts under the $setting_assimilation_cultures_hybrid$ and $setting_assimilation_cultures_none$ settings of the $rule_assimilation_cultures_rule$ game rule. Under $setting_assimilation_cultures_unrestricted$ every pop crosses at its full rate.",
   "es": "La parte de su tasa de [concept_assimilation|l] habitual a la que los colectivos se unen a una [concept_culture|l] de otro grupo de herencia, como máximo 100%. Cuenta con los ajustes $setting_assimilation_cultures_hybrid$ y $setting_assimilation_cultures_none$ de la regla de juego $rule_assimilation_cultures_rule$. Con $setting_assimilation_cultures_unrestricted$, todo colectivo cruza a su tasa completa."

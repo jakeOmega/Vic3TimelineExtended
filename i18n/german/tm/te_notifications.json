@@ -15,6 +15,10 @@
   "en": "No [concept_sr_module]s Queued",
   "de": "Keine [Concept('concept_sr_module','Koloniemodule')] in der Warteschlange"
  },
+ "alert_sr_module_stock_full_action": {
+  "en": "Journal Panel",
+  "de": "Journalfenster"
+ },
  "alert_sr_module_stock_full_desc": {
   "en": "Our module stock is full at #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! points and our [concept_sr_module] queue is empty, so the #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! points our module fabrication makes each month are lost.",
   "de": "Unser Modulbestand ist bei #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_stock_cap')|0]#! Punkten voll und unsere [concept_sr_module]-Warteschlange ist leer, daher gehen die #v [GetPlayer.MakeScope.ScriptValue('sr_disp_fab_rate')|1]#! Punkte, die unsere Modulfertigung jeden Monat erzeugt, verloren."
