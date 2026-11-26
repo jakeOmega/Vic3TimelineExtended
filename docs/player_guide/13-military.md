@@ -303,8 +303,17 @@ neither has Combined Arms.
 |---|---|
 | Democratic | Census Suffrage, Universal Suffrage, Liquid Democracy, Wealth Voting or Landed Voting; Presidential Republic, Parliamentary Republic or Monarchy; neither Single-Party State nor Autocracy |
 | Communist | Council Republic, with Command Economy or Cooperative Ownership |
-| Fascist | Corporate State with Single-Party State, or Autocracy with Single-Party State and Ancestral, Cultural or Racialized Citizenship |
+| Fascist | Corporate State with Single-Party State; or Autocracy or Single-Party State with Ancestral Citizenship; or Single-Party State with Cultural Citizenship; or Autocracy with Cultural Citizenship (the last two with the conditions below). Never under a Council Republic |
 | Authoritarian | Autocracy, Single-Party State or Oligarchy, when not communist or fascist |
+
+Cultural Citizenship is a common starting law, so it needs a condition. In a Single-Party State
+it makes a country fascist unless a left-wing group runs the government, and under Autocracy
+only when a Fascist or Ethno-Nationalist group does. "Runs the government" means the strongest
+interest group in it, by its leader's ideology. An autocracy that keeps Cultural Citizenship
+under any other group is authoritarian, and so is one with Racialized Citizenship. These are the
+tests of the Fascist model in [Political models of the world](11-influence.md#political-models-of-the-world),
+applied to one-party states and autocracies only, so a democracy with Ancestral Citizenship stays
+democratic.
 
 ### Ideological tension
 

@@ -34,19 +34,51 @@ country_is_communist = {
 	}
 }
 
+# The fascist camp is the Fascist political model (ch_set_political_model,
+# cultural_hegemony_effects.txt) as it applies to a one-party state or an
+# autocracy, so a country is the same thing in the Cultural Hegemony panel and
+# in the world war. Every way in holds Single-Party State or Autocracy, and
+# country_is_democratic needs a voting law from the same lawgroup, so no
+# country is both:
+#   - Corporate State with Single-Party State.
+#   - Ancestral Citizenship (law_ethnostate) under either.
+#   - Cultural Citizenship (law_national_supremacy) in a Single-Party State the
+#     left does not run.
+#   - Cultural Citizenship under Autocracy only when fascists run the government
+#     (ch_government_led_by_fascists). It is a common starting law, so under
+#     Autocracy alone it names an absolute monarch or a caudillo as often as a
+#     fascist; Racialized Citizenship is not in the model at all.
+# A Council Republic is never fascist, as the model tests it first. Autocracy's
+# variants (Bakufu, Neo-Absolutism) count, hence has_law_or_variant.
+# Autocracy and Single-Party State share lawgroup_distribution_of_power: a
+# country holds one, so they are alternatives here, never both. An earlier
+# branch ANDed them, and no country could pass it.
 country_is_fascist = {
 	OR = {
 		AND = {
-			has_law = law_type:law_corporate_state
-			has_law = law_type:law_single_party_state
+			has_law_or_variant = law_type:law_corporate_state
+			has_law_or_variant = law_type:law_single_party_state
 		}
 		AND = {
-			has_law = law_type:law_autocracy
-			has_law = law_type:law_single_party_state
+			NOT = { has_law_or_variant = law_type:law_council_republic }
 			OR = {
-				has_law = law_type:law_ethnostate
-				has_law = law_type:law_national_supremacy
-				has_law = law_type:law_racial_segregation
+				AND = {
+					OR = {
+						has_law_or_variant = law_type:law_autocracy
+						has_law_or_variant = law_type:law_single_party_state
+					}
+					has_law_or_variant = law_type:law_ethnostate
+				}
+				AND = {
+					has_law_or_variant = law_type:law_single_party_state
+					has_law_or_variant = law_type:law_national_supremacy
+					NOT = { ch_government_led_by_the_left = yes }
+				}
+				AND = {
+					has_law_or_variant = law_type:law_autocracy
+					has_law_or_variant = law_type:law_national_supremacy
+					ch_government_led_by_fascists = yes
+				}
 			}
 		}
 	}
