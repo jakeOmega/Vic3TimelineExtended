@@ -72,6 +72,7 @@ SETTLERS_SENT = 4_096_000  # sr_disp_emig_last_sent: the step at or past the ope
 SETTLERS_LC_WEEK = 2_835_693  # sr_disp_emig_bill_week: that many settlers x 3 x 12 / 52
 OFFWORLD_PEOPLE = 9_999_999  # sr_disp_offworld_pop: the rooms' sum is 945,000 before modules; seven digits
 TRANSIT_CEILING = 999     # sr_disp_cf_slot_<n>_months: the longest transit is 611 (chemical, the Kuiper Belt)
+WEEKS_CEILING = 9999      # a fleet's legs in weeks (ticks, four a month): the Kuiper Belt's chemical one is about 2,440
 END_YEAR = 2136           # sr_disp_cf_slot_<n>_year: END_DATE's year
 FAB_RATE_CEILING = 99.9   # sr_disp_fab_rate: the best method gives 25 a month; technology could add more
 FAB_STOCK = 200           # sr_disp_fab_stock: sr_mod_fab_stock_cap
@@ -258,12 +259,14 @@ def _longest_figure(name):
         return FUNDING_CEILING
     if re.fullmatch(r"sr_disp_rival_(lo|hi|est)_\w+|sr_disp_progress_frac_\w+", name):
         return 1.0  # a share of the goal, clamped to 0..1: "100%"
-    if re.fullmatch(r"sr_disp_cf_slot_\d_months|sr_disp_fl_\d_months_left|sr_disp_earth_(?:hostile|alert)_months", name):
+    if re.fullmatch(r"sr_disp_cf_slot_\d_months", name):
         return TRANSIT_CEILING
+    if re.fullmatch(r"sr_disp_fl_\d_weeks_left|sr_disp_earth_(?:hostile|alert)_weeks", name):
+        return WEEKS_CEILING
     if re.fullmatch(r"sr_window_wait_months_\w+", name):
         return WINDOW_WAIT
-    if re.fullmatch(r"sr_disp_fl_\d_leg_months", name):  # the Fleets window's leg line
-        return TRANSIT_CEILING
+    if re.fullmatch(r"sr_disp_fl_\d_leg_weeks", name):  # the Fleets window's leg line
+        return WEEKS_CEILING
     if re.fullmatch(r"sr_disp_fl_\d_leg_dv", name):  # gen_launch_windows.LEG_DV_CAP
         return LEG_DV_CEILING
     if re.fullmatch(r"sr_transit_months_\w+", name):
@@ -730,7 +733,7 @@ CELLS = {
        for col in ("where", "strength", "dv", "supply")},
     **{f"the destination popup's {col} column head (te_sr_dest_header_row)": (
         ("te_sr_dest_header_row", f'text = "je_space_race_widget_dp_col_{col}"'), f"je_space_race_widget_dp_col_{col}")
-       for col in ("where", "months", "dv", "window", "ours", "enemy", "inbound")},
+       for col in ("where", "weeks", "dv", "window", "ours", "enemy", "inbound")},
     "a destination's window, open (te_sr_dest_row)": (
         ("te_sr_dest_row", 'text = "je_space_race_widget_win_open"'),
         r"je_space_race_widget_win_open"),
@@ -1052,9 +1055,9 @@ class FigureBudgetTest(unittest.TestCase):
     # (gen_launch_windows.LEG_DV_CAP, 9999), our worlds there (six at Jupiter
     # and at Earth) and the enemy's strength there and on its way.
     DEST_FLEET = {"dp_strength": "9999/9999", "dp_dv": "5000.0", "dp_supply": "36"}
-    DEST = {"dr_months": "999", "dr_dv_covered": "9999.0", "dr_dv_short": "9999.0", "dr_worlds": "6",
+    DEST = {"dr_weeks": "9999", "dr_dv_covered": "9999.0", "dr_dv_short": "9999.0", "dr_worlds": "6",
             "dr_enemy": "99999", "dr_inbound": "99999"}
-    LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}
+    LOCATION = {"loc_ours": "99999", "loc_others": "99999", "loc_inbound_ours": "9·999"}  # weeks held to 999 (sr_disp_loc_inbound_weeks_<loc>)
     # The Fleets window (the owner, 2026-11-25): a slot's number and strength in
     # its list; on its page a role now of full, its fire to a tenth and, in the
     # drive's tile, a refit's months.

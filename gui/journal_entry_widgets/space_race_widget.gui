@@ -8108,8 +8108,8 @@ types space_race_widget_types
 			align = left|nobaseline
 			using = te_sr_fontsize_row
 			elide = right
-			text = "je_space_race_widget_dp_col_months"
-			tooltip = "je_space_race_widget_dp_col_months_tt"
+			text = "je_space_race_widget_dp_col_weeks"
+			tooltip = "je_space_race_widget_dp_col_weeks_tt"
 		}
 		textbox = {
 			size = { 60 20 }
@@ -8153,8 +8153,8 @@ types space_race_widget_types
 		}
 	}
 
-	### One location in a fleet's destination popup: its name, the leg's months
-	### and delta-v at the fleet's pace (red when the fleet carries less), from
+	### One location in a fleet's destination popup: its name, the leg's weeks
+	### (ticks of the fleets' clock) and delta-v at the fleet's pace (red when the fleet carries less), from
 	### Earth the launch window toward it (Next Windows' "Open now" and "In N
 	### months"; blank for other legs: a closed window only raises the delta-v,
 	### UI pass design § 4; and blank for a fleet at a torch or antimatter pace
@@ -8197,7 +8197,7 @@ types space_race_widget_types
 				align = left|nobaseline
 				using = te_sr_fontsize_row
 				elide = right
-				block "dr_months" {}
+				block "dr_weeks" {}
 			}
 		}
 		widget = {

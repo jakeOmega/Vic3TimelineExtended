@@ -9,6 +9,31 @@
 # sr_fleet_display_values.txt. First guesses, to tune in play (design § 20).
 # ============================================================================
 
+# ---- The fleets' clock (2026-11-25 design § 1.2) ------------------------------------
+# Fleets move on four ticks a month: the 1st (the global monthly step), the
+# 8th, 15th and 22nd (space_race_events.120-.122, queued from the 1st). A
+# tick's index is te_history_month_index x 4 + its quarter (0 to 3), kept in
+# global_var:sr_fl_tick by each tick (sr_fl_tick_set). The month counter is
+# the floor: read on a 1st before its tick runs, or if a month's ticks stopped,
+# the index is still the month's quarter 0. Every departure, landing and
+# weeks-left reads this. Any scope.
+# docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md
+sr_fl_tick_now = {
+	value = te_history_month_index
+	multiply = 4
+	if = {
+		limit = {
+			has_global_variable = sr_fl_tick
+			global_var:sr_fl_tick > { value = te_history_month_index multiply = 4 }
+		}
+		value = global_var:sr_fl_tick
+	}
+}
+# A tick index is over 88,000 from 1836 (1836 x 12 x 4) and a month index
+# under 30,000 to the game's end: below this, a fleet's _arrive or _depart is
+# an old save's month (sr_fl_ticks_migrate_once).
+sr_fl_tick_floor = { value = 50000 }
+
 # ---- Drives and propellant (design § 2) -------------------------------------------
 # A fleet's propellant capacity in km/s by the drive it flies on (its own,
 # sr_fl_<n>_drive; one ahead for rapid response hulls alone), before its
@@ -304,11 +329,15 @@ sr_free_seized_autonomy = { value = 60 }
 sr_interdiction_infamy = { value = 5 }
 sr_interdiction_dossier = { value = 10 }
 
-# ---- The AI's offence (design § 14, 6c) --------------------------------------------------------
-# A docked fleet attacks a location within this many months' leg, when its
+# ---- The AI's defence and offence (design § 14, 6b-6c) ---------------------------------------------
+# Legs in quarters, ticks of the fleets' clock (four a month). The defence
+# sends a fleet that reaches within six months, or before the first hostile
+# landing (sr_fl_<n>_ai_reaches_<loc>).
+sr_fl_ai_reach_quarters = { value = 24 }
+# A docked fleet attacks a location within twelve months' leg, when its
 # strength is this many times the enemy's force there (its fleets, and its
 # worlds' Defences and hulls).
-sr_fl_ai_attack_months = { value = 12 }
+sr_fl_ai_attack_quarters = { value = 48 }
 sr_fl_ai_attack_margin = { value = 1.5 }
 
 # ---- War support (design § 10) -------------------------------------------------------------

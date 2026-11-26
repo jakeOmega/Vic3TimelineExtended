@@ -9,7 +9,9 @@ offence; no interdiction at Earth). Full Colonies only.
 
 A country keeps up to ``SLOTS`` fleets, all country variables (a revolution's
 winner inherits them): ``sr_fl_<n>_loc`` (a location's code; absent while in
-transit or empty), ``_dest``, ``_depart`` and ``_arrive`` (in transit), the
+transit or empty), ``_dest``, ``_depart``, ``_arrive`` and ``_leg_quarters`` (in
+transit: ticks of the fleets' clock, four a month, ``sr_fl_tick_now``; the
+2026-11-25 design, docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md), the
 strength of each role now and at full (``sr_fl_<n>_<role>``,
 ``sr_fl_<n>_<role>_full``), ``_dv`` (propellant, km/s), ``_supply`` (months),
 ``_marines`` (battalions), ``_drive`` and ``_refit_until``, and from 6b
@@ -113,19 +115,24 @@ ORDER_CLEAR = 7
 ORDER_HANDLERS = ("ondefault", "onshift", "onctrl")
 DRIVES = tuple(d.key for d in glw.DRIVES)
 # A fleet's pace: its drive, or one ahead for rapid response hulls alone; 4 is
-# antimatter's rapid response, at three quarters of antimatter's months.
+# antimatter's rapid response, at three quarters of antimatter's quarters.
 PACE_LEGS = {0: "chemical", 1: "fusion", 2: "torch", 3: "antimatter", 4: "rapid_antimatter"}
 PACE_CAPACITY = {0: "chemical", 1: "fusion", 2: "torch", 3: "antimatter", 4: "antimatter"}
 POSTURES = {1: "station", 2: "standoff", 3: "closein", 4: "interdict"}
 
 # Every variable of a slot, cleared together (sr_fl_clear_at).
-SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_months", "dv", "supply", "marines", "drive",
+SLOT_VARS = ("loc", "dest", "depart", "arrive", "leg_quarters", "dv", "supply", "marines", "drive",
              "refit_until", "posture", "target", "destroy", "charged", "icpt")
 
 # A slot's variable lists, cleared with it, and on each new leg and landing
 # (sr_fl_dispatch, sr_fl_arrive_at): the players already told of the leg, by
 # volume (the Earth alert, UI pass design § 9).
 SLOT_LISTS = ("warned_quiet", "warned_loud")
+
+# The ceiling an earliest-landing value starts from before each leg lowers it
+# (max =): above the last tick of any game (2136 x 48 + 47 = 102,575), where
+# 99,999 was not (review of #2068: ticks pass it in November 2083).
+TICK_CEILING = 999999
 
 # The per-slot helpers a dispatcher reaches as sr_fl_<do>_at = { N = <n> }
 # (sr_fl_each_slot, sr_fl_by_op, sr_fl_by_local). Each names $N$, so every one
@@ -135,7 +142,7 @@ SLOT_ACTIONS = ("clear", "month", "arrive", "note", "new_at_earth", "take_marine
                 "gather", "apply_losses", "toggle_destroy", "ai_recall", "debug_drive",
                 "ai_assault", "debug_icpt", "icpt_repoint", "reserve_in", "set_pick", "set_posture", "set_target",
                 "xfer_open", "xfer_step", "transfer", "land_pick", "embark_pick",
-                "ld_open_land", "ld_open_embark", "ld_step")
+                "ld_open_land", "ld_open_embark", "ld_step", "migrate_ticks")
 # The combat record's per-power variables (sr_fleet_combat_effects.txt), and
 # per world closing in; kf (6d) is the ground-to-orbit batteries' kinetic fire.
 CB_VARS = ("present", "s1", "s2", "s3", "f1", "f2", "f3", "e1", "e2", "e3", "hs", "r1", "r2", "r3",
@@ -270,9 +277,10 @@ def render_slot_values(n: int) -> list[str]:
         for pace in (1, 2, 3, 4):
             out.append(f"\tif = {{ limit = {{ {var(n, 'pace')} >= {pace} }} value = sr_leg_dv_{PACE_LEGS[pace]}_{b.key}_earth }}")
         out.append("}")
-    # The legs from where it is to every location, at its pace.
+    # The legs from where it is to every location, at its pace: quarters (ticks
+    # of the fleets' clock) and delta-v.
     for b in LOCATIONS:
-        for kind in ("months", "dv"):
+        for kind in ("quarters", "dv"):
             out += [f"{var(n, f'leg_{kind}_{b.key}')} = {{", "\tvalue = 0",
                     "\tif = {", f"\t\tlimit = {{ has_variable = {var(n, 'loc')} }}"]
             first = True
@@ -295,7 +303,7 @@ def _bound(n: int, code: int) -> str:
 
 def _hostile_inbound(lc: glw.Location) -> list[str]:
     """The hostile fleets in flight to a location, for the country reading it:
-    their strength, and the earliest landing month (each leg caps the value
+    their strength, and the earliest landing tick (each leg caps the value
     with max =, from a ceiling only set when some leg exists)."""
     count = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} add = 1 }}" for n in range(1, SLOTS + 1)]
     each = [f"\t\t\tif = {{ limit = {{ {_bound(n, lc.code)} }} add = sr_fl_{n}_strength }}" for n in range(1, SLOTS + 1)]
@@ -306,7 +314,7 @@ def _hostile_inbound(lc: glw.Location) -> list[str]:
     return [f"sr_loc_hostile_inbound_count_{lc.key} = {{", "\tvalue = 0", *listed, *count, "\t\t}", "\t}", "}",
             f"sr_loc_hostile_inbound_strength_{lc.key} = {{", "\tvalue = 0", *listed, *each, "\t\t}", "\t}", "}",
             f"sr_loc_hostile_inbound_first_{lc.key} = {{", "\tvalue = 0",
-            "\tif = {", f"\t\tlimit = {{ sr_loc_hostile_inbound_count_{lc.key} > 0 }}", "\t\tvalue = 99999",
+            "\tif = {", f"\t\tlimit = {{ sr_loc_hostile_inbound_count_{lc.key} > 0 }}", f"\t\tvalue = {TICK_CEILING}",
             *head, *first, "\t\t}", "\t}", "}"]
 
 
@@ -323,7 +331,7 @@ def render_values() -> str:
            "#   sr_fl_<n>_dv_capacity, _endurance           propellant (km/s) and supply (months) full",
            "#   sr_fl_<n>_marine_capacity                   battalions its carriers hold",
            "#   sr_fl_<n>_fire_fleets, _fire_defences       its fire, before quality",
-           "#   sr_fl_<n>_leg_months_<loc>, _leg_dv_<loc>   the leg from where it is, at its pace",
+           "#   sr_fl_<n>_leg_quarters_<loc>, _leg_dv_<loc> the leg from where it is, at its pace (quarters: ticks)",
            ""]
     for n in range(1, SLOTS + 1):
         out += render_slot_values(n) + [""]
@@ -432,7 +440,7 @@ def render_values() -> str:
             "", "# ===== Per location, country scope: hostile fleets on their way (UI pass design § 9) =====",
             "#   sr_loc_hostile_inbound_count_<loc>     the fleets in flight there of countries at war with us",
             "#   sr_loc_hostile_inbound_strength_<loc>  their strength",
-            "#   sr_loc_hostile_inbound_first_<loc>     the earliest of their landing months, 0 with none",
+            "#   sr_loc_hostile_inbound_first_<loc>     the earliest of their landing ticks, 0 with none",
             *[line for lc in LOCATIONS for line in _hostile_inbound(lc)],
             *[line for lc in LOCATIONS[1:] for line in
               [f"sr_loc_ai_enemy_force_{lc.key} = {{", f"\tvalue = sr_loc_ai_enemy_fleets_{lc.key}",
@@ -661,13 +669,13 @@ def render_slot_triggers(n: int) -> list[str]:
             + " }",
             "}"]
     for lc in LOCATIONS[1:]:
-        out += [f"# It reaches {lc.name} within six months or before the first fleet bound there, and can",
-                "# come home again or dock there.",
+        out += [f"# It reaches {lc.name} within six months (sr_fl_ai_reach_quarters) or before the first",
+                "# fleet bound there, and can come home again or dock there.",
                 f"{var(n, f'ai_reaches_{lc.key}')} = {{",
                 "\tOR = {",
-                f"\t\t{var(n, f'leg_months_{lc.key}')} <= 6",
+                f"\t\t{var(n, f'leg_quarters_{lc.key}')} <= sr_fl_ai_reach_quarters",
                 f"\t\tAND = {{ has_global_variable = sr_loc_inbound_first_{lc.key} "
-                f"global_var:sr_loc_inbound_first_{lc.key} >= {{ value = te_history_month_index add = {var(n, f'leg_months_{lc.key}')} }} }}",
+                f"global_var:sr_loc_inbound_first_{lc.key} >= {{ value = sr_fl_tick_now add = {var(n, f'leg_quarters_{lc.key}')} }} }}",
                 "\t}",
                 "\tOR = {",
                 f"\t\tsr_loc_port_{lc.key} = yes",
@@ -675,13 +683,13 @@ def render_slot_triggers(n: int) -> list[str]:
                 "\t}",
                 "}"]
     for lc in LOCATIONS[1:]:
-        out += [f"# 6c: it may attack {lc.name}: docked, within sr_fl_ai_attack_months' leg, able to",
+        out += [f"# 6c: it may attack {lc.name}: docked, within sr_fl_ai_attack_quarters' leg, able to",
                 "# come home again or dock there, and outmatching the enemy's force there",
                 "# (its fleets and its worlds' Defences) sr_fl_ai_attack_margin times over.",
                 f"{var(n, f'ai_attacks_{lc.key}')} = {{",
                 f"\t{var(n, 'docked')} = yes",
                 f"\t{var(n, f'may_depart_{lc.key}')} = yes",
-                f"\t{var(n, f'leg_months_{lc.key}')} <= sr_fl_ai_attack_months",
+                f"\t{var(n, f'leg_quarters_{lc.key}')} <= sr_fl_ai_attack_quarters",
                 "\tOR = {",
                 f"\t\tsr_loc_port_{lc.key} = yes",
                 f"\t\t{var(n, 'dv_value')} >= {{ value = {var(n, f'leg_dv_{lc.key}')} add = {var(n, f'return_dv_{lc.key}')} }}",
@@ -1955,7 +1963,7 @@ def render_debug() -> list[str]:
         out += ["\tif = {",
                 f"\t\tlimit = {{ {var(n, 'exists')} = yes }}",
                 f"\t\tdebug_log = \"TE_SR_FLEET slot {n}: location [THIS.ScriptValue('{var(n, 'loc_value')}')|0] "
-                f"(0 in transit, bound for [THIS.Var('{var(n, 'dest')}').GetValue|0], landing at month "
+                f"(0 in transit, bound for [THIS.Var('{var(n, 'dest')}').GetValue|0], landing at tick "
                 f"[THIS.Var('{var(n, 'arrive')}').GetValue|0]) "
                 f"strength [THIS.ScriptValue('{var(n, 'strength')}')|1] of [THIS.ScriptValue('{var(n, 'strength_full')}')|1] "
                 f"drive [THIS.ScriptValue('{var(n, 'drive_value')}')|0] propellant [THIS.ScriptValue('{var(n, 'dv_value')}')|1] "
@@ -1974,25 +1982,27 @@ def render_debug() -> list[str]:
                 "\tif = {",
                 f"\t\tlimit = {{ has_global_variable = sr_loc_inbound_{k} }}",
                 f"\t\tdebug_log = \"TE_SR_FLEET location {lc.code} ({k}): [GetGlobalVariable('sr_loc_inbound_{k}').GetValue|0] inbound, "
-                f"the first at month [GetGlobalVariable('sr_loc_inbound_first_{k}').GetValue|0]\"",
+                f"the first at tick [GetGlobalVariable('sr_loc_inbound_first_{k}').GetValue|0]\"",
                 "\t}"]
     out += ["}",
             "# Every fleet of ours in transit lands now.",
             "sr_fl_debug_land_at = {",
-            "\tif = { limit = { has_variable = sr_fl_$N$_arrive } set_variable = { name = sr_fl_$N$_arrive value = te_history_month_index } }",
+            "\tif = { limit = { has_variable = sr_fl_$N$_arrive } set_variable = { name = sr_fl_$N$_arrive value = sr_fl_tick_now } }",
             "\tsr_fl_arrive_at = { N = $N$ }",
             "}"]
     return out
 
 
 def render_earth_alert() -> list[str]:
-    """The Earth alert (UI pass design § 9), for a player in its country pulse:
+    """The Earth alert (UI pass design § 9), for a player, on each of the fleets'
+    ticks (sr_fl_tick_alerts; it ran on the country pulse until a leg could be
+    shorter than a month, review of #2068):
     every slot of a power at war with it, in flight to Earth, is told once per
     leg at each volume. Loud (space_race_events.111) while a landing would tip
     the balance at Earth (sr_earth_alert_loud), in place of the quiet notice;
-    quiet (a feed notice) otherwise. One popup a month, given first to a loud
+    quiet (a feed notice) otherwise. One popup a tick, given first to a loud
     fleet nobody has been told of (the first pass), else to the first loud one;
-    the month's other loud fleets are marked told, and each not yet told
+    the tick's other loud fleets are marked told, and each not yet told
     quietly gets its feed notice, so every hostile owner is named somewhere.
     The players told are on the moving fleet's lists (SLOT_LISTS), cleared with
     each new leg and landing, so a war declared mid-flight is heard the next
@@ -2020,15 +2030,15 @@ def render_earth_alert() -> list[str]:
             "\t\tevery_in_global_list = {",
             "\t\t\tvariable = sr_fleet_powers",
             "\t\t\tlimit = { is_country_alive = yes has_war_with = scope:sr_alert_viewer }"]
-    out = ["# ===== The Earth alert (UI pass design § 9), a player's country pulse =====",
+    out = ["# ===== The Earth alert (UI pass design § 9), a player's, each tick (sr_fl_tick_alerts) =====",
            "# Each hostile fleet in flight to Earth, once per leg: loud (.111) while a",
            "# landing would tip the balance at Earth (sr_earth_alert_loud, read once: it",
            "# reads the location records and the fleets' strengths, which nothing here",
            "# changes), else quiet (sr_earth_hostile_notice). The players told sit on the",
-           "# fleet's sr_fl_<n>_warned_<volume> lists. One popup a month, naming its",
+           "# fleet's sr_fl_<n>_warned_<volume> lists. One popup a tick, naming its",
            "# fleet's owner (sr_earth_alert_by) and landing (sr_earth_alert_arrive): first",
            "# pass, a loud fleet nobody was told of; second, the first loud one left. The",
-           "# month's other loud fleets are marked told, and each not yet told quietly",
+           "# tick's other loud fleets are marked told, and each not yet told quietly",
            "# gets its feed notice.",
            "sr_earth_alert_step = {",
            "\tsave_scope_as = sr_alert_viewer",
@@ -2162,7 +2172,7 @@ def render_overview_list() -> list[str]:
             *[f"\t\t\t\t\t{t}" for t in threatened],
             "\t\t\t\t}", "\t\t\t}", "\t\t}",
             "\t\tcustom_tooltip_no_bullet = je_space_race_widget_ovc_def_line_calm", "\t}",
-            "\tif = {", "\t\tlimit = { has_variable = sr_fl_alert_arrive var:sr_fl_alert_arrive >= te_history_month_index }",
+            "\tif = {", "\t\tlimit = { has_variable = sr_fl_alert_arrive var:sr_fl_alert_arrive >= sr_fl_tick_now }",
             "\t\tcustom_tooltip_no_bullet = je_space_race_widget_ovc_def_line_inbound", "\t}", "}"]
     return out
 
@@ -2173,9 +2183,10 @@ def render_display() -> str:
            "# gen_space_fleets. Read by the GUI only. The viewer's scope.",
            "# Per slot n:",
            "#   sr_disp_fl_<n>              0 empty, 1 at a location, 2 in transit",
-           "#   sr_disp_fl_<n>_months_left  months until it lands",
+           "#   sr_disp_fl_<n>_weeks_left   weeks until it lands (ticks of the fleets' clock, four a",
+           "#                               month: the panel calls a tick a week)",
            "#   sr_disp_fl_<n>_refit_left   months of its refit left",
-           "#   sr_disp_fl_<n>_leg_months, _leg_dv  the leg to its picked destination",
+           "#   sr_disp_fl_<n>_leg_weeks, _leg_dv  the leg to its picked destination",
            "#   sr_disp_fl_<n>_place        the code of the location it is at, or is bound for (the card's world icon)",
            "#   sr_disp_fl_<n>_strength_frac, _dv_frac, _supply_frac, _marines_frac  the card's bars:",
            "#                               each reading as a share of its full, 0 to 1",
@@ -2204,9 +2215,9 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ has_variable = {var(n, 'loc')} }} value = 1 }}",
                 f"\telse_if = {{ limit = {{ has_variable = {var(n, 'dest')} }} value = 2 }}",
                 "}",
-                f"sr_disp_fl_{n}_months_left = {{",
+                f"sr_disp_fl_{n}_weeks_left = {{",
                 "\tvalue = 0",
-                f"\tif = {{ limit = {{ has_variable = {var(n, 'arrive')} }} value = var:{var(n, 'arrive')} subtract = te_history_month_index }}",
+                f"\tif = {{ limit = {{ has_variable = {var(n, 'arrive')} }} value = var:{var(n, 'arrive')} subtract = sr_fl_tick_now }}",
                 "\tmin = 0",
                 "}",
                 f"sr_disp_fl_{n}_refit_left = {{",
@@ -2214,10 +2225,10 @@ def render_display() -> str:
                 f"\tif = {{ limit = {{ {var(n, 'refitting')} = yes }} value = var:{var(n, 'refit_until')} subtract = te_history_month_index }}",
                 "}",
                 ]
-        for kind in ("months", "dv"):
+        for kind, reader in (("weeks", "quarters"), ("dv", "dv")):
             out += [f"sr_disp_fl_{n}_leg_{kind} = {{", "\tvalue = 0"]
             out += [f"\tif = {{ limit = {{ has_variable = sr_fl_dest_pick_{n} var:sr_fl_dest_pick_{n} = {b.code} }} "
-                    f"value = {var(n, f'leg_{kind}_{b.key}')} }}" for b in LOCATIONS]
+                    f"value = {var(n, f'leg_{reader}_{b.key}')} }}" for b in LOCATIONS]
             out.append("}")
         # may_depart_<loc>'s slot-wide terms, in its order; the per-leg one,
         # delta-v, is each row's own (UI pass design § 4).
@@ -2257,10 +2268,10 @@ def render_display() -> str:
         out += [f"sr_disp_fl_{n}_transit_frac = {{",
                 "\tvalue = 0",
                 "\tif = {",
-                f"\t\tlimit = {{ has_variable = {var(n, 'leg_months')} var:{var(n, 'leg_months')} > 0 }}",
-                f"\t\tvalue = var:{var(n, 'leg_months')}",
-                f"\t\tsubtract = sr_disp_fl_{n}_months_left",
-                f"\t\tdivide = var:{var(n, 'leg_months')}",
+                f"\t\tlimit = {{ has_variable = {var(n, 'leg_quarters')} var:{var(n, 'leg_quarters')} > 0 }}",
+                f"\t\tvalue = var:{var(n, 'leg_quarters')}",
+                f"\t\tsubtract = sr_disp_fl_{n}_weeks_left",
+                f"\t\tdivide = var:{var(n, 'leg_quarters')}",
                 "\t}",
                 "\tmin = 0",
                 "\tmax = 1",
@@ -2319,11 +2330,14 @@ def render_display() -> str:
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_global_variable = sr_loc_inbound_{k} }} value = global_var:sr_loc_inbound_{k} }}",
                 "}",
-                f"sr_disp_loc_inbound_months_{k} = {{",
+                f"sr_disp_loc_inbound_weeks_{k} = {{",
                 "\tvalue = 0",
                 f"\tif = {{ limit = {{ has_global_variable = sr_loc_inbound_first_{k} }} value = global_var:sr_loc_inbound_first_{k} "
-                "subtract = te_history_month_index }",
+                "subtract = sr_fl_tick_now }",
                 "\tmin = 0",
+                # The strip's cell is nine to a line, 50 wide: a chemical leg to
+                # Neptune or the Kuiper Belt runs past 999 weeks (#2068 review).
+                "\tmax = 999",
                 "}",
                 f"sr_disp_loc_inbound_ours_{k} = {{",
                 "\tvalue = 0",
@@ -2436,16 +2450,16 @@ def render_display() -> str:
     bound = [_bound(n, EARTH) for n in range(1, SLOTS + 1)]
     out += ["", "# Per power, in its own scope (the Hostile Fleet cell's hover, a line a power at",
             "# war with the viewer, sr_ov_list_earth): its fleets in flight to Earth, their",
-            "# strength, and the months until the first lands.",
+            "# strength, and the weeks (ticks) until the first lands.",
             "sr_disp_earth_power_count = {", "\tvalue = 0",
             *[f"\tif = {{ limit = {{ {b} }} add = 1 }}" for b in bound], "}",
             "sr_disp_earth_power_strength = {", "\tvalue = 0",
             *[f"\tif = {{ limit = {{ {b} }} add = sr_fl_{n}_strength }}" for n, b in enumerate(bound, 1)], "}",
-            "sr_disp_earth_power_months = {", "\tvalue = 0", "\tif = {",
+            "sr_disp_earth_power_weeks = {", "\tvalue = 0", "\tif = {",
             "\t\tlimit = {", "\t\t\tOR = {", *[f"\t\t\t\tAND = {{ {b} }}" for b in bound], "\t\t\t}", "\t\t}",
-            "\t\tvalue = 99999",
+            f"\t\tvalue = {TICK_CEILING}",
             *[f"\t\tif = {{ limit = {{ {b} }} max = var:sr_fl_{n}_arrive }}" for n, b in enumerate(bound, 1)],
-            "\t\tsubtract = te_history_month_index", "\t\tmin = 0", "\t}", "}"]
+            "\t\tsubtract = sr_fl_tick_now", "\t\tmin = 0", "\t}", "}"]
     out += render_transfer_display()
     return "\n".join(out) + "\n"
 
@@ -2716,7 +2730,7 @@ def _fleet_blocks(n: int) -> list[str]:
     # The destination button opens the slot's destination popup (UI pass
     # design § 4; te_popup sr_dest_<n>). It greys on sr_fleet_pick_sgui's
     # is_valid, a gate with no effect. Its hover is the leg to the destination
-    # picked (sr_disp_fl_<n>_leg_months / _dv); the key opens with that gate's
+    # picked (sr_disp_fl_<n>_leg_weeks / _dv); the key opens with that gate's
     # IsValidTooltip, so a greyed button says why it can't pick (a key that
     # reads JournalEntry can't go through Localize, gotcha #16).
     out += _override("fl_pick_button", f'enabled = "{_op("sr_fleet_pick_sgui", "IsValid", n)}"',
@@ -2843,7 +2857,7 @@ def _location_row(lc: glw.Location) -> list[str]:
     out += _override("loc_flag_visible", f'visible = "[{_eq(f"sr_disp_loc_flag_{k}", 1)}]"')
     out += _override("loc_context", f"datacontext = \"[JournalEntry.GetCountry.MakeScope.Var('sr_ls_cap_{k}').GetState]\"")
     out += _override("loc_others", f'raw_text = "[{_sv(f"sr_disp_loc_others_{k}")}|0]"')
-    figure = f"[{_sv(f'sr_disp_loc_inbound_{k}')}|0]·[{_sv(f'sr_disp_loc_inbound_months_{k}')}|0]"
+    figure = f"[{_sv(f'sr_disp_loc_inbound_{k}')}|0]·[{_sv(f'sr_disp_loc_inbound_weeks_{k}')}|0]"
     out += _override("loc_inbound", f'visible = "[{_ge(f"sr_disp_loc_inbound_{k}", 1)}]"')
     out += _override("loc_inbound_ours", f'visible = "[{_eq(f"sr_disp_loc_inbound_ours_{k}", 1)}]"', f'raw_text = "{figure}"')
     out += _override("loc_inbound_rival", f'visible = "[{_eq(f"sr_disp_loc_inbound_ours_{k}", 0)}]"', f'raw_text = "{figure}"')
@@ -2994,7 +3008,7 @@ def _xfer_body(n: int) -> list[str]:
 
 def _dest_row(n: int, b: glw.Location) -> list[str]:
     """Slot n's row for the location b in its destination popup (UI pass
-    design § 4): hidden for where the fleet is; the leg's months and delta-v
+    design § 4): hidden for where the fleet is; the leg's weeks and delta-v
     (red when the fleet carries less), from Earth the window toward b's body
     (blank at a torch or antimatter pace, which leaves in any month), our
     worlds there, the enemy's strength there and on its way, and Choose."""
@@ -3006,7 +3020,7 @@ def _dest_row(n: int, b: glw.Location) -> list[str]:
     out = ["\t\t\t\tte_sr_dest_row = {"]
     rows = _override("dr_visible", f'visible = "[Not( {_eq(loc, b.code)} )]"')
     rows += _override("dr_name", f'text = "sr_loc_name_{k}"')
-    rows += _override("dr_months", f'raw_text = "[{_sv(var(n, f"leg_months_{k}"))}|0]"')
+    rows += _override("dr_weeks", f'raw_text = "[{_sv(var(n, f"leg_quarters_{k}"))}|0]"')
     rows += _override("dr_dv_covered", f'visible = "[{covered}]"', f'raw_text = "[{_sv(leg_dv)}|1]"')
     rows += _override("dr_dv_short", f'visible = "[Not( {covered} )]"', f'raw_text = "#R [{_sv(leg_dv)}|1]#!"')
     if b.code == EARTH:

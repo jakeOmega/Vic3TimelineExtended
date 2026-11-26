@@ -461,7 +461,7 @@ class TextTest(unittest.TestCase):
             with self.subTest(slot=n):
                 for key in (f"je_space_race_widget_fw_{n}_leg", f"je_space_race_widget_fw_{n}_leg_short"):
                     self.assertEqual(re.findall(r"ScriptValue\('(\w+)'\)", self.loc[key]),
-                                     [f"sr_disp_fl_{n}_leg_months", f"sr_disp_fl_{n}_leg_dv"])
+                                     [f"sr_disp_fl_{n}_leg_weeks", f"sr_disp_fl_{n}_leg_dv"])
                 # One text, the propellant's figure red in the second.
                 self.assertEqual(self.loc[f"je_space_race_widget_fw_{n}_leg"].replace("propellant: #v ", "propellant: #R "),
                                  self.loc[f"je_space_race_widget_fw_{n}_leg_short"])

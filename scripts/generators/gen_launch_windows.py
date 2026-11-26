@@ -22,8 +22,9 @@ them as month-index ranges against ``te_history_month_index``
 * common/script_values/sr_fleet_legs_generated.txt -- the legs between the
   nine fleet locations (solar colonization slice 6 design § 1.2,
   docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md): for
-  every ordered pair and drive, ``sr_leg_months_<drive>_<a>_<b>`` and
-  ``sr_leg_dv_<drive>_<a>_<b>`` (km/s), and the rapid response readers.
+  every ordered pair and drive, ``sr_leg_quarters_<drive>_<a>_<b>`` (quarter-months,
+  the fleets' clock: docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md
+  § 1.3) and ``sr_leg_dv_<drive>_<a>_<b>`` (km/s), and the rapid response readers.
 
 Transit times (solar colonization slices 2-3 design § 2,
 docs/superpowers/specs/2026-10-25-solar-colonization-population-and-transit-design.md):
@@ -247,6 +248,10 @@ BRACHISTOCHRONE_ITERATIONS = 6
 MERCURY_SAMPLES = 240
 G0 = 9.80665  # m/s^2
 MONTH_DAYS = 30.4375
+# A fleet's legs are counted in quarter-months, the fleets' clock (the 1st, 8th,
+# 15th and 22nd; design 2026-11-25 § 1.2, docs/superpowers/specs/
+# 2026-11-25-space-fleet-clock-and-battles-design.md).
+QUARTER_DAYS = MONTH_DAYS / 4
 
 
 # ---------------------------------------------------------------------------
@@ -478,8 +483,14 @@ def min_delta_v(key: str, departures: np.ndarray, hohmann_days: float) -> np.nda
 # Transit times (slices 2-3 design § 2)
 # ---------------------------------------------------------------------------
 def months_of(days: float) -> int:
-    """Whole months, rounded half up, at least one: a fleet lands at a monthly step."""
+    """Whole months, rounded half up, at least one: a colony fleet lands at a monthly step."""
     return max(1, int(math.floor(days / MONTH_DAYS + 0.5)))
+
+
+def quarters_of(days: float) -> int:
+    """Whole quarter-months, rounded half up, at least one: a fleet lands at a tick
+    of the fleets' clock (four a month)."""
+    return max(1, int(math.floor(days / QUARTER_DAYS + 0.5)))
 
 
 def fusion_tof(key: str, departures: np.ndarray, hohmann_days: float, budget_kms: float) -> np.ndarray:
@@ -538,20 +549,31 @@ def drive_days(drive: Drive, key: str, departures: np.ndarray, hohmann_days: flo
     return np.full(departures.shape, hohmann_days)
 
 
-def transit_months(key: str, departures: np.ndarray, groups: np.ndarray, hohmann_days: float) -> dict[str, dict[int, int]]:
-    """{drive: {group: months}}: each group's mean over its departures, a
-    better drive never slower than the one before it, chemical the Hohmann time."""
+def transit_days(key: str, departures: np.ndarray, hohmann_days: float) -> dict[str, np.ndarray]:
+    """{drive: days per departure}."""
+    return {drive.key: drive_days(drive, key, departures, hohmann_days) for drive in DRIVES}
+
+
+def tabulate(days: dict[str, np.ndarray], groups: np.ndarray, unit=months_of) -> dict[str, dict[int, int]]:
+    """{drive: {group: whole units}}: each group's mean over its departures, in
+    `unit` (months_of for colony fleets, quarters_of for fleets' legs), a better
+    drive never slower than the one before it."""
     out: dict[str, dict[int, int]] = {}
     previous = None
     for drive in DRIVES:
-        days = drive_days(drive, key, departures, hohmann_days)
         table = {}
         for g in sorted(set(groups.tolist())):
-            months = months_of(float(np.mean(days[groups == g])))
-            table[g] = months if previous is None else min(months, previous[g])
+            n = unit(float(np.mean(days[drive.key][groups == g])))
+            table[g] = n if previous is None else min(n, previous[g])
         out[drive.key] = table
         previous = table
     return out
+
+
+def transit_months(key: str, departures: np.ndarray, groups: np.ndarray, hohmann_days: float) -> dict[str, dict[int, int]]:
+    """{drive: {group: months}}: each group's mean over its departures, a
+    better drive never slower than the one before it, chemical the Hohmann time."""
+    return tabulate(transit_days(key, departures, hohmann_days), groups, months_of)
 
 
 @dataclass
@@ -617,6 +639,7 @@ class BodyPlan:
     sampled: int = 0
     hohmann_days: float = 0.0  # median over its windows
     transit: dict[str, dict[int, int]] = field(default_factory=dict)  # drive -> offset -> months
+    transit_quarters: dict[str, dict[int, int]] = field(default_factory=dict)  # the same in quarters (fleets' legs)
     chem_dv: dict[int, float] = field(default_factory=dict)  # a month's cheapest delta-v by offset, mean over cycles
     cycles: list[Window] = field(default_factory=list)  # the sampled cycles
 
@@ -697,7 +720,9 @@ def plan_body(body: Body, first_month: int, last_month: int) -> BodyPlan:
         for off in offsets:
             transit_deps.append(datetime_to_jd(datetime(*month_of(w.optimum_month + off), TRANSIT_DAY)))
             transit_groups.append(off)
-    plan.transit = transit_months(body.key, np.array(transit_deps), np.array(transit_groups), hohmann_days)
+    days = transit_days(body.key, np.array(transit_deps), hohmann_days)
+    plan.transit = tabulate(days, np.array(transit_groups), months_of)
+    plan.transit_quarters = tabulate(days, np.array(transit_groups), quarters_of)
     return plan
 
 
@@ -1279,7 +1304,7 @@ def render_report(plans: list[BodyPlan], first: int, last: int, transit_plans: l
 # Ceres's (design § 1.1; gen_space_fleets.FLEET_LOCATIONS reads this table).
 @dataclass(frozen=True)
 class Location:
-    key: str  # script token: sr_leg_months_<drive>_<a>_<b>, sr_fl_<n>_loc's code
+    key: str  # script token: sr_leg_quarters_<drive>_<a>_<b>, sr_fl_<n>_loc's code
     code: int
     name: str
     body: str  # the body its legs are measured to
@@ -1523,10 +1548,11 @@ class LegPlan:
     epoch: int = 0
     optima: int = 0  # optima fitted
     worst_miss: float = 0.0  # months between the mean cycle and a true optimum, at most
-    # drive -> offset -> figure (cycle and exact legs); drive -> figure (fixed legs)
-    months: dict = field(default_factory=dict)
+    # drive -> offset -> figure (cycle and exact legs; fixed legs at offset 0).
+    # Quarters: the fleets' clock ticks four times a month (2026-11-25 design § 1.3).
+    quarters: dict = field(default_factory=dict)
     dv: dict = field(default_factory=dict)
-    sampled_range: dict = field(default_factory=dict)  # fixed legs: drive -> (months lo, hi, dv lo, hi)
+    sampled_range: dict = field(default_factory=dict)  # fixed legs: drive -> (quarters lo, hi, dv lo, hi)
 
 
 def _drive_figures(a: str, b: str, departures: np.ndarray, chem_days: np.ndarray, hohmann_days: float,
@@ -1552,11 +1578,11 @@ def _chemical_month_dv(a: str, b: str, months: list[int], hohmann_days: float, p
     return dv.min(axis=1)
 
 
-def _never_slower(months: dict[str, dict]) -> None:
-    """A better drive is never slower than the one before it, and every leg takes a month."""
+def _never_slower(quarters: dict[str, dict]) -> None:
+    """A better drive is never slower than the one before it, and every leg takes a quarter."""
     previous = None
     for drive in DRIVES:
-        table = months[drive.key]
+        table = quarters[drive.key]
         for k in table:
             table[k] = max(1, table[k] if previous is None else min(table[k], previous[k]))
         previous = table
@@ -1595,7 +1621,7 @@ def plan_cycle_leg(a: str, b: str, first: int, last: int) -> LegPlan:
         days, dv = figures[drive.key]
         if dv is None:
             dv = chem_dv
-        plan.months[drive.key] = {off: months_of(float(np.mean(days[groups == off]))) for off in offsets}
+        plan.quarters[drive.key] = {off: quarters_of(float(np.mean(days[groups == off]))) for off in offsets}
         plan.dv[drive.key] = {off: min(LEG_DV_CAP, float(np.mean(dv[groups == off]))) for off in offsets}
     # A sliver of the phase no whole month reaches (the month steps it 100
     # hundredths, so some residues of the cycle never come up) still needs a
@@ -1604,9 +1630,9 @@ def plan_cycle_leg(a: str, b: str, first: int, last: int) -> LegPlan:
         if off not in offsets:
             near = min(offsets, key=lambda o: (abs(o - off), abs(o)))
             for drive in DRIVES:
-                plan.months[drive.key][off] = plan.months[drive.key][near]
+                plan.quarters[drive.key][off] = plan.quarters[drive.key][near]
                 plan.dv[drive.key][off] = plan.dv[drive.key][near]
-    _never_slower(plan.months)
+    _never_slower(plan.quarters)
     return plan
 
 
@@ -1622,19 +1648,20 @@ def plan_fixed_leg(a: str, b: str, first: int, last: int) -> LegPlan:
         days, dv = figures[drive.key]
         if dv is None:
             dv = chem_dv
-        month_samples = [months_of(float(d)) for d in days]
-        plan.months[drive.key] = {0: months_of(float(np.median(days)))}
+        samples = [quarters_of(float(d)) for d in days]
+        plan.quarters[drive.key] = {0: quarters_of(float(np.median(days)))}
         plan.dv[drive.key] = {0: min(LEG_DV_CAP, float(np.median(dv)))}
-        plan.sampled_range[drive.key] = (min(month_samples), max(month_samples), float(np.min(dv)), float(np.max(dv)))
-    _never_slower(plan.months)
+        plan.sampled_range[drive.key] = (min(samples), max(samples), float(np.min(dv)), float(np.max(dv)))
+    _never_slower(plan.quarters)
     return plan
 
 
 def plan_exact_leg(b: str, body_plans: list[BodyPlan]) -> LegPlan:
-    """Earth to a location: the body's own windows. Months are its transit
-    table; delta-v new, by the same offsets: chemical a month's cheapest
-    transfer (the premium's), fusion the transfer its transit takes, the
-    torches acceleration x time, from the 200 km parking orbit."""
+    """Earth to a location: the body's own windows. Quarters are its transit
+    table's, from the same departures and days as the colony fleets' months;
+    delta-v new, by the same offsets: chemical a month's cheapest transfer (the
+    premium's), fusion the transfer its transit takes, the torches acceleration
+    x time, from the 200 km parking orbit."""
     body = LOCATION[b].body
     bp = next(p for p in body_plans if p.body.key == body)
     plan = LegPlan("earth", b, "exact", hohmann_days=bp.hohmann_days)
@@ -1646,7 +1673,7 @@ def plan_exact_leg(b: str, body_plans: list[BodyPlan]) -> LegPlan:
             groups.append(off)
     deps, groups = np.array(deps), np.array(groups)
     for drive in DRIVES:
-        plan.months[drive.key] = dict(bp.transit[drive.key])
+        plan.quarters[drive.key] = dict(bp.transit_quarters[drive.key])
         if drive.budget_kms is not None:
             _, dv = leg_fusion("earth", body, deps, bp.hohmann_days, drive.budget_kms, parking=True)
         elif drive.accel_g is not None:
@@ -1753,6 +1780,15 @@ def _cycle_tree(var: str, table: dict[int, str], cycle: int) -> list[str]:
     return _range_tree(var, segs, 1)
 
 
+def _offset_table(var: str, table: dict[int, str]) -> list[str]:
+    """A reader by a signed offset `var` (sr_launch_offset_<body>), equal
+    neighbours merged; one figure when every offset has the same."""
+    segs = _segments(table, {o: (o, o + 1) for o in table})
+    if len(segs) == 1:
+        return [f"\tvalue = {segs[0][2]}"]
+    return ["\tvalue = 0"] + _range_tree(var, segs, 1)
+
+
 def render_legs(plans: list[LegPlan]) -> str:
     out = [HEADER, LEGS_PREAMBLE]
     for plan in plans:
@@ -1761,19 +1797,12 @@ def render_legs(plans: list[LegPlan]) -> str:
         out.append(f"# ===== {la.name} to {lb.name} ({plan.kind}) =====")
         if plan.kind == "exact":
             body = lb.body
-            out.append(f"# The {body} window body's legs: months its colony fleets' transit, delta-v by "
-                       f"sr_launch_offset_{body}.")
+            out.append(f"# The {body} window body's legs: quarters and delta-v by sr_launch_offset_{body}.")
             for drive in DRIVES:
-                out.append(f"sr_leg_months_{drive.key}_{a}_{b} = {{ value = sr_transit_{drive.key}_{body} }}")
-                table = {o: _dv_text(drive, v) for o, v in plan.dv[drive.key].items()}
-                bounds = {o: (o, o + 1) for o in table}
-                segs = _segments(table, bounds)
-                out.append(f"sr_leg_dv_{drive.key}_{a}_{b} = {{")
-                if len(segs) == 1:
-                    out.append(f"\tvalue = {segs[0][2]}")
-                else:
-                    out += ["\tvalue = 0"] + _range_tree(f"sr_launch_offset_{body}", segs, 1)
-                out.append("}")
+                for name, table in (("quarters", {o: str(v) for o, v in plan.quarters[drive.key].items()}),
+                                    ("dv", {o: _dv_text(drive, v) for o, v in plan.dv[drive.key].items()})):
+                    out += [f"sr_leg_{name}_{drive.key}_{a}_{b} = {{",
+                            *_offset_table(f"sr_launch_offset_{body}", table), "}"]
         elif plan.kind == "cycle":
             var = f"sr_leg_phase_{a}_{b}"
             out += [f"# Mean cycle {plan.cycle / 100:.2f} months, epoch {plan.epoch}: within {plan.worst_miss:.2f} "
@@ -1786,25 +1815,25 @@ def render_legs(plans: list[LegPlan]) -> str:
                     f"\tmodulo = {plan.cycle}",
                     "}"]
             for drive in DRIVES:
-                for name, table in (("months", {o: str(v) for o, v in plan.months[drive.key].items()}),
+                for name, table in (("quarters", {o: str(v) for o, v in plan.quarters[drive.key].items()}),
                                     ("dv", {o: _dv_text(drive, v) for o, v in plan.dv[drive.key].items()})):
                     tree = _cycle_tree(var, table, plan.cycle)
                     head = [f"sr_leg_{name}_{drive.key}_{a}_{b} = {{"]
                     out += head + ([] if len(tree) == 1 else ["\tvalue = 0"]) + tree + ["}"]
         else:
             for drive in DRIVES:
-                out.append(f"sr_leg_months_{drive.key}_{a}_{b} = {{ value = {plan.months[drive.key][0]} }}")
+                out.append(f"sr_leg_quarters_{drive.key}_{a}_{b} = {{ value = {plan.quarters[drive.key][0]} }}")
                 out.append(f"sr_leg_dv_{drive.key}_{a}_{b} = {{ value = {_dv_text(drive, plan.dv[drive.key][0])} }}")
         # Rapid response (design § 1.2): one drive ahead; antimatter's own at
-        # three quarters of its months, rounded up, at least one.
+        # three quarters of its quarters, rounded up, at least one.
         for i, drive in enumerate(DRIVES):
             if i + 1 < len(DRIVES):
                 ahead = DRIVES[i + 1].key
-                out.append(f"sr_leg_months_rapid_{drive.key}_{a}_{b} = {{ value = sr_leg_months_{ahead}_{a}_{b} }}")
+                out.append(f"sr_leg_quarters_rapid_{drive.key}_{a}_{b} = {{ value = sr_leg_quarters_{ahead}_{a}_{b} }}")
                 out.append(f"sr_leg_dv_rapid_{drive.key}_{a}_{b} = {{ value = sr_leg_dv_{ahead}_{a}_{b} }}")
             else:
-                out += [f"sr_leg_months_rapid_{drive.key}_{a}_{b} = {{",
-                        f"\tvalue = sr_leg_months_{drive.key}_{a}_{b}",
+                out += [f"sr_leg_quarters_rapid_{drive.key}_{a}_{b} = {{",
+                        f"\tvalue = sr_leg_quarters_{drive.key}_{a}_{b}",
                         "\tmultiply = 0.75",
                         "\tadd = 0.75",
                         "\tfloor = yes",
@@ -1818,14 +1847,17 @@ def render_legs(plans: list[LegPlan]) -> str:
 LEGS_PREAMBLE = """# The legs between the nine fleet locations (solar colonization slice 6 design
 # §§ 1.2-2, docs/superpowers/archive/specs/2026-10-26-solar-colonization-fleets-design.md),
 # for every ordered pair and drive (chemical, fusion, torch, antimatter):
-#   sr_leg_months_<drive>_<a>_<b>   the months the leg takes, leaving this month
-#   sr_leg_dv_<drive>_<a>_<b>       its delta-v, km/s (tenths for chemical and
-#                                   fusion, whole for the torches)
-#   sr_leg_*_rapid_<drive>_<a>_<b>  a fleet of rapid response hulls alone: one
-#                                   drive ahead; antimatter's at 3/4 its months
+#   sr_leg_quarters_<drive>_<a>_<b>  the quarter-months the leg takes, leaving
+#                                    this month: ticks of the fleets' clock, four
+#                                    a month (2026-11-25 design § 1.3,
+#                                    docs/superpowers/specs/2026-11-25-space-fleet-clock-and-battles-design.md)
+#   sr_leg_dv_<drive>_<a>_<b>        its delta-v, km/s (tenths for chemical and
+#                                    fusion, whole for the torches)
+#   sr_leg_*_rapid_<drive>_<a>_<b>   a fleet of rapid response hulls alone: one
+#                                    drive ahead; antimatter's at 3/4 its quarters
 # Three kinds of leg:
 #   exact  Earth to a location: the body's own windows (sr_launch_offset_<body>),
-#          its colony fleets' transit as months
+#          from the departures its colony fleets' transit is measured on
 #   cycle  back to Earth, and among Mercury and Venus, Mars, the Belt and Jupiter:
 #          the pair's mean synodic cycle, sr_leg_phase_<a>_<b> (hundredths of a
 #          month into it, from 1800 so the dividend is positive; a curve reads it
@@ -1846,17 +1878,18 @@ def render_legs_report(plans: list[LegPlan]) -> list[str]:
              f"{CAPTURE_ECCENTRICITY}), from Earth in the 200 km parking orbit; arrival is that capture orbit, "
              "a rendezvous at a small body. Chemical's delta-v is the cheapest transfer of the departure's "
              "month; fusion's the shortest transfer within its budget; a torch's acceleration × time, at most its cap. "
-             "Months are rounded, at least 1; a better drive is never slower.", "",
+             f"Times are in quarter-months (a quarter is {QUARTER_DAYS:.2f} days: the fleets' clock ticks on the 1st, "
+             "8th, 15th and 22nd), rounded, at least 1; a better drive is never slower.", "",
              "| Leg | Kind | Cycle (months) | Mean cycle's worst miss (months) | "
-             + " | ".join(f"{d.name}, months · km/s" for d in DRIVES) + " |",
+             + " | ".join(f"{d.name}, quarters · km/s" for d in DRIVES) + " |",
              "|---|---|---|---|" + "---|" * len(DRIVES)]
     for plan in plans:
         la, lb = LOCATION[plan.a], LOCATION[plan.b]
         cells = []
         for d in DRIVES:
-            m, v = plan.months[d.key], plan.dv[d.key]
-            key = 0 if 0 in m else sorted(m)[len(m) // 2]
-            cells.append(f"{m[key]} · {_dv_text(d, v[key])}")
+            q, v = plan.quarters[d.key], plan.dv[d.key]
+            key = 0 if 0 in q else sorted(q)[len(q) // 2]
+            cells.append(f"{q[key]} · {_dv_text(d, v[key])}")
         cyc = f"{plan.cycle / 100:.2f}" if plan.kind == "cycle" else "—"
         miss = f"{plan.worst_miss:.2f}" if plan.kind == "cycle" else "—"
         lines.append(f"| {la.name} → {lb.name} | {plan.kind} | {cyc} | {miss} | " + " | ".join(cells) + " |")
@@ -1869,11 +1902,11 @@ def render_legs_report(plans: list[LegPlan]) -> list[str]:
                   f"Mean cycle {plan.cycle / 100:.2f} months, epoch {plan.epoch} hundredths from 1800.01; "
                   f"the fitted cycle is within {plan.worst_miss:.2f} months of each of the span's {plan.optima} "
                   "true optima.", "",
-                  "| Months | " + " | ".join(f"{d.name} (months · km/s)" for d in DRIVES) + " |",
+                  "| Months | " + " | ".join(f"{d.name} (quarters · km/s)" for d in DRIVES) + " |",
                   "|---|" + "---|" * len(DRIVES)]
-        for off in sorted(plan.months["chemical"]):
+        for off in sorted(plan.quarters["chemical"]):
             lines.append(f"| {off:+d} | " + " | ".join(
-                f"{plan.months[d.key][off]} · {_dv_text(d, plan.dv[d.key][off])}" for d in DRIVES) + " |")
+                f"{plan.quarters[d.key][off]} · {_dv_text(d, plan.dv[d.key][off])}" for d in DRIVES) + " |")
         lines.append("")
     return lines
 
@@ -1921,7 +1954,7 @@ def main() -> int:
         print("launch windows: current")
     if args.dry_run:
         legs = render_legs(plan_legs())
-        print(f"{LEGS_OUT}: {legs.count(chr(10))} lines (keep it under about 15,000)")
+        print(f"{LEGS_OUT}: {legs.count(chr(10))} lines (keep it under about 17,500)")
     return int(args.check and result["changed"])
 
 
