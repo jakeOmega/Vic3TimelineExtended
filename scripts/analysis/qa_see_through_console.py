@@ -8,7 +8,9 @@ The game's console (`game/gui/console.gui`) covers the left fifth of a 3840-wide
 clicks under it, which is where every side panel opens. For a session that looks at panels in their place, this writes
 a copy of the installed game's file in which the console draws nothing and lets clicks through, with its input line
 left exactly where it was: the harness's `click --console` point (`CONSOLE_INPUT_LINE`) still lands on it, and what a
-verb types is still read from the log, not from the screen. Only the edit line, at half strength, is drawn.
+verb types is still read from the log, not from the screen. Only the edit line, at half strength, is drawn
+(`--capture`: not even that). A capture session needs no variant for this: `start --capture` puts the capture copy,
+and a copy of `error_deer.gui` that hides debug mode's widgets during a shot, into the overlay (`game_qa/capture_gui.py`).
 
 The folder also gets the `.metadata/metadata.json` that `--add-mod` asks for and two localization files with one
 marker key each (`localization/english/` and its `replace/`): a key appended to a file that was there at launch is
@@ -27,49 +29,25 @@ import re
 import sys
 from pathlib import Path
 
-BOM = b"\xef\xbb\xbf"
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from game_qa import capture_gui  # noqa: E402
 
-# (what to find, what to put, how many times it must be there). Each is a whole-line edit of vanilla 1.15.2's file.
-EDITS: tuple[tuple[str, str, int], ...] = (
-    # The background template: no click blocker, nothing drawn.
-    ("template ConsoleBackground\n{\n\tusing = clickthrough_blocker\n",
-     "template ConsoleBackground\n{\n\t### TE QA: see-through console (no click blocker, nothing drawn)\n\talpha = 0\n", 1),
-    ("\tusing = bg_tiling_pattern\n\t\talpha = 0.065", "\tusing = bg_tiling_pattern\n\t\talpha = 0", 1),
-    ("template console_frame\n{\n", "template console_frame\n{\n\talpha = 0\n", 1),
-    # The window lets clicks through.
-    ('\tname = "console_window"\n\talwaystransparent = no\n\tscissor = no\n\tlayer = confirmation\n'
-     "\tusing = clickthrough_blocker\n",
-     '\tname = "console_window"\n\talwaystransparent = yes\n\tscissor = no\n\tlayer = confirmation\n', 1),
-    # The column keeps its layout though its children are hidden, so the edit line stays where it was.
-    ("\tflowcontainer = {\n\t\tdirection = vertical\n\t\tspacing = 4\n\t\tbackground = {\n\t\t\tusing = ConsoleBackground",
-     "\tflowcontainer = {\n\t\tdirection = vertical\n\t\tspacing = 4\n\t\tignoreinvisible = no\n\t\tbackground = {\n"
-     "\t\t\tusing = ConsoleBackground", 1),
-    # The output and the debug toolbars are hidden.
-    ('\t\t\tname = "console_output_scrollarea"\n', '\t\t\tname = "console_output_scrollarea"\n\t\t\tvisible = no\n', 1),
-    ('\t\t\tname = "toolbars_window"\n', '\t\t\tname = "toolbars_window"\n\t\t\tvisible = no\n', 1),
-    # The edit line, faint.
-    ("\t\t\tbackground = {\n\t\t\t\tusing = ConsoleEditbg\n\t\t\t\tmargin = { 4 0 }\n",
-     "\t\t\tbackground = {\n\t\t\t\tusing = ConsoleEditbg\n\t\t\t\tmargin = { 4 0 }\n\t\t\t\talpha = 0.5\n", 1),
-)
+BOM = capture_gui.BOM
+# The edits, shared with a capture session's console (`start --capture`, whose edit line draws nothing at all).
+EDITS = capture_gui.SEE_THROUGH_EDITS + (capture_gui.FAINT_EDIT_LINE,)
 
 
 class ConsoleFileChanged(ValueError):
     """The game's console.gui no longer holds a line this script edits."""
 
 
-def see_through(source: bytes) -> bytes:
-    """The game's `console.gui` with the console see-through. Keeps the file's BOM and line endings."""
-    had_bom = source.startswith(BOM)
-    text = source[len(BOM):].decode("utf-8") if had_bom else source.decode("utf-8")
-    crlf = "\r\n" in text
-    text = text.replace("\r\n", "\n")
-    for old, new, count in EDITS:
-        if text.count(old) != count:
-            raise ConsoleFileChanged("expected %d of %r in the game's console.gui, found %d" % (count, old, text.count(old)))
-        text = text.replace(old, new)
-    if crlf:
-        text = text.replace("\n", "\r\n")
-    return (BOM if had_bom else b"") + text.encode("utf-8")
+def see_through(source: bytes, capture: bool = False) -> bytes:
+    """The game's `console.gui` with the console see-through (with `capture`, the edit line drawing nothing too).
+    Keeps the file's BOM and line endings."""
+    try:
+        return (capture_gui.capture_console if capture else capture_gui.see_through_console)(source)
+    except capture_gui.CaptureGuiError as e:
+        raise ConsoleFileChanged(e.detail) from e
 
 
 def metadata(name: str, game_version: str) -> str:
@@ -94,11 +72,12 @@ def wsl_path(given: str) -> Path:
     return Path(given)
 
 
-def write_variant(folder: Path, console_source: Path, game_version: str, name: str) -> list[Path]:
+def write_variant(folder: Path, console_source: Path, game_version: str, name: str,
+                  capture: bool = False) -> list[Path]:
     """Write the variant into `folder` (made if missing; files there are overwritten). Returns what was written."""
     written = []
     files = {
-        folder / "gui" / "console.gui": see_through(console_source.read_bytes()),
+        folder / "gui" / "console.gui": see_through(console_source.read_bytes(), capture=capture),
         folder / ".metadata" / "metadata.json": metadata(name, game_version).encode("utf-8"),
         folder / "localization" / "english" / "te_qa_variant_l_english.yml":
             BOM + b'l_english:\n te_qa_variant_marker:0 "QA variant loaded"\n',
@@ -119,11 +98,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--game", help="the game's install folder (default: path_constants.base_game_path)")
     parser.add_argument("--game-version", default="1.15.2", help="supported_game_version for the metadata")
     parser.add_argument("--name", default="TE QA variant (see-through console)")
+    parser.add_argument("--capture", action="store_true",
+                        help="draw the edit line at alpha 0 too, as `start --capture` does in the overlay")
     args = parser.parse_args(argv)
     if args.game:
         game = Path(args.game)
     else:
-        sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
         import path_constants
         game = Path(path_constants.base_game_path)
     source = game / "game" / "gui" / "console.gui"
@@ -131,7 +111,7 @@ def main(argv: list[str] | None = None) -> int:
         print("no console.gui at %s" % source, file=sys.stderr)
         return 2
     try:
-        written = write_variant(wsl_path(args.folder), source, args.game_version, args.name)
+        written = write_variant(wsl_path(args.folder), source, args.game_version, args.name, capture=args.capture)
     except ConsoleFileChanged as e:
         print("not written: %s" % e, file=sys.stderr)
         return 2

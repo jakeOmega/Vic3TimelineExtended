@@ -557,6 +557,18 @@ def _op_wheel(req, backend, state):
     return {"notches_done": done}
 
 
+def _op_move(req, backend, state):
+    """Put the cursor on (x, y) of the client area and leave it there, pressing nothing: a hover, for a tooltip in a
+    picture (#2056). Aimed and checked as a click is (`_aim`), so a refusal moved nothing the game could take for a
+    person's, and the cursor's place is recorded as the helper's own (`helper_cursor`)."""
+    pid, x, y = _pid(req), _int(req, "x"), _int(req, "y")
+    try:
+        _aim(backend, state, pid, x, y)
+    finally:
+        state.last_sent_tick = backend.tick()
+    return {}
+
+
 def _op_drag(req, backend, state):
     """Press the left button at (x1, y1) of the client area, move to (x2, y2) in DRAG_MOVES steps and release it
     there. The press is aimed as a click is; before each move the window must still be in front, unmoved and the
@@ -627,6 +639,14 @@ def _op_screenshot(req, backend, state):
     x, y, w, h = win["client"]
     if w <= 0 or h <= 0:
         raise _Refusal("no_client_area", "the window's client area is empty (minimized?)")
+    box = req.get("box")
+    if box is not None:
+        # A region of the client area at full resolution (#2056): [left, top, width, height] in client pixels.
+        if (not isinstance(box, list) or len(box) != 4 or any(isinstance(v, bool) or not isinstance(v, int) for v in box)
+                or box[0] < 0 or box[1] < 0 or box[2] < 1 or box[3] < 1 or box[0] + box[2] > w or box[1] + box[3] > h):
+            raise _Refusal("bad_request", "box is [left, top, width, height] inside the %dx%d client area, not %r"
+                           % (w, h, box))
+        x, y, w, h = x + box[0], y + box[1], box[2], box[3]
     cw, ch, rgb = backend.capture((x, y, w, h))
     width, height, small = scale_rgb(cw, ch, rgb, max_width)
     data = encode_png(width, height, small)
@@ -708,7 +728,7 @@ def _op_tcp_close(req, backend, state):
 _OPS = {
     "ping": _op_ping, "launch": _op_launch, "adopt": _op_adopt, "window": _op_window,
     "idle_ms": _op_idle_ms, "focus": _op_focus, "keys": _op_keys, "click": _op_click, "presence": _op_presence,
-    "wheel": _op_wheel, "drag": _op_drag,
+    "wheel": _op_wheel, "drag": _op_drag, "move": _op_move,
     "screenshot": _op_screenshot, "kill": _op_kill, "tcp_open": _op_tcp_open, "tcp_send": _op_tcp_send,
     "tcp_recv": _op_tcp_recv, "tcp_close": _op_tcp_close,
 }

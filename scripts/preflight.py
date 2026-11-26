@@ -28,6 +28,7 @@ from __future__ import annotations
 import argparse
 import fnmatch
 import io
+import json
 import os
 import subprocess
 import sys
@@ -80,6 +81,8 @@ class Result:
     ok: bool
     output: str = ""
     skipped: str = ""
+    note: str = ""
+    """Printed under the check's line when it passes: what to know, never a failure (the stale screenshots)."""
 
 
 @dataclass
@@ -276,6 +279,36 @@ def check_tests(ctx: Ctx) -> Result:
     return sh(ctx, argv + tests)
 
 
+def check_guide_shots(ctx: Ctx) -> Result:
+    """The shot manifest is valid (a failure), and the pictures whose files changed since they were taken (a note:
+    CI can't take pictures, and the release checklist refreshes them). Under --changed, only the pictures this diff
+    reaches."""
+    valid = sh(ctx, [PY, "scripts/image_pipeline/guide_shots.py"])
+    if not valid.ok:
+        return valid
+    proc = subprocess.run([PY, "scripts/image_pipeline/guide_shots_stale.py", "--json"], cwd=REPO_ROOT, env=ctx.env,
+                          text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        found = json.loads(proc.stdout)
+    except ValueError:
+        return Result(True, note="the staleness report did not run: " + (proc.stderr.strip().splitlines() or ["?"])[-1])
+    if found.get("shallow"):
+        return Result(True)
+    stale = found.get("stale") or {}
+    if ctx.changed is not None:
+        mine = set(ctx.changed)
+        stale = {sid: info for sid, info in stale.items() if mine & set(info["files"])}
+    if not stale:
+        return Result(True)
+    lines = ["%s: %s" % (sid, ", ".join(info["files"][:3]) + (" ..." if len(info["files"]) > 3 else ""))
+             for sid, info in list(stale.items())[:6]]
+    if len(stale) > 6:
+        lines.append("... and %d more" % (len(stale) - 6))
+    lines.append("%d picture(s) may be stale: python3 scripts/image_pipeline/guide_shots_stale.py. Refresh them on "
+                 "a major release (docs/guides/release_checklist.md)" % len(stale))
+    return Result(True, note="\n".join(lines))
+
+
 def check_audits(ctx: Ctx) -> Result:
     argv = [PY, "scripts/run_audits.py"]
     return sh(ctx, argv)
@@ -342,6 +375,11 @@ CHECKS: tuple[Check, ...] = (
     Check("guide-style", "docs", "Player guide style lint",
           command(PY, "scripts/analysis/check_player_guide_style.py", "--strict"),
           ("docs/player_guide/*", "localization/*", "scripts/analysis/check_player_guide_style.py")),
+    Check("guide-shots", "docs", "The screenshot manifest is valid; stale pictures noted, never failed",
+          check_guide_shots, ("docs/player_guide/*", "scripts/image_pipeline/guide_shots*", "gui/*", "common/*",
+                              "localization/*", "game_qa/capture*"),
+          fix="Run `python3 scripts/image_pipeline/guide_shots.py` and fix what it prints (a new picture or "
+              "`<!-- screenshot: -->` spot needs an entry in its SHOTS)."),
     Check("guide-pdf", "docs", "Player guide PDF matches its sources",
           command(PY, "scripts/build_player_guide.py", "--check"),
           ("docs/player_guide/*", "scripts/build_player_guide.py", "scripts/player_guide_figures.py"),
@@ -421,6 +459,8 @@ def main(argv=None) -> int:
             continue
         if result.ok:
             print(f"ok    {check.id:13} {check.title}  ({seconds:.0f}s)", flush=True)
+            for line in result.note.splitlines():
+                print("      note: " + line, flush=True)
             continue
         failed.append(check)
         if args.ci:

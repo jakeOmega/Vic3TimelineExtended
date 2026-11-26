@@ -141,5 +141,30 @@ class EnvironmentTests(unittest.TestCase):
             self.assertIn(f"{key}:", workflow)
 
 
+class GuideShotsCheckTests(unittest.TestCase):
+    """#2056: stale screenshots are a note, never a failure; an invalid manifest fails."""
+
+    def run_check(self, report, changed=None, valid=True):
+        import json
+        import subprocess
+        done = subprocess.CompletedProcess([], 0, stdout=json.dumps(report), stderr="")
+        with mock.patch.object(preflight, "sh", lambda c, argv: preflight.Result(valid, "" if valid else "bad")), \
+                mock.patch.object(preflight.subprocess, "run", lambda *a, **k: done):
+            return preflight.check_guide_shots(ctx(changed))
+
+    def test_stale_pictures_pass_with_a_note(self):
+        report = {"stale": {"banking_tab": {"files": ["gui/budget_panel.gui"]}}, "fresh": [], "unknown": {},
+                  "shallow": False}
+        result = self.run_check(report)
+        self.assertTrue(result.ok)
+        self.assertIn("banking_tab: gui/budget_panel.gui", result.note)
+        self.assertEqual(self.run_check(report, changed=["gui/other.gui"]).note, "", "not this diff's")
+        self.assertIn("banking_tab", self.run_check(report, changed=["gui/budget_panel.gui"]).note)
+
+    def test_a_shallow_checkout_says_nothing_and_a_bad_manifest_fails(self):
+        self.assertEqual(self.run_check({"stale": {}, "shallow": True}).note, "")
+        self.assertFalse(self.run_check({}, valid=False).ok)
+
+
 if __name__ == "__main__":
     unittest.main()

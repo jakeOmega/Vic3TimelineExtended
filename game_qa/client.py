@@ -49,6 +49,17 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                                              # changed .gui files synced into the overlay, the reload proved, a
                                              # full-size crop of the panel and the GUI lines the game logged
     python3 -m game_qa gui-hide              # clear a preview left up by --keep, and the values it set
+    python3 -m game_qa view ACTION... [then ACTION...]...
+                                             # open a view by script (#2056): the actions (set:KEY=VALUE, clear:KEY,
+                                             # panel:NAME[:TAB], market:TAB, close-panel) run by a scratch widget's
+                                             # creation, one widget per `then`-separated step
+    python3 -m game_qa crop [L T R B] [--settle] [--label NAME]
+                                             # a region of the window at its own resolution, nothing typed; --settle
+                                             # shoots until two shots agree
+    python3 -m game_qa hover X Y             # leave the cursor at X, Y, pressing nothing (a tooltip), then a shot
+    python3 -m game_qa capture [--only ID]... [--scene NAME] --permission "..." | --in-session
+                                             # the screenshots the shot manifest lists (scripts/image_pipeline/
+                                             # guide_shots.py): one session per scene, then a contact sheet
     python3 -m game_qa try-event EVENT [--setup NAME] --read "<expr>"...
                                              # each option of EVENT: setup, fire, read, pick, read; exit 0 only
                                              # when every option fired and was picked
@@ -828,6 +839,8 @@ def cmd_start(args) -> tuple[dict, int]:
         body["fixture_date"] = args.fixture
     if args.unresponsive_s is not None:
         body["unresponsive_s"] = args.unresponsive_s
+    if args.capture:
+        body["capture"] = True
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -980,6 +993,51 @@ def cmd_profiler_roots(args) -> tuple[dict, int]:
     return call(_backup_root(), "profiler-roots", body)
 
 
+def view_steps(actions: Sequence[str]) -> list[list[str]]:
+    """`view`'s positional words as steps: split on the word `then`. ValueError for an empty step."""
+    steps: list[list[str]] = [[]]
+    for word in actions:
+        if word == "then":
+            steps.append([])
+        else:
+            steps[-1].append(word)
+    if any(not step for step in steps):
+        raise ValueError("each step between `then`s holds at least one action, not %r" % (list(actions),))
+    return steps
+
+
+def cmd_view(args) -> tuple[dict, int]:
+    try:
+        steps = view_steps(args.actions)
+    except ValueError as e:
+        return {"refused": "bad_argument", "detail": str(e)}, 2
+    return call(_backup_root(), "view", {"steps": steps}, GUI_SHOW_TIMEOUT_S)
+
+
+def cmd_crop(args) -> tuple[dict, int]:
+    body: dict = {"settle": args.settle}
+    if args.box:
+        if len(args.box) != 4:
+            return {"refused": "bad_argument", "detail": "a box is four fractions: left top right bottom"}, 2
+        body["box"] = args.box
+    if args.label is not None:
+        body["label"] = args.label
+    return call(_backup_root(), "crop", body)
+
+
+def cmd_hover(args) -> tuple[dict, int]:
+    return call(_backup_root(), "hover", {"x": args.x, "y": args.y})
+
+
+def cmd_capture(args) -> tuple[dict, int]:
+    from game_qa import capture
+    backups = _backup_root()
+    return capture.main_verb(
+        args, call=lambda verb, body=None, timeout=VERB_TIMEOUT_S: call(backups, verb, body, timeout),
+        start=lambda body: start_session(backups, body, spawn_server), stop=lambda: cmd_stop(args),
+        backup_root=backups)
+
+
 def cmd_gui_show(args) -> tuple[dict, int]:
     variables: dict[str, str] = {}
     for item in args.var or []:
@@ -1073,6 +1131,9 @@ def add_verbs(sub) -> None:
     p.add_argument("--game-arg", action="append", default=[], metavar="FLAG",
                    help="add one of %s to the game's arguments (repeatable). Write it without its dash, or as "
                         "--game-arg=-FLAG. The fixture's own run never gets it" % ", ".join(session.GAME_ARGS))
+    p.add_argument("--capture", action="store_true",
+                   help="a capture session (#2056): the overlay carries the console with nothing drawn and debug "
+                        "mode's counters hidden while te_qa_capture is set, so a picture shows nothing of the harness")
     p.add_argument("--unresponsive-s", type=float, metavar="S",
                    help="how long the game's window may not respond before a verb calls the game gone (game_gone), "
                         "for every verb of the session: %g s by default, up to %g. For a late save whose ticks freeze "
@@ -1206,6 +1267,25 @@ def add_verbs(sub) -> None:
     p.set_defaults(run=cmd_gui_show)
     p = sub.add_parser("gui-hide", help="clear a preview gui-show --keep left up, and the values it set")
     p.set_defaults(run=cmd_gui_hide)
+    p = sub.add_parser("view", help="open a view by script, not by clicks: client-side keys set and panels opened "
+                                    "by a scratch widget's creation (#2056)")
+    p.add_argument("actions", nargs="+", metavar="ACTION",
+                   help="set:KEY=VALUE, clear:KEY, panel:NAME, panel:NAME:TAB, market:TAB or close-panel; the word "
+                        "`then` starts a new step, whose widget is created after the last one's")
+    p.set_defaults(run=cmd_view)
+    p = sub.add_parser("crop", help="a region of the window at the window's own resolution, nothing typed")
+    p.add_argument("box", nargs="*", type=float, metavar="L T R B",
+                   help="left, top, right, bottom as fractions of the window (default: the whole window)")
+    p.add_argument("--settle", action="store_true", help="shoot again until two shots in a row agree")
+    p.add_argument("--label", help="a word in the file's name")
+    p.set_defaults(run=cmd_crop)
+    p = sub.add_parser("hover", help="leave the cursor at X, Y (fractions of the window), pressing nothing, then a "
+                                     "shot: a tooltip for a picture")
+    p.add_argument("x", type=float)
+    p.add_argument("y", type=float)
+    p.set_defaults(run=cmd_hover)
+    from game_qa import capture as _capture
+    _capture.add_parser(sub, cmd_capture)
     p = sub.add_parser("try-event", help="the owner's first check: for each option of EVENT, run the setup, fire "
                                          "the event, read, pick that option, read again; one table in the report")
     p.add_argument("event")

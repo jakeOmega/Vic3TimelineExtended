@@ -41,6 +41,14 @@ game has taken the rewrite.
                                                 the deployed mod's at the same path
 
 A `.gui` file added mid-game was picked up in the test session of 2026-11-23, and an edit reloads within a second.
+
+`start --capture` (#2056) adds copies of two of the game's own files, made by `game_qa.capture_gui` from the installed
+ones and written as they come (`extra_gui`), so that nothing of the harness's is drawn in a picture:
+
+    mod/te_qa_overlay/gui/console.gui           the console, see-through, its edit line drawing nothing
+    mod/te_qa_overlay/gui/error_deer.gui        debug mode's counters, hidden while te_qa_capture is set
+
+Like the profiler window, they are never kept in the repo, and the fixture's key never reads them.
 """
 
 from __future__ import annotations
@@ -122,16 +130,19 @@ class Overlay:
     preview_file: Path | None = None    # gui-show's wrapper, when the overlay carries one
     preview_revision: int = 0           # of preview_file: 0 as built, then what write_preview was given
     synced: dict[str, str] = field(default_factory=dict)    # a synced .gui file's path -> sha256 of what was written
+    extra_gui: list[str] = field(default_factory=list)      # what `build` wrote from `extra_gui` (start --capture)
 
 
 def build(dest: Path, setups: Mapping[str, str], game_version: str, profiler_gui: bytes | None = None,
-          fixture_date: tuple[int, int, int] | None = None, preview_gui: str | None = None) -> Overlay:
+          fixture_date: tuple[int, int, int] | None = None, preview_gui: str | None = None,
+          extra_gui: Mapping[str, bytes] | None = None) -> Overlay:
     """Write the overlay into `dest` (a folder named OVERLAY_NAME), replacing an earlier one of ours.
 
     `setups` maps a setup name to the Paradox script of its body, which becomes the scripted effect
     `te_qa_setup_<name>` and is run by its own hidden event. `profiler_gui`, when given, is written as it is to
     PROFILER_GUI_FILE (what `profiler_gui()` made of the game's own file). `preview_gui`, when given, is written
-    with the BOM to PREVIEW_FILE (gui-show's empty wrapper). `fixture_date` is the date the
+    with the BOM to PREVIEW_FILE (gui-show's empty wrapper). `extra_gui` maps a path under `gui/` (a `.gui` file other
+    than those two) to bytes written as they are: the capture copies of the game's files. `fixture_date` is the date the
     scripted test fails on, so the date of the save an unattended run makes (#1602); None is the plain
     fixture's, the game's second day, whose text is the one run live. Raises OverlayError, before anything is
     written or removed, for a name or body it refuses, a `game_version` that is not text, a `dest`
@@ -149,6 +160,11 @@ def build(dest: Path, setups: Mapping[str, str], game_version: str, profiler_gui
         raise OverlayError(f"{dest.parent} is not a folder: the overlay goes into an existing mod folder")
     if os.path.lexists(dest) and not _is_overlay(dest):
         raise OverlayError(f"{dest} exists and is not an overlay made by game_qa, so it is left alone")
+    extra = dict(extra_gui or {})
+    for rel, data in extra.items():
+        if (not isinstance(rel, str) or _SYNC_PATH.fullmatch(rel) is None or rel in (PREVIEW_FILE, PROFILER_GUI_FILE)
+                or not isinstance(data, (bytes, bytearray))):
+            raise OverlayError(f"{rel!r} is not a .gui file under gui/ that the overlay may carry as it is")
 
     test_text = _scripted_test_text(fixture_date)
     events_text, read_line, setup_events = _events_text(sorted(bodies))
@@ -163,6 +179,8 @@ def build(dest: Path, setups: Mapping[str, str], game_version: str, profiler_gui
             _write(temp / PROFILER_GUI_FILE, bytes(profiler_gui))
         if preview_gui is not None:
             _write(temp / PREVIEW_FILE, _txt(preview_gui))
+        for rel, data in sorted(extra.items()):
+            _write(temp / rel, bytes(data))
         remove(dest)
         os.rename(temp, dest)
     except BaseException:
@@ -170,7 +188,7 @@ def build(dest: Path, setups: Mapping[str, str], game_version: str, profiler_gui
         raise
     return Overlay(dest, dest / EVENTS_FILE, read_line, setup_events, dest / EFFECTS_FILE, bodies,
                    profiler_gui=dest / PROFILER_GUI_FILE if profiler_gui is not None else None,
-                   preview_file=dest / PREVIEW_FILE if preview_gui is not None else None)
+                   preview_file=dest / PREVIEW_FILE if preview_gui is not None else None, extra_gui=sorted(extra))
 
 
 def profiler_gui(base_game: Path) -> tuple[bytes | None, dict]:
