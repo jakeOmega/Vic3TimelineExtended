@@ -115,6 +115,16 @@ The siege stays on the 1st: the Defences' fire on fleets closing in, integrity, 
 - Tests: the battle's wiring (every tick, after the landings and the batteries; the siege only on the 1st), the pair rule, the break, the retreat's gate, the batteries' share, the AI's two tests, the records. `test_space_fleet_battle.py` runs the loop itself from the script files in fixed point (test_space_fleets' `_Fx` with countries): an even fight breaks both in 12 to 16 steps, a 2:1 costs the winner 11.4% (the continuous square law's 9.9%), and tenders reach the ceiling.
 - Play-test list: `event te_debug_space_race.6` option o (the strongest enemy puts a fleet at Earth) and n (fill the reserve), then watch a battle settle within the tick, a break and a retreat, an Avoid that escapes and one that is caught.
 
+### 2.11 After review (PR #2069)
+
+- **A battle needs a fleet to keep going.** Fleets can break; the Orbital Battlestation can't. A step with no fleet paired (two battlestations at war at Earth and no fleet between them) is taken only as a battle's first step, at `sr_fleet_k` × `sr_battery_tick_share` (a quarter of the old month's fire, as the batteries), so two battlestations no longer grind each other to nothing within the week, and the self-check's BROKEN counts only fleets left paired.
+- **An Avoid fleet lands on Station** where its country holds no colony (`sr_fl_arrival_posture_at`), since a Stand off where there is a colony it may attack ties it and the battle of its landing tick would catch it. Its player stands it off to blockade, and is caught from then on.
+- **The AI chooses Engage or Avoid only with a Space Command**, as a player's fleets keep their setting without one.
+- **The AI's defence** settles which fleets may go before sending any, sends them strongest first until the win test passes (not all), and keeps its fleets at Earth home while an enemy fleet is at Earth or on its way (`sr_fl_ai_earth_threatened`).
+- **One report a tick:** a batteries-only report queued at Earth is taken over by a battle elsewhere in the same tick (`sr_battle_notice_batteries`, a day), not followed by a second.
+- Quality × readiness is read once a power a battle (`sr_bt_qr`), and the building searches start with `has_building`.
+- Left as designed: a broken fleet at a dock (Earth or a Spaceport) stays and is fought again the next week, losing half of what it then brings each time; allies don't pool in the AI's two tests.
+
 ## 3. The open questions: first guesses
 
 | Question | First guess | Why |

@@ -2595,7 +2595,11 @@ class ReadinessTest(unittest.TestCase):
         for m in re.finditer(r"multiply = sr_fleet_readiness", everything):
             before = everything[max(0, m.start() - 120):m.start()]
             self.assertRegex(before, r"(sr_fl_(\$N\$|\d)_fire_(fleets|defences)\s*multiply = sr_fleet_quality|"
-                                     r"value = var:sr_fl_at_earth)\s*$")
+                                     r"value = var:sr_fl_at_earth|name = sr_bt_qr value = \{ value = sr_fleet_quality)\s*$")
+        # The battle's, once a power (sr_bt_qr, review of #2069): only a fleet's fire.
+        for m in re.finditer(r"multiply = var:sr_bt_qr", everything):
+            self.assertRegex(everything[max(0, m.start() - 120):m.start()],
+                             r"value = sr_fl_\$N\$_fire_fleets\s*if = \{ limit = \{ has_variable = sr_bt_qr \}\s*$")
         self.assertNotIn("sr_fleet_readiness", _block(self.values, "sr_battlestation_fire"))
         for name in ("sr_bt_battery_fire", "sr_bt_snap_bs", "sr_bt_ready_bs"):
             self.assertNotIn("sr_fleet_readiness", _block(self.combat, name))

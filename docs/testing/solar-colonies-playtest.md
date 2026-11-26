@@ -294,7 +294,8 @@ interdiction; fill the reserve; an enemy fleet at Earth). Grep `debug.log` for `
     Orbital Battlestation fights for its owner (25 strength a level), never breaks, and regains 10% a month; the
     batteries fire a quarter of their month's figure each week; a battle there adds debris (Orbit section).
     **Engage / Avoid.** Set a fleet to Avoid and send it to an enemy location held by a slower enemy fleet that
-    engages: it lands and nobody fights. Send it against a faster one: it is caught. Send it where the enemy holds a
+    engages: it lands on Station (not Stand off) and nobody fights; set it to Stand off and it is caught the next
+    week (it blockades, so it is tied). Send it against a faster one: it is caught. Send it where the enemy holds a
     colony with a fleet set to Avoid: our fleet, if it engages, catches theirs (tied to its colony). The button shows
     on the card in flight and where the posture line does, and in the Fleets window always; without a Space Command
     it is grayed with the reason. An AI fleet sets its own: it avoids a fight it would lose by strength × fire.

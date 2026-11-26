@@ -431,7 +431,8 @@ class ReviewFixesTest(unittest.TestCase):
         """Each cut in a battle (2026-11-25 design § 2) books its crews on the
         power's record, the report reading the battle's sum."""
         record = _block(self.combat, "sr_bt_record")
-        self.assertIn("set_variable = { name = sr_battle_dead value = var:sr_bt_dead }", record)
+        self.assertIn("sr_bt_note_figures = yes", record)
+        self.assertIn("set_variable = { name = sr_battle_dead value = var:sr_bt_dead }", _block(self.combat, "sr_bt_note_figures"))
         self.assertIn("change_local_variable = { name = sr_pers_noted add = local_var:sr_pers_lost }",
                       _block(self.pers, "sr_pers_note_people"))
         cut = _block(self.combat, "sr_bt_cut_slot")

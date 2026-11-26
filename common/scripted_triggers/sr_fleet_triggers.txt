@@ -385,6 +385,9 @@ sr_has_battlestation = {
 }
 
 sr_battlestation_held = {
+	# The cheap test first: the battle reads this for every power at Earth each
+	# week (review of #2069).
+	has_building = building_orbital_battlestation
 	any_scope_building = {
 		is_building_type = building_orbital_battlestation
 		state = { sr_state_held_by_owner = yes }
@@ -479,6 +482,9 @@ sr_fl_ai_reserve_matches = {
 # Country scope. A ground-to-orbit battery, anywhere (its levels count only in
 # the states it controls: sr_battery_fire, sr_battery_sweep).
 sr_has_battery = {
+	# The cheap test first: the battle reads this for every power at Earth each
+	# week (review of #2069).
+	has_building = building_orbital_defense_battery
 	any_scope_building = {
 		is_building_type = building_orbital_defense_battery
 	}

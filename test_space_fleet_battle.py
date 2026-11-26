@@ -41,7 +41,9 @@ class _FxWorld(_Fx):
         # Unless a test says otherwise: no colony, dock or hostile world, no
         # battlestation or battery, and no leg a fleet may take.
         self.ov_triggers = [(r"sr_loc_held_\w+|sr_loc_port_\w+|sr_fl_\d_has_hostile_world|sr_battlestation_held|sr_has_battery"
-                             r"|sr_fl_\d_may_depart_\w+", lambda t, n: False)]
+                             r"|sr_fl_\d_may_depart_\w+|has_building|sr_fl_ai_earth_threatened", lambda t, n: False),
+                            # A Space Command, unless a test says otherwise.
+                            (r"sr_sc_operational", lambda t, n: True)]
         self.ov_triggers = list((triggers or {}).items()) + self.ov_triggers
         self.vars = {}
         self.events, self.dispatched, self.debris = [], [], []
@@ -168,7 +170,7 @@ class _FxWorld(_Fx):
                 self.events.append((self._here(), dict((k, x) for k, _, x in v)))
             elif key == "sr_fl_dispatch":
                 self.dispatched.append((self._here(), dict((k, x) for k, _, x in v)))
-            elif key == "save_temporary_scope_as":
+            elif key in ("save_temporary_scope_as", "save_scope_as"):
                 self.saved[v] = self._here()
             elif key == "te_debris_add":
                 self.debris.append({k: self.num(x) for k, _, x in v})
@@ -264,7 +266,8 @@ class UnevenFightTest(unittest.TestCase):
                              "set_variable = { name = sr_bt_dead value = 0 } set_variable = { name = sr_bt_present value = yes } "
                              "set_local_variable = { name = sr_bt_held value = 0 } set_local_variable = { name = sr_bt_units value = 0 } "
                              "sr_fl_bt_setup_at = { N = 1 } set_variable = { name = sr_bt_s value = 0 } "
-                             "set_variable = { name = sr_bt_f value = 0 } sr_fl_bt_ready_at = { N = 1 }"))
+                             "set_variable = { name = sr_bt_f value = 0 } set_variable = { name = sr_bt_qr value = 1 } "
+                             "sr_fl_bt_ready_at = { N = 1 }"))
         w.run(_parse("set_local_variable = { name = sr_bt_steps value = 0 } set_local_variable = { name = sr_bt_debris value = 0 } "
                      "set_local_variable = { name = sr_bt_ends value = 0 } set_local_variable = { name = sr_bt_battle value = 0 } "
                      "sr_bt_step = yes"))
@@ -360,7 +363,9 @@ class EarthTest(unittest.TestCase):
         w.battle("earth")
         self.assertEqual([t for t, e in w.events], ["B"])
         self.assertIn("sr_battery_notice_pending", w.world["B"])
-        self.assertNotIn("sr_battle_notice_pending", w.world["B"])
+        # One report a tick either way; a battle elsewhere this tick may take it over.
+        self.assertIn("sr_battle_notice_pending", w.world["B"])
+        self.assertIn("sr_battle_notice_batteries", w.world["B"])
 
 
 class AiTest(unittest.TestCase):
@@ -388,8 +393,9 @@ class AiDefendTest(unittest.TestCase):
     """§ 2.7: sr_fl_ai_defend_<loc> on the win test. B's 100 warships are bound
     for Mars, where A holds a colony; A's free fleets at Earth can reach it."""
 
-    def _defend(self, *ours, at_mars=0):
-        w = _two(triggers={r"sr_fl_ai_threatened_mars": lambda t, n: True, r"sr_icpt_interdicts_at": lambda t, n: False})
+    def _defend(self, *ours, at_mars=0, earth_threat=False):
+        w = _two(triggers={r"sr_fl_ai_threatened_mars": lambda t, n: True, r"sr_icpt_interdicts_at": lambda t, n: False,
+                           r"sr_fl_ai_earth_threatened": lambda t, n: earth_threat})
         # A slot's gates hold for a fleet at Earth (as may_depart's own has_variable does).
         w.ov_triggers.insert(0, (r"sr_fl_\d_ai_free|sr_fl_\d_ai_reaches_mars|sr_fl_\d_may_depart_mars",
                                  lambda t, n: w.world[t].get(f"sr_fl_{n[6]}_loc") == _fxn(CODE["earth"])))
@@ -417,9 +423,84 @@ class AiDefendTest(unittest.TestCase):
     def test_nothing_while_already_winning(self):
         self.assertEqual(self._defend(150, at_mars=120), [])
 
+    def test_strongest_first_only_as_many_as_win(self):
+        # 60 alone loses to 100; 60 and 50 win; 40 stays.
+        self.assertEqual(self._defend(60, 50, 40), [1, 2])
+
+    def test_fleets_at_earth_stay_while_earth_is_threatened(self):
+        self.assertEqual(self._defend(150, 60, earth_threat=True), [])
+
     def test_more_when_ours_there_would_lose(self):
         # 50 there and 60 free: 110 against 100.
         self.assertEqual(self._defend(60, at_mars=50), [1])
+
+
+class ReviewFixesTest(unittest.TestCase):
+    """The review of #2069."""
+
+    def test_battlestations_alone_exchange_a_quarter_month_s_fire_once_a_tick(self):
+        bs = {r"sr_battlestation_fire": lambda t, n: 50, r"sr_battlestation_full": lambda t, n: 125}
+        w = _two(values=bs, triggers={r"sr_battlestation_held": lambda t, n: True})
+        for tag in "AB":
+            w.world[tag]["sr_battlestation_strength"] = _fxn(125)
+        w.battle("earth")
+        self.assertEqual(w.locals["sr_bt_steps"], _fxn(1))
+        # The other's 50 fire x 0.1 x 0.25: a quarter of a month's, as the
+        # batteries', not sixty steps (which left each at 5.76).
+        for tag in "AB":
+            self.assertEqual(w.var(tag, "sr_battlestation_strength"), Decimal("123.75"))
+        self.assertNotIn("sr_bt_broken_logged", w.globals)
+        self.assertNotIn("sr_bt_ok_logged", w.globals)
+
+    def test_a_fleet_keeps_the_battle_going_beside_a_battlestation(self):
+        bs = {r"sr_battlestation_fire": lambda t, n: 50, r"sr_battlestation_full": lambda t, n: 100}
+        w = _two(values=bs, triggers={r"sr_battlestation_held": _always(("A", r"sr_battlestation_held"))})
+        w.world["A"]["sr_battlestation_strength"] = _fxn(100)
+        w.fleet("B", 1, "earth", war=100)
+        w.battle("earth")
+        self.assertGreater(w.locals["sr_bt_steps"], _fxn(1))
+        self.assertLessEqual(w.strength("B", 1), 50)
+
+    def test_every_battle_figure_is_cleared_for_battery_and_battlestation_owners(self):
+        bs = {r"sr_battlestation_fire": lambda t, n: 50, r"sr_battlestation_full": lambda t, n: 100,
+              r"sr_battery_fire": lambda t, n: 100, r"sr_battery_fire_kinetic": lambda t, n: 0}
+        w = _two(values=bs, triggers={r"sr_battlestation_held": _always(("A", r"sr_battlestation_held")),
+                                      r"sr_has_battery": _always(("A", r"sr_has_battery"))})
+        w.world["A"]["sr_battlestation_strength"] = _fxn(100)
+        w.fleet("B", 1, "earth", war=100)
+        w.battle("earth")
+        for tag in "AB":
+            left = [k for k in w.world[tag] if "_bt_" in k or k.startswith("sr_bt_")]
+            self.assertEqual(left, [], tag)
+
+    def test_without_a_space_command_an_ai_keeps_its_setting(self):
+        w = _two(players=[], triggers={r"sr_sc_operational": _always(("A", r"sr_sc_operational"))})
+        w.fleet("A", 1, "mars", war=100)
+        w.fleet("B", 1, "mars", war=60)
+        w.battle("mars")
+        # B, weaker, would avoid; with no Space Command it keeps Engage and fights.
+        self.assertNotIn("sr_fl_1_avoid", w.world["B"])
+        self.assertLessEqual(w.strength("B", 1), 30)
+
+    def test_one_report_a_tick_a_battle_taking_over_the_batteries(self):
+        vals = {r"sr_battery_fire": lambda t, n: 100, r"sr_battery_fire_kinetic": lambda t, n: 0}
+        w = _two(players=["B"], values=vals, triggers={r"sr_has_battery": _always(("A", r"sr_has_battery"))})
+        w.fleet("B", 1, "earth", war=100)
+        w.fleet("B", 2, "mars", war=100)
+        w.fleet("A", 1, "mars", war=100)
+        w.battle("earth")
+        w.battle("mars")
+        self.assertEqual([t for t, e in w.events], ["B"])
+        self.assertEqual(w.var("B", "sr_battle_loc"), CODE["mars"])
+        self.assertNotIn("sr_battle_notice_batteries", w.world["B"])
+
+    def test_an_avoid_fleet_lands_on_station(self):
+        from test_space_fleets import _block, _strip
+        import gen_space_fleets as gsf
+        arrival = _block(_strip(_raw(ROOT / gsf.EFFECTS_OUT)), "sr_fl_arrival_posture_at")
+        self.assertRegex(arrival, r"else = \{\s*if = \{ limit = \{ has_variable = sr_fl_\$N\$_avoid \} "
+                                  r"set_variable = \{ name = sr_fl_\$N\$_posture value = 1 \} \}\s*"
+                                  r"else = \{ set_variable = \{ name = sr_fl_\$N\$_posture value = 2 \} \}")
 
 
 class CeilingTest(unittest.TestCase):

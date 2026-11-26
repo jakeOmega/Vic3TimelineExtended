@@ -8652,6 +8652,18 @@ sr_loc_held_earth = { always = no }
 #                                 our marines on its world don't make one already;
 #                                 or one held at the break level by force for fewer
 #                                 than sr_hold_ai_reinforce_months (owner, 2026-11-25)
+# The AI's defence keeps its fleets at Earth home (sr_fl_ai_defend_<loc>): a
+# fleet of a power at war with it is at Earth or on its way there (review of
+# #2069: sending every free fleet could leave Earth to the enemy).
+sr_fl_ai_earth_threatened = {
+	save_temporary_scope_as = sr_icpt_victim
+	any_in_global_list = {
+		variable = sr_fleet_powers
+		is_country_alive = yes
+		has_war_with = scope:sr_icpt_victim
+		OR = { has_variable = sr_fl_at_earth sr_fl_any_bound = { CODE = 1 } }
+	}
+}
 # The Moon's colonies, at Earth: Land and Embark there (owner, 2026-11-24).
 sr_loc_held_lunar = {
 	OR = {

@@ -364,7 +364,7 @@ sr_fl_ai_attack_margin = { value = 1.5 }
 sr_ws_colony_base = { value = 0.1 }
 sr_ws_colony_growth = { value = 0.15 }
 sr_ws_colony_full_people = { value = 75000 }
-# A month's battle: who lost the larger share, and a fleet destroyed outright.
+# A battle's verdict: who lost the larger share, and a fleet destroyed outright.
 sr_ws_battle = { value = 0.1 }
 sr_ws_battle_rout = { value = 0.25 }
 

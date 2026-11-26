@@ -229,6 +229,9 @@ sr_battle_run = {
 		limit = { has_variable = sr_bt_present }
 		set_variable = { name = sr_bt_s value = 0 }
 		set_variable = { name = sr_bt_f value = 0 }
+		# Its fleets' quality x readiness, once a battle (readiness reads its
+		# Space Command; review of #2069).
+		set_variable = { name = sr_bt_qr value = { value = sr_fleet_quality multiply = sr_fleet_readiness } }
 		sr_fl_each_slot = { DO = bt_ready }
 		sr_bt_ready_bs = yes
 	}
@@ -238,6 +241,9 @@ sr_battle_run = {
 			has_variable = sr_bt_present
 			is_player = no
 			var:sr_bt_s > 0
+			# Without a Space Command its fleets keep the setting they had, as a
+			# player's do (design § 2.9; review of #2069).
+			sr_sc_operational = yes
 		}
 		sr_bt_ai_choose = yes
 	}
@@ -474,7 +480,11 @@ sr_fl_bt_ready_at = {
 		change_variable = { name = sr_bt_s add = sr_fl_$N$_strength }
 		change_variable = {
 			name = sr_bt_f
-			add = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness }
+			add = {
+				value = sr_fl_$N$_fire_fleets
+				# Set by step 3 before this; a tooltip's walk writes nothing (tooltip_walk).
+				if = { limit = { has_variable = sr_bt_qr } multiply = var:sr_bt_qr }
+			}
 		}
 	}
 }
@@ -560,6 +570,29 @@ sr_bt_step = {
 		limit = { has_variable = sr_bt_present }
 		sr_bt_each_unit = { DO = engaged }
 	}
+	# Fleets keep a battle going: they can break. Battlestations, which can't,
+	# alone exchange one step a tick, at a quarter of a month's fire (the
+	# batteries' share), not sixty (review of #2069).
+	set_local_variable = { name = sr_bt_fleet_pairs value = 0 }
+	every_in_global_list = {
+		variable = sr_fleet_powers
+		limit = { has_variable = sr_bt_present }
+		sr_fl_each_slot = { DO = bt_count }
+	}
+	set_local_variable = { name = sr_bt_step_k value = sr_bt_k }
+	if = {
+		limit = {
+			local_var:sr_bt_pairs > 0
+			local_var:sr_bt_fleet_pairs = 0
+		}
+		if = {
+			limit = { local_var:sr_bt_steps > 0 }
+			set_local_variable = { name = sr_bt_pairs value = 0 }
+		}
+		else = {
+			set_local_variable = { name = sr_bt_step_k value = { value = sr_fleet_k multiply = sr_battery_tick_share } }
+		}
+	}
 	if = {
 		limit = { local_var:sr_bt_pairs > 0 }
 		set_local_variable = { name = sr_bt_battle value = 1 }
@@ -584,7 +617,10 @@ sr_fl_bt_snap_at = {
 		set_variable = { name = sr_fl_$N$_bt_s value = sr_fl_$N$_strength }
 		set_variable = {
 			name = sr_fl_$N$_bt_f
-			value = { value = sr_fl_$N$_fire_fleets multiply = sr_fleet_quality multiply = sr_fleet_readiness }
+			value = {
+				value = sr_fl_$N$_fire_fleets
+				if = { limit = { has_variable = sr_bt_qr } multiply = var:sr_bt_qr }
+			}
 		}
 	}
 }
@@ -656,7 +692,7 @@ sr_bt_loss = {
 			value = {
 				value = var:sr_fl_$N$_bt_s
 				multiply = local_var:sr_bt_sum
-				multiply = sr_bt_k
+				multiply = local_var:sr_bt_step_k
 			}
 		}
 	}
@@ -758,7 +794,21 @@ sr_bt_record = {
 		else = {
 			set_variable = { name = sr_ws_battle value = { value = sr_ws_battle multiply = -1 } days = 30 }
 		}
+		# One report a tick: a battle's, or the batteries' fire alone at most once a
+		# month. The report reads its figures a day later, so a battle elsewhere
+		# in the same tick takes over a batteries' report already queued instead
+		# of queuing a second (sr_battle_notice_batteries, a day; review of #2069).
 		if = {
+			limit = {
+				is_player = yes
+				local_var:sr_bt_battle = 1
+				has_variable = sr_battle_notice_batteries
+			}
+			remove_variable = sr_battle_notice_batteries
+			set_variable = { name = sr_battle_loc value = $CODE$ }
+			sr_bt_note_figures = yes
+		}
+		else_if = {
 			limit = {
 				is_player = yes
 				NOT = { has_variable = sr_battle_notice_pending }
@@ -767,25 +817,29 @@ sr_bt_record = {
 					NOT = { has_variable = sr_battery_notice_pending }
 				}
 			}
+			set_variable = { name = sr_battle_notice_pending value = yes days = 6 }
 			if = {
-				limit = { local_var:sr_bt_battle = 1 }
-				set_variable = { name = sr_battle_notice_pending value = yes days = 6 }
-			}
-			else = {
+				limit = { local_var:sr_bt_battle = 0 }
 				set_variable = { name = sr_battery_notice_pending value = yes days = 25 }
+				set_variable = { name = sr_battle_notice_batteries value = yes days = 1 }
 			}
 			set_variable = { name = sr_battle_loc value = $CODE$ }
-			set_variable = { name = sr_battle_lost value = var:sr_bt_lost }
-			set_variable = { name = sr_battle_dealt value = sr_bt_enemy_lost }
-			set_variable = { name = sr_battle_left value = { value = var:sr_bt_before subtract = var:sr_bt_lost min = 0 } }
-			# The crews that died with the destroyed half (space forces personnel
-			# design § 7): what sr_fl_cut_role booked in this battle, so the
-			# Orbital Battlestation's share of the losses (no crew) and the
-			# full-strength floor are left out (review of #2020).
-			set_variable = { name = sr_battle_dead value = var:sr_bt_dead }
+			sr_bt_note_figures = yes
 			trigger_event = { id = space_race_events.101 days = 1 }
 		}
 	}
+}
+# The report's figures beside sr_battle_loc, read by space_race_events.101 a
+# day later.
+sr_bt_note_figures = {
+	set_variable = { name = sr_battle_lost value = var:sr_bt_lost }
+	set_variable = { name = sr_battle_dealt value = sr_bt_enemy_lost }
+	set_variable = { name = sr_battle_left value = { value = var:sr_bt_before subtract = var:sr_bt_lost min = 0 } }
+	# The crews that died with the destroyed half (space forces personnel
+	# design § 7): what sr_fl_cut_role booked in this battle, so the
+	# Orbital Battlestation's share of the losses (no crew) and the
+	# full-strength floor are left out (review of #2020).
+	set_variable = { name = sr_battle_dead value = var:sr_bt_dead }
 }
 
 # Global scope, after the battle (§ 2.10): TE_SELF_CHECK fleet_battle, once a
@@ -807,7 +861,7 @@ sr_bt_self_check = {
 		every_in_global_list = {
 			variable = sr_fleet_powers
 			limit = { has_variable = sr_bt_present }
-			sr_bt_each_unit = { DO = left_paired }
+			sr_fl_each_slot = { DO = bt_left }
 		}
 		if = {
 			limit = {
@@ -837,7 +891,9 @@ sr_bt_self_check = {
 	}
 }
 
-sr_bt_left_paired = {
+# A fleet still paired at the ceiling (the battlestation, which never breaks,
+# doesn't count: review of #2069), and a fleet paired this step (sr_bt_step).
+sr_fl_bt_left_at = {
 	if = {
 		limit = {
 			has_variable = sr_fl_$N$_bt_in
@@ -846,6 +902,15 @@ sr_bt_left_paired = {
 		}
 		change_local_variable = { name = sr_bt_pf add = var:sr_fl_$N$_bt_f }
 		change_local_variable = { name = sr_bt_ps add = var:sr_fl_$N$_bt_s }
+	}
+}
+sr_fl_bt_count_at = {
+	if = {
+		limit = {
+			has_variable = sr_fl_$N$_bt_p
+			var:sr_fl_$N$_bt_p = 1
+		}
+		change_local_variable = { name = sr_bt_fleet_pairs add = 1 }
 	}
 }
 
@@ -858,6 +923,7 @@ sr_bt_end_power = {
 	if = { limit = { has_variable = sr_bt_dead } remove_variable = sr_bt_dead }
 	if = { limit = { has_variable = sr_bt_s } remove_variable = sr_bt_s }
 	if = { limit = { has_variable = sr_bt_f } remove_variable = sr_bt_f }
+	if = { limit = { has_variable = sr_bt_qr } remove_variable = sr_bt_qr }
 	sr_bt_end_bs = yes
 }
 

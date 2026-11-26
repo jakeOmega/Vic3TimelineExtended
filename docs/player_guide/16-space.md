@@ -1583,7 +1583,9 @@ orders:
 - Two fleets that both engage fight; two that both avoid don't.
 - A fleet that engages catches one that avoids if it is at least as fast, or if
   the other can't slip away: it is where its country holds a colony, at Earth,
-  or closing in, interdicting or blockading there.
+  or closing in, interdicting, or standing off where there is a colony it may
+  attack. A fleet set to Avoid that lands where you hold no colony takes Station
+  rather than Stand off, so it can still slip away; set Stand off to blockade.
 - A fleet's speed is its drive's, one step more for a fleet of rapid response
   alone. Fleets are matched one by one, so a slow fleet can be caught while a
   faster one of the same country gets away.
@@ -1621,7 +1623,8 @@ At Earth every fleet is stationed and none can slip away, so a fleet that
 engages there fights every enemy fleet. An Orbital Battlestation fights for its
 owner: it always engages and never breaks, fighting until its strength is gone
 (25 strength a level, regaining 10% a month; none in a state its owner doesn't
-control). Its owner's ground-to-orbit batteries fire once a week before the
+control). Two battlestations with no fleet in the fight exchange only a quarter
+of a month's fire a week. Its owner's ground-to-orbit batteries fire once a week before the
 battle (see [Holding Earth orbit](#holding-earth-orbit)). The one exception to
 Station at Earth is a fleet closing in on a colony on the Moon: the posture
 buttons show while there is a lunar colony you can close in on (an enemy's, a
@@ -1781,10 +1784,11 @@ supply or propellant, and land marines for the garrisons they order. Where they
 hold colonies and an enemy fleet is there or on its way, or a fleet interdicts
 them there, they weigh their fleets there and on their way against the enemy's,
 each by strength times fire: winning already, they send nothing; else their
-strongest free fleet if it would win alone, else every free fleet that can reach
-it if together they would, else none. In a battle an AI engages where its
+strongest free fleet if it would win alone, else its free fleets that can reach
+it, strongest first, until together they would win, else none; while an enemy
+fleet is at Earth or on its way, its fleets at Earth stay home. In a battle an AI engages where its
 fleets' strength times fire is at least the enemy's there, and avoids
-otherwise. At war,
+otherwise; without a Space Command its fleets keep the setting they had. At war,
 once a month, an AI sends one fleet from a dock to the nearest enemy location
 within a year's flight, when the fleet is at least half again as strong as the
 enemy's fleets and its colonies' Defenses there and can fly home again or dock
