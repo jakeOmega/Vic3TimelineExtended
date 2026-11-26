@@ -1709,14 +1709,14 @@ began, not a month's worth at a time. Turn Auto-launch off to keep a reserve in 
 and launch it when you choose; it costs the same upkeep on the ground.
 
 You hear of each fleet of a country at war with you that is on its way to
-Earth, once a leg, within a month of its setting out, or of a war beginning with
+Earth, once a leg, within a week of its setting out, or of a war beginning with
 it already on its way. A notice in the feed tells you of one whose landing would
 change nothing. A popup, Earth Is Threatened, tells you once of one whose
 landing would tip the balance: it would find no fleet of yours at Earth (and
 Earth not blockaded already), or yours holds against what is there now but not
 against that and what is coming. That can come later in the leg too, if your
-fleet leaves Earth or theirs grows. One popup a month covers every such fleet
-that month, and the others you hadn't heard of get the feed notice. The
+fleet leaves Earth or theirs grows. One popup a week covers every such fleet
+that week, and the others you hadn't heard of get the feed notice. The
 overview's Hostile Fleet cell shows the first landing; hover it for each
 country's fleets on their way.
 
