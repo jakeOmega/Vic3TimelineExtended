@@ -1,0 +1,78 @@
+{
+ "hc_burmic_african": {
+  "en": "Burmese $heritage_group_african$",
+  "ru": "Бирманская $heritage_group_african$"
+ },
+ "hc_eastern_romance_african": {
+  "en": "Romanian $heritage_group_african$",
+  "ru": "Румынская $heritage_group_african$"
+ },
+ "hc_galla_central_asian": {
+  "en": "Oromo $heritage_group_central_asian$",
+  "ru": "Оромская $heritage_group_central_asian$"
+ },
+ "hc_jurchenic_african": {
+  "en": "Manchu $heritage_group_african$",
+  "ru": "Маньчжурская $heritage_group_african$"
+ },
+ "hc_lacustrine_bantu_central_asian": {
+  "en": "Great Lakes Bantu $heritage_group_central_asian$",
+  "ru": "Банту Великих озёр $heritage_group_central_asian$"
+ },
+ "hc_magadhan_african": {
+  "en": "Bengali $heritage_group_african$",
+  "ru": "Бенгальская $heritage_group_african$"
+ },
+ "hc_northwestern_indic_african": {
+  "en": "Punjabi $heritage_group_african$",
+  "ru": "Пенджабская $heritage_group_african$"
+ },
+ "hc_occitano_romance_african": {
+  "en": "Occitan $heritage_group_african$",
+  "ru": "Окситанская $heritage_group_african$"
+ },
+ "hc_oghuz_african": {
+  "en": "Turkic $heritage_group_african$",
+  "ru": "Тюркская $heritage_group_african$"
+ },
+ "hc_pahari_african": {
+  "en": "Nepali $heritage_group_african$",
+  "ru": "Непальская $heritage_group_african$"
+ },
+ "hc_philippinic_african": {
+  "en": "Filipino $heritage_group_african$",
+  "ru": "Филиппинская $heritage_group_african$"
+ },
+ "hc_quechuan_african": {
+  "en": "Quechua $heritage_group_african$",
+  "ru": "Кечуанская $heritage_group_african$"
+ },
+ "hc_siamese_african": {
+  "en": "Thai $heritage_group_african$",
+  "ru": "Тайская $heritage_group_african$"
+ },
+ "hc_south_central_african": {
+  "en": "Telugu $heritage_group_african$",
+  "ru": "Телугу $heritage_group_african$"
+ },
+ "hc_southern_indic_african": {
+  "en": "Marathi $heritage_group_african$",
+  "ru": "Маратхская $heritage_group_african$"
+ },
+ "hc_tamil_tulu_african": {
+  "en": "Tamil $heritage_group_african$",
+  "ru": "Тамильская $heritage_group_african$"
+ },
+ "hc_vietic_african": {
+  "en": "Vietnamese $heritage_group_african$",
+  "ru": "Вьетнамская $heritage_group_african$"
+ },
+ "hc_yue_african": {
+  "en": "Cantonese $heritage_group_african$",
+  "ru": "Кантонская $heritage_group_african$"
+ },
+ "heritage_hc_central_asian": {
+  "en": "$heritage_group_central_asian$ Diaspora",
+  "ru": "Диаспора: $heritage_group_central_asian$"
+ }
+}

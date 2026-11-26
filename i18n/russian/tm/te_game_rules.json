@@ -91,13 +91,25 @@
   "en": "Hybrid Cultures",
   "ru": "Гибридные культуры"
  },
+ "setting_assimilation_cultures_hybrid_desc": {
+  "en": "A [concept_pop] living among a people of another heritage group takes up their language and keeps its heritage, in a hybrid culture such as $hc_anglophone_african$. It joins the majority only where the $lawgroup_bodily_autonomy$ law in force allows it. A game begun before these cultures were added plays as $setting_assimilation_cultures_unrestricted$.",
+  "ru": "[concept_pop], живущая среди народа другой группы наследия, перенимает его язык и сохраняет своё наследие в гибридной культуре, например «$hc_anglophone_african$». Она присоединяется к большинству, только если это допускает действующий закон из группы «$lawgroup_bodily_autonomy$». Игра, начатая до добавления этих культур, идёт как «$setting_assimilation_cultures_unrestricted$»."
+ },
  "setting_assimilation_cultures_none": {
   "en": "None",
   "ru": "Нет"
  },
+ "setting_assimilation_cultures_none_desc": {
+  "en": "No [concept_pop] joins a [concept_culture] of another heritage group, and no hybrid cultures form, unless the $lawgroup_bodily_autonomy$ law in force allows it. Within a heritage group pops assimilate as before. Hybrid pops from another setting stay as they are.",
+  "ru": "Ни одна [concept_pop|l] не присоединяется к [Concept('concept_culture','культуре')] другой группы наследия, и гибридные культуры не образуются, если только это не допускает действующий закон из группы «$lawgroup_bodily_autonomy$». Внутри группы наследия группы населения ассимилируются, как и прежде. Гибридные группы населения из другой настройки остаются как есть."
+ },
  "setting_assimilation_cultures_unrestricted": {
   "en": "Unrestricted",
   "ru": "Без ограничений"
+ },
+ "setting_assimilation_cultures_unrestricted_desc": {
+  "en": "A [concept_pop] can join the largest primary [concept_culture] in its state whatever its heritage, as in the base game. For a pop of another heritage group the mod does this once a year, so the pop's panel does not show it. Hybrid pops from another setting join the majority at the usual rate.",
+  "ru": "[concept_pop] может присоединиться к крупнейшей основной [Concept('concept_culture','культуре')] в своей области, каким бы ни было её наследие, как в базовой игре. Для группы населения другой группы наследия мод делает это раз в год, поэтому панель группы населения этого не показывает. Гибридные группы населения из другой настройки присоединяются к большинству с обычной скоростью."
  },
  "setting_banking_system_disabled": {
   "en": "Banking System Disabled",

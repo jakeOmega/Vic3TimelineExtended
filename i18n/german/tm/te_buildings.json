@@ -155,6 +155,10 @@
   "en": "Antimatter Facility Construction Site",
   "de": "Baustelle: Antimaterie-Eindämmungsanlage"
  },
+ "building_antimatter_sub_any_slot_tt": {
+  "en": "An [concept_antimatter_facility] slot that no built Antimatter Engine or Antimatter Warhead Plant takes: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country once levels [concept_under_construction] count as taken",
+  "de": "Ein Platz für eine [concept_antimatter_facility], den kein gebautes Antimaterie-Triebwerk und kein gebautes Antimaterie-Sprengkopfwerk belegt: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! im ganzen Land frei, sobald Stufen [concept_under_construction] als belegt zählen"
+ },
  "building_antimatter_sub_slots_tt": {
   "en": "A free [concept_antimatter_facility] slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
   "de": "Ein freier [concept_antimatter_facility]-Slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! frei im ganzen Land (Stufen [concept_under_construction|l] zählen als belegt)"
@@ -518,6 +522,10 @@
  "building_employment_spacers_add": {
   "en": "$spacers$ Per Level",
   "de": "$spacers$ pro Stufe"
+ },
+ "building_employment_spacers_add_desc": {
+  "en": "Modifies the amount of $spacers$ a building can hire per level",
+  "de": "Verändert die Zahl der $spacers$, die ein Gebäude je Stufe einstellen kann"
  },
  "building_eni_palazzo": {
   "en": "Palazzo ENI",
@@ -992,8 +1000,8 @@
   "de": "Seekabelreichweite"
  },
  "building_grid_undersea_cable_range_add_desc": {
-  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, landing on a coast that touches both. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
-  "de": "Wie viele [Concept('concept_sea_node', '$concept_sea_nodes|q$')] das Kabel einer $building_grid_hvdc_interconnector$ durchqueren kann. Bei 1 erreicht das Kabel Küstenstaaten an einem $concept_sea_node$, den dieser Staat berührt. Jeder weitere Punkt durchquert einen weiteren $concept_sea_node$ und landet an einer Küste, die beide berührt. Zählt nur bei einer $building_grid_hvdc_interconnector$: Technologie verlängert ein Kabel, verlegt aber keines."
+  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, open ocean included. No cable crosses the $STATE_SOUTHERN_OCEAN_01$. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
+  "de": "Wie viele [Concept('concept_sea_node', '$concept_sea_nodes|q$')] das Kabel einer $building_grid_hvdc_interconnector$ durchqueren kann. Bei 1 erreicht das Kabel Küstenstaaten an einem $concept_sea_node$, den dieser Staat berührt. Jeder weitere Punkt durchquert einen weiteren $concept_sea_node$, offenen Ozean eingeschlossen. Kein Kabel durchquert den $STATE_SOUTHERN_OCEAN_01$. Zählt nur bei einer $building_grid_hvdc_interconnector$: Technologie verlängert ein Kabel, verlegt aber keines."
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -2103,6 +2111,10 @@
   "en": "Solar Power Receiver",
   "de": "Solarempfänger"
  },
+ "building_solar_receiver_any_slot_tt": {
+  "en": "An Orbital Solar Collector slot that no built Solar Power Receiver takes: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country once levels [concept_under_construction] count as taken",
+  "de": "Ein Platz für einen Orbitalen Sonnenkollektor, den kein gebauter Solarempfänger belegt: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! im ganzen Land frei, sobald Stufen [concept_under_construction] als belegt zählen"
+ },
  "building_solar_receiver_slots_tt": {
   "en": "A free Solar Receiver slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
   "de": "Ein freier Solarempfänger-Slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! frei im ganzen Land (Stufen [concept_under_construction|l] zählen als belegt)"
@@ -2138,6 +2150,10 @@
  "building_space_forces_base": {
   "en": "Space Forces Base",
   "de": "Weltraumstreitkräfte-Basis"
+ },
+ "building_space_forces_base_desc": {
+  "en": "Barracks and training halls for the people who crew our warships in space and fight as their marines. Each staffed level trains #v 1,000#! [concept_sr_space_personnel]. A point of fleet strength needs #v 100#! of them to crew it, #v 50#! with $artificial_intelligence$, and a marine battalion, or a level of Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center at a colony of ours, #v 1,000#!. When ships are destroyed or marines lost, the base's $spacers_no_icon$ die with them.",
+  "de": "Kasernen und Ausbildungshallen für die Menschen, die unsere Kriegsschiffe im Weltraum bemannen und als deren Marineinfanterie kämpfen. Jede besetzte Stufe bildet #v 1.000#! Angehörige des [Concept('concept_sr_space_personnel', 'Weltraumstreitkräfte-Personals')] aus. Ein Punkt Flottenstärke braucht #v 100#! davon als Besatzung, #v 50#! mit $artificial_intelligence$, und ein Marinebataillon oder eine Stufe Raumhafen, Verteidigungsanlagen, Geheimanlage, Übungsgelände oder Nuklearkommandozentrale an einer unserer Kolonien #v 1.000#!. Wenn Schiffe zerstört werden oder Marineinfanterie verloren geht, sterben die $spacers_no_icon$ der Basis mit ihnen."
  },
  "building_space_mine": {
   "en": "Extraplanetary Base",

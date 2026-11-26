@@ -91,13 +91,25 @@
   "en": "Hybrid Cultures",
   "de": "Hybridkulturen"
  },
+ "setting_assimilation_cultures_hybrid_desc": {
+  "en": "A [concept_pop] living among a people of another heritage group takes up their language and keeps its heritage, in a hybrid culture such as $hc_anglophone_african$. It joins the majority only where the $lawgroup_bodily_autonomy$ law in force allows it. A game begun before these cultures were added plays as $setting_assimilation_cultures_unrestricted$.",
+  "de": "[Concept('concept_pop', 'Pops')], die unter einem Volk einer anderen Herkunftsgruppe leben, übernehmen dessen Sprache und behalten ihr Erbe, in einer Hybridkultur wie $hc_anglophone_african$. Sie schließen sich der Mehrheit nur an, wo das in Kraft befindliche Gesetz der Gruppe $lawgroup_bodily_autonomy$ es erlaubt. Ein Spiel, das begonnen wurde, bevor diese Kulturen hinzukamen, läuft mit $setting_assimilation_cultures_unrestricted$."
+ },
  "setting_assimilation_cultures_none": {
   "en": "None",
   "de": "Keine"
  },
+ "setting_assimilation_cultures_none_desc": {
+  "en": "No [concept_pop] joins a [concept_culture] of another heritage group, and no hybrid cultures form, unless the $lawgroup_bodily_autonomy$ law in force allows it. Within a heritage group pops assimilate as before. Hybrid pops from another setting stay as they are.",
+  "de": "Keine [Concept('concept_pop', 'Pops')] schließen sich einer [concept_culture] einer anderen Herkunftsgruppe an, und es bilden sich keine Hybridkulturen, es sei denn, das in Kraft befindliche Gesetz der Gruppe $lawgroup_bodily_autonomy$ erlaubt es. Innerhalb einer Herkunftsgruppe assimilieren sich Pops wie zuvor. Hybride Pops aus einer anderen Einstellung bleiben, wie sie sind."
+ },
  "setting_assimilation_cultures_unrestricted": {
   "en": "Unrestricted",
   "de": "Uneingeschränkt"
+ },
+ "setting_assimilation_cultures_unrestricted_desc": {
+  "en": "A [concept_pop] can join the largest primary [concept_culture] in its state whatever its heritage, as in the base game. For a pop of another heritage group the mod does this once a year, so the pop's panel does not show it. Hybrid pops from another setting join the majority at the usual rate.",
+  "de": "[Concept('concept_pop', 'Pops')] können sich der größten primären [concept_culture] in ihrem Staat anschließen, gleich welches Erbe, wie im Basisspiel. Bei Pops einer anderen Herkunftsgruppe tut die Mod das einmal im Jahr, sodass die Tafel des Pops es nicht zeigt. Hybride Pops aus einer anderen Einstellung schließen sich der Mehrheit mit der üblichen Rate an."
  },
  "setting_banking_system_disabled": {
   "en": "Banking System Disabled",

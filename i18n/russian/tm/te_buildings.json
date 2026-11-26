@@ -139,6 +139,10 @@
   "en": "Antimatter Facility Construction Site",
   "ru": "Хранилище антиматерии: стройплощадка"
  },
+ "building_antimatter_sub_any_slot_tt": {
+  "en": "An [concept_antimatter_facility] slot that no built Antimatter Engine or Antimatter Warhead Plant takes: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country once levels [concept_under_construction] count as taken",
+  "ru": "Слот [Concept('concept_antimatter_facility','установки по производству антиматерии')], не занятый ни одним построенным «Двигателем на антиматерии» или «Заводом боезарядов на антиматерии»: свободно по стране #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#!, если уровни в статусе [concept_under_construction|l] считать уже занятыми"
+ },
  "building_antimatter_sub_slots_tt": {
   "en": "A free [concept_antimatter_facility] slot: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
   "ru": "Свободный слот для [Concept('concept_antimatter_facility','установки по производству антиматерии')]: #v [GetPlayer.MakeScope.ScriptValue('antimatter_sub_building_slots_remaining')|0]#! свободно по стране (уровни в состоянии «[concept_under_construction|l]» считаются занятыми)"
@@ -494,6 +498,10 @@
  "building_employment_spacers_add": {
   "en": "$spacers$ Per Level",
   "ru": "$spacers$ на уровень"
+ },
+ "building_employment_spacers_add_desc": {
+  "en": "Modifies the amount of $spacers$ a building can hire per level",
+  "ru": "Изменяет число работников типа «$spacers$», которых здание может нанять на уровень"
  },
  "building_eni_palazzo": {
   "en": "Palazzo ENI",
@@ -968,8 +976,8 @@
   "ru": "Дальность подводного кабеля"
  },
  "building_grid_undersea_cable_range_add_desc": {
-  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, landing on a coast that touches both. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
-  "ru": "Сколько [Concept('concept_sea_node','морских узлов')] может пересечь кабель «$building_grid_hvdc_interconnector$». При значении 1 кабель достигает прибрежных областей у того же объекта ($concept_sea_node$), которого касается эта область. Каждое следующее очко позволяет пересечь ещё один такой объект ($concept_sea_node$) и выйти на побережье, которого касаются оба. Учитывается только у «$building_grid_hvdc_interconnector$»: технология удлиняет кабель, но не прокладывает его."
+  "en": "How many [Concept('concept_sea_node', '$concept_sea_nodes|q$')] an $building_grid_hvdc_interconnector$'s cable can cross. At 1 the cable reaches coastal states on a $concept_sea_node$ this state touches. Each point more crosses one more $concept_sea_node$, open ocean included. No cable crosses the $STATE_SOUTHERN_OCEAN_01$. It counts only on an $building_grid_hvdc_interconnector$: technology lengthens a cable, but lays none.",
+  "ru": "Сколько [Concept('concept_sea_node', '$concept_sea_nodes|q$')] может пересечь кабель «$building_grid_hvdc_interconnector$». При значении 1 кабель достигает прибрежных областей у того же объекта ($concept_sea_node$), которого касается эта область. Каждое следующее очко позволяет пересечь ещё один такой объект ($concept_sea_node$), включая открытый океан. Ни один кабель не пересекает область «$STATE_SOUTHERN_OCEAN_01$». Учитывается только у «$building_grid_hvdc_interconnector$»: технология удлиняет кабель, но не прокладывает его."
  },
  "building_group_bg_arts_standard_of_living_add": {
   "en": "$bg_arts$ Employee [concept_sol]",
@@ -2079,6 +2087,10 @@
   "en": "Solar Power Receiver",
   "ru": "Приёмник солнечной энергии"
  },
+ "building_solar_receiver_any_slot_tt": {
+  "en": "An Orbital Solar Collector slot that no built Solar Power Receiver takes: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country once levels [concept_under_construction] count as taken",
+  "ru": "Слот «Орбитального солнечного коллектора», не занятый ни одним построенным «Приёмником солнечной энергии»: свободно по стране #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#!, если уровни в статусе [concept_under_construction|l] считать уже занятыми"
+ },
  "building_solar_receiver_slots_tt": {
   "en": "A free Solar Receiver slot: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! free across the country (levels [concept_under_construction] count as taken)",
   "ru": "Свободный слот солнечного приёмника: #v [GetPlayer.MakeScope.ScriptValue('solar_receiver_slots_remaining')|0]#! свободно по стране (уровни в состоянии «[concept_under_construction|l]» считаются занятыми)"
@@ -2114,6 +2126,10 @@
  "building_space_forces_base": {
   "en": "Space Forces Base",
   "ru": "База космических сил"
+ },
+ "building_space_forces_base_desc": {
+  "en": "Barracks and training halls for the people who crew our warships in space and fight as their marines. Each staffed level trains #v 1,000#! [concept_sr_space_personnel]. A point of fleet strength needs #v 100#! of them to crew it, #v 50#! with $artificial_intelligence$, and a marine battalion, or a level of Spaceport, Defenses, Black Site, Training Ground or Nuclear Command Center at a colony of ours, #v 1,000#!. When ships are destroyed or marines lost, the base's $spacers_no_icon$ die with them.",
+  "ru": "Казармы и учебные залы для людей, которые составляют экипажи наших боевых кораблей в космосе и воюют в качестве их морпехов. Каждый укомплектованный уровень готовит #v 1 000#! ед. [Concept('concept_sr_space_personnel','личного состава космических сил')]. Каждому пункту силы флота нужно для экипажа #v 100#! из них, а с технологией $artificial_intelligence$ — #v 50#!; батальону морпехов, а также уровню «Космодрома», «Оборонительных сооружений», «Секретного объекта», «Учебного полигона» или «Ядерного командного центра» в нашей колонии — #v 1 000#!. Когда корабли уничтожены или морпехи потеряны, вместе с ними погибают и «$spacers_no_icon$» этой базы."
  },
  "building_space_mine": {
   "en": "Extraplanetary Base",
