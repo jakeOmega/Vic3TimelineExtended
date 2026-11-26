@@ -25319,38 +25319,6 @@
   "en": "What the Bank Is For",
   "ru": "Для чего нужен банк"
  },
- "te_map_modes.1.a": {
-  "en": "Tourism appeal",
-  "ru": "Привлекательность для туристов"
- },
- "te_map_modes.1.b": {
-  "en": "GDP per capita",
-  "ru": "ВВП на душу населения"
- },
- "te_map_modes.1.c": {
-  "en": "Greenhouse gas emissions",
-  "ru": "Выбросы парниковых газов"
- },
- "te_map_modes.1.d": {
-  "en": "Our cartographers can redraw the world map by whatever measure we choose. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode: its colors will show the metric we chose instead of migration appeal.\\n\\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!",
-  "ru": "Наши картографы могут перерисовать карту мира по любому выбранному нами показателю. Выберите показатель ниже, затем переключитесь на режим карты #b [concept_migration_pull]#!: его цвета покажут выбранный показатель вместо миграционной привлекательности.\\n\\n#italic Прежде чем перейти к другому показателю, снова откройте это решение и выберите #b Сбросить наложение#!.#!"
- },
- "te_map_modes.1.e_clear": {
-  "en": "Clear overlay",
-  "ru": "Сбросить наложение"
- },
- "te_map_modes.1.f": {
-  "en": "\\\"The map office can color the map by any figure the other offices send us: how strongly each state draws visitors, what each person there produces, what each country puts into the air. Tell us which, and we will lay it over the migration map, since that is the only sheet the printers have set up for colors. When you want a different figure, tell us to clear the sheet first, or the two will run together.\\\"",
-  "ru": "«Картографическое бюро может раскрасить карту по любой цифре, которую пришлют нам другие бюро: насколько сильно каждая область притягивает посетителей, сколько производит каждый её житель, сколько выбрасывает в воздух каждая страна. Скажите нам, по какой, и мы наложим её на карту миграции, потому что это единственный лист, под который у типографов настроены цвета. Когда понадобится другая цифра, прикажите сначала очистить лист, иначе они сольются»."
- },
- "te_map_modes.1.f_dismiss": {
-  "en": "Never mind.",
-  "ru": "Не важно."
- },
- "te_map_modes.1.t": {
-  "en": "Cartographic Survey",
-  "ru": "Картографическая съёмка"
- },
  "te_orbital_debris.1.a": {
   "en": "Keep the climbers running",
   "ru": "Не останавливать подъёмники"

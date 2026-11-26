@@ -25319,38 +25319,6 @@
   "en": "What the Bank Is For",
   "de": "Wofür die Bank da ist"
  },
- "te_map_modes.1.a": {
-  "en": "Tourism appeal",
-  "de": "Touristische Attraktivität"
- },
- "te_map_modes.1.b": {
-  "en": "GDP per capita",
-  "de": "BIP pro Kopf"
- },
- "te_map_modes.1.c": {
-  "en": "Greenhouse gas emissions",
-  "de": "Treibhausgasemissionen"
- },
- "te_map_modes.1.d": {
-  "en": "Our cartographers can redraw the world map by whatever measure we choose. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode: its colors will show the metric we chose instead of migration appeal.\\n\\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!",
-  "de": "Unsere Kartografen können die Weltkarte nach jedem Maß neu zeichnen, das wir wählen. Wählen Sie unten eine Kennzahl aus und wechseln Sie dann in den Kartenmodus #b [concept_migration_pull]#!: Seine Farben zeigen dann die gewählte Kennzahl statt der Migrationsanziehung.\\n\\n#italic Öffnen Sie diese Entscheidung erneut und wählen Sie #b Löschen#!, bevor Sie zu einer anderen Kennzahl wechseln.#!"
- },
- "te_map_modes.1.e_clear": {
-  "en": "Clear overlay",
-  "de": "Overlay löschen"
- },
- "te_map_modes.1.f": {
-  "en": "\\\"The map office can color the map by any figure the other offices send us: how strongly each state draws visitors, what each person there produces, what each country puts into the air. Tell us which, and we will lay it over the migration map, since that is the only sheet the printers have set up for colors. When you want a different figure, tell us to clear the sheet first, or the two will run together.\\\"",
-  "de": "„Das Kartenbüro kann die Karte nach jeder Zahl einfärben, die uns die anderen Büros schicken: wie stark jeder Staat Besucher anzieht, was jeder Mensch dort erzeugt, was jedes Land in die Luft abgibt. Sagen Sie uns, welche, und wir legen sie über die Migrationskarte, denn das ist der einzige Bogen, den die Drucker für Farben eingerichtet haben. Wollen Sie eine andere Zahl, sagen Sie uns, dass wir den Bogen zuerst leeren sollen, sonst laufen die beiden ineinander.“"
- },
- "te_map_modes.1.f_dismiss": {
-  "en": "Never mind.",
-  "de": "Schon gut."
- },
- "te_map_modes.1.t": {
-  "en": "Cartographic Survey",
-  "de": "Kartografische Vermessung"
- },
  "te_orbital_debris.1.a": {
   "en": "Keep the climbers running",
   "de": "Die Kletterkapseln weiterlaufen lassen"

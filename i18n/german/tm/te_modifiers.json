@@ -1319,14 +1319,6 @@
   "en": "How much faster the people of every colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
   "de": "Wie viel schneller die Bevölkerung jeder von uns gehaltenen Kolonie jeden Monat wächst, zusätzlich zu den #v 0,2%#!, um die jede Kolonie wächst, bei den Einstellungen „Einfach“ und „Volle Kolonien“ der Regel „Wettlauf ins All“."
  },
- "country_sr_colony_slots_add": {
-  "en": "Colony Module Slots",
-  "de": "Koloniemodul-Plätze"
- },
- "country_sr_colony_slots_add_desc": {
-  "en": "Module slots at every colony we hold, beside those its size gives, under the Simple and Full Colonies settings of the Space Race rule. Habitats, Spaceports, Defenses and the facilities share them, and a colony takes up to #v 4#! [concept_sr_module]s past them at a rising price.",
-  "de": "Modulplätze in jeder von uns gehaltenen Kolonie, zusätzlich zu denen, die ihre Größe verleiht, bei den Einstellungen „Einfach“ und „Volle Kolonien“ der Regel „Wettlauf ins All“. Habitate, Raumhäfen, Verteidigungsanlagen und die Einrichtungen teilen sie sich, und eine Kolonie kann bis zu #v 4#! [Concept('concept_sr_module','Koloniemodule')] darüber hinaus aufnehmen, zu steigendem Preis."
- },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
   "de": "Koloniemodulfertigung pro Monat"

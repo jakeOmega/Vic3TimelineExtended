@@ -439,10 +439,6 @@
   "en": "Deselect this name for your custom religion.",
   "ru": "Отменить выбор этого названия для вашей собственной религии."
  },
- "GDPPERCAPITA": {
-  "en": "$GDP_SHORT$ per Capita:\\n     Local/National\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!",
-  "ru": "$GDP_SHORT$ на душу населения:\\n     Местный/национальный\\n@money!#bold $GDP_per_capita$/@money![State.GetCountry.GetGDPPerCapita|2*]#!"
- },
  "GM_ARCH_SUBJECT": {
   "en": "from being their subject",
   "ru": "из-за подчинённого положения по отношению к ним"
@@ -8095,10 +8091,6 @@
   "en": "People here look however they choose, and the world takes notice.",
   "ru": "Люди здесь выглядят так, как выбирают, и мир это замечает."
  },
- "morphological_freedom_unsettled_modifier_desc": {
-  "en": "Twenty years of argument have left a licensing regime nobody quite wanted, and neither side has stopped arguing.",
-  "ru": "Двадцать лет споров оставили режим лицензирования, который никто по-настоящему не хотел, и ни одна сторона не перестала спорить."
- },
  "motor_ships": {
   "en": "Motor Ships",
   "ru": "Моторные суда"
@@ -10619,14 +10611,6 @@
   "en": "Our Extraplanetary Base levels work the room of our colonies and, with $asteroid_mining$, the near-Earth asteroids, the richest first. The outer sites' room is poor, and a level past all of our room works at -75%.",
   "ru": "Уровни нашей Внепланетной базы осваивают пространство наших колоний и, с технологией $asteroid_mining$, околоземные астероиды, начиная с самых богатых. Пространства на дальних площадках мало, и уровень сверх всего нашего пространства работает с -75%."
  },
- "sr_emigration_programme": {
-  "en": "Emigration Program",
-  "ru": "Программа эмиграции"
- },
- "sr_emigration_programme_desc": {
-  "en": "Our program sends settlers to our colonies each month. Each level raises the Space Program's throughput, and its Launch Capacity bill with it.",
-  "ru": "Наша программа ежемесячно отправляет поселенцев в наши колонии. Каждый уровень повышает пропускную способность Космической программы, а вместе с ней и её счёт за пусковые мощности."
- },
  "sr_engineering_breakthrough": {
   "en": "Engineering Breakthrough",
   "ru": "Инженерный прорыв"
@@ -10838,14 +10822,6 @@
  "sr_module_lab_desc": {
   "en": "Our colonies' Research Stations radio their findings home.",
   "ru": "Исследовательские станции наших колоний передают свои открытия домой по радио."
- },
- "sr_module_resort": {
-  "en": "Off-World Resorts",
-  "ru": "Внеземные курорты"
- },
- "sr_module_resort_desc": {
-  "en": "Our colonies' resorts draw tourists who can afford the fare.",
-  "ru": "Курорты наших колоний привлекают туристов, способных оплатить дорогу."
  },
  "sr_module_train": {
   "en": "Off-World Training Grounds",
@@ -11899,14 +11875,6 @@
   "en": "Outliers",
   "ru": "Выбросы"
  },
- "te_jmap_pick_academics_desc": {
-  "en": "Color each state by its Academics as a share of its people. Universities and a literate, urban people draw them. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_academics_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле учёных среди их населения. Их привлекают университеты и грамотное городское население. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_academics_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_academics_colors', 'te_jmap_color_in_force' )]"
- },
- "te_jmap_pick_aristocrats_desc": {
-  "en": "Color each state by its Aristocrats as a share of its people. Landed estates and serfdom keep them many; land reform and industry thin them. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_aristocrats_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле аристократов среди их населения. Помещичьи имения и крепостничество приумножают их; земельная реформа и промышленность сокращают. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_aristocrats_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_aristocrats_colors', 'te_jmap_color_in_force' )]"
- },
  "te_jmap_pick_armed_forces_desc": {
   "en": "Color each state by its Soldiers and Officers, in people. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_armed_forces_colors', 'te_jmap_color_in_force_none' )]",
   "ru": "Окрасить области по числу солдат и офицеров, в людях. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_lo')|K]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_soldiers_hi')|K]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_doubling', 'te_jmap_scale_in_force_doubling' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_armed_forces_colors', 'te_jmap_color_in_force_none' )]"
@@ -11919,17 +11887,9 @@
   "en": "Color each state by its births per 1,000 people last year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_birth_rate_colors', 'te_jmap_color_in_force' )]",
   "ru": "Окрасить области по числу рождений на 1 000 человек за прошлый год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_lo')|0]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_cbr_hi')|0]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_birth_rate_colors', 'te_jmap_color_in_force' )]"
  },
- "te_jmap_pick_capitalists_desc": {
-  "en": "Color each state by its Capitalists as a share of its people. They gather where industry and finance do, so a few great cities hold most of them. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_capitalists_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле капиталистов среди их населения. Они собираются там, где промышленность и финансы, поэтому большинство из них сосредоточено в нескольких великих городах. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_capitalists_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_knee_20_50', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_capitalists_colors', 'te_jmap_color_in_force' )]"
- },
  "te_jmap_pick_city_rank_desc": {
   "en": "Color each state by its city's place in the world's ranking, the one tourism's [concept_tourism_cities] bonus reads: the 20 largest from amber at 20th to crimson at 1st, the rest steel blue, paler with each doubling of the rank. A state past 501st has no rank and is pale. The ranking is recalculated every month.",
   "ru": "Окрасить области по месту их города в мировом рейтинге, по которому считается бонус [concept_tourism_cities] туризма: 20 крупнейших — от янтарного на 20-м месте до малинового на 1-м, остальные — стально-синие, бледнее с каждым удвоением ранга. Область за пределами 501-го места не имеет ранга и окрашена бледно. Рейтинг пересчитывается каждый месяц."
- },
- "te_jmap_pick_clergy_desc": {
-  "en": "Color each state by its Clergymen as a share of its people. A state church and devout people keep them many. Counted once a year.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_lo')|%1]#! to #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_clergy_colors', 'te_jmap_color_in_force' )]",
-  "ru": "Окрасить области по доле священнослужителей среди их населения. Государственная церковь и набожное население приумножают их. Подсчёт раз в год.\\n$te_jmap_scaled_lead$ $te_jmap_measured_area$: от #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_lo')|%1]#! до #v [GetPlayer.MakeScope.ScriptValue('te_jmap_clergy_hi')|%1]#!. $te_jmap_measured_trim$\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_scale'), '(CFixedPoint)0' ), 'te_jmap_curve_straight', 'te_jmap_scale_in_force' )]\\n[SelectLocalization( EqualTo_CFixedPoint( GetPlayer.MakeScope.ScriptValue('te_jmap_color'), '(CFixedPoint)0' ), 'te_jmap_pick_clergy_colors', 'te_jmap_color_in_force' )]"
  },
  "te_jmap_pick_colonies_desc": {
   "en": "Color each colony, and each colonial subject's state, by its empire's [concept_colonial_stability]: red while it collapses, then orange, yellow and green up to solidified. An empire's home states are taupe.",
@@ -12199,17 +12159,9 @@
   "en": "Public Confidence Shaken",
   "ru": "Общественное доверие подорвано"
  },
- "te_map_mode_overlay_desc": {
-  "en": "Migration-attraction map-mode overlay. The displayed [concept_migration_pull] is being overridden to color the world map by the metric you chose in the Cartographic Survey.",
-  "ru": "Накладка режима карты привлекательности миграции. Отображаемое [concept_migration_pull|l] подменяется, чтобы окрасить карту мира по метрике, выбранной вами в «Картографической съёмке»."
- },
  "te_officer_academies_standing_desc": {
   "en": "Officers schooled in the national academies form a confident, close-knit caste with a voice in politics. Scales with the share of your regular battalions trained under $pm_officer_academies$.",
   "ru": "Офицеры, обученные в национальных академиях, образуют уверенную сплочённую касту с голосом в политике. Масштабируется долей ваших регулярных батальонов, обученных по методу $pm_officer_academies$."
- },
- "te_open_map_mode_survey_desc": {
-  "en": "Hijack the [concept_migration_pull] map mode to color the world map by an arbitrary metric.\\n\\n#b The game must be paused.#! Pick a metric, then switch to the #b Migration Attraction#! map mode to view it. Re-open this decision to pick #b Clear#! before switching to another metric. The overlay self-cleans within 5 in-game days of unpausing.",
-  "ru": "Подменить режим карты [concept_migration_pull|l], чтобы окрасить карту мира по произвольной метрике.\\n\\n#b Игра должна стоять на паузе.#! Выберите метрику, затем переключитесь на режим карты #b Привлекательность миграции#!, чтобы увидеть её. Откройте это решение снова и выберите #b Очистить#!, прежде чем переходить к другой метрике. Накладка сама очищается в течение 5 игровых дней после снятия паузы."
  },
  "te_orbital_debris": {
   "en": "Orbital Debris",

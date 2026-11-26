@@ -1319,14 +1319,6 @@
   "en": "How much faster the people of every colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
   "es": "Cuánto más rápido crece cada mes la población de cada colonia que tenemos, además del #v 0,2%#! en que crece toda colonia, con los ajustes de colonias simples y completas de la regla de la Carrera espacial."
  },
- "country_sr_colony_slots_add": {
-  "en": "Colony Module Slots",
-  "es": "Espacios de módulos coloniales"
- },
- "country_sr_colony_slots_add_desc": {
-  "en": "Module slots at every colony we hold, beside those its size gives, under the Simple and Full Colonies settings of the Space Race rule. Habitats, Spaceports, Defenses and the facilities share them, and a colony takes up to #v 4#! [concept_sr_module]s past them at a rising price.",
-  "es": "Ranuras de módulo en cada colonia que tenemos, además de las que da su tamaño, con los ajustes de colonias simples y completas de la regla de la Carrera espacial. Hábitats, Puertos espaciales, Defensas y las instalaciones las comparten, y una colonia puede tomar hasta #v 4#! [Concept('concept_sr_module','módulos de colonia')] más allá de ellas a un precio creciente."
- },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
   "es": "Fabricación mensual de módulos coloniales"

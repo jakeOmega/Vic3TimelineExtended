@@ -1319,14 +1319,6 @@
   "en": "How much faster the people of every colony we hold grow each month, beside the #v 0.2%#! every colony grows by, under the Simple and Full Colonies settings of the Space Race rule.",
   "ru": "Насколько быстрее каждый месяц растёт население каждой нашей колонии сверх #v 0,2%#!, на которые растёт любая колония, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка»."
  },
- "country_sr_colony_slots_add": {
-  "en": "Colony Module Slots",
-  "ru": "Ячейки модулей колоний"
- },
- "country_sr_colony_slots_add_desc": {
-  "en": "Module slots at every colony we hold, beside those its size gives, under the Simple and Full Colonies settings of the Space Race rule. Habitats, Spaceports, Defenses and the facilities share them, and a colony takes up to #v 4#! [concept_sr_module]s past them at a rising price.",
-  "ru": "Ячейки модулей в каждой нашей колонии сверх тех, что даёт её размер, при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Жилые модули, космодромы, оборонительные сооружения и объекты делят их между собой, а колония может взять до #v 4#! [Concept('concept_sr_module','колониальных модулей')] сверх них по растущей цене."
- },
  "country_sr_module_fabrication_add": {
   "en": "Colony Module Fabrication per Month",
   "ru": "Изготовление колониальных модулей в месяц"

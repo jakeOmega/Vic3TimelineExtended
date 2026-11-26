@@ -25319,38 +25319,6 @@
   "en": "What the Bank Is For",
   "es": "Para qué sirve el banco"
  },
- "te_map_modes.1.a": {
-  "en": "Tourism appeal",
-  "es": "Atractivo turístico"
- },
- "te_map_modes.1.b": {
-  "en": "GDP per capita",
-  "es": "PIB per cápita"
- },
- "te_map_modes.1.c": {
-  "en": "Greenhouse gas emissions",
-  "es": "Emisiones de gases de efecto invernadero"
- },
- "te_map_modes.1.d": {
-  "en": "Our cartographers can redraw the world map by whatever measure we choose. Pick a metric below, then switch to the #b [concept_migration_pull]#! map mode: its colors will show the metric we chose instead of migration appeal.\\n\\n#italic Re-open this decision and pick #b Clear#! before switching to another metric.#!",
-  "es": "Nuestros cartógrafos pueden redibujar el mapa del mundo según la medida que elijamos. Elige abajo una métrica y cambia después al modo de mapa de #b [concept_migration_pull|l]#!: sus colores mostrarán la métrica elegida en lugar de la atracción migratoria.\\n\\n#italic Vuelve a abrir esta decisión y elige #b Quitar#! antes de pasar a otra métrica.#!"
- },
- "te_map_modes.1.e_clear": {
-  "en": "Clear overlay",
-  "es": "Quitar la superposición"
- },
- "te_map_modes.1.f": {
-  "en": "\\\"The map office can color the map by any figure the other offices send us: how strongly each state draws visitors, what each person there produces, what each country puts into the air. Tell us which, and we will lay it over the migration map, since that is the only sheet the printers have set up for colors. When you want a different figure, tell us to clear the sheet first, or the two will run together.\\\"",
-  "es": "«La oficina de mapas puede colorear el mapa con cualquier cifra que nos envíen las demás oficinas: cuánto atrae cada estado a los visitantes, cuánto produce cada persona que vive en él, cuánto vierte cada país al aire. Díganos cuál, y la superpondremos al mapa de migración, porque es la única hoja que los impresores han preparado para colores. Cuando quieran otra cifra, díganos que limpiemos antes la hoja, o se mezclarán las dos.»"
- },
- "te_map_modes.1.f_dismiss": {
-  "en": "Never mind.",
-  "es": "Da igual."
- },
- "te_map_modes.1.t": {
-  "en": "Cartographic Survey",
-  "es": "Levantamiento cartográfico"
- },
  "te_orbital_debris.1.a": {
   "en": "Keep the climbers running",
   "es": "Mantener en marcha los vehículos de ascenso"
