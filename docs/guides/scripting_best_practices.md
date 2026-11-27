@@ -1418,6 +1418,10 @@ possible = {
 
 The `value:NAME` prefix is for `add` / `multiply` / `divide` lines **inside another script value**, where the engine needs to disambiguate between named SVs and other tokens. In trigger context, the parser already expects a comparison and resolves the bare name correctly — the prefix is a mistake there. Mod precedent: `peaceful_annex_gdp_requirement` (in `extra_script_values.txt`) is read as `gdp < peaceful_annex_gdp_requirement` from a JE `possible` clause.
 
+## A bare name in a value position that nothing defines loads without a word
+
+`value = X`, `add = X`, `max = X`, `multiplier = X`, `days = X` or `gdp > X`, with an `X` that is no script value, scripted trigger or effect, engine trigger or event target, loads with no error and no log line. Space forces personnel (PR #2020) used `sr_pers_state_spacers` and `sr_pers_state_spacer_steps` in four places, defined neither, and passed every audit (the kill's cap and both self-checks read them). What value the engine gives such a name was not measured. An unknown name in a *key* position, by contrast, logs `Unknown trigger type`. `script_value_reference_audit` (CI and reload, #2021) now flags a bare name in these value positions that resolves nowhere; it does not judge a prefixed or chained value (`scope:x`, `owner.x`) or a `$PARAM$` name.
+
 ## Silent-Zero Footgun: `_add × (1 + _mult)` Without an `_add` Source
 
 When designing a paired `_add` / `_mult` modifier family meant to combine into a single per-tick contribution, the obvious script-value formula is:
