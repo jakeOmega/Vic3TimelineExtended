@@ -1802,7 +1802,7 @@
  je_space_race_widget_fl_stance_3:0 "Engage"
  je_space_race_widget_fl_stance_4:0 "Fight to the Last"
  je_space_race_widget_fl_strength_tt:0 "#header Strength#!\nThe fleet's strength now, and at full. A battle's losses are half ships destroyed and half damage that a dock repairs. The icons above it are its [concept_sr_ship_role]s."
- je_space_race_widget_fl_supply_tt:0 "#header Supply#!\nMonths of supply left, of the months it carries when full. It counts down away from a dock and refills when the fleet docks. With none left the fleet loses #v 5%#! of its strength a month. [concept_sr_role_tender]s lengthen it."
+ je_space_race_widget_fl_supply_tt:0 "#header Supply#!\nMonths of supply left, of the months it carries when full. It falls by one each month the fleet spends at a location with no dock, holds while the fleet is in flight, and refills when it docks. With none left the fleet loses #v 5%#! of its strength a month. [concept_sr_role_tender]s lengthen it."
  je_space_race_widget_fl_transfer:0 "Transfer"
  je_space_race_widget_fleets_header:0 "Colony Fleets"
  je_space_race_widget_free_empty:0 "There is no free colony in the solar system."

@@ -450,6 +450,30 @@ class DockTest(unittest.TestCase):
         # Away from a dock supply counts down only at a location (sr_fl_month_at acts on a slot with one).
         self.assertIn("At a location with no dock its supply counts down", loc["je_space_race_widget_fw_dock_tt"])
 
+    def test_supply_holds_in_flight_and_the_texts_say_so(self):
+        """sr_fl_month_at acts only on a slot with a location, so a fleet in
+        flight spends no supply however long the leg. The concept, the Supply
+        hover and the player guide said it counted down "away from a dock"
+        until #2057, which read as a month of supply for each month of a leg."""
+        effects = _read(os.path.join(REPO, "common", "scripted_effects", "sr_fleet_effects.txt"))
+        month = effects[effects.index("\nsr_fl_month_at = {"):]
+        month = month[:month.index("\n}\n")]
+        self.assertTrue(month.startswith("\nsr_fl_month_at = {\n\tif = {\n\t\tlimit = { has_variable = sr_fl_$N$_loc }"))
+        self.assertNotRegex(month, r"\n\telse", "an outer else would act on a fleet in flight")
+        self.assertIn("subtract = 1", month)
+        loc = dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _read(LOC)))
+        concepts = dict(re.findall(r'(?m)^ (\w+):\d* "(.*)"$', _read(os.path.join(
+            REPO, "localization", "english", "te_concepts_l_english.yml"))))
+        guide = _read(os.path.join(REPO, "docs", "player_guide", "16-space.md"))
+        texts = {"concept": concepts["concept_sr_space_fleet_desc"],
+                 "supply hover": loc["je_space_race_widget_fl_supply_tt"], "guide": guide}
+        for name, text in texts.items():
+            with self.subTest(text=name):
+                self.assertNotIn("away from a dock", text.lower())
+        self.assertIn("spending propellant but no supply", texts["concept"])
+        self.assertIn("holds while the fleet is in flight", texts["supply hover"])
+        self.assertIn("A fleet in flight\nuses none, however long the leg.", guide)
+
 
 class TextTest(unittest.TestCase):
     """The window's own words."""
