@@ -127,7 +127,7 @@ def refusal(error: Exception) -> dict:
         return {"refused": "fixture_failed", "detail": str(error), "step": error.step, "reply": error.reply,
                 "snapshot": error.snapshot}
     if isinstance(error, OverlayError):
-        return {"refused": "overlay_refused", "detail": str(error)}
+        return {"refused": error.code, "detail": str(error)}
     return {"refused": "error", "detail": "%s: %s" % (type(error).__name__, error)}
 
 

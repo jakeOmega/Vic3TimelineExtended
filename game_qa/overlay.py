@@ -113,7 +113,16 @@ _MONTHS = {
 
 
 class OverlayError(Exception):
-    """A setup, a name or a folder the overlay refuses; nothing has been written or removed."""
+    """A setup, a name or a folder the overlay refuses; nothing has been written or removed. `code` is the refusal
+    a verb answers with."""
+
+    code = "overlay_refused"
+
+
+class SetupParameterized(OverlayError):
+    """A setup whose body holds a `$` the engine would read as a parameter (`parameter_lines`, #2070)."""
+
+    code = "setup_parameterized"
 
 
 @dataclass
@@ -528,7 +537,52 @@ def _clean_body(name: str, body: str) -> str:
     problem = brace_problem(body)
     if problem:
         raise OverlayError(f"setup {name}: {problem}")
+    check_parameters(name, body)
     return body
+
+
+def check_parameters(name: str, body: str) -> None:
+    """Raise SetupParameterized when the body holds a `$` the engine would read as a parameter, naming each line
+    with one. The harness writes a setup as the body of a scripted effect and calls it `= yes`; a `$` makes that
+    effect parameterized, and the engine then skips the call, logging nothing when it runs (#2070: `run-setup`
+    answered `ok` with no lines between the setup's markers, and error.log was empty)."""
+    lines = parameter_lines(body)
+    if not lines:
+        return
+    text = body.replace("\r\n", "\n").replace("\r", "\n").split("\n")[lines[0] - 1].strip()
+    if len(text) > 80:
+        text = text[:77] + "..."
+    where = "line %d" % lines[0] if len(lines) == 1 else "lines %s" % ", ".join(map(str, lines))
+    raise SetupParameterized(
+        f"setup {name}: a $ on {where} (first: {text!r}) makes the overlay's scripted effect parameterized, and "
+        "the engine skips a `= yes` call to it, logging nothing when it runs. A $ inside a quoted string counts too "
+        "(it is substituted there); one in a # comment does not. Fill in the placeholder or take the $ out")
+
+
+def parameter_lines(body: str) -> list[int]:
+    """The 1-based lines of a body that hold a `$` outside a # comment, read as `brace_problem` reads them. A `$`
+    inside a "quoted string" counts: the engine substitutes `$X$` there (the mod's `te_aip_default_event` names
+    `WHAT` only inside its `debug_log` string, and its callers pass `WHAT = ...`). One in a comment does not:
+    `form_decolonized_country` names `$PARAM$` only in a comment, is called `= yes`, and formed countries in game
+    (2026-11-07 and 11-14, `docs/vanilla/vanilla_known_bugs.md`)."""
+    found: list[int] = []
+    line = 1
+    in_string = False
+    in_comment = False
+    for char in body.replace("\r\n", "\n").replace("\r", "\n"):
+        if char == "$" and not in_comment and (not found or found[-1] != line):
+            found.append(line)
+        if in_comment:
+            in_comment = char != "\n"
+        elif in_string:
+            in_string = char != '"'
+        elif char == '"':
+            in_string = True
+        elif char == "#":
+            in_comment = True
+        if char == "\n":
+            line += 1
+    return found
 
 
 def brace_problem(body: str) -> str | None:

@@ -299,10 +299,13 @@ class AddSetupTest(OverlayTestCase):
     def test_a_bad_name_or_body_is_refused_and_nothing_is_written(self):
         ov = self.build()
         before = ov.effects_file.read_bytes()
-        for name, body in (("Bad Name", SETUP_A), ("late", "add_treasury = {"), ("late", "  ")):
+        for name, body in (("Bad Name", SETUP_A), ("late", "add_treasury = {"), ("late", "  "),
+                           ("late", 'debug_log = "law_$WHAT$"')):
             with self.assertRaises(overlay.OverlayError):
                 overlay.add_setup(ov, name, body)
         self.assertEqual((ov.effects_file.read_bytes(), ov.revision, ov.added), (before, 0, {}))
+        with self.assertRaises(overlay.SetupParameterized):
+            overlay.add_setup(ov, "late", "add_treasury = $AMOUNT$")
 
     def test_no_slot_left_is_refused(self):
         ov = self.build()
@@ -460,7 +463,53 @@ class BodyTest(OverlayTestCase):
             self.build({"alpha": SETUP_A, "beta": "a = {"})
         self.assertIn("beta", str(caught.exception))
 
+    PARAMETERIZED = (
+        ("$WHAT$ = yes", [1]),
+        ("a = yes\nset_variable = { name = te_$KEY$ value = 1 }", [2]),
+        ('a = yes\n\ndebug_log = "TE_QA law_$WHAT$ [THIS.GetCountry.GetTagName]"', [3]),     # in a string too
+        ("a = $X$\r\nb = yes\r\nc = $Y$ # and $Z$", [1, 3]),                                 # once a line
+        ('debug_log = "a # in a string starts no comment $X$"', [1]),
+        ('debug_log = "a string over\nlines $X$"', [2]),
+        ("# a comment ends at its line\na = $X$", [2]),
+    )
+    UNPARAMETERIZED = (
+        "a = yes # $WHAT$ in a comment",
+        "# $WHAT$\n\t# and $X$ again\na = yes",
+        'a = yes # "$X$" quoted in a comment',
+        'debug_log = "costs 5 [concept_money]"',
+    )
+
+    def test_a_setup_with_a_dollar_outside_a_comment_is_refused_naming_its_lines(self):
+        for body, lines in self.PARAMETERIZED:
+            with self.subTest(body=body):
+                self.assertEqual(overlay.parameter_lines(body), lines)
+                with self.assertRaises(overlay.SetupParameterized) as caught:
+                    self.build({"alpha": body})
+                self.assertEqual(caught.exception.code, "setup_parameterized")
+                self.assertIsInstance(caught.exception, overlay.OverlayError)
+                where = "line %d" % lines[0] if len(lines) == 1 else "lines " + ", ".join(map(str, lines))
+                self.assertIn("setup alpha: a $ on %s " % where, str(caught.exception))
+                self.assertIn("parameterized", str(caught.exception))
+                self.assertFalse(self.dest.exists())
+                self.assertEqual(os.listdir(self.mods) if self.mods.exists() else [], [])
+
+    def test_the_refusal_quotes_the_first_line_with_a_dollar(self):
+        with self.assertRaises(overlay.SetupParameterized) as caught:
+            overlay.check_parameters("alpha", 'a = yes\n\tdebug_log = "TE_QA $WHAT$"\nb = $X$')
+        self.assertIn("""(first: 'debug_log = "TE_QA $WHAT$"')""", str(caught.exception))
+        with self.assertRaises(overlay.SetupParameterized) as caught:
+            overlay.check_parameters("alpha", "a = $X$ " + "b" * 200)
+        self.assertIn("(first: '%s...')" % ("a = $X$ " + "b" * 69), str(caught.exception))
+
+    def test_a_dollar_in_a_comment_does_not_count(self):
+        for body in self.UNPARAMETERIZED:
+            with self.subTest(body=body):
+                self.assertEqual(overlay.parameter_lines(body), [])
+                self.assertEqual(self.build({"alpha": body}).setup_events, {"alpha": "te_qa.10"})
+
     def test_check_setups_refuses_what_build_refuses_and_writes_nothing(self):
+        with self.assertRaises(overlay.SetupParameterized):
+            overlay.check_setups({"alpha": SETUP_A, "beta": "x = $X$"})
         for setups in ({"alpha": "a = {"}, {"Alpha": SETUP_A}, {"alpha": ""}, {"alpha": 3}):
             with self.subTest(setups=setups):
                 with self.assertRaises(overlay.OverlayError):
