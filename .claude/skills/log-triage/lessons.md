@@ -387,7 +387,7 @@ A country or state printed with `GetName` comes out as tooltip markup, `tooltipp
 
 ### The QA harness's run folders keep self-check verdicts the game's logs have rotated away: grep them for verdicts the play-test lists lack (2026-11-26)
 
-*Until `scripts/analysis/log_triage.py` reads them (#2091), by hand:*
+*Since #2091 the report's Harness sessions section reads them (from each folder's `summary.md`, or its `debug.log` when the summary has no verdict table). What it replaced, by hand:*
 
 The snapshot holds only the last six generations of each log, and a long session or an armed AI probe rotates `debug.log` in minutes (13,676 `TE_AIP` lines took launch #6's first half hour on 2026-11-26). The harness copies every session's `debug.log` to `/mnt/d/vic3_qa_backups/runs/<UTC stamp>/` and writes each verdict into that folder's `summary.md`. On 2026-11-26 those folders held both conscript-refresh self-checks from five days before, a BROKEN among them, which no play-test list had: `grep -h "TE_SELF_CHECK \(OK\|BROKEN\|NO_VERDICT\)" /mnt/d/vic3_qa_backups/runs/*/debug.log | sed 's/.*TE_SELF_CHECK/TE_SELF_CHECK/' | sort | uniq -c`, then `grep -m1 '^- Save:' <folder>/summary.md` for the save it ran on. A save loaded several times repeats its verdicts, so count games, not lines. A canary whose `debug_log` line rotated away can still be read from error.log when its answer is an engine refusal (the probe's combat-unit variable, the same day).
 
