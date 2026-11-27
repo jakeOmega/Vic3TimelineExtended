@@ -13,7 +13,7 @@ vanilla code.
 
 ## Status
 
-**2026-11-26 22:05 MST.** Two things take most of a 2050 week:
+**2026-11-26 23:50 MST.** Two things take most of a 2050 week:
 
 1. **The ship construction readout under the date**, about 6 s of a 32 s
    week, outside the tick work (finding 5). **Fixed on this branch** without
@@ -21,11 +21,15 @@ vanilla code.
    tooltip and the Ships tab.
 2. **The investors' weekly construction pass**, 22 s of each weekly tick
    (two thirds of all tick work). It follows how many levels investors place
-   a week, and the USA is at the engine's ceiling of 1,000. Nothing that
+   a week, and the USA is at the engine's ceiling of 1,000 placements.
+   Nothing that
    keeps gameplay as it is has cut it: not a cheaper `ai_value`, not the
    `possible` blocks, not the update divisor (findings 2 and 3). A slower
    queue turnover halves the week's tick work (finding 4); that is the
-   owner's call, with options under "Proposals that change gameplay".
+   owner's call, with options under "Proposals that change gameplay". The
+   owner's own idea, investors that place levels in batches by script, has
+   its first probe in: script queues past 1,000 and the engine's pass then
+   rests (proposal 4).
 
 ## The save and the method
 
@@ -270,8 +274,9 @@ one are the projects in flight at the switch finishing together; a longer
 run would even out near 7 s a tick.)
 
 **Why this matters for the design.** Construction progress is applied once a
-week and the private queue holds 1,000 one-level elements, so investors can
-never finish more than 1,000 levels a week. The USA is at that ceiling: its
+week and the engine fills the private queue only to 1,000 one-level
+elements, so levels the engine places can never finish faster than 1,000 a
+week. (Levels queued by script are not held to that: proposal 4's probe.) The USA is at that ceiling: its
 cap of 3,064 a project is at or above what a level costs, and every further
 year of the modifier's ×1.2 ramp (toward 9,000) adds efficiency penalty and
 no levels. The pool it is meant to drain holds 15.5 trillion and takes in
@@ -411,24 +416,43 @@ to keep the rate. None is built.
      dormant pass picks for itself instead (a random building with profit
      and `occupancy > 0.9`), which never founds a building, never invests
      abroad, and gates on occupancy, which flat crews make meaningless.
-   - **To read in game first**, one short session: whether the effect queues
-     past 1,000 elements; the pass's time with the queue held above 1,000
-     across a weekly tick; whether the pool is charged and who owns the
-     levels; whether the effect honors `possible` and level caps
-     (`can_queue_building_levels = K` can ask first); whose pool pays in a
-     foreign state.
-   - Side effects to weigh: K levels are committed on today's prices where
-     the engine scores again after each; a queue past 1,000 lifts the
-     ceiling of 1,000 levels a week, so Excess Private Construction's raise
-     is no longer what sets throughput; thousands of queue entries in the
-     Construction panel.
+   - **Probed the same night** (session `20261127T063553Z`, `probe_batch.sh`,
+     `setups/p_*.txt`; the owner's go: "Mind running this real quick?"):
+
+     | Read | Result |
+     |---|---|
+     | Queue past 1,000 by script | **Yes.** 17 Steel Mill levels queued in each of the USA's 180 states by `start_privately_funded_building_construction`: `construction_queue_num_queued_private_levels` went from 1,000 to 4,060 |
+     | The engine's pass with the queue above 1,000 | **Rests.** The first weekly tick took 0.49 s against 1.8 s unchanged |
+     | Throughput with a longer queue | **Not held to 1,000 levels a week.** All 3,060 script levels finished within two weeks beside the engine's own (the capital's Steel Mill went from level 2 to 19); `private_construction_used` stayed 3.0 million, the allocation. So the queue's length was the ceiling, and past it the construction bought is |
+     | The second weekly tick | 19.9 s, as unchanged: the queue had emptied to under 1,000 by then (a Steel Mill level is about 800 points, and the engine's own picks average 3,000), so the engine refilled it. Holding the pass down needs more than a week's allocation queued ahead at every weekly tick |
+     | A resource-capped building | Refused: five Gold Mine levels in the capital added nothing to the queue |
+     | A foreign state, and who owns the levels | Not read: the probe's country filter matched nobody, and the government already owned Steel Mill levels in the capital |
+
+   - **What the design has to do, given that:** keep more than 1,000 levels
+     queued after each week's completions (about a week's allocation in
+     points beyond what finishes), or the engine refills at full cost; and
+     decide how the engine gets its picks, since a queue kept full gives it
+     none. Letting the queue dip just under 1,000 gives it that many
+     placements at 22 ms each.
+   - **Overshoot** (owner, 2026-11-26): "mostly okay, if we turn on this
+     system once we're building hundreds of levels a week", since by then
+     there are enough levels of most buildings that a batch is a small
+     step; the risk is in local goods, "mainly transportation and network
+     infrastructure". So the batch pass starts only at that scale, and
+     buildings that make local goods keep single levels or a small batch.
+   - Still to read in game: who owns script-queued levels and whether the
+     pool pays as for the engine's; whether the effect honors `possible`;
+     whose pool pays in a foreign state.
+   - Other side effects: Excess Private Construction's raise is no longer
+     what sets throughput once the queue passes 1,000; thousands of queue
+     entries in the Construction panel.
 
 ## Open
 
 1. **The turnover decision** (finding 4 and the proposals above) is the
    owner's. The 120-day runs give two caps; the unchanged 120-day run is
-   still owed (it stopped after 14 days), and so is the in-game probe of
-   proposal 4.
+   still owed (it stopped after 14 days). Proposal 4's first probe is in;
+   its ownership and foreign-state reads are owed.
 2. **Which candidates the pass scores.** The Steel Mill's `possible` is asked
    about 760,000 times on a heavy weekly tick, and the USA owns 180 states,
    so most of what its investors score each placement looks to be foreign
