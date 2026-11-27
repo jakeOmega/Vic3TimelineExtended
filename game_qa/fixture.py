@@ -99,16 +99,23 @@ DATED_KEPT = 4                                  # dated fixtures kept, the newes
 SHORT_RUN_LAST: Date = (1836, 3, 31)
 
 # The estimate of a run's wall-clock time: wall seconds per game day of an AI-only game on the owner's machine, by
-# year, read from the archived observer runs' plain-text autosaves (each save's file time against its `game_date`;
-# runs of game 1.14 and the mod of early October 2026, under /mnt/d/vic3te-data/):
-#   vic3te-demog-overnight-2026-10-12   1836.2 to 1876.1: 0.47 s a day; 1877.1 to 1904.1: 0.53 (0.55 to 0.61
-#                                        a year from 1895)
-#   vic3te-demog-p2-normal-2026-10-11   1837.1 to 1902.1: 0.61
-#   vic3te-growth-probe-data            1949.8 to 1953.2: 0.98 (a run from a save of that date)
-# Between the anchors the rate is interpolated; past the last one nothing is measured, and it is taken to go on
-# rising at the 1904 to 1951 slope. The owner's own play of a 1931 game ran slower (1.33 to 1.9 s a day,
-# docs/audits/late_game_performance.md), with the interface drawn for a player.
-RATE_ANCHORS: tuple[tuple[float, float], ...] = ((1836.0, 0.47), (1876.0, 0.47), (1904.0, 0.58), (1951.0, 0.98))
+# year (#1602). Re-anchored to the first long dated-fixture run, 2026-11-16 (`fixture --until 1925.1.1` on build
+# dab9335f1 with the AI probe on, game 1.15.2: run 20261116T092529Z, its `fixture.json` `timing.years`, the game's
+# own seconds a game day): 0.55 in 1836, 0.70 to 0.76 a decade from 1840 to 1900, 0.80 to 0.86 from 1900 to 1925
+# (0.92 to 1.04 in 1908-1910 and 1916-1918), 6 h 46 min in all where the October anchors gave 4.85 h. The 1948
+# figure is the session played on from that run's 1925 save (run 20261117T000858Z): 300 days a call took 352 to
+# 456 s, 1.17 to 1.51 s a game day with the pauses and date reads included, so it is an upper bound for an
+# unattended run, on the safe side for a grant. A later build ran 1836 to 1850 at 0.58 (run 20261116T212324Z), so
+# the rates move by a fifth or so between builds. Between the anchors the rate is interpolated; past the last one
+# nothing is measured, and it is taken to go on rising at the 1925 to 1948 slope. The October anchors these replace
+# (0.47 to 1876, 0.58 at 1904, 0.98 at 1951, from archived observer runs of game 1.14) ran about 40% low. The
+# owner's own play of a 1931 game ran slower (1.33 to 1.9 s a day, docs/audits/late_game_performance.md), with the
+# interface drawn for a player.
+RATE_ANCHORS: tuple[tuple[float, float], ...] = ((1836.0, 0.55), (1840.0, 0.72), (1900.0, 0.78), (1925.0, 0.85),
+                                                (1948.0, 1.2))
+RATE_FROM = ("the dated-fixture run of 2026-11-16 on the owner's machine (game 1.15.2, the AI probe on): 0.55 s a "
+             "game day in 1836, 0.72 to 1900, 0.85 at 1925 (6 h 46 min to 1925); 1.2 at 1948 from a session played "
+             "on from its save; past 1948 a guess (fixture.RATE_ANCHORS); builds differ by a fifth or so")
 LOAD_S = 90.0               # launch to the save of the 1836 fixture's three-day run (spec § 3.6): the load, and a save
 # The watch limit of a dated run: FIXTURE_LIMIT_S, the 1836 run's, plus LIMIT_FACTOR times the estimate of every day
 # past the 1836 fixture's. The limit ends a game that may have hung, at the cost of the run: generous on purpose,

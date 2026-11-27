@@ -11,6 +11,9 @@ Three sources, all plain files the game writes:
     logs/dedicated_server.log     a `Processing Tick: <Y.M.D[.H]>` line per frame, stamped with the wall-clock second,
                                   `Pause Toggled! Paused: true|false` at every pause key, `Changing game speed to: N`.
                                   It rotates at about 512 KB, within one run too, like debug.log
+    logs/<id>/pop_stats.csv       from console `logging.popstats`: one row per pop (`id,country,state,workplace,
+                                  poptype,culture,religion,size,workforce,dependents,…`), in a new folder each time
+                                  (#1758); `Session.profile_pops` copies it as `pop_stats_<label>.csv`
 
 The session (`Session.profile_start`, `Session.profile_dump`) copies the first two into the run folder as
 `tt_<label>.csv` and `sp_<label>.txt` the moment each is written, and follows the third into the run folder's
@@ -70,6 +73,17 @@ REFERENCE_LOCATION = "common/pop_types/aristocrats.txt:33"  # a per-tick vanilla
 KINDS = ("month_start", "weekly", "ordinary", "sub")
 KIND_TEXT = {"month_start": "hour 0 on the 1st", "weekly": "hour 0, weekly day", "ordinary": "hour 0, ordinary day",
              "sub": "hours 6, 12 and 18"}
+# `logging.popstats` (#1758): every pop, one row each, into a new folder of logs/ each time ("Log created at:
+# logs/f551829e-c1dd-4247-9ad1-58b66bcb707d/pop_stats.csv", live 2026-11-13, a 19 MB file on a 1931 save). The
+# snapshot copies no folder and the restore removes none, so `profile pops` copies the file into the run folder and
+# the stop names the folder (`left_behind`).
+POPS_COMMAND = "logging.popstats"
+POPS_FILE = "pop_stats.csv"
+POPS_PREFIX, POPS_SUFFIX = "pop_stats_", ".csv"
+POPS_HEADER_START = "id,country,state,"          # the CSV's first columns, as the 2026-11-13 dump had them
+POPS_WAIT_S = 60.0                              # a 19 MB file: longer than the other dumps' wait
+_POPS_REPLY = re.compile(r"Log created at:\s*(logs[/\\]([0-9A-Za-z][0-9A-Za-z_-]{0,63})[/\\]pop_stats\.csv)\s*$",
+                         re.IGNORECASE)
 DUMP_WAIT_S = 15.0                              # from the console's answer to the file holding still, new
 SETTLE_S = 0.5                                  # two looks this far apart must agree before a copy
 
@@ -140,6 +154,21 @@ def rows_written(lines: Sequence[str]) -> tuple[int, str] | None:
         if match:
             return int(match.group(1)), match.group(2).strip()
     return None
+
+
+def pops_written(lines: Sequence[str]) -> str | None:
+    """The user-data-relative path `logging.popstats` says it wrote ("logs/<id>/pop_stats.csv", with `/`), from its
+    answer, or None when no line says so. The folder must be one plain name: letters, digits, `_` and `-`."""
+    for line in lines:
+        found = _POPS_REPLY.search(line.strip())
+        if found:
+            return "logs/%s/%s" % (found[2], POPS_FILE)
+    return None
+
+
+def pops_path(run_dir: Path, label: str) -> Path:
+    """The run folder's copy of a pop dump: pop_stats_<label>.csv."""
+    return Path(run_dir) / (POPS_PREFIX + label + POPS_SUFFIX)
 
 
 def names_file(path: str, name: str) -> bool:
