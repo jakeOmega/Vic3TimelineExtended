@@ -39076,6 +39076,36 @@ sr_resort_next_fill = {
 	}
 }
 
+# The room buildings' next-day hooks (#1951; ROOM_BUILDINGS).
+# Country scope, the owner of an Extraplanetary Base just built or expanded
+# (te_on_building_built, te_on_building_expanded): the room's refresh the next
+# day (space_race_events.110), when the new level surely counts. One event a day
+# however many levels finish: each refresh removes and re-adds its modifier, and
+# whether a second same-day run's has_modifier sees the first's add is
+# unverified, so a batch must not run it twice. The marker lapses in two days if
+# the event never fires.
+sr_ebase_hook_fire = {
+	if = {
+		limit = { NOT = { has_variable = sr_ebase_hook_pending } }
+		set_variable = { name = sr_ebase_hook_pending value = yes days = 2 }
+		trigger_event = { id = space_race_events.110 days = 1 }
+	}
+}
+
+# Country scope, the owner of a Resort Colony just built or expanded
+# (te_on_building_built, te_on_building_expanded): the room's refresh the next
+# day (space_race_events.112), when the new level surely counts. One event a day
+# however many levels finish: each refresh removes and re-adds its modifier, and
+# whether a second same-day run's has_modifier sees the first's add is
+# unverified, so a batch must not run it twice. The marker lapses in two days if
+# the event never fires.
+sr_resort_hook_fire = {
+	if = {
+		limit = { NOT = { has_variable = sr_resort_hook_pending } }
+		set_variable = { name = sr_resort_hook_pending value = yes days = 2 }
+		trigger_event = { id = space_race_events.112 days = 1 }
+	}
+}
 
 # Console (te_debug_space_race.4): every colony's modules, and its caps' use counting
 # our queue and every shipment.

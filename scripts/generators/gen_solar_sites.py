@@ -26,22 +26,29 @@ Outputs:
   mirror, release, transfer and monthly step; the choice dispatcher
   (``sr_site_choose_<modifier>``, an option of the founding and discovery
   events); the revolution repoint, the panel snapshot, Cede
-  Colony's apply and the console's helpers.
+  Colony's apply and the console's helpers; each room building's next-day hook
+  (``ROOM_BUILDINGS``, below).
 - ``common/journal_entries/sr_sites_generated.txt``: the solar colonization
   entry's declarations of the 80 specializations, the 40 discovery outcomes
   (under races only; under simple and full colonies an outcome is its world's
   boon, ``DISCOVERY_BOONS``) and the six facilities (an ``INJECT:`` into the
   hand-written entry, ``je_space_race.txt``).
 - ``common/scripted_triggers/sr_sites_generated.txt``: Cede Colony's input filter
-  and ``sr_any_site_unclaimed``.
+  and ``sr_any_site_unclaimed``; each room building's build gates.
 - ``common/script_values/sr_sites_generated.txt``: ``sr_sites_held_count`` and the
-  AI's value of a ceded world.
+  AI's value of a ceded world; each room building's levels and room.
 - ``common/script_values/sr_sites_display_generated.txt``: the panel's
-  ``sr_disp_site_<key>``, read by the GUI only.
+  ``sr_disp_site_<key>`` and each room building's overview cell, read by the GUI
+  only.
 - ``common/buildings/sr_site_buildings_generated.txt``: one hidden building type
   per world, which only names it in the treaty designer.
 - ``common/customizable_localization/sr_sites_generated_custom_loc.txt``: a
   world's name from its index, for the notices.
+
+The room buildings (``ROOM_BUILDINGS``, #1951) are the Extraplanetary Base and the
+Resort Colony, whose levels fill a room their country's colonies give them: the
+pieces of that room still the same shape for both are written by one function
+each (``render_room_*``, ``site_room_*``), called once a building.
 
 The table is the script's own: each world's stage, launch-window body
 (``gen_launch_windows.BODIES``; Mercury and the Moon have none), founding event
@@ -512,6 +519,49 @@ OVERFLOW_GRADE = -75
 ORBIT_RESORT_ROOM = 10
 RESORT_TECH = "space_colonization"
 RESORT_OVERFLOW_DRAW = -75
+
+
+# The two buildings whose levels fill a room their country's colonies give it
+# (#1951): the Extraplanetary Base (design § 9) and the Resort Colony (#1948
+# design § 6). The resort's room began as a copy of the base's; what is still
+# the same shape is written from here, one function a piece called once for each
+# building: the levels built and queued, the room (each world's and the
+# country's), the build gates, the next-day hook and the overview cell's display
+# values. Where the levels go is each one's own: the base's month places them by
+# record (gen_ebase.py, ground types design § 8), the resort's room fills best
+# draw first (render_resort_fill). So are the two refreshes, the hook's events
+# (space_race_events.110, .112), the cell's last line and the base's
+# sr_disp_ebase_next_past / _next_profit, all hand-written.
+@dataclass(frozen=True)
+class RoomBuilding:
+    key: str  # the names' infix: sr_<key>_room_total, sr_site_<key>_room_<site>, sr_disp_<key>_*
+    name: str  # comments only
+    design: str  # where its room is designed, comments only
+    building: str
+    tech: str  # the building's technology: the overview cell shows with it
+    home: str  # the room every country has, comments only
+    home_tech: str  # the technology that room needs
+    home_room: int
+    site_room: str  # the Site attribute holding a world's own room
+    facility: str  # the module whose staffed levels add sr_mod_<facility>_room to its world's room
+    measure: str  # what a level gets in the room, in percent: var:sr_<key>_<measure>, its average
+    overflow: int  # a level past all of the room, in percent
+    hook_event: str  # the room's refresh the day after a level finishes
+
+
+EBASE = RoomBuilding("ebase", "Extraplanetary Base", "design § 9", "building_space_mine",
+                     "in_situ_resource_utilization", "the near-Earth asteroids", NEAR_EARTH_TECH, NEAR_EARTH_ROOM,
+                     "ebase_room", "mine", "grade", OVERFLOW_GRADE, "space_race_events.110")
+RESORT = RoomBuilding("resort", "Resort Colony", "#1948 design § 6", "building_space_resort",
+                      RESORT_TECH, "Earth orbit", RESORT_TECH, ORBIT_RESORT_ROOM,
+                      "resort_room", "resort", "draw", RESORT_OVERFLOW_DRAW, "space_race_events.112")
+ROOM_BUILDINGS = (EBASE, RESORT)
+
+# The overview cell shows built and queued levels apart ("9999 +999 / 9999") only
+# while each figure fits under these (test_space_race_labels.py measures the word
+# at them); otherwise their sum.
+SPLIT_QUEUED_UNDER = 1000
+SPLIT_FIGURE_UNDER = 10000
 
 # The Moon's six worlds (lunar colonization design § 3): stage 0, at Earth's
 # location, never gated, founded the month their fleet leaves (§ 3.3). A module
@@ -1825,6 +1875,9 @@ def render_triggers() -> str:
     out += ["\t}", "}", ""]
     out += (render_fleet_triggers() + [""] + render_module_triggers() + [""] + render_dismantle_triggers()
             + [""] + render_autonomy_triggers())
+    out += ["", "# ===== The room buildings' build gates (#1951; ROOM_BUILDINGS) ====="]
+    for b in ROOM_BUILDINGS:
+        out += ["", *render_room_gates(b)]
     return "\n".join(out) + "\n"
 
 
@@ -2324,22 +2377,9 @@ def render_module_values() -> list[str]:
             "sr_mod_upkeep_levels = {", "\tvalue = 0"]
     out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{s.key} ?= this }} add = sr_site_extra_levels_{s.key} }}"
             for s in SITES]
-    out += ["}", "",
-            "# Country scope: THIS's Extraplanetary Base room, in levels (design § 9): the",
-            f"# near-Earth {NEAR_EARTH_ROOM} with {NEAR_EARTH_TECH} (lunar colonization design § 6)",
-            "# and every colony it holds.",
-            "sr_ebase_room_total = {", "\tvalue = 0",
-            f"\tif = {{ limit = {{ has_technology_researched = {NEAR_EARTH_TECH} }} add = {NEAR_EARTH_ROOM} }}"]
-    out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = sr_site_ebase_room_{s.key} }}" for s in SITES]
     out.append("}")
-    out += ["",
-            "# Country scope: THIS's Resort Colony room, in levels (#1948 design § 6.1): Earth",
-            f"# orbit's {ORBIT_RESORT_ROOM} with {RESORT_TECH}, the building's technology, and every colony",
-            "# that serves it.",
-            "sr_resort_room_total = {", "\tvalue = 0",
-            f"\tif = {{ limit = {{ has_technology_researched = {RESORT_TECH} }} add = {ORBIT_RESORT_ROOM} }}"]
-    out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = sr_site_resort_room_{s.key} }}" for s in SITES]
-    out.append("}")
+    for b in ROOM_BUILDINGS:
+        out += ["", *render_room_levels(b), "", *render_room_total(b)]
     out += render_shipment_wait_values()
     return out
 
@@ -2403,17 +2443,9 @@ def _hab_values(site: Site) -> list[str]:
             pers = f" multiply = sr_site_pers_share_{k}" if t in PERSONNEL_TYPES else ""
             out.append(f"sr_site_{t}_staffed_{k} = {{ value = sr_site_{t}_value_{k} multiply = sr_site_staffing_{k}{pers} }}")
     out += _boon_values(site)
-    out += ["# Its Extraplanetary Base room: the world's, and its Mining Complexes' (design § 7).",
-            f"sr_site_ebase_room_{k} = {{",
-            f"\tvalue = {site.ebase_room}",
-            f"\tadd = {{ value = {eff_value(site, 'mine')} multiply = sr_mod_mine_room floor = yes }}",
-            "}",
-            "# Its Resort Colony room: the world's, and its Off-World Resorts' (#1948 design § 6.1).",
-            f"sr_site_resort_room_{k} = {{",
-            f"\tvalue = {site.resort_room}",
-            f"\tadd = {{ value = {eff_value(site, 'resort')} multiply = sr_mod_resort_room floor = yes }}",
-            "}",
-            "# Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a",
+    for b in ROOM_BUILDINGS:
+        out += site_room_values(b, site)
+    out += ["# Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a",
             "# staffed Cultural Center level (the owner, 2026-11-24).",
             f"sr_site_resort_draw_{k} = {{",
             f"\tvalue = {site.resort_draw}",
@@ -2893,6 +2925,9 @@ def render_module_effects() -> list[str]:
     # The Extraplanetary Base's fill and its next level's place are gen_ebase.py's
     # (ground types design § 8); ebase_tiers() above stays the order by grade.
     out += render_resort_fill()
+    out += ["# The room buildings' next-day hooks (#1951; ROOM_BUILDINGS)."]
+    for i, b in enumerate(ROOM_BUILDINGS):
+        out += [""] * bool(i) + render_room_hook(b)
     out += ["",
             "# Console (te_debug_space_race.4): every colony's modules, and its caps' use counting",
             "# our queue and every shipment.",
@@ -2931,6 +2966,185 @@ def render_module_effects() -> list[str]:
                        f"sr_site_terra_step_{k} = {{ MONTHS = 120 }} sr_site_sync_{k} = yes }}")
     out.append("}")
     return out
+
+
+# ---------------------------------------------------------------------------
+# The room buildings' shared pieces (#1951): one function a piece, called for
+# each of ROOM_BUILDINGS
+# ---------------------------------------------------------------------------
+
+def _a(noun: str) -> str:
+    return f"{'an' if noun[0] in 'AEIOU' else 'a'} {noun}"
+
+
+def render_room_levels(b: RoomBuilding) -> list[str]:
+    """The country's levels of the building, built, and built and queued."""
+    t = b.building
+    return [f"# Country scope. Its {b.name} levels, built, and built and queued. Each state's",
+            "# building is the engine's b: lookup, which also finds one whose levels are all",
+            "# queued, never a walk of the state's buildings: the building's can_build_private",
+            "# reads the queued count, and the private investment pass reads that in every",
+            "# state (scripting_best_practices.md § \"A Building's `possible` Runs in Every",
+            "# State for Private Investment, Before `can_build_private`\").",
+            f"sr_{b.key}_levels = {{",
+            "\tvalue = 0",
+            "\tevery_scope_state = {",
+            f"\t\tlimit = {{ exists = b:{t} }}",
+            f"\t\tadd = b:{t}.level",
+            "\t}",
+            "}",
+            "",
+            f"sr_{b.key}_queued_levels = {{",
+            "\tvalue = 0",
+            "\tevery_scope_state = { # REVIEWED 2026-11-22: investors must obey the room, so it stays in "
+            "can_build_private; one b: lookup a state (the base's: 36 reads in a week of the 2024 USA)",
+            f"\t\tlimit = {{ exists = b:{t} }}",
+            f"\t\tadd = b:{t}.level_after_queued_constructions",
+            "\t}",
+            "}"]
+
+
+def render_room_total(b: RoomBuilding) -> list[str]:
+    """The country's room for the building, in levels: the room every country has,
+    with its technology, and each colony that serves it (site_serves)."""
+    out = [f"# Country scope: THIS's {b.name} room, in levels ({b.design}): {b.home},",
+           f"# {b.home_room} with {b.home_tech}, and every colony that serves it.",
+           f"sr_{b.key}_room_total = {{", "\tvalue = 0",
+           f"\tif = {{ limit = {{ has_technology_researched = {b.home_tech} }} add = {b.home_room} }}"]
+    out += [f"\tif = {{ limit = {{ {site_serves(s)} }} add = sr_site_{b.key}_room_{s.key} }}" for s in SITES]
+    out.append("}")
+    return out
+
+
+def site_room_values(b: RoomBuilding, site: Site) -> list[str]:
+    """A world's own room for the building: the table's, and its modules'. Any scope."""
+    k = site.key
+    return [f"# Its {b.name} room: the world's, and sr_mod_{b.facility}_room a staffed "
+            f"{FACILITY[b.facility].name} level.",
+            f"sr_site_{b.key}_room_{k} = {{",
+            f"\tvalue = {getattr(site, b.site_room)}",
+            f"\tadd = {{ value = {eff_value(site, b.facility)} multiply = sr_mod_{b.facility}_room floor = yes }}",
+            "}"]
+
+
+def render_room_gates(b: RoomBuilding) -> list[str]:
+    """The building's can_build_government and can_build_private (extra_buildings.txt):
+    an AI government and every private investor build within the room only."""
+    return [f"# Country scope. One more {b.name} level, counting those queued, fits in the",
+            "# country's room; always under races only, where the building is unlimited.",
+            f"sr_{b.key}_has_room = {{",
+            "\tOR = {",
+            "\t\tNOT = { sr_colonies_contested_enabled = yes }",
+            f"\t\tsr_{b.key}_queued_levels < sr_{b.key}_room_total",
+            "\t}",
+            "}",
+            "",
+            "# Country scope, the building's can_build_government: an AI government builds",
+            "# within the room only; a player's builds past it, at the penalty.",
+            f"sr_{b.key}_may_build_government = {{",
+            "\tOR = {",
+            "\t\tis_ai = no",
+            "\t\tcustom_tooltip = {",
+            f"\t\t\ttext = sr_{b.key}_room_full_tt",
+            f"\t\t\tsr_{b.key}_has_room = yes",
+            "\t\t}",
+            "\t}",
+            "}",
+            "",
+            "# Country scope, the building's can_build_private: no private investor builds",
+            "# past the room, in anyone's country.",
+            f"sr_{b.key}_may_build_private = {{",
+            "\tcustom_tooltip = {",
+            f"\t\ttext = sr_{b.key}_room_full_tt",
+            f"\t\tsr_{b.key}_has_room = yes",
+            "\t}",
+            "}"]
+
+
+def render_room_hook(b: RoomBuilding) -> list[str]:
+    """The next day's refresh once a level finishes (extra_on_actions.txt's
+    te_on_building_built and te_on_building_expanded call it on the owner)."""
+    return [f"# Country scope, the owner of {_a(b.name)} just built or expanded",
+            "# (te_on_building_built, te_on_building_expanded): the room's refresh the next",
+            f"# day ({b.hook_event}), when the new level surely counts. One event a day",
+            "# however many levels finish: each refresh removes and re-adds its modifier, and",
+            "# whether a second same-day run's has_modifier sees the first's add is",
+            "# unverified, so a batch must not run it twice. The marker lapses in two days if",
+            "# the event never fires.",
+            f"sr_{b.key}_hook_fire = {{",
+            "\tif = {",
+            f"\t\tlimit = {{ NOT = {{ has_variable = sr_{b.key}_hook_pending }} }}",
+            f"\t\tset_variable = {{ name = sr_{b.key}_hook_pending value = yes days = 2 }}",
+            f"\t\ttrigger_event = {{ id = {b.hook_event} days = 1 }}",
+            "\t}",
+            "}"]
+
+
+def site_room_display(b: RoomBuilding, site: Site) -> str:
+    """A world's room for the building, for its page and the Modules view."""
+    return f"sr_disp_site_{b.key}_room_{site.key} = {{ value = sr_site_{b.key}_room_{site.key} }}"
+
+
+def render_room_display(b: RoomBuilding) -> list[str]:
+    """The overview's cell for the building (UI pass design § 8) and the Modules
+    view's queued row: read by the GUI only."""
+    k, m = b.key, b.measure
+    return [f"# The overview's {b.name} cell (UI pass design § 8; {b.design}): our levels,",
+            f"# our room for them, and the throughput the room gives them (percent, the average {m};",
+            f"# negative past the room); levels queued and not yet built; the {m} the next level",
+            "# would work at (the refresh's, queued levels counted); 1 once built and queued",
+            "# levels pass the room; and 1 once the building is ours to build (its technology).",
+            f"sr_disp_{k}_levels = {{",
+            f"\tvalue = sr_{k}_levels",
+            "}",
+            f"sr_disp_{k}_room = {{",
+            f"\tvalue = sr_{k}_room_total",
+            "}",
+            f"sr_disp_{k}_{m} = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_variable = sr_{k}_{m} }} value = var:sr_{k}_{m} }}",
+            "}",
+            f"sr_disp_{k}_queued = {{",
+            f"\tvalue = sr_{k}_queued_levels",
+            f"\tsubtract = sr_{k}_levels",
+            "\tmin = 0",
+            "}",
+            f"sr_disp_{k}_next_{m} = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_variable = sr_{k}_next_{m} }} value = var:sr_{k}_next_{m} }}",
+            "\t# Live past all of the room, where the refresh's figure would lag a freshly",
+            "\t# queued batch (or read 0 before any refresh has run).",
+            f"\tif = {{ limit = {{ sr_{k}_queued_levels >= sr_{k}_room_total }} value = {b.overflow} }}",
+            "}",
+            f"sr_disp_{k}_past = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ sr_{k}_queued_levels > sr_{k}_room_total }} value = 1 }}",
+            "}",
+            "# The cell's word counts queued levels as well as built ones, as its red and",
+            "# \"next at\" do: \"built +queued / room\" while levels are queued and the three",
+            "# figures fit the cell's column (\"9999 +999 / 9999\" at the longest), and",
+            "# otherwise their sum against the room (owner, 2026-11-04: \"0 / 75\" in red,",
+            "# with more than 75 levels queued, hid the queue that made it red).",
+            f"sr_disp_{k}_total = {{",
+            f"\tvalue = sr_{k}_levels",
+            f"\tadd = sr_disp_{k}_queued",
+            "}",
+            f"sr_disp_{k}_split = {{",
+            "\tvalue = 0",
+            "\tif = {",
+            "\t\tlimit = {",
+            f"\t\t\tsr_disp_{k}_queued > 0",
+            f"\t\t\tsr_disp_{k}_queued < {SPLIT_QUEUED_UNDER}",
+            f"\t\t\tsr_disp_{k}_levels < {SPLIT_FIGURE_UNDER}",
+            f"\t\t\tsr_disp_{k}_room < {SPLIT_FIGURE_UNDER}",
+            "\t\t}",
+            "\t\tvalue = 1",
+            "\t}",
+            "}",
+            f"sr_disp_{k}_shown = {{",
+            "\tvalue = 0",
+            f"\tif = {{ limit = {{ has_technology_researched = {b.tech} }} value = 1 }}",
+            "}"]
 
 
 def render_resort_fill() -> list[str]:
@@ -4507,10 +4721,10 @@ def render_display() -> str:
                 f"sr_disp_mod_next_hab_cost_{k} = {{ value = sr_mod_next_hab_cost_{k} }}",
                 f"sr_disp_site_hab_share_{k} = {{ value = {hab_share_eff(site)} multiply = 100 round = yes }}",
                 f"sr_disp_site_hab_people_{k} = {{ value = {hab_share_eff(site)} multiply = sr_site_base_room_{k} }}",
-                f"sr_disp_site_ebase_room_{k} = {{ value = sr_site_ebase_room_{k} }}",
+                site_room_display(EBASE, site),
                 # Its discoveries' recorded options, 0 for none: the page's boon lines.
                 *[line for d in site.discoveries for line in _opt_var(f"sr_disp_site_disc_{d}", f"sr_site_disc_{d}")],
-                f"sr_disp_site_resort_room_{k} = {{ value = sr_site_resort_room_{k} }}",
+                site_room_display(RESORT, site),
                 # Its draw with its Cultural Centers' points (the owner, 2026-11-24).
                 f"sr_disp_site_resort_draw_{k} = {{ value = sr_site_resort_draw_{k} }}",
                 # Solar System's line under the name: the world's Habitat cap.
@@ -4534,6 +4748,8 @@ def render_display() -> str:
     out += render_overview_display()
     out += render_window_display()
     out += _ebase_view().render_view_display()
+    for b in ROOM_BUILDINGS:
+        out += ["", *render_room_display(b)]
     return "\n".join(out) + "\n"
 
 
