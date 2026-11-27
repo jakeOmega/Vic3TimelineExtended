@@ -29236,8 +29236,8 @@
   "ru": "#b Причины смерти#!\\nЗа прошлый год — #v $te_demog_cd_dc_total_fig$#! смертей в областях страны; таблица рядом с диаграммой разбивает их по причинам."
  },
  "te_demog_cd_um_line": {
-  "en": " Besides them, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
-  "ru": " Помимо них, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! на 1 000 загрузились: их тела умерли от этих причин, и диаграмма их учитывает, но они продолжают жить как разумы."
+  "en": " Besides them, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as [concept_uploaded_minds].",
+  "ru": " Помимо них, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! на 1 000 загрузились: их тела умерли от этих причин, и диаграмма их учитывает, но они продолжают жить как [concept_uploaded_minds|l]."
  },
  "te_demog_cd_work_capital": {
   "en": "; in [Country.GetCapital.GetName], the capital, ×#v [Country.GetCapital.MakeScope.Var('te_dg_m_work').GetValue|2]#!",
@@ -29752,8 +29752,8 @@
   "ru": "Мигранты — это люди, которых область приобретает или теряет сверх того, что объясняют её рождаемость, смертность, погибшие на войне и убитые событиями. Они приходят и уходят в основном молодыми взрослыми, а там, где лёгкая промышленность и услуги привлекают женщин к работе, среди них больше женщин. Погибшие на войне берутся из мужчин и женщин 18–40 лет, девятнадцать из двадцати — мужчины."
  },
  "te_demog_how_minds": {
-  "en": "Mind Backups saves the minds of those in longevity care: when a backed-up body dies by accident, violence or at work, the mind can be restored to a new one, so half of those deaths are undone. With Mind Upload Nexuses, people in care who face death from illness or old age upload instead, as far as there is room, and go on as minds: their bodies leave the states' people, but they count as living. Each Nexus level hosts a million minds. A Nexus makes what its minds produce, so an empty one makes nothing; minds don't work in pops, need no care and draw no pension. $law_human_purity$ bans the backups with longevity care.",
-  "ru": "«Резервное копирование сознания» сохраняет разум тех, кто на медицине долголетия: когда тело с резервной копией умирает от несчастного случая, насилия или на работе, разум можно восстановить в новом, так что половина таких смертей отменяется. С «Узлами загрузки сознания» люди на лечении, которым грозит смерть от болезни или старости, загружаются вместо этого, пока есть место, и продолжают жить как разумы: их тела выбывают из населения областей, но они считаются живыми. Каждый уровень узла вмещает миллион разумов. Узел производит то, что производят его разумы, так что пустой не производит ничего; разумы не работают в группах населения, не нуждаются в лечении и не получают пенсии. Закон $law_human_purity$ запрещает резервное копирование вместе с медициной долголетия."
+  "en": "Mind Backups saves the minds of those in longevity care: when a backed-up body dies by accident, violence or at work, the mind can be restored to a new one, so half of those deaths are undone. With Mind Upload Nexuses, people in care who face death from illness or old age upload instead, as far as there is room, and go on as [concept_uploaded_minds]: their bodies leave the states' people and the population the game shows elsewhere, but Living to 100 counts them as living. Each Nexus level hosts a million minds. A Nexus makes what its minds produce, so an empty one makes nothing ([concept_mind_hosting]); minds don't work in pops, need no care and draw no pension. Uploads follow the census: each state's yearly count uploads its own, and the country's next count adds them to the Uploaded Minds row and to the Nexuses' output, so the first minds arrive a year or two after the first level. $law_human_purity$ bans the backups with longevity care.",
+  "ru": "«Резервное копирование сознания» сохраняет сознания тех, кто на медицине долголетия: когда тело с резервной копией умирает от несчастного случая, насилия или на работе, сознание можно восстановить в новом теле, так что половина таких смертей отменяется. С Узлами загрузки сознания люди на лечении, которым грозит смерть от болезни или старости, загружаются вместо этого, пока есть место, и продолжают жить как [concept_uploaded_minds|l]: их тела выбывают из населения областей и из населения, которое игра показывает в других местах, но «Доживание до 100 лет» считает их живыми. Каждый уровень Узла вмещает миллион сознаний. Узел производит то, что производят его сознания, так что пустой не производит ничего ([concept_mind_hosting|l]); сознания не работают в группах населения, не нуждаются в лечении и не получают пенсии. Загрузки следуют за переписью: ежегодный подсчёт каждой области загружает её людей, а следующий подсчёт страны добавляет их в строку «Загруженные сознания» и в выпуск Узлов, так что первые сознания появляются через год-два после первого уровня. Закон $law_human_purity$ запрещает резервное копирование вместе с медициной долголетия."
  },
  "te_demog_how_modifiers": {
   "en": "Under the Full setting the yearly count puts standing modifiers on a state where its figures call for them: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect. Each is worked out again every year at a strength set by the figure behind it, and goes when the figure falls back. The Modifiers section lists them, so the state's modifier row, which keeps what starts and ends on a date, does not. Hover one for its effects at the strength the state has now.",
@@ -30984,8 +30984,8 @@
   "ru": ", и ещё #v [Country.MakeScope.ScriptValue('te_demog_um_archived_m')|1]#! млн в архиве, заморожены из-за нехватки места: они вернутся раньше, чем загрузится кто-то новый"
  },
  "te_demog_ov_um_backup_tt": {
-  "en": "#b Backed Up#!\\nThe share of the country's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work.",
-  "ru": "#b Резервные копии#!\\nДоля населения страны, чьи сознания сохраняет Резервное копирование сознания: тех, кто охвачен медициной долголетия. Восстановлено в новых телах: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! всех смертей от несчастных случаев, насилия или на работе."
+  "en": "#b Backed Up#!\\nThe share of the country's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work. Under the Full setting, with a Mind Upload Nexus, those in care who would die of illness or old age upload instead and go on as [concept_uploaded_minds].",
+  "ru": "#b Резервные копии#!\\nДоля населения страны, чьи сознания сохраняет Резервное копирование сознания: тех, кто охвачен медициной долголетия. Восстановлено в новых телах: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! всех смертей от несчастных случаев, насилия или на работе. При настройке «Полное», с Узлом загрузки сознания, люди на лечении, которые умерли бы от болезни или старости, загружаются вместо этого и продолжают жить как [concept_uploaded_minds|l]."
  },
  "te_demog_ov_um_backup_value": {
   "en": "#v [Country.MakeScope.Var('te_dg_elig').GetValue|%0]#! of people",
@@ -31003,9 +31003,17 @@
   "en": ", and #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! uploaded: bodies that died while their minds go on",
   "ru": ", и #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! загрузилось: тела умерли, а сознания продолжают жить"
  },
+ "te_demog_ov_um_pending_tt": {
+  "en": "#b [concept_uploaded_minds]#!\\nNone yet: the country's Mind Upload Nexuses wait on the yearly census. The country's census counts their room, each state's census over the next year uploads into it the people in longevity care who would die of illness or old age, and the country's next census counts them here. Until then the Nexuses make nothing, since their goods follow their [concept_mind_hosting].",
+  "ru": "#b [concept_uploaded_minds]#!\\nПока нет: Узлы загрузки сознания страны ждут ежегодной переписи. Перепись страны считает их вместимость, перепись каждой области в течение следующего года загружает в них людей на медицине долголетия, которые умерли бы от болезни или старости, а следующая перепись страны считает их здесь. До тех пор Узлы ничего не производят, поскольку их товары следуют их [Concept('concept_mind_hosting','размещению сознаний')]."
+ },
+ "te_demog_ov_um_pending_value": {
+  "en": "None yet",
+  "ru": "Пока нет"
+ },
  "te_demog_ov_um_tt": {
-  "en": "#b Uploaded Minds#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v $te_demog_ov_um_end_fig$#!",
-  "ru": "#b Загруженные сознания#!\\nСознания, которые принимают Узлы загрузки сознания страны, в долях от всех людей и сознаний страны вместе.\\n Размещено: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! млн из #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! млн (заполнено на #v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#!)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Загружено за прошлый год: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! из тех, кто мог\\n Решили прекратить за прошлый год: #v $te_demog_ov_um_end_fig$#!"
+  "en": "#b [concept_uploaded_minds]#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together. The population the game shows elsewhere counts only people with bodies and leaves them out. Counted at the country's yearly census.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v $te_demog_ov_um_end_fig$#!\\nThe Nexuses' goods and research follow how full they are ([concept_mind_hosting]).",
+  "ru": "#b [concept_uploaded_minds]#!\\nСознания, которые принимают Узлы загрузки сознания страны, в долях от всех людей и сознаний страны вместе. Население, которое игра показывает в других местах, считает только людей с телами и их не включает. Считается при ежегодной переписи страны.\\n Размещено: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! млн из #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! млн (заполнено на #v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#!)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Загружено за прошлый год: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! из тех, кто мог\\n Решили прекратить за прошлый год: #v $te_demog_ov_um_end_fig$#!\\nТовары и исследования Узлов следуют их заполненности ([concept_mind_hosting|l])."
  },
  "te_demog_ov_um_value": {
   "en": "#v [Country.MakeScope.Var('te_dg_um_share').GetValue|%1]#! of people",
@@ -31716,8 +31724,8 @@
   "ru": "Рождений: #v [State.MakeScope.Var('te_dg_cbr').GetValue|1]#! на 1 000 человек за прошлый год"
  },
  "te_demog_st_cd_um_line": {
-  "en": " Besides them, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
-  "ru": " Помимо них, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! на 1 000 загрузились: их тела умерли от этих причин, и диаграмма их учитывает, но они продолжают жить как разумы."
+  "en": " Besides them, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as [concept_uploaded_minds].",
+  "ru": " Помимо них, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! на 1 000 загрузились: их тела умерли от этих причин, и диаграмма их учитывает, но они продолжают жить как [concept_uploaded_minds|l]."
  },
  "te_demog_st_cdr_tt": {
   "en": "#b Deaths#!\\nDeaths per 1,000 people in the state last year, the war dead and the people killed by events apart: the census's deaths, which the pie below splits by cause, with the war dead and the killed beside them.[SelectLocalization( GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_cd_um_line', 'te_tt_blank' )][SelectLocalization( GetScriptedGui('te_demog_state_on_top_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_ontop_rate', 'te_tt_blank' )]",
@@ -32380,8 +32388,8 @@
   "ru": "#b Детей на женщину#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)2' ) ), 'te_demog_st_tfr_prev', '' )]\\nСколько детей родила бы женщина в этой области за жизнь при показателях этого года. Каждая строка с × ниже умножает то, что дало бы одно богатство; поздние браки и промежутки между родами — два обычая, сдерживающих рождаемость.\\n$te_demog_st_tfr_terms$\\n[SelectLocalization( GetScriptedGui('te_demog_lx_state_mab_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_tfr_mab', 'te_demog_tfr_mab_pending' )]\\n\\n[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_births', 'te_demog_ov_births_pending' )]"
  },
  "te_demog_st_um_backup_tt": {
-  "en": "#b Backed Up#!\\nThe share of this state's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work.",
-  "ru": "#b Резервные копии#!\\nДоля людей этой области, чьи сознания сохраняет Резервное копирование сознания: тех, кто охвачен медициной долголетия. Восстановлено в новых телах: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! всех смертей от несчастных случаев, насилия или на работе."
+  "en": "#b Backed Up#!\\nThe share of this state's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work. Under the Full setting, with a Mind Upload Nexus, those in care who would die of illness or old age upload instead and go on as [concept_uploaded_minds].",
+  "ru": "#b Резервные копии#!\\nДоля людей этой области, чьи сознания сохраняет Резервное копирование сознания: тех, кто охвачен медициной долголетия. Восстановлено в новых телах: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! всех смертей от несчастных случаев, насилия или на работе. При настройке «Полное», с Узлом загрузки сознания, люди на лечении, которые умерли бы от болезни или старости, загружаются вместо этого и продолжают жить как [concept_uploaded_minds|l]."
  },
  "te_demog_st_um_backup_value": {
   "en": "#v [State.MakeScope.Var('te_dg_elig').GetValue|%0]#! of people",
@@ -32400,8 +32408,8 @@
   "ru": ", и #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! загрузилось: тела умерли, а сознания продолжают жить"
  },
  "te_demog_st_um_tt": {
-  "en": "#b Uploaded Last Year#!\\nThis state's people who uploaded to our Mind Upload Nexuses at its last census instead of dying. The whole country's network hosts them, so the Demographics tab counts them.",
-  "ru": "#b Загружено за прошлый год#!\\nЛюди этой области, которые при последней переписи загрузились в наши Узлы загрузки сознания вместо смерти. Их размещает сеть всей страны, поэтому их считает вкладка «Демография»."
+  "en": "#b Uploaded Last Year#!\\nThis state's people who uploaded to our Mind Upload Nexuses at its last census instead of dying, and go on as [concept_uploaded_minds]. The whole country's Nexuses host them, so the Demographics tab counts them, from the country's first census after this state's.",
+  "ru": "#b Загружено за прошлый год#!\\nЛюди этой области, которые при последней переписи загрузились в наши Узлы загрузки сознания вместо смерти и продолжают жить как [concept_uploaded_minds|l]. Их размещают Узлы всей страны, поэтому их считает вкладка «Демография», начиная с первой переписи страны после переписи этой области."
  },
  "te_demog_st_um_value": {
   "en": "#v $te_demog_st_um_new_fig$#! people",
@@ -32636,68 +32644,68 @@
   "ru": "Многие из наших людей теперь продолжают существовать как сознания без тел, и верующие называют это грехом против творения."
  },
  "te_demog_um_nexus_in_advanced_materials": {
-  "en": "Inputs by Hosted Minds",
-  "ru": "Затраты размещённых сознаний"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Затраты [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_in_advanced_materials_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_nexus_in_digital_access": {
-  "en": "Inputs by Hosted Minds",
-  "ru": "Затраты размещённых сознаний"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Затраты [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_in_digital_access_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_nexus_in_electricity": {
-  "en": "Inputs by Hosted Minds",
-  "ru": "Затраты размещённых сознаний"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Затраты [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_in_electricity_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_nexus_in_electronic_components": {
-  "en": "Inputs by Hosted Minds",
-  "ru": "Затраты размещённых сознаний"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Затраты [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_in_electronic_components_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_nexus_out_digital_assets": {
-  "en": "Output by Hosted Minds",
-  "ru": "Выпуск размещённых сознаний"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Выпуск [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_out_digital_assets_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_nexus_out_fine_art": {
-  "en": "Output by Hosted Minds",
-  "ru": "Выпуск размещённых сознаний"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Выпуск [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_out_fine_art_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_nexus_out_services": {
-  "en": "Output by Hosted Minds",
-  "ru": "Выпуск размещённых сознаний"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Выпуск [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_out_services_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_nexus_out_tourism": {
-  "en": "Output by Hosted Minds",
-  "ru": "Выпуск размещённых сознаний"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "ru": "Выпуск [Concept('concept_mind_hosting','размещённых сознаний')]"
  },
  "te_demog_um_nexus_out_tourism_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит то, что производят загруженные сознания, которые он размещает: каждый его товар следует заполненности размещения в стране, а прочие бонусы здания добавляются сверху, поэтому без сознаний он ничего не производит и не потребляет."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "ru": "При настройке «Полное» правила «Демография» Узел загрузки сознания производит лишь то, что производят его [concept_uploaded_minds|l], поэтому каждый его товар следует заполненности Узлов страны, а прочие бонусы здания добавляются сверху: пустой Узел ничего не производит и не потребляет. Сознания приходят с ежегодной переписью, через год-два после постройки первого уровня."
  },
  "te_demog_um_ontop_note": {
   "en": " (the uploads' bodies among them)",
@@ -32708,12 +32716,12 @@
   "ru": "Небиологические: #v $te_demog_um_women_fig$#! женщин и #v $te_demog_um_men_fig$#! мужчин — сознания без тела и возраста, поэтому столбца нет."
  },
  "te_demog_um_research": {
-  "en": "Empty Hosting",
-  "ru": "Пустое размещение"
+  "en": "Empty [Concept('concept_mind_hosting','Hosting')]",
+  "ru": "Пустое [Concept('concept_mind_hosting','размещение')]"
  },
  "te_demog_um_research_desc": {
-  "en": "A Mind Upload Nexus speeds research only as far as minds fill it.",
-  "ru": "Узел загрузки сознания ускоряет исследования лишь в той мере, в какой его заполняют сознания."
+  "en": "This country's Mind Upload Nexuses are not full, and a Nexus speeds research only as far as [concept_uploaded_minds] fill it.",
+  "ru": "Узлы загрузки сознания этой страны не заполнены, а Узел ускоряет исследования лишь в той мере, в какой его заполняют [concept_uploaded_minds|l]."
  },
  "te_demog_um_row": {
   "en": "Uploaded Minds",

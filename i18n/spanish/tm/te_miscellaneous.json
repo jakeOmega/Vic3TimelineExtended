@@ -29292,8 +29292,8 @@
   "es": "#b Causas de muerte#!\\nLas #v $te_demog_cd_dc_total_fig$#! muertes del año pasado en los estados del país; la tabla junto al gráfico circular las reparte por causa."
  },
  "te_demog_cd_um_line": {
-  "en": " Besides them, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
-  "es": " Además, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! por cada 1 000 se han cargado: sus cuerpos murieron por estas causas, y el gráfico circular los cuenta, pero siguen existiendo como mentes."
+  "en": " Besides them, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as [concept_uploaded_minds].",
+  "es": " Además, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! por cada 1 000 se cargaron: sus cuerpos murieron por estas causas, y el gráfico circular los cuenta, pero siguen existiendo como [concept_uploaded_minds|l]."
  },
  "te_demog_cd_work_capital": {
   "en": "; in [Country.GetCapital.GetName], the capital, ×#v [Country.GetCapital.MakeScope.Var('te_dg_m_work').GetValue|2]#!",
@@ -29808,8 +29808,8 @@
   "es": "Los migrantes son las personas que un estado gana o pierde más allá de lo que explican sus nacimientos, muertes, muertos en guerra y personas muertas por eventos. Llegan y se van sobre todo siendo jóvenes adultos, y donde la industria ligera y los servicios atraen a las mujeres al trabajo, más de ellos son mujeres. Los muertos en guerra se toman de los hombres y las mujeres de 18 a 40 años, diecinueve de cada veinte hombres."
  },
  "te_demog_how_minds": {
-  "en": "Mind Backups saves the minds of those in longevity care: when a backed-up body dies by accident, violence or at work, the mind can be restored to a new one, so half of those deaths are undone. With Mind Upload Nexuses, people in care who face death from illness or old age upload instead, as far as there is room, and go on as minds: their bodies leave the states' people, but they count as living. Each Nexus level hosts a million minds. A Nexus makes what its minds produce, so an empty one makes nothing; minds don't work in pops, need no care and draw no pension. $law_human_purity$ bans the backups with longevity care.",
-  "es": "Las Copias de seguridad mentales guardan las mentes de quienes reciben medicina de la longevidad: cuando un cuerpo con copia muere por accidente, violencia o en el trabajo, la mente puede restaurarse en uno nuevo, así que se deshace la mitad de esas muertes. Con los Nexos de carga mental, las personas con medicina de la longevidad que se enfrentan a la muerte por enfermedad o vejez se cargan en cambio, mientras haya sitio, y continúan como mentes: sus cuerpos salen de la población de los estados, pero cuentan como vivas. Cada nivel de Nexo aloja un millón de mentes. Un Nexo produce lo que producen sus mentes, así que uno vacío no produce nada; las mentes no trabajan en colectivos, no necesitan cuidados y no cobran pensión. $law_human_purity$ prohíbe las copias de seguridad junto con la medicina de la longevidad."
+  "en": "Mind Backups saves the minds of those in longevity care: when a backed-up body dies by accident, violence or at work, the mind can be restored to a new one, so half of those deaths are undone. With Mind Upload Nexuses, people in care who face death from illness or old age upload instead, as far as there is room, and go on as [concept_uploaded_minds]: their bodies leave the states' people and the population the game shows elsewhere, but Living to 100 counts them as living. Each Nexus level hosts a million minds. A Nexus makes what its minds produce, so an empty one makes nothing ([concept_mind_hosting]); minds don't work in pops, need no care and draw no pension. Uploads follow the census: each state's yearly count uploads its own, and the country's next count adds them to the Uploaded Minds row and to the Nexuses' output, so the first minds arrive a year or two after the first level. $law_human_purity$ bans the backups with longevity care.",
+  "es": "Las copias de seguridad mentales guardan las mentes de quienes reciben medicina de la longevidad: cuando un cuerpo con copia muere por accidente, violencia o en el trabajo, la mente puede restaurarse en uno nuevo, así que se deshace la mitad de esas muertes. Con los Nexos de carga mental, las personas con medicina de la longevidad que se enfrentan a la muerte por enfermedad o vejez se cargan en cambio, mientras haya sitio, y continúan como [concept_uploaded_minds|l]: sus cuerpos salen de la población de los estados y de la población que el juego muestra en otras partes, pero Llegar a los 100 las cuenta como vivas. Cada nivel de Nexo aloja un millón de mentes. Un Nexo produce lo que producen sus mentes, así que uno vacío no produce nada ([concept_mind_hosting|l]); las mentes no trabajan en colectivos, no necesitan cuidados y no cobran pensión. Las cargas siguen al censo: el recuento anual de cada estado carga a las suyas, y el siguiente recuento del país las suma a la fila Mentes cargadas y a la producción de los Nexos, así que las primeras mentes llegan uno o dos años después del primer nivel. $law_human_purity$ prohíbe las copias de seguridad junto con la medicina de la longevidad."
  },
  "te_demog_how_modifiers": {
   "en": "Under the Full setting the yearly count puts standing modifiers on a state where its figures call for them: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect. Each is worked out again every year at a strength set by the figure behind it, and goes when the figure falls back. The Modifiers section lists them, so the state's modifier row, which keeps what starts and ends on a date, does not. Hover one for its effects at the strength the state has now.",
@@ -31040,8 +31040,8 @@
   "es": ", y #v [Country.MakeScope.ScriptValue('te_demog_um_archived_m')|1]#! millones archivadas, congeladas por falta de espacio: vuelven antes de que se cargue a nadie nuevo"
  },
  "te_demog_ov_um_backup_tt": {
-  "en": "#b Backed Up#!\\nThe share of the country's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work.",
-  "es": "#b Con copia de seguridad#!\\nLa proporción de la población del país cuyas mentes guardan las Copias de seguridad mentales: quienes reciben medicina de la longevidad. Restauradas en cuerpos nuevos: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! de todas las muertes por accidente, violencia o en el trabajo."
+  "en": "#b Backed Up#!\\nThe share of the country's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work. Under the Full setting, with a Mind Upload Nexus, those in care who would die of illness or old age upload instead and go on as [concept_uploaded_minds].",
+  "es": "#b Con copia de seguridad#!\\nLa proporción de la población del país cuyas mentes guardan las copias de seguridad mentales: quienes reciben medicina de la longevidad. Restauradas en cuerpos nuevos: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! de todas las muertes por accidente, violencia o en el trabajo. Con el ajuste Completo y un Nexo de carga mental, quienes reciben cuidados y morirían por enfermedad o vejez se cargan en cambio y continúan como [concept_uploaded_minds|l]."
  },
  "te_demog_ov_um_backup_value": {
   "en": "#v [Country.MakeScope.Var('te_dg_elig').GetValue|%0]#! of people",
@@ -31059,9 +31059,17 @@
   "en": ", and #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! uploaded: bodies that died while their minds go on",
   "es": ", y #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! cargadas: cuerpos que murieron mientras sus mentes continúan"
  },
+ "te_demog_ov_um_pending_tt": {
+  "en": "#b [concept_uploaded_minds]#!\\nNone yet: the country's Mind Upload Nexuses wait on the yearly census. The country's census counts their room, each state's census over the next year uploads into it the people in longevity care who would die of illness or old age, and the country's next census counts them here. Until then the Nexuses make nothing, since their goods follow their [concept_mind_hosting].",
+  "es": "#b [concept_uploaded_minds]#!\\nTodavía ninguna: los Nexos de carga mental del país esperan al censo anual. El censo del país cuenta su capacidad, el censo de cada estado carga durante el año siguiente a las personas con medicina de la longevidad que morirían por enfermedad o vejez, y el siguiente censo del país las cuenta aquí. Hasta entonces, los Nexos no producen nada, ya que sus bienes siguen a su [concept_mind_hosting|l]."
+ },
+ "te_demog_ov_um_pending_value": {
+  "en": "None yet",
+  "es": "Aún ninguna"
+ },
  "te_demog_ov_um_tt": {
-  "en": "#b Uploaded Minds#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v $te_demog_ov_um_end_fig$#!",
-  "es": "#b Mentes cargadas#!\\nLas mentes que alojan los Nexos de carga mental del país, como proporción de la población y las mentes del país en conjunto.\\n Alojadas: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! millones de #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! millones (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! de ocupación)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Cargadas el año pasado: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! de quienes podían\\n Eligieron terminar el año pasado: #v $te_demog_ov_um_end_fig$#!"
+  "en": "#b [concept_uploaded_minds]#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together. The population the game shows elsewhere counts only people with bodies and leaves them out. Counted at the country's yearly census.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v $te_demog_ov_um_end_fig$#!\\nThe Nexuses' goods and research follow how full they are ([concept_mind_hosting]).",
+  "es": "#b [concept_uploaded_minds]#!\\nLas mentes que alojan los Nexos de carga mental del país, como proporción de la población y las mentes del país en conjunto. La población que el juego muestra en otras partes cuenta solo a las personas con cuerpo y las deja fuera. Se cuentan en el censo anual del país.\\n Alojadas: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! millones de #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! millones (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! de ocupación)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Cargadas el año pasado: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! de quienes podían\\n Eligieron terminar el año pasado: #v $te_demog_ov_um_end_fig$#!\\nLos bienes y la investigación de los Nexos siguen su grado de ocupación ([concept_mind_hosting|l])."
  },
  "te_demog_ov_um_value": {
   "en": "#v [Country.MakeScope.Var('te_dg_um_share').GetValue|%1]#! of people",
@@ -31772,8 +31780,8 @@
   "es": "Nacimientos: #v [State.MakeScope.Var('te_dg_cbr').GetValue|1]#! por cada 1 000 personas el año pasado"
  },
  "te_demog_st_cd_um_line": {
-  "en": " Besides them, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
-  "es": " Además, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! por cada 1 000 se cargaron: sus cuerpos murieron por estas causas, y el gráfico circular los cuenta, pero continúan como mentes."
+  "en": " Besides them, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as [concept_uploaded_minds].",
+  "es": " Además, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! por cada 1 000 se cargaron: sus cuerpos murieron por estas causas, y el gráfico circular los cuenta, pero siguen existiendo como [concept_uploaded_minds|l]."
  },
  "te_demog_st_cdr_tt": {
   "en": "#b Deaths#!\\nDeaths per 1,000 people in the state last year, the war dead and the people killed by events apart: the census's deaths, which the pie below splits by cause, with the war dead and the killed beside them.[SelectLocalization( GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_cd_um_line', 'te_tt_blank' )][SelectLocalization( GetScriptedGui('te_demog_state_on_top_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_ontop_rate', 'te_tt_blank' )]",
@@ -32436,8 +32444,8 @@
   "es": "#b Hijos por mujer#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)2' ) ), 'te_demog_st_tfr_prev', '' )]\\nLos hijos que tendría una mujer de este estado a lo largo de su vida con las tasas de este año. Cada línea × de abajo multiplica lo que daría la riqueza por sí sola; el matrimonio tardío y el espaciamiento de los nacimientos son las dos costumbres que frenan los nacimientos.\\n$te_demog_st_tfr_terms$\\n[SelectLocalization( GetScriptedGui('te_demog_lx_state_mab_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_tfr_mab', 'te_demog_tfr_mab_pending' )]\\n\\n[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_births', 'te_demog_ov_births_pending' )]"
  },
  "te_demog_st_um_backup_tt": {
-  "en": "#b Backed Up#!\\nThe share of this state's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work.",
-  "es": "#b Con copia de seguridad#!\\nLa proporción de la población de este estado cuyas mentes guardan las Copias de seguridad mentales: quienes reciben medicina de la longevidad. Restauradas en cuerpos nuevos: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! de todas las muertes por accidente, violencia o en el trabajo."
+  "en": "#b Backed Up#!\\nThe share of this state's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work. Under the Full setting, with a Mind Upload Nexus, those in care who would die of illness or old age upload instead and go on as [concept_uploaded_minds].",
+  "es": "#b Con copia de seguridad#!\\nLa proporción de la población de este estado cuyas mentes guardan las copias de seguridad mentales: quienes reciben medicina de la longevidad. Restauradas en cuerpos nuevos: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! de todas las muertes por accidente, violencia o en el trabajo. Con el ajuste Completo y un Nexo de carga mental, quienes reciben cuidados y morirían por enfermedad o vejez se cargan en cambio y continúan como [concept_uploaded_minds|l]."
  },
  "te_demog_st_um_backup_value": {
   "en": "#v [State.MakeScope.Var('te_dg_elig').GetValue|%0]#! of people",
@@ -32456,8 +32464,8 @@
   "es": ", y #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! cargadas: cuerpos que murieron mientras sus mentes continúan"
  },
  "te_demog_st_um_tt": {
-  "en": "#b Uploaded Last Year#!\\nThis state's people who uploaded to our Mind Upload Nexuses at its last census instead of dying. The whole country's network hosts them, so the Demographics tab counts them.",
-  "es": "#b Cargadas el año pasado#!\\nLas personas de este estado que se cargaron en nuestros Nexos de carga mental en su último censo en lugar de morir. La red del país entero las aloja, así que la pestaña Demografía las cuenta."
+  "en": "#b Uploaded Last Year#!\\nThis state's people who uploaded to our Mind Upload Nexuses at its last census instead of dying, and go on as [concept_uploaded_minds]. The whole country's Nexuses host them, so the Demographics tab counts them, from the country's first census after this state's.",
+  "es": "#b Cargadas el año pasado#!\\nLas personas de este estado que se cargaron en nuestros Nexos de carga mental en su último censo en lugar de morir, y continúan como [concept_uploaded_minds|l]. Los Nexos de todo el país las alojan, así que la pestaña Demografía las cuenta, a partir del primer censo del país posterior al de este estado."
  },
  "te_demog_st_um_value": {
   "en": "#v $te_demog_st_um_new_fig$#! people",
@@ -32692,68 +32700,68 @@
   "es": "Muchos de los nuestros siguen ahora como mentes sin cuerpo, y los devotos lo llaman un pecado contra la creación."
  },
  "te_demog_um_nexus_in_advanced_materials": {
-  "en": "Inputs by Hosted Minds",
-  "es": "Insumos por mentes alojadas"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Insumos por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_in_advanced_materials_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_nexus_in_digital_access": {
-  "en": "Inputs by Hosted Minds",
-  "es": "Insumos por mentes alojadas"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Insumos por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_in_digital_access_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_nexus_in_electricity": {
-  "en": "Inputs by Hosted Minds",
-  "es": "Insumos por mentes alojadas"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Insumos por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_in_electricity_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_nexus_in_electronic_components": {
-  "en": "Inputs by Hosted Minds",
-  "es": "Insumos por mentes alojadas"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Insumos por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_in_electronic_components_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_nexus_out_digital_assets": {
-  "en": "Output by Hosted Minds",
-  "es": "Producción por mentes alojadas"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Producción por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_out_digital_assets_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_nexus_out_fine_art": {
-  "en": "Output by Hosted Minds",
-  "es": "Producción por mentes alojadas"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Producción por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_out_fine_art_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_nexus_out_services": {
-  "en": "Output by Hosted Minds",
-  "es": "Producción por mentes alojadas"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Producción por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_out_services_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_nexus_out_tourism": {
-  "en": "Output by Hosted Minds",
-  "es": "Producción por mentes alojadas"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "es": "Producción por [Concept('concept_mind_hosting','mentes alojadas')]"
  },
  "te_demog_um_nexus_out_tourism_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce lo que producen las mentes cargadas que aloja: cada uno de sus bienes sigue el grado de ocupación del alojamiento del país, con las demás bonificaciones del edificio por encima, así que sin mentes no produce ni utiliza nada."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "es": "Con el ajuste Completo de la regla de Demografía, un Nexo de carga mental produce solo lo que producen sus [concept_uploaded_minds|l], así que cada uno de sus bienes sigue el grado de ocupación de los Nexos del país, con las demás bonificaciones del edificio por encima: un Nexo vacío no produce ni utiliza nada. Las mentes llegan con el censo anual, uno o dos años después de construirse el primer nivel."
  },
  "te_demog_um_ontop_note": {
   "en": " (the uploads' bodies among them)",
@@ -32764,12 +32772,12 @@
   "es": "No biológicos: #v $te_demog_um_women_fig$#! mujeres y #v $te_demog_um_men_fig$#! hombres, mentes sin cuerpo ni edad, así que sin barra."
  },
  "te_demog_um_research": {
-  "en": "Empty Hosting",
-  "es": "Alojamiento vacío"
+  "en": "Empty [Concept('concept_mind_hosting','Hosting')]",
+  "es": "[Concept('concept_mind_hosting','Alojamiento')] vacío"
  },
  "te_demog_um_research_desc": {
-  "en": "A Mind Upload Nexus speeds research only as far as minds fill it.",
-  "es": "Un Nexo de carga mental solo acelera la investigación en la medida en que lo llenan las mentes."
+  "en": "This country's Mind Upload Nexuses are not full, and a Nexus speeds research only as far as [concept_uploaded_minds] fill it.",
+  "es": "Los Nexos de carga mental de este país no están llenos, y un Nexo acelera la investigación solo en la medida en que lo llenan las [concept_uploaded_minds|l]."
  },
  "te_demog_um_row": {
   "en": "Uploaded Minds",

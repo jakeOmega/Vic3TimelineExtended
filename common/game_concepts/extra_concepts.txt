@@ -353,6 +353,12 @@ concept_inheritance_concentration = {}
 # the census's health-care access (docs/systems/mod_systems/demographics.md § Demographics, Causes of Death)
 concept_health_care_access = {}
 
+# Uploaded minds under the Demographics rule's Full setting (docs/systems/mod_systems/demographics.md § Uploaded minds):
+# the minds a Mind Upload Nexus hosts, who uploads and how the census counts them; and how full the country's Nexuses
+# are, which their goods and research follow, and why a new Nexus waits a year or two on the census.
+concept_uploaded_minds = {}
+concept_mind_hosting = {}
+
 # Creditors' Consortium (2026-11-16): the leader's standing guarantee of its
 # members' debts and the rescue on terms a member's default calls
 # (docs/systems/mod_systems/power_blocs.md § "Creditors' Consortium")

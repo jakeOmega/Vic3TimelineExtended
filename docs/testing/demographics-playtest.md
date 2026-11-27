@@ -1048,6 +1048,12 @@ game can show:
 6. **The output's size** (the owner's choice, 2026-10-20: a late-game wonder at full capacity, years to fill). A full
    level makes about £40M a week at base prices, most of it 300,000 digital assets. Watch the digital assets price in a
    market with a full Nexus: a crash there says the factor is too large.
+7. **The explanations** (2026-11-26). With Mind Backups and a completed Nexus before any mind is counted, the Longevity
+   section's Uploaded Minds row reads None yet, and its hover explains the wait on the census; at the census that first
+   counts a mind the row shows the figures instead, never both. In the Nexus's breakdown each of the eight lines reads
+   Output by Hosted Minds or Inputs by Hosted Minds, and in the research speed tooltip the cancel reads Empty Hosting,
+   with Hosted Minds and Hosting links to Mind Hosting: check that the links render (no raw brackets) and open the
+   concept, and that Uploaded Minds opens from the rows' hovers and How It Works.
 7. **The Devout (switch off).** With `UM_POLITICS` on and regenerated, the Devout lose 3 approval while the minds pass 1%
    of people and minds; off (the default) nothing shows.
 8. **Who owns the levels (owner: read the line).** Once a game under Full, `debug.log` has `TE_INFO um_nexus_ownership`
