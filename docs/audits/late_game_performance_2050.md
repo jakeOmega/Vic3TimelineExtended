@@ -29,7 +29,8 @@ vanilla code.
    owner's call, with options under "Proposals that change gameplay". The
    owner's own idea, investors that place levels in batches by script, has
    its first probe in: script queues past 1,000 and the engine's pass then
-   rests (proposal 4).
+   rests (proposal 4). **Built on 2026-11-27, not yet run in game**
+   (proposal 4, "Built").
 
 ## The save and the method
 
@@ -369,7 +370,7 @@ modifier (finding 3), a higher update divisor (finding 2).
 ## Proposals that change gameplay (owner's call)
 
 The first three trade investor building rate for speed; the fourth is meant
-to keep the rate. None is built.
+to keep the rate. The fourth is built (2026-11-27); the others are not.
 
 1. **Stop Excess Private Construction's ramp where it stops adding levels.**
    Hold the raise at the point where a level takes one week (the cap equal
@@ -440,6 +441,31 @@ to keep the rate. None is built.
      step; the risk is in local goods, "mainly transportation and network
      infrastructure". So the batch pass starts only at that scale, and
      buildings that make local goods keep single levels or a small batch.
+   - **Built** (2026-11-27; `docs/systems/mod_systems/construction.md`
+     § Batched Private Investment, `te_batch_investment_effects.txt`). Not
+     the form sketched above. The engine fires `on_start_expanding_building`
+     as it queues a level, so script answers each of the investors' picks at
+     home at once, inside the pass, with more levels of the same building: a
+     tenth of the building's size, 100 at most, a fiftieth and 10 for a
+     building that makes a local good. The queue is held **under** 1,000,
+     not over it: batches stop at 900 and the engine fills the last hundred
+     slots a level at a time. That keeps the engine's picks abroad, which
+     script cannot batch (the effect names no investor), keeps the queue's
+     length and so the construction bought as they are, and should leave
+     about 100 + 15 decisions a week of the 1,000: 2 to 3 s of the 22. A
+     country batches once its investors place 800 levels in a month.
+     Whether the hook runs inside the pass, and whether the pass counts
+     script's levels against its 1,000, are both unread; each has a
+     self-check line, and if either fails the system does nothing and says
+     so. The pulse form above, with the queue held past 1,000, is the
+     fallback. A game rule switches it off. Timing it on this save is the
+     first row of `docs/testing/perf-fixes-playtest.md` § Batched private
+     investment.
+   - **What it costs in play:** a batching country's investors place far
+     fewer levels abroad (about a tenth with the reserve at 100, by the
+     arithmetic of 115 picks against 1,000, not by measurement), and a
+     building grows by up to a tenth in one week where it grew a level at a
+     time.
    - Still to read in game: who owns script-queued levels and whether the
      pool pays as for the engine's; whether the effect honors `possible`;
      whose pool pays in a foreign state.
@@ -451,8 +477,9 @@ to keep the rate. None is built.
 
 1. **The turnover decision** (finding 4 and the proposals above) is the
    owner's. The 120-day runs give two caps; the unchanged 120-day run is
-   still owed (it stopped after 14 days). Proposal 4's first probe is in;
-   its ownership and foreign-state reads are owed.
+   still owed (it stopped after 14 days). Proposal 4 is built and untimed;
+   its ownership and payment reads are play-test rows, and the foreign-state
+   read no longer matters to it (it queues only at home).
 2. **Which candidates the pass scores.** The Steel Mill's `possible` is asked
    about 760,000 times on a heavy weekly tick, and the USA owns 180 states,
    so most of what its investors score each placement looks to be foreign

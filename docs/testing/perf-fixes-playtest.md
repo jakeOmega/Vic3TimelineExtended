@@ -162,3 +162,48 @@ charts").
 | National Info, another country | Its charts at each range, as for the player | The player's store: the plots read `Country` |
 | The default, 5 years (`gui/charts-default-5y`) | After a fresh launch (the key unset), every monthly History section and viewer opens on 5 Years with the 5 Years button greyed, 1 Year and 20 Years clickable; 20 Years then shows every month and is greyed, and the choice holds across tabs until the game closes. Demographics and Cultural Hegemony still open on 100 years | 20 Years shows on a fresh launch: the deployed generated file is the old one. Two buttons greyed, or none: a section's buttons were missed |
 | ~~Under five years stored (`gui/charts-default-5y`)~~ (seen 2026-11-24: failed, fixed; the row "A short store" above) | A new game's first years, and a 1-year view in its first year: the plot draws every month stored, at the right, as 20 Years does | As above: the fallback to the whole list with the age test is now the short store's own plot |
+
+## Batched private investment (2026-11-27)
+
+Once a country's investors place 800 levels in a month, each level they queue at home gets a batch of the same building
+beside it (a tenth of its size, 100 at most; a fiftieth and 10 for a local good's), so the engine's weekly investment
+pass makes far fewer decisions (`docs/systems/mod_systems/construction.md` § Batched Private Investment;
+`docs/audits/late_game_performance_2050.md`, proposal 4). **Nothing here has been seen in game**, and the system rests
+on three engine facts nobody has read. Use the 2050 USA copy (`te_qa_copy_iua2050_20261126`) and the report's method
+(`profile start`, `advance`, `weekest.py`). A country is watched at its first monthly pulse after the load and batches
+from the second. The save is of 6 February 2050, so the USA is watched on 1 March, `TE_BI on` prints on 1 April, the
+weeks to time are April's, and `batch_invest_month` reads on 1 May: advance about 90 days. The rule (Batched Private
+Investment) switches between the two in one save.
+
+### Self-checks
+
+Each prints once a game in `debug.log`, after a `TE_SELF_CHECK START` line of the same name. The fallbacks are written
+out in `te_batch_investment_effects.txt` above each check.
+
+| Line | When it reads | OK means | BROKEN means, and the fallback |
+|---|---|---|---|
+| `batch_invest_hook` | A watched country's monthly pulse | The hook found the private queue longer ten times or more in a month: it runs as investors queue levels | Six months running at the engine's limit, the pool paying, under ten picks seen a month: the hook runs after the pass, or not for private levels. Batching never starts. Fallback: batch from a weekly pulse over buildings under construction, with the ceiling above 1,000 |
+| `batch_invest_queue` | The first batch of two levels or more | `queued` = `asked` | The effect was refused from the hook (`queued` under `asked`), or queues nothing there (0). Fallback for 0: the weekly pulse, as above |
+| `batch_invest_reentry` | The same batch | The batch's own levels came back through the hook with the level already counted | The hook runs before its level is counted, so each pick is read one call late; fallback: batch the previous call's building. `NO_VERDICT`: none came back while the batch ran; `batch_invest_month` then decides |
+| `batch_invest_month` | The end of a first whole month of batching with twenty home picks or more | The batches queued levels and no pick came with more than 1,000 queued | No level from a batch (read `marked`, `capped`, `unknown` and `maxq` on the line), or `maxq` over 1,000: the engine does not count script's levels. Fallback: hold the queue above 1,000 instead of under it |
+| `batch_invest_runaway` | Never, if all is well | — | A batch queued more than it asked for. Batching is off for the rest of that game; report the line |
+| `batch_invest_flag` | Never, if all is well | — | A batch ended without clearing its flag; cleared at the pulse. Report the line |
+
+### Checks
+
+| Check | Expect | If it fails |
+|---|---|---|
+| It switches on | `TE_BI on country=USA` at the second month start after the load, with `placed` in the thousands | No line by the fourth month start: read `batch_invest_hook`. `picks_home` near 0 with a full queue is the hook not seeing picks |
+| The investment pass | `HandleAutonomousInvestment` on the weekly ticks after `TE_BI on`: about 2 to 3 s against 22 s (a hundred single levels at 22 ms, and a dozen or two batches) | No change with `added` in the thousands on the `TE_BI month` line: the engine makes its decisions anyway; `maxq` over 1,000 says it does not count script's levels. No change with `added` near 0: read `marked`, `capped`, `unknown` |
+| The week | Wall time a week about 7 s against 26 s over the report's dates | The pass fell and the week did not: something else grew; profile the tick tasks again |
+| Decisions against levels | On `TE_BI month`: `picks_home` + `picks_other` a few hundred a month, `added` several thousand, `short`, `over` and `unknown` 0 | `short` above 0: the effect refuses levels `can_queue_building_levels` passed (a building's `possible`, say); harmless, but say which buildings. `unknown` above 0: investors queued a building the generator left out; add it to `why_not`'s reading |
+| The private queue | The Construction panel's private queue holds about 1,000 levels as before, with runs of one building in one state | Far over 1,000: report `maxq` and the queue; the ceiling should make it impossible |
+| Who owns a batch | After a batched building's levels finish, its ownership tooltip gives the new levels to private owners (Financial Districts, Manor Houses, its own workers), as the engine's levels | The government's share rose by the batch: script's private levels are not privately owned. Switch the rule off and report |
+| Who pays | The investment pool's weekly spending is about what it was, and the treasury's construction spending did not rise | The treasury pays for the batches: switch the rule off and report |
+| Levels finished | The report's counter (levels finished in the USA's states a week, 577 before) is the same or higher: more of the queue is at home | Much lower: batches of expensive buildings wait where single levels of cheap ones finished; read the queue's first entries |
+| Investment abroad | The USA's investors still place levels abroad every week (`picks_other` above 0), at roughly a tenth of the rate before | None at all: the reserve's slots are filled at home; raise `te_bi_reserve`. If the owner wants more abroad at 22 ms a level a week, the same |
+| Local goods | Transportation and electricity prices in the USA's states do not swing after `TE_BI on`; a Railway grows by at most a fiftieth a week | Swings: lower `te_bi_local_share` or `te_bi_local_batch_max`, to single levels if need be |
+| A building's growth | No building grows by more than about a tenth in a week from batches | More: the six-day mark does not hold (a timed state variable); read `marked` |
+| The rule, off | Switched to Batched Investment Disabled from the change-country screen: the next weekly pass takes 22 s again, and no `TE_BI` line follows the next month start | Batches go on: `has_game_rule` reads a save's old setting until reload; say which |
+| The rule, on again | `TE_BI on` at the second month start after | No line: the country was not watched again; read its private queue at the pulse |
+| A long AI run | An observer run to 2050 with the rule on against one with it off: the twenty largest economies' GDP growth by year about the same | The giants grow slower with it on: batches overshoot (read which buildings stand under-staffed), or the lost investment abroad mattered; lower `te_bi_share` or raise the reserve |
