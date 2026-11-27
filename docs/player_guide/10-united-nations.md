@@ -976,8 +976,9 @@ Resolution row.
 A carried mandate lasts five years and makes the Authorized Restoration war goal
 available against that country, for that state, at no infamy, in one diplomatic
 play. Enforcing the goal adds delivery and 6 standing. Adding any other demand
-against that country in that play for territory, subjugation, regime change or
-humiliation abuses the mandate, and so does backing down; reparations and
+against that country in that play for territory, subjugation (taking one of its
+subjects included), regime change or humiliation abuses the mandate, and so does
+backing down; reparations and
 similar demands are allowed at their normal price. Demands against that country
 in another play or war do not touch the mandate. The mandate covers its own war
 and no other: any other war you begin pays the surcharge, goes on your record

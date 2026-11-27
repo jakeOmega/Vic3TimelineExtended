@@ -18,7 +18,10 @@ any play, and each must act only in the mandate's own play:
 * the violation check, ``un_mandate_has_prohibited_goal``
   (common/scripted_triggers/un_mandate_triggers.txt). It counted a
   prohibited goal against the target from any play or war; the player is
-  told "in that play", and now that is what it counts.
+  told "in that play", and now that is what it counts. A goal to take one of
+  the target's subjects (``transfer_subject``, ``targets_enemy_subject``)
+  targets the subject, not the target, so the check and the strike read that
+  type against each of the target's direct subjects too (#1899).
 * the war-goal surcharge, ``un_teeth_war_goal_surcharge``
   (common/scripted_effects/un_teeth_effects.txt). It exempted a bound holder
   in every play, so every other war it began went surcharge-free.
@@ -56,6 +59,15 @@ MANDATE_GOAL = "te_un_mandate_restore_state"
 
 _STRIKE_CALL = re.compile(r"\bun_mandate_strike_goal_type\s*=\s*\{\s*TYPE\s*=\s*(\w+)\s*\}")
 _HELD_CALL = re.compile(r"\bun_mandate_prohibited_goal_held\s*=\s*\{\s*TYPE\s*=\s*(\w+)\s+TARGET\s*=\s*\$TARGET\$\s*\}")
+_SUBJECT_STRIKE_CALL = re.compile(r"\bun_mandate_strike_subject_goal_type\s*=\s*\{\s*TYPE\s*=\s*(\w+)\s*\}")
+_SUBJECT_HELD_CALL = re.compile(
+    r"\bun_mandate_prohibited_goal_on_subject_held\s*=\s*\{\s*TYPE\s*=\s*(\w+)\s+TARGET\s*=\s*\$TARGET\$\s*\}")
+
+# The war goal types whose definition carries targets_enemy_subject (vanilla's
+# common/war_goal_types/; none of the mod's): their goal targets the subject,
+# not its overlord. liberate_subject takes nothing for the holder, so it is not
+# prohibited.
+SUBJECT_GOAL_TYPES = {"liberate_subject", "transfer_subject"}
 
 
 def _squash(text):
@@ -88,7 +100,11 @@ class StrikeTest(unittest.TestCase):
         cls.limit = _sub_block(cls.gated, "limit")
         cls.struck = _STRIKE_CALL.findall(cls.gated)
         cls.helper = _block(effects, "un_mandate_strike_goal_type")
-        cls.prohibited = _HELD_CALL.findall(_block(_read(TRIGGERS), "un_mandate_has_prohibited_goal"))
+        cls.subject_helper = _block(effects, "un_mandate_strike_subject_goal_type")
+        cls.struck_on_subject = _SUBJECT_STRIKE_CALL.findall(cls.gated)
+        has_prohibited = _block(_read(TRIGGERS), "un_mandate_has_prohibited_goal")
+        cls.prohibited = _HELD_CALL.findall(has_prohibited)
+        cls.prohibited_on_subject = _SUBJECT_HELD_CALL.findall(has_prohibited)
 
     def test_the_strike_runs_only_in_the_mandates_own_play(self):
         self.assertRegex(self.limit, r"\bis_diplomatic_play_type\s*=\s*" + MANDATE_PLAY + r"\b")
@@ -103,6 +119,8 @@ class StrikeTest(unittest.TestCase):
         outside = self.effects.replace(self.gated, "")
         self.assertEqual(_STRIKE_CALL.findall(outside), [],
                          "un_mandate_strike_goal_type is called outside the gated strike")
+        self.assertEqual(_SUBJECT_STRIKE_CALL.findall(outside), [],
+                         "un_mandate_strike_subject_goal_type is called outside the gated strike")
         self.assertTrue(self.struck)
 
     def test_a_type_is_struck_only_for_a_goal_against_the_mandates_target(self):
@@ -144,6 +162,29 @@ class StrikeTest(unittest.TestCase):
         self.assertEqual(len(self.struck), len(set(self.struck)), "a type is struck twice")
         self.assertEqual(len(self.prohibited), len(set(self.prohibited)), "a type is prohibited twice")
         self.assertEqual(set(self.struck), set(self.prohibited))
+        self.assertEqual(len(self.struck_on_subject), len(set(self.struck_on_subject)))
+        self.assertEqual(set(self.struck_on_subject), set(self.prohibited_on_subject))
+
+    def test_a_prohibited_subject_goal_is_read_on_the_targets_subjects(self):
+        # A goal to take one of the target's subjects targets the subject, so
+        # a read against the target alone lets it through (#1899). Both reads
+        # stay until TE_SELF_CHECK nd_play_subject_goal says how a play reads it.
+        expected = SUBJECT_GOAL_TYPES & set(self.prohibited)
+        self.assertIn("transfer_subject", expected)
+        self.assertEqual(set(self.prohibited_on_subject), expected)
+        self.assertEqual(set(self.struck_on_subject), expected)
+
+    def test_the_subject_strike_points_the_strike_at_each_subject_then_back(self):
+        helper = _squash(self.subject_helper)
+        self.assertIn("save_temporary_scope_as = un_mandate_strike_play "
+                      "scope:un_mandate_strike_target = { save_temporary_scope_as = un_mandate_strike_overlord } "
+                      "scope:un_mandate_strike_overlord = { every_direct_subject = { "
+                      "save_temporary_scope_as = un_mandate_strike_target "
+                      "scope:un_mandate_strike_play = { un_mandate_strike_goal_type = { TYPE = $TYPE$ } } } }",
+                      helper)
+        # The types struck after it read the mandate's target again.
+        self.assertTrue(helper.rstrip().endswith(
+            "scope:un_mandate_strike_overlord = { save_temporary_scope_as = un_mandate_strike_target }"))
 
     def test_the_hook_binds_then_strikes_then_checks(self):
         hook = _block(_read(ON_ACTIONS), "un_mandate_on_wargoal_added")
@@ -199,7 +240,15 @@ class ViolationTest(unittest.TestCase):
         triggers = _read(TRIGGERS)
         cls.prohibited = _block(triggers, "un_mandate_has_prohibited_goal")
         cls.held = _block(triggers, "un_mandate_prohibited_goal_held")
+        cls.on_subject = _block(triggers, "un_mandate_prohibited_goal_on_subject_held")
         cls.bound_play = _block(triggers, "un_mandate_is_bound_play_of")
+
+    def test_the_subject_read_is_the_play_scoped_read_against_each_subject(self):
+        self.assertIn("save_temporary_scope_as = un_mpg_holder_t $TARGET$ = { any_direct_subject = { "
+                      "save_temporary_scope_as = un_mpg_subject_t scope:un_mpg_holder_t = { "
+                      "un_mandate_prohibited_goal_held = { TYPE = $TYPE$ TARGET = scope:un_mpg_subject_t } } } }",
+                      _squash(self.on_subject))
+        self.assertNotRegex(self.on_subject, r"_participant_has_war_goal_of_type_against")
 
     def test_every_prohibited_type_goes_through_the_play_scoped_read(self):
         self.assertNotRegex(self.prohibited, r"_participant_has_war_goal_of_type_against",

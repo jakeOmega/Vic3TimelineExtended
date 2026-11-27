@@ -214,6 +214,14 @@ un_mandate_holds_authorized_goal = {
 # common/war_goal_types/ when new territorial or subjugation goals are added,
 # and with un_mandate_ai_strike_prohibited (test_un_mandate_play_scope.py
 # checks the two lists match).
+#
+# transfer_subject is read twice: against the target, and against each of the
+# target's direct subjects (un_mandate_prohibited_goal_on_subject_held). Its
+# goal targets the subject, not the overlord (targets_enemy_subject: a war's,
+# measured in game 2026-11-18; a play's, TE_SELF_CHECK nd_play_subject_goal),
+# so the target read alone let a holder take one of the target's subjects
+# (#1899). The target read stays until that self-check says how a play reads
+# such a goal.
 # Parameters: $TARGET$ = target country scope
 # Scope: the mandate actor
 un_mandate_has_prohibited_goal = {
@@ -237,6 +245,8 @@ un_mandate_has_prohibited_goal = {
 		un_mandate_prohibited_goal_held = { TYPE = make_chartered_company TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = release_as_subject TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = transfer_subject TARGET = $TARGET$ }
+		# A goal to take one of the target's subjects targets the subject (#1899).
+		un_mandate_prohibited_goal_on_subject_held = { TYPE = transfer_subject TARGET = $TARGET$ }
 		# --- punitive ---
 		un_mandate_prohibited_goal_held = { TYPE = regime_change TARGET = $TARGET$ }
 		un_mandate_prohibited_goal_held = { TYPE = humiliation TARGET = $TARGET$ }
@@ -279,6 +289,23 @@ un_mandate_prohibited_goal_held = {
 	any_diplomatic_play = {
 		un_mandate_is_bound_play_of = { ACTOR = prev }
 		has_play_goal = $TYPE$
+	}
+}
+
+# Whether the scoped country holds a goal of $TYPE$ against one of $TARGET$'s
+# direct subjects, in the play its bound mandate is exercised in
+# (un_mandate_prohibited_goal_held, read against each subject). For the goal
+# types with targets_enemy_subject, which target the subject, not its
+# overlord. The shape of nd_side_holds_goal_on_subject_of.
+# Parameters: $TYPE$ = war goal type; $TARGET$ = the overlord (the mandate's target)
+# Scope: the mandate actor
+un_mandate_prohibited_goal_on_subject_held = {
+	save_temporary_scope_as = un_mpg_holder_t
+	$TARGET$ = {
+		any_direct_subject = {
+			save_temporary_scope_as = un_mpg_subject_t
+			scope:un_mpg_holder_t = { un_mandate_prohibited_goal_held = { TYPE = $TYPE$ TARGET = scope:un_mpg_subject_t } }
+		}
 	}
 }
 
