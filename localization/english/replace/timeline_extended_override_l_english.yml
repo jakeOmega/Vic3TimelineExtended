@@ -169,3 +169,9 @@
  # construction market a late economy reads "238189/654603", which ran under the cost beside it in the Construction
  # panel's site row and filled the HUD's construction box (seen in game, 2026-11-24). Below 1,000 it is vanilla's.
  CONSTRUCTION_VALUE_WITHOUT_ICON:1 "#v [SelectLocalization( LessThan_CFixedPoint( Country.CalcUsedConstruction, '(CFixedPoint)1000' ), 'TE_CONSTRUCTION_USED_N', 'TE_CONSTRUCTION_USED_K' )]#!/[SelectLocalization( LessThan_CFixedPoint( Country.CalcBaseConstructionSpeed, '(CFixedPoint)1000' ), 'TE_CONSTRUCTION_SPEED_N', 'TE_CONSTRUCTION_SPEED_K' )]"
+ # Vanilla's "#v [Country.GetShipConstructionUsage|0]#!/[Country.GetShipConstruction|0]" without the usage. The box
+ # under the date shows this text all the time, and the game works GetShipConstructionUsage out again after every tick:
+ # about 7 s of every game week in a 2050 game, where the total alone costs nothing that can be measured
+ # (docs/audits/late_game_performance_2050.md, finding 5). What is in use is in the box's tooltip, worked out on hover,
+ # and in the Construction panel's Ships tab, which reads TE_SHIP_CONSTRUCTION_VALUE_PANEL and is open only when asked.
+ SHIP_CONSTRUCTION_VALUE_WITHOUT_ICON:1 "#v [Country.GetShipConstruction|0]#!"

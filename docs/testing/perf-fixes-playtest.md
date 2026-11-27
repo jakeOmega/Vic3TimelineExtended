@@ -124,6 +124,21 @@ technology nothing changes. Nothing here has been seen in game. Use the 2030 Uni
 | Littoral Defense | A Littoral Defense country (the law needs the technology) builds supply ships at 20–25 a week, where the law's −5 may have left it 0 before | Below 20: the law's −5 and the +25% combine another way; raise the add by 5 |
 | Readout tooltip at Very High | Hovering the readout no longer slows the day as it did in 1977 (17 s a day) | Still slow: the tooltip lists every entry, started or not; count the unstarted ones in the save |
 
+## The ship construction box under the date shows the total (2026-11-26, PR #2089)
+
+The box under the date showed "used/total" ship construction, and the game worked the used figure out again after
+every tick: about 7 s of every game week on the 2050 save (`docs/audits/late_game_performance_2050.md`, finding 5).
+The mod now overrides the box's text (`SHIP_CONSTRUCTION_VALUE_WITHOUT_ICON`) to show the total alone. The timing was
+measured through the harness; the look of the box, its tooltip and the Ships tab is what a play-test adds.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The box under the date | The ship construction icon and one figure, the total (the first line of its tooltip gives the same figure "in total") | "used/total" as before: the override did not load; look for a second definition of the key in another mod of the playset |
+| Its tooltip | Vanilla's, unchanged: the total, then "used/total being used", then the military and supply ship lines | A raw key: `SHIP_CONSTRUCTION_SPEED_BASE_TOOLTIP` is vanilla's and is not overridden, so say what shows |
+| Paused ship construction | The base game's paused text in the box, not a figure | A figure: another mod of the playset redefines `SHIP_CONSTRUCTION_VALUE`, whose pause switch is vanilla's and untouched here; name the mod |
+| The Construction panel's Ships tab | "used/total" beside the ship icon at the top, live | The total alone: the tab reads vanilla's key; `gui/production_methods.gui` should read `TE_SHIP_CONSTRUCTION_VALUE_PANEL` |
+| Speed, a late game at speed 5 | Days pass faster between weekly ticks than before the change (a sub-tick 0.22 s against 0.37 s on the 2050 save) | No change: the cost is in the other figure after a patch; time each with a one-line `replace/` override as finding 5 did |
+
 ## History charts: the 1-year and 5-year ranges build only the bars they show (2026-11-24, `gui/charts-perf`)
 
 Each chart's 1-year and 5-year plots read only the store's newest samples, `DataModelLast( <list>, '(int32)12' )`
