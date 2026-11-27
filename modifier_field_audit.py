@@ -67,12 +67,12 @@ Which directories, and which blocks in them are modifier blocks, are the mod
 state server's rules for `GET /modifier-grants` (`_grant_scan_plan`,
 `_grant_block_label`): a static modifier's direct fields, and elsewhere the
 first block inside an entity whose name says `modifier`, with only the
-per-unit scaling wrappers nested inside it. This module reads the files token
-by token instead of line by line, because the server's own line scan skips a
-block written on one line (`tax_modifier_high = { tax_income_add = 0.05 }`),
-which the mod does about 700 times (the generated tax amendments and 25
-hand-written ship modifications); `test_modifier_field_audit` holds the two
-scans to the same sites otherwise. A journal entry's
+per-unit scaling wrappers nested inside it. The files are read token by
+token by the server's `_grant_fields`, the one walk both use (#1685), so a
+block written on one line (`tax_modifier_high = { tax_income_add = 0.05 }`,
+which the mod does about 700 times: the generated tax amendments and 25
+hand-written ship modifications) is seen by the audit and by the endpoint
+alike; `test_modifier_field_audit` holds the two to the same sites. A journal entry's
 `modifiers_while_active` and `scaling_modifiers_while_active` name static
 modifiers, whose own fields are checked where they are defined. Script
 directories (effects, triggers, events) hold no modifier block. A field whose
@@ -122,14 +122,12 @@ import difflib
 import os
 import re
 import sys
-from bisect import bisect_right
 from dataclasses import dataclass, field
 from typing import Callable
 
 from audit_common import AuditResult as _AuditResult
 from audit_common import cli_main, parse_reviewed, write_text
 from loc_coverage_audit import _culture_names, engine_named_culture_type
-from paradox_file_parser import INJECT_DIRECTIVES, REPLACE_DIRECTIVES
 
 REPORT_PATH = os.path.join("docs", "engine", "modifier_field_report.md")
 ENGINE_LIST_PATH = os.path.join("docs", "engine", "modifiers_summary.txt")
@@ -162,14 +160,6 @@ _STRING_OR_COMMENT_RE = re.compile(r'"[^"\n]*"|#[^\n]*')
 
 # `modifier:<name>`, as a trigger or a value; `$` marks a name built from a parameter.
 _READ_RE = re.compile(r"(?<![A-Za-z0-9_])modifier:(?P<name>[A-Za-z0-9_$]+)")
-
-_TOKEN_RE = re.compile(
-    r"(?P<close>\})"
-    r"|(?P<key>[A-Za-z_][A-Za-z0-9_.:|@$\-]*)\s*(?:\?=|[!<>=]=|[=<>])\s*"
-    r"(?:(?P<open>\{)|(?P<value>[^\s{}]+))?"
-    r"|(?P<anon>\{)"
-)
-
 
 @dataclass
 class Site:
@@ -236,32 +226,15 @@ class AuditResult(_AuditResult):
 
 def grant_rules():
     """The mod state server module, for its rules on where modifier blocks are
-    (`_grant_scan_plan`, `_grant_block_label`). The server runs as `__main__`,
-    so a post-load run takes the running module instead of importing a second
-    copy of it."""
+    (`_grant_scan_plan`, `_grant_block_label`) and its reading of a file's
+    blocks (`_grant_fields`), the same as `GET /modifier-grants` uses (#1685).
+    The server runs as `__main__`, so a post-load run takes the running module
+    instead of importing a second copy of it."""
     main = sys.modules.get("__main__")
-    if hasattr(main, "_grant_block_label") and hasattr(main, "_grant_scan_plan"):
+    if all(hasattr(main, name) for name in ("_grant_block_label", "_grant_scan_plan", "_grant_fields")):
         return main
     import mod_state_server
     return mod_state_server
-
-
-def _blank(text: str) -> str:
-    """`text` with comments and string bodies replaced by spaces, offsets kept."""
-    def repl(m):
-        s = m.group(0)
-        if s[0] == "#":
-            return " " * len(s)
-        return '"' + " " * (len(s) - 2) + '"'
-    return _STRING_OR_COMMENT_RE.sub(repl, text)
-
-
-def _bare(key: str) -> str:
-    """`key` without an `INJECT:` / `REPLACE:` directive in front of it."""
-    head, sep, tail = key.partition(":")
-    if sep and (head in INJECT_DIRECTIVES or head in REPLACE_DIRECTIVES):
-        return tail
-    return key
 
 
 def site_label(stack: list, key: str, mode: str, rules=None) -> str | None:
@@ -282,28 +255,17 @@ def scan_text(text: str, rel_path: str, mode: str, rules=None) -> tuple[list, li
 
     `mode` is the server's: "direct" for a static modifier file, whose fields
     sit directly in the entity, "wrapped" for every other entity directory.
-    `tag_lines` are the lines that carry this audit's `# REVIEWED` tag."""
+    `tag_lines` are the lines that carry this audit's `# REVIEWED` tag. The
+    file is read by the server's `_grant_fields`, as `GET /modifier-grants`
+    reads it, so the two find the same blocks (#1685)."""
     rules = rules or grant_rules()
-    clean = _blank(text)
-    starts = [0] + [m.end() for m in re.finditer(r"\n", clean)]
     raw_lines = text.split("\n")
     sites: list = []
-    stack: list = []   # one frame per open brace, [0] the entity
-    for m in _TOKEN_RE.finditer(clean):
-        if m.group("close"):
-            if stack:
-                stack.pop()
-        elif m.group("anon"):
-            stack.append(None)
-        elif m.group("open"):
-            stack.append(_bare(m.group("key")))
-        elif m.group("value") and stack and stack[0] is not None:
-            key = _bare(m.group("key"))
-            label = site_label(stack, key, mode, rules)
-            if label is None:
-                continue
-            line = bisect_right(starts, m.start())
-            sites.append(Site(key, rel_path, line, label, stack[0], parse_reviewed(raw_lines[line - 1], (CHECK,))))
+    for stack, key, _value, line in rules._grant_fields(text):
+        label = site_label(stack, key, mode, rules)
+        if label is None:
+            continue
+        sites.append(Site(key, rel_path, line, label, stack[0], parse_reviewed(raw_lines[line - 1], (CHECK,))))
     tag_lines = []
     if "REVIEWED" in text:
         tag_lines = [i for i, raw in enumerate(raw_lines, 1) if parse_reviewed(raw, (CHECK,))]

@@ -12,6 +12,7 @@ routes read stays in mod_state_server and is read as `srv.<name>` through
 import json
 import os
 import re
+from bisect import bisect_right
 from collections import defaultdict
 from pathlib import Path
 
@@ -22,7 +23,7 @@ import pm_employment_audit
 import script_argument_audit
 import tech_unlocks_lib
 import variable_usage
-from paradox_file_parser import ParadoxFileParser
+from paradox_file_parser import INJECT_DIRECTIVES, REPLACE_DIRECTIVES, ParadoxFileParser
 
 from server import server_state
 
@@ -109,23 +110,6 @@ _SCALING_WRAPPERS: frozenset[str] = frozenset({
 _BAG_CONTAINERS: frozenset[str] = frozenset({"pact"})
 
 
-# Entity ids may contain `-` (`post-scarcity_economy`, `law_post-scarcity`,
-# `e-commerce`, #327); the first character stays a letter/underscore so a
-# `-1 = {` or `value = -1` line can never open an entity. An optional
-# directive prefix (`INJECT:`, `REPLACE:`, `REPLACE_OR_CREATE:`, ...) is
-# captured separately: with only `INJECT:`/`REPLACE:` allowed, an entity opened
-# by `REPLACE_OR_CREATE:` (158 in the mod's building, building group and PM group
-# files) never opened, and any grant in it would have been dropped (#327).
-_GRANT_OPENER_RE = re.compile(
-    r"^\s*(?:(?P<directive>[A-Z][A-Z_]*):)?(?P<name>[A-Za-z_][\w-]*)\s*=\s*\{"
-)
-
-
-_GRANT_LINE_RE = re.compile(
-    r"^\s*([a-z_][a-z0-9_]*)\s*=\s*(-?\d+(?:\.\d+)?|yes|no)\s*$"
-)
-
-
 # A mod entity that REPLACEs a vanilla one wholesale (the vanilla copy's grants
 # are not in effect).
 _GRANT_REPLACE_RE = re.compile(
@@ -159,17 +143,79 @@ def _grant_block_label(name_stack: list, mode: str):
     return label
 
 
+# The file read token by token, for /modifier-grants and modifier_field_audit alike (#1685): `}`, `{`, and
+# `<key> <operator> {` or `<key> <operator> <value>`. A line scan missed a block written on one line,
+# `country_modifiers = { tax_income_add = 0.05 }`, and several pairs on one line: 705 sites in the mod, 105 of
+# `tax_income_add`'s 117. A key may contain `-` (`post-scarcity_economy`, `e-commerce`, #327) but starts with a
+# letter or `_`, so `-1 = {` opens an anonymous block, not an entity; a directive in front of it
+# (`INJECT:`, `REPLACE_OR_CREATE:`, ...) is stripped by `_grant_bare` (#327: an entity opened by
+# `REPLACE_OR_CREATE:` was once never opened).
+_GRANT_TOKEN_RE = re.compile(
+    r"(?P<close>\})"
+    r"|(?P<key>[A-Za-z_][A-Za-z0-9_.:|@$\-]*)\s*(?:\?=|[!<>=]=|[=<>])\s*"
+    r"(?:(?P<open>\{)|(?P<value>[^\s{}]+))?"
+    r"|(?P<anon>\{)"
+)
+
+# A quoted string (kept, its body blanked) or a comment (blanked).
+_GRANT_STRING_OR_COMMENT_RE = re.compile(r'"[^"\n]*"|#[^\n]*')
+
+# The values a grant row takes: a number, or yes/no for a boolean modifier type.
+_GRANT_VALUE_RE = re.compile(r"-?\d+(?:\.\d+)?|yes|no")
+_GRANT_FIELD_NAME_RE = re.compile(r"[a-z_][a-z0-9_]*")
+
+
+def _grant_blank(text: str) -> str:
+    """`text` with comments and string bodies replaced by spaces, offsets kept, so a brace or a `#` in a
+    string (a `desc = "..."`) is not read as code."""
+    def repl(m):
+        found = m.group(0)
+        if found[0] == "#":
+            return " " * len(found)
+        return '"' + " " * (len(found) - 2) + '"'
+    return _GRANT_STRING_OR_COMMENT_RE.sub(repl, text)
+
+
+def _grant_bare(key: str) -> str:
+    """`key` without an `INJECT:` / `REPLACE:` directive (or another of their family) in front of it."""
+    head, sep, tail = key.partition(":")
+    if sep and (head in INJECT_DIRECTIVES or head in REPLACE_DIRECTIVES):
+        return tail
+    return key
+
+
+def _grant_fields(text: str):
+    """Yield `(stack, key, value, line)` for every `<key> = <value>` inside an entity of one file's raw text.
+
+    `stack` holds the keys of the blocks around the pair, [0] the entity, directives stripped and None for an
+    anonymous `{`: what `_grant_block_label` reads. It is the walk's own list, valid until the next item. `key`
+    has its directive stripped; `value` is the raw token (a quoted string's body blanked). `line` is 1-based.
+    The one reading of a file's modifier blocks for `/modifier-grants` (`_scan_file_for_grants`) and
+    `modifier_field_audit.scan_text`, so the two cannot disagree on where a block's fields are (#1685)."""
+    clean = _grant_blank(text)
+    starts = [0] + [m.end() for m in re.finditer(r"\n", clean)]
+    stack: list = []
+    for m in _GRANT_TOKEN_RE.finditer(clean):
+        if m.group("close"):
+            if stack:
+                stack.pop()
+        elif m.group("anon"):
+            stack.append(None)
+        elif m.group("open"):
+            stack.append(_grant_bare(m.group("key")))
+        elif m.group("value") and stack and stack[0] is not None:
+            yield stack, _grant_bare(m.group("key")), m.group("value"), bisect_right(starts, m.start())
+
+
 def _scan_file_for_grants(abs_path: str, rel: str, entity_type: str, mode: str,
                           origin: str, target):
-    """Yield grant dicts for one file. Line-by-line state machine: tracks the
-    column-0 entity opener and a name stack parallel to brace depth. Paradox
-    files are one-token-per-line, so a line is an opener, a grant, or a closer;
-    single-line `bag = { k = v }` with inline numerics, several `k = v` pairs on
-    one line and `k = @constant` values do not occur in the entity dirs
-    (verified) and are a documented blind spot.
+    """Yield grant dicts for one file: each `target = <value>` (every snake_case key when `target` is None)
+    whose value is a number or yes/no, in a block `_grant_block_label` takes for a modifier block. The file is
+    read token by token (`_grant_fields`), so a block opened and closed on one line, or several pairs on one
+    line, count as their own lines do (#1685). A `k = @constant` value is not a grant row.
 
-    A file that does not contain `target` at all is skipped without the line
-    scan: walking every entity directory per query stays cheap that way."""
+    A file that does not contain `target` at all is skipped without the scan: walking every entity directory
+    per query stays cheap that way."""
     try:
         with open(abs_path, "r", encoding="utf-8-sig", errors="replace") as f:
             content = f.read()
@@ -177,57 +223,26 @@ def _scan_file_for_grants(abs_path: str, rel: str, entity_type: str, mode: str,
         return
     if target is not None and target not in content:
         return
-    depth = 0
-    name_stack: list = []
-    current_entity = None
-    for lineno, raw in enumerate(content.split("\n"), 1):
-        text = raw.split("#", 1)[0]
-
-        # Grant candidate (no brace on the line) — test in current context.
-        gm = _GRANT_LINE_RE.match(text)
-        if gm and current_entity is not None and "{" not in text and "}" not in text:
-            key, value = gm.group(1), gm.group(2)
-            if target is None or key == target:
-                label = _grant_block_label(name_stack, mode)
-                if label is not None:
-                    if value in ("yes", "no"):
-                        coerced = value
-                    else:
-                        coerced = float(value) if "." in value else int(value)
-                    yield {
-                        "entity_type": entity_type,
-                        "entity_id": current_entity,
-                        "origin": origin,
-                        "file": rel,
-                        "line": lineno,
-                        "value": coerced,
-                        "block": label,
-                    }
-
-        # Update brace depth + name stack from this line.
-        opener = _GRANT_OPENER_RE.match(text)
-        opens = text.count("{")
-        closes = text.count("}")
-        if opener and opens:
-            name = opener.group("name")
-            if depth == 0:
-                current_entity = name
-            name_stack.append(name)
-            for _ in range(opens - 1):
-                name_stack.append(None)
-            depth += opens
-        elif opens:
-            for _ in range(opens):
-                name_stack.append(None)
-            depth += opens
-        for _ in range(closes):
-            if name_stack:
-                name_stack.pop()
-            depth -= 1
-            if depth <= 0:
-                depth = 0
-                current_entity = None
-                name_stack = []
+    for stack, key, value, lineno in _grant_fields(content):
+        if target is not None:
+            if key != target:
+                continue
+        elif not _GRANT_FIELD_NAME_RE.fullmatch(key):
+            continue
+        if not _GRANT_VALUE_RE.fullmatch(value):
+            continue
+        label = _grant_block_label(stack, mode)
+        if label is None:
+            continue
+        yield {
+            "entity_type": entity_type,
+            "entity_id": stack[0],
+            "origin": origin,
+            "file": rel,
+            "line": lineno,
+            "value": value if value in ("yes", "no") else (float(value) if "." in value else int(value)),
+            "block": label,
+        }
 
 
 def _grant_entity_dirs(common_root: str) -> list[str]:
