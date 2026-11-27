@@ -27,6 +27,8 @@ GUI = {path.name: path.read_text(encoding="utf-8-sig") for path in sorted((ROOT 
 USAGE = "GetShipConstructionUsage"
 PANEL_KEY = "TE_SHIP_CONSTRUCTION_VALUE_PANEL"
 USED_OF_TOTAL_KEY = "TE_SHIP_CONSTRUCTION_USED_OF_TOTAL"
+# The used figure below and from 1,000 (#2093; test_construction_figures.py holds the switch).
+USED_FIGURE_KEYS = {"TE_SHIP_CONSTRUCTION_USED_N", "TE_SHIP_CONSTRUCTION_USED_K"}
 
 
 class ShipConstructionReadoutTest(unittest.TestCase):
@@ -40,7 +42,9 @@ class ShipConstructionReadoutTest(unittest.TestCase):
         self.assertIn(f'text = "{PANEL_KEY}"', panel)
         self.assertNotIn('text = "SHIP_CONSTRUCTION_VALUE"', panel,
                          "vanilla's key now reads the total alone; the tab would lose the figure in use")
-        self.assertEqual(LOC[USED_OF_TOTAL_KEY], "#v [Country.GetShipConstructionUsage|0]#!/[Country.GetShipConstruction|0]")
+        for key in USED_FIGURE_KEYS:
+            self.assertIn(f"'{key}'", LOC[USED_OF_TOTAL_KEY], "used/total: the figure in use, then the total")
+        self.assertIn("'TE_SHIP_CONSTRUCTION_TOTAL_N'", LOC[USED_OF_TOTAL_KEY])
         # Vanilla's SHIP_CONSTRUCTION_VALUE, with the mod's key in place of the one overridden.
         self.assertEqual(LOC[PANEL_KEY], "[SelectLocalization(Country.IsShipConstructionPaused, "
                                          f"'CONSTRUCTION_DURATION_PAUSED', '{USED_OF_TOTAL_KEY}')]")
@@ -48,7 +52,10 @@ class ShipConstructionReadoutTest(unittest.TestCase):
     def test_only_the_ships_tab_shows_the_usage(self):
         """A second always-shown place for the usage would bring the cost back."""
         keys_with_usage = {key for key, value in LOC.items() if USAGE in value}
-        self.assertEqual(keys_with_usage, {USED_OF_TOTAL_KEY})
+        self.assertEqual(keys_with_usage, {USED_OF_TOTAL_KEY} | USED_FIGURE_KEYS)
+        for key in USED_FIGURE_KEYS:
+            with self.subTest(spliced=key):
+                self.assertEqual({k for k, value in LOC.items() if key in value and k != key}, {USED_OF_TOTAL_KEY})
         for name, text in GUI.items():
             with self.subTest(gui=name):
                 self.assertNotIn(USAGE, text)
