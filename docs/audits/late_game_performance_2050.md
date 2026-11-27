@@ -255,6 +255,21 @@ no levels. The pool it is meant to drain holds 15.5 trillion and takes in
 So in this game the modifier no longer does what it was built for, and the
 1,000 placements a week it produces cost 22 s of every week.
 
+**What the levels are worth.** A setup summed the USA's buildings on 13
+March 2050 (`setups/occ.txt`; level × `occupancy` over every building that
+is not subsistence, session `20261127T043633Z`): 180 states, 3,544,997
+levels, 2,559,468 of them staffed (72%). 1,113,484 levels, 31%, stand in
+buildings under half staffed, with a population of 467 million. Investors
+add about 30,000 levels a year in the USA's own states to a stock of which a
+quarter has nobody to work it. Occupancy is not only a shortage of people (a
+building that cannot pay its wages empties too), so this bounds the loss
+from a slower turnover; it does not prove there is none.
+
+**This is the measurement the super-building note of 2026-11-23 asked for**
+("measure an era-12/13 save first"): at a full weekly turnover the pass is
+22 s a weekly tick, and it scales with placements, so levels ten times the
+size would leave about 2 s of it.
+
 This changes what investors build, so it is the owner's call; options are
 under "Proposals that change gameplay".
 
