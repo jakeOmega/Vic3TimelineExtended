@@ -57,9 +57,6 @@ What it writes (the hand-written logic is in te_demog_effects.txt / te_demog_val
         te_demog_cause_deaths_estimate          each natural cause's deaths at the step's rates over the bands, the
                                                 Causes of Death section's estimate (issue #1029; demographics_model
                                                 .band_cause_rates)
-        te_demog_ring_migrate_slots, _bands, _pool_bands, _class
-                                                the 150-year ring's one-time re-filing on the 300-year one, the loops of
-                                                te_demog_ring_migrate (issue #1075; demographics_model.ring_migrate)
     common/script_values/te_demog_generated_values.txt
         per-pop engine curves and wealth TFR; per-state cause multipliers (reads of the
         demographics modifier types: medicine as 1 - access x treatment), women's work share, the means and
@@ -721,38 +718,6 @@ def old_rows(o):
     o("")
 
 
-def ring_migration(o):
-    """The 150-year ring's one-time re-filing on the 300-year one (issue #1075; te_demog_ring_migrate's loops)."""
-    old, w = M.OLD_RING_YEARS, P.LX_BAND_WIDTH
-    assert N == 2 * old, "te_demog_ring_migrate re-files a 150-year ring on a 300-year one"
-    o(f"# THIS = a state, in te_demog_ring_migrate: each old slot 0-{old - 1} to its slot on the {N}-year ring.")
-    o("te_demog_ring_migrate_slots = {")
-    for k in range(old):
-        o(f"te_demog_ring_migrate_slot = {{ S = {k} T = {k + old} }}")
-    o("}")
-    o("")
-    o(f"# THIS = a state, in te_demog_ring_migrate: each old birth band 0-{old // w - 1} with its slots, by its top slot.")
-    o("te_demog_ring_migrate_bands = {")
-    for j in range(old // w):
-        o(f"te_demog_ring_migrate_band = {{ J = {j} T = {j + old // w} TOP = {w * j + w - 1} }}")
-    o("}")
-    o("")
-    o("# THIS = a state, in te_demog_ring_migrate: the pool into the band and slot of its mean age (te_dg_r3_jp, te_dg_r3_kp).")
-    o("te_demog_ring_migrate_pool_bands = {")
-    for j in range(P.LX_BANDS):
-        slots = " ".join(f"S{i} = {w * j + i}" for i in range(w))
-        o(f"te_demog_ring_migrate_pool_band = {{ J = {j} {slots} }}")
-    o("}")
-    o("")
-    last = len(P.MIGRANT_CLASSES) - 1
-    o("# THIS = a state, in te_demog_ring_migrate: the people who flow now and folded before, into the last migrant class.")
-    o("te_demog_ring_migrate_class = {")
-    o(f"change_variable = {{ name = te_dg_cf{last} add = local_var:te_dg_r3_cf }}")
-    o(f"change_variable = {{ name = te_dg_cm{last} add = local_var:te_dg_r3_cm }}")
-    o("}")
-    o("")
-
-
 def debug_ring(o):
     for when in ("before", "after"):
         o(f"# THIS = a state: the ring as TE_DEMOG_REPLAY {when} lines (demographics_harness.format_replay).")
@@ -1201,7 +1166,6 @@ def render_effects(root=ROOT):
     practice_loops(o)
     family_policy_effects(o)
     cause_deaths_estimate(o)
-    ring_migration(o)
     debug_ring(o)
     return o.text()
 

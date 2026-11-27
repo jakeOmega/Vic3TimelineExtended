@@ -61,8 +61,6 @@
 # more step (te_demog_medicine_drift and te_demog_practices_step in te_demog_step_begin), a year's
 # spread and drift on top of the yearly ones.
 te_debug_demog_replay = {
-	# a census on the 150-year ring is re-filed at its own year before that year goes back (issue #1075)
-	te_demog_ring_check = yes
 	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 	te_demog_step_begin = yes
 	set_variable = { name = te_dg_dbg_war value = local_var:te_dg_war }
@@ -323,8 +321,6 @@ te_debug_demog_bench_walk = {
 te_debug_demog_bench_pass = {
 	every_state = {
 		limit = { te_demog_has_census = yes }
-		# a census on the 150-year ring is re-filed at its own year first (issue #1075)
-		te_demog_ring_check = yes
 		set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 		te_demog_step = yes
 	}
