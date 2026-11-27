@@ -1572,8 +1572,9 @@ your colonies with a Spaceport: supply and propellant refill (at a Spaceport,
 the tanks fill up on a site that makes propellant, such as Utopia Planitia,
 Ceres, Europa or Titan, and by a quarter a month anywhere else), damage is
 repaired, and a fleet on an older drive refits to your best
-in three months. Away from a dock supply runs down, and a fleet without it loses
-5% of its strength a month. Marines fill up at Earth only, as far as your
+in three months. At a location with no dock a fleet uses a month of supply each
+month, and one without it loses 5% of its strength a month. A fleet in flight
+uses none, however long the leg. Marines fill up at Earth only, as far as your
 Space Forces Personnel allow. A fleet that arrives
 where you hold a colony counts as contact for the colony's autonomy. When an
 enemy fleet sets out for a location where you hold a colony, you are warned
