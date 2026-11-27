@@ -1733,21 +1733,32 @@ class CommandLineTest(unittest.TestCase):
 
     def test_recover_waits_while_a_watch_may_still_be_recording(self):
         # Final touches: `recover` had no such guard; it judged a run whose `watch` was mid-look.
-        for newest in ("started", "heartbeat", "watching"):
-            with self.subTest(newest=newest):
-                snap = self.armed_snapshot(dt.datetime.now(UTC) - dt.timedelta(minutes=5))
-                long_ago = dt.datetime.now(UTC) - dt.timedelta(seconds=60)
-                snapshot.record(snap, "started", now=long_ago if newest != "started" else None,
-                                pid=4242, created="2026-11-10T08:00:00.0000000Z")
-                if newest != "started":
-                    snapshot.record(snap, newest, **({"gap_s": 1} if newest == "watching" else {}))
-                (self.user / "continue_game.json").write_text('{"title": "%s"}' % newest)
-                before, events = self.tree(), [e["event"] for e in snapshot.journal(snap)]
-                out, code = self.run_cli("recover")
-                self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
-                                 (2, [(snap.id, False, "watch_still_recording")]))
-                self.assertEqual((self.tree(), [e["event"] for e in snapshot.journal(snap)]), (before, events))
-                snapshot.record(snap, "held", reason="test cleanup")      # out of the next subtest's way
+        # The verdict rests on the age of the newest sign of life by the backup drive's clock, so the test sets
+        # that age on naps_clock(): read from the machine's clock, a WSL step or a slow moment under parallel load
+        # moved it across WATCH_RECORDING_S once (#1755).
+        limit = cli.WATCH_RECORDING_S
+        with self.naps_clock() as now:
+            for newest in ("started", "heartbeat", "watching"):
+                for age in (0, limit - 1, limit + 1):
+                    with self.subTest(newest=newest, age=age):
+                        snap = self.armed_snapshot(now() - dt.timedelta(minutes=5))
+                        seen = now() - dt.timedelta(seconds=age)
+                        snapshot.record(snap, "started", now=seen if newest == "started" else seen - dt.timedelta(
+                            seconds=60), pid=4242, created="2026-11-10T08:00:00.0000000Z")
+                        if newest != "started":
+                            snapshot.record(snap, newest, now=seen, **({"gap_s": 1} if newest == "watching" else {}))
+                        (self.user / "continue_game.json").write_text('{"title": "%s"}' % newest)
+                        before, events = self.tree(), [e["event"] for e in snapshot.journal(snap)]
+                        out, code = self.run_cli("recover")
+                        if age >= limit:                # old enough: no watch can still be recording, so it is judged
+                            self.assertEqual([r["id"] for r in out["runs"]][:1], [snap.id])
+                            self.assertNotEqual(out["runs"][0]["reason"], "watch_still_recording", out)
+                            continue
+                        self.assertEqual((code, [(r["id"], r["held"], r["reason"]) for r in out["runs"]]),
+                                         (2, [(snap.id, False, "watch_still_recording")]))
+                        self.assertEqual((self.tree(), [e["event"] for e in snapshot.journal(snap)]),
+                                         (before, events))
+                        snapshot.record(snap, "held", now=now(), reason="test cleanup")   # out of the next one's way
 
     def test_a_start_whose_reply_was_lost_is_refused_as_unconfirmed(self):
         taken, _ = self.run_cli("snapshot")
