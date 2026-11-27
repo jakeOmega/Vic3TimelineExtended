@@ -581,25 +581,16 @@ sr_ebase_refresh = {
 	}
 }
 
-# Country scope, the owner of an Extraplanetary Base just built or expanded
-# (te_on_building_built, te_on_building_expanded): Base Room's refresh the next
-# day (space_race_events.110), when the new level surely counts. One event a
-# day however many levels finish: each refresh removes and re-adds its
-# modifier, and whether a second same-day run's has_modifier sees the first's
-# add is unverified, so a batch must not run it twice. The marker lapses in
-# two days if the event never fires.
-sr_ebase_hook_fire = {
-	if = {
-		limit = { NOT = { has_variable = sr_ebase_hook_pending } }
-		set_variable = { name = sr_ebase_hook_pending value = yes days = 2 }
-		trigger_event = { id = space_race_events.110 days = 1 }
-	}
-}
+# Its next-day hook, sr_ebase_hook_fire (space_race_events.110), is generated with
+# the Resort Colony's from one function (gen_solar_sites.render_room_hook, #1951):
+# common/scripted_effects/sr_sites_generated.txt.
 
 # ---- Resort Colony room (#1948 design § 6.3) ----------------------------------------------
 # Country scope, from the monthly country pulse, for every country with Space
 # Colonization (the building's technology): the one refresh site of the two
-# resort room modifiers, the twin of sr_ebase_refresh. Its built levels fill its
+# resort room modifiers. It began as the twin of sr_ebase_refresh, whose fill the
+# base's ground types have since replaced, so the two stay apart; what the two
+# rooms still share is generated (ROOM_BUILDINGS, #1951). Its built levels fill its
 # room best draw first (sr_resort_fill: Earth orbit's 10, each colony's own and its
 # Off-World Resorts'); the average draw over all of them, past the room at -75%,
 # is one country modifier, so only the levels past the room pay the penalty. Both
@@ -653,17 +644,8 @@ sr_resort_refresh = {
 	}
 }
 
-# Country scope, the owner of a Resort Colony just built or expanded
-# (te_on_building_built, te_on_building_expanded): the room's refresh the next
-# day (space_race_events.112), as sr_ebase_hook_fire does for bases, with a
-# marker of its own. One event a day however many levels finish.
-sr_resort_hook_fire = {
-	if = {
-		limit = { NOT = { has_variable = sr_resort_hook_pending } }
-		set_variable = { name = sr_resort_hook_pending value = yes days = 2 }
-		trigger_event = { id = space_race_events.112 days = 1 }
-	}
-}
+# Its next-day hook, sr_resort_hook_fire (space_race_events.112), is generated with
+# the base's (gen_solar_sites.render_room_hook, #1951).
 
 # ---- The Resort Colony free of its state (#1953) -----------------------------------------
 # State scope, ROOT the state, from sr_resort_state_on_action on the state's monthly

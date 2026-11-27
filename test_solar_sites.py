@@ -1613,7 +1613,7 @@ class ModulesTest(unittest.TestCase):
         mine = _block(buildings, "REPLACE_OR_CREATE:building_space_mine")
         self.assertIn("owner ?= { sr_ebase_may_build_government = yes }", _block(mine, "can_build_government"))
         self.assertIn("owner ?= { sr_ebase_may_build_private = yes }", _block(mine, "can_build_private"))
-        gates = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
+        gates = _strip(_raw(*gss.TRIGGERS_OUT.parts))  # gss.render_room_gates (#1951)
         self.assertIn("is_ai = no", _block(gates, "sr_ebase_may_build_government"))
         self.assertNotIn("is_ai", _block(gates, "sr_ebase_may_build_private"))
         room = _block(gates, "sr_ebase_has_room")
@@ -2527,7 +2527,9 @@ class EbaseCellTest(unittest.TestCase):
         # The next level's grade is gen_ebase.py's since the ground types (design § 8).
         cls.effects = _strip(_raw("common", "scripted_effects", "sr_ebase_generated.txt"))
         cls.modules = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
-        cls.display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        # The cell's values: the base's own and the room buildings' shared (gss.render_room_display, #1951).
+        cls.display = (_strip(_raw("common", "script_values", "space_race_display_values.txt"))
+                       + _strip(_raw(*gss.DISPLAY_OUT.parts)))
         cls.widget = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
 
     def test_next_place_sets_the_next_grade_with_queued_levels(self):
@@ -2614,6 +2616,47 @@ class EbaseCellTest(unittest.TestCase):
         self.assertIn('text = "je_space_race_widget_ebase_queued_figure"', self.widget[row:row + 300])
 
 
+class RoomBuildingsTest(unittest.TestCase):
+    """The Extraplanetary Base's and the Resort Colony's shared room pieces
+    (#1951): one generator function a piece, called for each building."""
+
+    PIECES = ((gss.TRIGGERS_OUT, lambda b: gss.render_room_gates(b)),
+              (gss.EFFECTS_OUT, lambda b: gss.render_room_hook(b)),
+              (gss.VALUES_OUT, lambda b: gss.render_room_levels(b) + gss.render_room_total(b)),
+              (gss.DISPLAY_OUT, lambda b: gss.render_room_display(b)))
+
+    def test_both_buildings(self):
+        self.assertEqual([(b.key, b.building) for b in gss.ROOM_BUILDINGS],
+                         [("ebase", "building_space_mine"), ("resort", "building_space_resort")])
+        self.assertEqual((gss.EBASE.measure, gss.RESORT.measure), ("grade", "draw"))
+        self.assertEqual(gss.EBASE.overflow, gss.OVERFLOW_GRADE)
+        self.assertEqual(gss.RESORT.overflow, gss.RESORT_OVERFLOW_DRAW)
+
+    def test_each_piece_is_defined_once_by_the_generator(self):
+        """A hand-written copy would sort before the generated file and win (scripted
+        triggers and effects keep the first definition) or lose without a word
+        (script values keep the last), so neither may come back."""
+        for out, render in self.PIECES:
+            folder = os.path.join(REPO, out.parent)
+            texts = {}
+            for path in sorted(glob.glob(os.path.join(folder, "*.txt"))):
+                texts[os.path.relpath(path, REPO)] = _strip(_raw(os.path.relpath(path, REPO)))
+            for b in gss.ROOM_BUILDINGS:
+                names = re.findall(r"(?m)^(\w+) = \{", "\n".join(render(b)))
+                self.assertTrue(names)
+                for name in names:
+                    with self.subTest(name=name):
+                        where = [rel for rel, text in texts.items()
+                                 for _ in re.finditer(rf"(?m)^{name} = \{{", text)]
+                        self.assertEqual(where, [str(out)])
+        # ... and each world's room, from one function too.
+        values = _strip(_raw(*gss.VALUES_OUT.parts))
+        for b in gss.ROOM_BUILDINGS:
+            for site in gss.SITES:
+                with self.subTest(building=b.key, site=site.key):
+                    self.assertIn("\n".join(gss.site_room_values(b, site)[1:]), values)
+
+
 class EbaseRefreshTest(unittest.TestCase):
     """The Base Room cell refreshed when a base is built (UI pass design § 8):
     the building hooks fire a hidden country event on the owner, whose ROOT is
@@ -2640,7 +2683,7 @@ class EbaseRefreshTest(unittest.TestCase):
     def test_one_event_a_day_the_next_day(self):
         """However many levels finish on one day, the refresh runs once, the
         next day: a second same-day run of its remove-and-add might stack."""
-        fire = _block(self.modules, "sr_ebase_hook_fire")
+        fire = _block(_strip(_raw(*gss.EFFECTS_OUT.parts)), "sr_ebase_hook_fire")  # gss.render_room_hook (#1951)
         self.assertRegex(fire, r"limit = \{ NOT = \{ has_variable = sr_ebase_hook_pending \} \}\s*"
                                r"set_variable = \{ name = sr_ebase_hook_pending value = yes days = 2 \}\s*"
                                r"trigger_event = \{ id = space_race_events\.110 days = 1 \}")

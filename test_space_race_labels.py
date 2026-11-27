@@ -38,7 +38,8 @@ ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_sites_generated_ro
 FLEET_ROWS = os.path.join(REPO, "gui", "journal_entry_widgets", "sr_fleets_generated_rows.gui")  # gen_space_fleets.py
 WINDOWS = os.path.join(REPO, "gui", "sr_launch_window_widgets.gui")  # Next Windows (colony management design § 6)
 VALUES = os.path.join(REPO, "common", "script_values", "space_race_values.txt")
-DISPLAY_VALUES = os.path.join(REPO, "common", "script_values", "space_race_display_values.txt")
+# The room buildings' cells (gen_solar_sites.render_room_display, #1951).
+ROOM_DISPLAY_VALUES = os.path.join(REPO, "common", "script_values", "sr_sites_display_generated.txt")
 SITES_VALUES = os.path.join(REPO, "common", "script_values", "sr_sites_generated.txt")
 LOC_DIR = os.path.join(REPO, "localization", "english")
 # Banking's overview cell, which the colonization overview's cells reuse (audit SPC-6).
@@ -416,14 +417,14 @@ def _ebase_split_bounds():
     while sr_disp_ebase_split's limit holds, so each figure it bounds is
     measured at its bound; a figure it leaves unbounded is measured at its
     longest and fails the cell."""
-    limit = _block(_read(DISPLAY_VALUES), "sr_disp_ebase_split")
+    limit = _block(_read(ROOM_DISPLAY_VALUES), "sr_disp_ebase_split")
     return {m.group(1): int(m.group(2)) - 1 for m in re.finditer(r"\b(sr_disp_ebase_\w+) < (\d+)", limit)}
 
 
 def _resort_split_bounds():
     """The Resort Room cell's split word (#1948), bounded as Base Room's is by
     sr_disp_resort_split's limit."""
-    limit = _block(_read(DISPLAY_VALUES), "sr_disp_resort_split")
+    limit = _block(_read(ROOM_DISPLAY_VALUES), "sr_disp_resort_split")
     return {m.group(1): int(m.group(2)) - 1 for m in re.finditer(r"\b(sr_disp_resort_\w+) < (\d+)", limit)}
 
 

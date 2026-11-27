@@ -148,10 +148,10 @@ class ResortRoomTest(unittest.TestCase):
         self.assertRegex(values, r"(?m)^sr_mod_resort_room = \{ value = 10 \}")
         # Each state's colony by the engine's b: lookup, never a walk of its buildings: the private
         # investment pass reads the queued count in every state.
-        levels = _block(values, "sr_resort_levels")
+        levels = _block(_values(), "sr_resort_levels")  # gss.render_room_levels (#1951)
         self.assertIn("limit = { exists = b:building_space_resort }", levels)
         self.assertIn("add = b:building_space_resort.level\n", levels)
-        queued = _block(values, "sr_resort_queued_levels")
+        queued = _block(_values(), "sr_resort_queued_levels")
         self.assertIn("limit = { exists = b:building_space_resort }", queued)
         self.assertIn("add = b:building_space_resort.level_after_queued_constructions", queued)
         for block in (levels, queued):
@@ -258,7 +258,7 @@ class ResortRefreshTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.effects = _strip(_raw("common", "scripted_effects", "sr_colony_module_effects.txt"))
-        cls.triggers = _strip(_raw("common", "scripted_triggers", "sr_colony_module_triggers.txt"))
+        cls.triggers = _strip(_raw(*gss.TRIGGERS_OUT.parts))  # gss.render_room_gates (#1951)
         cls.modifiers = _strip(_raw("common", "static_modifiers", "space_race_modifiers.txt"))
 
     def test_refresh_removes_first_and_averages(self):
@@ -303,7 +303,7 @@ class ResortRefreshTest(unittest.TestCase):
             with self.subTest(on_action=name):
                 self.assertRegex(_block(hooks, name), r"is_building_type = building_space_resort\s+exists = owner\s+\}"
                                                       r"\s+owner = \{ sr_resort_hook_fire = yes \}")
-        fire = _block(self.effects, "sr_resort_hook_fire")
+        fire = _block(_effects(), "sr_resort_hook_fire")  # gss.render_room_hook (#1951)
         self.assertIn("NOT = { has_variable = sr_resort_hook_pending }", fire)
         self.assertIn("set_variable = { name = sr_resort_hook_pending value = yes days = 2 }", fire)
         self.assertIn("trigger_event = { id = space_race_events.112 days = 1 }", fire)
@@ -557,7 +557,7 @@ class ResortModuleTest(unittest.TestCase):
 class ResortPanelTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.display = _strip(_raw("common", "script_values", "space_race_display_values.txt"))
+        cls.display = _strip(_raw(*gss.DISPLAY_OUT.parts))  # gss.render_room_display (#1951)
         cls.gui = _raw("gui", "journal_entry_widgets", "space_race_widget.gui")
         cls.rows = _raw(*gss.GUI_OUT.parts)
 
