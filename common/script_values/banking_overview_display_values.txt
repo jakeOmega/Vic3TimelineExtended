@@ -642,7 +642,8 @@ banking_disp_bar_stance = {
 
 # banking_bubble_pressure_bar: -2 to 100, so 0 draws a sliver (from #2041).
 banking_disp_bar_bubble = {
-	value = 0.0196078
+	value = 2
+	divide = 102
 	if = {
 		limit = { has_variable = bubble_pressure }
 		value = var:bubble_pressure
