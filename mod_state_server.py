@@ -155,6 +155,7 @@ from server.routes_analysis import (  # noqa: F401 — re-exported
     _emit_event_effect,
     _EVENT_HEADER_RE,
     _event_ids_from_mod_file,
+    _event_option_name_keys,
     _extract_event_ids_from_file,
     _extract_modifier_fields,
     _find_dominance_issues,
