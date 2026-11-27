@@ -473,16 +473,20 @@ class EventTests(unittest.TestCase):
 class SelfCheckNameTests(unittest.TestCase):
     """A saved scope's name printed blank in a ``debug_log`` while script read the scope fine (#1729;
     ``.claude/skills/log-triage/lessons.md`` § "A blank or null name for a saved scope"). The self-checks
-    name each country from inside its own scope: the rebels as ``THIS``, the metropole as ``ROOT``."""
+    name the rebels from inside their own scope, as ``THIS``. The metropole in the two-name lines stays a
+    saved scope's name: inside the rebels' scope ``THIS`` is the rebels, ROOT's accessor is unread in this
+    mod's logs, and a bad accessor drops the whole line (lessons.md § "A self-check line the engine can't
+    render"), where a saved scope's name is at worst blank."""
 
     SELF_CHECK = re.compile(r'debug_log = "TE_SELF_CHECK[^"]*"')
 
-    def test_no_self_check_names_a_saved_scope(self):
+    def test_no_self_check_names_the_rebels_by_a_saved_scope(self):
         lines = self.SELF_CHECK.findall(EFFECTS)
         self.assertTrue(lines)
         for line in lines:
             with self.subTest(line=line[:70]):
-                self.assertNotIn("SCOPE.sCountry", line)
+                self.assertNotIn("sCountry('decol_iw_month_rebels')", line)
+                self.assertNotIn("sCountry('decol_iw_end_rebels')", line)
 
     def test_rebels_print_from_their_own_scope(self):
         for effect, scope in (("decol_iw_war_month", "decol_iw_month_rebels"),
@@ -496,8 +500,6 @@ class SelfCheckNameTests(unittest.TestCase):
                 for line in lines:
                     self.assertIn(line, inside)
                     self.assertIn("rebels=[THIS.GetCountry.GetNameNoFormatting]", line)
-                    if "metropole=" in line:
-                        self.assertIn("metropole=[ROOT.GetCountry.GetNameNoFormatting]", line)
 
 
 if __name__ == "__main__":
