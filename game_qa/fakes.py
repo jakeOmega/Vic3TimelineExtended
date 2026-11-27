@@ -7,13 +7,14 @@ plain attributes, for a test to set and read.
 """
 from __future__ import annotations
 
+import math
 from collections import deque
 from pathlib import Path
 from typing import Sequence
 
 from game_qa import win_helper
 from game_qa.gate import ProcId
-from game_qa.helper import HelperError, Presence, Window
+from game_qa.helper import CpuReading, HelperError, Presence, Window
 
 GAME_HWND = 70                              # the handle of the game's window in both fakes
 GAME_PID = 7                                # the game's process in both fakes
@@ -96,6 +97,7 @@ class FakeBackend:
             GAME_PID: {"hwnd": GAME_HWND, "title": "Victoria 3", "responding": True, "client": (0, 0, 1920, 1080)},
         }
         self.creation: dict[int, str] = {GAME_PID: GAME_CREATED}       # live processes: pid -> creation time
+        self.cpu: dict[int, float] = {GAME_PID: 12.5}  # the CPU seconds each has used
         self.replaced_after: int | None = None  # another program has the game's id after this many keys
         self.next_pid = 1000
         self.launched: list[tuple[str, list, str]] = []
@@ -140,6 +142,11 @@ class FakeBackend:
 
     def creation_time(self, pid: int) -> str | None:
         return self.creation.get(pid)
+
+    def cpu_seconds(self, pid: int, created: str) -> float | None:
+        if self.creation.get(pid) != created:
+            return None
+        return self.cpu.get(pid, 0.0)
 
     def forget_child(self, pid: int) -> None:
         self.forgotten.append(pid)
@@ -359,6 +366,15 @@ class FakeHelper:
         self.boxes: list[tuple[int, int, int, int] | None] = []      # each screenshot's box, None for the whole area
         self.tcp_port: int | None = None
         self.tcp_in: deque[bytes] = deque()     # what tcp_recv hands out, one chunk a call
+        # The game's CPU use, in cores, at fake time t: `cpu_rate_at(t)` if set, else `cpu_rate` (a paused game
+        # rendering ran on 3.3 to 4.0 live; inside a long tick, about 1.1). `cpu` integrates it over `now`;
+        # `cpu_error` makes it refuse with that code.
+        self.cpu_rate = 3.5
+        self.cpu_rate_at = None
+        self.cpu_error: str | None = None
+        self.cpu_calls = 0
+        self._cpu_s = 100.0
+        self._cpu_at = 0.0
         self.tcp_sent: list[bytes] = []
 
     def clock(self) -> float:
@@ -390,6 +406,21 @@ class FakeHelper:
 
     def idle_ms(self) -> int:
         return self.idle
+
+    def cpu(self, pid: int) -> CpuReading:
+        self.cpu_calls += 1
+        if self.cpu_error is not None:
+            raise HelperError(self.cpu_error, "the fake's cpu refusal")
+        if not self.exists:
+            raise HelperError("not_ours", "no live process %d" % pid)
+        span = self.now - self._cpu_at
+        steps = max(1, math.ceil(span / 0.05)) if span > 0 else 0
+        for n in range(steps):          # the rate at the start of each 50 ms
+            t = self._cpu_at + span * n / steps
+            rate = self.cpu_rate_at(t) if self.cpu_rate_at is not None else self.cpu_rate
+            self._cpu_s += rate * span / steps
+        self._cpu_at = max(self._cpu_at, self.now)
+        return CpuReading(self._cpu_s, int(round(self.now * 1000)))
 
     def focus(self, pid: int) -> bool:
         self.focus_calls += 1

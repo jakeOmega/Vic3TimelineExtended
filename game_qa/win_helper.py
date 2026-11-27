@@ -45,6 +45,12 @@ button is always released once it went down. `presence`
 reports where the cursor and the foreground window are, and where the helper
 last put the cursor, so that a caller comparing two readings can tell its
 own move from a person's.
+
+`cpu` reads the CPU time the game has used in all (kernel and user, every
+thread, in seconds) with the helper's tick (milliseconds), for a process this
+helper started or adopted, read on the handle that proves its creation time.
+It sends nothing: the session reads a rate from two readings, to tell a paused
+game rendering from one inside a long tick (#1963).
 """
 from __future__ import annotations
 
@@ -629,6 +635,17 @@ def _op_presence(req, backend, state):
             "helper_cursor": None if mine is None else list(mine)}
 
 
+def _op_cpu(req, backend, state):
+    pid = _pid(req)
+    recorded = state.ours.get(pid)
+    if recorded is None:
+        raise _Refusal("not_ours", "process %d was not started or adopted by this helper" % pid)
+    seconds = backend.cpu_seconds(pid, recorded)
+    if seconds is None:
+        raise _Refusal("not_ours", "no live process %d was created at %s" % (pid, recorded))
+    return {"cpu_s": seconds, "at_ms": backend.tick()}
+
+
 def _op_screenshot(req, backend, state):
     pid = _pid(req)
     path = _str(req, "path", empty=False)
@@ -729,7 +746,7 @@ _OPS = {
     "ping": _op_ping, "launch": _op_launch, "adopt": _op_adopt, "window": _op_window,
     "idle_ms": _op_idle_ms, "focus": _op_focus, "keys": _op_keys, "click": _op_click, "presence": _op_presence,
     "wheel": _op_wheel, "drag": _op_drag, "move": _op_move,
-    "screenshot": _op_screenshot, "kill": _op_kill, "tcp_open": _op_tcp_open, "tcp_send": _op_tcp_send,
+    "cpu": _op_cpu, "screenshot": _op_screenshot, "kill": _op_kill, "tcp_open": _op_tcp_open, "tcp_send": _op_tcp_send,
     "tcp_recv": _op_tcp_recv, "tcp_close": _op_tcp_close,
 }
 
@@ -892,6 +909,23 @@ class WindowsBackend:
             return None
         try:
             return self._created_of(handle)
+        finally:
+            self._kernel32.CloseHandle(handle)
+
+    def cpu_seconds(self, pid: int, created: str) -> float | None:
+        """The kernel and user time `pid` has used, in seconds, if the live process behind the handle opened here
+        was created at `created`; else None."""
+        handle = self._kernel32.OpenProcess(self.PROCESS_QUERY_LIMITED_INFORMATION, 0, pid)
+        if not handle:
+            return None
+        try:
+            if self._created_of(handle) != created:
+                return None
+            times = [FILETIME() for _ in range(4)]
+            if not self._kernel32.GetProcessTimes(handle, *[ctypes.byref(t) for t in times]):
+                return None
+            kernel, user = ((t.dwHighDateTime << 32) | t.dwLowDateTime for t in times[2:])
+            return (kernel + user) / 10_000_000
         finally:
             self._kernel32.CloseHandle(handle)
 
