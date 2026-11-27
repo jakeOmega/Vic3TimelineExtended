@@ -1071,6 +1071,12 @@ sr_disp_free_trade_influence = {
 sr_disp_fab_rate = {
 	value = sr_mod_fab_rate
 }
+# The fabrication bonus in percent (country_sr_module_fabrication_mult: +100
+# with Von Neumann Machines), for the Fabrication hover.
+sr_disp_fab_mult_pct = {
+	value = modifier:country_sr_module_fabrication_mult
+	multiply = 100
+}
 # The modules built a month at Earth (sr_mod_fab_per_month); those built at an
 # Orbital Yard on their world come on top (the owner, 2026-11-24).
 sr_disp_fab_per_month = {

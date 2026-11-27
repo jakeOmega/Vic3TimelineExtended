@@ -1639,6 +1639,29 @@ class ModulesTest(unittest.TestCase):
                                                        "space_race_modifier_types.txt"),
                                                   "country_sr_module_fabrication_add"))
 
+    def test_von_neumann_machines_doubles_fabrication_from_every_source(self):
+        """Von Neumann Machines carries +100% fabrication (the owner, 2026-11-26),
+        and the rate multiplies its whole total, the Orbital Yards' points
+        included, so every reader of sr_mod_fab_rate takes the bonus."""
+        techs = _strip(_raw("common", "technology", "technologies", "era_13.txt"))
+        self.assertIn("country_sr_module_fabrication_mult = 1", _block(techs, "von_neumann_machines"))
+        values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
+        rate = _block(values, "sr_mod_fab_rate")
+        self.assertRegex(rate, r"value = sr_mod_fab_rate_method\s+add = \{ value = sr_mod_units_yard "
+                               r"multiply = sr_mod_yard_points \}\s+multiply = sr_mod_fab_rate_factor")
+        factor = _block(values, "sr_mod_fab_rate_factor")
+        self.assertIn("value = 1", factor)
+        self.assertIn("add = modifier:country_sr_module_fabrication_mult", factor)
+        types = _raw("common", "modifier_type_definitions", "space_race_modifier_types.txt")
+        mult = _block(types, "country_sr_module_fabrication_mult")
+        self.assertIn("percent = yes", mult)
+        self.assertIn("script_only = yes", mult)
+        # The panel's hover shows the bonus.
+        loc = _raw("localization", "english", "te_journal_entries_l_english.yml")
+        hover = re.search(r"(?m)^ je_space_race_widget_fab_tt:0 (.*)$", loc).group(1)
+        self.assertIn("sr_disp_fab_mult_pct", hover)
+        self.assertIn("$von_neumann_machines$", hover)
+
     # ---- The module stock, Moon modules and the price past a world's slots (the owner, 2026-11-15) ----
 
     def test_the_stock_holds_a_base_a_year_of_fabrication_and_storage(self):
