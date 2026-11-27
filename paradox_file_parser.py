@@ -79,9 +79,14 @@ class ParadoxFileParser:
         # Operator class covers !=, ?= and == as well as = < > <= >= — `!` and
         # `?` belong to no other token class, so before they were listed here
         # they were silently dropped and `x != 0` tokenized as `x = 0`.
+        # `list "name"` is a named color list (`color = list
+        # "rcw_breakaway_colors"` in two 1.15 vanilla scripted-effect files,
+        # coat of arms and flag definitions): one token, or the bare word
+        # `list` reads as a key with no operator and the whole file fails.
         token_pattern = (
             r'(?:rgb|hsv360|hsv|hex)\s*\{[^}]*\}'
             r'|@\[[^\]]+\]'
+            r'|\blist\s+"[^"]*"'
             r'|\{|\}|\s*[!?><=]+\s*|"[^"]*"|[\w\-\.:\|/$@]+'
         )
         text = "\n".join(self._strip_comment(line) for line in text.split("\n"))

@@ -52,6 +52,26 @@ def _make_vanilla(root, version="1.13.9"):
            "\t\tcreate_state = { country = c:AAA owned_provinces = { x0000A1 x0000A2 } }\n"
            "\t\tcreate_state = { country = c:BBB owned_provinces = { x0000B1 } }\n"
            "\t\tadd_homeland = cu:alpha\n\t}\n}\n")
+    # Each tag's history block (#1628).
+    _write(os.path.join(root, "game/common/history/countries/aaa - alpha.txt"),
+           "COUNTRIES = {\n\tc:AAA ?= {\n\t\tactivate_law = law_type:law_x\n"
+           "\t\teffect_starting_technology_tier_2_tech = yes\n\t}\n}\n")
+    # The defines (#1879): a namespace opened twice keeps both blocks' leaves.
+    _write(os.path.join(root, "game/common/defines/00_defines.txt"),
+           "NAI = {\n\tGATE = 0.1 # a comment\n\tSTEPS = { 1 2 3 }\n}\n"
+           "NPops = {\n\tA = 1\n}\nNPops = {\n\tB = 2\n}\n")
+    _write(os.path.join(root, "game/common/defines/jomini/00_tooltips.txt"),
+           "NTooltips = {\n\tDELAY = 0.5\n}\n")
+    # Lookup-only types (#1860): kept by name, with the file that defines it.
+    _write(os.path.join(root, "game/common/scripted_triggers/00_triggers.txt"),
+           "country_has_x = {\n\thas_law = law_type:law_x\n}\n"
+           "country_has_y = {\n\tOR = { has_law = law_type:$A$ has_law = law_type:law_y }\n}\n")
+    _write(os.path.join(root, "game/common/scripted_effects/00_effects.txt"),
+           "make_x = {\n\tcreate_country = { color = list \"breakaway_colors\" }\n}\n")
+    _write(os.path.join(root, "game/common/scripted_effects/01_more.txt"),
+           "make_x = {\n\tadd_modifier = { name = later }\n}\n")
+    _write(os.path.join(root, "game/common/war_goal_types/00_war_goals.txt"),
+           "make_union = {\n\tkind = make_subject\n}\n")
     _write(os.path.join(root, "launcher/launcher-settings.json"),
            json.dumps({"rawVersion": version}))
 
@@ -135,6 +155,82 @@ class BuildLoadTests(unittest.TestCase):
         # A rebuild keeps the file: only stray common/*.json files are pruned.
         vp.build(self.game, self.out)
         self.assertTrue(os.path.isfile(os.path.join(self.out, vp.STATE_HISTORY_FILE)))
+
+    def test_country_history_is_stored_beside_the_entity_types(self):
+        import country_history
+        manifest = vp.build(self.game, self.out)
+        info = manifest["country_history"]
+        self.assertEqual((info["dir"], info["files"], info["countries"], info["with_laws"]),
+                         ("game/common/history/countries", 1, 1, 1))
+        self.assertIn("game/common/history/countries/aaa - alpha.txt", manifest["sources"])
+        live = country_history.parse_dir(os.path.join(self.game, "game/common/history/countries"))
+        self.assertEqual(vp.load_country_history(self.out), live)
+        self.assertEqual(live["aaa - alpha.txt"]["AAA"],
+                         {"laws": ["law_x"], "tech_tier_effects": ["effect_starting_technology_tier_2_tech"]})
+
+    def test_defines_are_merged_leaf_by_leaf(self):
+        manifest = vp.build(self.game, self.out)
+        self.assertEqual(manifest["defines"], {"dir": "game/common/defines", "file": "defines.json",
+                                               "namespaces": 3, "leaves": 5})
+        self.assertIn("game/common/defines/jomini/00_tooltips.txt", manifest["sources"])
+        self.assertEqual(vp.vanilla_define("NAI", "GATE", self.out), "0.1")
+        self.assertEqual(vp.vanilla_define("NAI", "STEPS", self.out), ["1", "2", "3"])
+        # ModState's top-level merge would have kept the second NPops block alone.
+        self.assertEqual((vp.vanilla_define("NPops", "A", self.out), vp.vanilla_define("NPops", "B", self.out)),
+                         ("1", "2"))
+        self.assertEqual(vp.vanilla_define("NTooltips", "DELAY", self.out), "0.5")
+        for ns, name in (("NAI", "NOPE"), ("NOPE", "GATE")):
+            with self.subTest(define=f"{ns}.{name}"), self.assertRaises(KeyError):
+                vp.vanilla_define(ns, name, self.out)
+        # A rebuild after a vanilla edit is read, not a cached copy.
+        _write(os.path.join(self.game, "game/common/defines/00_defines.txt"), "NAI = {\n\tGATE = 0.25\n}\n")
+        vp.build(self.game, self.out)
+        self.assertEqual(vp.vanilla_define("NAI", "GATE", self.out), "0.25")
+
+    def test_vanilla_define_without_defines_in_the_snapshot(self):
+        vp.build(self.game, self.out)
+        manifest = vp.read_manifest(self.out)
+        del manifest["defines"]
+        with open(os.path.join(self.out, vp.MANIFEST), "w", encoding="utf-8") as f:
+            json.dump(manifest, f)
+        with self.assertRaises(FileNotFoundError):
+            vp.vanilla_define("NAI", "GATE", self.out)
+        self.assertIsNone(vp.load_defines(self.out))
+
+    def test_lookup_types_are_kept_by_name_and_file(self):
+        manifest = vp.build(self.game, self.out)
+        self.assertEqual({et: (i["dir"], i["entities"], i["parse_failures"])
+                          for et, i in manifest["lookup_types"].items()}, {
+            "Scripted Triggers": ("game/common/scripted_triggers", 2, []),
+            "Scripted Effects": ("game/common/scripted_effects", 1, []),
+            "War Goal Types": ("game/common/war_goal_types", 1, []),
+        })
+        triggers = vp.load_lookup("Scripted Triggers", self.out)
+        self.assertEqual(triggers["country_has_x"],
+                         {"file": "00_triggers.txt", "body": ("=", {"has_law": ("=", "law_type:law_x")})})
+        # The last file in name order wins a key two files define, as ModState's merge does.
+        effects = vp.load_lookup("Scripted Effects", self.out)
+        self.assertEqual(effects["make_x"]["file"], "01_more.txt")
+        live, failures = vp.lookup_table(os.path.join(self.game, "game/common/scripted_effects"), "Scripted Effects")
+        self.assertEqual(failures, [])
+        self.assertTrue(vp._strict_equal(effects, live))
+        # The merged tables stay mod-only: ModState never sees the lookup types.
+        self.assertNotIn("Scripted Triggers", vp.load(self.out).data)
+        self.assertEqual(vp.load_lookup("War Goal Types", self.out)["make_union"]["body"],
+                         ("=", {"kind": ("=", "make_subject")}))
+        self.assertIsNone(vp.load_lookup("Not A Type", self.out))
+        # One line per entry.
+        with open(os.path.join(self.out, "lookup/scripted_triggers.json"), encoding="utf-8") as f:
+            self.assertEqual(len(f.read().splitlines()), 4)
+
+    def test_a_lookup_file_that_does_not_parse_is_recorded(self):
+        _write(os.path.join(self.game, "game/common/war_goal_types/01_broken.txt"), "goal = {\n\tkind = make_subject\n}\nstray_word\n")
+        manifest = vp.build(self.game, self.out)
+        failures = manifest["lookup_types"]["War Goal Types"]["parse_failures"]
+        self.assertEqual([f["file"] for f in failures], ["game/common/war_goal_types/01_broken.txt"])
+        # A lookup type's failure is not a ModState one: the server would report it on every load.
+        self.assertEqual(manifest["parse_failures"], [])
+        self.assertEqual(sorted(vp.load_lookup("War Goal Types", self.out)), ["make_union"])
 
     def test_no_history_folder_is_an_empty_table(self):
         shutil.rmtree(os.path.join(self.game, "game/common/history"))
@@ -247,6 +343,40 @@ class FreshnessTests(unittest.TestCase):
         self.assertFalse(result.fresh)
         self.assertIn("state history", " ".join(result.code_reasons))
         self.assertIsNone(vp.load_state_history(self.out, manifest=manifest))
+
+    def test_snapshot_without_the_new_tables_is_stale(self):
+        for key, words in (("country_history", "country history"), ("defines", "defines"),
+                           ("lookup_types", "lookup types")):
+            with self.subTest(section=key):
+                manifest = vp.read_manifest(self.out)
+                del manifest[key]
+                result = vp.check(self.out, None, manifest=manifest)
+                self.assertFalse(result.fresh)
+                self.assertIn(words, " ".join(result.code_reasons))
+
+    def test_new_lookup_type_is_stale(self):
+        with mock.patch.dict(vp.VANILLA_LOOKUP_DIRS, {"On Actions": "on_actions"}):
+            result = vp.check(self.out, None)
+        self.assertIn("On Actions", " ".join(result.code_reasons))
+
+    def test_edited_country_history_or_defines_file_is_stale(self):
+        for rel in ("game/common/history/countries/aaa - alpha.txt", "game/common/defines/00_defines.txt",
+                    "game/common/scripted_triggers/00_triggers.txt"):
+            with self.subTest(file=rel):
+                with open(os.path.join(self.game, rel), "a", encoding="utf-8") as f:
+                    f.write("# edited\n")
+                self.assertIn(f"changed: {rel}", " ".join(vp.check(self.out, self.game).game_reasons))
+                vp.build(self.game, self.out)
+
+    def test_new_readers_are_in_the_fingerprint(self):
+        import country_history
+        import game_defines
+        before = vp.parser_fingerprint()
+        for module, name in ((country_history, "parse_text"), (game_defines, "parse_text"),
+                             (vp, "lookup_table")):
+            with self.subTest(reader=f"{module.__name__}.{name}"), \
+                    mock.patch.object(module, name, lambda *a: {}):
+                self.assertNotEqual(vp.parser_fingerprint(), before)
 
     def test_edited_history_file_is_stale(self):
         path = os.path.join(self.game, "game/common/history/states/00_states.txt")

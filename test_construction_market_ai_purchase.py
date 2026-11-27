@@ -43,6 +43,7 @@ import unittest
 from pathlib import Path
 
 from test_construction_market_budget_step import CURRENT_VALUES, DISPLAY_VALUES, TARGET_VALUES, Env, load
+from vanilla_parsed import vanilla_define
 
 ROOT = Path(__file__).resolve().parent
 AI_VALUES = ROOT / "common/script_values/te_construction_market_ai_values.txt"
@@ -83,8 +84,8 @@ RAILWAY_POINTS, SUPER_HIGH_POINTS = 800.0, 2000.0
 PASS_VALUES = ROOT / "common/script_values/te_ai_build_pass_values.txt"
 
 # The engine's AI defines the constants are taken from, at vanilla's values (1.15.1, common/defines/00_ai.txt);
-# test_matches_the_game_files reads them where the game is installed (vanilla_parsed/ holds no defines). The mod
-# leaves them alone for the reasoning to hold, except MOD_NAI's.
+# test_matches_vanilla holds them to vanilla_parsed/defines.json. The mod leaves them alone for the reasoning to
+# hold, except MOD_NAI's.
 NAI = {
     "CONSTRUCTION_DEBT_PAUSE": 0.4,
     "CONSTRUCTION_DEBT_RESUME": 0.2,
@@ -392,15 +393,10 @@ class Constants(unittest.TestCase):
             for name in (n for n in NAI if n not in MOD_NAI):
                 self.assertIsNone(re.search(rf"\b{name}\s*=", text), f"{path.name} sets {name}")
 
-    def test_matches_the_game_files(self):
-        path = _game_file("defines/00_ai.txt")
-        if path is None:
-            self.skipTest("no Victoria 3 install")
-        text = path.read_text(encoding="utf-8-sig")
+    def test_matches_vanilla(self):
+        # vanilla_parsed/defines.json (#1879), so it runs in CI too.
         for name, value in NAI.items():
-            m = re.search(rf"^\s*{name}\s*=\s*([0-9.]+)", text, re.M)
-            self.assertIsNotNone(m, name)
-            self.assertEqual(float(m.group(1)), value, name)
+            self.assertEqual(float(vanilla_define("NAI", name)), value, name)
 
 
 class ScriptAgainstModel(unittest.TestCase):
@@ -1341,15 +1337,6 @@ NOT_PROBE_FIELDS = {"main", "is_ai", "has_wasted_construction", "wasted_weeks", 
 
 def _code(text):
     return "\n".join(line.split("#", 1)[0].rstrip() for line in text.splitlines())
-
-
-def _game_file(name):
-    try:
-        from path_constants import base_game_path
-    except Exception:
-        return None
-    path = Path(base_game_path) / "game/common" / name
-    return path if path.is_file() else None
 
 
 if __name__ == "__main__":

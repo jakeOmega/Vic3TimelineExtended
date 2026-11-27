@@ -21,6 +21,14 @@ Layout (all JSON, pretty-printed so a vanilla bump diffs line by line):
         common/<entity_type>.json     one file per entity type
         history/states.json           who owns each state at game start
                                       (state_history.parse_dir, #901)
+        history/countries.json        each tag's starting laws, techs and
+                                      the rest of its history block
+                                      (country_history.parse_dir, #1628)
+        defines.json                  the engine defines, merged leaf by
+                                      leaf (game_defines.parse_dir, #1879)
+        lookup/<entity_type>.json     types kept for lookup by name only
+                                      (mod_state.VANILLA_LOOKUP_DIRS, #1860):
+                                      {name: {"file", "body"}}, one line each
         localization_english.json     vanilla English loc {key: value}
 
 Value encoding: the parser produces str, dict (str keys), list, and 2-tuples
@@ -32,8 +40,9 @@ top-level operator as a dict — and `build` asserts an exact round trip
 
 Freshness (`check`) compares, in order: snapshot format version, the parser
 fingerprint (source of the code that turns vanilla files into ModState data),
-the set of entity types and their directories (and that the state history is
-there), the game files' version
+the set of entity types and their directories (and that the lookup types,
+the state and country histories and the defines are there), the game files'
+version
 (launcher-settings.json `rawVersion`, or a vanilla clone's HEAD subject), and
 the source-file inventory — path +
 size in the fast mode the server uses at startup, path + sha256 with
@@ -66,10 +75,19 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
 
+import country_history
+import game_defines
 import mod_state
 import paradox_file_parser
 import state_history
-from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_files, iter_script_files
+from mod_state import (
+    VANILLA_COMMON_DIRS,
+    VANILLA_LOOKUP_DIRS,
+    ModState,
+    iter_loc_files,
+    iter_script_files,
+    parser_for,
+)
 
 FORMAT_VERSION = 1
 
@@ -84,6 +102,14 @@ COMMON_REL_DIR = "game/common"
 # result beside the entity types.
 STATE_HISTORY_REL_DIR = "game/" + state_history.REL_DIR
 STATE_HISTORY_FILE = "history/states.json"
+# Each tag's history block (#1628), the same kind of effect script.
+COUNTRY_HISTORY_REL_DIR = "game/" + country_history.REL_DIR
+COUNTRY_HISTORY_FILE = "history/countries.json"
+# The engine defines (#1879), merged leaf by leaf as the engine does.
+DEFINES_REL_DIR = "game/" + game_defines.REL_DIR
+DEFINES_FILE = "defines.json"
+# VANILLA_LOOKUP_DIRS' tables (#1860), one file per type.
+LOOKUP_DIR = "lookup"
 
 _OPERATORS = frozenset(paradox_file_parser.conditional_tokens)
 
@@ -130,6 +156,20 @@ def _dumps(obj) -> str:
     return json.dumps(obj, indent=1, ensure_ascii=False) + "\n"
 
 
+def _dumps_lines(table: dict) -> str:
+    """JSON with one line per top-level key, compact within it: the lookup
+    tables are about 2.5 times smaller than pretty-printed, and a vanilla
+    bump still diffs entry by entry."""
+    if not table:
+        return "{}\n"
+    rows = [
+        json.dumps(key, ensure_ascii=False) + ": "
+        + json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        for key, value in table.items()
+    ]
+    return "{\n" + ",\n".join(rows) + "\n}\n"
+
+
 # ---------------------------------------------------------------------------
 # Fingerprints and inventories
 # ---------------------------------------------------------------------------
@@ -137,8 +177,9 @@ def _dumps(obj) -> str:
 def parser_fingerprint() -> str:
     """sha256 over the code that turns vanilla files into ModState data: all of
     paradox_file_parser.py plus the ModState file-walking / loc-reading
-    functions and state_history's reader (not its lookups, which run on the
-    stored data). Any edit there (comments included) marks the snapshot stale —
+    functions, the readers of the state and country histories and the
+    defines, and the lookup-table reader (not the histories' lookups, which
+    run on the stored data). Any edit there (comments included) marks the snapshot stale —
     a false positive costs one rebuild, a false negative serves a parse the
     current parser would not produce."""
     h = hashlib.sha256()
@@ -162,6 +203,22 @@ def parser_fingerprint() -> str:
             state_history.parse_text,
             state_history.source_files,
             state_history.parse_dir,
+            country_history.render,
+            country_history.render_value,
+            country_history._body_text,
+            country_history._add,
+            country_history._add_effects,
+            country_history._pairs,
+            country_history.parse_text,
+            country_history.source_files,
+            country_history.parse_dir,
+            game_defines.parse_text,
+            game_defines._leaf,
+            game_defines.source_files,
+            game_defines.parse_files,
+            game_defines.merge,
+            game_defines.parse_dir,
+            lookup_table,
         )
     ]
     for part in parts:
@@ -182,6 +239,45 @@ def _state_history_dir(game_root: str) -> str:
     return os.path.join(game_root, *STATE_HISTORY_REL_DIR.split("/"))
 
 
+def _country_history_dir(game_root: str) -> str:
+    return os.path.join(game_root, *COUNTRY_HISTORY_REL_DIR.split("/"))
+
+
+def _defines_dir(game_root: str) -> str:
+    return os.path.join(game_root, *DEFINES_REL_DIR.split("/"))
+
+
+def _lookup_dirs(game_root: str) -> dict[str, str]:
+    """{lookup type: absolute dir} for the vanilla tree at `game_root`."""
+    return {
+        et: os.path.join(game_root, *COMMON_REL_DIR.split("/"), *rel.split("/"))
+        for et, rel in VANILLA_LOOKUP_DIRS.items()
+    }
+
+
+def lookup_table(dir_path: str, entity_type: str) -> tuple[dict, list[dict]]:
+    """({name: {"file": path under dir_path, "body": parsed}}, failures) for a
+    VANILLA_LOOKUP_DIRS type: every top-level key of every file, parsed as
+    ModState parses a file, the last file in name order winning a key two
+    define. `failures` are the files that did not parse, as
+    [{"file", "error"}]. A missing directory is an empty table."""
+    table: dict = {}
+    failures: list[dict] = []
+    if not os.path.isdir(dir_path):
+        return table, failures
+    for path in iter_script_files(dir_path):
+        parser = parser_for(entity_type)
+        try:
+            parser.parse_file(path)
+        except Exception as e:  # noqa: BLE001 — recorded, as ModState does
+            failures.append({"file": path, "error": f"{type(e).__name__}: {e}"})
+            continue
+        rel = os.path.relpath(path, dir_path).replace(os.sep, "/")
+        for name, body in parser.data.items():
+            table[name] = {"file": rel, "body": body}
+    return table, failures
+
+
 def _rel(path: str, game_root: str) -> str:
     return os.path.relpath(path, game_root).replace(os.sep, "/")
 
@@ -193,7 +289,12 @@ def _source_files(game_root: str) -> list[str]:
     for d in _entity_dirs(game_root).values():
         if os.path.isdir(d):
             files.extend(iter_script_files(d))
+    for d in _lookup_dirs(game_root).values():
+        if os.path.isdir(d):
+            files.extend(iter_script_files(d))
     files.extend(state_history.source_files(_state_history_dir(game_root)))
+    files.extend(country_history.source_files(_country_history_dir(game_root)))
+    files.extend(game_defines.source_files(_defines_dir(game_root)))
     loc_dir = os.path.join(game_root, *LOC_REL_DIR.split("/"))
     if os.path.isdir(loc_dir):
         files.extend(iter_loc_files(loc_dir))
@@ -310,10 +411,30 @@ def build(game_root: str, out_dir: str = DEFAULT_DIR, *,
             "file": rel_file,
             "entities": len(data),
         }
+    lookup_types = {}
+    for et, d in _lookup_dirs(game_root).items():
+        table, failures = lookup_table(d, et)
+        text = _dumps_lines(encode(table))
+        if not _strict_equal(decode(json.loads(text)), table):
+            raise AssertionError(f"{et}: parsed data does not survive the JSON round trip")
+        rel_file = f"{LOOKUP_DIR}/{_slug(et)}.json"
+        files[rel_file] = text
+        lookup_types[et] = {
+            "dir": _rel(d, game_root),
+            "file": rel_file,
+            "entities": len(table),
+            "parse_failures": [
+                {"file": _rel(f["file"], game_root), "error": f["error"]} for f in failures
+            ],
+        }
     files[LOC_FILE] = _dumps(ms.localization)
     # Plain strings, lists and dicts: nothing for the tuple encoding to do.
     history = state_history.parse_dir(_state_history_dir(game_root))
     files[STATE_HISTORY_FILE] = _dumps(history)
+    countries = country_history.parse_dir(_country_history_dir(game_root))
+    files[COUNTRY_HISTORY_FILE] = _dumps(countries)
+    defines = game_defines.parse_dir(_defines_dir(game_root))
+    files[DEFINES_FILE] = _dumps(defines)
 
     manifest = {
         "format_version": FORMAT_VERSION,
@@ -322,6 +443,7 @@ def build(game_root: str, out_dir: str = DEFAULT_DIR, *,
         "parser_fingerprint": parser_fingerprint(),
         "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "entity_types": entity_types,
+        "lookup_types": lookup_types,
         "localization": {
             "dir": LOC_REL_DIR,
             "file": LOC_FILE,
@@ -332,6 +454,18 @@ def build(game_root: str, out_dir: str = DEFAULT_DIR, *,
             "file": STATE_HISTORY_FILE,
             "files": len(history),
             **state_history.summary(state_history.merge(history)),
+        },
+        "country_history": {
+            "dir": COUNTRY_HISTORY_REL_DIR,
+            "file": COUNTRY_HISTORY_FILE,
+            "files": len(countries),
+            **country_history.summary(country_history.merge(countries)),
+        },
+        "defines": {
+            "dir": DEFINES_REL_DIR,
+            "file": DEFINES_FILE,
+            "namespaces": sum(1 for v in defines.values() if isinstance(v, dict)),
+            "leaves": game_defines.leaf_count(defines),
         },
         "parse_failures": [
             {"file": _rel(f["file"], game_root), "error": f["error"]}
@@ -351,9 +485,12 @@ def build(game_root: str, out_dir: str = DEFAULT_DIR, *,
     for rel, text in files.items():
         _write_atomic(os.path.join(out_dir, rel), text)
     keep = set(files)
-    for name in os.listdir(os.path.join(out_dir, "common")):
-        if f"common/{name}" not in keep and name.endswith(".json"):
-            os.remove(os.path.join(out_dir, "common", name))
+    for sub in ("common", LOOKUP_DIR):
+        if not os.path.isdir(os.path.join(out_dir, sub)):
+            continue
+        for name in os.listdir(os.path.join(out_dir, sub)):
+            if f"{sub}/{name}" not in keep and name.endswith(".json"):
+                os.remove(os.path.join(out_dir, sub, name))
     # Manifest last: a snapshot whose manifest is written is complete.
     _write_atomic(os.path.join(out_dir, MANIFEST), _dumps(manifest))
     return manifest
@@ -456,6 +593,83 @@ def load_state_history(snapshot_dir: str = DEFAULT_DIR, *,
     return json.loads(text) if text is not None else None
 
 
+def _section(snapshot_dir: str, manifest: Optional[dict], key: str):
+    """The parsed JSON file a manifest section names, or None when there is
+    no snapshot, no such section (a snapshot built before it was added) or
+    no file."""
+    if manifest is None:
+        manifest = read_manifest(snapshot_dir)
+    info = (manifest or {}).get(key)
+    if not info:
+        return None
+    text = _read_text(os.path.join(snapshot_dir, info["file"]))
+    return json.loads(text) if text is not None else None
+
+
+def load_country_history(snapshot_dir: str = DEFAULT_DIR, *,
+                         manifest: Optional[dict] = None) -> Optional[dict]:
+    """The snapshot's vanilla country history, {file name: {tag: record}} as
+    country_history.parse_dir returns it. None when there is no snapshot or
+    it was built before #1628."""
+    return _section(snapshot_dir, manifest, "country_history")
+
+
+def load_defines(snapshot_dir: str = DEFAULT_DIR, *,
+                 manifest: Optional[dict] = None) -> Optional[dict]:
+    """The snapshot's vanilla defines, {namespace: {leaf: value}} as
+    game_defines.parse_dir returns it. None when there is no snapshot or it
+    was built before #1879."""
+    return _section(snapshot_dir, manifest, "defines")
+
+
+def load_lookup(entity_type: str, snapshot_dir: str = DEFAULT_DIR, *,
+                manifest: Optional[dict] = None) -> Optional[dict]:
+    """A VANILLA_LOOKUP_DIRS type's table from the snapshot, {name: {"file":
+    path under the type's directory, "body": parsed}} as lookup_table returns
+    it. None when the snapshot holds no such table (built before #1860)."""
+    if manifest is None:
+        manifest = read_manifest(snapshot_dir)
+    info = ((manifest or {}).get("lookup_types") or {}).get(entity_type)
+    if not info:
+        return None
+    text = _read_text(os.path.join(snapshot_dir, info["file"]))
+    return decode(json.loads(text)) if text is not None else None
+
+
+# {defines.json path: ((mtime_ns, size), table)} for vanilla_define.
+_DEFINES_CACHE: dict[str, tuple[tuple[int, int], dict]] = {}
+
+
+def vanilla_define(namespace: str, name: str, snapshot_dir: str = DEFAULT_DIR):
+    """Vanilla's value of the define `namespace.name` (`"NAI",
+    "CONSTRUCTION_RESERVES_NEW_CONSTRUCTIONS"`), read from the committed
+    snapshot with no game install: the token as the game file writes it
+    (`"0.1"`, `"yes"`), or a list of tokens for an array define. Raises
+    KeyError when vanilla has no such define, FileNotFoundError when the
+    snapshot holds no defines (rebuild it on the machine with the game).
+    Tests that pin a vanilla define read it here, so a vanilla patch that
+    moves one fails them in CI too (#1879)."""
+    manifest = read_manifest(snapshot_dir)
+    info = (manifest or {}).get("defines")
+    if not info:
+        raise FileNotFoundError(
+            f"no vanilla defines in {snapshot_dir}: rebuild with `python3 vanilla_parsed.py build`")
+    path = os.path.join(snapshot_dir, info["file"])
+    st = os.stat(path)
+    stamp = (st.st_mtime_ns, st.st_size)
+    cached = _DEFINES_CACHE.get(path)
+    if cached is None or cached[0] != stamp:
+        with open(path, "r", encoding="utf-8") as f:
+            cached = (stamp, json.load(f))
+        _DEFINES_CACHE[path] = cached
+    block = cached[1].get(namespace)
+    if not isinstance(block, dict):
+        raise KeyError(f"vanilla has no define namespace {namespace}")
+    if name not in block:
+        raise KeyError(f"vanilla has no define {namespace}.{name}")
+    return block[name]
+
+
 def parsed_entities(entity_types, mod_state=None) -> dict:
     """{entity_type: parsed vanilla data} for a generator that reads vanilla
     entities but not raw vanilla text (so needs no game install).
@@ -535,6 +749,18 @@ def check(snapshot_dir: str = DEFAULT_DIR, game_root: Optional[str] = None, *,
         code.append(f"entity type directory changed: {', '.join(moved)}")
     if (manifest.get("state_history") or {}).get("dir") != STATE_HISTORY_REL_DIR:
         code.append(f"the state history ({STATE_HISTORY_REL_DIR}) is not in the snapshot")
+    if (manifest.get("country_history") or {}).get("dir") != COUNTRY_HISTORY_REL_DIR:
+        code.append(f"the country history ({COUNTRY_HISTORY_REL_DIR}) is not in the snapshot")
+    if (manifest.get("defines") or {}).get("dir") != DEFINES_REL_DIR:
+        code.append(f"the defines ({DEFINES_REL_DIR}) are not in the snapshot")
+    snap_lookup = {
+        et: info.get("dir") for et, info in (manifest.get("lookup_types") or {}).items()
+    }
+    want_lookup = {et: f"{COMMON_REL_DIR}/{rel}" for et, rel in VANILLA_LOOKUP_DIRS.items()}
+    if snap_lookup != want_lookup:
+        changed = sorted(et for et in set(snap_lookup) | set(want_lookup)
+                         if snap_lookup.get(et) != want_lookup.get(et))
+        code.append(f"lookup types not as the code lists them: {', '.join(changed)}")
 
     game: list[str] = []
     game_checked = False
@@ -575,13 +801,21 @@ def _default_game_root() -> Optional[str]:
 
 def _summary(manifest: dict) -> str:
     n_entities = sum(i["entities"] for i in manifest["entity_types"].values())
+    n_failures = len(manifest["parse_failures"]) + sum(
+        len(i.get("parse_failures", [])) for i in (manifest.get("lookup_types") or {}).values())
+    parts = [
+        f"{len(manifest['entity_types'])} entity types, {n_entities} entities",
+        *(f"{i['entities']} {et.lower()}"
+          for et, i in (manifest.get("lookup_types") or {}).items()),
+        f"{(manifest.get('state_history') or {}).get('states', 0)} states at start",
+        f"{(manifest.get('country_history') or {}).get('countries', 0)} country histories",
+        f"{(manifest.get('defines') or {}).get('leaves', 0)} defines",
+        f"{manifest['localization']['keys']} loc keys",
+        f"{len(manifest['sources'])} source files",
+        f"{n_failures} parse failures",
+    ]
     return (
-        f"vanilla {manifest['game_version']} "
-        f"({len(manifest['entity_types'])} entity types, {n_entities} entities, "
-        f"{(manifest.get('state_history') or {}).get('states', 0)} states at start, "
-        f"{manifest['localization']['keys']} loc keys, "
-        f"{len(manifest['sources'])} source files, "
-        f"{len(manifest['parse_failures'])} parse failures), "
+        f"vanilla {manifest['game_version']} ({', '.join(parts)}), "
         f"built {manifest['built_at']}, parser {manifest['parser_fingerprint']}"
     )
 
@@ -622,7 +856,8 @@ def main(argv: Optional[list[str]] = None) -> int:
         manifest = build(game_root, args.out, game_version=args.game_version)
         unchanged = before is not None and manifest.get("built_at") == before.get("built_at")
         print(("unchanged: " if unchanged else "wrote: ") + _summary(manifest))
-        for f in manifest["parse_failures"]:
+        for f in manifest["parse_failures"] + [
+                f for i in manifest["lookup_types"].values() for f in i["parse_failures"]]:
             print(f"  parse failure: {f['file']}: {f['error']}")
         return 0
 

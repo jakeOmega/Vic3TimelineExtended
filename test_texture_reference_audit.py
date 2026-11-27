@@ -365,7 +365,7 @@ def _install_common() -> str | None:
 
 
 # DECLARED_FIELDS folders vanilla_parsed/ doesn't hold.
-UNCOVERED = ["acceptance_statuses", "ai_strategic_region_stance_types", "ai_strategies", "alert_types",
+UNCOVERED = ["acceptance_statuses", "ai_strategic_region_stance_types", "ai_strategies",
              "character_roles", "cohesion_levels", "combat_unit_experience_levels", "commander_orders",
              "commander_ranks", "company_charter_types", "interest_tier_types", "liberty_desire_levels",
              "military_formation_flags", "naval_battle_conditions", "naval_mission_types", "objectives",
