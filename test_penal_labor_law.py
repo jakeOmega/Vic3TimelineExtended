@@ -254,8 +254,9 @@ class HumanRightsTests(unittest.TestCase):
 
 class CulturalHegemonyTests(unittest.TestCase):
     def test_hegemonic_pressure_never_picks_the_camps(self):
-        # cultural_hegemony.16.a adopts the hegemon's law with activate_law,
-        # which skips the camps' gate. Each place the event scans the Criminal
+        # cultural_hegemony.16.a adopts the hegemon's law with enact_law, and
+        # with activate_law a day later if that did not pass it (#1443), which
+        # skips the camps' gate. Each place the event scans the Criminal
         # Justice group must exclude the camps: the outer trigger (or the event
         # fires with no valid pick), tier 2's trigger and its random pick.
         text = _slice(

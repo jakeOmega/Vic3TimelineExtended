@@ -1,0 +1,44 @@
+﻿# ============================================================================
+# enact_law WITH A ONE-DAY FALLBACK (#1443)
+# ============================================================================
+# Six event options that stand for a political decision pass their law with
+# vanilla 1.15's enact_law ("a successful enactment, with on_enact, movement
+# loyalists and interest group approval") where activate_law only switched
+# it: cultural_hegemony.16.a, extra_law_events.36.b, decolonization_events.75.a
+# and .c, te_judiciary_events.5.a and te_peg.3.b.
+#
+# UNVERIFIED (vanilla_1_15_prep.md C20): whether enact_law respects the law's
+# can_enact, whether it passes the law at once or starts an enactment, and
+# what it does to an enactment already running. So the game never relies on
+# it alone: a hidden check a day on (te_enact_law.1) reads whether the law is
+# in force and, if not, cancels the law's own enactment if one runs and
+# activates the law as the option did before, logging once a game
+#   TE_SELF_CHECK OK|BROKEN enact_law
+# with whether an enactment was running at the call and is running a day on.
+# Play-test list: docs/testing/vanilla-1-15-playtest.md, "Panels and systems".
+# If BROKEN, the fallback is activate_law at the six call sites (the parent of
+# #1443's commit), and this file, te_enact_law_events.txt and
+# te_enact_law_values.txt go.
+# ============================================================================
+
+# Country scope. LAW: a law type (law_type:law_x, or a saved scope holding
+# one). The check is queued before enact_law runs, so it records whether an
+# enactment was already running. A law the country already has gets no check:
+# it would read OK whatever enact_law did.
+te_enact_law_checked = {
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_law = $LAW$ } }
+			$LAW$ = { save_scope_as = te_enact_law }
+			if = {
+				limit = { enacting_any_law = yes }
+				save_scope_value_as = { name = te_enact_enacting_before value = 1 }
+			}
+			else = {
+				save_scope_value_as = { name = te_enact_enacting_before value = 0 }
+			}
+			trigger_event = { id = te_enact_law.1 days = 1 }
+		}
+	}
+	enact_law = $LAW$
+}

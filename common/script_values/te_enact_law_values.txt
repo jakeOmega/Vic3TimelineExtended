@@ -1,0 +1,10 @@
+﻿# enact_law's self-check (#1443; common/scripted_effects/te_enact_law_effects.txt).
+# Country scope: 1 while the country is enacting a law, for te_enact_law.1's
+# log line.
+te_enact_law_enacting_now = {
+	value = 0
+	if = {
+		limit = { enacting_any_law = yes }
+		value = 1
+	}
+}

@@ -5753,7 +5753,7 @@ decolonization_events.75 = {
 			text = decolonization_events.75.a_tt
 			decol_iw_release_all_territories = yes
 		}
-		activate_law = law_type:law_universal_suffrage
+		te_enact_law_checked = { LAW = law_type:law_universal_suffrage }
 		if = {
 			limit = {
 				NOR = {
@@ -5761,7 +5761,7 @@ decolonization_events.75 = {
 					has_law = law_type:law_parliamentary_republic
 				}
 			}
-			activate_law = law_type:law_parliamentary_republic
+			te_enact_law_checked = { LAW = law_type:law_parliamentary_republic }
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -5791,7 +5791,7 @@ decolonization_events.75 = {
 		ai_chance = { base = 3 }
 		if = {
 			limit = { has_law = law_type:law_parliamentary_republic }
-			activate_law = law_type:law_presidential_republic
+			te_enact_law_checked = { LAW = law_type:law_presidential_republic }
 		}
 		add_modifier = {
 			name = decol_iw_general_mandate_modifier
