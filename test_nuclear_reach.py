@@ -54,6 +54,10 @@ class TestReachList(unittest.TestCase):
     def setUp(self):
         self.effects = strip_comments(read(EFFECTS))
         self.refresh = squash(block(self.effects, "nd_reach_refresh"))
+        # The builders take the list's name ($LIST$, 2026-11-26), so the Map Room's Nuclear Reach map builds the same
+        # bomber reach into a list of its own (te_jmap_store_reach); the deterrent's is nd_reach.
+        self.reset = squash(block(self.effects, "nd_reach_reset"))
+        self.build = squash(block(self.effects, "nd_reach_build"))
         self.add_from = squash(block(self.effects, "nd_reach_add_from"))
 
     def test_rebuilt_weekly_before_the_planner(self):
@@ -61,32 +65,50 @@ class TestReachList(unittest.TestCase):
         self.assertLess(weekly.index("nd_reach_refresh = yes"), weekly.index("nd_plan_refresh = yes"))
 
     def test_rebuilt_from_scratch_and_cleared_with_icbms(self):
-        self.assertIn("if = { limit = { has_variable_list = nd_reach } clear_variable_list = nd_reach }", self.refresh)
-        self.assertIn("set_variable = { name = nd_reach_count value = 0 }", self.refresh)
+        self.assertIn("if = { limit = { has_variable_list = $LIST$ } clear_variable_list = $LIST$ }", self.reset)
+        self.assertIn("set_variable = { name = $LIST$_count value = 0 }", self.reset)
+        for kind in ("adjacency", "region"):
+            self.assertIn(f"set_variable = {{ name = $LIST$_{kind}_added value = 0 }}", self.reset)
+        # the deterrent's own list, so the panel's nd_reach_count is still its count
+        self.assertIn("nd_reach_reset = { LIST = nd_reach }", self.refresh)
         self.assertIn("nd_is_armed = yes NOT = { nd_fields_icbms = yes }", self.refresh)
-        self.assertLess(self.refresh.index("clear_variable_list = nd_reach"), self.refresh.index("nd_reach_add_from = yes"))
+        self.assertLess(self.refresh.index("nd_reach_reset = { LIST = nd_reach }"),
+                        self.refresh.index("nd_reach_build = { LIST = nd_reach }"))
+        self.assertLess(self.refresh.index("nd_fields_icbms"), self.refresh.index("nd_reach_build"))
 
     def test_from_us_our_subjects_and_our_hosts(self):
         self.assertIn("save_scope_as = nd_reach_self", self.refresh)
-        self.assertIn("every_direct_subject = { nd_reach_add_from = yes }", self.refresh)
+        self.assertTrue(self.build.startswith("save_scope_as = nd_reach_self nd_reach_add_from = { LIST = $LIST$ }"),
+                        self.build)
+        self.assertIn("every_direct_subject = { nd_reach_add_from = { LIST = $LIST$ } }", self.build)
         self.assertIn("has_type = nuclear_basing source_country = scope:nd_reach_self } target_country = {"
-                      " nd_reach_add_from = yes }", self.refresh)
+                      " nd_reach_add_from = { LIST = $LIST$ } }", self.build)
 
     def test_both_halves_never_ourselves(self):
         for needle in ("has_strategic_adjacency = scope:nd_reach_cand", "NOT = { THIS = scope:nd_reach_self }",
                        "every_country_strategic_region = { every_scope_state = {",
-                       "NOT = { owner = scope:nd_reach_self }", "nd_reach_add = { KIND = adjacency }",
-                       "nd_reach_add = { KIND = region }"):
+                       "NOT = { owner = scope:nd_reach_self }", "nd_reach_add = { LIST = $LIST$ KIND = adjacency }",
+                       "nd_reach_add = { LIST = $LIST$ KIND = region }"):
             self.assertIn(needle, self.add_from)
 
     def test_added_once_and_counted(self):
         add = squash(block(self.effects, "nd_reach_add"))
-        self.assertIn("is_target_in_variable_list = { name = nd_reach target = scope:nd_reach_new }", add)
+        self.assertIn("is_target_in_variable_list = { name = $LIST$ target = scope:nd_reach_new }", add)
         self.assertLess(add.index("is_target_in_variable_list"), add.index("add_to_variable_list"))
-        self.assertIn("change_variable = { name = nd_reach_count add = 1 }", add)
-        self.assertIn("change_variable = { name = nd_reach_$KIND$_added add = 1 }", add)
+        self.assertIn("change_variable = { name = $LIST$_count add = 1 }", add)
+        self.assertIn("change_variable = { name = $LIST$_$KIND$_added add = 1 }", add)
         # No edit of the list while iterating it.
-        self.assertNotIn("variable = nd_reach ", self.refresh + self.add_from)
+        self.assertNotIn("variable = $LIST$ ", self.refresh + self.build + self.add_from)
+
+    def test_only_the_deterrent_and_the_map_build_a_list(self):
+        # the deterrent builds nd_reach, which every strike reads; the Map Room builds te_jmap_rch, which no strike
+        # reads, so the map can't change what a strike can hit
+        effects = squash(strip_comments("\n".join(read(f) for f in sorted((ROOT / "common/scripted_effects").glob("*.txt")))))
+        calls = re.findall(r"nd_reach_(?:reset|build) = \{ LIST = (\w+) \}", effects)
+        self.assertEqual(sorted(set(calls)), ["nd_reach", "te_jmap_rch"])
+        for folder in ("common/scripted_triggers", "common/scripted_effects", "common/script_values", "events"):
+            for f in sorted((ROOT / folder).glob("nuclear*.txt")):
+                self.assertNotIn("te_jmap_rch", strip_comments(read(f)), f.name)
 
     def test_article_hooks_rebuild_the_guest(self):
         article = strip_comments(read(ARTICLE))

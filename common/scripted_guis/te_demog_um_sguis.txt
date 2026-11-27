@@ -26,6 +26,22 @@ te_demog_um_shown_sgui = {
 	effect = { }
 }
 
+# Under Full, the country has Mind Backups and a Nexus but no minds yet (none counted at its census: the wait for the
+# census to count the room, then for the states' censuses to upload into it): the Uploaded Minds row reads None yet,
+# and its hover says why. te_demog_um_any_minds is 0 while the pool's variables are unset, so this never reads one.
+te_demog_um_pending_sgui = {
+	scope = country
+	is_shown = {
+		te_demog_effects_run = yes
+		has_technology_researched = mind_backups
+		any_scope_state = { has_building = building_mind_upload_nexus }
+		te_demog_um_any_minds <= 0
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Minds archived for want of capacity (call 7).
 te_demog_um_archived_sgui = {
 	scope = country

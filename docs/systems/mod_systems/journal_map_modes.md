@@ -33,7 +33,8 @@ all from one table of classes (§ The Class Maps). The eighteenth (the same day,
 living standards, the economy and politics, Literacy among them on its old selector (§ The Map Room, "The eighteenth
 pass's ten"). The nineteenth (the same day, #1977, the last of the four) adds five: four engine figures the mod reads
 as a value for the first time, each with a once-a-game self-check, and a count of the yearly walk (§ The Map Room,
-"The nineteenth pass's five").
+"The nineteenth pass's five"). The twentieth (2026-11-26, the owner's ask: "what states are reachable by bomber, by
+sub, and by ICBM") adds Nuclear Reach (§ The Map Room, "The twentieth pass's one").
 `docs/testing/journal-map-modes-playtest.md` lists what is still open, and this file says which parts rest on an
 unverified engine fact. Update both as the answers come in.
 
@@ -324,6 +325,33 @@ entry, in no country's journal.
   The play-test list's Self-checks table names each fallback. Not buildable: Migration Attraction, since state-scope
   `migration_pull` reads the country's figure (why the Cartographic Survey was switched off). Unverified (play-test
   check 35): the four reads in a paint, the hovers and the five maps' look.
+- **The twentieth pass's one** (2026-11-26, the owner's ask). 90 **Nuclear Reach**, in Military and Security beside
+  Nuclear Weapons, while the nuclear weapons rule is on: where the viewer's weapons can strike, by the cheapest leg
+  that reaches each state (`te_jmap_reach_*`, `te_journal_map_triggers.txt`). The viewer's own states blue
+  (`te_jmap_reach_you`, the "your" maps' blue); then its bombers' reach, orange: the state's owner on the viewer's
+  list, or strategically adjacent to the viewer now, read live as a strike reads it (`nd_state_in_reach_of`), so a war
+  begun since the list was built counts at once; then a coast only its missile submarines reach, bluish green; then
+  what only its ICBMs reach, reddish purple; the rest pale (`te_jmap_none`). A coast in bomber reach that the
+  submarines reach too takes the submarines' green as stripes (the Map Room's fourth `map_color_second` branch), and
+  the hover's second line says so; a state out of reach has a second line naming the leg that would reach it
+  (submarines, for a coast while the viewer holds one of its own; otherwise only ICBMs). The three are Okabe and Ito's
+  colors for color-blind readers (#E69F00, #009E73, #CC79A7), so they stay apart with no L, M or S cones; the map is
+  categorical, so Outliers, Scale and Color are greyed on it. **The bombers' reach is the deterrent's own rule, built
+  by its own helpers into a list of the map's.** `nd_reach_reset`, `nd_reach_build`, `nd_reach_add_from` and
+  `nd_reach_add` (`nuclear_deterrence_effects.txt`) take the list's name (`LIST`), the deterrent's `nd_reach` and the
+  map's `te_jmap_rch`, each with its own counters (`$LIST$_count` …), so the panel's `nd_reach_count` is untouched
+  and no strike reads the map's list (`test_nuclear_reach.py` holds both). The deterrent builds `nd_reach` only for an
+  armed country without ICBMs; the map builds `te_jmap_rch` for any viewer, so it shows the bombers' reach beside the
+  missiles' and, before the first warhead, where the bombers would fly (the pick's tooltip says so). The other two legs
+  are flags on the viewer (`te_jmap_rch_subs`, `te_jmap_rch_icbms`, from `nd_fields_missile_submarines` and
+  `nd_fields_icbms`, public facts: nuclear.md), with its own coast (`te_jmap_rch_coast`), so a paint reads a list and
+  three flags, and never the submarines' trigger, which walks the viewer's states for a coast. **The store follows the
+  viewer.** `te_jmap_store_reach` runs from `te_jmap_note_viewer` while 90 is the pick, on the country just noted: at
+  the pick (after the selector is set), at an option click, at the Timeline Extended window's Map Room button and at a
+  player's monthly pulse, so the list is a month old at most and is never another country's. Nothing it reads is
+  private: no `nd_is_armed`, no arsenal (in multiplayer another player can see the viewer's map), and an unarmed
+  viewer's map looks like an armed one's. The walk is the deterrent's weekly one, once, for one country. Unverified
+  (play-test check 36): the live adjacency in a paint, the stripes on small coasts and the four colors' look.
 - **Picks are scripted GUIs on a page widget, not scripted buttons.** The engine locks a scripted button for a country
   not involved in its entry ("Countries that are not involved in the Journal Entry may not take this action"), and
   nobody is involved in the Map Room. So `te_jmap_pick_<map>_sgui`
@@ -833,7 +861,7 @@ Every map button clears the see-through flag before it opens a page.
   each class's two picks in one place: § The Class Maps); Economy (GDP, GDP per Capita; Unemployment, Vacant Jobs; Gini,
   Dynastic Wealth, Ownership; Company HQs, Investment, Trade Capacity; Infrastructure, Market Access, Power Grids);
   Politics (Turmoil, Radicals vs Loyalists, Discrimination; Political Models, United Nations, Colonies); Military and Security (Armed
-  Forces, Fighting-Age Men, War Dead; Devastation, Nuclear Weapons, Agent Networks); Land and Environment (Base Comfort,
+  Forces, Fighting-Age Men, War Dead; Devastation, Nuclear Weapons, Nuclear Reach; Agent Networks); Land and Environment (Base Comfort,
   Current Comfort, Tourism Appeal; Pollution, Emissions; Ocean Basins, Grandeur). Each button keeps its own gate, so a census map
   hides while the census doesn't run and a system's map while its rule is off. A group whose every map is gated hides
   with them, header and all (`te_jmap_cat_<key>_sgui`, generated where a group has no map every player sees: today

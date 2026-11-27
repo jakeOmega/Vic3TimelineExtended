@@ -940,7 +940,7 @@ te_jmap_pick_colonies_sgui = {
 
 # Military and Security: where the soldiers are, the men of fighting age and the war dead, on one row since the census
 # shares a country's war dead out to its states by their soldiers; then devastation, the nuclear powers and the
-# viewer's agent networks.
+# viewer's nuclear reach; and the viewer's agent networks.
 
 te_jmap_pick_armed_forces_sgui = {
 	scope = country
@@ -998,6 +998,19 @@ te_jmap_pick_nuclear_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 19 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 19 }
+	}
+}
+
+te_jmap_pick_nuclear_reach_sgui = {
+	scope = country
+	is_shown = {
+		is_player = yes
+		has_game_rule = nuclear_weapons_enabled
+	}
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 90 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 90 }
 	}
 }
 

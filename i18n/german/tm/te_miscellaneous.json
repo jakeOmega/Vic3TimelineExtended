@@ -8207,6 +8207,10 @@
   "en": "Military Garrison, level [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0] of 3; the full program: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_garrison_effectiveness_add')]",
   "de": "Militärgarnison, Stufe [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0] von 3; das vollständige Programm: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_garrison_effectiveness_add')]"
  },
+ "colonial_garrison_ig_modifier": {
+  "en": "Opposes the Colonial Garrison",
+  "de": "Ist gegen die Kolonialgarnison"
+ },
  "colonial_gp_condemnation_tt": {
   "en": "[Concept('concept_great_power', 'Great powers')] demanding [concept_decolonization_system] ([ROOT.GetCountry.MakeScope.ScriptValue('colonial_gp_condemnation_per_power')|=+2]/mo for a peer; each scaled by its [concept_prestige] relative to ours, ×0.25 to ×2)",
   "de": "[Concept('concept_great_power', 'Großmächte')], die [concept_decolonization_system] fordern ([ROOT.GetCountry.MakeScope.ScriptValue('colonial_gp_condemnation_per_power')|=+2]/Monat pro Ebenbürtiger; jeweils skaliert nach ihrem [concept_prestige] im Verhältnis zu unserem, ×0,25 bis ×2)"
@@ -29532,8 +29536,8 @@
   "de": "#b Todesursachen#!\\nDie #v $te_demog_cd_dc_total_fig$#! Todesfälle des Vorjahres in den Staaten des Landes; die Tabelle neben dem Kreisdiagramm teilt sie nach Ursache auf."
  },
  "te_demog_cd_um_line": {
-  "en": " Besides them, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
-  "de": " Hinzu kommen #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! je 1.000 Hochgeladene: Ihre Körper starben an diesen Ursachen, und das Kreisdiagramm zählt sie, doch sie leben als Geister weiter."
+  "en": " Besides them, #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as [concept_uploaded_minds].",
+  "de": " Hinzu kommen #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! je 1.000 Hochgeladene: Ihre Körper starben an diesen Ursachen, und das Kreisdiagramm zählt sie, doch sie leben als [concept_uploaded_minds] weiter."
  },
  "te_demog_cd_work_capital": {
   "en": "; in [Country.GetCapital.GetName], the capital, ×#v [Country.GetCapital.MakeScope.Var('te_dg_m_work').GetValue|2]#!",
@@ -30052,8 +30056,8 @@
   "de": "Migranten sind die Menschen, die ein Staat über das hinaus gewinnt oder verliert, was seine Geburten, Todesfälle, Kriegstoten und die durch Ereignisse Getöteten erklären. Sie kommen und gehen meist als junge Erwachsene, und wo Leichtindustrie und Dienstleistungen Frauen zur Arbeit anziehen, sind mehr von ihnen Frauen. Kriegstote werden den Männern und Frauen im Alter von 18 bis 40 Jahren entnommen, neunzehn von zwanzig davon Männer."
  },
  "te_demog_how_minds": {
-  "en": "Mind Backups saves the minds of those in longevity care: when a backed-up body dies by accident, violence or at work, the mind can be restored to a new one, so half of those deaths are undone. With Mind Upload Nexuses, people in care who face death from illness or old age upload instead, as far as there is room, and go on as minds: their bodies leave the states' people, but they count as living. Each Nexus level hosts a million minds. A Nexus makes what its minds produce, so an empty one makes nothing; minds don't work in pops, need no care and draw no pension. $law_human_purity$ bans the backups with longevity care.",
-  "de": "Bewusstseins-Backups sichern den Geist der Menschen in Langlebigkeitsmedizin: Stirbt ein gesicherter Körper durch Unfall, Gewalt oder bei der Arbeit, kann der Geist in einem neuen wiederhergestellt werden, sodass die Hälfte dieser Todesfälle rückgängig gemacht wird. Mit Bewusstseins-Upload-Nexus laden Menschen in Behandlung, denen der Tod durch Krankheit oder Alter droht, stattdessen hoch, soweit Platz ist, und bestehen als Geister fort: Ihre Körper scheiden aus der Bevölkerung der Staaten aus, zählen aber als lebend. Jede Nexus-Stufe beherbergt eine Million Geister. Ein Nexus erzeugt, was seine Geister produzieren, ein leerer also nichts; Geister arbeiten nicht in Pops, brauchen keine Pflege und beziehen keine Rente. $law_human_purity$ verbietet die Backups mit der Langlebigkeitsmedizin."
+  "en": "Mind Backups saves the minds of those in longevity care: when a backed-up body dies by accident, violence or at work, the mind can be restored to a new one, so half of those deaths are undone. With Mind Upload Nexuses, people in care who face death from illness or old age upload instead, as far as there is room, and go on as [concept_uploaded_minds]: their bodies leave the states' people and the population the game shows elsewhere, but Living to 100 counts them as living. Each Nexus level hosts a million minds. A Nexus makes what its minds produce, so an empty one makes nothing ([concept_mind_hosting]); minds don't work in pops, need no care and draw no pension. Uploads follow the census: each state's yearly count uploads its own, and the country's next count adds them to the Uploaded Minds row and to the Nexuses' output, so the first minds arrive a year or two after the first level. $law_human_purity$ bans the backups with longevity care.",
+  "de": "Bewusstseins-Backups sichern den Geist der Menschen in Langlebigkeitsmedizin: Stirbt ein gesicherter Körper durch Unfall, Gewalt oder bei der Arbeit, kann der Geist in einem neuen wiederhergestellt werden, sodass die Hälfte dieser Todesfälle rückgängig gemacht wird. Mit Bewusstseins-Upload-Nexus laden Menschen in Pflege, denen der Tod durch Krankheit oder Alter droht, stattdessen hoch, soweit Platz ist, und bestehen als [concept_uploaded_minds] fort: Ihre Körper scheiden aus der Bevölkerung der Staaten und aus der Bevölkerung aus, die das Spiel sonst zeigt, aber „Bis 100 leben“ zählt sie als lebend. Jede Nexus-Stufe beherbergt eine Million Geister. Ein Nexus erzeugt, was seine Geister produzieren, ein leerer also nichts ([concept_mind_hosting]); Geister arbeiten nicht in Pops, brauchen keine Pflege und beziehen keine Rente. Uploads folgen der Volkszählung: Die jährliche Zählung jedes Staates lädt die eigenen hoch, und die nächste Zählung des Landes fügt sie der Zeile „Hochgeladene Geister“ und der Produktion der Nexus hinzu, sodass die ersten Geister ein bis zwei Jahre nach der ersten Stufe eintreffen. $law_human_purity$ verbietet die Backups mit der Langlebigkeitsmedizin."
  },
  "te_demog_how_modifiers": {
   "en": "Under the Full setting the yearly count puts standing modifiers on a state where its figures call for them: Inequality, Youth Bulge, Fewer Men, More Men, the Longevity Gap, Metropolis, Dispersed Towns, Primate City and Provincial Neglect. Each is worked out again every year at a strength set by the figure behind it, and goes when the figure falls back. The Modifiers section lists them, so the state's modifier row, which keeps what starts and ends on a date, does not. Hover one for its effects at the strength the state has now.",
@@ -31284,8 +31288,8 @@
   "de": ", und #v [Country.MakeScope.ScriptValue('te_demog_um_archived_m')|1]#! Mio. archiviert, mangels Platz eingefroren: Sie kehren zurück, bevor jemand Neues hochlädt"
  },
  "te_demog_ov_um_backup_tt": {
-  "en": "#b Backed Up#!\\nThe share of the country's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work.",
-  "de": "#b Gesichert#!\\nDer Anteil der Bevölkerung des Landes, dessen Geist von Bewusstseins-Backups gesichert wird: die Menschen in Langlebigkeitsmedizin. In neue Körper zurückgeholt: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! aller Todesfälle durch Unfall, Gewalt oder bei der Arbeit."
+  "en": "#b Backed Up#!\\nThe share of the country's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work. Under the Full setting, with a Mind Upload Nexus, those in care who would die of illness or old age upload instead and go on as [concept_uploaded_minds].",
+  "de": "#b Gesichert#!\\nDer Anteil der Bevölkerung des Landes, dessen Geist von Bewusstseins-Backups gesichert wird: die Menschen in Langlebigkeitsmedizin. In neue Körper zurückgeholt: #v [Country.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! aller Todesfälle durch Unfall, Gewalt oder bei der Arbeit. Unter der Einstellung „Voll“ laden mit einem Bewusstseins-Upload-Nexus Menschen in Pflege, die an Krankheit oder Alter sterben würden, stattdessen hoch und leben als [concept_uploaded_minds] weiter."
  },
  "te_demog_ov_um_backup_value": {
   "en": "#v [Country.MakeScope.Var('te_dg_elig').GetValue|%0]#! of people",
@@ -31303,9 +31307,17 @@
   "en": ", and #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! uploaded: bodies that died while their minds go on",
   "de": ", und #v [Country.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! hochgeladen: Körper, die starben, während ihr Geist weiterbesteht"
  },
+ "te_demog_ov_um_pending_tt": {
+  "en": "#b [concept_uploaded_minds]#!\\nNone yet: the country's Mind Upload Nexuses wait on the yearly census. The country's census counts their room, each state's census over the next year uploads into it the people in longevity care who would die of illness or old age, and the country's next census counts them here. Until then the Nexuses make nothing, since their goods follow their [concept_mind_hosting].",
+  "de": "#b [concept_uploaded_minds]#!\\nNoch keine: Die Bewusstseins-Upload-Nexus des Landes warten auf die jährliche Volkszählung. Die Volkszählung des Landes zählt ihre Kapazität, die Volkszählung jedes Staates lädt im Laufe des nächsten Jahres die Menschen in Langlebigkeitsmedizin hoch, die an Krankheit oder Alter sterben würden, und die nächste Volkszählung des Landes zählt sie hier. Bis dahin erzeugen die Nexus nichts, da ihre Güter ihrer [concept_mind_hosting] folgen."
+ },
+ "te_demog_ov_um_pending_value": {
+  "en": "None yet",
+  "de": "Noch keine"
+ },
  "te_demog_ov_um_tt": {
-  "en": "#b Uploaded Minds#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v $te_demog_ov_um_end_fig$#!",
-  "de": "#b Hochgeladene Geister#!\\nDie Geister, die die Bewusstseins-Upload-Nexus des Landes beherbergen, als Anteil an Menschen und Geistern des Landes zusammen.\\n Beherbergt: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! Mio. von #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! Mio. (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! belegt)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Im Vorjahr hochgeladen: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! derer, die es konnten\\n Im Vorjahr freiwillig beendet: #v $te_demog_ov_um_end_fig$#!"
+  "en": "#b [concept_uploaded_minds]#!\\nThe minds the country's Mind Upload Nexuses host, a share of the country's people and minds together. The population the game shows elsewhere counts only people with bodies and leaves them out. Counted at the country's yearly census.\\n Hosted: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! million of #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! million (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! full)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Uploaded last year: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! of those who could\\n Chose to end last year: #v $te_demog_ov_um_end_fig$#!\\nThe Nexuses' goods and research follow how full they are ([concept_mind_hosting]).",
+  "de": "#b [concept_uploaded_minds]#!\\nDie Geister, die die Bewusstseins-Upload-Nexus des Landes beherbergen, als Anteil an Menschen und Geistern des Landes zusammen. Die Bevölkerung, die das Spiel sonst zeigt, zählt nur Menschen mit Körper und lässt sie aus. Gezählt bei der jährlichen Volkszählung des Landes.\\n Beherbergt: #v [Country.MakeScope.ScriptValue('te_demog_um_minds_m')|1]#! Mio. von #v [Country.MakeScope.ScriptValue('te_demog_um_cap_m')|1]#! Mio. (#v [Country.MakeScope.Var('te_dg_um_util').GetValue|%0]#! belegt)[SelectLocalization( GetScriptedGui('te_demog_um_archived_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'te_demog_ov_um_archived_line', 'te_tt_blank' )]\\n Im Vorjahr hochgeladen: #v $te_demog_ov_um_new_fig$#!, #v [Country.MakeScope.ScriptValue('te_demog_um_hosted_share')|%0]#! derer, die es konnten\\n Im Vorjahr freiwillig beendet: #v $te_demog_ov_um_end_fig$#!\\nDie Güter und die Forschung der Nexus folgen ihrer Auslastung ([concept_mind_hosting])."
  },
  "te_demog_ov_um_value": {
   "en": "#v [Country.MakeScope.Var('te_dg_um_share').GetValue|%1]#! of people",
@@ -32016,8 +32028,8 @@
   "de": "Geburten: #v [State.MakeScope.Var('te_dg_cbr').GetValue|1]#! je 1.000 Menschen im Vorjahr"
  },
  "te_demog_st_cd_um_line": {
-  "en": " Besides them, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as minds.",
-  "de": " Daneben wurden #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! je 1.000 hochgeladen: Ihre Körper starben an diesen Ursachen, und das Kreisdiagramm zählt sie, doch sie bestehen als Geister fort."
+  "en": " Besides them, #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! per 1,000 uploaded: their bodies died of these causes, and the pie counts them, but they go on as [concept_uploaded_minds].",
+  "de": " Hinzu kommen #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! je 1.000 Hochgeladene: Ihre Körper starben an diesen Ursachen, und das Kreisdiagramm zählt sie, doch sie leben als [concept_uploaded_minds] weiter."
  },
  "te_demog_st_cdr_tt": {
   "en": "#b Deaths#!\\nDeaths per 1,000 people in the state last year, the war dead and the people killed by events apart: the census's deaths, which the pie below splits by cause, with the war dead and the killed beside them.[SelectLocalization( GetScriptedGui('te_demog_um_state_uploads_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_cd_um_line', 'te_tt_blank' )][SelectLocalization( GetScriptedGui('te_demog_state_on_top_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_ontop_rate', 'te_tt_blank' )]",
@@ -32680,8 +32692,8 @@
   "de": "#b Kinder je Frau#! [SelectLocalization( Not( EqualTo_CFixedPoint( State.MakeScope.ScriptValue('te_demog_trend_tfr'), '(CFixedPoint)2' ) ), 'te_demog_st_tfr_prev', '' )]\\nDie Kinder, die eine Frau in diesem Staat mit den Raten dieses Jahres im Lauf ihres Lebens hätte. Jede ×-Zeile unten multipliziert das, was der Wohlstand allein ergäbe; späte Heirat und Geburtenabstände sind die beiden Bräuche, die Geburten niedrig halten.\\n$te_demog_st_tfr_terms$\\n[SelectLocalization( GetScriptedGui('te_demog_lx_state_mab_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_tfr_mab', 'te_demog_tfr_mab_pending' )]\\n\\n[SelectLocalization( GetScriptedGui('te_demog_state_stepped_sgui').IsShown( GuiScope.SetRoot( State.MakeScope ).End ), 'te_demog_st_births', 'te_demog_ov_births_pending' )]"
  },
  "te_demog_st_um_backup_tt": {
-  "en": "#b Backed Up#!\\nThe share of this state's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work.",
-  "de": "#b Gesichert#!\\nDer Anteil der Menschen dieses Staates, dessen Geist von Bewusstseins-Backups gesichert wird: die Menschen in Langlebigkeitsmedizin. In neue Körper zurückgeholt: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! aller Todesfälle durch Unfall, Gewalt oder bei der Arbeit."
+  "en": "#b Backed Up#!\\nThe share of this state's people whose minds Mind Backups saves: those in longevity care. Restored to new bodies: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! of all deaths by accident, violence or at work. Under the Full setting, with a Mind Upload Nexus, those in care who would die of illness or old age upload instead and go on as [concept_uploaded_minds].",
+  "de": "#b Gesichert#!\\nDer Anteil der Menschen dieses Staates, dessen Geist von Bewusstseins-Backups gesichert wird: die Menschen in Langlebigkeitsmedizin. In neue Körper zurückgeholt: #v [State.MakeScope.ScriptValue('te_demog_um_restore_share')|%0]#! aller Todesfälle durch Unfall, Gewalt oder bei der Arbeit. Unter der Einstellung „Voll“ laden mit einem Bewusstseins-Upload-Nexus Menschen in Pflege, die an Krankheit oder Alter sterben würden, stattdessen hoch und leben als [concept_uploaded_minds] weiter."
  },
  "te_demog_st_um_backup_value": {
   "en": "#v [State.MakeScope.Var('te_dg_elig').GetValue|%0]#! of people",
@@ -32700,8 +32712,8 @@
   "de": ", und #v [State.MakeScope.ScriptValue('te_demog_um_upload_rate')|1]#! hochgeladen: Körper, die starben, während ihr Geist weiterbesteht"
  },
  "te_demog_st_um_tt": {
-  "en": "#b Uploaded Last Year#!\\nThis state's people who uploaded to our Mind Upload Nexuses at its last census instead of dying. The whole country's network hosts them, so the Demographics tab counts them.",
-  "de": "#b Im Vorjahr hochgeladen#!\\nDie Menschen dieses Staates, die bei seiner letzten Volkszählung in unsere Bewusstseins-Upload-Nexus hochgeladen wurden, statt zu sterben. Das Netzwerk des ganzen Landes beherbergt sie, sodass der Reiter „Demografie“ sie zählt."
+  "en": "#b Uploaded Last Year#!\\nThis state's people who uploaded to our Mind Upload Nexuses at its last census instead of dying, and go on as [concept_uploaded_minds]. The whole country's Nexuses host them, so the Demographics tab counts them, from the country's first census after this state's.",
+  "de": "#b Im Vorjahr hochgeladen#!\\nDie Menschen dieses Staates, die bei seiner letzten Volkszählung in unsere Bewusstseins-Upload-Nexus hochgeladen wurden, statt zu sterben, und als [concept_uploaded_minds] weiterleben. Die Nexus des ganzen Landes beherbergen sie, sodass der Reiter Demografie sie zählt, ab der ersten Volkszählung des Landes nach der dieses Staates."
  },
  "te_demog_st_um_value": {
   "en": "#v $te_demog_st_um_new_fig$#! people",
@@ -32936,68 +32948,68 @@
   "de": "Viele unserer Menschen bestehen nun als Geister ohne Körper fort, und die Frommen nennen es eine Sünde gegen die Schöpfung."
  },
  "te_demog_um_nexus_in_advanced_materials": {
-  "en": "Inputs by Hosted Minds",
-  "de": "Inputs durch beherbergte Geister"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Inputs durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_in_advanced_materials_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_nexus_in_digital_access": {
-  "en": "Inputs by Hosted Minds",
-  "de": "Inputs durch beherbergte Geister"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Inputs durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_in_digital_access_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_nexus_in_electricity": {
-  "en": "Inputs by Hosted Minds",
-  "de": "Inputs durch beherbergte Geister"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Inputs durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_in_electricity_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_nexus_in_electronic_components": {
-  "en": "Inputs by Hosted Minds",
-  "de": "Inputs durch beherbergte Geister"
+  "en": "Inputs by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Inputs durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_in_electronic_components_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_nexus_out_digital_assets": {
-  "en": "Output by Hosted Minds",
-  "de": "Output durch beherbergte Geister"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Output durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_out_digital_assets_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_nexus_out_fine_art": {
-  "en": "Output by Hosted Minds",
-  "de": "Output durch beherbergte Geister"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Output durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_out_fine_art_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_nexus_out_services": {
-  "en": "Output by Hosted Minds",
-  "de": "Output durch beherbergte Geister"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Output durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_out_services_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_nexus_out_tourism": {
-  "en": "Output by Hosted Minds",
-  "de": "Output durch beherbergte Geister"
+  "en": "Output by [Concept('concept_mind_hosting','Hosted Minds')]",
+  "de": "Output durch [Concept('concept_mind_hosting','beherbergte Geister')]"
  },
  "te_demog_um_nexus_out_tourism_desc": {
-  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes what the uploaded minds it hosts produce: each of its goods follows how full the country's hosting is, with the building's other bonuses on top, so with no minds it makes and uses nothing.",
-  "de": "Unter der Einstellung „Voll“ der Demografie-Regel erzeugt ein Bewusstseins-Upload-Nexus, was die hochgeladenen Geister produzieren, die er beherbergt: Jedes seiner Güter folgt der Auslastung der Beherbergung im Land, zuzüglich der übrigen Boni des Gebäudes, sodass er ohne Geister nichts erzeugt und nichts verbraucht."
+  "en": "Under the Demographics rule's Full setting a Mind Upload Nexus makes only what its [concept_uploaded_minds] produce, so each of its goods follows how full the country's Nexuses are, with the building's other bonuses on top: an empty Nexus makes and uses nothing. The minds arrive with the yearly census, a year or two after the first level is built.",
+  "de": "Unter der Einstellung „Voll“ der Demografieregel erzeugt ein Bewusstseins-Upload-Nexus nur, was seine [concept_uploaded_minds] produzieren, sodass jedes seiner Güter der Auslastung der Nexus im Land folgt, zuzüglich der übrigen Boni des Gebäudes: Ein leerer Nexus erzeugt und verbraucht nichts. Die Geister treffen mit der jährlichen Volkszählung ein, ein bis zwei Jahre nach dem Bau der ersten Stufe."
  },
  "te_demog_um_ontop_note": {
   "en": " (the uploads' bodies among them)",
@@ -33008,12 +33020,12 @@
   "de": "Nicht biologisch: #v $te_demog_um_women_fig$#! Frauen und #v $te_demog_um_men_fig$#! Männer, Geister ohne Körper und ohne Alter, daher kein Balken."
  },
  "te_demog_um_research": {
-  "en": "Empty Hosting",
-  "de": "Leere Beherbergung"
+  "en": "Empty [Concept('concept_mind_hosting','Hosting')]",
+  "de": "Leere [Concept('concept_mind_hosting','Beherbergung')]"
  },
  "te_demog_um_research_desc": {
-  "en": "A Mind Upload Nexus speeds research only as far as minds fill it.",
-  "de": "Ein Bewusstseins-Upload-Nexus beschleunigt die Forschung nur so weit, wie Geister ihn füllen."
+  "en": "This country's Mind Upload Nexuses are not full, and a Nexus speeds research only as far as [concept_uploaded_minds] fill it.",
+  "de": "Die Bewusstseins-Upload-Nexus dieses Landes sind nicht voll, und ein Nexus beschleunigt die Forschung nur so weit, wie [concept_uploaded_minds] ihn füllen."
  },
  "te_demog_um_row": {
   "en": "Uploaded Minds",
@@ -35083,6 +35095,10 @@
   "en": "Nuclear Weapons",
   "de": "Nuklearwaffen"
  },
+ "te_jmap_pick_nuclear_reach": {
+  "en": "Nuclear Reach",
+  "de": "Nukleare Reichweite"
+ },
  "te_jmap_pick_ocean_basins": {
   "en": "Ocean Basins",
   "de": "Meeresbecken"
@@ -35754,6 +35770,38 @@
  "te_jmap_tt_pollution_none": {
   "en": "#b [THIS.GetState.GetName]#!\\nNo pollution in the region.",
   "de": "#b [THIS.GetState.GetName]#!\\nKeine Verschmutzung in der Region."
+ },
+ "te_jmap_tt_reach_also_subs": {
+  "en": "Your missile submarines reach this coast too.",
+  "de": "Ihre Raketen-U-Boote erreichen auch diese Küste."
+ },
+ "te_jmap_tt_reach_bombers": {
+  "en": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName] is in your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName]: in Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_icbms": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOnly your ICBMs reach this state. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\nNur Ihre ICBMs erreichen diesen Staat. [THIS.GetState.GetOwner.GetName]: außer Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOut of your reach. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\nAußer Ihrer Reichweite. [THIS.GetState.GetOwner.GetName]: außer Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_subs": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour missile submarines reach this coast. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\nIhre Raketen-U-Boote erreichen diese Küste. [THIS.GetState.GetOwner.GetName]: außer Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_would_icbms": {
+  "en": "Only ICBMs would reach it.",
+  "de": "Nur ICBMs würden ihn erreichen."
+ },
+ "te_jmap_tt_reach_would_subs": {
+  "en": "Missile submarines would reach this coast.",
+  "de": "Raketen-U-Boote würden diese Küste erreichen."
+ },
+ "te_jmap_tt_reach_you": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour own state.",
+  "de": "#b [THIS.GetState.GetName]#!\\nIhr eigener Staat."
  },
  "te_jmap_tt_seabed_arctic": {
   "en": "#b [THIS.GetState.GetName]#!\\nOcean basin: #v $te_seabed_basin_arctic$#!",
