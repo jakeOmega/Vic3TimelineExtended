@@ -194,6 +194,31 @@ threads) say nothing here about wall time. **Not shipped**: it would have
 meant a `REPLACE` of two vanilla buildings for no gain. The lesson holds for
 any script the scoring calls: only what runs on the tick thread counts.
 
+**The `possible` blocks are not the cost either.** City industries carry
+`possible = { owner = { NOT = { OR = { has_law_or_variant =
+law_type:law_industry_banned  has_law_or_variant =
+law_type:law_extraction_economy } } } }` (eight vanilla buildings; nineteen
+of the mod's through `is_industrial_production_allowed`), asked 12.8 million
+times in the 35 days. Three variants, the same save and steps:
+
+| Variant | Pass, ticks 2–5 | Levels finished in the USA | Reading |
+|---|---|---|---|
+| Baseline | 88.6–90.7 s | 2,886 | |
+| `pot`: the test moved to `potential` | 89.1 s | 2,886 | The pass asks `potential` per candidate as well (5.7 million calls of the Steel Mill's) |
+| `flagmod`: the test read from a boolean modifier the two laws carry | 87.3 s | 2,886 | The call fell from 0.84 to 0.69 µs; the pass did not move |
+| `noposs`: the blocks removed | 48.4 s | 1,963 | Not a saving in script: states under those laws became candidates, investors chose differently, and their levels finished more slowly |
+
+A deep scan of the tick thread's stack had shown the trigger and
+`has_law_or_variant` routines on a third of its samples; the three runs say
+that was stale stack memory, not live frames. So **no script the scoring
+calls is on the serial path**; what the tick thread spends is engine work
+per scored candidate. The `noposs` run adds one fact: the first full tick
+took 30.0 s against 24.9 with about a fifth more candidates passing their
+triggers, so the pass grows with the candidates that reach scoring. A
+trigger that turned away candidates no investor would pick would cut it in
+proportion. None is proposed: which candidates those are is an AI design
+question.
+
 ### 4. Queue turnover is the big lever: Excess Private Construction off halves the week's tick work
 
 Session `20261127T033631Z` (`noexcess`): before the 35 days a setup removed
