@@ -483,12 +483,16 @@ update_countrys_bloc_principles_plurality = { update_countrys_bloc_principle_bas
 # come back: see Emergency Liquidity in remove_banking_market_modifiers_effect.
 # The marker is written only while the tool is on, so the cleanup's run on
 # every law activation posts nothing for tools already off.
+# The tool's week-long mark goes too (banking_tool_clear_pending,
+# banking_policy_effects.txt, #1811), so a tool a law lifted can be switched
+# on again at once once the law allows it.
 # Parameters: $MODIFIER$ = the tool's JE modifier, $MARK$ = its off_ marker
 banking_strip_tool = {
 	if = {
 		limit = { je:je_banking_cycle = { has_modifier = $MODIFIER$ } }
 		te_history_record_banking_marker = { MARK = $MARK$ }
 		je:je_banking_cycle = { remove_modifier = $MODIFIER$ }
+		banking_tool_clear_pending = { MODIFIER = $MODIFIER$ }
 	}
 }
 
@@ -1463,6 +1467,55 @@ fix_incompatible_laws = {
 		set_variable = te_law_sweep_replacing	# te_law_replaced_notice
 		activate_law = law_type:law_wage_subsidies
 		remove_variable = te_law_sweep_replacing
+	}
+}
+
+# Self-check (#1852): does a law script puts in place ever land in a country
+# the engine is still building? It builds a revolution's country law by law,
+# each firing on_law_activated, and a group it hasn't reached yet still holds
+# its file's first law: law_chiefdom in Governance Principles. Judged against
+# such a placeholder, a copied voting law reads as barred, and the sweep
+# replaces a law the origin held (reading A, the start-date fault mid-game).
+# Judged against a law the new country really holds, as for Kalat's uprising
+# in 1978 (#1923), the sweep did what it is for (reading B), and the owner
+# judges the outcome. Run by te_law_sweep_notice_from_law_scope on each marked
+# replacement after the game's first two months. Once a game for each line;
+# the country is printed from its own scope, the law from the scope the
+# notice saves (a bad accessor drops a debug_log line whole, and ROOT's is
+# unread in this mod's logs; a saved scope's name prints at worst blank):
+#   BROKEN law_sweep_unbuilt_country  no ruler yet, Chiefdom, not decentralized
+#   INFO law_sweep_new_country        no ruler yet, Governance Principles not
+#                                     Chiefdom
+#   OK law_sweep_unbuilt_country      the first replacement in a country with a
+#                                     ruler, so a game with no BROKEN line ran it
+# A decentralized country holds Chiefdom and may have no ruler as it is, so it
+# is left out. Behaviour is unchanged. docs/testing/law-consistency-playtest.md.
+# Scope: the country; scope:te_law_sweep_new_law = the law just activated
+te_law_sweep_unbuilt_selfcheck = {
+	if = {
+		limit = { NOT = { exists = ruler } }
+		if = {
+			limit = {
+				has_law = law_type:law_chiefdom
+				NOT = { is_country_type = decentralized }
+				NOT = { has_global_variable = te_selfcheck_law_sweep_unbuilt_broken }
+			}
+			set_global_variable = te_selfcheck_law_sweep_unbuilt_broken
+			debug_log = "TE_SELF_CHECK BROKEN law_sweep_unbuilt_country country=[THIS.GetCountry.GetNameNoFormatting] tag=[THIS.GetCountry.GetTagName] law=[SCOPE.sLaw('te_law_sweep_new_law').GetNameNoFormatting] (a law was put in place in a country with no ruler that still holds Chiefdom, the placeholder of a group the engine had not reached yet: the law it replaced may have been judged against the placeholder; read a save of the day against the origin's laws, save_country_probe.py --laws; the fix: both law-activated wrappers wait while the owner has no ruler, docs/testing/law-consistency-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else_if = {
+			limit = {
+				NOT = { has_law = law_type:law_chiefdom }
+				NOT = { has_global_variable = te_selfcheck_law_sweep_new_country }
+			}
+			set_global_variable = te_selfcheck_law_sweep_new_country
+			debug_log = "TE_SELF_CHECK INFO law_sweep_new_country country=[THIS.GetCountry.GetNameNoFormatting] tag=[THIS.GetCountry.GetTagName] law=[SCOPE.sLaw('te_law_sweep_new_law').GetNameNoFormatting] (a law was put in place in a country with no ruler yet whose Governance Principles is set: a new country judged against laws it holds, as designed; the outcome is for the owner to judge, docs/testing/law-consistency-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_global_variable = te_selfcheck_law_sweep_unbuilt_ok } }
+		set_global_variable = te_selfcheck_law_sweep_unbuilt_ok
+		debug_log = "TE_SELF_CHECK OK law_sweep_unbuilt_country country=[THIS.GetCountry.GetNameNoFormatting] tag=[THIS.GetCountry.GetTagName] law=[SCOPE.sLaw('te_law_sweep_new_law').GetNameNoFormatting] (the first law put in place this game in a country with a ruler: the check ran; a BROKEN line, if any, is the answer) date=[TimeKeeper.GetCurrentDate.GetString]"
 	}
 }
 

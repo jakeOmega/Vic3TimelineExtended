@@ -107,6 +107,11 @@ types te_tax_layout_widget_types
 			te_tax_note = {
 				text = "te_tax_lt_how_rates"
 			}
+			### The − and +'s clicks, which the Tax Rates section said until
+			### 2026-11-27 (from #2041).
+			te_tax_note = {
+				text = "te_tax_lt_intro"
+			}
 			te_tax_note = {
 				text = "te_tax_lt_how_law"
 			}
@@ -160,6 +165,11 @@ types te_tax_layout_widget_types
 			}
 			te_tax_note = {
 				text = "te_tax_how_drafting"
+			}
+			### The − and +'s clicks, which the drafting table said until
+			### 2026-11-27 (from #2041).
+			te_tax_note = {
+				text = "te_tax_wb_intro"
 			}
 			te_tax_note = {
 				text = "te_tax_how_drafting_baseline"

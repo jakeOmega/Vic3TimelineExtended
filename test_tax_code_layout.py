@@ -669,14 +669,18 @@ class PrivateTest(unittest.TestCase):
 
     def test_the_light_codes_steppers_are_the_players(self):
         """te_tax_instrument_row's - and + (the light code's public rows reuse
-        it) sit in fixed slots, guarded, and the intro that explains them too."""
+        it) sit in fixed slots, guarded. The intros that explained their clicks are on the
+        Help page (te_tax_code_help_body, from #2041), not in the live sections."""
         row = type_body(gui(WORKBENCH), "te_tax_instrument_row")
         for button in ("button_icon_minus_action", "button_icon_plus_action"):
             with self.subTest(button=button):
                 self.assertRegex(row, rf"widget = \{{\s*size = \{{ 22 22 \}}\s*parentanchor = vcenter\s*"
                                       rf"{button} = \{{\s*using = {GUARD}\b")
-        self.assert_guarded(type_body(gui(LIGHT_GUI), "te_tax_light_section"), 'text = "te_tax_lt_intro"',
-                            "te_tax_light_section")
+        self.assertNotIn("te_tax_lt_intro", _strip_comments(type_body(gui(LIGHT_GUI), "te_tax_light_section")))
+        self.assertNotIn("te_tax_wb_intro", _strip_comments(type_body(gui(WORKBENCH), "te_tax_workbench_section")))
+        help_body = type_body(gui(LAYOUT), "te_tax_code_help_body")
+        for key in ("te_tax_lt_intro", "te_tax_wb_intro"):
+            self.assertIn(f'text = "{key}"', help_body)
 
     def test_the_public_parts_stay_public(self):
         """What another country sees (§ 6.4's Shown column) is under no guard:

@@ -110,6 +110,10 @@ class Outcome:
     # empty) and `unrecorded` (True: the manifest has no sizes and times to tell a changed save by). Empty when there
     # is nothing to say, and when the check was not made (another game running, `saves=False`).
     manual_saves: dict = field(default_factory=dict)
+    # Folders in logs/ the snapshot did not name (`Snapshot.log_folders`, #1758): the run's, left where they are,
+    # since the restore removes no folder. Empty when there are none, when logs/ was left alone, and for a snapshot
+    # that named no folders (taken before they were recorded).
+    left_behind: list[str] = field(default_factory=list)
 
 
 # A file's size and mtime_ns as compare saw them, or None if it was absent.
@@ -668,7 +672,8 @@ def restore(
     their recorded times; removes the files the run added or created (`logs/` last in both, so that a log another
     program holds open stops the restore with everything else back: `_put_back`); puts the recorded time back on the files
     the run wrote again with the same bytes (`_retouched`; listed as `retimed`, in the Outcome and, when there
-    are some, in the journal entry); records `restored` with the names.
+    are some, in the journal entry); names the folders in logs/ the snapshot did not list, which it leaves where they
+    are (`left_behind`, #1758: it removes no folder); records `restored` with the names.
 
     Just before each change the file is looked at again. If it is no longer as it was compared, the restore
     stops, records `held` with the reason `modified_during_restore` and the file, and returns what it had
@@ -732,10 +737,23 @@ def restore(
     if changed_saves:
         return _hold(snap, "manual_save_changed", now, found, files=changed_saves, restored=restored, removed=removed,
                      retimed=retimed)
+    left = left_behind(snap, user_data) if logs else []
     done = {"restored": restored, "removed": removed, **({"retimed": retimed} if retimed else {}),
-            **({"manual_saves": found} if found else {})}
+            **({"manual_saves": found} if found else {}), **({"left_behind": left} if left else {})}
     snapshot.record(snap, "restored", now=now, **done)
-    return Outcome(restored, removed, False, "", retimed, found)
+    return Outcome(restored, removed, False, "", retimed, found, left)
+
+
+def left_behind(snap: Snapshot, user_data: Path) -> list[str]:
+    """The folders directly in logs/ now that `snap` did not name (`Snapshot.log_folders`), sorted: what a console
+    `logging.popstats` leaves (`logs/<id>/pop_stats.csv`, #1758). Nothing is removed: a folder is never the
+    restore's to delete. Empty for a snapshot that named no folders (one taken before they were recorded)."""
+    if snap.log_folders is None:
+        return []
+    try:
+        return sorted(snapshot.scan_subfolders(Path(user_data)) - snap.log_folders)
+    except OSError:     # a report only: a folder that cannot be listed never stops a restore that has put all back
+        return []
 
 
 # --- unfinished runs -------------------------------------------------------------------------

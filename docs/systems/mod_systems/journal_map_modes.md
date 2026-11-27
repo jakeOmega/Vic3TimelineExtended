@@ -347,8 +347,8 @@ entry, in no country's journal.
   `nd_fields_icbms`, public facts: nuclear.md), with its own coast (`te_jmap_rch_coast`), so a paint reads a list and
   three flags, and never the submarines' trigger, which walks the viewer's states for a coast. **The store follows the
   viewer.** `te_jmap_store_reach` runs from `te_jmap_note_viewer` while 90 is the pick, on the country just noted: at
-  the pick (after the selector is set), at an option click, at the Timeline Extended window's Map Room button and at a
-  player's monthly pulse, so the list is a month old at most and is never another country's. Nothing it reads is
+  the pick (after the selector is set), at an option click, at the Timeline Extended window's Map Room button and at the
+  viewer's own monthly pulse, so the list is a month old at most and is never another country's. Nothing it reads is
   private: no `nd_is_armed`, no arsenal (in multiplayer another player can see the viewer's map), and an unarmed
   viewer's map looks like an armed one's. The walk is the deterrent's weekly one, once, for one country. Unverified
   (play-test check 36): the live adjacency in a paint, the stripes on small coasts and the four colors' look.
@@ -441,9 +441,9 @@ which is what the Map Room showed before it had options.
   Each continent button's tooltip lists its regions by vanilla's names. The first pick of Continent takes the
   player's capital's (`te_jmap_default_continent`); later picks keep the last one chosen.
 - **The viewer.** The market, the bloc and the country are `global_var:te_jmap_viewer`'s, the "your" maps' viewer
-  (§ The Systems' Maps): the player who last clicked a pick, an option or a map button, and each month a player's
-  country. In a single-player game that is the player, through a change of country too. In multiplayer the area is
-  one for everybody, as the pick is, and follows the viewer from player to player.
+  (§ The Systems' Maps): the player who last clicked a pick, an option or a map button. In a single-player game that is
+  the player, through a change of country too. In multiplayer the area is one for everybody, as the pick is, and it
+  follows the player who last clicked.
 - **Outliers.** 0, the default: four states at each end (`TRIM`), and under a limited area at most a tenth of the
   area's states with a figure (`AREA_TRIM_PART`), so a country of fifteen states keeps thirteen in range where four
   at each end would leave seven. 1: none, the lowest state to the highest. 2: a twentieth of the states with a figure
@@ -797,10 +797,12 @@ Each pick shows while its system's rule is on.
 
 **The viewer.** A paint can't reach the player (`is_player` drew nothing under `owner`, 2026-11-05), so the maps of
 "your" country (19, 20) are drawn for `global_var:te_jmap_viewer`: every pick and map button sets it to the player's
-country (`te_jmap_note_viewer`, `te_journal_map_effects.txt`), and so does a player's monthly pulse
-(`te_journal_map_on_actions.txt`), so an entry's page opened from the journal has one too. Like the pick, it is one for
-every player in a multiplayer game: there the last player to pick sees their own deterrent and networks, and another
-player looking at those maps sees the same viewer's, a known limit. Whether `global_var:` holding a country compares
+country (`te_jmap_note_viewer`, `te_journal_map_effects.txt`). A player's monthly pulse (`te_journal_map_on_actions.txt`)
+sets it only when there is no viewer, the viewer is no longer a player (it left, or its player changed country), or the
+player is the viewer already (which rebuilds the Nuclear Reach store each month), so an entry's page opened from the
+journal has one too, and the pulse never takes the view from one player to give it to another (#1809). Like the pick,
+it is one for every player in a multiplayer game: there the player who last clicked sees their own deterrent and
+networks, and another player looking at those maps sees the same viewer's until they click, a known limit. Whether `global_var:` holding a country compares
 in a paint (`this = scope:…` after `save_temporary_scope_as`) is unverified (play-test).
 
 **What the systems keep for the maps.** A paint can't walk pops, so two systems now store a figure where they already

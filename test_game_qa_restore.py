@@ -427,6 +427,50 @@ class RestoreTests(RestoreTestCase):
         self.assertEqual(events(snap), ["started", "game_exited"])
 
 
+class LeftBehindTests(RestoreTestCase):
+    """#1758: a folder in logs/ the snapshot did not name (a `logging.popstats` dump's) is named, never removed."""
+
+    def test_a_new_folder_is_left_where_it_is_and_named_in_the_outcome_and_the_journal(self):
+        (self.user / "logs" / "mine").mkdir(parents=True)
+        snap = self.run_started()
+        dump = self.user / "logs" / "f551829e"
+        dump.mkdir()
+        (dump / "pop_stats.csv").write_text("id,country\n", encoding="utf-8")
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.left_behind), (False, ["logs/f551829e"]))
+        self.assertTrue((dump / "pop_stats.csv").is_file())
+        self.assertNotIn("logs/f551829e/pop_stats.csv", out.removed)
+        entry = snapshot.journal(snap)[-1]
+        self.assertEqual((entry["event"], entry["left_behind"]), ("restored", ["logs/f551829e"]))
+
+    def test_nothing_new_names_nothing_and_logs_left_alone_names_nothing(self):
+        snap = self.run_started()
+        finish(snap)
+        out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual(out.left_behind, [])
+        self.assertNotIn("left_behind", snapshot.journal(snap)[-1])
+        snap = self.run_started()
+        (self.user / "logs" / "new").mkdir(parents=True)
+        finish(snap)
+        self.assertEqual(restore.restore(snap, self.user, other_game_running=False, logs=False).left_behind, [])
+
+    def test_a_logs_folder_that_cannot_be_listed_never_stops_the_restore(self):
+        snap = self.run_started()
+        finish(snap)
+        with mock.patch.object(snapshot, "scan_subfolders", side_effect=PermissionError("denied")):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.left_behind), (False, []))
+        self.assertEqual(snapshot.journal(snap)[-1]["event"], "restored")
+
+    def test_a_snapshot_that_named_no_folders_names_none(self):
+        snap = self.run_started()
+        (self.user / "logs" / "new").mkdir(parents=True)
+        finish(snap)
+        snap.log_folders = None                         # a manifest from before #1758
+        self.assertEqual(restore.restore(snap, self.user, other_game_running=False).left_behind, [])
+
+
 class TickTaskTimingsTests(RestoreTestCase):
     """#1700: console `dump_ticktask_timings` overwrites `ticktask_timings.csv` in the user-data root in place.
     It is in the snapshot set, so the restore's rules for the set decide it: the owner's copy is put back, one the

@@ -14,6 +14,8 @@ import re
 import unittest
 from pathlib import Path
 
+from vanilla_parsed import vanilla_define
+
 ROOT = Path(__file__).resolve().parent
 DEFINES = ROOT / "common/defines/extra_defines.txt"
 DEFINES_DIR = ROOT / "common/defines"
@@ -77,16 +79,11 @@ class TheDefine(unittest.TestCase):
                 text = _strip_comments(path.read_text(encoding="utf-8-sig"))
                 self.assertNotRegex(text, rf"\b{SHOULD_HAVE_GATE}\s*=")
 
-    def test_matches_the_game_files(self):
-        path = _game_file("defines/00_ai.txt")
-        if path is None:
-            self.skipTest("no Victoria 3 install (vanilla_parsed/ holds no defines)")
-        text = path.read_text(encoding="utf-8-sig")
+    def test_matches_vanilla(self):
+        # vanilla_parsed/defines.json (#1879), so it runs in CI too.
         for name, value in ((GATE, VANILLA_GATE), (SHOULD_HAVE_GATE, VANILLA_SHOULD_HAVE_GATE)):
             with self.subTest(define=name):
-                m = re.search(rf"(?m)^\s*{name}\s*=\s*([0-9.]+)", text)
-                self.assertIsNotNone(m)
-                self.assertEqual(float(m.group(1)), value)
+                self.assertEqual(float(vanilla_define("NAI", name)), value)
 
 
 class TheSelfCheck(unittest.TestCase):
@@ -236,15 +233,6 @@ class TheSelfCheck(unittest.TestCase):
         doc = SYSTEM_DOC.read_text(encoding="utf-8")
         self.assertIn(f"`{GATE}` 0.02", doc)
         self.assertIn("ai_reserve_gate", doc)
-
-
-def _game_file(name):
-    try:
-        from path_constants import base_game_path
-    except Exception:
-        return None
-    path = Path(base_game_path) / "game/common" / name
-    return path if path.is_file() else None
 
 
 if __name__ == "__main__":

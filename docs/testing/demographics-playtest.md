@@ -50,7 +50,7 @@ Each PR adds its own section, newest last, and a fixed item is struck through wi
 | `TE_SELF_CHECK … um_nexus_cascade` | Full: once a game, `START` at a Nexus's monthly refresh in a state whose own tourism output read is +30% or more (airports, `tourism_output`), the verdict a week later (`te_debug_demog.131`). No line means no Nexus stood in such a state under Full | the building's other tourism (its read of the axis less the Nexus's own modifier) is the state's read, up to 0.25 more (a company's +0.2 is the only building-level tourism line) and at most 0.05 less: a building's goods read carries its state's lines (and through them the country's), which the refresh's offset rests on, so an empty Nexus makes nothing there | below the state's (at least 0.1 below, since the state reads 0.3 or more and a company at most 0.2): the building's read leaves the state's lines out, so an empty Nexus makes their share of its tourism and services (the airports' tourism, the financial cycle's services). `NO_VERDICT` (more than 0.25 above: a building-level line the check doesn't know) re-arms | read the state's and the country's axis too (`modifier:goods_<axis>_<good>_mult` on the state; the country's on `owner`) and add them to the other bonuses in `te_demog_um_nexus_good` |
 | `TE_SELF_CHECK … rate_below_measured` | Full, normal speed: once a game, at the census step after a state's deaths fell in one step from the probes' measured range (the window just measured at −0.9 or above at both ends, the walk's average total) to −0.95 or below (the new window's start), with no war dead, kills or Internal Resettlement's moves and that window's residual within a quarter of the new window's deaths (at least 100 a year). It arms only where a stop at −0.9 would show: the deficit such a stop leaves must clear the OK band's low side (half the deaths and a month at the old rate) by that quarter of the deaths, so a drop from an old window above about 0.3 of the bare curve doesn't arm (its month's lag would swallow the deficit: the review of #1082). The verdict needs the window's end at −0.95 or below too (2026-10-20; `te_demog_rbm_selfcheck_flows`). Such a quiet state is rare (late states' deaths are about 1 per 1,000 a year, their migration often tens): the likeliest place is a save from before this build, whose late states drop from the old −0.8 (a fifth of the bare curve) to their own rate at their first step, or a late medical leap from a low old rate. The console's replay (option a) runs no walk and doesn't touch the check. A game may show no line at all | a year below −0.95 ran as the walk's linear line expects: the residual (the walk applies the census's wealth line per pop, as the engine does) is within half of the expected deaths (the low side widened by a month's `lag`, Q7's "within a month"). The engine's per-pop rate holds its line from −0.9 to −1, and the census's floor at −1 stands | `residual` below that band: near minus `if_stopped_at_0_9` (the deaths a stop at −0.9 would add), the engine stops at −0.9; a figure far from it (the size of the `baseline`) is emigration the baseline missed, so read the state's population over the year before taking the fallback. A residual above the band is migration (a stop at −0.9 only adds deaths): no line, and a later state can arm | the floor back at −0.9: `RATE_TOTAL_FLOOR` in `scripts/analysis/demographics_params.py` to −0.9, then `scripts/generators/gen_demographics.py` |
 | `TE_SELF_CHECK … delayed_state_event` | every game, in the first month: the first country's monthly pulse sends its capital a state event with `days = 7` (`te_debug_demog.199`, the path the self-checks above used to take) and itself the verdict with `days = 14` (`.198`), beside `workforce_lines_net` (2026-11-06) | a state event triggered with a delay runs; the `TE_PROBE delayed_state_event` line a week before holds its scopes (check its root is the capital) | it never runs, as the 1.14.5 and 1.15 saves showed for every self-check's verdict | the mod's three gameplay calls of this kind ran nothing either. **Read BROKEN** in the 2026-11-08 new game (January 16, 1836, no `TE_PROBE` line), so they now wait on country events as the self-checks' `.2nn` relays do: `te_demog_events.5` runs `.4`'s day-later refresh in each of the country's states, `monument_events.34` and `.35` run `.30`'s next order and `.31`'s orphan pass in each state `gm_state_tomorrow` marked. The check stays: OK in a later patch means the engine fixed the path, and the relays could go back to plain delayed calls. **BROKEN again on 2026-11-16** in both unattended games (build `dab9335f1` and `main` at `81b947368`, January 16, 1836, no `TE_PROBE` line), as in every game read since 2026-11-08 (`docs/testing/game-qa-results-2026-11-11.md` to `-13.md`). It is the expected verdict and asks nothing; its line now says so instead of asking for the move that was already made |
-| `TE_SELF_CHECK … demog_runaway` | Full: at a state's census, once a state (`te_dg_chk_runaway` keeps the code and `_year` the census year, so a later save shows a trip whose line has rolled away), the first year a state of 10,000 people or more shows a sign of a runaway (2026-11-06) | no line: no state ran away. No sign held in any sane state of a 2020, a 1940 and the 1926 save | `why=` names the first sign: 1 the walk's people read below 0 (its sum wrapped at the script's ±9.2e13), 2 over 500 million people, 3 ten times last year's with no province change, 4 life expectancy under 5, 5 the deaths term at its floor (the engine kills nobody there), skipped in a census whose rise in people is three quarters or more net migration (#1500: arrivals swamp the base the year's deaths were counted against), 6 crowding's input over 5, 7 the births term at its ceiling of 10, 8 only the census's guards 1 to 3 (a model rate below 0, or a short life table in a state under 10,000). A state the guards cleared prints `guard=` (1 people, 2 life expectancy, 3 a model rate, 4 known kills of a third or more of its people in the step's window) in place of the terms it no longer has; the fourth guard alone logs nothing (§ The runaway tripwire, item 7). The line's year and figures date the onset that the 1.15 observer game's East Bengal couldn't (§ The runaway tripwire, below) | the guards (#1476) are built: a guarded state runs on the engine's own rates. Bring the line to the owner, with the state's figures in the next saves (§ below) |
+| `TE_SELF_CHECK … demog_runaway` | Full: at a state's census, once a state (`te_dg_chk_runaway` keeps the code and `_year` the census year, so a later save shows a trip whose line has rolled away), the first year a state of 10,000 people or more shows a sign of a runaway (2026-11-06) | no line: no state ran away. No sign held in any sane state of a 2020, a 1940 and the 1926 save | `why=` names the first sign: 1 the walk's people read below 0 (its sum wrapped at the script's ±9.2e13), 2 over 500 million people, 3 ten times last year's with no province change, skipped where the rise is three quarters or more net migration (#1933, as 5), 4 life expectancy under 5, 5 the deaths term at its floor (the engine kills nobody there), skipped in a census whose rise in people is three quarters or more net migration (#1500: arrivals swamp the base the year's deaths were counted against), 6 crowding's input over 5, 7 the births term at its ceiling of 10, 8 only the census's guards 1 to 3 (a model rate below 0, or a short life table in a state under 10,000). A state the guards cleared prints `guard=` (1 people, 2 life expectancy, 3 a model rate, 4 known kills of a third or more of its people in the step's window) in place of the terms it no longer has; the fourth guard alone logs nothing (§ The runaway tripwire, item 7). The line's year and figures date the onset that the 1.15 observer game's East Bengal couldn't (§ The runaway tripwire, below) | the guards (#1476) are built: a guarded state runs on the engine's own rates. Bring the line to the owner, with the state's figures in the next saves (§ below) |
 
 No `primogeniture_scaled` line at all after a game's first year means no state took the line fresh: no country had Primogeniture, or the game was continued from a save where every Primogeniture state already held it. Start a new game, or enact the law. A `START` with no verdict means the state changed hands within the week; the check doesn't run again in that game. Before 2026-11-06 a `START` never had a verdict, here or in any check whose verdict is a state event (`primogeniture_scaled`, the three workforce checks, `measure_country_types`, `conscription_term_read`, `wave_timed_country_type`, `family_limitation_scaled`, the two `um_nexus` checks): each waited its week as a state event triggered with a delay, which never ran, so none of these facts has been read in a game yet. Each now waits on the owner's country event (`delayed_state_event` below). No `primate_state_flag` line means no country of three states or more ran a census under Full. No `planned_capital_moved` line means nobody founded a planned capital (take the decision, or watch an observer run past Steel-Frame Buildings); with `penalty=1`, the base game's own move penalty stacks on the decision's costs, so consider lowering the authority cost. No `measure_country_types` line means no measure that moves family size went on (start Child Allowance under Pro-Natalist Policy); a `START` with no verdict, that the capital changed hands within the week.
 
@@ -1519,16 +1519,12 @@ No self-check: every read the build makes is proven (`modulo` on the census year
 `Multiply_CFixedPoint`, `SelectLocalization` in a text and `GreaterThanOrEqualTo_CFixedPoint` on a stored variable).
 `mod_systems/demographics.md` § The ring's 300 years has the design.
 
-1. **A save from before, re-filed** (any rule with the census on). Load the France → European Union autosave of
-   2057-11-01, made before this build, and play a year. Each state re-files its ring at its own next step
-   (`te_dg_ring` appears, 300): its people and the 85+ band are what they were (the step's own births, deaths and
-   migrants aside), and Franche-Comté's pool of 9.4 million at a mean age of 165 shows in its 150–199 row, its pool
-   (`te_dg_pf`, `te_dg_pm`) at 0. `scripts/analysis/save_country_probe.py --states` on a save a year on reads no pool
-   past 1% of any state's people.
-2. **The rows past 85** (any rule). In that game, Île-de-France's subtab and the European Union's tab draw rows past 85
-   in 85+'s place (85–99, 100–124 and up, the highest labelled "N+"), each bar per five years of age; the hover
-   gives the people in the row and says how the bar is drawn. The
-   Biological button's view splits by biological age, with fewer rows. No "Failed to fetch variable" line in
+1. **A save from before, re-filed**: retired with the script's re-filing (#1429). Vanilla 1.15 loads no save of mod
+   1.2.0, the only release on the 150-year ring.
+2. **The rows past 85** (any rule). In a late save on 1.15 (2050 or later; the 2057 France game was on 1.14), a
+   long-lived state's subtab and its country's tab draw rows past 85 in 85+'s place (85–99, 100–124 and up, the
+   highest labelled "N+"), each bar per five years of age; the hover gives the people in the row and says how the bar
+   is drawn. The Biological button's view splits by biological age, with fewer rows. No "Failed to fetch variable" line in
    `error.log` with the pyramid open on a split state and an unsplit one.
 3. **An ordinary pyramid.** A new 1836 game, and a 2000 save: every pyramid ends at 85+ as before, with the outline
    on it.
@@ -1777,6 +1773,14 @@ of millions to around 10¹⁵ came before 1917.
    engine's own migration. No matching source was found for Cape Colony. **Owner's call:** give sign 3 the same
    arrivals skip as sign 5, or keep it as a flag on a tiny state flooded with tens of times its people. Saves:
    `/mnt/d/vic3_triage_2026-11-19/l6/saves/` (172340 = 1982.4.1 before, 173714 = 1982.10.1 after).
+   A third, in the same game's 1986 census (#1933): `why=3 state=Mindanao owner=D67 people=1466401 prev=141277
+   provinces=3 e0=35.18 cbr=1.71 cdr=7.36 mig=1398204`, net migration 1.06 of the rise, sane rates. **Built (#1933,
+   2026-11-27): the skip.** Sign 3 now stands aside where net migration is three quarters or more of the rise, as sign
+   5 does; the three lines read 1.00 to 1.06. The census's migration is what is left of the engine's own change once
+   its births and deaths are counted, so a skipped tenfold year had births of a quarter of the rise at most, and a
+   runaway of births still trips; the signs after 3 still read the state. If the owner would rather keep the flag on a
+   flooded tiny state, reverting #1933's limit puts it back. **To check:** no `why=3` line whose `mig=` is three
+   quarters of `people` − `prev` or more.
 
 ## W's lead: the census sets the pops past its aim (2026-11-07)
 
@@ -1919,3 +1923,36 @@ Room's Sex Balance hover add the same figure. Offline: `test_demographics_regist
    save shows it at once, with no error.log line about a missing variable. If a row reads 0, the bands' prefix in the
    value is wrong for that scope.
 2. **The hovers.** A row of the States section and a state on the Sex Balance map each list both figures.
+
+## Left from #1046: four things only the game shows (2026-11-27)
+
+Four items of #1046 (what was left of #894) wait on a game, not on script; each is from #1046, and each says what a
+result would change. The harness's Impact of Institutions and the technology hook's limit stay on the issue.
+
+1. **Private Health Insurance's floor (Full), from #1046.** The census applies the law's wealth line (−0.002 a wealth
+   level for each level of the health institution, on the on-top family) on its own pair, Census: Deaths by Wealth, at its
+   share of the bare curve, and never below −0.005 a wealth level (`te_demog_k_wealth_line_floor`, owner option b: a
+   wealth-99 pop dies at no less than half the census's rate). Before the late game (no wealth slope), raise the
+   institution a level at a time from 1 to 4 and wait for a state's census step after each: `te_dg_w` (a save, or the
+   state's mortality tooltip's Census: Deaths by Wealth) grows from level 1 to 2 (−0.002, −0.004 × the census's share),
+   reaches the floor at level 3 (−0.005, where the line would be −0.006), and level 4 reads the same as 3. A line that
+   keeps growing past level 3 means the floor isn't read; one that doesn't move from level 1 means the law's line
+   doesn't reach the on-top family.
+2. **Severe starvation at food security 0, from #1046.** The walk's severe-starvation ladder takes each step's middle
+   (`_starvation_buckets(severe=True)`), so its bottom step reads 0.9375 where the engine's starvation value is 1.0 at
+   exactly 0. Keep monthly saves through a famine deep enough that a state's pops reach food security 0: if most of
+   its starving pops sit at exactly 0 (the save's `food_security={ starvation= }` at 1), the census books about 6%
+   too few of their famine deaths, and a step at exactly 0 belongs in the ladder; if few do, leave it.
+3. **The year after a famine, from #1046.** The census nets mild starvation in its term M at each step (yearly at
+   normal speed), so when a famine ends between steps the term stays netted until the next one: an earlier run read births and deaths
+   terms 0.2 to 0.4 off for a year after a famine, and the walk booked severe deaths a step or two after the famine's
+   record ended (Japan 1886, East India 1880–81). In the next game with a famine, read the state's `te_dg_md` and
+   `te_dg_mb` (option n, or the monthly saves) for the year after it ends. Still off by 0.2 or more: re-net M monthly
+   in starving states (no on-action fires on a change in starvation), the fix #1046 proposed.
+4. **Laws and Institutions, named once (outside Full), from #1046.** Outside Full a laborer's mortality tooltip can
+   show two or three lines all named "Laws and Institutions": the general pair (`te_demog_line_deaths_*`), its class's
+   (`te_demog_line_laborers_deaths_*`) and the wealth pair (`te_demog_line_wealth_deaths_*`). If they confuse in
+   play, name the class and wealth pairs apart (their loc keys beside the general pair's). The law and technology
+   hooks already refresh the pairs at once and again a day later (`te_demog_events.4`, then `te_demog_events.5` with
+   `days = 1`, since a delayed state event never runs), so a pair that has not followed a law by the next day
+   (item 2 of "Phase 2 step 1: the interfaces") is not the event's timing: bring it to the owner.

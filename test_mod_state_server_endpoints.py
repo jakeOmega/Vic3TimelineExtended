@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import tempfile
 import unittest
 from unittest import mock
@@ -460,18 +461,39 @@ class ModifierGrantScanTests(unittest.TestCase):
             entity_type="Technologies")
         self.assertEqual([g["entity_id"] for g in out], ["pan-nationalism"])
 
-    def test_opener_rejects_leading_hyphen(self):
-        self.assertIsNone(mss._GRANT_OPENER_RE.match("\t-1 = {"))
-        self.assertIsNone(mss._GRANT_OPENER_RE.match("\tvalue = -1"))
-        self.assertIsNone(mss._GRANT_OPENER_RE.match("\tx >= {"))
+    def test_a_number_never_opens_an_entity(self):
+        # `-1 = {` opens an anonymous block, so nothing inside it is an entity's field.
+        self.assertEqual(self._scan("-1 = {\n\tmodifier = {\n\t\ttarget_mod = 1\n\t}\n}\n"), [])
         self.assertEqual(
-            mss._GRANT_OPENER_RE.match("lab-grown_food = {").group("name"), "lab-grown_food")
+            [stack[0] for stack, *_ in mss._grant_fields("lab-grown_food = {\n\tmodifier = { x = 1 }\n}\n")],
+            ["lab-grown_food"])
 
-    def test_opener_captures_the_directive_prefix(self):
-        for prefix in ("INJECT", "REPLACE", "REPLACE_OR_CREATE"):
-            m = mss._GRANT_OPENER_RE.match(f"{prefix}:law_x = {{")
-            self.assertEqual((m.group("directive"), m.group("name")), (prefix, "law_x"))
-        self.assertIsNone(mss._GRANT_OPENER_RE.match("law_x = {").group("directive"))
+    def test_every_directive_is_stripped_from_the_entity(self):
+        for prefix in ("INJECT", "TRY_INJECT", "INJECT_OR_CREATE", "REPLACE", "TRY_REPLACE", "REPLACE_OR_CREATE"):
+            with self.subTest(prefix=prefix):
+                out = self._scan(f"{prefix}:law_x = {{\n\tmodifier = {{\n\t\ttarget_mod = 1\n\t}}\n}}\n")
+                self.assertEqual([g["entity_id"] for g in out], ["law_x"])
+
+    def test_a_block_written_on_one_line(self):
+        # #1685: the line scan read none of these, 105 of tax_income_add's 117 sites among them.
+        out = self._scan("amendment_x = {\n\tcountry_modifiers = { target_mod = 0.05 }\n}\n",
+                         entity_type="Amendments")
+        self.assertEqual([(g["entity_id"], g["block"], g["value"], g["line"]) for g in out],
+                         [("amendment_x", "country_modifiers", 0.05, 2)])
+        out = self._scan("law_x = {\n\tmodifier = {\n\t\tother_add = 1 target_mod = -2\n\t\ttarget_mod = yes\n"
+                         "\t}\n}\n")
+        self.assertEqual([(g["value"], g["line"]) for g in out], [(-2, 3), ("yes", 4)])
+        out = self._scan("law_x = { modifier = { a_add = 1 b_mult = 0.5 } possible = { c_add = 2 } }\n",
+                         target=None)
+        self.assertEqual([(g["value"], g["block"]) for g in out], [(1, "modifier"), (0.5, "modifier")])
+
+    def test_a_brace_or_a_field_in_a_string_or_comment_is_not_code(self):
+        out = self._scan('law_x = {\n\tdesc = "a { target_mod = 9"\n\tmodifier = {\n'
+                         '\t\t# target_mod = 8 }\n\t\ttarget_mod = 0.5\n\t}\n}\n')
+        self.assertEqual([(g["value"], g["line"]) for g in out], [(0.5, 5)])
+
+    def test_a_constant_or_a_string_value_is_not_a_grant_row(self):
+        self.assertEqual(self._scan("law_x = {\n\tmodifier = { target_mod = @x target_mod = \"y\" }\n}\n"), [])
 
     def test_replace_or_create_entity_opens(self):
         # #327: only INJECT:/REPLACE: were recognised, so an entity opened by
@@ -782,6 +804,11 @@ class ModifierGrantCoverageTests(unittest.TestCase):
     # build or supply (`goods_input_steel_add = 1700`); nothing applies them.
     NON_GRANT_BLOCKS = {"construction_goods", "materiel_goods"}
 
+    # The test's own line scan, independent of the server's token walk (`_grant_fields`): a field alone on its
+    # line, and a block opener. It cannot see a block written on one line, which the scan's own tests cover.
+    LINE_RE = re.compile(r"^\s*([a-z_][a-z0-9_]*)\s*=\s*(-?\d+(?:\.\d+)?|yes|no)\s*$")
+    OPENER_RE = re.compile(r"^\s*(?:(?P<directive>[A-Z][A-Z_]*):)?(?P<name>[A-Za-z_][\w-]*)\s*=\s*\{")
+
     @unittest.skipUnless(os.path.isdir(mss._MOD_COMMON), "mod common/ not found")
     def test_every_registered_modifier_in_an_entity_file_is_claimed(self):
         import glob
@@ -823,14 +850,14 @@ class ModifierGrantCoverageTests(unittest.TestCase):
                     lines = fh.read().split("\n")
                 for lineno, raw in enumerate(lines, 1):
                     text = raw.split("#", 1)[0]
-                    m = mss._GRANT_LINE_RE.match(text)
+                    m = self.LINE_RE.match(text)
                     if (m and m.group(1) in registered and len(stack) >= 2
                             and (abs_path, lineno) not in claimed
                             and stack[1] not in self.NON_GRANT_BLOCKS):
                         missed.append(
                             f"{os.path.relpath(abs_path, mss.mod_path)}:{lineno} "
                             f"{text.strip()} in {'/'.join(map(str, stack))}")
-                    opener = mss._GRANT_OPENER_RE.match(text)
+                    opener = self.OPENER_RE.match(text)
                     opens, closes = text.count("{"), text.count("}")
                     if opener and opens:
                         stack.append(opener.group("name"))
@@ -1321,14 +1348,13 @@ class ValidateRegistriesHTTPTests(unittest.TestCase):
         self.assertEqual(d["status"], "validated")
         self.assertIn("warning_count", d)
         self.assertIsInstance(d["warnings"], list)
+        from game_log_reader import REGISTRY_WARNING_KEYS
+
         for w in d["warnings"]:
-            if w.get("kind") == "helper_anchor_mod_calls":
-                # #730: a registry entry anchored on a vanilla helper file the mod calls.
-                self.assertEqual(set(w.keys()), {
-                    "label", "detail", "kind", "entry", "anchor", "helper_file", "mod_uses", "advice",
-                })
-            else:
-                self.assertEqual(set(w.keys()), {"label", "detail"})
+            # Each kind's own keys (#1949): `helper_anchor_mod_calls` (#730), `mod_only_anchor` (#873), and the
+            # plain {label, detail} of a warning with no kind.
+            self.assertIn(w.get("kind"), REGISTRY_WARNING_KEYS, w)
+            self.assertEqual(set(w.keys()), REGISTRY_WARNING_KEYS[w.get("kind")], w)
         if "helper_anchor_check" in d:
             self.assertTrue(d["helper_anchor_check"] == "ran"
                             or d["helper_anchor_check"].startswith("skipped"))

@@ -1,0 +1,102 @@
+{
+ "isolated_states": [
+  "=",
+  {}
+ ],
+ "states_in_turmoil": [
+  "=",
+  {}
+ ],
+ "high_tensions": [
+  "=",
+  {}
+ ],
+ "secession_growing": [
+  "=",
+  {}
+ ],
+ "diplomatic_pact_in_danger": [
+  "=",
+  {}
+ ],
+ "treaty_article_in_danger": [
+  "=",
+  {}
+ ],
+ "treaty_withdrawal_planned": [
+  "=",
+  {}
+ ],
+ "expiring_obligations": [
+  "=",
+  {}
+ ],
+ "can_decrease_subject_autonomy": [
+  "=",
+  {}
+ ],
+ "market_goods_shortages": [
+  "=",
+  {}
+ ],
+ "state_goods_shortages": [
+  "=",
+  {}
+ ],
+ "formation_low_organization": [
+  "=",
+  {}
+ ],
+ "insufficient_ship_crew": [
+  "=",
+  {}
+ ],
+ "low_market_access_states": [
+  "=",
+  {}
+ ],
+ "insufficient_tax_capacity_states": [
+  "=",
+  {}
+ ],
+ "expensive_government_goods": [
+  "=",
+  {}
+ ],
+ "expensive_military_goods": [
+  "=",
+  {}
+ ],
+ "low_sol_in_state": [
+  "=",
+  {}
+ ],
+ "companies_losing_prosperity": [
+  "=",
+  {}
+ ],
+ "isolated_colony": [
+  "=",
+  {}
+ ],
+ "blockaded_states": [
+  "=",
+  {}
+ ],
+ "blockaded_hubs": [
+  "=",
+  {}
+ ],
+ "bombarded_states": [
+  "=",
+  {}
+ ],
+ "formables_possible": [
+  "=",
+  {}
+ ],
+ "can_take_decisions": [
+  "=",
+  {}
+ ]
+}

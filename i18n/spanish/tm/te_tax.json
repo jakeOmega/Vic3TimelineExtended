@@ -752,8 +752,8 @@
   "es": "Tipos"
  },
  "te_tax_lt_intro": {
-  "en": "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law. Collections follow a change within days.",
-  "es": "Haz clic en − o + para mover un impuesto un paso, y clic con Mayús para fijarlo en cero o en el tipo más alto que puede alcanzar con tu ley de tributación. La recaudación sigue a un cambio en cuestión de días."
+  "en": "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law.",
+  "es": "Haz clic en − o + para mover un impuesto un paso, y clic con Mayús para fijarlo en cero o en el tipo más alto que puede alcanzar con tu ley de tributación."
  },
  "te_tax_lt_law_other": {
   "en": "Another law",

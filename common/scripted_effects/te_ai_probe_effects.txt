@@ -26,7 +26,7 @@ te_aip_arm = {
 		set_global_variable = { name = te_aip_k value = 0 }
 		set_global_variable = { name = te_aip_next_id value = 0 }
 	}
-	debug_log = "TE_AIP ARM v=5"
+	debug_log = "TE_AIP ARM v=6"
 	ordered_country = {
 		limit = { NOT = { is_country_type = decentralized } }
 		order_by = gdp
@@ -141,10 +141,8 @@ te_aip_country_tick = {
 	}
 }
 
-# The yearly snapshot of the country in scope, then its counters start again. The army census (version 4)
-# runs first: the P line prints what it counted.
+# The yearly snapshot of the country in scope, then its counters start again.
 te_aip_snapshot = {
-	te_aip_unit_census = yes
 	debug_log = "TE_AIP S A1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_y')|0] ai=[THIS.ScriptValue('te_aip_ai')|0] rank=[THIS.ScriptValue('te_aip_rank')|0] type=[THIS.ScriptValue('te_aip_type')|0] subject=[THIS.ScriptValue('te_aip_subject')|0] gdp=[THIS.ScriptValue('te_aip_gdp')|0] pop=[THIS.ScriptValue('te_aip_pop')|0] sol=[THIS.ScriptValue('te_aip_sol')|2] sol_exp=[THIS.ScriptValue('te_aip_sol_exp')|2] lit=[THIS.ScriptValue('te_aip_lit')|3] peasants=[THIS.ScriptValue('te_aip_peasants')|3] radicals=[THIS.ScriptValue('te_aip_radicals')|3] loyalists=[THIS.ScriptValue('te_aip_loyalists')|3] legitimacy=[THIS.ScriptValue('te_aip_legitimacy')|0] infamy=[THIS.ScriptValue('te_aip_infamy')|1]"
 	debug_log = "TE_AIP S A2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] states=[THIS.ScriptValue('te_aip_states')|0] states_inc=[THIS.ScriptValue('te_aip_states_inc')|0] colonies=[THIS.ScriptValue('te_aip_colonies')|0] subjects=[THIS.ScriptValue('te_aip_subjects')|0] war=[THIS.ScriptValue('te_aip_war')|0] plays=[THIS.ScriptValue('te_aip_plays')|0] levels=[THIS.ScriptValue('te_aip_levels')|0] techs=[THIS.ScriptValue('te_aip_techs')|0] innovation=[THIS.ScriptValue('te_aip_innovation')|1] enacting=[THIS.ScriptValue('te_aip_enacting')|0] researching=[THIS.ScriptValue('te_aip_researching')|0] revolution=[THIS.ScriptValue('te_aip_revolution')|0] insurrection=[THIS.ScriptValue('te_aip_insurrection')|0] election=[THIS.ScriptValue('te_aip_election')|0]"
 	debug_log = "TE_AIP S F1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] income=[THIS.ScriptValue('te_aip_income')|0] expenses=[THIS.ScriptValue('te_aip_expenses')|0] fixed_income=[THIS.ScriptValue('te_aip_fixed_income')|0] fixed_expenses=[THIS.ScriptValue('te_aip_fixed_expenses')|0] net_fixed=[THIS.ScriptValue('te_aip_net_fixed')|0] tax_income=[THIS.ScriptValue('te_aip_tax_income')|0] tax_level=[THIS.ScriptValue('te_aip_tax_level')|0] gold=[THIS.ScriptValue('te_aip_gold')|0] gold_limit=[THIS.ScriptValue('te_aip_gold_limit')|0] gold_scaled=[THIS.ScriptValue('te_aip_gold_scaled')|3] debt_scaled=[THIS.ScriptValue('te_aip_debt_scaled')|3] principal=[THIS.ScriptValue('te_aip_principal')|0] credit=[THIS.ScriptValue('te_aip_credit')|0] default=[THIS.ScriptValue('te_aip_default')|0] bankrupt=[THIS.ScriptValue('te_aip_bankrupt')|0]"
@@ -177,7 +175,7 @@ te_aip_snapshot = {
 	debug_log = "TE_AIP S H1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_h_rationalism')|0];[THIS.ScriptValue('te_aip_h_academia')|0];[THIS.ScriptValue('te_aip_h_empiricism')|0];[THIS.ScriptValue('te_aip_h_civilizing_mission')|0];[THIS.ScriptValue('te_aip_h_human_rights')|0];[THIS.ScriptValue('te_aip_h_pan_nationalism')|0];[THIS.ScriptValue('te_aip_h_nationalism')|0];[THIS.ScriptValue('te_aip_h_currency_standards')|0];[THIS.ScriptValue('te_aip_h_colonization')|0];[THIS.ScriptValue('te_aip_h_quinine')|0];[THIS.ScriptValue('te_aip_h_malaria_prevention')|0];[THIS.ScriptValue('te_aip_h_military_drill')|0];[THIS.ScriptValue('te_aip_h_line_infantry')|0];[THIS.ScriptValue('te_aip_h_general_staff')|0];[THIS.ScriptValue('te_aip_h_trench_works')|0];[THIS.ScriptValue('te_aip_h_nco_training')|0];[THIS.ScriptValue('te_aip_h_mobile_armor')|0];[THIS.ScriptValue('te_aip_h_combined_arms')|0];[THIS.ScriptValue('te_aip_h_artillery')|0];[THIS.ScriptValue('te_aip_h_napoleonic_warfare')|0];[THIS.ScriptValue('te_aip_h_breech_loading_artillery')|0];[THIS.ScriptValue('te_aip_h_defense_in_depth')|0];[THIS.ScriptValue('te_aip_h_motorized_artillery')|0];[THIS.ScriptValue('te_aip_h_standing_army')|0]"
 	debug_log = "TE_AIP S H2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_h_electrical_generation')|0];[THIS.ScriptValue('te_aip_h_steam_turbine')|0];[THIS.ScriptValue('te_aip_h_radio')|0];[THIS.ScriptValue('te_aip_h_telephone')|0]"
 	debug_log = "TE_AIP S P1 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_pp_states')|0];[THIS.ScriptValue('te_aip_q_power')|0];[THIS.ScriptValue('te_aip_elec_made')|0];[THIS.ScriptValue('te_aip_elec_used')|0];[THIS.ScriptValue('te_aip_elec_price')|3];[THIS.ScriptValue('te_aip_uc_gas_light')|0];[THIS.ScriptValue('te_aip_uc_elec_light')|0];[THIS.ScriptValue('te_aip_radio_price')|3];[THIS.ScriptValue('te_aip_radio_buy')|1];[THIS.ScriptValue('te_aip_radio_sell')|1];[THIS.ScriptValue('te_aip_q_uni')|0];[THIS.ScriptValue('te_aip_q_admin')|0];[THIS.ScriptValue('te_aip_q_mil')|0];[THIS.ScriptValue('te_aip_q_infra')|0];[THIS.ScriptValue('te_aip_cc_scale')|3];[THIS.ScriptValue('te_aip_cc_total')|3];[THIS.ScriptValue('te_aip_bur_add')|0];[THIS.ScriptValue('te_aip_bur_mult')|2]"
-	debug_log = "TE_AIP S P2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_bur_cost_add')|0];[THIS.ScriptValue('te_aip_bur_inst_mult')|2];[THIS.ScriptValue('te_aip_bur_pop_mult')|2];[THIS.ScriptValue('te_aip_slack')|3];[THIS.ScriptValue('te_aip_slack_peasants')|3];[THIS.ScriptValue('te_aip_u_all')|0];[THIS.ScriptValue('te_aip_u_new')|0];[THIS.ScriptValue('te_aip_u_changed')|0];[THIS.ScriptValue('te_aip_u_irr_new')|0];[THIS.ScriptValue('te_aip_u_from_irr')|0];[THIS.ScriptValue('te_aip_u_flows')|0]"
+	debug_log = "TE_AIP S P2 [THIS.GetCountry.GetTagName] [THIS.ScriptValue('te_aip_id')|0] [THIS.ScriptValue('te_aip_k')|0] [THIS.ScriptValue('te_aip_bur_cost_add')|0];[THIS.ScriptValue('te_aip_bur_inst_mult')|2];[THIS.ScriptValue('te_aip_bur_pop_mult')|2];[THIS.ScriptValue('te_aip_slack')|3];[THIS.ScriptValue('te_aip_slack_peasants')|3]"
 	te_aip_snapshot_data_functions = yes
 	set_variable = { name = te_aip_n_built value = 0 }
 	set_variable = { name = te_aip_n_expanded value = 0 }
@@ -204,86 +202,6 @@ te_aip_snapshot = {
 	set_variable = { name = te_aip_n_inst_down value = 0 }
 	set_variable = { name = te_aip_n_law_set value = 0 }
 	set_variable = { name = te_aip_n_bank_down value = 0 }
-}
-
-# Version 4's army census, country scope, at each snapshot before its lines print. No on_action fires when a
-# battalion is recruited or changes type, so each battalion of the country's armies is marked with its type
-# (te_aip_ut, an index into ai_probe_key.json's unit_type_index), and the next snapshot counts the battalions
-# with no mark (u_new: recruited since, or come to the country), those whose type is not their mark's
-# (u_changed: upgraded or changed), and of those the irregular infantry recruited (u_irr_new) and the
-# battalions that were irregular infantry and are now another type (u_from_irr). u_flows is 1 when the
-# country's battalions were marked at its last snapshot, so the counts are flows; at its first they are not.
-# Whether a combat unit holds a variable is undocumented: the first battalion reached tries one, and the
-# census counts only if it held (`TE_AIP CANARY unit_vars v=1`). If not, every u_* field reads 0 and nothing
-# is set on a battalion again.
-te_aip_unit_census = {
-	if = {
-		limit = { NOT = { has_global_variable = te_aip_unit_vars_tested } }
-		random_military_formation = {
-			limit = { is_army = yes }
-			random_combat_unit = {
-				set_global_variable = te_aip_unit_vars_tested
-				set_variable = te_aip_unit_var_test
-				if = {
-					limit = { has_variable = te_aip_unit_var_test }
-					set_global_variable = te_aip_unit_vars
-					remove_variable = te_aip_unit_var_test
-				}
-			}
-		}
-		if = {
-			limit = { has_global_variable = te_aip_unit_vars_tested }
-			debug_log = "TE_AIP CANARY unit_vars v=[THIS.ScriptValue('te_aip_unit_vars_ok')|0]"
-		}
-	}
-	set_variable = { name = te_aip_u_all value = 0 }
-	set_variable = { name = te_aip_u_new value = 0 }
-	set_variable = { name = te_aip_u_changed value = 0 }
-	set_variable = { name = te_aip_u_irr_new value = 0 }
-	set_variable = { name = te_aip_u_from_irr value = 0 }
-	set_variable = { name = te_aip_u_flows value = 0 }
-	if = {
-		limit = { has_global_variable = te_aip_unit_vars }
-		set_local_variable = { name = te_aip_u_all value = 0 }
-		set_local_variable = { name = te_aip_u_new value = 0 }
-		set_local_variable = { name = te_aip_u_changed value = 0 }
-		set_local_variable = { name = te_aip_u_irr_new value = 0 }
-		set_local_variable = { name = te_aip_u_from_irr value = 0 }
-		every_military_formation = {
-			limit = { is_army = yes }
-			every_combat_unit = {
-				change_local_variable = { name = te_aip_u_all add = 1 }
-				set_local_variable = { name = te_aip_ut_now value = te_aip_unit_type_index }
-				if = {
-					limit = { NOT = { has_variable = te_aip_ut } }
-					change_local_variable = { name = te_aip_u_new add = 1 }
-					if = {
-						limit = { local_var:te_aip_ut_now = 1 }
-						change_local_variable = { name = te_aip_u_irr_new add = 1 }
-					}
-				}
-				else_if = {
-					limit = { NOT = { var:te_aip_ut = local_var:te_aip_ut_now } }
-					change_local_variable = { name = te_aip_u_changed add = 1 }
-					if = {
-						limit = { var:te_aip_ut = 1 }
-						change_local_variable = { name = te_aip_u_from_irr add = 1 }
-					}
-				}
-				set_variable = { name = te_aip_ut value = local_var:te_aip_ut_now }
-			}
-		}
-		set_variable = { name = te_aip_u_all value = local_var:te_aip_u_all }
-		set_variable = { name = te_aip_u_new value = local_var:te_aip_u_new }
-		set_variable = { name = te_aip_u_changed value = local_var:te_aip_u_changed }
-		set_variable = { name = te_aip_u_irr_new value = local_var:te_aip_u_irr_new }
-		set_variable = { name = te_aip_u_from_irr value = local_var:te_aip_u_from_irr }
-		if = {
-			limit = { has_variable = te_aip_units_marked }
-			set_variable = { name = te_aip_u_flows value = 1 }
-		}
-		set_variable = te_aip_units_marked
-	}
 }
 
 # The interface's figures (see te_aip_canary).

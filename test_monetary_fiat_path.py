@@ -266,7 +266,8 @@ class SuspensionEndEvent(unittest.TestCase):
     def test_fiat_needs_the_laws_own_gates_and_shows_greyed(self):
         b = self.option('te_peg.3.b')
         self.assertIn(('show_as_unavailable', '=', [('always', '=', 'yes')]), b)
-        self.assertIn(('activate_law', '=', 'law_type:law_fiat_currency'), b)
+        # enact_law with the one-day fallback to activate_law (#1443, te_enact_law_effects.txt)
+        self.assertIn(('te_enact_law_checked', '=', [('LAW', '=', 'law_type:law_fiat_currency')]), b)
         trigger = Script.field(b, 'trigger')
         cases = {
             (('law_national_bank',), ('keynesian_economics',), False): True,
@@ -294,7 +295,7 @@ class SuspensionEndEvent(unittest.TestCase):
     def test_fiat_cancels_a_running_currency_enactment_first(self):
         b = self.option('te_peg.3.b')
         keys = [key for key, _, _ in b]
-        law_at = keys.index('activate_law')
+        law_at = keys.index('te_enact_law_checked')
         cancel = [(i, val) for i, (key, _, val) in enumerate(b) if key == 'if'
                   and ('cancel_enactment', '=', 'yes') in val]
         self.assertEqual(len(cancel), 1)

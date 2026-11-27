@@ -441,6 +441,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_demog_window_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_demog_tab_layout" {
 						te_demog_browser_sections = {}
 					}
@@ -459,6 +462,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_demographics"
 					}
@@ -490,6 +496,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_nation_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_nation_tab_layout" {
 						te_nation_wide_sections = {}
 					}
@@ -508,6 +517,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_nation"
 					}
@@ -539,6 +551,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_banking_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_banking_tab_layout" {
 						te_banking_wide_sections = {}
 					}
@@ -557,6 +572,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "[SelectLocalization( GetScriptedGui('te_budget_banking_readout_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), 'banking_dash_cat_monetary', 'te_window_tab_banking' )]"
 					}
@@ -606,6 +624,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_tax_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_tax_tab_layout" {
 						te_tax_wide_sections = {}
 					}
@@ -628,6 +649,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_tax_code"
 					}
@@ -659,6 +683,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_gm_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_gm_tab_layout" {
 						te_gm_wide_sections = {}
 					}
@@ -677,6 +704,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_grand_monuments"
 					}
@@ -708,6 +738,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_ce_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_ce_tab_layout" {
 						te_ce_wide_sections = {}
 					}
@@ -726,6 +759,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_colonial_empire"
 					}
@@ -775,6 +811,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_seabed_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_seabed_tab_layout" {
 						te_seabed_wide_sections = {}
 					}
@@ -793,6 +832,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_seabed"
 					}
@@ -824,6 +866,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_ch_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_ch_tab_layout" {
 						te_ch_wide_sections = {}
 					}
@@ -842,6 +887,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_cultural_hegemony"
 					}
@@ -874,6 +922,19 @@ types te_national_info_generated_types
 
 				te_sr_tab_body = {
 					blockoverride "te_sr_tab_layout" {
+						default_header = {
+							using = default_list_position
+							blockoverride "size" {
+								size = { 1620 44 }
+							}
+							blockoverride "text" {
+								text = "te_window_tab_space_race"
+							}
+							te_help_button = {
+								visible = "[Not( GetMetaPlayer.IsObserver )]"
+								onclick = "[GetVariableSystem.Set('te_popup', 'help_space_race')]"
+							}
+						}
 						te_sr_wide_sections = {}
 					}
 				}
@@ -891,6 +952,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_space_race"
 					}
@@ -922,6 +986,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_nuclear_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_nuclear_tab_layout" {
 						te_nuclear_wide_sections = {}
 					}
@@ -940,6 +1007,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_nuclear_weapons"
 					}
@@ -971,6 +1041,9 @@ types te_national_info_generated_types
 				ignoreinvisible = yes
 
 				te_grid_tab_body = {
+					blockoverride "te_tab_header_size" {
+						size = { 1620 44 }
+					}
 					blockoverride "te_grid_tab_layout" {
 						te_grid_wide_sections = {}
 					}
@@ -989,6 +1062,9 @@ types te_national_info_generated_types
 
 				default_header = {
 					using = default_list_position
+					blockoverride "size" {
+						size = { 1620 44 }
+					}
 					blockoverride "text" {
 						text = "te_window_tab_power_grids"
 					}

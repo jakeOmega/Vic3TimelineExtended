@@ -5,6 +5,7 @@
     .venv/bin/python scripts/preflight.py --quick     # all of it but the test suite
     .venv/bin/python scripts/preflight.py --changed   # only what your diff can affect
     .venv/bin/python scripts/preflight.py --only audits docs
+    .venv/bin/python scripts/preflight.py --jobs 8    # 8 pytest workers and 8 audits at a time
     .venv/bin/python scripts/preflight.py --list
 
 This file is the one list of CI's game-independent checks: the workflow
@@ -20,6 +21,9 @@ venv's Python: the system one lacks numpy, pytest and ruff.
 `--changed` is for the loop while you work, not the gate before a push. It
 compares the branch and working tree with `origin/main` and drops groups the
 diff cannot reach, and narrows the test run only when no mod content changed.
+
+The test suite runs one pytest worker per CPU and the audits one per CPU at a
+time; `--jobs N` caps both, for several runs sharing one machine (#1803).
 
 Exit code: 0 when every check that ran passed, 1 otherwise.
 """
@@ -74,6 +78,8 @@ class Ctx:
     ci: bool
     changed: list | None
     """Changed paths under --changed, else None (run everything)."""
+    jobs: int | None = None
+    """--jobs: pytest workers and audits at a time; None, one per CPU."""
 
 
 @dataclass
@@ -273,7 +279,8 @@ def check_tests(ctx: Ctx) -> Result:
         tests = sorted(wanted)
     # --dist loadfile runs each file whole on one worker, as unittest does;
     # under loadscope a file's classes are split and tearDownModule runs early.
-    argv = [PY, "-m", "pytest", "-n", "auto", "--dist", "loadfile", "-p", "no:cacheprovider", "-q"]
+    workers = str(ctx.jobs) if ctx.jobs else "auto"
+    argv = [PY, "-m", "pytest", "-n", workers, "--dist", "loadfile", "-p", "no:cacheprovider", "-q"]
     if ctx.ci:
         argv.append("--durations=25")
     return sh(ctx, argv + tests)
@@ -311,6 +318,8 @@ def check_guide_shots(ctx: Ctx) -> Result:
 
 def check_audits(ctx: Ctx) -> Result:
     argv = [PY, "scripts/run_audits.py"]
+    if ctx.jobs:
+        argv += ["--jobs", str(ctx.jobs)]
     return sh(ctx, argv)
 
 
@@ -419,8 +428,13 @@ def main(argv=None) -> int:
                         help="CI mode: stream each check's output, and run organize_loc's writer.")
     parser.add_argument("--real-paths", action="store_true",
                         help="Use this machine's game paths instead of CI's dummy ones.")
+    parser.add_argument("--jobs", type=int, default=None, metavar="N",
+                        help="Run the tests on N pytest workers and the audits N at a time (default: one per "
+                             "CPU). Cap it when several runs share the machine.")
     parser.add_argument("--list", action="store_true", help="List the checks and exit.")
     args = parser.parse_args(argv)
+    if args.jobs is not None and args.jobs < 1:
+        parser.error("--jobs takes a whole number of 1 or more")
 
     known = set(GROUPS) | {c.id for c in CHECKS}
     unknown = [n for n in args.only + args.skip if n not in known]
@@ -436,7 +450,7 @@ def main(argv=None) -> int:
     if changed is not None and not changed:
         print(f"Nothing differs from {args.base}; nothing to check.")
         return 0
-    ctx = Ctx(env=run_audits.child_env(args.real_paths), ci=args.ci, changed=changed)
+    ctx = Ctx(env=run_audits.child_env(args.real_paths), ci=args.ci, changed=changed, jobs=args.jobs)
     checks = select(args, changed)
     if not checks:
         print("No check applies to this selection.")

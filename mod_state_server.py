@@ -155,6 +155,7 @@ from server.routes_analysis import (  # noqa: F401 — re-exported
     _emit_event_effect,
     _EVENT_HEADER_RE,
     _event_ids_from_mod_file,
+    _event_option_name_keys,
     _extract_event_ids_from_file,
     _extract_modifier_fields,
     _find_dominance_issues,
@@ -164,12 +165,12 @@ from server.routes_analysis import (  # noqa: F401 — re-exported
     _get_loc_accessor_index,
     _get_script_args_result,
     _get_variable_usage_index,
+    _grant_bare,
     _grant_block_label,
+    _grant_fields,
     _grant_entity_dirs,
     _grant_entity_type_name,
-    _GRANT_LINE_RE,
     _GRANT_NESTED_PARENTS,
-    _GRANT_OPENER_RE,
     _GRANT_REPLACE_RE,
     _grant_scan_plan,
     _GRANT_SKIP_DIRS,
@@ -303,6 +304,11 @@ _party_catalog_cache: tuple[ModState, list[dict]] | None = None
 # (ModState, {state: record}, state-region table, vanilla source) for
 # /state-history; cleared with the catalogs on every load.
 _state_history_cache: tuple | None = None
+# {table: (data, vanilla source)} for the vanilla tables no merged entity type
+# holds: the lookup types, the country history and the defines
+# (server.routes_entities._vanilla_table). Vanilla only, so cleared on a full
+# load alone.
+_vanilla_tables_cache: dict = {}
 
 
 # ---------------------------------------------------------------------------
@@ -3090,7 +3096,7 @@ ROUTES: dict[str, Route] = {
     "buildings": Route("_buildings", ("rest", "params")),
     "companies": Route("_companies", ("rest", "params")),
     "building-companies": Route("_building_companies", ("rest",)),
-    "goods": Route("_goods"),
+    "goods": Route("_goods", ("rest", "params")),
     "combat-units": Route("_combat_units"),
     "ideologies": Route("_ideologies", ("rest",)),
     "movements": Route("_movements", ("rest",)),
@@ -3101,6 +3107,12 @@ ROUTES: dict[str, Route] = {
     "state-region": Route("_state_region", ("rest",)),
     # Who owns each state at game start (#901)
     "state-history": Route("_state_history", ("rest", "params")),
+    # Each tag's starting laws, technologies and setup (#1628)
+    "country-history": Route("_country_history", ("rest", "params")),
+    # The engine defines, vanilla's value beside the mod's (#1879)
+    "defines": Route("_defines", ("rest",)),
+    # War goal types by name, vanilla's and the mod's (#1860)
+    "war-goal-types": Route("_war_goal_types", ("rest", "params")),
     # Prestige goods per base good, against the engine's cap (#749)
     "prestige-goods": Route("_prestige_goods", ("params",)),
     # Vanilla's own script, read from the installed game (#1563)
@@ -3117,8 +3129,8 @@ ROUTES: dict[str, Route] = {
     "diplomatic-actions": Route("_diplomatic_actions", ("rest",)),
     "decisions": Route("_decisions", ("rest",)),
     "script-values": Route("_script_values", ("rest",)),
-    "scripted-effects": Route("_scripted_effects", ("rest",)),
-    "scripted-triggers": Route("_scripted_triggers", ("rest",)),
+    "scripted-effects": Route("_scripted_effects", ("rest", "params")),
+    "scripted-triggers": Route("_scripted_triggers", ("rest", "params")),
     "decrees": Route("_decrees", ("rest",)),
     "principles": Route("_principles", ("rest",)),
     "amendments": Route("_amendments", ("rest",)),
@@ -3409,7 +3421,8 @@ class ModStateHandler(
                 {"path": "/buildings/<id?>", "desc": "Building defs incl. PMG list."},
                 {"path": "/companies?flavored=yes|no&source=mod|vanilla|all", "desc": "Merged company rosters, prosperity effects, flagships and per-flavored-bucket statistics."},
                 {"path": "/building-companies/<building_id>", "desc": "Companies listing a building in their roster or extension roster."},
-                {"path": "/goods", "desc": "Goods catalog."},
+                {"path": "/goods/<good?>", "desc": "Goods catalog; with a good, its entry."},
+                {"path": "/goods/<good>/producers|consumers?exclude=<building>&inputs=yes&outputs=yes", "desc": "Which buildings make (producers) or use (consumers) a good (#1757): each building's production methods whose building_modifiers carry goods_output_<good>_add or goods_input_<good>_add, with the method's group, block (workforce_scaled, level_scaled, unscaled), per-level figure and source (vanilla, modified or mod), over the merged data. ?exclude= drops buildings; ?inputs=yes / ?outputs=yes attach each method's other goods lines."},
                 {"path": "/vanilla-refs/<name>?depth=N", "desc": "Vanilla's own script, read from the installed game (#1563; 503 without one): the top-level vanilla entities in common/ and events/ whose body mentions <name>, N steps up, and the journal entries, on-actions and decisions among them. The first call reads the install (half a minute or more)."},
                 {"path": "/culture-reads/<culture>?as=primary|pop|homeland|any", "desc": "Where vanilla tests cu:<culture> (#1563, needs the game): one row per file and entity with count, the keys the tests sit under, and the journal entries the entity belongs to or is reached from."},
                 {"path": "/formables?lists_culture=<culture>", "desc": "country_formation tags, vanilla's and the mod's (#1563, needs the game): the cultures the tag's country definition lists, exists_at_start, use_culture_states, source vanilla|mod|both."},
@@ -3421,6 +3434,9 @@ class ModStateHandler(
                 {"path": "/strategic-regions/<name?>", "desc": "Strategic regions (mod ∪ vanilla, #917): the state regions each holds. /state-region/<STATE_X> is the inverse."},
                 {"path": "/state-region/<STATE_X>", "desc": "The strategic region a state region is in (#917)."},
                 {"path": "/state-history/<STATE_X?>?country=<TAG>&provinces=true", "desc": "Who owns each state on the start date (#901): one part per owning country, with its province count and the hubs (city, port, farm, mine, wood) it holds, plus homelands and claims. ?country= lists what a tag starts with. Works from vanilla_parsed/ with no game install."},
+                {"path": "/country-history/<TAG?>", "desc": "What a country starts with (#1628), from vanilla common/history/countries: its laws, technologies, starting-technology tier and other scripted effects, tax level and taxed goods, institutions, ruling interest groups, journal entries, its `if` blocks (limit and effects as written) and every other effect as written. Bare: counts and the tags. The mod's GLOBAL history files (extra_history.txt) run after and are named, not folded in. Works from vanilla_parsed/ with no game install."},
+                {"path": "/defines/<namespace?>/<name?>", "desc": "The engine defines (#1879): vanilla's value of NAMESPACE.NAME beside the mod's (common/defines) and the file that sets it; with a namespace alone, all of its leaves; bare, the namespaces with counts. Values are the tokens as written. Works from vanilla_parsed/defines.json with no game install."},
+                {"path": "/war-goal-types/<id?>?source=mod|vanilla", "desc": "War goal types by name (#1860), vanilla's (from vanilla_parsed/) and the mod's: kind, the file that defines it, raw. With an id and no source, the mod's definition when it has one, else vanilla's. Bare: every type with its source."},
                 {"path": "/prestige-goods?base_good=<good>", "desc": "Prestige goods per base good (#749): origin vanilla|mod, prestige_bonus, the companies listing each, and count against the engine's cap of 3 per base good."},
                 {"path": "/production-methods/<id?>", "desc": "Production methods (and their groups). Pass a PMG or PM id."},
                 {"path": "/pm-employment/<building>?select=<pm|glob>[,...]&bucket=level_scaled|workforce_scaled|unscaled|all&limit=", "desc": "Per-profession employment of every valid PM combination (pm_employment_audit's rules), grouped by identical totals with a count and an example combination, plus min/max totals per bucket (#990). Without a building, ?select= runs it for every building with a matching PM."},
@@ -3429,8 +3445,8 @@ class ModStateHandler(
                 {"path": "/diplomatic-actions/<id?>", "desc": "Diplomatic-action catalog with category (subject_relation/power_bloc/general) + pact metadata."},
                 {"path": "/decisions/<id?>", "desc": "Decisions catalog."},
                 {"path": "/script-values/<id?>", "desc": "Script value definitions."},
-                {"path": "/scripted-effects/<id?>", "desc": "Scripted effects with their $X$ parameters; with an id, every call site (mod and vanilla) with file:line and parsed args."},
-                {"path": "/scripted-triggers/<id?>", "desc": "Scripted triggers, the same shape as /scripted-effects."},
+                {"path": "/scripted-effects/<id?>?source=vanilla", "desc": "Scripted effects with their $X$ parameters; with an id, every call site (mod and vanilla) with file:line and parsed args. ?source=vanilla reads vanilla's definitions instead (#1860; from vanilla_parsed/, no callers)."},
+                {"path": "/scripted-triggers/<id?>?source=vanilla", "desc": "Scripted triggers, the same shape as /scripted-effects, ?source=vanilla included."},
                 {"path": "/scripted-helpers/unresolved", "desc": "Call sites whose callee is missing: a scripted effect or trigger neither vanilla nor the mod defines, which the engine silently ignores (#288)."},
                 {"path": "/script-args/<helper?>", "desc": "Scripted effect/trigger calls whose arguments don't match the callee's $X$ names (#732); with a helper, its params and every caller's unknown/missing args."},
                 {"path": "/variable-usage/<name?>?kind=var|list&store=scope|global|local&unfiltered_by=<trigger>&patterns=false", "desc": "Every mod site that writes, reads or iterates a variable or variable list, with file:line, entity, op, scope hint and an iterator's limit (#973). unfiltered_by keeps the iterations whose limit names neither the trigger nor a scripted trigger that names it. Bare: every name with its counts (?prefix=)."},
@@ -3929,6 +3945,7 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     else:
         # Vanilla is re-read: drop the overlap endpoint's vanilla index too.
         _overlap_vanilla_cache.clear()
+        _vanilla_tables_cache.clear()
         _vanilla_source, _vanilla_source_warnings = _choose_vanilla_source()
         for w in _vanilla_source_warnings:
             logger.warning(f"[vanilla] {w['detail']}")

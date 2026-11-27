@@ -83,3 +83,48 @@ the owner's screenshot only.
 |---|---|---|
 | **Every description whole.** A new game's Game Rules screen. Step each mod rule through every setting, the longest first: Free Market Construction, Space Race, Tax Code, Banking System, Global Commons, Social Movements. | Each description ends on its own full stop, with no ellipsis. Free Market Construction Disabled shows "Construction Sites must currently be built from the state view." in bold. | The model is too generous: lower `WRAP_WIDTH` in `test_game_rule_desc_length.py` until the text that was cut off fails, then cut what it flags. |
 | **Setting names fit the selector.** The same screen: Free Market Construction without AI Retooling Costs (51 characters), without Retooling Costs (48), Internal Resettlement: AI Voluntary Only (40). | The whole name between the arrows; smaller type is fine. | Shorten the name (`setting_<name>`), keep the player guide's rules table (`01-introduction.md`) to the same words, and give the names a check of their own in the test. |
+
+## The record under a section that grows (2026-11-27, #2040)
+
+In the Banking and Cultural Hegemony tabs the history section (`te_banking_reference_sections`,
+`te_ch_reference_sections`) sits under the status sections, whose lines rewrap (Banking's Monetary Policy dial) or
+whose list gains rows (the CH board). It was anchored (`parentanchor = hcenter`), and an anchored child of a vertical
+flowcontainer keeps the place its first layout gave it when a sibling above grows (`gui_modding_guide.md` gotcha #52):
+it would draw over the bottom of the section above and leave a gap below. It now flows, with no anchor: it is 520 in
+a 520 column in all three of its hosts. Nobody had seen the overlap in these two places; the check is that nothing
+moved.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Banking tab, the side panel and the Budget panel.** With the tab open, let a Monetary Policy line change length (a figure gaining a digit as the weeks pass), or collapse and reopen Active Policies. | The history charts start under the last status section with the usual gap, centred in the column, as before; Open Journal Entry under them. | The charts sit left of centre: a host column is wider than 520; the hosts are listed in `test_banking_layout.py`'s `test_the_reference_composer_flows`. |
+| **Cultural Hegemony tab, Society panel.** Let the Top Cultural Powers board gain a row (a new power past the threshold) with the tab open, or collapse and reopen the board. | The model history chart starts under the last status section, centred, nothing drawn over the board's foot. | As above, `test_cultural_hegemony_layout.py`'s `test_the_reference_composer_flows`. |
+| **Full Screen and National Info.** Banking and Cultural Hegemony in the Timeline Extended window's Full Screen, and in National Info. | The history sits at the top of the third column, as before. | |
+| **The journal entries.** Open each entry in the journal. | The history charts centred under the status sections, as before. | |
+
+The frame's Open Journal Entry button (`te_system_tab_frame`, `gui/te_system_tab_widgets.gui`) is still anchored: in
+Full Screen the frame is three columns wide, so a fixed 520 slot would put it at the left. What is left of #2040 is
+that button and the sweep of the other tabs.
+
+## Small text fixes from the second GUI wave (2026-11-27, from #2041)
+
+Loc only; the layout tests and `test_banking_layout.py`'s width budget pass. What the game shows:
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Nation tab, a new game.** The overview's Construction and Global Tech boxes. | "Construction / Base cost" and "Global Tech / Not yet", with no third line; once construction is scaled or tech spreads, the figure comes back ("+12%", "+5 spread"). | A raw key or "0%": `te_nation_ov_construction_fig` / `te_nation_ov_tech_fig` and the `AddLocalizationIf` they hold. |
+| **Banking, Monetary Policy, The Rate.** Wage Pressure, Price Pressure, Asset Purchases and Risk Premium, a negative and a positive reading. | The "%" in the figure's own colour: red beside a red "−0.4", green beside a green "+0.4", white beside a white "0.0". | A "%" another colour than its figure: the `|=+` format colours by another rule than #R / #G; `banking_dash_pct_*`. |
+| **German, the state view's Local Climate tile.** A malarial state, a humid one, and one before its first monthly update. | "Luftfeuchte", "Ständig" and "Folgt" each inside its cell. | A cut word: shorten it further in `i18n/german/tm/te_miscellaneous.json`. |
+
+## Layout moves from the second GUI wave (2026-11-27, from #2041)
+
+Four moves #2041 listed, none seen in game. Nothing is removed: each text moved to a Help page, each icon keeps its
+hover.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **The Effects strip on every tab** (`te_je_modifier_strip`, `gui/te_system_tab_widgets.gui`). Grand Monuments in a new game (the eight busts), Cultural Hegemony with its bonus, and any tab whose entry has a timed modifier; the side panel, the vanilla panels' tabs, Full Screen. | A dark panel above Open Journal Entry: an "Effects" heading over a rule, then "Ongoing" over the icons, left-aligned, 12 to a row, and "Timed" over one row per modifier with its name and time left. Each group only with something in it; nothing at all for an entry with none. Hovering "Effects", "Ongoing" and "Timed" explains each. | Icons centred or the heading missing: the strip's markup. A raw `te_je_modifier_strip_*` key: the loc. The panel wider than its column: its `margin = { 20 8 }` around the 480 rows. |
+| **Tax Code, the Light code's Tax Rates** (`te_tax_light_section`). | No "Click − or + …" paragraph over the rows. The "?" opens How the Light Tax Code Works, whose Rates topic now says how the − and + and shift-click work. | The paragraph still in the section, or missing from the page: `te_tax_lt_intro` in `te_tax_code_help_body`. |
+| **Tax Code, the legislated code's draft table** (`te_tax_workbench_section`). | No "Click − or + for one step …" line over the table. How Tax Legislation Works, Drafting, says it, right-click included. | As above, `te_tax_wb_intro`. |
+| **Construction panel with the Free Market Construction rule off** (`te_direct_construction_section`, `gui/construction_panel.gui`). | The Direct Construction header has a "?" at its right and no intro paragraph under it; the "?" opens How Construction Works, with a Construction Sites topic holding the old intro. With the rule on, the market's "?" still opens How the Construction Market Works. | No "?": the header's `te_help_button`. The page's title or body for the wrong rule: the `te_construction_market_rule_on_sgui` gates in `te_construction_market_help_body` and the popup's title. |
+| **Banking, Bubble Pressure at 0** (`banking_bubble_pressure_bar`, a new game). | A thin red sliver at the bar's left, about 2%, not an empty dark box. At 50 the fill is about half; at 100, full. Another country's copy in National Info looks the same. | An empty box: the engine does not draw a negative `min_value` as a floor; set the bar from `max(bubble_pressure, 2)` instead, which changes its breakdown. |
+| **National Info, the player's own country and another's,** on a tab with a full-screen layout (Banking, Nation, Grand Monuments). | The tab's title is one bar across the three columns, as in the Timeline Extended window's Full Screen, not a 554-wide header floating over them. The player's own Space Race tab now has a title bar with its "?" too. | A header still 554: `te_tab_header_size` is not reaching the body; the generator's `_ni_own` / `_ni_other`. |

@@ -34,223 +34,238 @@ types production_methods
 		}
 
 		### TOP ITEM
-		widget = {
-			size = { @panel_width_plus_14 95 }
+		# MOD (buildings panel speed): the top of the row sits in a one-item fixedgridbox. The engine leaves a fixedgridbox's
+		# items out of a frame while they are scrolled out of view; a flowcontainer's children, which the panel's list
+		# and the PM strip below are, are worked out every frame whether seen or not. The panel lists every building type
+		# the country has (201 in the USA of 2050) and shows nine, and each row asks the engine for its
+		# productivity span, its buttons' states and, per production method group, whether all its buildings share a
+		# method: 331 ms a frame with the panel open, 59 with this (docs/audits/buildings_panel_performance.md). The one
+		# item is the type's first production method group, which every building type has; nothing reads its context.
+		fixedgridbox = {
+			addcolumn = @panel_width_plus_14
+			addrow = 95
+			datamodel = "[DataModelFirst(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups, '(int32)1')]"
 
-			highlight_tutorial = {
-	   			visible = "[BuildingType.IsBeingTutorialHighlighted]"
-	    	}
+			item = {
+				widget = {
+					size = { @panel_width_plus_14 95 }
 
-			### DROPDOWN / EXPAND
-			section_header_button = {
-				block "section_header_interactable" {}
+					highlight_tutorial = {
+			   			visible = "[BuildingType.IsBeingTutorialHighlighted]"
+			    	}
 
-				blockoverride "background" {
-					block "section_header_background" {
-						using = expand_button_bg
-					}
-				}
+					### DROPDOWN / EXPAND
+					section_header_button = {
+						block "section_header_interactable" {}
 
-				blockoverride "layout" {
-					position = { 110 0 }
-					size = { 440 38 }
-				}
+						blockoverride "background" {
+							block "section_header_background" {
+								using = expand_button_bg
+							}
+						}
 
-				blockoverride "left_text" {
-					raw_text = "#v [BuildingType.GetNameNoFormatting]#!"
-				}
-				blockoverride "right_text" {
-					section_header_right_text = {
-						visible = "[And( And(Not(BuildingType.IsGovernmentFunded), Not(BuildingType.IsSubsistenceBuilding)), GreaterThan_int32( BuildingType.GetNumLevelsInCountryRaw(GetPlayer.Self), '(int32)0' ))]"
-						text = "[BuildingType.GetProductivitySpanDesc(GetPlayer.Self)]"
-						tooltip = "PRODUCTIVITY_SPAN_TOOLTIP"
-					}
-				}
+						blockoverride "layout" {
+							position = { 110 0 }
+							size = { 440 38 }
+						}
 
-				blockoverride "onclick" {
-					block "expand_onclick" {
-						onclick = "[BuildingBrowserPanel.ToggleExpandBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType)]"
-					}
-				}
+						blockoverride "left_text" {
+							raw_text = "#v [BuildingType.GetNameNoFormatting]#!"
+						}
+						blockoverride "right_text" {
+							section_header_right_text = {
+								visible = "[And( And(Not(BuildingType.IsGovernmentFunded), Not(BuildingType.IsSubsistenceBuilding)), GreaterThan_int32( BuildingType.GetNumLevelsInCountryRaw(GetPlayer.Self), '(int32)0' ))]"
+								text = "[BuildingType.GetProductivitySpanDesc(GetPlayer.Self)]"
+								tooltip = "PRODUCTIVITY_SPAN_TOOLTIP"
+							}
+						}
 
-				blockoverride "onclick_showmore" {
-					block "expand_showmore_visible" {
-						visible = "[Not(BuildingBrowserPanel.IsBuildingTypeExpanded(BuildingBrowserBuildingTypeItem.GetBuildingType))]"
-					}
-				}
+						blockoverride "onclick" {
+							block "expand_onclick" {
+								onclick = "[BuildingBrowserPanel.ToggleExpandBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType)]"
+							}
+						}
 
-				blockoverride "onclick_showless" {
-					block "expand_showless_visible" {
-						visible = "[BuildingBrowserPanel.IsBuildingTypeExpanded(BuildingBrowserBuildingTypeItem.GetBuildingType)]"
-					}
-				}
-			}
+						blockoverride "onclick_showmore" {
+							block "expand_showmore_visible" {
+								visible = "[Not(BuildingBrowserPanel.IsBuildingTypeExpanded(BuildingBrowserBuildingTypeItem.GetBuildingType))]"
+							}
+						}
 
-			### production methods grouped
-			container = {
-				position = { 110 0 }
-				parentanchor = bottom
-
-				# MOD: past four groups the strip scrolls, as the condensed rows'
-				# do (condensed_building_information_pms). The mod's buildings carry
-				# up to seven, and vanilla's grid ran them over the rest of the row.
-				scrollarea = {
-					maximumsize = { 208 -1 }
-					autoresizescrollarea = yes
-					scrollbarpolicy_horizontal = as_needed
-					scrollbarpolicy_vertical = as_needed
-					scrollbar_horizontal = {
-						using = horizontal_scrollbar
-					}
-					scrollbar_vertical = {
-						using = vertical_scrollbar
+						blockoverride "onclick_showless" {
+							block "expand_showless_visible" {
+								visible = "[BuildingBrowserPanel.IsBuildingTypeExpanded(BuildingBrowserBuildingTypeItem.GetBuildingType)]"
+							}
+						}
 					}
 
-					scrollwidget = {
-						flowcontainer = {
-							datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
-							direction = horizontal
-							spacing = 2
+					### production methods grouped
+					container = {
+						position = { 110 0 }
+						parentanchor = bottom
 
-							item = {
-								widget = {
-									size = { 50 50 }
-									visible = "[And(And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), And(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_graded')))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_space_program_mission_ceiling')))]"
-									tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
-									using = tooltip_ne
+						# MOD: past four groups the strip scrolls, as the condensed rows'
+						# do (condensed_building_information_pms). The mod's buildings carry
+						# up to seven, and vanilla's grid ran them over the rest of the row.
+						scrollarea = {
+							maximumsize = { 208 -1 }
+							autoresizescrollarea = yes
+							scrollbarpolicy_horizontal = as_needed
+							scrollbarpolicy_vertical = as_needed
+							scrollbar_horizontal = {
+								using = horizontal_scrollbar
+							}
+							scrollbar_vertical = {
+								using = vertical_scrollbar
+							}
 
-									button = {
-										visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
-										distribute_visual_state = no
-										inherit_visual_state = no
-										using = expand_button_bg_dropdown
-										size = { 100% 100% }
-										onclick = "[BuildingBrowserBuildingTypeItem.ToggleSwitchProductionMethodMenu( ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
-										enabled = "[Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry))]"
-									}
+							scrollwidget = {
+								flowcontainer = {
+									datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
+									direction = horizontal
+									spacing = 2
 
-									### pm icon
-									icon = {
-										visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
-										size = { 40 40 }
-										parentanchor = center
-										texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
-									}
+									item = {
+										widget = {
+											size = { 50 50 }
+											visible = "[And(And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), And(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_graded')))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_space_program_mission_ceiling')))]"
+											tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
+											using = tooltip_ne
 
-									### mixed pm icon
-									icon = {
-										visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
-										size = { 35 35 }
-										parentanchor = center
-										texture = "[ProductionMethodGroup.GetMixedIcon]"
-									}
+											button = {
+												visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
+												distribute_visual_state = no
+												inherit_visual_state = no
+												using = expand_button_bg_dropdown
+												size = { 100% 100% }
+												onclick = "[BuildingBrowserBuildingTypeItem.ToggleSwitchProductionMethodMenu( ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+												enabled = "[Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry))]"
+											}
 
-									### new pm
-									has_new_pm_icon = {
-										position = { -2 2 }
-										parentanchor = bottom|left
-										blockoverride "visible" {
-											visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
-										}
-									}
+											### pm icon
+											icon = {
+												visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
+												size = { 40 40 }
+												parentanchor = center
+												texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
+											}
+
+											### mixed pm icon
+											icon = {
+												visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
+												size = { 35 35 }
+												parentanchor = center
+												texture = "[ProductionMethodGroup.GetMixedIcon]"
+											}
+
+											### new pm
+											has_new_pm_icon = {
+												position = { -2 2 }
+												parentanchor = bottom|left
+												blockoverride "visible" {
+													visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
+												}
+											}
 
 
-									### nr available
-									textbox = {
-										raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
-										parentanchor = right
-										position = { -5 0 }
-										autoresize = yes
-										align = right|nobaseline
-										visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
-										tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
-										using = tooltip_above
-										using = fontsize_small
+											### nr available
+											textbox = {
+												raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
+												parentanchor = right
+												position = { -5 0 }
+												autoresize = yes
+												align = right|nobaseline
+												visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
+												tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
+												using = tooltip_above
+												using = fontsize_small
 
-										background = {
-											using = default_background
-											margin = { 8 4 }
+												background = {
+													using = default_background
+													margin = { 8 4 }
+												}
+											}
 										}
 									}
 								}
 							}
 						}
 					}
-				}
-			}
 
-			### building icon
-			button = {
-				texture = "[BuildingType.GetIcon]"
-				onrightclick = "[RightClickMenuManager.ShowForBuildingType(BuildingType.AccessSelf)]"
-				effectname = "NoHighlight"
-				distribute_visual_state = no
-				inherit_visual_state = no
+					### building icon
+					button = {
+						texture = "[BuildingType.GetIcon]"
+						onrightclick = "[RightClickMenuManager.ShowForBuildingType(BuildingType.AccessSelf)]"
+						effectname = "NoHighlight"
+						distribute_visual_state = no
+						inherit_visual_state = no
 
-				size = { 100 100 }
-				position = { 7 0 }
-				parentanchor = vcenter
+						size = { 100 100 }
+						position = { 7 0 }
+						parentanchor = vcenter
 
-				tooltipwidget = {
-					FancyTooltip_BuildingType = {}
-				}
-			}
-
-			### ACTION BUTTONS
-			flowcontainer = {
-				parentanchor = bottom|right
-				position = { -10 -5 }
-				spacing = 5
-				
-				### nationalize
-				building_type_nationalize_button = {
-					size = { 40 40 }
-				}
-
-				### privatize
-				building_type_privatize_toggle = {
-					visible = no
-					size = { 40 40 }
-				}
-
-				building_type_privatize_or_monopolize = {}
-
-				### subsidize
-				building_type_subsidize_toggle = {
-					size = { 40 40 } 
-				}
-
-				### auto expand
-				building_type_auto_expand_toggle = {
-					size = { 40 40 } 
-				}
-				
-				### expand
-				button_icon_round_map_interaction = {
-					size = { 40 40 }
-					blockoverride "icon" {
-						texture = "gfx/interface/buttons/button_icons/plus.dds"
+						tooltipwidget = {
+							FancyTooltip_BuildingType = {}
+						}
 					}
 
-					onclick = "[BuildingType.ActivateExpansionLens]"
-					using = select_button_sound
-					block "expand_button_visible" {
-						visible = "[And(Or( BuildingType.IsBuildable, BuildingType.IsExpandable ), Not(BuildingType.GeneratesCombatUnits))]"
-					}
-					tooltip = "EXPAND_TOOLTIP_BUILDING_TYPE"
-					using = tooltip_se
-				}
-			}
+					### ACTION BUTTONS
+					flowcontainer = {
+						parentanchor = bottom|right
+						position = { -10 -5 }
+						spacing = 5
+				
+						### nationalize
+						building_type_nationalize_button = {
+							size = { 40 40 }
+						}
 
-			### PRODUCTIVITY SPAN ###
-			textbox = {
-				raw_text = "#v [BuildingBrowserBuildingTypeItem.GetTotalFilteredSizeDesc]#!"
-				autoresize = yes
-				position = { 11 -3 }
-				parentanchor = bottom
-				align = hcenter|nobaseline
-				using = fontsize_large
-				minimumsize = { 26 26 }
+						### privatize
+						building_type_privatize_toggle = {
+							visible = no
+							size = { 40 40 }
+						}
+
+						building_type_privatize_or_monopolize = {}
+
+						### subsidize
+						building_type_subsidize_toggle = {
+							size = { 40 40 } 
+						}
+
+						### auto expand
+						building_type_auto_expand_toggle = {
+							size = { 40 40 } 
+						}
+				
+						### expand
+						button_icon_round_map_interaction = {
+							size = { 40 40 }
+							blockoverride "icon" {
+								texture = "gfx/interface/buttons/button_icons/plus.dds"
+							}
+
+							onclick = "[BuildingType.ActivateExpansionLens]"
+							using = select_button_sound
+							block "expand_button_visible" {
+								visible = "[And(Or( BuildingType.IsBuildable, BuildingType.IsExpandable ), Not(BuildingType.GeneratesCombatUnits))]"
+							}
+							tooltip = "EXPAND_TOOLTIP_BUILDING_TYPE"
+							using = tooltip_se
+						}
+					}
+
+					### PRODUCTIVITY SPAN ###
+					textbox = {
+						raw_text = "#v [BuildingBrowserBuildingTypeItem.GetTotalFilteredSizeDesc]#!"
+						autoresize = yes
+						position = { 11 -3 }
+						parentanchor = bottom
+						align = hcenter|nobaseline
+						using = fontsize_large
+						minimumsize = { 26 26 }
+					}
+				}
 			}
 		}
 
@@ -1096,38 +1111,67 @@ types production_methods
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 
+				### TIMELINE EXTENDED: the week's cost under the ship construction figure, where vanilla has it
+				### beside it (in the second half of the row, left of the pause button), and both in the body
+				### size, as in the Construction Site row (construction_queue_sector_actions). A late game's
+				### "used/total" reached five digits a side and ran under the cost ("35015/5054£-1.37M", seen in
+				### game 2026-11-26, #2093).
 				flowcontainer = {
+					direction = vertical
 					parentanchor = center
-					spacing = 10
-					tooltip = "SHIP_CONSTRUCTION_SPEED_BASE_TOOLTIP"
-					datacontext = "[AccessPlayer]"
+					spacing = 0
 
-					icon = {
-						parentanchor = vcenter
-						size = { 30 30 }
-						texture = "gfx/interface/icons/state_status_icons/ship_construction.dds"
-						visible = "[Not(Country.IsShipConstructionPaused)]"
-					}
+					flowcontainer = {
+						name = "ship_construction_points"
+						parentanchor = hcenter
+						spacing = 10
+						tooltip = "SHIP_CONSTRUCTION_SPEED_BASE_TOOLTIP"
+						datacontext = "[AccessPlayer]"
 
-					icon = {
-						parentanchor = vcenter
-						size = { 30 30 }
-						texture = "gfx/interface/icons/state_status_icons/ship_construction_paused.dds"
-						visible = "[Country.IsShipConstructionPaused]"
+						icon = {
+							parentanchor = vcenter
+							size = { 30 30 }
+							texture = "gfx/interface/icons/state_status_icons/ship_construction.dds"
+							visible = "[Not(Country.IsShipConstructionPaused)]"
+						}
+
+						icon = {
+							parentanchor = vcenter
+							size = { 30 30 }
+							texture = "gfx/interface/icons/state_status_icons/ship_construction_paused.dds"
+							visible = "[Country.IsShipConstructionPaused]"
+						}
+
+						textbox = {
+							parentanchor = vcenter
+							text = "TE_SHIP_CONSTRUCTION_VALUE_PANEL"
+							autoresize = yes
+							align = nobaseline
+							min_width = 56
+
+							background = {
+								using = dark_area
+								margin = { 8 0 }
+							}
+						}
 					}
 
 					textbox = {
-						parentanchor = vcenter
-						using = fontsize_large
-						text = "TE_SHIP_CONSTRUCTION_VALUE_PANEL"
-						autoresize = yes
-						align = nobaseline
-						min_width = 56
+						datacontext = "[GetPlayer]"
+						parentanchor = hcenter
 
 						background = {
 							using = dark_area
-							margin = { 20 0 }
+							margin = { 8 0 }
 						}
+
+						autoresize = yes
+						align = nobaseline
+
+						alpha = "[TransparentIfZero(Country.GetShipConstructionGoodsExpenses)]"
+						raw_text = "@money![Negate(Country.GetShipConstructionGoodsExpenses)|D+]"
+
+						tooltip = "SHIP_CONSTRUCTION_GOODS_EXPENSES_BREAKDOWN"
 					}
 				}
 			}
@@ -1140,26 +1184,6 @@ types production_methods
 					direction = horizontal
 					parentanchor = center
 					spacing = 20 # need extra spacing for the tooltips for the text vs the button not to interfere with each other...
-
-					textbox = {
-						datacontext = "[GetPlayer]"
-						parentanchor = vcenter
-
-						background = {
-							using = dark_area
-							margin_right = 30
-						}
-
-						autoresize = yes
-						minimumsize = { 0 26 }
-						margin_left = 5
-						align = nobaseline
-
-						alpha = "[TransparentIfZero(Country.GetShipConstructionGoodsExpenses)]"
-						raw_text = "@money![Negate(Country.GetShipConstructionGoodsExpenses)|D+]"
-						
-						tooltip = "SHIP_CONSTRUCTION_GOODS_EXPENSES_BREAKDOWN"
-					}
 
 					container = {
 						parentanchor = vcenter

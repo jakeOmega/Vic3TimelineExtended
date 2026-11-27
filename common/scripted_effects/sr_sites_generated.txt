@@ -22475,7 +22475,7 @@ sr_mod_ai_plan_valles_marineris = {
 			limit = {
 				sr_mod_can_queue_mine_valles_marineris = yes
 				sr_site_crews_valles_marineris >= sr_site_levels_valles_marineris
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = valles_marineris TYPE = mine INDEX = 1 CODE = 6 }
 		}
@@ -22715,7 +22715,7 @@ sr_mod_ai_plan_olympus_mons = {
 			limit = {
 				sr_mod_can_queue_mine_olympus_mons = yes
 				sr_site_crews_olympus_mons >= sr_site_levels_olympus_mons
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = olympus_mons TYPE = mine INDEX = 2 CODE = 6 }
 		}
@@ -22955,7 +22955,7 @@ sr_mod_ai_plan_hellas_planitia = {
 			limit = {
 				sr_mod_can_queue_mine_hellas_planitia = yes
 				sr_site_crews_hellas_planitia >= sr_site_levels_hellas_planitia
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = hellas_planitia TYPE = mine INDEX = 3 CODE = 6 }
 		}
@@ -23203,7 +23203,7 @@ sr_mod_ai_plan_utopia_planitia = {
 			limit = {
 				sr_mod_can_queue_mine_utopia_planitia = yes
 				sr_site_crews_utopia_planitia >= sr_site_levels_utopia_planitia
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = utopia_planitia TYPE = mine INDEX = 4 CODE = 6 }
 		}
@@ -23443,7 +23443,7 @@ sr_mod_ai_plan_arcadia_planitia = {
 			limit = {
 				sr_mod_can_queue_mine_arcadia_planitia = yes
 				sr_site_crews_arcadia_planitia >= sr_site_levels_arcadia_planitia
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = arcadia_planitia TYPE = mine INDEX = 5 CODE = 6 }
 		}
@@ -23686,7 +23686,7 @@ sr_mod_ai_plan_ceres = {
 			limit = {
 				sr_mod_can_queue_mine_ceres = yes
 				sr_site_crews_ceres >= sr_site_levels_ceres
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = ceres TYPE = mine INDEX = 6 CODE = 6 }
 		}
@@ -23888,7 +23888,7 @@ sr_mod_ai_plan_vesta = {
 			limit = {
 				sr_mod_can_queue_mine_vesta = yes
 				sr_site_crews_vesta >= sr_site_levels_vesta
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = vesta TYPE = mine INDEX = 7 CODE = 6 }
 		}
@@ -24098,7 +24098,7 @@ sr_mod_ai_plan_psyche = {
 			limit = {
 				sr_mod_can_queue_mine_psyche = yes
 				sr_site_crews_psyche >= sr_site_levels_psyche
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = psyche TYPE = mine INDEX = 8 CODE = 6 }
 		}
@@ -24300,7 +24300,7 @@ sr_mod_ai_plan_pallas = {
 			limit = {
 				sr_mod_can_queue_mine_pallas = yes
 				sr_site_crews_pallas >= sr_site_levels_pallas
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = pallas TYPE = mine INDEX = 9 CODE = 6 }
 		}
@@ -24502,7 +24502,7 @@ sr_mod_ai_plan_hygiea = {
 			limit = {
 				sr_mod_can_queue_mine_hygiea = yes
 				sr_site_crews_hygiea >= sr_site_levels_hygiea
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = hygiea TYPE = mine INDEX = 10 CODE = 6 }
 		}
@@ -24704,7 +24704,7 @@ sr_mod_ai_plan_io = {
 			limit = {
 				sr_mod_can_queue_mine_io = yes
 				sr_site_crews_io >= sr_site_levels_io
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = io TYPE = mine INDEX = 11 CODE = 6 }
 		}
@@ -24906,7 +24906,7 @@ sr_mod_ai_plan_europa = {
 			limit = {
 				sr_mod_can_queue_mine_europa = yes
 				sr_site_crews_europa >= sr_site_levels_europa
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = europa TYPE = mine INDEX = 12 CODE = 6 }
 		}
@@ -25129,7 +25129,7 @@ sr_mod_ai_plan_ganymede = {
 			limit = {
 				sr_mod_can_queue_mine_ganymede = yes
 				sr_site_crews_ganymede >= sr_site_levels_ganymede
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = ganymede TYPE = mine INDEX = 13 CODE = 6 }
 		}
@@ -25377,7 +25377,7 @@ sr_mod_ai_plan_callisto = {
 			limit = {
 				sr_mod_can_queue_mine_callisto = yes
 				sr_site_crews_callisto >= sr_site_levels_callisto
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = callisto TYPE = mine INDEX = 14 CODE = 6 }
 		}
@@ -25612,7 +25612,7 @@ sr_mod_ai_plan_himalia = {
 			limit = {
 				sr_mod_can_queue_mine_himalia = yes
 				sr_site_crews_himalia >= sr_site_levels_himalia
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = himalia TYPE = mine INDEX = 15 CODE = 6 }
 		}
@@ -25814,7 +25814,7 @@ sr_mod_ai_plan_amalthea = {
 			limit = {
 				sr_mod_can_queue_mine_amalthea = yes
 				sr_site_crews_amalthea >= sr_site_levels_amalthea
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = amalthea TYPE = mine INDEX = 16 CODE = 6 }
 		}
@@ -26021,7 +26021,7 @@ sr_mod_ai_plan_venus = {
 			limit = {
 				sr_mod_can_queue_mine_venus = yes
 				sr_site_crews_venus >= sr_site_levels_venus
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = venus TYPE = mine INDEX = 17 CODE = 6 }
 		}
@@ -26256,7 +26256,7 @@ sr_mod_ai_plan_mercury = {
 			limit = {
 				sr_mod_can_queue_mine_mercury = yes
 				sr_site_crews_mercury >= sr_site_levels_mercury
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = mercury TYPE = mine INDEX = 18 CODE = 6 }
 		}
@@ -26463,7 +26463,7 @@ sr_mod_ai_plan_titan = {
 			limit = {
 				sr_mod_can_queue_mine_titan = yes
 				sr_site_crews_titan >= sr_site_levels_titan
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = titan TYPE = mine INDEX = 19 CODE = 6 }
 		}
@@ -26706,7 +26706,7 @@ sr_mod_ai_plan_enceladus = {
 			limit = {
 				sr_mod_can_queue_mine_enceladus = yes
 				sr_site_crews_enceladus >= sr_site_levels_enceladus
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = enceladus TYPE = mine INDEX = 20 CODE = 6 }
 		}
@@ -26916,7 +26916,7 @@ sr_mod_ai_plan_rhea = {
 			limit = {
 				sr_mod_can_queue_mine_rhea = yes
 				sr_site_crews_rhea >= sr_site_levels_rhea
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = rhea TYPE = mine INDEX = 21 CODE = 6 }
 		}
@@ -27118,7 +27118,7 @@ sr_mod_ai_plan_mimas = {
 			limit = {
 				sr_mod_can_queue_mine_mimas = yes
 				sr_site_crews_mimas >= sr_site_levels_mimas
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = mimas TYPE = mine INDEX = 22 CODE = 6 }
 		}
@@ -27320,7 +27320,7 @@ sr_mod_ai_plan_iapetus = {
 			limit = {
 				sr_mod_can_queue_mine_iapetus = yes
 				sr_site_crews_iapetus >= sr_site_levels_iapetus
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = iapetus TYPE = mine INDEX = 23 CODE = 6 }
 		}
@@ -27522,7 +27522,7 @@ sr_mod_ai_plan_titania = {
 			limit = {
 				sr_mod_can_queue_mine_titania = yes
 				sr_site_crews_titania >= sr_site_levels_titania
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = titania TYPE = mine INDEX = 24 CODE = 6 }
 		}
@@ -27724,7 +27724,7 @@ sr_mod_ai_plan_oberon = {
 			limit = {
 				sr_mod_can_queue_mine_oberon = yes
 				sr_site_crews_oberon >= sr_site_levels_oberon
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = oberon TYPE = mine INDEX = 25 CODE = 6 }
 		}
@@ -27926,7 +27926,7 @@ sr_mod_ai_plan_miranda = {
 			limit = {
 				sr_mod_can_queue_mine_miranda = yes
 				sr_site_crews_miranda >= sr_site_levels_miranda
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = miranda TYPE = mine INDEX = 26 CODE = 6 }
 		}
@@ -28128,7 +28128,7 @@ sr_mod_ai_plan_ariel = {
 			limit = {
 				sr_mod_can_queue_mine_ariel = yes
 				sr_site_crews_ariel >= sr_site_levels_ariel
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = ariel TYPE = mine INDEX = 27 CODE = 6 }
 		}
@@ -28330,7 +28330,7 @@ sr_mod_ai_plan_triton = {
 			limit = {
 				sr_mod_can_queue_mine_triton = yes
 				sr_site_crews_triton >= sr_site_levels_triton
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = triton TYPE = mine INDEX = 28 CODE = 6 }
 		}
@@ -28540,7 +28540,7 @@ sr_mod_ai_plan_proteus = {
 			limit = {
 				sr_mod_can_queue_mine_proteus = yes
 				sr_site_crews_proteus >= sr_site_levels_proteus
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = proteus TYPE = mine INDEX = 29 CODE = 6 }
 		}
@@ -28742,7 +28742,7 @@ sr_mod_ai_plan_pluto = {
 			limit = {
 				sr_mod_can_queue_mine_pluto = yes
 				sr_site_crews_pluto >= sr_site_levels_pluto
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = pluto TYPE = mine INDEX = 30 CODE = 6 }
 		}
@@ -28952,7 +28952,7 @@ sr_mod_ai_plan_eris = {
 			limit = {
 				sr_mod_can_queue_mine_eris = yes
 				sr_site_crews_eris >= sr_site_levels_eris
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = eris TYPE = mine INDEX = 31 CODE = 6 }
 		}
@@ -29154,7 +29154,7 @@ sr_mod_ai_plan_makemake = {
 			limit = {
 				sr_mod_can_queue_mine_makemake = yes
 				sr_site_crews_makemake >= sr_site_levels_makemake
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = makemake TYPE = mine INDEX = 32 CODE = 6 }
 		}
@@ -29356,7 +29356,7 @@ sr_mod_ai_plan_haumea = {
 			limit = {
 				sr_mod_can_queue_mine_haumea = yes
 				sr_site_crews_haumea >= sr_site_levels_haumea
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = haumea TYPE = mine INDEX = 33 CODE = 6 }
 		}
@@ -29558,7 +29558,7 @@ sr_mod_ai_plan_sedna = {
 			limit = {
 				sr_mod_can_queue_mine_sedna = yes
 				sr_site_crews_sedna >= sr_site_levels_sedna
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = sedna TYPE = mine INDEX = 34 CODE = 6 }
 		}
@@ -29755,7 +29755,7 @@ sr_mod_ai_plan_shackleton = {
 			limit = {
 				sr_mod_can_queue_mine_shackleton = yes
 				sr_site_crews_shackleton >= sr_site_levels_shackleton
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = shackleton TYPE = mine INDEX = 35 CODE = 6 }
 		}
@@ -29952,7 +29952,7 @@ sr_mod_ai_plan_peary = {
 			limit = {
 				sr_mod_can_queue_mine_peary = yes
 				sr_site_crews_peary >= sr_site_levels_peary
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = peary TYPE = mine INDEX = 36 CODE = 6 }
 		}
@@ -30149,7 +30149,7 @@ sr_mod_ai_plan_tranquility = {
 			limit = {
 				sr_mod_can_queue_mine_tranquility = yes
 				sr_site_crews_tranquility >= sr_site_levels_tranquility
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = tranquility TYPE = mine INDEX = 37 CODE = 6 }
 		}
@@ -30346,7 +30346,7 @@ sr_mod_ai_plan_marius_hills = {
 			limit = {
 				sr_mod_can_queue_mine_marius_hills = yes
 				sr_site_crews_marius_hills >= sr_site_levels_marius_hills
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = marius_hills TYPE = mine INDEX = 38 CODE = 6 }
 		}
@@ -30543,7 +30543,7 @@ sr_mod_ai_plan_daedalus = {
 			limit = {
 				sr_mod_can_queue_mine_daedalus = yes
 				sr_site_crews_daedalus >= sr_site_levels_daedalus
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = daedalus TYPE = mine INDEX = 39 CODE = 6 }
 		}
@@ -30740,7 +30740,7 @@ sr_mod_ai_plan_imbrium = {
 			limit = {
 				sr_mod_can_queue_mine_imbrium = yes
 				sr_site_crews_imbrium >= sr_site_levels_imbrium
-				sr_ebase_levels > sr_ebase_room_total
+				sr_ebase_queued_levels >= sr_ebase_room_total
 			}
 			sr_mod_queue = { KEY = imbrium TYPE = mine INDEX = 40 CODE = 6 }
 		}

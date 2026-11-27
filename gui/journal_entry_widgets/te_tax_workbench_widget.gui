@@ -859,9 +859,8 @@ types te_tax_workbench_widget_types
 					}
 				}
 
-				te_tax_text = {
-					text = "te_tax_wb_intro"
-				}
+				# How to use the − and + is on the Help page, under Drafting
+				# (te_tax_code_help_body; 2026-11-27, from #2041).
 				te_tax_instrument_head = {}
 
 				### Income: wages and dividends.

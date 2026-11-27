@@ -619,6 +619,9 @@ te_law_sweep_notice_from_law_scope = {
 				limit = { game_date > 1836.3.1 }
 				save_scope_as = te_law_sweep_new_law
 				owner = { post_notification = te_law_replaced_notice }
+				# Self-check (#1852): whether a replacement lands in a country
+				# the engine is still building (extra_effects.txt).
+				owner = { te_law_sweep_unbuilt_selfcheck = yes }
 			}
 			owner = { remove_variable = te_law_sweep_replacing }
 		}

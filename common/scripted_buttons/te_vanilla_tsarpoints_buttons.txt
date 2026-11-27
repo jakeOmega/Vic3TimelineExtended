@@ -1,0 +1,140 @@
+﻿# ======================================================================
+#  The Tsar's Heir of Alexander agenda (je_tp_tsar_heir_of_alexander):
+#  its Rail Transport button counts Air and Space Transport too
+# ======================================================================
+#
+# Vanilla's third button asks for 75% of the army's battalions on Rail
+# Transport. The mod's Air Transport and Space Transport each rule out Rail
+# Transport on the same formation (extra_mobilization_options.txt), so a
+# Russia that moved its army from rail to air dropped under 75% rail and lost
+# the button (#1796). The line marked MOD reads te_army_rail_or_better_share
+# (common/scripted_triggers/te_tsarpoints_triggers.txt), which counts Rail,
+# Air and Space Transport together. Truck Transport stays out, as in vanilla:
+# it is vanilla's own option, and vanilla's button already doesn't count it.
+#
+# A REPLACE because an INJECT can't change a trigger block vanilla declares:
+# a second possible is rejected at load, and an INJECT only adds conditions,
+# where this one must swap vanilla's rail test for a wider one
+# (scripting_best_practices.md, "A second trigger block is rejected at load").
+# Everything else is vanilla 1.15.2's button, copied from the installed game
+# (common/scripted_buttons/08_tsarpoints_buttons.txt). Re-diff on every Vic3
+# patch: test_tsarpoints_rail_button.py puts vanilla's line back in place of
+# the MOD one, compares the button with vanilla_parsed/, and fails when
+# vanilla moves.
+
+REPLACE:je_tp_tsar_heir_of_alexander_button_3 = {
+	name = "je_tp_tsar_heir_of_alexander_button_3_name"
+	desc = "je_tp_tsar_heir_of_alexander_button_3_desc"
+	autocomplete = yes
+
+	ai_chance = {
+		value = 100
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		has_technology_researched = wargaming
+		te_army_rail_or_better_share = yes # MOD: vanilla's army_mobilization_option_fraction names Rail Transport alone, value >= 0.75
+		any_state_in_eastern_europe = {
+			filter = {
+				custom_tooltip = {
+					text = owned_by_this_country_or_subjects_scopeless_tt
+					OR = {
+						owner = ROOT
+						owner = {
+							is_subject_of = ROOT
+						}
+					}
+				}
+			}
+			list_scopes = yes
+			show_trigger_per_scope = yes
+			has_building = building_railway
+			custom_tooltip = {
+				text = transportation_at_reasonable_price_tt
+				NOT = {
+					sg:transportation = {
+						state_goods_pricier > 0.25
+					}
+				}
+			}
+			percent = 1
+		}
+		trigger_if = {
+			limit = {
+				is_at_war = no
+			}
+			market = {
+				NOT = {
+					mg:ammunition ?= {
+						market_goods_pricier > tsarpoints_market_pricier_less_generous_max_value
+					}
+				}
+				NOT = {
+					mg:artillery ?= {
+						market_goods_pricier > tsarpoints_market_pricier_less_generous_max_value
+					}
+				}
+				NOT = {
+					mg:small_arms ?= {
+						market_goods_pricier > tsarpoints_market_pricier_less_generous_max_value
+					}
+				}
+				NOT = {
+					mg:engines ?= {
+						market_goods_pricier > tsarpoints_market_pricier_less_generous_max_value
+					}
+				}
+			}
+		}
+		trigger_else = {
+			market = {
+				NOT = {
+					mg:ammunition ?= {
+						market_goods_pricier > tsarpoints_market_pricier_max_value
+					}
+				}
+				NOT = {
+					mg:artillery ?= {
+						market_goods_pricier > tsarpoints_market_pricier_max_value
+					}
+				}
+				NOT = {
+					mg:small_arms ?= {
+						market_goods_pricier > tsarpoints_market_pricier_max_value
+					}
+				}
+				NOT = {
+					mg:engines ?= {
+						market_goods_pricier > tsarpoints_market_pricier_max_value
+					}
+				}
+			}
+		}
+		hidden_trigger = {
+			NOT = {
+				has_variable = je_tp_tsar_heir_of_alexander_button_3_complete
+			}
+		}
+	}
+
+	selected = {
+		has_variable = je_tp_tsar_heir_of_alexander_button_3_complete
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = je_tp_tsar_button_advance_agenda_tt
+			set_variable = je_tp_tsar_heir_of_alexander_button_3_complete
+			je:je_tp_tsar_heir_of_alexander = {
+				add_progress = {
+					value = 1
+					name = je_tp_tsar_heir_of_alexander_progress_bar
+				}
+			}
+		}
+	}
+}

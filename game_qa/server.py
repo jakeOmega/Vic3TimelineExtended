@@ -33,10 +33,11 @@ removes the folder (spec § 5.2, Review Focus 1).
                known by pid and start time): then it serves on, and `stop` again runs the stop again
     selfchecks the verdicts of the mod's TE_SELF_CHECK lines in the session's run so far, the game's log
                flushed first (`Session.self_checks`)
-    profile-start, profile-dump
+    profile-start, profile-dump, profile-pops
                a profile of the running game (#1700): the tick timings cleared and the script profiler on, then
                both dumps copied into the run folder (`Session.profile_start`, `Session.profile_dump`); `profile
-               summary` reads the copies and needs no server
+               summary` reads the copies and needs no server; every pop in one CSV, copied into the run folder
+               (`Session.profile_pops`, #1758)
     status     the server and the session, answered here without asking the game anything
     the rest   console, run-setup, add-setup, press, events, pick, read, tag, enter-game, advance, shot, click, try-event,
                profiler-roots, wheel, drag, gui-show, gui-hide, view, crop, hover
@@ -82,7 +83,8 @@ HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for th
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
 START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules",
-              "game_args", "add_mods", "fixture_date", "unresponsive_s", "capture")
+              "game_args", "add_mods", "fixture_date", "unresponsive_s", "capture", "gui_from",
+              "tick_settle_s")
 FIXTURE_ARGS = ("permission", "until", "playset", "owner_confirmed_busy", "max_hours")
 SCRIPT_DOCS_ARGS = ("permission", "version", "out", "force", "owner_confirmed_busy")
 
@@ -191,6 +193,7 @@ class SessionServer:
             "view": self._view, "crop": self._crop, "hover": self._hover,
             "profile-start": self._profile_start,
             "profile-dump": self._profile_dump,
+            "profile-pops": self._profile_pops,
         }
 
     @property
@@ -394,7 +397,8 @@ class SessionServer:
         return self._session.enter_game(body.get("via") or "country"), 0
 
     def _advance(self, body: dict) -> tuple[dict, int]:
-        return {"reached": list(self._session.advance(_arg(body, "days")))}, 0
+        reached = self._session.advance(_arg(body, "days"))
+        return {"reached": list(reached), "tick_settle": self._session.tick_settle}, 0
 
     def _shot(self, body: dict) -> tuple[dict, int]:
         return {"path": str(self._session.shot())}, 0
@@ -416,7 +420,8 @@ class SessionServer:
         return self._session.gui_show(
             _arg(body, "type"), _arg(body, "repo"), context=body.get("context") or "player",
             width=body.get("width", 520), variables=body.get("variables") or {}, outlines=body.get("outlines") is True,
-            scale=body.get("scale"), setup=body.get("setup"), keep=body.get("keep") is True), 0
+            scale=body.get("scale"), setup=body.get("setup"), keep=body.get("keep") is True,
+            sync_only=body.get("sync_only"), force_sync=body.get("force_sync") is True), 0
 
     def _view(self, body: dict) -> tuple[dict, int]:
         return self._session.view(_arg(body, "steps")), 0
@@ -442,6 +447,9 @@ class SessionServer:
 
     def _profile_dump(self, body: dict) -> tuple[dict, int]:
         return self._session.profile_dump(body.get("label")), 0
+
+    def _profile_pops(self, body: dict) -> tuple[dict, int]:
+        return self._session.profile_pops(body.get("label")), 0
 
     # ---- session.json
 

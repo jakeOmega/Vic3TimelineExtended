@@ -579,6 +579,21 @@ class StatusTextTest(unittest.TestCase):
             self.assertNotIn("all_switched", rows["je_te_cm_%s_status_late" % key])
             self.assertIn("global_var:te_cm_state_%s ?= 2" % key, rows["je_te_cm_%s_status_late" % key])
 
+    def test_the_complete_row_promises_a_late_join_only_where_one_can_happen(self):
+        # Every core part joins at the start (one still waiting on a vanilla entry holds the start back), so after
+        # completion only an optional culture, or the other culture of a two-culture core slot, can still join.
+        # A merge with neither said that cultures qualifying later could join, with nothing left to join (#1806).
+        late = "Cultures that qualify later can still join."
+        for merge in cfg.MERGES:
+            text = self.loc["je_te_cm_%s_status_complete" % merge.key]
+            self.assertTrue(text.startswith("The merge is complete: "), merge.key)
+            can_join_late = bool(merge.optional) or any(len(part.cultures) > 1 for part in merge.core)
+            self.assertEqual(gen.takes_late_part(merge), can_join_late, merge.key)
+            self.assertEqual(text.endswith(" " + late), can_join_late, merge.key)
+        # Pinned both ways: East Slavic and Chinese have no optional culture, Anglophone and American do.
+        for key, expected in (("east_slavic", False), ("chinese", False), ("anglophone", True), ("american", True)):
+            self.assertEqual(late in self.loc["je_te_cm_%s_status_complete" % key], expected, key)
+
     def test_the_gap_row_names_both_ends_and_the_gap(self):
         # "Too wide" alone left the player to find which cultures (2026-11-09): the row names the best- and worst-off
         # core cultures from the last census, their standards of living and the gap, and the value it must be under.

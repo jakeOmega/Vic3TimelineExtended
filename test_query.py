@@ -1,5 +1,5 @@
 """`scripts/query.py` (#1538): the offline answer to a lookup is the same bytes
-the server sends for it, on the same fixtures, for each of the five lookups."""
+the server sends for it, on the same fixtures, for each lookup."""
 from __future__ import annotations
 
 import http.client
@@ -136,6 +136,7 @@ class OfflineMatchesServerTests(unittest.TestCase):
             ("base_game_path", self.base),
             ("_BASE_COMMON", os.path.join(self.base, "game", "common")),
             ("_script_args_cache", None),
+            ("_vanilla_tables_cache", {}),
         ):
             patcher = mock.patch.object(mss, name, value)
             patcher.start()
@@ -166,6 +167,12 @@ class OfflineMatchesServerTests(unittest.TestCase):
         (["modifier-grants", "country_prestige_mult", "scope=mod"],
          "/modifier-grants/country_prestige_mult?scope=mod", 200),
         (["modifier-grants", "Not-Valid"], "/modifier-grants/Not-Valid", 400),
+        # Vanilla's side comes from the committed vanilla_parsed/ (the fixture
+        # base has no game files); the fixture ModState holds no helpers.
+        (["scripted-triggers", "country_has_monarchy_law", "source=vanilla"],
+         "/scripted-triggers/country_has_monarchy_law?source=vanilla", 200),
+        (["scripted-effects", "te_some_helper"], "/scripted-effects/te_some_helper", 503),
+        (["war-goal-types", "make_personal_union"], "/war-goal-types/make_personal_union", 200),
     ]
 
     def test_every_lookup_prints_the_bytes_the_server_sends(self):
@@ -190,6 +197,9 @@ class OfflineMatchesServerTests(unittest.TestCase):
                          ["law_te_council"])
         self.assertEqual(answer("modifier-search", "prestige")["entity_count"], 2)
         self.assertEqual(answer("script-args")["flags"][0]["unknown"], ["EXTRA"])
+        trigger = answer("scripted-triggers", "country_has_monarchy_law", "source=vanilla")
+        self.assertEqual(trigger["file"], "game/common/scripted_triggers/00_ep2_victoria_scripted_triggers.txt")
+        self.assertEqual(answer("war-goal-types", "make_personal_union")["kind"], "make_subject")
         grants = answer("modifier-grants", "country_prestige_mult")
         self.assertEqual(sorted((g["origin"], g["entity_id"]) for g in grants["grants"]),
                          [("mod", "law_te_council"), ("vanilla", "law_monarchy")])
@@ -229,7 +239,8 @@ class UsageTests(unittest.TestCase):
 
     def test_the_issue_lookups_are_the_supported_ones(self):
         self.assertEqual(set(query.LOOKUPS), {
-            "modifier-search", "localize", "references", "script-args", "modifier-grants"})
+            "modifier-search", "localize", "references", "script-args", "modifier-grants",
+            "scripted-triggers", "scripted-effects", "war-goal-types"})
 
     def test_request_paths(self):
         self.assertEqual(query.build_request(["modifier-search", "goods_output"])[1],

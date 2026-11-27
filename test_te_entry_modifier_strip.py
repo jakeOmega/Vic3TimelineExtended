@@ -171,6 +171,26 @@ class StripTypeTest(unittest.TestCase):
                 self.assertIn(f'tooltip = "[{item}.GetTooltip]"', body)
                 self.assertIn(f'texture = "[{item}.GetIcon]"', body)
 
+    def test_the_strip_has_a_heading_and_its_two_groups(self):
+        """From #2041 (a new game's Grand Monuments tab: eight identical busts above
+        Open Journal Entry), the Space Race's form for every tab: a ruled heading,
+        then Ongoing and Timed, each named, each drawn only with something in it,
+        and the timed rows with their name and time left."""
+        body = _strip_comments(_type_body(_read(WIDGETS), "te_je_modifier_strip"))
+        order = [body.index(f'text = "{key}"') for key in
+                 ("te_je_modifier_strip_header", "te_je_modifier_strip_ongoing", "te_je_modifier_strip_timed")]
+        self.assertEqual(order, sorted(order))
+        self.assertLess(body.index('text = "te_je_modifier_strip_ongoing"'),
+                        body.index('datamodel = "[JournalEntry.GetScalingModifiers]"'))
+        self.assertLess(body.index('text = "te_je_modifier_strip_timed"'),
+                        body.index('datamodel = "[JournalEntry.GetTimedModifiers]"'))
+        for model in ("GetScalingModifiers", "GetTimedModifiers"):
+            self.assertIn(f'visible = "[Not( IsDataModelEmpty( JournalEntry.{model} ) )]"', body)
+        self.assertIn('visible = "[Or( Not( IsDataModelEmpty( JournalEntry.GetScalingModifiers ) ), '
+                      'Not( IsDataModelEmpty( JournalEntry.GetTimedModifiers ) ) )]"', body)
+        self.assertIn('text = "[TimedModifier.GetName]"', body)
+        self.assertIn('text = "[TimedModifier.GetRemainingDuration]"', body)
+        self.assertEqual(re.findall(r"maximumsize = \{ (\d+) -1 \}", body), ["480"] * 3 + ["269", "170"])
 
     def test_the_space_races_form_reads_the_same_rows(self):
         """te_sr_program_effects: the same guard and the same two datamodels,

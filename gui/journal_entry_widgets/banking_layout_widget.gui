@@ -212,9 +212,13 @@ types banking_layout_widget_types
 	### running as well as the entry, as the charts are: every country holds
 	### the entry, dormant until its cycle starts, and an empty composer would
 	### still take its host's spacing (a gap above Open Journal Entry).
+	### No anchor: it is 520, the history panel's header, in a 520 column in
+	### every host (the tab frame's content, a wide layout's third column, the
+	### entry's own root), so an anchor placed nothing, while under the status
+	### composer, whose dial lines rewrap, an anchored composer would keep its
+	### first-layout place (gui_modding_guide.md gotcha #52; #2040).
 	type te_banking_reference_sections = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 2
 		visible = "[And( GetScriptedGui('te_budget_banking_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), GetScriptedGui('banking_dash_cycle_running').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) )]"

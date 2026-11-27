@@ -2920,10 +2920,13 @@ types cultural_hegemony_widget_types
 		te_ch_sec_models = {}
 	}
 
-	### The chart.
+	### The chart. No anchor: it is 520, its header's width, in a 520 column in
+	### every host (the tab frame's content, the wide layout's third column, the
+	### entry's own root), so an anchor placed nothing, while under the status
+	### composer, whose board can gain a row, an anchored composer would keep its
+	### first-layout place (gui_modding_guide.md gotcha #52; #2040).
 	type te_ch_reference_sections = flowcontainer {
 		direction = vertical
-		parentanchor = hcenter
 		ignoreinvisible = yes
 		spacing = 4
 		visible = "[GetScriptedGui('te_society_ch_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"

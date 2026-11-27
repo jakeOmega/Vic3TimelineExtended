@@ -110,6 +110,23 @@ class StatusTests(_FakeMSCase):
                          ["Laws:law_peg"])
         self.assertEqual(entries[("Laws", "law_peg", "icon")]["status"], "shared_mod")
 
+    def test_alert_textures_are_classified(self):
+        # #2052: an alert on a vanilla alert icon is borrowed, and the vanilla
+        # alert that owns the icon shows as its sharer.
+        vanilla = {"insufficient_construction_for_investment": _entity(texture="gfx/law/vanilla.dds")}
+        self.install({"Alert Types": {
+            **vanilla,
+            "sr_module_queue_empty": _entity(texture="gfx/law/vanilla.dds"),
+            "sr_module_stock_full": _entity(texture="gfx/law/a.dds"),
+        }}, base={"Alert Types": vanilla})
+        entries = _by_key(_run(types=["Alert Types"]))
+        borrowed = entries[("Alert Types", "sr_module_queue_empty", "texture")]
+        self.assertEqual((borrowed["status"], borrowed["path"], borrowed["shared_with"]),
+                         ("borrowed_vanilla", "gfx/law/vanilla.dds", ["insufficient_construction_for_investment"]))
+        self.assertEqual(entries[("Alert Types", "sr_module_stock_full", "texture")]["status"], "unique_mod")
+        self.assertNotIn(("Alert Types", "insufficient_construction_for_investment", "texture"), entries)
+        self.assertIn(("Alert Types", "texture"), srv._IMAGE_FIELDS_BY_TYPE)
+
     def test_shared_with_is_capped_same_type_first(self):
         laws = {f"law_{i:02d}": _entity(icon="gfx/law/vanilla.dds") for i in range(25)}
         self.install({"Laws": laws,
