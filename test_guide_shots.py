@@ -145,3 +145,18 @@ class StaleTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class InputStepTest(unittest.TestCase):
+    def test_each_kind_with_its_arguments(self):
+        for step in (("click", 0.5, 0.4), ("wheel", 0.5, 0.5, -40), ("drag", 0.1, 0.2, 0.3, 0.4), ("advance", 1),
+                     ("event", "te_debug_colonial_empire.1", 5)):
+            with self.subTest(step=step):
+                self.assertTrue(gs._input_ok(step))
+
+    def test_anything_else_is_refused(self):
+        for step in (("press", "esc"), ("click", 1.5, 0.4), ("click", 0.5), ("wheel", 0.5, 0.5, 41),
+                     ("wheel", 0.5, 0.5, 0.5), ("advance", 0), ("advance", 32), ("advance", True),
+                     ("event", "save", 0), ("event", "a.1", -1), ("event", "a.1", "0"), (), "click"):
+            with self.subTest(step=step):
+                self.assertFalse(gs._input_ok(step))

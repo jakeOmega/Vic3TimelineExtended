@@ -162,8 +162,6 @@ class ActionTest(unittest.TestCase):
             "construction:ships": "InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'ships' )",
             "state:capital": "InformationPanelBar.OpenStatePanel( AccessPlayer.AccessCapital )",
             "zoom:capital": "AccessPlayer.AccessCapital.ZoomToCapital",
-            "je:je_te_map_room": "InformationPanelBar.OpenJournalEntryPanel( GetPlayerJournalEntry('je_te_map_room')"
-                                 ".AccessSelf )",
             "sgui:te_jmap_pick_leading_cause_sgui": "GetScriptedGui('te_jmap_pick_leading_cause_sgui').Execute( "
                                                     "GuiScope.SetRoot( GetPlayer.MakeScope ).End )",
         }
@@ -174,7 +172,7 @@ class ActionTest(unittest.TestCase):
     def test_anything_else_is_refused(self):
         for text in ("set:a", "set:a=b c", "set:a='x'", "clear:", "panel:", "panel:a:b:c", "market:", "raw:x",
                      "ExecuteConsoleCommand('save')", "set:a=b]", "close-panel:x", "construction:", "construction:a b",
-                     "state:FRA", "state:", "zoom:map", "je:", "je:a b", "sgui:x_sgui", "sgui:te_x", "sgui:te_a b_sgui",
+                     "state:FRA", "state:", "zoom:map", "je:je_x", "sgui:x_sgui", "sgui:te_x", "sgui:te_a b_sgui",
                      7, None):
             with self.subTest(text=text):
                 with self.assertRaises(cg.CaptureGuiError) as caught:

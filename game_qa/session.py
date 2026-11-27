@@ -246,8 +246,10 @@ LOAD_NO_ACK_TRIES = 2
 # And a not_foreground of the keys themselves (LEFT_FRONT) with nothing typed: the window was in front and lost it while
 # the keys went out, which a late save's load does each time the game stops responding and Windows puts its stand-in
 # window in front (live 2026-11-26). Each try passes `_front`'s presence rule again, so someone at the machine still
-# ends the start ("someone has used the machine"), and a line holding half a command (`Console.stranded`) is never
-# retried.
+# ends the start ("someone has used the machine"). The keys can lose the front partway through the probe (live
+# 2026-11-27, the 1964 copy's second start: refused on its first try), leaving that much of it on the input line
+# without its Enter (`Console.stranded`): the next try empties the line first (`clear_line`). Nothing else is ever on
+# the line during a load: the probe is the session's own text.
 LOAD_LEFT_FRONT_TRIES = 8
 # The errors after Start whose own code `enter_game` keeps (with the clicks added): they say more than not_entered.
 ENTER_KEPT = ("breakpoint_unverified", "tag_failed", "debugger", "watch_ended", "left_running")
@@ -1575,8 +1577,8 @@ class Session:
     def _console_when_loaded(self) -> None:
         """Wait for the console to take commands once the window has first answered: `ensure_open` is tried
         every ENTER_RETRY_S while it refuses game_gone, until LOAD_WAIT_S has passed, once more after a
-        no_ack (LOAD_NO_ACK_TRIES), and up to LOAD_LEFT_FRONT_TRIES times while the keys lose the front with nothing
-        typed (LEFT_FRONT); any other error is raised at once, and `watch` (and a stop asked meanwhile) is looked at
+        no_ack (LOAD_NO_ACK_TRIES), and up to LOAD_LEFT_FRONT_TRIES times while the keys lose the front (LEFT_FRONT,
+        the probe's text cleared from the line first when part of it went out); any other error is raised at once, and `watch` (and a stop asked meanwhile) is looked at
         before each retry, so a game that ended stops the tries. A save from late in a game keeps the window from responding for
         longer than UNRESPONSIVE_S while it loads (live 2026-11-12: a 47 MB save of 1931 ended the first start
         `game_gone` 75 s after the launch), which one `ensure_open` takes for a game that has gone. Recorded as
@@ -1588,12 +1590,16 @@ class Session:
                 tries += 1
                 out["tries"] = tries
                 try:
+                    if self._console.stranded:
+                        # Only the console probe of a load can be on the line, without its Enter (LEFT_FRONT
+                        # below): empty it before the next try, which ensure_open would refuse stranded_text.
+                        self._console.clear_line()
+                        out["cleared"] = out.get("cleared", 0) + 1
                     self._console.ensure_open(max(1.0, min(CONSOLE_READY_S, deadline - self._clock())))
                     return
                 except ConsoleError as e:
                     no_acks += e.code == "no_ack"
-                    left_front = (e.code == "not_foreground" and e.detail == LEFT_FRONT
-                                  and not self._console.stranded)
+                    left_front = e.code == "not_foreground" and e.detail == LEFT_FRONT
                     left_fronts += left_front
                     retried = ((e.code in ENTER_RETRIED and no_acks < LOAD_NO_ACK_TRIES)
                                or (left_front and left_fronts < LOAD_LEFT_FRONT_TRIES))

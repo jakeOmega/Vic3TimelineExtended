@@ -57,6 +57,7 @@ MANIFEST = "scripts/image_pipeline/guide_shots.py"
 TAKEN_FILE = "scripts/image_pipeline/guide_shots_taken.json"
 CONSOLE_PARK = (0.1125, 0.544)          # session.CONSOLE_INPUT_LINE: the console's edit line, which hovers nothing
 VIEW_TIMEOUT_S = 120.0
+ADVANCE_TIMEOUT_S = 900.0     # an input step's advance: the verb plays at most about 400 s a call
 CAPTURE_ARGS = ("no_notifications",)
 OPS = {">": lambda a, b: a > b, ">=": lambda a, b: a >= b, "<": lambda a, b: a < b, "<=": lambda a, b: a <= b,
        "==": lambda a, b: a == b, "!=": lambda a, b: a != b}
@@ -248,6 +249,15 @@ class Capture:
         view = self.verb("view", {"steps": steps}, VIEW_TIMEOUT_S)
         self.previous_keys = keys_set(shot.get("view") or [])
         out["view_log"] = view.get("log") or []
+        if event:
+            # Fired after the view (which closes the side panel) and before the inputs: the game files a new event in
+            # the outliner, minimized, once a day passes (live 2026-11-26, 1964 copy: no window while paused, and no
+            # outliner row until `advance 1`), so a recipe advances a day and clicks the row (PopupManager.OpenEvent
+            # takes an Event, which no view can name). Answered after the shot, its first option, so it covers
+            # nothing later. The console's `event` ignores the event's trigger: a recipe names one whose text needs
+            # no scope but the country's.
+            self.verb("console", {"text": "event %s" % event})
+            out["pending"] = self.verb("events", {}).get("pending")
         scroll = shot.get("scroll")
         inputs = ([("wheel", *scroll)] if scroll else []) + [tuple(step) for step in shot.get("input") or []]
         for step in inputs:
@@ -256,13 +266,6 @@ class Capture:
             # A click, a wheel or a drag latches the keyboard away (whether it moved the keyboard is not known): the
             # console's input line takes it back before anything types again.
             self.verb("click", {"console": True})
-        if event:
-            # Fired after the view (which closes the side panel), then `events` (the list waits for the console's
-            # reply, by when the window is up); answered after the shot, its first option, so it covers nothing
-            # later. The console's `event` ignores the event's trigger: a recipe names one whose text needs no
-            # scope but the country's.
-            self.verb("console", {"text": "event %s" % event})
-            out["pending"] = self.verb("events", {}).get("pending")
         hover = shot.get("hover") or CONSOLE_PARK
         self.verb("hover", {"x": hover[0], "y": hover[1]})
         try:
@@ -287,7 +290,9 @@ class Capture:
         return out
 
     def do_input(self, step: Sequence) -> None:
-        """One input step of a recipe: ("click", x, y), ("wheel", x, y, notches) or ("drag", x1, y1, x2, y2)."""
+        """One input step of a recipe: ("click", x, y), ("wheel", x, y, notches), ("drag", x1, y1, x2, y2),
+        ("advance", days): time passed, on a copy (an event reaches the outliner only then), or ("event", id, option):
+        an event fired from the console and answered with that option (0-based)."""
         kind, args = step[0], list(step[1:])
         if kind == "click":
             self.verb("click", {"x": args[0], "y": args[1]})
@@ -295,8 +300,16 @@ class Capture:
             self.verb("wheel", {"x": args[0], "y": args[1], "notches": args[2]})
         elif kind == "drag":
             self.verb("drag", {"x1": args[0], "y1": args[1], "x2": args[2], "y2": args[3]})
+        elif kind == "advance":
+            self.verb("advance", {"days": args[0]}, ADVANCE_TIMEOUT_S)
+        elif kind == "event":
+            # A console-only event answered at once, by option index: a debug event's refresh of a panel's display
+            # state (te_debug_colonial_empire.1's sixth option), which a tag to another country leaves unset until
+            # its next monthly pulse. No window is needed: `select_event_option` answers a pending event.
+            self.verb("console", {"text": "event %s" % args[0]})
+            self.verb("pick", {"index": args[1], "event": args[0]})
         else:
-            raise CaptureError("bad_input", "%r is not a click, wheel or drag" % (step,))
+            raise CaptureError("bad_input", "%r is not a click, wheel, drag, advance or event" % (step,))
 
     def try_country(self, shot: Mapping, country: str) -> dict:
         """Play `country` (a `tag` when it is another) and read the shot's needs there: {country, met, needs,

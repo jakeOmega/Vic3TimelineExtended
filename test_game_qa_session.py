@@ -746,7 +746,7 @@ class StartTest(SessionTestCase):
         self.assertEqual(self._console_ready()["tries"], session.LOAD_LEFT_FRONT_TRIES)
         self.assertEqual(error.info["stop"]["outcome"], "restored")
 
-    def test_half_a_command_typed_before_the_front_was_lost_is_not_retried(self):
+    def test_half_a_probe_typed_before_the_front_was_lost_is_cleared_and_tried_again(self):
         sent = {"n": 0}
 
         def step(index):
@@ -754,11 +754,12 @@ class StartTest(SessionTestCase):
             if sent["n"] == 2:                  # one character of the probe went out, then the front was lost
                 self.game.foreground = False
         self.game.on_step = step
-        error = self.session_error(self.start)
+        reply = self.start()
         self.game.on_step = None
-        self.assertEqual(error.code, "not_foreground")
-        self.assertIn(LEFT_FRONT, error.detail)
-        self.assertEqual(self._console_ready()["tries"], 1)
+        self.assertEqual(reply["country"], "FRA")
+        ready = self._console_ready()
+        self.assertEqual((ready["outcome"], ready["tries"], ready["cleared"]), ("ok", 2, 1))
+        self.assertEqual(self.game.typed, "")   # nothing of the half probe was left on the line
 
     def test_a_console_that_never_opens_is_tried_twice_not_for_the_whole_wait(self):
         self.game.console_never_opens = True

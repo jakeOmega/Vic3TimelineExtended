@@ -49,8 +49,6 @@ binding (`ExecuteConsoleCommand`, a save) through it:
     construction:TAB     [InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'TAB' )]
     state:capital        [InformationPanelBar.OpenStatePanel( AccessPlayer.AccessCapital )]
     zoom:capital         [AccessPlayer.AccessCapital.ZoomToCapital]: the camera to the capital
-    je:KEY               [InformationPanelBar.OpenJournalEntryPanel( GetPlayerJournalEntry('KEY').AccessSelf )]: an
-                         entry's page, as the Map Room button opens it (je_te_map_room)
     sgui:te_…_sgui       [GetScriptedGui('NAME').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]: one of the
                          mod's scripted GUIs run as its button runs it, in the played country's scope. It changes the
                          game (a Map Room pick sets the country's selector), which is why only a copy is ever loaded
@@ -61,6 +59,9 @@ Each binding is one vanilla's own GUI uses (`OpenConstructionPanel( GetPlayer.Se
 played country's capital as the State: a map object the view can name without a click. The capital is reached by
 `AccessPlayer`, not `GetPlayer`: live 2026-11-26, `GetPlayer.AccessCapital` was refused "Invalid promote 'GetPlayer'
 ... requires non const promote" (`AccessPlayer.AccessFirstMarket` is the market tab's for the same reason).
+A journal entry's page has no view action: `GetPlayerJournalEntry('KEY').AccessSelf` in a binding was refused
+the same way, and the same entry given as the step widget's datacontext opened nothing and logged nothing (live
+2026-11-27), so a recipe clicks the entry's outliner row or its button.
 """
 
 from __future__ import annotations
@@ -267,15 +268,13 @@ def parse_action(text: str) -> Action:
         binding = "InformationPanelBar.OpenStatePanel( AccessPlayer.AccessCapital )"
     elif text == "zoom:capital":
         binding = "AccessPlayer.AccessCapital.ZoomToCapital"
-    elif kind == "je" and _WORD.fullmatch(rest):
-        binding = "InformationPanelBar.OpenJournalEntryPanel( GetPlayerJournalEntry('%s').AccessSelf )" % rest
     elif kind == "sgui" and _WORD.fullmatch(rest) and rest.startswith("te_") and rest.endswith("_sgui"):
         binding = "GetScriptedGui('%s').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )" % rest
     elif text == "close-panel":
         binding = "InformationPanelBar.ClosePanel"
     if binding is None:
         raise CaptureGuiError("bad_action", "%r is not an action: set:KEY=VALUE, clear:KEY, panel:NAME, "
-                              "panel:NAME:TAB, market:TAB, construction[:TAB], state:capital, zoom:capital, je:KEY, "
+                              "panel:NAME:TAB, market:TAB, construction[:TAB], state:capital, zoom:capital, "
                               "sgui:te_NAME_sgui or close-panel, each name letters, digits and _" % (text,))
     return Action(text, binding)
 

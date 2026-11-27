@@ -329,16 +329,29 @@ class CaptureRunTest(unittest.TestCase):
             ("click", {"console": True}), ("hover", {"x": capture.CONSOLE_PARK[0], "y": capture.CONSOLE_PARK[1]}),
             ("crop", {"box": [0.0, 0.0, 0.5, 1.0], "settle": True, "label": "one"})])
 
-    def test_an_event_is_fired_after_the_view_and_answered_after_the_shot(self):
+    def test_an_event_is_fired_before_the_inputs_and_answered_after_the_shot(self):
         self.m.SHOTS["one"]["event"] = "space_race_events.42"
+        self.m.SHOTS["one"]["input"] = [("advance", 1), ("click", 0.9, 0.2)]   # a day, then its outliner row
         del self.m.SHOTS["one"]["view"]             # an event shot needs no view
         fake = FakeSession(self.tmp, {"nd_stockpile": 1.0})
         results = self.run_capture(fake, ["one"])
-        steps = [(v, b) for v, b in fake.calls if v in ("view", "console", "events", "hover", "crop", "pick")]
-        self.assertEqual([v for v, _ in steps], ["view", "console", "events", "hover", "crop", "pick", "view"])
+        steps = [(v, b) for v, b in fake.calls
+                 if v in ("view", "console", "events", "advance", "click", "hover", "crop", "pick")]
+        self.assertEqual([v for v, _ in steps],
+                         ["view", "console", "events", "advance", "click", "click", "hover", "crop", "pick", "view"])
         self.assertEqual(steps[1][1], {"text": "event space_race_events.42"})
-        self.assertEqual(steps[5][1], {"index": 0, "event": "space_race_events.42"})
+        self.assertEqual(steps[3][1], {"days": 1})
+        self.assertEqual(steps[8][1], {"index": 0, "event": "space_race_events.42"})
         self.assertEqual(results["one"]["status"], "taken")
+
+    def test_an_event_input_fires_the_event_and_picks_its_option_at_once(self):
+        self.m.SHOTS["one"]["input"] = [("event", "te_debug_colonial_empire.1", 5)]
+        fake = FakeSession(self.tmp, {"nd_stockpile": 1.0})
+        self.run_capture(fake, ["one"])
+        steps = [(v, b) for v, b in fake.calls if v in ("console", "pick", "crop")]
+        self.assertEqual(steps[:2], [("console", {"text": "event te_debug_colonial_empire.1"}),
+                                     ("pick", {"index": 5, "event": "te_debug_colonial_empire.1"})])
+        self.assertEqual(steps[2][0], "crop")
 
     def test_an_unknown_input_fails_the_shot(self):
         self.m.SHOTS["one"]["input"] = [("press", "esc")]
