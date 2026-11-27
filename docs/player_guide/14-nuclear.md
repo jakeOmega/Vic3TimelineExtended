@@ -319,7 +319,8 @@ crises and against your enemies' distant allies. No strike, salvo or answer can
 hit a state out of reach, a Leadership salvo needs the capital in reach, and a
 threat against a country you can't reach is a bluff. The Forces section's Reach
 row counts the countries in reach and lists them on hover; with ICBMs fielded
-it reads Every country.
+it reads Every country. The Map Room's [Nuclear Reach](01-introduction.md)
+map shows the same reach state by state, each leg in its own color.
 
 In a game saved before the delivery projects, every country that had
 researched Intercontinental Ballistic Missiles keeps its missiles as fielded,

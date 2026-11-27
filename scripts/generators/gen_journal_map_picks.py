@@ -104,6 +104,8 @@ MAPS = [
     dict(key="vacant_jobs", sel=85),
     dict(key="below_expected_sol", sel=86),
     dict(key="discrimination", sel=87),
+    # the viewer's nuclear reach, by the leg that carries its weapons (2026-11-26): the Map Room's alone
+    dict(key="nuclear_reach", sel=90, gate="has_game_rule = nuclear_weapons_enabled"),
 ]
 # The class maps (#1975): two per pop type, its people and its share of the people, from journal_map_classes.py. The
 # Count/Share switch (te_jmap_class_mode) shows one of a class's two buttons, so `mode` joins the pick's is_shown.
@@ -164,9 +166,10 @@ GROUPS = [
     dict(key="military", name="Military and Security",
          note="where the soldiers are, the men of fighting age and the war dead, on one row since the census shares a "
               "country's war dead out to its states by their soldiers; then devastation, the nuclear powers and the "
-              "viewer's agent networks",
+              "viewer's nuclear reach; and the viewer's agent networks",
          rows=[["armed_forces", "fighting_age_men", "war_dead"],
-               ["devastation", "nuclear", "networks"]]),
+               ["devastation", "nuclear", "nuclear_reach"],
+               ["networks"]]),
     dict(key="land", name="Land and Environment",
          note="the climate's comfort before and after technology's relief, and tourism's base appeal; then the "
               "regions' pollution beside the emissions, and the ocean basins and the monuments' grandeur, each "

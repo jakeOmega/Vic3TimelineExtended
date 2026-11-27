@@ -1001,7 +1001,7 @@ types te_map_room_picks_generated
 
 		# Military and Security: where the soldiers are, the men of fighting age and the war dead, on one row since
 		# the census shares a country's war dead out to its states by their soldiers; then devastation, the nuclear
-		# powers and the viewer's agent networks.
+		# powers and the viewer's nuclear reach; and the viewer's agent networks.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_military"
@@ -1076,6 +1076,23 @@ types te_map_room_picks_generated
 					onclick = "[GetScriptedGui('te_jmap_pick_nuclear_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_nuclear_reach"
+					tooltip = "te_jmap_pick_nuclear_reach_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_nuclear_reach_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_nuclear_reach_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_nuclear_reach_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+			}
+
+			flowcontainer = {
+				visible = "[GetScriptedGui('te_jmap_pick_networks_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_networks"

@@ -284,6 +284,59 @@ te_jmap_nuke_armed = {
 }
 
 # ---------------------------------------------------------------------------
+# Nuclear Reach (90): where the viewer's nuclear weapons reach, by the leg that carries them
+# ---------------------------------------------------------------------------
+# The rule is the deterrent's (nd_state_in_reach_of, nuclear_deterrence_triggers.txt), one leg at a time: bombers reach
+# the countries in the viewer's list, missile submarines every coastal state, ICBMs every state. The list and the
+# legs are stored on the viewer by te_jmap_store_reach (te_journal_map_effects.txt), so a paint reads a list and two
+# flags, not the delivery triggers, whose submarines walk the viewer's states for a coast. Nothing here reads the
+# viewer's arsenal (nuclear.md's privacy rule: in multiplayer another player can see the viewer's map), and the map
+# draws the bombers' reach whether or not the viewer holds a warhead.
+
+# In the viewer's bombers' reach: its owner is on the viewer's list (te_jmap_rch), or strategically adjacent to the
+# viewer now, read live as a strike reads it, so a war begun since the list was built counts at once. The viewer's own
+# states are not.
+te_jmap_reach_bombers = {
+	owner ?= { save_temporary_scope_as = te_jmap_reach_owner }
+	global_var:te_jmap_viewer ?= {
+		NOT = { this = scope:te_jmap_reach_owner }
+		OR = {
+			has_strategic_adjacency = scope:te_jmap_reach_owner
+			AND = {
+				has_variable_list = te_jmap_rch
+				is_target_in_variable_list = { name = te_jmap_rch target = scope:te_jmap_reach_owner }
+			}
+		}
+	}
+}
+
+# A coastal state, and the viewer fields missile submarines with a coast of its own to sail from.
+te_jmap_reach_subs = {
+	is_coastal = yes
+	global_var:te_jmap_viewer ?= { has_variable = te_jmap_rch_subs }
+}
+
+# The viewer fields ICBMs, which reach every state.
+te_jmap_reach_icbms = {
+	global_var:te_jmap_viewer ?= { has_variable = te_jmap_rch_icbms }
+}
+
+# Out of the viewer's reach: no leg reaches it, and it isn't the viewer's own (the paint's last branch, pale).
+te_jmap_reach_out = {
+	NOT = { te_jmap_owner_is_viewer = yes }
+	NOT = { te_jmap_reach_bombers = yes }
+	NOT = { te_jmap_reach_subs = yes }
+	NOT = { te_jmap_reach_icbms = yes }
+}
+
+# A coast missile submarines would reach, were the viewer to field them: a coastal state, and a coast of the viewer's
+# own to sail from. The hover's line for a state out of reach.
+te_jmap_reach_subs_would = {
+	is_coastal = yes
+	global_var:te_jmap_viewer ?= { has_variable = te_jmap_rch_coast }
+}
+
+# ---------------------------------------------------------------------------
 # Covert Warfare: the viewer's network in each country
 # ---------------------------------------------------------------------------
 # The viewer has a network in the state's owner (te_jmap_net_strength, te_journal_map_values.txt).

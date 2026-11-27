@@ -2591,6 +2591,10 @@
   "en": "Our colonial empire is crumbling. International pressure and local unrest make every territory costlier to hold.",
   "ru": "Наша колониальная империя рушится. Международное давление и местные волнения делают удержание каждой территории дороже."
  },
+ "colonial_garrison_ig_modifier_desc": {
+  "en": "Our Military Garrison holds the colonies by force, and this group opposes colonial exploitation. Its political strength is reduced.",
+  "ru": "Наш Военный гарнизон удерживает колонии силой, а эта группа выступает против колониальной эксплуатации. Её политическая сила снижена."
+ },
  "colonial_integration_progress_modifier_desc": {
   "en": "A colonial territory has reached a milestone in integration, with high cultural acceptance among the local population.",
   "ru": "Колониальная территория достигла рубежа в интеграции: среди местного населения высокое культурное принятие."
@@ -12242,6 +12246,10 @@
  "te_jmap_pick_nuclear_desc": {
   "en": "The world's nuclear powers in red, as the world sees them. If you are one, the countries hosting your weapons, those under your nuclear umbrella or a $nuclear_guarantee$ you gave, and those whose independence you guarantee, each in its own color. Your own country is blue.",
   "ru": "Ядерные державы мира — красным, как их видит мир. Если вы одна из них: страны, где размещено ваше оружие, страны под вашим ядерным зонтиком или под гарантией «$nuclear_guarantee$», данной вами, и страны, чью независимость вы гарантируете, — каждая своим цветом. Ваша страна — синяя."
+ },
+ "te_jmap_pick_nuclear_reach_desc": {
+  "en": "Where your nuclear weapons can strike. Orange: your bombers' reach, every country next to you, to a direct subject of yours or to a host of your weapons, or sharing a strategic region with one of them. Green: every other coast, while you field missile submarines and hold a coast; stripes mark a coast both reach. Pink: every state left, while you field ICBMs. Your country is blue, a state out of reach pale. Before your first warhead, orange is where your bombers would fly.",
+  "ru": "Куда может ударить ваше ядерное оружие. Оранжевый: зона досягаемости ваших бомбардировщиков, то есть каждая страна, соседняя с вами, с вашим прямым зависимым государством или со страной, где размещено ваше оружие, либо делящая с кем-то из них стратегический регион. Зелёный: каждое прочее побережье, пока у вас развёрнуты ракетные подлодки и есть своё побережье; штриховка отмечает побережье, куда достают и те и другие. Розовый: каждая оставшаяся область, пока у вас развёрнуты МБР. Ваша страна — синяя, область вне досягаемости — бледная. До вашей первой боеголовки оранжевый показывает, куда долетели бы ваши бомбардировщики."
  },
  "te_jmap_pick_ocean_basins_desc": {
   "en": "Color each coastal state by the ocean basin its [concept_seabed_licence]s come from: Pacific, Atlantic, Indian, Arctic or Southern.",
