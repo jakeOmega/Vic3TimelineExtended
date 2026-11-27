@@ -1321,14 +1321,13 @@ class ValidateRegistriesHTTPTests(unittest.TestCase):
         self.assertEqual(d["status"], "validated")
         self.assertIn("warning_count", d)
         self.assertIsInstance(d["warnings"], list)
+        from game_log_reader import REGISTRY_WARNING_KEYS
+
         for w in d["warnings"]:
-            if w.get("kind") == "helper_anchor_mod_calls":
-                # #730: a registry entry anchored on a vanilla helper file the mod calls.
-                self.assertEqual(set(w.keys()), {
-                    "label", "detail", "kind", "entry", "anchor", "helper_file", "mod_uses", "advice",
-                })
-            else:
-                self.assertEqual(set(w.keys()), {"label", "detail"})
+            # Each kind's own keys (#1949): `helper_anchor_mod_calls` (#730), `mod_only_anchor` (#873), and the
+            # plain {label, detail} of a warning with no kind.
+            self.assertIn(w.get("kind"), REGISTRY_WARNING_KEYS, w)
+            self.assertEqual(set(w.keys()), REGISTRY_WARNING_KEYS[w.get("kind")], w)
         if "helper_anchor_check" in d:
             self.assertTrue(d["helper_anchor_check"] == "ran"
                             or d["helper_anchor_check"].startswith("skipped"))
