@@ -520,6 +520,18 @@ shock.
    `logistics_input_cut` self-check reads OK on a base running it, since the
    method carries no launch multiplier of its own. An AI base on Mining Colony
    switches to it (the group's default `most_profitable`).
+5. **Colony module fabrication (2026-11-26).** The technology's tooltip also
+   lists +100% Colony Module Fabrication, its description on hover (shown
+   under every Space Race setting, as the Habitat room technologies' lines
+   are). Under Simple or Full Colonies, research it with a fabrication method running
+   (and, if you can, an Orbital Yard or Mare Imbrium's Mass Driver): the
+   Space Race panel's Modules view shows the "Fabrication a month" figure
+   doubled from the next month, its hover reads "Fabrication bonus, on every
+   source: +100%", the stock's "A year's fabrication" line doubles with it,
+   and the Next Module hover's months to wait halve. The country's modifier
+   breakdown still lists the method's +25 (or 12, 5) Colony Module
+   Fabrication per Month, undoubled: the bonus applies in the rate, not to
+   that line.
 
 ## Phase 3: Advanced Fission
 

@@ -353,6 +353,8 @@
  country_sr_habitat_room_add_desc:0 "How much of its world's starting room each Habitat at our colonies adds for people, beyond the half every Habitat holds, under the Simple and Full Colonies settings of the Space Race rule. A colony keeps the room its Habitats were built with if it changes hands."
  country_sr_module_fabrication_add:0 "Colony Module Fabrication per Month"
  country_sr_module_fabrication_add_desc:0 "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100."
+ country_sr_module_fabrication_mult:0 "Colony Module Fabrication"
+ country_sr_module_fabrication_mult_desc:0 "More colony module fabrication points from every source, under the Simple and Full Colonies settings of the Space Race rule: the Space Program's method, the $sr_colony_imbrium_massdriver$ and each $sr_mq_module_yard$. At +100% the points a module costs come in twice as fast."
  country_sr_module_storage_add:0 "Colony Module Storage"
  country_sr_module_storage_add_desc:0 "Fabrication points our colony module stock holds beyond its base and a year of fabrication, under the Simple and Full Colonies settings of the Space Race rule."
  country_st_res_aeroplanes_capacity_add:0 "$aeroplanes$ Reserve Capacity"

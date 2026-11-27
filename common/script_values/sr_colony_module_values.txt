@@ -74,14 +74,24 @@ sr_mod_fab_stock_fill_cap = {
 sr_mod_dismantle_months = { value = 12 }
 
 # Country scope. The month's points: the Space Program's fabrication method
-# (te_colony_module_pms.txt), workforce-scaled, and the colonies' Orbital Yards
-# (colony management design § 7).
+# (sr_colony_module_pms.txt), workforce-scaled, with Mare Imbrium's Mass Driver
+# (country_sr_module_fabrication_add), and the colonies' Orbital Yards (colony
+# management design § 7), all times the fabrication bonus
+# (country_sr_module_fabrication_mult: Von Neumann Machines' +100%, the owner,
+# 2026-11-26). Every reader of the rate (the stock's year, the panel, the
+# alerts, the months to the next module) takes the bonus with it.
 sr_mod_fab_rate_method = {
 	value = modifier:country_sr_module_fabrication_add
 }
 sr_mod_fab_rate = {
 	value = sr_mod_fab_rate_method
 	add = { value = sr_mod_units_yard multiply = sr_mod_yard_points }
+	multiply = sr_mod_fab_rate_factor
+}
+sr_mod_fab_rate_factor = {
+	value = 1
+	add = modifier:country_sr_module_fabrication_mult
+	min = 0
 }
 
 # ---- The AI's fabrication budget (the owner, 2026-11-20) ---------------------------
