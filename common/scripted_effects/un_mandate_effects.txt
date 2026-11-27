@@ -628,8 +628,10 @@ un_mandates_monthly_update = {
 # the target is left. An allowed goal of the same type that comes first goes
 # with it, since nothing can spare it. Before #1892 there was one call per
 # type, which took the older, allowed goal and left the prohibited one, so
-# the mandate still ended violated. test_un_mandate_play_scope.py pins the
-# gate, the list and the loop.
+# the mandate still ended violated. transfer_subject is also struck against
+# each of the target's direct subjects (un_mandate_strike_subject_goal_type),
+# as un_mandate_has_prohibited_goal reads it (#1899).
+# test_un_mandate_play_scope.py pins the gate, the list and the loop.
 # Scope: diplomatic play; expects scope:actor (from on_wargoal_added)
 un_mandate_ai_strike_prohibited = {
 	if = {
@@ -666,6 +668,8 @@ un_mandate_ai_strike_prohibited = {
 		un_mandate_strike_goal_type = { TYPE = make_chartered_company }
 		un_mandate_strike_goal_type = { TYPE = release_as_subject }
 		un_mandate_strike_goal_type = { TYPE = transfer_subject }
+		# A goal to take one of the target's subjects targets the subject (#1899).
+		un_mandate_strike_subject_goal_type = { TYPE = transfer_subject }
 		un_mandate_strike_goal_type = { TYPE = regime_change }
 		un_mandate_strike_goal_type = { TYPE = humiliation }
 	}
@@ -714,6 +718,26 @@ un_mandate_strike_goal_type = {
 		}
 		un_strike_goals_self_check = { STRIKE = mandate TYPE = $TYPE$ TARGET = scope:un_mandate_strike_target }
 	}
+}
+
+# Strike the holder's goals of $TYPE$ against each of the mandate target's
+# direct subjects: un_mandate_strike_goal_type, with each subject in turn as
+# scope:un_mandate_strike_target, then the target put back for the types
+# after it. For the goal types with targets_enemy_subject, which target the
+# subject, not its overlord, so the read against the target never finds them
+# (#1899; un_mandate_prohibited_goal_on_subject_held is the violation's read).
+# Parameters: $TYPE$ = war goal type
+# Scope: diplomatic play; expects scope:actor and scope:un_mandate_strike_target
+un_mandate_strike_subject_goal_type = {
+	save_temporary_scope_as = un_mandate_strike_play
+	scope:un_mandate_strike_target = { save_temporary_scope_as = un_mandate_strike_overlord }
+	scope:un_mandate_strike_overlord = {
+		every_direct_subject = {
+			save_temporary_scope_as = un_mandate_strike_target
+			scope:un_mandate_strike_play = { un_mandate_strike_goal_type = { TYPE = $TYPE$ } }
+		}
+	}
+	scope:un_mandate_strike_overlord = { save_temporary_scope_as = un_mandate_strike_target }
 }
 
 # After a strike loop (un_mandate_strike_goal_type, un_force_strike_goal):
