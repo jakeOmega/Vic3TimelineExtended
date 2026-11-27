@@ -109,6 +109,29 @@ class TestTripwire(unittest.TestCase):
         # from fewer than 10,000 people a tenfold rise says nothing
         self.assert_quiet({**SANE, "te_dg_walk_pop": 90_000.0, "te_dg_walk_pop_prev": 8_000.0})
 
+    def test_sign_3_skips_a_tenfold_rise_that_is_mostly_migration(self):
+        """#1933: the three sign-3 lines of the owner's 1.15.2 USA game were states flooded by arrivals, with sane
+        rates: net migration 1.00 to 1.06 of the rise. Sign 3 stands aside there as sign 5 does."""
+        mindanao = {**SANE, "te_dg_walk_pop": 1_466_401.0, "te_dg_walk_pop_prev": 141_277.0, "te_dg_provinces": 3.0,
+                    "te_dg_e0": 35.18, "te_dg_cbr": 1.71, "te_dg_cdr": 7.36, "te_dg_net_migration": 1_398_204.0,
+                    "te_dg_in_crowd": 0.107, "te_dg_m_inf": 1.094}
+        cape = {**SANE, "te_dg_walk_pop": 351_990.0, "te_dg_walk_pop_prev": 18_287.0, "te_dg_provinces": 1.0,
+                "te_dg_e0": 42.60, "te_dg_cbr": 0.53, "te_dg_cdr": 2.19, "te_dg_net_migration": 346_237.0}
+        gold_coast = {**SANE, "te_dg_walk_pop": 480_277.0, "te_dg_walk_pop_prev": 11_553.0, "te_dg_provinces": 1.0,
+                      "te_dg_e0": 36.10, "te_dg_cbr": 0.0, "te_dg_cdr": 0.28, "te_dg_net_migration": 470_116.0}
+        for state in (mindanao, cape, gold_coast):
+            with self.subTest(people=state["te_dg_walk_pop"]):
+                self.assert_quiet(state)
+        # a tenfold rise that is half migration still trips: the other half is births no census should make
+        rise = mindanao["te_dg_walk_pop"] - mindanao["te_dg_walk_pop_prev"]
+        self.assert_trips({**mindanao, "te_dg_net_migration": 0.5 * rise}, 3)
+        # three quarters is the bound, as sign 5's
+        self.assert_quiet({**mindanao, "te_dg_net_migration": 0.75 * rise})
+        self.assert_trips({**mindanao, "te_dg_net_migration": 0.74 * rise}, 3)
+        # the skip only stands sign 3 aside: the signs after it still read the state
+        self.assert_trips({**mindanao, "te_dg_in_crowd": 5.1}, 6)
+        self.assert_trips({**mindanao, "te_dg_e0": 4.9}, 4)
+
     def test_each_sign_on_its_own(self):
         for change, why in (({"te_dg_e0": 4.9}, 4), ({"te_dg_rate_clamp_d": 1.0}, 5),
                             ({"te_dg_in_crowd": 5.1}, 6), ({"te_dg_mb": 10.5}, 7)):
