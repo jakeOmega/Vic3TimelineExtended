@@ -489,9 +489,10 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   law with `enact_law` through `te_enact_law_checked` (`common/scripted_effects/te_enact_law_effects.txt`) where they
   used `activate_law`. What a player should see: the law passes the day the option is picked, as before, and now as a
   successful enactment, with the interest-group approval and the movement loyalists vanilla gives one (the engine
-  docs' words: "with on_enact, movement loyalists and interest group approval"). A hidden check a day on (`te_enact_law.1`) logs one line per verdict in `debug.log`, once a game:
-  `TE_SELF_CHECK OK|BROKEN enact_law`, with the law, the country, `enacting_before` (1 if the country was enacting a
-  law when the option was picked) and, on OK, `enacting_now`. Judged only for a country that did not already hold the
+  docs' words: "with on_enact, movement loyalists and interest group approval"). A hidden check a day on
+  (`te_enact_law.1`, or `.2` when an enactment was already running; both run `te_enact_law_check`) logs one line per
+  verdict in `debug.log`, once a game: `TE_SELF_CHECK OK|BROKEN enact_law`, with the law, the country,
+  `enacting_before` (1 if the country was enacting a law when the option was picked) and, on OK, `enacting_now`. Judged only for a country that did not already hold the
   law. **OK:** the law is in force; with `enacting_before=1`, `enacting_now=1` means the enactment already running
   survived and `enacting_now=0` means `enact_law` ended it. **BROKEN `started=yes`:** `enact_law` started an
   enactment rather than passing the law; the check cancelled it and activated the law. **BROKEN `started=no`:**

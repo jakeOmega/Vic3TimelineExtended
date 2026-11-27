@@ -4,8 +4,8 @@
 Vanilla 1.15's enact_law passes a law as a successful enactment (on_enact, movement loyalists, interest group
 approval), where activate_law only switches it. Whether it respects can_enact, passes the law at once and copes with
 an enactment already running is unverified (vanilla_1_15_prep.md C20), so each of the six options calls
-te_enact_law_checked (common/scripted_effects/te_enact_law_effects.txt), which queues te_enact_law.1 a day on: that
-event activates the law as before if enact_law did not pass it, and logs TE_SELF_CHECK OK|BROKEN enact_law.
+te_enact_law_checked (common/scripted_effects/te_enact_law_effects.txt), which queues te_enact_law.1 (or .2 when an
+enactment was already running) a day on: its te_enact_law_check activates the law as before if enact_law did not pass it, and logs TE_SELF_CHECK OK|BROKEN enact_law.
 Play-test row: docs/testing/vanilla-1-15-playtest.md, "Panels and systems".
 """
 
@@ -77,41 +77,49 @@ class CheckTests(unittest.TestCase):
         guard = _block(hidden, "if")
         self.assertIn("NOT = { has_law = $LAW$ }", _block(guard, "limit"))
         self.assertIn("$LAW$ = { save_scope_as = te_enact_law }", guard)
-        self.assertIn("trigger_event = { id = te_enact_law.1 days = 1 }", guard)
-        self.assertEqual(len(re.findall(r"save_scope_value_as = \{ name = te_enact_enacting_before value = [01] \}",
-                                        guard)), 2)
+        # which event records whether an enactment was running at the call
+        running = _block(guard, "if")
+        self.assertIn("enacting_any_law = yes", _block(running, "limit"))
+        self.assertIn("trigger_event = { id = te_enact_law.2 days = 1 }", running)
+        self.assertIn("trigger_event = { id = te_enact_law.1 days = 1 }", _block(guard, "else"))
         # enact_law itself stays outside hidden_effect, so the option's tooltip shows it
         self.assertNotIn("enact_law =", hidden)
 
-    def test_the_event_takes_no_trigger_and_falls_back_to_activate_law(self):
-        event = _def(EVENTS, "te_enact_law.1")
-        self.assertIn("hidden = yes", event)
-        self.assertNotRegex(event, r"(?<![\w.])trigger\s*=\s*\{")
-        immediate = _block(event, "immediate")
-        self.assertIn("exists = scope:te_enact_law", _block(immediate, "limit"))
-        fallback = _block(immediate, "else")
+    def test_the_events_take_no_trigger_and_pass_what_ran_before(self):
+        for event_id, before in (("te_enact_law.1", 0), ("te_enact_law.2", 1)):
+            with self.subTest(event=event_id):
+                event = _def(EVENTS, event_id)
+                self.assertIn("hidden = yes", event)
+                self.assertNotRegex(event, r"(?<![\w.])trigger\s*=\s*\{")
+                self.assertEqual(_block(event, "immediate").split(),
+                                 ["te_enact_law_check", "=", "{", "BEFORE", "=", str(before), "}"])
+
+    def test_the_check_falls_back_to_activate_law(self):
+        check = _def(EFFECTS, "te_enact_law_check")
+        self.assertIn("exists = scope:te_enact_law", _block(check, "limit"))
+        fallback = _block(check, "else")
         self.assertIn("activate_law = scope:te_enact_law", fallback)
         cancel = fallback.index("cancel_enactment = yes")
         self.assertLess(cancel, fallback.index("activate_law = scope:te_enact_law"))
         self.assertIn("is_enacting_law = scope:te_enact_law", fallback[:cancel])
 
     def test_each_verdict_logs_once_a_game(self):
-        event = _def(EVENTS, "te_enact_law.1")
+        check = _def(EFFECTS, "te_enact_law_check")
         for flag, verdicts in (("te_sc_enact_law_ok", ["TE_SELF_CHECK OK enact_law "]),
                                ("te_sc_enact_law_broken", ["TE_SELF_CHECK BROKEN enact_law started=yes ",
                                                            "TE_SELF_CHECK BROKEN enact_law started=no "])):
             with self.subTest(flag=flag):
-                self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", event)
-                self.assertIn(f"set_global_variable = {flag}", event)
+                self.assertIn(f"NOT = {{ has_global_variable = {flag} }}", check)
+                self.assertIn(f"set_global_variable = {flag}", check)
                 for verdict in verdicts:
-                    self.assertEqual(event.count(verdict), 1, verdict)
+                    self.assertEqual(check.count(verdict), 1, verdict)
+        self.assertEqual(check.count("enacting_before=$BEFORE$"), 3)
         self.assertIn("te_enact_law_enacting_now = {", VALUES)
-        self.assertIn("THIS.ScriptValue('te_enact_law_enacting_now')", event)
+        self.assertIn("THIS.ScriptValue('te_enact_law_enacting_now')", check)
 
     def test_the_play_test_list_names_the_check_and_its_fallback(self):
         self.assertIn("TE_SELF_CHECK OK|BROKEN enact_law", PLAYTEST)
         self.assertIn("#1443", PLAYTEST)
-
 
 if __name__ == "__main__":
     unittest.main()
