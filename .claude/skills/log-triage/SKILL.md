@@ -61,7 +61,7 @@ Per finding the report gives the launch, wall-clock and game date, the lines of 
 - Before reporting `BROKEN`, rule out the cases its branch can't tell apart, and check the play-test list's row for what it prescribes.
 - A `START` that never gets its verdict is a dead path until the save says otherwise.
 - `LOST`: the engine dropped the line (a bad accessor). Fix the string and re-arm a once-a-game check by renaming its marker.
-- **The logs are not the game's state.** A system that silently does nothing logs nothing, an assert naming one country can stand for a hundred, and a registry entry that says "harmless" is a claim about the save. Read the save: `scripts/analysis/save_country_probe.py` (`--var`, `--states`, `--laws`, `--diff`). Copy autosaves by mtime; they rotate.
+- **The logs are not the game's state.** A system that silently does nothing logs nothing, an assert naming one country can stand for a hundred, and a registry entry that says "harmless" is a claim about the save. Read the save: `scripts/analysis/save_country_probe.py` (`--var`, `--states`, `--laws`, `--buildings TYPE`, `--diff`). Copy autosaves by mtime; they rotate.
 
 ## 5. Registering a line
 

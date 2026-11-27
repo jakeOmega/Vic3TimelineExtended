@@ -16,6 +16,8 @@ Usage:
     save_country_probe.py [save.v3] --states --var '^gm_' --owner EUN
     save_country_probe.py [save.v3] --state 456 --state STATE_SUEZ
     save_country_probe.py --diff before.v3 after.v3 --states --var '^gm_(premigration|migrated)$'
+    save_country_probe.py [save.v3] --buildings te_construction_market_site [--owner USA] [--json]
+    save_country_probe.py --diff before.v3 after.v3 --buildings steel_mill --state STATE_RUHR
 
 With no save named, the newest in the save folder is read. A country is shown if
 it matches every filter given: --tag (repeatable), --var / --modifier (a regex; it
@@ -48,6 +50,25 @@ Built for #1061: three sessions had rebuilt a throwaway scanner to read state
 variables (demographics late births, the census cohort slots, Grand Monuments'
 migration of older saves). On a 2055 save of 758 states, a read takes 2-3 s
 when the filters name few of them (56 held a gm_ variable) and 7 s for all.
+
+--buildings TYPE reads the buildings of that type instead (#1788; `building_`
+optional, repeatable): one row per building record with its id, state, owner,
+level, staffing, employees, throughput, start date and age in weeks against the
+save's date, production methods, input and output goods with their quantities,
+goods cost and sales, and each timed modifier with its multiplier. --owner and
+--state narrow it as for --states, --json writes the rows as JSON (a table to
+keep or compare), and --diff follows the same building ids across two saves: a
+building is compared if it matches in either. Two traps, both met on the
+2026-11-13 triage (PR #1780): a row's throughput and its modifier's multiplier
+come from different moments (the throughput from the last production update,
+the multiplier from the last time script applied the modifier), and staffing is
+over the CURRENT job count, so 2.0 is two employees on one job, not a building
+twice staffed. A good is saved as an index into the goods database; the names
+come from this checkout's goods in load order (goods_order), so a save from a
+build with other goods reads the wrong names. Built for the triage that read
+every Construction Site by age with a scratch scanner, the third session to
+write one (#933, #1050). On a 1948 save of 16,959 buildings, one type reads in
+about 10 s and 700 MB of memory (the 275 MB gamestate is read whole).
 
 Law groups are not in the save. They come from the `group =` of each law
 definition, read with brace depth tracked: vanilla's common/laws (the game
@@ -215,6 +236,31 @@ check_save_history_order.py).
   meta      0x3245 = i32 game date in hours: days = v // 24,
             year = days // 365 - 5000, day of year = days % 365.
 
+  buildings (worked out 2026-11-27 on one 1.15.1 save of 1948, 16,959 buildings;
+            the archived scanner of 2026-11-13 read the same keys on 1.14.5 and 1.15.1)
+            u32:<id> = { 0x27f8 = "<type>"  0x3a52 = <levels>  0x01b7 = <state id>
+                         0x5808 = i32:<built, hours>  0x2fce = { <inputs> }  0x2fcf = { <outputs> }
+                         0x32ed = <staffing>  0x5607 = <employees>  0x2a6f = <throughput>
+                         0x2d15 = <goods cost>  0x5606 = <goods sales>  0x5925 = { "<pm>" ... }
+                         0x333b = { 0x0d00 = { { 0x000b = n  0x0c1f = "<modifier>"
+                                                 0x0cf7 = <multiplier>  0x0cf8 = <start>  [0x0cf9 = <end>] } } } ... }
+            Found by BUILDING_RE (as save_world_report.py), keeping records with a
+            0x5925: other records carry `0x27f8 = "<type>"` too. The figures are
+            written with the f64 token (0x0167) but hold an i64 fixed point x 1e5
+            (parse_block(fx=True)); employees (0x5607, text name
+            previous_staffing) is a raw count under the same token. A figure the
+            record leaves out prints `-` (a site with no inputs has no 0x2fce).
+            A state of 0xffffffff is none: such records are at level 0 (a
+            building that has gone, or is going), and print `no state`.
+            Goods: 0x2fce / 0x2fcf = { 0x56ec = <tok>  0x304f = { <good index> =
+            { 0x02d2 = <quantity>  0x607c = { ... } } ... } }. Verified on that
+            save against the goods in load order (vanilla's 54, then the mod's
+            13): every coal mine's one output was coal, every steel mill's was
+            steel with coal and iron among its inputs, every tooling workshop's
+            was tools, and the sites' input was index 61, construction.
+            The owner is the state's (0x2840 of its record); a building keeps none
+            of its own that this tool decodes (0x2fd0 = { <id> } is not decoded).
+
   More databases (treaty articles, treaties, technology, buildings), the
   gamestate's own date (autosaves have no meta) and the text-save names of
   their tokens: the BINARY LAYOUT of save_world_report.py.
@@ -272,8 +318,9 @@ DIRECTIVE_RE = re.compile(r"^[A-Z_]+:")  # INJECT:, REPLACE:, TRY_INJECT:, ...
 
 
 # ---------------------------------------------------------------- decoding
-def tokens(b, i, end):
-    """Yield (offset, kind, value) for every token in b[i:end]."""
+def tokens(b, i, end, fx=False):
+    """Yield (offset, kind, value) for every token in b[i:end]. With `fx`, 0x0167 comes back as ("fx", the raw
+    i64): a building's figures are fixed point x 1e5 written under that token (BINARY LAYOUT § buildings)."""
     while i < end - 1:
         t = struct.unpack_from("<H", b, i)[0]
         o = i
@@ -307,19 +354,22 @@ def tokens(b, i, end):
             yield o, "float", struct.unpack_from("<f", b, i)[0]
             i += 4
         elif t == 0x0167:
-            yield o, "float", struct.unpack_from("<d", b, i)[0]
+            if fx:
+                yield o, "fx", struct.unpack_from("<q", b, i)[0]
+            else:
+                yield o, "float", struct.unpack_from("<d", b, i)[0]
             i += 8
         else:
             yield o, "tok", t
 
 
-def parse_block(b, start):
+def parse_block(b, start, fx=False):
     """Parse `<key> = { ... }` at `start`; return (items, end_offset).
 
     items is a list of (key, value): key is None for a bare value, and a value
     is a scalar (kind, v) or a nested items list.
     """
-    stream = tokens(b, start, len(b))
+    stream = tokens(b, start, len(b), fx)
     next(stream), next(stream)  # the key and '='
     if next(stream)[1] != "{":
         raise ValueError(f"no block at 0x{start:x}")
@@ -650,16 +700,23 @@ def fmt_hours(hours):
     return f"{year}.{month + 1}.{day + 1}"
 
 
-def save_date(save_path, blob=None):
-    """The game date from meta; an autosave has none, so then from the gamestate (`blob`), when given."""
+def save_hours(save_path, blob=None):
+    """The game date in hours from meta; an autosave has none, so then from the gamestate (`blob`), when given;
+    None when neither has it."""
     raw = Path(save_path).read_bytes()
     with zipfile.ZipFile(io.BytesIO(raw[raw.find(b"PK\x03\x04") :])) as archive:
         meta = archive.read("meta") if "meta" in archive.namelist() else b""
     at = meta.find(DATE_KEY)
     if at != -1:
-        return fmt_hours(struct.unpack_from("<i", meta, at + 6)[0])
+        return struct.unpack_from("<i", meta, at + 6)[0]
     at = blob.find(DATE_KEY, 0, 4096) if blob is not None else -1  # ~30 bytes in (save_world_report.gamestate_hours)
-    return fmt_hours(struct.unpack_from("<i", blob, at + 6)[0]) if at != -1 else "?"
+    return struct.unpack_from("<i", blob, at + 6)[0] if at != -1 else None
+
+
+def save_date(save_path, blob=None):
+    """The game date from meta; an autosave has none, so then from the gamestate (`blob`), when given."""
+    hours = save_hours(save_path, blob)
+    return fmt_hours(hours) if hours is not None else "?"
 
 
 # ---------------------------------------------------------------- selection
@@ -1204,6 +1261,330 @@ def diff(before, after, filters, groups=None):
             print("\n".join(lines) + "\n")
 
 
+# ---------------------------------------------------------------- buildings (#1788)
+# BINARY LAYOUT § buildings. The header regex is save_world_report.BUILDING_RE's (that module imports this one).
+BUILDING_RE = re.compile(rb"(?:\x0c|\x14)\x00(....)\x01\x00\x03\x00\xf8\x27\x01\x00(?:\x0f|\x17)\x00", re.S)
+KEY_BUILDING_TYPE, KEY_LEVELS, KEY_BUILDING_STATE, KEY_PMS, KEY_BUILT = 0x27F8, 0x3A52, 0x01B7, 0x5925, 0x5808
+KEY_STAFFING, KEY_EMPLOYEES, KEY_THROUGHPUT, KEY_GOODS_COST, KEY_GOODS_SALES = 0x32ED, 0x5607, 0x2A6F, 0x2D15, 0x5606
+KEY_INPUTS, KEY_OUTPUTS, KEY_GOODS, KEY_QUANTITY = 0x2FCE, 0x2FCF, 0x304F, 0x02D2
+KEY_MOD_MULT, KEY_MOD_START, KEY_MOD_END = 0x0CF7, 0x0CF8, 0x0CF9
+PARSE_ERRORS = (ValueError, StopIteration, struct.error, IndexError)
+HOURS_A_WEEK = 24 * 7
+NO_STATE = 0xFFFFFFFF   # a building in no state (level 0: 8 of 108 steel mills on the 1948 save)
+BUILDING_TRAPS = ("A row's throughput and its modifier's multiplier come from different moments (the last production "
+                  "update, the last time script applied the modifier); staffing is over the current job count, so "
+                  "2.0 is two employees on one job.")
+
+
+def top_level_names(text):
+    """The top-level entity names of a script file, in file order, an INJECT:/REPLACE: prefix stripped."""
+    toks = [t for t in SCRIPT_TOKEN_RE.findall(text) if not t.startswith("#")]
+    out, depth = [], 0
+    for i, t in enumerate(toks):
+        if t == "{":
+            if depth == 0 and i >= 2 and toks[i - 1] == "=":
+                out.append(DIRECTIVE_RE.sub("", toks[i - 2]))
+            depth += 1
+        elif t == "}":
+            depth = max(depth - 1, 0)
+    return out
+
+
+def goods_order(vanilla_dir=None, snapshot=None, mod_dir=None):
+    """The goods in the order the game indexes them, which a building's goods are saved by: the files of vanilla's
+    and the mod's common/goods sorted by name (a mod file of the same name replaces vanilla's), each one's goods in
+    file order, a good already named keeping its place (an INJECT:). With no install, the vanilla_parsed snapshot's
+    goods.json stands in for vanilla's files and comes first. Any argument may be None or missing."""
+    vanilla = Path(vanilla_dir) if vanilla_dir else None
+    mod = Path(mod_dir) if mod_dir else None
+    order, files = [], {}
+    if vanilla and vanilla.is_dir():
+        files = {p.name: p for p in vanilla.glob("*.txt")}
+    elif snapshot and Path(snapshot).is_file():
+        order = list(json.loads(Path(snapshot).read_text(encoding="utf-8")))
+    if mod and mod.is_dir():
+        files.update({p.name: p for p in mod.glob("*.txt")})
+    for name in sorted(files):
+        for good in top_level_names(files[name].read_text(encoding="utf-8-sig", errors="replace")):
+            if good not in order:
+                order.append(good)
+    return order
+
+
+@functools.lru_cache(maxsize=1)
+def known_goods():
+    """goods_order() over this checkout's goods files and the configured game install, if any."""
+    vanilla = None
+    try:
+        sys.path.insert(0, str(REPO))
+        from path_constants import base_game_path
+
+        vanilla = Path(base_game_path) / "game" / "common" / "goods"
+    except (ImportError, RuntimeError):
+        pass
+    return goods_order(vanilla, REPO / "vanilla_parsed" / "common" / "goods.json", REPO / "common" / "goods")
+
+
+def building_type(text):
+    """The type names --buildings TYPE stands for: the name itself, and with `building_` before it."""
+    return {text, text if text.startswith("building_") else "building_" + text}
+
+
+def _fx(v):
+    return v[1] / FIXED if isinstance(v, tuple) and v[0] == "fx" else None
+
+
+def _count(v):
+    return v[1] if isinstance(v, tuple) and v[0] in ("fx", "int") else None
+
+
+def _int(v):
+    return v[1] if isinstance(v, tuple) and v[0] == "int" else None
+
+
+class BuildingFilters:
+    """--buildings: the types, and --owner (tags) and --state (ids or region names) as for --states."""
+
+    def __init__(self, types, owners=(), states=()):
+        self.asked = list(types)
+        self.types = set().union(*(building_type(t) for t in types)) if types else set()
+        self.tags = set(owners)
+        states = [str(x) for x in states]
+        self.ids = {int(x) for x in states if x.isdigit()}
+        self.regions = {region_name(x) for x in states if not x.isdigit()}
+
+    def wants(self, row):
+        if self.tags and row["tag"] not in self.tags:
+            return False
+        if (self.ids or self.regions) and row["state"] not in self.ids and row["region"] not in self.regions:
+            return False
+        return True
+
+
+class BuildingSave:
+    """One save's buildings of the asked types (BINARY LAYOUT § buildings). Records of other types are skipped by
+    the type string right after their header, unparsed."""
+
+    def __init__(self, path, filters, goods=None):
+        self.path = Path(path)
+        self.filters = filters
+        self.blob = read_gamestate(path)
+        self.hours = save_hours(path, self.blob)
+        self.tags = {cid: tag for _, cid, tag, _ in country_headers(self.blob)}
+        heads, _end, self.warning = state_headers(self.blob)
+        self._state_at = {sid: start for start, sid in heads}
+        self._states = {}
+        self.goods = known_goods() if goods is None else list(goods)
+        self.failed = 0
+        self._rows = None
+
+    def state(self, sid):
+        """(region, owner id) of a state record, (None, None) when there is none."""
+        if sid not in self._states:
+            region = owner = None
+            if sid in self._state_at:
+                items = parse_block(self.blob, self._state_at[sid])[0]
+                reg, own = get(items, KEY_REGION), get(items, KEY_OWNER)
+                region = reg[1] if reg and reg[0] == "str" else None
+                owner = own[1] if own and own[0] == "int" else None
+            self._states[sid] = (region, owner)
+        return self._states[sid]
+
+    def good(self, index):
+        return self.goods[index] if isinstance(index, int) and 0 <= index < len(self.goods) else f"good#{index}"
+
+    def goods_of(self, items, key):
+        """{good: quantity} of an inputs or outputs block, in saved order; None when the record has none."""
+        block = get(items, key)
+        listed = get(block, KEY_GOODS) if isinstance(block, list) else None
+        if not isinstance(listed, list):
+            return None
+        out = {}
+        for k, entry in listed:
+            if k is not None and k[0] == "int" and isinstance(entry, list):
+                out[self.good(k[1])] = _fx(get(entry, KEY_QUANTITY))
+        return out
+
+    def row(self, bid, items):
+        sid = _int(get(items, KEY_BUILDING_STATE))
+        sid = None if sid == NO_STATE else sid
+        region, owner = self.state(sid)
+        built = _int(get(items, KEY_BUILT))
+        block = get(items, KEY_MODS)
+        modifiers = []
+        for _, entry in (get(block, KEY_MODLIST) if isinstance(block, list) else None) or []:
+            if not isinstance(entry, list):
+                continue
+            name, start, end = get(entry, KEY_MODNAME), _int(get(entry, KEY_MOD_START)), _int(get(entry, KEY_MOD_END))
+            modifiers.append({"name": name[1] if name and name[0] == "str" else None,
+                              "multiplier": _fx(get(entry, KEY_MOD_MULT)),
+                              "start": fmt_hours(start) if start is not None else None,
+                              "end": fmt_hours(end) if end is not None else None})
+        kind = get(items, KEY_BUILDING_TYPE)
+        return {
+            "id": bid,
+            "type": kind[1] if kind and kind[0] == "str" else None,
+            "state": sid,
+            "region": region,
+            "tag": self.tags.get(owner, "gone") if owner is not None else "none",
+            "levels": _count(get(items, KEY_LEVELS)),
+            "staffing": _fx(get(items, KEY_STAFFING)),
+            "employees": _count(get(items, KEY_EMPLOYEES)),
+            "throughput": _fx(get(items, KEY_THROUGHPUT)),
+            "started": fmt_hours(built) if built is not None else None,
+            "age_weeks": round((self.hours - built) / HOURS_A_WEEK, 1)
+            if built is not None and self.hours is not None else None,
+            "pms": [v[1] for k, v in get(items, KEY_PMS) or [] if k is None and isinstance(v, tuple) and v[0] == "str"],
+            "inputs": self.goods_of(items, KEY_INPUTS),
+            "outputs": self.goods_of(items, KEY_OUTPUTS),
+            "goods_cost": _fx(get(items, KEY_GOODS_COST)),
+            "goods_sales": _fx(get(items, KEY_GOODS_SALES)),
+            "modifiers": modifiers,
+        }
+
+    def rows(self):
+        """{id: row} for every building of the asked types, the owner and state filters not applied."""
+        if self._rows is None:
+            self._rows, blob = {}, self.blob
+            for m in BUILDING_RE.finditer(blob):
+                at = m.end()
+                n = struct.unpack_from("<H", blob, at)[0]
+                if blob[at + 2 : at + 2 + n].decode("latin1") not in self.filters.types:
+                    continue
+                try:
+                    items = parse_block(blob, m.start(), fx=True)[0]
+                except PARSE_ERRORS:
+                    self.failed += 1
+                    continue
+                if get(items, KEY_PMS) is None:      # not a building: another record naming a building type
+                    continue
+                bid = struct.unpack("<I", m.group(1))[0]
+                self._rows[bid] = self.row(bid, items)
+        return self._rows
+
+    def select(self):
+        return {bid: row for bid, row in self.rows().items() if self.filters.wants(row)}
+
+    def warnings(self):
+        out = [self.warning] if self.warning else []
+        if self.failed:
+            out.append(f"{self.failed} building records of the type failed to parse")
+        return out
+
+
+def building_order(row):
+    return row["tag"], row["region"] or "", row["id"]
+
+
+def _num(x):
+    return "-" if x is None else f"{x:.6g}"
+
+
+def _goods_text(goods):
+    return "-" if not goods else ", ".join(f"{good} {_num(q)}" for good, q in goods.items())
+
+
+def _modifier_text(mod):
+    span = f" from {mod['start']}" if mod["start"] else ""
+    span += f" to {mod['end']}" if mod["end"] else ""
+    mult = f" x{_num(mod['multiplier'])}" if mod["multiplier"] is not None else ""
+    return f"{mod['name']}{mult}{span}"
+
+
+def building_title(row):
+    where = "no state" if row["state"] is None else f"{row['region'] or '?'} (state {row['state']})"
+    return f"id {row['id']}  {row['tag']}  {where}  {row['type']}"
+
+
+def building_lines(row, indent="  "):
+    age = f" ({_num(row['age_weeks'])} weeks)" if row["age_weeks"] is not None else ""
+    lines = [
+        f"{indent}{building_title(row)}",
+        f"{indent}  level {_num(row['levels'])}  staffing {_num(row['staffing'])}  employees {_num(row['employees'])}"
+        f"  throughput {_num(row['throughput'])}  started {row['started'] or '-'}{age}"
+        f"  cost {_num(row['goods_cost'])}  sales {_num(row['goods_sales'])}",
+        f"{indent}  pms: {', '.join(row['pms']) or '-'}",
+        f"{indent}  inputs: {_goods_text(row['inputs'])}   outputs: {_goods_text(row['outputs'])}",
+    ]
+    if row["modifiers"]:
+        lines.append(f"{indent}  modifiers: " + "; ".join(_modifier_text(m) for m in row["modifiers"]))
+    return lines
+
+
+def report_buildings(save_path, filters, as_json=False, goods=None):
+    save = BuildingSave(save_path, filters, goods)
+    rows = sorted(save.select().values(), key=building_order)
+    if as_json:
+        print(json.dumps({"save": str(save_path), "date": save_date(save_path, save.blob), "hours": save.hours,
+                          "types": filters.asked, "warnings": save.warnings(), "traps": BUILDING_TRAPS,
+                          "buildings": rows}, indent=1))
+        return
+    print(f"{save_path}  [{save_date(save_path, save.blob)}]  {', '.join(filters.asked)}: "
+          f"{len(save.rows())} buildings, {len(rows)} shown")
+    for warning in save.warnings():
+        print(f"  WARNING: {warning}")
+    for row in rows:
+        print("\n".join(building_lines(row)))
+    if rows:
+        print(f"\n  {BUILDING_TRAPS}")
+
+
+def building_changes(p, q):
+    """What changed on one building between two rows, as lines."""
+    ch = []
+    for field in ("type", "tag", "region", "levels", "staffing", "employees", "throughput", "started", "goods_cost",
+                  "goods_sales"):
+        if p[field] != q[field]:
+            ch.append(f"{field}: {_num(p[field]) if not isinstance(p[field], str) else p[field]} -> "
+                      f"{_num(q[field]) if not isinstance(q[field], str) else q[field]}")
+    ch += [f"+pm {x}" for x in q["pms"] if x not in p["pms"]] + [f"-pm {x}" for x in p["pms"] if x not in q["pms"]]
+    for side in ("inputs", "outputs"):
+        a, z = p[side] or {}, q[side] or {}
+        for good in [*a, *(g for g in z if g not in a)]:
+            if good not in z:
+                ch.append(f"-{side[:-1]} {good} {_num(a[good])}")
+            elif good not in a:
+                ch.append(f"+{side[:-1]} {good} {_num(z[good])}")
+            elif a[good] != z[good]:
+                ch.append(f"{side[:-1]} {good}: {_num(a[good])} -> {_num(z[good])}")
+    a = {m["name"]: m for m in p["modifiers"]}
+    z = {m["name"]: m for m in q["modifiers"]}
+    for name in [*a, *(n for n in z if n not in a)]:
+        if name not in z:
+            ch.append(f"-modifier {_modifier_text(a[name])}")
+        elif name not in a:
+            ch.append(f"+modifier {_modifier_text(z[name])}")
+        elif a[name] != z[name]:
+            ch.append(f"modifier {_modifier_text(a[name])} -> {_modifier_text(z[name])}")
+    return ch
+
+
+def diff_buildings(before, after, filters, goods=None):
+    """Per building id: gone, new, or what changed on it; a building is compared if it matches in either save."""
+    a, z = BuildingSave(before, filters, goods), BuildingSave(after, filters, goods)
+    wanted = set(a.select()) | set(z.select())
+    print(f"BEFORE {before}  [{save_date(before, a.blob)}]\nAFTER  {after}  [{save_date(after, z.blob)}]\n")
+    for label, save in (("BEFORE", a), ("AFTER", z)):
+        for warning in save.warnings():
+            print(f"WARNING ({label}): {warning}\n")
+    pa, pz = a.rows(), z.rows()
+    changed = gone = new = 0
+    for bid in sorted(wanted, key=lambda i: building_order(pz.get(i) or pa[i])):
+        p, q = pa.get(bid), pz.get(bid)
+        if q is None:
+            gone += 1
+            print(f"== {building_title(p)}\n   gone (no longer in the save)\n")
+        elif p is None:
+            new += 1
+            print("\n".join([f"== {building_title(q)}", "   new:", *building_lines(q, "   ")[1:]]) + "\n")
+        else:
+            ch = building_changes(p, q)
+            if ch:
+                changed += 1
+                print(f"== {building_title(q)}\n" + "\n".join(f"     {c}" for c in ch) + "\n")
+    print(f"{len(wanted)} buildings compared: {changed} changed, {gone} gone, {new} new")
+
+
 def main(argv):
     import argparse
 
@@ -1219,9 +1600,13 @@ def main(argv):
     parser.add_argument("--law-conflicts", action="store_true",
                         help="list countries with two or more active laws in one group (--tag narrows it)")
     parser.add_argument("--states", action="store_true", help="read states instead of countries")
-    parser.add_argument("--owner", action="append", default=[], help="with --states: owner tag (repeatable)")
+    parser.add_argument("--owner", action="append", default=[], help="with --states or --buildings: owner tag (repeatable)")
     parser.add_argument("--state", action="append", default=[],
-                        help="with --states: a state id or region name, STATE_ optional (repeatable)")
+                        help="with --states or --buildings: a state id or region name, STATE_ optional (repeatable)")
+    parser.add_argument("--buildings", action="append", default=[], metavar="TYPE",
+                        help="read the buildings of this type instead (building_ optional, repeatable; #1788), with "
+                             "--owner, --state, --json and --diff. Two traps: " + BUILDING_TRAPS.replace("%", "%%"))
+    parser.add_argument("--json", action="store_true", help="with --buildings: the rows as JSON")
     args = parser.parse_args(argv)
     try:
         return run_args(args, parser)
@@ -1231,6 +1616,10 @@ def main(argv):
 
 
 def run_args(args, parser):
+    if args.buildings:
+        return run_buildings(args, parser)
+    if args.json:
+        parser.error("--json goes with --buildings")
     if args.states or args.owner or args.state:
         return run_states(args, parser)
     filters = Filters(args.tag, args.var, args.modifier, args.je, args.laws, args.law)
@@ -1267,6 +1656,26 @@ def run_states(args, parser):
         return 1
     for save in saves:
         report_states(save, filters)
+    return 0
+
+
+def run_buildings(args, parser):
+    if args.tag or args.var or args.modifier or args.je or args.laws or args.law or args.law_conflicts or args.states:
+        parser.error("--buildings takes --owner, --state, --json and --diff")
+    filters = BuildingFilters(args.buildings, args.owner, args.state)
+    if args.diff:
+        if len(args.saves) != 2:
+            parser.error("--diff takes exactly two saves: before after")
+        if args.json:
+            parser.error("--diff prints its changes as text; write each save's --json to compare tables")
+        diff_buildings(*args.saves, filters)
+        return 0
+    saves = args.saves or find_saves()[:1]
+    if not saves:
+        print("no save found")
+        return 1
+    for save in saves:
+        report_buildings(save, filters, args.json)
     return 0
 
 

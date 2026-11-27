@@ -15,6 +15,7 @@ Run: .venv/bin/python test_save_country_probe.py
 """
 
 import io
+import json
 import struct
 import sys
 import tempfile
@@ -762,6 +763,220 @@ class CivilWarTests(unittest.TestCase):
         with redirect_stdout(out):
             scp.diff(before, after, scp.Filters(var='^nuclear_'))
         self.assertIn(f'MERGE: loser id {ORIGINAL} -> survivor id {REBEL}', out.getvalue())
+
+
+
+FX = b'\x67\x01'
+
+
+def fx(value):
+    """A building figure: the f64 token holding an i64 fixed point x 1e5 (BINARY LAYOUT § buildings)."""
+    return FX + struct.pack('<q', round(value * scp.FIXED))
+
+
+def goods_block(key, goods):
+    """An inputs (0x2fce) or outputs (0x2fcf) block: {good index: quantity}, laid out as on the 1948 save."""
+    entries = b''.join(
+        I32 + struct.pack('<i', index) + EQ + OPEN + tok(scp.KEY_QUANTITY) + EQ + fx(qty)
+        + tok(0x607C) + EQ + OPEN + fx(0) + fx(0) + fx(0) + CLOSE + CLOSE
+        for index, qty in goods.items()
+    )
+    return tok(key) + EQ + OPEN + tok(0x56EC) + EQ + tok(22255) + tok(scp.KEY_GOODS) + EQ + OPEN + entries + CLOSE + CLOSE
+
+
+def building(bid, type_name, state_id, levels=1, built=None, inputs=None, outputs=None, staffing=None,
+             employees=None, throughput=None, cost=None, sales=None, pms=('pm_base',), modifiers=(), header=U32):
+    """One building record, its keys in the 1948 save's order. modifiers: (name, multiplier, start hours, end)."""
+    body = tok(scp.KEY_BUILDING_TYPE) + EQ + string(type_name)
+    body += tok(scp.KEY_LEVELS) + EQ + I32 + struct.pack('<i', levels)
+    body += tok(0x2AB2) + EQ + BOOL + b'\x01'
+    body += tok(scp.KEY_BUILDING_STATE) + EQ + U32 + struct.pack('<I', state_id)
+    if built is not None:
+        body += tok(scp.KEY_BUILT) + EQ + I32 + struct.pack('<i', built)
+    body += tok(0x5A15) + EQ + fx(1)
+    if inputs is not None:
+        body += goods_block(scp.KEY_INPUTS, inputs)
+    if outputs is not None:
+        body += goods_block(scp.KEY_OUTPUTS, outputs)
+    for key, value in ((scp.KEY_STAFFING, staffing), (scp.KEY_THROUGHPUT, throughput), (scp.KEY_GOODS_COST, cost),
+                       (scp.KEY_GOODS_SALES, sales)):
+        if value is not None:
+            body += tok(key) + EQ + fx(value)
+    if employees is not None:   # a raw count under the f64 token
+        body += tok(scp.KEY_EMPLOYEES) + EQ + FX + struct.pack('<q', employees)
+    if pms is not None:
+        body += tok(scp.KEY_PMS) + EQ + OPEN + b''.join(string(pm) for pm in pms) + CLOSE
+    if modifiers:
+        entries = b''
+        for i, (name, mult, start, end) in enumerate(modifiers):
+            entries += OPEN + tok(0x000B) + EQ + I32 + struct.pack('<i', i) + tok(scp.KEY_MODNAME) + EQ + string(name)
+            if mult is not None:
+                entries += tok(scp.KEY_MOD_MULT) + EQ + fx(mult)
+            entries += tok(scp.KEY_MOD_START) + EQ + I32 + struct.pack('<i', start)
+            if end is not None:
+                entries += tok(scp.KEY_MOD_END) + EQ + I32 + struct.pack('<i', end)
+            entries += CLOSE
+        body += tok(scp.KEY_MODS) + EQ + OPEN + tok(scp.KEY_MODLIST) + EQ + OPEN + entries + CLOSE
+        body += tok(0x0968) + EQ + I32 + struct.pack('<i', 1) + CLOSE
+    body += tok(0x2FD0) + EQ + OPEN + I32 + struct.pack('<i', 285225868) + CLOSE
+    return header + struct.pack('<I', bid) + EQ + OPEN + body + CLOSE
+
+
+class BuildingTests(unittest.TestCase):
+    """--buildings (#1788): building records, laid out as on a 1.15.1 save of 1948 (16,959 buildings)."""
+
+    GOODS = ['coal', 'iron', 'steel', 'construction']
+    SAVE_DATE = (1948, 9, 20)
+
+    def setUp(self):
+        self.countries = [country(4, 'USA'), country(9, 'GER')]
+        self.states = state_db(state(31, 'STATE_PENNSYLVANIA', 4), state(1039, 'STATE_RUHR', 9))
+        site_built = hours(1948, 9, 20) - 10 * 7 * 24        # ten weeks before the save
+        self.SITE = building(16777264, 'te_construction_market_site', 31, built=site_built, inputs={3: 3.05438},
+                             staffing=2.0, employees=2, throughput=2.93914, cost=6105.70562, pms=(
+                                 'pm_te_construction_market_base', 'pm_no_construction_automation'),
+                             modifiers=[('te_construction_market_capacity_modifier', 1.98216, hours(1948, 9, 17), None)])
+        self.MILL = building(805306473, 'building_steel_mill', 1039, levels=86, built=hours(1916, 3, 14),
+                             inputs={0: 1.00138, 1: 5.00691}, outputs={2: 3.12932}, staffing=0.85, employees=214998,
+                             throughput=2.32966, cost=211633.16, sales=338561.31, header=I32)
+        self.records = [
+            self.SITE, self.MILL,
+            building(300, 'building_steel_mill', 31, levels=12, built=hours(1930, 1, 1), outputs={2: 1.5}),
+            building(301, 'building_steel_mill', 0xFFFFFFFF, levels=0),               # gone: in no state
+            building(302, 'te_construction_market_site', 31, pms=None),               # names the type; no building
+            building(303, 'building_coal_mine', 31, outputs={0: 7.0}),
+        ]
+        self.path = self.write(self.records)
+
+    def write(self, records, **kw):
+        kw.setdefault('date', self.SAVE_DATE)
+        path = write_save(self.countries, records=[self.states, *records], **kw)
+        self.addCleanup(Path(path).unlink)
+        return path
+
+    def select(self, path=None, types=('te_construction_market_site', 'steel_mill'), **filters):
+        return scp.BuildingSave(path or self.path, scp.BuildingFilters(types, **filters), self.GOODS).select()
+
+    def run_main(self, *argv):
+        out = io.StringIO()
+        with unittest.mock.patch.object(scp, 'known_goods', lambda: self.GOODS), redirect_stdout(out):
+            code = scp.main(list(argv))
+        return code, out.getvalue()
+
+    def test_a_record_decodes(self):
+        rows = self.select()
+        self.assertEqual(set(rows), {16777264, 805306473, 300, 301}, 'no coal mine, no record without methods')
+        site = rows[16777264]
+        self.assertEqual(site, {
+            'id': 16777264, 'type': 'te_construction_market_site', 'state': 31, 'region': 'STATE_PENNSYLVANIA',
+            'tag': 'USA', 'levels': 1, 'staffing': 2.0, 'employees': 2, 'throughput': 2.93914,
+            'started': '1948.7.12', 'age_weeks': 10.0,
+            'pms': ['pm_te_construction_market_base', 'pm_no_construction_automation'],
+            'inputs': {'construction': 3.05438}, 'outputs': None, 'goods_cost': 6105.70562, 'goods_sales': None,
+            'modifiers': [{'name': 'te_construction_market_capacity_modifier', 'multiplier': 1.98216,
+                           'start': '1948.9.17', 'end': None}]})
+        mill = rows[805306473]
+        self.assertEqual((mill['tag'], mill['region'], mill['levels'], mill['employees']), ('GER', 'STATE_RUHR', 86, 214998))
+        self.assertEqual((mill['inputs'], mill['outputs']), ({'coal': 1.00138, 'iron': 5.00691}, {'steel': 3.12932}))
+        self.assertEqual((rows[301]['state'], rows[301]['tag'], rows[301]['region']), (None, 'none', None))
+
+    def test_a_good_past_the_list_prints_its_index(self):
+        save = scp.BuildingSave(self.path, scp.BuildingFilters(['steel_mill']), ['coal'])
+        self.assertEqual(save.select()[805306473]['outputs'], {'good#2': 3.12932})
+
+    def test_owner_and_state_filters(self):
+        self.assertEqual(set(self.select(owners=['GER'])), {805306473})
+        self.assertEqual(set(self.select(states=['pennsylvania'])), {16777264, 300})
+        self.assertEqual(set(self.select(states=['1039'], types=['building_steel_mill'])), {805306473})
+
+    def test_report_names_the_traps(self):
+        code, text = self.run_main(self.path, '--buildings', 'te_construction_market_site')
+        self.assertEqual(code, 0)
+        self.assertIn('[1948.9.20]  te_construction_market_site: 1 buildings, 1 shown', text)
+        self.assertIn('id 16777264  USA  STATE_PENNSYLVANIA (state 31)  te_construction_market_site', text)
+        self.assertIn('level 1  staffing 2  employees 2  throughput 2.93914  started 1948.7.12 (10 weeks)', text)
+        self.assertIn('inputs: construction 3.05438   outputs: -', text)
+        self.assertIn('modifiers: te_construction_market_capacity_modifier x1.98216 from 1948.9.17', text)
+        self.assertIn('two employees on one job', text)
+        self.assertIn('no state', self.run_main(self.path, '--buildings', 'steel_mill')[1])
+
+    def test_json(self):
+        code, text = self.run_main(self.path, '--buildings', 'steel_mill', '--owner', 'USA', '--json')
+        self.assertEqual(code, 0)
+        data = json.loads(text)
+        self.assertEqual((data['date'], data['types'], data['warnings']), ('1948.9.20', ['steel_mill'], []))
+        self.assertEqual([b['id'] for b in data['buildings']], [300])
+        self.assertIn('different moments', data['traps'])
+
+    def test_help_names_the_traps(self):
+        out = io.StringIO()
+        with redirect_stdout(out), self.assertRaises(SystemExit):
+            scp.main(['--help'])
+        text = ' '.join(out.getvalue().split())
+        self.assertIn('different moments', text)
+        self.assertIn('two employees on one job', text)
+
+    def test_diff_follows_the_ids(self):
+        after = self.write([
+            building(16777264, 'te_construction_market_site', 31, built=hours(1948, 7, 12), inputs={3: 4.0},
+                     staffing=1.0, employees=1, throughput=2.93914, cost=6105.70562,
+                     pms=('pm_te_construction_market_base', 'pm_construction_no_effect'),
+                     modifiers=[('te_construction_market_capacity_modifier', 2.5, hours(1948, 10, 1), None)]),
+            self.MILL,
+            building(304, 'building_steel_mill', 31, levels=1, built=hours(1948, 10, 1)),
+        ], date=(1948, 10, 4))
+        code, text = self.run_main('--diff', self.path, after, '--buildings', 'te_construction_market_site',
+                                   '--buildings', 'steel_mill', '--owner', 'USA')
+        self.assertEqual(code, 0)
+        self.assertIn('[1948.10.4]', text)
+        self.assertIn('staffing: 2 -> 1', text)
+        self.assertIn('employees: 2 -> 1', text)
+        self.assertIn('input construction: 3.05438 -> 4', text)
+        self.assertIn('+pm pm_construction_no_effect', text)
+        self.assertIn('-pm pm_no_construction_automation', text)
+        self.assertIn('modifier te_construction_market_capacity_modifier x1.98216 from 1948.9.17 -> '
+                      'te_construction_market_capacity_modifier x2.5 from 1948.10.1', text)
+        self.assertIn('== id 300  USA  STATE_PENNSYLVANIA (state 31)  building_steel_mill\n   gone', text)
+        self.assertIn('== id 304  USA  STATE_PENNSYLVANIA (state 31)  building_steel_mill\n   new:', text)
+        self.assertNotIn('805306473', text, "the Ruhr's mill is Germany's in both saves")
+        self.assertIn('3 buildings compared: 1 changed, 1 gone, 1 new', text)
+
+    def test_buildings_refuse_country_filters_and_json_without_them(self):
+        for argv in (('--tag', 'USA'), ('--var', 'x'), ('--states',), ('--laws',)):
+            with self.subTest(argv=argv), redirect_stdout(io.StringIO()), unittest.mock.patch('sys.stderr', io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    scp.main([self.path, '--buildings', 'steel_mill', *argv])
+        with redirect_stdout(io.StringIO()), unittest.mock.patch('sys.stderr', io.StringIO()):
+            with self.assertRaises(SystemExit):
+                scp.main([self.path, '--json'])
+            with self.assertRaises(SystemExit):
+                scp.main(['--diff', self.path, self.path, '--buildings', 'steel_mill', '--json'])
+
+
+class GoodsOrderTests(unittest.TestCase):
+    """A building's goods are saved by index: the goods in load order (verified on the 1948 save: index 61 was
+    construction, every coal mine made coal, every steel mill steel)."""
+
+    def test_files_by_name_a_mod_file_replacing_vanillas_and_an_inject_keeping_its_place(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            vanilla, mod = Path(tmp) / 'vanilla', Path(tmp) / 'mod'
+            vanilla.mkdir(), mod.mkdir()
+            (vanilla / '00_goods.txt').write_text('ammunition = {\n\tcost = 50 # { a brace\n}\ncoal = { cost = 30 }\n')
+            (vanilla / '10_more.txt').write_text('iron = { x = { y = 1 } }\n')
+            (mod / '10_more.txt').write_text('steel = {}\n')            # replaces vanilla's file of that name
+            (mod / 'te_goods.txt').write_text('﻿construction = {}\nINJECT:coal = { cost = 31 }\n')
+            self.assertEqual(scp.goods_order(vanilla, None, mod), ['ammunition', 'coal', 'steel', 'construction'])
+            snapshot = Path(tmp) / 'goods.json'
+            snapshot.write_text(json.dumps({'ammunition': [], 'coal': [], 'iron': []}))
+            self.assertEqual(scp.goods_order(Path(tmp) / 'none', snapshot, mod),
+                             ['ammunition', 'coal', 'iron', 'steel', 'construction'])
+
+    def test_this_checkout_puts_the_mods_goods_after_vanillas(self):
+        order = scp.known_goods()
+        vanilla = json.loads((Path(__file__).resolve().parent / 'vanilla_parsed' / 'common' / 'goods.json').read_text())
+        self.assertEqual(order[:len(vanilla)], list(vanilla))
+        self.assertIn('construction', order[len(vanilla):])
+        self.assertEqual(len(order), len(set(order)))
 
 
 if __name__ == '__main__':
