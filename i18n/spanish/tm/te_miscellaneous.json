@@ -8071,6 +8071,10 @@
   "en": "Military Garrison, level [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0] of 3; the full program: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_garrison_effectiveness_add')]",
   "es": "Guarnición militar, nivel [ROOT.GetCountry.MakeScope.ScriptValue('colonial_garrison_level_value')|0] de 3; el programa completo: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_garrison_effectiveness_add')]"
  },
+ "colonial_garrison_ig_modifier": {
+  "en": "Opposes the Colonial Garrison",
+  "es": "Se opone a la guarnición colonial"
+ },
  "colonial_gp_condemnation_tt": {
   "en": "[Concept('concept_great_power', 'Great powers')] demanding [concept_decolonization_system] ([ROOT.GetCountry.MakeScope.ScriptValue('colonial_gp_condemnation_per_power')|=+2]/mo for a peer; each scaled by its [concept_prestige] relative to ours, ×0.25 to ×2)",
   "es": "[Concept('concept_great_power', 'Grandes potencias')] que exigen la [concept_decolonization_system|l] ([ROOT.GetCountry.MakeScope.ScriptValue('colonial_gp_condemnation_per_power')|=+2]/mes para una potencia equiparable; cada una se escala según su [concept_prestige|l] respecto al nuestro, de ×0,25 a ×2)"
@@ -34835,6 +34839,10 @@
   "en": "Nuclear Weapons",
   "es": "Armas nucleares"
  },
+ "te_jmap_pick_nuclear_reach": {
+  "en": "Nuclear Reach",
+  "es": "Alcance nuclear"
+ },
  "te_jmap_pick_ocean_basins": {
   "en": "Ocean Basins",
   "es": "Cuencas oceánicas"
@@ -35506,6 +35514,38 @@
  "te_jmap_tt_pollution_none": {
   "en": "#b [THIS.GetState.GetName]#!\\nNo pollution in the region.",
   "es": "#b [THIS.GetState.GetName]#!\\nSin contaminación en la región."
+ },
+ "te_jmap_tt_reach_also_subs": {
+  "en": "Your missile submarines reach this coast too.",
+  "es": "Tus submarinos con misiles también alcanzan esta costa."
+ },
+ "te_jmap_tt_reach_bombers": {
+  "en": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName] is in your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName] está al alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_icbms": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOnly your ICBMs reach this state. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\nSolo tus ICBM alcanzan este estado. [THIS.GetState.GetOwner.GetName] está fuera del alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOut of your reach. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\nFuera de tu alcance. [THIS.GetState.GetOwner.GetName] está fuera del alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_subs": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour missile submarines reach this coast. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\nTus submarinos con misiles alcanzan esta costa. [THIS.GetState.GetOwner.GetName] está fuera del alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_would_icbms": {
+  "en": "Only ICBMs would reach it.",
+  "es": "Solo los ICBM lo alcanzarían."
+ },
+ "te_jmap_tt_reach_would_subs": {
+  "en": "Missile submarines would reach this coast.",
+  "es": "Los submarinos con misiles alcanzarían esta costa."
+ },
+ "te_jmap_tt_reach_you": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour own state.",
+  "es": "#b [THIS.GetState.GetName]#!\\nTu propio estado."
  },
  "te_jmap_tt_seabed_arctic": {
   "en": "#b [THIS.GetState.GetName]#!\\nOcean basin: #v $te_seabed_basin_arctic$#!",
