@@ -66,6 +66,17 @@ class StartCaptureTest(tgs.SessionTestCase):
         self.assertIn(b"### TE QA capture: the edit line draws nothing", console)
         self.assertIn(b"te_qa_capture", (ov / capture_gui.ERROR_DEER_FILE).read_bytes())
 
+    def test_the_deployed_mods_debug_lines_are_gated_in_the_overlay(self):
+        install_game_files(self.paths.base_game)
+        gui = Path(self.paths.deploy_dir) / "gui"
+        gui.mkdir(parents=True, exist_ok=True)
+        (gui / "journal_entry.gui").write_bytes(capture_gui.BOM + b'je = {\n\tvisible = "[InDebugMode]"\n}\n')
+        reply = self.start(capture=True)
+        self.assertIn("gui/journal_entry.gui", reply["capture"]["files"])
+        copied = (self.paths.overlay_dir / "gui" / "journal_entry.gui").read_bytes()
+        self.assertTrue(copied.startswith(capture_gui.BOM + b"je = {"))
+        self.assertIn(capture_gui.GATED_DEBUG.encode(), copied)
+
     def test_a_plain_start_carries_neither(self):
         install_game_files(self.paths.base_game)
         reply = self.start()
@@ -227,8 +238,9 @@ class FakeSession:
             path = self.tmp / ("crop_%02d.png" % self.n)
             path.write_bytes(fakes.win_helper.encode_png(4, 4, bytes(48)))
             return {"crop": str(path), "settled": True, "tries": 2, "crop_size": [4, 4], "window": self.window}, 0
-        if verb == "status":
-            return {"started": True, "save": "s", "country": "USA"}, 0
+        if verb == "status":       # the server's shape: the session's facts under "session"
+            return {"server": {"port": 8951}, "session": {"started": True, "stopped": False, "save": "s",
+                                                          "country": "USA"}}, 0
         return {"log": []} if verb == "view" else {}, 0
 
 
@@ -250,6 +262,9 @@ class Manifest:
         }
 
     parse_need = staticmethod(guide_shots.parse_need)
+
+    def shot_trim(self, shot):
+        return shot.get("trim") or None
 
     def crop_box(self, shot):
         return tuple(self.REGIONS[shot["crop"]])
@@ -281,7 +296,7 @@ class CaptureRunTest(unittest.TestCase):
         self.assertEqual(results["two"]["status"], "taken")
         verbs = [v for v, _ in fake.calls]
         self.assertEqual(verbs, ["read", "view", "hover", "crop", "tag", "read", "run-setup", "view", "hover", "crop",
-                                 "view"])
+                                 "view", "tag"])
         views = [b["steps"] for v, b in fake.calls if v == "view"]
         self.assertEqual(views[0][0], ["clear:com_open_window", "close-panel", "set:te_qa_capture=yes"])
         self.assertEqual(views[1][0], ["clear:com_open_window", "clear:te_x", "close-panel", "set:te_qa_capture=yes"],
@@ -301,6 +316,34 @@ class CaptureRunTest(unittest.TestCase):
         self.assertEqual([v for v, _ in verbs], ["view", "wheel", "click", "hover", "crop", "view"])
         self.assertEqual(verbs[1][1], {"x": 0.13, "y": 0.6, "notches": -8})
         self.assertEqual(verbs[2][1], {"console": True})
+
+    def test_input_steps_click_wheel_and_drag_then_take_the_keyboard_back(self):
+        self.m.SHOTS["one"]["scroll"] = (0.13, 0.6, -2)
+        self.m.SHOTS["one"]["input"] = [("click", 0.5, 0.4), ("drag", 0.4, 0.5, 0.6, 0.5), ("wheel", 0.5, 0.5, 3)]
+        fake = FakeSession(self.tmp, {"nd_stockpile": 1.0})
+        self.run_capture(fake, ["one"])
+        steps = [(v, b) for v, b in fake.calls if v in ("wheel", "click", "drag", "hover", "crop")]
+        self.assertEqual(steps, [
+            ("wheel", {"x": 0.13, "y": 0.6, "notches": -2}), ("click", {"x": 0.5, "y": 0.4}),
+            ("drag", {"x1": 0.4, "y1": 0.5, "x2": 0.6, "y2": 0.5}), ("wheel", {"x": 0.5, "y": 0.5, "notches": 3}),
+            ("click", {"console": True}), ("hover", {"x": capture.CONSOLE_PARK[0], "y": capture.CONSOLE_PARK[1]}),
+            ("crop", {"box": [0.0, 0.0, 0.5, 1.0], "settle": True, "label": "one"})])
+
+    def test_an_event_is_fired_after_the_view_and_answered_after_the_shot(self):
+        self.m.SHOTS["one"]["event"] = "space_race_events.42"
+        del self.m.SHOTS["one"]["view"]             # an event shot needs no view
+        fake = FakeSession(self.tmp, {"nd_stockpile": 1.0})
+        results = self.run_capture(fake, ["one"])
+        steps = [(v, b) for v, b in fake.calls if v in ("view", "console", "events", "hover", "crop", "pick")]
+        self.assertEqual([v for v, _ in steps], ["view", "console", "events", "hover", "crop", "pick", "view"])
+        self.assertEqual(steps[1][1], {"text": "event space_race_events.42"})
+        self.assertEqual(steps[5][1], {"index": 0, "event": "space_race_events.42"})
+        self.assertEqual(results["one"]["status"], "taken")
+
+    def test_an_unknown_input_fails_the_shot(self):
+        self.m.SHOTS["one"]["input"] = [("press", "esc")]
+        results = self.run_capture(FakeSession(self.tmp, {"nd_stockpile": 1.0}), ["one"])
+        self.assertEqual((results["one"]["status"], results["one"]["error"]), ("failed", "bad_input"))
 
     def test_an_unmet_need_skips_the_shot_with_what_was_read(self):
         fake = FakeSession(self.tmp, {"nd_stockpile": 0.0})
@@ -326,7 +369,13 @@ class CaptureRunTest(unittest.TestCase):
         self.assertEqual((result["status"], result["country"]), ("taken", "KOR"))
         self.assertEqual([t["country"] for t in result["tried"]], ["BRZ", "JAP"])
         self.assertIn("not in this save", result["tried"][0]["reason"])
-        self.assertEqual([b["tag"] for v, b in fake.calls if v == "tag"], ["BRZ", "JAP", "KOR"])
+        self.assertEqual([b["tag"] for v, b in fake.calls if v == "tag"], ["BRZ", "JAP", "KOR", "USA"])
+
+    def test_the_scenes_country_is_played_again_after_another_was_tried(self):
+        fake = FakeSession(self.tmp, {"c:GBR = { has_journal_entry = je_x }": True})
+        self.run_capture(fake, ["two"])
+        tags = [b["tag"] for v, b in fake.calls if v == "tag"]
+        self.assertEqual(tags, ["GBR", "USA"])
 
     def test_no_candidate_skips_with_each_ones_reason(self):
         self.m.SHOTS["one"]["country"] = ["JAP", "KOR"]
@@ -366,6 +415,9 @@ class CaptureRunTest(unittest.TestCase):
         self.assertEqual(body["unresponsive_s"], 120)
 
     def test_select(self):
+        self.m.SHOTS["store"] = dict(out="workshop/store.png", status="pilot", scene="late", view=[["close-panel"]],
+                                     crop="side", shows="store")
+        self.assertEqual(capture.select(self.m, workshop=True), ["store"], "--workshop takes the Workshop's shots")
         self.assertEqual(capture.select(self.m), ["one", "two"])
         self.assertEqual(capture.select(self.m, only=["two"]), ["two"])
         for kwargs, code in (({"only": ["drawn"]}, "not_a_view"), ({"only": ["nope"]}, "unknown_shot"),
@@ -374,6 +426,31 @@ class CaptureRunTest(unittest.TestCase):
                 with self.assertRaises(capture.CaptureError) as caught:
                     capture.select(self.m, **kwargs)
                 self.assertEqual(caught.exception.code, code)
+
+
+class TrimTest(unittest.TestCase):
+    def test_the_content_ends_at_the_first_long_empty_run_or_the_last_content_row(self):
+        rows = [True] * 10 + [False] * 5 + [True] * 10 + [False] * 30 + [True] * 3 + [False] * 4
+        self.assertEqual(capture.trim_line(rows, gap=20, pad=2), 27, "the footer below the long run is cut")
+        self.assertEqual(capture.trim_line(rows, gap=40, pad=2), 60, "no run that long: the last content row")
+        self.assertIsNone(capture.trim_line(rows, gap=40, pad=10), "nothing to cut")
+        self.assertIsNone(capture.trim_line([False] * 9, gap=4), "no content at all is left alone")
+
+    @unittest.skipIf(capture._pillow() is None, "Pillow is not installed")
+    def test_trim_bottom_cuts_the_picture_in_place(self):
+        from PIL import Image, ImageDraw
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "panel.png"
+            im = Image.new("RGB", (100, 400), (40, 45, 40))
+            draw = ImageDraw.Draw(im)
+            draw.rectangle((10, 20, 90, 30), fill=(220, 220, 200))       # a section
+            draw.rectangle((10, 60, 90, 70), fill=(220, 220, 200))       # another, 29 rows below
+            draw.rectangle((10, 380, 90, 390), fill=(220, 220, 200))     # the footer, past a long run
+            im.save(path)
+            self.assertEqual(capture.trim_bottom(path, gap=100), {"height": 71 + capture.TRIM_PAD,
+                                                                  "cut": 400 - 71 - capture.TRIM_PAD})
+            with Image.open(path) as cut:
+                self.assertEqual(cut.size, (100, 71 + capture.TRIM_PAD))
 
 
 class SheetTest(unittest.TestCase):
@@ -438,11 +515,20 @@ class MainVerbTest(unittest.TestCase):
             reply, code = capture.main_verb(capture._arg_namespace(list=True), call=None, start=started.append,
                                             stop=None, backup_root=Path(tmp))
             self.assertEqual(code, 0)
-            self.assertIn("late_2043", reply["plan"])
+            self.assertTrue(reply["plan"] and set(reply["plan"]) <= set(guide_shots.SCENES), reply["plan"])
             reply, code = capture.main_verb(capture._arg_namespace(), call=None, start=started.append, stop=None,
                                             backup_root=Path(tmp))
             self.assertEqual((code, reply["refused"]), (2, "no_permission"))
             self.assertEqual(started, [])
+
+    def test_in_session_takes_the_shots_in_the_running_session(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            fake = FakeSession(Path(tmp), {"nd_stockpile": 1.0})
+            with mock.patch.object(capture, "load_manifest", return_value=Manifest()):
+                reply, code = capture.main_verb(capture._arg_namespace(in_session=True, only=["one"]), call=fake,
+                                                start=None, stop=None, backup_root=Path(tmp), repo=Path(tmp))
+            self.assertEqual((code, reply["counts"]), (0, {"taken": 1}))
+            self.assertEqual([v for v, _ in fake.calls][:2], ["status", "read"])
 
     def test_a_failed_start_is_reported_and_nothing_is_taken(self):
         for stop_reply, stops_wanted in (({"outcome": "restored"}, 0), ({"outcome": "refused", "stop_again": True}, 1)):

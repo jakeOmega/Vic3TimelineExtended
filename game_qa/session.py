@@ -53,8 +53,8 @@ from typing import Any
 
 from game_qa import (addmod, capture_gui, fixture, gui_preview, overlay, pixels, profiling, rules, script_docs,
                      snapshot)
-from game_qa.console import (CLEAR_BACKSPACES, KEYBOARD_AWAY, MAX_UNRESPONSIVE_S, MENU_PROBE_COMMAND, PROBE_COMMAND,
-                             UNRESPONSIVE_S, Console, ConsoleError, Reply)
+from game_qa.console import (CLEAR_BACKSPACES, KEYBOARD_AWAY, LEFT_FRONT, MAX_UNRESPONSIVE_S, MENU_PROBE_COMMAND,
+                             PROBE_COMMAND, UNRESPONSIVE_S, Console, ConsoleError, Reply)
 from game_qa.dap import Debugger, DebuggerError
 from game_qa.fixture import RunCli
 from game_qa.gate import UNKNOWN_START, ProcId
@@ -243,6 +243,12 @@ ENTER_RETRIED = ("no_ack", "game_gone")
 # While a late save loads (`_console_when_loaded`) a no_ack is retried once only: the live evidence (2026-11-12) is
 # game_gone, and a console that never opens would otherwise be pressed for the whole of LOAD_WAIT_S.
 LOAD_NO_ACK_TRIES = 2
+# And a not_foreground of the keys themselves (LEFT_FRONT) with nothing typed: the window was in front and lost it while
+# the keys went out, which a late save's load does each time the game stops responding and Windows puts its stand-in
+# window in front (live 2026-11-26). Each try passes `_front`'s presence rule again, so someone at the machine still
+# ends the start ("someone has used the machine"), and a line holding half a command (`Console.stranded`) is never
+# retried.
+LOAD_LEFT_FRONT_TRIES = 8
 # The errors after Start whose own code `enter_game` keeps (with the clicks added): they say more than not_entered.
 ENTER_KEPT = ("breakpoint_unverified", "tag_failed", "debugger", "watch_ended", "left_running")
 PROOF_S = 3.0                           # unpaused, to prove the game was entered
@@ -546,7 +552,7 @@ class Session:
             raise SessionError("bad_argument", "capture is true or false, not %r" % (capture,))
         if capture:
             try:
-                self._capture_files = capture_gui.capture_files(self._paths.base_game)
+                self._capture_files = capture_gui.capture_files(self._paths.base_game, self._paths.deploy_dir)
             except capture_gui.CaptureGuiError as e:
                 raise SessionError(e.code, e.detail) from e
         self._add_mods_playset = playset
@@ -1568,15 +1574,16 @@ class Session:
 
     def _console_when_loaded(self) -> None:
         """Wait for the console to take commands once the window has first answered: `ensure_open` is tried
-        every ENTER_RETRY_S while it refuses game_gone, until LOAD_WAIT_S has passed, and once more after a
-        no_ack (LOAD_NO_ACK_TRIES); any other error is raised at once, and `watch` (and a stop asked meanwhile) is looked at before each retry,
-        so a game that ended stops the tries. A save from late in a game keeps the window from responding for
+        every ENTER_RETRY_S while it refuses game_gone, until LOAD_WAIT_S has passed, once more after a
+        no_ack (LOAD_NO_ACK_TRIES), and up to LOAD_LEFT_FRONT_TRIES times while the keys lose the front with nothing
+        typed (LEFT_FRONT); any other error is raised at once, and `watch` (and a stop asked meanwhile) is looked at
+        before each retry, so a game that ended stops the tries. A save from late in a game keeps the window from responding for
         longer than UNRESPONSIVE_S while it loads (live 2026-11-12: a 47 MB save of 1931 ended the first start
         `game_gone` 75 s after the launch), which one `ensure_open` takes for a game that has gone. Recorded as
         the step `console_ready`, with the tries made."""
         deadline = self._clock() + LOAD_WAIT_S
         with self._step("console_ready") as out:
-            tries = no_acks = 0
+            tries = no_acks = left_fronts = 0
             while True:
                 tries += 1
                 out["tries"] = tries
@@ -1585,8 +1592,12 @@ class Session:
                     return
                 except ConsoleError as e:
                     no_acks += e.code == "no_ack"
-                    if (e.code not in ENTER_RETRIED or no_acks >= LOAD_NO_ACK_TRIES
-                            or self._clock() + ENTER_RETRY_S > deadline):
+                    left_front = (e.code == "not_foreground" and e.detail == LEFT_FRONT
+                                  and not self._console.stranded)
+                    left_fronts += left_front
+                    retried = ((e.code in ENTER_RETRIED and no_acks < LOAD_NO_ACK_TRIES)
+                               or (left_front and left_fronts < LOAD_LEFT_FRONT_TRIES))
+                    if not retried or self._clock() + ENTER_RETRY_S > deadline:
                         raise
                     out["last_refusal"] = e.code
                 self._sleep(ENTER_RETRY_S)

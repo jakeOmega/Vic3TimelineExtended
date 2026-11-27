@@ -17,6 +17,12 @@ the game in a session:
   a capture has set CAPTURE_KEY (the `view` verb's `set:te_qa_capture=yes`); the frame counter stays for the
   performance sessions that read it.
 
+* **Debug mode's lines elsewhere** (`DEBUG_GATED_FILES`): a journal entry's page prints "Debug: Journal entry key:
+  ... and ID is ..." (seen live 2026-11-26 on the Map Room's page), an event window its id, a tooltip its keys.
+  `gate_debug_lines` puts the same condition into every `visible` line of those files that names `InDebugMode`, so
+  they hide too while the key is set. Each is copied from the deployed mod where the mod ships the file (the overlay
+  loads after it, so its copy must be the mod's, the build under test), else from the game.
+
 Both are copies of the installed game's files with whole-line edits, made at `start --capture` and never kept in the
 repo. A patch that moves one of the edited lines stops the start with the line that could not be found
 (`CaptureGuiError("capture_gui_changed")`), rather than load a console that might not take keys.
@@ -39,7 +45,22 @@ binding (`ExecuteConsoleCommand`, a save) through it:
     panel:NAME           [InformationPanelBar.OpenPanel('NAME')]
     panel:NAME:TAB       [InformationPanelBar.OpenPanelTab('NAME', 'TAB')]
     market:TAB           [InformationPanelBar.OpenMarketPanelTab(AccessPlayer.AccessFirstMarket.Self, 'TAB')]
+    construction         [InformationPanelBar.OpenConstructionPanel( GetPlayer.Self )]
+    construction:TAB     [InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'TAB' )]
+    state:capital        [InformationPanelBar.OpenStatePanel( AccessPlayer.AccessCapital )]
+    zoom:capital         [AccessPlayer.AccessCapital.ZoomToCapital]: the camera to the capital
+    je:KEY               [InformationPanelBar.OpenJournalEntryPanel( GetPlayerJournalEntry('KEY').AccessSelf )]: an
+                         entry's page, as the Map Room button opens it (je_te_map_room)
+    sgui:te_…_sgui       [GetScriptedGui('NAME').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]: one of the
+                         mod's scripted GUIs run as its button runs it, in the played country's scope. It changes the
+                         game (a Map Room pick sets the country's selector), which is why only a copy is ever loaded
     close-panel          [InformationPanelBar.ClosePanel]
+
+Each binding is one vanilla's own GUI uses (`OpenConstructionPanel( GetPlayer.Self )` in the outliner,
+`OpenStatePanel( State.AccessSelf )`, `Country.AccessCapital.ZoomToCapital` on a country's capital link), with the
+played country's capital as the State: a map object the view can name without a click. The capital is reached by
+`AccessPlayer`, not `GetPlayer`: live 2026-11-26, `GetPlayer.AccessCapital` was refused "Invalid promote 'GetPlayer'
+... requires non const promote" (`AccessPlayer.AccessFirstMarket` is the market tab's for the same reason).
 """
 
 from __future__ import annotations
@@ -97,6 +118,15 @@ ERROR_DEER_EDITS: tuple[tuple[str, str, int], ...] = (
 )
 
 
+# Every GUI file of vanilla 1.15.2 or the mod with a widget shown only in debug mode, error_deer.gui (above) aside.
+DEBUG_GATED_FILES = ("gui/journal_entry.gui", "gui/eventwindow.gui", "gui/tooltip.gui", "gui/custom_tooltip.gui",
+                     "gui/states_panel.gui", "gui/market_panel.gui", "gui/power_bloc_panel.gui",
+                     "gui/right_click_menu.gui", "gui/military_formation_panel.gui", "gui/ship_panel.gui",
+                     "gui/location_finder.gui", "gui/front_panel.gui", "gui/ship_designer_popup.gui")
+GATED_DEBUG = "And( InDebugMode, Not( GetVariableSystem.Exists( '%s' ) ) )" % CAPTURE_KEY
+_DEBUG_VISIBLE = re.compile(r'^(?P<lead>\s*visible\s*=\s*)"?\[(?P<expr>[^"\]]*\bInDebugMode\b[^"]*?)\]"?(?P<tail>\s*(?:#.*)?)$')
+
+
 class CaptureGuiError(Exception):
     """A capture file that can't be made, or a view that can't be written. `code` names why."""
 
@@ -140,12 +170,54 @@ def gated_error_deer(source: bytes) -> bytes:
     return apply_edits(source, ERROR_DEER_EDITS, "error_deer.gui")
 
 
-def capture_files(base_game) -> dict[str, bytes]:
-    """{overlay path: bytes} for a capture session, made from the install folder `base_game`. `capture_gui_missing`
-    when a file can't be read, `capture_gui_changed` when one has moved."""
+def gate_debug_lines(source: bytes) -> tuple[bytes, int]:
+    """`source` with every `visible = "[... InDebugMode ...]"` line (quoted or not) made to need CAPTURE_KEY unset
+    as well, its BOM and line endings kept; and how many lines were changed."""
+    had_bom = source.startswith(BOM)
+    text = (source[len(BOM):] if had_bom else source).decode("utf-8")
+    crlf = "\r\n" in text
+    lines = text.replace("\r\n", "\n").split("\n")
+    changed = 0
+    for i, line in enumerate(lines):
+        m = _DEBUG_VISIBLE.match(line)
+        if m:
+            expr = re.sub(r"\bInDebugMode\b", GATED_DEBUG, m["expr"])
+            lines[i] = '%s"[%s]"%s' % (m["lead"], expr, m["tail"])
+            changed += 1
+    text = "\n".join(lines)
+    if crlf:
+        text = text.replace("\n", "\r\n")
+    return (BOM if had_bom else b"") + text.encode("utf-8"), changed
+
+
+def debug_gated_files(base_game, deploy_dir=None) -> dict[str, bytes]:
+    """{overlay path: bytes}: each of DEBUG_GATED_FILES from the deployed mod when it ships it, else from the game,
+    with its debug lines gated. A file that can't be read, or holds no such line, is left out: nothing of it shows
+    in a capture then, or the game's own draws as before."""
     from pathlib import Path
 
     out: dict[str, bytes] = {}
+    for rel in DEBUG_GATED_FILES:
+        sources = ([Path(deploy_dir) / rel] if deploy_dir else []) + [Path(base_game) / "game" / rel]
+        for path in sources:
+            try:
+                data = path.read_bytes()
+            except OSError:
+                continue
+            gated, changed = gate_debug_lines(data)
+            if changed:
+                out[rel] = gated
+            break
+    return out
+
+
+def capture_files(base_game, deploy_dir=None) -> dict[str, bytes]:
+    """{overlay path: bytes} for a capture session, made from the install folder `base_game` (and the deployed mod's
+    folder `deploy_dir`, for DEBUG_GATED_FILES). `capture_gui_missing` when the console or error_deer.gui can't be
+    read, `capture_gui_changed` when one has moved."""
+    from pathlib import Path
+
+    out: dict[str, bytes] = debug_gated_files(base_game, deploy_dir)
     for rel, source, make in ((CONSOLE_FILE, CONSOLE_SOURCE, capture_console),
                               (ERROR_DEER_FILE, ERROR_DEER_SOURCE, gated_error_deer)):
         path = Path(base_game) / source
@@ -187,11 +259,24 @@ def parse_action(text: str) -> Action:
             binding = "InformationPanelBar.OpenPanelTab( '%s', '%s' )" % (name, tab)
     elif kind == "market" and _TAB.fullmatch(rest):
         binding = "InformationPanelBar.OpenMarketPanelTab( AccessPlayer.AccessFirstMarket.Self, '%s' )" % rest
+    elif text == "construction":
+        binding = "InformationPanelBar.OpenConstructionPanel( GetPlayer.Self )"
+    elif kind == "construction" and _WORD.fullmatch(rest):
+        binding = "InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, '%s' )" % rest
+    elif text == "state:capital":
+        binding = "InformationPanelBar.OpenStatePanel( AccessPlayer.AccessCapital )"
+    elif text == "zoom:capital":
+        binding = "AccessPlayer.AccessCapital.ZoomToCapital"
+    elif kind == "je" and _WORD.fullmatch(rest):
+        binding = "InformationPanelBar.OpenJournalEntryPanel( GetPlayerJournalEntry('%s').AccessSelf )" % rest
+    elif kind == "sgui" and _WORD.fullmatch(rest) and rest.startswith("te_") and rest.endswith("_sgui"):
+        binding = "GetScriptedGui('%s').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )" % rest
     elif text == "close-panel":
         binding = "InformationPanelBar.ClosePanel"
     if binding is None:
         raise CaptureGuiError("bad_action", "%r is not an action: set:KEY=VALUE, clear:KEY, panel:NAME, "
-                              "panel:NAME:TAB, market:TAB or close-panel, each name letters, digits and _" % (text,))
+                              "panel:NAME:TAB, market:TAB, construction[:TAB], state:capital, zoom:capital, je:KEY, "
+                              "sgui:te_NAME_sgui or close-panel, each name letters, digits and _" % (text,))
     return Action(text, binding)
 
 
