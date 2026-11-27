@@ -64,6 +64,62 @@ class RegistryMatchesEventFilesTests(unittest.TestCase):
             "or point the event at a picture that has one (contact_sheet.py --window "
             "to choose), and list the event under it.")
 
+    def test_every_picture_file_has_a_prompt_entry(self):
+        self.assertEqual(
+            self.report["unsourced"], [],
+            "These files in gfx/event_pictures/ have no entry in event_image_prompts.IMAGES, "
+            "so nothing records where they came from (#1773: sixty such files shipped, most "
+            "of them stock or press photographs). Delete the file, or add its entry if the "
+            "pipeline drew it.")
+
+    def test_the_unsourced_allowlist_has_no_stale_line(self):
+        self.assertEqual(
+            self.report["stale_allowlist"], [],
+            "Drop these lines from scripts/image_pipeline/unsourced_event_pictures.txt: the "
+            "picture has an entry now, or its file is gone.")
+
+
+class CheckTests(unittest.TestCase):
+    """check() on made-up event files and picture lists (#1773)."""
+
+    KEY = "nuclear_test_mushroom"  # any key the registry has
+
+    @staticmethod
+    def _art(eid, *textures, trigger=False):
+        art = inv.EventArt(eid, "events/x.txt", False)
+        for t in textures:
+            art.blocks.append({"trigger": trigger, "texture": t})
+        return art
+
+    def test_a_file_with_no_entry_is_an_error_unless_allowlisted(self):
+        on_disk = {self.KEY, "zz_unsourced", "zz_waiting"}
+        r = eip.check({}, on_disk, allowlist={"zz_waiting"})
+        self.assertEqual(r["unsourced"], ["zz_unsourced"])
+        self.assertEqual(r["stale_allowlist"], [])
+
+    def test_an_allowlisted_stem_with_an_entry_or_no_file_is_stale(self):
+        r = eip.check({}, {self.KEY}, allowlist={self.KEY, "zz_gone"})
+        self.assertEqual(r["unsourced"], [])
+        self.assertEqual(r["stale_allowlist"], sorted([self.KEY, "zz_gone"]))
+
+    def test_each_texture_of_conditional_art_needs_an_entry(self):
+        arts = {"my.1": self._art("my.1", f"gfx/event_pictures/{self.KEY}.dds",
+                                  "gfx/event_pictures/zz_unsourced.dds", trigger=True),
+                "my.2": self._art("my.2", f"gfx/event_pictures/{self.KEY}.dds",
+                                  f"gfx/event_pictures/{self.KEY}.dds", trigger=True)}
+        r = eip.check(arts, {self.KEY}, allowlist=set())
+        self.assertEqual(r["unregistered"]["conditional"], ["my.1", "my.2"])
+        self.assertEqual(r["unregistered"]["unregistered_picture"],
+                         [("my.1", "gfx/event_pictures/zz_unsourced.dds")])
+
+    def test_the_allowlist_file_reads_stems_and_skips_comments(self):
+        d = tempfile.mkdtemp()
+        path = os.path.join(d, "list.txt")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("# header\n\nzz_one\nzz_two  # a note\n")
+        self.assertEqual(eip.load_unsourced_allowlist(path), {"zz_one", "zz_two"})
+        self.assertEqual(eip.load_unsourced_allowlist(os.path.join(d, "missing.txt")), set())
+
 
 class ReframedFieldTests(unittest.TestCase):
     """An entry's `reframed` names an edit reframe_event_image.py can make, on a picture that exists."""

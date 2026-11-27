@@ -1,0 +1,72 @@
+# Pictures in gfx/event_pictures/ allowed to stand without an entry in
+# event_image_prompts.IMAGES. Read by event_image_prompts.check(): any other
+# picture file with no entry fails test_event_image_registry.py and
+# `event_image_prompts.py --validate`, and so does a stale line here (a stem
+# that has an entry now, or whose file is gone).
+#
+# Every line is a file nothing records a source for, awaiting the owner's call
+# to delete it (#1773). None of them is shown by any event, GUI file or script.
+# Most look like stock or press photographs (some with real flags, logos or a
+# real person's likeness); the moons and planets look like NASA, JPL or ESA
+# imagery, and events show the generated colony_* pictures instead. The list
+# is meant to empty out: delete the file and its line together.
+#
+# One picture stem a line; '#' starts a comment.
+amalthea
+arcadia_planitia
+augmented_athlete
+bilingual
+callisto
+ceres
+climate_refugees
+coastal_flooding
+commando
+corp_office
+cultural_exchange
+cyber_attack
+development_protest
+divorce_reform
+environmental_movement
+espionage
+europa
+event_diplomacy
+gaming_industry
+ganymede
+globalization_protest
+green_technology
+hellas_planitia
+himalia
+human_rights
+hygiea
+international_court
+interstellar
+io
+labor_dispute
+marriage_equality
+melting_iceburg
+mercury
+ministry_building
+monetary_policy
+olympus_mons
+outsourcing
+pallas
+parliamentary_debate
+police_brutality
+political_rally
+post_war_reconstruction
+pride_march
+psyche
+satellite_dish
+self_driving
+social_revolution
+supply_chain
+surveillance_debate
+terrorist_attack
+test_placeholder
+un_charter
+un_peacekeepers
+utonia_planitia
+valles_marineris
+venus
+vesta
+war_devastation

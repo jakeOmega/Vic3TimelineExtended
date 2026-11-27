@@ -2645,12 +2645,30 @@ def get_all_mapped_events() -> set:
     return mapped
 
 
-def check(arts=None, on_disk=None) -> dict:
+UNSOURCED_ALLOWLIST = "unsourced_event_pictures.txt"
+
+
+def load_unsourced_allowlist(path=None) -> set:
+    """The picture stems ``check()`` lets stand without a prompt entry: one a
+    line in ``unsourced_event_pictures.txt`` beside this file, ``#`` starting a
+    comment. Each is a file awaiting the owner's call to delete it (#1773);
+    the list is meant to empty out, and a stale line is an error."""
+    import os
+    if path is None:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), UNSOURCED_ALLOWLIST)
+    if not os.path.isfile(path):
+        return set()
+    with open(path, encoding="utf-8") as fh:
+        return {line.split("#", 1)[0].strip() for line in fh} - {""}
+
+
+def check(arts=None, on_disk=None, allowlist=None) -> dict:
     """Compare the registry with what the event files actually show.
 
     ``arts`` is ``event_image_inventory.load(mod_root)`` and ``on_disk`` the set
     of ``gfx/event_pictures/*.dds`` stems; both default to this checkout's
-    (git's list of pictures when ``gfx/`` is not checked out).
+    (git's list of pictures when ``gfx/`` is not checked out). ``allowlist``
+    defaults to ``load_unsourced_allowlist()``.
 
     Errors (the registry is wrong; ``generate_event_images.py --phase update``
     would act on them):
@@ -2666,7 +2684,16 @@ def check(arts=None, on_disk=None) -> dict:
                   eighteen found in #1658 looked like stock or press photographs:
                   draw the picture through the pipeline, or point the event at
                   one that has an entry. A plain texture outside
-                  gfx/event_pictures/ lands here too, listed by its path
+                  gfx/event_pictures/ lands here too, listed by its path, and
+                  so does each texture of an event's conditional art (#1773)
+      unsourced   a file in gfx/event_pictures/ with no entry here, whether or
+                  not anything shows it (#1773: sixty such files shipped, most
+                  of them stock or press photographs, some with real flags).
+                  Delete it, or give it an entry if the pipeline drew it. The
+                  allowlist exempts files awaiting the owner's call
+      stale_allowlist
+                  an allowlisted stem that has an entry now, or no file: drop
+                  the line
     Information:
       pending       images with no .dds yet, and the events waiting for them
       unregistered  the other visible events the registry does not list, by what
@@ -2680,9 +2707,13 @@ def check(arts=None, on_disk=None) -> dict:
         arts = inv.load(mod_root)
     if on_disk is None:
         on_disk = inv.known_pictures(mod_root)
+    if allowlist is None:
+        allowlist = load_unsourced_allowlist()
 
     seen: dict[str, str] = {}
     report: dict = {"duplicates": [], "dead": [], "drift": [], "pending": {},
+                    "unsourced": sorted(s for s in on_disk if s not in IMAGES and s not in allowlist),
+                    "stale_allowlist": sorted(s for s in allowlist if s in IMAGES or s not in on_disk),
                     "unregistered": {"registered_picture": [], "unregistered_picture": [],
                                      "video": [], "conditional": []}}
     for key, img in IMAGES.items():
@@ -2703,8 +2734,17 @@ def check(arts=None, on_disk=None) -> dict:
     for eid, art in sorted(arts.items()):
         if eid in seen or art.hidden or art.debug or art.kind == "none":
             continue
-        if art.kind in ("video", "conditional"):
-            report["unregistered"][art.kind].append(eid)
+        if art.kind == "conditional":
+            report["unregistered"]["conditional"].append(eid)
+            for block in art.blocks:
+                texture = block.get("texture")
+                if texture is None:
+                    continue
+                m = inv._PICTURE_RE.match(texture)
+                if not (m and m.group(1) in IMAGES):
+                    report["unregistered"]["unregistered_picture"].append((eid, texture))
+        elif art.kind == "video":
+            report["unregistered"]["video"].append(eid)
         elif art.picture in IMAGES:
             report["unregistered"]["registered_picture"].append((eid, art.picture))
         else:
@@ -2719,7 +2759,11 @@ def validate() -> bool:
     for title, rows in (("DUPLICATE EVENT ASSIGNMENTS", r["duplicates"]),
                         ("LISTED EVENTS THAT ARE GONE, HIDDEN OR DEBUG-ONLY", r["dead"]),
                         ("DRIFT: LISTED UNDER AN IMAGE BUT SHOWING ANOTHER (re-pointed by hand: "
-                         "move the ID; image just generated: run --phase update)", r["drift"])):
+                         "move the ID; image just generated: run --phase update)", r["drift"]),
+                        ("FILES IN gfx/event_pictures/ WITH NO PROMPT ENTRY (#1773: delete the file, "
+                         "or add its entry if the pipeline drew it)", [(x,) for x in r["unsourced"]]),
+                        (f"STALE LINES IN {UNSOURCED_ALLOWLIST} (the picture has an entry now, or no "
+                         "file: drop the line)", [(x,) for x in r["stale_allowlist"]])):
         if rows:
             print(f"{title} ({len(rows)}):")
             for row in rows:
@@ -2741,8 +2785,12 @@ def validate() -> bool:
         print(f"    {eid} -> {pic}")
     print(f"  showing a vanilla video: {len(un['video'])}")
     print(f"  with conditional art (phase 3 never touches these): {len(un['conditional'])}")
+    allowed = load_unsourced_allowlist()
+    if allowed:
+        print(f"\nPicture files allowlisted without an entry ({UNSOURCED_ALLOWLIST}, awaiting the "
+              f"owner's call to delete them): {len(allowed)}")
     errors = (len(r["duplicates"]) + len(r["dead"]) + len(r["drift"])
-              + len(un["unregistered_picture"]))
+              + len(un["unregistered_picture"]) + len(r["unsourced"]) + len(r["stale_allowlist"]))
     print(f"\nImages: {len(IMAGES)}  Listed events: {len(get_all_mapped_events())}  Errors: {errors}")
     return errors == 0
 
