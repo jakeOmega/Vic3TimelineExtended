@@ -73,6 +73,50 @@ banking_tool_clear_pending = {
 	}
 }
 
+# The rule switched off mid-game (te_banking_cycle_stop_for_rule): every tool's mark goes with the cycle, so a
+# rule switched on again within the week opens every tool at once. test_banking_tool_roster.OneCopyTests holds the
+# list to the tools banking_tool_before_switch_on marks.
+banking_tool_clear_all_pending = {
+	banking_tool_clear_pending = { MODIFIER = banking_open_market_ops }
+	banking_tool_clear_pending = { MODIFIER = banking_moral_suasion }
+	banking_tool_clear_pending = { MODIFIER = banking_countercyclical_capital_buffer }
+	banking_tool_clear_pending = { MODIFIER = banking_raise_margin_requirements }
+	banking_tool_clear_pending = { MODIFIER = banking_expand_deposit_guarantee }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_infrastructure }
+	banking_tool_clear_pending = { MODIFIER = banking_export_credit_facility }
+	banking_tool_clear_pending = { MODIFIER = banking_capital_controls_out }
+	banking_tool_clear_pending = { MODIFIER = banking_emergency_liquidity_program }
+	banking_tool_clear_pending = { MODIFIER = banking_asset_relief_program }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_heavy_industry }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_agriculture }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_armaments }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_electrification }
+	banking_tool_clear_pending = { MODIFIER = banking_reserve_requirements }
+	banking_tool_clear_pending = { MODIFIER = banking_bank_holiday }
+	banking_tool_clear_pending = { MODIFIER = banking_bail_in_regime }
+	banking_tool_clear_pending = { MODIFIER = planning_plan_revision }
+	banking_tool_clear_pending = { MODIFIER = planning_target_reduction }
+	banking_tool_clear_pending = { MODIFIER = planning_consolidation_order }
+	banking_tool_clear_pending = { MODIFIER = planning_emergency_allocation }
+	banking_tool_clear_pending = { MODIFIER = planning_strategic_stockpile }
+	banking_tool_clear_pending = { MODIFIER = planning_distribution_upgrade }
+	banking_tool_clear_pending = { MODIFIER = planning_admin_campaign }
+	banking_tool_clear_pending = { MODIFIER = planning_coordination_protocol }
+	banking_tool_clear_pending = { MODIFIER = cooperative_dividend_restraint }
+	banking_tool_clear_pending = { MODIFIER = cooperative_mutual_aid }
+	banking_tool_clear_pending = { MODIFIER = cooperative_capital_plan }
+	banking_tool_clear_pending = { MODIFIER = cooperative_credit_expansion }
+	banking_tool_clear_pending = { MODIFIER = cooperative_council_directive }
+	banking_tool_clear_pending = { MODIFIER = cooperative_consumption_ceiling }
+	banking_tool_clear_pending = { MODIFIER = cooperative_solidarity_campaign }
+	banking_tool_clear_pending = { MODIFIER = cooperative_worker_buyout }
+	banking_tool_clear_pending = { MODIFIER = banking_restrict_inflows }
+	banking_tool_clear_pending = { MODIFIER = banking_sterilize_inflows }
+	banking_tool_clear_pending = { MODIFIER = banking_foreign_borrowing_limits }
+	banking_tool_clear_pending = { MODIFIER = banking_fx_surrender }
+	banking_tool_clear_pending = { MODIFIER = banking_emergency_import_financing }
+}
+
 # The "Raise Policy Rate" pair used to open this file. It is deleted
 # (monetary_policy_design.md §18): the policy rate is a country variable the
 # player or the delegated central bank sets directly, not an on/off intervention.

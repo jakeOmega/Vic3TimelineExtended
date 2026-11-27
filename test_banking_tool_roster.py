@@ -448,6 +448,17 @@ class OneCopyTests(unittest.TestCase):
         self.assertIn("text = banking_tool_pending_tt", gate)
         self.assertIn("banking_tool_pending_tt", _loc_keys())
 
+    def test_the_rule_off_teardown_clears_every_mark(self):
+        # te_banking_cycle_stop_for_rule (the rule switched off mid-game) clears every tool's mark, so a rule switched
+        # on again within the week opens every tool at once
+        effects = _text(EFFECTS)
+        all_clear = _top_level_block(effects, "banking_tool_clear_all_pending = {")
+        cleared = set(re.findall(r"banking_tool_clear_pending = \{ MODIFIER = (\w+) \}", all_clear))
+        self.assertEqual(cleared, set(_switch_on_tools().values()))
+        stop = _top_level_block(_text(ROOT / "common/scripted_effects/banking_cycle_effects.txt"),
+                                "te_banking_cycle_stop_for_rule = {")
+        self.assertIn("banking_tool_clear_all_pending = yes", stop)
+
     def test_the_pool_transfers_are_not_held(self):
         effects, possible = _text(EFFECTS), _text(POSSIBLE)
         for tool in ("ce_invest_pool_inject", "ce_invest_pool_withdraw"):
