@@ -272,15 +272,17 @@ no levels. The pool it is meant to drain holds 15.5 trillion and takes in
 So in this game the modifier no longer does what it was built for, and the
 1,000 placements a week it produces cost 22 s of every week.
 
-**What the levels are worth.** A setup summed the USA's buildings on 13
-March 2050 (`setups/occ.txt`; level × `occupancy` over every building that
-is not subsistence, session `20261127T043633Z`): 180 states, 3,544,997
-levels, 2,559,468 of them staffed (72%). 1,113,484 levels, 31%, stand in
-buildings under half staffed, with a population of 467 million. Investors
-add about 30,000 levels a year in the USA's own states to a stock of which a
-quarter has nobody to work it. Occupancy is not only a shortage of people (a
-building that cannot pay its wages empties too), so this bounds the loss
-from a slower turnover; it does not prove there is none.
+**Occupancy does not price the levels** (owner, 2026-11-26). A setup summed
+level × `occupancy` over the USA's buildings that are not subsistence on 13
+March 2050 (`setups/occ.txt`, session `20261127T043633Z`): 180 states,
+3,544,997 levels, a level-weighted occupancy of 72%, and 31% of the levels
+in buildings under half staffed. That is a weighted mean of how full each
+building's jobs are, not a count of levels nobody works: by 2050 the
+methods in use hire a flat crew (`unscaled` employment), so a new level
+adds output without adding jobs, and an empty job says nothing about it.
+The figure therefore does not bound what a slower turnover would cost. What
+it costs is the output of the levels not built, which these runs did not
+measure.
 
 **This is the measurement the super-building note of 2026-11-23 asked for**
 ("measure an era-12/13 save first"): at a full weekly turnover the pass is
@@ -364,7 +366,7 @@ Each of these trades investor building rate for speed; none is built.
 2. **Hold the cap lower, so a level takes N weeks.** The pass is about 22 s ÷
    N. At the base cap (N of about three) the week's tick work is 17.5 s
    against 33.5, and investors finish about half as many levels in the
-   USA's states, a quarter of whose existing levels are unstaffed. Where
+   USA's states. Where
    between a cap of 1,390 and 3,064 the saving starts needs longer runs
    (finding 4).
 3. **Larger levels in the late eras, with a lower cap.** The owner's
@@ -407,7 +409,9 @@ Each of these trades investor building rate for speed; none is built.
    middle setting) show 1.3–1.4 s a sub-tick outside the tick tasks against
    0.37 s before, with their tick tasks normal. Their tick-task figures are
    quoted above; their wall times are not. Every wall time in this report is
-   from before that.
+   from before that. The owner was not at the machine and suggests Windows'
+   notice for a window that has stopped responding, which a 30 s weekly tick
+   would raise; not checked.
 6. Side finding, filed as #2093: in the Ships tab the "used/total" figure
    runs into the cost beside it at five digits (it did before this branch).
 
