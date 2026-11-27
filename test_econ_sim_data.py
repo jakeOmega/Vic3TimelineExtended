@@ -63,9 +63,11 @@ class TestNumbers(unittest.TestCase):
     def test_load_is_fast(self):
         # CPU time, not wall time: a loaded machine (pytest -n auto) stretches the wall clock, not the work.
         # load_mod_data runs in this process, on this thread, so process_time counts all of it (#1693).
+        # About 6 s of CPU on the dev machine alone (2026-11-27); under `pytest -n auto` with the game running it
+        # took 15.6 s, past the old 15 s limit (#1785). 30 s still catches a blow-up.
         start = time.process_time()
         D.load_mod_data()
-        self.assertLess(time.process_time() - start, 15.0)       # about 4 s on the dev machine; this only catches a blow-up
+        self.assertLess(time.process_time() - start, 30.0)
 
 
 class TestReaders(unittest.TestCase):

@@ -233,9 +233,12 @@ capital is at work.
 
 AI countries choose their own purchase each week, always as a fixed quantity.
 They spend roughly their net income, more when their gold reserves are full and
-less when they carry debt. They cut back when a war or banking stress meets thin
-reserves, and buy at least 10 points a week while their government queue has
-anything in it.
+less when they carry debt. A low interest rate lets them borrow a little to
+build, and a high one makes them keep a reserve first. They cut back when a war
+or banking stress meets thin reserves. A government with no surplus and no gold
+to spare buys nothing and its queue waits, unless it is short of bureaucracy:
+then it buys about a fifth of its income's worth. They buy nothing at all while
+debt has paused their construction.
 
 ## Construction costs in rich countries
 

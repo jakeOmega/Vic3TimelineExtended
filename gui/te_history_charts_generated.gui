@@ -6139,19 +6139,6 @@ types te_history_charts_generated_types
 						texture_density = 2
 						skip_initial_animation = yes
 						alwaystransparent = yes
-						color = { 0.0 0.514 0.0 1.0 }
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c6') )]"
-						min = 0
-						max = 1
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
 						color = { 0.835 0.318 0.506 1.0 }
 						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c5') )]"
 						min = 0
@@ -6431,19 +6418,6 @@ types te_history_charts_generated_types
 						alwaystransparent = yes
 						color = { 0.565 0.522 0.914 1.0 }
 						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c7') )]"
-						min = 0
-						max = 1
-					}
-					progressbar = {
-						size = { 100% 100% }
-						direction = vertical
-						progresstexture = "gfx/interface/backgrounds/white.dds"
-						noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
-						texture_density = 2
-						skip_initial_animation = yes
-						alwaystransparent = yes
-						color = { 0.0 0.514 0.0 1.0 }
-						value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_dg_h_c6') )]"
 						min = 0
 						max = 1
 					}

@@ -6302,5 +6302,271 @@ class ProfileTest(SessionTestCase):
         self.assertEqual((skipped[0]["log"], skipped[0]["bytes"]), (profiling.SERVER_LOG, len(found)))
 
 
+
+class GuiShowSyncTest(GuiShowTestBase):
+    """#2015 item 1 and #1989: a sync too large is refused unless forced, --sync-only limits it, the reload wait grows
+    with the bytes, and a not_reloaded after a sync says to show again."""
+
+    def add_files(self, count: int, size: int = 100) -> list[str]:
+        names = []
+        for n in range(count):
+            rel = "gui/many_%02d.gui" % n
+            (self.repo / rel).write_text("types m%d {\n\ttype te_m%d = widget {}\n}\n" % (n, n) + "#" * size + "\n",
+                                         encoding="utf-8")
+            names.append(rel)
+        return names
+
+    def test_more_files_than_the_limit_are_refused_with_nothing_written(self):
+        self.add_files(session.GUI_SYNC_MAX_FILES)          # with x.gui, one more than the limit
+        e = self.session_error(self.show)
+        self.assertEqual(e.code, "sync_too_large")
+        self.assertEqual(len(e.info["files"]), session.GUI_SYNC_MAX_FILES + 1)
+        self.assertIn("--gui-from", e.info["next"])
+        self.assertEqual(self.written, [])
+        self.assertNotIn(session.PREVIEW_CREATE, self.typed())
+
+    def test_more_bytes_than_the_limit_are_refused_and_force_sync_goes_ahead(self):
+        self.add_files(1, size=session.GUI_SYNC_MAX_BYTES)
+        e = self.session_error(self.show)
+        self.assertEqual(e.code, "sync_too_large")
+        self.assertGreater(e.info["total_bytes"], session.GUI_SYNC_MAX_BYTES)
+        reply = self.show(force_sync=True)
+        self.assertEqual(sorted(reply["synced"]), ["gui/many_00.gui", "gui/x.gui"])
+
+    def test_files_the_overlay_holds_already_do_not_count(self):
+        names = self.add_files(session.GUI_SYNC_MAX_FILES - 1)
+        self.assertEqual(len(self.show()["synced"]), session.GUI_SYNC_MAX_FILES)    # at the limit: fine
+        (self.repo / names[0]).write_text("types m {\n\ttype te_m0 = widget {}\n}\n", encoding="utf-8")
+        self.assertEqual(self.show()["synced"], [names[0]])                       # one changed, one synced
+
+    def test_sync_only_copies_the_named_files_and_leaves_the_rest(self):
+        names = self.add_files(session.GUI_SYNC_MAX_FILES + 2)
+        reply = self.show(sync_only=[names[1], "gui/x.gui"])
+        self.assertEqual(sorted(reply["synced"]), sorted([names[1], "gui/x.gui"]))
+        self.assertFalse((self.overlay_dir / names[0]).exists())
+
+    def test_sync_only_refuses_a_file_the_branch_did_not_change(self):
+        e = self.session_error(self.show, sync_only=["gui/lib.gui"])
+        self.assertEqual(e.code, "bad_argument")
+        self.assertIn("gui/lib.gui", e.detail)
+        self.assertEqual(self.written, [])
+        for bad in ("gui/x.gui", [3]):
+            with self.subTest(bad=bad):
+                self.assertEqual(self.session_error(self.show, sync_only=bad).code, "bad_argument")
+
+    def test_the_reload_wait_grows_with_the_bytes_synced(self):
+        self.assertEqual(session._reload_wait(0), session.GUI_RELOAD_WAIT_S)
+        self.assertGreater(session._reload_wait(5_800_000), session.GUI_RELOAD_WAIT_S + 50)
+        self.assertEqual(session._reload_wait(10**9), session.GUI_RELOAD_WAIT_MAX_S)
+
+    def test_not_reloaded_after_a_sync_says_to_show_again_and_the_next_show_syncs_nothing(self):
+        self.reload_logs = False
+        e = self.session_error(self.show)
+        self.assertEqual(e.code, "not_reloaded")
+        self.assertIn("without editing", e.info["next"])
+        self.assertGreaterEqual(e.info["waited_s"], session.GUI_RELOAD_WAIT_S)
+        self.reload_logs = True
+        self.assertEqual(self.show()["synced"], [])
+        self.reload_logs = False
+        self.assertNotIn("next", self.session_error(self.show).info)   # nothing synced: nothing to say
+
+
+class GuiShowInvalidTypeTest(GuiShowTestBase):
+    """#1989 item 3: the game's "'X' is not a valid widget/type/property", logged once at the sync that caused it,
+    is repeated on later shows while the checkout's gui/ defines X."""
+
+    def test_a_line_logged_at_a_not_reloaded_sync_comes_back_on_the_next_show(self):
+        real = overlay.sync_gui
+
+        def sync(ov, rel, data):
+            self.game.error("'te_x_section' is not a valid widget/type/property")
+            return real(ov, rel, data)
+        self.reload_logs = False
+        with mock.patch.object(overlay, "sync_gui", sync):
+            self.assertEqual(self.session_error(self.show).code, "not_reloaded")
+        self.reload_logs = True
+        reply = self.show()
+        self.assertEqual([item["type"] for item in reply["invalid_types"]], ["te_x_section"])
+        self.assertIn("--gui-from", reply["invalid_types_hint"])
+        self.assertEqual(self.show()["invalid_types"][0]["type"], "te_x_section")    # and on every show after
+
+    def test_a_type_the_checkout_does_not_define_is_not_repeated(self):
+        real = overlay.sync_gui
+
+        def sync(ov, rel, data):
+            self.game.error("'te_nowhere' is not a valid widget/type/property")
+            return real(ov, rel, data)
+        with mock.patch.object(overlay, "sync_gui", sync):
+            reply = self.show()
+        self.assertNotIn("invalid_types", reply)
+        self.assertTrue(any("te_nowhere" in line["text"] for line in reply["log"]))      # this call's log has it
+
+
+class GuiShowScaleCheckTest(GuiShowTestBase):
+    """#1989 item 1: --scale shoots at the asked scale, then at the owner's, and says whether the panel's width
+    changed by their ratio."""
+
+    def setUp(self):
+        super().setUp()
+        (self.user / session.SETTINGS_FILE).write_text('{"GUI": {"scale": 1.5}}', encoding="utf-8")
+        self.scale_takes = True
+        self.scale = 1.5
+        before = self.game.on_command
+
+        def hook(text):
+            if text.startswith("gui.setscale ") and self.scale_takes:
+                self.scale = float(text.split()[1])
+            if before is not None:
+                before(text)
+        self.game.on_command = hook
+
+    def panel_shot(self, pid, path, max_width=1600):
+        width, height = self.game.client[2], self.game.client[3]
+        half = round(85 * self.scale / 1.5)                 # 170 px wide at the owner's 1.5
+        grey, magenta = bytes((90, 90, 90)), bytes((255, 0, 255))
+        rows = b"".join((grey if (200 - half <= x < 200 + half and 75 <= y < 225) else magenta)
+                        for y in range(height) for x in range(width))
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(fakes.win_helper.encode_png(width, height, rows))
+        self.game.screenshots.append((pid, path, max_width))
+        return path
+
+    def test_a_scale_that_takes_is_said_to_and_the_widget_is_created_after_it(self):
+        reply = self.show(scale=0.75)
+        self.assertIs(reply["scale_applied"], True)
+        self.assertEqual(reply["crop_size"][0], 2 * round(85 * 0.75 / 1.5) + 2 * session.GUI_CROP_MARGIN)
+        self.assertTrue(Path(reply["reference_crop"]).is_file())
+        gui = [c for c in self.typed() if c.startswith("gui.")]
+        i = gui.index("gui.setscale 0.75")
+        self.assertEqual(gui[i + 1:i + 3], [session.CLEAR_WIDGETS, session.PREVIEW_CREATE])   # created at the scale
+        j = gui.index("gui.setscale 1.5")
+        self.assertEqual(gui[j + 1:j + 3], [session.CLEAR_WIDGETS, session.PREVIEW_CREATE])   # the reference
+
+    def test_a_scale_that_does_not_take_is_said_not_to(self):
+        self.scale_takes = False
+        reply = self.show(scale=0.75)
+        self.assertIs(reply["scale_applied"], False)
+        self.assertIn("did not take", reply["scale_note"])
+        self.assertIn("owner's 1.5", reply["scale_note"])
+
+    def test_the_owners_own_scale_takes_no_reference_shot(self):
+        reply = self.show(scale=1.5)
+        self.assertNotIn("scale_applied", reply)
+        self.assertNotIn("reference_crop", reply)
+
+    def test_the_check_on_its_own(self):
+        m = 2 * session.GUI_CROP_MARGIN
+        self.assertIs(session._scale_check([170 + m, 1], [113 + m, 1], 1.0, 1.5)["scale_applied"], True)
+        self.assertIs(session._scale_check([170 + m, 1], [170 + m, 1], 1.0, 1.5)["scale_applied"], False)
+        self.assertIsNone(session._scale_check(None, [1, 1], 1.0, 1.5)["scale_applied"])
+
+
+class GuiFromStartTest(GuiShowTestBase):
+    """#1989 item 3b: `start --gui-from` puts the branch's changed .gui files in the overlay before the launch, so the
+    game parses them at startup and the first gui-show from that checkout syncs nothing."""
+
+    def started(self, **kwargs) -> dict:
+        kwargs.setdefault("gui_from", str(self.repo))
+        return super().started(**kwargs)
+
+    def fresh_session(self) -> None:
+        self.session.stop()
+        self.game = Game(self.user, self.order)
+        self.cli = Cli(self)
+        self.session = session.Session(self.game, self.cli, self.spawn_watch, self.paths,
+                                       sleep=self.game.sleep, clock=self.game.clock, helper_factory=self.new_helper)
+
+    def test_the_files_are_in_the_overlay_before_the_launch_and_the_show_syncs_nothing(self):
+        self.assertEqual(self.start_reply["gui_from"], {"repo": str(self.repo), "synced": ["gui/x.gui"],
+                                                        "bytes": len(self.X_GUI)})
+        self.assertEqual(self.written[0], "sync gui/x.gui")         # before the first preview: at the start
+        self.assertEqual((self.overlay_dir / "gui/x.gui").read_text(encoding="utf-8"), self.X_GUI)
+        self.assertEqual(self.show()["synced"], [])
+
+    def test_a_broken_file_refuses_the_start_before_anything_is_done(self):
+        self.fresh_session()
+        (self.repo / "gui" / "x.gui").write_text("types t {\n\ttype te_x_section = widget {\n}\n", encoding="utf-8")
+        e = self.session_error(self.start, gui_from=str(self.repo))
+        self.assertEqual(e.code, "gui_parse_error")
+        self.assertFalse(os.path.lexists(self.overlay_dir))
+        self.assertEqual(self.cli.calls, [])
+
+    def test_a_path_that_is_no_checkout_is_refused(self):
+        self.fresh_session()
+        with tempfile.TemporaryDirectory() as empty:
+            self.assertEqual(self.session_error(self.start, gui_from=empty).code, "not_a_repo")
+        self.assertEqual(self.session_error(self.start, gui_from="").code, "bad_argument")
+        self.assertEqual(self.cli.calls, [])
+
+
+
+class ProfilePopsTest(SessionTestCase):
+    """#1758: `profile pops` types logging.popstats, copies the logs/<id>/pop_stats.csv it names into the run folder,
+    and leaves the game's folder, which the stop then names (`left_behind`, in restore's tests)."""
+
+    POPS_ID = "f551829e-c1dd-4247-9ad1-58b66bcb707d"
+    HEADER = "id,country,state,workplace,poptype,culture,religion,size,workforce,dependents\n"
+
+    def setUp(self):
+        super().setUp()
+        self.snap = snapshot.take(self.user, self.paths.backup_root, now=SNAP_TIME)
+        self.started()
+        self.run_dir = self.paths.backup_root / "runs" / SNAP
+        self.pops_text = self.HEADER + "1,FRA,1,2,laborers,french,catholic,1000,500,500\n" * 3
+        self.pops_reply = ["Log created at: logs/%s/pop_stats.csv" % self.POPS_ID]
+
+        def hook(text):
+            if text == profiling.POPS_COMMAND:
+                folder = self.user / "logs" / self.POPS_ID
+                folder.mkdir(parents=True, exist_ok=True)
+                (folder / "pop_stats.csv").write_text(self.pops_text, encoding="utf-8")
+                self.game.on(text, success=self.pops_reply)
+        self.game.on_command = hook
+
+    def steps(self, verb: str) -> list[dict]:
+        return [step for step in read_steps(self.run_dir) if step["verb"] == verb]
+
+    def test_the_dump_is_copied_under_its_label_and_the_folder_is_named(self):
+        reply = self.session.profile_pops("before")
+        self.assertEqual((reply["file"], reply["rows"], reply["folder"]),
+                         ("pop_stats_before.csv", 3, "logs/" + self.POPS_ID))
+        self.assertEqual((self.run_dir / "pop_stats_before.csv").read_text(encoding="utf-8"), self.pops_text)
+        self.assertTrue((self.user / "logs" / self.POPS_ID / "pop_stats.csv").is_file())      # the game's stays
+        step = self.steps("profile_pops")[0]
+        self.assertEqual((step["outcome"], step["folder"]), ("ok", "logs/" + self.POPS_ID))
+        self.assertEqual(self.session.profile_pops()["file"], "pop_stats_1836_01_11.csv")       # the date by default
+
+    def test_a_label_used_already_is_refused_before_anything_is_typed(self):
+        self.session.profile_pops("A")
+        self.game.steps.clear()
+        self.assertEqual(self.session_error(self.session.profile_pops, "A").code, "label_used")
+        self.assertNotIn(profiling.POPS_COMMAND, self.typed())
+        self.assertEqual(self.session_error(self.session.profile_pops, "bad label").code, "bad_argument")
+
+    def test_an_answer_that_names_no_file_and_a_file_that_is_not_the_table_are_refused(self):
+        self.pops_reply = ["Unknown command"]
+        self.assertEqual(self.session_error(self.session.profile_pops, "A").code, "dump_refused")
+        self.pops_reply = ["Log created at: logs/../pop_stats.csv"]
+        self.assertEqual(self.session_error(self.session.profile_pops, "A").code, "dump_refused")
+        self.pops_reply = ["Log created at: logs/%s/pop_stats.csv" % self.POPS_ID]
+        self.pops_text = "something else\n"
+        self.assertEqual(self.session_error(self.session.profile_pops, "A").code, "not_pop_stats")
+        self.assertFalse((self.run_dir / "pop_stats_A.csv").exists())
+
+    def test_the_answer_is_read_with_either_separator(self):
+        self.assertEqual(profiling.pops_written(["Log created at: logs\\abc-1\\pop_stats.csv"]), "logs/abc-1/pop_stats.csv")
+        self.assertIsNone(profiling.pops_written(["Log created at: logs/a/b/pop_stats.csv"]))
+
+    def test_the_stop_names_the_folder_as_this_runs(self):
+        self.session.profile_pops("A")
+        notes = session._left_behind_notes({"left_behind": ["logs/" + self.POPS_ID, "logs/other"]},
+                                           self.session._pops_folders)
+        self.assertEqual(len(notes), 1)
+        self.assertIn("logs/other", notes[0])
+        self.assertIn("logs/%s from this run's `profile pops`" % self.POPS_ID, notes[0])
+        self.assertEqual(session._left_behind_notes({"restored": []}), [])
+
+
 if __name__ == "__main__":
     unittest.main()

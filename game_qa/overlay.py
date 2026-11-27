@@ -400,6 +400,12 @@ def sync_gui(ov: Overlay, rel: str, data: bytes) -> bool:
     return True
 
 
+def would_sync(ov: Overlay, rel: str, data: bytes) -> bool:
+    """Whether `sync_gui(ov, rel, data)` would write: the overlay does not already hold these bytes there."""
+    path = ov.dir / rel
+    return not (ov.synced.get(rel) == hashlib.sha256(bytes(data)).hexdigest() and path.is_file())
+
+
 def unsync_gui(ov: Overlay, rel: str) -> bool:
     """Remove the overlay's copy of `rel`, which this session synced (`ov.synced`), now that the repo no longer
     has it: True when a copy was removed, False for a path this session never synced (the harness's own files

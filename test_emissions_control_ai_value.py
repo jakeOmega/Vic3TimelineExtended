@@ -19,12 +19,15 @@ import re
 import unittest
 from pathlib import Path
 
+from vanilla_parsed import vanilla_define
+
 ROOT = Path(__file__).resolve().parent
 TIERS = ("pm_no_emissions_control", "pm_basic_emissions_control", "pm_advanced_emissions_control")
 
-# Vanilla game/common/defines/00_ai.txt (1.14.5), unless extra_defines.txt overrides them.
-VANILLA_BASE_VALUE = 1000.0          # PRODUCTION_METHOD_BASE_VALUE
-VANILLA_SHORTAGE_FACTOR = 10.0       # PRODUCTION_METHOD_REDUCE_OUTPUT_PENALTY_FACTOR
+# Vanilla's NAI defines (vanilla_parsed/defines.json, #1879), unless extra_defines.txt overrides them.
+VANILLA_STICKINESS = float(vanilla_define("NAI", "PRODUCTION_METHOD_STICKINESS_DOWNGRADE"))
+VANILLA_BASE_VALUE = float(vanilla_define("NAI", "PRODUCTION_METHOD_BASE_VALUE"))
+VANILLA_SHORTAGE_FACTOR = float(vanilla_define("NAI", "PRODUCTION_METHOD_REDUCE_OUTPUT_PENALTY_FACTOR"))
 
 
 def _strip_comments(text):
@@ -54,7 +57,7 @@ class TestEmissionsControlAiValue(unittest.TestCase):
             (ROOT / "common/production_method_groups/extra_pm_groups.txt").read_text(encoding="utf-8-sig"))
         cls.group = _block(groups, "pmg_emissions_control")
         defines = _strip_comments((ROOT / "common/defines/extra_defines.txt").read_text(encoding="utf-8-sig"))
-        cls.stickiness = _define(defines, "PRODUCTION_METHOD_STICKINESS_DOWNGRADE", 0.75)
+        cls.stickiness = _define(defines, "PRODUCTION_METHOD_STICKINESS_DOWNGRADE", VANILLA_STICKINESS)
         cls.base = _define(defines, "PRODUCTION_METHOD_BASE_VALUE", VANILLA_BASE_VALUE)
         cls.shortage = _define(defines, "PRODUCTION_METHOD_REDUCE_OUTPUT_PENALTY_FACTOR", VANILLA_SHORTAGE_FACTOR)
 

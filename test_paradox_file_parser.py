@@ -184,6 +184,19 @@ class ParadoxFileParserTests(unittest.TestCase):
         tokens = self.parser.tokenize(text)
         self.assertEqual(tokens, ["color", "=", "hsv360{ 20 80 80 }"])
 
+    def test_tokenize_named_color_list(self):
+        """`color = list "rcw_breakaway_colors"` (1.15 vanilla
+        05_russia_scripted_effects.txt and 05_russian_civil_war_scripted_effects.txt)
+        is one value: before, `list` read as a key with no operator and both
+        files failed to parse."""
+        text = 'create_country = {\n\tcolor = list "rcw_breakaway_colors"\n\ttier = kingdom\n}'
+        self.assertEqual(self.parser.tokenize(text)[3:6], ["color", "=", 'list "rcw_breakaway_colors"'])
+        parsed = self.parser.parse_object(self.parser.tokenize("{" + text + "}"))[0]
+        self.assertEqual(parsed["create_country"][1]["color"], ("=", 'list "rcw_breakaway_colors"'))
+        # A key named `list`, or a word ending in it, is unchanged.
+        self.assertEqual(self.parser.tokenize('list = "x" every_in_list "y"'),
+                         ["list", "=", '"x"', "every_in_list", '"y"'])
+
     def test_tokenize_at_substitution_expression(self):
         """`@[hazardous_terrain_factor]` in script_values is one token.
         Without this the parser drops the brackets and mis-tokenizes the

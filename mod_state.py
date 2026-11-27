@@ -185,6 +185,22 @@ VANILLA_COMMON_DIRS = {
     # Vanilla's game rules, so a cloud session can read what each base-game
     # setting carries (its flags and apply_modifier lines) without the game.
     "Game Rules": "game_rules",
+    # The top-bar alerts (#2052): /placeholder-icons and /duplicate-images
+    # read each alert's `texture`, loc_coverage_audit its five text keys.
+    "Alert Types": "alert_types",
+    "Alert Groups": "alert_groups",
+}
+
+# Vanilla types vanilla_parsed snapshots for lookup by name only (#1860), as
+# {entity_type: directory relative to <base_game_path>/game/common}. ModState
+# doesn't load them: scripted effects and triggers stay mod-only in the merged
+# tables (MOD_ONLY_DIRS), and war goal types are not an entity table at all.
+# `/scripted-effects/<id>?source=vanilla`, `/scripted-triggers/<id>?source=
+# vanilla` and `/war-goal-types/<id>` read them (vanilla_parsed.load_lookup).
+VANILLA_LOOKUP_DIRS = {
+    "Scripted Triggers": "scripted_triggers",
+    "Scripted Effects": "scripted_effects",
+    "War Goal Types": "war_goal_types",
 }
 
 # Entity types ModState reads from the mod alone, as {entity_type: directory

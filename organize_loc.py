@@ -319,14 +319,24 @@ def find_progress_bar_keys(project_directory):
     return bar_keys
 
 
-def find_alert_type_keys(project_directory):
-    """Finds the implicit text keys of the mod's top-bar alerts.
+def alert_type_keys(base_key):
+    """The text keys the engine reads for one alert type, as {role: key}.
 
     The engine names an alert's text off its key with no script reference:
     `alert_<key>_name`, `_desc`, `_hint` and `_action`, and `<key>_setting_name`
     for its switch in the alert settings (vanilla's `alerts_l_english.yml`).
-    Without this every key the mod's `common/alert_types/` needs would be filed
-    to te_unused_l_english.yml.
+    The one definition of them: find_alert_type_keys keeps them out of
+    te_unused, and loc_coverage_audit checks that a mod alert has them.
+    """
+    keys = {role: f"alert_{base_key}_{role}" for role in ("name", "desc", "hint", "action")}
+    keys["setting_name"] = f"{base_key}_setting_name"
+    return keys
+
+
+def find_alert_type_keys(project_directory):
+    """Finds the implicit text keys of the mod's top-bar alerts
+    (alert_type_keys). Without this every key the mod's `common/alert_types/`
+    needs would be filed to te_unused_l_english.yml.
     """
     alert_keys = set()
     alert_path = os.path.join(project_directory, "common", "alert_types")
@@ -337,9 +347,7 @@ def find_alert_type_keys(project_directory):
             with open(os.path.join(alert_path, file), "r", encoding="utf-8-sig") as f:
                 matches = re.findall(r"^([\w\.-]+)\s*=\s*{", f.read(), re.MULTILINE)
                 for base_key in matches:
-                    for suffix in ("_name", "_desc", "_hint", "_action"):
-                        alert_keys.add(f"alert_{base_key}{suffix}")
-                    alert_keys.add(f"{base_key}_setting_name")
+                    alert_keys.update(alert_type_keys(base_key).values())
     return alert_keys
 
 

@@ -634,7 +634,7 @@ The offline `building_scope_variable_audit.py` catches variable effects/triggers
 
 ## Combat Units Have No Variables
 
-**Measured 2026-11-26** by the AI probe's canary (`te_aip_unit_census`, a new 1836 game): `set_variable` on a battalion reached through `random_military_formation = { random_combat_unit = { … } }` logs `set_variable effect [ This scope doesn't support variables. Scope:  ]` and writes nothing, and a `has_variable` read there logs the same message for its trigger and comes out false. The empty `Scope:  ` is how a combat unit prints; a building prints its name. So script can't mark a battalion and find it again: whether a battalion was recruited or upgraded since a pass can't be told from script, only from saves (each battalion record names its building and type). Keep such state on the formation's owner, the country, or the state where it was raised, as for buildings above. Issue #2090 takes the census that tried it out of the probe.
+**Measured 2026-11-26** by the AI probe's canary (`te_aip_unit_census`, a new 1836 game): `set_variable` on a battalion reached through `random_military_formation = { random_combat_unit = { … } }` logs `set_variable effect [ This scope doesn't support variables. Scope:  ]` and writes nothing, and a `has_variable` read there logs the same message for its trigger and comes out false. The empty `Scope:  ` is how a combat unit prints; a building prints its name. So script can't mark a battalion and find it again: whether a battalion was recruited or upgraded since a pass can't be told from script, only from saves (each battalion record names its building and type). Keep such state on the formation's owner, the country, or the state where it was raised, as for buildings above. Probe version 6 took the census that tried it out (#2090).
 
 ## Region-Level Data: State Regions Hold Variables; a State Cannot Iterate Its Provinces
 
@@ -1417,6 +1417,10 @@ possible = {
 `value:te_subjugation_strength >= 1.0` produces `Unknown trigger type: value:te_subjugation_strength` and silently disables the trigger (the action still appears but the gate is dead).
 
 The `value:NAME` prefix is for `add` / `multiply` / `divide` lines **inside another script value**, where the engine needs to disambiguate between named SVs and other tokens. In trigger context, the parser already expects a comparison and resolves the bare name correctly — the prefix is a mistake there. Mod precedent: `peaceful_annex_gdp_requirement` (in `extra_script_values.txt`) is read as `gdp < peaceful_annex_gdp_requirement` from a JE `possible` clause.
+
+## A bare name in a value position that nothing defines loads without a word
+
+`value = X`, `add = X`, `max = X`, `multiplier = X`, `days = X` or `gdp > X`, with an `X` that is no script value, scripted trigger or effect, engine trigger or event target, loads with no error and no log line. Space forces personnel (PR #2020) used `sr_pers_state_spacers` and `sr_pers_state_spacer_steps` in four places, defined neither, and passed every audit (the kill's cap and both self-checks read them). What value the engine gives such a name was not measured. An unknown name in a *key* position, by contrast, logs `Unknown trigger type`. `script_value_reference_audit` (CI and reload, #2021) now flags a bare name in these value positions that resolves nowhere; it does not judge a prefixed or chained value (`scope:x`, `owner.x`) or a `$PARAM$` name.
 
 ## Silent-Zero Footgun: `_add × (1 + _mult)` Without an `_add` Source
 

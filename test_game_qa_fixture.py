@@ -783,11 +783,13 @@ class EstimateTest(unittest.TestCase):
         self.assertEqual(fixture.time_limit_s(fixture.DEFAULT_DATE), fixture.FIXTURE_LIMIT_S)
         self.assertLess(fixture.estimate_s(fixture.DEFAULT_DATE), 120)      # 90 s, live (spec § 3.6)
 
-    def test_a_run_to_1904_is_estimated_at_the_overnight_observer_runs_pace(self):
-        # vic3te-demog-overnight-2026-10-12: 1836.2.1 to 1876.1.1 in 1.89 h, 1877.1.1 to 1904.1.1 in 1.44 h.
-        hours = fixture.estimate_s((1904, 1, 1)) / 3600
-        self.assertGreater(hours, 3.33 * 0.85)
-        self.assertLess(hours, 3.33 * 1.25)
+    def test_a_run_to_1925_is_estimated_at_the_first_long_runs_pace_and_not_below_it(self):
+        # The dated-fixture run of 2026-11-16 (run 20261116T092529Z): 1836 to 1925.1.1 in 24,372 s (6 h 46 min),
+        # where the October anchors gave 4.85 h (#1602). The estimate sets the owner's grant, so it may sit a little
+        # above a measured run, never below.
+        hours = fixture.estimate_s((1925, 1, 1)) / 3600
+        self.assertGreaterEqual(hours, 24372 / 3600)
+        self.assertLess(hours, 24372 / 3600 * 1.15)
 
     def test_the_estimate_and_the_limit_grow_with_the_span_and_the_limit_stays_well_above(self):
         dates = [(1836, 7, 1), (1850, 1, 1), (1900, 1, 1), (1950, 1, 1), (2000, 1, 1), (2050, 1, 1)]
@@ -798,7 +800,7 @@ class EstimateTest(unittest.TestCase):
         for date, estimate, limit in zip(dates, estimates, limits):
             with self.subTest(date=date):
                 self.assertGreater(limit, fixture.FIXTURE_LIMIT_S + 2.5 * (estimate - fixture.LOAD_S))
-        self.assertGreater(fixture.seconds_per_day(2050), fixture.seconds_per_day(1951))   # rising past the last anchor
+        self.assertGreater(fixture.seconds_per_day(2050), fixture.seconds_per_day(1948))   # rising past the last anchor
 
 
 class TimingTest(unittest.TestCase):

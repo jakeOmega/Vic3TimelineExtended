@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.15.2",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "2c116434d3cf34ed",
- "built_at": "2026-11-19T17:11:13+00:00",
+ "parser_fingerprint": "514ae4d688553886",
+ "built_at": "2026-11-27T19:59:20+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -319,6 +319,36 @@
    "dir": "game/common/game_rules",
    "file": "common/game_rules.json",
    "entities": 16
+  },
+  "Alert Types": {
+   "dir": "game/common/alert_types",
+   "file": "common/alert_types.json",
+   "entities": 72
+  },
+  "Alert Groups": {
+   "dir": "game/common/alert_groups",
+   "file": "common/alert_groups.json",
+   "entities": 25
+  }
+ },
+ "lookup_types": {
+  "Scripted Triggers": {
+   "dir": "game/common/scripted_triggers",
+   "file": "lookup/scripted_triggers.json",
+   "entities": 1022,
+   "parse_failures": []
+  },
+  "Scripted Effects": {
+   "dir": "game/common/scripted_effects",
+   "file": "lookup/scripted_effects.json",
+   "entities": 1382,
+   "parse_failures": []
+  },
+  "War Goal Types": {
+   "dir": "game/common/war_goal_types",
+   "file": "lookup/war_goal_types.json",
+   "entities": 39,
+   "parse_failures": []
   }
  },
  "localization": {
@@ -336,11 +366,34 @@
   "unowned_states": 0,
   "countries": 449
  },
+ "country_history": {
+  "dir": "game/common/history/countries",
+  "file": "history/countries.json",
+  "files": 450,
+  "countries": 450,
+  "with_laws": 357,
+  "with_technologies": 80,
+  "conditional_blocks": 15
+ },
+ "defines": {
+  "dir": "game/common/defines",
+  "file": "defines.json",
+  "namespaces": 52,
+  "leaves": 3597
+ },
  "parse_failures": [],
  "sources": {
   "game/common/ai_ship_categories/00_ai_ship_categories.txt": {
    "size": 451,
    "sha256": "6ab66ae0cf181e3bec27f5f3a9fc7f84fc0f27339f58f8c150bab5a06db4806e"
+  },
+  "game/common/alert_groups/00_alert_groups.txt": {
+   "size": 677,
+   "sha256": "25a348b7a47b3b2271abbf7ce5af4b35689af8fcc0fe493c3092ad1a46843528"
+  },
+  "game/common/alert_types/00_alert_types.txt": {
+   "size": 25648,
+   "sha256": "74cbfaa21e54a8ca96be89aedf50b290baad2ca51e18825ceae70caad51a514a"
   },
   "game/common/amendments/00_amendments_content_04.txt": {
    "size": 6188,
@@ -738,6 +791,42 @@
    "size": 57195,
    "sha256": "0116013dac7fd94fe6c4f2bf6d5e0cb7220cdebb94827ad4ba5bffb500f25721"
   },
+  "game/common/defines/00_ai.txt": {
+   "size": 149622,
+   "sha256": "a1c49bb95f9c3cd57375253fce7026ff90f5ca11635f61bfca95799ca029eff8"
+  },
+  "game/common/defines/00_audio.txt": {
+   "size": 1592,
+   "sha256": "1ece88fcc5b77bcfa8b31e8534b568d63698d33865f08e2ec07f57f306a169b0"
+  },
+  "game/common/defines/00_defines.txt": {
+   "size": 227514,
+   "sha256": "6a16fdfa0a506685cd9d24b4eb2a3e8302689c0eaa982b7c33165a810e2b04ca"
+  },
+  "game/common/defines/00_graphics.txt": {
+   "size": 55258,
+   "sha256": "7627c436eae34736882c3922e4adc30ba8bf8e662788564c128b3ce087655e43"
+  },
+  "game/common/defines/00_interfaces.txt": {
+   "size": 18245,
+   "sha256": "43ee4d61e7d8045cab88391d704592f46d8cde221e8125dde3fb1ac752762d84"
+  },
+  "game/common/defines/00_shaders.txt": {
+   "size": 2049,
+   "sha256": "cba79da527e6b536f226a249a510547f235df7ed89a12981d6e36ff7f592b509"
+  },
+  "game/common/defines/jomini/00_tooltips.txt": {
+   "size": 768,
+   "sha256": "0ba5c20ffd675bbac121e523e7a331471917d2b1fedbf114340bfeef3dfd9f65"
+  },
+  "game/common/defines/jomini/fog_of_war.txt": {
+   "size": 1903,
+   "sha256": "826a7b72365ca156576c28cede9eda2f658650f11d71775054b2252c0c88ba96"
+  },
+  "game/common/defines/jomini/rivers.txt": {
+   "size": 366,
+   "sha256": "3f32f8f08695325dc47fb8fbb914fcd055fd4604aa4c20211afcfa490eef1c01"
+  },
   "game/common/diplomatic_actions/00_relations_actions.txt": {
    "size": 7443,
    "sha256": "6cd5d572ae976a2e1f4f4af5c81fb577ed4804bace442e6fa31bace09881749b"
@@ -1025,6 +1114,1806 @@
   "game/common/harvest_condition_types/01_sea_harvest_condition_types.txt": {
    "size": 9651,
    "sha256": "8d33218e730e1419bd50929f4a671750b31c93368a9d394683034778259307d0"
+  },
+  "game/common/history/countries/abk - abkhazia.txt": {
+   "size": 229,
+   "sha256": "d95a664f87f5bc2ea5a518cd0fd024610a55eff84ade8e06cb8124cceb6662a5"
+  },
+  "game/common/history/countries/abs - absaroka.txt": {
+   "size": 165,
+   "sha256": "a869a3985f0d189d9cee12ae237867e9c62db60062c29bd69cbcbeb210ad25a5"
+  },
+  "game/common/history/countries/abu - abu dhabi.txt": {
+   "size": 168,
+   "sha256": "033e17983b32ba0a7c8b759dfedf43140237096c2e1d61a76d12bf0013f73ef6"
+  },
+  "game/common/history/countries/ace - aceh.txt": {
+   "size": 233,
+   "sha256": "567de4a37a4fbfa447a02aeada23c652cf40d32a41e100e75d43eee9f78bda92"
+  },
+  "game/common/history/countries/ach - acholi.txt": {
+   "size": 208,
+   "sha256": "367ffc9affd3db0cc4fc469de82f27cdfcdb0e3692474b035b84e2371d9c94af"
+  },
+  "game/common/history/countries/adg - adagh.txt": {
+   "size": 206,
+   "sha256": "f9f4f40d0ee6c1c2da3ecd9d5686e2e4a56653e00d0dce029adc7d6ac3866384"
+  },
+  "game/common/history/countries/adr - adrar.txt": {
+   "size": 206,
+   "sha256": "57f20a914855c7913bcb27a08114392e66d5d4b5fd97a31bf832dbd7da405a17"
+  },
+  "game/common/history/countries/agc -angoche.txt": {
+   "size": 265,
+   "sha256": "57b964988011637dd61717b263e47e0f28a7e84a877f96eb2fa3963cdb533a87"
+  },
+  "game/common/history/countries/ahg - ahaggar.txt": {
+   "size": 206,
+   "sha256": "d60ed4e8f1464b1c718043bdb64f27adfdb78d07bfff4d930a004af5280ca670"
+  },
+  "game/common/history/countries/ain - ainu.txt": {
+   "size": 166,
+   "sha256": "0251acfab76da723bc7c292f24e4950d657e03fb5fa8342c1f30a71050a85479"
+  },
+  "game/common/history/countries/air - air.txt": {
+   "size": 206,
+   "sha256": "196998f17bdf43c57e966bd5db6b8903cf86aea32f48f9634166db6321f8d6e7"
+  },
+  "game/common/history/countries/ait - ait abbas.txt": {
+   "size": 274,
+   "sha256": "7d725fe5bc654ecadb718a960af1067c5a60263b6722c12e5cb5eaad837274c5"
+  },
+  "game/common/history/countries/ajj - ajjer.txt": {
+   "size": 206,
+   "sha256": "3a89fbeebdbd3446cee045ca1f7f49a52123b06a235a8898e5ea612fcb43039d"
+  },
+  "game/common/history/countries/ajr - ajuran.txt": {
+   "size": 206,
+   "sha256": "2de1a9db18144d788208f73f10b919dee622b6be3d31163d1c828b0c9eb36dae"
+  },
+  "game/common/history/countries/alk - alyaska.txt": {
+   "size": 687,
+   "sha256": "14b805c583d77ae6c35e77f8a5c12bf0d22d66f87742157006a1285f4d9a0e95"
+  },
+  "game/common/history/countries/alw - alwar.txt": {
+   "size": 129,
+   "sha256": "d34e5de5cefa52dd946199bf0d6a44f17bf62c37ddd056f0abe3cac8083e5ea7"
+  },
+  "game/common/history/countries/anh - anhalt.txt": {
+   "size": 179,
+   "sha256": "6109905c6e06f9de52c12da10288574d2ff2215e40c0296d2e3ce873ce055463"
+  },
+  "game/common/history/countries/ank - ankole.txt": {
+   "size": 478,
+   "sha256": "257c94508e6928787bb7feb289f432f62541d7a5a72d90cbd949a2294b7c5132"
+  },
+  "game/common/history/countries/anu - anuak.txt": {
+   "size": 208,
+   "sha256": "e91a420fe9a4c585c354868adbc6afd91e117b4cd00988d27cb7c50876bd352e"
+  },
+  "game/common/history/countries/apc - apache.txt": {
+   "size": 393,
+   "sha256": "f6d093b372bebef602d9073acb04454df80585ea9eb069d542089c45cd8ff0eb"
+  },
+  "game/common/history/countries/arb - arabistan.txt": {
+   "size": 171,
+   "sha256": "a876e914c13c7bddb5967575d7ed18cff3583fa6d0ea4eb1fba809124cc821e8"
+  },
+  "game/common/history/countries/arg - argentina.txt": {
+   "size": 1704,
+   "sha256": "5187dd088d84e076cf4a0b53ca8d18a6a37fafa74c82f8e432dbbc6e9aaed474"
+  },
+  "game/common/history/countries/arh - arnhem.txt": {
+   "size": 164,
+   "sha256": "2db478f6982187a822f62ea09ee3088f83ae15fe411644a1b6b20f9cf7e02b3f"
+  },
+  "game/common/history/countries/arp - arapaho.txt": {
+   "size": 393,
+   "sha256": "2470c1f7b85bd93e09f44d06ba6353c83d10feaf4fbb68ee814a422da32011bf"
+  },
+  "game/common/history/countries/arr - arrernte.txt": {
+   "size": 164,
+   "sha256": "5548235cb7c7a0c2749ef85fb6ae62597aa1d1c0647d2084c7fa81dfaf77a93d"
+  },
+  "game/common/history/countries/ars - arsiland.txt": {
+   "size": 263,
+   "sha256": "7617ea4c5199e768678dc3198daac5a674f3c4af0f7e617c1ea836ced5e651ef"
+  },
+  "game/common/history/countries/ash - ashanti.txt": {
+   "size": 263,
+   "sha256": "703a52392214ed4c9eff4280c4044bef949ba8fa8122f506c69f63f46122caf1"
+  },
+  "game/common/history/countries/asm - assam.txt": {
+   "size": 129,
+   "sha256": "40b2d30da1b76120079595a2234ea86b32b0ab0c8ff19819ce9c457431f00a9b"
+  },
+  "game/common/history/countries/atb - athabaska.txt": {
+   "size": 165,
+   "sha256": "55822e8edbb618b815ef4bd0428da7937724460ac99c8de08d99c1e3cf386a04"
+  },
+  "game/common/history/countries/atr - ataram.txt": {
+   "size": 206,
+   "sha256": "1688c80d3001eef51225efc06c05245f8a86b43fa8349e4eb63581eeadccb9c6"
+  },
+  "game/common/history/countries/aul - aulihan.txt": {
+   "size": 206,
+   "sha256": "f76410cd9b9a7b47c1218f34002ca1daedbc97ba5725b90bb9e8bc1c7f54efc3"
+  },
+  "game/common/history/countries/aus - austria.txt": {
+   "size": 1952,
+   "sha256": "ea76243489d920c27a7d37b2a6572e5610efbf7c8168f072b60ce17f884a9c59"
+  },
+  "game/common/history/countries/awa - awadh.txt": {
+   "size": 129,
+   "sha256": "66b650b1e8868f83eb8f7361723a11ced5da2d5c17547e04b622a4e73521d168"
+  },
+  "game/common/history/countries/aws - aussa.txt": {
+   "size": 222,
+   "sha256": "d3a454d40f764a879c0cbab436f793580c28b7f4bac6e6e96042a7dbf46ef12e"
+  },
+  "game/common/history/countries/ayi - anyi.txt": {
+   "size": 206,
+   "sha256": "bdabf61950381188f10d74da1153d6d732cae252917ab87be73a47042d75052e"
+  },
+  "game/common/history/countries/bad - baden.txt": {
+   "size": 344,
+   "sha256": "8614b4568ed7c2601444faeede804c4fe650e736742c00a3b1f25c52c2dada0a"
+  },
+  "game/common/history/countries/bag - bagelkhand.txt": {
+   "size": 195,
+   "sha256": "2687e206801a68a996bdc96052c462baa321ace9eb03a54640d9cee5c7fe80f1"
+  },
+  "game/common/history/countries/bal - bali.txt": {
+   "size": 235,
+   "sha256": "d8a67d75eb99b0b158b86f52665e591491dc9b0342b38142473806084579e078"
+  },
+  "game/common/history/countries/bas - bastar.txt": {
+   "size": 129,
+   "sha256": "57e36b004ac7e4e97baa74aa60752dac2f19f5fe0cd2ae872143875f6f88a45a"
+  },
+  "game/common/history/countries/bav - bavaria.txt": {
+   "size": 434,
+   "sha256": "15c8a7b1fe6afd03bb628209484e4668cd6441aad5af4b09547647364842d6f3"
+  },
+  "game/common/history/countries/bce - ceylon.txt": {
+   "size": 920,
+   "sha256": "9e14d21248cffac08f1766a1d2c55d2b8821ee6ad3bcd07b7de5b711f8e70956"
+  },
+  "game/common/history/countries/bel - belgium.txt": {
+   "size": 1143,
+   "sha256": "658d0fcaf8049d38c4ecd3a71227cd715fce2bd194839824ea53ebfd7feb5502"
+  },
+  "game/common/history/countries/ben - benin.txt": {
+   "size": 221,
+   "sha256": "b14d6e360bf8eeafc436b4c21031f2fccade19fa748b9e5c34db9ad26dde6680"
+  },
+  "game/common/history/countries/ber - beroda.txt": {
+   "size": 129,
+   "sha256": "8253409744caf05ec9c8ff2bb4645d14e07483af4ee872ffb936df6e9d3a551d"
+  },
+  "game/common/history/countries/bgi - bagirmi.txt": {
+   "size": 263,
+   "sha256": "458f19cb1cf7757b5308a8c7491edd1203ab0fae28289156b5b990150bbbaa12"
+  },
+  "game/common/history/countries/bgm - begemder.txt": {
+   "size": 669,
+   "sha256": "0e3886344600bd03c16b380e980ef6fd7944d38f2e20dccc40a56e141cec0cf0"
+  },
+  "game/common/history/countries/bhn - bahrain.txt": {
+   "size": 168,
+   "sha256": "39df3840542603116659c7b4ebbb0d744bc5b6d0db5b8a1db0965890e04e5486"
+  },
+  "game/common/history/countries/bho - bhopal.txt": {
+   "size": 129,
+   "sha256": "a7567faf7c91cab032e9436e24b6d9faa84901f5ed81497d45427ed44390caca"
+  },
+  "game/common/history/countries/bhu - bhutan.txt": {
+   "size": 662,
+   "sha256": "d85c622a31a455dfd9a308ad21682af752df350be96b51a4c546cd7eac062ba6"
+  },
+  "game/common/history/countries/bhv - bhavnagar.txt": {
+   "size": 195,
+   "sha256": "8eb93ca941d06d68cb5cd3e9d9919e24c1835f515619395563f285b0212aed94"
+  },
+  "game/common/history/countries/bhw - bahawalpur.txt": {
+   "size": 193,
+   "sha256": "4618a6eea845b6a1cbf6953c8fb77604b60cf37c7098aa329fcc9930cf8f7e70"
+  },
+  "game/common/history/countries/bic - british east india company.txt": {
+   "size": 2213,
+   "sha256": "7c28da10ed769885002244ab2279ab2b0cf828d2538b0d15f71e1c9d73607c3f"
+  },
+  "game/common/history/countries/bik - bikaner.txt": {
+   "size": 208,
+   "sha256": "ab42aa63f3413ccd803cff20cb82f7fe19b2c1bc92031e2cebb09c81ed7d5281"
+  },
+  "game/common/history/countries/bko - bukey orda.txt": {
+   "size": 234,
+   "sha256": "a4163f33be2238fca0fc5200b4c47876a90dd7012491bf6017f42a3f4d0119b4"
+  },
+  "game/common/history/countries/bla - bilua.txt": {
+   "size": 163,
+   "sha256": "fb89150bb9fa9004e8930b77540f30641b3d6fcbed650bdbd78dfb4c95efbe24"
+  },
+  "game/common/history/countries/ble - baule.txt": {
+   "size": 206,
+   "sha256": "912b0ba272c4e50e0726308dffb90ba0a8e4e95a9c1f4aa5258d61ee60efd72f"
+  },
+  "game/common/history/countries/blf - blackfoot.txt": {
+   "size": 166,
+   "sha256": "599f1c433f187559a08c67acee155d55ea097f6626929d8deb7ff77b432d3350"
+  },
+  "game/common/history/countries/blg - bulungan.txt": {
+   "size": 235,
+   "sha256": "0ce229c01b01fc7cd252a28064f14f53839745ea45e79d2ea7c0626211949a58"
+  },
+  "game/common/history/countries/bmb - bemba.txt": {
+   "size": 206,
+   "sha256": "871f3f195e9edabb3781552c7096025a64bd16a8270ceb327064ea6b23904f44"
+  },
+  "game/common/history/countries/bmm - bamum.txt": {
+   "size": 206,
+   "sha256": "9a9992aeeb316a7dc425fa1c10671a84117cf9779bc9ffd39bc19f039dea4456"
+  },
+  "game/common/history/countries/bnd - bundu.txt": {
+   "size": 206,
+   "sha256": "3006322532b121210ee1bf1b7f93ffd3940ca088590800321f2c927e0dfb1558"
+  },
+  "game/common/history/countries/bng - bangala.txt": {
+   "size": 206,
+   "sha256": "9cea9a059152d4609c95843090c3eac4665e37d49ad763d4d6d8b71ad215403a"
+  },
+  "game/common/history/countries/bnj - banjar.txt": {
+   "size": 235,
+   "sha256": "6b71361379ce48c71d82f1feb2bda1c2f21811adb2040b07c385746b2ddbaeb1"
+  },
+  "game/common/history/countries/bnn - bannock.txt": {
+   "size": 164,
+   "sha256": "608eebcd686da1ca0d7cb58f917e6c63689e0cd04c909f8e5b29ea2b475e9fa3"
+  },
+  "game/common/history/countries/bny - bunyoro.txt": {
+   "size": 213,
+   "sha256": "f3c702eaa7a76f25ae52c9e98f8bfe693987e26624d4164ab3bf3dbaa9da49bf"
+  },
+  "game/common/history/countries/bob - bobangi.txt": {
+   "size": 206,
+   "sha256": "2565e1a3e4421df46e4b0d3d7777e031b930978380c6209d2bdad67838ec2949"
+  },
+  "game/common/history/countries/bol - bolivia.txt": {
+   "size": 1114,
+   "sha256": "9f5f011c91d61dc31ef624f5fd8ccce35159e3f098316bf10f0103823f33b381"
+  },
+  "game/common/history/countries/bor - bornu.txt": {
+   "size": 213,
+   "sha256": "70fd56938dca01a2dbdaa6307e8647e19bfc4e0d79e045af7e1865ee53b8af67"
+  },
+  "game/common/history/countries/bra - braunschweig.txt": {
+   "size": 317,
+   "sha256": "2bac8d87ca7a90db32e9e7171c8791fa0a155f5ef372b1f8093dc2b779d35a56"
+  },
+  "game/common/history/countries/brd - burundi.txt": {
+   "size": 213,
+   "sha256": "f9601139a1324c224a4039d7ed8e7f38e2c6d5f43e0cafd6beb68fe8f80e8fee"
+  },
+  "game/common/history/countries/bre - bremen.txt": {
+   "size": 405,
+   "sha256": "1d8f226274440944122aeaf17a57b667ba446f71c23451455d932edc58df1140"
+  },
+  "game/common/history/countries/brg - borgu.txt": {
+   "size": 221,
+   "sha256": "7975b38b44c0e4513102335bd282ab31e12f146b4397aa523b030a456eb0c62a"
+  },
+  "game/common/history/countries/brk - brakna.txt": {
+   "size": 206,
+   "sha256": "7e34229922e08b2ffec082e2503e1031d0df7a946b35af8461126b1e718667cb"
+  },
+  "game/common/history/countries/brn - borana.txt": {
+   "size": 208,
+   "sha256": "f8129976345053937ddd30272c12db53f6730ec0a417a75f1dd75d4043f20a46"
+  },
+  "game/common/history/countries/bru - brunei.txt": {
+   "size": 235,
+   "sha256": "8866f5f4ec59cc3910a23b9f28358f6ba4a72e29269c75e6ade7e9120a724d4d"
+  },
+  "game/common/history/countries/brz - brazil.txt": {
+   "size": 1848,
+   "sha256": "d7371253f827889c9126b4e35a7769bd2c8ffa3b394c54fc94e9172d26c9070b"
+  },
+  "game/common/history/countries/bst - basuto.txt": {
+   "size": 579,
+   "sha256": "94fd19138c780c5d3b8bd15a2dc759ea330abe4114213dee4158861959725eba"
+  },
+  "game/common/history/countries/btn - buton.txt": {
+   "size": 235,
+   "sha256": "60120c3491bcb14eefcb312ec16edfed9bd2d4a3ed091dda03ecfe43f8dcb726"
+  },
+  "game/common/history/countries/bug - buganda.txt": {
+   "size": 213,
+   "sha256": "182f6f30f096cff577e2f0b82dcd96895c7fb7842ef08dcba749a1afc898b4bb"
+  },
+  "game/common/history/countries/buk - bukkhara.txt": {
+   "size": 235,
+   "sha256": "d5987108ec32dbd4505da8726d9e7c6cbe76bf0a532febafc53adad0a53bc921"
+  },
+  "game/common/history/countries/bun - bundelkhand.txt": {
+   "size": 129,
+   "sha256": "8c34201be4baa9bace950bd0e8ee417ef5eb246bced156b305d64362a777396c"
+  },
+  "game/common/history/countries/bur - burma.txt": {
+   "size": 332,
+   "sha256": "af47cc71f73c24c7e3e24f3860924fa2e7b1ca9a7a13615974fc7c568bbe6bb3"
+  },
+  "game/common/history/countries/cam - cambodia.txt": {
+   "size": 277,
+   "sha256": "92ac2bdf1ff3bbbb19a2183f854a4e41b9cb0ec9eff218509bbc1a1dd23c9150"
+  },
+  "game/common/history/countries/cay - cayor.txt": {
+   "size": 206,
+   "sha256": "df3e850cc5593e0211649c557787f1b3da1acb0d2da099d9b99a1827c4052fc6"
+  },
+  "game/common/history/countries/chc - chechnya.txt": {
+   "size": 581,
+   "sha256": "d04bf54b4270875eacf2db9437e13ae75fea7162168445c7fe276ee8288cf710"
+  },
+  "game/common/history/countries/chi - china.txt": {
+   "size": 1152,
+   "sha256": "01971161ea5e2042d102d7e285a01cdc3d6476f2ebec60457b5c3b9200829be6"
+  },
+  "game/common/history/countries/chk - chokwe.txt": {
+   "size": 206,
+   "sha256": "1ee83f8a075fddb1685f25f1e62ec220e479ce097c3d1d342d02703438a691f5"
+  },
+  "game/common/history/countries/chl - chile.txt": {
+   "size": 1409,
+   "sha256": "0ab121303ea9d4844a35e61a6a3cd2e17d4ef69550e7ad4886d055138ac9640f"
+  },
+  "game/common/history/countries/chp - champassak.txt": {
+   "size": 233,
+   "sha256": "19af52fd90f7b848784f0ef7d67968b9e209836f2a858858c918f67937cab0f0"
+  },
+  "game/common/history/countries/cht - chitral.txt": {
+   "size": 235,
+   "sha256": "3e9193b1db0bd92b86426e6df9430f777cf86a07dd119a93189ffbaaa68c06e8"
+  },
+  "game/common/history/countries/cir - circassia.txt": {
+   "size": 516,
+   "sha256": "ed36b7d6e5f8ce133f09fcade58f4ea8a5214bac4fde6aec98160bc095bed3ce"
+  },
+  "game/common/history/countries/clm - colombia.txt": {
+   "size": 1149,
+   "sha256": "bfa103e58b8b5903831daa9fd8af28107199d3074cf334575e691d112bb23345"
+  },
+  "game/common/history/countries/cmb - chaamba.txt": {
+   "size": 206,
+   "sha256": "26ae5fc1537f0c6b782db11bc7da12c92c1459491352ac59fba0ed9fb05fe043"
+  },
+  "game/common/history/countries/cmi - chiang mai.txt": {
+   "size": 233,
+   "sha256": "df722f8b24332ff051dc98bbc1968c12b627a12680cf4e6f87e4f805113ec566"
+  },
+  "game/common/history/countries/cob - saxe-coburg-gotha.txt": {
+   "size": 278,
+   "sha256": "3a79ad36eeb0af8167ea0ca0dc1ecf57d86a3292c08c95d2549b074cb1aa6309"
+  },
+  "game/common/history/countries/coc - cochin.txt": {
+   "size": 129,
+   "sha256": "67ec0b8669357218d5766574d68a15d5986d238a6ceaa104ee3550c23a69c706"
+  },
+  "game/common/history/countries/com - comanche.txt": {
+   "size": 164,
+   "sha256": "bc97bf8eea7e8df36ed2f50e055ae16e6051d270faf501ab473fb4d23fc2effd"
+  },
+  "game/common/history/countries/con - constantine.txt": {
+   "size": 589,
+   "sha256": "648b4059f68754a0f6ebd068ab6f1304b2770b8b0075a0b6a74917fee13a4d7d"
+  },
+  "game/common/history/countries/coo - cooch behar.txt": {
+   "size": 129,
+   "sha256": "3b0598719f5b5067494747fc206bbf9edb83fd9a98439071f82f87673c4702c5"
+  },
+  "game/common/history/countries/cro - croatia.txt": {
+   "size": 1179,
+   "sha256": "0440f4389f539fa7406e7ab30b769e8452af406dac9b557116c2b1483926bb95"
+  },
+  "game/common/history/countries/cub - cuba.txt": {
+   "size": 1800,
+   "sha256": "528499d5ec2f1460f4e4d9f2f94b8dfec141b771dc24c6b38bdf1c47c6e3fd80"
+  },
+  "game/common/history/countries/dah - dahomey.txt": {
+   "size": 221,
+   "sha256": "a056e761fcbe02bf47f82a2384d4b5f09752a9c343501a6b6760e5f653e5f88b"
+  },
+  "game/common/history/countries/dai - dai viet.txt": {
+   "size": 328,
+   "sha256": "357e1899e67160a3476f3f6ca5ac63997cc3f5997582c9c3272f574b863184b5"
+  },
+  "game/common/history/countries/dak - dar al kuti.txt": {
+   "size": 206,
+   "sha256": "206c853c16b2d12420680bc15125df5b2186cb83f4faf4ef92ac69db16b2a308"
+  },
+  "game/common/history/countries/dei - dutch east indies company.txt": {
+   "size": 945,
+   "sha256": "3babd2ec645f54d4f3c0beeefaa9d98c3bebbcb25a262023d4d95068970452dd"
+  },
+  "game/common/history/countries/den - denmark.txt": {
+   "size": 1493,
+   "sha256": "d7b380fcbdc1f19dd7778bfd71f8ed08f95c6aaa5281f67299202c04710debfe"
+  },
+  "game/common/history/countries/dfr - darfur.txt": {
+   "size": 213,
+   "sha256": "d6b01f7d8b6174fd773865af2bbee6421bbdb115784d823bb6d53f90631f93d7"
+  },
+  "game/common/history/countries/dft - dar fertit.txt": {
+   "size": 206,
+   "sha256": "c5b75a6eda0272d9dfcb0596738fa36ab02dd4e66b019fdf8f782dd8322ddc24"
+  },
+  "game/common/history/countries/dgr - degar.txt": {
+   "size": 357,
+   "sha256": "7503f293b51b506139e1bddd21ec185d038139b3f0a1cf23c44ae5410ff72c1c"
+  },
+  "game/common/history/countries/dha - dharmpur.txt": {
+   "size": 276,
+   "sha256": "2836a40202363faef92530b78c94e0b506ce7ed67bfd2d7b5ba71bc928ac7cf9"
+  },
+  "game/common/history/countries/din - dinnik.txt": {
+   "size": 206,
+   "sha256": "2b93e252e6af146cc8b89ff3b859e0f56e76e6a271f6ea18c9d8ad0e74189b8d"
+  },
+  "game/common/history/countries/dio - diola.txt": {
+   "size": 207,
+   "sha256": "f546ed0ff440c50def07a517d90dac0d49d4ee3e38cbf503edbd6af96d8aa580"
+  },
+  "game/common/history/countries/dla - duala.txt": {
+   "size": 206,
+   "sha256": "8d711c32149b0b98a6448a27779fe190fe8accf1293c9097ace72ea6ab1ec091"
+  },
+  "game/common/history/countries/dlm - delim.txt": {
+   "size": 206,
+   "sha256": "1ab1fa061a236867a63df905d3b4541a5e88b7b3a476ccf8134a45fe69e2ee5a"
+  },
+  "game/common/history/countries/dnk - dinka.txt": {
+   "size": 206,
+   "sha256": "9af40a28d61a60f15d9c9f4a72d5e9a7a1da3d2a63fa44023d0f812e6dd391e3"
+  },
+  "game/common/history/countries/ecu - ecuador.txt": {
+   "size": 1077,
+   "sha256": "40e6d7f09e1d5af3e34071a9e56818bf6bbdbad40646e70582a8daa1038558e8"
+  },
+  "game/common/history/countries/egy - egypt.txt": {
+   "size": 704,
+   "sha256": "e5a22623deea26108296bb06b08343805c76b75b166d2404bf9fc2225d1b42af"
+  },
+  "game/common/history/countries/ewe - ewe.txt": {
+   "size": 208,
+   "sha256": "8f27b83cacd4bc20bec8c8157c2da3ae3d384db6f3367ae2acc6258e27e1ad41"
+  },
+  "game/common/history/countries/ezo - ezochi.txt": {
+   "size": 394,
+   "sha256": "84cff373baf3a69118ae74137ae6dfb3083ec902ef8c371b013767a2a660a007"
+  },
+  "game/common/history/countries/fin - finland.txt": {
+   "size": 944,
+   "sha256": "6730ffc8cb8828556755d7fddf9db5ad04bf4d00c280d8cfe53a60d1453c9115"
+  },
+  "game/common/history/countries/fji - fiji.txt": {
+   "size": 163,
+   "sha256": "633f7711b49b7f65b57986cb856df988523c2243ee336309964058f90b54f44d"
+  },
+  "game/common/history/countries/fng - fang.txt": {
+   "size": 208,
+   "sha256": "8f448294c2a87973e980d9851b582ccac35b808b8a2eb07d930a5fcdd961728c"
+  },
+  "game/common/history/countries/fra - france.txt": {
+   "size": 3194,
+   "sha256": "803f39e09953a2f9a18c2aabe3f9f31f93de7e1e1ce69cf23aa2ac5c496dd9b9"
+  },
+  "game/common/history/countries/frm - frankfurt am main.txt": {
+   "size": 603,
+   "sha256": "6b47493521645175163b6fba69c60c270e0913e5f2b63f737b9dd019c0348c3b"
+  },
+  "game/common/history/countries/ftj - futa jallon.txt": {
+   "size": 213,
+   "sha256": "385aa4df1c92f848b614bc0c3c8d64975748a48169bca2a6a9992443cdede285"
+  },
+  "game/common/history/countries/ftr - futa toro.txt": {
+   "size": 213,
+   "sha256": "0bbf642e3e86a0d3059cda2035f439839e6f5b9830f7b51c15e9fd66ad6a4475"
+  },
+  "game/common/history/countries/fzn - fezzan.txt": {
+   "size": 254,
+   "sha256": "af0b3615289361674798d1b31e0d3e75298d37a50e23f12303a810b3df83b604"
+  },
+  "game/common/history/countries/gar - garwhal.txt": {
+   "size": 129,
+   "sha256": "8d3c6a9c9227b2c2ea1b409c56c119ace26d3b286165733c3a7c064ca21c7a5b"
+  },
+  "game/common/history/countries/gbr - great britain.txt": {
+   "size": 3650,
+   "sha256": "005eee88c307fd110ff414cd991d2c6de1e4ec058567d3bd7ddd57c0b4ade108"
+  },
+  "game/common/history/countries/ggo - gogo.txt": {
+   "size": 206,
+   "sha256": "7dd88585aa9b336c3d5f4b7746eec07c3fa509cf33896009a00280e4592a46ec"
+  },
+  "game/common/history/countries/gjm - gojjam.txt": {
+   "size": 212,
+   "sha256": "e08d2e028008459d312fb6c6d73d8cb57266859029c9faff840d909ec317ffd2"
+  },
+  "game/common/history/countries/gld - geledi.txt": {
+   "size": 263,
+   "sha256": "3e1c8f2ba1bd70ebd54d910149425d87e31b9a29d2d9b495eee6c0a641fa1e74"
+  },
+  "game/common/history/countries/gni - guarani.txt": {
+   "size": 164,
+   "sha256": "4339d121b55058aa1a94a55068e9fe309532cb448a300a970c70ed9b87abd8de"
+  },
+  "game/common/history/countries/gre - greece.txt": {
+   "size": 536,
+   "sha256": "12b039554a120838a58296f753a55a30d370558ee06107429b439d10ea805e1b"
+  },
+  "game/common/history/countries/grw - garawa.txt": {
+   "size": 164,
+   "sha256": "9234682f3dc084b96420365a5a8e35d6238d19c2fd0ea7b0defa92f36d75ec42"
+  },
+  "game/common/history/countries/gwa - gwalior.txt": {
+   "size": 129,
+   "sha256": "c407b1510116fee047508264a276e3759b071d32d232d7ce1d473b940f67a76e"
+  },
+  "game/common/history/countries/gza - gaza.txt": {
+   "size": 423,
+   "sha256": "489d1184794295533fb7c3a324ebef169d2bc73da4950b6982168966355f0f14"
+  },
+  "game/common/history/countries/hai - haiti.txt": {
+   "size": 948,
+   "sha256": "4b0af3cfc06f03d1297710c2a3c56c2713ca733fc300ce88b9e81e43da5dc477"
+  },
+  "game/common/history/countries/ham - hamburg.txt": {
+   "size": 403,
+   "sha256": "3f2df18d1ff33daecae176cfbce292d2e50c93c4676f2100404366dc21fe552c"
+  },
+  "game/common/history/countries/han - hannover.txt": {
+   "size": 689,
+   "sha256": "70ed482d8ec8c960cf4ac0ad9c3334b142fa56153bcaa547b12d444532320830"
+  },
+  "game/common/history/countries/har - harar.txt": {
+   "size": 212,
+   "sha256": "dca5bb831a01753f66bb7059fa63e44b94f92500aa32e3661d57f501d6666b23"
+  },
+  "game/common/history/countries/hau - hausa.txt": {
+   "size": 213,
+   "sha256": "69bbbd8db4a57d71ef065c8714cb07bdadef426b066d7ca7579142d9d916ab9e"
+  },
+  "game/common/history/countries/haw - hawaii.txt": {
+   "size": 990,
+   "sha256": "2e9a866fc96eba866e794016b63c82dee438c0107ee745578e697d450a84f655"
+  },
+  "game/common/history/countries/hbc - hudson bay company.txt": {
+   "size": 795,
+   "sha256": "ac875cd4750020f6a21d9002a8d477e01b8cd6bb2f11af8a9298b9f2e9fb10af"
+  },
+  "game/common/history/countries/hdj - hedjaz.txt": {
+   "size": 168,
+   "sha256": "fa15331fadc1ec7c5f8bea7885ba60031fbd872531f64ad00c9e659882fd3a44"
+  },
+  "game/common/history/countries/hdy - hadiya.txt": {
+   "size": 263,
+   "sha256": "4d8f4c58f1399f9e6343de8abc5e9110d055334bff1b15fc37c3bf044df9e0a9"
+  },
+  "game/common/history/countries/hek - hesse-kassel.txt": {
+   "size": 280,
+   "sha256": "d93a90ce2e3076285da98541dc58e79347c6ec7aec0b6cb09d066de481a2ce3f"
+  },
+  "game/common/history/countries/her - herat.txt": {
+   "size": 290,
+   "sha256": "357cddfd8acdad926e1988df9e58f99b9c4d9b4f27908d39d4ab6ab7fe7fcbe4"
+  },
+  "game/common/history/countries/hes - hesse.txt": {
+   "size": 280,
+   "sha256": "260470da09aed61e9b75a6634d75e67fba26835d94d235a078c1a9f9a8939081"
+  },
+  "game/common/history/countries/hhe - hehe.txt": {
+   "size": 207,
+   "sha256": "a47e18cc5d3dcb8a81e6475fa2e244644e892531d697ac612b78dedc9b5cbf19"
+  },
+  "game/common/history/countries/hla - halia.txt": {
+   "size": 164,
+   "sha256": "eb3f8d836653c04f6fb20800537cd91fc0a976f5811fbcafafca7c59062173d8"
+  },
+  "game/common/history/countries/hmb - hemba.txt": {
+   "size": 208,
+   "sha256": "d738677a73ada4660ddac7905b57085ed3c0c95b168964299179d9cd5083061a"
+  },
+  "game/common/history/countries/hoh - hohenzollern.txt": {
+   "size": 277,
+   "sha256": "9810f54f05c1b0d6ee18f3e8ed8dcf12fac3a40bf99a51a5d942c7f8f048d3a7"
+  },
+  "game/common/history/countries/hol - holstein.txt": {
+   "size": 182,
+   "sha256": "706ffa612d8e6330b3581123e103287ba96abcd938eea8fe221aba9c7706b6db"
+  },
+  "game/common/history/countries/hro - herero.txt": {
+   "size": 208,
+   "sha256": "d51801f2e179cb91feaa2873a56e86403aef494c86c8754e9505464d4e414664"
+  },
+  "game/common/history/countries/hun - hungary.txt": {
+   "size": 1172,
+   "sha256": "16ed066fcddcbf772fb53899a209d454c9da77ea3525a4d4614653421733fdef"
+  },
+  "game/common/history/countries/hyd - hyderabad.txt": {
+   "size": 195,
+   "sha256": "88e6e890e539e466deb166440f014c96571954f7e479d3ccbd03760fcfd5c4e8"
+  },
+  "game/common/history/countries/ibo - ibo.txt": {
+   "size": 208,
+   "sha256": "72095e9cc76d858bf682709bfdb4e0fa136c08fd47b9508ceb3ada6b8bcd14cc"
+  },
+  "game/common/history/countries/ida - idar.txt": {
+   "size": 252,
+   "sha256": "268ba8c8e8eb2f4d75b582a83f184158b362f4eae53bb884c8dc116c2ea31e29"
+  },
+  "game/common/history/countries/ind - indore.txt": {
+   "size": 129,
+   "sha256": "d0dd2d48718981adf8062c1bc29a03a8f96f6518fb926cbd69b2d5d64ccb2831"
+  },
+  "game/common/history/countries/ion - ionian islands.txt": {
+   "size": 574,
+   "sha256": "2e23541b11ae04c158d86abb2683561bb6fe2948a8a83b7bdffa5286099ba9ba"
+  },
+  "game/common/history/countries/iqu - iquichia.txt": {
+   "size": 881,
+   "sha256": "ebfa2c3ca1b61f112496fb3c15d1b3110d89988e4da722e300db807f1bfc2f1d"
+  },
+  "game/common/history/countries/irc - iron confederacy.txt": {
+   "size": 164,
+   "sha256": "2d655416862a07ff170ceec62ce9ed2f1ef29cf8028931c703b2bc2290773226"
+  },
+  "game/common/history/countries/isq - isaaq.txt": {
+   "size": 222,
+   "sha256": "eaaec04b99dfb1a23858bab2958ff8bbfbc3ed949c125866e24f4f2dedae395d"
+  },
+  "game/common/history/countries/jab - jabal shammar.txt": {
+   "size": 171,
+   "sha256": "60860d304307e9f39fa10c09a4a69b082d2a9477e047fdd07bb32c300f4906bf"
+  },
+  "game/common/history/countries/jai - jaipur.txt": {
+   "size": 190,
+   "sha256": "dfe57090b5f2a010fc077f9ea4bf473bf4451b1effabcccd99a6faa972c8992f"
+  },
+  "game/common/history/countries/jap - japan.txt": {
+   "size": 1882,
+   "sha256": "8acae6b4cb8fb38b2462def8bb895306a8baa20515b5c954269b04d26dc1e1d2"
+  },
+  "game/common/history/countries/jas - jaisalmer.txt": {
+   "size": 129,
+   "sha256": "fd8a72c8019b56ada255fbbf736871b232a81f085b94d37d5ae19a44534f5205"
+  },
+  "game/common/history/countries/jey - jeypore.txt": {
+   "size": 195,
+   "sha256": "9a3576251e1458098d2bf4922e0342142ed2d11eaf87307725db84dbf9df242c"
+  },
+  "game/common/history/countries/jhn - jhansi.txt": {
+   "size": 129,
+   "sha256": "679d5b674dfcc52ee2217bcdbc91d2ab37ec28ea6219482c21301127ca7f6758"
+  },
+  "game/common/history/countries/jlf - jolof.txt": {
+   "size": 207,
+   "sha256": "e66e6475f8ff5aeeebe79eb1b4e026cf52617091adf4a303b8939949a227465f"
+  },
+  "game/common/history/countries/jmb - jambi.txt": {
+   "size": 235,
+   "sha256": "a04c71904220b5ae9a663a99cbb12e67688e432e2033984251e45db3a5c6c63d"
+  },
+  "game/common/history/countries/jod - jodhpur.txt": {
+   "size": 129,
+   "sha256": "6171426994e25ded8608ad177644f22070528c04cba226483ff903a569a29b6d"
+  },
+  "game/common/history/countries/joh - johore.txt": {
+   "size": 290,
+   "sha256": "163dd91ec0cba41d7f9d7efcd0d5fd376f5434bd9dc632a86aac47872a550b79"
+  },
+  "game/common/history/countries/jun - junagadh.txt": {
+   "size": 276,
+   "sha256": "c9d5a79908d86ec07e8cbd4a36457d152fd88a448335dc1957b61be04c6d96eb"
+  },
+  "game/common/history/countries/kab - kabul.txt": {
+   "size": 290,
+   "sha256": "7f2b655c01d84fec5fa2d968f9699147d14ba8ccdd15c476a93aabb139e5fd54"
+  },
+  "game/common/history/countries/kaf - kafiristan.txt": {
+   "size": 290,
+   "sha256": "1856e1c5390fcc9028c83c6e68f2ba6e2a0eab37c18cf3833553657911673bcd"
+  },
+  "game/common/history/countries/kal - kalat.txt": {
+   "size": 334,
+   "sha256": "367235bf2ccbb965103c11e9bc879cc44f0e4fc6621e4d9a203e5b0a804a31fa"
+  },
+  "game/common/history/countries/kan - kandahar.txt": {
+   "size": 290,
+   "sha256": "7a08a2a9c9dbb23d37a7fed31b20c9b8da44093055b2420e064d02bb0999242a"
+  },
+  "game/common/history/countries/kas - kashmir.txt": {
+   "size": 613,
+   "sha256": "6600dd0337a81055b560161bf691d2ababeefacb49d88d25c2446a6bc9d582db"
+  },
+  "game/common/history/countries/kat - kathiri.txt": {
+   "size": 235,
+   "sha256": "f55dcd6e5b3d80eb862d580cd83a0485535e88ff589690ca867e81a349b620e0"
+  },
+  "game/common/history/countries/kau - kaurna.txt": {
+   "size": 787,
+   "sha256": "e6dc695fa0e6482608c683628e3b7ad7ef3480048ce9aefbf0c57fb5cc609211"
+  },
+  "game/common/history/countries/kba - kuba.txt": {
+   "size": 208,
+   "sha256": "f4b494e3e52fde3ec600b1be78c47bd6cdc7fbb11a037c01b7ed27c8c5b5b173"
+  },
+  "game/common/history/countries/kbd - kabadougou.txt": {
+   "size": 208,
+   "sha256": "68a3df8188ba72b7d641eaefc0a34ebb0ccf065c3e50657e5da7a906a5acb368"
+  },
+  "game/common/history/countries/kbu - kaabu.txt": {
+   "size": 206,
+   "sha256": "ee1741d9ddad6efde2edceb63237a941a8e4e1968fe852a7816d5b4fac668d62"
+  },
+  "game/common/history/countries/kfa - kaffa.txt": {
+   "size": 213,
+   "sha256": "30ec0f3c66792c6a712e7a8b1d65af1095ece2ca4695f56441c4a01fef775f9b"
+  },
+  "game/common/history/countries/khi - khiva.txt": {
+   "size": 238,
+   "sha256": "595cca673615e21e331a34660257f0db30a417e0500da04642a673a89838e3ae"
+  },
+  "game/common/history/countries/khp - kolhapur.txt": {
+   "size": 195,
+   "sha256": "ee4201a65d656650935f1c0ddecde385c3420a1625181bfe891b6d0297a47a4c"
+  },
+  "game/common/history/countries/kki - kuki.txt": {
+   "size": 351,
+   "sha256": "cd73e7eee2a25e7432b1a7bfb137380c79d6ae2497c73d509d0131c9b62b3ae1"
+  },
+  "game/common/history/countries/kky - kikuyu.txt": {
+   "size": 208,
+   "sha256": "f284132e3ac101a17437f04690d59ed39bc0962117962d1dd0f242cdcaacd377"
+  },
+  "game/common/history/countries/kln - kulin.txt": {
+   "size": 164,
+   "sha256": "5a480c58187c5d0b7ff592db470b09a63468ce44a331a52ccaa75c6636f6865f"
+  },
+  "game/common/history/countries/klo - khmer loeu.txt": {
+   "size": 360,
+   "sha256": "2f7e84b8aae85d7f62cb85f44d8729e81568c007f447df11c73a0686e6c06e6d"
+  },
+  "game/common/history/countries/knc - karna.txt": {
+   "size": 164,
+   "sha256": "392e98930de1b9ed78f7a37294c3e556c7ed349825cf2435d1c2f2aef1e5541b"
+  },
+  "game/common/history/countries/kng - kong.txt": {
+   "size": 207,
+   "sha256": "ef98f97161c729f98242e39a4a145649d5eae4e93e6aaf78942d81b3e37dd9f7"
+  },
+  "game/common/history/countries/knk - kanak.txt": {
+   "size": 164,
+   "sha256": "be6163b45b92afb77fc3bdd3fa46f74109b040a422e842482c2d78f05f4e16a5"
+  },
+  "game/common/history/countries/kno - kurnool.txt": {
+   "size": 195,
+   "sha256": "2f6e071b7ed7443fb74aa944d7784b80479617d5a551a87c402336087a0b0bb3"
+  },
+  "game/common/history/countries/kok - kokand.txt": {
+   "size": 238,
+   "sha256": "0efc7250b1fbdb9f5d01e2be44841f85bb66cdaa382bf782efde626946302e66"
+  },
+  "game/common/history/countries/kon - kongo.txt": {
+   "size": 213,
+   "sha256": "1ac96af499be2f33512af5d128aebcc88045d6cf9ba30453e3ed7c1e52f33834"
+  },
+  "game/common/history/countries/kor - korea.txt": {
+   "size": 754,
+   "sha256": "5c80b4e22bf07ea90a3c66b407d91ed4e75720520d39b4817ad9045cc48510ff"
+  },
+  "game/common/history/countries/kot - kotah.txt": {
+   "size": 195,
+   "sha256": "75bcce04e8b948a71b4195727126776bcb4fac8b1359a8392921e586187582bb"
+  },
+  "game/common/history/countries/kra - krakow.txt": {
+   "size": 787,
+   "sha256": "72aebc80a46e89b61ae4aaed405101f20104a0d977ca2fc30f05589fe534d118"
+  },
+  "game/common/history/countries/krg - karangwe.txt": {
+   "size": 215,
+   "sha256": "df40f5454b9c03dcd869dccc59e53b5020c7e3539b59e8fc00a425502dbfb923"
+  },
+  "game/common/history/countries/kri - kurnai.txt": {
+   "size": 164,
+   "sha256": "08ebec40f7dcbbbde6547b91b1e5e1b01bc719d6e36d2858f3d67b9ddbd1e223"
+  },
+  "game/common/history/countries/krt - kaarta.txt": {
+   "size": 213,
+   "sha256": "b33165efd6acb787857d8f62ef24796a9d55772a94e0f39acaf430f7a7e6c78c"
+  },
+  "game/common/history/countries/kru - kru.txt": {
+   "size": 207,
+   "sha256": "ca1cdfee7705897dbd1cdc2532a62e9c729fbf99e003f6dc092f87b090a8d43e"
+  },
+  "game/common/history/countries/ksn - kasanje.txt": {
+   "size": 207,
+   "sha256": "e3c1eb3e15d4a7e91cc038396c9b4303da655e852c751d5a207297ed3b200da5"
+  },
+  "game/common/history/countries/kti - kutai.txt": {
+   "size": 237,
+   "sha256": "e15f0a360c778422b8fd8bde9ee67a8be9519635c358ead9773cb350a70cd4b8"
+  },
+  "game/common/history/countries/ktu - kartu.txt": {
+   "size": 164,
+   "sha256": "5b93e48da9bf10ed2904ca41cbd70955b28169c0650b8f58b2f86c58499edb28"
+  },
+  "game/common/history/countries/kun - kunduz.txt": {
+   "size": 292,
+   "sha256": "11229015d7db8f82d2202996c7021b5885e21e0f0af1ac53a0916afc3e910426"
+  },
+  "game/common/history/countries/kut - kutch.txt": {
+   "size": 129,
+   "sha256": "7c70f89cbcf114f3e062aa7ac0c8302faa286fbac5d10216fbf1cbdb25f056d6"
+  },
+  "game/common/history/countries/kyn - kanyara-mantharta.txt": {
+   "size": 164,
+   "sha256": "89b39cfb5c6f52e6b00ebed8ea11d48114ca923746e5764f299797ee919c8a12"
+  },
+  "game/common/history/countries/kzh - kishi zhuz.txt": {
+   "size": 238,
+   "sha256": "d5ab4b0bb53ffc245e1931fed2d7dbcb6ef6fdc6a71e6af8dafc25277a45a7ca"
+  },
+  "game/common/history/countries/kzm - kazembe.txt": {
+   "size": 206,
+   "sha256": "5eae44050e77d33f4cb8c08d203fde41a1af71037497da6e936147bbd929b0de"
+  },
+  "game/common/history/countries/lad - ladakh.txt": {
+   "size": 235,
+   "sha256": "f8bbeec756db81c105055ba4058e4662833cee021ccef31d793d0454fb645a69"
+  },
+  "game/common/history/countries/lah - lahej.txt": {
+   "size": 168,
+   "sha256": "216fb0f22407f84f921acaca4e639f761f8cae47da961791c932ec2c51a1f01d"
+  },
+  "game/common/history/countries/lan - lanfang.txt": {
+   "size": 642,
+   "sha256": "ff2ea9e08a7ec802d12d5d6bb5f6314f009d1790e736ff81d08bbfc16370aedc"
+  },
+  "game/common/history/countries/lba - luba.txt": {
+   "size": 206,
+   "sha256": "e96f54d1b46330a76c356c324ab242a44e2c189088d5fb9f9699499e068d4a4b"
+  },
+  "game/common/history/countries/lga - lega.txt": {
+   "size": 206,
+   "sha256": "0ab911b6de867b013aef209e1b89112cd92929d77f5fab47b4f679b00fec8b10"
+  },
+  "game/common/history/countries/lib - liberia.txt": {
+   "size": 539,
+   "sha256": "bf3451cec583bbd0bb8c4c8d32b3b8580d6ab79fc74bbd41c07ffb5e6980ec7b"
+  },
+  "game/common/history/countries/lip - lippe.txt": {
+   "size": 273,
+   "sha256": "18df5212b9027c9dcb34b86d3bc6c832f0c6e427b2c2da03103c865435a25a51"
+  },
+  "game/common/history/countries/lkt - lakota.txt": {
+   "size": 164,
+   "sha256": "b4eb9a638d62f6434c141a57f37cf05d19120f8d3a01b567f159d5d99ca7b99d"
+  },
+  "game/common/history/countries/lnd - lunda.txt": {
+   "size": 206,
+   "sha256": "207b1e7f141efeb2441d2f4d4fbc0ecb2252cb35f175c8ac6d90c6d1c6e5f7f6"
+  },
+  "game/common/history/countries/lng - loango.txt": {
+   "size": 206,
+   "sha256": "2ea20afb14545db7c8cf3814f50bb78cd443b875e4023a69e8339fc1fa75bd4c"
+  },
+  "game/common/history/countries/lrr - larrakia.txt": {
+   "size": 164,
+   "sha256": "57a1e525561d9420aef0f7add20c30b8cb8b27efadc98d15b83f6ee7a9fef12e"
+  },
+  "game/common/history/countries/lua - luang prabang.txt": {
+   "size": 234,
+   "sha256": "a5c5b0c1a982605ab3fd6daf8083154580c63c9983768385e5046ded7dbe9191"
+  },
+  "game/common/history/countries/lub - lubeck.txt": {
+   "size": 403,
+   "sha256": "4ec83e2cabe2ac74c087b980aaedabc941774e514fb9ab63cfcd639a0ffff549"
+  },
+  "game/common/history/countries/luc - lucca.txt": {
+   "size": 256,
+   "sha256": "aa126d26aab6058f0aa0384f9f1545e2dcb092e650d9990bb3624b18784416d1"
+  },
+  "game/common/history/countries/luo - luo.txt": {
+   "size": 206,
+   "sha256": "638bac013b9e5411e31ccaaf25bdc8d99ae02a7807e7d6dbec9ff4fa0468b766"
+  },
+  "game/common/history/countries/lux - luxemburg.txt": {
+   "size": 230,
+   "sha256": "b2dc4d6931c03774eb1125b07b0ec184cba58c82a0231453e59f86b4fa17dc4a"
+  },
+  "game/common/history/countries/lzo - barotse.txt": {
+   "size": 208,
+   "sha256": "3c0751a334adeb17ba1f635d72b00a35679edff57bd26ba64d84ec91ed0d32c4"
+  },
+  "game/common/history/countries/mad - madagascar.txt": {
+   "size": 320,
+   "sha256": "adc2d695951d59fd67ce25ebd3e012c000bb2688f2235c59ff36bb1693142b1d"
+  },
+  "game/common/history/countries/mah - mahra.txt": {
+   "size": 235,
+   "sha256": "a1a806c3fa7d6419685c7ea2137db57aa7b7bf01dfaa3525b12b3252e98a27d2"
+  },
+  "game/common/history/countries/mai - maimana.txt": {
+   "size": 290,
+   "sha256": "17345eae53ab3e060b03f8a8e21ee73403161bac535907404770eba6bc07d90f"
+  },
+  "game/common/history/countries/mak - makran.txt": {
+   "size": 235,
+   "sha256": "09668e9f0f81af9797ba2d2fb6834d09ec68a8f3c930e93ea405aa732d4defb3"
+  },
+  "game/common/history/countries/mas - mascara.txt": {
+   "size": 875,
+   "sha256": "7a98b442ad5de02efaa8016b99d78c3ebec603f7a17b43202b4940986ee75ad0"
+  },
+  "game/common/history/countries/mbs - mombasa.txt": {
+   "size": 263,
+   "sha256": "ee7dae61b109a63e1cbb3b4797efd15d09082bcc6c5f768bbe330800d3509692"
+  },
+  "game/common/history/countries/mcr - micronesia.txt": {
+   "size": 163,
+   "sha256": "9a526556af26848f9ea750feb9e6019145724ec7558d0951b694c2ea752a1f63"
+  },
+  "game/common/history/countries/mdk - mandinka.txt": {
+   "size": 213,
+   "sha256": "640b7db6a6b29d0f0f753b2847e419cdac08a2dfed2c6de737ae080d439663a0"
+  },
+  "game/common/history/countries/mec - mecklenburg.txt": {
+   "size": 736,
+   "sha256": "612b311d2e4056da7746015f958756f30fbd0cd7240c477c58fbb8f5ef245822"
+  },
+  "game/common/history/countries/mei - saxe-meiningen.txt": {
+   "size": 278,
+   "sha256": "a045ba53a81a913fcb691c8d53b1aa38a6c7058a077c9d1063a4abfbff317abe"
+  },
+  "game/common/history/countries/mew - mewar.txt": {
+   "size": 129,
+   "sha256": "dcf76ca50576e8c15bf85d03e99ce030ce8e9da6559aa73c35c62d49d4c832cf"
+  },
+  "game/common/history/countries/mex - mexico.txt": {
+   "size": 1379,
+   "sha256": "dced002f8c60b6c06c98e986427875fce73791adb38798490b165e0ecac60535"
+  },
+  "game/common/history/countries/mgd - maguindanao.txt": {
+   "size": 235,
+   "sha256": "e3fd34b3a346c4da11382d7f88af59ecc0dd7cd201ba9f638edfabca4dc86803"
+  },
+  "game/common/history/countries/mgh - khasi.txt": {
+   "size": 351,
+   "sha256": "55e1bad3b0a88253f23ef59881980e0426328b9fa9527d36d59626af3f4d0cd1"
+  },
+  "game/common/history/countries/mjk - mijikenda.txt": {
+   "size": 208,
+   "sha256": "d391c56e28945ae74ca353dc7b5f3a03c2347c8c4064dc032fcc4443ab1a465a"
+  },
+  "game/common/history/countries/mjt - majerteen.txt": {
+   "size": 366,
+   "sha256": "ea01b4a19ad36220d1d73d8c49a79da6f675ae35abddbd5ff95d5a9ff56d4589"
+  },
+  "game/common/history/countries/mkt - miskitia.txt": {
+   "size": 717,
+   "sha256": "45b8c6b8d3d3fac2447e1df91561db5b90534e08229ad70393a997e556f56682"
+  },
+  "game/common/history/countries/mld - maldives.txt": {
+   "size": 195,
+   "sha256": "a9466978f5adc5cb8776ae5b4d595f3c88c1989a4d7ba779d20749ddc60a492b"
+  },
+  "game/common/history/countries/mnb - mangbetu.txt": {
+   "size": 207,
+   "sha256": "0da41981f3c3e5924e1c0bfbea858075f96075332faeab03e69e3e31473efeea"
+  },
+  "game/common/history/countries/mnc - manica.txt": {
+   "size": 208,
+   "sha256": "b9d7befc0ffecc11219ea3858a097ec3a87c627a79094619d410b01d006642e6"
+  },
+  "game/common/history/countries/mnd - mindanao.txt": {
+   "size": 165,
+   "sha256": "d3cf90c159adba65835d0add2e1a0b50eb176518ed98a46c91ed69fe77d8d90e"
+  },
+  "game/common/history/countries/mnl - mingrelia.txt": {
+   "size": 229,
+   "sha256": "b28838da6dc4fd12a042467c08833e28c399bbfdd54ca4c2496d98a98e425ea8"
+  },
+  "game/common/history/countries/mnp - manipur.txt": {
+   "size": 186,
+   "sha256": "961543a23791ec1a2c48dfc477dd496abb2ed4ea0149ebc66bb66a9d1c8e4b48"
+  },
+  "game/common/history/countries/mod - modena.txt": {
+   "size": 256,
+   "sha256": "41754243ee7792861f63cec34a2a28ba69783f6f1e7b932100ff101e32efd762"
+  },
+  "game/common/history/countries/mol - moldavia.txt": {
+   "size": 401,
+   "sha256": "01b0ccf21e39e22a82cbc2f3ad2d2107de546f58956684a003fd03587daad26b"
+  },
+  "game/common/history/countries/mon - montenegro.txt": {
+   "size": 2225,
+   "sha256": "18ef29f087ccab7b6c68aefb57d905d705a08004493e71fb792de98615a41ff5"
+  },
+  "game/common/history/countries/mor - morocco.txt": {
+   "size": 494,
+   "sha256": "016e4783a812679640cf29525f958342e924ccd7fd8c608239c3cf79a0f31ec8"
+  },
+  "game/common/history/countries/mos - mossi.txt": {
+   "size": 206,
+   "sha256": "af19f9ebf63f7eaacf39770f062933e645536d4b34c2e91ffb4cca0fcbcd3c57"
+  },
+  "game/common/history/countries/mra - mara.txt": {
+   "size": 164,
+   "sha256": "080b11551a796345751301d121fbdcae675ff6aaf022eab93431971d143b83be"
+  },
+  "game/common/history/countries/mrn - mirning.txt": {
+   "size": 164,
+   "sha256": "fad5ade5e0a134e147e660572177fb6528a91948c6bd338de2189635e11875c5"
+  },
+  "game/common/history/countries/mrv - maravi.txt": {
+   "size": 208,
+   "sha256": "8c43c1d636bfd14758595d53ba28b6e6e4fe390478e2783cf456883714426e22"
+  },
+  "game/common/history/countries/msh - mashona.txt": {
+   "size": 207,
+   "sha256": "d1c667e327d1a4a9c62404d88da607d17a5b30c8e9f21b0f08e56c9cabb1c4e0"
+  },
+  "game/common/history/countries/msi - masai.txt": {
+   "size": 258,
+   "sha256": "eefe6821639ea5b9a9ccbad26368c85ef9065842f9d07ae7391f500d70e2ea61"
+  },
+  "game/common/history/countries/msk - maseko.txt": {
+   "size": 208,
+   "sha256": "ce7c3476f891bec8d1a3b466a36c4f62dc34e2e73851d8bfbcc601c87284df78"
+  },
+  "game/common/history/countries/msn - massina.txt": {
+   "size": 213,
+   "sha256": "cb8f21ddbdbabce777e844588c079f2ce66cc56b95664393d6d69efbd73fbbc2"
+  },
+  "game/common/history/countries/mst - mecklenburg-strelitz.txt": {
+   "size": 278,
+   "sha256": "ff81faa41ce652633edb08a06b61808f795a34a315f67219055121321df25a77"
+  },
+  "game/common/history/countries/mtb - matabele.txt": {
+   "size": 206,
+   "sha256": "6bb8bb0cd5fab4a90745a735e309e53539d22e63c193e72f15739c8a17c07ff9"
+  },
+  "game/common/history/countries/mtp - mutapa.txt": {
+   "size": 207,
+   "sha256": "59a81cfb69143211d5baf818874b7d492b021106a62cbe51d511754e024dc1e6"
+  },
+  "game/common/history/countries/mug - mughals.txt": {
+   "size": 542,
+   "sha256": "b45bb43dd3d7fb7c6e41b188be4f632a1af65454340b111c5be4747ee37332ac"
+  },
+  "game/common/history/countries/myb - mayurbhanj.txt": {
+   "size": 195,
+   "sha256": "014306d50a4af6707472abc374cffd695ef0fd265e9618153d327b7b732eaac2"
+  },
+  "game/common/history/countries/mys - mysore.txt": {
+   "size": 333,
+   "sha256": "2bad448f9f3a69d5012d9a62e2158297e81dfe27eb9d0a9a301d8c390bffbaca"
+  },
+  "game/common/history/countries/mzb - mzab.txt": {
+   "size": 206,
+   "sha256": "4377a846b8f92f068a29cae9f5942f6f2cfe3844b221020366bd0f4c290c8326"
+  },
+  "game/common/history/countries/nag - nagpur.txt": {
+   "size": 129,
+   "sha256": "dc02e7d94cd4320b8526a572fc30f3cfcf42c1dbdad7abc28e1cde993aa374b2"
+  },
+  "game/common/history/countries/nam - nama.txt": {
+   "size": 208,
+   "sha256": "dcdaade6df6c3fbe8f9c198cd46dd32b7cf4a5ad62ef17199d0aef1af15ee5a5"
+  },
+  "game/common/history/countries/nar - narsinghpur.txt": {
+   "size": 195,
+   "sha256": "415128f05be63ca4c72a9566973a71fcfdd8cbf3a535b3730d5fb36697a62f39"
+  },
+  "game/common/history/countries/nas - nassau.txt": {
+   "size": 372,
+   "sha256": "98e7720a658bf12c5a444cdab2726ad40d549272827ef048659ebc4af337f3c3"
+  },
+  "game/common/history/countries/naw - nawanagar.txt": {
+   "size": 195,
+   "sha256": "24cd1ea0f27ff0238f9d8f711ef8047c053aea21c42f0fa6e2eba6a9bca7b707"
+  },
+  "game/common/history/countries/nbs - new brunswick.txt": {
+   "size": 1073,
+   "sha256": "621e64eb5cb71aa39f43f5362ff946abe658bab3d6561e85b43d3cec5a150079"
+  },
+  "game/common/history/countries/nej - nejd.txt": {
+   "size": 171,
+   "sha256": "be05f78eecf9610cac23055f02ab43f5ce8499dae9b124014272771942641d7e"
+  },
+  "game/common/history/countries/nep - nepal.txt": {
+   "size": 363,
+   "sha256": "f46e8caffb61e528061d33556e165e12a96e0c35f47740f2a377eee35dcbc946"
+  },
+  "game/common/history/countries/net - netherlands.txt": {
+   "size": 1374,
+   "sha256": "87d7335d5dfd4a98f0a247a98317ced9b777c3f439ff8d32ffb48d0960da821f"
+  },
+  "game/common/history/countries/nga - naga.txt": {
+   "size": 351,
+   "sha256": "0c821d7ed8d7573b8677ca90fd651403b6f2ced504d195f833566132ffb593ba"
+  },
+  "game/common/history/countries/nng - noongar.txt": {
+   "size": 164,
+   "sha256": "c105c903dc7dd7c50938c2860db4d7367183b16bed236d82d894607774c87e0f"
+  },
+  "game/common/history/countries/nor - norway.txt": {
+   "size": 1484,
+   "sha256": "120dc862a737eb1df1390442ca4b080a49d5454fa3cb4cc2f1fb937226e1b25a"
+  },
+  "game/common/history/countries/npu - north peru.txt": {
+   "size": 1179,
+   "sha256": "3e2e69487c6f501b3f3fcf75eb16079679840e1d4ffde570a3543900f18371cc"
+  },
+  "game/common/history/countries/nru - nauru.txt": {
+   "size": 164,
+   "sha256": "a64fd0344a9a0ee87b67c3da34ef4ba85368c9e43f5cd25b480c0afce5c8fb45"
+  },
+  "game/common/history/countries/nsw - new south wales.txt": {
+   "size": 885,
+   "sha256": "af641bf643a64145b650847724664bff235d63a400199ac275937d34859839ad"
+  },
+  "game/common/history/countries/nto - ngati toa.txt": {
+   "size": 164,
+   "sha256": "e450c35ce8ff47c4faac7ca63825b66db9258918a7b5ff23b2ded45771594cf6"
+  },
+  "game/common/history/countries/ntu - ngai tahu.txt": {
+   "size": 163,
+   "sha256": "487e5d1ab6c3538aff260d91437f7d10535b1e450de8340dd1364dc7763d1efc"
+  },
+  "game/common/history/countries/nue - nuer.txt": {
+   "size": 207,
+   "sha256": "8c07b0aa2440900ef953dc6f2d05d54377b68916f34ab648d9b8c1dfa7615bf2"
+  },
+  "game/common/history/countries/nvj - navajo.txt": {
+   "size": 400,
+   "sha256": "c03b34051786ea3700fdbaf8dcc9581a1fc94bb6772070419b9f7dab4e2d6126"
+  },
+  "game/common/history/countries/nvs - nova scotia.txt": {
+   "size": 896,
+   "sha256": "8b6a4bcba0cadbd76494254fdfc10f8d9147f869f3bdb9a16ec8c81af3ab92dc"
+  },
+  "game/common/history/countries/nym - unyamwezi.txt": {
+   "size": 393,
+   "sha256": "97500cbf3d0fbe62bd1b8cb0011783cdc22af5f71b954f279f4488f714515932"
+  },
+  "game/common/history/countries/nyp - ngumpin-yapa.txt": {
+   "size": 164,
+   "sha256": "a8fd75883cc61989cfba5ca710c5d8d7dfa0dee414e507bea5983fa9152ab2bb"
+  },
+  "game/common/history/countries/nzp - nez perce.txt": {
+   "size": 351,
+   "sha256": "d7797cc812ea681b04bea09c6f58f71f842ecf6419370bbb72c9f174e635c863"
+  },
+  "game/common/history/countries/ogd - ogaden.txt": {
+   "size": 208,
+   "sha256": "ab5723765c7c9df2ea0878d8f24e51851a43cac4f185e64820bf9fe3b3218329"
+  },
+  "game/common/history/countries/old - oldenburg.txt": {
+   "size": 182,
+   "sha256": "4e27e662c32780fddfd226a80f64a69e2a481d3128df650a35bc631931ea5469"
+  },
+  "game/common/history/countries/oma - oman.txt": {
+   "size": 972,
+   "sha256": "436ef372925e2aee74559127d01e2bb16b9343de909f96b3d34a48c5f52854e4"
+  },
+  "game/common/history/countries/omo - omo.txt": {
+   "size": 208,
+   "sha256": "92990bd15688ccd5335d51212276e30ca94f8a6d4328bd7162e62a927d77c3f0"
+  },
+  "game/common/history/countries/ont - ontario.txt": {
+   "size": 1083,
+   "sha256": "a9c60a2dc857b4f30187a93b50fd860161f9ad6fb49ac975fc31301b96c22651"
+  },
+  "game/common/history/countries/ora - oranje.txt": {
+   "size": 1200,
+   "sha256": "a8b60ac0892ea9a92f4c58ebf2dbec5f3bc9ff979666e72491d8d1e1c7baadc7"
+  },
+  "game/common/history/countries/org - oregon.txt": {
+   "size": 468,
+   "sha256": "634a3d84c2062732565d7202ee18e6375bbccf641c56ea141a745476c2f8d8e8"
+  },
+  "game/common/history/countries/orm - orma.txt": {
+   "size": 208,
+   "sha256": "bb238d883ff357340ce2b3dc88c3cf65d53f2e928c39c478ec1ac1870855dbab"
+  },
+  "game/common/history/countries/oua - oualata.txt": {
+   "size": 206,
+   "sha256": "b17a491d46178658040505bc730e7f3dfe2494bc1d0b4a0542ef0ffe87414a19"
+  },
+  "game/common/history/countries/ovb - ovambo.txt": {
+   "size": 208,
+   "sha256": "80097e8df8436a997dd5274cdaaad7ad1ac70165db523aaa18c937b14b3da660"
+  },
+  "game/common/history/countries/ovm - ovimbundu.txt": {
+   "size": 208,
+   "sha256": "d6d2e96816ecf0df85188ff49dfb63b6d2d983b21d82834f60e0a1fdc28c6d0d"
+  },
+  "game/common/history/countries/oyo - oyo.txt": {
+   "size": 222,
+   "sha256": "adc97efb5b0978988470c9cd597e17e41460ef548fac5627f2836602e53c6ead"
+  },
+  "game/common/history/countries/ozh - orta zhuz.txt": {
+   "size": 238,
+   "sha256": "79fbe1d785f28e5cec1cfb88f614d6f9ecb369cd7f252a241071b0b8087740e2"
+  },
+  "game/common/history/countries/paa - paakintyi.txt": {
+   "size": 164,
+   "sha256": "80a1b900757d86afaa926b88f2671f2eff840cf2aea8863a612910d331312cda"
+  },
+  "game/common/history/countries/pan - panjab.txt": {
+   "size": 913,
+   "sha256": "77f6df29449841ed1aee1fae2a0bdeafeb4c5295f8d9683937051592b04463fd"
+  },
+  "game/common/history/countries/pap - papal states.txt": {
+   "size": 1001,
+   "sha256": "4334501adaa647622636b24a1f8094e147a6193ef8c8b745ff08467c58167673"
+  },
+  "game/common/history/countries/par - parma.txt": {
+   "size": 208,
+   "sha256": "edd0c83f3a65dddffcec1304b2cbec8acb286fd01e8a25d0b24673e33c924727"
+  },
+  "game/common/history/countries/pat - patagonia.txt": {
+   "size": 164,
+   "sha256": "1ef0c86143f7803604329fa5bc95b69567331a5de905515df341f25565c188d9"
+  },
+  "game/common/history/countries/pco - puerto rico.txt": {
+   "size": 890,
+   "sha256": "25d3c0951cdee06ea114dc80d5129f65717f3c6a6b8d2ab02c32187d525b7bd0"
+  },
+  "game/common/history/countries/pdi - pedi.txt": {
+   "size": 206,
+   "sha256": "4be4002cfa14d5e43daa988c00c50445ca6e3f8bbf125081a40607f29d2076cc"
+  },
+  "game/common/history/countries/per - persia.txt": {
+   "size": 1154,
+   "sha256": "c850b91140e99a4de80d698656e0acead89648809abe26986641203b923757d5"
+  },
+  "game/common/history/countries/phi - philippines.txt": {
+   "size": 1191,
+   "sha256": "036285e2baa19c3cf92e161e884b3d300feedbbd9c06a4dd55cc81de6aad472c"
+  },
+  "game/common/history/countries/phl - philippolis.txt": {
+   "size": 1002,
+   "sha256": "f601919102f65e343cb63be13700e098cb708549a648af1eb9484534bdfaa9f0"
+  },
+  "game/common/history/countries/plp - palanpur.txt": {
+   "size": 276,
+   "sha256": "60d28d945944196f44825fad88f5575fe852a41125e26213300df8454e500c5a"
+  },
+  "game/common/history/countries/ply - tahiti.txt": {
+   "size": 491,
+   "sha256": "6f8c33f09adae4a32c8d8f93af8fe9e3f84b1b32e27c377ca067f1840650e1fa"
+  },
+  "game/common/history/countries/pma - pama.txt": {
+   "size": 164,
+   "sha256": "563b81f8fa03e38bb7b284a61014875fbeee1f50329231ff13fc1554de54aebe"
+  },
+  "game/common/history/countries/pni - piratini.txt": {
+   "size": 1031,
+   "sha256": "31dba2ed04b9218c51960a3347a80a7117e97f341a795ff632ffc7ad8693f7b1"
+  },
+  "game/common/history/countries/pol - poland.txt": {
+   "size": 1249,
+   "sha256": "b4a915d7958878587cdc75834af1a1785dc98af2f956165e80166e65a3bdbeda"
+  },
+  "game/common/history/countries/pon - pontianak.txt": {
+   "size": 233,
+   "sha256": "83aeb0c25c6ca78e77d7d3584c22ee2734c9e57606c4487e45cea1719215632e"
+  },
+  "game/common/history/countries/por - portugal.txt": {
+   "size": 3048,
+   "sha256": "5b00321f6a4ee867f9463806f89a0e1681ed9daa377c9c313f43100820934402"
+  },
+  "game/common/history/countries/ppu - papua.txt": {
+   "size": 164,
+   "sha256": "2a292bac75a2ebd92446a1ccba2c286f2bf3bdf1988ddbf57e8d8fdcaca51120"
+  },
+  "game/common/history/countries/pra - grao para.txt": {
+   "size": 820,
+   "sha256": "ba6ea72c0ac55794a14c73567f1c6b82ad963defaf8fc90c2c24bcabfc66feff"
+  },
+  "game/common/history/countries/prg - paraguay.txt": {
+   "size": 1296,
+   "sha256": "cc2339de436fcac8091ada03a88da825d6f771b815758749ce5a55182eb021f2"
+  },
+  "game/common/history/countries/prk - perak.txt": {
+   "size": 235,
+   "sha256": "0e59b30d3379b0621c72d3d69a0633361996e14e17c7c316b3406540e2648e90"
+  },
+  "game/common/history/countries/pru - prussia.txt": {
+   "size": 1719,
+   "sha256": "17a5714d4415b527e1e71797d34166792cd098701c1d92de2e34cf2a8458ac22"
+  },
+  "game/common/history/countries/pta - patiala.txt": {
+   "size": 129,
+   "sha256": "cf3c25607c90cb08eca138a98e436aae1692abe08824ab3522a5fcb004759093"
+  },
+  "game/common/history/countries/ptn - patna.txt": {
+   "size": 195,
+   "sha256": "5ef9ce25f00dfb2a1cfac7533bcbb3d623a83e9ded0d7a277511edc090fd7077"
+  },
+  "game/common/history/countries/pud - pudukottai.txt": {
+   "size": 195,
+   "sha256": "d0a5dea6bf58493ba8bc364b4c5ee42f344bd13577fec9a62045d74cd916667f"
+  },
+  "game/common/history/countries/pwn - pawnee.txt": {
+   "size": 165,
+   "sha256": "f70dd06e2eb9ab90c3313b37685cd8f2e4652ed3de45860b22f3db1df451944f"
+  },
+  "game/common/history/countries/que - quebec.txt": {
+   "size": 1004,
+   "sha256": "dfbb5728ad9e8fed27a3024c4097475359d4f02a0b3ce3ad123f6149c43ecdc3"
+  },
+  "game/common/history/countries/qwr - qwara.txt": {
+   "size": 212,
+   "sha256": "4ee9ce6ddbdce9b8ce4133aa8cc41ac4f116f61e0ec5733e23a655d206ed5585"
+  },
+  "game/common/history/countries/rgb - riguibat.txt": {
+   "size": 206,
+   "sha256": "579ce09739d823d9a7e0352b7f0d130f16fb2c950956e49fc40bc1a0a8bc87e1"
+  },
+  "game/common/history/countries/rus - russia.txt": {
+   "size": 2223,
+   "sha256": "d6c380038c9557a699654d8d460ecd70382578b68eb8b00c9c8c11724ededdab"
+  },
+  "game/common/history/countries/rwd - rwanda.txt": {
+   "size": 215,
+   "sha256": "be2e31016b40f91512feff6ef246e209578a520aa6f4095494f21ce859fbcec7"
+  },
+  "game/common/history/countries/ryu - ryukyu.txt": {
+   "size": 648,
+   "sha256": "9f75d45864fe5f90e0169a127858886df0ae1dd81998453574504230b273b399"
+  },
+  "game/common/history/countries/saf - south africa.txt": {
+   "size": 1023,
+   "sha256": "affc77a05706c81f8df3cd35206d4a51c2dcfdf6ae038cb6ca50eeb145ea6d65"
+  },
+  "game/common/history/countries/sah - sahrawi.txt": {
+   "size": 207,
+   "sha256": "472c4c8aeecc11a238c4fae2f1c4cd844ee15409eeb3a9aa1d0b4794ca2128a0"
+  },
+  "game/common/history/countries/sak - siak.txt": {
+   "size": 233,
+   "sha256": "ac865f17bbc4e06b2d9d0922a4ac206d27a43c15205a1d1f767d02846c0c7187"
+  },
+  "game/common/history/countries/san - san.txt": {
+   "size": 208,
+   "sha256": "29816f7cd1846b7912fb4a1f53e15461158fcf9075bff51372787979f2c7029a"
+  },
+  "game/common/history/countries/sar - sardinia.txt": {
+   "size": 847,
+   "sha256": "a8452a0a8a0f0faf16164733174a27eef9915724e0117ea1a19c7fdbfd0b2876"
+  },
+  "game/common/history/countries/sas - south australia.txt": {
+   "size": 806,
+   "sha256": "5f03fc6e5017fff4c341098dd1147d6bb2b35b67ba942c4074b5ba37a0ea169a"
+  },
+  "game/common/history/countries/sat - satara.txt": {
+   "size": 195,
+   "sha256": "970472a4b59a7a9190f266dd1fc1fb2484acf269fcebc8a23469574394f89e78"
+  },
+  "game/common/history/countries/sax - saxony.txt": {
+   "size": 352,
+   "sha256": "47cc701bf2cab2505f81ca661e73849a28ce903a45ccd70ee6ff195ef86e48ca"
+  },
+  "game/common/history/countries/sch - schleswig.txt": {
+   "size": 182,
+   "sha256": "02480d6bf466adfddae54d5556b4297dd84327a44ae99b0ad03387021dc520f2"
+  },
+  "game/common/history/countries/scm - schaumburg-lippe.txt": {
+   "size": 275,
+   "sha256": "7809e5893750b4df177b93d180596b5fa159f7e11d5e018f8581b48bdf906c00"
+  },
+  "game/common/history/countries/sct - sipsong chao tai.txt": {
+   "size": 357,
+   "sha256": "dd8a1d648efba14c542e2cccf2c0cadbf39cf2c8dd2121879c93b20509033b56"
+  },
+  "game/common/history/countries/scw - schwarzburg.txt": {
+   "size": 278,
+   "sha256": "eeb747e78808a86699599182fef4ad73fd3c6c11c90a66c01d92ab773071f20e"
+  },
+  "game/common/history/countries/sdm - sidamo.txt": {
+   "size": 212,
+   "sha256": "c74039d3812b85037cb099ebeae8f2d3aa931910d04198245861a037a26dc854"
+  },
+  "game/common/history/countries/sel - selangor.txt": {
+   "size": 233,
+   "sha256": "dcfe0fe66327e2d852c5db9a02d65bf785f4570a363b2972bcdc87ee9bd4a08e"
+  },
+  "game/common/history/countries/seq - indian territory.txt": {
+   "size": 615,
+   "sha256": "9c22d44e213ba1f38bea3c31f51814f7e49f87bf0766be1047a18a723941e915"
+  },
+  "game/common/history/countries/ser - serbia.txt": {
+   "size": 1148,
+   "sha256": "15e0989e26529ab792175593efaffce5298f08683d697a61bddbc815c0c2e243"
+  },
+  "game/common/history/countries/sgu - segou.txt": {
+   "size": 213,
+   "sha256": "bf3a5fade4ec8ed561350607d8819dd3ffece97bbcb73a82d73636474b072096"
+  },
+  "game/common/history/countries/shs - shan.txt": {
+   "size": 284,
+   "sha256": "f4dfc0189a215ae11206df3a592a7892990d5999756c5d0407f66ba8b914b17c"
+  },
+  "game/common/history/countries/shw - shewa.txt": {
+   "size": 306,
+   "sha256": "75bf27bf097ece445b66cdf4c9fc8d01963297d67f4870146280a89939ecf324"
+  },
+  "game/common/history/countries/sia - siam.txt": {
+   "size": 320,
+   "sha256": "43d31e138a2faa57079c5797b5badac1e91842c0db4d6310f79c65a9cd433cae"
+  },
+  "game/common/history/countries/sic - two sicilies.txt": {
+   "size": 657,
+   "sha256": "a5c2261b4d2e2d1ee7e2eca8c7fa8c73a8ddcca3004c4346f7219323ee7fe375"
+  },
+  "game/common/history/countries/sik - sikkim.txt": {
+   "size": 272,
+   "sha256": "be1929e33ad5c1693a350de19410a414168ddb3efee4e0cb275a9d2b9297a940"
+  },
+  "game/common/history/countries/sil - sierra leone.txt": {
+   "size": 642,
+   "sha256": "5fe3b9d4b20f05d1cd80b319b1b5e970728107b5bbe8a9e994e0eb5f26220337"
+  },
+  "game/common/history/countries/sin - sind.txt": {
+   "size": 558,
+   "sha256": "c81f2e79b261a8e32daf74f28e0daed42941b32175fa25b2ce89ee2c750ad567"
+  },
+  "game/common/history/countries/skh - sakhalin.txt": {
+   "size": 164,
+   "sha256": "f3bd994bc720958b17045450e23e52d1b28d96408dfba8b1d487a53f08ee93d8"
+  },
+  "game/common/history/countries/skm - usukuma.txt": {
+   "size": 207,
+   "sha256": "051d196527f503f8fbf2256a7abf43c979e888ff647dd617c85f14f23d76f5d0"
+  },
+  "game/common/history/countries/sky - sakuye.txt": {
+   "size": 208,
+   "sha256": "07b6b6ba2af3e4dd2c734332533ffb598e9a8d433cbe69889fb1ab08d0462d9f"
+  },
+  "game/common/history/countries/slk - selknam.txt": {
+   "size": 164,
+   "sha256": "1155a16bfad8088bd23e6bc026bcf30983a0c4c77f27be63a55810f42d775ce8"
+  },
+  "game/common/history/countries/sls - salish.txt": {
+   "size": 164,
+   "sha256": "6c6384dca24709bd24221a182776bace882e6dc69996825e5011248d1fea0323"
+  },
+  "game/common/history/countries/slw - sulawesi.txt": {
+   "size": 165,
+   "sha256": "5d9b81aed445ca5ad4b5eba52a0578e1b182f362cbc8d90fc3e500a20ea8034b"
+  },
+  "game/common/history/countries/smb - sambas.txt": {
+   "size": 233,
+   "sha256": "e8508f1922bb955275224bd10d4e46dc3deeb7bb973781c936889ca694d8b4d1"
+  },
+  "game/common/history/countries/sml - seminole.txt": {
+   "size": 164,
+   "sha256": "a7c9e2f446817ac4aa2e40904e1ea8b16d0a9615c60048226dfb448f453221ba"
+  },
+  "game/common/history/countries/sng - sangu.txt": {
+   "size": 208,
+   "sha256": "dafdf2bc34daf022ce10524a3bbe6587466792b4686749a0588ddf6b0b8dd559"
+  },
+  "game/common/history/countries/sok - sokoto.txt": {
+   "size": 431,
+   "sha256": "38854a093c3dcd3aa610eaeb90c22904233492a4f9c0e2d2775977292f50df41"
+  },
+  "game/common/history/countries/spa - spain.txt": {
+   "size": 2758,
+   "sha256": "1cb63d200ab9df6c377f840b212a8731abc0682667bdfa4acb9663efa45fdc8b"
+  },
+  "game/common/history/countries/spc - carlist spain.txt": {
+   "size": 1808,
+   "sha256": "44f7168b3706a7b413458ab5082348972d52f107e63cb4cacf723de446272376"
+  },
+  "game/common/history/countries/spu - south peru.txt": {
+   "size": 1113,
+   "sha256": "86701e30bb22dc98a5b7108921b35b7db20ce76dc9724b5348607c61185de467"
+  },
+  "game/common/history/countries/srk - surakarta.txt": {
+   "size": 235,
+   "sha256": "b63878b28f4d241fe670739ad215f10b958761630e5dc5f5c59f50da43329350"
+  },
+  "game/common/history/countries/srr - serer.txt": {
+   "size": 207,
+   "sha256": "2131ea6aac33131d70255bf869c7f643882a2a88915a812ad255308efb4b7978"
+  },
+  "game/common/history/countries/ssu - susu.txt": {
+   "size": 208,
+   "sha256": "5e6f501a730c6ad453876d6e50c16bdcd1e667529e4b25609712596ad8d3efd4"
+  },
+  "game/common/history/countries/stg - sintang.txt": {
+   "size": 232,
+   "sha256": "066aaf79369565ea20bdf2315b769dca934f08aa9f3f39cdf740fb5ad3489a92"
+  },
+  "game/common/history/countries/sul - sulu.txt": {
+   "size": 266,
+   "sha256": "dd084ebb8bf5596bec7113486b6d7cc5ad39362f3dcc79b0ac6b7d5d7fefc78f"
+  },
+  "game/common/history/countries/sur - surguja.txt": {
+   "size": 195,
+   "sha256": "c7450c1f2486897572728b8e506eff56a919be0eea4ee69081f41ce2100aba6d"
+  },
+  "game/common/history/countries/svn - svaneti.txt": {
+   "size": 229,
+   "sha256": "f5fb457fe74f37923d7f381dd93f05a0cbada3e8640dfbc46cd2bce69d6e9a84"
+  },
+  "game/common/history/countries/swe - sweden.txt": {
+   "size": 1446,
+   "sha256": "24e7ddbf67e9a11edc4747b9710f99a4cf93f50b86b05901a62a9303ed065358"
+  },
+  "game/common/history/countries/swi - switzerland.txt": {
+   "size": 1310,
+   "sha256": "9e2439fb531606eec35e78ff6de600574086c1b2cda5ae08f8aa49546eb6c0c2"
+  },
+  "game/common/history/countries/swz - swaziland.txt": {
+   "size": 487,
+   "sha256": "236f81dc820804fd17a885d5f28bd9db143daa121ec55b1f11b1bbe70c1f3f11"
+  },
+  "game/common/history/countries/tas - tasmania.txt": {
+   "size": 858,
+   "sha256": "a9f8b24f49ecbdf58bbc44a6dbb4203a849eaead55983a2ce9e1ea82c7402abf"
+  },
+  "game/common/history/countries/tbi - tibesti.txt": {
+   "size": 206,
+   "sha256": "13ef99147e56116728afb3ef2559d2097dcebf529222e9e4e8cad5ad54348424"
+  },
+  "game/common/history/countries/tek - tekna.txt": {
+   "size": 206,
+   "sha256": "44b59f9061b5297dfb13e78c94f278c8b2cf56d1a61331ee6e1883f77f561463"
+  },
+  "game/common/history/countries/tex - texas.txt": {
+   "size": 1026,
+   "sha256": "489985991785efc8e51f17c27f05bca87b7152d7c8ab273213adb14f496306d0"
+  },
+  "game/common/history/countries/tgi - tungi.txt": {
+   "size": 263,
+   "sha256": "89c7878d4941591feadc60027d02cb1073ca7ac475380f813747d62dd2fac6ee"
+  },
+  "game/common/history/countries/tgr - tigray.txt": {
+   "size": 352,
+   "sha256": "464b8f1575f6c34118805d788953cdeab399f6f41cae5dbe18278635ed7f5ce4"
+  },
+  "game/common/history/countries/thl - tehuelche.txt": {
+   "size": 164,
+   "sha256": "d03aa6b382e2524750bd36d1a48593f0d8b9502ba881eafc389b74b7e7aa0d56"
+  },
+  "game/common/history/countries/tib - tibet.txt": {
+   "size": 577,
+   "sha256": "5b156ebab92302a48c748fb33466da3df83a1fcefee9841564d09ffe6a56fca0"
+  },
+  "game/common/history/countries/tid - tidore.txt": {
+   "size": 233,
+   "sha256": "8927b0d4fb60736251c11182e2b708c33fa3ca434b9e00e57ef570131d95ea69"
+  },
+  "game/common/history/countries/tip - tipperah.txt": {
+   "size": 351,
+   "sha256": "3a8d346a90deb75c96307f76d0e16fd18dba291840c3e313ed97ae8c606e6618"
+  },
+  "game/common/history/countries/tke - teke.txt": {
+   "size": 206,
+   "sha256": "eb2511a81cf5245b4a6c51ce3b127eb1572c2b78557b51dc22772a98110b923d"
+  },
+  "game/common/history/countries/tki - tarki.txt": {
+   "size": 229,
+   "sha256": "f03a0660e546f1fbd1bd7f282e717fe15b268070011577031b9b90c9f2b32cc5"
+  },
+  "game/common/history/countries/tmn - temne.txt": {
+   "size": 206,
+   "sha256": "6d319cc1952cc5d56ba04d34149d44c33967917b46dba96efa876e7b26604c5c"
+  },
+  "game/common/history/countries/tng - tonga.txt": {
+   "size": 164,
+   "sha256": "c378a955f2966c839d93cbdd116779e6f8957c5246c723ebbb6566e811dc7cdf"
+  },
+  "game/common/history/countries/tps - toposa.txt": {
+   "size": 207,
+   "sha256": "460e17a84d1d079940fdcf8e9336c9bbcfada704edc768d5e604b8f296b7b03b"
+  },
+  "game/common/history/countries/tra - travancore.txt": {
+   "size": 129,
+   "sha256": "e0fb632f1b01c83a15c8eec51702c4964d56125d4938f08281447e61377300b1"
+  },
+  "game/common/history/countries/tri - tripoli.txt": {
+   "size": 171,
+   "sha256": "d619f6237b47b33c7f879fa0ce782b151ef1aaff883fe0721fd5d50258b7506d"
+  },
+  "game/common/history/countries/trk - turkana.txt": {
+   "size": 208,
+   "sha256": "9a89729d9cf4d730b66d15775e4739e55547f1a99dc5e5feb8dd9ddc01369339"
+  },
+  "game/common/history/countries/trm - turkmenia.txt": {
+   "size": 234,
+   "sha256": "63285feeea7cb96128da7b55a9a2c0121fc909fb946a9ff2e3eac82a59593f22"
+  },
+  "game/common/history/countries/trn - transvaal.txt": {
+   "size": 1127,
+   "sha256": "352bb2cc310b0414b355911e70a3d0dfc8eb668387c19d40205c23c42a6fd0c5"
+  },
+  "game/common/history/countries/trs - transylvania.txt": {
+   "size": 983,
+   "sha256": "389249b32e2dd9aaa0a545a14b186397b66852157634c9366b31fbfd8eac406b"
+  },
+  "game/common/history/countries/trz - trarza.txt": {
+   "size": 206,
+   "sha256": "cf6b1fafece7de74129ba249ffb93517fae8a69d7be77936830ee1d6637ddf67"
+  },
+  "game/common/history/countries/tsw - botswana.txt": {
+   "size": 207,
+   "sha256": "6ed13e0a779c6b3e12f44220c14e7bd38e5c5136c06a7cd4e94da08e39a573e0"
+  },
+  "game/common/history/countries/tua - tuat.txt": {
+   "size": 206,
+   "sha256": "1e661b18ff4017a008a7e42a058c2b54628e98801e7f410201460f3a078e7420"
+  },
+  "game/common/history/countries/tug - touggourt.txt": {
+   "size": 276,
+   "sha256": "a7be588238253e572e2b56f8b91404ebba284633d555839627febc11af86085a"
+  },
+  "game/common/history/countries/tun - tunis.txt": {
+   "size": 168,
+   "sha256": "5dee16e460ce62f76bae750eb848f1baf1b2671396270896a0432a30206a3307"
+  },
+  "game/common/history/countries/tur - ottoman empire.txt": {
+   "size": 1303,
+   "sha256": "17c517fdec9c86ae10c56c1a8cbe11e055cd2edc5f798521b140c7f0e83cde70"
+  },
+  "game/common/history/countries/tus - tuscany.txt": {
+   "size": 501,
+   "sha256": "81636247e6b2b7bb3f967b014576ecdd23a7e73e960c981caba5b22c0db4bed8"
+  },
+  "game/common/history/countries/ubd - baltic.txt": {
+   "size": 1340,
+   "sha256": "b5775099f7ac2418fbbb5226f438fe9ea8e23e6e1474f7b146c1e11d680dd8ef"
+  },
+  "game/common/history/countries/uca - central america.txt": {
+   "size": 984,
+   "sha256": "9124a2c5cec7f47c62eb55ef70e9b5e531aa0a4e45821c54a314604c4fc50a4a"
+  },
+  "game/common/history/countries/ult - ulta.txt": {
+   "size": 164,
+   "sha256": "538fb3df755688f26ee81c1ce4ee0a80c1a2db129d93366c6e0d9f5ff68ef1c2"
+  },
+  "game/common/history/countries/unt - united tribes.txt": {
+   "size": 549,
+   "sha256": "cc84f26bf7ca5896ca1b90873c0d2f677c1917ea7cd72f2238ea1509869aef07"
+  },
+  "game/common/history/countries/uru - uruguay.txt": {
+   "size": 993,
+   "sha256": "687625333fc77cb062a3078b0ed4df243d7e37bac402ef6617b8021dcfedcd45"
+  },
+  "game/common/history/countries/usa - usa.txt": {
+   "size": 2693,
+   "sha256": "9081f32495bab317842d2354700e8a34d11539056a558286306ab05ead6ee51b"
+  },
+  "game/common/history/countries/ute - ute.txt": {
+   "size": 166,
+   "sha256": "0a02f6118feebdcfc57dc50fbfbc4513bee62fe35586613d6ed20f993f7e9307"
+  },
+  "game/common/history/countries/uzh - uly zhuz.txt": {
+   "size": 238,
+   "sha256": "66b8fa7883d878964de0cde9d8b203b5f84b56bd6ab6a260aa7c91c1b8df8b02"
+  },
+  "game/common/history/countries/vnd - venda.txt": {
+   "size": 206,
+   "sha256": "74d04dac12b72d6c78eb568fd593decace18dc3972ebb2112c2e2c73e3246e12"
+  },
+  "game/common/history/countries/vnt - vanuatu.txt": {
+   "size": 164,
+   "sha256": "48e9c4df2c939d402e1eeae9467f8ee24fe68b7e816d7ab7a849ed14370b211c"
+  },
+  "game/common/history/countries/vnz - venezuela.txt": {
+   "size": 1040,
+   "sha256": "f6344cf687bad2571c12546225e96ebca8bb9ab6941dfa85e9e191c2e5a69967"
+  },
+  "game/common/history/countries/wad - wadai.txt": {
+   "size": 213,
+   "sha256": "5a1b7bb7f6c4fec370a65c319663ba5e677a67c0f15e882cfe7fd159b2f8c6fb"
+  },
+  "game/common/history/countries/wal - wallachia.txt": {
+   "size": 452,
+   "sha256": "f2b708e98e482f379e8e599dac82ff30cd6c26782e7510819d0f342429b44f5c"
+  },
+  "game/common/history/countries/was - western australia.txt": {
+   "size": 858,
+   "sha256": "fdd5d347b6c2666c5e2834d31ee5397a80800cbe6ad777e6921c0e7663becf55"
+  },
+  "game/common/history/countries/wbl - waterboersland.txt": {
+   "size": 376,
+   "sha256": "d372ff86a4cb289c429053bc1d63e3c1a3823fb300e0ea0db382549de9a09530"
+  },
+  "game/common/history/countries/wdj - wiradjuri.txt": {
+   "size": 164,
+   "sha256": "a2094e8df3a61477fe48ee91e6e533626883aea9de220bb37804b5c6ef2f3c74"
+  },
+  "game/common/history/countries/wei - saxe-weimar.txt": {
+   "size": 278,
+   "sha256": "0b033dc98631e46d4df0b5c4d5c785406bb607cc04e68694f6274309611c6902"
+  },
+  "game/common/history/countries/wkb - waka-gabi.txt": {
+   "size": 164,
+   "sha256": "c2c54b30196514d160e080004d67467603b42685df9a9d098aacfa2cc241f6a4"
+  },
+  "game/common/history/countries/wld - waldeck.txt": {
+   "size": 273,
+   "sha256": "119f2552e7c89e087ba65421550790160b2318b4cabbe88792bbc11a949ded41"
+  },
+  "game/common/history/countries/wlg - welega.txt": {
+   "size": 212,
+   "sha256": "fe488aa972410dd9bc3aeb832118344d9abe1a59afdd3bb488cc73ddc8391dcf"
+  },
+  "game/common/history/countries/wlt - wolaita.txt": {
+   "size": 212,
+   "sha256": "c627a279e561d0a9121f2f3a7889ace21a665f3edce874012e69e770d6b80c8c"
+  },
+  "game/common/history/countries/wrr - worrorran.txt": {
+   "size": 164,
+   "sha256": "0df13857632f9e833497993854b224c63fd19a351c36aa43b0dd4b095b162d72"
+  },
+  "game/common/history/countries/wsg - warsangali.txt": {
+   "size": 222,
+   "sha256": "49e0ce3c86e33c28fd039abdc875154aed2c0cc2cf8140b943c8ff519638c84d"
+  },
+  "game/common/history/countries/wti - wati.txt": {
+   "size": 164,
+   "sha256": "c10c04bd35f44f24f9f6260cbcdd8a877163374d909c55ecd2206b45fc3150b3"
+  },
+  "game/common/history/countries/wtu - witu.txt": {
+   "size": 263,
+   "sha256": "d9633da137a743383112f3fa29d26d71780d0c8d5099419632cc6d1401fdd29c"
+  },
+  "game/common/history/countries/wur - wurttemberg.txt": {
+   "size": 316,
+   "sha256": "d9957358592de6a547a7874a66d8dce1533f16d32e0ba7d845a59f25416926a1"
+  },
+  "game/common/history/countries/xho - xhosa.txt": {
+   "size": 206,
+   "sha256": "82f11c674817872b930ba5e39af7d9aabaf0e9888c91b1c165cd7200c8ed4990"
+  },
+  "game/common/history/countries/ygu - yolngu.txt": {
+   "size": 164,
+   "sha256": "3c0259659fd56af6328b631c1ed48d22a8e6a9afe700d68ad2e2a609a315380d"
+  },
+  "game/common/history/countries/yka - yaka.txt": {
+   "size": 206,
+   "sha256": "15c13f4f7aa0ec801a75409bea29b0f4e7a0ae7e174357c0b9d7e49b3ea1f7a4"
+  },
+  "game/common/history/countries/yog - yogyakarta.txt": {
+   "size": 233,
+   "sha256": "5c17250c5f204f67f0c1aada19a7fe7ef5a2035b1d3b25925d98434e397a2dee"
+  },
+  "game/common/history/countries/yur - yura.txt": {
+   "size": 164,
+   "sha256": "23ca04245ddb86b2924d49608bb56b93d97cbb9f5e059033ec742d097f3852ec"
+  },
+  "game/common/history/countries/zai - zaidi.txt": {
+   "size": 208,
+   "sha256": "4f0e4e7cb2cd46440adfe917b09f373ea34b2a8c576b49737867a48bcaac108d"
+  },
+  "game/common/history/countries/znd - zande.txt": {
+   "size": 208,
+   "sha256": "9ecdd0c62f8e94607637f418df790329d8eecf8c6f79b23863147393e17c40f8"
+  },
+  "game/common/history/countries/zul - zulu.txt": {
+   "size": 488,
+   "sha256": "cb6bb7c6c2cf5f6ff985b72d3835b0652783c6a138284141568d71a726d39a83"
+  },
+  "game/common/history/countries/zwy - zuwayya.txt": {
+   "size": 206,
+   "sha256": "5983793ea90223de060e2ad801d91c4a8143288694248072fef3afe42fc37321"
   },
   "game/common/history/states/00_states.txt": {
    "size": 477281,
@@ -2742,6 +4631,210 @@
    "size": 1706,
    "sha256": "01535c263362e7f8cbf99266799e76ffbbd28c342f4e5880a5b5f3cb39ebbf81"
   },
+  "game/common/scripted_effects/0000_debug_effects.txt": {
+   "size": 258,
+   "sha256": "7c59b33e9f8882cdee374eb85b3baf2e0f72d80155d040442bc5a64a55dbac46"
+  },
+  "game/common/scripted_effects/00_ai_decree_effects.txt": {
+   "size": 2993,
+   "sha256": "f099caa25dca1f93db0b216575e00f990757b9897b02dadc811948ca5850d219"
+  },
+  "game/common/scripted_effects/00_balkan_wars_scripted_effects.txt": {
+   "size": 10198,
+   "sha256": "09f8e9f7bdaf7f1caf2e2767a8bd7dac267abcd13a76891afa8d981165d9bdb3"
+  },
+  "game/common/scripted_effects/00_chris_scripted_effects.txt": {
+   "size": 15022,
+   "sha256": "5fc73a18551952d96fce6a32d014f3eaad102c2170c952c84472d4fec6878a82"
+  },
+  "game/common/scripted_effects/00_dynamic_state_names.txt": {
+   "size": 6944,
+   "sha256": "bad1262a04b2ee1a2a0740506c0756b365ecc54971ace7e73d8d4af73cfee0e3"
+  },
+  "game/common/scripted_effects/00_dynamic_state_names_africa.txt": {
+   "size": 21358,
+   "sha256": "22ee85131f7731afdd259700fd18d502011eab1893311c3ac255d31a83118f89"
+  },
+  "game/common/scripted_effects/00_dynamic_state_names_americas.txt": {
+   "size": 12959,
+   "sha256": "95f3c56f6dd3fe6f1b72740e720ea5b2f19dd863ce483dafae84234b9313a2b6"
+  },
+  "game/common/scripted_effects/00_dynamic_state_names_asia.txt": {
+   "size": 74807,
+   "sha256": "add13aa8180b148895838c508835de1a972bc3f5f904739a0c6a180435849769"
+  },
+  "game/common/scripted_effects/00_dynamic_state_names_europe.txt": {
+   "size": 174184,
+   "sha256": "09dd11849627725f43ce49c8e7dfd78e7b4369f940ca2f87a7730f2da332be46"
+  },
+  "game/common/scripted_effects/00_expedition_effects.txt": {
+   "size": 20442,
+   "sha256": "2d0bb0939538f7e118fbc9f34cbba62b2d6fc1bf379b07e585f1a4e093c37723"
+  },
+  "game/common/scripted_effects/00_government_type_change_effects.txt": {
+   "size": 1580,
+   "sha256": "1d116b9346f8e56344fedd4038247277c16dcaddad3e3301766753e8a7a0c679"
+  },
+  "game/common/scripted_effects/00_intelligentsia_scripted_effects.txt": {
+   "size": 775,
+   "sha256": "5ce8d8a17822a441cbbdd645044067ccb4a744b6dcce9018f4b8549207027157"
+  },
+  "game/common/scripted_effects/00_krakatoa_effects.txt": {
+   "size": 1698,
+   "sha256": "a23c6ac9d1a4efe91b135d916c09dd8b886c15df088f6e03a566c6ee2f26153b"
+  },
+  "game/common/scripted_effects/00_lobby_effects.txt": {
+   "size": 4714,
+   "sha256": "33564a290eb7f1d49b58b084eaad3c7776b90301e19f262a572ea91a97375c3d"
+  },
+  "game/common/scripted_effects/00_monument_scripted_effects.txt": {
+   "size": 3121,
+   "sha256": "702f70033b5732f3f4e184b5c932119cfcb901737117116bd5a8b1b9b81eb867"
+  },
+  "game/common/scripted_effects/00_movement_effects.txt": {
+   "size": 133,
+   "sha256": "f1d8b624cfa39429761c9c50be8fe73c9d5a6d28bf020009f15112483a35559f"
+  },
+  "game/common/scripted_effects/00_native_conscription.txt": {
+   "size": 1964,
+   "sha256": "5fce0319925f188c8d6749989f954f62851016f546fe6e86b874626b836e55f1"
+  },
+  "game/common/scripted_effects/00_political_setup.txt": {
+   "size": 4806,
+   "sha256": "70c755848862abb553d5d5279d5f98a8a5e4d14b557aec484096eae316e7e9f4"
+  },
+  "game/common/scripted_effects/00_rlit_scripted_effects.txt": {
+   "size": 6710,
+   "sha256": "3774bd3f484492de5475689d8b2e9e77f8da35dbc655bf6365b6afd61bdc5db6"
+  },
+  "game/common/scripted_effects/00_rufus_scripted_effects.txt": {
+   "size": 1492,
+   "sha256": "8b0842f1fb6f8b5cbac304bebb620033c07da05cff049265160ab2920ddc791f"
+  },
+  "game/common/scripted_effects/00_scripted_effects.txt": {
+   "size": 33200,
+   "sha256": "2c4cde3c1e06dc99bf486ccdd7ff418ed7721e26d022f3dd92a06be8f6ff585f"
+  },
+  "game/common/scripted_effects/00_sepoy_mutiny_scripted_effects.txt": {
+   "size": 59093,
+   "sha256": "be32f69bde816f2216d18a29ae1aebca1859f22ea25cf9504b25cf62ff519534"
+  },
+  "game/common/scripted_effects/00_sgui_effects.txt": {
+   "size": 4526,
+   "sha256": "ddac74d6eb118f2f92cc9696632177c31a635bfb42676646030609b9d292a28a"
+  },
+  "game/common/scripted_effects/00_spanish_flu_effects.txt": {
+   "size": 5361,
+   "sha256": "ffd4118819b2d42db78a0d067a58bdcefec89e6a3d8b534b0dd169d41f209889"
+  },
+  "game/common/scripted_effects/00_spanish_new_world_scripted_effects.txt": {
+   "size": 14138,
+   "sha256": "f9105f202c89a51f0965bdde84ba7d5d13e8d8cb51ff4067826bfd5a7f92f85f"
+  },
+  "game/common/scripted_effects/00_starting_inventions.txt": {
+   "size": 4653,
+   "sha256": "ed3f518ede32a343e986b71f892be17b6145d1f3010fe5f523a2507705a5de84"
+  },
+  "game/common/scripted_effects/00_starting_pop_literacy.txt": {
+   "size": 6569,
+   "sha256": "bd7a643cdde74863e05ec7565b9a35da4b14115b3afee2facdc42c11aad50598"
+  },
+  "game/common/scripted_effects/00_starting_pop_wealth.txt": {
+   "size": 2807,
+   "sha256": "c3dc09f61925a1d8746601396f388d5e0327031d9ca1256b66792015ae37ce27"
+  },
+  "game/common/scripted_effects/00_starting_secret_goals.txt": {
+   "size": 2070,
+   "sha256": "424a3498eb13ec76d0c0a03bf2c0a1f157294ed4a42533454093e138ca779f3f"
+  },
+  "game/common/scripted_effects/00_strike_effects.txt": {
+   "size": 2495,
+   "sha256": "ecb32c27d6ea5e0cb762f4953512db040967d51a543508139e2ec669480fab40"
+  },
+  "game/common/scripted_effects/00_the_grand_collapse_scripted_effects.txt": {
+   "size": 19948,
+   "sha256": "b83839458819b26d24bee0122c7d24bdd8664ae89a1bba47d19bceeb0e47d34b"
+  },
+  "game/common/scripted_effects/00_treaty_of_london_scripted_effects.txt": {
+   "size": 2419,
+   "sha256": "ccbfd6962736442fdba909613dd57db7f23e45c9d2a659eb15c14503cf70ede9"
+  },
+  "game/common/scripted_effects/00_unification_effects.txt": {
+   "size": 291,
+   "sha256": "f346b074eca18ec59dbad70043a1fe91ff59b3737c1f3e11103ada7e3d632de5"
+  },
+  "game/common/scripted_effects/00_victoria_adversarial_scripted_effects.txt": {
+   "size": 61287,
+   "sha256": "4775262dbce3f3e5e07bbb942de0637e8771025a11a702a83992db41acb28846"
+  },
+  "game/common/scripted_effects/00_victoria_cleanup_scripted_effects.txt": {
+   "size": 33618,
+   "sha256": "893cacee1fda729ea96fc07cfda8537f4e6d6370207d49ca9256be0e8bbd31a6"
+  },
+  "game/common/scripted_effects/00_victoria_ep2_scripted_effects.txt": {
+   "size": 68484,
+   "sha256": "217258505bd0d9959fb0592104ed399ec9f519763a2f961556155db749d1deaf"
+  },
+  "game/common/scripted_effects/00_victoria_great_game_scripted_effects.txt": {
+   "size": 13983,
+   "sha256": "4fb607c5c32dde9c70e55e48a7f72f80307dadcb8a80a4939b036cfec6d2eab1"
+  },
+  "game/common/scripted_effects/00_victoria_heir_generation.txt": {
+   "size": 6885,
+   "sha256": "fe3d5197fafe1f26e622b4746b446947dc80ce4bcd83dd73ec939d2a9c7665f4"
+  },
+  "game/common/scripted_effects/00_victoria_ip3_scripted_effects.txt": {
+   "size": 32696,
+   "sha256": "413036931c4a5dc3a08ad403c512b7d14c393208c5cdd09117bc293d51057a86"
+  },
+  "game/common/scripted_effects/00_victoria_ip4_scripted_effects.txt": {
+   "size": 53747,
+   "sha256": "4abf6d91ccd2afcfee785c28171ea45392f5e40b4cb76c9d3ca0e37c27a5fb74"
+  },
+  "game/common/scripted_effects/00_victoria_ip5_scripted_effects.txt": {
+   "size": 20725,
+   "sha256": "4835c66aa6dfae2b397da2c575442071be5c5f8fb762d49b8f7095c324475cad"
+  },
+  "game/common/scripted_effects/00_victoria_on_actions_effects.txt": {
+   "size": 52615,
+   "sha256": "89945f1811e2483d5ebeca60683b6f41f50cfa03530b288569f4c4a90fcdfdb2"
+  },
+  "game/common/scripted_effects/00_victoria_on_revolution_effects.txt": {
+   "size": 16121,
+   "sha256": "d5d7ab8c933f69aeec1e572a61e2cb7bb859201081888a2fb668bf07dd114f4e"
+  },
+  "game/common/scripted_effects/00_victoria_on_wargoal_enforced_effects.txt": {
+   "size": 8336,
+   "sha256": "3f0cdc3b126791ab1bfa7608a7021d82b53342f336ff1fd1feee8cfe4a27d52c"
+  },
+  "game/common/scripted_effects/00_victoria_royal_successions.txt": {
+   "size": 21291,
+   "sha256": "a4bb6da35a1f165321fcfdf49de827730635851d294672f47621c27f5c2d13a6"
+  },
+  "game/common/scripted_effects/00_victoria_scripted_effects.txt": {
+   "size": 109655,
+   "sha256": "78eb1ab7d94117db49076b10ac2e4958c66837c10110b0e46eb3e063f5bb2e50"
+  },
+  "game/common/scripted_effects/04_neg_event_options_scripted_effects.txt": {
+   "size": 11255,
+   "sha256": "50674e7cade64bf09686f453318fc2235fcb74445bbd5d63910e6fd6220bdfa1"
+  },
+  "game/common/scripted_effects/04_negotiation_scripted_effects.txt": {
+   "size": 19491,
+   "sha256": "350b9ceba317c0cd74983f922af349634a4ecd895dc92b20346918331cf38c5b"
+  },
+  "game/common/scripted_effects/05_russia_scripted_effects.txt": {
+   "size": 25042,
+   "sha256": "eb13aa42eb925fe79cfd1b83552fac80cf18287a912115bdb06de058f7da5704"
+  },
+  "game/common/scripted_effects/05_russian_civil_war_scripted_effects.txt": {
+   "size": 88719,
+   "sha256": "901054a0e8d03251fa7bff17cb3a795c3f6c35b959250ff282951b4524bfd356"
+  },
+  "game/common/scripted_effects/05_tsarpoints_scripted_effects.txt": {
+   "size": 34406,
+   "sha256": "00f2b2796fcdc649b9cf610e1923e99e7adb8a1904904dd51a3eaa1928ed65f1"
+  },
   "game/common/scripted_progress_bars/00_austrian_progress_bars.txt": {
    "size": 3975,
    "sha256": "918917d4ec3305e2a447899b3d640e9dfe0366833f65e0ee0b624c8b817dadc8"
@@ -2825,6 +4918,138 @@
   "game/common/scripted_progress_bars/09_forest_of_bayonets_progress_bars.txt": {
    "size": 3402,
    "sha256": "a633f696ab2f9355dbbe202fb994d72c66cf2868cbc55407af36b4a7c5b7fece"
+  },
+  "game/common/scripted_triggers/00_ai_triggers.txt": {
+   "size": 31360,
+   "sha256": "4fa555d5b591aa4c5d05788221b600fd8458bd3dc8e9e52ae0b806180d8d63cd"
+  },
+  "game/common/scripted_triggers/00_building_triggers.txt": {
+   "size": 1096,
+   "sha256": "b84c2665d59482cab85db29be51fcc2425d478ec17ddc2ead7c926b5a0b178d2"
+  },
+  "game/common/scripted_triggers/00_civil_war_triggers.txt": {
+   "size": 63,
+   "sha256": "63abb81c1aff36c60d7b629ad2631e7254d4a8c69d3cf2b0da60f4f28c33049d"
+  },
+  "game/common/scripted_triggers/00_clothes_triggers.txt": {
+   "size": 52116,
+   "sha256": "9aff585594094f5136265d683a26cc9aa81ae0a31e9a2878762aae6b82dd23ce"
+  },
+  "game/common/scripted_triggers/00_coa_triggers.txt": {
+   "size": 16165,
+   "sha256": "5f89bd3d97652333f6ed2e4f8308a7b3e37e3b1d264478a4fa2837d9d3967874"
+  },
+  "game/common/scripted_triggers/00_debug_triggers.txt": {
+   "size": 61,
+   "sha256": "34c17fcdb23eeca276ebfebb028ef9d8119540143a2a7da03378498c590bcd3d"
+  },
+  "game/common/scripted_triggers/00_diplomacy_triggers.txt": {
+   "size": 4812,
+   "sha256": "1aca2fd5254ee640e3c3591a7cc27249e223f69800d4f609b24442ff5edba84b"
+  },
+  "game/common/scripted_triggers/00_ep2_victoria_scripted_triggers.txt": {
+   "size": 15418,
+   "sha256": "99c242bb12946a95d782e641837745c60c5f00211e588f445d62a9465e2ba34e"
+  },
+  "game/common/scripted_triggers/00_geography_triggers.txt": {
+   "size": 10081,
+   "sha256": "10677fcdadacc25f6af825275d234d6ad036a4e88a0701334208efe09de0c891"
+  },
+  "game/common/scripted_triggers/00_gfx_buildings_graphics_triggers.txt": {
+   "size": 2024,
+   "sha256": "30ceb8fda92ffe17b810322d2dacc7100cd8ff994ee26250b42da7b6afa1c2ff"
+  },
+  "game/common/scripted_triggers/00_gfx_route_graphics_triggers.txt": {
+   "size": 25757,
+   "sha256": "0c498f411ba4e4f4f4ec290ac5e9845230beb1932c2eb520fa6beed0626fcf18"
+  },
+  "game/common/scripted_triggers/00_has_dlc_triggers.txt": {
+   "size": 412,
+   "sha256": "1c968c1aa7a58c14cf2a38a9796a5688f41ab65ea630a16539ed1e6e473979c7"
+  },
+  "game/common/scripted_triggers/00_ip3_victoria_scripted_triggers.txt": {
+   "size": 32159,
+   "sha256": "d96675c6b35f073a323f23796b848d92f0b452529d58501c891206822fc9a9f4"
+  },
+  "game/common/scripted_triggers/00_ip4_victoria_scripted_triggers.txt": {
+   "size": 22885,
+   "sha256": "b459086fcb470e9369d5328146d87bba0bef2981174799aae7546f6244142cc7"
+  },
+  "game/common/scripted_triggers/00_ip4_winspear_scripted_triggers.txt": {
+   "size": 242,
+   "sha256": "5f2a7463e785cbed0e7f3e4454647c52bc28b854d21c20955e4cbcc509bd2efc"
+  },
+  "game/common/scripted_triggers/00_ip5_daniel_triggers.txt": {
+   "size": 3629,
+   "sha256": "0c6d76429c740c29b55a0e45a564f825ef479a9b2068e01033308fa0278170d7"
+  },
+  "game/common/scripted_triggers/00_ip5_russian_revolution_scripted_triggers.txt": {
+   "size": 3311,
+   "sha256": "09672c7aba5b0c63d53cbf97164547050fe86d8d956a8374887f8f482536d030"
+  },
+  "game/common/scripted_triggers/00_ip5_victoria_scripted_triggers.txt": {
+   "size": 9780,
+   "sha256": "e0dafdb5beb8f4a748ab3866b66ea23832d0d8eb976d78d00fe21d0ef4e1af1b"
+  },
+  "game/common/scripted_triggers/00_lobby_formation_triggers.txt": {
+   "size": 2301,
+   "sha256": "a54a00299eee837d5953c4a4c5b6299e7d93cfb9618d4b6d5d55cbd5b82ed397"
+  },
+  "game/common/scripted_triggers/00_rlit_scripted_triggers.txt": {
+   "size": 2332,
+   "sha256": "4dcb1b7de692f4f65cc531b3a212fe90b3efdf34bc8f708e9ec8839d7db10253"
+  },
+  "game/common/scripted_triggers/00_scripted_triggers.txt": {
+   "size": 68514,
+   "sha256": "85be503d1eb58053cb9ca7f69e403235ef88aeb40c2fc020c4684bdf01f33855"
+  },
+  "game/common/scripted_triggers/00_ship_name_triggers.txt": {
+   "size": 3,
+   "sha256": "f1945cd6c19e56b3c1c78943ef5ec18116907a4ca1efc40a57d48ab1db7adfc5"
+  },
+  "game/common/scripted_triggers/00_spanish_new_world_triggers.txt": {
+   "size": 180,
+   "sha256": "3a4e5caae78d897c6e1ec3fcb02dbc71c61411ff1d713d364174c602e77db38f"
+  },
+  "game/common/scripted_triggers/00_strike_triggers.txt": {
+   "size": 1747,
+   "sha256": "66875d1e2ca3457ce447cbe939ec9c60ac0bc8b18a1ef029a6509b0c4c753636"
+  },
+  "game/common/scripted_triggers/00_theme_triggers.txt": {
+   "size": 1756,
+   "sha256": "16aa7a35cc8f92ab27804bab5578e010eeff05bc1acbca35baef3c30701503ea"
+  },
+  "game/common/scripted_triggers/00_victoria_scripted_triggers.txt": {
+   "size": 27497,
+   "sha256": "1099dc96d45897d7c82872d3763f8b7953af4006e9210af6d8ed5add7b630a88"
+  },
+  "game/common/scripted_triggers/01_has_dlc_triggers_ip1.txt": {
+   "size": 167,
+   "sha256": "16d2a1c2b60b727d871c8455d99e0246a39e8ca94f07a1a014c9dabc03312763"
+  },
+  "game/common/scripted_triggers/05_provisional_government_triggers.txt": {
+   "size": 2400,
+   "sha256": "5abb56ab9d8a1820b273ea8ee8ccf050242786b6765c76cc366adeb4aebc3abb"
+  },
+  "game/common/scripted_triggers/05_russian_civil_war_triggers.txt": {
+   "size": 17703,
+   "sha256": "c7e04bae0b7dd45128a842222d7cb9f0fc880f8a8ea2ca0bab5aaf0e6186ebec"
+  },
+  "game/common/scripted_triggers/05_tsarpoints_scripted_triggers.txt": {
+   "size": 30573,
+   "sha256": "4d22469ebc817d730a0c5789b6e5bdfb0edc3087f417beb4e06f3322e3b98868"
+  },
+  "game/common/scripted_triggers/ip4_carlist_war_triggers.txt": {
+   "size": 152,
+   "sha256": "ee37761ca132b73e117ca465fb0cf99de0835d25144518afff74476596067bc4"
+  },
+  "game/common/scripted_triggers/ip4_negotiation_triggers.txt": {
+   "size": 10834,
+   "sha256": "ac41dc9ca11080ae7813ccf81ea0793fb65e1129bea831c34eaaafd0db5a3500"
+  },
+  "game/common/scripted_triggers/nemo_scripted_triggers.txt": {
+   "size": 1576,
+   "sha256": "fea05f053977dbe6f32a939e6286d6249eaea8287ce3244d80db65804af3ce41"
   },
   "game/common/ship_groups/00_ship_groups.txt": {
    "size": 668,
@@ -3393,6 +5618,162 @@
   "game/common/treaty_articles/36_abandon_piracy.txt": {
    "size": 5320,
    "sha256": "f112f83a5f62ff400e47561ed38f96087db6bca77dba7f4268833a09aeb1a299"
+  },
+  "game/common/war_goal_types/00_annex_country.txt": {
+   "size": 2694,
+   "sha256": "f35bea2711d46f8383411ef5c1b7e678f89fd0b0772f474595c0fd292e3866cf"
+  },
+  "game/common/war_goal_types/01_ban_slavery.txt": {
+   "size": 3031,
+   "sha256": "e50c006fa6f02d50bcfe961f8767f92900e145819b9a8d10f59ac21978d1068a"
+  },
+  "game/common/war_goal_types/02_colonization_rights.txt": {
+   "size": 1131,
+   "sha256": "48ec4cac540595a681c25cfbe41f058364b030a50ff75f5d53874949dca1bdd8"
+  },
+  "game/common/war_goal_types/03_conquer_state.txt": {
+   "size": 2605,
+   "sha256": "ddb458620f1360bd5d9a1be2f08dbddbe5162ad8bc6b4135332e942e900d3399"
+  },
+  "game/common/war_goal_types/04_contain_threat.txt": {
+   "size": 1093,
+   "sha256": "62c21c1d2787a1baf610dbe25e43d1fed9f159453ec025b5b3029d13c893c538"
+  },
+  "game/common/war_goal_types/05_enforce_treaty_article.txt": {
+   "size": 1026,
+   "sha256": "9fe4d806d311de96668aea68d4fd9b5d11ba55aaef50090d3d0d1727c50b74f1"
+  },
+  "game/common/war_goal_types/06_force_nationalization.txt": {
+   "size": 3849,
+   "sha256": "42dfdfd65f295bc0c1cd8bf277aedf247e2b0d644daacfb7c8266d774ac6d5ab"
+  },
+  "game/common/war_goal_types/07_foreign_investment_rights.txt": {
+   "size": 2732,
+   "sha256": "cd13dc64ac43e7af2c0edae44c6a2a9139343a13a3bb048f41f4ee435a843407"
+  },
+  "game/common/war_goal_types/08_humiliation.txt": {
+   "size": 1083,
+   "sha256": "6bcf627b4f6c3f0ecb687e0d54605841c2ee6799eb7f172273835897af4649fa"
+  },
+  "game/common/war_goal_types/09_increase_autonomy.txt": {
+   "size": 1231,
+   "sha256": "905716bdec4c3a40fcb6953bc32b59b45042eb760a7c7013204a26045cb0efb2"
+  },
+  "game/common/war_goal_types/10_independence.txt": {
+   "size": 1229,
+   "sha256": "be17f7f624226dbfcb0e95bebcce8ed70f6f2ccaaefa570e703b548edcc8edd3"
+  },
+  "game/common/war_goal_types/11_join_power_bloc.txt": {
+   "size": 1409,
+   "sha256": "40bb0dbc04590c5ab0d9bcfc04fc0f78ea4b6429114c5543d45b9c3228ea1a96"
+  },
+  "game/common/war_goal_types/12_leave_power_bloc.txt": {
+   "size": 1243,
+   "sha256": "e6839dfacdb7f31a9e71b3004b2cca0d2cd6359903ed896790a3aae20f261dd0"
+  },
+  "game/common/war_goal_types/13_liberate_country.txt": {
+   "size": 1387,
+   "sha256": "702166cd5776aac7a5fc43712f7dd819d71a992fe693865e907a18041a710ac7"
+  },
+  "game/common/war_goal_types/14_liberate_subject.txt": {
+   "size": 1593,
+   "sha256": "3ea594121068995d0eb44c8b1a3b44b3ecfb5d41f804619eec7defdd23858e07"
+  },
+  "game/common/war_goal_types/15_make_dominion.txt": {
+   "size": 2547,
+   "sha256": "40f7beda95bd5245b693f2000c4203e7d46432b94586d954e53b3a18acdad0b5"
+  },
+  "game/common/war_goal_types/16_make_protectorate.txt": {
+   "size": 2560,
+   "sha256": "3f7c8be34c0c6705d30f9f43cbcb15bca734ae5bc83f98881318da8db55c2ffc"
+  },
+  "game/common/war_goal_types/17_make_tributary.txt": {
+   "size": 2551,
+   "sha256": "6a809542d785d92fb9b53697173ff14ed88898ff169ae5deff16d978f6cf9eae"
+  },
+  "game/common/war_goal_types/18_open_market.txt": {
+   "size": 2234,
+   "sha256": "e9bfe87b3d4314fb2223037333bac7c5d0369b59eb6b4be813da77813584301d"
+  },
+  "game/common/war_goal_types/19_reduce_autonomy.txt": {
+   "size": 2094,
+   "sha256": "7c1cab9f0c6a1b775bee8e126d54f3bd408367d20e3ca8dfc7774f46f69e83e9"
+  },
+  "game/common/war_goal_types/20_regime_change.txt": {
+   "size": 2202,
+   "sha256": "3b4e786ddc30ee5610121bb146b19a15235f492c5dcf7ef87fbca928e3467b94"
+  },
+  "game/common/war_goal_types/21_return_state.txt": {
+   "size": 2592,
+   "sha256": "e910881fce3c7cf9936db5fa14d9b87c2858cf4f477d8471887b8ef2da0b8c9a"
+  },
+  "game/common/war_goal_types/22_revoke_all_claims.txt": {
+   "size": 1109,
+   "sha256": "57922d647761e4061f7013d0d6944e85eca7a4a70de4d49d07330939e4de4479"
+  },
+  "game/common/war_goal_types/23_revoke_claim.txt": {
+   "size": 1147,
+   "sha256": "a309ff52d9ac743a533b7cc539f045553e5426ac2ac578e6dcfbc1c5ad1bd6eb"
+  },
+  "game/common/war_goal_types/24_secession.txt": {
+   "size": 1039,
+   "sha256": "d7b9e3405076c6e336a6b99fa63c46c864892eb5cddb0a45864fd53b846ea76f"
+  },
+  "game/common/war_goal_types/25_take_treaty_port.txt": {
+   "size": 2846,
+   "sha256": "56a77ece1ee02131a2b6683b4085b6616fba6fb54b2033566550801fde7acaac"
+  },
+  "game/common/war_goal_types/26_transfer_subject.txt": {
+   "size": 2248,
+   "sha256": "f6432c32c21c04a35cabe1e3af0bc9bf120dd548534c2015427a186207f2abf9"
+  },
+  "game/common/war_goal_types/27_unification.txt": {
+   "size": 1641,
+   "sha256": "47f539c8f29c094371f977f393608de48d66d26da07c8f1db9aaff93d4664afd"
+  },
+  "game/common/war_goal_types/28_unification_leadership.txt": {
+   "size": 1211,
+   "sha256": "e9e43b9d87c9c800928e62bd42a12f5d17fc8945eadd931b7cbce574c3a486fc"
+  },
+  "game/common/war_goal_types/29_restore_union.txt": {
+   "size": 2094,
+   "sha256": "a9710dd29456fc3d90d5943b1e5b0bf155c68a14db93e8b04d271dfdc6792703"
+  },
+  "game/common/war_goal_types/30_demand_strait_access.txt": {
+   "size": 1977,
+   "sha256": "d2c9df1206c090cab7e55b78872d2649e2a8af0535d17639de658dbf864bcf0c"
+  },
+  "game/common/war_goal_types/31_demand_toll_exemption.txt": {
+   "size": 1926,
+   "sha256": "37ef9d115fa2d280721433d2eaa93c423de5a07b4900382f17e9941ec71286fa"
+  },
+  "game/common/war_goal_types/32_demand_no_tolls.txt": {
+   "size": 1874,
+   "sha256": "7a1c1e3fd6307ea4a51a5056d31cea7b59208e292aa8887e15864e5e7fae2317"
+  },
+  "game/common/war_goal_types/33_demand_no_strait_closure.txt": {
+   "size": 1942,
+   "sha256": "8cdd4ffee21748f65f919e1324a87ac5e16675be1f1aa6cb3c753bdf07313cfe"
+  },
+  "game/common/war_goal_types/34_make_personal_union.txt": {
+   "size": 1561,
+   "sha256": "ab13631609bdd453864b2a253d0234ed93c392f74b3a3989639dc46eb57780f2"
+  },
+  "game/common/war_goal_types/35_make_chartered_company.txt": {
+   "size": 1571,
+   "sha256": "d7b600b9ef657eca1482ab6ecee6b211cf5e5c9a25ab65c6cc53677f246a766a"
+  },
+  "game/common/war_goal_types/36_make_crown_land.txt": {
+   "size": 1554,
+   "sha256": "cbea34e0b0ae961c926d15f74fcd677d538a6a6c5f9e332db88b985ab484ee56"
+  },
+  "game/common/war_goal_types/37_break_enforced_treaties.txt": {
+   "size": 589,
+   "sha256": "1cb6a1e44eb16a4a3b6eb42cffcc5e0e1d3bf6d71318359ee28018063022c846"
+  },
+  "game/common/war_goal_types/38_release_as_subject.txt": {
+   "size": 1143,
+   "sha256": "ad486344892763d4bfde5a1236525f94308f4f4244cd0d58cb85bab9ed840ac6"
   },
   "game/localization/english/JE_lobby_text_l_english.yml": {
    "size": 24045,

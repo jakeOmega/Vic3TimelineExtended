@@ -46,6 +46,7 @@ import sys
 import unittest
 
 from paradox_file_parser import ParadoxFileParser
+from vanilla_parsed import vanilla_define
 
 REPO = os.path.dirname(os.path.abspath(__file__))
 
@@ -67,11 +68,11 @@ LAND_TECH_METAL_MINE = "pm_smart_miners_building_tech_metals_mine"
 # kind of ship and nothing else.
 VESSELS = "pmg_support_vessels_building_ocean_mine"
 SHIP_GOODS = {"clippers", "steamers", "motor_ships", "magnetic_drive_ships"}
-# Vanilla game/common/defines/00_ai.txt (1.14.5), unless extra_defines.txt overrides them.
+# Vanilla's NAI defines (vanilla_parsed/defines.json, #1879), unless extra_defines.txt overrides them.
 VANILLA_AI_DEFINES = {
-    "PRODUCTION_METHOD_BASE_VALUE": 1000.0,
-    "PRODUCTION_METHOD_STICKINESS_DOWNGRADE": 0.75,
-    "PRODUCTION_METHOD_REDUCE_OUTPUT_PENALTY_FACTOR": 10.0,
+    key: float(vanilla_define("NAI", key))
+    for key in ("PRODUCTION_METHOD_BASE_VALUE", "PRODUCTION_METHOD_STICKINESS_DOWNGRADE",
+                "PRODUCTION_METHOD_REDUCE_OUTPUT_PENALTY_FACTOR")
 }
 # The rebalance holds under the Global Commons rule; with it off the mine is uncapped
 # and keeps the methods it had before (spec § 2.9), its *_uncapped family.

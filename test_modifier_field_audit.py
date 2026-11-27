@@ -9,6 +9,7 @@ import json
 import os
 import tempfile
 import unittest
+from collections import Counter
 from unittest import mock
 
 import mod_state_server as mss
@@ -644,14 +645,14 @@ class RealModTests(unittest.TestCase):
         self.assertTrue(self.src.has_loc("country_prestige_mult"))
         self.assertIn("catholic", self.src.vanilla_religions)
 
-    def test_same_sites_as_the_server_scan_plus_one_line_blocks(self):
-        """One definition of "a modifier block": every site `GET
-        /modifier-grants` finds is a modifier block's site here, and what this
-        scan adds is only what the server's line scan cannot see, a block
-        opened and closed on one line."""
-        mine = {(s.file, s.line, s.field) for s in self.sites if s.shown}
-        theirs = set()
-        lines_of = {}
+    def test_same_sites_as_the_server_scan(self):
+        """One definition of "a modifier block" (#1685): `GET /modifier-grants`
+        and this audit read a file with the same walk, `_grant_fields`, so every
+        site the endpoint returns is a shown site here and the other way round.
+        On the mod they are the same 28,000-odd lines, blocks written on one
+        line among them, which the endpoint's old line scan could not see."""
+        mine = Counter((s.file, s.line, s.block) for s in self.sites if s.shown)
+        theirs = Counter()
         common = os.path.join(ROOT, "common")
         for entity_type, subdir, mode in mss._grant_scan_plan([common]):
             for root, dirs, names in os.walk(os.path.join(common, *subdir.split("/"))):
@@ -661,16 +662,25 @@ class RealModTests(unittest.TestCase):
                         continue
                     abs_p = os.path.join(root, name)
                     rel = os.path.relpath(abs_p, ROOT).replace(os.sep, "/")
-                    with open(abs_p, encoding="utf-8-sig", errors="replace") as fh:
-                        lines_of[rel] = fh.read().split("\n")
                     for grant in mss._scan_file_for_grants(abs_p, rel, entity_type, mode, "mod", None):
-                        code = lines_of[rel][grant["line"] - 1].split("#", 1)[0]
-                        theirs.add((rel, grant["line"], mss._GRANT_LINE_RE.match(code).group(1)))
-        self.assertGreater(len(theirs), 20000)
-        self.assertEqual(theirs - mine, set())
-        for file, line, name in sorted(mine - theirs):
-            code = lines_of[file][line - 1].split("#", 1)[0]
-            self.assertTrue("{" in code and "}" in code, f"{file}:{line} {name}: {code.strip()}")
+                        theirs[(grant["file"], grant["line"], grant["block"])] += 1
+        self.assertGreater(sum(theirs.values()), 20000)
+        self.assertEqual(theirs, mine)
+
+    def test_the_endpoint_finds_each_written_site_of_a_name(self):
+        """The issue's two names: `/modifier-grants` returned 12 of
+        `tax_income_add`'s 117 sites and 53 of `ship_movement_speed_add`'s 76,
+        because the generated tax amendments and the ship modifications write
+        their blocks on one line (#1685)."""
+        if os.path.realpath(mss.mod_path) != os.path.realpath(ROOT):
+            self.skipTest("the server module reads another checkout than this test's")
+        for name in ("tax_income_add", "ship_movement_speed_add"):
+            with self.subTest(name=name):
+                written = sorted((s.file, s.line) for s in self.sites if s.field == name and s.shown)
+                found = mss._find_modifier_grants(name, scope="mod", limit=100000)
+                self.assertEqual(found["total"], len(written))
+                self.assertEqual(sorted((g["file"], g["line"]) for g in found["grants"]), written)
+                self.assertGreater(len(written), 50)
 
     def test_the_ship_cost_blocks_are_scanned(self):
         costs = [s for s in self.sites if s.block in mfa.COST_BLOCKS]
@@ -701,7 +711,7 @@ class RealModTests(unittest.TestCase):
                 return
             if isinstance(value, tuple):           # (operator, value)
                 value = value[-1]
-            key = mfa._bare(key)
+            key = mss._grant_bare(key)
             if isinstance(value, dict):
                 for k, v in value.items():
                     walk(k, v, stack + [key], out)

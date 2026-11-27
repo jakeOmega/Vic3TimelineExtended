@@ -34,6 +34,11 @@ What the report holds, and the triage step each part replaces:
   Self-checks     every TE_SELF_CHECK by name and verdict, a START that got no
                   verdict, a probe line the engine dropped, and the play-test
                   list that waits for each.
+  Harness         the verdicts of the QA harness's sessions of the last week
+                  (`--since`), read from their run folders, which keep the whole
+                  of each session's debug.log after the game's own logs have
+                  rotated it away: by check and save, and whether the play-test
+                  list beside it records a dated verdict yet.
   Crashes         crash folders since the oldest launch in the logs.
 
 The same registries tag the lines as /logs does (game_log_reader), so
@@ -714,10 +719,189 @@ def self_checks(families: dict, clock: Clock, docs_root: str) -> list[str]:
     return out
 
 
+# ------------------------------------------------------- harness sessions
+# The QA harness copies each session's debug.log to `<backup root>/runs/<UTC stamp>/` and writes the run's
+# verdicts into that folder's summary.md (game_qa/selfchecks.py, game_qa/report.py). The game's own logs keep six
+# generations, which a long session rotates within the hour, so a verdict logged in a harness session reaches a
+# triage only from there (#2091: two conscript-refresh checks, a BROKEN among them, waited five days for a grep).
+HARNESS_DAYS = 7
+_VERDICT_RANK = {"BROKEN": 0, "START": 1, "NO_VERDICT": 2}
+_RUN_FOLDER_RE = re.compile(r"(\d{8})T\d{6}Z(?:-\d+)?")
+_SUMMARY_HEADING = "## Self-checks"
+_SUMMARY_TABLE_HEAD = "| Check | Verdict | From | Line |"
+# A play-test list records a verdict as a dated OK or BROKEN beside the check's name: `(OK 2026-11-27: ...)`,
+# `BROKEN ... 2026-11-21`. A table row is read alone; prose by its paragraph.
+_DATED_VERDICT_RE = re.compile(r"\b(?:OK|BROKEN|NO_VERDICT)\b.{0,80}?\b20\d\d-\d\d-\d\d\b"
+                               r"|\b20\d\d-\d\d-\d\d\b.{0,80}?\b(?:OK|BROKEN|NO_VERDICT)\b", re.S)
+
+
+def _table_cells(row: str) -> list[str]:
+    """The cells of one markdown table row as game_qa/report.py writes it (`_cell` escapes a `|` as `\\|`)."""
+    cells, cell, i = [], "", 1 if row.startswith("|") else 0
+    body = row.rstrip()
+    body = body[:-1] if body.endswith("|") and not body.endswith("\\|") else body
+    while i < len(body):
+        if body.startswith("\\|", i):
+            cell += "|"
+            i += 2
+            continue
+        if body[i] == "|":
+            cells.append(cell.strip())
+            cell = ""
+        else:
+            cell += body[i]
+        i += 1
+    cells.append(cell.strip())
+    return cells
+
+
+def summary_self_checks(text: str) -> list[dict] | None:
+    """The rows of a run's summary.md `## Self-checks` table: {name, verdict, source, line}, every BROKEN first as
+    the harness orders them. [] when the section says no line was read; None when the summary has no such section
+    (a summary written before the harness reported verdicts, #1650)."""
+    lines = text.split("\n")
+    try:
+        start = lines.index(_SUMMARY_HEADING)
+    except ValueError:
+        return None
+    rows: list[dict] = []
+    in_table = False
+    for raw in lines[start + 1:]:
+        if raw.startswith("## "):
+            break
+        if raw.strip() == _SUMMARY_TABLE_HEAD:
+            in_table = True
+            continue
+        if in_table:
+            if not raw.startswith("|"):
+                break
+            cells = _table_cells(raw)
+            if len(cells) == 4 and cells[0] != "---":
+                rows.append(dict(zip(("name", "verdict", "source", "line"), cells)))
+    return rows
+
+
+def _summary_field(text: str, label: str) -> str | None:
+    prefix = f"- {label}: "
+    for raw in text.split("\n"):
+        if raw.startswith(prefix):
+            value = raw[len(prefix):].strip()
+            return None if value in ("", "(none)") else value
+    return None
+
+
+def run_verdicts(backup_root: str, run_id: str) -> tuple[str | None, list[dict], str]:
+    """(the save the run loaded, its verdict rows, where they were read): the summary's table, or, for a run whose
+    summary has none, the session's copy of debug.log read as `game_qa selfchecks` reads it."""
+    folder = os.path.join(backup_root, "runs", run_id)
+    text = ""
+    try:
+        with open(os.path.join(folder, "summary.md"), encoding="utf-8", errors="replace") as fh:
+            text = fh.read()
+    except OSError:
+        pass
+    save = _summary_field(text, "Save")
+    rows = summary_self_checks(text) if text else None
+    if rows is not None:
+        return save, rows, "summary.md"
+    if not os.path.isfile(os.path.join(folder, "debug.log")):
+        return save, [], "no summary table and no debug.log"
+    from pathlib import Path
+
+    from game_qa import selfchecks
+    found = selfchecks.of_run(Path(backup_root), run_id)
+    return save, [{"name": c["name"], "verdict": c["verdict"],
+                   "source": c["source"] + (" (not vouched for)" if c.get("unvouched") else ""),
+                   "line": c["line"]} for c in found["checks"]], "debug.log"
+
+
+def _verdict_recorded(name: str, lists: dict) -> bool:
+    """Whether a play-test list gives `name` a dated verdict: a table row naming it, or a paragraph naming it, that
+    holds OK, BROKEN or NO_VERDICT within 80 characters of a date."""
+    for text in lists.values():
+        if name not in text:
+            continue
+        for block in re.split(r"\n\s*\n", text):
+            if name not in block:
+                continue
+            parts = [ln for ln in block.split("\n") if name in ln] if block.lstrip().startswith("|") else [block]
+            if any(_DATED_VERDICT_RE.search(part) for part in parts):
+                return True
+    return False
+
+
+def harness_sessions(backup_root: str | None, since: dt.date, docs_root: str) -> list[str]:
+    """The Harness block: each check the run folders since `since` report, its verdict on each save (a save loaded
+    in several runs repeats its verdicts, so it is one line), and whether a play-test list records one yet."""
+    runs_dir = os.path.join(backup_root, "runs") if backup_root else None
+    try:
+        names = sorted(os.listdir(runs_dir)) if runs_dir else []
+    except OSError:
+        names = []
+    if not names:
+        return [f"  no run folders under {runs_dir or '(no game_qa_backup_path)'}"]
+    floor = since.strftime("%Y%m%d")
+
+    def is_session(name: str) -> bool:
+        """A run folder of `since` or later that a session left: a summary, or the session's copy of its log (a
+        folder of a run that only made a fixture has neither)."""
+        m = _RUN_FOLDER_RE.fullmatch(name)
+        folder = os.path.join(runs_dir, name)
+        return bool(m) and m.group(1) >= floor and any(
+            os.path.isfile(os.path.join(folder, f)) for f in ("summary.md", "debug.log"))
+
+    runs = [n for n in names if is_session(n)]
+    if not runs:
+        return [f"  no session since {since:%Y-%m-%d} under {runs_dir}"]
+    per: dict = collections.OrderedDict()       # name -> save -> {verdicts, runs, first line by verdict}
+    unreadable = []
+    for run_id in runs:
+        try:
+            save, rows, _where = run_verdicts(backup_root, run_id)
+        except OSError as exc:
+            unreadable.append(f"{run_id} ({exc})")
+            continue
+        for row in rows:
+            rec = per.setdefault(row["name"], collections.OrderedDict()).setdefault(
+                save or "(no save named)", {"verdicts": collections.Counter(), "runs": [], "line": {},
+                                            "unvouched": False})
+            rec["verdicts"][row["verdict"]] += 1
+            rec["runs"].append(run_id)
+            rec["line"].setdefault(row["verdict"], row["line"])
+            rec["unvouched"] |= "not vouched" in row.get("source", "")
+    lists = playtest_lists(docs_root)
+    out = [f"  {len(runs)} sessions since {since:%Y-%m-%d} under {runs_dir}"]
+    order = sorted(per.items(), key=lambda kv: (not any(r["verdicts"]["BROKEN"] for r in kv[1].values()), kv[0]))
+    for name, saves in order:
+        broken = any(r["verdicts"]["BROKEN"] for r in saves.values())
+        homes = [doc for doc, text in lists.items() if name in text]
+        if not homes:
+            where = "in no play-test list"
+        else:
+            where = "listed in " + ", ".join(f"{PLAYTEST_DIR}/{h}" for h in homes)
+            if not _verdict_recorded(name, {h: lists[h] for h in homes}):
+                where += "  <-- no dated verdict there yet"
+        out.append(f"  {name}: {len(saves)} save{'s' if len(saves) != 1 else ''}"
+                   f"{'  <-- BROKEN' if broken else ''}; {where}")
+        for save, rec in saves.items():
+            verdict = ", ".join(f"{v} in {n} run{'s' if n != 1 else ''}"
+                                for v, n in sorted(rec["verdicts"].items(), key=lambda vn: _VERDICT_RANK.get(vn[0], 3)))
+            out.append(f"      {save}: {verdict} (newest {rec['runs'][-1]})"
+                       f"{', not vouched for' if rec['unvouched'] else ''}")
+            # The line itself only where it needs reading: a BROKEN, or a START or NO_VERDICT that got no OK.
+            shown = next((v for v in ("BROKEN", "START", "NO_VERDICT") if v in rec["line"]), None)
+            if shown and not (shown != "BROKEN" and rec["verdicts"]["OK"]):
+                out.append("        " + rec["line"][shown][:300])
+    for item in unreadable:
+        out.append(f"  UNREADABLE run {item}")
+    return out
+
+
 # -------------------------------------------------------------------- report
 def report(snap_dir: str, docs_root: str = REPO_ROOT, mod_root: str | None = None,
            vanilla_game: str | None = None, git_ref: str | None = "origin/main",
-           full: bool = False) -> str:
+           full: bool = False, harness_root: str | None = None,
+           harness_since: dt.date | None = None) -> str:
     mod_root = mod_root or docs_root
     cut: dict[str, str] = {}
     families = read_snapshot(snap_dir, cut)
@@ -797,6 +981,10 @@ def report(snap_dir: str, docs_root: str = REPO_ROOT, mod_root: str | None = Non
         out.append("\n== Self-checks and traces")
         out += checks
 
+    if harness_since is not None:
+        out.append("\n== Harness sessions: self-checks from the QA harness's run folders")
+        out += harness_sessions(harness_root, harness_since, docs_root)
+
     crashes = manifest.get("crashes", [])
     since = clock.starts[0].timestamp() if clock.starts else 0
     recent = [c for c in crashes if c["mtime"] >= since] if since else []
@@ -823,6 +1011,11 @@ def main(argv=None) -> int:
     ap.add_argument("--full", action="store_true", help="print each message whole")
     ap.add_argument("--git-ref", default="origin/main",
                     help="count commits on this ref since each launch ('' to skip)")
+    ap.add_argument("--since", metavar="YYYY-MM-DD", type=dt.date.fromisoformat,
+                    help=f"read the QA harness's run folders from this UTC date on (default: {HARNESS_DAYS} days back)")
+    ap.add_argument("--harness", metavar="DIR",
+                    help="the QA harness's backup root (default: path_constants.game_qa_backup_path)")
+    ap.add_argument("--no-harness", action="store_true", help="leave out the harness sessions")
     args = ap.parse_args(argv)
 
     import path_constants
@@ -839,10 +1032,14 @@ def main(argv=None) -> int:
             print(snap)
             return 0
     base = getattr(path_constants, "base_game_path", None)
+    since = None if args.no_harness else (
+        args.since or (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=HARNESS_DAYS)).date())
     sys.stdout.write(report(
         snap, docs_root=REPO_ROOT, mod_root=args.mod_root or path_constants.mod_path,
         vanilla_game=os.path.join(base, "game") if base else None,
-        git_ref=args.git_ref or None, full=args.full))
+        git_ref=args.git_ref or None, full=args.full,
+        harness_root=args.harness or getattr(path_constants, "game_qa_backup_path", None),
+        harness_since=since))
     return 0
 
 
