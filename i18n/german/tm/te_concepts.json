@@ -12267,6 +12267,10 @@
   "en": "The world's nuclear powers in red, as the world sees them. If you are one, the countries hosting your weapons, those under your nuclear umbrella or a $nuclear_guarantee$ you gave, and those whose independence you guarantee, each in its own color. Your own country is blue.",
   "de": "Die Nuklearmächte der Welt in Rot, so, wie die Welt sie sieht. Wenn Sie eine sind, erscheinen die Länder, die Ihre Waffen beherbergen, jene unter Ihrem nuklearen Schirm oder einer von Ihnen gegebenen $nuclear_guarantee$ und jene, deren Unabhängigkeit Sie garantieren, jeweils in eigener Farbe. Ihr eigenes Land ist blau."
  },
+ "te_jmap_pick_nuclear_reach_desc": {
+  "en": "Where your nuclear weapons can strike. Orange: your bombers' reach, every country next to you, to a direct subject of yours or to a host of your weapons, or sharing a strategic region with one of them. Green: every other coast, while you field missile submarines and hold a coast; stripes mark a coast both reach. Pink: every state left, while you field ICBMs. Your country is blue, a state out of reach pale. Before your first warhead, orange is where your bombers would fly.",
+  "de": "Wo Ihre Nuklearwaffen zuschlagen können. Orange: die Reichweite Ihrer Bomber, jedes Land, das an Sie, an eines Ihrer direkten Klientelländer oder an ein Gastland Ihrer Waffen grenzt oder mit einem von ihnen eine Strategieregion teilt. Grün: jede weitere Küste, solange Sie Raketen-U-Boote in Dienst haben und eine Küste halten; Streifen markieren eine Küste, die beide erreichen. Rosa: jeder übrige Staat, solange Sie ICBMs in Dienst haben. Ihr Land ist blau, ein Staat außer Reichweite blass. Vor Ihrem ersten Sprengkopf zeigt Orange, wohin Ihre Bomber fliegen würden."
+ },
  "te_jmap_pick_ocean_basins_desc": {
   "en": "Color each coastal state by the ocean basin its [concept_seabed_licence]s come from: Pacific, Atlantic, Indian, Arctic or Southern.",
   "de": "Färbt jeden Küstenstaat nach dem Meeresbecken, aus dem seine [Concept('concept_seabed_licence','Meeresbodenlizenzen')] stammen: Pazifik, Atlantik, Indischer Ozean, Arktis oder Südpolarmeer."

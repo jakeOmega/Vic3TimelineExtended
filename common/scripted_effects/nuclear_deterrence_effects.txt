@@ -2834,32 +2834,24 @@ nd_record_nuclear_use = {
 # With ICBMs the list is gone and nothing reads it; submarines' coasts are
 # per state (nd_state_in_reach_of). Built by effects alone: the region half
 # is the unprobed one (TE_SELF_CHECK nd_reach).
+#
+# The list is named by $LIST$ in the four helpers below (nd_reach_reset,
+# nd_reach_build, nd_reach_add_from, nd_reach_add), so the Map Room's Nuclear
+# Reach map (te_jmap_store_reach, te_journal_map_effects.txt) builds the same
+# bomber reach into a list of its own, te_jmap_rch, for its viewer, whatever
+# that country's arsenal or delivery: a second list, so the map never
+# changes what a strike can hit. Each list keeps its own counters
+# ($LIST$_count, $LIST$_adjacency_added, $LIST$_region_added).
 # ----------------------------------------------------------------------------
 nd_reach_refresh = {
 	save_scope_as = nd_reach_self
-	if = {
-		limit = { has_variable_list = nd_reach }
-		clear_variable_list = nd_reach
-	}
-	set_variable = { name = nd_reach_count value = 0 }
-	set_variable = { name = nd_reach_adjacency_added value = 0 }
-	set_variable = { name = nd_reach_region_added value = 0 }
+	nd_reach_reset = { LIST = nd_reach }
 	if = {
 		limit = {
 			nd_is_armed = yes
 			NOT = { nd_fields_icbms = yes }
 		}
-		nd_reach_add_from = yes
-		every_direct_subject = { nd_reach_add_from = yes }
-		every_scope_treaty = {
-			every_scope_article = {
-				limit = {
-					has_type = nuclear_basing
-					source_country = scope:nd_reach_self
-				}
-				target_country = { nd_reach_add_from = yes }
-			}
-		}
+		nd_reach_build = { LIST = nd_reach }
 		# Once a game: the first rebuild with a strategically adjacent country
 		# finds it in the list. The line prints what each half added, so a
 		# zero in the region half shows.
@@ -3051,8 +3043,39 @@ nd_based_near_refresh = {
 	}
 }
 
+# Attacker scope: empty the list $LIST$ and zero its counters, before a build
+# or in place of one (a country nd_reach_refresh builds no list for still
+# reads a count of 0).
+nd_reach_reset = {
+	if = {
+		limit = { has_variable_list = $LIST$ }
+		clear_variable_list = $LIST$
+	}
+	set_variable = { name = $LIST$_count value = 0 }
+	set_variable = { name = $LIST$_adjacency_added value = 0 }
+	set_variable = { name = $LIST$_region_added value = 0 }
+}
+
+# Attacker scope: build the bomber reach into $LIST$, from us, each direct
+# subject and each host of our weapons (a Nuclear Basing article we are the
+# source of). Run nd_reach_reset on the same list first.
+nd_reach_build = {
+	save_scope_as = nd_reach_self
+	nd_reach_add_from = { LIST = $LIST$ }
+	every_direct_subject = { nd_reach_add_from = { LIST = $LIST$ } }
+	every_scope_treaty = {
+		every_scope_article = {
+			limit = {
+				has_type = nuclear_basing
+				source_country = scope:nd_reach_self
+			}
+			target_country = { nd_reach_add_from = { LIST = $LIST$ } }
+		}
+	}
+}
+
 # A base country's scope (us, a subject, a host); scope:nd_reach_self is the
-# attacker whose list grows.
+# attacker whose list $LIST$ grows.
 nd_reach_add_from = {
 	save_scope_as = nd_reach_base
 	every_country = {
@@ -3062,7 +3085,7 @@ nd_reach_add_from = {
 			scope:nd_reach_base = { has_strategic_adjacency = scope:nd_reach_cand }
 		}
 		save_scope_as = nd_reach_new
-		scope:nd_reach_self = { nd_reach_add = { KIND = adjacency } }
+		scope:nd_reach_self = { nd_reach_add = { LIST = $LIST$ KIND = adjacency } }
 	}
 	every_country_strategic_region = {
 		every_scope_state = {
@@ -3071,24 +3094,24 @@ nd_reach_add_from = {
 				NOT = { owner = scope:nd_reach_self }
 			}
 			owner = { save_scope_as = nd_reach_new }
-			scope:nd_reach_self = { nd_reach_add = { KIND = region } }
+			scope:nd_reach_self = { nd_reach_add = { LIST = $LIST$ KIND = region } }
 		}
 	}
 }
 
-# Attacker scope: scope:nd_reach_new joins nd_reach once. $KIND$ names the
+# Attacker scope: scope:nd_reach_new joins $LIST$ once. $KIND$ names the
 # half that added it, for the self-check.
 nd_reach_add = {
 	if = {
 		limit = {
 			OR = {
-				NOT = { has_variable_list = nd_reach }
-				NOT = { is_target_in_variable_list = { name = nd_reach target = scope:nd_reach_new } }
+				NOT = { has_variable_list = $LIST$ }
+				NOT = { is_target_in_variable_list = { name = $LIST$ target = scope:nd_reach_new } }
 			}
 		}
-		add_to_variable_list = { name = nd_reach target = scope:nd_reach_new }
-		change_variable = { name = nd_reach_count add = 1 }
-		change_variable = { name = nd_reach_$KIND$_added add = 1 }
+		add_to_variable_list = { name = $LIST$ target = scope:nd_reach_new }
+		change_variable = { name = $LIST$_count add = 1 }
+		change_variable = { name = $LIST$_$KIND$_added add = 1 }
 	}
 }
 

@@ -1383,6 +1383,14 @@
   "en": "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100.",
   "ru": "Очки в месяц на колониальные модули из нашей очереди при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка». Каждый модуль стоит 100."
  },
+ "country_sr_module_fabrication_mult": {
+  "en": "Colony Module Fabrication",
+  "ru": "Изготовление колониальных модулей"
+ },
+ "country_sr_module_fabrication_mult_desc": {
+  "en": "More colony module fabrication points from every source, under the Simple and Full Colonies settings of the Space Race rule: the Space Program's method, the $sr_colony_imbrium_massdriver$ and each $sr_mq_module_yard$. At +100% the points a module costs come in twice as fast.",
+  "ru": "Больше очков изготовления колониальных модулей при настройках «Простые» и «Полноценные колонии» правила «Космическая гонка», от каждого источника: метод Космической программы, $sr_colony_imbrium_massdriver$ и каждая $sr_mq_module_yard$. При +100% очки, которые стоит модуль, набираются вдвое быстрее."
+ },
  "country_sr_module_storage_add": {
   "en": "Colony Module Storage",
   "ru": "Склад модулей колонии"

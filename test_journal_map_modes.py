@@ -21,7 +21,9 @@ number no branch reads all fail silently on the map. So this holds the pieces to
 - the Map Room's options (Area and Outliers, 2026-11-14): a state outside the area is greyed by one stored mark the
   paint reads first, the mark is put on by an effect (never asked for in a paint), every state region belongs to
   exactly one continent, each option button runs its scripted GUI and then the picks' own repaint, and no system's
-  own entry reads the mark or the Map Room's ranges.
+  own entry reads the mark or the Map Room's ranges;
+- Nuclear Reach (selector 90): the viewer's reach by the cheapest leg, its bombers' from the deterrent's own builder
+  into the map's list, rebuilt whenever the viewer is noted while it is the pick, and nothing private read.
 """
 import os
 import re
@@ -266,13 +268,15 @@ class CauseColorsTest(unittest.TestCase):
                              short)
         cause_stripes = [body for limit, body in branches_of(stripes) if re.search(r"te_jmap_selector = 11\b", limit)]
         self.assertEqual(len(cause_stripes), len(self.CAUSES), "a stripe that isn't a cause's")
-        # the only other stripes: Power Grids' hubs and Company Headquarters' regional headquarters (Trade Capacity
-        # striped its Trade Centers only while it painted the owner's trade)
+        # the only other stripes: Power Grids' hubs, Company Headquarters' regional headquarters and Nuclear Reach's
+        # submarines over the bombers (Trade Capacity striped its Trade Centers only while it painted the owner's trade)
         others = [limit for limit, _body in branches_of(stripes) if not re.search(r"te_jmap_selector = 11\b", limit)]
         self.assertEqual(others, [ColorTest.GREY_STRIPES,     # Greyscale's, first (the Color option)
                                   "te_jmap_selector = 31 te_jmap_in_area = yes te_jmap_grid_hub = yes",
                                   "te_jmap_selector = 34 te_jmap_in_area = yes has_variable = te_jmap_rhq_n "
-                                  "te_jmap_color < 2"])
+                                  "te_jmap_color < 2",
+                                  "te_jmap_selector = 90 te_jmap_in_area = yes te_jmap_reach_bombers = yes "
+                                  "te_jmap_reach_subs = yes"])
 
     def test_the_census_stores_the_runner_up(self):
         # te_dg_dc_second is the largest slice but the leader's, in te_dg_dc_lead's codes, for every slice
@@ -308,8 +312,9 @@ class MapRoomTest(unittest.TestCase):
         picks = self.picks()
         # 2 was literacy, retired in the fifth pass (vanilla's literacy map mode shows it) and back in the first tier
         # 48-73 the class maps (#1975); 2 literacy again and 74-82 the first tier's (#1976); 83-87 the second tier's
-        # (#1977); 88-89 the class maps' Spacers, the mod's own pop type (space forces personnel, 2026-11-24)
-        self.assertEqual(sorted(picks.values()), list(range(1, 90)), "one pick per selector")
+        # (#1977); 88-89 the class maps' Spacers, the mod's own pop type (space forces personnel, 2026-11-24); 90
+        # Nuclear Reach (2026-11-26)
+        self.assertEqual(sorted(picks.values()), list(range(1, 91)), "one pick per selector")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -1433,7 +1438,8 @@ class CategoriesTest(unittest.TestCase):
                         "power_grids"),
             "politics": ("turmoil", "radicals_loyalists", "discrimination", "political_models", "united_nations",
                          "colonies"),
-            "military": ("armed_forces", "fighting_age_men", "war_dead", "devastation", "nuclear", "networks"),
+            "military": ("armed_forces", "fighting_age_men", "war_dead", "devastation", "nuclear", "nuclear_reach",
+                         "networks"),
             "land": ("base_comfort", "current_comfort", "tourism_appeal", "pollution", "emissions", "ocean_basins",
                      "grandeur"),
         }
@@ -1539,7 +1545,8 @@ class OptionsTest(unittest.TestCase):
 
     def test_no_stripes_and_no_second_line_outside_the_area(self):
         stripes = branches_of(block(self.room, "map_color_second"))
-        self.assertEqual(len(stripes), 10)
+        self.assertEqual(len(stripes), 11)  # Greyscale's, the grids' hubs, the regional HQs, the seven causes and
+        # Nuclear Reach's submarines over the bombers
         self.assertEqual(stripes[0][0], ColorTest.GREY_STRIPES)
         for limit, _body in stripes:
             self.assertIn(" te_jmap_in_area = yes ", limit)
@@ -1549,7 +1556,7 @@ class OptionsTest(unittest.TestCase):
         hover = block(self.room, "map_tooltip")
         second = hover[hover.index("custom_tooltip_no_bullet = te_jmap_tt_no_pick"):]
         lines = branches_of(second[second.index("if = {"):])
-        self.assertEqual(len(lines), 9)
+        self.assertEqual(len(lines), 12)  # 34, 45, the seven causes and Nuclear Reach's three
         for limit, _body in lines:
             self.assertRegex(limit, r"^te_jmap_selector = \d+ te_jmap_in_area = yes ", limit)
         self.assertEqual(" ".join(block(self.triggers, "te_jmap_in_area").split()),
@@ -2622,6 +2629,119 @@ class DocsTest(unittest.TestCase):
         doc = read(PLAYTEST)
         for piece in ("TE_JMAP", "te_jmap_repaint", "te_je_see_through"):
             self.assertIn(piece, doc)
+
+
+class NuclearReachMapTest(_RoomBranches, unittest.TestCase):
+    """Nuclear Reach (selector 90, 2026-11-26, the owner's ask: "what states are reachable by bomber, by sub, and by
+    ICBM"): the viewer's reach by the cheapest leg that reaches a state, the bombers' from the deterrent's own builder
+    into a list of the map's, and nothing private read."""
+
+    SEL = 90
+    SECRET = ("nuclear_weapon_stockpile", "nd_is_armed", "nd_display_public_estimate", "nd_believed_stockpile",
+              "nd_stockpile")
+
+    def setUp(self):
+        super().setUp()
+        self.effects = code(EFFECTS)
+        self.triggers = code(TRIGGERS)
+
+    def test_the_paint_runs_from_your_own_states_to_the_icbms(self):
+        colors = [(limit, body) for limit, body in self.of(self.colors, self.SEL)]
+        self.assertEqual([(" ".join(limit.split()[3:]), body) for limit, body in colors], [
+            ("te_jmap_owner_is_viewer = yes", 'value = "te_jmap_reach_you"'),
+            ("te_jmap_reach_bombers = yes", 'value = "te_jmap_reach_bombers"'),
+            ("te_jmap_reach_subs = yes", 'value = "te_jmap_reach_subs"'),
+            ("te_jmap_reach_icbms = yes", 'value = "te_jmap_reach_icbms"'),
+            ("", 'value = "te_jmap_none"'),
+        ])
+        hover = [(" ".join(limit.split()[3:]), body) for limit, body in self.of(self.hover, self.SEL)]
+        self.assertEqual(hover[:5], [
+            ("te_jmap_owner_is_viewer = yes", "custom_tooltip_no_bullet = te_jmap_tt_reach_you"),
+            ("te_jmap_reach_bombers = yes", "custom_tooltip_no_bullet = te_jmap_tt_reach_bombers"),
+            ("te_jmap_reach_subs = yes", "custom_tooltip_no_bullet = te_jmap_tt_reach_subs"),
+            ("te_jmap_reach_icbms = yes", "custom_tooltip_no_bullet = te_jmap_tt_reach_icbms"),
+            ("", "custom_tooltip_no_bullet = te_jmap_tt_reach_none"),
+        ])
+        # the second line: the submarines over the bombers (the stripes), or what would reach a state out of reach
+        self.assertEqual(hover[5:], [
+            ("te_jmap_in_area = yes te_jmap_reach_bombers = yes te_jmap_reach_subs = yes",
+             "custom_tooltip_no_bullet = te_jmap_tt_reach_also_subs"),
+            ("te_jmap_in_area = yes te_jmap_reach_out = yes te_jmap_reach_subs_would = yes",
+             "custom_tooltip_no_bullet = te_jmap_tt_reach_would_subs"),
+            ("te_jmap_in_area = yes te_jmap_reach_out = yes",
+             "custom_tooltip_no_bullet = te_jmap_tt_reach_would_icbms"),
+        ])
+        out = " ".join(block(self.triggers, "te_jmap_reach_out").split())
+        for leg in ("te_jmap_owner_is_viewer", "te_jmap_reach_bombers", "te_jmap_reach_subs", "te_jmap_reach_icbms"):
+            self.assertIn(f"NOT = {{ {leg} = yes }}", out)
+
+    def test_the_bombers_reach_is_the_list_or_adjacency_now(self):
+        # the list a month old at most, the viewer's own strategic adjacency live, as nd_state_in_reach_of reads it
+        body = " ".join(block(self.triggers, "te_jmap_reach_bombers").split())
+        self.assertIn("NOT = { this = scope:te_jmap_reach_owner }", body)
+        self.assertIn("has_strategic_adjacency = scope:te_jmap_reach_owner", body)
+        self.assertIn("is_target_in_variable_list = { name = te_jmap_rch target = scope:te_jmap_reach_owner }", body)
+        self.assertIn("is_coastal = yes", block(self.triggers, "te_jmap_reach_subs"))
+        self.assertIn("has_variable = te_jmap_rch_subs", block(self.triggers, "te_jmap_reach_subs"))
+        self.assertIn("has_variable = te_jmap_rch_icbms", block(self.triggers, "te_jmap_reach_icbms"))
+
+    def test_the_paint_reads_stored_legs_and_nothing_private(self):
+        # a paint runs per state as the game runs: the legs are flags the store set, not the delivery triggers (the
+        # submarines' walks the viewer's states for a coast); and nuclear.md's privacy rule, as for Nuclear Weapons
+        names = [n for n in re.findall(r"^(te_jmap_reach_\w+)\s*=\s*\{", self.triggers, re.M)]
+        self.assertEqual(sorted(names), ["te_jmap_reach_bombers", "te_jmap_reach_icbms", "te_jmap_reach_out",
+                                         "te_jmap_reach_subs", "te_jmap_reach_subs_would"])
+        for name in names:
+            body = block(self.triggers, name)
+            for word in self.SECRET + ("nd_fields_icbms", "nd_fields_missile_submarines", "any_scope_state"):
+                self.assertNotRegex(body, r"\b" + word + r"\b", f"{name} reads {word}")
+        for key, text in loc_values().items():
+            if key.startswith("te_jmap_tt_reach_") or key.startswith("te_jmap_pick_nuclear_reach"):
+                self.assertNotIn("ScriptValue(", text, key)
+                self.assertNotIn("Var(", text, key)
+
+    def test_the_store_is_the_deterrent_s_builder_on_a_list_of_the_map_s(self):
+        store = " ".join(block(self.effects, "te_jmap_store_reach").split())
+        self.assertTrue(store.startswith("nd_reach_reset = { LIST = te_jmap_rch } nd_reach_build = { LIST = te_jmap_rch }"),
+                        store)
+        # the legs from the delivery triggers, never the technologies, and the viewer's own coast
+        for flag, test in (("te_jmap_rch_subs", "nd_fields_missile_submarines = yes"),
+                           ("te_jmap_rch_icbms", "nd_fields_icbms = yes"),
+                           ("te_jmap_rch_coast", "any_scope_state = { is_coastal = yes }")):
+            self.assertIn(f"if = {{ limit = {{ {test} }} set_variable = {flag} }} else_if = {{ limit = {{ "
+                          f"has_variable = {flag} }} remove_variable = {flag} }}", store)
+        self.assertNotIn("has_technology_researched", store)
+        self.assertNotIn("nd_is_armed", store, "the bombers' reach shows before the first warhead too")
+
+    def test_the_reach_follows_the_viewer_while_it_is_the_pick(self):
+        # built on whoever becomes the viewer: every pick and option, the window's button and a player's month all
+        # note the viewer, so the store sits there, after the viewer is set, and only while the map is up
+        note = " ".join(block(self.effects, "te_jmap_note_viewer").split())
+        self.assertLess(note.index("set_global_variable = { name = te_jmap_viewer value = root }"),
+                        note.index("te_jmap_store_reach"))
+        self.assertIn("if = { limit = { global_var:te_jmap_sel ?= 90 } root = { te_jmap_store_reach = yes } }", note)
+        self.assertEqual(self.effects.count("te_jmap_store_reach = yes"), 1, "one call site")
+        # a pick notes the viewer after it sets the selector, so the first pick of the map builds the reach
+        pick = " ".join(block(self.effects, "te_jmap_set_selector").split())
+        self.assertLess(pick.index("set_global_variable = { name = te_jmap_sel"), pick.index("te_jmap_note_viewer"))
+
+    def test_the_pick_waits_for_the_rule_and_sits_beside_nuclear_weapons(self):
+        body = block(sguis(), "te_jmap_pick_nuclear_reach_sgui")
+        self.assertIn("has_game_rule = nuclear_weapons_enabled", block(body, "is_shown"))
+        row = code(PICKS_GUI)
+        self.assertLess(row.index('text = "te_jmap_pick_nuclear"'), row.index('text = "te_jmap_pick_nuclear_reach"'))
+
+    def test_the_three_legs_stay_apart(self):
+        # Okabe and Ito's three, chosen to stay apart for color-blind readers, apart from the "your" blue too
+        text = code(COLORS)
+        hsv = {n: tuple(int(x) for x in re.search(r"\b" + n + r"\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)",
+                                                  text).groups())
+               for n in ("te_jmap_reach_you", "te_jmap_reach_bombers", "te_jmap_reach_subs", "te_jmap_reach_icbms")}
+        self.assertEqual(hsv["te_jmap_reach_bombers"], (41, 100, 90))
+        self.assertEqual(hsv["te_jmap_reach_subs"], (164, 100, 62))
+        self.assertEqual(hsv["te_jmap_reach_icbms"], (327, 41, 80))
+        self.assertEqual(hsv["te_jmap_reach_you"], tuple(int(x) for x in re.search(
+            r"\bte_jmap_nuke_you\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)", text).groups()))
 
 
 if __name__ == "__main__":

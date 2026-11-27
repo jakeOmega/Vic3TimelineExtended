@@ -361,6 +361,52 @@ te_jmap_range_selfcheck = {
 # every player in a multiplayer game, as the pick is.
 te_jmap_note_viewer = {
 	set_global_variable = { name = te_jmap_viewer value = root }
+	# The Nuclear Reach map (90) is the viewer's reach, so whoever becomes the viewer while it is the pick has it
+	# built now: at the pick, at an option, at the Timeline Extended window's button and at a player's monthly pulse.
+	if = {
+		limit = { global_var:te_jmap_sel ?= 90 } # false when unset: the map buttons' tooltips walk this writing nothing
+		root = { te_jmap_store_reach = yes }
+	}
+}
+
+# The Nuclear Reach map's figures (90; te_journal_map_triggers.txt): what the viewer's nuclear weapons reach, by the
+# leg that carries them. The bombers' reach is the nuclear deterrent's own rule, built by its own helpers
+# (nd_reach_reset, nd_reach_build: nuclear_deterrence_effects.txt) into a list of the map's, te_jmap_rch, with
+# counters of its own (te_jmap_rch_count ...), so the panel's nd_reach_count is untouched. The deterrent's nd_reach
+# exists only for an armed country without ICBMs; the map's list is built for any viewer, so it still shows the
+# bombers' reach beside the missiles' and where they would fly before the first warhead, and changes nothing a strike
+# can hit. The other two legs are flags, whether the viewer fields them (the delivery triggers, which the world can
+# see: nuclear.md), and the viewer's own coast decides whether the hover offers submarines for a coast out of reach.
+# Viewer scope (country), from te_jmap_note_viewer while the map is the pick, so the world's countries are walked for
+# nobody else; up to a month old, though the paint reads the viewer's strategic adjacency live, as a strike does, so a
+# war's reach shows at once.
+te_jmap_store_reach = {
+	nd_reach_reset = { LIST = te_jmap_rch }
+	nd_reach_build = { LIST = te_jmap_rch }
+	if = {
+		limit = { nd_fields_missile_submarines = yes }
+		set_variable = te_jmap_rch_subs
+	}
+	else_if = {
+		limit = { has_variable = te_jmap_rch_subs }
+		remove_variable = te_jmap_rch_subs
+	}
+	if = {
+		limit = { nd_fields_icbms = yes }
+		set_variable = te_jmap_rch_icbms
+	}
+	else_if = {
+		limit = { has_variable = te_jmap_rch_icbms }
+		remove_variable = te_jmap_rch_icbms
+	}
+	if = {
+		limit = { any_scope_state = { is_coastal = yes } }
+		set_variable = te_jmap_rch_coast
+	}
+	else_if = {
+		limit = { has_variable = te_jmap_rch_coast }
+		remove_variable = te_jmap_rch_coast
+	}
 }
 
 # The Company Headquarters map's figures (34; te_journal_map_values.txt): each state's headquarters, counted by building

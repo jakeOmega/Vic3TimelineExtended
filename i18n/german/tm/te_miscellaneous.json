@@ -8209,7 +8209,7 @@
  },
  "colonial_garrison_ig_modifier": {
   "en": "Opposes the Colonial Garrison",
-  "de": "Lehnt die Kolonialgarnison ab"
+  "de": "Ist gegen die Kolonialgarnison"
  },
  "colonial_gp_condemnation_tt": {
   "en": "[Concept('concept_great_power', 'Great powers')] demanding [concept_decolonization_system] ([ROOT.GetCountry.MakeScope.ScriptValue('colonial_gp_condemnation_per_power')|=+2]/mo for a peer; each scaled by its [concept_prestige] relative to ours, ×0.25 to ×2)",
@@ -35095,6 +35095,10 @@
   "en": "Nuclear Weapons",
   "de": "Nuklearwaffen"
  },
+ "te_jmap_pick_nuclear_reach": {
+  "en": "Nuclear Reach",
+  "de": "Nukleare Reichweite"
+ },
  "te_jmap_pick_ocean_basins": {
   "en": "Ocean Basins",
   "de": "Meeresbecken"
@@ -35766,6 +35770,38 @@
  "te_jmap_tt_pollution_none": {
   "en": "#b [THIS.GetState.GetName]#!\\nNo pollution in the region.",
   "de": "#b [THIS.GetState.GetName]#!\\nKeine Verschmutzung in der Region."
+ },
+ "te_jmap_tt_reach_also_subs": {
+  "en": "Your missile submarines reach this coast too.",
+  "de": "Ihre Raketen-U-Boote erreichen auch diese Küste."
+ },
+ "te_jmap_tt_reach_bombers": {
+  "en": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName] is in your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName]: in Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_icbms": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOnly your ICBMs reach this state. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\nNur Ihre ICBMs erreichen diesen Staat. [THIS.GetState.GetOwner.GetName]: außer Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOut of your reach. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\nAußer Ihrer Reichweite. [THIS.GetState.GetOwner.GetName]: außer Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_subs": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour missile submarines reach this coast. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "de": "#b [THIS.GetState.GetName]#!\\nIhre Raketen-U-Boote erreichen diese Küste. [THIS.GetState.GetOwner.GetName]: außer Reichweite Ihrer Bomber."
+ },
+ "te_jmap_tt_reach_would_icbms": {
+  "en": "Only ICBMs would reach it.",
+  "de": "Nur ICBMs würden ihn erreichen."
+ },
+ "te_jmap_tt_reach_would_subs": {
+  "en": "Missile submarines would reach this coast.",
+  "de": "Raketen-U-Boote würden diese Küste erreichen."
+ },
+ "te_jmap_tt_reach_you": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour own state.",
+  "de": "#b [THIS.GetState.GetName]#!\\nIhr eigener Staat."
  },
  "te_jmap_tt_seabed_arctic": {
   "en": "#b [THIS.GetState.GetName]#!\\nOcean basin: #v $te_seabed_basin_arctic$#!",

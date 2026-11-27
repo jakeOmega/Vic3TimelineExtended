@@ -64,7 +64,7 @@ programmable_matter = {
 von_neumann_machines = {
 	# Factories that build copies of themselves (era 13 spec § 7.10): Self-Replicating Construction PM for
 	# Construction Sectors (and its Construction Site twin in direct-construction games), Self-Replicating Miners
-	# PM for Extraplanetary Bases
+	# PM for Extraplanetary Bases; doubles colony module fabrication from every source (the owner, 2026-11-26)
 	era = era_13
 	texture = "gfx/interface/icons/invention_icons/von_neumann_machines.dds"
 	category = production
@@ -77,6 +77,9 @@ von_neumann_machines = {
 	modifier = {
 		# machines that put up their own scaffolding: between Programmable Matter's 75 and Molecular Assemblers' 200
 		country_max_weekly_construction_progress_add = 100
+		# the plants that build colony modules copy themselves: the method's, the Mass Driver's and the
+		# Orbital Yards' points twice over (sr_mod_fab_rate)
+		country_sr_module_fabrication_mult = 1
 	}
 
 	ai_weight = {

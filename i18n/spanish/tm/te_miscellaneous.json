@@ -34847,6 +34847,10 @@
   "en": "Nuclear Weapons",
   "es": "Armas nucleares"
  },
+ "te_jmap_pick_nuclear_reach": {
+  "en": "Nuclear Reach",
+  "es": "Alcance nuclear"
+ },
  "te_jmap_pick_ocean_basins": {
   "en": "Ocean Basins",
   "es": "Cuencas oceánicas"
@@ -35518,6 +35522,38 @@
  "te_jmap_tt_pollution_none": {
   "en": "#b [THIS.GetState.GetName]#!\\nNo pollution in the region.",
   "es": "#b [THIS.GetState.GetName]#!\\nSin contaminación en la región."
+ },
+ "te_jmap_tt_reach_also_subs": {
+  "en": "Your missile submarines reach this coast too.",
+  "es": "Tus submarinos con misiles también alcanzan esta costa."
+ },
+ "te_jmap_tt_reach_bombers": {
+  "en": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName] is in your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\n[THIS.GetState.GetOwner.GetName] está al alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_icbms": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOnly your ICBMs reach this state. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\nSolo tus ICBM alcanzan este estado. [THIS.GetState.GetOwner.GetName] está fuera del alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_none": {
+  "en": "#b [THIS.GetState.GetName]#!\\nOut of your reach. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\nFuera de tu alcance. [THIS.GetState.GetOwner.GetName] está fuera del alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_subs": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour missile submarines reach this coast. [THIS.GetState.GetOwner.GetName] is out of your bombers' reach.",
+  "es": "#b [THIS.GetState.GetName]#!\\nTus submarinos con misiles alcanzan esta costa. [THIS.GetState.GetOwner.GetName] está fuera del alcance de tus bombarderos."
+ },
+ "te_jmap_tt_reach_would_icbms": {
+  "en": "Only ICBMs would reach it.",
+  "es": "Solo los ICBM lo alcanzarían."
+ },
+ "te_jmap_tt_reach_would_subs": {
+  "en": "Missile submarines would reach this coast.",
+  "es": "Los submarinos con misiles alcanzarían esta costa."
+ },
+ "te_jmap_tt_reach_you": {
+  "en": "#b [THIS.GetState.GetName]#!\\nYour own state.",
+  "es": "#b [THIS.GetState.GetName]#!\\nTu propio estado."
  },
  "te_jmap_tt_seabed_arctic": {
   "en": "#b [THIS.GetState.GetName]#!\\nOcean basin: #v $te_seabed_basin_arctic$#!",

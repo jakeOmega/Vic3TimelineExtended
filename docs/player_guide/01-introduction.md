@@ -45,7 +45,7 @@ while its game rule is on; a group with none of its maps to show is hidden.
 | Classes | Every pop type, from Aristocrats to Soldiers and the mod's Spacers |
 | Economy | GDP, GDP per Capita, Unemployment, Vacant Jobs, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Infrastructure, Market Access, Power Grids |
 | Politics | Turmoil, Radicals/Loyalists, Discrimination, Political Models, United Nations, Colonies |
-| Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Agent Networks |
+| Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Nuclear Reach, Agent Networks |
 | Land and Environment | Base Comfort, Current Comfort, Tourism Appeal, Pollution, Emissions, Ocean Basins, Grandeur |
 
 Hover a state for its figure. Trade Capacity colors each state by its own
@@ -117,9 +117,16 @@ where the dead came from, not where they fell. Emissions colors a state by its
 share of the world's emissions last year. Nuclear Weapons shows the world's
 nuclear powers as the world sees them, the countries that host your weapons or
 shelter under your umbrella, and, while the world believes you armed, those
-whose independence you guarantee; Agent Networks shades each country by your
-network there. Power Grids colors each grid, bordering grids apart, with its
-hub striped white and a station on no grid gray.
+whose independence you guarantee. Nuclear Reach shows where your weapons can
+strike, by what carries them there: your own states blue, your bombers' reach
+orange, the coasts only your missile submarines reach green, and what only
+your ICBMs reach pink, with the rest pale. Green stripes mark a coast both your
+bombers and your submarines reach, and a pale state's hover says what would
+reach it. Before your first warhead the orange shows where your bombers would
+fly. Your bombers' reach is worked out when you pick the map and each month
+after, and a war that brings a country into reach shows at once. Agent Networks
+shades each country by your network there. Power Grids colors each grid,
+bordering grids apart, with its hub striped white and a station on no grid gray.
 Colonies colors each colony by its empire's colonial stability. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes
 of Death chart, full where that cause took 90% of the deaths and paler as its

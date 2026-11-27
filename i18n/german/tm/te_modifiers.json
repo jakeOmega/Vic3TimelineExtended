@@ -1383,6 +1383,14 @@
   "en": "Points a month toward our queued colony modules, under the Simple and Full Colonies settings of the Space Race rule. Each module costs 100.",
   "de": "Punkte pro Monat für unsere Koloniemodule in der Warteschlange, bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“. Jedes Modul kostet 100."
  },
+ "country_sr_module_fabrication_mult": {
+  "en": "Colony Module Fabrication",
+  "de": "Koloniemodulfertigung"
+ },
+ "country_sr_module_fabrication_mult_desc": {
+  "en": "More colony module fabrication points from every source, under the Simple and Full Colonies settings of the Space Race rule: the Space Program's method, the $sr_colony_imbrium_massdriver$ and each $sr_mq_module_yard$. At +100% the points a module costs come in twice as fast.",
+  "de": "Mehr Punkte der Modulfertigung für Koloniemodule aus allen Quellen, bei den Einstellungen „Einfache Kolonien“ und „Volle Kolonien“ der Spielregel „Wettlauf ins All“: die Methode des Raumfahrtprogramms, der $sr_colony_imbrium_massdriver$ und jede $sr_mq_module_yard$. Bei +100% kommen die Punkte, die ein Modul kostet, doppelt so schnell zusammen."
+ },
  "country_sr_module_storage_add": {
   "en": "Colony Module Storage",
   "de": "Koloniemodul-Lager"

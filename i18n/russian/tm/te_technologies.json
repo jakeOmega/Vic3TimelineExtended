@@ -1504,8 +1504,8 @@
   "ru": "Машины фон Неймана"
  },
  "von_neumann_machines_desc": {
-  "en": "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes, and the asteroid belt fills with miners nobody launched.",
-  "ru": "Джон фон Нейман спросил, может ли машина построить собственную копию. Наша может: фабрика-зародыш сама добывает руду, делает детали и собирает вторую фабрику, а две делают четыре. Строительные бригады теперь в основном решают, куда поставить следующую копию, а пояс астероидов наполняется шахтёрами, которых никто не запускал."
+  "en": "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes. The plants that fabricate our colony modules copy themselves too, and the asteroid belt fills with miners nobody launched.",
+  "ru": "Джон фон Нейман спросил, может ли машина построить собственную копию. Наша может: фабрика-зародыш сама добывает руду, делает детали и собирает вторую фабрику, а две делают четыре. Строительные бригады теперь в основном решают, куда поставить следующую копию. Заводы, изготавливающие наши колониальные модули, тоже копируют себя, а пояс астероидов наполняется шахтёрами, которых никто не запускал."
  },
  "wireless_internet": {
   "en": "Wireless Internet (Wi-Fi)",

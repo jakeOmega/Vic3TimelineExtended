@@ -281,6 +281,15 @@ colors = {
 	te_jmap_nuke_guaranteed = hsv360 { 160 38 72 }
 	te_jmap_nuke_armed = hsv360 { 2 82 70 }
 
+	# Nuclear Reach: the viewer (the "your" maps' blue), then each leg's own reach, the cheapest leg first: bombers
+	# orange, missile submarines bluish green (striped over the bombers' orange on a coast both reach), ICBMs reddish
+	# purple. Okabe and Ito's colors for color-blind readers (#E69F00, #009E73, #CC79A7), so the three stay apart with
+	# no L, M or S cones; a state out of reach is te_jmap_none.
+	te_jmap_reach_you = hsv360 { 212 72 72 }
+	te_jmap_reach_bombers = hsv360 { 41 100 90 }	# #E69F00
+	te_jmap_reach_subs = hsv360 { 164 100 62 }	# #009E73
+	te_jmap_reach_icbms = hsv360 { 327 41 80 }	# #CC79A7
+
 	# Covert Warfare: the viewer, and its network's strength, faint to full (pale lilac to deep violet).
 	te_jmap_net_you = hsv360 { 212 72 72 }
 	te_jmap_net_low = hsv360 { 290 18 88 }

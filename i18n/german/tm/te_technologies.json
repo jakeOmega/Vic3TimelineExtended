@@ -1504,8 +1504,8 @@
   "de": "Von-Neumann-Maschinen"
  },
  "von_neumann_machines_desc": {
-  "en": "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes, and the asteroid belt fills with miners nobody launched.",
-  "de": "John von Neumann fragte, ob eine Maschine eine Kopie ihrer selbst bauen könnte. Unsere kann es: Eine Keimfabrik gräbt ihr eigenes Erz, stellt ihre eigenen Teile her und baut eine zweite Fabrik zusammen, und die beiden bauen vier. Bautrupps entscheiden heute meist nur noch, wohin die nächste Kopie kommt, und der Asteroidengürtel füllt sich mit Bergleuten, die niemand gestartet hat."
+  "en": "John von Neumann asked whether a machine could build a copy of itself. Ours can: a seed factory digs its own ore, makes its own parts and assembles a second factory, and the two make four. Construction crews now mostly decide where the next copy goes. The plants that fabricate our colony modules copy themselves too, and the asteroid belt fills with miners nobody launched.",
+  "de": "John von Neumann fragte, ob eine Maschine eine Kopie ihrer selbst bauen könnte. Unsere kann es: Eine Keimfabrik gräbt ihr eigenes Erz, stellt ihre eigenen Teile her und baut eine zweite Fabrik zusammen, und die beiden bauen vier. Bautrupps entscheiden heute meist nur noch, wohin die nächste Kopie kommt. Die Werke, die unsere Koloniemodule fertigen, kopieren sich ebenfalls, und der Asteroidengürtel füllt sich mit Bergleuten, die niemand gestartet hat."
  },
  "wireless_internet": {
   "en": "Wireless Internet (Wi-Fi)",
