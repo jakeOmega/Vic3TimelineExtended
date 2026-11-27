@@ -155,13 +155,66 @@ per placement. A higher divisor also caps a small pool at one placement a
 tick, 28 a week, which a country with a few million of weekly pool income
 would notice. Not recommended.
 
+### 4. Queue turnover is the big lever: Excess Private Construction off takes the week from 38.5 to 23.8 s
+
+Session `20261127T033631Z` (`noexcess`): before the 35 days a setup removed
+`too_much_private_construction` from the USA and set
+`var:too_much_private_construction_cached` to 0, so its per-project weekly
+cap fell from 3,064 to 690 (`modifier:country_max_weekly_construction_progress_add`).
+Nothing else differs from the baseline.
+
+| | Baseline (`base3`) | Excess off |
+|---|---|---|
+| Wall time a week | 38.5 s | **23.8 s** (−38%) |
+| Investment pass, weekly ticks 2–5 | 24.9, 20.2, 14.8, 29.0 = 88.8 s | 0.95, 1.08, 19.1, 6.3 = 27.4 s (−69%) |
+| `private_construction_used` at the end | 3.05 million | 0.69 million (−78%) |
+| Levels finished in the USA's states, 35 days | 2,886 | 1,372 (−52%) |
+| Private queue at the end | 1,000 | 1,000 |
+
+The pass follows the levels placed: with a level taking four or five weeks
+the queue turns over a quarter as often. (The two cheap ticks and the 19 s
+one are the projects in flight at the switch finishing together; a longer
+run would even out near 7 s a tick.)
+
+**Why this matters for the design.** Construction progress is applied once a
+week and the private queue holds 1,000 one-level elements, so investors can
+never finish more than 1,000 levels a week. The USA is at that ceiling: its
+cap of 3,064 a project is at or above what a level costs, and every further
+year of the modifier's ×1.2 ramp (toward 9,000) adds efficiency penalty and
+no levels. The pool it is meant to drain holds 15.5 trillion and takes in
+11.5 billion a week, of which construction spends about 0.1 to 0.5 billion.
+So in this game the modifier no longer does what it was built for, and the
+1,000 placements a week it produces cost 22 s of every week.
+
+This changes what investors build, so it is the owner's call; options are
+under "Proposals that change gameplay".
+
 ## Changes made on this branch
 
 None yet.
 
 ## Proposals that change gameplay (owner's call)
 
-None yet.
+Each of these trades investor building rate for speed; none is built.
+
+1. **Stop Excess Private Construction's ramp where it stops adding levels.**
+   Hold the raise at the point where a level takes one week (the cap equal
+   to a typical level's cost), not 9,000. Free in levels and in time, and it
+   takes back the efficiency penalty beyond that point. It does not make the
+   week faster by itself; it stops paying for nothing.
+2. **Hold the cap lower, so a level takes N weeks.** The pass is about 22 s ÷
+   N. At the base cap (N of four or five) the week is 23.8 s against 38.5.
+   Investors then finish that much less. A middle setting is measured below
+   when run.
+3. **Larger levels in the late eras, with a lower cap.** The owner's
+   super-building idea, or a modifier form of it: the engine has
+   `building_group_<group>_employee_mult` and `building_throughput_add`, so
+   an era technology could make each level of the city industries (the
+   uncapped groups, which are the ones investors place by the thousand)
+   employ and produce more, while the cap is held so fewer levels finish.
+   Growth is kept and placements fall. It needs a design: existing levels
+   grow at once, construction cost per level cannot be raised by a modifier,
+   and economy of scale and company thresholds count levels.
 
 ## Open
 
