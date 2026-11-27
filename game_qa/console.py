@@ -123,6 +123,13 @@ KEYBOARD_AWAY = ("a click since the console last answered may have given the key
                  "clicks the console's input line and proves the keyboard is back")
 
 
+# `_keys`' refusal when the window was in front and was not by the time the keys went out, twice running. Someone
+# clicking elsewhere does it, and so does a late save's load: each time the game stops responding, Windows puts its
+# "not responding" stand-in window in front of it (live 2026-11-26: the 2050 copy's start ended so 71 s after the
+# launch, mid-load). `Session._console_when_loaded` retries it while nothing was typed.
+LEFT_FRONT = "the game's window left the front while typing"
+
+
 class ConsoleError(Exception):
     """`code` is one of bad_text, not_foreground, no_ack, no_reply, game_gone, stranded_text,
     history_unreadable, log_gap, console_open (`hotkey` while the console is not known to be closed),
@@ -240,6 +247,11 @@ class Console:
         """Return with the game's window responding and in front, by the same presence rule as every key, without
         touching the console: for a click (`Session.click`), whose point an opened console could cover."""
         self._front()
+
+    @property
+    def stranded(self) -> bool:
+        """Whether text went out without its Enter, so the input line may hold half a command."""
+        return self._stranded
 
     def clear_line(self) -> None:
         """Empty the console's input line with Backspaces, after the usual foreground check, and allow typing
@@ -509,7 +521,7 @@ class Console:
                     self._stranded = True       # before anything else can raise: the line holds half a command
                 self._require_window()          # a window that is gone is game_gone, whatever was typed
                 if attempt == 2 or not nothing_sent:
-                    raise ConsoleError("not_foreground", "the game's window left the front while typing") from e
+                    raise ConsoleError("not_foreground", LEFT_FRONT) from e
 
     # ---- history and log
 

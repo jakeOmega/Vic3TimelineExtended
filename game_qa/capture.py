@@ -11,10 +11,17 @@ and stops the session; `--in-session` uses a session already running instead and
 3. `run-setup` its setups (given to `start` with the scene's other shots');
 4. `view`: one step that resets what the shot before opened (the Timeline Extended window's keys and every key the
    last view set cleared, the side panel closed), sets `te_qa_capture`, then the shot's own steps;
-5. `hover` its point, or park the cursor on the console's input line, where it hovers nothing (the edit line, which
+5. its `scroll` and `input` (a wheel, clicks or a drag on the HUD, the map or the tech tree: the owner's standing
+   grants of 2026-11-24 and 2026-11-26), then `click --console`, which takes the keyboard back;
+6. `hover` its point, or park the cursor on the console's input line, where it hovers nothing (the edit line, which
    draws nothing in a capture, takes the hover);
-6. `crop` its region with `settle` (shot again until two shots agree);
-7. compare with the committed picture: the same size and no pixel changed is `unchanged`.
+7. `crop` its region with `settle` (shot again until two shots agree), then trim the empty panel below the content
+   (`trim`, the owner's framing of 2026-11-26: from the tab strip down to the last section, no empty background);
+8. compare with the committed picture: the same size and no pixel changed is `unchanged`.
+
+A Workshop shot (`out` under `workshop/`, taken with `--workshop`) is never written into the repo: the carousel
+images stay local (owner, 2026-11-26), and `scripts/image_pipeline/workshop_screenshots.py --src <capture folder>`
+annotates them from the capture folder.
 
 Everything lands in a capture folder under the backup root (`captures/<stamp>/`, on D:): each new picture, the old
 one beside it, a difference image where Pillow is installed, `capture.json` and `index.html`, the contact sheet a
@@ -50,6 +57,7 @@ MANIFEST = "scripts/image_pipeline/guide_shots.py"
 TAKEN_FILE = "scripts/image_pipeline/guide_shots_taken.json"
 CONSOLE_PARK = (0.1125, 0.544)          # session.CONSOLE_INPUT_LINE: the console's edit line, which hovers nothing
 VIEW_TIMEOUT_S = 120.0
+ADVANCE_TIMEOUT_S = 900.0     # an input step's advance: the verb plays at most about 400 s a call
 CAPTURE_ARGS = ("no_notifications",)
 OPS = {">": lambda a, b: a > b, ">=": lambda a, b: a >= b, "<": lambda a, b: a < b, "<=": lambda a, b: a <= b,
        "==": lambda a, b: a == b, "!=": lambda a, b: a != b}
@@ -74,8 +82,13 @@ def load_manifest(repo: Path = REPO):
     return module
 
 
-def select(manifest, only: Sequence[str] = (), scenes: Sequence[str] = ()) -> list[str]:
-    """The shot ids to take: `only` (each a TAKEN shot), else every TAKEN shot, narrowed to `scenes` when given."""
+def is_workshop(shot: Mapping) -> bool:
+    return str(shot.get("out", "")).startswith("workshop/")
+
+
+def select(manifest, only: Sequence[str] = (), scenes: Sequence[str] = (), workshop: bool = False) -> list[str]:
+    """The shot ids to take: `only` (each a TAKEN shot), else every TAKEN shot of the guide (or, with `workshop`, of
+    the Workshop page), narrowed to `scenes` when given."""
     shots = manifest.SHOTS
     unknown = [sid for sid in only if sid not in shots]
     if unknown:
@@ -89,7 +102,8 @@ def select(manifest, only: Sequence[str] = (), scenes: Sequence[str] = ()) -> li
     if bad:
         raise CaptureError("unknown_scene", "no scene %s; the manifest has %s" % (", ".join(bad),
                                                                               ", ".join(manifest.SCENES)))
-    chosen = list(only) or [sid for sid, shot in shots.items() if shot["status"] in manifest.TAKEN]
+    chosen = list(only) or [sid for sid, shot in shots.items()
+                            if shot["status"] in manifest.TAKEN and is_workshop(shot) == workshop]
     if scenes:
         chosen = [sid for sid in chosen if shots[sid]["scene"] in scenes]
     if not chosen:
@@ -147,9 +161,10 @@ def keys_set(steps: Sequence[Sequence[str]]) -> list[str]:
 
 
 def reset_step(manifest, previous: Sequence[str]) -> list[str]:
-    """Clear the Timeline Extended window's keys and every key the last view set, close the side panel, and set the
-    capture key: the first step of every shot's view."""
-    keys = list(dict.fromkeys(list(manifest.TE_WINDOW_KEYS) + [k for k in previous if k != manifest.CAPTURE_KEY]))
+    """Clear the Timeline Extended window's keys, the mod's popups' and every key the last view set, close the side
+    panel, and set the capture key: the first step of every shot's view."""
+    keys = list(dict.fromkeys(list(manifest.TE_WINDOW_KEYS) + list(getattr(manifest, "POPUP_KEYS", ()))
+                              + [k for k in previous if k != manifest.CAPTURE_KEY]))
     return ["clear:%s" % k for k in keys] + ["close-panel", "set:%s=yes" % manifest.CAPTURE_KEY]
 
 
@@ -195,6 +210,15 @@ class Capture:
                 "clear:%s" % self.m.CAPTURE_KEY]]}, VIEW_TIMEOUT_S)
         except CaptureError:
             pass                                # the shots stand; the next view resets anyway
+        played = (started or {}).get("country") or sc["as_tag"]
+        if self.country != played:
+            # A shot's candidate countries leave the last one tried played: an --in-session run's session goes on
+            # (live 2026-11-26, as Germany after the taboo shot), so the scene's country is played again.
+            try:
+                self.verb("tag", {"tag": played})
+                self.country = played
+            except CaptureError:
+                pass
 
     def shot(self, sid: str) -> dict:
         shot = self.m.SHOTS[sid]
@@ -220,25 +244,72 @@ class Capture:
             out["tried"] = tried[:-1]
         for name in shot.get("setups") or {}:
             self.verb("run-setup", {"name": name})
-        steps = [reset_step(self.m, self.previous_keys)] + [list(s) for s in shot["view"]]
+        event = shot.get("event")
+        steps = [reset_step(self.m, self.previous_keys)] + [list(s) for s in shot.get("view") or [["close-panel"]]]
         view = self.verb("view", {"steps": steps}, VIEW_TIMEOUT_S)
-        self.previous_keys = keys_set(shot["view"])
+        self.previous_keys = keys_set(shot.get("view") or [])
         out["view_log"] = view.get("log") or []
+        if event:
+            # Fired after the view (which closes the side panel) and before the inputs: the game files a new event in
+            # the outliner, minimized, once a day passes (live 2026-11-26, 1964 copy: no window while paused, and no
+            # outliner row until `advance 1`), so a recipe advances a day and clicks the row (PopupManager.OpenEvent
+            # takes an Event, which no view can name). Answered after the shot, its first option, so it covers
+            # nothing later. The console's `event` ignores the event's trigger: a recipe names one whose text needs
+            # no scope but the country's.
+            self.verb("console", {"text": "event %s" % event})
+            out["pending"] = self.verb("events", {}).get("pending")
         scroll = shot.get("scroll")
-        if scroll:
-            # A wheel latches the keyboard away (whether it moves the keyboard is not known): the console's input
-            # line takes it back before anything types again.
-            self.verb("wheel", {"x": scroll[0], "y": scroll[1], "notches": scroll[2]})
+        inputs = ([("wheel", *scroll)] if scroll else []) + [tuple(step) for step in shot.get("input") or []]
+        for step in inputs:
+            self.do_input(step)
+        if inputs:
+            # A click, a wheel or a drag latches the keyboard away (whether it moved the keyboard is not known): the
+            # console's input line takes it back before anything types again.
             self.verb("click", {"console": True})
         hover = shot.get("hover") or CONSOLE_PARK
         self.verb("hover", {"x": hover[0], "y": hover[1]})
-        crop = self.verb("crop", {"box": list(self.m.crop_box(shot)), "settle": True, "label": sid})
+        try:
+            crop = self.verb("crop", {"box": list(self.m.crop_box(shot)), "settle": True, "label": sid})
+        finally:
+            if event:
+                try:
+                    out["picked"] = self.verb("pick", {"index": 0, "event": event}).get("form")
+                except CaptureError as e:
+                    out["pick_error"] = "%s: %s" % (e.code, e.detail)
         self.check_window(crop.get("window"))
         new = self.out_dir / ("%s%s" % (sid, ".png"))
         shutil.copyfile(crop["crop"], new)
         out.update(status="taken", new=str(new), settled=crop.get("settled"), tries=crop.get("tries"),
                    crop_size=crop.get("crop_size"), window=crop.get("window"))
+        gap = self.m.shot_trim(shot)
+        if gap:
+            trimmed = trim_bottom(new, gap)
+            if trimmed:
+                out["trimmed"] = trimmed
+                out["crop_size"] = [crop.get("crop_size", [0])[0], trimmed["height"]]
         return out
+
+    def do_input(self, step: Sequence) -> None:
+        """One input step of a recipe: ("click", x, y), ("wheel", x, y, notches), ("drag", x1, y1, x2, y2),
+        ("advance", days): time passed, on a copy (an event reaches the outliner only then), or ("event", id, option):
+        an event fired from the console and answered with that option (0-based)."""
+        kind, args = step[0], list(step[1:])
+        if kind == "click":
+            self.verb("click", {"x": args[0], "y": args[1]})
+        elif kind == "wheel":
+            self.verb("wheel", {"x": args[0], "y": args[1], "notches": args[2]})
+        elif kind == "drag":
+            self.verb("drag", {"x1": args[0], "y1": args[1], "x2": args[2], "y2": args[3]})
+        elif kind == "advance":
+            self.verb("advance", {"days": args[0]}, ADVANCE_TIMEOUT_S)
+        elif kind == "event":
+            # A console-only event answered at once, by option index: a debug event's refresh of a panel's display
+            # state (te_debug_colonial_empire.1's sixth option), which a tag to another country leaves unset until
+            # its next monthly pulse. No window is needed: `select_event_option` answers a pending event.
+            self.verb("console", {"text": "event %s" % args[0]})
+            self.verb("pick", {"index": args[1], "event": args[0]})
+        else:
+            raise CaptureError("bad_input", "%r is not a click, wheel, drag, advance or event" % (step,))
 
     def try_country(self, shot: Mapping, country: str) -> dict:
         """Play `country` (a `tag` when it is another) and read the shot's needs there: {country, met, needs,
@@ -285,6 +356,59 @@ class Capture:
         self.window_checked = True
 
 
+# ---- trimming
+
+
+TRIM_PAD = 24           # pixels kept below the last content row
+TRIM_BRIGHT = 100       # a pixel brighter than this (0-255) is text, a bar or a frame, not the panel's background
+TRIM_MIN = 3            # sampled pixels a row needs above TRIM_BRIGHT to hold content
+
+
+def content_rows(path: Path, x_margin: tuple[float, float] = (0.05, 0.93)) -> list[bool] | None:
+    """For each row of the picture, whether it holds content: more than TRIM_MIN of every second pixel between the
+    margins brighter than TRIM_BRIGHT. A side panel's background is a dark texture (under 70 in the shots of
+    2026-11-26) and its text and bars are bright. None without Pillow."""
+    pil = _pillow()
+    if pil is None:
+        return None
+    with pil[0].open(path) as im:
+        grey = im.convert("L")
+    w, h = grey.size
+    data = grey.tobytes()
+    lo, hi = int(w * x_margin[0]), int(w * x_margin[1])
+    return [sum(1 for v in data[y * w + lo:y * w + hi:2] if v > TRIM_BRIGHT) > TRIM_MIN for y in range(h)]
+
+
+def trim_line(rows: Sequence[bool], gap: int, pad: int = TRIM_PAD) -> int | None:
+    """The height to keep: the content ends at the first run of `gap` or more empty rows below content (what is
+    below that, such as the Market panel's World Market button, is the panel's footer, not the section's), or at
+    the last content row; `pad` rows are kept below it. None when nothing would be cut."""
+    last = None
+    for y, filled in enumerate(rows):
+        if filled:
+            if last is not None and y - last - 1 >= gap:
+                break
+            last = y
+    if last is None:
+        return None
+    keep = min(len(rows), last + 1 + pad)
+    return keep if keep < len(rows) else None
+
+
+def trim_bottom(path: Path, gap: int) -> dict | None:
+    """Cut the empty panel below the content off the picture at `path`, in place: {height, cut} or None."""
+    rows = content_rows(path)
+    keep = trim_line(rows, gap) if rows else None
+    if keep is None:
+        return None
+    Image = _pillow()[0]
+    with Image.open(path) as im:
+        im.load()
+        cut = im.height - keep
+        im.crop((0, 0, im.width, keep)).save(path)
+    return {"height": keep, "cut": cut}
+
+
 # ---- comparing, the contact sheet, writing back
 
 
@@ -304,7 +428,7 @@ def compare(results: Mapping[str, dict], repo: Path, out_dir: Path) -> None:
         if r.get("status") != "taken":
             continue
         old = Path(repo) / r["out"]
-        if not old.is_file():
+        if is_workshop(r) or not old.is_file():
             r["change"] = "new"
             continue
         old_copy = Path(out_dir) / ("%s.old%s" % (sid, old.suffix))
@@ -397,7 +521,7 @@ def write_back(results: Mapping[str, dict], manifest, repo: Path, window_scale: 
     commit = _git(repo, "rev-parse", "HEAD")
     written = []
     for sid, r in results.items():
-        if r.get("status") != "taken" or r.get("change") == "unchanged":
+        if r.get("status") != "taken" or r.get("change") == "unchanged" or is_workshop(r):
             continue
         out = Path(repo) / r["out"]
         if out.suffix.lower() in (".jpg", ".jpeg"):
@@ -437,6 +561,8 @@ def add_parser(sub, run) -> None:
                    help="copy each new or changed picture to its out path and record it in guide_shots_taken.json")
     p.add_argument("--any-window", action="store_true",
                    help="take them in a window other than the manifest's (its regions will be off)")
+    p.add_argument("--workshop", action="store_true",
+                   help="take the Workshop page's shots (out under workshop/), never written into the repo")
     p.add_argument("--list", action="store_true", help="list what would be taken, start nothing")
     p.set_defaults(run=run)
 
@@ -448,7 +574,7 @@ def main_verb(args, call: Call, start: Callable[[dict], tuple[dict, int]], stop:
         problems = manifest.validate()
         if problems:
             raise CaptureError("bad_manifest", "; ".join(problems[:10]))
-        ids = select(manifest, args.only, args.scene)
+        ids = select(manifest, args.only, args.scene, getattr(args, "workshop", False))
         plan = by_scene(manifest, ids)
         if args.list:
             return {"plan": plan, "starts": 0 if args.in_session else len(plan)}, 0
@@ -469,14 +595,17 @@ def main_verb(args, call: Call, start: Callable[[dict], tuple[dict, int]], stop:
         started = None
         if args.in_session:
             status, code = call("status", {})
-            if code != 0 or not status.get("started"):
+            # The server's status nests the session's own facts under "session" (live 2026-11-26: read at the top,
+            # every --in-session capture answered no_session).
+            running = status.get("session") or {} if code == 0 else {}
+            if not running.get("started") or running.get("stopped"):
                 for sid in scene_ids:
                     cap.results[sid] = {"id": sid, "status": "not_run", "error": "no_session"}
                 continue
-            started = {"country": status.get("country"), "save": status.get("save")}
-            if status.get("save") != manifest.SCENES[scene]["save"]:
+            started = {"country": running.get("country"), "save": running.get("save")}
+            if running.get("save") != manifest.SCENES[scene]["save"]:
                 sessions.append({"scene": scene, "note": "the running session's save is %s, not the scene's %s"
-                                 % (status.get("save"), manifest.SCENES[scene]["save"])})
+                                 % (running.get("save"), manifest.SCENES[scene]["save"])})
         else:
             try:
                 body = start_body(manifest, scene, scene_ids, args.permission)
@@ -502,7 +631,8 @@ def main_verb(args, call: Call, start: Callable[[dict], tuple[dict, int]], stop:
                 stopped, _code = stop()
                 sessions[-1]["stop"] = {k: stopped.get(k) for k in ("outcome", "held", "reason", "next", "refused")}
     compare(cap.results, repo, out_dir)
-    sheet = contact_sheet(cap.results, out_dir, "Guide shots, %s" % stamp)
+    sheet = contact_sheet(cap.results, out_dir, "%s shots, %s" % (
+        "Workshop" if getattr(args, "workshop", False) else "Guide", stamp))
     written: list[str] = []
     if args.write:
         saves = {sid: manifest.SCENES[manifest.SHOTS[sid]["scene"]]["save"] for sid in cap.results}
@@ -518,6 +648,7 @@ def main_verb(args, call: Call, start: Callable[[dict], tuple[dict, int]], stop:
 
 def _arg_namespace(**kw) -> argparse.Namespace:
     """For tests: the verb's arguments with their defaults."""
-    base = dict(only=[], scene=[], permission=None, in_session=False, write=False, any_window=False, list=False)
+    base = dict(only=[], scene=[], permission=None, in_session=False, write=False, any_window=False, list=False,
+                workshop=False)
     base.update(kw)
     return argparse.Namespace(**base)

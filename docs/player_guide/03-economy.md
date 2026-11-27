@@ -128,7 +128,7 @@ building that is only adding levels already has finished ones, so it pays.
 The Construction Market section sits at the top of the construction panel's
 National Queue tab.
 
-![The Construction Market section under Fixed Budget. The government spends £40.0M a week and buys 3,042 points, still closing on the 3,075 the budget buys at today's price; private investors take 84% of construction and the market is short.](images/construction_market.png)
+![The Construction Market section under Fixed Budget: the weekly budget stepper, what the government buys against what the budget buys, how fast the gap closes, what private investors buy, the price, and what is on sale against what is wanted.](images/construction_market.png)
 
 | Row | What it shows |
 |---|---|
@@ -663,7 +663,7 @@ whether you lead it or joined it, because that is where the reserve buys and
 sells. If you open another market with the tab still selected, it offers a
 button back to your own. The tab ends with an Open Journal Entry button.
 
-![The Strategic Reserve tab of the Market panel: the overview (Hub Operating, Flow Cap, Sales Income) above the Reserve Inventory, with the Ammunition row expanded to its figures, the Fill by Month chart and the start of its Policy Settings.](images/strategic_reserve_tab.png)
+![The Strategic Reserve tab of the Market panel: the overview (the hub, purchases and sales income) above the Reserve Inventory, with the Grain row expanded to its figures and its Fill by Month chart, then the other goods' rows.](images/strategic_reserve_tab.png)
 
 The overview at the top is always shown, as four boxes. Hub has the hub's
 icon at full color while the hub is fully staffed, marked Hub Operating, and

@@ -81,7 +81,7 @@ doesn't list them one by one, because the mod builds those lists only for the
 country you play. The Colonial Powers rows are the same as on your own tab,
 without their hover.
 
-<!-- screenshot: the Colonial Empire overview with the stability bar showing a red stretch, and Colonial Holdings open with its territories, their Release buttons and a colonial subject's Release and Dominion buttons -->
+![The Colonial Empire overview: the Stability bar with a red stretch for the year ahead, and Colonial Holdings listing the territories, each with its Release button.](images/colonial_empire_overview.png)
 
 The overview starts with the Stability bar. Its solid part and a lighter
 stretch show today's value and where the bar will be in 12 months at this

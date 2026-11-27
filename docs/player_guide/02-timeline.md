@@ -791,7 +791,7 @@ rededicated; then it is named again like any new monument, and the naming event
 can give the historical name back. Rename and Name It are grayed out while it
 carries its historical name. Only pulling it down, or demolishing it, ends it.
 
-![The Grand Monuments tab of the Timeline Extended window: the overview's four counts (ten monuments Upheld), National Effects with Interest Group Approval, and the start of Our Monuments.](images/grand_monuments_tab.png)
+![The Grand Monuments tab of the Timeline Extended window: the overview's four tiles and the monument policy, then National Effects: the policy buttons, the effects in force and Interest Group Approval.](images/grand_monuments_tab.png)
 
 <!-- screenshot: the Monuments panel with Contested lit in the overview and a contested monument's row with its three buttons -->
 

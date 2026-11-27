@@ -63,6 +63,11 @@ class ManifestTest(unittest.TestCase):
         for key in gs.TE_WINDOW_KEYS:
             self.assertTrue("GetVariableSystem.Set('%s'" % key in text, key)
 
+    def test_the_popup_keys_are_the_mods_own(self):
+        gui = "".join(p.read_text(encoding="utf-8-sig") for p in (HERE / "gui").rglob("*.gui"))
+        for key in gs.POPUP_KEYS:
+            self.assertIn("GetVariableSystem.Set('%s'" % key, gui, key)
+
     def test_the_capture_key_is_the_harness_one(self):
         from game_qa import capture_gui
         self.assertEqual(gs.CAPTURE_KEY, capture_gui.CAPTURE_KEY)
@@ -140,3 +145,18 @@ class StaleTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class InputStepTest(unittest.TestCase):
+    def test_each_kind_with_its_arguments(self):
+        for step in (("click", 0.5, 0.4), ("wheel", 0.5, 0.5, -40), ("drag", 0.1, 0.2, 0.3, 0.4), ("advance", 1),
+                     ("event", "te_debug_colonial_empire.1", 5)):
+            with self.subTest(step=step):
+                self.assertTrue(gs._input_ok(step))
+
+    def test_anything_else_is_refused(self):
+        for step in (("press", "esc"), ("click", 1.5, 0.4), ("click", 0.5), ("wheel", 0.5, 0.5, 41),
+                     ("wheel", 0.5, 0.5, 0.5), ("advance", 0), ("advance", 32), ("advance", True),
+                     ("event", "save", 0), ("event", "a.1", -1), ("event", "a.1", "0"), (), "click"):
+            with self.subTest(step=step):
+                self.assertFalse(gs._input_ok(step))

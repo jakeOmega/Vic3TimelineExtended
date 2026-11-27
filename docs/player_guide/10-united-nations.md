@@ -167,7 +167,7 @@ doctrine, holds about +2.5 to +3.4. A great power under Total War and
 Isolationism holds −3.5 before its nuclear posture. The AI does not weigh this
 modifier when it chooses laws or doctrine.
 
-![The Why UN Authority Is Moving section in the UN tab of the Diplomacy panel. Authority is 68.1 and rising toward a target of 72.4, the sum of the pillars; below come the tier and the charter and the champions and underminers, with Recent Entries collapsed at the foot.](images/un_authority_moving.png)
+![The Why UN Authority Is Moving section in the UN tab of the Diplomacy panel: the pillars whose sum sets the target authority drifts toward, then the tier and the charter and the champions and underminers, with Recent Entries collapsed, and the start of Missions in the Field.](images/un_authority_moving.png)
 
 ### UN authority tiers
 
@@ -316,7 +316,7 @@ costs 15 relations with the target and voting against gains 15. When a power
 bloc leader's resolution carries, its bloc gains 3 leverage in each of its other
 members that sits in the Assembly; when it falls, the bloc loses 3.
 
-![The General Assembly with a Humanitarian Aid Request in session, in its first month with two votes for and none against: what happens if it carries or falls, how the Assembly reads our position term by term, the vote buttons and the start of Delegations.](images/un_general_assembly.png)
+![The General Assembly with a resolution in session: the tally and the passage rule, the vote buttons, what happens if it carries or falls, and the start of Delegations.](images/un_general_assembly.png)
 
 ### General Assembly topics
 
@@ -603,7 +603,7 @@ request for a pledge counts it in your favor, +20 for every 25%. Its acceptance
 tooltip shows the line. The members the World Development Fund pays give it to
 those who [fund it](#development-programs-sizes).
 
-![The chamber's Delegations section. Each row shows a member's band as the Assembly estimates it and any campaign on it (Batonga is lobbying South Africa to vote for the resolution), with buttons to start a campaign or ask for a pledge.](images/UN_lobbying.png)
+![The chamber's Delegations section. Each row shows a member's band as the Assembly estimates it and any campaign on it, with buttons to start a campaign or ask for a pledge.](images/UN_lobbying.png)
 
 ## Business the reformed charter opens
 
@@ -1142,7 +1142,7 @@ entry's own buttons are the AI's. The tab adds the entry's status text, while a
 founding conference sits or after the UN has dissolved, and ends with an Open
 Journal Entry button.
 
-![The UN tab of the Diplomacy panel: the overview (membership, tier, standing, the authority bar, the countries, GDP and population pies, the Security Council, the agencies and the headquarters) and Status.](images/un_tab_overview.png)
+![The UN tab of the Diplomacy panel: the overview (membership, tier, standing, the authority bar, the countries, GDP and population pies, the Security Council, the agencies and the headquarters) and the start of the General Assembly.](images/un_tab_overview.png)
 
 The overview at the top is always shown. Its first rows are cells, two to a
 row: your membership (with Found, Join or Leave under it), the UN's tier and

@@ -25,7 +25,7 @@ from game_qa import __main__ as cli
 from game_qa import dap, fakes, fixture, gate, logtail, overlay, pixels, profiling, server, session, snapshot
 from game_qa.report import read_steps
 from game_qa.client import enabled_mods
-from game_qa.console import MAX_UNRESPONSIVE_S, UNRESPONSIVE_S, ConsoleError
+from game_qa.console import LEFT_FRONT, MAX_UNRESPONSIVE_S, UNRESPONSIVE_S, ConsoleError
 from game_qa.gate import ProcId
 from game_qa.helper import HelperError
 from test_game_qa_overlay import PROFILER_GUI
@@ -715,6 +715,51 @@ class StartTest(SessionTestCase):
         self.assertEqual(error.code, "not_foreground")
         self.assertEqual(self._console_ready()["tries"], 1)
         self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def _ghosted_keys(self, times):
+        """The first `times` key calls find the window in front at the check and lose it at the first key, as a
+        late save's load does when Windows puts its "not responding" stand-in in front (live 2026-11-26)."""
+        lost = {"calls": 0}
+        original = self.game.keys
+
+        def keys(pid, steps):
+            if lost["calls"] < times:
+                lost["calls"] += 1
+                self.game.foreground = False
+            return original(pid, steps)
+        self.game.keys = keys
+        return lost
+
+    def test_a_window_that_loses_the_front_at_the_first_key_while_the_save_loads_is_retried(self):
+        lost = self._ghosted_keys(2)            # both of `_keys`' attempts of the first try
+        reply = self.start()
+        self.assertEqual(reply["country"], "FRA")
+        self.assertEqual(lost["calls"], 2)
+        ready = self._console_ready()
+        self.assertEqual((ready["outcome"], ready["tries"], ready["last_refusal"]), ("ok", 2, "not_foreground"))
+
+    def test_a_window_that_keeps_losing_the_front_ends_the_start_after_the_tries(self):
+        self._ghosted_keys(10 ** 6)
+        error = self.session_error(self.start)
+        self.assertEqual(error.code, "not_foreground")
+        self.assertIn(LEFT_FRONT, error.detail)
+        self.assertEqual(self._console_ready()["tries"], session.LOAD_LEFT_FRONT_TRIES)
+        self.assertEqual(error.info["stop"]["outcome"], "restored")
+
+    def test_half_a_probe_typed_before_the_front_was_lost_is_cleared_and_tried_again(self):
+        sent = {"n": 0}
+
+        def step(index):
+            sent["n"] += 1
+            if sent["n"] == 2:                  # one character of the probe went out, then the front was lost
+                self.game.foreground = False
+        self.game.on_step = step
+        reply = self.start()
+        self.game.on_step = None
+        self.assertEqual(reply["country"], "FRA")
+        ready = self._console_ready()
+        self.assertEqual((ready["outcome"], ready["tries"], ready["cleared"]), ("ok", 2, 1))
+        self.assertEqual(self.game.typed, "")   # nothing of the half probe was left on the line
 
     def test_a_console_that_never_opens_is_tried_twice_not_for_the_whole_wait(self):
         self.game.console_never_opens = True

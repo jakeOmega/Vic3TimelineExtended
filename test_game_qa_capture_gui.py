@@ -103,6 +103,49 @@ class ErrorDeerTest(unittest.TestCase):
             self.assertIn(b"te_qa_capture", files[cg.ERROR_DEER_FILE])
 
 
+class DebugGateTest(unittest.TestCase):
+    SOURCE = ("widget = {\n"
+              '\tvisible = "[InDebugMode]"\n'
+              "\ttext = { visible = [InDebugMode] }\n"
+              "\tbox = {\n\t\tvisible = [InDebugMode]\n\t}\n"
+              '\tother = {\n\t\tvisible = "[And(InDebugMode, Not(StringIsEmpty(Market.GetModifierDesc)))]" # why\n\t}\n'
+              '\traw_text = "InDebugMode"\n'
+              '\tvisible = "[IsInDebugModeLike]"\n'
+              "}\n")
+
+    def test_every_visible_line_naming_it_needs_the_key_unset_too(self):
+        out, changed = cg.gate_debug_lines(self.SOURCE.encode())
+        text = out.decode()
+        self.assertEqual(changed, 3, "the line holding a whole block is not a visible line, and is left")
+        self.assertIn('\tvisible = "[%s]"\n' % cg.GATED_DEBUG, text)
+        self.assertIn('\t\tvisible = "[%s]"\n' % cg.GATED_DEBUG, text, "an unquoted one is quoted")
+        self.assertIn('\t\tvisible = "[And(%s, Not(StringIsEmpty(Market.GetModifierDesc)))]" # why\n' % cg.GATED_DEBUG,
+                      text)
+        self.assertIn('\traw_text = "InDebugMode"\n', text)
+        self.assertIn('\tvisible = "[IsInDebugModeLike]"\n', text, "a longer name is not the trigger")
+        self.assertIn(cg.CAPTURE_KEY, cg.GATED_DEBUG)
+
+    def test_the_bom_and_line_endings_are_kept(self):
+        source = cg.BOM + self.SOURCE.replace("\n", "\r\n").encode()
+        out, _ = cg.gate_debug_lines(source)
+        self.assertTrue(out.startswith(cg.BOM))
+        self.assertEqual(out.count(b"\r\n"), source.count(b"\r\n"))
+
+    def test_the_mods_copy_is_gated_where_it_ships_one_and_a_file_with_none_is_left_out(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base, deploy = Path(tmp) / "game_install", Path(tmp) / "deploy"
+            (base / "game" / "gui").mkdir(parents=True)
+            (deploy / "gui").mkdir(parents=True)
+            (base / "game" / "gui" / "journal_entry.gui").write_text('a = {\n\tvisible = "[InDebugMode]"\n}\n')
+            (deploy / "gui" / "journal_entry.gui").write_text('mod = {\n\tvisible = "[InDebugMode]"\n}\n')
+            (base / "game" / "gui" / "eventwindow.gui").write_text('b = {\n\tvisible = "[InDebugMode]"\n}\n')
+            (base / "game" / "gui" / "tooltip.gui").write_text("c = {\n}\n")
+            out = cg.debug_gated_files(base, deploy)
+            self.assertEqual(sorted(out), ["gui/eventwindow.gui", "gui/journal_entry.gui"])
+            self.assertTrue(out["gui/journal_entry.gui"].startswith(b"mod = {"), "the mod's, the build under test")
+            self.assertIn(cg.CAPTURE_KEY.encode(), out["gui/eventwindow.gui"])
+
+
 class ActionTest(unittest.TestCase):
     def test_each_form_and_its_binding(self):
         cases = {
@@ -115,6 +158,12 @@ class ActionTest(unittest.TestCase):
             "market:te_global_warming": "InformationPanelBar.OpenMarketPanelTab( AccessPlayer.AccessFirstMarket.Self, "
                                         "'te_global_warming' )",
             "close-panel": "InformationPanelBar.ClosePanel",
+            "construction": "InformationPanelBar.OpenConstructionPanel( GetPlayer.Self )",
+            "construction:ships": "InformationPanelBar.OpenConstructionPanelTab( GetPlayer.Self, 'ships' )",
+            "state:capital": "InformationPanelBar.OpenStatePanel( AccessPlayer.AccessCapital )",
+            "zoom:capital": "AccessPlayer.AccessCapital.ZoomToCapital",
+            "sgui:te_jmap_pick_leading_cause_sgui": "GetScriptedGui('te_jmap_pick_leading_cause_sgui').Execute( "
+                                                    "GuiScope.SetRoot( GetPlayer.MakeScope ).End )",
         }
         for text, binding in cases.items():
             with self.subTest(text=text):
@@ -122,7 +171,9 @@ class ActionTest(unittest.TestCase):
 
     def test_anything_else_is_refused(self):
         for text in ("set:a", "set:a=b c", "set:a='x'", "clear:", "panel:", "panel:a:b:c", "market:", "raw:x",
-                     "ExecuteConsoleCommand('save')", "set:a=b]", "close-panel:x", 7, None):
+                     "ExecuteConsoleCommand('save')", "set:a=b]", "close-panel:x", "construction:", "construction:a b",
+                     "state:FRA", "state:", "zoom:map", "je:je_x", "sgui:x_sgui", "sgui:te_x", "sgui:te_a b_sgui",
+                     7, None):
             with self.subTest(text=text):
                 with self.assertRaises(cg.CaptureGuiError) as caught:
                     cg.parse_action(text)

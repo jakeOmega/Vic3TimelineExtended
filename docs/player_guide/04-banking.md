@@ -615,7 +615,7 @@ its reading and what moves it; the Help page has the rules behind each
 group. Each mandate button says what its rule does. Your Policy Stance and price band are in the
 overview, with the policy rate and the past year's inflation under them.
 
-![The Monetary Policy block of the banking dashboard: the rates and the Rate Target stepper, the exchange rate, what borrowing costs, prices, and the central bank's stance, delegation and mandate.](images/banking_rate.png)
+![The Monetary Policy block of the banking dashboard: the rates with the Rate Target stepper and the central bank's delegation and mandate, the exchange rate, the international arrangements, what borrowing costs, and prices.](images/banking_rate.png)
 
 ### Who sets the policy rate
 
