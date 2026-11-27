@@ -973,6 +973,19 @@ def mod_uses(mod_root: str, names: frozenset[str]) -> dict[str, list[str]]:
     return result
 
 
+# The keys of each kind of registry warning that POST /validate/registries and
+# POST /reload return, by its `kind` (None: the plain {label, detail} pair the
+# registry loaders' own warnings make). The two producers below build these
+# shapes, and the tests hold every warning to its kind's keys (#1949), so a new
+# kind is one line here.
+REGISTRY_WARNING_KEYS: dict[str | None, frozenset] = {
+    None: frozenset({"label", "detail"}),
+    "helper_anchor_mod_calls": frozenset(
+        {"label", "kind", "entry", "anchor", "helper_file", "mod_uses", "advice", "detail"}),
+    "mod_only_anchor": frozenset({"label", "kind", "entry", "anchors", "detail"}),
+}
+
+
 def helper_anchor_warnings(
     refs: list[VanillaBugRef],
     mod_root: str,
