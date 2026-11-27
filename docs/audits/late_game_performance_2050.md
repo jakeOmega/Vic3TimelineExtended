@@ -13,14 +13,15 @@ vanilla code.
 
 ## Status
 
-**2026-11-26 20:45 MST.** The week is 38.5–39.2 s (two matching runs; the
-first run of the night, 44.1 s, was slower in every weekly tick and is
-treated as disturbed). The investors' construction pass is 22 s of each
-weekly tick, runs on one thread, and re-scores every candidate building
-after each placement. Script is at least a quarter of that thread's time.
-Measured so far: the update divisor (no clean gain). Running: Excess
-Private Construction off, to price a slower queue turnover. Next: a cheaper
-`ai_value` for the Railway and the Arts Academy.
+**2026-11-26 21:30 MST.** Two things take most of a 2050 week:
+
+1. **The investors' weekly construction pass**, 22 s of each weekly tick
+   (two thirds of all tick work). It follows how many levels investors place
+   a week. Only a slower queue turnover has cut it so far (finding 4, the
+   owner's call); a cheaper `ai_value` and the update divisor did not.
+2. **The ship construction readout under the date**, about 7 s a week
+   outside the tick work, the same vanilla readout as in 2030 (finding 5). A
+   fix that keeps gameplay as it is, is being built.
 
 ## The save and the method
 
@@ -42,6 +43,24 @@ Private Construction off, to price a slower queue turnover. Next: a cheaper
   and must then `stop`.
 
 ## Baseline
+
+**Reference numbers** (three runs that repeat tick for tick, `base2`,
+`base3`, `base4`; finding 1):
+
+| Measure | Value |
+|---|---|
+| Tick tasks, a steady week (mean of weekly ticks 2–5, plus 27 other frames) | **33.0–34.2 s**: the weekly tick 27.0–27.6 s, of it the investment pass 22.2–22.7 s; the other 27 frames 6.0–6.6 s |
+| Wall time, 7 February to 12 March (33.2 days: the cheap first weekly tick and three full ones) | 148–154 s, **31.2–32.4 s a week** |
+| Wall time outside the tick tasks | about 8–9 s a week (sub-tick 0.37 s against 0.24 s of tasks) |
+
+A run is compared on these two: `weekest.py` (tick tasks) and `wallday.py
+<log> 2050.2.7 2050.3.12` (wall over the same dates). A whole run's
+seconds a week is not comparable between runs, because a run ends on a
+different tick and the fifth weekly tick is 30 s by itself.
+
+**The first run of the night**, below, was slower in every weekly tick than
+the three that followed (the machine was busier) and is kept only for its
+shape.
 
 Session `20261127T025708Z`, 6 February to 13 March 2050 (35 days, 140
 ticks), deployed `main` at `7d353f90a`.
@@ -105,7 +124,7 @@ second with a counter of finished levels (`variants/count`).
   `base3`: the same save plays the same weeks. A variant can therefore be
   compared tick for tick. The first weekly tick after the load is always
   cheap (1.8 s); leave it out. The baseline for comparisons is ticks 2 to 5:
-  **88.8–90.7 s**, 22 s a tick, and 38.5–39.2 s a week.
+  **88.6–90.7 s**, 22 s a tick.
 - **One thread.** Per-thread CPU every 0.67 s (`threadcpu.py`): through the
   pass the game's tick thread runs at 0.99 of a core, the main thread waits
   at 0, and about ten workers run at 0.3–0.7 each (7.3 cores busy in all).
@@ -142,10 +161,10 @@ week (finding 4, gameplay), and which candidates exist (not yet tried).
 investment update a tick per that much weekly pool income, so 22,980 a tick
 for the USA) raised tenfold, session `20261127T031817Z`:
 
-| Weekly tick | 2 | 3 | 4 | 5 | Ticks 2–5 | Week |
-|---|---|---|---|---|---|---|
-| Baseline (`base3`) | 24.9 | 20.2 | 14.8 | 29.0 | 88.8 s | 38.5 s |
-| Divisor × 10 | 33.6 | 11.9 | 12.0 | 16.7 | 74.2 s | 36.3 s |
+| Weekly tick | 2 | 3 | 4 | 5 | Ticks 2–5 | Tick tasks, steady week | Wall, same dates |
+|---|---|---|---|---|---|---|---|
+| Baseline (`base3`) | 24.9 | 20.2 | 14.8 | 29.0 | 88.8 s | 33.5 s | 32.0 s |
+| Divisor × 10 | 33.6 | 11.9 | 12.0 | 16.7 | 74.2 s | 30.3 s | 32.0 s |
 
 The first full tick is no cheaper with a tenth of the updates, so the cost
 follows placements, not updates: an update that finds the queue full costs
@@ -155,7 +174,27 @@ per placement. A higher divisor also caps a small pool at one placement a
 tick, 28 a week, which a country with a few million of weekly pool income
 would notice. Not recommended.
 
-### 4. Queue turnover is the big lever: Excess Private Construction off takes the week from 38.5 to 23.8 s
+### 3. A cheaper `ai_value` buys nothing: that script runs on the workers
+
+The two costliest script entries of the baseline are vanilla's `ai_value` for
+the Railway (a chain of twelve journal-entry cases) and the Arts Academy.
+Variant `aiv` (session `20261127T034239Z`) replaced both buildings with
+copies whose `ai_value` sits behind one gate that every case needs, so the
+result is the same. The Railway's call fell from 14.2 to 6.3 µs and the Arts
+Academy's from 4.7 to 3.1 µs.
+
+| Weekly tick | 2 | 3 | 4 | 5 | Ticks 2–5 | Tick tasks, steady week | Wall, same dates |
+|---|---|---|---|---|---|---|---|
+| Baseline (`base3`) | 24.9 | 20.2 | 14.8 | 29.0 | 88.8 s | 33.5 s | 32.0 s |
+| `ai_value` gated | 24.1 | 19.7 | 14.3 | 30.9 | 89.0 s | 33.6 s | 31.8 s |
+
+No change. `ai_value` is scored on the worker threads, which are not what
+the pass waits for, so the script profiler's seconds (CPU summed over
+threads) say nothing here about wall time. **Not shipped**: it would have
+meant a `REPLACE` of two vanilla buildings for no gain. The lesson holds for
+any script the scoring calls: only what runs on the tick thread counts.
+
+### 4. Queue turnover is the big lever: Excess Private Construction off halves the week's tick work
 
 Session `20261127T033631Z` (`noexcess`): before the 35 days a setup removed
 `too_much_private_construction` from the USA and set
@@ -165,7 +204,8 @@ Nothing else differs from the baseline.
 
 | | Baseline (`base3`) | Excess off |
 |---|---|---|
-| Wall time a week | 38.5 s | **23.8 s** (−38%) |
+| Tick tasks, a steady week | 33.5 s | **17.5 s** (−48%) |
+| Wall time, same dates | 32.0 s a week | 23.8 s a week (the first weeks still finish projects in flight) |
 | Investment pass, weekly ticks 2–5 | 24.9, 20.2, 14.8, 29.0 = 88.8 s | 0.95, 1.08, 19.1, 6.3 = 27.4 s (−69%) |
 | `private_construction_used` at the end | 3.05 million | 0.69 million (−78%) |
 | Levels finished in the USA's states, 35 days | 2,886 | 1,372 (−52%) |
@@ -189,6 +229,26 @@ So in this game the modifier no longer does what it was built for, and the
 This changes what investors build, so it is the owner's call; options are
 under "Proposals that change gameplay".
 
+### 5. The ship construction readout under the date still costs about 7 s a week
+
+The 2030 audit found vanilla's readout under the date
+(`gui/timemanip.gui:487`, `text = "SHIP_CONSTRUCTION_VALUE"`, which is
+`#v [Country.GetShipConstructionUsage|0]#!/[Country.GetShipConstruction|0]`)
+to be half of that year's week. The fix that shipped was fewer supply ships
+in progress (Naval Convoy Defense's weekly cap); it was never timed. In 2050
+the cost is still there. The 2030 knockout variant (the text replaced by a
+constant), session `20261127T041226Z`:
+
+| | Baseline | Readout a constant |
+|---|---|---|
+| Wall time, same dates | 31.2–32.4 s a week | **25.3 s a week** (−21%) |
+| Tick tasks, a steady week | 33.0–34.2 s | 33.0 s (unchanged, as expected: it is GUI work) |
+| A sub-tick, wall | 0.37 s | 0.22 s |
+| An ordinary day's hour 0, wall | 1.03 s | 0.71 s |
+
+About 0.15 s after every tick, which is one evaluation of the text each time
+the tick changes what it reads. Paused, the frame is 10 ms either way.
+
 ## Changes made on this branch
 
 None yet.
@@ -203,7 +263,7 @@ Each of these trades investor building rate for speed; none is built.
    takes back the efficiency penalty beyond that point. It does not make the
    week faster by itself; it stops paying for nothing.
 2. **Hold the cap lower, so a level takes N weeks.** The pass is about 22 s ÷
-   N. At the base cap (N of four or five) the week is 23.8 s against 38.5.
+   N. At the base cap (N of about three) the week's tick work is 17.5 s against 33.5.
    Investors then finish that much less. A middle setting is measured below
    when run.
 3. **Larger levels in the late eras, with a lower cap.** The owner's
