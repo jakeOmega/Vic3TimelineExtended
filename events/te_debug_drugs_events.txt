@@ -14,7 +14,7 @@ te_debug_drugs.1 = { # REVIEWED 2026-10-02: console-only test event (`event te_d
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
