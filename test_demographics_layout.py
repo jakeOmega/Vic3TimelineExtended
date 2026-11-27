@@ -787,7 +787,8 @@ class PieTest(unittest.TestCase):
                      if "te_demog_hist_causes_title" in _override(c, "chart_title"))
         layers = re.findall(r"color = \{ ([\d.]+) ([\d.]+) ([\d.]+) 1\.0 \}\s*value = \"\[FixedPointToFloat\( "
                             r"ScriptContainer\.GetVariableValue\('te_dg_h_c(\d)'\) \)\]\"", _override(chart, "bar_body"))
-        self.assertEqual([int(k) for *_, k in layers], list(range(8, 0, -1)))
+        # no layer 6: it held the deaths added on top, which no save 1.15 loads still has (#1429); the pie skips it too
+        self.assertEqual([int(k) for *_, k in layers], [8, 7, 5, 4, 3, 2, 1])
         colours = dict(_pie_colours())
         for *rgb, k in layers:
             hex_ = colours[f"pie_{SLICES[int(k) - 1][1]}"]

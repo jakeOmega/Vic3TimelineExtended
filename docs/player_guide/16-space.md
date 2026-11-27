@@ -1353,7 +1353,6 @@ the discovery has a 1% monthly chance for biological finds or 2% for other finds
 A country can receive at most one discovery every six months. Each discovery
 occurs once, and other possible finds wait through that spacing period.
 Surveys continue while colonization is idle and after all sites are claimed.
-Colonies founded in an older save receive no new founding rolls.
 
 Each event reports a confirmed discovery by an established colony. The
 biological finds include living microbes and ancient microbial fossils; other

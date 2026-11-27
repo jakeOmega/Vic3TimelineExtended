@@ -1519,16 +1519,12 @@ No self-check: every read the build makes is proven (`modulo` on the census year
 `Multiply_CFixedPoint`, `SelectLocalization` in a text and `GreaterThanOrEqualTo_CFixedPoint` on a stored variable).
 `mod_systems/demographics.md` § The ring's 300 years has the design.
 
-1. **A save from before, re-filed** (any rule with the census on). Load the France → European Union autosave of
-   2057-11-01, made before this build, and play a year. Each state re-files its ring at its own next step
-   (`te_dg_ring` appears, 300): its people and the 85+ band are what they were (the step's own births, deaths and
-   migrants aside), and Franche-Comté's pool of 9.4 million at a mean age of 165 shows in its 150–199 row, its pool
-   (`te_dg_pf`, `te_dg_pm`) at 0. `scripts/analysis/save_country_probe.py --states` on a save a year on reads no pool
-   past 1% of any state's people.
-2. **The rows past 85** (any rule). In that game, Île-de-France's subtab and the European Union's tab draw rows past 85
-   in 85+'s place (85–99, 100–124 and up, the highest labelled "N+"), each bar per five years of age; the hover
-   gives the people in the row and says how the bar is drawn. The
-   Biological button's view splits by biological age, with fewer rows. No "Failed to fetch variable" line in
+1. **A save from before, re-filed**: retired with the script's re-filing (#1429). Vanilla 1.15 loads no save of mod
+   1.2.0, the only release on the 150-year ring.
+2. **The rows past 85** (any rule). In a late save on 1.15 (2050 or later; the 2057 France game was on 1.14), a
+   long-lived state's subtab and its country's tab draw rows past 85 in 85+'s place (85–99, 100–124 and up, the
+   highest labelled "N+"), each bar per five years of age; the hover gives the people in the row and says how the bar
+   is drawn. The Biological button's view splits by biological age, with fewer rows. No "Failed to fetch variable" line in
    `error.log` with the pyramid open on a split state and an unsplit one.
 3. **An ordinary pyramid.** A new 1836 game, and a 2000 save: every pyramid ends at 85+ as before, with the outline
    on it.
