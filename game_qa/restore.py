@@ -750,7 +750,10 @@ def left_behind(snap: Snapshot, user_data: Path) -> list[str]:
     restore's to delete. Empty for a snapshot that named no folders (one taken before they were recorded)."""
     if snap.log_folders is None:
         return []
-    return sorted(snapshot.scan_subfolders(Path(user_data)) - snap.log_folders)
+    try:
+        return sorted(snapshot.scan_subfolders(Path(user_data)) - snap.log_folders)
+    except OSError:     # a report only: a folder that cannot be listed never stops a restore that has put all back
+        return []
 
 
 # --- unfinished runs -------------------------------------------------------------------------

@@ -455,6 +455,14 @@ class LeftBehindTests(RestoreTestCase):
         finish(snap)
         self.assertEqual(restore.restore(snap, self.user, other_game_running=False, logs=False).left_behind, [])
 
+    def test_a_logs_folder_that_cannot_be_listed_never_stops_the_restore(self):
+        snap = self.run_started()
+        finish(snap)
+        with mock.patch.object(snapshot, "scan_subfolders", side_effect=PermissionError("denied")):
+            out = restore.restore(snap, self.user, other_game_running=False)
+        self.assertEqual((out.held, out.left_behind), (False, []))
+        self.assertEqual(snapshot.journal(snap)[-1]["event"], "restored")
+
     def test_a_snapshot_that_named_no_folders_names_none(self):
         snap = self.run_started()
         (self.user / "logs" / "new").mkdir(parents=True)
