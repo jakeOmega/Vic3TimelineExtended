@@ -347,3 +347,27 @@ only by a station gone offline, demolished or lost since, which the next run put
 | **The same figures.** The overview's Sent and Received, and their hovers, before and after the update and after the next 1st. | The same figures and station counts as the cards' Sent and Delivered summed over the country's stations, and as before the update; after the 1st, the new month's. | 0 everywhere after a 1st: the run didn't reach `te_grid_store_tab_flows_effect`. 0 until the first 1st after the update is expected (the figures are written at the run). |
 | **A station demolished** mid-month. | Its flow stays in Sent or Received until the 1st, as its row stays in the Stations table. | — |
 | **Profiler**, the game paused, the tab open. | None of `power_grid_values.txt`'s `te_grid_tab_*_live` lines among the roots. | One is: something still reads a live figure. |
+
+## Next Steps, idle reasons and Grid Flows (2026-11-27)
+
+The Power Grids tab's Next Steps panel (Suggested Stations with Build, In Reach with Draft Treaty), the reason a station
+moves nothing on every Mode hover and the building panel's Reason row, and the Map Room's Grid Flows map (selector 91)
+(`power_grids.md` § Why a station moves nothing, § Next Steps, § Power Grids map). Three engine shapes are new to the
+mod: a scripted GUI that queues a building (`te_grid_build_station_sgui`, `start_building_construction` in state scope,
+which the AI pass already runs from an on_action), vanilla's new-draft call from a mod panel's datamodel row
+(`InformationPanelBar.OpenTreatyDraftPanelForNewDraft`), and a row's `visible` read through
+`GuiScope.SetRoot( Country ).AddScope( 'te_grid_link_capital', State ).ScriptValue(...)` (the market panel's form for a
+script value). Play as a country with Electrical Capacitors and power plants in a few states, beside a neighbor with
+stations of its own and no agreement.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Suggested Stations** fills. Open the Power Grids tab a month in, before building a station. | Up to three states, best first, each with a reason ("Makes Electricity to share" on a state with power plants); the hover gives its Electricity made, price and population. Before the first monthly pulse, the note. | Always the note: `te_grid_suggest_on_action` doesn't run for the player (`is_player`), or `te_grid_ai_station_site` holds nowhere for a player (compare with the AI's stations). The same state three times: the marker in `te_grid_suggest_pick_effect` isn't excluding it. |
+| **Build.** Hover Build, then click it. | The hover lists three ticked conditions and "Queues a Grid Transfer Station here"; the click queues one in the government's queue (the construction panel), the row disappears, and the list is picked again at once (a bordering state now). | Nothing queued: `start_building_construction` from a scripted GUI doesn't build for a player; fall back to opening the state (`InformationPanelBar.OpenStatePanel`) and let the player build there. Queued but the list unchanged: the click marker (`te_grid_build_click`) isn't read back; drop the guard and accept the re-pick's walk on hover. |
+| **A site built elsewhere.** Queue a suggested state's station from the build menu instead. | Its row drops at once; the note shows if none is left; a new pick comes next month. | It stays: `te_grid_suggestion_open_disp` misses a queued station (`b:` at level 0). |
+| **In Reach.** After the 1st, beside the neighbor's station. | Its flag and name, a Draft Treaty button; the overview's Agreements box reads In reach: 1 (its land neighbor counted, where until now only cables were). | No row but In reach 1: the row's `AddScope` script value returns nothing (fail closed); make the row unconditional and keep the live count. No row and 0: `te_grid_store_missed_links_effect` found no neighbor (a `has_building` on the neighbor's state). |
+| **Draft Treaty.** Click it. | Vanilla's treaty draft opens with that country; add a Grid Interconnection Agreement and propose it. Once signed, the row and the count drop at once, before the next 1st. | Nothing opens: the call needs `GetPlayer.Self` rather than `Country.Self`. The row stays until the 1st: `te_grid_link_open` misses the new treaty (`binds = scope:….owner`). |
+| **Another country's tab.** National Info on the neighbor. | No Next Steps panel. | It shows: `Country.IsLocalPlayer` is true there; gate it on `ObjectsEqual( Country.Self, GetPlayer.Self )` behind the observer test. |
+| **Idle reasons.** A station alone on its grid, one in a state with no power use, and one just built. | Each Mode hover leads with its reason ("It is the only station on its grid", "Nothing in this state makes or uses Electricity", "It joins its grid at the next monthly balancing"), and the building panel shows a Reason row; a sending or receiving station shows its meaning and no Reason row. | A blank first line: `te_grid_idle_reason_disp` returns a code with no text, or 0 for an idle station on a save from before this build until the next 1st (expected once: the generic idle line shows). |
+| **Grid Flows.** Pick it in the Map Room's Economy group, beside Power Grids. | Senders blue, receivers orange, idle stations pale, stations on no grid grey; the hover gives the flow a week, or the short reason. | Every station grey: `te_grid_mode_disp` reads 4 in a paint (a modifier read there); paint from the stored `te_grid_flow` and `te_grid_command` instead. |
+

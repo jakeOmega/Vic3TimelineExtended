@@ -504,3 +504,11 @@ te_jmap_grid_off = {
 	has_variable = te_grid_flow
 	NOT = { has_variable = te_grid_hub }
 }
+
+# Grid Flows (the Map Room's 91, 2026-11-27): the state has a station, and its mode is $MODE$ as the Power Grids tab's
+# Stations table reads it (te_grid_mode_disp, power_grid_values.txt): 1 sending, 2 receiving, 3 idle on a grid, 4 on
+# no grid. The station first, since the mode reads 4 for a state with none.
+te_jmap_grid_mode = {
+	has_building = building_grid_transfer_station
+	te_grid_mode_disp = $MODE$
+}

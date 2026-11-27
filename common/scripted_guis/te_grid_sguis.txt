@@ -37,3 +37,39 @@ te_grid_cable_links_sgui = {
 		}
 	}
 }
+
+# State scope, a suggested site on the Power Grids tab (te_grid_suggested,
+# its owner the local player: the row shows only then). Build queues a Grid
+# Transfer Station there, as the build menu does, in the government's queue
+# (start_building_construction, the AI pass's effect, te_grid_ai_build_effect),
+# then picks the suggestions again so the next site shows at once. The
+# re-pick is three ordered walks of the owner's states, so it runs only on
+# the click: the tooltip's walk writes no variable, and the marker set just
+# before it is read back only when the effect runs for real
+# (scripting_best_practices.md, "An Option's Tooltip Walks Its Effects").
+te_grid_build_station_sgui = {
+	scope = state
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		te_grid_station_buildable = yes
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = te_grid_build_station_effect_tt
+			start_building_construction = building_grid_transfer_station
+		}
+		set_variable = te_grid_build_click
+		if = {
+			limit = { has_variable = te_grid_build_click }
+			remove_variable = te_grid_build_click
+			owner = {
+				te_grid_suggest_effect = yes
+			}
+		}
+	}
+}

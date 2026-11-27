@@ -414,3 +414,52 @@ te_grid_map_color_taken = {
 		}
 	}
 }
+
+# State scope, a capital on ROOT's te_grid_missed_capitals (ROOT the country
+# whose list it is, the Power Grids tab's): its owner is no grid partner of
+# ROOT now, read live from ROOT's treaties and bloc as
+# te_grid_refresh_partners_effect lists partners (a Grid Interconnection
+# Agreement, or a bloc whose principle joins its members' grids, a member at
+# war left out). The list is the last run's and the tab reads it every frame,
+# so an agreement signed since, or a principle taken since, drops its row and
+# its count at once (te_grid_tab_reach_disp, te_grid_link_open_disp).
+te_grid_link_open = {
+	exists = owner
+	NOT = { owner = root }
+	save_temporary_scope_as = te_grid_link_cap
+	root = {
+		NOT = {
+			any_scope_treaty = {
+				binds = scope:te_grid_link_cap.owner
+				any_scope_article = { has_type = grid_interconnection_agreement }
+			}
+		}
+		NOT = {
+			AND = {
+				te_grid_bloc_links_grids = yes
+				is_in_same_power_bloc = scope:te_grid_link_cap.owner
+				NOT = { has_war_with = scope:te_grid_link_cap.owner }
+			}
+		}
+	}
+}
+
+# State scope, a suggested site (te_grid_suggested, te_grid_suggest_effect):
+# a station could still be queued here by its owner. It has none, built or
+# queued, and the building's placement rule allows one now
+# (te_grid_station_placeable). The Build button's is_valid
+# (te_grid_build_station_sgui), each line its own tooltip.
+te_grid_station_buildable = {
+	custom_tooltip = {
+		text = te_grid_build_no_station_tt
+		te_grid_state_has_station = no
+	}
+	custom_tooltip = {
+		text = te_grid_station_adjacent_tt
+		te_grid_station_placeable = yes
+	}
+	custom_tooltip = {
+		text = te_grid_build_tech_tt
+		owner = { has_technology_researched = electrical_capacitors }
+	}
+}

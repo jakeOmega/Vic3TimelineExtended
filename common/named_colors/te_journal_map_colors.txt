@@ -359,4 +359,9 @@ colors = {
 	te_jmap_grid_12 = hsv360 { 56 42 98 }
 	te_jmap_grid_offline = hsv360 { 0 0 52 }
 	te_jmap_grid_hub = hsv360 { 0 0 98 }
+	# Grid Flows (91): sending blue, receiving orange (a pair colorblind viewers tell apart), idle on a grid a pale sand;
+	# on no grid, the Power Grids map's grey (te_jmap_grid_offline).
+	te_jmap_grid_send = hsv360 { 208 72 82 }
+	te_jmap_grid_receive = hsv360 { 28 84 94 }
+	te_jmap_grid_idle = hsv360 { 46 22 82 }
 }

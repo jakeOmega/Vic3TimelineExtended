@@ -1204,6 +1204,187 @@ types te_grid_widget_types
 	}
 
 	### ----------------------------------------------------------------------
+	### Next Steps (2026-11-27): where to grow the grid, for the local player
+	### alone (Country.IsLocalPlayer, false for another country in National
+	### Info and for every country an observer opens): the tab shows another
+	### country no control. Two lists, both stored, each row read live (rule
+	### 5, a call to action reads live):
+	###   Suggested Stations, the three sites the AI would choose next
+	###   (te_grid_suggested, te_grid_suggest_effect: monthly, and again on each
+	###   Build), best first, each with why and a Build button. A row hides once
+	###   its state has a station or another owner.
+	###   In Reach, while there is any, the countries whose stations could join
+	###   ours across a border or by undersea cable but aren't grid partners
+	###   (te_grid_missed_capitals, the last run's), each with its flag and
+	###   Draft Treaty, vanilla's own new-draft call. A row hides the moment the
+	###   two become partners (te_grid_link_open_disp, read live from the
+	###   treaties and the bloc).
+	### Rows: a 372 text and a 100 button, 8 between (480); a flag 30, a 302
+	### name and a 140 button, 4 between (480).
+	### ----------------------------------------------------------------------
+
+	### One suggested site: an item of te_grid_suggested, its state the
+	### datacontext. Its name and why on two lines, the figures on hover; Build
+	### queues a station there (te_grid_build_station_sgui), greyed with the
+	### reason when it can't.
+	type te_grid_suggest_row = flowcontainer {
+		visible = "[And( ObjectsEqual( State.GetOwner, Country.Self ), GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_suggestion_open_disp'), '(CFixedPoint)0' ) )]"
+		direction = horizontal
+		spacing = 8
+
+		textbox = {
+			minimumsize = { 372 -1 }
+			maximumsize = { 372 -1 }
+			autoresize = yes
+			multiline = yes
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			tooltip = "te_grid_suggest_tt"
+			text = "te_grid_suggest_line"
+		}
+		button = {
+			using = default_button_action
+			size = { 100 28 }
+			parentanchor = vcenter
+			enabled = "[GetScriptedGui('te_grid_build_station_sgui').IsValid( GuiScope.SetRoot( State.MakeScope ).End )]"
+			onclick = "[GetScriptedGui('te_grid_build_station_sgui').Execute( GuiScope.SetRoot( State.MakeScope ).End )]"
+			tooltip = "[Concatenate( GetScriptedGui('te_grid_build_station_sgui').IsValidTooltip( GuiScope.SetRoot( State.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), GetScriptedGui('te_grid_build_station_sgui').ExecuteTooltip( GuiScope.SetRoot( State.MakeScope ).End ) ) )]"
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 90
+				using = te_grid_fontsize_row
+				text = "te_grid_suggest_build"
+			}
+		}
+	}
+
+	### One country in reach: an item of te_grid_missed_capitals, read through
+	### its capital (gotcha #15), the capital the datacontext. Its flag
+	### (vanilla's, its name on hover and the country on click) and its name
+	### beside it (GetNameNoFlag: one flag per country, rule 8); Draft Treaty
+	### opens a new treaty draft with it, as the country panel's Draft a
+	### Treaty does, greyed while the two can't sign one.
+	type te_grid_reach_row = flowcontainer {
+		visible = "[GreaterThan_CFixedPoint( GuiScope.SetRoot( Country.MakeScope ).AddScope( 'te_grid_link_capital', State.MakeScope ).ScriptValue('te_grid_link_open_disp'), '(CFixedPoint)0' )]"
+		direction = horizontal
+		spacing = 4
+
+		widget = {
+			size = { 30 28 }
+			parentanchor = vcenter
+
+			tiny_flag = {
+				datacontext = "[State.GetCountry]"
+				parentanchor = center
+			}
+		}
+		textbox = {
+			minimumsize = { 302 -1 }
+			maximumsize = { 302 -1 }
+			autoresize = yes
+			multiline = yes
+			parentanchor = vcenter
+			align = left|nobaseline
+			using = te_grid_fontsize_row
+			tooltip = "te_grid_reach_tt"
+			text = "te_grid_reach_name"
+		}
+		button = {
+			using = default_button_action
+			size = { 140 28 }
+			parentanchor = vcenter
+			enabled = "[Country.CanSignTreatyWith( State.GetCountry.Self )]"
+			onclick = "[InformationPanelBar.OpenTreatyDraftPanelForNewDraft( Country.Self, State.GetCountry.Self )]"
+			### The hover reads the row's State alone: a tooltip inside a
+			### datamodel item may not see the tab's Country (gotcha #24).
+			tooltip = "te_grid_reach_draft_tt"
+
+			textbox = {
+				parentanchor = center
+				align = center|nobaseline
+				autoresize = yes
+				max_width = 130
+				using = te_grid_fontsize_row
+				text = "te_grid_reach_draft"
+			}
+		}
+	}
+
+	type te_grid_next_panel = flowcontainer {
+		visible = "[Country.IsLocalPlayer]"
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_grid_panel = {
+			te_grid_heading = {
+				blockoverride "heading_text" {
+					text = "te_grid_suggest_header"
+				}
+				blockoverride "heading_right" {
+					tooltip = "te_grid_suggest_rank_tt"
+					text = "te_grid_suggest_rank"
+				}
+			}
+			### A note while no suggestion stands: none picked yet, or each has a
+			### station or another owner since (te_grid_tab_suggest_open_disp).
+			te_grid_note = {
+				visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_suggest_open_disp'), '(CFixedPoint)0' ) )]"
+				text = "te_grid_suggest_none"
+			}
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_suggest_open_disp'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				margin_top = 4
+				datamodel = "[Country.MakeScope.GetList('te_grid_suggested')]"
+
+				item = {
+					te_grid_suggest_row = {
+						datacontext = "[Scope.GetState]"
+					}
+				}
+			}
+			### In Reach, only while a country is (rule 7): te_grid_tab_reach_disp
+			### counts the rows that show.
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_grid_tab_reach_disp'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				margin_top = 8
+
+				te_grid_heading = {
+					blockoverride "heading_text" {
+						text = "te_grid_reach_header"
+					}
+					blockoverride "heading_right" {
+						tooltip = "te_grid_reach_count_tt"
+						text = "te_grid_reach_count"
+					}
+				}
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+					datamodel = "[Country.MakeScope.GetList('te_grid_missed_capitals')]"
+
+					item = {
+						te_grid_reach_row = {
+							datacontext = "[Scope.GetState]"
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
 	### A Grid Transfer Station's building panel (gui/building_details_panel.gui,
 	### shown on that building type only): the state's grid in brief, the
 	### tile's rows with their hovers, and a link to the Power Grids tab for the
@@ -1249,13 +1430,30 @@ types te_grid_widget_types
 
 		te_grid_kv_row = {
 			blockoverride "row_tooltip" {
-				tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+				tooltip = "TE_STATE_GRID_ROW_MODE_HERE_TT"
 			}
 			blockoverride "row_label" {
 				text = "TE_STATE_GRID_ROW_MODE"
 			}
 			blockoverride "row_value" {
 				text = "te_grid_st_mode"
+			}
+		}
+		### Why the station moves nothing, in brief (te_grid_idle_reason_disp:
+		### the last run's for a station idle on a grid, the rest live), while it
+		### moves nothing; the whole reason on hover.
+		te_grid_kv_row = {
+			blockoverride "row_visible" {
+				visible = "[GreaterThan_CFixedPoint( State.MakeScope.ScriptValue('te_grid_idle_reason_disp'), '(CFixedPoint)0' )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "te_grid_bld_reason_tt"
+			}
+			blockoverride "row_label" {
+				text = "te_grid_bld_reason_label"
+			}
+			blockoverride "row_value" {
+				text = "te_grid_bld_reason"
 			}
 		}
 		te_grid_kv_row = {
@@ -1486,6 +1684,7 @@ types te_grid_widget_types
 				te_grid_overview_panel = {}
 				te_grid_grids_panel = {}
 				te_grid_stations_panel = {}
+				te_grid_next_panel = {}
 			}
 		}
 		blockoverride "tab_open_journal" {}
@@ -1510,6 +1709,7 @@ types te_grid_widget_types
 
 		blockoverride "column_3" {
 			te_grid_stations_panel = {}
+			te_grid_next_panel = {}
 		}
 	}
 }

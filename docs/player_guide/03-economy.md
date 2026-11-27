@@ -560,13 +560,18 @@ shows Sea cables, how many stations from other grids its cable joins to this
 one; the hover names them and gives the cable's range. On a grid that joins two
 markets it also shows the Exports or Imports of the state's market across the
 border, and Pass-through on the station that takes the import in. Its hover
-has the grid's supply against its demand.
+has the grid's supply against its demand. The hover of a station's mode, here
+and in the Power Grids tab, says why the station moves what it does: it is the
+only station on its grid, nothing on its grid uses or makes power, nothing in
+its state does, the grid has too little to spare or needs too little, its price
+is close to the grid's, it has no staff yet, or it joins its grid on the 1st.
 
 The Power Grids tab of the Timeline Extended window opens once you research
 Electrical Capacitors. Its overview counts your stations and how many are on
 a grid, the grids they are on, the Electricity your stations send and receive
 a week, your transmission efficiency, and your Grid Interconnection Agreements,
-with the countries whose undersea cables reach yours but aren't joined to you.
+with the countries in reach: those whose stations border yours, or whose
+undersea cables reach yours, but that aren't joined to you.
 Under the boxes, Bloc partners counts the members of your bloc joined to you
 through its principle that you have no agreement with. National Generation,
 under your flag in the same frame, shows how much Electricity your power plants
@@ -580,11 +585,24 @@ Stations table lists each of your stations with its mode, flow, grid and
 staffing: first those on no grid, then those that move nothing or are short of
 staff, then the rest, the largest flow first. It shows ten, and Show All lists
 the rest. Most figures are the
-last monthly balancing's, so a new station joins them on the 1st. A station's
-building panel shows its own grid in brief,
-with a button to the tab, and National Info shows another country's tab. The
-map button in the tab's header opens the Map Room on Power Grids, which colors
-every grid in the world in a color of its own, with its hub striped white.
+last monthly balancing's, so a new station joins them on the 1st.
+
+Your own tab also has Next Steps. Suggested Stations lists the three states
+where a station would help your grids most, ranked the way the AI ranks its
+own sites, each with the reason and a Build button that queues a station there.
+It is picked once a month and again after each Build, and a state drops off as
+soon as it has a station. In Reach lists the countries whose stations could
+join yours but aren't your grid partners, each with a Draft Treaty button that
+opens a treaty draft with them; add a Grid Interconnection Agreement to it to
+join your grids.
+
+A station's building panel shows its own grid in brief, and when the station
+moves nothing, the reason, with a button to the tab. National Info shows
+another country's tab, without Next Steps. The map button in the tab's header
+opens the Map Room on Power Grids, which colors every grid in the world in a
+color of its own, with its hub striped white. Grid Flows, beside it, colors
+each station's state by whether it sends power, receives it, sits idle or is
+on no grid.
 
 A station is worth building where power plants make more than the state uses,
 and where Electricity is expensive. A state with no power uses none, because its

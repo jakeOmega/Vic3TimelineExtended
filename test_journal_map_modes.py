@@ -313,8 +313,8 @@ class MapRoomTest(unittest.TestCase):
         # 2 was literacy, retired in the fifth pass (vanilla's literacy map mode shows it) and back in the first tier
         # 48-73 the class maps (#1975); 2 literacy again and 74-82 the first tier's (#1976); 83-87 the second tier's
         # (#1977); 88-89 the class maps' Spacers, the mod's own pop type (space forces personnel, 2026-11-24); 90
-        # Nuclear Reach (2026-11-26)
-        self.assertEqual(sorted(picks.values()), list(range(1, 91)), "one pick per selector")
+        # Nuclear Reach (2026-11-26); 91 Grid Flows (2026-11-27)
+        self.assertEqual(sorted(picks.values()), list(range(1, 92)), "one pick per selector")
         # the "no data" branch names the figure maps in an OR; a pick needs a branch of its own
         color = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_color"))
         tooltip = re.sub(r"\bOR\s*=\s*\{[^{}]*\}", "", block(self.room, "map_tooltip"))
@@ -1435,7 +1435,7 @@ class CategoriesTest(unittest.TestCase):
             "classes": tuple(f"class_{c['pop']}_{kind}" for c in class_table().CLASSES for kind in ("count", "share")),
             "economy": ("gdp", "gdp_per_capita", "unemployment", "vacant_jobs", "gini", "dynastic_wealth", "ownership",
                         "company_hqs", "investment", "trade_capacity", "infrastructure", "market_access",
-                        "power_grids"),
+                        "power_grids", "grid_flows"),
             "politics": ("turmoil", "radicals_loyalists", "discrimination", "political_models", "united_nations",
                          "colonies"),
             "military": ("armed_forces", "fighting_age_men", "war_dead", "devastation", "nuclear", "nuclear_reach",
@@ -2742,6 +2742,59 @@ class NuclearReachMapTest(_RoomBranches, unittest.TestCase):
         self.assertEqual(hsv["te_jmap_reach_icbms"], (327, 41, 80))
         self.assertEqual(hsv["te_jmap_reach_you"], tuple(int(x) for x in re.search(
             r"\bte_jmap_nuke_you\s*=\s*hsv360\s*\{\s*(\d+)\s+(\d+)\s+(\d+)", text).groups()))
+
+
+
+class GridFlowsMapTest(_RoomBranches, unittest.TestCase):
+    """Grid Flows (selector 91, 2026-11-27, the owner's ask for an import/export map beside vanilla's price map): each
+    station's state by what its station does this month, read as the Power Grids tab's Stations table reads it."""
+
+    SEL = 91
+    MODES = ((1, "te_jmap_grid_send", "te_jmap_tt_grid_send"), (2, "te_jmap_grid_receive", "te_jmap_tt_grid_receive"),
+             (3, "te_jmap_grid_idle", "te_jmap_tt_grid_idle"), (4, "te_jmap_grid_offline", "te_jmap_tt_grid_flow_off"))
+
+    def test_the_paint_and_the_hover_follow_the_mode(self):
+        expected = [(f"grid_mode = {{ MODE = {n} }}", color) for n, color, _ in self.MODES]
+        colors = [(" ".join(limit.split()[3:]).replace("te_jmap_", ""), body) for limit, body in
+                  self.of(self.colors, self.SEL)]
+        self.assertEqual(colors, [(m, f'value = "{c}"') for m, c in expected] + [("", 'value = "te_jmap_none"')])
+        hover = [(" ".join(limit.split()[3:]).replace("te_jmap_", ""), body) for limit, body in
+                 self.of(self.hover, self.SEL)]
+        self.assertEqual(hover, [(f"grid_mode = {{ MODE = {n} }}", f"custom_tooltip_no_bullet = {tt}")
+                                 for n, _, tt in self.MODES]
+                         + [("", "custom_tooltip_no_bullet = te_jmap_tt_grid_none")])
+
+    def test_the_mode_is_the_tab_s_on_a_station(self):
+        body = " ".join(block(code(TRIGGERS), "te_jmap_grid_mode").split())
+        # the station first: te_grid_mode_disp reads 4, offline, where there is none
+        self.assertEqual(body, "has_building = building_grid_transfer_station te_grid_mode_disp = $MODE$")
+        values = code("common/script_values/power_grid_values.txt")
+        self.assertEqual(sorted({int(v) for v in re.findall(r"\bvalue = (\d+)", block(values, "te_grid_mode_disp"))}),
+                         [n for n, _, _ in self.MODES])
+
+    def test_the_hovers_read_the_state_through_this(self):
+        # a map hover has no State datacontext: each reads THIS.GetState, and the idle reason through its own chain
+        loc = loc_values()
+        keys = [tt for _, _, tt in self.MODES] + ["te_jmap_tt_grid_flow", "te_jmap_tt_grid_staff", "te_jmap_tt_grid_why"]
+        for key in keys:
+            self.assertNotRegex(loc[key], r"(?<![.\w])State\.", key)
+        why = loc["te_jmap_tt_grid_why"]
+        for n in range(1, 11):
+            self.assertIn(f"'(CFixedPoint){n}'), 'te_grid_why_short_{n}'", why)
+        # a hub is named only where the station moves power, so it is on a grid
+        for key in ("te_jmap_tt_grid_idle", "te_jmap_tt_grid_flow_off"):
+            self.assertNotIn("te_grid_hub", loc[key], key)
+
+    def test_the_pick_sits_beside_power_grids_and_the_colors_stay_apart(self):
+        row = code(PICKS_GUI)
+        self.assertLess(row.index('text = "te_jmap_pick_power_grids"'), row.index('text = "te_jmap_pick_grid_flows"'))
+        self.assertEqual(block(block(sguis(), "te_jmap_pick_grid_flows_sgui"), "is_shown").split(),
+                         ["is_player", "=", "yes"])
+        text = code(COLORS)
+        hue = {n: int(re.search(r"\b" + n + r"\s*=\s*hsv360\s*\{\s*(\d+)", text).group(1))
+               for n in ("te_jmap_grid_send", "te_jmap_grid_receive")}
+        # blue against orange: far apart on the wheel, a pair colorblind viewers tell apart
+        self.assertGreaterEqual(abs(hue["te_jmap_grid_send"] - hue["te_jmap_grid_receive"]), 150)
 
 
 if __name__ == "__main__":

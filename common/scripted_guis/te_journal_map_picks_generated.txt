@@ -734,7 +734,8 @@ te_jmap_pick_class_spacers_share_sgui = {
 
 # Economy: output (GDP, GDP per capita) and work (unemployment, the jobs open); how wealth is spread (the walk's Gini
 # and Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what the owners invest
-# and the trade a state can carry; its infrastructure to spare, the market access it buys, and the power grids.
+# and the trade a state can carry; its infrastructure to spare and the market access it buys; the power grids, and
+# what each station sends or receives on them.
 
 te_jmap_pick_gdp_sgui = {
 	scope = country
@@ -863,6 +864,16 @@ te_jmap_pick_power_grids_sgui = {
 	is_valid = { NOT = { te_jmap_selector = 31 } }
 	effect = {
 		te_jmap_set_selector = { SEL = 31 }
+	}
+}
+
+te_jmap_pick_grid_flows_sgui = {
+	scope = country
+	is_shown = { is_player = yes }
+	ai_is_valid = { always = no }
+	is_valid = { NOT = { te_jmap_selector = 91 } }
+	effect = {
+		te_jmap_set_selector = { SEL = 91 }
 	}
 }
 

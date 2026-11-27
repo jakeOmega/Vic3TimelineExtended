@@ -1454,6 +1454,43 @@ je_te_map_room = {
 			}
 			value = "te_jmap_none"
 		}
+		# 91. Grid Flows (2026-11-27): each station's state by what its station does this month, as the Power Grids
+		# tab's Stations table shows it (te_grid_mode_disp): sending blue, receiving orange, idle on a grid pale, on no
+		# grid grey (the Power Grids map's offline grey). A colorblind-safe pair, so the Color option needn't touch it.
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 1 }
+			}
+			value = "te_jmap_grid_send"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 2 }
+			}
+			value = "te_jmap_grid_receive"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 3 }
+			}
+			value = "te_jmap_grid_idle"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 4 }
+			}
+			value = "te_jmap_grid_offline"
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+			}
+			value = "te_jmap_none"
+		}
 		# The first tier of the owner's new maps (2026-11-23, #1976): living standards, the economy and politics.
 		# 74. Standard of Living: the yearly walk's people-weighted mean (te_dg_sol), whatever the Demographics rule.
 		else_if = {
@@ -3251,6 +3288,41 @@ je_te_map_room = {
 		else_if = {
 			limit = {
 				te_jmap_selector = 31
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_none
+		}
+		# 91. Grid Flows: what the station sends or receives, idle and why, on no grid, or none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 1 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_send
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 2 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_receive
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 3 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_idle
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 4 }
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_flow_off
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_grid_none
 		}

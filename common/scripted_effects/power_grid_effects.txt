@@ -60,6 +60,9 @@
 #   te_grid_power_rate  the Grid Power its lines carry per unit of flow: the
 #                    grid's sending price (te_grid_price) when they were set
 #   te_grid_staffed  the station had staff at the last run (self-checks only)
+#   te_grid_idle_reason  why a station on a grid moves nothing this month, 1-7
+#                    (te_grid_store_idle_reason_effect); none while it moves
+#                    power or is on no grid
 #   te_grid_upload_electricity_mult / te_grid_download_electricity_mult
 #                    the Electricity modifiers' multipliers as applied, net of
 #                    the station's other Electricity bonuses
@@ -223,11 +226,13 @@ te_grid_world_update_effect = {
 	}
 
 	# Each country's stations, in the order the Power Grids tab lists them,
-	# and the overview's Sent and Received as of this run.
+	# the overview's Sent and Received as of this run, and the countries in
+	# reach that aren't its grid partners (In Reach).
 	every_in_global_list = {
 		variable = te_grid_record_countries
 		te_grid_order_stations_effect = yes
 		te_grid_store_tab_flows_effect = yes
+		te_grid_store_missed_links_effect = yes
 	}
 
 	te_grid_staffing_info_end_effect = yes
@@ -255,8 +260,140 @@ te_grid_record_clear_effect = {
 		clear_variable_list = te_grid_stations
 		clear_variable_list = te_grid_cable_reach
 		te_grid_clear_tab_flows_effect = yes
+		clear_variable_list = te_grid_missed_capitals
 	}
 	clear_global_variable_list = te_grid_record_countries
+}
+
+# Country scope, at the end of a run, a country of its record: the countries
+# whose stations could join its grids but aren't its grid partners, for the
+# Power Grids tab's In Reach list and the overview's In reach count
+# (te_grid_tab_reach_disp): a country with a station that borders one of its
+# own across a land border, or whose undersea cable reaches one of its own or
+# is reached by it (te_grid_cable_reach, from this run's cable walk). Either
+# would join its grid under a Grid Interconnection Agreement. Their capitals
+# go on te_grid_missed_capitals, each once, since a country read straight off
+# a GUI list is unproven (gui_modding_guide.md gotcha #15) and the tab reads
+# each through its capital, as the grid cards' flags do. The partner list is
+# this run's (te_grid_refresh_partners_effect, at its start); an agreement
+# signed since is read live where the list is shown (te_grid_link_open).
+te_grid_store_missed_links_effect = {
+	clear_variable_list = te_grid_missed_capitals
+	save_scope_as = te_grid_missed_of
+	every_scope_state = {
+		limit = { has_building = building_grid_transfer_station }
+		every_neighbouring_state = {
+			limit = {
+				NOT = { owner = scope:te_grid_missed_of }
+				has_building = building_grid_transfer_station
+			}
+			owner = {
+				te_grid_add_missed_link_effect = yes
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = te_grid_cable_reach }
+		every_in_list = {
+			variable = te_grid_cable_reach
+			limit = { exists = this }
+			te_grid_add_missed_link_effect = yes
+		}
+	}
+}
+
+# Country scope, a country whose stations reach scope:te_grid_missed_of's: its
+# capital on that country's te_grid_missed_capitals, once, unless the two are
+# grid partners. A country with no capital is left out, as on a grid card.
+te_grid_add_missed_link_effect = {
+	save_scope_as = te_grid_missed_country
+	if = {
+		limit = {
+			exists = capital
+			NOT = {
+				scope:te_grid_missed_of = {
+					is_target_in_variable_list = { name = te_grid_partners target = scope:te_grid_missed_country }
+				}
+			}
+		}
+		capital = {
+			save_scope_as = te_grid_missed_capital
+		}
+		scope:te_grid_missed_of = {
+			if = {
+				limit = {
+					NOT = { is_target_in_variable_list = { name = te_grid_missed_capitals target = scope:te_grid_missed_capital } }
+				}
+				add_to_variable_list = { name = te_grid_missed_capitals target = scope:te_grid_missed_capital }
+			}
+		}
+	}
+}
+
+# ---- Suggested stations -----------------------------------------------------------
+
+# Country scope, a player's: the three states the AI would put its next
+# stations in, for the Power Grids tab's Suggested Stations. Those are the
+# AI's sites (te_grid_ai_station_site: no station yet, placeable now, with
+# power in the market area and another station to share it with, or beside a
+# grid partner's station), best first by the AI's own value
+# (te_grid_station_ai_value), into te_grid_suggested in that order, each with
+# why it is suggested (te_grid_suggest_reason, te_grid_suggest_reason_value).
+# Monthly (te_grid_suggest_on_action, power_grid_on_actions.txt) and when the
+# tab's Build queues one (te_grid_build_station_sgui), so the next site shows
+# at once. The list is advice as of then; each row hides live once its state
+# has a station or another owner (te_grid_suggestion_open_disp, the tab's
+# rows).
+# Three passes of one pick each, every pick marked so the next skips it:
+# position = N clamps past the end of a short list and repeats its last state
+# (scripting_best_practices.md, "ordered_scope_state position = N").
+# The partner list is refreshed first, as the AI's station pass does
+# (te_grid_ai_build_effect): the balancing keeps it only for a country with a
+# station.
+te_grid_suggest_effect = {
+	if = {
+		limit = { has_variable_list = te_grid_suggested }
+		every_in_list = {
+			variable = te_grid_suggested
+			limit = { exists = this }
+			if = {
+				limit = { has_variable = te_grid_suggest_reason }
+				remove_variable = te_grid_suggest_reason
+			}
+		}
+	}
+	clear_variable_list = te_grid_suggested
+	if = {
+		limit = { has_technology_researched = electrical_capacitors }
+		te_grid_refresh_partners_effect = yes
+		te_grid_suggest_pick_effect = yes
+		te_grid_suggest_pick_effect = yes
+		te_grid_suggest_pick_effect = yes
+		every_in_list = {
+			variable = te_grid_suggested
+			remove_variable = te_grid_suggest_picked
+		}
+	}
+}
+
+# Country scope, from te_grid_suggest_effect: the best site not yet picked,
+# marked, its reason stored, and added to the end of te_grid_suggested. With
+# none left it picks nothing.
+te_grid_suggest_pick_effect = {
+	ordered_scope_state = {
+		limit = {
+			NOT = { has_variable = te_grid_suggest_picked }
+			te_grid_ai_station_site = yes
+		}
+		order_by = te_grid_station_ai_value
+		max = 1
+		check_range_bounds = no
+		set_variable = te_grid_suggest_picked
+		set_variable = { name = te_grid_suggest_reason value = te_grid_suggest_reason_value }
+		owner = {
+			add_to_variable_list = { name = te_grid_suggested target = prev }
+		}
+	}
 }
 
 # Country scope, at the end of a run, after te_grid_order_stations_effect: the
@@ -1122,11 +1259,13 @@ te_grid_balance_region_effect = {
 		set_variable = { name = te_grid_hub value = scope:te_grid_hub_state }
 	}
 
-	# What crosses between markets, once every flow is set; then the orders.
+	# What crosses between markets, once every flow is set; then the orders,
+	# and why each station that moves nothing is idle (te_grid_idle_reason).
 	te_grid_cross_market_effect = yes
 	every_in_global_list = {
 		variable = te_grid_region
 		te_grid_set_station_flow_effect = yes
+		te_grid_store_idle_reason_effect = yes
 	}
 
 	# Once the orders are set, the grid's record for the Power Grids tab, and its
@@ -1540,12 +1679,83 @@ te_grid_set_station_flow_effect = {
 	}
 }
 
+# State scope, a member of the grid being balanced, once its order is set
+# (te_grid_set_station_flow_effect): why a station on a grid moves nothing this
+# month, for the Mode hovers and the building panel's Reason
+# (te_grid_idle_reason_disp, power_grid_values.txt). It reads the balancing's
+# locals (te_grid_members, te_grid_sum_production, te_grid_scale_up and
+# te_grid_scale_down, set in te_grid_balance_region_effect before the orders)
+# and global te_grid_region_active, so it is called from there only. The first
+# test that holds gives the reason:
+#   1 the only station on its grid: no other to trade with
+#   2 nothing on the grid uses power, so the grid is never priced
+#   3 nothing on the grid makes power
+#   4 nothing in this state makes or uses power
+#   5 it is short, but the grid has too little to spare: its order was scaled
+#     away to match the senders (te_grid_scale_down)
+#   6 it has power to spare, but the grid needs too little of it
+#     (te_grid_scale_up)
+#   7 its price is close to the grid's: the losses would eat what it could
+#     move, or its order is under a unit a week
+# A station that moves something holds none. Why a station is on no grid is
+# read live (te_grid_idle_reason_disp), since it changes between runs.
+te_grid_store_idle_reason_effect = {
+	if = {
+		limit = { var:te_grid_command > 0 }
+		if = {
+			limit = { has_variable = te_grid_idle_reason }
+			remove_variable = te_grid_idle_reason
+		}
+	}
+	else_if = {
+		limit = { local_var:te_grid_members <= 1 }
+		set_variable = { name = te_grid_idle_reason value = 1 }
+	}
+	else_if = {
+		limit = { global_var:te_grid_region_active = 0 }
+		set_variable = { name = te_grid_idle_reason value = 2 }
+	}
+	else_if = {
+		limit = { local_var:te_grid_sum_production <= 0 }
+		set_variable = { name = te_grid_idle_reason value = 3 }
+	}
+	else_if = {
+		limit = {
+			var:te_grid_local_production <= 0
+			var:te_grid_local_consumption <= 0
+		}
+		set_variable = { name = te_grid_idle_reason value = 4 }
+	}
+	else_if = {
+		limit = {
+			var:te_grid_target <= -1
+			local_var:te_grid_scale_down < 1
+		}
+		set_variable = { name = te_grid_idle_reason value = 5 }
+	}
+	else_if = {
+		limit = {
+			var:te_grid_target >= 1
+			local_var:te_grid_scale_up < 1
+		}
+		set_variable = { name = te_grid_idle_reason value = 6 }
+	}
+	else = {
+		set_variable = { name = te_grid_idle_reason value = 7 }
+	}
+}
+
 # State scope. A station that can't take part this month moves nothing. Its
 # factor is kept for when it comes back.
 te_grid_idle_station_effect = {
 	set_variable = { name = te_grid_flow value = 0 }
 	set_variable = { name = te_grid_command value = 0 }
 	set_variable = { name = te_grid_import_command value = 0 }
+	# Why it is on no grid is read live (te_grid_idle_reason_disp).
+	if = {
+		limit = { has_variable = te_grid_idle_reason }
+		remove_variable = te_grid_idle_reason
+	}
 	te_grid_clear_cross_market_effect = yes
 	# On no grid this month: the tile shows no grid figures.
 	if = {
@@ -1767,6 +1977,10 @@ te_grid_clear_state_effect = {
 	if = {
 		limit = { has_variable = te_grid_staffed }
 		remove_variable = te_grid_staffed
+	}
+	if = {
+		limit = { has_variable = te_grid_idle_reason }
+		remove_variable = te_grid_idle_reason
 	}
 	clear_variable_list = te_grid_cable_links
 	te_grid_clear_cross_market_effect = yes

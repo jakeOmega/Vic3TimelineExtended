@@ -289,7 +289,8 @@ class StructureTest(unittest.TestCase):
         body = _type_body(self.gui, "te_grid_tab_body")
         content = body[body.index('block "te_grid_tab_layout"'):]
         self.assertEqual(re.findall(r"^\t+(te_grid_\w+_panel) = \{\}", content, re.M),
-                         ["te_grid_overview_panel", "te_grid_grids_panel", "te_grid_stations_panel"])
+                         ["te_grid_overview_panel", "te_grid_grids_panel", "te_grid_stations_panel",
+                          "te_grid_next_panel"])
         # National Generation is in the overview's frame, after the boxes and the Bloc partners
         # line, so it reads as the country's and not as a grid's (owner, 2026-11-14).
         overview = _type_body(self.gui, "te_grid_overview_panel")
@@ -353,8 +354,10 @@ class StructureTest(unittest.TestCase):
         columns = assert_wide_matches_narrow(self, "te_grid_wide_sections",
                                              layout=("te_grid_tab_body", "te_grid_tab_layout"))
         # one section to a column, in the tab's order (2026-11-24: 435, 500 and 360 in a great power's 2032, where
-        # two columns ran 940 beside 360); none hides while the tab is open, so no column takes a gate
-        self.assertEqual(columns, [["te_grid_overview_panel"], ["te_grid_grids_panel"], ["te_grid_stations_panel"]])
+        # two columns ran 940 beside 360), and Next Steps under the stations, the shortest (2026-11-27); none hides
+        # while the tab is open (Next Steps' own gate, the local player's, is its type's), so no column takes a gate
+        self.assertEqual(columns, [["te_grid_overview_panel"], ["te_grid_grids_panel"],
+                                   ["te_grid_stations_panel", "te_grid_next_panel"]])
         self.assertNotIn("_visible", _type_body(self.gui, "te_grid_wide_sections"))
 
     def test_the_registry(self):
@@ -461,8 +464,10 @@ class StructureTest(unittest.TestCase):
         self.assertIn("te_grid_mode_disp = 2", _txt_block(values, "te_grid_tab_receivers_live"))
         for body in (sent, received):
             self.assertIn("add = te_grid_electricity_moved_disp", body)
+        # In reach: the run's land and cable reach, each still no partner now, read live (2026-11-27).
         reach = _txt_block(values, "te_grid_tab_reach_disp")
-        self.assertIn("NOT = { is_target_in_variable_list = { name = te_grid_partners target = root } }", reach)
+        self.assertIn("variable = te_grid_missed_capitals", reach)
+        self.assertIn("te_grid_link_open = yes", reach)
         self.assertIn("exists = this", reach)
         on_grid = _txt_block(values, "te_grid_tab_on_grid_disp")
         for cond in ("has_building = building_grid_transfer_station", "has_variable = te_grid_hub"):
@@ -660,7 +665,7 @@ class StoredFlowsTest(unittest.TestCase):
         # At the run's end, for every country of its record, after its stations' order.
         run = self._squash(_txt_block(self.effects, "te_grid_world_update_effect"))
         self.assertIn("every_in_global_list = { variable = te_grid_record_countries te_grid_order_stations_effect = yes "
-                      "te_grid_store_tab_flows_effect = yes }", run)
+                      "te_grid_store_tab_flows_effect = yes te_grid_store_missed_links_effect = yes }", run)
         self.assertLess(run.index("te_grid_balance_region_effect = yes"), run.index("te_grid_store_tab_flows_effect"))
         # A country that leaves the run keeps none, as it keeps no list: cleared where its lists are.
         clear = self._squash(_txt_block(self.effects, "te_grid_record_clear_effect"))
@@ -1038,6 +1043,200 @@ class BuildingPanelTest(unittest.TestCase):
         self.assertIn("GetVariableSystem.Set('te_systems_window_tab', 'power_grids')", button)
         self.assertIn("GetVariableSystem.Set('com_open_window', 'te_systems_window')", button)
         self.assertLess(button.index("te_systems_window_tab"), button.index("com_open_window"))
+
+
+
+GRID_SGUIS = os.path.join(REPO, "common", "scripted_guis", "te_grid_sguis.txt")
+
+
+class NextStepsTest(_Budget, unittest.TestCase):
+    """Next Steps (2026-11-27): Suggested Stations, the three sites the AI would choose next with a Build button,
+    and In Reach, the countries whose stations could join ours without being partners, with Draft Treaty. The
+    local player's alone; both lists stored, each row read live (style guide rule 5: a call to action)."""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.panel = _type_body(cls.gui, "te_grid_next_panel")
+        cls.suggest = _type_body(cls.gui, "te_grid_suggest_row")
+        cls.reach = _type_body(cls.gui, "te_grid_reach_row")
+        cls.values = _no_comments(_read(VALUES))
+        cls.effects = _no_comments(_read(EFFECTS))
+        cls.triggers = _no_comments(_read(TRIGGERS))
+
+    def test_the_local_players_alone(self):
+        # Another country's tab (National Info) and an observer's show no control: the panel's own gate, first.
+        self.assertTrue(self.panel.lstrip("{ \n\t").startswith('visible = "[Country.IsLocalPlayer]"'))
+        for body in (self.panel, self.suggest, self.reach):
+            self.assertNotIn("GetPlayer", body)
+
+    def test_the_rows_widths(self):
+        def widths(body):
+            boxes = [int(w) for w in re.findall(r"maximumsize = \{ (\d+) -1 \}", body)]
+            fixed = [int(w) for w in re.findall(r"(?:widget|button) = \{[^{}]*?size = \{ (\d+) \d+ \}", body)]
+            gap = int(re.search(r"spacing = (\d+)", body).group(1))
+            return boxes, fixed, gap
+        boxes, fixed, gap = widths(self.suggest)
+        self.assertEqual(sum(boxes) + sum(fixed) + gap * (len(boxes) + len(fixed) - 1), 480)
+        boxes, fixed, gap = widths(self.reach)
+        self.assertEqual(sum(boxes) + sum(fixed) + gap * (len(boxes) + len(fixed) - 1), 480)
+        line = self.box(self.suggest, '"te_grid_suggest_line"')
+        for n in range(1, 5):
+            with self.subTest(reason=n):
+                self.fits(f"te_grid_suggest_why_short_{n}", line, SHARE)
+        # Two lines: the state's name, then why (each held above); the name at the longest a state's runs.
+        self.assertEqual(self.loc["te_grid_suggest_line"], "#b [State.GetNameNoFormatting]#!\\n$te_grid_suggest_why_short$")
+        self.assertLessEqual(len(STATE) * UNITS[line[1]] * MARGIN, line[0])
+        self.fits("te_grid_suggest_build", self.box(self.suggest, '"te_grid_suggest_build"'))
+        self.fits("te_grid_reach_draft", self.box(self.reach, '"te_grid_reach_draft"'))
+        for key, number in (("te_grid_suggest_header", NUMBER), ("te_grid_reach_header", NUMBER)):
+            self.fits(key, self.type_box("te_grid_heading", "heading_text"), number)
+        for key in ("te_grid_suggest_rank", "te_grid_reach_count"):
+            self.fits(key, self.type_box("te_grid_heading", "heading_right"))
+
+    def test_the_lists_and_their_live_rows(self):
+        self.assertIn("datamodel = \"[Country.MakeScope.GetList('te_grid_suggested')]\"", self.panel)
+        self.assertIn("datamodel = \"[Country.MakeScope.GetList('te_grid_missed_capitals')]\"", self.panel)
+        self.assertRegex(self.panel, r'te_grid_suggest_row = \{\s*datacontext = "\[Scope\.GetState\]"')
+        self.assertRegex(self.panel, r'te_grid_reach_row = \{\s*datacontext = "\[Scope\.GetState\]"')
+        # A site built or lost since the list was picked drops at once; so does a country we have signed with.
+        self.assertIn("ObjectsEqual( State.GetOwner, Country.Self )", self.suggest)
+        self.assertIn("ScriptValue('te_grid_suggestion_open_disp')", self.suggest)
+        self.assertIn("te_grid_state_has_station = no", _txt_block(self.values, "te_grid_suggestion_open_disp"))
+        self.assertIn("GuiScope.SetRoot( Country.MakeScope ).AddScope( 'te_grid_link_capital', State.MakeScope )"
+                      ".ScriptValue('te_grid_link_open_disp')", self.reach)
+        self.assertIn("te_grid_link_open = yes", _txt_block(self.values, "te_grid_link_open_disp"))
+        # The note and the In Reach section follow the same live counts as the rows.
+        for name in ("te_grid_tab_suggest_open_disp", "te_grid_tab_reach_disp"):
+            self.assertIn(f"ScriptValue('{name}')", self.panel)
+        opened = _txt_block(self.values, "te_grid_tab_suggest_open_disp")
+        for test in ("owner = root", "te_grid_state_has_station = no"):
+            self.assertIn(test, opened)
+        self.assertIn("te_grid_link_open = yes", _txt_block(self.values, "te_grid_tab_reach_disp"))
+        # The live test reads the treaties and the bloc as te_grid_refresh_partners_effect lists partners.
+        link = _txt_block(self.triggers, "te_grid_link_open")
+        for test in ("any_scope_article = { has_type = grid_interconnection_agreement }", "te_grid_bloc_links_grids = yes",
+                     "is_in_same_power_bloc", "has_war_with"):
+            self.assertIn(test, link)
+        # A country through its capital (gotcha #15), its flag on the flag alone, its name without one beside it.
+        self.assertRegex(self.reach, r'tiny_flag = \{\s*datacontext = "\[State\.GetCountry\]"')
+        self.assertEqual(self.loc["te_grid_reach_name"], "[State.GetCountry.GetNameNoFlag]")
+
+    def test_the_buttons(self):
+        build = _block_from(self.suggest, self.suggest.index("button = {") + len("button = "))
+        root = "GuiScope.SetRoot( State.MakeScope ).End"
+        for call in ("IsValid", "Execute"):
+            self.assertIn(f"GetScriptedGui('te_grid_build_station_sgui').{call}( {root} )", build)
+        self.assertIn(f"Concatenate( GetScriptedGui('te_grid_build_station_sgui').IsValidTooltip( {root} )", build)
+        self.assertIn(f"GetScriptedGui('te_grid_build_station_sgui').ExecuteTooltip( {root} )", build)
+        draft = _block_from(self.reach, self.reach.index("button = {") + len("button = "))
+        # Vanilla's own new-draft call, as the country panel's Draft a Treaty, greyed where it is.
+        self.assertIn('onclick = "[InformationPanelBar.OpenTreatyDraftPanelForNewDraft( Country.Self, State.GetCountry.Self )]"',
+                      draft)
+        self.assertIn('enabled = "[Country.CanSignTreatyWith( State.GetCountry.Self )]"', draft)
+        # A tooltip inside a datamodel item reads the row's State alone (gotcha #24).
+        self.assertNotRegex(self.loc[re.search(r'tooltip = "(\w+)"', draft).group(1)], r"(?<![.\w])Country\.")
+
+    def test_build_queues_and_repicks_on_the_click_only(self):
+        sgui = _no_comments(_txt_block(_read(GRID_SGUIS), "te_grid_build_station_sgui"))
+        self.assertIn("scope = state", sgui)
+        self.assertIn("te_grid_station_buildable = yes", sgui)
+        effect = sgui[sgui.index("effect = {"):]
+        self.assertRegex(effect, r"custom_tooltip = \{\s*text = te_grid_build_station_effect_tt\s*"
+                                 r"start_building_construction = building_grid_transfer_station\s*\}")
+        # The re-pick is three ordered walks, so the tooltip's walk mustn't run it: the marker it can't write first.
+        guard = effect.index("set_variable = te_grid_build_click")
+        repick = effect.index("te_grid_suggest_effect = yes")
+        self.assertLess(guard, repick)
+        self.assertIn("limit = { has_variable = te_grid_build_click }", effect[guard:repick])
+        buildable = _txt_block(self.triggers, "te_grid_station_buildable")
+        self.assertEqual(buildable.count("custom_tooltip = {"), 3)
+        for test in ("te_grid_state_has_station = no", "te_grid_station_placeable = yes",
+                     "has_technology_researched = electrical_capacitors"):
+            self.assertIn(test, buildable)
+
+    def test_the_suggestions_are_the_ais_sites(self):
+        suggest = _txt_block(self.effects, "te_grid_suggest_effect")
+        self.assertEqual(suggest.count("te_grid_suggest_pick_effect = yes"), 3)
+        self.assertLess(suggest.index("te_grid_refresh_partners_effect = yes"),
+                        suggest.index("te_grid_suggest_pick_effect = yes"))
+        self.assertIn("remove_variable = te_grid_suggest_picked", suggest)
+        pick = _txt_block(self.effects, "te_grid_suggest_pick_effect")
+        # One pick a pass, the last marked so the next skips it: position = N repeats a short list's last state.
+        self.assertIn("max = 1", pick)
+        self.assertNotIn("position", pick)
+        self.assertIn("NOT = { has_variable = te_grid_suggest_picked }", pick)
+        self.assertIn("te_grid_ai_station_site = yes", pick)
+        self.assertIn("order_by = te_grid_station_ai_value", pick)
+        self.assertIn("set_variable = { name = te_grid_suggest_reason value = te_grid_suggest_reason_value }", pick)
+        hook = _no_comments(_txt_block(_read(ON_ACTIONS), "te_grid_suggest_on_action"))
+        self.assertIn("is_player = yes", hook)
+        reasons = sorted({int(v) for v in re.findall(r"\bvalue = (\d+)",
+                                                     _txt_block(self.values, "te_grid_suggest_reason_value"))})
+        self.assertEqual(reasons, [1, 2, 3, 4])
+        for n in reasons:
+            for kind in ("short", "long"):
+                self.assertIn(f"te_grid_suggest_why_{kind}_{n}", self.loc)
+                self.assertIn(f"'(CFixedPoint){n}'), 'te_grid_suggest_why_{kind}_{n}'",
+                              self.loc[f"te_grid_suggest_why_{kind}"])
+
+    def test_the_missed_links_are_land_and_cable_reach_less_partners(self):
+        store = _txt_block(self.effects, "te_grid_store_missed_links_effect")
+        self.assertIn("every_neighbouring_state", store)
+        self.assertIn("variable = te_grid_cable_reach", store)
+        add = _txt_block(self.effects, "te_grid_add_missed_link_effect")
+        self.assertIn("is_target_in_variable_list = { name = te_grid_partners target = scope:te_grid_missed_country }", add)
+        self.assertIn("add_to_variable_list = { name = te_grid_missed_capitals target = scope:te_grid_missed_capital }", add)
+        self.assertIn("NOT = { is_target_in_variable_list = { name = te_grid_missed_capitals", add)
+        # Cleared with the rest of a country's record, so a country that leaves the run keeps none.
+        self.assertIn("clear_variable_list = te_grid_missed_capitals", _txt_block(self.effects, "te_grid_record_clear_effect"))
+
+
+class IdleReasonTest(unittest.TestCase):
+    """Why a station moves nothing (2026-11-27): the run stores the reason for a station idle on a grid, the rest
+    are read live, and the Mode hovers, the building panel's Reason and the Grid Flows map say it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = _no_comments(_read(EFFECTS))
+        cls.values = _no_comments(_read(VALUES))
+        cls.loc = _all_loc()
+        cls.gui = _read(GUI)
+
+    def test_stored_after_the_order_and_cleared_off_the_grid(self):
+        balance = _txt_block(self.effects, "te_grid_balance_region_effect")
+        self.assertRegex(balance, r"te_grid_set_station_flow_effect = yes\s*te_grid_store_idle_reason_effect = yes")
+        store = _txt_block(self.effects, "te_grid_store_idle_reason_effect")
+        self.assertEqual(sorted({int(v) for v in re.findall(r"name = te_grid_idle_reason value = (\d+)", store)}),
+                         list(range(1, 8)))
+        # A station that moves power holds none.
+        self.assertIn("limit = { var:te_grid_command > 0 }", store)
+        for name in ("te_grid_idle_station_effect", "te_grid_clear_state_effect"):
+            self.assertIn("remove_variable = te_grid_idle_reason", _txt_block(self.effects, name), name)
+
+    def test_every_reason_has_its_words(self):
+        disp = _txt_block(self.values, "te_grid_idle_reason_disp")
+        codes = sorted({int(v) for v in re.findall(r"\bvalue = (\d+)", disp)} - {0})
+        self.assertEqual(codes, [8, 9, 10, 11])
+        self.assertIn("value = var:te_grid_idle_reason", disp)
+        for n in range(1, 12):
+            with self.subTest(reason=n):
+                self.assertIn(f"'(CFixedPoint){n}'), 'te_grid_why_{n}'", self.loc["te_grid_why"])
+                self.assertIn(f"'(CFixedPoint){n}'), 'te_grid_why_short_{n}'", self.loc["te_grid_bld_reason"])
+                self.assertIn(f"te_grid_why_{n}", self.loc)
+                self.assertIn(f"te_grid_why_short_{n}", self.loc)
+
+    def test_the_hovers_say_it(self):
+        # The four mode icons, the tile's and the building panel's Mode, and the building panel's Reason row.
+        for word in ("sending", "receiving", "idle", "offline"):
+            self.assertEqual(self.loc[f"te_grid_st_mode_{word}_tt"], f"#b $te_grid_mode_{word}$#!\\n$te_grid_why$")
+        self.assertIn("$te_grid_why$", self.loc["TE_STATE_GRID_ROW_MODE_HERE_TT"])
+        self.assertIn('tooltip = "TE_STATE_GRID_ROW_MODE_HERE_TT"', _read(os.path.join(REPO, "gui", "te_state_panel_widgets.gui")))
+        section = _type_body(self.gui, "te_grid_building_section")
+        self.assertIn('tooltip = "TE_STATE_GRID_ROW_MODE_HERE_TT"', section)
+        self.assertIn("ScriptValue('te_grid_idle_reason_disp'), '(CFixedPoint)0' )", section)
+        # The table's header keeps the legend alone: it has no State.
+        self.assertNotIn("te_grid_why", self.loc["TE_STATE_GRID_ROW_MODE_TT"])
 
 
 if __name__ == "__main__":
