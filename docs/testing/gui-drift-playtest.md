@@ -83,3 +83,13 @@ the owner's screenshot only.
 |---|---|---|
 | **Every description whole.** A new game's Game Rules screen. Step each mod rule through every setting, the longest first: Free Market Construction, Space Race, Tax Code, Banking System, Global Commons, Social Movements. | Each description ends on its own full stop, with no ellipsis. Free Market Construction Disabled shows "Construction Sites must currently be built from the state view." in bold. | The model is too generous: lower `WRAP_WIDTH` in `test_game_rule_desc_length.py` until the text that was cut off fails, then cut what it flags. |
 | **Setting names fit the selector.** The same screen: Free Market Construction without AI Retooling Costs (51 characters), without Retooling Costs (48), Internal Resettlement: AI Voluntary Only (40). | The whole name between the arrows; smaller type is fine. | Shorten the name (`setting_<name>`), keep the player guide's rules table (`01-introduction.md`) to the same words, and give the names a check of their own in the test. |
+
+## Small text fixes from the second GUI wave (2026-11-27, from #2041)
+
+Loc only; the layout tests and `test_banking_layout.py`'s width budget pass. What the game shows:
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Nation tab, a new game.** The overview's Construction and Global Tech boxes. | "Construction / Base cost" and "Global Tech / Not yet", with no third line; once construction is scaled or tech spreads, the figure comes back ("+12%", "+5 spread"). | A raw key or "0%": `te_nation_ov_construction_fig` / `te_nation_ov_tech_fig` and the `AddLocalizationIf` they hold. |
+| **Banking, Monetary Policy, The Rate.** Wage Pressure, Price Pressure, Asset Purchases and Risk Premium, a negative and a positive reading. | The "%" in the figure's own colour: red beside a red "−0.4", green beside a green "+0.4", white beside a white "0.0". | A "%" another colour than its figure: the `|=+` format colours by another rule than #R / #G; `banking_dash_pct_*`. |
+| **German, the state view's Local Climate tile.** A malarial state, a humid one, and one before its first monthly update. | "Luftfeuchte", "Ständig" and "Folgt" each inside its cell. | A cut word: shorten it further in `i18n/german/tm/te_miscellaneous.json`. |

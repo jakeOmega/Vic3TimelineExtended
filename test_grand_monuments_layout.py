@@ -2311,8 +2311,8 @@ class HeldByLineTest(unittest.TestCase):
 
 class StateCardCountryTest(unittest.TestCase):
     """The state panel's Grand Monument cards have a State and no Country
-    (states_panel.gui:1458-1459, te_state_gm_card and te_state_gm_site_card set
-    none; review of PR #1355, I3). So nothing they draw reads Country: no type's
+    (states_panel.gui, where te_state_gm_card and te_state_gm_site_card are
+    mounted, sets none; review of PR #1355, I3). So nothing they draw reads Country: no type's
     markup, no te_own_country_only (it reads Country.IsLocalPlayer), no key they
     render or splice. The five buttons they share with the panel keep GetPlayer;
     in the panel they sit under its guard, where the player is the shown country."""

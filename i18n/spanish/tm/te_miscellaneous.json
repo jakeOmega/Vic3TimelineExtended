@@ -36571,7 +36571,7 @@
   "en": "Global Tech",
   "es": "Tecnología global"
  },
- "te_nation_ov_tech_fig": {
+ "te_nation_ov_tech_spread": {
   "en": "#v [Country.MakeScope.ScriptValue('te_nation_tech_spread')|+0]#! spread",
   "es": "#v [Country.MakeScope.ScriptValue('te_nation_tech_spread')|+0]#! de difusión"
  },

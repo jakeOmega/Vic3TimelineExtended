@@ -1213,6 +1213,20 @@ class TabLayoutTest(unittest.TestCase):
     def _nation_loc(self):
         return {k: v for k, v in _loc().items() if k.startswith(("te_nation_", "te_window_tab_nation"))}
 
+    def test_a_zero_is_not_a_figure(self):
+        """#2041: in a new game the Construction and Global Tech boxes read "Base cost / 0%" and
+        "Not yet / 0 spread": the third line restated the word as a zero. Each figure now shows on the
+        same test that picks its word's other branch, and nothing at zero."""
+        loc = _loc()
+        for box, value, shown in (("construction", "te_nation_construction_cost", "te_nation_ov_construction_pct"),
+                                  ("tech", "te_nation_tech_spread", "te_nation_ov_tech_spread")):
+            with self.subTest(box=box):
+                test = f"GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('{value}'), '(CFixedPoint)0' )"
+                self.assertEqual(loc[f"te_nation_ov_{box}_fig"], f"[AddLocalizationIf( {test}, '{shown}' )]")
+                self.assertTrue(loc[f"te_nation_ov_{box}_word"].startswith(f"[SelectLocalization( {test}, "),
+                                "the figure shows exactly when the word is not the zero one")
+                self.assertIn(f"ScriptValue('{value}')", loc[shown])
+
     def test_the_overview_fits_its_column(self):
         """Each box's caption, its words and its figure fit the 154 column at
         16 (rule 3; test_banking_layout.py's budget: 8.6 units a character at
@@ -1232,8 +1246,9 @@ class TabLayoutTest(unittest.TestCase):
         cell = self.gui[self.gui.index("type te_nation_ov_cell = "):self.gui.index("type te_nation_list = ")]
         self.assertEqual(set(re.findall(r"max_width = (\d+)", cell)), {"154"})
         keys = set(re.findall(r'"(te_nation_ov_\w+_(?:cap|fig))"', self.gui))
-        # the words are a SelectLocalization of these
-        for word in (k for k in loc if k.startswith("te_nation_ov_") and k.endswith("_word")):
+        # the words are a SelectLocalization of these, and a figure shown only when it is not zero an
+        # AddLocalizationIf of its own key (#2041)
+        for word in (k for k in loc if k.startswith("te_nation_ov_") and k.endswith(("_word", "_fig"))):
             keys |= {k for k in re.findall(r"'(te_nation_\w+)'", loc[word]) if k in loc}   # not ScriptValue('x')
         self.assertGreaterEqual(len(keys), 15)
         for key in sorted(keys):

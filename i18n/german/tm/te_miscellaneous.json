@@ -3409,7 +3409,7 @@
  },
  "TE_CLIMATE_MALARIA_2": {
   "en": "Endemic",
-  "de": "Endemisch"
+  "de": "Ständig"
  },
  "TE_CLIMATE_WATER_0": {
   "en": "Ample",
@@ -3793,7 +3793,7 @@
  },
  "TE_STATE_CLIMATE_ROW_HUMIDITY": {
   "en": "Humidity",
-  "de": "Luftfeuchtigkeit"
+  "de": "Luftfeuchte"
  },
  "TE_STATE_CLIMATE_ROW_MALARIA": {
   "en": "Malaria",
@@ -36819,7 +36819,7 @@
   "en": "Global Tech",
   "de": "Globale Technologie"
  },
- "te_nation_ov_tech_fig": {
+ "te_nation_ov_tech_spread": {
   "en": "#v [Country.MakeScope.ScriptValue('te_nation_tech_spread')|+0]#! spread",
   "de": "#v [Country.MakeScope.ScriptValue('te_nation_tech_spread')|+0]#! Verbreitung"
  },
@@ -38737,15 +38737,15 @@
  },
  "te_state_climate_humidity_tt": {
   "en": "#bold Humidity#!\\nHow humid the warmest month is, by its dew point: #v Dry#! under 10°C, #v Moderate#! from 10 to 16°C, #v Humid#! from 16 to 20°C and #v Sultry#! over 20°C. It describes the season; the cost of humid heat is in Hot days.",
-  "de": "#bold Luftfeuchtigkeit#!\\nWie feucht der wärmste Monat ist, gemessen am Taupunkt: #v Trocken#! unter 10°C, #v Gemäßigt#! von 10 bis 16°C, #v Feucht#! von 16 bis 20°C und #v Schwül#! über 20°C. Dies beschreibt die Jahreszeit; die Kosten feuchter Hitze stehen unter „Heiße Tage“."
+  "de": "#bold Luftfeuchte#!\\nWie feucht der wärmste Monat ist, gemessen am Taupunkt: #v Trocken#! unter 10°C, #v Gemäßigt#! von 10 bis 16°C, #v Feucht#! von 16 bis 20°C und #v Schwül#! über 20°C. Dies beschreibt die Jahreszeit; die Kosten feuchter Hitze stehen unter „Heiße Tage“."
  },
  "te_state_climate_malaria_tt": {
   "en": "#bold Malaria#!\\nHow common malaria was here in 1836: #v None#!, #v Seasonal#! (fevers in marshes and river valleys) or #v Endemic#!.\\n\\nMalaria costs #R -[State.MakeScope.ScriptValue('te_climate_disease_raw')|0]%#! [concept_migration_pull]. The owner's medicine eases #v [State.MakeScope.ScriptValue('te_climate_relief_disease')|%0]#! of it, leaving #R -[State.MakeScope.ScriptValue('te_climate_disease_term')|0]%#!.",
-  "de": "#bold Malaria#!\\nWie verbreitet Malaria hier 1836 war: #v Keine#!, #v Saisonal#! (Fieber in Sümpfen und Flusstälern) oder #v Endemisch#!.\\n\\nMalaria kostet #R -[State.MakeScope.ScriptValue('te_climate_disease_raw')|0]%#! [concept_migration_pull]. Die Medizin des Besitzerlandes mildert #v [State.MakeScope.ScriptValue('te_climate_relief_disease')|%0]#! davon, sodass #R -[State.MakeScope.ScriptValue('te_climate_disease_term')|0]%#! bleiben."
+  "de": "#bold Malaria#!\\nWie verbreitet Malaria hier 1836 war: #v Keine#!, #v Saisonal#! (Fieber in Sümpfen und Flusstälern) oder #v Ständig#!.\\n\\nMalaria kostet #R -[State.MakeScope.ScriptValue('te_climate_disease_raw')|0]%#! [concept_migration_pull]. Die Medizin des Besitzerlandes mildert #v [State.MakeScope.ScriptValue('te_climate_relief_disease')|%0]#! davon, sodass #R -[State.MakeScope.ScriptValue('te_climate_disease_term')|0]%#! bleiben."
  },
  "te_state_climate_pending": {
   "en": "#v Pending#!",
-  "de": "#v Ausstehend#!"
+  "de": "#v Folgt#!"
  },
  "te_state_climate_pending_tt": {
   "en": "#bold Comfort#!\\nWorked out at the state's next monthly update. Until then its climate neither costs nor adds [concept_migration_pull].",

@@ -36511,7 +36511,7 @@
   "en": "Global Tech",
   "ru": "Глобальные технологии"
  },
- "te_nation_ov_tech_fig": {
+ "te_nation_ov_tech_spread": {
   "en": "#v [Country.MakeScope.ScriptValue('te_nation_tech_spread')|+0]#! spread",
   "ru": "распространение #v [Country.MakeScope.ScriptValue('te_nation_tech_spread')|+0]#!"
  },
