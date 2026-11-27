@@ -62,6 +62,23 @@ class SelectionTests(unittest.TestCase):
                          ["test_query.py", "test_server_routes.py", "test_server_split.py"])
         self.assertEqual(tests_run(["paths.py"]), ["test_paths.py"])
 
+    def test_jobs_caps_the_test_workers_and_the_audits(self):
+        # #1803: several preflights on one machine each ran one pytest worker per CPU.
+        def argv_of(check, jobs):
+            run = preflight.Ctx(env=dict(os.environ), ci=False, changed=None, jobs=jobs)
+            with mock.patch.object(preflight, "git", return_value="test_a.py\n"), \
+                    mock.patch.object(preflight, "sh", side_effect=lambda c, argv: preflight.Result(True, argv)):
+                return check(run).output
+        tests = argv_of(preflight.check_tests, None)
+        self.assertEqual(tests[tests.index("-n") + 1], "auto")
+        tests = argv_of(preflight.check_tests, 10)
+        self.assertEqual(tests[tests.index("-n") + 1], "10")
+        self.assertNotIn("--jobs", argv_of(preflight.check_audits, None))
+        audits = argv_of(preflight.check_audits, 10)
+        self.assertEqual(audits[audits.index("--jobs") + 1], "10")
+        with mock.patch("sys.stderr"), self.assertRaises(SystemExit):
+            preflight.main(["--jobs", "0", "--list"])
+
     def test_script_change_runs_the_audits(self):
         ids = [c.id for c in preflight.select(args(), ["events/banking_events.txt"])]
         self.assertIn("audits", ids)

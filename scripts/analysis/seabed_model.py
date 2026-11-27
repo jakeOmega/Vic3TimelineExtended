@@ -730,6 +730,15 @@ def share_basin(world: World, b: str, part: list) -> dict:
     return ent
 
 
+def sharing_ent(c: Country, b: str) -> int:
+    """What the last sharing gave the country in basin b: its entitlement,
+    plus the waiting share a country without the technology holds apart
+    (yearly_pass caps its entitlement at its holdings). The readout counts
+    licences of this, as the script's te_seabed_readout reads
+    te_seabed_ent_<b> before that split."""
+    return c.ent[b] + c.wait[b]
+
+
 def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
     """te_seabed_readout (seabed claims spec § 3.5): about how much more claim
     weight the country needs in basin b for one more licence, from the last
@@ -737,7 +746,8 @@ def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
     weight, a country of weight w and tentative share e = R·w/W needs, for a
     target t, d = t - e more: Δw = d·W / (R - e - d), which for a country
     sharing one half is (t·W - R·w) / (R - t). An active country's target is
-    its entitlement + 1; a frozen one's what it was frozen at + 1, with its
+    its entitlement + 1 (sharing_ent: a country without the technology
+    counts its waiting share too); a frozen one's what it was frozen at + 1, with its
     holdings put back in the halves they came off and its weight back in the
     active set. An eligible party under the Regulated regime takes the smaller
     Δw of its two halves (both rise, so the true need is a little less). None
@@ -764,7 +774,10 @@ def need_weight(world: World, b: str, cid, step: int = 1) -> float | None:
     elig = world.regime == REGULATED and c.eligible
     r_res, r_open, w_res, w_all = f["rem_res"], f["rem_open"], f["wsum_res"], f["wsum_all"]
     if cid in f["active"]:
-        t = c.ent[b] + step
+        # The sharing's entitlement, its waiting share included: the script's
+        # readout runs before the split that caps a country without the
+        # technology at its holdings (te_seabed_share_round, #1840).
+        t = sharing_ent(c, b) + step
     else:
         fa = f["frozen_at"][cid]
         dr = f["frozen_res"].get(cid, 0.0)
@@ -814,7 +827,7 @@ def exact_need_weight(world: World, b: str, cid, *, tol: float = 0.01, cap: floa
     c = world.countries[cid]
     if f is None or cid not in f["part"] or c.weight[b] <= 0:
         return None
-    target = c.ent[b] + 1
+    target = sharing_ent(c, b) + 1
     sim = copy.deepcopy(world)
     base = c.weight[b]
 

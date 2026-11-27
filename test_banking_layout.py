@@ -1840,6 +1840,23 @@ class FlowedSlotTest(unittest.TestCase):
                 self.assertEqual(gui_tree.widgets(c)[0].kind, "banking_dash_category_header")
                 self.assertIsNone(c.prop("parentanchor"))
 
+    def test_the_reference_composer_flows(self):
+        """#2040: in the tab the record sits under the status composer, whose dial lines rewrap as their
+        figures change, so an anchored record would keep its first-layout place and draw over the dial's
+        last line. It is the history panel's 520 header in a 520 column in each of its three hosts (the tab
+        frame's content, the wide layout's third column, the entry's root), so it flows with no anchor."""
+        layout = gui_tree.parse(_read(LAYOUT))
+        ref = next(n for n in layout.walk() if n.kind == "type" and n.name == "te_banking_reference_sections")
+        self.assertIsNone(ref.prop("parentanchor"))
+        self.assertEqual([w.kind for w in gui_tree.widgets(ref)], ["te_banking_history_panel"])
+        hist = gui_tree.parse(_read(HIST))
+        panel = next(n for n in hist.walk() if n.kind == "type" and n.name == "te_banking_history_panel")
+        self.assertEqual(gui_tree.widgets(panel)[0].kind, "banking_dash_category_header")
+        self.assertIn("size = { 520 32 }", _type_body(self.dash, "banking_dash_category_header"))
+        hosts = [(n.parent.kind, n.parent.name) for n in layout.walk() if n.kind == "te_banking_reference_sections"]
+        self.assertEqual(sorted(hosts), [("block", "te_banking_tab_layout"), ("blockoverride", "column_3"),
+                                         ("te_je_country", "")])
+
     def test_the_status_sections_flow(self):
         """The sections are each 520 (a 520 header, or the categories' 520 and a minimum), so their
         composer and the wide columns' wrappers are 520 and an anchor placed nothing; an anchored

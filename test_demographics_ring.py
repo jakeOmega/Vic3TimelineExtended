@@ -4,13 +4,13 @@ Part 1: the census keeps 85 and over as its last band, and the pyramid splits it
 where the people past 100 are 1% of the people or more (te_demog_old_rows_close, te_demog_old_rows_show; the model's
 old_rows, old_rows_shown, lx_bio_old_rows), on states, countries and the biological pyramid.
 
-Part 2: the ring holds ages 0-299 (demographics_params.RING_YEARS), and a census taken on the 150-year ring (a save from
-before the change: its state has no te_dg_ring) is re-filed at its next step (te_demog_ring_migrate, against its twin
-demographics_model.ring_migrate): each cohort keeps its age, the late game's birth bands go with their slots, and the
-pool goes to its mean age with its treated share and deficit (owner, 2026-10-20).
+Part 2: the ring holds ages 0-299 (demographics_params.RING_YEARS). A census on the 150-year ring exists only in a save of
+mod release 1.2.0 (vanilla 1.14.5), which vanilla 1.15 doesn't load, so the script's re-filing went (#1429). The
+offline twin, demographics_model.ring_migrate, stays for the golden records and demographics_rebook's archived saves:
+each cohort keeps its age, the late game's birth bands go with their slots, and the pool goes to its mean age with its
+treated share and deficit (owner, 2026-10-20).
 """
 
-import math
 import random
 import re
 import sys
@@ -78,13 +78,6 @@ def _old_census(year, seed, pool_age=165.4, treated=True, pool=True, band_of_age
     return v, ring
 
 
-def _migrated(v, truncate=False):
-    eng = _Engine({}, truncate=truncate)
-    eng.vars.update(v)
-    eng.call("te_demog_ring_check")
-    return eng
-
-
 class TestRingYears(unittest.TestCase):
     def test_the_ring_reaches_past_any_age_a_player_meets(self):
         """Someone born in 1836 is 264 in 2100: the ring holds them (issue #1075)."""
@@ -105,115 +98,58 @@ class TestRingYears(unittest.TestCase):
         self.assertIn(f"limit = {{ local_var:te_dg_age = {n} }}", _block(effects, "te_demog_slot"))
         self.assertIn(f"multiply = {n} }}", _block(effects, "te_demog_fold_slot"))
         self.assertEqual(_block(effects, "te_demog_work_pool_part").count(f"te_dg_wa_end <= {n} }}"), 2)
-        migrate = _block(effects, "te_demog_ring_migrate")
-        self.assertIn(f"set_variable = {{ name = te_dg_ring value = {n} }}", migrate)
-        self.assertIn(f"modulo = {OLD} }}", migrate)
-        # no hand-written 150, 149 or 148 left in the census's code outside the migration and the life tables, which
-        # close at 150 (GROUPS)
+        # no hand-written 150, 149 or 148 left in the census's code outside the life tables, which close at 150 (GROUPS)
         for name in ("te_demog_seed", "te_demog_seed_slot", "te_demog_accumulate_slot", "te_demog_slot",
                      "te_demog_age_slot", "te_demog_fold_slot", "te_demog_work_pool_part", "te_demog_work_part"):
             code = "\n".join(line.split("#")[0] for line in _block(effects, name).splitlines())
             self.assertIsNone(re.search(r"\b(14[89]|150)\b", code), name)
 
-    def test_every_step_checks_the_ring_first(self):
-        effects = _text(EFFECTS)
-        code = [line.strip() for line in _block(effects, "te_demog_step_begin").splitlines()
-                if line.strip() and not line.strip().startswith("#")]
-        self.assertEqual(code[0], "te_demog_ring_check = yes")
+    def test_the_script_no_longer_re_files_a_150_year_ring(self):
+        """1.15 loads no save of mod 1.2.0, the only release on the 150-year ring (#1429): no step checks for one."""
+        effects = _text(EFFECTS) + _text(GENERATED_EFFECTS_FILE)
+        self.assertNotIn("te_demog_ring_check", effects)
+        self.assertNotIn("te_demog_ring_migrate", effects)
 
 
-class TestRingMigration(unittest.TestCase):
-    """te_demog_ring_migrate against demographics_model.ring_migrate."""
+class TestRingMigrationModel(unittest.TestCase):
+    """demographics_model.ring_migrate, which the golden records and demographics_rebook still use for a census on
+    the 150-year ring."""
 
-    def _check(self, year, seed, **kw):
-        v, ring = _old_census(year, seed, **kw)
-        ages = {(year - k) % OLD: (ring.f[k], ring.m[k]) for k in range(OLD) if ring.f[k]}
-        M.ring_migrate(ring)
-        eng = _migrated(v)
-        got = eng.vars
-        self.assertEqual(got["te_dg_ring"], P.RING_YEARS)
-        for k in range(P.RING_YEARS):
-            for s, side in (("f", ring.f), ("m", ring.m)):
-                if side[k]:
-                    self.assertAlmostEqual(got[f"te_dg_{s}{k}"], side[k], places=6, msg=(year, k, s))
-                else:
-                    self.assertNotIn(f"te_dg_{s}{k}", got, (year, k, s))
-        # each cohort kept its age on the new ring
-        for k in range(P.RING_YEARS):
-            if f"te_dg_f{k}" in got:
-                age = (year - k) % P.RING_YEARS
-                if age in ages:
-                    self.assertAlmostEqual(got[f"te_dg_f{k}"], ages[age][0], places=6, msg=(year, age))
-        for j in range(P.LX_BANDS):
-            for name, side in ((f"te_dg_s{j}", ring.lx_s), (f"te_dg_d{j}", ring.lx_d)):
-                if side[j] is None:
-                    self.assertNotIn(name, got, (year, name))
-                else:
-                    self.assertAlmostEqual(got[name], side[j], places=7, msg=(year, name))
-        self.assertAlmostEqual(got["te_dg_pf"], ring.pool_f, places=6)
-        self.assertAlmostEqual(got["te_dg_pm"], ring.pool_m, places=6)
-        self.assertAlmostEqual(got["te_dg_pa"], ring.pool_age, places=6)
-        for name, want in (("te_dg_lx_ps", ring.lx_ps), ("te_dg_lx_pd", ring.lx_pd)):
-            if want is None:
-                self.assertNotIn(name, got)
-            else:
-                self.assertAlmostEqual(got[name], want, places=7)
-        for c in range(len(P.MIGRANT_CLASSES)):
-            self.assertAlmostEqual(got[f"te_dg_cf{c}"], ring.class_f[c], places=5, msg=c)
-            self.assertAlmostEqual(got[f"te_dg_cm{c}"], ring.class_m[c], places=5, msg=c)
-        return eng, ring
-
-    def test_a_year_in_the_rings_first_half(self):
-        # 1937 mod 300 = 137: the slots above the open slot (37) move up 150
-        self.assertLess(1937 % P.RING_YEARS, OLD)
-        self._check(1937, 1)
-
-    def test_a_year_in_the_rings_second_half(self):
-        # 2057 mod 300 = 257: the open slot (107) and those below it move up 150
-        self.assertGreaterEqual(2057 % P.RING_YEARS, OLD)
-        self._check(2057, 2)
+    def test_each_cohort_keeps_its_age(self):
+        for year in (1937, 2057):    # the open slot in the 300-year ring's first half, then in its second
+            v, ring = _old_census(year, 1, pool=False)
+            ages = {(year - k) % OLD: (ring.f[k], ring.m[k]) for k in range(OLD) if ring.f[k]}
+            before = ring.people()
+            M.ring_migrate(ring)
+            self.assertEqual(len(ring.f), P.RING_YEARS)
+            for age, (f, m) in ages.items():
+                k = (year - age) % P.RING_YEARS
+                self.assertEqual((ring.f[k], ring.m[k]), (f, m), (year, age))
+            self.assertAlmostEqual(ring.people(), before, places=3)
 
     def test_the_pool_goes_to_its_mean_age(self):
         """Franche-Comte's 9.4M at a mean age of 165 all become 165 (the owner's simple rule)."""
         for year in (1937, 2057):
             v, ring = _old_census(year, 3, pool_age=164.6)
             pool_f, pool_m = ring.pool_f, ring.pool_m
-            eng = _migrated(v)
+            M.ring_migrate(ring)
             k = (year - 165) % P.RING_YEARS
-            self.assertAlmostEqual(eng.vars[f"te_dg_f{k}"], pool_f, places=6)
-            self.assertAlmostEqual(eng.vars[f"te_dg_m{k}"], pool_m, places=6)
-            self.assertEqual((eng.vars["te_dg_pf"], eng.vars["te_dg_pm"], eng.vars["te_dg_pa"]),
-                             (0.0, 0.0, float(P.RING_YEARS)))
-            self.assertNotIn("te_dg_lx_ps", eng.vars)
+            self.assertAlmostEqual(ring.f[k], pool_f, places=6)
+            self.assertAlmostEqual(ring.m[k], pool_m, places=6)
+            self.assertEqual((ring.pool_f, ring.pool_m, ring.pool_age), (0.0, 0.0, float(P.RING_YEARS)))
+            self.assertIsNone(ring.lx_ps)
             # its band takes its treated share and deficit (no cohort under 150 shares a band with 165)
             j = k // W
-            self.assertAlmostEqual(eng.vars[f"te_dg_s{j}"], 0.62, places=7)
-            self.assertAlmostEqual(eng.vars[f"te_dg_d{j}"], 118.25, places=6)
-
-    def test_a_young_pool_merges_into_its_band(self):
-        """A pool of mean age 151 lands in a band with the cohorts aged 147-149: the band's share and deficit are the
-        two's by people."""
-        for year in (1937, 2057):
-            v, ring = _old_census(year, 4, pool_age=150.8, band_of_age=149)
-            k = (year - 151) % P.RING_YEARS
-            j = k // W
-            # the band holds the cohorts aged 149 and 148 beside 150-152
-            self.assertTrue({(year - x) % P.RING_YEARS for x in (148, 149)} <= set(range(W * j, W * j + W)))
-            eng, ring = self._check(year, 4, pool_age=150.8, band_of_age=149)
-            self.assertNotAlmostEqual(eng.vars[f"te_dg_s{j}"], 0.62, places=3)
-            self.assertNotAlmostEqual(eng.vars[f"te_dg_s{j}"], 0.3, places=3)
+            self.assertAlmostEqual(ring.lx_s[j], 0.62, places=7)
+            self.assertAlmostEqual(ring.lx_d[j], 118.25, places=6)
 
     def test_a_pool_past_the_ring_stays(self):
         for year in (1937, 2057):
-            eng, ring = self._check(year, 5, pool_age=312.0)
-            self.assertGreater(eng.vars["te_dg_pf"], 0)
-            self.assertEqual(eng.vars["te_dg_pa"], 312.0)
-            self.assertIn("te_dg_lx_ps", eng.vars)
-
-    def test_no_pool_and_no_late_game(self):
-        for year in (1937, 2057):
-            eng, _ring = self._check(year, 6, treated=False, pool=False)
-            self.assertFalse(any(re.fullmatch(r"te_dg_[sd]\d+", n) for n in eng.vars))
+            v, ring = _old_census(year, 5, pool_age=312.0)
+            M.ring_migrate(ring)
+            self.assertGreater(ring.pool_f, 0)
+            self.assertEqual(ring.pool_age, 312.0)
+            self.assertIsNotNone(ring.lx_ps)
 
     def test_the_new_ring_is_a_300_year_census_of_the_same_people(self):
         """A seed on the 300-year ring folded back onto 150 slots comes back unchanged: the re-filing is the ring's own
@@ -234,67 +170,6 @@ class TestRingMigration(unittest.TestCase):
             M.ring_migrate(old)
             self.assertEqual(old.f, new.f)
             self.assertEqual(old.m, new.m)
-
-    def test_fixed_point(self):
-        """Under the engine's five decimals the re-filing stays within the range and close to the model."""
-        for year in (1937, 2057):
-            v, ring = _old_census(year, 7, pool_age=150.8)
-            M.ring_migrate(ring)
-            eng = _migrated(v, truncate=True)
-            for j in range(P.LX_BANDS):
-                if ring.lx_s[j] is not None:
-                    self.assertTrue(math.isclose(eng.vars[f"te_dg_s{j}"], ring.lx_s[j], abs_tol=1e-4), j)
-                    self.assertTrue(math.isclose(eng.vars[f"te_dg_d{j}"], ring.lx_d[j], rel_tol=1e-4), j)
-
-    def test_a_late_census_re_filed_then_stepped_matches_the_model(self):
-        """End to end: a late-game census on the 150-year ring, its pool at 160 and treated, re-filed by its own next
-        step (te_demog_step_begin's te_demog_ring_check) and stepped, against ring_migrate then step in the model."""
-        import copy
-        import test_demographics_late as L
-        inp = _late_inp()
-        new = _late_ring(inp)
-        y = new.year
-        for a in range(OLD, N):
-            new.f[(y - a) % N] = new.m[(y - a) % N] = 0.0
-        old = M.Ring(year=y, scale=new.scale)
-        for a in range(OLD):
-            old.f[(y - a) % OLD], old.m[(y - a) % OLD] = new.f[(y - a) % N], new.m[(y - a) % N]
-        for j in range(OLD_BANDS):
-            top = W * j + W - 1
-            old.lx_s[j] = new.lx_s[((y - (y - top) % OLD) % N) // W]
-            old.lx_d[j] = new.lx_d[((y - (y - top) % OLD) % N) // W]
-        old.pool_f, old.pool_m, old.pool_age, old.lx_ps, old.lx_pd = 3000.0, 2000.0, 160.4, 0.7, 95.0
-        old.lx_elig, old.lx_cover, old.lx_sbar = new.lx_elig, new.lx_cover, new.lx_sbar
-        old.class_f, old.class_m, old.fam, old.faw = list(new.class_f), list(new.class_m), new.fam, new.faw
-        old.fws_work, old.medicine, old.total = new.fws_work, new.medicine, new.total
-        ring = M.ring_migrate(copy.deepcopy(old))
-        self.assertEqual(ring.pool_f, 0.0)
-        pop = ring.people() * 1.004
-        eng = _late_engine(ring, inp, pop)
-        # the script's census as the save holds it: the old ring, its pool and class sums, and no te_dg_ring
-        for name in [n for n in eng.vars if re.fullmatch(r"te_dg_([fmsd])\d+", n)]:
-            del eng.vars[name]
-        for k in range(OLD):
-            if old.f[k] or old.m[k]:
-                eng.vars[f"te_dg_f{k}"], eng.vars[f"te_dg_m{k}"] = old.f[k], old.m[k]
-        for j in range(OLD_BANDS):
-            if old.lx_s[j] is not None:
-                eng.vars[f"te_dg_s{j}"], eng.vars[f"te_dg_d{j}"] = old.lx_s[j], old.lx_d[j]
-        for c in range(len(P.MIGRANT_CLASSES)):
-            eng.vars[f"te_dg_cf{c}"], eng.vars[f"te_dg_cm{c}"] = old.class_f[c], old.class_m[c]
-        eng.vars.update(te_dg_pf=old.pool_f, te_dg_pm=old.pool_m, te_dg_pa=old.pool_age, te_dg_lx_ps=old.lx_ps,
-                        te_dg_lx_pd=old.lx_pd)
-        del eng.vars["te_dg_ring"]
-        eng.call("te_demog_step")
-        self.assertEqual(eng.vars["te_dg_ring"], P.RING_YEARS)
-        out = M.step(ring, inp, y + 1, engine_pop=pop)
-        L.TestLateGameScript("test_a_late_step_matches_the_model").check(eng, ring, out)
-
-    def test_a_census_on_the_new_ring_is_left_alone(self):
-        v, _ring = _old_census(2057, 8)
-        v["te_dg_ring"] = float(P.RING_YEARS)
-        eng = _migrated(v)
-        self.assertEqual(eng.vars, v)
 
 
 
