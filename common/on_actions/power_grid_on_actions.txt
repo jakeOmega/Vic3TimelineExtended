@@ -36,14 +36,15 @@ te_grid_world_dispatch = {
 	}
 }
 
-# The AI's own station building (te_grid_ai_build_effect), and every
-# country's generation by source for the Power Grids tab
-# (te_grid_mix_record_effect). Never the balancing: that runs once a month
-# for the world, above.
+# The AI's own station building (te_grid_ai_build_effect), every country's
+# generation by source for the Power Grids tab (te_grid_mix_record_effect),
+# and a player's suggested stations (te_grid_suggest_effect). Never the
+# balancing: that runs once a month for the world, above.
 on_monthly_pulse_country = {
 	on_actions = {
 		te_grid_ai_build_on_action
 		te_grid_mix_on_action
+		te_grid_suggest_on_action
 	}
 }
 
@@ -63,6 +64,18 @@ te_grid_mix_on_action = {
 		if = {
 			limit = { te_grid_tab_unlocked = yes }
 			te_grid_mix_record_effect = yes
+		}
+	}
+}
+
+# A player's only: the tab shows its Suggested Stations to the local player
+# alone, and the AI picks its own sites in te_grid_ai_build_effect. The effect
+# clears the list for a country without Electrical Capacitors.
+te_grid_suggest_on_action = {
+	effect = {
+		if = {
+			limit = { is_player = yes }
+			te_grid_suggest_effect = yes
 		}
 	}
 }

@@ -307,11 +307,12 @@ class BalancingTest(unittest.TestCase):
     def test_global_pulse_dispatches_one_hidden_country_event(self):
         on_actions = _code(_read(ON_ACTIONS))
         # One world-wide run a month: a country pulse that balanced as well would balance every
-        # grid twice. The country pulse runs only the AI's station building and the Power Grids
-        # tab's generation record.
+        # grid twice. The country pulse runs only the AI's station building, the Power Grids
+        # tab's generation record and a player's suggested stations.
+        hooks = ("te_grid_ai_build_on_action", "te_grid_mix_on_action", "te_grid_suggest_on_action")
         self.assertEqual(_sub(on_actions, "on_monthly_pulse_country").split(),
-                         ["on_actions", "=", "{", "te_grid_ai_build_on_action", "te_grid_mix_on_action", "}"])
-        for hook in ("te_grid_ai_build_on_action", "te_grid_mix_on_action"):
+                         ["on_actions", "=", "{", *hooks, "}"])
+        for hook in hooks:
             country_pass = _top_level(on_actions, hook)
             self.assertNotIn("te_grid.1", country_pass)
             self.assertNotIn("te_grid_world_update_effect", country_pass)
@@ -345,7 +346,12 @@ class BalancingTest(unittest.TestCase):
 
     def test_links_read_the_partner_list_not_the_treaties(self):
         triggers = _code(_read(TRIGGERS))
-        self.assertNotIn("any_scope_treaty", triggers)
+        # Only the Power Grids tab's In Reach filter reads the treaties, live, for display
+        # (te_grid_link_open); no link the balancing reads does, and the run never calls it.
+        display = _top_level(triggers, "te_grid_link_open")
+        self.assertIn("any_scope_treaty", display)
+        self.assertNotIn("any_scope_treaty", triggers.replace(display, ""))
+        self.assertNotIn("te_grid_link_open", _code(_read(EFFECTS)))
         self.assertIn("is_target_in_variable_list = { name = te_grid_partners", triggers)
         refresh = _code(_top_level(_read(EFFECTS), "te_grid_refresh_partners_effect"))
         self.assertIn("has_type = grid_interconnection_agreement", refresh)

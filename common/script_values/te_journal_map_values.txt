@@ -23,7 +23,8 @@
 # 77 SoL vs expected, 78 unemployment, 79 population, 80 GDP, 81 infrastructure, 82 radicals vs loyalists; the
 # second tier's (#1977): 83 market access, 84 pollution, 85 vacant jobs, 86 below expected SoL, 87 discrimination; 88-89
 # the Spacers' people and share (2026-11-24, journal_map_classes.py); 90 nuclear reach (the viewer's, by the leg that
-# carries its weapons; 2026-11-26); 0 none. 6
+# carries its weapons; 2026-11-26); 91 grid flows (what each power grid station sends or receives; 2026-11-27); 0
+# none. 6
 # was the scope probe until the fourth session. A global variable (te_jmap_set_selector), since a state's map_color reaches neither the
 # entry nor a country (the scope probe painted blue, 2026-11-05): one player's pick is every player's in multiplayer.
 # Root-free, so the Map Room's state roots and the pick buttons' country roots read the same number.

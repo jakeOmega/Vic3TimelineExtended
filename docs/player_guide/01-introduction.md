@@ -43,7 +43,7 @@ while its game rule is on; a group with none of its maps to show is hidden.
 | Families and Ages | Birth Rate, Death Rate, Natural Change, Fertility, Family Planning, Median Age, Aged 65 and Over, Sex Balance |
 | Living Conditions | Standard of Living, Wealth, SoL vs Wealth, SoL vs Expected, Below Expected SoL, Literacy, Life Expectancy, Infant Mortality, Leading Cause, Health Care |
 | Classes | Every pop type, from Aristocrats to Soldiers and the mod's Spacers |
-| Economy | GDP, GDP per Capita, Unemployment, Vacant Jobs, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Infrastructure, Market Access, Power Grids |
+| Economy | GDP, GDP per Capita, Unemployment, Vacant Jobs, Gini Coefficient, Dynastic Wealth, Ownership, Company HQs, Investment, Trade Capacity, Infrastructure, Market Access, Power Grids, Grid Flows |
 | Politics | Turmoil, Radicals/Loyalists, Discrimination, Political Models, United Nations, Colonies |
 | Military and Security | Armed Forces, Fighting-Age Men, War Dead, Devastation, Nuclear Weapons, Nuclear Reach, Agent Networks |
 | Land and Environment | Base Comfort, Current Comfort, Tourism Appeal, Pollution, Emissions, Ocean Basins, Grandeur |
@@ -127,6 +127,10 @@ fly. Your bombers' reach is worked out when you pick the map and each month
 after, and a war that brings a country into reach shows at once. Agent Networks
 shades each country by your network there. Power Grids colors each grid,
 bordering grids apart, with its hub striped white and a station on no grid gray.
+Grid Flows colors each state with a station by what the station does this
+month: blue where it sends power to its grid, orange where it receives it, pale
+where it is on a grid but moves nothing, and gray where it is on no grid. Its
+hover gives the flow, or why the station moves nothing.
 Colonies colors each colony by its empire's colonial stability. Leading Cause
 colors a state by what killed most of its people, in the colors of the Causes
 of Death chart, full where that cause took 90% of the deaths and paler as its

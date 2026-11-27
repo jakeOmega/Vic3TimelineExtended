@@ -738,8 +738,8 @@ types te_map_room_picks_generated
 
 		# Economy: output (GDP, GDP per capita) and work (unemployment, the jobs open); how wealth is spread (the
 		# walk's Gini and Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what
-		# the owners invest and the trade a state can carry; its infrastructure to spare, the market access it buys,
-		# and the power grids.
+		# the owners invest and the trade a state can carry; its infrastructure to spare and the market access it
+		# buys; the power grids, and what each station sends or receives on them.
 		te_jmap_category_header = {
 			blockoverride "left_text" {
 				text = "te_jmap_cat_economy"
@@ -898,6 +898,13 @@ types te_map_room_picks_generated
 					onclick = "[GetScriptedGui('te_jmap_pick_market_access_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
+			}
+
+			flowcontainer = {
+				direction = horizontal
+				parentanchor = hcenter
+				ignoreinvisible = yes
+				spacing = 4
 
 				te_jmap_pick_button = {
 					text = "te_jmap_pick_power_grids"
@@ -905,6 +912,15 @@ types te_map_room_picks_generated
 					visible = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					down = "[Not( GetScriptedGui('te_jmap_pick_power_grids_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 					onclick = "[GetScriptedGui('te_jmap_pick_power_grids_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
+				}
+
+				te_jmap_pick_button = {
+					text = "te_jmap_pick_grid_flows"
+					tooltip = "te_jmap_pick_grid_flows_desc"
+					visible = "[GetScriptedGui('te_jmap_pick_grid_flows_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+					down = "[Not( GetScriptedGui('te_jmap_pick_grid_flows_sgui').IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					onclick = "[GetScriptedGui('te_jmap_pick_grid_flows_sgui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					onclick = "[PdxGuiTriggerAllAnimations('te_jmap_repaint')]"
 				}
 			}

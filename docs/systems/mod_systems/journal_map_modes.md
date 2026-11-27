@@ -776,7 +776,7 @@ works (the owner saw the page fade, 2026-11-06).
 ## The Systems' Maps
 
 Eight of the mod's systems have a map (sixth pass, owner's ask, 2026-11-06), selectors 18-25, and the Power Grids a
-ninth (31, 2026-11-07). Each but the Seabed's and the Power Grids' is drawn twice: by the system's own entry, whenever its page is open, and by the Map Room, on a pick. Both ask the same
+ninth (31, 2026-11-07) and a tenth, Grid Flows (91, 2026-11-27). Each but the Seabed's and the Power Grids' is drawn twice: by the system's own entry, whenever its page is open, and by the Map Room, on a pick. Both ask the same
 state-scope triggers in the same order (`common/scripted_triggers/te_journal_map_triggers.txt`, one per color band), so
 the two pages paint alike; `test_journal_map_modes.py`'s parity test compares the entry's ladder with the Map Room's
 branches for its selector. Each map ends in a branch that takes every state left, so none needs the "no data" `OR`.
@@ -793,6 +793,7 @@ Each pick shows while its system's rule is on.
 | 24 | Grandeur | `je_grand_monuments` | `gm_state_grandeur`, straight to 75 (the panel's top frame), then soft to 225 |
 | 25 | Colonies | `je_colonial_empire` | Each colony (`te_jmap_ce_colony`, below) and each colonial subject's state by its empire's band (`colonial_empire_tier`, the monthly snapshot of the band ladder); an empire's other states taupe |
 | 31 | Power Grids | none | Each station's state on a grid this month (`te_grid_hub`) in its grid's color, one of twelve (`te_grid_map_color`, `te_jmap_grid_<n>`), the hub striped white (`te_grid_rec_supply`, the record only a hub holds; the Map Room's second `map_color_second` branch); a station on no grid grey (`te_grid_flow` without a hub); the hover names the hub and the grid's stations (`te_grid_region_size_disp`). No game rule, as the Power Grids tab has none (owner's ask, 2026-11-07) |
+| 91 | Grid Flows | none | Each station's state by what its station does this month, as the Power Grids tab's Stations table reads it (`te_jmap_grid_mode`: `te_grid_mode_disp` behind `has_building`, since the mode reads 4 where there is no station): sending blue, receiving orange, idle on a grid pale, on no grid the Power Grids map's grey (`te_jmap_grid_send`, `_receive`, `_idle`, `_offline`); the hover gives the flow, or why the station moves nothing (`te_jmap_tt_grid_why`, the idle reason read through `THIS`). Beside Power Grids under Economy; no game rule either. The owner's ask for an import/export map (2026-11-27), where vanilla's goods map already shows Electricity's price |
 
 **The viewer.** A paint can't reach the player (`is_player` drew nothing under `owner`, 2026-11-05), so the maps of
 "your" country (19, 20) are drawn for `global_var:te_jmap_viewer`: every pick and map button sets it to the player's
@@ -859,7 +860,7 @@ Every map button clears the see-through flag before it opens a page.
   Balance); Living Conditions (Standard of Living, Wealth, SoL vs Wealth; SoL vs Expected, Below Expected SoL, Literacy; Life Expectancy,
   Infant Mortality, Leading Cause; Health Care); Classes (every pop type since #1975, five rows of three by theme,
   each class's two picks in one place: § The Class Maps); Economy (GDP, GDP per Capita; Unemployment, Vacant Jobs; Gini,
-  Dynastic Wealth, Ownership; Company HQs, Investment, Trade Capacity; Infrastructure, Market Access, Power Grids);
+  Dynastic Wealth, Ownership; Company HQs, Investment, Trade Capacity; Infrastructure, Market Access; Power Grids, Grid Flows);
   Politics (Turmoil, Radicals vs Loyalists, Discrimination; Political Models, United Nations, Colonies); Military and Security (Armed
   Forces, Fighting-Age Men, War Dead; Devastation, Nuclear Weapons, Nuclear Reach; Agent Networks); Land and Environment (Base Comfort,
   Current Comfort, Tourism Appeal; Pollution, Emissions; Ocean Basins, Grandeur). Each button keeps its own gate, so a census map

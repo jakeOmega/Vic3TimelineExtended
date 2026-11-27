@@ -2024,9 +2024,11 @@ types te_state_panel_widget_types
 				}
 
 				blockoverride "rows" {
+					### The mode's hover says why the station moves what it
+					### does (te_grid_idle_reason_disp), then every mode's meaning.
 					te_state_tile_row = {
 						blockoverride "row_tooltip" {
-							tooltip = "TE_STATE_GRID_ROW_MODE_TT"
+							tooltip = "TE_STATE_GRID_ROW_MODE_HERE_TT"
 						}
 						blockoverride "row_label" {
 							text = "TE_STATE_GRID_ROW_MODE"

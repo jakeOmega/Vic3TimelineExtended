@@ -106,6 +106,8 @@ MAPS = [
     dict(key="discrimination", sel=87),
     # the viewer's nuclear reach, by the leg that carries its weapons (2026-11-26): the Map Room's alone
     dict(key="nuclear_reach", sel=90, gate="has_game_rule = nuclear_weapons_enabled"),
+    # what each power grid station sends or receives (2026-11-27), beside the Power Grids map; no game rule either
+    dict(key="grid_flows", sel=91),
 ]
 # The class maps (#1975): two per pop type, its people and its share of the people, from journal_map_classes.py. The
 # Count/Share switch (te_jmap_class_mode) shows one of a class's two buttons, so `mode` joins the pick's is_shown.
@@ -150,13 +152,14 @@ GROUPS = [
     dict(key="economy", name="Economy",
          note="output (GDP, GDP per capita) and work (unemployment, the jobs open); how wealth is spread (the walk's "
               "Gini and Dynastic Wealth) and who owns the capital; where the companies keep their headquarters, what "
-              "the owners invest and the trade a state can carry; its infrastructure to spare, the market access it "
-              "buys, and the power grids",
+              "the owners invest and the trade a state can carry; its infrastructure to spare and the market access it "
+              "buys; the power grids, and what each station sends or receives on them",
          rows=[["gdp", "gdp_per_capita"],
                ["unemployment", "vacant_jobs"],
                ["gini", "dynastic_wealth", "ownership"],
                ["company_hqs", "investment", "trade_capacity"],
-               ["infrastructure", "market_access", "power_grids"]]),
+               ["infrastructure", "market_access"],
+               ["power_grids", "grid_flows"]]),
     dict(key="politics", name="Politics",
          note="turmoil, the loyalists against the radicals, and the people short of full acceptance; then the "
               "political models the world follows, the United Nations and the colonial empires, each while its "
