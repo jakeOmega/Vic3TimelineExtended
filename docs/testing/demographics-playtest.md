@@ -1923,3 +1923,36 @@ Room's Sex Balance hover add the same figure. Offline: `test_demographics_regist
    save shows it at once, with no error.log line about a missing variable. If a row reads 0, the bands' prefix in the
    value is wrong for that scope.
 2. **The hovers.** A row of the States section and a state on the Sex Balance map each list both figures.
+
+## Left from #1046: four things only the game shows (2026-11-27)
+
+Four items of #1046 (what was left of #894) wait on a game, not on script; each is from #1046, and each says what a
+result would change. The harness's Impact of Institutions and the technology hook's limit stay on the issue.
+
+1. **Private Health Insurance's floor (Full), from #1046.** The census applies the law's wealth line (−0.002 a wealth
+   level for each level of the health institution, on the on-top family) on its own pair, Census: Deaths by Wealth, at its
+   share of the bare curve, and never below −0.005 a wealth level (`te_demog_k_wealth_line_floor`, owner option b: a
+   wealth-99 pop dies at no less than half the census's rate). Before the late game (no wealth slope), raise the
+   institution a level at a time from 1 to 4 and wait for a state's census step after each: `te_dg_w` (a save, or the
+   state's mortality tooltip's Census: Deaths by Wealth) grows from level 1 to 2 (−0.002, −0.004 × the census's share),
+   reaches the floor at level 3 (−0.005, where the line would be −0.006), and level 4 reads the same as 3. A line that
+   keeps growing past level 3 means the floor isn't read; one that doesn't move from level 1 means the law's line
+   doesn't reach the on-top family.
+2. **Severe starvation at food security 0, from #1046.** The walk's severe-starvation ladder takes each step's middle
+   (`_starvation_buckets(severe=True)`), so its bottom step reads 0.9375 where the engine's starvation value is 1.0 at
+   exactly 0. Keep monthly saves through a famine deep enough that a state's pops reach food security 0: if most of
+   its starving pops sit at exactly 0 (the save's `food_security={ starvation= }` at 1), the census books about 6%
+   too few of their famine deaths, and a step at exactly 0 belongs in the ladder; if few do, leave it.
+3. **The year after a famine, from #1046.** The census nets mild starvation in its term M at each step (yearly at
+   normal speed), so when a famine ends between steps the term stays netted until the next one: an earlier run read births and deaths
+   terms 0.2 to 0.4 off for a year after a famine, and the walk booked severe deaths a step or two after the famine's
+   record ended (Japan 1886, East India 1880–81). In the next game with a famine, read the state's `te_dg_md` and
+   `te_dg_mb` (option n, or the monthly saves) for the year after it ends. Still off by 0.2 or more: re-net M monthly
+   in starving states (no on-action fires on a change in starvation), the fix #1046 proposed.
+4. **Laws and Institutions, named once (outside Full), from #1046.** Outside Full a laborer's mortality tooltip can
+   show two or three lines all named "Laws and Institutions": the general pair (`te_demog_line_deaths_*`), its class's
+   (`te_demog_line_laborers_deaths_*`) and the wealth pair (`te_demog_line_wealth_deaths_*`). If they confuse in
+   play, name the class and wealth pairs apart (their loc keys beside the general pair's). The law and technology
+   hooks already refresh the pairs at once and again a day later (`te_demog_events.4`, then `te_demog_events.5` with
+   `days = 1`, since a delayed state event never runs), so a pair that has not followed a law by the next day
+   (item 2 of "Phase 2 step 1: the interfaces") is not the event's timing: bring it to the owner.
