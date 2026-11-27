@@ -13,15 +13,19 @@ vanilla code.
 
 ## Status
 
-**2026-11-26 21:30 MST.** Two things take most of a 2050 week:
+**2026-11-26 22:05 MST.** Two things take most of a 2050 week:
 
-1. **The investors' weekly construction pass**, 22 s of each weekly tick
+1. **The ship construction readout under the date**, about 6 s of a 32 s
+   week, outside the tick work (finding 5). **Fixed on this branch** without
+   changing gameplay: the box shows the total; the used figure is in its
+   tooltip and the Ships tab.
+2. **The investors' weekly construction pass**, 22 s of each weekly tick
    (two thirds of all tick work). It follows how many levels investors place
-   a week. Only a slower queue turnover has cut it so far (finding 4, the
-   owner's call); a cheaper `ai_value` and the update divisor did not.
-2. **The ship construction readout under the date**, about 7 s a week
-   outside the tick work, the same vanilla readout as in 2030 (finding 5). A
-   fix that keeps gameplay as it is, is being built.
+   a week, and the USA is at the engine's ceiling of 1,000. Nothing that
+   keeps gameplay as it is has cut it: not a cheaper `ai_value`, not the
+   `possible` blocks, not the update divisor (findings 2 and 3). A slower
+   queue turnover halves the week's tick work (finding 4); that is the
+   owner's call, with options under "Proposals that change gameplay".
 
 ## The save and the method
 
@@ -274,9 +278,47 @@ constant), session `20261127T041226Z`:
 About 0.15 s after every tick, which is one evaluation of the text each time
 the tick changes what it reads. Paused, the frame is 10 ms either way.
 
+**Which figure costs it.** A one-line `replace/` override of
+`SHIP_CONSTRUCTION_VALUE_WITHOUT_ICON` showing the total alone
+(`[Country.GetShipConstruction|0]`, variant `shipcap`, session
+`20261127T042734Z`) ran 25.7 s a week, the constant's time. So
+`GetShipConstructionUsage` is the cost and the total is free. The box's
+tooltip names what the usage walks: on 13 March 2050 the USA had **15,955
+supply ships under construction** (and 526,626 available), against 0
+warships.
+
+**Fixed on this branch.** The mod overrides
+`SHIP_CONSTRUCTION_VALUE_WITHOUT_ICON` to the total alone. Vanilla's
+`SHIP_CONSTRUCTION_VALUE` is read in two places: the box under the date
+(`timemanip.gui`, not overridden, so it picks the new text up) and the
+Construction panel's Ships tab (`production_methods.gui`, which the mod
+already overrides and now points at `TE_SHIP_CONSTRUCTION_VALUE_PANEL`, the
+old "used/total"). The tooltip is vanilla's and still gives the full
+breakdown, worked out on hover. No GUI file of vanilla's is newly
+overridden. With the branch's own files as a variant (session
+`20261127T043633Z`): **26.1 s a week against 31.2–32.4** over the same
+dates, the box reading "50544", the tooltip "35015/50544 being used", the
+Ships tab "35015/50544". `test_ship_construction_readout.py` holds the three
+texts and fails if any other always-shown text reads the usage.
+
+What is lost: the used figure at a glance. It is one hover away. If the
+owner wants it back on the box, the cost comes back with it unless the
+supply ships in progress are fewer (the rescale of
+`docs/superpowers/plans/2026-11-24-supply-ship-scale.md` would cut the walk
+tenfold).
+
 ## Changes made on this branch
 
-None yet.
+| Change | Files | Measured |
+|---|---|---|
+| The ship construction box under the date shows the total, not "used/total" (finding 5) | `localization/english/replace/timeline_extended_override_l_english.yml`, `localization/english/te_miscellaneous_l_english.yml`, `gui/production_methods.gui`, `test_ship_construction_readout.py` | Wall time 31.2–32.4 → 26.1 s a week on the 2050 save (−18%); tick work unchanged |
+
+Play-test rows: `docs/testing/perf-fixes-playtest.md`, "The ship
+construction box under the date shows the total".
+
+Tried and not shipped: a gated `ai_value` for the Railway and Arts Academy
+(finding 3), the industry-ban test moved to `potential` or to a law
+modifier (finding 3), a higher update divisor (finding 2).
 
 ## Proposals that change gameplay (owner's call)
 
