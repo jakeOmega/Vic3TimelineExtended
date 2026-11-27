@@ -32,6 +32,28 @@
   "save": "te_qa_copy_iua2050_20261126",
   "sha256": "8bbb0819fad30a0f2965244d9a0c35d9ef368a6d9d67e5c03b9aee1f897f8eb1"
  },
+ "civil_rights_movement": {
+  "commit": "ab59be0871760d0c3b3c9908a384b87dd9db1e14",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_usa1964_20261126",
+  "sha256": "e7864e48f73f710a5adf1a16510d0c6ff1c5cff6e8dc6baec6fa781ec6a051f5"
+ },
+ "colonial_empire_overview": {
+  "commit": "ab59be0871760d0c3b3c9908a384b87dd9db1e14",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_usa1964_20261126",
+  "sha256": "deffb611409efe4236b5ef34f0fa60dd291ec712db2685fbd4f0b3e4128d1909"
+ },
  "construction_market": {
   "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
   "taken": "2026-11-26",
@@ -42,6 +64,17 @@
   "ui_scale": 1.5,
   "save": "te_qa_copy_iua2050_20261126",
   "sha256": "b4d7a5d74c63c03ea7dcab5855569c7f95ce1d29e490d6dadca08a902345a89f"
+ },
+ "demographics_pyramid": {
+  "commit": "ab59be0871760d0c3b3c9908a384b87dd9db1e14",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_usa1964_20261126",
+  "sha256": "8616edfb0c499ac2d9a8141fdc803554277515c7d242c4239ee823a774f2d460"
  },
  "grand_monuments_tab": {
   "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",

@@ -31,7 +31,7 @@ The Civil Rights Movement has no timer. A support bar rises or falls, you set
 your stance with policy buttons, and how long you held each stance decides which
 of ten endings you get.
 
-<!-- screenshot: the Civil Rights Movement journal entry with the Movement Support bar and the policy buttons in view -->
+![The Civil Rights Movement journal entry: the stance held and the ending it leads to, the policy buttons, and the Movement Support bar.](images/civil_rights_movement.png)
 
 ### When the civil rights struggle begins
 

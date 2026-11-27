@@ -1211,7 +1211,7 @@ choices use the census's own levers: the pension age, Birth Limit and, for the
 Overspill, your Settlement Authorities' Planned Towns. Every event and choice is
 listed in [Demographic event list](19-appendix-events.md#demographic-event-list).
 
-<!-- screenshot: the Demographics tab with the population pyramid and its twenty-year outline -->
+![The Population Pyramid on the Demographics tab: men and women by age, with pale bars for the same ages twenty years on at today's rates.](images/demographics_pyramid.png)
 
 ## Internal resettlement
 

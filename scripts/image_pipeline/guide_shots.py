@@ -47,15 +47,18 @@ Shot keys:
                     fold into it (negative scrolls down; `game_qa wheel`, inside the owner's standing grant of HUD
                     clicks, 2026-11-24). How far a notch goes depends on what the save shows above the section,
                     so look at the contact sheet before trusting a count
-    input           a list of steps after the view and the scroll: ("click", x, y), ("wheel", x, y, notches) or
-                    ("drag", x1, y1, x2, y2), fractions of the window. The owner's standing grants cover the HUD
+    input           a list of steps after the view and the scroll: ("click", x, y), ("wheel", x, y, notches),
+                    ("drag", x1, y1, x2, y2), fractions of the window, ("advance", days), time passed on the copy
+                    (an event reaches the outliner only then), or ("event", id, option), an event fired and answered
+                    at once (a debug event's display refresh). The owner's standing grants cover the HUD
                     (2026-11-24) and the map, the tech tree and map objects (2026-11-26: wheel and drag over the map,
                     clicks on states, buildings and characters), on te_qa_copy_* saves; never with a lens option
                     armed, never the Esc menu, save or load
     hover           (x, y) to leave the cursor on before the shot, fractions of the window (a tooltip)
-    event           an event id fired from the console after the view (`event <id>`, which ignores its trigger),
-                    answered with its first option after the shot: an event whose text needs no scope but the
-                    country's
+    event           an event id fired from the console after the view and before the inputs (`event <id>`, which
+                    ignores its trigger), answered with its first option after the shot: an event whose text needs
+                    no scope but the country's. It arrives minimized: the inputs advance a day and click its
+                    outliner row
     crop            a REGIONS key, or (left, top, right, bottom) in fractions of the window
     trim            the empty panel below the content is cut off (capture.trim_bottom): True (the default for the
                     TRIMMED regions) cuts at the first empty run of TRIM_GAP pixels or more, a number sets that run,
@@ -158,6 +161,21 @@ STATE_BY_CAPITAL = [("click", 0.594, 0.36), ("wheel", 0.13, 0.6, -40)]
 # The tech tree's Reset button, right of its search box (TechTreePanel.Reset<Tab>View): the tree's top at its first
 # zoom, the one known start for a pan. Measured 2026-11-26 at UI scale 1.5.
 TECH_TREE_RESET = [("click", 0.9694, 0.2523)]
+
+
+# The Map Room from the Timeline Extended window: its Map Room button (top left of the side panel) opens the page on
+# the map picked last (a view's sgui: pick), and closes the window. Then the camera, from the capital (zoom:capital):
+# the wheel zooms about the cursor and by uneven steps, and a drag does not pan the map, so these notches, in this
+# order, are what put the Atlantic between South America and Africa (1964 copy, 2026-11-26, UI scale 1.5).
+MAP_ROOM_BUTTON = ("click", 0.1518, 0.1394)
+MAP_ROOM_ATLANTIC = [MAP_ROOM_BUTTON, ("wheel", 0.6, 0.5, -8), ("wheel", 0.75, 0.65, 2), ("wheel", 0.75, 0.65, -1),
+                     ("wheel", 0.55, 0.5, -1), ("wheel", 0.82, 0.62, 1)]
+
+
+# A country played by a tag shows its Colonial Empire rows only after its next monthly pulse
+# (colonial_empire_display_ready waits for colonial_empire_tier, set for a played country): the debug event's
+# sixth option runs colonial_empire_refresh_display at once, touching nothing else.
+COLONIAL_REFRESH = [("event", "te_debug_colonial_empire.1", 5)]
 
 
 def side_scroll(notches: int) -> list[tuple]:
@@ -406,6 +424,26 @@ SHOTS = {
         depends_on=["gui/states_panel.gui", "gui/te_state_panel_widgets.gui"],
         shows="a state panel scrolled to its end: the mod's tiles (Local Climate, Dynastic Wealth among them) and "
               "the tourism card"),
+    "ws_02_leading_cause_map": dict(
+        out=WORKSHOP + "ws_02_leading_cause_map.png", used_by=["workshop:02_leading_cause_map"], status="entry",
+        scene="mid_1964", needs=["te_demog_cohorts_run = yes"],
+        view=[["zoom:capital"]] + te_window("nation") + [["clear:te_je_see_through",
+                                                           "sgui:te_jmap_pick_leading_cause_sgui"]],
+        input=MAP_ROOM_ATLANTIC, hover=(0.6, 0.47), crop=(0.245, 0.06, 0.83, 0.94),
+        depends_on=["gui/te_map_widgets.gui", "common/scripted_guis/te_journal_map_picks_generated.txt"],
+        shows="the Map Room's Leading Cause of Death map over the Atlantic, a striped state's tooltip open",
+        note="the hover is Inner Mauritania in the 1964 copy: infection first, chronic illness in the stripes"),
+    "ws_03_map_room": dict(
+        out=WORKSHOP + "ws_03_map_room.png", used_by=["workshop:03_map_room"], status="entry", scene="mid_1964",
+        needs=["te_demog_cohorts_run = yes"],
+        view=[["zoom:capital"]] + te_window("nation") + [["clear:te_je_see_through",
+                                                           "set:te_jmap_cat_population_open=yes",
+                                                           "set:te_jmap_cat_living_open=yes",
+                                                           "sgui:te_jmap_pick_life_expectancy_sgui"]],
+        input=MAP_ROOM_ATLANTIC, hover=(0.12, 0.93), crop=(0.0203, 0.05, 0.70, 0.80),
+        depends_on=["gui/te_map_widgets.gui", "common/scripted_guis/te_journal_map_picks_generated.txt"],
+        shows="the Map Room page, two of its categories open, beside the Life Expectancy map",
+        note="a category opens on its key (te_jmap_cat_<name>_open)"),
     "ws_04_united_nations": dict(
         out=WORKSHOP + "ws_04_united_nations.png", used_by=["workshop:04_united_nations"], status="pilot",
         scene="late_2050", needs=[has_je("je_united_nations")],
@@ -415,9 +453,10 @@ SHOTS = {
               "the Field, Our Obligations"),
     "ws_05_demographics": dict(
         out=WORKSHOP + "ws_05_demographics.png", used_by=["workshop:05_demographics"], status="entry",
-        scene="late_2050", view=te_window("demographics", wide=True), crop="te_window_body",
-        depends_on=["gui/journal_entry_widgets/demog*.gui", "gui/journal_entry_widgets/te_demog*.gui"],
-        shows="the Demographics tab full screen: the census, the population pyramid, causes of death"),
+        scene="mid_1964", needs=["te_demog_cohorts_run = yes"], view=te_window("demographics", wide=True),
+        crop="te_window_body", depends_on=["gui/te_demographics_widgets.gui"],
+        shows="the Demographics tab full screen: the census, the population pyramid, causes of death",
+        note="the 1964 copy: the 2050 game's census is of its speculative era (life expectancy 309 years)"),
     "ws_06_grand_monuments": dict(
         out=WORKSHOP + "ws_06_grand_monuments.png", used_by=["workshop:06_grand_monuments"], status="entry",
         scene="late_2050", needs=[has_je("je_grand_monuments")],
@@ -426,11 +465,12 @@ SHOTS = {
         shows="the Grand Monuments tab full screen: our monuments, national effects, trophies"),
     "ws_07_colonial_empire": dict(
         out=WORKSHOP + "ws_07_colonial_empire.png", used_by=["workshop:07_colonial_empire"], status="entry",
-        scene="late_2050", country=["EUN", "USA", "GBR", "FRA"], needs=[has_je("je_colonial_empire")],
-        view=te_window("colonial_empire", wide=True), crop="te_window_body",
+        scene="mid_1964", country=["TUR", "RUS"],
+        needs=[has_je("je_colonial_empire"), "colonial_empire_disp_colonies > 0"],
+        view=te_window("colonial_empire", wide=True), input=COLONIAL_REFRESH, crop="te_window_body",
         depends_on=["gui/journal_entry_widgets/colonial_empire*.gui", "gui/journal_entry_widgets/te_ce*.gui"],
         shows="the Colonial Empire tab full screen: stability and the colony list with its Release buttons",
-        note="in the 2050 copy only the European Union holds the entry"),
+        note="in the 1964 copy only Turkey (two colonies) and Russia (one territory) hold the entry"),
     "ws_08_space_race": dict(
         out=WORKSHOP + "ws_08_space_race.png", used_by=["workshop:08_space_race"], status="entry",
         scene="late_2043", view=te_window("space_race", wide=True), crop="te_window_body",
@@ -463,12 +503,12 @@ SHOTS = {
               "first in the first column)",
         note="the list scrolls 90 pixels a notch; 14 from the top put Inheritance Laws first in 2050"),
     "ws_13_event": dict(
-        out=WORKSHOP + "ws_13_event.png", used_by=["workshop:13_nuclear_event"], status="entry", scene="late_2050",
-        event="space_race_events.42", crop=(0.3, 0.12, 0.7, 0.86), art=True,
-        depends_on=["gui/eventwindow.gui", "events/space_race_events.txt"],
-        shows="a space race event window, its picture, text and three options",
-        note="an event whose text names nothing but the country (space_race_events.42, Twenty Minutes of Silence); "
-             "the crop is a guess until the first run"),
+        out=WORKSHOP + "ws_13_event.png", used_by=["workshop:13_nuclear_event"], status="entry", scene="mid_1964",
+        event="space_race_events.32", input=[("advance", 1), ("click", 0.922, 0.2305)], crop=(0.265, 0.17, 0.73, 0.835),
+        art=True, depends_on=["gui/eventwindow.gui", "events/space_race_events.txt"],
+        shows="a space race event window (Who Goes to the Moon?), its picture, text and three options",
+        note="an event whose text names nothing but the country; the click is its outliner row, first under Active "
+             "Journal Entries in the 1964 copy (under Civil Rights Movement)"),
     "ws_c1_colonies": dict(
         out=WORKSHOP + "ws_c1_colonies.png", used_by=["workshop:c1_colonies"], status="entry", scene="late_2050",
         needs=["sr_disp_colonies_held > 0"], art=True,
@@ -517,9 +557,13 @@ SHOTS = {
         placeholder="the Heir Education journal entry with one trait focus, one ideology focus and one mentor focus "
                     "active"),
     "civil_rights_movement": dict(
-        out=IMG + "civil_rights_movement.png", used_by=[G + "07-social-movements.md"], status="placeholder",
-        placeholder="the Civil Rights Movement journal entry with the Movement Support bar and the policy buttons in "
-                    "view"),
+        out=IMG + "civil_rights_movement.png", used_by=[G + "07-social-movements.md"], status="entry",
+        scene="mid_1964", needs=[has_je("je_civil_rights")], view=[["close-panel"]], input=[("click", 0.91, 0.15)],
+        crop=(0.0203, 0.05, 0.2427, 0.645),
+        depends_on=["common/journal_entries/je_civil_rights.txt", "common/scripted_buttons/*civil*"],
+        shows="the Civil Rights Movement journal entry with the Movement Support bar and the policy buttons in view",
+        note="the USA in the 1964 copy, where the movement is marginal and its row is the first under Active "
+             "Journal Entries in the outliner (the click); the page from its banner to its description"),
     "religious_revival_event": dict(
         out=IMG + "religious_revival_event.png", used_by=[G + "07-social-movements.md"], status="placeholder",
         art=True, placeholder="a religious revival event, such as The Moral Majority, with its three options"),
@@ -527,16 +571,25 @@ SHOTS = {
         out=IMG + "cultural_merge.png", used_by=[G + "08-states.md"], status="placeholder",
         placeholder="a running Cultural Merge journal entry, its status line and Merge Progress bar in view"),
     "demographics_pyramid": dict(
-        out=IMG + "demographics_pyramid.png", used_by=[G + "08-states.md"], status="placeholder",
-        placeholder="the Demographics tab with the population pyramid and its twenty-year outline"),
+        out=IMG + "demographics_pyramid.png", used_by=[G + "08-states.md"], status="entry", scene="mid_1964",
+        needs=["te_demog_cohorts_run = yes"], view=te_window("demographics"), input=side_scroll(8),
+        crop=(0.0203, 0.400, 0.2427, 0.850), depends_on=["gui/te_demographics_widgets.gui"],
+        shows="the Demographics tab's Population Pyramid: men and women by age, the pale bars twenty years ahead",
+        note="the section alone, eight notches down the side panel in the 1964 copy (its place moves with the "
+             "Causes of Death list above it)"),
     "eu_formation": dict(
         out=IMG + "eu_formation.png", used_by=[G + "09-diplomacy.md"], status="placeholder",
         placeholder="the formation panel showing the European Union with its requirements tooltip"),
     "colonial_empire_overview": dict(
-        out=IMG + "colonial_empire_overview.png", used_by=[G + "12-decolonization.md"], status="placeholder",
-        placeholder="the Colonial Empire overview with the stability bar showing a red stretch, and Colonial Holdings "
-                    "open with its territories, their Release buttons and a colonial subject's Release and Dominion "
-                    "buttons"),
+        out=IMG + "colonial_empire_overview.png", used_by=[G + "12-decolonization.md"], status="entry",
+        scene="mid_1964", country=["TUR", "RUS"],
+        needs=[has_je("je_colonial_empire"), "colonial_empire_disp_territories_eligible > 0"],
+        view=te_window("colonial_empire"), input=COLONIAL_REFRESH, crop=(0.0203, 0.1426, 0.2427, 0.712),
+        depends_on=["gui/journal_entry_widgets/colonial_empire*.gui"],
+        shows="the Colonial Empire overview, the stability bar with its red stretch, and Colonial Holdings open: "
+              "the territories with their Release buttons",
+        note="Turkey in the 1964 copy, which holds no colonial subject, so the subject's Release and Dominion "
+             "buttons the placeholder asked for are not in it; the crop ends under Colonial Holdings"),
     "territory_popup": dict(
         out=IMG + "territory_popup.png", used_by=[G + "12-decolonization.md"], status="placeholder",
         placeholder="the popup for one territory, with Grant it independence, the Round Table Conference grayed with "
@@ -556,7 +609,23 @@ SHOTS = {
 
 KEYS = {"out", "used_by", "status", "scene", "country", "needs", "setups", "view", "scroll", "input", "hover", "event",
         "crop", "trim", "max_kb", "depends_on", "shows", "placeholder", "art", "note"}
-INPUTS = {"click": 2, "wheel": 3, "drag": 4}
+INPUTS = {"click": 2, "wheel": 3, "drag": 4, "advance": 1, "event": 2}
+
+
+def _input_ok(step) -> bool:
+    if not (isinstance(step, (list, tuple)) and step and step[0] in INPUTS and len(step) == INPUTS[step[0]] + 1):
+        return False
+    kind, args = step[0], list(step[1:])
+    if kind == "event":
+        return (isinstance(args[0], str) and re.fullmatch(r"[a-z0-9_]+\.\d+", args[0]) is not None
+                and isinstance(args[1], int) and not isinstance(args[1], bool) and 0 <= args[1] <= 9)
+    if kind == "advance":
+        return isinstance(args[0], int) and not isinstance(args[0], bool) and 0 < args[0] <= 31
+    if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in args):
+        return False
+    if kind == "wheel":
+        return all(0 <= v <= 1 for v in args[:2]) and isinstance(args[2], int) and 0 < abs(args[2]) <= 40
+    return all(0 <= v <= 1 for v in args)
 NEED = re.compile(r"^(?P<expr>.+?)\s*(?P<op>>=|<=|==|!=|>|<)\s*(?P<num>-?\d+(?:\.\d+)?)$")
 _TAG = re.compile(r"^[A-Z0-9_]{1,16}$")
 _SETUP = re.compile(r"^[a-z][a-z0-9_]{0,40}$")
@@ -709,14 +778,10 @@ def validate() -> list[str]:
             if hover is not None and not (len(hover) == 2 and all(0 <= v <= 1 for v in hover)):
                 problems.append("%s: hover is (x, y), fractions of the window" % where)
             for step in shot.get("input") or []:
-                if not (isinstance(step, (list, tuple)) and step and step[0] in INPUTS
-                        and len(step) == INPUTS[step[0]] + 1
-                        and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in step[1:])
-                        and (step[0] == "wheel" or all(0 <= v <= 1 for v in step[1:]))
-                        and (step[0] != "wheel" or (all(0 <= v <= 1 for v in step[1:3]) and isinstance(step[3], int)
-                                                    and 0 < abs(step[3]) <= 40))):
-                    problems.append("%s: an input step is (\"click\", x, y), (\"wheel\", x, y, notches) or "
-                                    "(\"drag\", x1, y1, x2, y2), fractions of the window: %r" % (where, step))
+                if not _input_ok(step):
+                    problems.append("%s: an input step is (\"click\", x, y), (\"wheel\", x, y, notches), "
+                                    "(\"drag\", x1, y1, x2, y2), fractions of the window, (\"advance\", days) or "
+                                    "(\"event\", id, option): %r" % (where, step))
             trim = shot.get("trim")
             if trim is not None and not (isinstance(trim, bool) or (isinstance(trim, int) and trim > 0)):
                 problems.append("%s: trim is True, False or an empty run in pixels" % where)
