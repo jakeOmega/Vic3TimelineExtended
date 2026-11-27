@@ -115,10 +115,16 @@ _HEADLINE_PREFIX = "notification_headlines_"
 _SKIP_KEY = re.compile(r"^(?:te_debug|TE_DEBUG|te_tp_|te_tax_debug)")
 
 
+# A minus sign straight after a colour code and before a number, a data function or a spliced key
+# (`#R -[value]%#!`, the mod's negative percentages) is a sign, not a dash: dropped before the markup becomes
+# " X ", which would turn it into " X - X " for the spaced-hyphen rule (#1803).
+_SIGNED_AFTER_CODE = re.compile(r"(#[A-Za-z_;:,\[\]().']+\s)-(?=[\d\[$])")
+
+
 def prose(value: str) -> str:
     """The value as a reader sees its words: data functions, spliced keys and
     formatting codes replaced by a neutral token."""
-    return _MARKUP.sub(" X ", value)
+    return _MARKUP.sub(" X ", _SIGNED_AFTER_CODE.sub(r"\1", value))
 
 
 def lint_value(value: str) -> list:

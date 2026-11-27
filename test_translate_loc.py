@@ -133,6 +133,17 @@ class StalePolicyTests(unittest.TestCase):
     def test_rewrite_is_major(self):
         self.assertFalse(t.is_minor_change("Raises the price of grain.", "Lowers wages in every state."))
 
+    def test_a_changed_splice_is_major(self):
+        """#1803: a phrase replaced by a `$key$` splice read as a small edit, and the old translation, which still
+        had the phrase, kept shipping (the Map Room pick tooltips: "the world" under a limited area)."""
+        old = "Picks a site anywhere in the world for the next launch, at the usual cost of a launch."
+        self.assertFalse(t.is_minor_change(old, old.replace("the world", "$te_map_room_area$")))      # added
+        self.assertFalse(t.is_minor_change(old.replace("the world", "$te_a$"), old.replace("the world", "$te_b$")))
+        self.assertFalse(t.is_minor_change(old.replace("the world", "$te_a$"), old))                  # removed
+        # The same splices with a small wording change around them stay minor.
+        self.assertTrue(t.is_minor_change(old.replace("the world", "$te_a$"),
+                                          old.replace("the world", "$te_a$").replace("usual", "normal")))
+
     def test_classify(self):
         entries = [t.Entry("a_l_english.yml", k, en) for k, en in [
             ("same", "Hello there"), ("tweak", "Hello there, friend!"), ("new", "Brand new"),

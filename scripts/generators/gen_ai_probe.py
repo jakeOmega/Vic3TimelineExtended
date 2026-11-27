@@ -62,7 +62,7 @@ the technologies that gate electricity and radios (TECH_FLAGS_4); P1 and P2 (ver
 (states with a power plant, power levels queued, Electricity made, bought and its price, urban centres by street
 lighting, the radios market), the construction queue by kind, the construction cost scaling, what the bureaucracy's
 modifiers add and multiply, the workforce's slack, and a census of the army's battalions (te_aip_unit_census: new
-since the last report, of another type than at the last report); X7 and X8, the institutions' bureaucracy cost and
+since the last report, of another type than at the last report; retired in version 6); X7 and X8, the institutions' bureaucracy cost and
 the strata's standard of living (DATA_FUNCTIONS); and the W line's three game rules (RULES), so a log says which
 setting its fields ran under. `bt_company_headquarter` reads the headquarters' group from version 4 (BUILDING_TYPE_READS).
 Version 5 (#1877) adds to C2 the interest rate the construction purchase reads (`rate`, the rate paid, and
@@ -74,6 +74,10 @@ and what its railway entry reads: `inf_short_states`, the states whose infrastru
 `rail_sites`, the states the entry would act on (te_ai_build_pass_railway_site: incorporated, short by more than
 its margin). C2 is full, and a line of its own would take a snapshot past the five lines version 4 allowed it (the
 log rotates every 512 KB), so it joins the line with room nearest in kind: the country's buildings by type.
+Version 6 (#2090) takes out the army census: a combat unit holds no variables (its canary, `TE_AIP CANARY unit_vars`,
+read v=0 in the first game it ran in, 2026-11-26: "This scope doesn't support variables"), so the battalions could not
+be marked and every u_* field read 0. Its six fields leave the end of P2 (RETIRED_TAIL), with the canary, the
+battalion's type index and the marks; the net change in irregulars (report table 4b) still reads from the R line.
 Every figure in an S line comes through a script value (`[THIS.ScriptValue('x')|n]`), the one accessor form the
 mod has always seen print (docs/guides/scripting_best_practices.md, `debug_log` Loc-String Templating Limitations).
 
@@ -84,7 +88,9 @@ OLD LOGS. A version-1 log (the first long run, 2026-11-16) must go on parsing wi
 field or line is only ever added: no line is renamed or renumbered, a field joins the end of its group, and a
 positional line (`POSITIONAL`) never takes another field, since its lines are read by position. New positional
 fields go on a line of their own: a group of their own, or a later part of the group that starts a new line
-(version 4's H2, `field_groups` giving H twice).
+(version 4's H2, `field_groups` giving H twice). A field is retired only from the end of a positional line, and the
+key names it (`retired_tail`, from RETIRED_TAIL), so an older log's longer line still reads: the parser drops that
+many values from its end (version 6's army census).
 """
 
 from __future__ import annotations
@@ -98,7 +104,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-VERSION = 5
+VERSION = 6
 PREFIX = "te_aip_"
 FIELDS_PER_LINE = 15
 POSITIONAL_PER_LINE = 22
@@ -117,6 +123,7 @@ LINES_ADDED = {
     3: [],          # version 3 added fields to C2 and N2, the W line's fields, and the calendar schedule
     4: ["H2", "P1", "P2"],
     5: [],          # version 5 added fields to C2 (the rate the purchase reads, and the AI construction pass) and B2
+    6: [],          # version 6 took the army census's six fields off the end of P2 (RETIRED_TAIL)
 }
 
 VALUES_FILE = "common/script_values/te_ai_probe_values.txt"
@@ -358,13 +365,13 @@ def rule_tests(name: str, settings: list[str]) -> list[str]:
     return RULE_TESTS.get(name) or [f"has_game_rule = {setting}" for setting in settings]
 
 
-# The army census (te_aip_unit_census): no on_action fires when a battalion is recruited or changes type
-# (vanilla's on_actions.log names none), so each snapshot marks every army battalion with its type (a variable on the
-# combat unit) and counts, against the marks of the country's last snapshot, the battalions with no mark (recruited
-# since) and those of another type (upgraded or changed). Whether a combat unit holds a variable is not documented, so
-# the probe tries it once on one battalion (`CANARY unit_vars`) and counts only if it held: otherwise every u_* reads 0.
-IRREGULAR = "combat_unit_type_irregular_infantry"
-UNIT_CENSUS = ["u_all", "u_new", "u_changed", "u_irr_new", "u_from_irr", "u_flows"]
+# Fields a version took off the end of a positional line: {line: [field, ...]}, in the order older logs print them.
+# The parser drops that many values from the end of an older log's line, so a version 4 or 5 log still reads with
+# this key. Version 6 (#2090): the army census of versions 4 and 5 marked each battalion with its type in a variable
+# on the combat unit, to count recruits and upgrades between reports, but a combat unit holds no variables (the
+# census's canary read v=0 in the first game it ran in, 2026-11-26; scripting_best_practices.md, "Combat Units Have
+# No Variables"), so every one of these fields read 0.
+RETIRED_TAIL = {"P2": ["u_all", "u_new", "u_changed", "u_irr_new", "u_from_irr", "u_flows"]}
 
 # The interface's data functions, printed with each snapshot (and once each at arming, alone).
 DATA_FUNCTIONS = [
@@ -522,8 +529,6 @@ def catalog(mod_state) -> dict:
     missing = [t for t in tech_flags + tech_flags_4 if t not in all_techs]
     if missing:
         raise ValueError(f"TECH_FLAGS names technologies no file defines: {missing}")
-    if IRREGULAR not in unit_types:
-        raise ValueError(f"The army census counts {IRREGULAR}, which no file defines")
 
     # A group counts when a building belongs to it or to a group under it. Vanilla keeps 21 legacy groups
     # (bg_coal_mining, bg_wheat_farms, ...) that no building belongs to; test_no_dead_building_groups.py bars them.
@@ -557,7 +562,6 @@ def catalog(mod_state) -> dict:
         # Version 4.
         "tech_flags_4": tech_flags_4,
         "street_lights": street_lighting_methods(mod_state),
-        "unit_type_index": list(unit_types),
         "law_groups": law_groups,
         "laws": {group: by_group[group] for group in law_groups},
         "all_laws": [law for group in law_groups for law in by_group[group]],
@@ -922,7 +926,8 @@ def market_good(key: str, good: str) -> list[Field]:
 
 def version_4_fields(cat: dict) -> list[Field]:
     """The P group (version 4): electrification, the construction queue by kind, the construction cost scaling, the
-    bureaucracy's modifiers, the workforce's slack and the army census, in that order."""
+    bureaucracy's modifiers and the workforce's slack, in that order (versions 4 and 5 ended it with the army census:
+    RETIRED_TAIL)."""
     kinds = dict(QUEUE_KINDS)
     lights = [levels(name, "is_building_type = building_urban_center " + (
         f"has_active_production_method = {methods[0]}" if len(methods) == 1 else
@@ -965,8 +970,7 @@ def version_4_fields(cat: dict) -> list[Field]:
         variable("slack", "te_cc_slack", 3),
         variable("slack_peasants", "te_cc_peasants", 3),
     ]
-    army = [variable(name, PREFIX + name) for name in UNIT_CENSUS]
-    return electricity + queue + cost + bureaucracy + labour + army
+    return electricity + queue + cost + bureaucracy + labour
 
 
 def bank_phase_field() -> Field:
@@ -1073,14 +1077,6 @@ def render_values(cat: dict) -> str:
     parts.append(index("play_type_index", [f"is_diplomatic_play_type = {play}" for play in cat["play_types"]])
                  .script_value())
     parts.append("\n")
-    if cat.get("unit_type_index"):
-        parts.append("# --- version 4: the army census (te_aip_unit_census). A battalion's type (ai_probe_key.json,\n"
-                     "# unit_type_index), read in the combat unit's scope; whether a combat unit held a variable ---\n")
-        parts.append(index("unit_type_index", [f"has_unit_type = unit_type:{unit}" for unit in cat["unit_type_index"]])
-                     .script_value())
-        parts.append("te_aip_unit_vars_ok = { value = 0 if = { limit = { has_global_variable = te_aip_unit_vars } "
-                     "value = 1 } }\n")
-        parts.append("\n")
     return "".join(parts)
 
 
@@ -1111,83 +1107,6 @@ LAW_FIELDS = ("law=[THIS.ScriptValue('te_aip_law_enacting')|0] chance=[THIS.Scri
               "stall=[THIS.ScriptValue('te_aip_ev_stall_chance')|2] setbacks=[THIS.ScriptValue('te_aip_ev_setbacks')|0]")
 WORLD_LINE = ("TE_AIP W [THIS.ScriptValue('te_aip_k')|0] y=[THIS.ScriptValue('te_aip_year')|0] "
               + " ".join(f"{name}=[THIS.ScriptValue('te_aip_w_{name}')|0]" for name in WORLD_FIELDS))
-
-
-def unit_census_effect(cat: dict) -> str:
-    """te_aip_unit_census (version 4, UNIT_CENSUS): the army's battalions against the marks of the last snapshot."""
-    irregular = cat["unit_type_index"].index(IRREGULAR) + 1
-    counts = [name for name in UNIT_CENSUS if name != "u_flows"]
-    zero = "".join(f"\tset_variable = {{ name = te_aip_{name} value = 0 }}\n" for name in UNIT_CENSUS)
-    local_zero = "".join(f"\t\tset_local_variable = {{ name = te_aip_{name} value = 0 }}\n" for name in counts)
-    store = "".join(f"\t\tset_variable = {{ name = te_aip_{name} value = local_var:te_aip_{name} }}\n" for name in counts)
-    return (
-        "# Version 4's army census, country scope, at each snapshot before its lines print. No on_action fires when a\n"
-        "# battalion is recruited or changes type, so each battalion of the country's armies is marked with its type\n"
-        "# (te_aip_ut, an index into ai_probe_key.json's unit_type_index), and the next snapshot counts the battalions\n"
-        "# with no mark (u_new: recruited since, or come to the country), those whose type is not their mark's\n"
-        "# (u_changed: upgraded or changed), and of those the irregular infantry recruited (u_irr_new) and the\n"
-        "# battalions that were irregular infantry and are now another type (u_from_irr). u_flows is 1 when the\n"
-        "# country's battalions were marked at its last snapshot, so the counts are flows; at its first they are not.\n"
-        "# Whether a combat unit holds a variable is undocumented: the first battalion reached tries one, and the\n"
-        "# census counts only if it held (`TE_AIP CANARY unit_vars v=1`). If not, every u_* field reads 0 and nothing\n"
-        "# is set on a battalion again.\n"
-        "te_aip_unit_census = {\n"
-        "\tif = {\n"
-        "\t\tlimit = { NOT = { has_global_variable = te_aip_unit_vars_tested } }\n"
-        "\t\trandom_military_formation = {\n"
-        "\t\t\tlimit = { is_army = yes }\n"
-        "\t\t\trandom_combat_unit = {\n"
-        "\t\t\t\tset_global_variable = te_aip_unit_vars_tested\n"
-        "\t\t\t\tset_variable = te_aip_unit_var_test\n"
-        "\t\t\t\tif = {\n"
-        "\t\t\t\t\tlimit = { has_variable = te_aip_unit_var_test }\n"
-        "\t\t\t\t\tset_global_variable = te_aip_unit_vars\n"
-        "\t\t\t\t\tremove_variable = te_aip_unit_var_test\n"
-        "\t\t\t\t}\n"
-        "\t\t\t}\n"
-        "\t\t}\n"
-        "\t\tif = {\n"
-        "\t\t\tlimit = { has_global_variable = te_aip_unit_vars_tested }\n"
-        "\t\t\tdebug_log = \"TE_AIP CANARY unit_vars v=[THIS.ScriptValue('te_aip_unit_vars_ok')|0]\"\n"
-        "\t\t}\n"
-        "\t}\n"
-        + zero +
-        "\tif = {\n"
-        "\t\tlimit = { has_global_variable = te_aip_unit_vars }\n"
-        + local_zero +
-        "\t\tevery_military_formation = {\n"
-        "\t\t\tlimit = { is_army = yes }\n"
-        "\t\t\tevery_combat_unit = {\n"
-        "\t\t\t\tchange_local_variable = { name = te_aip_u_all add = 1 }\n"
-        "\t\t\t\tset_local_variable = { name = te_aip_ut_now value = te_aip_unit_type_index }\n"
-        "\t\t\t\tif = {\n"
-        "\t\t\t\t\tlimit = { NOT = { has_variable = te_aip_ut } }\n"
-        "\t\t\t\t\tchange_local_variable = { name = te_aip_u_new add = 1 }\n"
-        "\t\t\t\t\tif = {\n"
-        f"\t\t\t\t\t\tlimit = {{ local_var:te_aip_ut_now = {irregular} }}\n"
-        "\t\t\t\t\t\tchange_local_variable = { name = te_aip_u_irr_new add = 1 }\n"
-        "\t\t\t\t\t}\n"
-        "\t\t\t\t}\n"
-        "\t\t\t\telse_if = {\n"
-        "\t\t\t\t\tlimit = { NOT = { var:te_aip_ut = local_var:te_aip_ut_now } }\n"
-        "\t\t\t\t\tchange_local_variable = { name = te_aip_u_changed add = 1 }\n"
-        "\t\t\t\t\tif = {\n"
-        f"\t\t\t\t\t\tlimit = {{ var:te_aip_ut = {irregular} }}\n"
-        "\t\t\t\t\t\tchange_local_variable = { name = te_aip_u_from_irr add = 1 }\n"
-        "\t\t\t\t\t}\n"
-        "\t\t\t\t}\n"
-        "\t\t\t\tset_variable = { name = te_aip_ut value = local_var:te_aip_ut_now }\n"
-        "\t\t\t}\n"
-        "\t\t}\n"
-        + store +
-        "\t\tif = {\n"
-        "\t\t\tlimit = { has_variable = te_aip_units_marked }\n"
-        "\t\t\tset_variable = { name = te_aip_u_flows value = 1 }\n"
-        "\t\t}\n"
-        "\t\tset_variable = te_aip_units_marked\n"
-        "\t}\n"
-        "}\n\n"
-    )
 
 
 def render_effects(cat: dict) -> str:
@@ -1308,10 +1227,7 @@ def render_effects(cat: dict) -> str:
         "}\n\n"
     )
 
-    out.append("# The yearly snapshot of the country in scope, then its counters start again. The army census (version 4)\n"
-               "# runs first: the P line prints what it counted.\nte_aip_snapshot = {\n")
-    if cat.get("unit_type_index"):
-        out.append("\tte_aip_unit_census = yes\n")
+    out.append("# The yearly snapshot of the country in scope, then its counters start again.\nte_aip_snapshot = {\n")
     for name, part in snapshot_lines(cat):
         if name[0] in POSITIONAL:
             body = ";".join(field.accessor(keyed=False) for field in part)
@@ -1323,8 +1239,6 @@ def render_effects(cat: dict) -> str:
         out.append(f"\tset_variable = {{ name = te_aip_n_{name} value = 0 }}\n")
     out.append("}\n\n")
 
-    if cat.get("unit_type_index"):
-        out.append(unit_census_effect(cat))
     out.append("# The interface's figures (see te_aip_canary).\n"
                "te_aip_snapshot_data_functions = {\n")
     for line in sorted({line for line, _, _ in DATA_FUNCTIONS}):
@@ -1726,17 +1640,17 @@ def render_key(cat: dict) -> str:
         "construction_methods": {name: methods for name, methods in cat["construction_methods"]},
         "ai_expansion_staffing": AI_EXPANSION_STAFFING,
         # Version 4: the technologies of the H2 line (tech_flags names them all, H1's and H2's); the street
-        # lighting methods each P1 field counts; the unit types a battalion's census mark indexes (1-based) and the
-        # census's fields; the W line's game rules, each field's settings (1-based); the version each data function
-        # was added in; the construction queue's kinds; the settings under which rt_* reads 0 by design.
+        # lighting methods each P1 field counts; the W line's game rules, each field's settings (1-based); the
+        # version each data function was added in; the construction queue's kinds; the settings under which rt_*
+        # reads 0 by design.
         "tech_flags_4": cat.get("tech_flags_4", []),
         "street_lights": {name: methods for name, methods in cat.get("street_lights", [])},
-        "unit_type_index": cat.get("unit_type_index", []),
-        "unit_census": UNIT_CENSUS,
         "rules": {name: {"rule": rule, "settings": settings} for name, rule, settings in RULES},
         "data_functions_added": DATA_FUNCTIONS_ADDED,
         "queue_kinds": {name: limit for name, limit in QUEUE_KINDS},
         "retooling_waived": RETOOLING_WAIVED,
+        # Version 6: the fields a version took off the end of a positional line, which an older log still prints.
+        "retired_tail": RETIRED_TAIL,
     }
     return json.dumps(key, indent=1) + "\n"
 
@@ -1767,7 +1681,6 @@ def catalog_from_key(key: dict) -> dict:
         "construction_methods": [(name, methods) for name, methods in key["construction_methods"].items()],
         "tech_flags_4": key.get("tech_flags_4", []),
         "street_lights": [(name, methods) for name, methods in key.get("street_lights", {}).items()],
-        "unit_type_index": key.get("unit_type_index", []),
     }
 
 

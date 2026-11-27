@@ -18,7 +18,7 @@ Usage:
 
 With no positional argument it scans `gfx/` under the repo root. Known offenders
 listed in `scripts/analysis/dds_dimension_allowlist.txt` are reported but do not
-fail the run; that file is expected to empty out as #246 lands. Exits 1 when an
+fail the run; it has been empty since #246 re-exported the last four. Exits 1 when an
 unlisted violation is found.
 
 The stale-allowlist check ("listed but no longer violates — drop the line") only

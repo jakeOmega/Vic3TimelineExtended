@@ -37,6 +37,7 @@ from game_log_reader import (
     mod_frame_test,
     mod_only_anchor_warnings,
     mod_uses,
+    REGISTRY_WARNING_KEYS,
     apply_known_noise_modes,
     WATCH_KIND,
     GUI_GLOBAL_PROMOTES,
@@ -1809,6 +1810,7 @@ Error
         self.assertEqual(len(out), 1)
         w = out[0]
         self.assertEqual(w["kind"], "helper_anchor_mod_calls")
+        self.assertEqual(set(w), REGISTRY_WARNING_KEYS["helper_anchor_mod_calls"])     # #1949
         self.assertEqual(w["label"], "vanilla_bug_registry")
         self.assertEqual(w["anchor"], "00_lobby_effects.txt")
         self.assertEqual(w["helper_file"], "common/scripted_effects/00_lobby_effects.txt")
@@ -1852,6 +1854,7 @@ Error
             out = mod_only_anchor_warnings(refs, mod, game)
         self.assertEqual([(w["kind"], w["entry"], w["anchors"]) for w in out],
                          [("mod_only_anchor", "replayed vanilla", ["modified.txt"])])
+        self.assertEqual([set(w) for w in out], [REGISTRY_WARNING_KEYS["mod_only_anchor"]])      # #1949
         self.assertEqual(mod_only_anchor_warnings(refs, mod, None), [])
 
     def test_comments_and_definitions_are_not_uses(self):

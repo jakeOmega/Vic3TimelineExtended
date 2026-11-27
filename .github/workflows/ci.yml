@@ -29,10 +29,12 @@ jobs:
   checks:
     name: Checks (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    # The whole job takes 14-17 minutes (November 2026), nearly all of it the
-    # unit tests; 30 caps a hung step instead of burning the default 6-hour
-    # allowance.
-    timeout-minutes: 30
+    # Green runs of 2026-11-26/27, nearly all of it the unit tests: Python 3.11
+    # took a median 19.6 minutes (max 26.9), Python 3.12 a median 22.1 (max
+    # 30.0), and 3.12 varies by about five minutes from run to run. At 30 the
+    # limit cut off 8 green 3.12 jobs in 36 hours (#2071); 45 still caps a hung
+    # step instead of burning the default 6-hour allowance.
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:

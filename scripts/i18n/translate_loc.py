@@ -231,11 +231,15 @@ def is_minor_change(old_en: str, new_en: str) -> bool:
     punctuation, since a small edit there is usually a rename. Longer text needs
     the same numbers and 85% similarity. A change of spelling only, British to
     American as scripts/analysis/check_loc_spelling.py sweeps it (Licence to
-    License), is minor at any length. Anything else ships English until
-    retranslated."""
+    License), is minor at any length. A change in which `$key$` splices the
+    text names (one added, removed or renamed) is never minor: a phrase
+    replaced by a splice reads as a small edit, but the old translation still
+    has the phrase (#1803). Anything else ships English until retranslated."""
     def norm(text: str) -> str:
         return re.sub(r"\s+", " ", text).strip().rstrip(".!?:;").casefold()
 
+    if set(_DOLLAR.findall(old_en)) != set(_DOLLAR.findall(new_en)):
+        return False
     if norm(old_en) == norm(new_en):
         return True
     if norm(americanize_value(old_en)[0]) == norm(new_en):
