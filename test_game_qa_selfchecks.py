@@ -378,9 +378,12 @@ class VerdictTest(unittest.TestCase):
         self.assertTrue(check["line"].endswith("n=2"))
 
     def test_the_pattern_is_log_triages(self):
-        import log_triage       # on the path once selfchecks has asked for it
+        # _pattern() puts scripts/analysis on the path, so it runs before the import: run alone, or first on an
+        # xdist worker, the import would otherwise find no log_triage (#1914).
+        pattern = selfchecks._pattern()
+        import log_triage
 
-        self.assertIs(selfchecks._pattern(), log_triage.SELF_CHECK_RE)
+        self.assertIs(pattern, log_triage.SELF_CHECK_RE)
 
     def test_a_line_that_is_not_a_debug_log_line_is_still_read(self):
         (check,) = selfchecks.verdicts(["TE_SELF_CHECK OK bare (a line with no prefix)"], "session")
