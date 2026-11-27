@@ -21,12 +21,109 @@
 # test_banking_external_tools.NonModifierTooltipTest pins the prose's figures,
 # and DisplayModifierTest the display modifiers', to the script values.
 
+# ONE COPY OF A TOOL (#1811). Both of a tool's enable buttons, the dashboard's
+# scripted GUI and the AI's scripted button, hide while the tool is on, yet a
+# 1957 save held three copies of Moral Suasion, holding 3 points where one holds
+# 1: a same-name add_modifier stacks. A second press can pass the button's gate
+# before the first one shows. The points line reads
+# modifier:country_banking_intervention_max_add, which takes in a new copy's
+# cost only after the effect has ended, days later for some sums
+# (scripting_best_practices.md, "A gate that reads back the cost a declaration
+# carries passes again until the cost lands"); the dashboard's is_valid never
+# asked whether the tool was on; and a click lands on a button drawn a frame
+# before. So every enable effect of the 38 tools calls
+# banking_tool_before_switch_on first, and every disable effect, with
+# banking_strip_tool (a law's lift), calls banking_tool_clear_pending.
+#
+# - A copy already on the entry comes off, so a second press that has_modifier
+#   does see leaves one copy, not two. Guarded: remove_modifier on a modifier
+#   the scope doesn't hold logs an error on every call.
+# - A week's mark, banking_pending_<modifier>, which the tool's
+#   banking_possible_* reads (banking_tool_not_pending). A variable write is
+#   visible to the very next press, where a modifier's sum is not, so the mark
+#   stops a second press however soon it comes. The tool's own Disable and a
+#   law's strip clear it, so switching a tool back on after switching it off is
+#   never held up; any other lift (peace lifting capital controls, the
+#   directed-credit cap, a revolution's new entry) leaves it to run out within
+#   the week. A week covers the slowest modifier lag measured (2 to 5 days),
+#   as the influence and garrison marks do (ch_influence_pending,
+#   colonial_garrison_pending_levels).
+#
+# The two investment-pool transfers (ce_invest_pool_inject / _withdraw) are
+# meant to be pressed again and again and hold no modifier, so they take
+# neither. test_banking_tool_roster.OneCopyTests holds all of this.
+#
+# Parameters: $MODIFIER$ = the tool's JE modifier
+banking_tool_before_switch_on = {
+	je:je_banking_cycle = {
+		remove_modifier_if_exists_effect = { MODIFIER = $MODIFIER$ }
+	}
+	hidden_effect = {
+		set_variable = { name = banking_pending_$MODIFIER$ days = 7 }
+	}
+}
+
+# Parameters: $MODIFIER$ = the tool's JE modifier
+banking_tool_clear_pending = {
+	hidden_effect = {
+		if = {
+			limit = { has_variable = banking_pending_$MODIFIER$ }
+			remove_variable = banking_pending_$MODIFIER$
+		}
+	}
+}
+
+# The rule switched off mid-game (te_banking_cycle_stop_for_rule): every tool's mark goes with the cycle, so a
+# rule switched on again within the week opens every tool at once. test_banking_tool_roster.OneCopyTests holds the
+# list to the tools banking_tool_before_switch_on marks.
+banking_tool_clear_all_pending = {
+	banking_tool_clear_pending = { MODIFIER = banking_open_market_ops }
+	banking_tool_clear_pending = { MODIFIER = banking_moral_suasion }
+	banking_tool_clear_pending = { MODIFIER = banking_countercyclical_capital_buffer }
+	banking_tool_clear_pending = { MODIFIER = banking_raise_margin_requirements }
+	banking_tool_clear_pending = { MODIFIER = banking_expand_deposit_guarantee }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_infrastructure }
+	banking_tool_clear_pending = { MODIFIER = banking_export_credit_facility }
+	banking_tool_clear_pending = { MODIFIER = banking_capital_controls_out }
+	banking_tool_clear_pending = { MODIFIER = banking_emergency_liquidity_program }
+	banking_tool_clear_pending = { MODIFIER = banking_asset_relief_program }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_heavy_industry }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_agriculture }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_armaments }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_electrification }
+	banking_tool_clear_pending = { MODIFIER = banking_reserve_requirements }
+	banking_tool_clear_pending = { MODIFIER = banking_bank_holiday }
+	banking_tool_clear_pending = { MODIFIER = banking_bail_in_regime }
+	banking_tool_clear_pending = { MODIFIER = planning_plan_revision }
+	banking_tool_clear_pending = { MODIFIER = planning_target_reduction }
+	banking_tool_clear_pending = { MODIFIER = planning_consolidation_order }
+	banking_tool_clear_pending = { MODIFIER = planning_emergency_allocation }
+	banking_tool_clear_pending = { MODIFIER = planning_strategic_stockpile }
+	banking_tool_clear_pending = { MODIFIER = planning_distribution_upgrade }
+	banking_tool_clear_pending = { MODIFIER = planning_admin_campaign }
+	banking_tool_clear_pending = { MODIFIER = planning_coordination_protocol }
+	banking_tool_clear_pending = { MODIFIER = cooperative_dividend_restraint }
+	banking_tool_clear_pending = { MODIFIER = cooperative_mutual_aid }
+	banking_tool_clear_pending = { MODIFIER = cooperative_capital_plan }
+	banking_tool_clear_pending = { MODIFIER = cooperative_credit_expansion }
+	banking_tool_clear_pending = { MODIFIER = cooperative_council_directive }
+	banking_tool_clear_pending = { MODIFIER = cooperative_consumption_ceiling }
+	banking_tool_clear_pending = { MODIFIER = cooperative_solidarity_campaign }
+	banking_tool_clear_pending = { MODIFIER = cooperative_worker_buyout }
+	banking_tool_clear_pending = { MODIFIER = banking_restrict_inflows }
+	banking_tool_clear_pending = { MODIFIER = banking_sterilize_inflows }
+	banking_tool_clear_pending = { MODIFIER = banking_foreign_borrowing_limits }
+	banking_tool_clear_pending = { MODIFIER = banking_fx_surrender }
+	banking_tool_clear_pending = { MODIFIER = banking_emergency_import_financing }
+}
+
 # The "Raise Policy Rate" pair used to open this file. It is deleted
 # (monetary_policy_design.md §18): the policy rate is a country variable the
 # player or the delegated central bank sets directly, not an on/off intervention.
 
 banking_effect_cb_open_market_ops = {
 	te_history_record_banking_marker = { MARK = on_cb_open_market_ops }
+	banking_tool_before_switch_on = { MODIFIER = banking_open_market_ops }
 	je:je_banking_cycle = { add_modifier = { name = banking_open_market_ops } }
 	add_treasury = banking_toggle_treasury_cost
 	# te_mon_pressure_qe. No inflation under the simplified game rule.
@@ -39,10 +136,12 @@ banking_effect_cb_open_market_ops = {
 banking_effect_cb_disable_open_market_ops = {
 	te_history_record_banking_marker = { MARK = off_cb_open_market_ops }
 	je:je_banking_cycle = { remove_modifier = banking_open_market_ops }
+	banking_tool_clear_pending = { MODIFIER = banking_open_market_ops }
 }
 
 banking_effect_cb_moral_suasion = {
 	te_history_record_banking_marker = { MARK = on_cb_moral_suasion }
+	banking_tool_before_switch_on = { MODIFIER = banking_moral_suasion }
 	je:je_banking_cycle = { add_modifier = { name = banking_moral_suasion } }
 
 }
@@ -50,10 +149,12 @@ banking_effect_cb_moral_suasion = {
 banking_effect_cb_disable_moral_suasion = {
 	te_history_record_banking_marker = { MARK = off_cb_moral_suasion }
 	je:je_banking_cycle = { remove_modifier = banking_moral_suasion }
+	banking_tool_clear_pending = { MODIFIER = banking_moral_suasion }
 }
 
 banking_effect_cb_countercyclical_buffer = {
 	te_history_record_banking_marker = { MARK = on_cb_countercyclical_buffer }
+	banking_tool_before_switch_on = { MODIFIER = banking_countercyclical_capital_buffer }
 	je:je_banking_cycle = { add_modifier = { name = banking_countercyclical_capital_buffer } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -61,10 +162,12 @@ banking_effect_cb_countercyclical_buffer = {
 banking_effect_cb_disable_countercyclical_buffer = {
 	te_history_record_banking_marker = { MARK = off_cb_countercyclical_buffer }
 	je:je_banking_cycle = { remove_modifier = banking_countercyclical_capital_buffer }
+	banking_tool_clear_pending = { MODIFIER = banking_countercyclical_capital_buffer }
 }
 
 banking_effect_cb_raise_margin_requirements = {
 	te_history_record_banking_marker = { MARK = on_cb_raise_margin_requirements }
+	banking_tool_before_switch_on = { MODIFIER = banking_raise_margin_requirements }
 	je:je_banking_cycle = { add_modifier = { name = banking_raise_margin_requirements } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -72,10 +175,12 @@ banking_effect_cb_raise_margin_requirements = {
 banking_effect_cb_disable_raise_margin_requirements = {
 	te_history_record_banking_marker = { MARK = off_cb_raise_margin_requirements }
 	je:je_banking_cycle = { remove_modifier = banking_raise_margin_requirements }
+	banking_tool_clear_pending = { MODIFIER = banking_raise_margin_requirements }
 }
 
 banking_effect_cb_expand_deposit_guarantee = {
 	te_history_record_banking_marker = { MARK = on_cb_expand_deposit_guarantee }
+	banking_tool_before_switch_on = { MODIFIER = banking_expand_deposit_guarantee }
 	je:je_banking_cycle = { add_modifier = { name = banking_expand_deposit_guarantee } }
 	add_loyalists = { value = banking_small_radicals_value }
 }
@@ -83,11 +188,13 @@ banking_effect_cb_expand_deposit_guarantee = {
 banking_effect_cb_disable_expand_deposit_guarantee = {
 	te_history_record_banking_marker = { MARK = off_cb_expand_deposit_guarantee }
 	je:je_banking_cycle = { remove_modifier = banking_expand_deposit_guarantee }
+	banking_tool_clear_pending = { MODIFIER = banking_expand_deposit_guarantee }
 	add_radicals = { value = banking_toggle_paired_radicals_value }
 }
 
 banking_effect_cb_directed_credit_infrastructure = {
 	te_history_record_banking_marker = { MARK = on_cb_directed_credit_infrastructure }
+	banking_tool_before_switch_on = { MODIFIER = banking_directed_credit_infrastructure }
 	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_infrastructure } }
 	add_treasury = banking_toggle_treasury_cost
 }
@@ -95,10 +202,12 @@ banking_effect_cb_directed_credit_infrastructure = {
 banking_effect_cb_disable_directed_credit_infrastructure = {
 	te_history_record_banking_marker = { MARK = off_cb_directed_credit_infrastructure }
 	je:je_banking_cycle = { remove_modifier = banking_directed_credit_infrastructure }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_infrastructure }
 }
 
 banking_effect_cb_export_credit_facility = {
 	te_history_record_banking_marker = { MARK = on_cb_export_credit_facility }
+	banking_tool_before_switch_on = { MODIFIER = banking_export_credit_facility }
 	je:je_banking_cycle = { add_modifier = { name = banking_export_credit_facility } }
 	add_treasury = banking_toggle_treasury_cost
 }
@@ -106,12 +215,14 @@ banking_effect_cb_export_credit_facility = {
 banking_effect_cb_disable_export_credit_facility = {
 	te_history_record_banking_marker = { MARK = off_cb_export_credit_facility }
 	je:je_banking_cycle = { remove_modifier = banking_export_credit_facility }
+	banking_tool_clear_pending = { MODIFIER = banking_export_credit_facility }
 }
 
 banking_effect_cb_capital_controls_outflow = {
 	# TEMPORARY PR 585: observe action-time restraint violations; no policy change.
 	te_tp_observe_controls = { KIND = ordinary }
 	te_history_record_banking_marker = { MARK = on_cb_capital_controls_outflow }
+	banking_tool_before_switch_on = { MODIFIER = banking_capital_controls_out }
 	je:je_banking_cycle = { add_modifier = { name = banking_capital_controls_out } }
 	change_infamy = { value = 1 }
 	custom_tooltip = {
@@ -140,6 +251,7 @@ banking_effect_cb_capital_controls_outflow = {
 banking_effect_cb_disable_capital_controls_outflow = {
 	te_history_record_banking_marker = { MARK = off_cb_capital_controls_outflow }
 	je:je_banking_cycle = { remove_modifier = banking_capital_controls_out }
+	banking_tool_clear_pending = { MODIFIER = banking_capital_controls_out }
 	if = {
 		limit = { te_mon_full_system = yes }
 		custom_tooltip = banking_nonmod_capital_controls_off_tt
@@ -164,6 +276,7 @@ banking_nonmod_war_end_lift_tooltip = {
 # and closes itself once the crisis is over (banking_cycle_eliq_wind_down).
 banking_effect_cb_emergency_liquidity_program = {
 	te_history_record_banking_marker = { MARK = on_cb_emergency_liquidity_program }
+	banking_tool_before_switch_on = { MODIFIER = banking_emergency_liquidity_program }
 	je:je_banking_cycle = { add_modifier = { name = banking_emergency_liquidity_program } }
 	# A new opening, so a law that closes it may refund it again
 	# (remove_banking_market_modifiers_effect, extra_effects.txt).
@@ -203,11 +316,13 @@ banking_effect_cb_emergency_liquidity_program = {
 banking_effect_cb_disable_emergency_liquidity_program = {
 	te_history_record_banking_marker = { MARK = off_cb_emergency_liquidity_program }
 	je:je_banking_cycle = { remove_modifier = banking_emergency_liquidity_program }
+	banking_tool_clear_pending = { MODIFIER = banking_emergency_liquidity_program }
 	add_treasury = emergency_liquidity_program_deactivation_refund
 }
 
 banking_effect_cb_asset_relief_program = {
 	te_history_record_banking_marker = { MARK = on_cb_asset_relief_program }
+	banking_tool_before_switch_on = { MODIFIER = banking_asset_relief_program }
 	je:je_banking_cycle = { add_modifier = { name = banking_asset_relief_program } }
 	add_treasury = banking_asset_relief_activation_cost
 	add_radicals = { value = banking_medium_radicals_value }
@@ -216,6 +331,7 @@ banking_effect_cb_asset_relief_program = {
 banking_effect_cb_disable_asset_relief_program = {
 	te_history_record_banking_marker = { MARK = off_cb_asset_relief_program }
 	je:je_banking_cycle = { remove_modifier = banking_asset_relief_program }
+	banking_tool_clear_pending = { MODIFIER = banking_asset_relief_program }
 }
 
 # ---- 2026-09-23 expansion --------------------------------------------------
@@ -225,6 +341,7 @@ banking_effect_cb_disable_asset_relief_program = {
 
 banking_effect_cb_directed_credit_heavy_industry = {
 	te_history_record_banking_marker = { MARK = on_cb_directed_credit_heavy_industry }
+	banking_tool_before_switch_on = { MODIFIER = banking_directed_credit_heavy_industry }
 	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_heavy_industry } }
 	add_treasury = banking_toggle_treasury_cost
 }
@@ -232,10 +349,12 @@ banking_effect_cb_directed_credit_heavy_industry = {
 banking_effect_cb_disable_directed_credit_heavy_industry = {
 	te_history_record_banking_marker = { MARK = off_cb_directed_credit_heavy_industry }
 	je:je_banking_cycle = { remove_modifier = banking_directed_credit_heavy_industry }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_heavy_industry }
 }
 
 banking_effect_cb_directed_credit_agriculture = {
 	te_history_record_banking_marker = { MARK = on_cb_directed_credit_agriculture }
+	banking_tool_before_switch_on = { MODIFIER = banking_directed_credit_agriculture }
 	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_agriculture } }
 	add_treasury = banking_toggle_treasury_cost
 }
@@ -243,10 +362,12 @@ banking_effect_cb_directed_credit_agriculture = {
 banking_effect_cb_disable_directed_credit_agriculture = {
 	te_history_record_banking_marker = { MARK = off_cb_directed_credit_agriculture }
 	je:je_banking_cycle = { remove_modifier = banking_directed_credit_agriculture }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_agriculture }
 }
 
 banking_effect_cb_directed_credit_armaments = {
 	te_history_record_banking_marker = { MARK = on_cb_directed_credit_armaments }
+	banking_tool_before_switch_on = { MODIFIER = banking_directed_credit_armaments }
 	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_armaments } }
 	add_treasury = banking_toggle_treasury_cost
 }
@@ -254,10 +375,12 @@ banking_effect_cb_directed_credit_armaments = {
 banking_effect_cb_disable_directed_credit_armaments = {
 	te_history_record_banking_marker = { MARK = off_cb_directed_credit_armaments }
 	je:je_banking_cycle = { remove_modifier = banking_directed_credit_armaments }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_armaments }
 }
 
 banking_effect_cb_directed_credit_electrification = {
 	te_history_record_banking_marker = { MARK = on_cb_directed_credit_electrification }
+	banking_tool_before_switch_on = { MODIFIER = banking_directed_credit_electrification }
 	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_electrification } }
 	add_treasury = banking_toggle_treasury_cost
 }
@@ -265,10 +388,12 @@ banking_effect_cb_directed_credit_electrification = {
 banking_effect_cb_disable_directed_credit_electrification = {
 	te_history_record_banking_marker = { MARK = off_cb_directed_credit_electrification }
 	je:je_banking_cycle = { remove_modifier = banking_directed_credit_electrification }
+	banking_tool_clear_pending = { MODIFIER = banking_directed_credit_electrification }
 }
 
 banking_effect_cb_reserve_requirements = {
 	te_history_record_banking_marker = { MARK = on_cb_reserve_requirements }
+	banking_tool_before_switch_on = { MODIFIER = banking_reserve_requirements }
 	je:je_banking_cycle = { add_modifier = { name = banking_reserve_requirements } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -276,6 +401,7 @@ banking_effect_cb_reserve_requirements = {
 banking_effect_cb_disable_reserve_requirements = {
 	te_history_record_banking_marker = { MARK = off_cb_reserve_requirements }
 	je:je_banking_cycle = { remove_modifier = banking_reserve_requirements }
+	banking_tool_clear_pending = { MODIFIER = banking_reserve_requirements }
 }
 
 # Ninety days, then the banks reopen on their own: the modifier is TIMED, so
@@ -292,6 +418,7 @@ banking_effect_cb_disable_reserve_requirements = {
 # holiday early does not reset it.
 banking_effect_cb_bank_holiday = {
 	te_history_record_banking_marker = { MARK = on_cb_bank_holiday }
+	banking_tool_before_switch_on = { MODIFIER = banking_bank_holiday }
 	je:je_banking_cycle = { add_modifier = { name = banking_bank_holiday days = 90 } }
 	# The Active Policies row's "N days left" (GUI audit BNK-11): the term
 	# above, counted down by the weekly pulse (banking_cycle_weekly_effects),
@@ -337,11 +464,13 @@ banking_effect_cb_disable_bank_holiday = {
 		remove_variable = banking_bank_holiday_reopening
 	}
 	je:je_banking_cycle = { remove_modifier = banking_bank_holiday }
+	banking_tool_clear_pending = { MODIFIER = banking_bank_holiday }
 }
 
 # No treasury cost — that is the point of a bail-in. The creditors pay instead.
 banking_effect_cb_bail_in_regime = {
 	te_history_record_banking_marker = { MARK = on_cb_bail_in_regime }
+	banking_tool_before_switch_on = { MODIFIER = banking_bail_in_regime }
 	je:je_banking_cycle = { add_modifier = { name = banking_bail_in_regime } }
 	add_radicals = { value = banking_medium_radicals_value strata = upper }
 }
@@ -349,10 +478,12 @@ banking_effect_cb_bail_in_regime = {
 banking_effect_cb_disable_bail_in_regime = {
 	te_history_record_banking_marker = { MARK = off_cb_bail_in_regime }
 	je:je_banking_cycle = { remove_modifier = banking_bail_in_regime }
+	banking_tool_clear_pending = { MODIFIER = banking_bail_in_regime }
 }
 
 banking_effect_ce_plan_revision = {
 	te_history_record_banking_marker = { MARK = on_ce_plan_revision }
+	banking_tool_before_switch_on = { MODIFIER = planning_plan_revision }
 	je:je_banking_cycle = { add_modifier = { name = planning_plan_revision } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -360,10 +491,12 @@ banking_effect_ce_plan_revision = {
 banking_effect_ce_disable_plan_revision = {
 	te_history_record_banking_marker = { MARK = off_ce_plan_revision }
 	je:je_banking_cycle = { remove_modifier = planning_plan_revision }
+	banking_tool_clear_pending = { MODIFIER = planning_plan_revision }
 }
 
 banking_effect_ce_target_reduction = {
 	te_history_record_banking_marker = { MARK = on_ce_target_reduction }
+	banking_tool_before_switch_on = { MODIFIER = planning_target_reduction }
 	je:je_banking_cycle = { add_modifier = { name = planning_target_reduction } }
 	add_radicals = { value = banking_toggle_paired_radicals_value strata = upper }
 }
@@ -371,11 +504,13 @@ banking_effect_ce_target_reduction = {
 banking_effect_ce_disable_target_reduction = {
 	te_history_record_banking_marker = { MARK = off_ce_target_reduction }
 	je:je_banking_cycle = { remove_modifier = planning_target_reduction }
+	banking_tool_clear_pending = { MODIFIER = planning_target_reduction }
 	add_loyalists = { value = banking_small_radicals_value strata = upper }
 }
 
 banking_effect_ce_consolidation_order = {
 	te_history_record_banking_marker = { MARK = on_ce_consolidation_order }
+	banking_tool_before_switch_on = { MODIFIER = planning_consolidation_order }
 	je:je_banking_cycle = { add_modifier = { name = planning_consolidation_order } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -383,10 +518,12 @@ banking_effect_ce_consolidation_order = {
 banking_effect_ce_disable_consolidation_order = {
 	te_history_record_banking_marker = { MARK = off_ce_consolidation_order }
 	je:je_banking_cycle = { remove_modifier = planning_consolidation_order }
+	banking_tool_clear_pending = { MODIFIER = planning_consolidation_order }
 }
 
 banking_effect_ce_emergency_allocation = {
 	te_history_record_banking_marker = { MARK = on_ce_emergency_allocation }
+	banking_tool_before_switch_on = { MODIFIER = planning_emergency_allocation }
 	je:je_banking_cycle = { add_modifier = { name = planning_emergency_allocation } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -394,10 +531,12 @@ banking_effect_ce_emergency_allocation = {
 banking_effect_ce_disable_emergency_allocation = {
 	te_history_record_banking_marker = { MARK = off_ce_emergency_allocation }
 	je:je_banking_cycle = { remove_modifier = planning_emergency_allocation }
+	banking_tool_clear_pending = { MODIFIER = planning_emergency_allocation }
 }
 
 banking_effect_ce_strategic_stockpile = {
 	te_history_record_banking_marker = { MARK = on_ce_strategic_stockpile }
+	banking_tool_before_switch_on = { MODIFIER = planning_strategic_stockpile }
 	je:je_banking_cycle = { add_modifier = { name = planning_strategic_stockpile } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -405,10 +544,12 @@ banking_effect_ce_strategic_stockpile = {
 banking_effect_ce_disable_strategic_stockpile = {
 	te_history_record_banking_marker = { MARK = off_ce_strategic_stockpile }
 	je:je_banking_cycle = { remove_modifier = planning_strategic_stockpile }
+	banking_tool_clear_pending = { MODIFIER = planning_strategic_stockpile }
 }
 
 banking_effect_ce_distribution_upgrade = {
 	te_history_record_banking_marker = { MARK = on_ce_distribution_upgrade }
+	banking_tool_before_switch_on = { MODIFIER = planning_distribution_upgrade }
 	je:je_banking_cycle = { add_modifier = { name = planning_distribution_upgrade } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -416,10 +557,12 @@ banking_effect_ce_distribution_upgrade = {
 banking_effect_ce_disable_distribution_upgrade = {
 	te_history_record_banking_marker = { MARK = off_ce_distribution_upgrade }
 	je:je_banking_cycle = { remove_modifier = planning_distribution_upgrade }
+	banking_tool_clear_pending = { MODIFIER = planning_distribution_upgrade }
 }
 
 banking_effect_ce_admin_campaign = {
 	te_history_record_banking_marker = { MARK = on_ce_admin_campaign }
+	banking_tool_before_switch_on = { MODIFIER = planning_admin_campaign }
 	je:je_banking_cycle = { add_modifier = { name = planning_admin_campaign } }
 	add_radicals = { value = banking_toggle_paired_radicals_value strata = upper }
 }
@@ -427,17 +570,20 @@ banking_effect_ce_admin_campaign = {
 banking_effect_ce_disable_admin_campaign = {
 	te_history_record_banking_marker = { MARK = off_ce_admin_campaign }
 	je:je_banking_cycle = { remove_modifier = planning_admin_campaign }
+	banking_tool_clear_pending = { MODIFIER = planning_admin_campaign }
 	add_loyalists = { value = banking_small_radicals_value strata = upper }
 }
 
 banking_effect_ce_coordination_protocol = {
 	te_history_record_banking_marker = { MARK = on_ce_coordination_protocol }
+	banking_tool_before_switch_on = { MODIFIER = planning_coordination_protocol }
 	je:je_banking_cycle = { add_modifier = { name = planning_coordination_protocol } }
 }
 
 banking_effect_ce_disable_coordination_protocol = {
 	te_history_record_banking_marker = { MARK = off_ce_coordination_protocol }
 	je:je_banking_cycle = { remove_modifier = planning_coordination_protocol }
+	banking_tool_clear_pending = { MODIFIER = planning_coordination_protocol }
 }
 
 # Each transfer rebalances the treasury-pool line at once: the cache the entry
@@ -465,6 +611,7 @@ banking_effect_ce_invest_pool_withdraw = {
 
 banking_effect_cw_dividend_restraint = {
 	te_history_record_banking_marker = { MARK = on_cw_dividend_restraint }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_dividend_restraint }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_dividend_restraint } }
 	add_radicals = { value = banking_toggle_paired_radicals_value strata = middle }
 }
@@ -475,6 +622,7 @@ banking_effect_cw_dividend_restraint = {
 banking_effect_cw_disable_dividend_restraint = {
 	te_history_record_banking_marker = { MARK = off_cw_dividend_restraint }
 	je:je_banking_cycle = { remove_modifier = cooperative_dividend_restraint }
+	banking_tool_clear_pending = { MODIFIER = cooperative_dividend_restraint }
 	add_loyalists = { value = banking_small_radicals_value strata = middle }
 }
 
@@ -483,6 +631,7 @@ banking_effect_cw_disable_dividend_restraint = {
 # so a round trip nets the toggle friction rather than farming loyalists.
 banking_effect_cw_mutual_aid_fund = {
 	te_history_record_banking_marker = { MARK = on_cw_mutual_aid_fund }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_mutual_aid }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_mutual_aid } }
 	add_loyalists = { value = banking_small_radicals_value strata = lower }
 }
@@ -490,11 +639,13 @@ banking_effect_cw_mutual_aid_fund = {
 banking_effect_cw_disable_mutual_aid_fund = {
 	te_history_record_banking_marker = { MARK = off_cw_mutual_aid_fund }
 	je:je_banking_cycle = { remove_modifier = cooperative_mutual_aid }
+	banking_tool_clear_pending = { MODIFIER = cooperative_mutual_aid }
 	add_radicals = { value = banking_toggle_paired_radicals_value strata = lower }
 }
 
 banking_effect_cw_capital_plan = {
 	te_history_record_banking_marker = { MARK = on_cw_capital_plan }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_capital_plan }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_capital_plan } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -502,10 +653,12 @@ banking_effect_cw_capital_plan = {
 banking_effect_cw_disable_capital_plan = {
 	te_history_record_banking_marker = { MARK = off_cw_capital_plan }
 	je:je_banking_cycle = { remove_modifier = cooperative_capital_plan }
+	banking_tool_clear_pending = { MODIFIER = cooperative_capital_plan }
 }
 
 banking_effect_cw_credit_expansion = {
 	te_history_record_banking_marker = { MARK = on_cw_credit_expansion }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_credit_expansion }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_credit_expansion } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -513,20 +666,24 @@ banking_effect_cw_credit_expansion = {
 banking_effect_cw_disable_credit_expansion = {
 	te_history_record_banking_marker = { MARK = off_cw_credit_expansion }
 	je:je_banking_cycle = { remove_modifier = cooperative_credit_expansion }
+	banking_tool_clear_pending = { MODIFIER = cooperative_credit_expansion }
 }
 
 banking_effect_cw_council_directive = {
 	te_history_record_banking_marker = { MARK = on_cw_council_directive }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_council_directive }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_council_directive } }
 }
 
 banking_effect_cw_disable_council_directive = {
 	te_history_record_banking_marker = { MARK = off_cw_council_directive }
 	je:je_banking_cycle = { remove_modifier = cooperative_council_directive }
+	banking_tool_clear_pending = { MODIFIER = cooperative_council_directive }
 }
 
 banking_effect_cw_consumption_ceiling = {
 	te_history_record_banking_marker = { MARK = on_cw_consumption_ceiling }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_consumption_ceiling }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_consumption_ceiling } }
 	add_radicals = { value = banking_toggle_paired_radicals_value strata = lower }
 }
@@ -534,21 +691,25 @@ banking_effect_cw_consumption_ceiling = {
 banking_effect_cw_disable_consumption_ceiling = {
 	te_history_record_banking_marker = { MARK = off_cw_consumption_ceiling }
 	je:je_banking_cycle = { remove_modifier = cooperative_consumption_ceiling }
+	banking_tool_clear_pending = { MODIFIER = cooperative_consumption_ceiling }
 	add_loyalists = { value = banking_small_radicals_value strata = lower }
 }
 
 banking_effect_cw_solidarity_campaign = {
 	te_history_record_banking_marker = { MARK = on_cw_solidarity_campaign }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_solidarity_campaign }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_solidarity_campaign } }
 }
 
 banking_effect_cw_disable_solidarity_campaign = {
 	te_history_record_banking_marker = { MARK = off_cw_solidarity_campaign }
 	je:je_banking_cycle = { remove_modifier = cooperative_solidarity_campaign }
+	banking_tool_clear_pending = { MODIFIER = cooperative_solidarity_campaign }
 }
 
 banking_effect_cw_worker_buyout = {
 	te_history_record_banking_marker = { MARK = on_cw_worker_buyout }
+	banking_tool_before_switch_on = { MODIFIER = cooperative_worker_buyout }
 	je:je_banking_cycle = { add_modifier = { name = cooperative_worker_buyout } }
 	add_radicals = { value = banking_toggle_radicals_value }
 }
@@ -556,10 +717,12 @@ banking_effect_cw_worker_buyout = {
 banking_effect_cw_disable_worker_buyout = {
 	te_history_record_banking_marker = { MARK = off_cw_worker_buyout }
 	je:je_banking_cycle = { remove_modifier = cooperative_worker_buyout }
+	banking_tool_clear_pending = { MODIFIER = cooperative_worker_buyout }
 }
 
 banking_effect_cb_restrict_inflows = {
 	te_history_record_banking_marker = { MARK = on_cb_restrict_inflows }
+	banking_tool_before_switch_on = { MODIFIER = banking_restrict_inflows }
 	je:je_banking_cycle = { add_modifier = { name = banking_restrict_inflows } }
 	add_radicals = { value = banking_toggle_radicals_value }
 	custom_tooltip = banking_nonmod_restrict_inflows_tt
@@ -568,10 +731,12 @@ banking_effect_cb_restrict_inflows = {
 banking_effect_cb_disable_restrict_inflows = {
 	te_history_record_banking_marker = { MARK = off_cb_restrict_inflows }
 	je:je_banking_cycle = { remove_modifier = banking_restrict_inflows }
+	banking_tool_clear_pending = { MODIFIER = banking_restrict_inflows }
 }
 
 banking_effect_cb_sterilize_inflows = {
 	te_history_record_banking_marker = { MARK = on_cb_sterilize_inflows }
+	banking_tool_before_switch_on = { MODIFIER = banking_sterilize_inflows }
 	je:je_banking_cycle = { add_modifier = { name = banking_sterilize_inflows } }
 	# Its friction is radicals, not cash: the tool ends at the next pulse when
 	# the treasury cannot pay a month (banking_external_monthly_update), so a charge here
@@ -597,6 +762,7 @@ banking_effect_cb_sterilize_inflows = {
 banking_effect_cb_disable_sterilize_inflows = {
 	te_history_record_banking_marker = { MARK = off_cb_sterilize_inflows }
 	je:je_banking_cycle = { remove_modifier = banking_sterilize_inflows }
+	banking_tool_clear_pending = { MODIFIER = banking_sterilize_inflows }
 	# The bill ends with the tool; set_variable shows nothing, so say so.
 	custom_tooltip = {
 		text = banking_external_sterilization_charge_off_tt
@@ -607,6 +773,7 @@ banking_effect_cb_disable_sterilize_inflows = {
 
 banking_effect_cb_foreign_borrowing_limits = {
 	te_history_record_banking_marker = { MARK = on_cb_foreign_borrowing_limits }
+	banking_tool_before_switch_on = { MODIFIER = banking_foreign_borrowing_limits }
 	je:je_banking_cycle = { add_modifier = { name = banking_foreign_borrowing_limits } }
 	add_radicals = { value = banking_toggle_radicals_value }
 	custom_tooltip = banking_nonmod_foreign_borrowing_limits_tt
@@ -614,11 +781,13 @@ banking_effect_cb_foreign_borrowing_limits = {
 banking_effect_cb_disable_foreign_borrowing_limits = {
 	te_history_record_banking_marker = { MARK = off_cb_foreign_borrowing_limits }
 	je:je_banking_cycle = { remove_modifier = banking_foreign_borrowing_limits }
+	banking_tool_clear_pending = { MODIFIER = banking_foreign_borrowing_limits }
 	custom_tooltip = banking_nonmod_foreign_borrowing_limits_off_tt
 }
 
 banking_effect_cb_fx_surrender = {
 	te_history_record_banking_marker = { MARK = on_cb_fx_surrender }
+	banking_tool_before_switch_on = { MODIFIER = banking_fx_surrender }
 	je:je_banking_cycle = { add_modifier = { name = banking_fx_surrender } }
 	add_radicals = { value = banking_toggle_radicals_value }
 	# Gold: the vault's purchases. Floating: the exchange-rate target's support.
@@ -634,10 +803,12 @@ banking_effect_cb_fx_surrender = {
 banking_effect_cb_disable_fx_surrender = {
 	te_history_record_banking_marker = { MARK = off_cb_fx_surrender }
 	je:je_banking_cycle = { remove_modifier = banking_fx_surrender }
+	banking_tool_clear_pending = { MODIFIER = banking_fx_surrender }
 }
 
 banking_effect_cb_emergency_import_financing = {
 	te_history_record_banking_marker = { MARK = on_cb_emergency_import_financing }
+	banking_tool_before_switch_on = { MODIFIER = banking_emergency_import_financing }
 	je:je_banking_cycle = { add_modifier = { name = banking_emergency_import_financing } }
 	# Its friction is radicals, not cash: the tool ends at the next pulse when
 	# the treasury cannot pay a month (banking_external_monthly_update), so a charge here
@@ -654,6 +825,7 @@ banking_effect_cb_emergency_import_financing = {
 banking_effect_cb_disable_emergency_import_financing = {
 	te_history_record_banking_marker = { MARK = off_cb_emergency_import_financing }
 	je:je_banking_cycle = { remove_modifier = banking_emergency_import_financing }
+	banking_tool_clear_pending = { MODIFIER = banking_emergency_import_financing }
 	custom_tooltip = {
 		text = banking_external_import_charge_off_tt
 		set_variable = { name = banking_external_import_charge_cached value = 0 }

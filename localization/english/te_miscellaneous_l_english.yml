@@ -2225,6 +2225,7 @@
  banking_stance_band_3:0 "Monetary Stance: Neutral"
  banking_stance_band_4:0 "Monetary Stance: Tight"
  banking_stance_band_5:0 "Monetary Stance: Very Tight"
+ banking_tool_pending_tt:0 "Not switched on in the last 7 days, unless switched off since"
  bg_megastructure_capped_private:0 "Private Megastructure Facility"
  bg_sr_colony_sites:0 "Solar System Colonies"
  big_money_election_modifier:0 "Big Money Election"

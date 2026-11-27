@@ -483,12 +483,16 @@ update_countrys_bloc_principles_plurality = { update_countrys_bloc_principle_bas
 # come back: see Emergency Liquidity in remove_banking_market_modifiers_effect.
 # The marker is written only while the tool is on, so the cleanup's run on
 # every law activation posts nothing for tools already off.
+# The tool's week-long mark goes too (banking_tool_clear_pending,
+# banking_policy_effects.txt, #1811), so a tool a law lifted can be switched
+# on again at once once the law allows it.
 # Parameters: $MODIFIER$ = the tool's JE modifier, $MARK$ = its off_ marker
 banking_strip_tool = {
 	if = {
 		limit = { je:je_banking_cycle = { has_modifier = $MODIFIER$ } }
 		te_history_record_banking_marker = { MARK = $MARK$ }
 		je:je_banking_cycle = { remove_modifier = $MODIFIER$ }
+		banking_tool_clear_pending = { MODIFIER = $MODIFIER$ }
 	}
 }
 
