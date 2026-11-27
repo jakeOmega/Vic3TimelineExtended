@@ -342,7 +342,9 @@ def _runs_folder(backup_root: Path) -> Path:
 
 
 def _read_setups(specs: Sequence[str]) -> dict[str, str]:
-    """`--setup NAME=FILE`s as {NAME: the text of FILE}. Raises ValueError, naming the one at fault."""
+    """`--setup NAME=FILE`s as {NAME: the text of FILE}. Raises ValueError, naming the one at fault, and
+    overlay.SetupParameterized for a file with a `$` outside a comment (#2070): the engine would skip the setup's
+    call, logging nothing when it runs, so it is refused before a game is started or a reload is spent on it."""
     setups: dict[str, str] = {}
     for spec in specs:
         name, sep, file = spec.partition("=")
@@ -354,6 +356,7 @@ def _read_setups(specs: Sequence[str]) -> dict[str, str]:
             setups[name] = Path(file).read_text(encoding="utf-8-sig")
         except (OSError, UnicodeDecodeError) as e:
             raise ValueError("--setup %s: %s cannot be read as UTF-8 text (%s)" % (name, file, e)) from None
+        overlay.check_parameters(name, setups[name])
     return setups
 
 
@@ -820,6 +823,8 @@ def cmd_start(args) -> tuple[dict, int]:
         setups = _read_setups(args.setup)
     except ValueError as e:
         return {"refused": "bad_argument", "detail": str(e)}, 2
+    except overlay.SetupParameterized as e:
+        return {"refused": e.code, "detail": str(e)}, 2
     switches: dict[str, str] = {}
     for spec in args.switch_rule:
         rule, eq, setting = spec.partition("=")
@@ -933,6 +938,8 @@ def cmd_add_setup(args) -> tuple[dict, int]:
         setups = _read_setups([args.setup])
     except ValueError as e:
         return {"refused": "bad_argument", "detail": str(e).replace("--setup", "add-setup")}, 2
+    except overlay.SetupParameterized as e:
+        return {"refused": e.code, "detail": str(e)}, 2
     (name, script), = setups.items()
     return call(_backup_root(), "add-setup", {"name": name, "script": script}, ADD_SETUP_TIMEOUT_S)
 

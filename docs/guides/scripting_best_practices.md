@@ -4009,6 +4009,12 @@ An argument's value is one token: a number, a name, `var:x`, `local_var:x`, `sco
 
 Name a scripted trigger or effect apart from any game rule option. The audit reads `<name> = { … }` anywhere as a call, so a trigger `te_tax_code_light` beside the rule option `te_tax_code_light = { flag = te_tax_code_light }` made the option's block a call with an unknown argument `flag`. The engine keeps the two in separate databases, but a reader can't tell them apart either; the light tax code's trigger is `te_tax_code_light_on`.
 
+## A `$` in a Scripted Effect's Body Makes It Parameterized, Inside a Quoted String Too, but Not in a Comment
+
+A body with a `$` is a parameterized effect, and a `= yes` call to it is skipped: nothing runs and nothing is logged when it runs. On 2026-11-25 a game_qa setup with a stray `$WHAT$` in it (a placeholder a sed left unfilled) answered `ok` with no lines between its markers; its `debug_log`, its `set_global_variable` lines and its battle did nothing, and error.log was empty (#2070).
+
+A quoted string counts. The engine substitutes `$X$` inside strings: `te_aip_default_event` and `te_pb_summit_pay` name their parameter only inside a `debug_log` string, and their callers pass it (`WHAT = default`, `KIND = rally`). A `#` comment does not count. `form_decolonized_country`'s only `$` is `$PARAM$` in a comment, it is called `= yes`, and it formed countries in game on 2026-11-07 and 2026-11-14 (`docs/vanilla/vanilla_known_bugs.md`). The game_qa harness refuses a setup with a `$` outside a comment (`setup_parameterized`, `game_qa.overlay.parameter_lines`).
+
 ## `ordered_scope_state` `position = N` + `check_range_bounds = no` Clamps Out-of-Range
 
 For picking distinct top-N elements:

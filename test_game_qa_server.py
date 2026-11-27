@@ -335,6 +335,15 @@ class AddSetupVerbTest(ServerTestCase):
             self.assertNotIn("--setup", reply["detail"])
         self.assertEqual([c for c in fake.calls if c[0] == "add_setup"], [])
 
+    def test_a_setup_with_a_dollar_is_refused_before_the_server_is_asked(self):
+        fake, _thread = self.serve()
+        script = self.backups / "late.txt"
+        script.write_text('\ufeffset_variable = te_late\r\ndebug_log = "TE_QA law_$WHAT$"\r\n', encoding="utf-8")
+        reply, code = self.run_cli("add-setup", "late=%s" % script)
+        self.assertEqual((code, reply["refused"]), (2, "setup_parameterized"))
+        self.assertIn("setup late: a $ on line 2 ", reply["detail"])
+        self.assertEqual([c for c in fake.calls if c[0] == "add_setup"], [])
+
     def test_a_refusal_from_the_session_keeps_its_fields(self):
         fake = FakeSession()
         fake.raises["add_setup"] = session.SessionError("not_reloaded", "no reload", revision=1, seen=0, tries=30)
@@ -887,6 +896,15 @@ class StartTest(ServerTestCase):
             self.assertEqual((reply["refused"], code), ("bad_argument", 2))
             reply, code = self.run_cli("start", "--permission", PERMISSION, "--setup", "border")
             self.assertEqual((reply["refused"], code), ("bad_argument", 2))
+        self.assertEqual(spawn.handles, [])
+
+    def test_a_setup_with_a_dollar_spawns_nothing(self):
+        spawn = ThreadSpawner(FakeSession)
+        self.setup_file.write_text("set_variable = te_$KEY$\n", encoding="utf-8")
+        with mock.patch.object(client, "spawn_server", spawn):
+            reply, code = self.run_cli("start", "--permission", PERMISSION, "--setup", "border=%s" % self.setup_file)
+        self.assertEqual((reply["refused"], code), ("setup_parameterized", 2))
+        self.assertIn("setup border: a $ on line 1 ", reply["detail"])
         self.assertEqual(spawn.handles, [])
 
     def test_a_second_start_is_refused_while_one_runs(self):

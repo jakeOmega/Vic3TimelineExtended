@@ -1495,6 +1495,14 @@ class AddSetupTest(SessionTestCase):
                 self.assertEqual(self.session_error(self.session.add_setup, name, body).code, "overlay_refused")
         self.assertEqual((self.effects(), len(self.game.steps)), (before, steps))
 
+    def test_a_body_with_a_dollar_is_setup_parameterized_and_writes_and_types_nothing(self):
+        self.started()
+        before, steps = self.effects(), len(self.game.steps)
+        error = self.session_error(self.session.add_setup, "late", 'debug_log = "TE_QA law_$WHAT$"')
+        self.assertEqual(error.code, "setup_parameterized")
+        self.assertIn("line 1", error.detail)
+        self.assertEqual((self.effects(), len(self.game.steps)), (before, steps))
+
     def test_a_game_that_never_reloads_is_not_reloaded_and_the_setup_is_refused_until_it_has(self):
         self.started()
         self.game.reloads = False
@@ -4889,6 +4897,10 @@ class MinorsTest(SessionTestCase):
     def test_a_bad_setup_is_refused_before_anything_and_the_session_can_start_after(self):
         error = self.session_error(self.start, setups={"border": "set_variable = { x"})
         self.assertEqual(error.code, "overlay_refused")
+        self.assertEqual(self.cli.calls, [])
+        self.assertFalse(self.paths.overlay_dir.exists())
+        error = self.session_error(self.start, setups={"border": "set_variable = te_$X$"})
+        self.assertEqual(error.code, "setup_parameterized")
         self.assertEqual(self.cli.calls, [])
         self.assertFalse(self.paths.overlay_dir.exists())
         self.assertEqual(self.start(setups={"border": "set_variable = x"})["snapshot"], SNAP)

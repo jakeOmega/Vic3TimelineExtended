@@ -287,8 +287,8 @@ class SessionError(Exception):
     verb's reply; `stop`: the reply of the `stop` a failed start ran; `screenshot`, …).
 
     Codes: already_started, overlay_left, no_permission, bad_argument, bad_tag, no_save, held_snapshot,
-    held_unknown, overlay_refused, fixture_failed, snapshot_refused, launch_refused (with `game_may_be_up` when a
-    game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
+    held_unknown, overlay_refused, setup_parameterized, fixture_failed, snapshot_refused, launch_refused (with
+    `game_may_be_up` when a game may have started all the same), bad_launch_reply, unknown_start, game_gone, no_window,
     breakpoint_unverified, debugger, no_stop, unexpected_stop, maybe_stopped, no_date, bad_date, tag_failed,
     use_read, unknown_setup, setup_not_logged, bad_reply, nothing_pending, bad_index, not_selected, id_unaddressable,
     no_country, not_on_country_select, click_refused, click_unknown, console_not_open, keyboard_away,
@@ -542,7 +542,7 @@ class Session:
         try:
             overlay.check_setups(setups)
         except overlay.OverlayError as e:
-            raise SessionError("overlay_refused", str(e)) from e
+            raise SessionError(e.code, str(e)) from e
         if save is not None:
             save = self._check_save(save)
         switch_rules = self._check_switches(switch_rules, save)
@@ -598,7 +598,7 @@ class Session:
                 preview_gui=gui_preview.wrapper_text(None, "none", gui_preview.DEFAULT_WIDTH, 0, {}),
                 extra_gui=self._capture_files)
         except overlay.OverlayError as e:
-            raise SessionError("overlay_refused", str(e)) from e
+            raise SessionError(e.code, str(e)) from e
         if self._overlay.profiler_gui is not None:
             self._profiler_window = dict(self._profiler_window, file=str(self._overlay.profiler_gui))
         self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events),
@@ -1077,7 +1077,7 @@ class Session:
         try:
             self._overlay = overlay.build(self._paths.overlay_dir, {}, self._paths.game_version, fixture_date=date)
         except overlay.OverlayError as e:
-            raise SessionError("overlay_refused", str(e)) from e
+            raise SessionError(e.code, str(e)) from e
         self._record("overlay", outcome="built", setups=[], fixture_date=fixture.dotted(date))
         user = Path(self._paths.user_data)
         key = fixture.dated_key(self._fixture_key(playset), date)    # again: the build may have moved since the plan
@@ -1677,7 +1677,8 @@ class Session:
         `te_qa_effects.txt`, and the verb returns once the game has logged that file's new revision, which is the
         proof that it reloaded the file. `run_setup(name)` then runs it like a setup given at start.
 
-        A name or body the overlay refuses is `overlay_refused`, with nothing written. When the game has not
+        A name or body the overlay refuses is `overlay_refused`, with nothing written (`setup_parameterized` for a
+        body with a `$` outside a comment, #2070, which the engine would skip silently). When the game has not
         logged the new revision within RELOAD_WAIT_S the error is `not_reloaded`: the setup is in the file, and
         `run_setup` looks once more before it would run it, so a slow reload costs a wait and not the setup.
         The debugger is attached again once the reload is seen, because a reload of the script may drop the
@@ -1687,7 +1688,7 @@ class Session:
             try:
                 event, revision = overlay.add_setup(self._overlay, name, body)
             except overlay.OverlayError as e:
-                raise SessionError("overlay_refused", str(e)) from e
+                raise SessionError(e.code, str(e)) from e
             out.update(event=event, revision=revision)
             began = self._clock()
             self._sleep(RELOAD_FIRST_S)
@@ -2284,7 +2285,7 @@ class Session:
                 try:
                     overlay.write_preview(self._overlay, capture_gui.view_wrapper_text(parsed, revision), revision)
                 except overlay.OverlayError as e:
-                    raise SessionError("overlay_refused", str(e)) from e
+                    raise SessionError(e.code, str(e)) from e
                 self._await_preview(revision)
                 self._console.run(CLEAR_WIDGETS)
                 try:
@@ -2472,7 +2473,7 @@ class Session:
                     overlay.write_preview(self._overlay, gui_preview.wrapper_text(
                         type_name, context, width, revision, variables), revision)
                 except overlay.OverlayError as e:
-                    raise SessionError("overlay_refused", str(e)) from e
+                    raise SessionError(e.code, str(e)) from e
                 self._await_preview(revision)
                 if setup is not None:
                     result["setup_lines"] = self.run_setup(setup)
