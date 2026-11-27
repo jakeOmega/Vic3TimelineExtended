@@ -50,7 +50,11 @@ def fit_to_square(img):
     new_w, new_h = max(1, round(w * scale)), max(1, round(h * scale))
     resized = img.resize((new_w, new_h), Image.LANCZOS)
     canvas = Image.new("RGBA", (ICON_SIZE, ICON_SIZE), (0, 0, 0, 0))
-    canvas.paste(resized, ((ICON_SIZE - new_w) // 2, (ICON_SIZE - new_h) // 2), resized)
+    # No mask: the canvas is empty, so a plain paste copies every pixel as it
+    # is. Pasting with the image as its own mask blends it with the empty
+    # canvas, squaring each soft edge's alpha and darkening its color toward
+    # black: (200, 100, 50, 128) came out (100, 50, 25, 64).
+    canvas.paste(resized, ((ICON_SIZE - new_w) // 2, (ICON_SIZE - new_h) // 2))
     return canvas
 
 
