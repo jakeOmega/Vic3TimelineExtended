@@ -666,3 +666,26 @@ assimilation_cultures_rule = {
 		flag = assimilation_cultures_none
 	}
 }
+
+# Batched private investment (docs/systems/mod_systems/construction.md § Batched
+# Private Investment; owner, 2026-11-26): once a country's investors place
+# hundreds of levels a week, each level they pick at home is queued as a batch,
+# so the engine's weekly investment pass makes far fewer decisions. A speed
+# measure that changes what investors build (larger steps at home, less
+# abroad), so it has a switch. Read through te_bi_rule_on / te_bi_rule_off only
+# (te_batch_investment_triggers.txt), both written against the disabled
+# setting: a game begun before the rule existed plays with batching on.
+# Switched off mid-game, batching stops at the next level queued and each
+# country's counters go at its next monthly pulse (te_bi_clear); on again, a
+# country is watched from its next monthly pulse and batches a month later.
+te_batch_investment_rule = {
+	default = te_batch_investment_enabled
+
+	te_batch_investment_enabled = {
+		flag = te_batch_investment_enabled
+	}
+
+	te_batch_investment_disabled = {
+		flag = te_batch_investment_disabled
+	}
+}

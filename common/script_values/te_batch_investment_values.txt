@@ -1,0 +1,132 @@
+﻿# Batched private investment (docs/systems/mod_systems/construction.md § Batched Private Investment). Effects:
+# common/scripted_effects/te_batch_investment_effects.txt. Hooks: common/on_actions/te_batch_investment_on_actions.txt.
+# test_batch_investment.py runs these values and the effects against a model of the engine's weekly pass.
+
+# ---- Tuning ---------------------------------------------------------------------------------------------------------
+
+# Where the engine stops queueing private levels (read in game, never found in a define: the 2050 report's queue stood
+# at exactly 1,000 after every weekly pass). The month's self-check compares the queue at each investor pick with it.
+te_bi_engine_queue = 1000
+
+# The last slots under the engine's limit are left for it to fill a level at a time: script can only add levels at
+# home, so the investors' picks abroad and their first level of a new building stay the engine's, and these slots are
+# where it places them once the batches have filled the rest. Each costs one engine decision a week (about 22 ms in the
+# USA of 2050). 0 leaves the engine nothing but the picks it makes between batches.
+te_bi_reserve = 100
+
+# "At the limit" for te_bi_selfcheck_hook: a few levels can finish between the engine's pass and the monthly pulse.
+te_bi_engine_queue_near = {
+	value = te_bi_engine_queue
+	subtract = 10
+}
+
+# A batch is never queued past this.
+te_bi_ceiling = {
+	value = te_bi_engine_queue
+	subtract = te_bi_reserve
+}
+
+# A batch is a tenth of the building's built levels, the engine's own level counted in it, and at most a hundred.
+te_bi_share = 0.1
+te_bi_batch_max = 100
+
+# A building that makes a good no market carries (te_bi_local_goods_building): a fiftieth, at most ten. Too many levels
+# of these at once cannot be sold anywhere else (owner, 2026-11-26).
+te_bi_local_share = 0.02
+te_bi_local_batch_max = 10
+
+# A country is watched (its investors' picks counted) from this many private levels queued at a monthly pulse, and
+# until it has fewer than te_bi_unwatch_queue while not batching. A country that places 200 levels a week holds at
+# least 200 in its queue, since a level takes a week or more.
+te_bi_watch_queue = 200
+te_bi_unwatch_queue = 100
+
+# Batching starts when the investors placed this many levels in a month, about 200 a week ("once we're building
+# hundreds of levels a week", owner, 2026-11-26), and stops under te_bi_off_levels. The count while batching takes in
+# the levels the batches added, so batching does not end itself by lowering the engine's picks.
+te_bi_on_levels = 800
+te_bi_off_levels = 400
+
+# ---- Sizing ---------------------------------------------------------------------------------------------------------
+
+# Building scope: the levels a batch adds beside the level the engine has just queued. 0 for a new building and for one
+# under twenty levels (a hundred, for a local good's).
+te_bi_batch_extra = {
+	value = level
+	if = {
+		limit = { te_bi_local_goods_building = yes }
+		multiply = te_bi_local_share
+		max = te_bi_local_batch_max
+	}
+	else = {
+		multiply = te_bi_share
+		max = te_bi_batch_max
+	}
+	floor = yes
+	subtract = 1
+	min = 0
+}
+
+# Country scope, a watched country: the levels its investors placed since the last monthly pulse. Home picks the hook
+# saw, the queue's growth it did not see at home (picks abroad, mostly) and the levels the batches added.
+te_bi_placed = {
+	value = var:te_bi_home
+	add = var:te_bi_other
+	add = var:te_bi_added
+}
+
+# ---- What the self-check lines print (debug_log reads a named value, not a variable of another scope) ---------------
+
+te_bi_log_asked_g = {
+	value = -1
+	if = {
+		limit = { has_global_variable = te_bi_log_asked }
+		value = global_var:te_bi_log_asked
+	}
+}
+
+te_bi_log_queued_g = {
+	value = -1
+	if = {
+		limit = { has_global_variable = te_bi_log_queued }
+		value = global_var:te_bi_log_queued
+	}
+}
+
+te_bi_log_before_g = {
+	value = -1
+	if = {
+		limit = { has_global_variable = te_bi_log_before }
+		value = global_var:te_bi_log_before
+	}
+}
+
+te_bi_log_nested_g = {
+	value = -1
+	if = {
+		limit = { has_global_variable = te_bi_log_nested }
+		value = global_var:te_bi_log_nested
+	}
+}
+
+# The owner's private queue as the first level of the batch came back through the hook; -1 when none did.
+te_bi_log_nested_queue_g = {
+	value = -1
+	if = {
+		limit = { has_global_variable = te_bi_log_nested_queue }
+		value = global_var:te_bi_log_nested_queue
+	}
+}
+
+te_bi_log_level_g = {
+	value = -1
+	if = {
+		limit = { has_global_variable = te_bi_log_level }
+		value = global_var:te_bi_log_level
+	}
+}
+
+# Country scope: the private queue, for a log line (ScriptValue() takes a named value, not a trigger).
+te_bi_queue_now = {
+	value = construction_queue_num_queued_private_levels
+}

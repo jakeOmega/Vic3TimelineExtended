@@ -1,0 +1,12 @@
+﻿# Batched private investment's rule gate (docs/systems/mod_systems/construction.md § Batched Private Investment).
+# Every read of te_batch_investment_rule is one of these two. Each reads only a game rule, so it works from any scope.
+# Written against the disabled setting, as te_free_market_construction_on is: a game begun before the rule existed
+# names no setting for it, and plays with batching on.
+
+te_bi_rule_on = {
+	NOT = { has_game_rule = te_batch_investment_disabled }
+}
+
+te_bi_rule_off = {
+	has_game_rule = te_batch_investment_disabled
+}
