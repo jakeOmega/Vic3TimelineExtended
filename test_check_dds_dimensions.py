@@ -222,16 +222,11 @@ class PrScopeTests(unittest.TestCase):
 
 
 class AllowlistTests(unittest.TestCase):
-    def test_shipped_allowlist_holds_the_four_known_offenders(self):
-        entries = load_allowlist()
-        self.assertEqual(len(entries), 4, entries)
-        for name in ("american_google", "japanese_toyota", "korean_samsung", "russian_rosatom"):
-            self.assertTrue(
-                any(name in entry for entry in entries),
-                f"{name} missing from dds_dimension_allowlist.txt",
-            )
-        for entry in entries:
-            self.assertTrue(entry.startswith("gfx/"), entry)
+    def test_shipped_allowlist_is_empty(self):
+        """#246 re-exported the last four offenders (historical company icons)
+        at 256x256; a new block-compressed texture fixes its size rather than
+        joining the list."""
+        self.assertEqual(load_allowlist(), set())
 
     def test_allowlist_comments_and_blanks_are_ignored(self):
         with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False,

@@ -159,17 +159,6 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 
 **Fix:** Investigate why vanilla's identical syntax doesn't trigger the warning while the mod's use does. Candidate angle: the surrounding `type FancyTooltipWidgetType = container { ... }` declaration may differ from the vanilla `type default_popup = window { ... }` used by `block_windows.gui` in a way that affects template resolution timing. If a syntactic change silences it, apply; otherwise leave filtered.
 
-### L9. Mod DDS dimensions: historical-company icons
-**Files:**
-- `gfx/interface/icons/company_icons/historical_company_icons/japanese_toyota.dds`
-- `gfx/interface/icons/company_icons/historical_company_icons/korean_samsung.dds`
-- `gfx/interface/icons/company_icons/historical_company_icons/american_google.dds`
-- `gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds`
-
-**Problem:** Block-compressed (BC1/BC3) DDS textures need width and height that are multiples of 4. These four historical-company icons fail that constraint and emit `Block compressed texture '…' does not have a height and width that are a multiple of 4, which will cause edge pixels to be …` warnings (source `gfx_dds_loader.cpp:442`) once per file at load. Visual-only — engine still loads the texture; only effect is potential edge-pixel artifacts in the company-icon UI. Filtered from log triage via `docs/audits/mod_known_noise.md`.
-
-**Fix:** Re-export each file through the mod's image pipeline (`scripts/image_pipeline/`) at multiple-of-4 dimensions and overwrite. Verify warning count drops to 0 via `curl -s "http://localhost:8950/logs/debug?summary=true"` after the next launch.
-
 ### L10. Mod loc-only variables flagged unused
 **Files:**
 - `common/scripted_effects/cultural_hegemony_effects.txt` — the Top Cultural Powers rows' `ch_board_*` variables (`ch_board_row_write`, since 2026-10-27; the `ch_rank_*_{sol,art,prs,tech,raw}` globals before)

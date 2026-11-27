@@ -41,19 +41,6 @@ Could not find template 'vertical_scrollbar'
 
 Mod's scrollable `FancyTooltipWidgetType` uses `scrollbar_vertical = { using = vertical_scrollbar }` — the same exact pattern vanilla uses successfully (vanilla `block_windows` and `building_browser_panel` files do the same and don't error). Likely parse-time false-positive resolved in pass-2; scrollable tooltip rendering works in-game. Tracked at `docs/audits/open_issues.md#l8-mod-tooltipgui-vertical-scrollbar-template-warning` until a way to silence it surfaces.
 
-### `gfx_dds_loader.cpp:442` — historical-company icon DDS dimensions not multiple of 4
-- source: `gfx_dds_loader.cpp:442`
-- tracked: `docs/audits/open_issues.md#l9-mod-dds-dimensions-historical-company-icons`
-
-```
-Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/japanese_toyota.dds'
-Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/korean_samsung.dds'
-Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/american_google.dds'
-Block compressed texture 'gfx/interface/icons/company_icons/historical_company_icons/russian_rosatom.dds'
-```
-
-Block-compressed (BC1/BC3) DDS textures need multiple-of-4 width and height; these four mod-side historical-company icons fail that constraint and emit edge-artifact warnings once per file at load. Visual-only — engine still loads the texture. Fix requires re-export through the image pipeline; tracked at `docs/audits/open_issues.md#l9-mod-dds-dimensions-historical-company-icons`.
-
 ### `jomini_effect.cpp:1135` — variables set for localization tooltip read flagged unused
 - source: `jomini_effect.cpp:1135`
 - source: `jomini_effect.cpp:1140`
