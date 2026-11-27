@@ -28,6 +28,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / 'scripts' / 'analysis'))
 import save_country_probe as scp  # noqa: E402
 
+# Every synthetic save goes in one folder removed when the module's tests end: a NamedTemporaryFile with
+# delete=False and no unlink left a file in /tmp per save, 273 of them after an hour of parallel runs (#1803).
+_SAVES = tempfile.TemporaryDirectory(prefix='te_test_saves_')
+
+
+def tearDownModule():
+    _SAVES.cleanup()
+
 EQ = b'\x01\x00'
 OPEN = b'\x03\x00'
 CLOSE = b'\x04\x00'
@@ -189,7 +197,7 @@ def write_save(countries, records=(), date=(2003, 11, 18), meta=True):
         archive.writestr('gamestate', (b'' if meta else stamp) + b''.join(countries) + b''.join(records))
         if meta:
             archive.writestr('meta', stamp)
-    handle = tempfile.NamedTemporaryFile(suffix='.v3', delete=False)
+    handle = tempfile.NamedTemporaryFile(suffix='.v3', delete=False, dir=_SAVES.name)
     handle.write(b'SAV01030deadbeef00005ba\n' + buf.getvalue())
     handle.close()
     return handle.name

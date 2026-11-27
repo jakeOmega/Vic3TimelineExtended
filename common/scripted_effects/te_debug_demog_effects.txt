@@ -61,8 +61,6 @@
 # more step (te_demog_medicine_drift and te_demog_practices_step in te_demog_step_begin), a year's
 # spread and drift on top of the yearly ones.
 te_debug_demog_replay = {
-	# a census on the 150-year ring is re-filed at its own year before that year goes back (issue #1075)
-	te_demog_ring_check = yes
 	set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 	te_demog_step_begin = yes
 	set_variable = { name = te_dg_dbg_war value = local_var:te_dg_war }
@@ -323,8 +321,6 @@ te_debug_demog_bench_walk = {
 te_debug_demog_bench_pass = {
 	every_state = {
 		limit = { te_demog_has_census = yes }
-		# a census on the 150-year ring is re-filed at its own year first (issue #1075)
-		te_demog_ring_check = yes
 		set_variable = { name = te_dg_year value = { value = te_demog_year subtract = 1 } }
 		te_demog_step = yes
 	}
@@ -1299,7 +1295,12 @@ te_debug_demog_cause_deaths_selfcheck = {
 # of a 2020, a 1940 and the 1926 save (about 2,400 states). `why` is the first that holds:
 #   1  the walk's people below 0: its sum wrapped
 #   2  over te_demog_k_rate_guard_people, 500 million people (the largest state of the 2020 save held 128 million)
-#   3  ten times last year's people with no change in the state's provinces (a merge changes them; births can't)
+#   3  ten times last year's people with no change in the state's provinces (a merge changes them; births can't),
+#      except where net migration is three quarters or more of the rise, as 5 (#1933): Mindanao 1986, 141,277 to
+#      1,466,401 people with net migration of 1,398,204 (1.06 of the rise), sane rates. The census's migration is
+#      what is left of the engine's own change once its births and deaths are counted, so a skipped tenfold year is
+#      one whose births made up a quarter of the rise at most, and a runaway of births still trips. The signs after
+#      it still read the state
 #   4  life expectancy under te_demog_k_rate_guard_e0, 5 (sane states: 26 or more)
 #   5  the deaths term at its floor (te_dg_rate_clamp_d 1: the census asked for fewer deaths than none), except in a
 #      census where net migration is three quarters or more of a rise in people (#1500): there the year's births and
@@ -1364,7 +1365,7 @@ te_debug_demog_runaway_selfcheck = {
 				divide = { value = var:te_dg_walk_pop_prev min = 1 }
 			}
 		}
-		# sign 5's migration skip: the year's rise in people, and net migration's share of it
+		# signs 3 and 5's migration skip: the year's rise in people, and net migration's share of it
 		set_local_variable = {
 			name = te_dg_rw_rise
 			value = { value = var:te_dg_walk_pop subtract = var:te_dg_walk_pop_prev }
@@ -1391,6 +1392,13 @@ te_debug_demog_runaway_selfcheck = {
 				has_local_variable = te_dg_prov_step
 				local_var:te_dg_prov_step = 0
 				local_var:te_dg_rw_ratio >= 10
+				# not a census whose rise is mostly arrivals (#1933, as sign 5's)
+				NOT = {
+					AND = {
+						local_var:te_dg_rw_rise > 0
+						local_var:te_dg_rw_mig_share >= 0.75
+					}
+				}
 			}
 			set_local_variable = { name = te_dg_rw_why value = 3 }
 		}
@@ -1443,7 +1451,7 @@ te_debug_demog_runaway_selfcheck = {
 			}
 			set_variable = { name = te_dg_chk_runaway value = local_var:te_dg_rw_why }
 			set_variable = { name = te_dg_chk_runaway_year value = var:te_dg_year }
-			debug_log = "TE_SELF_CHECK BROKEN demog_runaway why=[THIS.Var('te_dg_chk_runaway').GetValue|0] guard=[THIS.Var('te_dg_rate_guard').GetValue|0] state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] year=[THIS.Var('te_dg_year').GetValue|0] people=[THIS.Var('te_dg_walk_pop').GetValue|0] prev=[THIS.Var('te_dg_walk_pop_prev').GetValue|0] provinces=[THIS.Var('te_dg_provinces').GetValue|0] e0=[THIS.Var('te_dg_e0').GetValue|2] cbr=[THIS.Var('te_dg_cbr').GetValue|2] cdr=[THIS.Var('te_dg_cdr').GetValue|2] mig=[THIS.Var('te_dg_net_migration').GetValue|0] crowd=[THIS.Var('te_dg_in_crowd').GetValue|3] m_inf=[THIS.Var('te_dg_m_inf').GetValue|3] (the census's guards cleared its terms, so the engine's own rates run here; guard: 1 its people's sum wrapped or over 500 million, 2 life expectancy under 5, 3 a model rate below 0, 4 known kills of a third or more of its people in the step's window; why: 1 the people's sum wrapped, 2 over 500 million, 3 tenfold in a year with no province change, 4 life expectancy under 5, 6 crowding over 5, 8 only the guard; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN demog_runaway why=[THIS.Var('te_dg_chk_runaway').GetValue|0] guard=[THIS.Var('te_dg_rate_guard').GetValue|0] state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] year=[THIS.Var('te_dg_year').GetValue|0] people=[THIS.Var('te_dg_walk_pop').GetValue|0] prev=[THIS.Var('te_dg_walk_pop_prev').GetValue|0] provinces=[THIS.Var('te_dg_provinces').GetValue|0] e0=[THIS.Var('te_dg_e0').GetValue|2] cbr=[THIS.Var('te_dg_cbr').GetValue|2] cdr=[THIS.Var('te_dg_cdr').GetValue|2] mig=[THIS.Var('te_dg_net_migration').GetValue|0] crowd=[THIS.Var('te_dg_in_crowd').GetValue|3] m_inf=[THIS.Var('te_dg_m_inf').GetValue|3] (the census's guards cleared its terms, so the engine's own rates run here; guard: 1 its people's sum wrapped or over 500 million, 2 life expectancy under 5, 3 a model rate below 0, 4 known kills of a third or more of its people in the step's window; why: 1 the people's sum wrapped, 2 over 500 million, 3 tenfold in a year with no province change, under three quarters migration, 4 life expectancy under 5, 6 crowding over 5, 8 only the guard; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
 		}
 		else_if = {
@@ -1451,7 +1459,7 @@ te_debug_demog_runaway_selfcheck = {
 			set_variable = { name = te_dg_chk_runaway value = local_var:te_dg_rw_why }
 			# the census year beside the code: debug.log rolls over in minutes in a long run, a save keeps both
 			set_variable = { name = te_dg_chk_runaway_year value = var:te_dg_year }
-			debug_log = "TE_SELF_CHECK BROKEN demog_runaway why=[THIS.Var('te_dg_chk_runaway').GetValue|0] state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] year=[THIS.Var('te_dg_year').GetValue|0] people=[THIS.Var('te_dg_walk_pop').GetValue|0] prev=[THIS.Var('te_dg_walk_pop_prev').GetValue|0] provinces=[THIS.Var('te_dg_provinces').GetValue|0] e0=[THIS.Var('te_dg_e0').GetValue|2] cbr=[THIS.Var('te_dg_cbr').GetValue|2] cdr=[THIS.Var('te_dg_cdr').GetValue|2] mig=[THIS.Var('te_dg_net_migration').GetValue|0] mb=[THIS.Var('te_dg_mb').GetValue|3] md=[THIS.Var('te_dg_md').GetValue|3] tb_b=[THIS.Var('te_dg_tb_b').GetValue|3] tb_d=[THIS.Var('te_dg_tb_d').GetValue|3] os_b=[THIS.Var('te_dg_os_b').GetValue|3] os_d=[THIS.Var('te_dg_os_d').GetValue|3] q_b=[THIS.Var('te_dg_q_b').GetValue|3] q_d=[THIS.Var('te_dg_q_d').GetValue|3] floor_d=[THIS.Var('te_dg_rate_clamp_d').GetValue|0] crowd=[THIS.Var('te_dg_in_crowd').GetValue|3] m_inf=[THIS.Var('te_dg_m_inf').GetValue|3] (why: 1 the people's sum wrapped, 2 over 500 million, 3 tenfold in a year with no province change, 4 life expectancy under 5, 5 the deaths term at its floor, in a census whose rise is under three quarters migration, 6 crowding over 5, 7 the births term at its ceiling of 10; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+			debug_log = "TE_SELF_CHECK BROKEN demog_runaway why=[THIS.Var('te_dg_chk_runaway').GetValue|0] state=[THIS.GetState.GetNameNoFormatting] owner=[THIS.GetState.GetOwner.GetTagName] year=[THIS.Var('te_dg_year').GetValue|0] people=[THIS.Var('te_dg_walk_pop').GetValue|0] prev=[THIS.Var('te_dg_walk_pop_prev').GetValue|0] provinces=[THIS.Var('te_dg_provinces').GetValue|0] e0=[THIS.Var('te_dg_e0').GetValue|2] cbr=[THIS.Var('te_dg_cbr').GetValue|2] cdr=[THIS.Var('te_dg_cdr').GetValue|2] mig=[THIS.Var('te_dg_net_migration').GetValue|0] mb=[THIS.Var('te_dg_mb').GetValue|3] md=[THIS.Var('te_dg_md').GetValue|3] tb_b=[THIS.Var('te_dg_tb_b').GetValue|3] tb_d=[THIS.Var('te_dg_tb_d').GetValue|3] os_b=[THIS.Var('te_dg_os_b').GetValue|3] os_d=[THIS.Var('te_dg_os_d').GetValue|3] q_b=[THIS.Var('te_dg_q_b').GetValue|3] q_d=[THIS.Var('te_dg_q_d').GetValue|3] floor_d=[THIS.Var('te_dg_rate_clamp_d').GetValue|0] crowd=[THIS.Var('te_dg_in_crowd').GetValue|3] m_inf=[THIS.Var('te_dg_m_inf').GetValue|3] (why: 1 the people's sum wrapped, 2 over 500 million, 3 tenfold in a year with no province change, under three quarters migration, 4 life expectancy under 5, 5 the deaths term at its floor, in a census whose rise is under three quarters migration, 6 crowding over 5, 7 the births term at its ceiling of 10; docs/testing/demographics-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
 			debug_log_scopes = yes
 		}
 	}

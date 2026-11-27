@@ -4,6 +4,8 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
     python3 -m game_qa start --permission "asked 12:40" [--as TAG] [--save NAME] [--setup NAME=FILE]...
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
                        [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE] [--unresponsive-s S]
+                       [--capture] [--gui-from CHECKOUT]
+                       [--tick-settle-s S]
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
                                              # date (the reply's `rules` says what the save holds); a game
@@ -44,7 +46,7 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                                              # and its call graph cropped out of the shot (--as-shown: as it is,
                                              # nothing typed)
     python3 -m game_qa gui-show TYPE [--context player|none|je:KEY] [--width N] [--var KEY=VALUE]... [--outlines]
-                       [--scale S] [--setup NAME] [--keep]
+                       [--scale S] [--setup NAME] [--keep] [--sync-only FILE]... [--force-sync]
                                              # one GUI type from this checkout's branch, alone in the game: its
                                              # changed .gui files synced into the overlay, the reload proved, a
                                              # full-size crop of the panel and the GUI lines the game logged
@@ -70,6 +72,8 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                                              # by default), the fixture's run's included; needs no session
     python3 -m game_qa profile start         # clear the tick timings and turn the script profiler on
     python3 -m game_qa profile dump [LABEL]  # both dumps, copied into the run folder as tt_LABEL.csv, sp_LABEL.txt
+    python3 -m game_qa profile pops [LABEL]  # every pop (`logging.popstats`), copied as pop_stats_LABEL.csv; the
+                                             # game's logs/<id>/ folder stays, and `stop` names it (left_behind)
     python3 -m game_qa profile summary [LABEL [LABEL2]] [--run ID] [--top N]
                                              # wall clock per frame type, top tick tasks, script by file, for the
                                              # window up to LABEL or between the two; needs no session
@@ -110,15 +114,20 @@ SERVER_WAIT_S = 30.0                    # from spawning the server to its sessio
 POLL_S = 0.2
 STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status` by then is busy, not dead
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
-ENTER_TIMEOUT_S = 1500.0
+# Each round's pause may wait out a long tick (session._settle, #1963): its baseline, the settle's longest wait
+# and two samples. Added once to enter-game (its proof is one round) and twice more to advance.
+TICK_SETTLE_ALLOWANCE_S = session.TICK_BASELINE_S + session.MAX_TICK_SETTLE_S + 2 * session.TICK_SAMPLE_S
+ENTER_TIMEOUT_S = 1500.0 + TICK_SETTLE_ALLOWANCE_S
 # gui-show builds the installed game's type index on its first call (about 10 s), waits up to
 # session.GUI_RELOAD_WAIT_S for the reload and types a dozen commands, any of which may wait as a verb's does.
-GUI_SHOW_TIMEOUT_S = VERB_TIMEOUT_S + session.GUI_RELOAD_WAIT_S + 30.0
+# With --scale it shoots twice (#1989), and the wait grows with what was synced, up to GUI_RELOAD_WAIT_MAX_S.
+GUI_SHOW_TIMEOUT_S = VERB_TIMEOUT_S + session.GUI_RELOAD_WAIT_MAX_S + 60.0
 # add-setup waits session.RELOAD_WAIT_S (300 s) for the reload (about 90 s, live), a last look may take a console
 # command's 30 s and LOADED_WAIT_S more, and the debugger is attached again: about 350 s, with room.
 ADD_SETUP_TIMEOUT_S = 600.0
 LONG_TIMEOUT_S = 900.0                  # try-event, and advance's rounds
-ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fixture's game first if need be
+# advance enters the fixture's game first if need be; two of its rounds may wait out a long tick
+ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S + 2 * TICK_SETTLE_ALLOWANCE_S
 # The worst cases, from the waits the session and the fixture allow themselves:
 #   enter-game, with each ensure_open and console run counted with one foreground wait (FOREGROUND_WAIT_S 120),
 #   the attach's requests at dap's 30 s, and the sends, closes, hotkeys and resumes as quick: the two ensure_opens
@@ -844,8 +853,12 @@ def cmd_start(args) -> tuple[dict, int]:
         body["fixture_date"] = args.fixture
     if args.unresponsive_s is not None:
         body["unresponsive_s"] = args.unresponsive_s
+    if args.tick_settle_s is not None:
+        body["tick_settle_s"] = args.tick_settle_s
     if args.capture:
         body["capture"] = True
+    if args.gui_from is not None:
+        body["gui_from"] = os.path.abspath(args.gui_from)
     return start_session(_backup_root(), body, spawn_server)
 
 
@@ -875,8 +888,8 @@ def fixture_verb(args, paths: session.Paths, backup_root: Path, spawn) -> tuple[
                 "go-ahead came from>\"`, in the background" % (plan["estimate_s"], plan["limit_s"], plan["date"]))), 0
         return dict(plan, dry_run=True, next=(
             "a run of about %.1f hours (watch limit %.1f): ask the owner for a grant of that run in their own words, "
-            "leaving room above the estimate (the one live run, to 1836.3.29, took 0.66 s a game day where the "
-            "estimate takes 0.47), then `fixture --until %s --permission \"<their words>\" --max-hours <what they "
+            "leaving room above the estimate (runs of the same span differ by a fifth or so between builds), then "
+            "`fixture --until %s --permission \"<their words>\" --max-hours <what they "
             "granted>`, in the background" % (plan["estimate_h"], plan["limit_h"], plan["date"]))), 0
     if not args.permission or not args.permission.strip():
         return {"refused": "no_permission", "detail": "say where the go-ahead to launch came from (--permission): "
@@ -1058,7 +1071,9 @@ def cmd_gui_show(args) -> tuple[dict, int]:
                                                    "checkout: %s" % (os.getcwd(), top.stderr.strip())}, 2
     body = {"type": args.type, "repo": top.stdout.strip(), "context": args.context, "width": args.width,
             "variables": variables, "outlines": args.outlines, "scale": args.scale, "setup": args.setup,
-            "keep": args.keep}
+            "keep": args.keep, "force_sync": args.force_sync}
+    if args.sync_only:
+        body["sync_only"] = list(args.sync_only)
     return call(_backup_root(), "gui-show", body, GUI_SHOW_TIMEOUT_S)
 
 
@@ -1085,6 +1100,10 @@ def cmd_profile_start(args) -> tuple[dict, int]:
 
 def cmd_profile_dump(args) -> tuple[dict, int]:
     return call(_backup_root(), "profile-dump", {"label": args.label})
+
+
+def cmd_profile_pops(args) -> tuple[dict, int]:
+    return call(_backup_root(), "profile-pops", {"label": args.label})
 
 
 def cmd_profile_summary(args) -> tuple[dict, int]:
@@ -1141,10 +1160,19 @@ def add_verbs(sub) -> None:
     p.add_argument("--capture", action="store_true",
                    help="a capture session (#2056): the overlay carries the console with nothing drawn and debug "
                         "mode's counters hidden while te_qa_capture is set, so a picture shows nothing of the harness")
+    p.add_argument("--gui-from", metavar="CHECKOUT",
+                   help="put the .gui files this checkout's branch changed into the overlay before the launch, so the "
+                        "game parses them at startup and gui-show from that checkout syncs nothing of them (#1989)")
     p.add_argument("--unresponsive-s", type=float, metavar="S",
                    help="how long the game's window may not respond before a verb calls the game gone (game_gone), "
                         "for every verb of the session: %g s by default, up to %g. For a late save whose ticks freeze "
                         "the window longer (#1905)" % (session.UNRESPONSIVE_S, session.MAX_UNRESPONSIVE_S))
+    p.add_argument("--tick-settle-s", type=float, metavar="S",
+                   help="how long each round's pause may wait for a long tick to end before anything is typed "
+                        "(#1963; the game's CPU rate back to %g of its paused rate): %g s by default, %g to %g, and "
+                        "0 turns the wait off. Not yet run live: if a session answers tick_unsettled on a paused "
+                        "game, start again with 0" % (session.TICK_SETTLE_RATIO, session.TICK_SETTLE_S,
+                                                      session.MIN_TICK_SETTLE_S, session.MAX_TICK_SETTLE_S))
     p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
                    help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
                         ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "
@@ -1271,6 +1299,12 @@ def add_verbs(sub) -> None:
     p.add_argument("--scale", type=float, help="the game's UI scale for the shot, put back to the owner's after")
     p.add_argument("--setup", metavar="NAME", help="a setup given at start, run before the preview is created")
     p.add_argument("--keep", action="store_true", help="leave the preview up (gui-hide clears it)")
+    p.add_argument("--sync-only", action="append", metavar="FILE",
+                   help="sync only this .gui file (gui/...gui, one the branch changed or the session synced); the "
+                        "others stay as the overlay holds them (repeatable, #2015)")
+    p.add_argument("--force-sync", action="store_true",
+                   help="sync even past %d files or %d bytes, which is refused otherwise: syncs that size froze the "
+                        "game (#2015)" % (session.GUI_SYNC_MAX_FILES, session.GUI_SYNC_MAX_BYTES))
     p.set_defaults(run=cmd_gui_show)
     p = sub.add_parser("gui-hide", help="clear a preview gui-show --keep left up, and the values it set")
     p.set_defaults(run=cmd_gui_hide)
@@ -1324,6 +1358,10 @@ def add_verbs(sub) -> None:
                                         "run folder at once")
     q.add_argument("label", nargs="?", help="what to call the dump (default: the game date)")
     q.set_defaults(run=cmd_profile_dump)
+    q = actions.add_parser("pops", help="every pop of the game (`logging.popstats`), copied into the run folder at "
+                                        "once; needs no `profile start` (#1758)")
+    q.add_argument("label", nargs="?", help="what to call the copy (default: the game date)")
+    q.set_defaults(run=cmd_profile_pops)
     q = actions.add_parser("summary", help="the wall clock per frame type, the top tick tasks and the script time by "
                                            "file, mod against vanilla: up to LABEL (default: the newest dump) from "
                                            "the profile's start, or between LABEL and LABEL2")

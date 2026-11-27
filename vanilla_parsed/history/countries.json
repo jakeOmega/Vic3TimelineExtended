@@ -1,0 +1,8509 @@
+{
+ "abk - abkhazia.txt": {
+  "ABK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "abs - absaroka.txt": {
+  "ABS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "abu - abu dhabi.txt": {
+  "ABU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "ace - aceh.txt": {
+  "ACE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "ach - acholi.txt": {
+  "ACH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "adg - adagh.txt": {
+  "ADG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "adr - adrar.txt": {
+  "ADR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "agc -angoche.txt": {
+  "AGC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_isolationism"
+   ]
+  }
+ },
+ "ahg - ahaggar.txt": {
+  "AHG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ain - ainu.txt": {
+  "AIN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ]
+  }
+ },
+ "air - air.txt": {
+  "AIR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ait - ait abbas.txt": {
+  "AIT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ],
+   "journal_entries": [
+    "je_reconquest_of_algeria"
+   ],
+   "other": [
+    "set_variable = algeria_ait_abbas_var"
+   ]
+  }
+ },
+ "ajj - ajjer.txt": {
+  "AJJ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ajr - ajuran.txt": {
+  "AJR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "alk - alyaska.txt": {
+  "ALK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "napoleonic_warfare"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_autocracy",
+    "law_tenant_farmers",
+    "law_land_based_taxation",
+    "law_military_bureaucrats",
+    "law_caesaropapism",
+    "law_subjecthood",
+    "law_extraction_economy",
+    "law_professional_army",
+    "law_censorship",
+    "law_women_own_property"
+   ],
+   "taxed_goods": [
+    "liquor"
+   ]
+  }
+ },
+ "alw - alwar.txt": {
+  "ALW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "anh - anhalt.txt": {
+  "ANH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ]
+  }
+ },
+ "ank - ankole.txt": {
+  "ANK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_state_religion",
+    "law_subjecthood",
+    "law_isolationism",
+    "law_land_based_taxation",
+    "law_debt_slavery",
+    "law_traditionalism",
+    "law_right_of_assembly"
+   ]
+  }
+ },
+ "anu - anuak.txt": {
+  "ANU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "apc - apache.txt": {
+  "APC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_12"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_isolationism",
+    "law_right_of_assembly",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "arb - arabistan.txt": {
+  "ARB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "arg - argentina.txt": {
+  "ARG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_autocracy",
+    "law_presidential_republic",
+    "law_freedom_of_conscience",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_frontier_colonization",
+    "law_censorship",
+    "law_legacy_slavery",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_national_militia",
+    "law_national_guard"
+   ],
+   "taxed_goods": [
+    "tobacco"
+   ],
+   "tax_level": "high",
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_import_tariff_level = { goods = g:clippers level = high_subventions }",
+    "set_import_tariff_level = { goods = g:manowars level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ],
+   "institutions": {
+    "institution_colonial_affairs": "2",
+    "institution_home_affairs": "1"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "arh - arnhem.txt": {
+  "ARH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "arp - arapaho.txt": {
+  "ARP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies",
+    "law_isolationism",
+    "law_right_of_assembly"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_12"
+   ]
+  }
+ },
+ "arr - arrernte.txt": {
+  "ARR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "ars - arsiland.txt": {
+  "ARS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "ash - ashanti.txt": {
+  "ASH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "asm - assam.txt": {
+  "ASM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "atb - athabaska.txt": {
+  "ATB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "atr - ataram.txt": {
+  "ATR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "aul - aulihan.txt": {
+  "AUL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "aus - austria.txt": {
+  "AUS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "technologies": [
+    "central_archives",
+    "railways"
+   ],
+   "tax_level": "medium",
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_crownland_diets",
+    "law_manorialism",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_local_police",
+    "law_secret_police",
+    "law_public_schools",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_secret_police",
+    "law_guild_system"
+   ],
+   "other": [
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_geheime_staatskonferenz sponsor = PREV.ig:ig_landowners } }",
+    "ig:ig_landowners ?= { add_ruling_interest_group = yes set_interest_group_name = austrian_aristocracy }",
+    "start_national_awakening = { culture = cu:czech months = 168 state_region = s:STATE_BOHEMIA }"
+   ],
+   "institutions": {
+    "institution_schools": "1",
+    "institution_police": "2",
+    "institution_home_affairs": "1"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces",
+    "ig_intelligentsia"
+   ],
+   "journal_entries": [
+    "je_matter_of_hungary"
+   ]
+  }
+ },
+ "awa - awadh.txt": {
+  "AWA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "aws - aussa.txt": {
+  "AWS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ayi - anyi.txt": {
+  "AYI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bad - baden.txt": {
+  "BAD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   },
+   "ruling_interest_groups": [
+    "ig_intelligentsia"
+   ]
+  }
+ },
+ "bag - bagelkhand.txt": {
+  "BAG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bal - bali.txt": {
+  "BAL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bas - bastar.txt": {
+  "BAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "bav - bavaria.txt": {
+  "BAV": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "technologies": [
+    "intensive_agriculture",
+    "railways"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bce - ceylon.txt": {
+  "BCE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_total_separation",
+    "law_tenant_farmers",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_migration_controls",
+    "law_debt_slavery",
+    "law_appointed_bureaucrats",
+    "law_oligarchy"
+   ],
+   "other": [
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_racialized_subjecthood sponsor = PREV.ig:ig_armed_forces } }"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ],
+   "taxed_goods": [
+    "grain"
+   ]
+  }
+ },
+ "bel - belgium.txt": {
+  "BEL": {
+   "other": [
+    "set_next_election_date = 1836.9.29",
+    "set_export_tariff_level = { goods = g:steel level = low_subventions }",
+    "set_variable = { name = recent_coup_or_revolution_var value = 5 }",
+    "add_company = company_type:company_john_cockerill",
+    "company:company_john_cockerill = { set_company_establishment_date = 1825.1.1 set_company_state_region = s:STATE_WALLONIA }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_1_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_liberal"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_freedom_of_conscience",
+    "law_per_capita_based_taxation",
+    "law_wealth_voting",
+    "law_religious_schools",
+    "law_racial_segregation",
+    "law_peasant_proprietorship",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_right_of_assembly",
+    "law_professional_army"
+   ],
+   "tax_level": "medium",
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "ben - benin.txt": {
+  "BEN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ber - beroda.txt": {
+  "BER": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "bgi - bagirmi.txt": {
+  "BGI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "bgm - begemder.txt": {
+  "BGM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_mercantilism",
+    "law_slave_trade"
+   ],
+   "other": [
+    "set_variable = { name = starting_ethiopian_emperor days = 7 }"
+   ]
+  }
+ },
+ "bhn - bahrain.txt": {
+  "BHN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "bho - bhopal.txt": {
+  "BHO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "bhu - bhutan.txt": {
+  "BHU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_oligarchy",
+    "law_state_religion",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_isolationism",
+    "law_serfdom",
+    "law_right_of_assembly"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bhv - bhavnagar.txt": {
+  "BHV": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bhw - bahawalpur.txt": {
+  "BHW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bic - british east india company.txt": {
+  "BIC": {
+   "ruling_interest_groups": [
+    "ig_industrialists",
+    "ig_armed_forces"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "technologies": [
+    "mechanical_tools",
+    "atmospheric_engine",
+    "railways",
+    "corporate_charters"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_total_separation",
+    "law_tenant_farmers",
+    "law_subjecthood",
+    "law_extraction_economy",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_migration_controls",
+    "law_debt_slavery",
+    "law_appointed_bureaucrats",
+    "law_professional_army",
+    "law_oligarchy",
+    "law_hindu_caste_not_enforced",
+    "law_combination_acts"
+   ],
+   "other": [
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_racialized_subjecthood sponsor = PREV.ig:ig_industrialists } }",
+    "set_export_tariff_level = { goods = g:opium level = low_subventions }",
+    "set_export_tariff_level = { goods = g:clothes level = high_tariffs }",
+    "set_variable = { name = east_indies_revolt_var value = 0 }",
+    "add_modifier = modifier_india_company_rule",
+    "every_scope_state = { limit = { OR = { is_in_geographic_region = geographic_region_bombay_old is_in_geographic_region = geographic_region_madras_old state_region = s:STATE_ASSAM } } add_modifier = { name = modifier_ryotwari_system } }",
+    "start_national_awakening = { culture = cu:bengali months = 240 state_region = s:STATE_WEST_BENGAL }"
+   ],
+   "tax_level": "high",
+   "taxed_goods": [
+    "opium",
+    "tobacco"
+   ],
+   "journal_entries": [
+    "je_consolidate_colonial_rule"
+   ]
+  }
+ },
+ "bik - bikaner.txt": {
+  "BIK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "laws": [
+    "law_serfdom",
+    "law_debt_slavery"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "bko - bukey orda.txt": {
+  "BKH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bla - bilua.txt": {
+  "BLA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ]
+  }
+ },
+ "ble - baule.txt": {
+  "BLE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "blf - blackfoot.txt": {
+  "BLF": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_11"
+   ]
+  }
+ },
+ "blg - bulungan.txt": {
+  "BLG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bmb - bemba.txt": {
+  "BMB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bmm - bamum.txt": {
+  "BMM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bnd - bundu.txt": {
+  "BND": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bng - bangala.txt": {
+  "BNG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bnj - banjar.txt": {
+  "BNJ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bnn - bannock.txt": {
+  "BNN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "bny - bunyoro.txt": {
+  "BNY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_isolationism",
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bob - bobangi.txt": {
+  "BOB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bol - bolivia.txt": {
+  "BOL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_autocracy",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }",
+    "set_global_variable = { name = peru_bolivia_var value = 0 }",
+    "change_infamy = 50",
+    "set_variable = pbc_member"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "bor - bornu.txt": {
+  "BOR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "bra - braunschweig.txt": {
+  "BRA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "technologies": [
+    "railways"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "brd - burundi.txt": {
+  "BRD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_isolationism",
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bre - bremen.txt": {
+  "BRE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience",
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_national_supremacy",
+    "law_free_trade"
+   ]
+  }
+ },
+ "brg - borgu.txt": {
+  "BRG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "brk - brakna.txt": {
+  "BRK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "brn - borana.txt": {
+  "BRN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "bru - brunei.txt": {
+  "BRU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "brz - brazil.txt": {
+  "BRZ": {
+   "other": [
+    "set_next_election_date = 1839.1.1",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }",
+    "add_modifier = { name = unrestricted_slave_trade_modifier }",
+    "add_modifier = { name = modifier_regency_intelligentsia }",
+    "trigger_event = { id = pedro.1 days = 7 }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_freedom_of_conscience",
+    "law_slave_trade",
+    "law_wealth_voting",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_per_capita_based_taxation",
+    "law_national_guard",
+    "law_no_schools",
+    "law_agrarianism"
+   ],
+   "taxed_goods": [
+    "liquor"
+   ],
+   "ruling_interest_groups": [
+    "ig_intelligentsia"
+   ],
+   "journal_entries": [
+    "ragamuffin_war"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = rp1_content",
+     "effects": [
+      "add_journal_entry = { type = je_matter_of_slavery }",
+      "add_journal_entry = { type = je_brazilian_nation_building }"
+     ]
+    }
+   ]
+  }
+ },
+ "bst - basuto.txt": {
+  "BST": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "technologies": [
+    "international_trade",
+    "rationalism"
+   ],
+   "laws": [
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_freedom_of_conscience",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ],
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "btn - buton.txt": {
+  "BTN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bug - buganda.txt": {
+  "BUG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_isolationism",
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "buk - bukkhara.txt": {
+  "BUK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "bun - bundelkhand.txt": {
+  "BUN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "bur - burma.txt": {
+  "BUR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "technologies": [
+    "mandatory_service"
+   ],
+   "laws": [
+    "law_peasant_levies",
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "cam - cambodia.txt": {
+  "CAM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "technologies": [
+    "sericulture"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "cay - cayor.txt": {
+  "CAY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "chc - chechnya.txt": {
+  "CHC": {
+   "other": [
+    "add_primary_culture = cu:dagestani"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "laws": [
+    "law_theocracy",
+    "law_oligarchy",
+    "law_peasant_proprietorship",
+    "law_land_based_taxation",
+    "law_national_militia",
+    "law_censorship",
+    "law_people_of_the_book",
+    "law_slavery_banned",
+    "law_traditionalism",
+    "law_cultural_exclusion"
+   ]
+  }
+ },
+ "chi - china.txt": {
+  "CHI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "technologies": [
+    "urban_planning",
+    "sericulture",
+    "academia",
+    "law_enforcement"
+   ],
+   "other": [
+    "set_market_capital = STATE_GUANGDONG",
+    "set_variable = { name = china_warlord_explosion value = 0 }",
+    "set_import_tariff_level = { goods = g:opium level = no_tariffs_or_subventions }",
+    "set_import_tariff_level = { goods = g:merchant_marine level = low_subventions }",
+    "set_variable = ryukyu_rival_member"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_serfdom",
+    "law_land_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_censorship",
+    "law_closed_borders",
+    "law_canton_system",
+    "law_freedom_of_conscience"
+   ],
+   "tax_level": "low",
+   "journal_entries": [
+    "je_warlord_china"
+   ]
+  }
+ },
+ "chk - chokwe.txt": {
+  "CHK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "chl - chile.txt": {
+  "CHL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_oligarchy",
+    "law_state_religion",
+    "law_cultural_exclusion",
+    "law_frontier_colonization",
+    "law_censorship",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_export_tariff_level = { goods = g:tools level = no_tariffs_or_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ],
+   "institutions": {
+    "institution_colonial_affairs": "2"
+   },
+   "ruling_interest_groups": [
+    "ig_armed_forces",
+    "ig_industrialists"
+   ]
+  }
+ },
+ "chp - champassak.txt": {
+  "CHP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "cht - chitral.txt": {
+  "CHT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "cir - circassia.txt": {
+  "CIR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "laws": [
+    "law_parliamentary_republic",
+    "law_oligarchy",
+    "law_people_of_the_book",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_proprietorship",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ]
+  }
+ },
+ "clm - colombia.txt": {
+  "CLM": {
+   "other": [
+    "set_next_election_date = 1837.4.1",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_legacy_slavery",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "ruling_interest_groups": [
+    "ig_petty_bourgeoisie",
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "cmb - chaamba.txt": {
+  "CMB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "cmi - chiang mai.txt": {
+  "CMI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "cob - saxe-coburg-gotha.txt": {
+  "COB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "coc - cochin.txt": {
+  "COC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "com - comanche.txt": {
+  "COM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_11"
+   ]
+  }
+ },
+ "con - constantine.txt": {
+  "CON": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_people_of_the_book",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade",
+    "law_right_of_assembly"
+   ],
+   "journal_entries": [
+    "je_reconquest_of_algeria"
+   ],
+   "other": [
+    "set_variable = algeria_constantine_var"
+   ]
+  }
+ },
+ "coo - cooch behar.txt": {
+  "COO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "cro - croatia.txt": {
+  "CRO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "tax_level": "high",
+   "taxed_goods": [
+    "liquor",
+    "wine"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_crownland_diets",
+    "law_manorialism",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_traditionalism",
+    "law_local_police",
+    "law_no_schools",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_guild_system"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "start_national_awakening = { culture = cu:croat months = 168 state_region = s:STATE_CROATIA }"
+   ]
+  }
+ },
+ "cub - cuba.txt": {
+  "CUB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "atmospheric_engine",
+    "mechanical_tools",
+    "lathe",
+    "railways"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_autocracy",
+    "law_state_religion",
+    "law_slave_trade",
+    "law_mercantilism",
+    "law_agrarianism",
+    "law_per_capita_based_taxation",
+    "law_no_police",
+    "law_subjecthood"
+   ],
+   "other": [
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_racialized_subjecthood sponsor = PREV.ig:ig_armed_forces } }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip4_content",
+     "effects": [
+      "add_journal_entry = { type = je_cuba_espanol }",
+      "add_journal_entry = { type = je_cuba_la_vida_dulce }",
+      "add_journal_entry = { type = je_cuba_independencia }",
+      "trigger_event = { id = cuba_independencia.1 }"
+     ]
+    }
+   ]
+  }
+ },
+ "dah - dahomey.txt": {
+  "DAH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "dai - dai viet.txt": {
+  "DAI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_freedom_of_conscience"
+   ],
+   "technologies": [
+    "sericulture"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "dak - dar al kuti.txt": {
+  "DAK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "dei - dutch east indies company.txt": {
+  "DEI": {
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_oligarchy",
+    "law_total_separation",
+    "law_subjecthood",
+    "law_extraction_economy",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_migration_controls",
+    "law_appointed_bureaucrats",
+    "law_debt_slavery",
+    "law_colonial_exploitation"
+   ],
+   "other": [
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_racialized_subjecthood sponsor = PREV.ig:ig_armed_forces } }"
+   ]
+  }
+ },
+ "den - denmark.txt": {
+  "DEN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "technologies": [
+    "dialectics"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "tax_level": "high",
+   "taxed_goods": [
+    "liquor"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_local_police",
+    "law_national_supremacy",
+    "law_diplomatic_navy",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_religious_schools",
+    "law_per_capita_based_taxation",
+    "law_colonial_exploitation",
+    "law_right_of_assembly",
+    "law_colonial_slavery"
+   ],
+   "institutions": {
+    "institution_colonial_affairs": "1",
+    "institution_schools": "3"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "dfr - darfur.txt": {
+  "DFR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "dft - dar fertit.txt": {
+  "DFT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "dgr - degar.txt": {
+  "DGR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_racial_segregation",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "dha - dharmpur.txt": {
+  "DHA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom",
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "din - dinnik.txt": {
+  "DIN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "dio - diola.txt": {
+  "DIO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "dla - duala.txt": {
+  "DLA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "dlm - delim.txt": {
+  "DLM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "dnk - dinka.txt": {
+  "DNK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ecu - ecuador.txt": {
+  "ECU": {
+   "other": [
+    "set_next_election_date = 1839.3.31",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_legacy_slavery",
+    "law_landed_voting",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "egy - egypt.txt": {
+  "EGY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "technologies": [
+    "napoleonic_warfare"
+   ],
+   "taxed_goods": [
+    "tobacco",
+    "coffee",
+    "luxury_furniture"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_people_of_the_book",
+    "law_per_capita_based_taxation",
+    "law_subjecthood",
+    "law_agrarianism",
+    "law_professional_army",
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "ewe - ewe.txt": {
+  "EWE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ezo - ezochi.txt": {
+  "EZO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_oligarchy",
+    "law_isolationism",
+    "law_warrior_caste"
+   ],
+   "tax_level": "low",
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "fin - finland.txt": {
+  "FIN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_per_capita_based_taxation",
+    "law_national_supremacy",
+    "law_tenant_farmers",
+    "law_religious_schools",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   },
+   "other": [
+    "active_law:lawgroup_education_system ?= { add_amendment = { type = amendment_prussian_education sponsor = PREV.ig:ig_armed_forces } }"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "fji - fiji.txt": {
+  "FJI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ]
+  }
+ },
+ "fng - fang.txt": {
+  "FNG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "fra - france.txt": {
+  "FRA": {
+   "other": [
+    "set_next_election_date = 1837.11.4",
+    "set_import_tariff_level = { goods = g:engines level = low_subventions }",
+    "set_import_tariff_level = { goods = g:fabric level = no_tariffs_or_subventions }",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_200_franc_suffrage sponsor = PREV.ig:ig_industrialists cooldown = 48 } }",
+    "add_modifier = { name = modifier_haitian_independence_payments_4 }",
+    "set_variable = { name = orleanist_restoration_var }",
+    "set_variable = { name = fra_republic_counter value = 1 }",
+    "add_company = company_type:company_dmc",
+    "company:company_dmc = { set_company_establishment_date = 1746.1.1 set_company_state_region = s:STATE_ALSACE_LORRAINE }",
+    "set_variable = { name = recent_coup_or_revolution_var value = 5 }",
+    "set_variable = free_elections_var",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_tradition_of_free_elections sponsor = PREV.ig:ig_intelligentsia } }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_1_tech"
+   ],
+   "tax_level": "medium",
+   "taxed_goods": [
+    "wine",
+    "liquor"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_wealth_voting",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_cultural_exclusion",
+    "law_protectionism",
+    "law_interventionism",
+    "law_public_schools",
+    "law_per_capita_based_taxation",
+    "law_colonial_resettlement",
+    "law_dedicated_police",
+    "law_professional_army",
+    "law_professional_navy",
+    "law_poor_laws",
+    "law_censorship",
+    "law_national_guard",
+    "law_peasant_proprietorship",
+    "law_combination_acts",
+    "law_colonial_slavery"
+   ],
+   "institutions": {
+    "institution_schools": "2",
+    "institution_police": "1",
+    "institution_colonial_affairs": "1"
+   },
+   "ruling_interest_groups": [
+    "ig_intelligentsia"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = voice_of_the_people_content",
+     "effects": [
+      "add_journal_entry = { type = je_divided_monarchists }",
+      "add_journal_entry = { type = je_conquest_of_algeria }"
+     ]
+    }
+   ]
+  }
+ },
+ "frm - frankfurt am main.txt": {
+  "FRM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_free_trade",
+    "law_right_of_assembly",
+    "law_religious_schools",
+    "law_per_capita_based_taxation",
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "ftj - futa jallon.txt": {
+  "FTJ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "ftr - futa toro.txt": {
+  "FTR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "fzn - fezzan.txt": {
+  "FZN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_oligarchy",
+    "law_tenant_farmers"
+   ]
+  }
+ },
+ "gar - garwhal.txt": {
+  "GAR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "gbr - great britain.txt": {
+  "GBR": {
+   "other": [
+    "set_next_election_date = 1836.2.1",
+    "set_import_tariff_level = { goods = g:grain level = high_tariffs }",
+    "set_import_tariff_level = { goods = g:fabric level = no_tariffs_or_subventions }",
+    "set_export_tariff_level = { goods = g:opium level = low_subventions }",
+    "set_export_tariff_level = { goods = g:tools level = no_tariffs_or_subventions }",
+    "set_import_tariff_level = { goods = g:sulfur level = no_tariffs_or_subventions }",
+    "add_modifier = { name = brazilian_slave_trade_modifier months = 600 }",
+    "add_company = company_type:company_hbc",
+    "company:company_hbc = { set_company_establishment_date = 1670.5.2 set_company_state_region = s:STATE_HOME_COUNTIES add_owned_country = c:HBC }",
+    "add_company = company_type:company_east_india_company",
+    "company:company_east_india_company = { set_company_establishment_date = 1600.12.31 set_company_state_region = s:STATE_HOME_COUNTIES add_owned_country = c:BIC }",
+    "set_variable = free_elections_var",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_tradition_of_free_elections sponsor = PREV.ig:ig_intelligentsia } }"
+   ],
+   "ruling_interest_groups": [
+    "ig_intelligentsia",
+    "ig_petty_bourgeoisie"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_1_tech"
+   ],
+   "technologies": [
+    "labor_movement",
+    "joint_stock_companies"
+   ],
+   "tax_level": "medium",
+   "taxed_goods": [
+    "liquor",
+    "luxury_clothes",
+    "luxury_furniture",
+    "tea"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_wealth_voting",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_right_of_assembly",
+    "law_national_supremacy",
+    "law_protectionism",
+    "law_interventionism",
+    "law_religious_schools",
+    "law_per_capita_based_taxation",
+    "law_colonial_resettlement",
+    "law_poor_laws",
+    "law_charitable_health_system",
+    "law_dedicated_police",
+    "law_professional_army",
+    "law_professional_navy",
+    "law_tenant_farmers",
+    "law_migration_controls",
+    "law_anti_strike_laws"
+   ],
+   "institutions": {
+    "institution_colonial_affairs": "2",
+    "institution_schools": "3",
+    "institution_police": "1"
+   },
+   "journal_entries": [
+    "je_victoria"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = rp1_content",
+     "effects": [
+      "add_journal_entry = { type = je_aberdeen_act }"
+     ]
+    }
+   ]
+  }
+ },
+ "ggo - gogo.txt": {
+  "GGO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "gjm - gojjam.txt": {
+  "GJM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "gld - geledi.txt": {
+  "GLD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "gni - guarani.txt": {
+  "GNI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "gre - greece.txt": {
+  "GRE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "mass_communication",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_greek_revolt_aftermath days = very_long_modifier_time is_decaying = yes }",
+    "set_variable = { name = ionian_islands_requirement_var value = 0 }"
+   ],
+   "taxed_goods": [
+    "tobacco"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "grw - garawa.txt": {
+  "GRW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "gwa - gwalior.txt": {
+  "GWA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "gza - gaza.txt": {
+  "GZA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "hai - haiti.txt": {
+  "HAI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_autocracy",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_censorship",
+    "law_agrarianism",
+    "law_per_capita_based_taxation",
+    "law_freedom_of_conscience",
+    "law_no_schools",
+    "law_no_police",
+    "law_homesteading"
+   ],
+   "other": [
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_haiti_polish_naturalization sponsor = PREV.ig:ig_armed_forces } }"
+   ],
+   "tax_level": "high",
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ],
+   "journal_entries": [
+    "je_haitian_debt"
+   ]
+  }
+ },
+ "ham - hamburg.txt": {
+  "HAM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_free_trade",
+    "law_right_of_assembly",
+    "law_freedom_of_conscience"
+   ]
+  }
+ },
+ "han - hannover.txt": {
+  "HAN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_freedom_of_conscience",
+    "law_land_based_taxation",
+    "law_religious_schools",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_right_of_assembly",
+    "law_national_supremacy"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   },
+   "journal_entries": [
+    "je_victoria"
+   ]
+  }
+ },
+ "har - harar.txt": {
+  "HAR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "hau - hausa.txt": {
+  "HAU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "haw - hawaii.txt": {
+  "HAW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "technologies": [
+    "egalitarianism",
+    "academia",
+    "empiricism"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_freedom_of_conscience",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_tenant_farmers",
+    "law_right_of_assembly",
+    "law_land_based_taxation",
+    "law_women_own_property",
+    "law_public_schools"
+   ],
+   "ruling_interest_groups": [
+    "ig_devout",
+    "ig_landowners"
+   ]
+  }
+ },
+ "hbc - hudson bay company.txt": {
+  "HBC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_autocracy",
+    "law_total_separation",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_frontier_colonization",
+    "law_right_of_assembly",
+    "law_land_based_taxation",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "institutions": {
+    "institution_colonial_affairs": "2"
+   },
+   "taxed_goods": [
+    "grain"
+   ]
+  }
+ },
+ "hdj - hedjaz.txt": {
+  "HDJ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "hdy - hadiya.txt": {
+  "HDY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "hek - hesse-kassel.txt": {
+  "HEK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "her - herat.txt": {
+  "HER": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "journal_entries": [
+    "je_unify_afghanistan"
+   ]
+  }
+ },
+ "hes - hesse.txt": {
+  "HES": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "hhe - hehe.txt": {
+  "HHE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "hla - halia.txt": {
+  "HLA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ]
+  }
+ },
+ "hmb - hemba.txt": {
+  "HMB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "hoh - hohenzollern.txt": {
+  "HOH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "hol - holstein.txt": {
+  "HOL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ]
+  }
+ },
+ "hro - herero.txt": {
+  "HRO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "hun - hungary.txt": {
+  "HUN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "tax_level": "medium",
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_state_religion",
+    "law_women_own_property",
+    "law_crownland_diets",
+    "law_manorialism",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_traditionalism",
+    "law_local_police",
+    "law_no_schools",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_guild_system"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "set_capital = STATE_SLOVAKIA",
+    "start_national_awakening = { culture = cu:hungarian months = 168 state_region = s:STATE_CENTRAL_HUNGARY }"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip3_content",
+     "effects": [
+      "add_journal_entry = { type = je_hungarian_revolution }"
+     ]
+    }
+   ]
+  }
+ },
+ "hyd - hyderabad.txt": {
+  "HYD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "ibo - ibo.txt": {
+  "IBO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_1"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ida - idar.txt": {
+  "IDA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_regency_landowners }"
+   ]
+  }
+ },
+ "ind - indore.txt": {
+  "IND": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "ion - ionian islands.txt": {
+  "ION": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_right_of_assembly",
+    "law_per_capita_based_taxation",
+    "law_national_supremacy"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "iqu - iquichia.txt": {
+  "IQU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_state_religion",
+    "law_autocracy",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_slavery_banned",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "ruling_interest_groups": [
+    "ig_rural_folk"
+   ],
+   "other": [
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }",
+    "set_variable = pbc_member"
+   ]
+  }
+ },
+ "irc - iron confederacy.txt": {
+  "IRC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "isq - isaaq.txt": {
+  "ISQ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "jab - jabal shammar.txt": {
+  "JAB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "jai - jaipur.txt": {
+  "JAI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_regency_intelligentsia }"
+   ]
+  }
+ },
+ "jap - japan.txt": {
+  "JAP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "technologies": [
+    "academia",
+    "urban_planning",
+    "centralization",
+    "law_enforcement",
+    "colonization",
+    "sericulture"
+   ],
+   "tax_level": "medium",
+   "other": [
+    "set_import_tariff_level = { goods = g:iron level = max_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = max_subventions }"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_bakufu",
+    "law_freedom_of_conscience",
+    "law_serfdom",
+    "law_hereditary_bureaucrats",
+    "law_subjecthood",
+    "law_sakoku",
+    "law_local_police",
+    "law_land_based_taxation",
+    "law_censorship",
+    "law_intermediate_edo_system",
+    "law_closed_borders",
+    "law_terakoya",
+    "law_warrior_caste"
+   ],
+   "institutions": {
+    "institution_police": "1"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ep2_content",
+     "effects": [
+      "add_journal_entry = { type = je_sakoku }",
+      "add_journal_entry = { type = je_tenpo_crisis }",
+      "trigger_event = { id = tenpo_events.1 days = 1 popup = yes }",
+      "set_variable = ryukyu_rival_member",
+      "every_scope_state = { limit = { is_in_geographic_region = geographic_region_honshu } add_devastation = 5 state_region = { start_harvest_condition_with_params = { type = torrential_rains duration = 720 intensity = 5 } } }"
+     ]
+    }
+   ]
+  }
+ },
+ "jas - jaisalmer.txt": {
+  "JAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "jey - jeypore.txt": {
+  "JEY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "jhn - jhansi.txt": {
+  "JHN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "jlf - jolof.txt": {
+  "JLF": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "jmb - jambi.txt": {
+  "JMB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "jod - jodhpur.txt": {
+  "JOD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "joh - johore.txt": {
+  "JOH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_regency_landowners }"
+   ]
+  }
+ },
+ "jun - junagadh.txt": {
+  "JUN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom",
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kab - kabul.txt": {
+  "KAB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "journal_entries": [
+    "je_unify_afghanistan"
+   ]
+  }
+ },
+ "kaf - kafiristan.txt": {
+  "KAF": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "journal_entries": [
+    "je_unify_afghanistan"
+   ]
+  }
+ },
+ "kal - kalat.txt": {
+  "KAL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_tenant_farmers",
+    "law_professional_army"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kan - kandahar.txt": {
+  "KAN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "journal_entries": [
+    "je_unify_afghanistan"
+   ]
+  }
+ },
+ "kas - kashmir.txt": {
+  "KAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_state_religion"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "set_state_religion = rel:hindu",
+    "ig:ig_devout ?= { set_interest_group_name = ig_hindu_priesthood remove_ideology = ideology_moralist add_ideology = ideology_hindu_moralist set_ig_trait = ig_trait:ig_trait_pious_fiction set_ig_trait = ig_trait:ig_trait_divine_right set_ig_trait = ig_trait:ig_trait_asceticism }"
+   ]
+  }
+ },
+ "kat - kathiri.txt": {
+  "KAT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kau - kaurna.txt": {
+  "KAU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "technologies": [
+    "rationalism",
+    "democracy"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_parliamentary_republic",
+    "law_census_voting",
+    "law_isolationism",
+    "law_elected_bureaucrats",
+    "law_racial_segregation",
+    "law_women_own_property",
+    "law_homesteading",
+    "law_consumption_based_taxation"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kba - kuba.txt": {
+  "KBA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "kbd - kabadougou.txt": {
+  "KBD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "kbu - kaabu.txt": {
+  "KBU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "kfa - kaffa.txt": {
+  "KFA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "khi - khiva.txt": {
+  "KHI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "khp - kolhapur.txt": {
+  "KHP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kki - kuki.txt": {
+  "KKI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "kky - kikuyu.txt": {
+  "KKY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "kln - kulin.txt": {
+  "KLN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "klo - khmer loeu.txt": {
+  "KLO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_6"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_racial_segregation",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "knc - karna.txt": {
+  "KNC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "kng - kong.txt": {
+  "KNG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "knk - kanak.txt": {
+  "KNK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ]
+  }
+ },
+ "kno - kurnool.txt": {
+  "KNO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kok - kokand.txt": {
+  "KOK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kon - kongo.txt": {
+  "KON": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "kor - korea.txt": {
+  "KOR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "technologies": [
+    "urban_planning",
+    "law_enforcement",
+    "sericulture"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_serfdom",
+    "law_land_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_isolationism",
+    "law_censorship"
+   ],
+   "tax_level": "low",
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_regency_landowners }"
+   ]
+  }
+ },
+ "kot - kotah.txt": {
+  "KOT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kra - krakow.txt": {
+  "KRA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "technologies": [
+    "dialectics"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_laissez_faire",
+    "law_total_separation",
+    "law_national_supremacy",
+    "law_wealth_voting",
+    "law_land_based_taxation",
+    "law_free_trade",
+    "law_private_schools",
+    "law_censorship"
+   ],
+   "institutions": {
+    "institution_schools": "3"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "krg - karangwe.txt": {
+  "KRG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_isolationism",
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "kri - kurnai.txt": {
+  "KRI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "krt - kaarta.txt": {
+  "KRT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_mercantilism",
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "kru - kru.txt": {
+  "KRU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ksn - kasanje.txt": {
+  "KSN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "kti - kutai.txt": {
+  "KTI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "ktu - kartu.txt": {
+  "KTU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "kun - kunduz.txt": {
+  "KUN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "journal_entries": [
+    "je_unify_afghanistan"
+   ]
+  }
+ },
+ "kut - kutch.txt": {
+  "KUT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "kyn - kanyara-mantharta.txt": {
+  "KYN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "kzh - kishi zhuz.txt": {
+  "KZH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "kzm - kazembe.txt": {
+  "KZM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "lad - ladakh.txt": {
+  "LAD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "lah - lahej.txt": {
+  "LAH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "lan - lanfang.txt": {
+  "LAN": {
+   "other": [
+    "set_next_election_date = 1838.6.15"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "technologies": [
+    "academia",
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_census_voting",
+    "law_total_separation",
+    "law_cultural_exclusion",
+    "law_mercantilism",
+    "law_land_based_taxation"
+   ],
+   "ruling_interest_groups": [
+    "ig_petty_bourgeoisie"
+   ]
+  }
+ },
+ "lba - luba.txt": {
+  "LBA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "lga - lega.txt": {
+  "LGA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "lib - liberia.txt": {
+  "LIB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_mercantilism",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_slavery_banned",
+    "law_national_supremacy"
+   ],
+   "ruling_interest_groups": [
+    "ig_intelligentsia"
+   ]
+  }
+ },
+ "lip - lippe.txt": {
+  "LIP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "lkt - lakota.txt": {
+  "LKT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "lnd - lunda.txt": {
+  "LND": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "lng - loango.txt": {
+  "LNG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_4",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "lrr - larrakia.txt": {
+  "LRR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "lua - luang prabang.txt": {
+  "LUA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "lub - lubeck.txt": {
+  "LUB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience",
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_free_trade",
+    "law_right_of_assembly"
+   ]
+  }
+ },
+ "luc - lucca.txt": {
+  "LUC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "banking",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ],
+   "laws": [
+    "law_religious_schools"
+   ]
+  }
+ },
+ "luo - luo.txt": {
+  "LUO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_5",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "lux - luxemburg.txt": {
+  "LUX": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ],
+   "laws": [
+    "law_national_supremacy",
+    "law_freedom_of_conscience"
+   ]
+  }
+ },
+ "lzo - barotse.txt": {
+  "LZO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mad - madagascar.txt": {
+  "MAD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_tangena_ordeal }"
+   ]
+  }
+ },
+ "mah - mahra.txt": {
+  "MAH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "mai - maimana.txt": {
+  "MAI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "journal_entries": [
+    "je_unify_afghanistan"
+   ]
+  }
+ },
+ "mak - makran.txt": {
+  "MAK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "mas - mascara.txt": {
+  "MAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "ruling_interest_groups": [
+    "ig_devout"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_people_of_the_book",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade",
+    "law_right_of_assembly"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_variable = algeria_mascara_var"
+   ],
+   "journal_entries": [
+    "je_reconquest_of_algeria"
+   ]
+  }
+ },
+ "mbs - mombasa.txt": {
+  "MBS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "mcr - micronesia.txt": {
+  "MCR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_3",
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "mdk - mandinka.txt": {
+  "MDK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mec - mecklenburg.txt": {
+  "MEC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_freedom_of_conscience",
+    "law_autocracy",
+    "law_hereditary_bureaucrats",
+    "law_religious_schools",
+    "law_local_police",
+    "law_land_based_taxation",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_censorship",
+    "law_migration_controls"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "mei - saxe-meiningen.txt": {
+  "MEI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "mew - mewar.txt": {
+  "MEW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "mex - mexico.txt": {
+  "MEX": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_oligarchy",
+    "law_cultural_exclusion",
+    "law_mercantilism",
+    "law_agrarianism",
+    "law_censorship",
+    "law_frontier_colonization",
+    "law_land_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:manowars level = high_subventions }",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_import_tariff_level = { goods = g:paper level = low_subventions }",
+    "add_modifier = { name = modifier_texas_war_of_independence_mexico months = 6 }"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces",
+    "ig_landowners"
+   ]
+  }
+ },
+ "mgd - maguindanao.txt": {
+  "MGD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "mgh - khasi.txt": {
+  "MGH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "mjk - mijikenda.txt": {
+  "MJK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mjt - majerteen.txt": {
+  "MJT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "laws": [
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_debt_slavery",
+    "law_right_of_assembly"
+   ]
+  }
+ },
+ "mkt - miskitia.txt": {
+  "MKT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_religious_schools",
+    "law_state_religion",
+    "law_hereditary_bureaucrats",
+    "law_right_of_assembly",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_legacy_slavery",
+    "law_land_based_taxation",
+    "law_peasant_levies",
+    "law_no_schools",
+    "law_no_police"
+   ]
+  }
+ },
+ "mld - maldives.txt": {
+  "MLD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "mnb - mangbetu.txt": {
+  "MNB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mnc - manica.txt": {
+  "MNC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mnd - mindanao.txt": {
+  "MND": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ]
+  }
+ },
+ "mnl - mingrelia.txt": {
+  "MNL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "mnp - manipur.txt": {
+  "MNP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_regency_landowners }"
+   ]
+  }
+ },
+ "mod - modena.txt": {
+  "MOD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "banking",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ],
+   "laws": [
+    "law_religious_schools"
+   ]
+  }
+ },
+ "mol - moldavia.txt": {
+  "MOL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_organic_regulation",
+    "law_legacy_slavery",
+    "law_manorialism",
+    "law_migration_controls",
+    "law_elected_bureaucrats"
+   ]
+  }
+ },
+ "mon - montenegro.txt": {
+  "MON": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces",
+    "ig_landowners"
+   ],
+   "laws": [
+    "law_theocracy",
+    "law_state_religion",
+    "law_national_supremacy",
+    "law_tenant_farmers",
+    "law_traditionalism",
+    "law_censorship",
+    "law_consumption_based_taxation",
+    "law_women_in_the_fields",
+    "law_chiefs_distribute_aid"
+   ],
+   "institutions": {
+    "institution_social_security": "4"
+   },
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip3_content",
+     "effects": [
+      "add_journal_entry = { type = je_montenegrin_raiding }",
+      "add_journal_entry = { type = je_mon_state_formation }",
+      "add_journal_entry = { type = je_mon_serb_unity }",
+      "add_modifier = { name = modifier_women_work_men_fight days = stupidly_long_modifier_time is_decaying = yes }",
+      "add_modifier = { name = modifier_lonely_mountain years = 30 is_decaying = yes }",
+      "add_modifier = { name = modifier_no_minting days = stupidly_long_modifier_time }",
+      "add_modifier = { name = mon_taxes_what_are days = very_long_modifier_time is_decaying = yes }",
+      "trigger_event = { id = mon_state_formation.15 }",
+      "set_tax_level = very_low",
+      "set_import_tariff_level = { goods = g:merchant_marine level = max_subventions }",
+      "set_import_tariff_level = { goods = g:small_arms level = max_subventions }",
+      "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+      "set_import_tariff_level = { goods = g:clothes level = high_subventions }",
+      "set_import_tariff_level = { goods = g:liquor level = high_subventions }",
+      "set_import_tariff_level = { goods = g:fruit level = high_subventions }",
+      "random_scope_state = { add_modifier = { name = mon_strong_backs years = 40 is_decaying = yes } }"
+     ]
+    }
+   ]
+  }
+ },
+ "mor - morocco.txt": {
+  "MOR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_people_of_the_book",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ],
+   "journal_entries": [
+    "je_lands_of_anarchy"
+   ]
+  }
+ },
+ "mos - mossi.txt": {
+  "MOS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_4"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mra - mara.txt": {
+  "MRA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "mrn - mirning.txt": {
+  "MRN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "mrv - maravi.txt": {
+  "MRV": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "msh - mashona.txt": {
+  "MSH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "msi - masai.txt": {
+  "MSI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_slavery_banned"
+   ]
+  }
+ },
+ "msk - maseko.txt": {
+  "MSK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "msn - massina.txt": {
+  "MSN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "mst - mecklenburg-strelitz.txt": {
+  "MST": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "mtb - matabele.txt": {
+  "MTB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_4",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mtp - mutapa.txt": {
+  "MTP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "mug - mughals.txt": {
+  "MUG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "laws": [
+    "law_serfdom",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_debt_slavery",
+    "law_right_of_assembly",
+    "law_subjecthood"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip2_content",
+     "effects": [
+      "add_journal_entry = { type = je_mughal_hindustan }"
+     ]
+    }
+   ]
+  }
+ },
+ "myb - mayurbhanj.txt": {
+  "MYB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "mys - mysore.txt": {
+  "MYS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "laws": [
+    "law_interventionism",
+    "law_appointed_bureaucrats",
+    "law_oligarchy"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "mzb - mzab.txt": {
+  "MZB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "nag - nagpur.txt": {
+  "NAG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "nam - nama.txt": {
+  "NAM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "nar - narsinghpur.txt": {
+  "NAR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "nas - nassau.txt": {
+  "NAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "egalitarianism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ],
+   "laws": [
+    "law_religious_schools",
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "1"
+   }
+  }
+ },
+ "naw - nawanagar.txt": {
+  "NAW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "nbs - new brunswick.txt": {
+  "NBS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_wealth_voting",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_right_of_assembly",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_right_of_assembly",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces",
+    "ig_petty_bourgeoisie"
+   ],
+   "taxed_goods": [
+    "grain"
+   ]
+  }
+ },
+ "nej - nejd.txt": {
+  "NEJ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "nep - nepal.txt": {
+  "NEP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom",
+    "law_mercantilism",
+    "law_debt_slavery",
+    "law_professional_army"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "net - netherlands.txt": {
+  "NET": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_liberal"
+   ],
+   "ruling_interest_groups": [
+    "ig_petty_bourgeoisie",
+    "ig_devout"
+   ],
+   "tax_level": "medium",
+   "other": [
+    "set_import_tariff_level = { goods = g:wood level = low_subventions }",
+    "set_import_tariff_level = { goods = g:iron level = low_subventions }"
+   ],
+   "taxed_goods": [
+    "tobacco",
+    "luxury_clothes"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_wealth_voting",
+    "law_per_capita_based_taxation",
+    "law_freedom_of_conscience",
+    "law_national_supremacy",
+    "law_diplomatic_navy",
+    "law_mercantilism",
+    "law_peasant_proprietorship",
+    "law_interventionism",
+    "law_colonial_exploitation",
+    "law_colonial_slavery",
+    "law_dedicated_police",
+    "law_public_schools",
+    "law_right_of_assembly"
+   ],
+   "institutions": {
+    "institution_schools": "2",
+    "institution_colonial_affairs": "1"
+   }
+  }
+ },
+ "nga - naga.txt": {
+  "NGA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "nng - noongar.txt": {
+  "NNG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "nor - norway.txt": {
+  "NOR": {
+   "other": [
+    "set_next_election_date = 1838.11.8",
+    "active_law:lawgroup_education_system ?= { add_amendment = { type = amendment_prussian_education sponsor = PREV.ig:ig_armed_forces } }",
+    "set_variable = free_elections_var",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_tradition_of_free_elections sponsor = PREV.ig:ig_intelligentsia } }"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_liberal"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_census_voting",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_appointed_bureaucrats",
+    "law_local_police",
+    "law_religious_schools",
+    "law_peasant_proprietorship",
+    "law_right_of_assembly"
+   ],
+   "tax_level": "medium",
+   "taxed_goods": [
+    "liquor"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "npu - north peru.txt": {
+  "NPU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_state_religion",
+    "law_oligarchy",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_legacy_slavery",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }",
+    "set_variable = pbc_member"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces",
+    "ig_intelligentsia"
+   ]
+  }
+ },
+ "nru - nauru.txt": {
+  "NRU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ]
+  }
+ },
+ "nsw - new south wales.txt": {
+  "NSW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_autocracy",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_censorship",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_frontier_colonization",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_rural_folk"
+   ],
+   "taxed_goods": [
+    "grain"
+   ]
+  }
+ },
+ "nto - ngati toa.txt": {
+  "NTO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_10",
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "ntu - ngai tahu.txt": {
+  "NTU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_8",
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "nue - nuer.txt": {
+  "NUE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "nvj - navajo.txt": {
+  "NVJ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies",
+    "law_right_of_assembly",
+    "law_isolationism"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_11"
+   ]
+  }
+ },
+ "nvs - nova scotia.txt": {
+  "NVS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_wealth_voting",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_right_of_assembly",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_right_of_assembly",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ],
+   "taxed_goods": [
+    "grain"
+   ]
+  }
+ },
+ "nym - unyamwezi.txt": {
+  "NYM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies",
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "nyp - ngumpin-yapa.txt": {
+  "NYP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "nzp - nez perce.txt": {
+  "NZP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "ogd - ogaden.txt": {
+  "OGD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "old - oldenburg.txt": {
+  "OLD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ]
+  }
+ },
+ "oma - oman.txt": {
+  "OMA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "technologies": [
+    "currency_standards"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_import_tariff_level = { goods = g:manowars level = high_subventions }",
+    "set_market_capital = STATE_ZANZIBAR"
+   ],
+   "taxed_goods": [
+    "liquor"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_freedom_of_conscience",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_land_based_taxation",
+    "law_slave_trade",
+    "law_right_of_assembly"
+   ],
+   "journal_entries": [
+    "je_splitting_oman"
+   ]
+  }
+ },
+ "omo - omo.txt": {
+  "OMO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ont - ontario.txt": {
+  "ONT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_landed_voting",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_right_of_assembly",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_dedicated_police",
+    "law_right_of_assembly",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_devout"
+   ],
+   "taxed_goods": [
+    "grain"
+   ]
+  }
+ },
+ "ora - oranje.txt": {
+  "ORA": {
+   "other": [
+    "set_next_election_date = 1839.10.12",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_national_supremacy",
+    "law_elected_bureaucrats",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_land_based_taxation",
+    "law_homesteading",
+    "law_national_militia",
+    "law_legacy_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_petty_bourgeoisie"
+   ],
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "org - oregon.txt": {
+  "ORG": {
+   "ruling_interest_groups": [
+    "ig_industrialists"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_liberal"
+   ],
+   "laws": [
+    "law_right_of_assembly",
+    "law_free_trade",
+    "law_per_capita_based_taxation",
+    "law_homesteading",
+    "law_frontier_colonization"
+   ]
+  }
+ },
+ "orm - orma.txt": {
+  "ORM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "oua - oualata.txt": {
+  "OUA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_6",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ovb - ovambo.txt": {
+  "OVB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ovm - ovimbundu.txt": {
+  "OVM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "oyo - oyo.txt": {
+  "OYO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ozh - orta zhuz.txt": {
+  "OZH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "paa - paakintyi.txt": {
+  "PAA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "pan - panjab.txt": {
+  "PAN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "technologies": [
+    "mandatory_service",
+    "line_infantry"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_tenant_farmers",
+    "law_professional_army",
+    "law_freedom_of_conscience",
+    "law_appointed_bureaucrats",
+    "law_migration_controls"
+   ],
+   "taxed_goods": [
+    "liquor",
+    "tobacco"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces",
+    "ig_petty_bourgeoisie"
+   ],
+   "other": [
+    "ig:ig_petty_bourgeoisie ?= { add_ruling_interest_group = yes add_modifier = { name = modifier_favored_by_wazir days = very_long_modifier_time is_decaying = yes } }"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip2_content",
+     "effects": [
+      "add_journal_entry = { type = je_sikh_sovereignty }"
+     ]
+    }
+   ]
+  }
+ },
+ "pap - papal states.txt": {
+  "PAP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "banking",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "ruling_interest_groups": [
+    "ig_devout"
+   ],
+   "laws": [
+    "law_theocracy",
+    "law_state_religion",
+    "law_land_based_taxation",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_censorship",
+    "law_national_militia",
+    "law_religious_schools",
+    "law_charitable_health_system",
+    "law_oligarchy"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }"
+   ],
+   "institutions": {
+    "institution_schools": "1"
+   }
+  }
+ },
+ "par - parma.txt": {
+  "PAR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "banking",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ]
+  }
+ },
+ "pat - patagonia.txt": {
+  "PAT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_10",
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "pco - puerto rico.txt": {
+  "PCO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_landed_voting",
+    "law_state_religion",
+    "law_slave_trade",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_per_capita_based_taxation",
+    "law_no_police",
+    "law_subjecthood"
+   ],
+   "other": [
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_racialized_subjecthood sponsor = PREV.ig:ig_armed_forces } }",
+    "ig:ig_devout = { set_interest_group_name = ig_catholic_church }"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "pdi - pedi.txt": {
+  "PDI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_4",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "per - persia.txt": {
+  "PER": {
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_devout"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "technologies": [
+    "admiralty",
+    "law_enforcement",
+    "urban_planning"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_people_of_the_book",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_traditionalism",
+    "law_serfdom",
+    "law_hereditary_bureaucrats",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_slave_trade",
+    "law_peasant_levies",
+    "law_no_schools"
+   ],
+   "tax_level": "medium",
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "OR = { has_dlc_feature = ep1_content has_dlc_feature = ip5_content }",
+     "effects": [
+      "add_journal_entry = { type = je_eastern_frontier }"
+     ]
+    }
+   ]
+  }
+ },
+ "phi - philippines.txt": {
+  "PHI": {
+   "other": [
+    "add_primary_culture = cu:spanish",
+    "remove_primary_culture = cu:filipino_mestizo",
+    "remove_primary_culture = cu:tagalog",
+    "remove_primary_culture = cu:ilocano",
+    "remove_primary_culture = cu:visayan",
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_racialized_subjecthood sponsor = PREV.ig:ig_armed_forces } }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_state_religion",
+    "law_appointed_bureaucrats",
+    "law_legacy_slavery",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_land_based_taxation",
+    "law_religious_schools",
+    "law_censorship"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_devout"
+   ],
+   "journal_entries": [
+    "je_philippines_development"
+   ]
+  }
+ },
+ "phl - philippolis.txt": {
+  "PHL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_oligarchy",
+    "law_national_supremacy",
+    "law_slavery_banned",
+    "law_homesteading",
+    "law_state_religion",
+    "law_local_police",
+    "law_religious_schools"
+   ],
+   "institutions": {
+    "institution_schools": "1",
+    "institution_police": "1"
+   },
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "plp - palanpur.txt": {
+  "PLP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom",
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "ply - tahiti.txt": {
+  "PLY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_mercantilism",
+    "law_right_of_assembly",
+    "law_land_based_taxation",
+    "law_women_own_property",
+    "law_subjecthood"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "pma - pama.txt": {
+  "PMA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "pni - piratini.txt": {
+  "PNI": {
+   "other": [
+    "set_next_election_date = 1836.9.11",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_variable = ragamuffin_nation_var"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_freedom_of_conscience",
+    "law_slave_trade",
+    "law_wealth_voting",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_per_capita_based_taxation",
+    "law_censorship"
+   ],
+   "journal_entries": [
+    "ragamuffin_war_minors"
+   ]
+  }
+ },
+ "pol - poland.txt": {
+  "POL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "tax_level": "medium",
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_manorialism",
+    "law_national_supremacy",
+    "law_land_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_freedom_of_conscience",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_professional_army",
+    "law_censorship",
+    "law_women_own_property",
+    "law_religious_schools"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_polish_organic_statute days = stupidly_long_modifier_time is_decaying = yes }",
+    "set_variable = { name = recent_coup_or_revolution_var value = 5 }",
+    "add_primary_culture = cu:russian"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip5_content",
+     "effects": [
+      "set_variable = poland_universities_closed_var",
+      "add_modifier = { name = congress_poland_restrictions }",
+      "add_modifier = { name = congress_poland_laws }"
+     ]
+    }
+   ]
+  }
+ },
+ "pon - pontianak.txt": {
+  "PON": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "por - portugal.txt": {
+  "POR": {
+   "other": [
+    "set_next_election_date = 1836.7.17",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_chamber_of_gentleman_deputies sponsor = PREV.ig:ig_petty_bourgeoisie cooldown = 24 } }",
+    "ig:ig_armed_forces = { add_ideology = ideology_liberal_praetorian add_ruling_interest_group = yes }",
+    "set_variable = { name = recent_coup_or_revolution_var value = 2 }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "atmospheric_engine",
+    "empiricism",
+    "napoleonic_warfare",
+    "stock_exchange",
+    "mass_communication"
+   ],
+   "taxed_goods": [
+    "liquor",
+    "coffee"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_freedom_of_conscience",
+    "law_oligarchy",
+    "law_elected_bureaucrats",
+    "law_land_based_taxation",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_national_guard",
+    "law_diplomatic_navy",
+    "law_no_police",
+    "law_interventionism",
+    "law_censorship",
+    "law_colonial_exploitation",
+    "law_colonial_slavery",
+    "law_latifundias",
+    "law_charitable_health_system",
+    "law_poor_laws",
+    "law_public_schools"
+   ],
+   "tax_level": "medium",
+   "institutions": {
+    "institution_colonial_affairs": "2"
+   },
+   "ruling_interest_groups": [
+    "ig_petty_bourgeoisie",
+    "ig_armed_forces"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip4_content",
+     "effects": [
+      "add_journal_entry = { type = je_devorismo }",
+      "add_journal_entry = { type = je_second_liberalism }",
+      "add_modifier = { name = modifier_legacy_of_the_liberal_wars days = long_modifier_time is_decaying = yes }"
+     ]
+    }
+   ]
+  }
+ },
+ "ppu - papua.txt": {
+  "PPU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_1"
+   ]
+  }
+ },
+ "pra - grao para.txt": {
+  "PRA": {
+   "other": [
+    "set_next_election_date = 1839.1.6",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_freedom_of_conscience",
+    "law_tenant_farmers",
+    "law_legacy_slavery",
+    "law_wealth_voting",
+    "law_racial_segregation",
+    "law_traditionalism",
+    "law_consumption_based_taxation",
+    "law_censorship"
+   ],
+   "journal_entries": [
+    "ragamuffin_war_minors"
+   ]
+  }
+ },
+ "prg - paraguay.txt": {
+  "PRG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_autocracy",
+    "law_freedom_of_conscience",
+    "law_racial_segregation",
+    "law_interventionism",
+    "law_legacy_slavery",
+    "law_per_capita_based_taxation",
+    "law_isolationism",
+    "law_no_schools",
+    "law_no_police",
+    "law_secret_police",
+    "law_national_militia"
+   ],
+   "technologies": [
+    "mass_communication",
+    "egalitarianism",
+    "central_archives",
+    "empiricism"
+   ],
+   "institutions": {
+    "institution_home_affairs": "3"
+   },
+   "ruling_interest_groups": [
+    "ig_intelligentsia"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = rp1_content",
+     "effects": [
+      "add_modifier = { name = hairy_feet_modifier }"
+     ]
+    }
+   ],
+   "other": [
+    "set_variable = francocracia_paraguay_var"
+   ]
+  }
+ },
+ "prk - perak.txt": {
+  "PRK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "pru - prussia.txt": {
+  "PRU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_1_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "taxed_goods": [
+    "liquor",
+    "luxury_furniture",
+    "wine"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_public_schools",
+    "law_local_police",
+    "law_per_capita_based_taxation",
+    "law_professional_army",
+    "law_censorship",
+    "law_combination_acts"
+   ],
+   "other": [
+    "active_law:lawgroup_education_system ?= { add_amendment = { type = amendment_prussian_education sponsor = PREV.ig:ig_armed_forces } }",
+    "add_company = company_type:company_krupp",
+    "company:company_krupp = { set_company_establishment_date = 1807.1.1 set_company_state_region = s:STATE_WESTPHALIA }"
+   ],
+   "institutions": {
+    "institution_schools": "2",
+    "institution_police": "1"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "pta - patiala.txt": {
+  "PTA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "ptn - patna.txt": {
+  "PTN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "pud - pudukottai.txt": {
+  "PUD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "pwn - pawnee.txt": {
+  "PWN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_10",
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "que - quebec.txt": {
+  "QUE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_landed_voting",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_right_of_assembly",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_dedicated_police",
+    "law_right_of_assembly",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ],
+   "taxed_goods": [
+    "grain"
+   ]
+  }
+ },
+ "qwr - qwara.txt": {
+  "QWR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "rgb - riguibat.txt": {
+  "RGB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "rus - russia.txt": {
+  "RUS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "napoleonic_warfare",
+    "stock_exchange",
+    "corporate_charters",
+    "fractional_distillation"
+   ],
+   "tax_level": "low",
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_serfdom",
+    "law_land_based_taxation",
+    "law_military_bureaucrats",
+    "law_caesaropapism",
+    "law_official_nationality",
+    "law_traditionalism",
+    "law_peasant_levies",
+    "law_professional_navy",
+    "law_censorship",
+    "law_third_section",
+    "law_internal_colonization",
+    "law_women_own_property"
+   ],
+   "taxed_goods": [
+    "liquor"
+   ],
+   "other": [
+    "set_export_tariff_level = { goods = g:grain level = no_tariffs_or_subventions }",
+    "set_export_tariff_level = { goods = g:wood level = no_tariffs_or_subventions }",
+    "set_import_tariff_level = { goods = g:silk level = no_tariffs_or_subventions }",
+    "set_import_tariff_level = { goods = g:copper level = max_subventions }",
+    "add_company = company_type:company_russian_american_company",
+    "company:company_russian_american_company = { set_company_establishment_date = 1799.7.8 set_company_state_region = s:STATE_INGRIA add_owned_country = c:ALK }",
+    "active_law:lawgroup_colonization ?= { add_amendment = { type = amendment_cossacks sponsor = PREV.ig:ig_rural_folk } }"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip5_content",
+     "effects": [
+      "trigger_event = { id = tsarpoints_events.14 days = 1 popup = yes }",
+      "trigger_event = { id = rlit.001 days = 30 popup = yes }",
+      "trigger_event = { id = rlit.052 months = 1140 popup = yes }",
+      "initialize_russian_revolution_alignments = yes"
+     ]
+    }
+   ]
+  }
+ },
+ "rwd - rwanda.txt": {
+  "RWD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_isolationism"
+   ]
+  }
+ },
+ "ryu - ryukyu.txt": {
+  "RYU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_serfdom",
+    "law_land_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_isolationism"
+   ],
+   "tax_level": "low",
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "set_variable = ryukyu_rival_member"
+   ]
+  }
+ },
+ "saf - south africa.txt": {
+  "SAF": {
+   "ruling_interest_groups": [
+    "ig_armed_forces",
+    "ig_landowners"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience",
+    "law_local_police",
+    "law_homesteading",
+    "law_colonial_administration",
+    "law_racial_segregation",
+    "law_land_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_public_schools",
+    "law_mercantilism"
+   ],
+   "taxed_goods": [
+    "grain"
+   ],
+   "other": [
+    "set_variable = southern_africa_subject_var"
+   ],
+   "institutions": {
+    "institution_schools": "1",
+    "institution_police": "1"
+   },
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "sah - sahrawi.txt": {
+  "SAH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_8",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "sak - siak.txt": {
+  "SAK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "san - san.txt": {
+  "SAN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "sar - sardinia.txt": {
+  "SAR": {
+   "ruling_interest_groups": [
+    "ig_devout",
+    "ig_landowners"
+   ],
+   "taxed_goods": [
+    "liquor",
+    "wine"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ],
+   "laws": [
+    "law_national_supremacy",
+    "law_local_police",
+    "law_religious_schools"
+   ],
+   "tax_level": "medium",
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_import_tariff_level = { goods = g:fabric level = no_tariffs_or_subventions }"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "sas - south australia.txt": {
+  "SAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_autocracy",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_censorship",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "sat - satara.txt": {
+  "SAT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "sax - saxony.txt": {
+  "SAX": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "technologies": [
+    "railways"
+   ],
+   "taxed_goods": [
+    "liquor"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "sch - schleswig.txt": {
+  "SCH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ]
+  }
+ },
+ "scm - schaumburg-lippe.txt": {
+  "SCM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "sct - sipsong chao tai.txt": {
+  "SCT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_racial_segregation",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "scw - schwarzburg.txt": {
+  "SCW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "sdm - sidamo.txt": {
+  "SDM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "sel - selangor.txt": {
+  "SEL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "seq - indian territory.txt": {
+  "SEQ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_racial_segregation",
+    "law_legacy_slavery",
+    "law_traditionalism",
+    "law_right_of_assembly",
+    "law_land_based_taxation",
+    "law_closed_borders"
+   ]
+  }
+ },
+ "ser - serbia.txt": {
+  "SER": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "mass_communication",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_national_supremacy",
+    "law_migration_controls",
+    "law_freedom_of_conscience",
+    "law_peasant_proprietorship",
+    "law_anti_strike_laws",
+    "law_no_schools",
+    "law_no_police",
+    "law_agrarianism",
+    "law_peasant_levies"
+   ],
+   "other": [
+    "add_modifier = { name = modifier_serbian_revolt_aftermath days = very_long_modifier_time is_decaying = yes }"
+   ],
+   "conditional": [
+    {
+     "kind": "if",
+     "limit": "has_dlc_feature = ip3_content",
+     "effects": [
+      "add_journal_entry = { type = je_serbian_throne }",
+      "trigger_event = { id = serbia.1 days = 1 }",
+      "add_journal_entry = { type = je_mon_serb_unity }"
+     ]
+    }
+   ]
+  }
+ },
+ "sgu - segou.txt": {
+  "SGU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "shs - shan.txt": {
+  "SHS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_peasant_levies",
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "shw - shewa.txt": {
+  "SHW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "sia - siam.txt": {
+  "SIA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_isolationism",
+    "law_debt_slavery"
+   ],
+   "technologies": [
+    "sericulture"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "sic - two sicilies.txt": {
+  "SIC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "banking",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ],
+   "laws": [
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_latifundias"
+   ],
+   "taxed_goods": [
+    "wine",
+    "liquor"
+   ],
+   "other": [
+    "set_export_tariff_level = { goods = g:sulfur level = no_tariffs_or_subventions }",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "sik - sikkim.txt": {
+  "SIK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom",
+    "law_isolationism"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "sil - sierra leone.txt": {
+  "SIL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_mercantilism",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_freedom_of_conscience",
+    "law_subjecthood"
+   ],
+   "other": [
+    "active_law:lawgroup_citizenship ?= { add_amendment = { type = amendment_racialized_subjecthood sponsor = PREV.ig:ig_armed_forces } }",
+    "add_primary_culture = cu:british"
+   ]
+  }
+ },
+ "sin - sind.txt": {
+  "SIN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_tenant_farmers",
+    "law_oligarchy",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_debt_slavery",
+    "law_right_of_assembly",
+    "law_subjecthood",
+    "law_appointed_bureaucrats"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "skh - sakhalin.txt": {
+  "SKH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "skm - usukuma.txt": {
+  "SKM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "sky - sakuye.txt": {
+  "SKY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "slk - selknam.txt": {
+  "SLK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_12"
+   ]
+  }
+ },
+ "sls - salish.txt": {
+  "SLS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "slw - sulawesi.txt": {
+  "SLW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ]
+  }
+ },
+ "smb - sambas.txt": {
+  "SMB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "sml - seminole.txt": {
+  "SML": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "sng - sangu.txt": {
+  "SNG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "sok - sokoto.txt": {
+  "SOK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_traditionalism",
+    "law_mercantilism",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_devout",
+    "ig_landowners"
+   ]
+  }
+ },
+ "spa - spain.txt": {
+  "SPA": {
+   "other": [
+    "set_next_election_date = 1836.2.26",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_chamber_of_procurators sponsor = PREV.ig:ig_petty_bourgeoisie cooldown = 96 } }",
+    "active_law:lawgroup_church_and_state ?= { add_amendment = { type = amendment_state_anti_clericalism sponsor = PREV.ig:ig_intelligentsia cooldown = 9 } }",
+    "ig:ig_armed_forces ?= { add_ruling_interest_group = yes add_ideology = ideology_liberal_praetorian }",
+    "add_modifier = { name = modifier_regency_petty_bourgeoisie }",
+    "set_immune_to_revolutions = yes",
+    "trigger_event = { id = spain_politics.1 days = 30 }",
+    "trigger_event = { id = carlist_war.7 popup = yes days = 1 }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "atmospheric_engine",
+    "empiricism",
+    "napoleonic_warfare",
+    "stock_exchange",
+    "mass_communication"
+   ],
+   "tax_level": "medium",
+   "taxed_goods": [
+    "liquor",
+    "tobacco"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_state_religion",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_land_based_taxation",
+    "law_latifundias",
+    "law_religious_schools",
+    "law_diplomatic_navy",
+    "law_charitable_health_system",
+    "law_national_guard",
+    "law_elected_bureaucrats",
+    "law_oligarchy",
+    "law_colonial_slavery"
+   ],
+   "institutions": {
+    "institution_health_system": "1"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_devout",
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "spc - carlist spain.txt": {
+  "SPC": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "atmospheric_engine",
+    "empiricism",
+    "napoleonic_warfare",
+    "stock_exchange",
+    "mass_communication"
+   ],
+   "tax_level": "medium",
+   "taxed_goods": [
+    "liquor",
+    "tobacco"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = max_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_armed_forces = { add_ruling_interest_group = yes add_ideology = ideology_conservative_praetorian }",
+    "trigger_event = { id = carlist_war.7 popup = yes days = 1 }",
+    "set_immune_to_revolutions = yes"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_state_religion",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_land_based_taxation",
+    "law_traditionalism",
+    "law_guild_system",
+    "law_religious_schools",
+    "law_charitable_health_system"
+   ],
+   "institutions": {
+    "institution_health_system": "1"
+   },
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_devout",
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "spu - south peru.txt": {
+  "SPU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_state_religion",
+    "law_oligarchy",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_legacy_slavery",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }",
+    "set_variable = pbc_member"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "srk - surakarta.txt": {
+  "SRK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "srr - serer.txt": {
+  "SRR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ssu - susu.txt": {
+  "SSU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "stg - sintang.txt": {
+  "STG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "sul - sulu.txt": {
+  "SUL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "taxed_goods": [
+    "tobacco"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "sur - surguja.txt": {
+  "SUR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "svn - svaneti.txt": {
+  "SVN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "swe - sweden.txt": {
+  "SWE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "technologies": [
+    "dialectics"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "taxed_goods": [
+    "liquor"
+   ],
+   "other": [
+    "set_export_tariff_level = { goods = g:iron level = no_tariffs_or_subventions }",
+    "active_law:lawgroup_education_system ?= { add_amendment = { type = amendment_prussian_education sponsor = PREV.ig:ig_armed_forces } }"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_no_workers_rights",
+    "law_local_police",
+    "law_professional_navy",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_religious_schools",
+    "law_right_of_assembly"
+   ],
+   "institutions": {
+    "institution_schools": "3"
+   },
+   "ruling_interest_groups": [
+    "ig_devout",
+    "ig_landowners"
+   ]
+  }
+ },
+ "swi - switzerland.txt": {
+  "SWI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "technologies": [
+    "dialectics"
+   ],
+   "laws": [
+    "law_parliamentary_republic",
+    "law_freedom_of_conscience",
+    "law_census_voting",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_migration_controls",
+    "law_right_of_assembly",
+    "law_per_capita_based_taxation",
+    "law_religious_schools",
+    "law_national_militia",
+    "law_peasant_proprietorship"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "set_variable = free_elections_var",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_tradition_of_free_elections sponsor = PREV.ig:ig_rural_folk } }"
+   ],
+   "institutions": {
+    "institution_schools": "3"
+   },
+   "ruling_interest_groups": [
+    "ig_rural_folk"
+   ]
+  }
+ },
+ "swz - swaziland.txt": {
+  "SWZ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ],
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "tas - tasmania.txt": {
+  "TAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_autocracy",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_censorship",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_frontier_colonization",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "tbi - tibesti.txt": {
+  "TBI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_5",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "tek - tekna.txt": {
+  "TEK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "tex - texas.txt": {
+  "TEX": {
+   "other": [
+    "set_next_election_date = 1836.9.5",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "add_modifier = { name = modifier_texas_war_of_independence months = 6 }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_census_voting",
+    "law_no_schools",
+    "law_total_separation",
+    "law_slave_trade",
+    "law_racial_segregation",
+    "law_national_militia",
+    "law_mercantilism",
+    "law_right_of_assembly",
+    "law_per_capita_based_taxation"
+   ],
+   "journal_entries": [
+    "je_texas_tex"
+   ]
+  }
+ },
+ "tgi - tungi.txt": {
+  "TGI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "tgr - tigray.txt": {
+  "TGR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "laws": [
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade",
+    "law_mercantilism",
+    "law_right_of_assembly",
+    "law_subjecthood"
+   ]
+  }
+ },
+ "thl - tehuelche.txt": {
+  "THL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_10",
+    "effect_starting_politics_traditional"
+   ]
+  }
+ },
+ "tib - tibet.txt": {
+  "TIB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "technologies": [
+    "sericulture"
+   ],
+   "laws": [
+    "law_theocracy",
+    "law_autocracy",
+    "law_state_religion",
+    "law_serfdom",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_isolationism",
+    "law_land_based_taxation"
+   ],
+   "ruling_interest_groups": [
+    "ig_devout"
+   ]
+  }
+ },
+ "tid - tidore.txt": {
+  "TID": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "tip - tipperah.txt": {
+  "TIP": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ],
+   "laws": [
+    "law_elder_council",
+    "law_national_supremacy",
+    "law_traditionalism",
+    "law_peasant_levies"
+   ]
+  }
+ },
+ "tke - teke.txt": {
+  "TKE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_8",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "tki - tarki.txt": {
+  "TKI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_serfdom"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "tmn - temne.txt": {
+  "TMN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "tng - tonga.txt": {
+  "TNG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ]
+  }
+ },
+ "tps - toposa.txt": {
+  "TPS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "tra - travancore.txt": {
+  "TRA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_princely_state"
+   ]
+  }
+ },
+ "tri - tripoli.txt": {
+  "TRI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "trk - turkana.txt": {
+  "TRK": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "trm - turkmenia.txt": {
+  "TRM": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "trn - transvaal.txt": {
+  "TRN": {
+   "other": [
+    "set_next_election_date = 1839.10.12",
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_national_supremacy",
+    "law_elected_bureaucrats",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_land_based_taxation",
+    "law_homesteading",
+    "law_national_militia",
+    "law_legacy_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_rural_folk"
+   ],
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "trs - transylvania.txt": {
+  "TRS": {
+   "other": [
+    "remove_primary_culture = cu:romanian",
+    "set_capital = STATE_NORTHERN_TRANSYLVANIA"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "tax_level": "medium",
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_crownland_diets",
+    "law_manorialism",
+    "law_subjecthood",
+    "law_mercantilism",
+    "law_traditionalism",
+    "law_local_police",
+    "law_no_schools",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_guild_system"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "trz - trarza.txt": {
+  "TRZ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_4",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "tsw - botswana.txt": {
+  "TSW": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "tua - tuat.txt": {
+  "TUA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_8",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "tug - touggourt.txt": {
+  "TUG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ],
+   "journal_entries": [
+    "je_reconquest_of_algeria"
+   ],
+   "other": [
+    "set_variable = algeria_touggourt_var"
+   ]
+  }
+ },
+ "tun - tunis.txt": {
+  "TUN": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade"
+   ]
+  }
+ },
+ "tur - ottoman empire.txt": {
+  "TUR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "technologies": [
+    "academia",
+    "law_enforcement",
+    "mandatory_service",
+    "urban_planning",
+    "line_infantry"
+   ],
+   "tax_level": "medium",
+   "other": [
+    "set_import_tariff_level = { goods = g:small_arms level = no_tariffs_or_subventions }",
+    "set_import_tariff_level = { goods = g:coffee level = low_subventions }",
+    "trigger_event = { id = sick_man.1 }",
+    "add_modifier = { name = sick_man_of_europe months = -1 }",
+    "add_modifier = { name = outmoded_bureaucracy months = -1 }",
+    "create_diplomatic_pact = { country = c:MON type = embargo }"
+   ],
+   "taxed_goods": [
+    "tobacco",
+    "wine",
+    "liquor"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_autocracy",
+    "law_millet_system",
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_censorship",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "tus - tuscany.txt": {
+  "TUS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "technologies": [
+    "banking",
+    "empiricism"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_reactionary"
+   ],
+   "laws": [
+    "law_religious_schools"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }"
+   ],
+   "ruling_interest_groups": [
+    "ig_intelligentsia"
+   ]
+  }
+ },
+ "ubd - baltic.txt": {
+  "UBD": {
+   "other": [
+    "remove_primary_culture = cu:lithuanian",
+    "remove_primary_culture = cu:latvian",
+    "remove_primary_culture = cu:estonian",
+    "add_primary_culture = cu:east_german",
+    "add_primary_culture = cu:russian",
+    "active_law:lawgroup_education_system ?= { add_amendment = { type = amendment_prussian_education sponsor = PREV.ig:ig_armed_forces } }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_evangelical_church }",
+    "every_scope_character = { limit = { NOT = { is_historical = yes } } retire_character = yes }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_landed_voting",
+    "law_land_based_taxation",
+    "law_national_supremacy",
+    "law_tenant_farmers",
+    "law_religious_schools",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_freedom_of_conscience"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners",
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "uca - central america.txt": {
+  "UCA": {
+   "other": [
+    "set_next_election_date = 1837.4.9",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ],
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_census_voting",
+    "law_cultural_exclusion",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_right_of_assembly",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police",
+    "law_freedom_of_conscience"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ],
+   "journal_entries": [
+    "central_america_falls_apart"
+   ]
+  }
+ },
+ "ult - ulta.txt": {
+  "ULT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "unt - united tribes.txt": {
+  "UNT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "laws": [
+    "law_monarchy",
+    "law_oligarchy",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_hereditary_bureaucrats",
+    "law_right_of_assembly",
+    "law_national_supremacy",
+    "law_mercantilism",
+    "law_land_based_taxation",
+    "law_homesteading"
+   ]
+  }
+ },
+ "uru - uruguay.txt": {
+  "URU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_wealth_voting",
+    "law_legacy_slavery",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_right_of_assembly",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ],
+   "other": [
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ]
+  }
+ },
+ "usa - usa.txt": {
+  "USA": {
+   "other": [
+    "set_next_election_date = 1836.12.7",
+    "set_market_capital = STATE_NEW_YORK",
+    "set_export_tariff_level = { goods = g:fabric level = no_tariffs_or_subventions }",
+    "set_import_tariff_level = { goods = g:sulfur level = no_tariffs_or_subventions }",
+    "set_variable = monroe_doctrine",
+    "active_law:lawgroup_governance_principles ?= { add_amendment = { type = amendment_american_second_amendment sponsor = PREV.ig:ig_rural_folk } }",
+    "active_law:lawgroup_slavery ?= { add_amendment = { type = amendment_american_fugitive_slaves_act sponsor = PREV.ig:ig_landowners } }",
+    "add_modifier = usa_capital_intact",
+    "add_modifier = { name = missouri_compromise years = 50 is_decaying = yes }",
+    "add_company = company_type:company_william_cramp",
+    "company:company_william_cramp = { set_company_establishment_date = 1830.1.1 set_company_state_region = s:STATE_PENNSYLVANIA }",
+    "set_variable = free_elections_var",
+    "active_law:lawgroup_distribution_of_power ?= { add_amendment = { type = amendment_tradition_of_free_elections sponsor = PREV.ig:ig_rural_folk } }"
+   ],
+   "tax_level": "low",
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_1_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_liberal"
+   ],
+   "laws": [
+    "law_public_schools",
+    "law_legacy_slavery",
+    "law_racial_segregation",
+    "law_homesteading",
+    "law_protectionism",
+    "law_interventionism",
+    "law_frontier_colonization",
+    "law_right_of_assembly",
+    "law_no_workers_rights",
+    "law_per_capita_based_taxation",
+    "law_national_militia",
+    "law_local_police",
+    "law_no_womens_rights"
+   ],
+   "institutions": {
+    "institution_colonial_affairs": "2",
+    "institution_schools": "2",
+    "institution_police": "2"
+   },
+   "ruling_interest_groups": [
+    "ig_rural_folk"
+   ],
+   "journal_entries": [
+    "je_texas_usa",
+    "je_acw_countdown",
+    "je_seminole_wars"
+   ]
+  }
+ },
+ "ute - ute.txt": {
+  "UTE": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_12"
+   ]
+  }
+ },
+ "uzh - uly zhuz.txt": {
+  "UZH": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "vnd - venda.txt": {
+  "VND": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_4",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "vnt - vanuatu.txt": {
+  "VNT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ]
+  }
+ },
+ "vnz - venezuela.txt": {
+  "VNZ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative",
+    "initialise_caciquismo_effect"
+   ],
+   "technologies": [
+    "empiricism"
+   ],
+   "laws": [
+    "law_presidential_republic",
+    "law_oligarchy",
+    "law_legacy_slavery",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_per_capita_based_taxation",
+    "law_no_schools",
+    "law_no_police"
+   ],
+   "other": [
+    "set_import_tariff_level = { goods = g:artillery level = high_subventions }",
+    "set_import_tariff_level = { goods = g:small_arms level = high_subventions }",
+    "ig:ig_devout ?= { set_interest_group_name = ig_catholic_church }"
+   ],
+   "ruling_interest_groups": [
+    "ig_intelligentsia"
+   ]
+  }
+ },
+ "wad - wadai.txt": {
+  "WAD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "wal - wallachia.txt": {
+  "WAL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_3_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_organic_regulation",
+    "law_legacy_slavery",
+    "law_manorialism",
+    "law_migration_controls",
+    "law_elected_bureaucrats"
+   ],
+   "technologies": [
+    "sericulture"
+   ]
+  }
+ },
+ "was - western australia.txt": {
+  "WAS": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "laws": [
+    "law_colonial_administration",
+    "law_autocracy",
+    "law_religious_schools",
+    "law_freedom_of_conscience",
+    "law_women_own_property",
+    "law_per_capita_based_taxation",
+    "law_appointed_bureaucrats",
+    "law_racial_segregation",
+    "law_mercantilism",
+    "law_interventionism",
+    "law_censorship",
+    "law_frontier_colonization",
+    "law_homesteading",
+    "law_anti_strike_laws"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ]
+  }
+ },
+ "wbl - waterboersland.txt": {
+  "WBL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_national_supremacy",
+    "law_slavery_banned",
+    "law_homesteading",
+    "law_state_religion"
+   ],
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "wdj - wiradjuri.txt": {
+  "WDJ": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "wei - saxe-weimar.txt": {
+  "WEI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "wkb - waka-gabi.txt": {
+  "WKB": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "wld - waldeck.txt": {
+  "WLD": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "wlg - welega.txt": {
+  "WLG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "wlt - wolaita.txt": {
+  "WLT": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "wrr - worrorran.txt": {
+  "WRR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "wsg - warsangali.txt": {
+  "WSG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "wti - wati.txt": {
+  "WTI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "wtu - witu.txt": {
+  "WTU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_5_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery",
+    "law_mercantilism"
+   ]
+  }
+ },
+ "wur - wurttemberg.txt": {
+  "WUR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_2_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_conservative"
+   ],
+   "laws": [
+    "law_freedom_of_conscience",
+    "law_autocracy"
+   ],
+   "institutions": {
+    "institution_schools": "2"
+   }
+  }
+ },
+ "xho - xhosa.txt": {
+  "XHO": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_4",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "ygu - yolngu.txt": {
+  "YGU": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "yka - yaka.txt": {
+  "YKA": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_native_conscription_5",
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "yog - yogyakarta.txt": {
+  "YOG": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ],
+   "ruling_interest_groups": [
+    "ig_landowners"
+   ]
+  }
+ },
+ "yur - yura.txt": {
+  "YUR": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_10"
+   ]
+  }
+ },
+ "zai - zaidi.txt": {
+  "ZAI": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_4_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_slave_trade",
+    "law_theocracy"
+   ]
+  }
+ },
+ "znd - zande.txt": {
+  "ZND": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_7_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_3"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ },
+ "zul - zulu.txt": {
+  "ZUL": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "technologies": [
+    "international_trade"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional"
+   ],
+   "laws": [
+    "law_subjecthood",
+    "law_traditionalism",
+    "law_land_based_taxation",
+    "law_slave_trade"
+   ],
+   "ruling_interest_groups": [
+    "ig_armed_forces"
+   ],
+   "journal_entries": [
+    "je_struggle_for_the_highveld"
+   ]
+  }
+ },
+ "zwy - zuwayya.txt": {
+  "ZWY": {
+   "tech_tier_effects": [
+    "effect_starting_technology_tier_6_tech"
+   ],
+   "scripted_effects": [
+    "effect_starting_politics_traditional",
+    "effect_native_conscription_5"
+   ],
+   "laws": [
+    "law_debt_slavery"
+   ]
+  }
+ }
+}

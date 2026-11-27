@@ -512,6 +512,23 @@ class IdleTest(BackendCase):
         self.assertEqual(self.call("idle_ms")["idle_ms"], 0)
 
 
+class CpuTest(BackendCase):
+    """#1963: `cpu` reads the game's CPU seconds with the helper's tick, for a process proved ours, and sends nothing."""
+
+    def test_the_game_s_cpu_time_and_the_tick(self):
+        self.backend.cpu[fakes.GAME_PID] = 41.25
+        reply = self.call("cpu", pid=fakes.GAME_PID)
+        self.assertEqual((reply["ok"], reply["cpu_s"], reply["at_ms"]), (True, 41.25, self.backend.now))
+        self.assertEqual((self.backend.sent, self.backend.mouse), ([], []))
+
+    def test_a_process_not_ours_or_reused_is_refused(self):
+        self.assertEqual(self.call("cpu", pid=55)["error"], "not_ours")             # never started or adopted
+        self.backend.creation[fakes.GAME_PID] = fakes.REUSED_CREATED                 # the game died; its id reused
+        self.assertEqual(self.call("cpu", pid=fakes.GAME_PID)["error"], "not_ours")
+        del self.backend.creation[fakes.GAME_PID]                                    # gone
+        self.assertEqual(self.call("cpu", pid=fakes.GAME_PID)["error"], "not_ours")
+
+
 class TcpTest(BackendCase):
     def test_tcp_only_to_loopback(self):
         self.assertTrue(self.call("tcp_open", port=6111)["ok"]); self.assertEqual(self.backend.connected, ("127.0.0.1", 6111))
@@ -1124,6 +1141,11 @@ class ProcessHelperTest(unittest.TestCase):
 
     def sent(self):
         return [json.loads(line) for line in self.popen.proc.stdin.lines]
+
+    def test_cpu_is_one_json_line_and_reads_back_as_a_reading(self):
+        ph = self.make(reply_line(cpu_s=12.5, at_ms=3_000_000))
+        self.assertEqual(ph.cpu(7), helper.CpuReading(12.5, 3_000_000))
+        self.assertEqual(self.sent(), [{"id": 1, "op": "cpu", "pid": 7}])
 
     def test_wheel_and_drag_are_one_json_line_each(self):
         ph = self.make(reply_line(notches_done=3), reply_line(moves=12))

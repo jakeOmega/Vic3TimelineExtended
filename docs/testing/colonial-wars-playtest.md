@@ -36,7 +36,9 @@ has happened (a declaration fought, talks concluded), so OK cannot be a false pa
 
 **2026-11-12: `decol_iw_rebels_armed` read OK** (a 1.15.1 game, launch of 21:13, 1932.4.14): the rebels had an army two
 months into their war, so the seeding fallback isn't needed. The line's `rebels=` printed blank, as a saved scope
-does in `debug_log`; the branch that fired is the answer.
+does in `debug_log`; the branch that fired is the answer. Since #1729 (2026-11-27) this line and both
+`decol_iw_talks_peace` lines print the rebels from inside their own scope (`THIS`); the metropole in the latter
+is still a saved scope's name and may print blank.
 
 **Readings.** 2026-10-24, the owner's game on `dd43038d`: `decol_iw_war_started` logged **BROKEN** on July 28, 1969, and no OK line in any generation. No secession began in the month before, so it was a territory's Fight (record kind 1), not a secession's record, and an AI empire's: the player (Byzantium) chose no Fight, and none of the 38 decolonized countries in the game's 1978 save names Byzantium as its former overlord. The play created the day after the rebels formed never became a war in 30 days, and nothing in `debug.log` or `error.log` names `create_diplomatic_play`, `dp_te_colonial_war` or `te_colonial_reconquest`. The blank `metropole=` and `rebels=` are the known blank of a saved scope's name in `debug_log` (`scripting_best_practices.md`), not a finding. The fallback was built on 2026-10-25: the rebels open the play against us, at escalation 80, with our reconquest as our primary demand, and the check is re-armed (`_v2`) with a `reason=` for each way it can fail.
 

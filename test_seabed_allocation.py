@@ -1548,9 +1548,22 @@ class ReadoutTest(unittest.TestCase):
         self.assertGreaterEqual(exact - lower, -0.01, (cid, b))
 
     @staticmethod
-    def _assumption_holds(w, b, cid):
-        """need_weight's assumption at its own answer: no other active
-        country falls to its holdings or floor."""
+    def _frozen_party_eligible(w, b):
+        """need_weight's first assumption fails: under the Regulated regime a
+        frozen party (ourselves included) is eligible, so its holdings come
+        off the halves by shares our weight moves. Unscreened until #1840:
+        every understatement in 1,500 worlds was such a basin."""
+        f = w.final[b]
+        return w.regime == m.REGULATED and any(
+            w.countries[j].eligible for j in f["part"] if j not in f["active"])
+
+    @classmethod
+    def _assumption_holds(cls, w, b, cid):
+        """need_weight's assumptions at its own answer: no frozen party is
+        eligible under the Regulated regime, and no other active country
+        falls to its holdings or floor."""
+        if cls._frozen_party_eligible(w, b):
+            return False
         f = w.final[b]
         x = m.need_weight(w, b, cid)
         me = w.countries[cid]
@@ -1573,32 +1586,74 @@ class ReadoutTest(unittest.TestCase):
                 return False
         return True
 
+    # Seed 78 alone passed while 7 of seeds 70-99 failed (#1840): 80, 87, 91
+    # and 94 on the unscreened frozen eligible party, 71, 76 and 95 on a
+    # country without the technology read against its capped entitlement.
+    # Over seeds 60-109 with both fixed: no failure; the frozen eligible party
+    # screened 12.6-34.1% of the cases, a rival at its holdings at most 7.9%,
+    # and the closed form understated in at most 0.28%.
+    READOUT_SEEDS = (71, 76, 78, 80, 87, 91, 94, 95)
+
     def test_closed_form_bounds_exact_after_years(self):
         """Holdings, floors and the reserved half, five years in: the closed
-        form never understates wherever its assumption holds, and it fails
-        rarely. Under the Regulated regime the halves can make it overstate by
-        more than one licence, so the lower bound is the Open regime's."""
-        rng = random.Random(78)
-        checked = skipped = under = 0
-        for i in range(30):
-            w = m.random_world(rng, regime=(m.OPEN, m.REGULATED)[i % 2])
-            run(w, rng, 5, annex=0, split=0)
-            for cid, c in w.countries.items():
-                for b in m.BASINS:
-                    if c.weight[b] <= 0:
-                        continue
-                    if self._assumption_holds(w, b, cid):
-                        checked += 1
-                        self._check_bound(w, b, cid, lower_bound=w.regime == m.OPEN)
-                        continue
-                    # a rival pushed to its holdings or floor: the readout may understate
-                    skipped += 1
-                    exact, closed = m.exact_need_weight(w, b, cid), m.need_weight(w, b, cid)
-                    if closed is not None and (exact is None or closed < exact - 0.01):
-                        under += 1
-        self.assertGreater(checked, 500)
-        self.assertLess(skipped, 0.15 * (checked + skipped))
-        self.assertLess(under, 0.01 * (checked + skipped))
+        form never understates wherever its assumptions hold, and it
+        understates rarely where they fail. Under the Regulated regime the
+        halves can make it overstate by more than one licence, so the lower
+        bound is the Open regime's."""
+        for seed in self.READOUT_SEEDS:
+            with self.subTest(seed=seed):
+                rng = random.Random(seed)
+                checked = frozen = rival = under = 0
+                for i in range(30):
+                    w = m.random_world(rng, regime=(m.OPEN, m.REGULATED)[i % 2])
+                    run(w, rng, 5, annex=0, split=0)
+                    for cid, c in w.countries.items():
+                        for b in m.BASINS:
+                            if c.weight[b] <= 0:
+                                continue
+                            if self._assumption_holds(w, b, cid):
+                                checked += 1
+                                self._check_bound(w, b, cid, lower_bound=w.regime == m.OPEN)
+                                continue
+                            # a frozen eligible party, or a rival pushed to its holdings
+                            # or floor: the readout may understate
+                            if self._frozen_party_eligible(w, b):
+                                frozen += 1
+                            else:
+                                rival += 1
+                            exact, closed = m.exact_need_weight(w, b, cid), m.need_weight(w, b, cid)
+                            if closed is not None and (exact is None or closed < exact - 0.01):
+                                under += 1
+                total = checked + frozen + rival
+                self.assertGreater(checked, 500)
+                self.assertLess(rival, 0.15 * total)
+                self.assertLess(frozen, 0.45 * total)
+                self.assertLess(under, 0.01 * total)
+
+    def test_a_country_without_the_technology_counts_its_waiting_share(self):
+        """The readout counts licences of what the sharing gave, waiting share
+        included: the script's te_seabed_readout runs before the split that
+        caps a country without the technology at its holdings. The model read
+        the capped entitlement until #1840, so such a country needed nothing
+        for "one more", and alone in a basin it read "full" while the exact
+        search found the bisection's floor (1/128)."""
+        countries = {0: m.Country(0, policy=m.SPONSOR, navy=10), 1: m.Country(1, policy=m.SPONSOR, navy=10, tech=False)}
+        w = m.World(countries, {0: m.State(0, "pacific", 0), 1: m.State(1, "pacific", 1)})
+        m.yearly_pass(w)
+        c = w.countries[1]
+        self.assertEqual(c.ent["pacific"], 0)
+        self.assertGreater(c.wait["pacific"], 0)
+        self.assertEqual(m.sharing_ent(c, "pacific"), c.wait["pacific"])
+        x = m.need_weight(w, "pacific", 1)
+        self.assertIsNotNone(x)
+        self.assertGreater(x, 0)
+        self._check_bound(w, "pacific", 1)
+        # Alone in the basin it already has every licence left: no weight wins
+        # another, and both forms say so.
+        alone = m.World({1: m.Country(1, policy=m.SPONSOR, navy=10, tech=False)}, {1: m.State(1, "pacific", 1)})
+        m.yearly_pass(alone)
+        self.assertIsNone(m.need_weight(alone, "pacific", 1))
+        self.assertIsNone(m.exact_need_weight(alone, "pacific", 1))
 
     def test_full_basin_reads_none(self):
         # the whole Arctic held by country 0: nothing is left to share

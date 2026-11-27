@@ -922,6 +922,24 @@ class PanelWidthTest(unittest.TestCase):
                 self.assertIsNone(host.prop("minimumsize"), "content-sized, so the sections set its width")
 
 
+    def test_the_reference_composer_flows(self):
+        """#2040: in the tab the chart sits under the status composer, whose board can gain a row, so an
+        anchored chart would keep its first-layout place and draw over the board's foot. It is the history
+        section's 520 header in a 520 column in each of its three hosts (the tab frame's content, the wide
+        layout's third column, the entry's root), so it flows with no anchor."""
+        gui = _read(WIDGET)
+        tree = gui_tree.parse(gui)
+        ref = next(n for n in tree.walk() if n.kind == "type" and n.name == "te_ch_reference_sections")
+        self.assertIsNone(ref.prop("parentanchor"))
+        self.assertEqual([w.kind for w in gui_tree.widgets(ref)], ["te_ch_sec_history"])
+        sec = next(n for n in tree.walk() if n.kind == "type" and n.name == "te_ch_sec_history")
+        self.assertEqual(gui_tree.widgets(sec)[0].kind, "ch_section_header")
+        self.assertIn("size = { 520 38 }", _type_body(gui, "ch_section_header"))
+        hosts = [(n.parent.kind, n.parent.name) for n in tree.walk() if n.kind == "te_ch_reference_sections"]
+        self.assertEqual(sorted(hosts), [("block", "te_ch_tab_layout"), ("blockoverride", "column_3"),
+                                         ("te_je_country", "")])
+
+
 class TypeSizeTest(unittest.TestCase):
     """CH-15: the 17 / 20 / 16 ladder through the panel's own templates (the
     owner lifted the panel's grandfathering for this rework, 2026-10-27)."""

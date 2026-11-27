@@ -35,6 +35,14 @@ class Window:
 
 
 @dataclass(frozen=True)
+class CpuReading:
+    """The CPU time a process has used in all (`cpu_s`, seconds, every thread) at the helper's tick `at_ms`
+    (milliseconds, Windows' own monotonic clock, never WSL's): two readings make a rate in cores."""
+    cpu_s: float
+    at_ms: int
+
+
+@dataclass(frozen=True)
 class Presence:
     """Where the cursor and the foreground window were at one reading, and where the helper last put the cursor.
 
@@ -65,6 +73,9 @@ class Helper(Protocol):
     def move(self, pid: int, x: int, y: int) -> None: ...
     # move: the cursor left on (x, y) of the client area, nothing pressed (a hover); aimed and refused as click is.
     def presence(self) -> Presence: ...
+    def cpu(self, pid: int) -> CpuReading: ...
+    # cpu: read only; refused not_ours unless this helper launched or adopted the process and it still has that
+    # creation time.
     def screenshot(self, pid: int, path: Path, max_width: int = 1600,
                    box: tuple[int, int, int, int] | None = None) -> Path: ...
     # screenshot: `box` (left, top, width, height in client pixels) shoots that region alone; `max_width` still caps it.
@@ -168,6 +179,10 @@ class ProcessHelper:
 
     def idle_ms(self) -> int:
         return int(self._call("idle_ms")["idle_ms"])
+
+    def cpu(self, pid: int) -> CpuReading:
+        r = self._call("cpu", pid=pid)
+        return CpuReading(float(r["cpu_s"]), int(r["at_ms"]))
 
     def focus(self, pid: int) -> bool:
         return bool(self._call("focus", pid=pid)["foreground"])

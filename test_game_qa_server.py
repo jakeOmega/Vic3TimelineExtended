@@ -61,13 +61,18 @@ class FakeSession:
         if verb in self.raises:
             raise self.raises[verb]
 
+    tick_settle = {"rounds": [{"settled_after_s": 4.0, "baseline_cores": 3.5}], "settled_after_s": 4.0}
+
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
-              switch_rules=None, game_args=None, add_mods=None, fixture_date=None, unresponsive_s=None):
+              switch_rules=None, game_args=None, add_mods=None, fixture_date=None, unresponsive_s=None, gui_from=None,
+              tick_settle_s=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
+        self.gui_from = gui_from
         self.switch_rules = switch_rules
         self.game_args, self.add_mods = game_args, add_mods
         self.fixture_date = fixture_date
         self.unresponsive_s = unresponsive_s
+        self.tick_settle_s = tick_settle_s
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
 
     def make_fixture(self, permission, until, playset="mod_only", owner_confirmed_busy=False, max_hours=None):
@@ -143,8 +148,9 @@ class FakeSession:
                 % SNAP, "scale": 1}
 
     def gui_show(self, type_name, repo, context="player", width=520, variables=None, outlines=False, scale=None,
-                 setup=None, keep=False):
+                 setup=None, keep=False, sync_only=None, force_sync=False):
         self._call("gui_show", type_name, repo, context, width, variables, outlines, scale, setup, keep)
+        self.sync_options = (sync_only, force_sync)
         return {"type": type_name, "crop": "/backups/runs/%s/gui_01_%s.png" % (SNAP, type_name), "log": []}
 
     def gui_hide(self):
@@ -164,6 +170,10 @@ class FakeSession:
     def profile_dump(self, label=None):
         self._call("profile_dump", label)
         return {"label": label or "1931_08_02", "date": [1931, 8, 2]}
+
+    def profile_pops(self, label=None):
+        self._call("profile_pops", label)
+        return {"label": label or "1931_08_02", "file": "pop_stats_1931_08_02.csv", "folder": "logs/abc"}
 
     def status(self):
         self._call("status")
@@ -402,6 +412,17 @@ class GuiVerbsTest(ServerTestCase):
                      "--outlines", "--scale", "1.25", "--setup", "fill", "--keep")
         self.assertEqual(fake.calls[-1], ("gui_show", "te_x", top, "je:je_x", 600, {"a": "b", "c": "d"}, True, 1.25,
                                           "fill", True))
+        self.assertEqual(fake.sync_options, (None, False))
+        self.run_cli("gui-show", "te_x", "--sync-only", "gui/a.gui", "--sync-only", "gui/b.gui", "--force-sync")
+        self.assertEqual(fake.sync_options, (["gui/a.gui", "gui/b.gui"], True))
+
+    def test_profile_pops_sends_its_label(self):
+        fake, _thread = self.serve()
+        reply, code = self.run_cli("profile", "pops", "before")
+        self.assertEqual((code, reply["file"]), (0, "pop_stats_1931_08_02.csv"))
+        self.assertEqual(fake.calls[-1], ("profile_pops", "before"))
+        self.run_cli("profile", "pops")
+        self.assertEqual(fake.calls[-1], ("profile_pops", None))
 
     def test_gui_show_waits_as_long_as_a_verb_and_the_reload(self):
         seen = {}
@@ -411,7 +432,7 @@ class GuiVerbsTest(ServerTestCase):
             return {}, 0
         with mock.patch.object(client, "call", call):
             in_process_cli(["gui-show", "te_x"])
-        self.assertGreaterEqual(seen["timeout"], client.VERB_TIMEOUT_S + session.GUI_RELOAD_WAIT_S)
+        self.assertGreaterEqual(seen["timeout"], client.VERB_TIMEOUT_S + session.GUI_RELOAD_WAIT_MAX_S)
 
     def test_a_var_without_an_equals_sign_is_refused_before_anything_is_sent(self):
         fake, _thread = self.serve()
@@ -443,7 +464,7 @@ class VerbTest(ServerTestCase):
         self.assertEqual(self.run_cli("events"), ({"pending": [{"numeric_id": 10, "event_id": "x.1", "options": 2}]}, 0))
         self.assertEqual(self.run_cli("run-setup", "border"), ({"name": "border", "lines": ["first line", "second line"]}, 0))
         self.assertEqual(self.run_cli("tag", "FRA"), ({"tag": "FRA"}, 0))
-        self.assertEqual(self.run_cli("advance", "30"), ({"reached": [1836, 2, 1]}, 0))
+        self.assertEqual(self.run_cli("advance", "30"), ({"reached": [1836, 2, 1], "tick_settle": FakeSession.tick_settle}, 0))
         self.assertEqual(fake.calls[-1], ("advance", 30))
         self.assertEqual(self.run_cli("enter-game")[0]["after"], [1836, 1, 15])
         self.assertEqual(fake.calls[-1], ("enter_game", "country"))
@@ -1138,6 +1159,35 @@ class FixtureVerbTest(ServerTestCase):
                 self.assertEqual(fake.unresponsive_s, expected)
                 self.assertEqual(self.run_cli("stop")[1], 0)
 
+    def test_start_passes_the_gui_checkout_on_as_an_absolute_path(self):
+        for argv, expected in (((), None), (("--gui-from", "."), os.path.abspath("."))):
+            with self.subTest(argv=argv):
+                fake = FakeSession()
+                spawn = ThreadSpawner(lambda: fake)
+                with mock.patch.object(client, "spawn_server", spawn):
+                    reply, code = self.run_cli("start", "--permission", PERMISSION, *argv)
+                self.threads.extend(h.thread for h in spawn.handles)
+                self.assertEqual(code, 0, reply)
+                self.assertEqual(fake.gui_from, expected)
+                self.assertEqual(self.run_cli("stop")[1], 0)
+
+    def test_start_passes_the_tick_settle_limit_on_and_leaves_it_out_by_default(self):
+        for argv, expected in (((), None), (("--tick-settle-s", "0"), 0.0), (("--tick-settle-s", "900"), 900.0)):
+            with self.subTest(argv=argv):
+                fake = FakeSession()
+                spawn = ThreadSpawner(lambda: fake)
+                with mock.patch.object(client, "spawn_server", spawn):
+                    reply, code = self.run_cli("start", "--permission", PERMISSION, *argv)
+                self.threads.extend(h.thread for h in spawn.handles)
+                self.assertEqual(code, 0, reply)
+                self.assertEqual(fake.tick_settle_s, expected)
+                self.assertEqual(self.run_cli("stop")[1], 0)
+
+    def test_the_client_waits_long_enough_for_the_longest_settles(self):
+        self.assertGreaterEqual(client.ENTER_TIMEOUT_S, 1500.0 + session.MAX_TICK_SETTLE_S)
+        self.assertGreaterEqual(client.ADVANCE_TIMEOUT_S,
+                                client.ENTER_TIMEOUT_S + client.LONG_TIMEOUT_S + 2 * session.MAX_TICK_SETTLE_S)
+
 
 # A server in a child process, so that it can be killed or signalled. Its double's `start` builds the overlay and
 # runs `snapshot` and `launch` for real (in-process, `gate` patched: the "game" is a record, nothing starts).
@@ -1167,6 +1217,8 @@ def run_cli(argv):
 
 
 class Double:
+    tick_settle = {"off": True}
+
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False):
         overlay.build(user / "mod" / overlay.OVERLAY_NAME, {}, "1.15.0")
         snap, code = run_cli(["snapshot", "--save", save])
@@ -1346,7 +1398,7 @@ class SignalTest(ChildServerTestCase):
         self.wait_for(lambda: "advance began" in self.marked(), "the advance under way")
         child.send_signal(signal.SIGTERM)
         talk.join(30)
-        self.assertEqual(answer["reply"], ({"reached": [1836, 2, 1]}, 0))       # answered, not cut short
+        self.assertEqual(answer["reply"], ({"reached": [1836, 2, 1], "tick_settle": {"off": True}}, 0))   # answered
         self.assertEqual(child.wait(30), 0, self.child_log())
         self.assertEqual(self.marked(), ["serving", "advance began", "advance done", "stop",
                                          "exited after signal %d" % signal.SIGTERM])
