@@ -333,6 +333,26 @@ class MissionContributorFlagsTest(unittest.TestCase):
             self.slot)
         self.assertEqual(calls, [(str(k), str(k + 1)) for k in range(self.POSITIONS)])
 
+    def test_the_players_are_walked_once_per_rebuild(self):
+        # #1719: a walk of every country for each flag cost about 1,000
+        # is_player tests a frame while un_events.4 stood open. The rebuild
+        # collects the players once; each flag write walks that list.
+        flag = _block(self.effects, "un_mission_mirror_flag")
+        self.assertNotIn("every_country", flag)
+        self.assertRegex(flag, r"every_in_global_list\s*=\s*\{\s*variable\s*=\s*un_msn_mirror_players\b")
+        self.assertIn("has_global_variable_list = un_msn_mirror_players", flag,
+                      "no list (no player): the write is skipped, not run over a missing list")
+        self.assertEqual(self.mirror.count("every_country"), 1, "one walk of every country per rebuild")
+        players = _sub_block(self.mirror, "every_country")
+        self.assertIn("is_player = yes", players)
+        self.assertIn("add_to_global_variable_list = { name = un_msn_mirror_players target = this }", players)
+        clear = self.mirror.index("clear_global_variable_list = un_msn_mirror_players")
+        self.assertLess(clear, self.mirror.index("every_country"), "cleared before it is rebuilt")
+        self.assertLess(self.mirror.index("every_country"), self.mirror.index("un_mission_mirror_slot_flags"),
+                        "built before the flags are written")
+        self.assertNotRegex(self.mirror[self.mirror.index("un_mission_mirror_slot_flags"):],
+                            r"clear_global_variable_list", "kept until the next rebuild, for the tooltip walk")
+
     def test_each_row_shows_its_slots_flags_in_order(self):
         rows = [_braced(self.widget, m.end() - 1) for m in re.finditer(
             r"^\t+un_chamber_mission_row\s*=\s*\{", self.widget, re.M)]
