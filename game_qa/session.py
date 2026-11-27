@@ -285,6 +285,22 @@ DRAIN_S = 0.5                           # before a read: a stop left over from a
 FOUND_LOGS_TRIES = 3                    # a dated run's snapshot manifest, read for the logs its game found at launch
 FOUND_LOGS_RETRY_S = 1.0
 PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far apart must agree, or the game runs
+# The tick settle (#1963): a pause key pressed inside a long tick does not stop the tick, and a console read sent
+# before it ends hung the game (the USA of 2024: "Random is blocked by thread", then no answer). A paused game
+# renders on several cores (3.3 to 4.0 live, 2026-11-22); inside a long tick it stops rendering and runs on about
+# 1.1. So before the first key of a round the game's CPU rate is read while it is paused (TICK_BASELINE_S), and
+# after the pause key nothing is typed until the rate is back to TICK_SETTLE_RATIO of that on TICK_SETTLE_SAMPLES
+# samples of TICK_SAMPLE_S in a row. The figures are the local patch's of 2026-11-22 (0.6, two in a row; the
+# wait took 7 s on an ordinary day and 124 s over the weekly one); this code has not yet been run live.
+TICK_BASELINE_S = 2.0
+TICK_SAMPLE_S = 1.0
+TICK_SETTLE_RATIO = 0.6
+TICK_SETTLE_SAMPLES = 2
+TICK_MIN_BASELINE = 0.5                 # cores: below this (a minimised game, say) a pause and a tick look alike
+TICK_SETTLE_S = 300.0                   # how long the settle may wait (`start --tick-settle-s`; 0 turns it off)
+MIN_TICK_SETTLE_S = 30.0
+MAX_TICK_SETTLE_S = 900.0               # a weekly tick ran 781 s under the script profiler (2026-11-22)
+PAUSE_RETRY_S = 5.0                     # the pause key refused not_foreground (a busy window): tried again this often
 WATCH_RESPAWNS = 3                      # a watch that failed while the game is proved alive is run again, this often
 
 _RETRIED = ("refused", "game_left_up")  # a stop that ended so is run again by the next stop()
@@ -477,6 +493,8 @@ class Session:
         self._gui_invalid: dict[str, str] = {}             # gui-show: "'X' is not a valid widget/type/property", by X
         self._gui_from: tuple[str, dict[str, bytes]] | None = None   # `start --gui-from`: the checkout and its files
         self._gui_from_reply: dict | None = None
+        self._tick_settle_s = TICK_SETTLE_S     # `start --tick-settle-s` (#1963): 0 turns the settle off
+        self._settles: list[dict] = []      # what each round's settle did, since the verb began (advance's reply)
         self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
         self._add_mods_playset = "mod_only"                # the playset they were checked for
         self._add_mods_digest: str | None = None           # fixture.add_mod_digest of them, at that check
@@ -493,7 +511,8 @@ class Session:
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
               switch_rules: Mapping[str, str] | None = None, game_args: Sequence[str] | None = None,
               add_mods: Sequence[str] | None = None, fixture_date: str | None = None,
-              unresponsive_s: float | None = None, capture: bool = False, gui_from: str | None = None) -> dict:
+              unresponsive_s: float | None = None, capture: bool = False, gui_from: str | None = None,
+              tick_settle_s: float | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
 
         `gui_from` (#1989) is a checkout whose branch's changed `.gui` files go into the overlay before the launch,
@@ -502,6 +521,10 @@ class Session:
         syncs nothing of them, so no large hot reload is needed. Read and checked before anything is done
         (`not_a_repo`, `gui_parse_error`, `bad_argument` for a file a capture copy also writes). The reply's
         `gui_from` names the files.
+
+        `tick_settle_s` (#1963) is how long a round's pause may wait for a long tick to end before anything is
+        typed (TICK_SETTLE_S by default, MIN_TICK_SETTLE_S to MAX_TICK_SETTLE_S); 0 turns the wait off, for a
+        machine where its threshold proves wrong. `start`'s reply gives it when it is not the default.
 
         `capture` (#2056) puts two copies of the game's own files into the overlay, made from the installed ones
         (`capture_gui.capture_files`): the console see-through with its edit line drawing nothing, and debug mode's
@@ -575,6 +598,7 @@ class Session:
         switch_rules = self._check_switches(switch_rules, save)
         self._game_args = _check_game_args(game_args)
         self._unresponsive_s = _check_unresponsive(unresponsive_s)
+        self._tick_settle_s = _check_tick_settle(tick_settle_s)
         self._add_mods = self._check_add_mods(add_mods, playset)
         date = self._check_fixture_date(fixture_date, save, playset)
         if capture is not False and capture is not True:
@@ -695,6 +719,8 @@ class Session:
             result["game_args"] = list(self._game_args)
         if self._unresponsive_s != UNRESPONSIVE_S:
             result["unresponsive_s"] = self._unresponsive_s
+        if self._tick_settle_s != TICK_SETTLE_S:
+            result["tick_settle_s"] = self._tick_settle_s
         if self._add_mods:
             result["add_mods"] = [asdict(mod) for mod in self._add_mods]
         if self._gui_from_reply is not None:
@@ -2061,9 +2087,23 @@ class Session:
             start = tuple(self.enter_game()["after"])
         else:
             start = None
+        self._settles = []
         with self._step("advance", days=days) as out:
             reached = self._advance(days, start, out)
         return reached
+
+    @property
+    def tick_settle(self) -> dict:
+        """What the tick settle did in the last advance (#1963), for its reply: `settled_after_s`, the longest
+        wait of its rounds, and `rounds`, one record a settle (`settled_after_s` and the paused rate it was read
+        against, or `skipped` and why); `{"off": True}` when `start --tick-settle-s 0` turned it off."""
+        if self._tick_settle_s == 0:
+            return {"off": True}
+        waits = [r["settled_after_s"] for r in self._settles if "settled_after_s" in r]
+        out: dict[str, Any] = {"rounds": list(self._settles)}
+        if waits:
+            out["settled_after_s"] = max(waits)
+        return out
 
     def shot(self) -> Path:
         self._require_game(types=False)
@@ -4106,20 +4146,25 @@ class Session:
         return min(round(width * fraction[0]), width - 1), min(round(height * fraction[1]), height - 1)
 
     def _run_for(self, seconds: float) -> tuple[int, int, int]:
-        """Close the console, unpause, wait, pause, reopen the console, and prove the pause: two date reads
-        PROOF_PAUSE_S apart must agree. If they do not, the pause key goes once more and the pause is proved again.
-        From the first key on, any failure is `left_running`, as is a date still moving after the second pause
-        key; the flag then refuses `enter_game` and `advance` until `stop`. Return the date the game paused at."""
+        """Close the console, read the paused game's CPU rate, unpause, wait, pause, wait for a long tick to end
+        (`_settle`), reopen the console, and prove the pause: two date reads PROOF_PAUSE_S apart must agree. If
+        they do not, the pause key goes once more, the settle waits again and the pause is proved again. From the
+        first key on, any failure is `left_running`, as is a date still moving after the second pause key and a
+        settle that timed out (`tick_unsettled`, which keeps its code); the flag then refuses `enter_game` and
+        `advance` until `stop`. Return the date the game paused at."""
         self._console.close()
+        baseline = self._tick_baseline()
         try:
             self._console.hotkey(SCAN_SPACE)
             self._sleep(seconds)
-            self._console.hotkey(SCAN_SPACE)
+            self._pause_key()
+            self._settle(baseline)
             self._console.ensure_open()
             when = self._paused_date()
             if when is None:                # the pause did not take: once more
                 self._console.close()
-                self._console.hotkey(SCAN_SPACE)
+                self._pause_key()
+                self._settle(baseline)
                 self._console.ensure_open()
                 when = self._paused_date()
             if when is None:
@@ -4128,12 +4173,91 @@ class Session:
             return when
         except BaseException as e:
             self._left_running = True
-            if not isinstance(e, Exception) or (isinstance(e, SessionError) and e.code == "left_running"):
+            if not isinstance(e, Exception) or (isinstance(e, SessionError)
+                                                and e.code in ("left_running", "tick_unsettled")):
                 raise
             extra = {"entered": e.entered} if isinstance(e, ConsoleError) else {}
             raise SessionError("left_running", "a round failed once its first pause key had been tried (%s): the "
                                "game may be running unpaused; enter_game and advance are refused until stop"
                                % _describe(e), cause=_code_of(e), **extra) from e
+
+    def _tick_baseline(self) -> float | None:
+        """The paused game's CPU rate in cores, read over TICK_BASELINE_S with the console closed (as it is after
+        the pause key), for `_settle` to compare with; None, and the round's record says why, when the settle is
+        off, a reading failed or the rate is too low to tell a tick by (TICK_MIN_BASELINE). It sends nothing, and
+        a failure here only skips the settle: it never refuses the round."""
+        if self._tick_settle_s == 0:
+            return None
+        try:
+            first = self._helper.cpu(self._proc.pid)
+            self._sleep(TICK_BASELINE_S)
+            second = self._helper.cpu(self._proc.pid)
+        except HelperError as e:
+            self._settles.append({"skipped": "the paused game's CPU time could not be read (helper: %s)" % e})
+            return None
+        rate = _cpu_rate(first, second)
+        if rate is None or rate < TICK_MIN_BASELINE:
+            self._settles.append({"skipped": "the paused game ran on %s cores, too few to tell a tick from a pause"
+                                  % ("no measurable" if rate is None else "%.2f" % rate)})
+            return None
+        return rate
+
+    def _settle(self, baseline: float | None) -> None:
+        """After the pause key: wait until the game's CPU rate is back to TICK_SETTLE_RATIO of `baseline` on
+        TICK_SETTLE_SAMPLES samples in a row, so that no console key or command goes into a tick still running
+        (#1963). Nothing is sent meanwhile. Past `start --tick-settle-s` it is refused `tick_unsettled`: the game
+        may still be inside a tick, so nothing more is typed (`_run_for` latches `left_running`). With no baseline
+        (`_tick_baseline`'s None) it returns at once."""
+        if baseline is None:
+            return
+        began = self._clock()
+        threshold = TICK_SETTLE_RATIO * baseline
+        rates: list[float | None] = []
+        prev = self._helper.cpu(self._proc.pid)
+        while True:
+            self._sleep(TICK_SAMPLE_S)
+            cur = self._helper.cpu(self._proc.pid)
+            rates.append(_cpu_rate(prev, cur))
+            prev = cur
+            waited = self._clock() - began
+            recent = rates[-TICK_SETTLE_SAMPLES:]
+            if len(recent) == TICK_SETTLE_SAMPLES and all(r is not None and r >= threshold for r in recent):
+                self._settles.append({"settled_after_s": round(waited, 1), "baseline_cores": round(baseline, 2)})
+                return
+            if waited >= self._tick_settle_s:
+                last = rates[-1]
+                self._settles.append({"unsettled_after_s": round(waited, 1), "baseline_cores": round(baseline, 2)})
+                raise SessionError(
+                    "tick_unsettled", "the game's CPU rate stayed under %g of its paused %.2f cores for %g s after "
+                    "the pause key (last %s): a tick may still be running, so nothing more was typed; enter_game "
+                    "and advance are refused until stop" % (TICK_SETTLE_RATIO, baseline, round(waited, 1),
+                                                           "unread" if last is None else "%.2f" % last),
+                    baseline_cores=round(baseline, 2), last_cores=None if last is None else round(last, 2),
+                    waited_s=round(waited, 1),
+                    next="stop. A tick this long: start again with a larger --tick-settle-s (up to %g). A paused "
+                         "game this machine reads below the threshold: start again with --tick-settle-s 0, which "
+                         "turns the wait off" % MAX_TICK_SETTLE_S)
+
+    def _pause_key(self) -> None:
+        """The pause key, pressed again every PAUSE_RETRY_S while the console refuses it `not_foreground` with
+        nothing sent (a window busy in a long tick does not come to the front, 2026-11-22) and `watch` sees the
+        game, for as long as the settle may wait; with the settle off, as before: no retry."""
+        deadline = self._clock() + self._tick_settle_s
+        tries = 0
+        while True:
+            try:
+                self._console.hotkey(SCAN_SPACE)
+                if tries:
+                    self._settles.append({"pause_key_retries": tries})
+                return
+            except ConsoleError as e:
+                cause = e.__cause__
+                nothing_sent = isinstance(cause, HelperError) and cause.reply.get("steps_done") == 0
+                if e.code != "not_foreground" or not nothing_sent or self._clock() >= deadline:
+                    raise
+            self._check_watch()
+            self._sleep(PAUSE_RETRY_S)
+            tries += 1
 
     def _paused_date(self) -> tuple[int, int, int] | None:
         """The date, if two reads PROOF_PAUSE_S apart agree on it (the game is paused); else None."""
@@ -4157,7 +4281,7 @@ class Session:
             current = self._run_for(wait)
             waited += wait
             passed = _game_day(current) - _game_day(start)
-            out.update(start=start, reached=current, passed=passed, rounds=round_no)
+            out.update(start=start, reached=current, passed=passed, rounds=round_no, tick_settle=list(self._settles))
             if passed >= days:
                 return current
             if passed > 0:
@@ -4313,6 +4437,34 @@ def _check_game_args(game_args: Sequence[str] | None) -> list[str]:
             raise SessionError("bad_argument", "%s is given twice" % flag)
         found.append(flag)
     return found
+
+
+def _cpu_rate(first, second) -> float | None:
+    """Cores in use between two helper.CpuReading: the CPU seconds over the helper's own seconds; None when its
+    clock did not move or the CPU time went back (another process's reading)."""
+    span = (second.at_ms - first.at_ms) / 1000.0
+    used = second.cpu_s - first.cpu_s
+    if span <= 0 or used < 0:
+        return None
+    return used / span
+
+
+def _check_tick_settle(value) -> float:
+    """`start`'s tick_settle_s: None for the default, 0 for off, else MIN_TICK_SETTLE_S to MAX_TICK_SETTLE_S."""
+    if value is None:
+        return TICK_SETTLE_S
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise SessionError("bad_argument", "tick_settle_s is a number of seconds, not %r" % (value,))
+    try:
+        seconds = float(value)
+    except OverflowError:
+        seconds = math.inf
+    if seconds == 0:
+        return 0.0
+    if not MIN_TICK_SETTLE_S <= seconds <= MAX_TICK_SETTLE_S:      # NaN fails both comparisons
+        raise SessionError("bad_argument", "--tick-settle-s takes 0 (off) or %g to %g seconds, not %r"
+                           % (MIN_TICK_SETTLE_S, MAX_TICK_SETTLE_S, value))
+    return seconds
 
 
 def _check_unresponsive(value) -> float:

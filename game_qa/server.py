@@ -83,7 +83,8 @@ HANDLER_TIMEOUT_S = 5.0                 # a connection that sends nothing for th
 RETRYABLE = ("refused", "game_left_up", "in_progress")     # a stop that ended so may end otherwise when run again
 MAX_BODY = 1 << 20                      # a request's JSON: setup scripts are the largest part
 START_ARGS = ("permission", "as_tag", "setups", "save", "playset", "owner_confirmed_busy", "switch_rules",
-              "game_args", "add_mods", "fixture_date", "unresponsive_s", "capture", "gui_from")
+              "game_args", "add_mods", "fixture_date", "unresponsive_s", "capture", "gui_from",
+              "tick_settle_s")
 FIXTURE_ARGS = ("permission", "until", "playset", "owner_confirmed_busy", "max_hours")
 SCRIPT_DOCS_ARGS = ("permission", "version", "out", "force", "owner_confirmed_busy")
 
@@ -396,7 +397,8 @@ class SessionServer:
         return self._session.enter_game(body.get("via") or "country"), 0
 
     def _advance(self, body: dict) -> tuple[dict, int]:
-        return {"reached": list(self._session.advance(_arg(body, "days")))}, 0
+        reached = self._session.advance(_arg(body, "days"))
+        return {"reached": list(reached), "tick_settle": self._session.tick_settle}, 0
 
     def _shot(self, body: dict) -> tuple[dict, int]:
         return {"path": str(self._session.shot())}, 0

@@ -61,14 +61,18 @@ class FakeSession:
         if verb in self.raises:
             raise self.raises[verb]
 
+    tick_settle = {"rounds": [{"settled_after_s": 4.0, "baseline_cores": 3.5}], "settled_after_s": 4.0}
+
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False,
-              switch_rules=None, game_args=None, add_mods=None, fixture_date=None, unresponsive_s=None, gui_from=None):
+              switch_rules=None, game_args=None, add_mods=None, fixture_date=None, unresponsive_s=None, gui_from=None,
+              tick_settle_s=None):
         self._call("start", permission, as_tag, setups, save, playset, owner_confirmed_busy)
         self.gui_from = gui_from
         self.switch_rules = switch_rules
         self.game_args, self.add_mods = game_args, add_mods
         self.fixture_date = fixture_date
         self.unresponsive_s = unresponsive_s
+        self.tick_settle_s = tick_settle_s
         return {"snapshot": SNAP, "pid": 7, "country": as_tag, "run_dir": "/backups/runs/" + SNAP}
 
     def make_fixture(self, permission, until, playset="mod_only", owner_confirmed_busy=False, max_hours=None):
@@ -460,7 +464,7 @@ class VerbTest(ServerTestCase):
         self.assertEqual(self.run_cli("events"), ({"pending": [{"numeric_id": 10, "event_id": "x.1", "options": 2}]}, 0))
         self.assertEqual(self.run_cli("run-setup", "border"), ({"name": "border", "lines": ["first line", "second line"]}, 0))
         self.assertEqual(self.run_cli("tag", "FRA"), ({"tag": "FRA"}, 0))
-        self.assertEqual(self.run_cli("advance", "30"), ({"reached": [1836, 2, 1]}, 0))
+        self.assertEqual(self.run_cli("advance", "30"), ({"reached": [1836, 2, 1], "tick_settle": FakeSession.tick_settle}, 0))
         self.assertEqual(fake.calls[-1], ("advance", 30))
         self.assertEqual(self.run_cli("enter-game")[0]["after"], [1836, 1, 15])
         self.assertEqual(fake.calls[-1], ("enter_game", "country"))
@@ -1167,6 +1171,23 @@ class FixtureVerbTest(ServerTestCase):
                 self.assertEqual(fake.gui_from, expected)
                 self.assertEqual(self.run_cli("stop")[1], 0)
 
+    def test_start_passes_the_tick_settle_limit_on_and_leaves_it_out_by_default(self):
+        for argv, expected in (((), None), (("--tick-settle-s", "0"), 0.0), (("--tick-settle-s", "900"), 900.0)):
+            with self.subTest(argv=argv):
+                fake = FakeSession()
+                spawn = ThreadSpawner(lambda: fake)
+                with mock.patch.object(client, "spawn_server", spawn):
+                    reply, code = self.run_cli("start", "--permission", PERMISSION, *argv)
+                self.threads.extend(h.thread for h in spawn.handles)
+                self.assertEqual(code, 0, reply)
+                self.assertEqual(fake.tick_settle_s, expected)
+                self.assertEqual(self.run_cli("stop")[1], 0)
+
+    def test_the_client_waits_long_enough_for_the_longest_settles(self):
+        self.assertGreaterEqual(client.ENTER_TIMEOUT_S, 1500.0 + session.MAX_TICK_SETTLE_S)
+        self.assertGreaterEqual(client.ADVANCE_TIMEOUT_S,
+                                client.ENTER_TIMEOUT_S + client.LONG_TIMEOUT_S + 2 * session.MAX_TICK_SETTLE_S)
+
 
 # A server in a child process, so that it can be killed or signalled. Its double's `start` builds the overlay and
 # runs `snapshot` and `launch` for real (in-process, `gate` patched: the "game" is a record, nothing starts).
@@ -1196,6 +1217,8 @@ def run_cli(argv):
 
 
 class Double:
+    tick_settle = {"off": True}
+
     def start(self, permission, as_tag=None, setups=None, save=None, playset="mod_only", owner_confirmed_busy=False):
         overlay.build(user / "mod" / overlay.OVERLAY_NAME, {}, "1.15.0")
         snap, code = run_cli(["snapshot", "--save", save])
@@ -1375,7 +1398,7 @@ class SignalTest(ChildServerTestCase):
         self.wait_for(lambda: "advance began" in self.marked(), "the advance under way")
         child.send_signal(signal.SIGTERM)
         talk.join(30)
-        self.assertEqual(answer["reply"], ({"reached": [1836, 2, 1]}, 0))       # answered, not cut short
+        self.assertEqual(answer["reply"], ({"reached": [1836, 2, 1], "tick_settle": {"off": True}}, 0))   # answered
         self.assertEqual(child.wait(30), 0, self.child_log())
         self.assertEqual(self.marked(), ["serving", "advance began", "advance done", "stop",
                                          "exited after signal %d" % signal.SIGTERM])

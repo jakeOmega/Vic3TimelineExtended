@@ -4862,6 +4862,131 @@ class PauseTest(SessionTestCase):
         self.assertEqual(len(self.game.clicks), 2)
 
 
+class TickSettleTest(SessionTestCase):
+    """#1963: after the pause key nothing is typed until the game's CPU rate is back to TICK_SETTLE_RATIO of its
+    paused rate on two samples in a row; past `--tick-settle-s` it is tick_unsettled; 0 turns it off."""
+
+    def setUp(self):
+        super().setUp()
+        self.long_tick_s = 0.0                  # the next pause key lands in a tick this long
+        self.tick = None                        # (began, ends) of the tick running
+        self.sent_at: list[tuple[float, dict]] = []
+        keys = self.game.keys
+
+        def keys_and_tick(pid, steps):
+            was_paused = self.game.paused
+            keys(pid, steps)
+            self.sent_at.extend((self.game.now, step) for step in steps)
+            if not was_paused and self.game.paused and self.long_tick_s:
+                self.tick = (self.game.now, self.game.now + self.long_tick_s)
+                self.long_tick_s = 0.0
+        self.game.keys = keys_and_tick
+        self.game.cpu_rate_at = lambda t: 1.1 if self.tick and self.tick[0] <= t < self.tick[1] else 3.5
+
+    def entered(self, **kwargs):
+        self.started(**kwargs)
+        self.session.enter_game()
+
+    def sent_during_the_tick(self) -> list[dict]:
+        began, ends = self.tick
+        return [step for at, step in self.sent_at if began < at < ends]
+
+    def test_an_ordinary_pause_settles_in_two_samples(self):
+        self.assertNotIn("tick_settle_s", self.started())       # the default is not named
+        self.session.enter_game()
+        self.session.advance(5)
+        settle = self.session.tick_settle
+        self.assertEqual(settle["settled_after_s"], session.TICK_SETTLE_SAMPLES * session.TICK_SAMPLE_S)
+        for record in settle["rounds"]:
+            self.assertAlmostEqual(record["baseline_cores"], 3.5, places=1)
+        step = [s for s in read_steps(self.paths.backup_root / "runs" / SNAP) if s["verb"] == "advance"][-1]
+        self.assertEqual(step["tick_settle"], settle["rounds"])
+
+    def test_nothing_is_typed_until_a_long_tick_has_ended_and_the_wait_is_reported(self):
+        self.entered()
+        self.long_tick_s = 40.0
+        reached = self.session.advance(5)
+        self.assertEqual(dt.date(*reached), self.game.date)
+        self.assertEqual(self.sent_during_the_tick(), [])
+        waited = self.session.tick_settle["settled_after_s"]
+        self.assertGreaterEqual(waited, 40.0)
+        self.assertLess(waited, 40.0 + 3 * session.TICK_SAMPLE_S)
+
+    def test_a_tick_past_the_limit_is_tick_unsettled_types_nothing_and_refuses_more_time(self):
+        self.entered(tick_settle_s=30)
+        self.long_tick_s = 100.0
+        e = self.session_error(self.session.advance, 5)
+        self.assertEqual(e.code, "tick_unsettled")
+        self.assertGreaterEqual(e.info["waited_s"], 30.0)
+        self.assertAlmostEqual(e.info["baseline_cores"], 3.5, places=1)
+        self.assertAlmostEqual(e.info["last_cores"], 1.1, places=1)
+        self.assertIn("--tick-settle-s 0", e.info["next"])
+        self.assertEqual([at for at, _ in self.sent_at if at > self.tick[0]], [])     # nothing after the pause key
+        self.assertTrue(self.session.status()["left_running"])
+        self.assertEqual(self.session_error(self.session.advance, 5).code, "left_running")
+
+    def test_zero_turns_the_wait_off_and_start_says_so(self):
+        reply = self.start(tick_settle_s=0)
+        self.assertEqual(reply["tick_settle_s"], 0.0)
+        self.session.enter_game()
+        self.game.cpu_calls = 0
+        self.session.advance(5)
+        self.assertEqual(self.game.cpu_calls, 0)
+        self.assertEqual(self.session.tick_settle, {"off": True})
+
+    def test_a_paused_game_on_too_few_cores_or_an_unreadable_one_skips_the_wait_and_still_advances(self):
+        self.entered()
+        self.game.cpu_rate_at = None
+        self.game.cpu_rate = 0.2                    # minimised, say
+        reached = self.session.advance(5)
+        self.assertEqual(dt.date(*reached), self.game.date)
+        rounds = self.session.tick_settle["rounds"]
+        self.assertTrue(rounds and all("too few" in r["skipped"] for r in rounds))
+        self.assertNotIn("settled_after_s", self.session.tick_settle)
+        self.game.cpu_error = "backend_error"
+        self.session.advance(5)
+        self.assertTrue(all("could not be read" in r["skipped"] for r in self.session.tick_settle["rounds"]))
+
+    def test_a_bad_limit_is_refused_before_anything_is_done(self):
+        for value in (10, 2000, "300", True, float("nan"), 1e400, 10**400):
+            with self.subTest(value=value):
+                self.assertEqual(self.session_error(self.start, tick_settle_s=value).code, "bad_argument")
+        self.assertEqual(self.cli.calls, [])
+
+    def refuse_pauses(self, count: int) -> None:
+        """The next `count` pause keys (space with the game running) are refused not_foreground, nothing sent."""
+        keys, left = self.game.keys, [count]
+
+        def keys(pid, steps, keys=keys):
+            if left[0] and {"scan": SPACE} in steps and not self.game.paused and not self.game.console_open:
+                left[0] -= 1
+                raise HelperError("not_foreground", "the game's window is not in front", {"steps_done": 0})
+            return keys(pid, steps)
+        self.game.keys = keys
+
+    def test_a_pause_key_refused_by_a_busy_window_is_pressed_again(self):
+        self.entered()
+        self.refuse_pauses(4)                       # the console tries twice a call: two calls refused
+        before = self.game.now
+        reached = self.session.advance(5)
+        self.assertTrue(self.game.paused)
+        self.assertEqual(dt.date(*reached), self.game.date)
+        self.assertIn({"pause_key_retries": 2}, self.session.tick_settle["rounds"])
+        self.assertGreaterEqual(self.game.now - before, 2 * session.PAUSE_RETRY_S)
+
+    def test_with_the_wait_off_a_refused_pause_key_is_not_pressed_again(self):
+        self.entered(tick_settle_s=0)
+        self.refuse_pauses(2)
+        e = self.session_error(self.session.advance, 5)
+        self.assertEqual((e.code, e.info["cause"]), ("left_running", "not_foreground"))
+
+    def test_the_rate_from_two_readings(self):
+        reading = fakes.CpuReading
+        self.assertEqual(session._cpu_rate(reading(10.0, 1000), reading(13.5, 2000)), 3.5)
+        self.assertIsNone(session._cpu_rate(reading(10.0, 1000), reading(13.5, 1000)))     # the clock did not move
+        self.assertIsNone(session._cpu_rate(reading(10.0, 1000), reading(9.0, 2000)))      # another process's
+
+
 class RestoreRetryTest(SessionTestCase):
     """I5: `busy` is retried for a minute; a later stop after a refusal runs restore again."""
 

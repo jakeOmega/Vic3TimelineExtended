@@ -5,6 +5,7 @@ real wiring (its paths, `run_cli`, `spawn_watch`, the Windows helper).
                        [--playset mod_only|current] [--switch-rule RULE=SETTING]... [--owner-confirmed-busy]
                        [--game-arg FLAG]... [--add-mod WINDOWS_PATH]... [--fixture DATE] [--unresponsive-s S]
                        [--capture] [--gui-from CHECKOUT]
+                       [--tick-settle-s S]
                                              # a game on the deployed build, on the fixture or on NAME; a
                                              # switched rule is switched in a copy of the fixture, as of its
                                              # date (the reply's `rules` says what the save holds); a game
@@ -113,7 +114,10 @@ SERVER_WAIT_S = 30.0                    # from spawning the server to its sessio
 POLL_S = 0.2
 STATUS_TIMEOUT_S = 10.0                 # a server that has not answered `status` by then is busy, not dead
 VERB_TIMEOUT_S = 300.0                  # a console command may wait 120 s for the game to come to the front
-ENTER_TIMEOUT_S = 1500.0
+# Each round's pause may wait out a long tick (session._settle, #1963): its baseline, the settle's longest wait
+# and two samples. Added once to enter-game (its proof is one round) and twice more to advance.
+TICK_SETTLE_ALLOWANCE_S = session.TICK_BASELINE_S + session.MAX_TICK_SETTLE_S + 2 * session.TICK_SAMPLE_S
+ENTER_TIMEOUT_S = 1500.0 + TICK_SETTLE_ALLOWANCE_S
 # gui-show builds the installed game's type index on its first call (about 10 s), waits up to
 # session.GUI_RELOAD_WAIT_S for the reload and types a dozen commands, any of which may wait as a verb's does.
 # With --scale it shoots twice (#1989), and the wait grows with what was synced, up to GUI_RELOAD_WAIT_MAX_S.
@@ -122,7 +126,8 @@ GUI_SHOW_TIMEOUT_S = VERB_TIMEOUT_S + session.GUI_RELOAD_WAIT_MAX_S + 60.0
 # command's 30 s and LOADED_WAIT_S more, and the debugger is attached again: about 350 s, with room.
 ADD_SETUP_TIMEOUT_S = 600.0
 LONG_TIMEOUT_S = 900.0                  # try-event, and advance's rounds
-ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S     # advance enters the fixture's game first if need be
+# advance enters the fixture's game first if need be; two of its rounds may wait out a long tick
+ADVANCE_TIMEOUT_S = ENTER_TIMEOUT_S + LONG_TIMEOUT_S + 2 * TICK_SETTLE_ALLOWANCE_S
 # The worst cases, from the waits the session and the fixture allow themselves:
 #   enter-game, with each ensure_open and console run counted with one foreground wait (FOREGROUND_WAIT_S 120),
 #   the attach's requests at dap's 30 s, and the sends, closes, hotkeys and resumes as quick: the two ensure_opens
@@ -848,6 +853,8 @@ def cmd_start(args) -> tuple[dict, int]:
         body["fixture_date"] = args.fixture
     if args.unresponsive_s is not None:
         body["unresponsive_s"] = args.unresponsive_s
+    if args.tick_settle_s is not None:
+        body["tick_settle_s"] = args.tick_settle_s
     if args.capture:
         body["capture"] = True
     if args.gui_from is not None:
@@ -1160,6 +1167,12 @@ def add_verbs(sub) -> None:
                    help="how long the game's window may not respond before a verb calls the game gone (game_gone), "
                         "for every verb of the session: %g s by default, up to %g. For a late save whose ticks freeze "
                         "the window longer (#1905)" % (session.UNRESPONSIVE_S, session.MAX_UNRESPONSIVE_S))
+    p.add_argument("--tick-settle-s", type=float, metavar="S",
+                   help="how long each round's pause may wait for a long tick to end before anything is typed "
+                        "(#1963; the game's CPU rate back to %g of its paused rate): %g s by default, %g to %g, and "
+                        "0 turns the wait off. Not yet run live: if a session answers tick_unsettled on a paused "
+                        "game, start again with 0" % (session.TICK_SETTLE_RATIO, session.TICK_SETTLE_S,
+                                                      session.MIN_TICK_SETTLE_S, session.MAX_TICK_SETTLE_S))
     p.add_argument("--add-mod", action="append", default=[], metavar="WINDOWS_PATH",
                    help="a variant mod folder (a Windows drive path outside the user-data folder, holding "
                         ".metadata/metadata.json), loaded after the run's playset and before the overlay, for an A/B "
