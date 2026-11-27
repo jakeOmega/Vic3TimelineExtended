@@ -317,6 +317,21 @@ Construction holds its strength, neither growing nor shrinking. Investors keep
 spending the pool on the private queue throughout, a 24th of it a week or as
 much as the queue can absorb, whichever is less.
 
+Investors in an economy this large also build in bigger steps. Once a country's
+investors keep the private queue full and queue about 800 building levels a
+month in their own country, each building they choose to expand there grows by
+up to 100 levels at a time, where it grew by one, with no more than a tenth of
+its size waiting in the queue; a building under 20 levels still grows by one.
+Buildings whose output can't leave the state, such as the Railway and Power
+Plants, grow by up to 10 at a time, with no more than a fiftieth of their size
+waiting. The private queue holds as many levels as before and the pool
+spends as much; the game only has far fewer investment decisions to work out
+each week, which is what makes late-game weeks pass faster. The cost is that
+these investors place fewer levels abroad and buy fewer government-owned levels,
+because both still go one at a time and the queue fills at home first. It stops
+when the investors queue fewer than 400 levels a month at home or no longer fill
+the queue, and the Batched Private Investment game rule turns it off.
+
 ## Adaptive standard-of-living expectations
 
 In the base game, pops expect a standard of living set by their stratum,

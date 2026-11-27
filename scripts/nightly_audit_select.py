@@ -112,6 +112,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_effects/te_demog_generated_effects.txt",
     "common/scripted_effects/te_demog_capital_generated.txt",
     "common/scripted_effects/nuclear_raze_generated.txt",
+    "common/scripted_effects/te_batch_investment_generated.txt",
+    "common/scripted_triggers/te_batch_investment_generated_triggers.txt",
     "common/script_values/te_demog_generated_values.txt",
     "common/static_modifiers/te_demog_line_modifiers_generated.txt",
     "common/script_values/te_demog_line_values_generated.txt",

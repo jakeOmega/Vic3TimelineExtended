@@ -1,0 +1,556 @@
+﻿# Batched private investment (docs/systems/mod_systems/construction.md § Batched Private Investment; owner,
+# 2026-11-26, after docs/audits/late_game_performance_2050.md, proposal 4).
+#
+# The engine's weekly investment pass queues private levels one at a time and scores every candidate building again
+# after each: 1,000 decisions and 22 s of every weekly tick for the USA of 2050. Script cannot shorten a decision, but
+# it can make each one count for more. The engine fires on_start_expanding_building as it queues a level; when the
+# level is one the investors of a very large economy have just picked at home, te_bi_hook queues more levels of the
+# same building beside it, a hundred levels a pick at most and until a tenth of the building's size is queued. The
+# engine finds its queue nearer full and makes fewer decisions: the investment AI picks a hundred levels at a time,
+# not one.
+#
+# What it rests on (each has a log line; docs/testing/perf-fixes-playtest.md § Batched private investment). A first
+# session on the 2050 copy read all four as holding (2026-11-27, batching forced on for the USA, 25 days; the figures
+# are in docs/systems/mod_systems/construction.md): the hook ran inside the pass, the engine stopped at 1,000 with
+# script's levels in the queue, 19 batches queued 1,448 levels from inside the hook with none refused and no crash,
+# and queued levels in other countries' states sat with the country that placed them. One session of one country:
+# the checks stay.
+#   1. on_start_expanding_building runs as the engine queues a level, inside its pass, with the level already counted
+#      in construction_queue_num_queued_private_levels. The mod's construction sites have followed this hook since the
+#      construction market was added, so it does fire; when in the tick it fires is the unread part.
+#   2. The engine reads the queue's length again after each level, so levels script adds between two of its decisions
+#      count against its limit of 1,000 (te_bi_engine_queue).
+#   3. start_privately_funded_building_construction, run from the hook, queues a level for the state's owner that the
+#      investment pool pays for and its investors own, as the engine's own do. The 2050 probe ran it from an event: the
+#      queue went from 1,000 to 4,060, the levels were built, and a resource-capped building was refused. Nothing in
+#      the mod has queued construction from inside a construction hook before.
+#   4. A level a country's investors queue abroad counts in their own country's private queue, not the host's.
+# What happens if one is wrong:
+#   1 wrong  no pick is seen, or the queue is already full when the hook runs: nothing is batched, and
+#            te_bi_selfcheck_hook or te_bi_selfcheck_month says so.
+#   2 wrong  the engine places its thousand whatever script adds, so the first batching pass leaves up to 900 levels
+#            too many in the queue. The first pick that finds more than 1,000 queued trips batching off in every
+#            country (te_bi_trip_limit), so it happens once.
+#   3 wrong  te_bi_selfcheck_queue says what the effect did; a crash at the first batch leaves its START line last.
+#   4 wrong  a watched country takes every foreign investor's level in its states for its own investors' and batches
+#            it; the play-test list has the row that reads it.
+# In every case script queues nothing past te_bi_ceiling by its own reading, a level that comes back through the hook
+# while a batch runs is never batched (te_bi_placing), and no building gets more queued than a tenth of its size.
+#
+# Who placed a level is read from the queue: script has no "who queued this". A watched country keeps the length of
+# its private queue as of the last hook call in one of its states (var:te_bi_seen); a call that finds it longer is a
+# level its investors queued. A government level leaves the private queue as it was, and another country's investors
+# queue into their own. A pick abroad raises the queue without a call at home, so the next call at home counts it
+# under te_bi_other, and if that call is not the investors' own it is taken for one: a government level, or a foreign
+# investor's, queued right after the investors' last pick abroad can get a batch. It needs room under the ceiling,
+# which the investors' pass has just filled, so it is rare; it adds private levels to a building someone just chose to
+# expand.
+#
+# What script cannot do is batch a pick abroad: the effect takes a state and no investor, so a level it queues in
+# another country's state would be that country's. Picks abroad stay single levels, and with batches filling the queue
+# at home there is room for fewer of them. te_bi_reserve keeps the last hundred slots for the engine to fill a level at
+# a time; the monthly line prints home and other picks so the share lost abroad can be read.
+
+# Building scope, ROOT of on_start_expanding_building, the owner watched (te_bi_on_start_expanding).
+te_bi_hook = {
+	if = {
+		limit = { has_global_variable = te_bi_placing }
+		# A level the batch under way is queueing, come back through the hook. Counted, and the queue as the
+		# first came back kept, for te_bi_selfcheck_queue; never batched.
+		if = {
+			limit = { global_var:te_bi_placing = 0 }
+			owner = {
+				set_global_variable = {
+					name = te_bi_nested_queue
+					value = construction_queue_num_queued_private_levels
+				}
+			}
+		}
+		change_global_variable = { name = te_bi_placing add = 1 }
+	}
+	else = {
+		set_local_variable = { name = te_bi_delta value = 0 }
+		owner = { te_bi_note_pick = yes }
+		if = {
+			limit = {
+				local_var:te_bi_delta >= 1
+				owner = { has_variable = te_bi_on }
+				te_bi_rule_on = yes
+				NOT = { has_global_variable = te_bi_tripped }
+			}
+			if = {
+				limit = {
+					owner = { var:te_bi_seen > te_bi_engine_queue }
+				}
+				owner = { te_bi_trip_limit = yes }
+			}
+			else = {
+				te_bi_try_batch = yes
+			}
+		}
+	}
+}
+
+# Country scope, a watched country, a level just queued in one of its states: how much longer its private queue is than
+# at the last such call (local_var:te_bi_delta). 1 or more is a level its investors placed. Completions shorten the
+# queue between calls, so the first pick after a week's levels finish reads 0 or less and passes as nobody's; it is one
+# pick a week. var:te_bi_maxq is the longest the queue stood at a pick in the month: only the engine's own levels raise
+# it, so it says whether the engine still fills this country's queue to its limit.
+te_bi_note_pick = {
+	set_local_variable = {
+		name = te_bi_delta
+		value = construction_queue_num_queued_private_levels
+	}
+	change_local_variable = {
+		name = te_bi_delta
+		subtract = var:te_bi_seen
+	}
+	set_variable = {
+		name = te_bi_seen
+		value = construction_queue_num_queued_private_levels
+	}
+	if = {
+		limit = { local_var:te_bi_delta >= 1 }
+		change_variable = { name = te_bi_home add = 1 }
+		change_variable = { name = te_bi_other add = local_var:te_bi_delta }
+		change_variable = { name = te_bi_other subtract = 1 }
+		if = {
+			limit = { var:te_bi_seen > var:te_bi_maxq }
+			set_variable = {
+				name = te_bi_maxq
+				value = var:te_bi_seen
+			}
+		}
+	}
+}
+
+# Building scope: size the batch (te_bi_batch_extra), clip it to the room under the ceiling, and queue it if the
+# building can take that many more levels (a mine near its deposit's end, a farm out of arable land). A pick that gets
+# no batch is counted by why: no room (the queue is at the ceiling: the reserve's single levels), small (a new or small
+# building, or one with a tenth of its size queued already), capped.
+te_bi_try_batch = {
+	set_local_variable = { name = te_bi_n value = te_bi_batch_extra }
+	set_local_variable = { name = te_bi_level value = level }
+	owner = {
+		set_local_variable = {
+			name = te_bi_before
+			value = construction_queue_num_queued_private_levels
+		}
+	}
+	set_local_variable = { name = te_bi_room value = te_bi_ceiling }
+	change_local_variable = { name = te_bi_room subtract = local_var:te_bi_before }
+	if = {
+		limit = { local_var:te_bi_room < 1 }
+		owner = {
+			change_variable = { name = te_bi_noroom add = 1 }
+		}
+	}
+	else_if = {
+		limit = { local_var:te_bi_n < 1 }
+		owner = {
+			change_variable = { name = te_bi_small add = 1 }
+		}
+	}
+	else = {
+		if = {
+			limit = { local_var:te_bi_n > local_var:te_bi_room }
+			set_local_variable = { name = te_bi_n value = local_var:te_bi_room }
+		}
+		if = {
+			limit = { can_queue_building_levels = local_var:te_bi_n }
+			te_bi_place = yes
+		}
+		else = {
+			owner = {
+				change_variable = { name = te_bi_capped add = 1 }
+			}
+		}
+	}
+}
+
+# Building scope: queue local_var:te_bi_n levels of this building. te_bi_placing is up while the levels are queued, so
+# the hook passes over each of them; it holds the count of those that came back.
+#
+# The self-check's START line goes out before the first batch of two levels or more, not after: nothing in the mod has
+# queued construction from inside a construction hook before, and if the engine cannot take it the game stops here
+# with that line the last of its kind in debug.log.
+te_bi_place = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_bi_checked_queue }
+			local_var:te_bi_n >= 2
+		}
+		set_global_variable = { name = te_bi_log_asked value = local_var:te_bi_n }
+		debug_log = "TE_SELF_CHECK START batch_invest_queue asked=[SCOPE.ScriptValue('te_bi_log_asked_g')|0] (a first batch is about to be queued from inside on_start_expanding_building; two verdict lines follow, batch_invest_queue and batch_invest_reentry. None, and the game gone: the engine does not take a level queued from inside its own hook. One: the engine dropped a templated line)"
+	}
+	set_local_variable = { name = te_bi_did value = 0 }
+	set_global_variable = { name = te_bi_placing value = 0 }
+	te_bi_queue_batch = yes
+	owner = { te_bi_after_batch = yes }
+	remove_global_variable = te_bi_placing
+	if = {
+		limit = { has_global_variable = te_bi_nested_queue }
+		remove_global_variable = te_bi_nested_queue
+	}
+}
+
+# State scope, from the generated te_bi_queue_batch, which finds the building's type: the effect takes a literal one.
+te_bi_queue_in_state = {
+	set_local_variable = { name = te_bi_did value = 1 }
+	while = {
+		count = local_var:te_bi_n
+		start_privately_funded_building_construction = $B$
+	}
+}
+
+# Country scope, the owner, straight after te_bi_queue_batch: count what was queued against what was asked, and take
+# the queue as it now stands as seen, so the batch's own levels are not read as picks.
+te_bi_after_batch = {
+	if = {
+		limit = { local_var:te_bi_did = 1 }
+		set_local_variable = {
+			name = te_bi_got
+			value = construction_queue_num_queued_private_levels
+		}
+		change_local_variable = { name = te_bi_got subtract = local_var:te_bi_before }
+		set_variable = {
+			name = te_bi_seen
+			value = construction_queue_num_queued_private_levels
+		}
+		change_variable = { name = te_bi_batches add = 1 }
+		change_variable = { name = te_bi_added add = local_var:te_bi_got }
+		change_variable = { name = te_bi_nested add = global_var:te_bi_placing }
+		if = {
+			limit = { local_var:te_bi_got < local_var:te_bi_n }
+			change_variable = { name = te_bi_short add = local_var:te_bi_n }
+			change_variable = { name = te_bi_short subtract = local_var:te_bi_got }
+		}
+		te_bi_selfcheck_queue = yes
+		if = {
+			limit = { local_var:te_bi_got > local_var:te_bi_n }
+			change_variable = { name = te_bi_over add = local_var:te_bi_got }
+			change_variable = { name = te_bi_over subtract = local_var:te_bi_n }
+			te_bi_trip_runaway = yes
+		}
+	}
+	else = {
+		# No branch of te_bi_queue_batch names this building: the generator's list is short of one investors build.
+		change_variable = { name = te_bi_unknown add = 1 }
+	}
+}
+
+# ---- The two trips. Each stops batching in every country (the hook reads te_bi_tripped, and each batching country
+# ---- switches off at its next monthly pulse) until the rule is switched off and on again (te_bi_monthly).
+
+# Country scope. More levels arrived than the batch asked for: something queues in answer to the batch's own levels.
+te_bi_trip_runaway = {
+	if = {
+		limit = { NOT = { has_global_variable = te_bi_tripped } }
+		set_global_variable = te_bi_tripped
+		set_global_variable = { name = te_bi_log_asked value = local_var:te_bi_n }
+		set_global_variable = { name = te_bi_log_queued value = local_var:te_bi_got }
+		set_global_variable = { name = te_bi_log_before value = local_var:te_bi_before }
+		set_global_variable = { name = te_bi_log_nested value = global_var:te_bi_placing }
+		debug_log = "TE_SELF_CHECK BROKEN batch_invest_runaway country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] asked=[SCOPE.ScriptValue('te_bi_log_asked_g')|0] queued=[SCOPE.ScriptValue('te_bi_log_queued_g')|0] queue_before=[SCOPE.ScriptValue('te_bi_log_before_g')|0] came_back=[SCOPE.ScriptValue('te_bi_log_nested_g')|0] (a batch queued more levels than it asked for, so something queues in answer to the batch's own levels; batching is off in every country until the rule is switched off and on)"
+	}
+}
+
+# Country scope, a batching country, a pick of its investors that found more than te_bi_engine_queue levels queued.
+# No batch is queued past te_bi_ceiling, so the engine placed that level with its queue over its limit: it does not
+# count script's levels, or its limit is not what the 2050 save showed (assumption 2). Its pass is then no shorter
+# for the batches, and every batch is a level more than the engine meant to queue, all of which get built. One
+# country's first batching pass is the whole cost: up to te_bi_ceiling levels too many, once.
+# Fallback: hold the queue above the limit instead of under it, which the 2050 probe showed rests the pass (the pulse
+# form in te_bi_selfcheck_hook's header). That builds more than the engine would, so it is the owner's call.
+te_bi_trip_limit = {
+	if = {
+		limit = { NOT = { has_global_variable = te_bi_tripped } }
+		set_global_variable = te_bi_tripped
+		debug_log = "TE_SELF_CHECK BROKEN batch_invest_limit country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] queue=[THIS.ScriptValue('te_bi_queue_now')|0] batches=[THIS.Var('te_bi_batches').GetValue|0] added=[THIS.Var('te_bi_added').GetValue|0] picks_home=[THIS.Var('te_bi_home').GetValue|0] (the engine queued a level for a batching country with more than 1,000 private levels queued: it does not count script's levels against its limit, so batching saves it nothing and adds levels; batching is off in every country until the rule is switched off and on)"
+	}
+}
+
+# TEMPORARY self-check, once a game, at the first batch of two levels or more (one level cannot tell "all" from
+# "some"). te_bi_place prints its START line before the batch. Two verdicts.
+#
+# batch_invest_queue: does start_privately_funded_building_construction, run from the hook, queue what it is asked?
+#   OK      queued = asked.
+#   BROKEN  queued under asked: the effect was refused though can_queue_building_levels passed (the building's
+#           possible, its can_build_private, or a cap the trigger does not read), or 0: it queues nothing from inside
+#           the hook. Fallback for 0: queue from a pulse instead (te_bi_selfcheck_hook's fallback). Queued over asked
+#           also prints batch_invest_runaway.
+#
+# batch_invest_reentry: when does the hook run? The batch's own levels come back through it, and the first to do so
+# records the owner's queue.
+#   OK          that queue is above queue_before: the hook runs inside the effect that queues, after the level is
+#               counted. The engine's own levels then reach the hook the same way, which is assumption 1's second half.
+#   BROKEN      it is queue_before: the hook runs before the level is counted, so te_bi_note_pick reads each pick one
+#               call late and a batch lands on the next building to be queued. Fallback: batch the building of the
+#               previous call (keep its state and type in two globals) instead of this one's.
+#   NO_VERDICT  none came back while the batch ran: script's levels reach the hook later or never. The batches still
+#               work if the engine's own levels reach it at once; batch_invest_month reads that. This is what the
+#               first session read (came_back=0 for a batch of 99): the engine does not run the hook for a level
+#               script queues, at least not inside the effect. So this check cannot say more in this engine, and
+#               te_bi_placing guards against a call that does not come.
+# First session, 2026-11-27: batch_invest_queue OK (asked 99, queued 99). Delete it with the log values (te_bi_log_*)
+# once it has read OK in a game that switched on by itself.
+te_bi_selfcheck_queue = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_bi_checked_queue }
+			local_var:te_bi_n >= 2
+		}
+		set_global_variable = te_bi_checked_queue
+		set_global_variable = { name = te_bi_log_asked value = local_var:te_bi_n }
+		set_global_variable = { name = te_bi_log_queued value = local_var:te_bi_got }
+		set_global_variable = { name = te_bi_log_before value = local_var:te_bi_before }
+		set_global_variable = { name = te_bi_log_level value = local_var:te_bi_level }
+		set_global_variable = { name = te_bi_log_nested value = global_var:te_bi_placing }
+		if = {
+			limit = { has_global_variable = te_bi_nested_queue }
+			set_global_variable = { name = te_bi_log_nested_queue value = global_var:te_bi_nested_queue }
+		}
+		if = {
+			limit = { local_var:te_bi_got = local_var:te_bi_n }
+			debug_log = "TE_SELF_CHECK OK batch_invest_queue country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] asked=[SCOPE.ScriptValue('te_bi_log_asked_g')|0] queued=[SCOPE.ScriptValue('te_bi_log_queued_g')|0] building_level=[SCOPE.ScriptValue('te_bi_log_level_g')|0] queue_before=[SCOPE.ScriptValue('te_bi_log_before_g')|0] (the first batch of two levels or more: every level asked for is in the private queue)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN batch_invest_queue country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] asked=[SCOPE.ScriptValue('te_bi_log_asked_g')|0] queued=[SCOPE.ScriptValue('te_bi_log_queued_g')|0] building_level=[SCOPE.ScriptValue('te_bi_log_level_g')|0] queue_before=[SCOPE.ScriptValue('te_bi_log_before_g')|0] (the first batch of two levels or more: the private queue grew by queued, not by asked. Under: the effect was refused, and 0 means it queues nothing from the hook. Over: something queued in answer)"
+		}
+		if = {
+			limit = { global_var:te_bi_placing = 0 }
+			debug_log = "TE_SELF_CHECK NO_VERDICT batch_invest_reentry country=[THIS.GetCountry.GetTagName] came_back=0 asked=[SCOPE.ScriptValue('te_bi_log_asked_g')|0] (none of the batch's levels came back through on_start_expanding_building while it ran: script's levels reach the hook later or never; batch_invest_month says whether the engine's reach it in time)"
+		}
+		else_if = {
+			limit = {
+				has_global_variable = te_bi_nested_queue
+				global_var:te_bi_nested_queue > local_var:te_bi_before
+			}
+			debug_log = "TE_SELF_CHECK OK batch_invest_reentry country=[THIS.GetCountry.GetTagName] came_back=[SCOPE.ScriptValue('te_bi_log_nested_g')|0] asked=[SCOPE.ScriptValue('te_bi_log_asked_g')|0] queue_before=[SCOPE.ScriptValue('te_bi_log_before_g')|0] queue_at_first=[SCOPE.ScriptValue('te_bi_log_nested_queue_g')|0] (the hook runs inside the effect that queues a level, after the level is counted)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN batch_invest_reentry country=[THIS.GetCountry.GetTagName] came_back=[SCOPE.ScriptValue('te_bi_log_nested_g')|0] asked=[SCOPE.ScriptValue('te_bi_log_asked_g')|0] queue_before=[SCOPE.ScriptValue('te_bi_log_before_g')|0] queue_at_first=[SCOPE.ScriptValue('te_bi_log_nested_queue_g')|0] (the hook runs before the level it is called for is counted, so each pick is read one call late)"
+		}
+	}
+}
+
+# ---- The monthly pass (te_bi_monthly_on_action: a watched country, or one with te_bi_watch_queue levels queued) ----
+
+# Country scope.
+te_bi_monthly = {
+	# The monthly pulse never runs inside a batch, so a flag still up was left by a batch that did not finish.
+	if = {
+		limit = { has_global_variable = te_bi_placing }
+		remove_global_variable = te_bi_placing
+		if = {
+			limit = { has_global_variable = te_bi_nested_queue }
+			remove_global_variable = te_bi_nested_queue
+		}
+		debug_log = "TE_SELF_CHECK BROKEN batch_invest_flag country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] (te_bi_placing was still set at a monthly pulse: a batch ended without clearing it, and the hook passed over every level queued since; cleared)"
+	}
+	if = {
+		limit = { te_bi_rule_off = yes }
+		te_bi_clear = yes
+		# Off and on again re-arms a trip: the way to try again in the same game.
+		if = {
+			limit = { has_global_variable = te_bi_tripped }
+			remove_global_variable = te_bi_tripped
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_variable = te_bi_watch } }
+		te_bi_watch_start = yes
+	}
+	else = {
+		te_bi_month_end = yes
+	}
+}
+
+# Country scope: start counting this country's picks. Every variable the hook reads is set here, together, and
+# te_bi_clear removes them together, so has_variable = te_bi_watch stands for all of them. They are country variables
+# and no lists, so a revolution's winner inherits them and carries on.
+te_bi_watch_start = {
+	set_variable = te_bi_watch
+	set_variable = {
+		name = te_bi_seen
+		value = construction_queue_num_queued_private_levels
+	}
+	set_variable = { name = te_bi_months_on value = 0 }
+	set_variable = { name = te_bi_blind_months value = 0 }
+	te_bi_reset_month = yes
+}
+
+te_bi_reset_month = {
+	set_variable = { name = te_bi_home value = 0 }
+	set_variable = { name = te_bi_other value = 0 }
+	set_variable = { name = te_bi_batches value = 0 }
+	set_variable = { name = te_bi_added value = 0 }
+	set_variable = { name = te_bi_short value = 0 }
+	set_variable = { name = te_bi_over value = 0 }
+	set_variable = { name = te_bi_noroom value = 0 }
+	set_variable = { name = te_bi_small value = 0 }
+	set_variable = { name = te_bi_capped value = 0 }
+	set_variable = { name = te_bi_unknown value = 0 }
+	set_variable = { name = te_bi_nested value = 0 }
+	set_variable = { name = te_bi_maxq value = 0 }
+}
+
+# Country scope: stop watching. Also the rule's teardown: switched off mid-game, each watched country is cleared at
+# its next monthly pulse, and the hook stops batching at once (it reads the rule).
+te_bi_clear = {
+	if = {
+		limit = { has_variable = te_bi_watch }
+		if = {
+			limit = { has_variable = te_bi_on }
+			remove_variable = te_bi_on
+		}
+		remove_variable = te_bi_watch
+		remove_variable = te_bi_seen
+		remove_variable = te_bi_months_on
+		remove_variable = te_bi_blind_months
+		remove_variable = te_bi_home
+		remove_variable = te_bi_other
+		remove_variable = te_bi_batches
+		remove_variable = te_bi_added
+		remove_variable = te_bi_short
+		remove_variable = te_bi_over
+		remove_variable = te_bi_noroom
+		remove_variable = te_bi_small
+		remove_variable = te_bi_capped
+		remove_variable = te_bi_unknown
+		remove_variable = te_bi_nested
+		remove_variable = te_bi_maxq
+	}
+}
+
+# Country scope, a watched country at its monthly pulse: switch batching on or off, log, and start the next month's
+# count. Two tests each way:
+# - Levels placed at home in the month (te_bi_placed: picks the hook saw, and the levels the batches added, so
+#   batching does not end itself by lowering the engine's picks). Picks abroad are left out: a country whose investors
+#   build mostly abroad would have its few home batches crowd the rest out.
+# - The engine still fills this country's queue to its limit (var:te_bi_maxq, the longest the queue stood at a pick).
+#   Only there is the queue's length the engine's doing, so that batches change which levels are queued and not how
+#   many. A country held under the limit by its pool's money or by the pass's own update count would have its queue
+#   lengthened by batches, and with it the construction the market buys for it and Excess Private Construction's
+#   entry test. The engine's last levels of a pass are single ones (the reserve), so the reading holds while batching.
+te_bi_month_end = {
+	te_bi_selfcheck_hook = yes
+	if = {
+		limit = {
+			NOT = { has_variable = te_bi_on }
+			te_bi_placed >= te_bi_on_levels
+			var:te_bi_maxq >= te_bi_engine_queue_near
+			NOT = { has_global_variable = te_bi_tripped }
+		}
+		set_variable = te_bi_on
+		set_variable = { name = te_bi_months_on value = 0 }
+		debug_log = "TE_BI on country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] placed_home=[THIS.ScriptValue('te_bi_placed')|0] picks_home=[THIS.Var('te_bi_home').GetValue|0] picks_other=[THIS.Var('te_bi_other').GetValue|0] maxq=[THIS.Var('te_bi_maxq').GetValue|0] queue=[THIS.ScriptValue('te_bi_queue_now')|0] (the investors placed te_bi_on_levels levels or more at home in a month with the queue at the engine's limit: their picks at home are batched from now on)"
+	}
+	else_if = {
+		limit = { has_variable = te_bi_on }
+		change_variable = { name = te_bi_months_on add = 1 }
+		# The month's line: each of the first six months of batching, then every January.
+		if = {
+			limit = {
+				OR = {
+					var:te_bi_months_on <= 6
+					month = 0
+				}
+			}
+			debug_log = "TE_BI month country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] months_on=[THIS.Var('te_bi_months_on').GetValue|0] picks_home=[THIS.Var('te_bi_home').GetValue|0] picks_other=[THIS.Var('te_bi_other').GetValue|0] batches=[THIS.Var('te_bi_batches').GetValue|0] added=[THIS.Var('te_bi_added').GetValue|0] short=[THIS.Var('te_bi_short').GetValue|0] over=[THIS.Var('te_bi_over').GetValue|0] noroom=[THIS.Var('te_bi_noroom').GetValue|0] small=[THIS.Var('te_bi_small').GetValue|0] capped=[THIS.Var('te_bi_capped').GetValue|0] unknown=[THIS.Var('te_bi_unknown').GetValue|0] came_back=[THIS.Var('te_bi_nested').GetValue|0] maxq=[THIS.Var('te_bi_maxq').GetValue|0] queue=[THIS.ScriptValue('te_bi_queue_now')|0]"
+		}
+		te_bi_selfcheck_month = yes
+		if = {
+			limit = {
+				OR = {
+					te_bi_placed < te_bi_off_levels
+					var:te_bi_maxq < te_bi_engine_queue_near
+					has_global_variable = te_bi_tripped
+				}
+			}
+			remove_variable = te_bi_on
+			debug_log = "TE_BI off country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] placed_home=[THIS.ScriptValue('te_bi_placed')|0] maxq=[THIS.Var('te_bi_maxq').GetValue|0] months_on=[THIS.Var('te_bi_months_on').GetValue|0] queue=[THIS.ScriptValue('te_bi_queue_now')|0] (under te_bi_off_levels levels placed at home in the month, or the queue no longer reached the engine's limit, or batching tripped)"
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_variable = te_bi_on }
+			construction_queue_num_queued_private_levels < te_bi_unwatch_queue
+		}
+		te_bi_clear = yes
+	}
+	else = {
+		te_bi_reset_month = yes
+	}
+}
+
+# TEMPORARY self-check: does the hook see the investors' picks as they are made (assumption 1)? Read at a watched
+# country's monthly pulse, batching or not.
+#   OK      once a game, the first watched country to show it: ten picks or more seen at home in the month, and the
+#           queue's unseen growth (te_bi_other) no more than twenty times that. A hook that runs as each level is
+#           queued sees every pick at home, so the unseen growth is only the picks abroad; one that runs after the pass
+#           sees the whole pass as one call's growth.
+#   BROKEN  once for each country it happens to: its sixth month with the queue within ten of the engine's limit at
+#           the pulse, the pool paying for construction, and not what OK asks. A queue held at the limit while its
+#           levels are paid for is one the engine refills, so the hook does not run as the engine queues: it runs
+#           later (the queue is full again by then) or not for private levels, and this country never batches. One
+#           other reading: a full queue so slow that under ten levels finish in a month; the line prints the counts.
+#           Fallback: batch from a pulse. Each week (te_construction_market_on_weekly_pulse) walk the country's states
+#           for buildings is_under_construction with less than their tenth queued, queue each one's batch, and hold
+#           the ceiling above the engine's limit so its pass rests in the weeks between
+#           (docs/audits/late_game_performance_2050.md, proposal 4: the pass took 0.49 s with 4,060 queued). That
+#           cannot tell a government level from a private one, and levels queued past the limit are built on top of
+#           the engine's thousand a week, so it changes how much is built and is the owner's call.
+# A country never at the limit gives no verdict; it is not what the system is for.
+te_bi_selfcheck_hook = {
+	if = {
+		limit = {
+			var:te_bi_home >= 10
+			var:te_bi_other <= te_bi_other_seen_limit
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_bi_checked_hook } }
+			set_global_variable = te_bi_checked_hook
+			debug_log = "TE_SELF_CHECK START batch_invest_hook (the verdict line follows; none after this one means the engine dropped the templated line)"
+			debug_log = "TE_SELF_CHECK OK batch_invest_hook country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] picks_home=[THIS.Var('te_bi_home').GetValue|0] picks_other=[THIS.Var('te_bi_other').GetValue|0] maxq=[THIS.Var('te_bi_maxq').GetValue|0] queue=[THIS.ScriptValue('te_bi_queue_now')|0] (on_start_expanding_building found the private queue longer ten times or more in a month, and the growth it did not see is no more than picks abroad would be: it runs as the investors queue levels)"
+		}
+	}
+	else_if = {
+		limit = {
+			construction_queue_num_queued_private_levels >= te_bi_engine_queue_near
+			te_bi_pool_spending > 0
+		}
+		change_variable = { name = te_bi_blind_months add = 1 }
+		if = {
+			limit = { var:te_bi_blind_months = 6 }
+			debug_log = "TE_SELF_CHECK START batch_invest_hook (the verdict line follows; none after this one means the engine dropped the templated line)"
+			debug_log = "TE_SELF_CHECK BROKEN batch_invest_hook country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] blind_months=[THIS.Var('te_bi_blind_months').GetValue|0] picks_home=[THIS.Var('te_bi_home').GetValue|0] picks_other=[THIS.Var('te_bi_other').GetValue|0] queue=[THIS.ScriptValue('te_bi_queue_now')|0] (a sixth month with the private queue at the engine's limit, the pool paying for construction, and on_start_expanding_building seeing under ten picks at home or under a twentieth of the queue's growth: the hook does not run as the engine queues a level, and this country never batches)"
+		}
+	}
+}
+
+# TEMPORARY self-check, at the end of each country's first whole month of batching (each time it switches on): do the
+# batches land, and does the engine count them (assumption 2)?
+#   OK      the batches queued more levels than were refused, and no pick found more than te_bi_engine_queue levels
+#           queued. picks_home + picks_other against added is the saving: the engine's decisions against the levels
+#           they stood for.
+#   BROKEN  the batches queued nothing or less than was refused. noroom near picks_home: every pick came with the
+#           queue already at the ceiling, so the hook runs after the engine's pass has filled it (fallback as
+#           batch_invest_hook's). Otherwise small, capped, unknown and short say why. A pick over the limit is
+#           batch_invest_limit, which trips at the pick itself.
+te_bi_selfcheck_month = {
+	if = {
+		limit = { var:te_bi_months_on = 1 }
+		debug_log = "TE_SELF_CHECK START batch_invest_month (the verdict line follows; none after this one means the engine dropped the templated line)"
+		if = {
+			limit = {
+				var:te_bi_added > var:te_bi_short
+				var:te_bi_maxq <= te_bi_engine_queue
+			}
+			debug_log = "TE_SELF_CHECK OK batch_invest_month country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] picks_home=[THIS.Var('te_bi_home').GetValue|0] picks_other=[THIS.Var('te_bi_other').GetValue|0] batches=[THIS.Var('te_bi_batches').GetValue|0] added=[THIS.Var('te_bi_added').GetValue|0] short=[THIS.Var('te_bi_short').GetValue|0] noroom=[THIS.Var('te_bi_noroom').GetValue|0] small=[THIS.Var('te_bi_small').GetValue|0] capped=[THIS.Var('te_bi_capped').GetValue|0] unknown=[THIS.Var('te_bi_unknown').GetValue|0] maxq=[THIS.Var('te_bi_maxq').GetValue|0] queue=[THIS.ScriptValue('te_bi_queue_now')|0] (a first whole month of batching: the batches queued levels and the engine never placed a level with more than 1,000 queued)"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN batch_invest_month country=[THIS.GetCountry.GetTagName] date=[TimeKeeper.GetCurrentDate.GetString] picks_home=[THIS.Var('te_bi_home').GetValue|0] picks_other=[THIS.Var('te_bi_other').GetValue|0] batches=[THIS.Var('te_bi_batches').GetValue|0] added=[THIS.Var('te_bi_added').GetValue|0] short=[THIS.Var('te_bi_short').GetValue|0] noroom=[THIS.Var('te_bi_noroom').GetValue|0] small=[THIS.Var('te_bi_small').GetValue|0] capped=[THIS.Var('te_bi_capped').GetValue|0] unknown=[THIS.Var('te_bi_unknown').GetValue|0] maxq=[THIS.Var('te_bi_maxq').GetValue|0] queue=[THIS.ScriptValue('te_bi_queue_now')|0] (a first whole month of batching: the batches queued no more levels than were refused, or a pick found more than 1,000 queued)"
+		}
+	}
+}

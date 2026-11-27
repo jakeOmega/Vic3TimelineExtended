@@ -1,0 +1,43 @@
+﻿# Batched private investment (common/scripted_effects/te_batch_investment_effects.txt).
+
+# Root = the building a level was just queued for, by anyone: a government, investors at home or from abroad, or
+# script. The trigger turns away every country that is not watched with one variable test, which is all this costs
+# before the late game. te_construction_market_on_actions.txt hooks the same on-action for the construction sites;
+# neither reads what the other writes.
+on_start_expanding_building = {
+	on_actions = {
+		te_bi_on_start_expanding
+	}
+}
+
+te_bi_on_start_expanding = {
+	trigger = {
+		owner ?= { has_variable = te_bi_watch }
+	}
+	effect = {
+		te_bi_hook = yes
+	}
+}
+
+# Root = the country. A watched country closes its month; any other is looked at only once its private queue holds
+# te_bi_watch_queue levels. A watched country still gets the pass with the rule off, which is its teardown.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_bi_monthly_on_action
+	}
+}
+
+te_bi_monthly_on_action = {
+	trigger = {
+		OR = {
+			has_variable = te_bi_watch
+			AND = {
+				te_bi_rule_on = yes
+				construction_queue_num_queued_private_levels >= te_bi_watch_queue
+			}
+		}
+	}
+	effect = {
+		te_bi_monthly = yes
+	}
+}
