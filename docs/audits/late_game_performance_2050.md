@@ -13,10 +13,14 @@ vanilla code.
 
 ## Status
 
-**2026-11-26 20:15 MST.** Baseline taken. A game week takes 44 s, and one
-engine task is two thirds of it: the investors' construction pass
-(`HandleAutonomousInvestment`), 29.6 s on every weekly tick. Next: whether
-that pass runs on one thread or many, and what one placement costs.
+**2026-11-26 20:45 MST.** The week is 38.5–39.2 s (two matching runs; the
+first run of the night, 44.1 s, was slower in every weekly tick and is
+treated as disturbed). The investors' construction pass is 22 s of each
+weekly tick, runs on one thread, and re-scores every candidate building
+after each placement. Script is at least a quarter of that thread's time.
+Measured so far: the update divisor (no clean gain). Running: Excess
+Private Construction off, to price a slower queue turnover. Next: a cheaper
+`ai_value` for the Railway and the Arts Academy.
 
 ## The save and the method
 
@@ -91,8 +95,65 @@ placements each scoring some 500 states.
 
 ## Findings
 
-None yet. Each finding gets a heading, the measurement behind it, and what
-was or could be done.
+### 1. The weekly investment pass is one thread re-scoring everything per placement
+
+Runs `base2` (`20261127T030938Z`) and `base3` (`20261127T032733Z`), the
+second with a counter of finished levels (`variants/count`).
+
+- **The runs repeat.** The pass took 1.97, 25.2, 20.1, 14.4 and 31.1 s on
+  the five weekly ticks of `base2` and 1.84, 24.9, 20.2, 14.8 and 29.0 s in
+  `base3`: the same save plays the same weeks. A variant can therefore be
+  compared tick for tick. The first weekly tick after the load is always
+  cheap (1.8 s); leave it out. The baseline for comparisons is ticks 2 to 5:
+  **88.8–90.7 s**, 22 s a tick, and 38.5–39.2 s a week.
+- **One thread.** Per-thread CPU every 0.67 s (`threadcpu.py`): through the
+  pass the game's tick thread runs at 0.99 of a core, the main thread waits
+  at 0, and about ten workers run at 0.3–0.7 each (7.3 cores busy in all).
+  The work is handed out in small pieces from a serial loop, so the pass is
+  as long as that one thread's work.
+- **What the thread runs.** Its instruction pointer and near stack every
+  5 ms, named by the strings each function references (`stacksample.py`,
+  `name_rvas.py`): `SetPotentialPrivateInvestmentPriorities`
+  (`country_ai.cpp`), the building score routine ("Base AI Value",
+  "Profitability", "Produced goods value"), the goods profit routine, and the
+  script system. A script-system function is on the near stack in 26% of the
+  weekly tick's samples, a lower bound (the scan sees the nearest twelve
+  return addresses), taken with the script profiler on.
+- **Which script.** Almost all of it is `ai_value` (41 s of 64 s in building
+  files over the 35 days) and `possible` (20 s), and about fifteen building
+  types take nearly all the calls: Arts Academy, Railway, Steel Mill and
+  the mod's radio, components, automotive, motor, tooling, glass,
+  explosives, electrics, synthetics and appliance industries, each asked
+  0.5 to 3.2 million times. These are the city industries with no resource
+  or land cap, which every state can take. Farms, mines and plantations are
+  asked a hundredth as often.
+- **Count.** 2,886 levels finished in the USA's own states in the 35 days
+  (577 a week); its investors also build abroad. The private queue stood at
+  1,000 at the end and `private_construction_used` at 3.05 million.
+
+So the cost is (placements a week) × (candidate states × candidate types) ×
+(cost of scoring one). The engine owns the loop. What the mod can reach:
+the script each candidate runs (finding 3), how many levels are placed a
+week (finding 4, gameplay), and which candidates exist (not yet tried).
+
+### 2. The update divisor is not a clean lever
+
+`NAI.AUTONOMOUS_INVESTMENT_UPDATE_COUNT_DIVISOR` (vanilla 500,000: one
+investment update a tick per that much weekly pool income, so 22,980 a tick
+for the USA) raised tenfold, session `20261127T031817Z`:
+
+| Weekly tick | 2 | 3 | 4 | 5 | Ticks 2–5 | Week |
+|---|---|---|---|---|---|---|
+| Baseline (`base3`) | 24.9 | 20.2 | 14.8 | 29.0 | 88.8 s | 38.5 s |
+| Divisor × 10 | 33.6 | 11.9 | 12.0 | 16.7 | 74.2 s | 36.3 s |
+
+The first full tick is no cheaper with a tenth of the updates, so the cost
+follows placements, not updates: an update that finds the queue full costs
+nothing (the other 27 ticks of a week run 23,000 of them in 16–36 ms). The
+later ticks are lower, which is a change in what gets built, not a saving
+per placement. A higher divisor also caps a small pool at one placement a
+tick, 28 a week, which a country with a few million of weekly pool income
+would notice. Not recommended.
 
 ## Changes made on this branch
 
