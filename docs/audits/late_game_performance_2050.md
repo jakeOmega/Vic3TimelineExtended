@@ -39,8 +39,14 @@ vanilla code.
 - **Wall clock:** `wallday.py` over the run's `dedicated_server.log`, with
   pauses taken out. **Tick tasks and script:** the harness's `profile
   summary`. A variant is an `--add-mod` folder of the changed files.
-- **Data:** `/mnt/d/vic3te-data/perf-2026-11-26/` (`run_variant.sh NAME
-  [--add-mod WINPATH]`, `runs/<name>/`, `variants/<name>/`).
+- **Data:** `/mnt/d/vic3te-data/perf-2026-11-26/` (`run_variant3.sh NAME
+  [--add-mod WINPATH]... [--setup S=FILE --run-setup S]`, which also reads
+  the queue, the pool and the count of finished levels at the end;
+  `runs/<name>/`, `variants/<name>/`, `setups/`; `weekest.py` and
+  `ttsum.py` for the tick tasks, `wallday.py` for the wall clock,
+  `sp_buildings.py` for the script profile by building; the samplers of
+  2026-11-23 with `stacksample_deep.py` and `stackstrings_tick.py`, which
+  follow the tick thread).
 - The 60 s weekly tick outlasts the harness's 30 s wait for a pause to be
   acknowledged, so `advance` ends `left_running` (`no_ack`) once the 35 days
   are done. The timing is complete by then; the session can still `read`
@@ -240,7 +246,18 @@ Nothing else differs from the baseline.
 | Levels finished in the USA's states, 35 days | 2,886 | 1,372 (−52%) |
 | Private queue at the end | 1,000 | 1,000 |
 
-The pass follows the levels placed: with a level taking four or five weeks
+**A middle setting** (session `20261127T051832Z`): the raise set to 700, so
+a cap of 1,390 against 690 and 3,064. The pass took 1.6, 19.0, 7.7 and
+2.2 s on ticks 2 to 5 (30.5 s; tick tasks 18.5 s a steady week), 1,551
+levels finished in the USA's states, and `private_construction_used` stood
+at 1.38 million. Over five weeks that is no different from the raise at 0:
+both windows are mostly the projects in flight at the switch finishing two
+or three weeks late and in one batch. What the two runs do show is that a
+typical level here costs well over 1,390 points, so the saving starts
+somewhere between a cap of 1,390 and 3,064. A run of several months each
+side would place it; it needs a grant of hours.
+
+The pass follows the levels placed: with a level taking about three weeks
 the queue turns over a quarter as often. (The two cheap ticks and the 19 s
 one are the projects in flight at the switch finishing together; a longer
 run would even out near 7 s a tick.)
@@ -345,9 +362,11 @@ Each of these trades investor building rate for speed; none is built.
    takes back the efficiency penalty beyond that point. It does not make the
    week faster by itself; it stops paying for nothing.
 2. **Hold the cap lower, so a level takes N weeks.** The pass is about 22 s ÷
-   N. At the base cap (N of about three) the week's tick work is 17.5 s against 33.5.
-   Investors then finish that much less. A middle setting is measured below
-   when run.
+   N. At the base cap (N of about three) the week's tick work is 17.5 s
+   against 33.5, and investors finish about half as many levels in the
+   USA's states, a quarter of whose existing levels are unstaffed. Where
+   between a cap of 1,390 and 3,064 the saving starts needs longer runs
+   (finding 4).
 3. **Larger levels in the late eras, with a lower cap.** The owner's
    super-building idea, or a modifier form of it: the engine has
    `building_group_<group>_employee_mult` and `building_throughput_add`, so
@@ -360,4 +379,58 @@ Each of these trades investor building rate for speed; none is built.
 
 ## Open
 
-None yet.
+1. **The turnover decision** (finding 4 and the proposals above) is the
+   owner's. A months-long pair of runs would say what a given cap costs in
+   levels and saves in time once the transient is over.
+2. **Which candidates the pass scores.** The Steel Mill's `possible` is asked
+   about 760,000 times on a heavy weekly tick, and the USA owns 180 states,
+   so most of what its investors score each placement looks to be foreign
+   states. Two bounding runs that narrowed or widened the candidates
+   (`noposs`, and `domonly`, city industries in the USA's own states only:
+   pass 23.5 s over ticks 2–5) both changed what investors built and how
+   fast it finished, so neither separates the cost of a placement from the
+   number of placements. The engine's own weight on foreign candidates is
+   `foreign_investment_ai_factor` on each building group; whether 0 there
+   skips the scoring is not measured, and it would end foreign investment in
+   that group.
+3. **15,955 supply ships under construction.** The box no longer pays for
+   them every tick, but the figure is the rescale plan's case
+   (`docs/superpowers/plans/2026-11-24-supply-ship-scale.md`); nothing else
+   in the tick tasks was traced to them.
+4. **The rest of the week's tick work**, about 11 s: `UpdateStateTrades`
+   2.7–3.5 s and `ProcessEconomicMigration` about 3.7 s a week (both engine
+   passes; the migration defines were measured on the 1992 save and left to
+   the owner), `RecalculateModifierNodes` 1.8 s. Not looked at again here.
+5. **Wall clocks after 22:00 on 2026-11-26 are not usable.** The first try
+   of the middle setting ended `not_foreground` (the game's window lost the
+   front, #1963), and the two runs after it (`domonly`, the repeat of the
+   middle setting) show 1.3–1.4 s a sub-tick outside the tick tasks against
+   0.37 s before, with their tick tasks normal. Their tick-task figures are
+   quoted above; their wall times are not. Every wall time in this report is
+   from before that.
+6. Side finding, filed as #2093: in the Ships tab the "used/total" figure
+   runs into the cost beside it at five digits (it did before this branch).
+
+## Lessons
+
+- **The same save replays the same weeks.** Three unchanged runs agreed on
+  each weekly tick to 2–7%, so a variant that leaves the game's choices
+  alone is compared tick for tick, and one that changes them shows it in
+  the pattern at once (finding 1).
+- **Count a week on fixed dates.** `advance 35` ends on a different tick
+  each run and one weekly tick is 30 s; a whole run's seconds a week moved
+  by 20% for that reason alone (Baseline).
+- **The script profiler's seconds are not the pass's seconds.** They are CPU
+  summed over threads. 23 s of profiled `ai_value` and 12.5 s of `possible`
+  were cut or moved with no change in the pass (finding 3).
+- **A deep stack scan lists stale frames.** Thirty-two kilobytes of stack
+  put `has_law_or_variant` on a third of the samples of a thread that was
+  not running it. The nearest dozen return addresses are callers; the rest
+  are history.
+- **A knockout that changes what the AI may build measures the AI, not the
+  code removed.** `noposs` and `domonly` each cut the pass by half or more
+  by changing where investors built.
+- **Split an always-shown text one data call at a time, in `replace/`.** A
+  one-line loc override in a variant showed which of two calls cost 6 s a
+  week, with no GUI file touched, and was the fix.
+
