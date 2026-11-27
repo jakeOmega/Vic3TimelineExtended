@@ -3,11 +3,12 @@
 # investors can build, because start_privately_funded_building_construction takes a literal
 # building type. Re-run the generator after a building or a building group changes;
 # test_batch_investment.py fails when this file is stale. Which buildings: the generator's
-# why_not (not government funded, expandable, and not can_build_private = { always = no }).
+# why_not (not government funded, expandable, and not can_build_private = { always = no }),
+# less its EXCLUDED (a private gate that counts levels, which a batch could overrun).
 
 # Building scope, from te_bi_place: local_var:te_bi_n levels to queue. Each branch hands the
-# state its own building type (te_bi_queue_in_state keeps the once-a-week mark under it). A
-# building with no branch leaves local_var:te_bi_did at 0, which the caller counts as unknown.
+# state its own building type (te_bi_queue_in_state). A building with no branch leaves
+# local_var:te_bi_did at 0, which the caller counts as unknown.
 te_bi_queue_batch = {
 	if = {
 		limit = { is_building_type = building_advanced_material_fabricator }
@@ -286,14 +287,6 @@ te_bi_queue_batch = {
 		state = { te_bi_queue_in_state = { B = building_space_elevator } }
 	}
 	else_if = {
-		limit = { is_building_type = building_space_mine }
-		state = { te_bi_queue_in_state = { B = building_space_mine } }
-	}
-	else_if = {
-		limit = { is_building_type = building_space_resort }
-		state = { te_bi_queue_in_state = { B = building_space_resort } }
-	}
-	else_if = {
 		limit = { is_building_type = building_specialty_alloy_metal_mine }
 		state = { te_bi_queue_in_state = { B = building_specialty_alloy_metal_mine } }
 	}
@@ -376,10 +369,6 @@ te_bi_queue_batch = {
 	else_if = {
 		limit = { is_building_type = building_tourism_industry }
 		state = { te_bi_queue_in_state = { B = building_tourism_industry } }
-	}
-	else_if = {
-		limit = { is_building_type = building_trade_center }
-		state = { te_bi_queue_in_state = { B = building_trade_center } }
 	}
 	else_if = {
 		limit = { is_building_type = building_vineyard }

@@ -4,8 +4,8 @@ When the investors of a very large economy queue a level, the mod queues more le
 building beside it (`te_bi_hook`, `common/scripted_effects/te_batch_investment_effects.txt`), so
 the engine's weekly investment pass makes a few dozen decisions where it made a thousand.
 `start_privately_funded_building_construction` takes a literal building type, and a building holds
-no variables, so every building investors can build needs its own branch: one that queues the
-levels and keeps the state's once-a-week mark for that type. This writes those branches to
+no variables, so every building investors can build needs its own branch to queue the levels.
+This writes those branches to
 `common/scripted_effects/te_batch_investment_generated.txt`, and the list of buildings that make
 a local good (which get a smaller batch) to
 `common/scripted_triggers/te_batch_investment_generated_triggers.txt`, from the merged mod and
@@ -32,6 +32,27 @@ EFFECTS = Path("common/scripted_effects/te_batch_investment_generated.txt")
 TRIGGERS = Path("common/scripted_triggers/te_batch_investment_generated_triggers.txt")
 
 KINDS = ("Buildings", "Building Groups", "PM Groups", "PMs", "Goods")
+
+# Buildings investors can build that are left out, and why: they keep single levels.
+EXCLUDED = {
+	"building_space_mine": "its private levels are capped by the base's room, a count of queued levels can_queue_building_levels does not read (sr_ebase_may_build_private)",
+	"building_space_resort": "its private levels are capped by the colony's room, as the Extraplanetary Base's (sr_resort_may_build_private)",
+	"building_trade_center": "it expands by itself with trade, and its private gate reads the levels already there (trade_center_construction_allowed)",
+}
+
+# The other selected buildings with a can_build_private gate, each read: a yes or no for the state or the country,
+# which the engine's own level has just passed, so the levels queued beside it pass too. A building that gains a gate,
+# or a new one that has one, stops the generator until it is put here or in EXCLUDED: a gate that counts levels (as
+# the two above do) is one a batch could overrun.
+GATES_READ = {
+	"building_coal_mine": "rt_fossil_construction_allowed_here: the state's fossil rule",
+	"building_oil_rig": "rt_fossil_construction_allowed_here",
+	"building_power_plant": "rt_fossil_construction_allowed_here",
+	"building_opium_plantation": "the owner does not ban opium",
+	"building_synthetics_plant_opium": "the owner does not ban opium",
+	"building_construction_sector": "a market game, or a direct game not yet converted",
+	"building_ocean_mine": "the Global Commons rule is off",
+}
 
 # Where a production method keeps what it makes.
 MODIFIER_BLOCKS = ("workforce_scaled", "level_scaled", "unscaled")
@@ -109,9 +130,10 @@ def why_not(name, body, groups):
 
 
 def select_buildings(state):
-	"""Every building the engine's investment pass could queue a level of. A building too many here
-	is a branch never taken; one missing is a pick that stays a single level (the hook counts it as
-	`unknown`), so the test is the engine's own three gates and nothing narrower."""
+	"""Every building the engine's investment pass could queue a level of, less EXCLUDED. A building
+	too many here is a branch never taken; one missing is a pick that stays a single level (the hook
+	counts it as `unknown`), so the test is the engine's own three gates, and then each private gate
+	is read by hand: one that counts levels is one a batch could overrun."""
 	buildings = state.get_data("Buildings")
 	groups = state.get_data("Building Groups")
 	names = []
@@ -121,7 +143,25 @@ def select_buildings(state):
 			names.append(name)
 	if not names:
 		raise ValueError("No building investors can build: the parse is empty or the gates are wrong")
-	return names
+	stale = sorted((set(EXCLUDED) | set(GATES_READ)) - set(names))
+	if stale:
+		raise ValueError(f"EXCLUDED or GATES_READ names buildings investors cannot build (or that are gone): {stale}")
+	both = sorted(set(EXCLUDED) & set(GATES_READ))
+	if both:
+		raise ValueError(f"In both EXCLUDED and GATES_READ: {both}")
+	unread = sorted(
+		name for name in names
+		if "can_build_private" in body_of(buildings, name) and name not in EXCLUDED and name not in GATES_READ
+	)
+	if unread:
+		raise ValueError(
+			f"{unread} have a can_build_private gate nobody has read: a yes-or-no gate goes in GATES_READ, "
+			"one that counts levels in EXCLUDED"
+		)
+	ungated = sorted(name for name in GATES_READ if "can_build_private" not in body_of(buildings, name))
+	if ungated:
+		raise ValueError(f"GATES_READ names buildings with no can_build_private any more: {ungated}")
+	return [name for name in names if name not in EXCLUDED]
 
 
 def local_goods(state):
@@ -164,11 +204,12 @@ def render_effects(names):
 		"# investors can build, because start_privately_funded_building_construction takes a literal",
 		"# building type. Re-run the generator after a building or a building group changes;",
 		"# test_batch_investment.py fails when this file is stale. Which buildings: the generator's",
-		"# why_not (not government funded, expandable, and not can_build_private = { always = no }).",
+		"# why_not (not government funded, expandable, and not can_build_private = { always = no }),",
+		"# less its EXCLUDED (a private gate that counts levels, which a batch could overrun).",
 		"",
 		"# Building scope, from te_bi_place: local_var:te_bi_n levels to queue. Each branch hands the",
-		"# state its own building type (te_bi_queue_in_state keeps the once-a-week mark under it). A",
-		"# building with no branch leaves local_var:te_bi_did at 0, which the caller counts as unknown.",
+		"# state its own building type (te_bi_queue_in_state). A building with no branch leaves",
+		"# local_var:te_bi_did at 0, which the caller counts as unknown.",
 		"te_bi_queue_batch = {",
 	]
 	for position, name in enumerate(names):

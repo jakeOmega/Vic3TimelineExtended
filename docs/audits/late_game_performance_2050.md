@@ -446,26 +446,37 @@ to keep the rate. The fourth is built (2026-11-27); the others are not.
      the form sketched above. The engine fires `on_start_expanding_building`
      as it queues a level, so script answers each of the investors' picks at
      home at once, inside the pass, with more levels of the same building: a
-     tenth of the building's size, 100 at most, a fiftieth and 10 for a
-     building that makes a local good. The queue is held **under** 1,000,
+     tenth of the building's size queued at most, 100 levels at most, a
+     fiftieth and 10 for a building that makes a local good. The queue is
+     held **under** 1,000,
      not over it: batches stop at 900 and the engine fills the last hundred
      slots a level at a time. That keeps the engine's picks abroad, which
      script cannot batch (the effect names no investor), keeps the queue's
      length and so the construction bought as they are, and should leave
      about 100 + 15 decisions a week of the 1,000: 2 to 3 s of the 22. A
-     country batches once its investors place 800 levels in a month.
-     Whether the hook runs inside the pass, and whether the pass counts
-     script's levels against its 1,000, are both unread; each has a
-     self-check line, and if either fails the system does nothing and says
-     so. The pulse form above, with the queue held past 1,000, is the
-     fallback. A game rule switches it off. Timing it on this save is the
-     first row of `docs/testing/perf-fixes-playtest.md` § Batched private
+     country batches once its investors place 800 levels at home in a
+     month with its queue at the engine's 1,000. Whether the hook runs
+     inside the pass, and whether the pass counts script's levels against
+     its 1,000, are both unread, and each has a self-check line. If the
+     hook runs too late, nothing is batched; if the pass does not count
+     script's levels, the first batching pass leaves up to 900 levels too
+     many in the queue and the first pick past 1,000 switches batching off
+     for the game. The pulse form above, with the queue held past 1,000,
+     is the fallback. A game rule switches it off. Timing it on this save
+     is in `docs/testing/perf-fixes-playtest.md` § Batched private
      investment.
+   - **The 1,000 has a likely source:** NAI's
+     `CONSTRUCTION_MAX_NUM_PRODUCTION_BUILDING_CONSTRUCTIONS` defines, 1 +
+     0.05 for each point of construction a country makes a week, the scaled
+     part at most 999. If so the ceiling is each country's own and reaches
+     1,000 at about 20,000 construction a week, which fits this save and is
+     not confirmed.
    - **What it costs in play:** a batching country's investors place far
      fewer levels abroad (about a tenth with the reserve at 100, by the
-     arithmetic of 115 picks against 1,000, not by measurement), and a
-     building grows by up to a tenth in one week where it grew a level at a
-     time.
+     arithmetic of 115 picks against 1,000, not by measurement) and buy
+     government-owned levels about a ninth as fast (the same pass
+     privatizes), and a building grows by up to a tenth in one week where
+     it grew a level at a time.
    - Still to read in game: who owns script-queued levels and whether the
      pool pays as for the engine's; whether the effect honors `possible`;
      whose pool pays in a foreign state.

@@ -159,10 +159,8 @@ class Building(Scope):
         super().__init__()
         self.kind, self.state, self.level = kind, state, level
         self.room = room  # further levels it can take, queued ones counted; None is no cap
+        self.pending = 0  # its levels in any queue
         state.buildings[kind] = self
-
-    def queued(self):
-        return sum(1 for building, _ in self.state.owner.queue if building is self)
 
 
 class Engine:
@@ -172,8 +170,9 @@ class Engine:
     LIMIT = 1000
 
     def __init__(self, script, *, hook="inside", script_hook=None, count_first=True, recheck=True, refuse=None,
-                 answer=0, rules=()):
+                 answer=0, rules=(), limit=LIMIT):
         self.script = script
+        self.limit = limit  # where the pass stops queueing for a country
         self.hook = hook  # when on_start_expanding_building runs for a level the engine queues: inside, after, never
         self.script_hook = script_hook or hook  # and for a level script queues
         self.count_first = count_first  # the level is in the queue when its hook runs
@@ -192,15 +191,21 @@ class Engine:
     # -- queueing ---------------------------------------------------------------------------------------------------
     def queue_private(self, investor, building, who):
         mode = self.script_hook if who == "script" else self.hook
-        if self.count_first:
+
+        def count():
             investor.queue.append((building, who))
+            building.pending += 1
+
+        if self.count_first:
+            count()
             self.fire(building, mode)
         else:
             self.fire(building, mode)
-            investor.queue.append((building, who))
+            count()
 
     def queue_government(self, building):
         building.state.owner.government_queue += 1
+        building.pending += 1
         self.fire(building, self.hook)
 
     def fire(self, building, mode):
@@ -239,24 +244,26 @@ class Engine:
         building = state.buildings[kind]
         if self.refuse and self.refuse(building):
             return
-        if building.room is not None and building.queued() >= building.room:
+        if building.room is not None and building.pending >= building.room:
             return
         self.queue_private(state.owner, building, "script")
         for _ in range(self.answer):
             state.owner.queue.append((building, "answer"))
+            building.pending += 1
 
     # -- the week ---------------------------------------------------------------------------------------------------
     def finish(self, country, levels):
         done, country.queue = country.queue[:levels], country.queue[levels:]
         for building, _ in done:
             building.level += 1
+            building.pending -= 1
 
     def invest(self, country, pick, updates=5000):
         """The weekly pass: one level a decision, until the queue is full."""
         decisions = 0
-        slots = self.LIMIT - len(country.queue)
+        slots = self.limit - len(country.queue)
         for _ in range(updates):
-            if self.recheck and len(country.queue) >= self.LIMIT:
+            if self.recheck and len(country.queue) >= self.limit:
                 break
             if not self.recheck and decisions >= slots:
                 break
@@ -321,6 +328,8 @@ class Run:
             return self.value(self.script.values[raw], scope)
         if raw == "level" and isinstance(scope, Building):
             return float(scope.level)
+        if raw == "level_after_queued_constructions" and isinstance(scope, Building):
+            return float(scope.level + scope.pending)
         if isinstance(scope, Country):
             if raw == "construction_queue_num_queued_private_levels":
                 return float(len(scope.queue))
@@ -384,7 +393,7 @@ class Run:
         if key == "is_building_type":
             return scope.kind == val
         if key == "can_queue_building_levels":
-            return scope.room is None or scope.queued() + self.value(val, scope) <= scope.room
+            return scope.room is None or scope.pending + self.value(val, scope) <= scope.room
         if key == "month":
             return compare((self.engine.day // 30) % 12, op, float(val))
         if key in self.script.triggers:
@@ -491,7 +500,7 @@ def compare(lhs, op, rhs):
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# A very large economy: forty states of city industries, a railway and a power plant in each, and investment abroad.
+# Very large economies: forty states of city industries, a railway and a power plant in each, and investment abroad.
 # ---------------------------------------------------------------------------------------------------------------------
 INDUSTRIES = ("building_steel_mill", "building_motor_industry", "building_tooling_workshop", "building_glassworks",
               "building_electrics_industry", "building_chemical_plant", "building_art_academy",
@@ -499,46 +508,83 @@ INDUSTRIES = ("building_steel_mill", "building_motor_industry", "building_toolin
 LOCAL = ("building_railway", "building_power_plant")
 
 
-class Giant:
-    def __init__(self, engine, *, abroad=0.3, states=40, seed=7):
-        self.engine, self.abroad = engine, abroad
+class Investor:
+    """A country, its buildings and where its investors place their levels."""
+
+    def __init__(self, tag, *, states, levels, seed, kinds=INDUSTRIES + LOCAL):
         self.random = random.Random(seed)
-        self.country, self.host = Country("USA"), Country("MEX")
-        self.home, self.foreign = [], []
+        self.country = Country(tag)
+        self.buildings = []
         for index in range(states):
-            state = State(f"home{index}", self.country)
-            for kind in INDUSTRIES + LOCAL:
-                self.home.append(Building(kind, state, self.random.randint(200, 5000)))
-        for index in range(10):
-            state = State(f"abroad{index}", self.host)
-            for kind in INDUSTRIES:
-                self.foreign.append(Building(kind, state, self.random.randint(50, 500)))
-        while len(self.country.queue) < Engine.LIMIT:  # the queue as the engine left it last week
-            self.country.queue.append((self.pick(), "engine"))
+            state = State(f"{tag}{index}", self.country)
+            for kind in kinds:
+                self.buildings.append(Building(kind, state, self.random.randint(*levels)))
+        self.abroad, self.share_abroad = [], 0.0
+
+    def invests_in(self, other, share):
+        self.abroad, self.share_abroad = other.buildings, share
 
     def pick(self):
-        return self.random.choice(self.foreign if self.random.random() < self.abroad else self.home)
+        return self.random.choice(self.abroad if self.random.random() < self.share_abroad else self.buildings)
 
-    def run(self, days, *, finish=1000, each_day=None):
+    def fill(self, levels=Engine.LIMIT):
+        """The queue as the engine left it last week."""
+        while len(self.country.queue) < levels:
+            building = self.pick()
+            self.country.queue.append((building, "engine"))
+            building.pending += 1
+
+
+class Giant:
+    """The USA, investing three levels in ten abroad, in a host that is small unless `rival`: then the host is a
+    second very large economy whose investors place three in ten of their levels in the USA."""
+
+    def __init__(self, engine, *, abroad=0.3, rival=False, queued=Engine.LIMIT):
+        self.engine = engine
+        self.usa = Investor("USA", states=40, levels=(200, 5000), seed=7)
+        if rival:
+            self.other = Investor("MEX", states=40, levels=(200, 5000), seed=11)
+            self.other.invests_in(self.usa, 0.3)
+        else:
+            self.other = Investor("MEX", states=10, levels=(50, 500), seed=11, kinds=INDUSTRIES)
+        self.usa.invests_in(self.other, abroad)
+        self.rival = rival
+        self.usa.fill(queued)
+        if rival:
+            self.other.fill()
+        self.country, self.host = self.usa.country, self.other.country
+        self.home, self.foreign = self.usa.buildings, self.other.buildings
+        self.pick = self.usa.pick
+
+    def investors(self):
+        return [self.usa, self.other] if self.rival else [self.usa]
+
+    def run(self, days, *, finish=1000, updates=5000):
         """Every seventh day the week's levels finish and the pass refills the queue; every thirtieth is a monthly
         pulse."""
+        engine = self.engine
         for _ in range(days):
-            engine = self.engine
             if engine.day % 7 == 0:
-                engine.finish(self.country, finish)
-                engine.invest(self.country, self.pick)
+                for investor in self.investors():
+                    engine.finish(investor.country, finish)
+                for investor in self.investors():
+                    engine.invest(investor.country, investor.pick, updates)
             if engine.day % 30 == 0:
                 engine.monthly(self.country)
                 engine.monthly(self.host)
-            if each_day:
-                each_day(self)
             engine.day += 1
             self.check()
 
     def check(self):
-        """What holds on every day in every engine: script never queues past the ceiling, and never abroad."""
-        assert not self.host.queue, "a level was queued for the host country"
-        assert not self.host.vars, "the host country, never at 200 levels queued, is watched"
+        """What holds on every day in every engine: a level script queued is in its own country, for its own
+        country."""
+        for investor in (self.usa, self.other):
+            for building, who in investor.country.queue:
+                if who == "script":
+                    assert building.state.owner is investor.country, "script queued a level abroad"
+        if not self.rival:
+            assert not self.host.queue, "a level was queued for the host country"
+            assert not self.host.vars, "the host country, never at 200 levels queued, is watched"
 
     def on(self):
         return "te_bi_on" in self.country.vars
@@ -551,7 +597,18 @@ SCRIPT = Script()
 
 
 def constant(name):
-    return float(SCRIPT.values[name])
+    """A tuning value, worked out where it is a sum of others."""
+    country = Country("AAA")
+    return Run(Engine(SCRIPT), country).value(name, country)
+
+
+def verdicts(engine):
+    """Each self-check's verdict lines, in order."""
+    found = {}
+    for line in engine.lines("TE_SELF_CHECK"):
+        if " START " not in line:
+            found.setdefault(line.split()[2], []).append(line.split()[1])
+    return found
 
 
 class TheAssumedEngine(unittest.TestCase):
@@ -570,6 +627,7 @@ class TheAssumedEngine(unittest.TestCase):
         self.assertTrue(self.giant.on())
         self.assertEqual(len(self.engine.lines("TE_BI on country=USA")), 1)
         self.assertIn("day30", self.engine.lines("TE_BI on")[0])
+        self.assertFalse(self.engine.lines("TE_BI off"))
 
     def test_the_pass_makes_a_small_fraction_of_its_decisions(self):
         self.assertGreater(min(self.before), 900)
@@ -577,36 +635,47 @@ class TheAssumedEngine(unittest.TestCase):
         self.assertLess(max(self.after), constant("te_bi_reserve") + 60)
         self.assertLess(sum(self.after) / len(self.after), 0.15 * sum(self.before) / len(self.before))
 
-    def test_as_many_levels_are_placed_as_before(self):
-        # The queue is refilled to the engine's limit every week either way.
+    def test_the_queue_is_as_long_as_before(self):
+        # Refilled to the engine's limit every week either way, so what reads the queue's length reads the same.
         self.assertEqual(len(self.giant.country.queue), Engine.LIMIT)
         self.assertEqual(self.giant.var("te_bi_maxq"), Engine.LIMIT)
 
     def test_every_self_check_reads_ok(self):
-        verdicts = [line.split()[1:3] for line in self.engine.lines("TE_SELF_CHECK") if " START " not in line]
-        self.assertEqual(sorted(verdicts), [["OK", "batch_invest_hook"], ["OK", "batch_invest_month"],
-                                            ["OK", "batch_invest_queue"], ["OK", "batch_invest_reentry"]])
+        self.assertEqual(verdicts(self.engine), {"batch_invest_hook": ["OK"], "batch_invest_month": ["OK"],
+                                                 "batch_invest_queue": ["OK"], "batch_invest_reentry": ["OK"]})
+        self.assertNotIn("te_bi_tripped", self.engine.globals)
 
     def test_each_verdict_follows_its_start_line(self):
-        for name in ("batch_invest_queue", "batch_invest_hook", "batch_invest_month"):
-            self.assertEqual(len(self.engine.lines(f"TE_SELF_CHECK START {name}")), 1, name)
+        log = self.engine.log
+        for name, verdict in (("batch_invest_queue", "batch_invest_queue"), ("batch_invest_hook", "batch_invest_hook"),
+                              ("batch_invest_month", "batch_invest_month")):
+            starts = [i for i, line in enumerate(log) if line.startswith(f"TE_SELF_CHECK START {name}")]
+            self.assertEqual(len(starts), 1, name)
+            self.assertIn(f" {verdict} ", log[starts[0] + 1])
+
+    def test_the_first_batchs_start_line_comes_before_the_batch(self):
+        # A crash at the first level queued from inside the hook leaves this line the last of its kind.
+        start = self.engine.lines("TE_SELF_CHECK START batch_invest_queue")[0]
+        self.assertRegex(start, r"asked=\d+ ")
+        self.assertNotIn("asked=-1", start)
 
     def test_the_month_line_prints_each_of_the_first_months(self):
         lines = self.engine.lines("TE_BI month country=USA")
         self.assertEqual(len(lines), 3)  # days 60, 90, 120
         figures = dict(part.split("=") for part in lines[-1].split()[2:])
-        self.assertEqual(figures["over"], "0")
-        self.assertEqual(figures["short"], "0")
-        self.assertEqual(figures["unknown"], "0")
+        for name in ("over", "short", "unknown", "capped"):
+            self.assertEqual(figures[name], "0", name)
         self.assertGreater(int(figures["added"]), 3000)
         self.assertLess(int(figures["picks_home"]) + int(figures["picks_other"]), 800)
+        # The reserve's single levels at home are the picks that found no room.
+        self.assertGreater(int(figures["noroom"]), 100)
 
 
 class WhatABatchIs(unittest.TestCase):
     def setUp(self):
         self.engine = Engine(SCRIPT)
         self.giant = Giant(self.engine)
-        self.queued, self.level_then = [], {}
+        self.queued, self.level_then, self.most_pending = [], {}, {}
         original = self.engine.script_queues
 
         def spy(state, kind):
@@ -614,9 +683,9 @@ class WhatABatchIs(unittest.TestCase):
             self.queued.append((self.engine.day, building, len(state.owner.queue)))
             self.level_then.setdefault((self.engine.day, building), building.level)
             original(state, kind)
+            self.most_pending[building] = max(self.most_pending.get(building, 0), building.pending / building.level)
 
         self.engine.script_queues = spy
-        self.giant.run(100)
 
     def batches(self):
         grouped = {}
@@ -625,14 +694,16 @@ class WhatABatchIs(unittest.TestCase):
         return grouped
 
     def test_no_batch_is_queued_before_batching_is_on(self):
+        self.giant.run(100)
         self.assertTrue(self.queued)
         self.assertGreaterEqual(min(day for day, _, _ in self.queued), 30)
 
     def test_no_level_is_queued_at_or_past_the_ceiling(self):
-        self.assertLess(max(length for _, _, length in self.queued), constant("te_bi_engine_queue")
-                        - constant("te_bi_reserve"))
+        self.giant.run(100)
+        self.assertLess(max(length for _, _, length in self.queued), constant("te_bi_ceiling"))
 
     def test_a_batch_is_a_tenth_of_the_building_and_a_fiftieth_for_a_local_good(self):
+        self.giant.run(100)
         sizes = set()
         for key, levels in self.batches().items():
             building, level = key[1], self.level_then[key]  # its built levels when the batch was sized
@@ -645,20 +716,25 @@ class WhatABatchIs(unittest.TestCase):
         self.assertIn((False, int(constant("te_bi_batch_max"))), sizes)
         self.assertIn((True, int(constant("te_bi_local_batch_max"))), sizes)
 
-    def test_a_building_is_batched_once_a_week(self):
-        weeks = {}
-        for day, building in self.batches():
-            weeks.setdefault((day // 7, building), []).append(day)
-        self.assertTrue(all(len(days) == 1 for days in weeks.values()))
+    def test_a_building_is_batched_once_in_a_pass(self):
+        self.giant.run(100)
+        self.assertEqual(len(self.batches()), len({(day, building) for day, building, _ in self.queued}))
+        self.assertLessEqual(max(self.most_pending.values()), constant("te_bi_share"))
 
-    def test_local_goods_buildings_get_batches_too(self):
-        self.assertTrue(any(building.kind in LOCAL for _, building in self.batches()))
+    def test_slow_levels_do_not_stack_batch_on_batch(self):
+        # Three levels in ten finish a week, so a level waits three weeks and more: a building picked again while
+        # its batch is still queued gets no second one.
+        self.giant.run(160, finish=300)
+        self.assertTrue(self.giant.on())
+        self.assertTrue(self.queued)
+        self.assertLessEqual(max(self.most_pending.values()), constant("te_bi_share"))
 
 
 class TheSizes(unittest.TestCase):
-    def size(self, kind, level):
+    def size(self, kind, level, pending=1):
         engine = Engine(SCRIPT)
         building = Building(kind, State("s", Country("AAA")), level)
+        building.pending = pending  # the engine's own level, just queued
         return Run(engine, building).value("te_bi_batch_extra", building)
 
     def test_an_ordinary_building(self):
@@ -669,27 +745,43 @@ class TheSizes(unittest.TestCase):
         self.assertEqual([self.size("building_railway", level) for level in (0, 99, 100, 149, 150, 499, 500, 9000)],
                          [0, 0, 1, 1, 2, 8, 9, 9])
 
+    def test_what_is_queued_already_comes_off(self):
+        self.assertEqual([self.size("building_steel_mill", 1000, pending) for pending in (1, 40, 99, 100, 250)],
+                         [99, 60, 1, 0, 0])
+
     def test_the_tuning_is_in_order(self):
         self.assertLess(constant("te_bi_off_levels"), constant("te_bi_on_levels"))
         self.assertLess(constant("te_bi_unwatch_queue"), constant("te_bi_watch_queue"))
-        self.assertLess(constant("te_bi_reserve"), constant("te_bi_engine_queue"))
         self.assertLess(constant("te_bi_local_share"), constant("te_bi_share"))
         self.assertLess(constant("te_bi_local_batch_max"), constant("te_bi_batch_max"))
         # A batch's own levels come back through the hook inside one `while`, which the engine stops at 1,000 passes.
         self.assertLess(constant("te_bi_batch_max"), 1000)
         # A country placing te_bi_on_levels a month holds a week's worth in its queue, so it is watched by then.
         self.assertLessEqual(constant("te_bi_watch_queue"), constant("te_bi_on_levels") / 4)
+        # The engine's own single levels are how script sees it reach its limit: they must start under "near".
+        self.assertLess(constant("te_bi_ceiling"), constant("te_bi_engine_queue_near"))
+        self.assertEqual(constant("te_bi_ceiling"), 900)
+
+    def test_the_mod_leaves_the_engines_limit_alone(self):
+        # The values file names NAI's CONSTRUCTION_MAX_NUM_PRODUCTION_BUILDING_CONSTRUCTIONS defines (1 + at most
+        # 999) as the likely source of the engine's 1,000. Script cannot read a define: if the mod ever sets one of
+        # them, te_bi_engine_queue has to follow.
+        for path in sorted((ROOT / "common" / "defines").glob("*.txt")):
+            self.assertNotIn("CONSTRUCTION_MAX_NUM_PRODUCTION_BUILDING_CONSTRUCTIONS",
+                             path.read_text(encoding="utf-8-sig"), path.name)
+        self.assertEqual(constant("te_bi_engine_queue"), 1 + 999)
 
 
-class WithoutTheReserve(unittest.TestCase):
+class ASmallReserve(unittest.TestCase):
     def test_the_pass_is_left_a_few_dozen_decisions(self):
         script = Script()
-        script.values["te_bi_reserve"] = "0"
+        script.values["te_bi_reserve"] = "20"
         engine = Engine(script)
         giant = Giant(engine)
         giant.run(120)
-        self.assertLess(max(engine.decisions["USA"][9:]), 60)
-        self.assertLessEqual(len(giant.country.queue), Engine.LIMIT + constant("te_bi_batch_max"))
+        self.assertTrue(giant.on())
+        self.assertLess(max(engine.decisions["USA"][9:]), 20 + 60)
+        self.assertEqual(len(giant.country.queue), Engine.LIMIT)
 
 
 class WhoPlacedTheLevel(unittest.TestCase):
@@ -725,9 +817,7 @@ class WhoPlacedTheLevel(unittest.TestCase):
         self.engine.queue_government(self.giant.home[0])  # brings var:te_bi_seen up to date
         self.engine.queue_private(self.giant.country, self.giant.foreign[0], "engine")
         before = len(self.giant.country.queue)
-        marked = Run(self.engine, self.giant.country).held
-        target = next(b for b in self.giant.home if b.kind == "building_steel_mill"
-                      and not marked(b.state, "te_bi_m_building_steel_mill"))
+        target = next(b for b in self.giant.home if b.kind == "building_steel_mill" and not b.pending)
         self.engine.queue_government(target)
         self.assertGreater(len(self.giant.country.queue), before)
         self.assertLessEqual(len(self.giant.country.queue), before + constant("te_bi_batch_max") - 1)
@@ -741,6 +831,95 @@ class WhoPlacedTheLevel(unittest.TestCase):
         self.assertEqual(len(self.giant.country.queue), before + 1)
         self.assertEqual(self.giant.var("te_bi_capped"), capped + 1)
 
+    def test_a_new_building_keeps_its_single_level(self):
+        new = Building("building_paper_mill", self.giant.home[0].state, 0)
+        self.engine.finish(self.giant.country, 500)
+        self.engine.queue_government(self.giant.home[1])
+        before, small = len(self.giant.country.queue), self.giant.var("te_bi_small")
+        self.engine.queue_private(self.giant.country, new, "engine")
+        self.assertEqual(len(self.giant.country.queue), before + 1)
+        self.assertEqual(self.giant.var("te_bi_small"), small + 1)
+
+    def test_a_building_with_no_branch_is_counted_unknown(self):
+        odd = Building("building_from_another_mod", self.giant.home[0].state, 900)
+        self.engine.finish(self.giant.country, 500)
+        self.engine.queue_government(self.giant.home[1])
+        before, unknown = len(self.giant.country.queue), self.giant.var("te_bi_unknown")
+        self.engine.queue_private(self.giant.country, odd, "engine")
+        self.assertEqual(len(self.giant.country.queue), before + 1)
+        self.assertEqual(self.giant.var("te_bi_unknown"), unknown + 1)
+        self.assertNotIn("te_bi_placing", self.engine.globals)
+
+
+class TwoGiants(unittest.TestCase):
+    """Two very large economies, each placing three levels in ten in the other."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.engine = Engine(SCRIPT)
+        cls.giant = Giant(cls.engine, rival=True)
+        cls.giant.run(150)
+
+    def test_both_batch(self):
+        self.assertEqual(len(self.engine.lines("TE_BI on country=")), 2)
+        for tag in ("USA", "MEX"):
+            self.assertLess(max(self.engine.decisions[tag][9:]), constant("te_bi_reserve") + 60, tag)
+
+    def test_neither_queue_passes_the_limit_and_nothing_trips(self):
+        for country in (self.giant.country, self.giant.host):
+            self.assertLessEqual(len(country.queue), Engine.LIMIT)
+            self.assertLessEqual(country.vars["te_bi_maxq"][0], Engine.LIMIT)
+        self.assertNotIn("te_bi_tripped", self.engine.globals)
+        self.assertFalse(self.engine.lines("TE_SELF_CHECK BROKEN"))
+
+    def test_each_still_places_levels_in_the_other(self):
+        for country in (self.giant.country, self.giant.host):
+            abroad = sum(1 for building, _ in country.queue if building.state.owner is not country)
+            self.assertGreater(abroad, 10)
+
+
+class OnlyAtTheEnginesLimit(unittest.TestCase):
+    """Batches change which levels are queued, not how many, only where the engine itself fills the queue to its
+    limit. A country held under it must not batch, or its queue would grow."""
+
+    def test_a_pass_short_of_updates_never_batches(self):
+        # 300 decisions a week, and everything finishes: the queue holds 300.
+        engine = Engine(SCRIPT)
+        giant = Giant(engine, queued=300)
+        giant.run(150, updates=300)
+        self.assertGreaterEqual(giant.var("te_bi_home"), 0)  # watched
+        self.assertFalse(engine.lines("TE_BI on"))
+        self.assertLessEqual(len(giant.country.queue), 300)
+        self.assertTrue(all(decisions == 300 for decisions in engine.decisions["USA"]))
+
+    def test_a_country_whose_own_limit_is_lower_never_batches(self):
+        # The limit follows the construction a country makes; this one's is 600.
+        engine = Engine(SCRIPT, limit=600)
+        giant = Giant(engine, queued=600)
+        giant.run(150)
+        self.assertFalse(engine.lines("TE_BI on"))
+        self.assertLessEqual(len(giant.country.queue), 600)
+
+    def test_a_batching_country_whose_limit_falls_stops_within_a_month(self):
+        engine = Engine(SCRIPT)
+        giant = Giant(engine)
+        giant.run(61)
+        self.assertTrue(giant.on())
+        engine.limit = 600
+        giant.run(60)
+        self.assertFalse(giant.on())
+        self.assertEqual(len(engine.lines("TE_BI off country=USA")), 1)
+        self.assertLessEqual(len(giant.country.queue), 600)
+        self.assertNotIn("te_bi_tripped", engine.globals)
+
+    def test_investors_who_build_mostly_abroad_do_not_batch(self):
+        # 1,000 levels a week, 900 of them abroad: about 400 a month at home.
+        engine = Engine(SCRIPT)
+        giant = Giant(engine, abroad=0.9)
+        giant.run(150)
+        self.assertFalse(engine.lines("TE_BI on"))
+        self.assertTrue(all(decisions == 1000 for decisions in engine.decisions["USA"]))
+
 
 class ASmallerEconomy(unittest.TestCase):
     def test_under_two_hundred_levels_a_week_nothing_is_batched(self):
@@ -753,8 +932,7 @@ class ASmallerEconomy(unittest.TestCase):
 
     def test_a_country_with_a_short_queue_is_not_watched(self):
         engine = Engine(SCRIPT)
-        giant = Giant(engine)
-        giant.country.queue = giant.country.queue[:150]
+        giant = Giant(engine, queued=150)
         engine.monthly(giant.country)
         self.assertFalse(giant.country.vars)
         engine.queue_private(giant.country, giant.home[0], "engine")
@@ -781,6 +959,20 @@ class TheRule(unittest.TestCase):
         self.assertFalse(giant.country.vars)
         self.assertFalse(engine.log)
 
+    def test_off_and_on_again_re_arms_a_trip(self):
+        engine = Engine(SCRIPT)
+        giant = Giant(engine)
+        giant.run(61)
+        engine.globals["te_bi_tripped"] = True
+        giant.run(30)
+        self.assertFalse(giant.on())
+        engine.rules.add("te_batch_investment_disabled")
+        giant.run(30)
+        self.assertNotIn("te_bi_tripped", engine.globals)
+        engine.rules.clear()
+        giant.run(90)
+        self.assertTrue(giant.on())
+
     def test_the_rule_and_its_texts(self):
         rule = dict((k, v) for k, _, v in top(RULES)["te_batch_investment_rule"])
         self.assertEqual(rule["default"], "te_batch_investment_enabled")
@@ -802,15 +994,12 @@ class TheRule(unittest.TestCase):
 class IfTheEngineDiffers(unittest.TestCase):
     """Each assumption turned off in the model: the script stays bounded and its line says what failed."""
 
-    def verdicts(self, engine):
-        return {line.split()[2]: line.split()[1] for line in engine.lines("TE_SELF_CHECK") if " START " not in line}
-
     def test_the_hook_runs_after_the_pass(self):
         engine = Engine(SCRIPT, hook="after")
         giant = Giant(engine)
-        giant.run(240)
+        giant.run(300)
         self.assertFalse(giant.on())
-        self.assertEqual(self.verdicts(engine), {"batch_invest_hook": "BROKEN"})
+        self.assertEqual(verdicts(engine), {"batch_invest_hook": ["BROKEN"]})  # once, at the sixth month
         self.assertTrue(all(decisions == 1000 for decisions in engine.decisions["USA"][1:]))
 
     def test_the_hook_never_runs_for_a_private_level(self):
@@ -818,39 +1007,55 @@ class IfTheEngineDiffers(unittest.TestCase):
         giant = Giant(engine)
         giant.run(240)
         self.assertFalse(giant.on())
-        self.assertEqual(self.verdicts(engine), {"batch_invest_hook": "BROKEN"})
+        self.assertEqual(verdicts(engine), {"batch_invest_hook": ["BROKEN"]})
+
+    def test_a_small_countrys_ok_does_not_hide_a_giant_the_hook_cannot_see(self):
+        # The hook's OK prints once a game, from whichever country shows it first; its BROKEN is each country's own.
+        engine = Engine(SCRIPT, hook="after")
+        giant = Giant(engine)
+        engine.globals["te_bi_checked_hook"] = True
+        giant.run(240)
+        self.assertEqual(verdicts(engine), {"batch_invest_hook": ["BROKEN"]})
 
     def test_a_stalled_full_queue_is_not_called_broken(self):
         engine = Engine(SCRIPT, hook="never")
         giant = Giant(engine)
         giant.country.gross_income = giant.country.net_income = 0.0  # the pool pays for nothing
         giant.run(240, finish=0)
-        self.assertEqual(self.verdicts(engine), {})
+        self.assertEqual(verdicts(engine), {})
 
     def test_the_pass_does_not_read_the_queue_again(self):
         engine = Engine(SCRIPT, recheck=False)
         giant = Giant(engine)
-        giant.run(120)
-        self.assertEqual(self.verdicts(engine)["batch_invest_month"], "BROKEN")
-        # Bounded all the same: script stops at the ceiling, and the engine adds its thousand.
-        self.assertLessEqual(len(giant.country.queue), 2 * Engine.LIMIT)
-        self.assertGreater(giant.var("te_bi_maxq"), Engine.LIMIT)
+        giant.run(150)
+        # The first batching pass overshoots, once: the first pick past the limit trips batching for good.
+        self.assertEqual(verdicts(engine)["batch_invest_limit"], ["BROKEN"])
+        self.assertIn("te_bi_tripped", engine.globals)
+        self.assertIn("day35", engine.lines("TE_SELF_CHECK BROKEN batch_invest_limit")[0])
+        self.assertFalse(giant.on())
+        self.assertEqual(len(engine.lines("TE_BI on")), 1)
+        self.assertEqual(verdicts(engine)["batch_invest_month"], ["BROKEN"])
+        # One pass's worth too many, built off in the next weeks; then the queue is the engine's again.
+        self.assertLessEqual(max(engine.decisions["USA"]), Engine.LIMIT)
+        self.assertEqual(len(giant.country.queue), Engine.LIMIT)
+        self.assertTrue(all(decisions == 1000 for decisions in engine.decisions["USA"][8:]))
 
     def test_the_hook_runs_before_the_level_is_counted(self):
         engine = Engine(SCRIPT, count_first=False)
         giant = Giant(engine)
         giant.run(120)
-        self.assertEqual(self.verdicts(engine).get("batch_invest_reentry"), "BROKEN")
-        self.assertLessEqual(len(giant.country.queue), Engine.LIMIT + constant("te_bi_batch_max"))
+        self.assertEqual(verdicts(engine).get("batch_invest_reentry"), ["BROKEN"])
+        self.assertLessEqual(len(giant.country.queue), Engine.LIMIT)
+        self.assertNotIn("te_bi_tripped", engine.globals)
 
     def test_scripts_own_levels_reach_the_hook_later(self):
         engine = Engine(SCRIPT, script_hook="after")
         giant = Giant(engine)
         giant.run(120)
-        verdicts = self.verdicts(engine)
-        self.assertEqual(verdicts["batch_invest_reentry"], "NO_VERDICT")
-        self.assertEqual(verdicts["batch_invest_queue"], "OK")
-        self.assertEqual(verdicts["batch_invest_month"], "OK")
+        found = verdicts(engine)
+        self.assertEqual(found["batch_invest_reentry"], ["NO_VERDICT"])
+        self.assertEqual(found["batch_invest_queue"], ["OK"])
+        self.assertEqual(found["batch_invest_month"], ["OK"])
         # The late calls find the queue as the batch left it, and batch nothing.
         self.assertLessEqual(len(giant.country.queue), Engine.LIMIT)
         self.assertLess(max(engine.decisions["USA"][9:]), constant("te_bi_reserve") + 60)
@@ -859,10 +1064,19 @@ class IfTheEngineDiffers(unittest.TestCase):
         engine = Engine(SCRIPT, refuse=lambda building: True)
         giant = Giant(engine)
         giant.run(120)
-        self.assertEqual(self.verdicts(engine)["batch_invest_queue"], "BROKEN")
+        found = verdicts(engine)
+        self.assertEqual(found["batch_invest_queue"], ["BROKEN"])
         self.assertIn("queued=0", engine.lines("TE_SELF_CHECK BROKEN batch_invest_queue")[0])
-        month = engine.lines("TE_BI month")[0]
-        self.assertNotIn("short=0 ", month)
+        self.assertEqual(found["batch_invest_month"], ["BROKEN"])
+        self.assertIn("added=0", engine.lines("TE_SELF_CHECK BROKEN batch_invest_month")[0])
+        self.assertTrue(all(decisions >= 999 for decisions in engine.decisions["USA"][1:]))
+
+    def test_the_effect_refuses_most_levels(self):
+        refused = iter(range(10 ** 9))
+        engine = Engine(SCRIPT, refuse=lambda building: next(refused) % 3 != 0)
+        giant = Giant(engine)
+        giant.run(120)
+        self.assertEqual(verdicts(engine)["batch_invest_month"], ["BROKEN"])
 
     def test_levels_queued_in_answer_to_a_batch_trip_it_for_good(self):
         engine = Engine(SCRIPT, answer=1)
@@ -872,9 +1086,10 @@ class IfTheEngineDiffers(unittest.TestCase):
         self.assertIn("te_bi_tripped", engine.globals)
         self.assertFalse(giant.on())
         # One batch, twice its size, and no more.
-        self.assertEqual(sum(1 for _, who in giant.country.queue if who == "script"), 0)
+        self.assertEqual(sum(1 for _, who in giant.country.queue if who in ("script", "answer")), 0)
         self.assertLessEqual(len(giant.country.queue), Engine.LIMIT)
         self.assertEqual(len(engine.lines("TE_BI on")), 1)
+        self.assertTrue(all(decisions >= 999 for decisions in engine.decisions["USA"][7:]))
 
     def test_a_flag_left_up_is_cleared_and_reported(self):
         engine = Engine(SCRIPT)
@@ -885,6 +1100,7 @@ class IfTheEngineDiffers(unittest.TestCase):
         self.assertEqual(engine.invest(giant.country, giant.pick), 800)  # every level passed over
         engine.monthly(giant.country)
         self.assertNotIn("te_bi_placing", engine.globals)
+        self.assertNotIn("te_bi_nested_queue", engine.globals)
         self.assertEqual(len(engine.lines("TE_SELF_CHECK BROKEN batch_invest_flag")), 1)
 
 
@@ -898,7 +1114,7 @@ class ARevolution(unittest.TestCase):
         winner.vars, winner.queue = dict(giant.country.vars), giant.country.queue
         for building in giant.home:
             building.state.owner = winner
-        giant.country = winner
+        giant.country = giant.usa.country = winner
         giant.run(60)
         self.assertTrue(giant.on())
         self.assertLess(max(engine.decisions["USA"][-4:]), constant("te_bi_reserve") + 60)
@@ -930,12 +1146,14 @@ class TheGeneratedFiles(unittest.TestCase):
         self.assertEqual(keys, ["if"] + ["else_if"] * (len(keys) - 1))
 
     def test_the_buildings_investors_place_by_the_thousand_have_a_branch(self):
-        # The 2050 report's list (finding 1), and every building the old, unused bulk pass named.
+        # The 2050 report's list (finding 1), and every building the old, unused bulk pass named but the one
+        # the generator leaves out on purpose.
         branches = set(self.branches())
         old = {value for key, _, block in read(OLD_LIST) if key == "is_privately_expandable_building_type"
                for _, _, group in block for _, _, value in group}
         self.assertGreater(len(old), 30)
-        self.assertEqual(old - branches, set())
+        self.assertEqual(old - branches, {"building_space_mine", "building_space_resort"} & old)
+        self.assertLessEqual(old - branches, set(gen.EXCLUDED))
         for kind in INDUSTRIES + LOCAL:
             self.assertIn(kind, branches)
 
@@ -945,6 +1163,18 @@ class TheGeneratedFiles(unittest.TestCase):
                      "te_construction_market_site", "building_airbus_lagardere_plant", "building_urban_center",
                      "building_financial_district", "building_subsistence_farm"):
             self.assertNotIn(kind, branches)
+
+    def test_a_building_whose_private_gate_counts_levels_has_none(self):
+        # A batch could overrun a gate that counts queued levels; can_queue_building_levels does not read it.
+        branches = set(self.branches())
+        self.assertEqual(set(gen.EXCLUDED), {"building_space_mine", "building_space_resort", "building_trade_center"})
+        self.assertFalse(set(gen.EXCLUDED) & branches)
+
+    def test_every_other_private_gate_has_been_read(self):
+        state = gen.load_state()
+        buildings = state.get_data("Buildings")
+        gated = {name for name in self.branches() if "can_build_private" in gen.body_of(buildings, name)}
+        self.assertEqual(gated, set(gen.GATES_READ))
 
     def test_the_local_goods_list(self):
         state = gen.load_state()
@@ -969,12 +1199,13 @@ class TheWiring(unittest.TestCase):
         self.assertEqual(trigger, [("owner", "?=", [("has_variable", "=", "te_bi_watch")])])
 
     def test_every_variable_the_hook_reads_is_set_when_watching_starts_and_removed_when_it_ends(self):
-        text = EFFECTS.read_text(encoding="utf-8-sig")
+        text = EFFECTS.read_text(encoding="utf-8-sig") + VALUES.read_text(encoding="utf-8-sig")
         used = set(re.findall(r"\bvar:(te_bi_\w+)", text)) | set(re.findall(r"Var\('(te_bi_\w+)'\)", text))
+        changed = set(re.findall(r"change_variable = \{ name = (te_bi_\w+)", text))
         engine = Engine(SCRIPT)
         country = Country("AAA")
         Run(engine, country).effect(SCRIPT.effects["te_bi_watch_start"], country)
-        self.assertEqual(used - set(country.vars), set())
+        self.assertEqual((used | changed) - set(country.vars), set())
         country.vars["te_bi_on"] = (True, None)
         Run(engine, country).effect(SCRIPT.effects["te_bi_clear"], country)
         self.assertEqual(country.vars, {})
@@ -986,9 +1217,13 @@ class TheWiring(unittest.TestCase):
         for name in set(re.findall(r"name = (te_bi_log_\w+)", text)):
             self.assertIn(f"{name}_g", SCRIPT.values, name)
 
-    def test_the_mark_lasts_less_than_a_week(self):
-        mark = dict((k, v) for k, _, v in SCRIPT.effects["te_bi_queue_in_state"][1][2])["set_variable"]
-        self.assertEqual(mark, [("name", "=", "te_bi_m_$B$"), ("days", "=", "6")])
+    def test_no_state_or_building_holds_a_variable(self):
+        # A building has no variable store, and the system needs none on a state: every variable is the country's.
+        for name in ("te_bi_queue_in_state", "te_bi_try_batch", "te_bi_place", "te_bi_hook"):
+            flat = repr(SCRIPT.effects[name])
+            outside_owner = re.sub(r"\('owner', '=', \[.*?\]\)\]\)", "", flat)
+            self.assertNotIn("'set_variable'", outside_owner, name)
+            self.assertNotIn("'change_variable'", outside_owner, name)
 
 
 if __name__ == "__main__":

@@ -4,21 +4,27 @@
 
 # ---- Tuning ---------------------------------------------------------------------------------------------------------
 
-# Where the engine stops queueing private levels (read in game, never found in a define: the 2050 report's queue stood
-# at exactly 1,000 after every weekly pass). The month's self-check compares the queue at each investor pick with it.
+# Where the engine stops queueing private levels in the largest economies: the 2050 report's queue stood at exactly
+# 1,000 after every weekly pass. The likely source is NAI's CONSTRUCTION_MAX_NUM_PRODUCTION_BUILDING_CONSTRUCTIONS
+# (00_ai.txt): 1 + 0.05 for each point of construction the country makes a week, the scaled part at most 999. If so
+# the limit is each country's own and reaches 1,000 at about 20,000 construction a week; a country under that is held
+# to fewer and never batches, since te_bi_month_end asks for a queue that reached te_bi_engine_queue_near. Script
+# cannot read a define, so a change to those three would need this changed with it.
 te_bi_engine_queue = 1000
 
-# The last slots under the engine's limit are left for it to fill a level at a time: script can only add levels at
-# home, so the investors' picks abroad and their first level of a new building stay the engine's, and these slots are
-# where it places them once the batches have filled the rest. Each costs one engine decision a week (about 22 ms in the
-# USA of 2050). 0 leaves the engine nothing but the picks it makes between batches.
-te_bi_reserve = 100
-
-# "At the limit" for te_bi_selfcheck_hook: a few levels can finish between the engine's pass and the monthly pulse.
+# "At the limit": a few levels short of it still counts. The last picks of a pass may be abroad, which the hook does
+# not see at home, and a few levels can finish between the pass and the monthly pulse.
 te_bi_engine_queue_near = {
 	value = te_bi_engine_queue
 	subtract = 10
 }
+
+# The last slots under the engine's limit are left for it to fill a level at a time: script can only add levels at
+# home, so the investors' picks abroad and their first level of a new building stay the engine's, and these slots are
+# where it places them once the batches have filled the rest. Each costs one engine decision a week (about 22 ms in the
+# USA of 2050). They are also how script sees that the engine still fills the queue to its limit (var:te_bi_maxq is
+# read at the engine's picks), so the reserve must stay above the ten of te_bi_engine_queue_near.
+te_bi_reserve = 100
 
 # A batch is never queued past this.
 te_bi_ceiling = {
@@ -26,7 +32,7 @@ te_bi_ceiling = {
 	subtract = te_bi_reserve
 }
 
-# A batch is a tenth of the building's built levels, the engine's own level counted in it, and at most a hundred.
+# A batch brings the building's queued levels up to a tenth of its built levels, and to a hundred at most.
 te_bi_share = 0.1
 te_bi_batch_max = 100
 
@@ -41,16 +47,17 @@ te_bi_local_batch_max = 10
 te_bi_watch_queue = 200
 te_bi_unwatch_queue = 100
 
-# Batching starts when the investors placed this many levels in a month, about 200 a week ("once we're building
-# hundreds of levels a week", owner, 2026-11-26), and stops under te_bi_off_levels. The count while batching takes in
-# the levels the batches added, so batching does not end itself by lowering the engine's picks.
+# Batching starts when the investors placed this many levels at home in a month, about 200 a week ("once we're
+# building hundreds of levels a week", owner, 2026-11-26), and stops under te_bi_off_levels.
 te_bi_on_levels = 800
 te_bi_off_levels = 400
 
 # ---- Sizing ---------------------------------------------------------------------------------------------------------
 
-# Building scope: the levels a batch adds beside the level the engine has just queued. 0 for a new building and for one
-# under twenty levels (a hundred, for a local good's).
+# Building scope: the levels a batch adds. The target is a share of the building's built levels; what is queued for it
+# already, in any queue, comes off, the level the engine has just queued included. So a building never has more than
+# a tenth of its size queued by batches, however long its levels take, a second pick of it in the same pass adds
+# nothing, and a new building or one under twenty levels (a hundred, for a local good's) gets no batch.
 te_bi_batch_extra = {
 	value = level
 	if = {
@@ -63,16 +70,30 @@ te_bi_batch_extra = {
 		max = te_bi_batch_max
 	}
 	floor = yes
-	subtract = 1
+	add = level
+	subtract = level_after_queued_constructions
 	min = 0
 }
 
-# Country scope, a watched country: the levels its investors placed since the last monthly pulse. Home picks the hook
-# saw, the queue's growth it did not see at home (picks abroad, mostly) and the levels the batches added.
+# Country scope, a watched country: the levels its investors placed at home since the last monthly pulse. The picks the
+# hook saw and the levels the batches added; not var:te_bi_other, the queue's growth it did not see at home, which is
+# mostly picks abroad.
 te_bi_placed = {
 	value = var:te_bi_home
-	add = var:te_bi_other
 	add = var:te_bi_added
+}
+
+# Country scope, a watched country: the most unseen growth a hook that runs at each pick would leave (te_bi_selfcheck_hook).
+# Twenty times the picks seen at home is investors placing 95% of their levels abroad.
+te_bi_other_seen_limit = {
+	value = var:te_bi_home
+	multiply = 20
+}
+
+# Country scope: what the investment pool paid out this week, which is what it spent on construction.
+te_bi_pool_spending = {
+	value = investment_pool_gross_income
+	subtract = investment_pool_net_income
 }
 
 # ---- What the self-check lines print (debug_log reads a named value, not a variable of another scope) ---------------
