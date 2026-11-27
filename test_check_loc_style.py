@@ -35,6 +35,15 @@ class RuleTests(unittest.TestCase):
         ):
             self.assertEqual(rules(value), [], value)
 
+    def test_a_minus_sign_after_a_colour_code_is_not_a_dash(self):
+        # #1803: `#R -[value]%#!` read as " X - X " once the markup was stripped.
+        for value in ("It loses #R -[GetPlayer.MakeScope.ScriptValue('x')|0]%#! of its throughput.",
+                      "Throughput #R -5%#! here.", "Upkeep #G -$te_amount$#! a week."):
+            self.assertEqual(rules(value), [], value)
+        # A real dash in coloured text, or after it, is still one.
+        self.assertIn("spaced-hyphen", rules("It costs #R 5%#! a week - and the rest goes."))
+        self.assertIn("spaced-hyphen", rules("#R Fines rise - and fall#!."))
+
     def test_markup_is_not_prose(self):
         self.assertEqual(rules("[GetStaticModifier('comprehensive_review').GetDesc] applies."), [])
         self.assertEqual(rules("$unprecedented_growth$ is in force."), [])
