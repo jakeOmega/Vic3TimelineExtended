@@ -6512,6 +6512,38 @@ class TestFastMode(unittest.TestCase):
         self._both(eng, eb=475e3, eb0=475e3, ed=430e3, ed0=430e3)
         self.assertEqual(eng.locals["te_dg_rate_lines_q"], 0.0)
 
+    def test_the_takeovers_start_rate_leaves_the_class_pairs_out(self):
+        """#1689: the window that starts at the takeover runs without the class pairs the refresh clears, so its start
+        rate (te_dg_sr_d), the start's own lines (te_dg_sp_d) and the accidents-and-violence part (te_dg_sc_ext, where
+        the walk's class read counts them) leave out the walk's sum of them (te_dg_w_edl): each reads as in the same
+        state with no pair in force. A class line that isn't a pair (the farmers' +0.03 here) stays in all three. The
+        end of the window before, which ran with the pair, keeps it under that cause (te_demog_on_top_causes reads the
+        walk's class read whole)."""
+        farmers, other, ed0 = 0.4 * 430e3, 0.03, 430e3   # the farmers' bare deaths; their class line besides the pair
+
+        def takeover(pair):
+            eng = self._eng_full()
+            if pair:
+                eng.modifiers["te_demog_line_farmers_deaths_down"] = -pair
+                eng.vars["te_dg_ln_farmers_deaths"] = pair
+            eng.locals.update(te_dg_w_edl=pair * farmers, te_dg_w_odx=(other + pair) * farmers)
+            self._both(eng, eb=475e3, eb0=475e3, ed=ed0 + (other + pair) * farmers, ed0=ed0)
+            self.assertNotIn("te_demog_line_farmers_deaths_down", eng.modifiers)
+            starts = {name: eng.vars[name] for name in ("te_dg_sr_d", "te_dg_sp_d", "te_dg_sc_ext")}
+            eng.call("te_demog_on_top_causes")
+            return starts, eng.locals["te_dg_oe_ext"]
+
+        none, end_none = takeover(0.0)
+        with_pair, end_pair = takeover(-0.1)
+        for name, value in none.items():
+            with self.subTest(name=name):
+                self.assertNotEqual(value, 0.0)
+                self.assertAlmostEqual(with_pair[name], value, places=4)
+        self.assertAlmostEqual(none["te_dg_sc_ext"], other * farmers / 1000.0, places=4)
+        # the window's end, in the tail of a walk that ran with the pair, counts it under accidents and violence
+        self.assertAlmostEqual(end_none, other * farmers, places=3)
+        self.assertAlmostEqual(end_pair, (other - 0.1) * farmers, places=3)
+
     def test_the_walk_sums_each_class_pair_at_its_pops_bare_deaths(self):
         """#1046: te_demog_absorbed_walk_init reads each class pair in force once (te_dg_w_lq_<class>) and
         te_demog_absorbed_walk_pop adds it at each of that class's pops' bare deaths, where the engine doesn't floor

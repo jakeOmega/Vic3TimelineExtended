@@ -343,6 +343,8 @@ GUARDS_DIGESTS = {
 }
 # Fast mode's class pairs (#1046): the walk's Full-only sums gain the moved lines' class pairs at their pops' bare deaths
 # (te_dg_w_edl), which only fast mode's first Full step reads; no recorded case holds a class pair, so no number changes.
+# The takeover's start rate, the start's own lines and their accidents-and-violence part take it off too (#1689,
+# te_demog_rate_effects.txt, hand-written): te_dg_w_edl is 0 in every recorded case, so again no number changes.
 CLASS_PAIR_DIGESTS = {
     ("generated_effects", "te_demog_absorbed_walk_init"): "d55951aa65b56203c04529399901e75f843a9c8241dc1d8c88e4340219cc2b3d",
     ("generated_effects", "te_demog_absorbed_walk_pop"): "56dc6fbc4c5dd04fd655ae60386e607e3cae29cb53a2653eca85978a34e7a0b3",
