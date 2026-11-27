@@ -423,6 +423,99 @@ def _resolve_entity_type(etype: str, known) -> Optional[str]:
     return norm_map.get(_normalize_entity_type(etype))
 
 
+# ---------------------------------------------------------------------------
+# Which buildings make or use a good (#1757): buildings ->
+# production_method_groups -> production_methods -> building_modifiers, over
+# the merged data (vanilla with the mod's INJECT/REPLACE applied).
+# ---------------------------------------------------------------------------
+GOODS_FLOW_LINES = {"producers": "goods_output_{}_add", "consumers": "goods_input_{}_add"}
+
+
+def _number(value):
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return value
+
+
+def _listed(value) -> list:
+    """A list field's names; a lone name as a one-item list."""
+    if isinstance(value, str):
+        return [value]
+    return [v for v in value if isinstance(v, str)] if isinstance(value, list) else []
+
+
+def _entity_source(etype: str, eid: str) -> str:
+    """`vanilla` (vanilla's, unchanged), `modified` (vanilla's, changed by the
+    mod) or `mod` (the mod's own)."""
+    srv = server_state()
+    base = srv.ms.base_parsers.get(etype)
+    vanilla = base.data if base is not None else {}
+    if eid not in vanilla:
+        return "mod"
+    return "vanilla" if vanilla[eid] == (srv.ms.get_data(etype) or {}).get(eid) else "modified"
+
+
+def _goods_lines(pm_body, prefix: str) -> list[dict]:
+    """[{good, block, per_level}] for a method's building_modifiers lines
+    named `<prefix><good>_add`, in source order."""
+    srv = server_state()
+    mods = srv.get_entity_data(srv.get_field(srv.get_entity_data(pm_body), "building_modifiers") or {})
+    rows = []
+    for block, lines in (mods.items() if isinstance(mods, dict) else ()):
+        lines = srv.get_entity_data(lines)
+        if not isinstance(lines, dict):
+            continue
+        for key, value in lines.items():
+            if key.startswith(prefix) and key.endswith("_add"):
+                rows.append({"good": key[len(prefix):-len("_add")], "block": block,
+                             "per_level": _number(_unwrap_val(value))})
+    return rows
+
+
+def _good_flows(good: str, direction: str, exclude=(), extra=()) -> dict:
+    """GET /goods/<good>/producers|consumers: every building with a production
+    method whose building_modifiers carry `goods_output_<good>_add`
+    (producers) or `goods_input_<good>_add` (consumers), each method with its
+    group, block and per-level figure (a negative figure is a cut, such as a
+    carbon capture method's). `extra` names the other goods lines to attach
+    to each method: "inputs" and/or "outputs"."""
+    srv = server_state()
+    buildings = srv.ms.get_data("Buildings") or {}
+    groups = srv.ms.get_data("PM Groups") or {}
+    pms = srv.ms.get_data("PMs") or {}
+    prefix = "goods_output_" if direction == "producers" else "goods_input_"
+    out: dict = {}
+    for bid, braw in buildings.items():
+        if bid in exclude:
+            continue
+        body = srv.get_entity_data(braw)
+        methods = []
+        for group in _listed(srv.get_field(body, "production_method_groups")):
+            gbody = srv.get_entity_data(groups.get(group, {}))
+            for pm in _listed(srv.get_field(gbody, "production_methods")):
+                if pm not in pms:
+                    continue
+                for line in _goods_lines(pms[pm], prefix):
+                    if line["good"] != good:
+                        continue
+                    row = {"pm": pm, "group": group, "block": line["block"],
+                           "per_level": line["per_level"], "source": _entity_source("PMs", pm)}
+                    for kind in extra:
+                        row[kind] = [r for r in _goods_lines(
+                            pms[pm], "goods_input_" if kind == "inputs" else "goods_output_")
+                            if r["good"] != good]
+                    methods.append(row)
+        if methods:
+            out[bid] = {
+                "name": srv.ms.localize(bid),
+                "building_group": srv.get_field(body, "building_group"),
+                "source": _entity_source("Buildings", bid),
+                "methods": methods,
+            }
+    return out
+
+
 class EntityRoutes:
     """The entity lookups and listings. A mixin of ModStateHandler."""
 
@@ -921,13 +1014,38 @@ class EntityRoutes:
         }
 
     # ---- structured: goods ------------------------------------------------
-    def _goods(self):
-        """GET /goods"""
+    def _goods(self, parts=(), params=None):
+        """GET /goods, /goods/<good>, /goods/<good>/producers|consumers
+        [?exclude=<building>[,...]][&inputs=yes][&outputs=yes] (#1757)"""
         srv = server_state()
         goods = srv.ms.get_data("Goods")
         if not goods:
             raise srv.DataNotLoaded("Goods")
-        return [{"type": "Goods", "id": gid, "name": srv.ms.localize(gid)} for gid in goods]
+        if not parts:
+            return [{"type": "Goods", "id": gid, "name": srv.ms.localize(gid)} for gid in goods]
+        gid = parts[0]
+        if gid not in goods:
+            raise srv.NotFound(gid, did_you_mean=difflib.get_close_matches(gid, list(goods), n=5))
+        if len(parts) == 1:
+            return {"type": "Goods", "id": gid, "name": srv.ms.localize(gid),
+                    "source": _entity_source("Goods", gid), "raw": srv.serialize(goods[gid])}
+        direction = parts[1]
+        if len(parts) > 2 or direction not in GOODS_FLOW_LINES:
+            raise srv.NotFound("/goods/" + "/".join(parts),
+                               hint="GET /goods/<good>, /goods/<good>/producers or /goods/<good>/consumers.")
+        params = params or {}
+        exclude = {b for v in params.get("exclude", []) for b in v.split(",") if b}
+        yes = ("1", "true", "yes")
+        extra = [k for k in ("inputs", "outputs") if (params.get(k) or ["no"])[0].lower() in yes]
+        buildings = _good_flows(gid, direction, exclude, extra)
+        return {
+            "good": gid, "name": srv.ms.localize(gid), "direction": direction,
+            "modifier": GOODS_FLOW_LINES[direction].format(gid),
+            "building_count": len(buildings),
+            "method_count": sum(len(b["methods"]) for b in buildings.values()),
+            "excluded": sorted(exclude),
+            "buildings": buildings,
+        }
 
     # ---- structured: combat units -----------------------------------------
     def _combat_units(self):
