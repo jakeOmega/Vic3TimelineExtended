@@ -93,9 +93,7 @@ te_jmap_class_walk_pop = {
 	}
 }
 
-# State scope, after the walk's pop loop. The tenth pass's four share maps read other names until #1975
-# (te_dg_soldiers already meant Soldiers and Officers, so every class took te_dg_cls_<pop>): a save that
-# still holds them loses them here.
+# State scope, after the walk's pop loop.
 te_jmap_class_walk_store = {
 	set_variable = { name = te_dg_cls_peasants value = local_var:te_jmap_w_peasants }
 	set_variable = { name = te_dg_cls_laborers value = local_var:te_jmap_w_laborers }
@@ -113,22 +111,6 @@ te_jmap_class_walk_store = {
 	set_variable = { name = te_dg_cls_academics value = local_var:te_jmap_w_academics }
 	set_variable = { name = te_dg_cls_capitalists value = local_var:te_jmap_w_capitalists }
 	set_variable = { name = te_dg_cls_spacers value = local_var:te_jmap_w_spacers }
-	if = {
-		limit = { has_variable = te_dg_capitalists }
-		remove_variable = te_dg_capitalists
-	}
-	if = {
-		limit = { has_variable = te_dg_aristocrats }
-		remove_variable = te_dg_aristocrats
-	}
-	if = {
-		limit = { has_variable = te_dg_clergy }
-		remove_variable = te_dg_clergy
-	}
-	if = {
-		limit = { has_variable = te_dg_academics }
-		remove_variable = te_dg_academics
-	}
 }
 
 # Map Options' Count/Share switch, just set (te_jmap_set_class_mode, te_journal_map_effects.txt): a class map

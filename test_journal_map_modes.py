@@ -1030,10 +1030,10 @@ class ClassMapsTest(_RoomBranches, unittest.TestCase):
             self.assertIn(f"limit = {{ is_pop_type = {p} }} change_local_variable = {{ name = te_jmap_w_{p} "
                           "add = total_size }", pop)
             self.assertIn(f"set_variable = {{ name = te_dg_cls_{p} value = local_var:te_jmap_w_{p} }}", store)
-        # no census gate: the counts are the walk's, as Armed Forces' soldiers; the old names leave a save
+        # no census gate: the counts are the walk's, as Armed Forces' soldiers; the tenth pass's names are gone
         self.assertNotIn("te_demog_cohorts_run", generated)
         for var in ("te_dg_capitalists", "te_dg_aristocrats", "te_dg_clergy", "te_dg_academics"):
-            self.assertIn(f"limit = {{ has_variable = {var} }} remove_variable = {var}", store)
+            self.assertNotIn(var, generated)
             self.assertNotIn(var, code(HOST))
 
 

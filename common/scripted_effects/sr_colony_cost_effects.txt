@@ -71,11 +71,6 @@ sr_ccost_refresh = {
 	}
 	# The Launch Capacity in all, for the AI's mission budget (sr_ccost_lc_now),
 	# with or without a Space Program: a colony holder founding one will pay it.
-	# A save from before 2026-11-25's flat amounts holds the old share instead.
-	if = {
-		limit = { has_variable = sr_ccost_share }
-		remove_variable = sr_ccost_share
-	}
 	set_local_variable = { name = sr_ccost_lc_new value = sr_ccost_lc_value }
 	if = {
 		limit = { local_var:sr_ccost_lc_new > 0 }

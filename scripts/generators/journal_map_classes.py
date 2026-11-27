@@ -108,10 +108,6 @@ CLASSES = [
 # property, learning and the state, industry, the land, offices and the army; then the space forces, a row of one.
 ROWS = [[c["pop"] for c in CLASSES[i:i + 3]] for i in range(0, len(CLASSES), 3)]
 
-# The state variables the tenth pass's four share maps read, until #1975 renamed every class's te_dg_cls_<pop>
-# (te_dg_soldiers already meant Soldiers and Officers): the walk removes them from a save that still holds them.
-RETIRED_VARS = ("te_dg_capitalists", "te_dg_aristocrats", "te_dg_clergy", "te_dg_academics")
-
 
 def count_var(c):
     """The walk's count of the class's people (state scope)."""

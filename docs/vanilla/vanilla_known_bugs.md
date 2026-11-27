@@ -287,6 +287,15 @@ set_hub_names effect [ Attempting to assign a key that does not have localizatio
 
 The dynamic state-name effects (common/scripted_effects/00_dynamic_state_names_europe.txt, e.g. Wallonia `set_hub_names = french` at line 4980, Posen `set_hub_names = polish` at 1375) switch every hub of a state to one culture's names. Vanilla's loc has each culture's city, farm, mine and wood names for Wallonia and Posen, plus a port name for one culture only (`HUB_NAME_STATE_WALLONIA_port_german`, `HUB_NAME_STATE_POSEN_port_russian`), though neither state region has a port hub. The log doesn't name the hub, so which key the engine misses is unconfirmed; it logs once per switch. 2 lines across the 2026-10-10 and 2026-10-11 runs.
 
+### `common/on_actions/00_code_on_actions.txt:957` — a flagship's loss compares its owner with a Great Britain that is gone
+- stack: vanilla only
+
+```
+Error: Invalid right side during comparison 'c'
+```
+
+`on_flagship_destroyed` checks for the Nobody Did Their Duty achievement with `scope:ship.owner ?= c:GBR`. The `?=` covers an unset owner, not a missing Great Britain, so once no country holds GBR every flagship sunk logs this line (the same shape as the Ezo Republic's `c:JAP` entry). Once, 2026-11-26, at 2046.2.3 of a 2045–2046 game, no mod frame. The mod has no copy of the file and no hook on `on_flagship_destroyed`; that GBR was gone is read from the line itself (`c:GBR` fails only when no country holds the tag), not from a save.
+
 ### `common/defines/00_defines.txt`, `common/defines/00_ai.txt`, `common/defines/00_graphics.txt` — define macro not specified warnings
 
 ```
@@ -720,11 +729,14 @@ is_land_adjacent_to_state trigger [ Invalid target state ]
 has_strategic_region_interest_tier trigger [ Invalid Country or StrategicRegion! ]
 Event target link 'root' returned an invalid object
 Scoped object of type 'state' is not valid (State NULL_STATE
+Value of wrong type in 'common/script_values/00_infamy_values.txt
 ```
 
 Downstream cascade of the `14_treaty_port.txt:425` entry above: `state_infamy_value` is a state-scoped script value, so every state trigger inside it errors once per render frame when the treaty designer evaluates the article without a chosen state. Eight distinct trigger errors per frame, ~7,800 lines in one six-generation rotation (2026-09-20). Same root cause, same verdict — register and skip.
 
 2026-11-09 (1.15): the war-goal half of the same cascade words it differently when the target state's handle is null, where before the scope was unset: `<trigger> trigger [ Scoped object of type 'state' is not valid (State NULL_STATE (x000000)) ]` at fourteen lines of this file (`event_target_comparison_trigger`, `is_incorporated`, `is_homeland_of_country_cultures`, `any_scope_culture`, `or`, `root`), once each in the second after a save load, followed by the Conquer State entry's `scope:target_country` lines below. The AI was weighing a Conquer State goal whose state had gone.
+
+2026-11-26: `Value of wrong type in 'common/script_values/00_infamy_values.txt:40'. Got value of type 'none'` (the soft-cap `limit` on `state_infamy_population_share_uncapped`), twice in the second Return State's preview logged the same message (the Return State entry below), in a new 1836 game.
 
 ### `common/naval_battle_conditions/00_naval_battle_conditions.txt:210` — `range` directive used inside a trigger
 
@@ -758,12 +770,13 @@ Fires per AI state-value evaluation, so the volume is large once it starts: 5,70
 
 Not mod-caused and not worth fixing mod-side: this mod's common/ai_strategies/edited_default_strategy.txt is an `INJECT:ai_strategy_default` that adds law/institution scoring and never touches the state-value block, and correcting the typo would mean carrying a copy of that whole block across every vanilla patch for a cosmetic AI-weight miss. Note the trigger is condition-gated, so an earlier log window with zero occurrences is not evidence it is new. Until 2026-10-10 the signature also held this file's path, which the matcher reads with any line number, so the entry tagged every error with the default strategy anywhere in its stack: 42 mod lines from UN ballots in that day's run (`Event target link 'capital' returned an invalid object`, fixed in the mod).
 
-### `common/war_goal_types/21_return_state.txt:69, 70, 83, 84` — war-goal `infamy` preview reads `scope:target_country` before it is bound
+### `common/war_goal_types/21_return_state.txt:40, 57, 69, 70, 83, 84` — war-goal `infamy` preview reads `scope:target_country` before it is bound
 - stack: vanilla only
 
 ```
 scope:target_country trigger [ Scoped object of type 'country' is not valid (Country  (4294967295)) ]
 Event target link 'scope' returned an invalid object
+Value of wrong type in 'common/war_goal_types/21_return_state.txt
 ```
 
 The same shape as the `14_treaty_port.txt:425` entry above, in the war-goal half of the diplomacy UI. Each of these vanilla war goals computes `infamy = { … }` with a `multiply` whose `limit` opens `scope:target_country = { is_subject_of = root … }` unguarded, and the play UI evaluates the block to preview the infamy cost before a target country is bound. `Country (4294967295)` is the engine's invalid handle (`0xFFFFFFFF`). The sibling `scope:target_state = { add = state_infamy_value }` on the line above is the same bug that drives the `00_infamy_values.txt` cascade.
@@ -773,6 +786,8 @@ The same block appears in `common/war_goal_types/03_conquer_state.txt` (`:69`, `
 20 lines in one session (2026-09-20). In 1.15.1 the same reads sit one line lower (70 and 84, the `scope:target_country = {` lines) and log `Event target link 'scope' returned an invalid object`: four lines on 2026-11-17, all while the game was paused (the war-goal preview), with no mod frame. Not mod-caused: this mod defines only `te_reunify_country` and `te_un_mandate_restore_state` under `common/war_goal_types/`, and references `wg_return_state` / `wg_conquer_state` / `wg_annex_country` nowhere in `common/` or `events/`. Cosmetic — the `multiply` simply fails its limit, so the subject-related infamy discounts don't apply during the preview.
 
 1.15.2 (2026-11-19): the same unguarded `scope:target_country = {` logs at `common/war_goal_types/14_liberate_subject.txt` (`:53`, the liberty-desire limit) and `common/war_goal_types/20_regime_change.txt` (`:61`, `:76`, the loyal and rebellious subject multipliers), nine lines over three launches, each beside the `00_infamy_values.txt` `root` lines. Two of the launches loaded the save with every mod missing, so these are vanilla's own; the mod overrides neither file.
+
+2026-11-26 (1.15.2): `common/war_goal_types/26_transfer_subject.txt` logs the first message at `:66` and `:81`, the same unguarded `scope:target_country = { is_subject_of = root … }` in its loyal and rebellious subject multipliers: four lines over two launches of a 2045–2050 game, no mod frame. Return State's own `maneuvers` (`:40`) and `infamy` (`:57`) blocks, which open `scope:target_state` unguarded, log `Value of wrong type in 'common/war_goal_types/21_return_state.txt:N'. Got value of type 'none'` when the state is not bound: five lines in one second of a new 1836 game (1837.11.24), not paused, beside two lines of the same message at 00_infamy_values.txt:40 (entry above), so the AI weighing a Return State goal. The mod overrides neither file (its war goals are the five `te_*` files) and none of the script values they read (`state_infamy_value`, `state_infamy_population_share_uncapped`).
 
 ### `common/scripted_triggers/00_ai_triggers.txt:614, 624, 644` — AI regional-objective iterators meet a null objective (1.14.4)
 - reviewed: helper anchor, signature cannot match a mod call (the mod calls only `ai_has_enact_weight_modifier_journal_entries` from this file, a law-commitment and journal-entry check with no regional-objective iterator; #730)
@@ -2269,6 +2284,19 @@ PdxDataFetchLocalizedData failed for
 
 Companion to `pdx_data_callstack.cpp:16` / `pdx_data_localize.cpp:151` — the GUI-side wrapper logs its own "fetch failed" message when the underlying data-system loc evaluation fails. Same root cause (vanilla loc-string context not set). Cosmetic. A line whose key or data type the mod's own GUI reaches loses this tag and shows as the mod's (`untag_mod_gui_fetches`, #1269); an entry whose signature names the line's key, type or expression keeps it.
 
+### `pdx_data_callstack.cpp:16` — a "Go to market" button drawn with no market
+- source: `pdx_data_callstack.cpp:16`
+- source: `pdx_data_localize_helper.cpp:286`
+- source: `pdx_gui_localize.cpp:140`
+
+```
+wanted context of type 'Market' for 'Market.GetName'
+FetchData failed for 'Market.GetName'
+PdxDataFetchLocalizedData failed for 'GO_TO_BUTTON_MARKET'
+```
+
+Vanilla's go-to button tooltip `GO_TO_BUTTON_MARKET` ("Go to [Market.GetName]") reads the market its button's `datacontext` names, and logs these three lines in one second when there is none. Vanilla draws the button in ten places (`country_panel`, `goods_panel` twice, `goods_state_panel`, `goods_local_prices_panel`, `goods_world_market_panel`, `states_panel` four times). Two of the states panel's, the go-to on the Market Capital status row (`STATE_MARKET_CAPITAL_STATUS`, vanilla lines 1321 and 3482, full and condensed), set no `datacontext` at all and pass the market only to their `onclick` (`OpenMarketPanelTab(State.GetMarket, 'default')`), so hovering either logs these lines every time; that is the likeliest source. The others fail only when their market comes back empty, as `CountryPanel.GetCountry.AccessFirstMarket` can. The mod's copies, in its overrides of the country panel (gui/00_te_country_panel_information.gui), the goods and goods-state panels and the states panel, keep vanilla's blocks for every button, the two context-less ones included (compared 2026-11-26), and no mod loc string calls `GO_TO_BUTTON_MARKET`. Once, 2026-11-26 (2046.4.27, paused). The specific signatures keep these lines tagged although the mod's own GUI reads the `Market` type (gui/te_trade_partner_tooltips.gui, for which the generic entries above give way); a mod line with no market for `Market.GetName` would hide here too, so a burst of them is worth a look at which panel was open.
+
 ### `navy_ai.cpp:3585` — no naval mission type possible for a country
 - source: `navy_ai.cpp:3585`
 
@@ -2719,7 +2747,17 @@ Seen once, 2026-11-09 (July 1876 of an observer game): Goa, one of the mod's cit
 Attempted to create relations for invalid countries!
 ```
 
-Four occurrences across the archives by 2026-10-17: three followed a mod trigger reading the attitude of a country that no longer existed (fixed), one followed vanilla's lobby effect.
+Four occurrences across the archives by 2026-10-17: three followed a mod trigger reading the attitude of a country that no longer existed (fixed), one followed vanilla's lobby effect. 2026-11-26 (2046.5.12 of a 2045–2050 game): once, with neither tell in error.log at that second (only two zero-construction-speed lines) and that launch's debug.log already rotated out, so unsettled.
+
+### `pdx_assert.cpp:641` — a building auto-downsized that may not be
+- source: `pdx_assert.cpp:641`
+- check: read error.log and debug.log at the same second for a building whose level just fell: a mod effect that removes or sets building levels (`remove_building`, the construction market's sites, the AI construction passes' `te_ai_*` traces), or a mod building with `downsizeable = no` (the Strategic Reserve hub, the grand monuments, the wonders) in that state, makes it the mod's. With none, read a save from just after for which building lost a level, and whether vanilla's own `downsizeable = no` buildings (67 of them, 1.15.2) include it.
+
+```
+Assertion failed: IsAllowedToAutoDownsize()
+```
+
+The assert names no building, no state and no file. The engine auto-downsizes a building that has gone short of workers (the `AUTO_DOWNSIZE_BUILDING_*` defines), and this says it reached one it should not. Once, 2026-11-26, at 2049.12.19 of a 2045–2050 game, with no other line in that second of error.log and that launch's debug.log rotated out. On the watch list because a mod building that opts out of downsizing, or a mod effect that moves building levels, could reach it as well as vanilla's.
 
 ## How to triage a new error-log entry
 

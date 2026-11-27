@@ -113,7 +113,7 @@ and a version-1 to -3 log is not asked for them.
 | bureaucracy modifiers non-zero | `bur_inst_mult` in many (37 of the mod's laws move it) | 0 everywhere: the `modifier:` reads return nothing |
 | strata's standard of living: lower <= average <= upper | nearly all | the X8 canary missing (GetTrendValue does not print from a loc string: the line is lost, take it out), or the trends are not what their names say |
 | slack in [0, 1] with peasants <= slack | all, above 0 in most | 0 everywhere: the cost scaling's stored `te_cc_slack` is not there (a direct game, or its walk not run) |
-| army census | `CANARY unit_vars v=1`; battalions counted within 5% of `army_size`; flows from each country's second report | `v=0`: a combat unit holds no variable, the census does not count and recruits cannot be told from upgrades (the report's net change in irregulars still reads); every battalion new at every report: the marks do not last a year |
+| army census | `CANARY unit_vars v=1`; battalions counted within 5% of `army_size`; flows from each country's second report | `v=0`: a combat unit holds no variable, the census does not count and recruits cannot be told from upgrades (the report's net change in irregulars still reads); every battalion new at every report: the marks do not last a year. **Read 2026-11-26: `v=0`** (the engine refused the canary's variable, `This scope doesn't support variables`, in error.log at 1836.2.3), so the census counts nothing; #2090 takes it out |
 
 Two lines read every log, whatever its version:
 
