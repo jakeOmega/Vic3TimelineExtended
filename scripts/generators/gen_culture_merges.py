@@ -1108,6 +1108,13 @@ def milestone_gate(merge: cfg.Merge) -> bool:
     return merge.gate is not None and merge.gate.milestone
 
 
+def takes_late_part(merge: cfg.Merge) -> bool:
+    """A part can still join after the merge is complete: it has an optional culture, or a core slot that more than
+    one culture can fill (Anglophone's Yankee or American). Every other core part joins at the start, since one still
+    waiting on a vanilla entry holds the start back, so a merge with neither has nothing left to join (#1806)."""
+    return bool(merge.optional) or any(len(part.cultures) > 1 for part in merge.core)
+
+
 def _sentence(clause: str) -> str:
     """A gate's clause as a condition line: capitalized, with a full stop."""
     return clause[0].upper() + clause[1:] + "."
@@ -2777,12 +2784,15 @@ def status_rows(merge: cfg.Merge, vanilla: dict, merges: tuple[cfg.Merge, ...]) 
     # The figure alone read as arbitrary (2026-11-08): hovering it gives the modifier's breakdown by source and what raises it.
     speed = "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],te_cm_speed_tt $country_culture_merge_speed_mult$: +%s#!" % sv.format(
         "te_cm_speed_display", "%0")
+    complete = "The merge is complete: %s is the national culture across the sphere." % result
+    if takes_late_part(merge):
+        complete += " Cultures that qualify later can still join."
     rows = [
         Row("te_cm_status_rule_off", _negated(["te_cm_system_enabled = yes"])),
         Row(
             base + "complete",
             ["te_cmg_%s_is_starter = yes" % key, "global_var:te_cm_state_%s ?= 2" % key, "te_cmg_%s_all_switched = yes" % key],
-            "The merge is complete: %s is the national culture across the sphere. Cultures that qualify later can still join." % result,
+            complete,
         ),
     ]
     # A standing gate that fails pauses a running or complete merge whole (cfg.Gate): before the late and running rows,
