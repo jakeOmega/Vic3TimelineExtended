@@ -235,7 +235,7 @@ the picture follows the fleet's own drive, not the program's. A fifth drive need
 
 ## Top-bar alerts (2026-11-26)
 
-The colony module queue's two alerts (`common/alert_types/te_space_race_alerts.txt`, PR #2051) borrowed vanilla alert icons until the next icon round, as the owner asked (2026-11-25). A vanilla alert icon is one painted object on a transparent background, 150 × 150, which the game's round alert button frames; the rim's green or yellow comes from the alert's `color`, not the icon. Each is a literal `texture` line in the alert file, and `/placeholder-icons` does not read `common/alert_types/` (#2052), so this table is their record. The registry entries are in the `space` category; `wire` does not reach the alert file, so a renamed file is edited there by hand.
+The colony module queue's two alerts (`common/alert_types/te_space_race_alerts.txt`, PR #2051) borrowed vanilla alert icons until the next icon round, as the owner asked (2026-11-25). A vanilla alert icon is one painted object on a transparent background, 150 × 150, which the game's round alert button frames; the rim's green or yellow comes from the alert's `color`, not the icon. Each is a literal `texture` line in the alert file. `/placeholder-icons?type=Alert%20Types` and `/duplicate-images` read `common/alert_types/` since #2052; this table records what each showed before. The registry entries are in the `space` category; `wire` does not reach the alert file, so a renamed file is edited there by hand.
 
 | Alert | Was | Shows | File |
 |---|---|---|---|

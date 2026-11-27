@@ -27,7 +27,8 @@ institutions, subject types, mobilization options, diplomatic actions (name
 plus the notification family their flags select), pop needs, decisions,
 amendments, messages, treaty articles, events, glossary entries and regional
 exile pools (1.15), power bloc principles (the `_desc` alone), law groups,
-combat unit groups and mobilization option groups. Journal entry outcomes (1.15) get a structural check of
+combat unit groups, mobilization option groups and top-bar alerts (their name,
+hint, action and setting name; organize_loc.alert_type_keys). Journal entry outcomes (1.15) get a structural check of
 their own, on every journal entry the mod defines or overrides (a `REPLACE:` of
 a vanilla one included): each outcome names a `conclusion_desc`, and each one
 not flagged `hidden` a `header` and an `effect_header` (journal_entries.md:
@@ -267,6 +268,16 @@ def _glossary_keys(name: str, body) -> list[tuple[str, bool, str]]:
     return [(name, True, "name"), (f"{name}_desc", True, "desc")]
 
 
+def _alert_type_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """A top-bar alert (`common/alert_types`, #2052) is read through five keys
+    off its name that no script names (organize_loc.alert_type_keys, the one
+    definition of them). Vanilla 1.15.2 has `_name`, `_hint`, `_action` and
+    `_setting_name` on all 72 of its alerts and `_desc` on 70, so `_desc` is
+    checked but not required."""
+    from organize_loc import alert_type_keys
+    return [(key, role != "desc", role) for role, key in alert_type_keys(name).items()]
+
+
 def _principle_keys(name: str, body) -> list[tuple[str, bool, str]]:
     """A power bloc principle has `<name>_desc` and no name key: the game
     names a tier from its group (`principle_group_x`) and its level, and
@@ -368,6 +379,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     # 1.15. An exile pool's name is its tab in the Invite Exile screen.
     "Glossary":               _glossary_keys,
     "Regional Exile Pools":   _simple_name,
+    "Alert Types":            _alert_type_keys,
 }
 
 
@@ -409,6 +421,7 @@ _DIR_MAP: dict[str, str] = {
     "Treaty Articles":        "common/treaty_articles",
     "Glossary":               "common/glossary",
     "Regional Exile Pools":   "common/regional_exile_pools",
+    "Alert Types":            "common/alert_types",
     "Events":                 "events",
 }
 

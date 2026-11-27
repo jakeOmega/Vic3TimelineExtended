@@ -612,7 +612,9 @@ class VanillaSanityTest(unittest.TestCase):
     # (papal_paternalistic on paternalistic.dds): 34 and 23 clusters on 1.14.5.
     # The scan still suits them, since the default mod-only mode flags only a
     # cluster with a mod entity, and the allowlist carries the mod's own variants.
-    THRESHOLD_OVERRIDES = {"Ideologies": 45, "Interest Group Traits": 30}
+    # Alert Types: 16 shared textures over 72 alerts on 1.15.2 (invasion and
+    # naval invasion on one icon, both goods shortages on another).
+    THRESHOLD_OVERRIDES = {"Ideologies": 45, "Interest Group Traits": 30, "Alert Types": 25}
 
     @classmethod
     def setUpClass(cls):

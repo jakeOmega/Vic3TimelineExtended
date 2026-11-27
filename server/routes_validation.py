@@ -55,6 +55,10 @@ _IMAGE_FIELDS_BY_TYPE: list[tuple[str, str]] = [
     ("Harvest Condition Types", "icon"),
     ("Power Bloc Identities",   "icon"),
     ("Parties",                 "icon"),
+    # Top-bar alerts (#2052). Vanilla shares some alert icons (16 textures
+    # over 72 alerts in 1.15.2), but the default mod-only mode flags only a
+    # cluster with a mod alert in it, as for ideology variants.
+    ("Alert Types",             "texture"),
 ]
 
 
