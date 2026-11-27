@@ -3022,12 +3022,19 @@ types building_browser_panel_types
 		blockoverride "scrollarea_content"
 		{
 			flowcontainer = {
+				# MOD (buildings panel speed): the list's values are worked out at most ten times a second, as the
+				# Building Registry's are (its vbox's max_update_rate). With the rows below culled off screen this took a
+				# frame from 61 ms to 20 on the USA of 2050 (docs/audits/buildings_panel_performance.md).
+				max_update_rate = 10
 				direction = vertical
 
 			
 				# Remove this, currently needed to make sure GetBuildingBrowserBuildingTypeItems is being populated
+				# MOD (buildings panel speed): over the first building only. Asking for the list is what fills the
+				# rows; vanilla made an empty widget for each of the country's buildings, several thousand late in a
+				# large country, which cost about 6 ms a frame (docs/audits/buildings_panel_performance.md).
 				flowcontainer = {
-					datamodel = "[BuildingBrowserPanel.GetSortedAndFilteredBuildings]"
+					datamodel = "[DataModelFirst(BuildingBrowserPanel.GetSortedAndFilteredBuildings, '(int32)1')]"
 
 					item = {
 						widget = {}
@@ -3513,289 +3520,302 @@ types building_browser_panel_types {
 				using = entry_bg_simple
 			}
 
-			container = {
+			# MOD (buildings panel speed): the type's header row sits in a one-item fixedgridbox, which the engine
+			# leaves out of a frame while it is scrolled out of view, as the buildings under it already were; the rows are a
+			# flowcontainer, whose children are worked out every frame. Grouped by type, 42 ms a frame on the USA of 2050
+			# before, 11 after (docs/audits/buildings_panel_performance.md). The one item is the type's first production
+			# method group, which every building type has; nothing reads its context.
+			fixedgridbox = {
+				addcolumn = @spreadsheet_width
+				addrow = @spreadsheet_header_height
+				datamodel = "[DataModelFirst(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups, '(int32)1')]"
 
-				# Hidden button to toggle expand on the entire item
-				button = {
-					size = { 100% 100% }
-					onclick = "[GetVariableSystem.Toggle(Concatenate('building_browser_building_type_', BuildingType.GetIDString))]"
-				}
+				item = {
+					container = {
 
-				flowcontainer = {
-					minimumsize = { @spreadsheet_width -1 }
-
-					tooltipwidget = {
-						FancyTooltip_BuildingType = {}
-					}
-
-					widget = {
-						size = { @spreadsheet_header_height @spreadsheet_header_height }
-
-						icon = {
-							parentanchor = center
-							size = { 70 70 }
-							texture = "[BuildingType.GetIcon]"
-						}
-					}
-
-					section_header_button = {
-
-						blockoverride "layout" {
-							size = { 420 @spreadsheet_header_height }
-						}
-
-						blockoverride "fontsize" {
-							using = fontsize_xxl
-						}
-
-						blockoverride "left_text" {
-							raw_text = "#v [BuildingType.GetNameNoFormatting]#!"
-						}
-
-						blockoverride "onclick" {
+						# Hidden button to toggle expand on the entire item
+						button = {
+							size = { 100% 100% }
 							onclick = "[GetVariableSystem.Toggle(Concatenate('building_browser_building_type_', BuildingType.GetIDString))]"
 						}
 
-						blockoverride "onclick_showmore" {
-							visible = "[Not(GetVariableSystem.Exists(Concatenate('building_browser_building_type_', BuildingType.GetIDString)))]"
-						}
+						flowcontainer = {
+							minimumsize = { @spreadsheet_width -1 }
 
-						blockoverride "onclick_showless" {
-							visible = "[GetVariableSystem.Exists(Concatenate('building_browser_building_type_', BuildingType.GetIDString))]"
-						}
-					}
+							tooltipwidget = {
+								FancyTooltip_BuildingType = {}
+							}
 
-					vertical_divider = {}
+							widget = {
+								size = { @spreadsheet_header_height @spreadsheet_header_height }
 
-					widget = {
-						size = { 120 @spreadsheet_header_height }
+								icon = {
+									parentanchor = center
+									size = { 70 70 }
+									texture = "[BuildingType.GetIcon]"
+								}
+							}
 
-						textbox = {
-							text = "[BuildingBrowserBuildingTypeItem.GetTotalFilteredSizeDesc]"
-							align = hcenter|nobaseline
-							using = fontsize_large
-							parentanchor = center
-							default_format = "#v"
-							autoresize = yes
-							maximumsize = { 120 -1 }
-							minimumsize = { 120 -1 }
-							fontsize_min = 12
-							elide = right
-						}
+							section_header_button = {
 
-						widget = {
-							parentanchor = top|right
-							size = { 24 24 }
-							position = { -4 4 }
-
-							### expand
-							button_icon_round_map_interaction = {
-								size = { 100% 100% }
-								blockoverride "icon" {
-									texture = "gfx/interface/buttons/button_icons/plus.dds"
+								blockoverride "layout" {
+									size = { 420 @spreadsheet_header_height }
 								}
 
-								onclick = "[BuildingType.ActivateExpansionLens]"
-								using = select_button_sound
-								visible = "[And(Or( BuildingType.IsBuildable, BuildingType.IsExpandable ), Not(BuildingType.GeneratesCombatUnits))]"
-								tooltip = "EXPAND_TOOLTIP_BUILDING_TYPE"
-							}
-						}
-					}
+								blockoverride "fontsize" {
+									using = fontsize_xxl
+								}
 
-					vertical_divider = {}
+								blockoverride "left_text" {
+									raw_text = "#v [BuildingType.GetNameNoFormatting]#!"
+								}
 
-					widget = {
-						size = { 220 @spreadsheet_header_height }
-						parentanchor = vcenter
+								blockoverride "onclick" {
+									onclick = "[GetVariableSystem.Toggle(Concatenate('building_browser_building_type_', BuildingType.GetIDString))]"
+								}
 
-						scrollarea = {
-							maximumsize = { 208 -1 }
-							autoresizescrollarea = yes
-							scrollbarpolicy_horizontal = as_needed
-							scrollbarpolicy_vertical = as_needed
-							scrollbar_horizontal = {
-								using = horizontal_scrollbar
+								blockoverride "onclick_showmore" {
+									visible = "[Not(GetVariableSystem.Exists(Concatenate('building_browser_building_type_', BuildingType.GetIDString)))]"
+								}
+
+								blockoverride "onclick_showless" {
+									visible = "[GetVariableSystem.Exists(Concatenate('building_browser_building_type_', BuildingType.GetIDString))]"
+								}
 							}
-							scrollbar_vertical = {
-								using = vertical_scrollbar
+
+							vertical_divider = {}
+
+							widget = {
+								size = { 120 @spreadsheet_header_height }
+
+								textbox = {
+									text = "[BuildingBrowserBuildingTypeItem.GetTotalFilteredSizeDesc]"
+									align = hcenter|nobaseline
+									using = fontsize_large
+									parentanchor = center
+									default_format = "#v"
+									autoresize = yes
+									maximumsize = { 120 -1 }
+									minimumsize = { 120 -1 }
+									fontsize_min = 12
+									elide = right
+								}
+
+								widget = {
+									parentanchor = top|right
+									size = { 24 24 }
+									position = { -4 4 }
+
+									### expand
+									button_icon_round_map_interaction = {
+										size = { 100% 100% }
+										blockoverride "icon" {
+											texture = "gfx/interface/buttons/button_icons/plus.dds"
+										}
+
+										onclick = "[BuildingType.ActivateExpansionLens]"
+										using = select_button_sound
+										visible = "[And(Or( BuildingType.IsBuildable, BuildingType.IsExpandable ), Not(BuildingType.GeneratesCombatUnits))]"
+										tooltip = "EXPAND_TOOLTIP_BUILDING_TYPE"
+									}
+								}
 							}
-							scrollwidget = {
-							flowcontainer = {
-								direction = horizontal
-								spacing = 2
-								datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
-								position = { 6 0 }
+
+							vertical_divider = {}
+
+							widget = {
+								size = { 220 @spreadsheet_header_height }
 								parentanchor = vcenter
 
-							item = {
-								widget = {
-									size = { 50 50 }
-									visible = "[And(And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), And(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_graded')))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_space_program_mission_ceiling')))]"
-									tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
-									using = tooltip_above
-
-									button = {
-										visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
-										distribute_visual_state = no
-										inherit_visual_state = no
-										using = expand_button_bg_dropdown
-										size = { 100% 100% }
-										onclick = "[BuildingBrowserBuildingTypeItem.ToggleSwitchProductionMethodMenu( ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
-										enabled = "[Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry))]"
+								scrollarea = {
+									maximumsize = { 208 -1 }
+									autoresizescrollarea = yes
+									scrollbarpolicy_horizontal = as_needed
+									scrollbarpolicy_vertical = as_needed
+									scrollbar_horizontal = {
+										using = horizontal_scrollbar
 									}
-
-									### pm icon
-									icon = {
-										visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
-										size = { 40 40 }
-										parentanchor = center
-										texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
+									scrollbar_vertical = {
+										using = vertical_scrollbar
 									}
+									scrollwidget = {
+									flowcontainer = {
+										direction = horizontal
+										spacing = 2
+										datamodel = "[BuildingBrowserBuildingTypeItem.GetBuildingType.AccessProductionMethodGroups]"
+										position = { 6 0 }
+										parentanchor = vcenter
 
-									### mixed pm icon
-									icon = {
-										visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
+									item = {
+										widget = {
+											size = { 50 50 }
+											visible = "[And(And(And4(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_light')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_heavy')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_intensive'))), And(Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_mine')), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_maintenance_graded')))), Not(EqualTo_string(ProductionMethodGroup.GetKey, 'pmg_space_program_mission_ceiling')))]"
+											tooltip = "BUILDING_TYPE_BULK_CHANGE_TOOLTIP"
+											using = tooltip_above
+
+											button = {
+												visible = "[NotEqualTo_int32( GetDataModelSize( ProductionMethodGroup.AccessCountryProductionMethods( GetPlayer.Self ) ), '(int32)1' )]"
+												distribute_visual_state = no
+												inherit_visual_state = no
+												using = expand_button_bg_dropdown
+												size = { 100% 100% }
+												onclick = "[BuildingBrowserBuildingTypeItem.ToggleSwitchProductionMethodMenu( ProductionMethodGroup.AccessSelf, PdxGuiWidget.AccessSelf)]"
+												enabled = "[Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry))]"
+											}
+
+											### pm icon
+											icon = {
+												visible = "[BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self )]"
+												size = { 40 40 }
+												parentanchor = center
+												texture = "[BuildingBrowserBuildingTypeItem.GetAllSameProductionMethodTexture( ProductionMethodGroup.Self )]"
+											}
+
+											### mixed pm icon
+											icon = {
+												visible = "[Not( BuildingBrowserBuildingTypeItem.HasAllSameProductionMethod( ProductionMethodGroup.Self ) )]"
+												size = { 35 35 }
+												parentanchor = center
+												texture = "[ProductionMethodGroup.GetMixedIcon]"
+											}
+
+											### new pm
+											has_new_pm_icon = {
+												position = { -2 2 }
+												parentanchor = bottom|left
+												blockoverride "visible" {
+													visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
+												}
+											}
+
+
+											### nr available
+											textbox = {
+												raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
+												parentanchor = top|right
+												position = { -5 0 }
+												autoresize = yes
+												align = right|nobaseline
+												visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
+												tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
+												using = tooltip_above
+												using = fontsize_small
+
+												background = {
+													using = default_background
+													margin = { 8 4 }
+												}
+											}
+										}
+									}
+									}
+									}
+								}
+							}
+
+							vertical_divider = {}
+
+							textbox = {
+								raw_text = "[BuildingBrowserBuildingTypeItem.GetTotalFilteredEmployed|D] / #maximum [BuildingBrowserBuildingTypeItem.GetTotalFilteredEmployeeCap|D]#!"
+								size = { 130 @spreadsheet_header_height }
+								align = nobaseline
+								using = fontsize_large
+								parentanchor = vcenter
+								default_format = "#v"
+								margin_left = 10
+								margin_right = 10
+								multiline = yes
+							}
+
+							vertical_divider = {}
+
+							widget = {
+								size = { 130 @spreadsheet_header_height }
+
+								textbox = {
+									raw_text = "[BuildingBrowserBuildingTypeItem.GetTotalFilteredCashReserves|D] / #maximum [BuildingBrowserBuildingTypeItem.GetTotalFilteredMaxCashReserves|D]#!"
+									visible = "[And(NotZero_CFixedPoint(BuildingBrowserBuildingTypeItem.GetTotalFilteredCashReserves), NotZero_CFixedPoint(BuildingBrowserBuildingTypeItem.GetTotalFilteredMaxCashReserves))]"
+									size = { 100% 100% }
+									align = nobaseline
+									using = fontsize_large
+									parentanchor = vcenter
+									default_format = "#v"
+									margin_left = 10
+									margin_right = 10
+									multiline = yes
+								}
+							}
+
+							vertical_divider = {}
+
+							widget = {
+								size = { 90 @spreadsheet_header_height }
+
+								textbox = {
+									visible = "[And(Not(BuildingType.IsGovernmentFunded), Not(BuildingType.IsSubsistenceBuilding))]"
+									raw_text = "@money![BuildingBrowserBuildingTypeItem.GetFilteredAverageProductivity|1]"
+									size = { 100 @spreadsheet_header_height }
+									align = nobaseline
+									using = fontsize_large
+									parentanchor = vcenter
+									default_format = "#v"
+									margin_left = 5
+								}
+							}
+
+							vertical_divider = {}
+
+							widget = {
+								size = { 150 @spreadsheet_header_height }
+								parentanchor = vcenter
+
+								flowcontainer = {
+									parentanchor = vcenter
+									margin = { 4 4 }
+
+									widget = {
 										size = { 35 35 }
-										parentanchor = center
-										texture = "[ProductionMethodGroup.GetMixedIcon]"
-									}
-
-									### new pm
-									has_new_pm_icon = {
-										position = { -2 2 }
-										parentanchor = bottom|left
-										blockoverride "visible" {
-											visible = "[And(GetPlayer.HasNewProductionMethodInGroup( ProductionMethodGroup.Self ), Not(IsDataModelEmpty(BuildingBrowserBuildingTypeItem.GetBuildingsInCountry)))]"
+										building_type_nationalize_button = {
+											parentanchor = center
 										}
 									}
 
-
-									### nr available
-									textbox = {
-										raw_text = "#bold [ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf)]#!"
-										parentanchor = top|right
-										position = { -5 0 }
-										autoresize = yes
-										align = right|nobaseline
-										visible = "[GreaterThan_int32( ProductionMethodGroup.GetNumAvailableOptionsForBuildingType(BuildingBrowserBuildingTypeItem.GetBuildingType.AccessSelf), '(int32)1')]"
-										tooltip = "PRODUCTION_METHOD_OPTIONS_BULK"
-										using = tooltip_above
-										using = fontsize_small
-
-										background = {
-											using = default_background
-											margin = { 8 4 }
-										}
-									}
-								}
-							}
-							}
-							}
-						}
-					}
-
-					vertical_divider = {}
-
-					textbox = {
-						raw_text = "[BuildingBrowserBuildingTypeItem.GetTotalFilteredEmployed|D] / #maximum [BuildingBrowserBuildingTypeItem.GetTotalFilteredEmployeeCap|D]#!"
-						size = { 130 @spreadsheet_header_height }
-						align = nobaseline
-						using = fontsize_large
-						parentanchor = vcenter
-						default_format = "#v"
-						margin_left = 10
-						margin_right = 10
-						multiline = yes
-					}
-
-					vertical_divider = {}
-
-					widget = {
-						size = { 130 @spreadsheet_header_height }
-
-						textbox = {
-							raw_text = "[BuildingBrowserBuildingTypeItem.GetTotalFilteredCashReserves|D] / #maximum [BuildingBrowserBuildingTypeItem.GetTotalFilteredMaxCashReserves|D]#!"
-							visible = "[And(NotZero_CFixedPoint(BuildingBrowserBuildingTypeItem.GetTotalFilteredCashReserves), NotZero_CFixedPoint(BuildingBrowserBuildingTypeItem.GetTotalFilteredMaxCashReserves))]"
-							size = { 100% 100% }
-							align = nobaseline
-							using = fontsize_large
-							parentanchor = vcenter
-							default_format = "#v"
-							margin_left = 10
-							margin_right = 10
-							multiline = yes
-						}
-					}
-
-					vertical_divider = {}
-
-					widget = {
-						size = { 90 @spreadsheet_header_height }
-
-						textbox = {
-							visible = "[And(Not(BuildingType.IsGovernmentFunded), Not(BuildingType.IsSubsistenceBuilding))]"
-							raw_text = "@money![BuildingBrowserBuildingTypeItem.GetFilteredAverageProductivity|1]"
-							size = { 100 @spreadsheet_header_height }
-							align = nobaseline
-							using = fontsize_large
-							parentanchor = vcenter
-							default_format = "#v"
-							margin_left = 5
-						}
-					}
-
-					vertical_divider = {}
-
-					widget = {
-						size = { 150 @spreadsheet_header_height }
-						parentanchor = vcenter
-
-						flowcontainer = {
-							parentanchor = vcenter
-							margin = { 4 4 }
-
-							widget = {
-								size = { 35 35 }
-								building_type_nationalize_button = {
-									parentanchor = center
-								}
-							}
-
-							### privatize
-							widget = {
-								size = { 35 35 }
+									### privatize
+									widget = {
+										size = { 35 35 }
 								
-								building_type_privatize_or_monopolize = {
-									size = { 35 35 }
+										building_type_privatize_or_monopolize = {
+											size = { 35 35 }
+										}
+									}
+
+									### subsidize
+									widget = {
+										size = { 35 35 }
+
+										building_type_subsidize_toggle = {
+											parentanchor = center
+										}
+									}
+
+									### Auto Expand
+									widget = {
+										size = { 35 35 }
+
+										building_type_auto_expand_toggle = {
+											parentanchor = center
+										}
+									}						
 								}
 							}
+						}
 
-							### subsidize
-							widget = {
-								size = { 35 35 }
-
-								building_type_subsidize_toggle = {
-									parentanchor = center
-								}
-							}
-
-							### Auto Expand
-							widget = {
-								size = { 35 35 }
-
-								building_type_auto_expand_toggle = {
-									parentanchor = center
-								}
-							}						
+						divider_clean = {
+							visible = "[GetVariableSystem.Exists(Concatenate('building_browser_building_type_', BuildingType.GetIDString))]"
+							parentanchor = bottom|hcenter
+							position = { 0 -2 }
 						}
 					}
-				}
-
-				divider_clean = {
-					visible = "[GetVariableSystem.Exists(Concatenate('building_browser_building_type_', BuildingType.GetIDString))]"
-					parentanchor = bottom|hcenter
-					position = { 0 -2 }
 				}
 			}
 
