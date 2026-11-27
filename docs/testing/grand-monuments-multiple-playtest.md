@@ -107,3 +107,15 @@ A civil war's winner takes over the monuments the loser raised at the win, where
 Run through `python3 -m game_qa` on a fresh 1836 game; figures and run folders in `docs/testing/game-qa-results-2026-11-11.md`.
 
 `gm_occupation_read`, `monument_piece_rejoins` and `monument_artifact_stands_apart` OK.
+
+## A construction site with no monument (2026-11-27, from #2041)
+
+A country holding only a construction site (no finished monument, no opportunity open, no naming) ran no national
+pulse, so the refresh's site loop, which lists the site for Awaiting Dedication and offers the AI the ceremony a
+finished level's hook missed, ran only at each level's own refresh (`monument_events.1` → `.20`). `gm_country_on_action`
+now names the site. Script only; `test_grand_monument_registry.py`'s `test_a_site_alone_keeps_the_national_pulse`.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **A player's first site.** A country with no monument and no opportunity: build a Grand Monument construction site and let its first level finish, then a month. | Awaiting Dedication lists the site from its first level, and still lists it after the next 1st; `debug.log` has `TE_MONUMENTS: 0 monuments, 0 contested` at each 1st from then on (the pulse's player line). | No monthly line: the pulse's gate (`monument_events_on_actions.txt`, `gm_country_on_action`) still misses the site. |
+| **An AI's site whose queue is cancelled.** As an observer, or reading an AI's state view: an AI site with no monument whose queued levels are cancelled after its last finished level. | The AI dedicates it within a month (`gm_state_offer_missed_ceremony`). | It sits undedicated: the ceremony waits for another level; read `gm_state_ai_dedicates_now` for the state. |
