@@ -3,8 +3,9 @@
 Layout under the backup root:
 
     store/<sha256[:2]>/<sha256>     one copy of each distinct file content, shared by every snapshot
-    snapshots/<id>/manifest.json    the files taken (size, mtime, hash), the listing of the folders, and the size
-                                    and mtime of everything listed in `save games/` (`save_stats`)
+    snapshots/<id>/manifest.json    the files taken (size, mtime, hash), the listing of the folders, the size
+                                    and mtime of everything listed in `save games/` (`save_stats`), and the
+                                    folders directly in `logs/` (`log_folders`)
     snapshots/<id>/journal.jsonl    what the run did: armed, playset, playset_written, started, watching,
                                     watch_resumed, heartbeat, look_failed, other_game, game_exited,
                                     playset_restored, restored, held
@@ -47,6 +48,10 @@ SNAPSHOT_SET = (
 
 # `Snapshot.listing` holds every file directly in these folders ("" is the user-data root).
 LISTED_FOLDERS = ("", "save games", "logs")
+# The folder whose subfolders are named in `Snapshot.log_folders` (#1758): the snapshot copies none of them and the
+# restore removes none, but a folder there the snapshot did not name is the run's (a console `logging.popstats`
+# writes `logs/<id>/pop_stats.csv`), and the restore names it (`left_behind`) instead of answering as if all were back.
+LOG_FOLDER = "logs"
 # The folder whose listed entries also get their size and time recorded (`Snapshot.save_stats`): the owner's own
 # saves there are never copied (they run to hundreds of MB), so a change to one is told by these alone (#1725).
 SAVE_FOLDER = "save games"
@@ -90,6 +95,9 @@ class Snapshot:
     # (st_size, st_mtime_ns) of each `listing` name in save games/, from the same lstat as the listing; None for a
     # manifest written before they were recorded, or one whose record does not read (see `load`).
     save_stats: dict[str, tuple[int, int]] | None = None
+    # Every folder directly in logs/ when taken ("logs/<name>"); None for a manifest written before they were
+    # recorded (#1758), or one whose record does not read.
+    log_folders: frozenset[str] | None = None
 
 
 # --- small helpers ---------------------------------------------------------------------------
@@ -143,6 +151,24 @@ def _scan_folder(user_data: Path, folder: str) -> dict[str, os.stat_result]:
             except FileNotFoundError:  # gone between the listing and the stat
                 continue
     return found
+
+
+def scan_subfolders(user_data: Path, folder: str = LOG_FOLDER) -> frozenset[str]:
+    """The folders directly in `folder` ("logs/<name>"), a link to one not followed or counted; empty when `folder`
+    is not there."""
+    found = set()
+    try:
+        iterator = os.scandir(Path(user_data) / folder)
+    except (FileNotFoundError, NotADirectoryError):
+        return frozenset()
+    with iterator as entries:
+        for entry in entries:
+            try:
+                if entry.is_dir(follow_symlinks=False):
+                    found.add(f"{folder}/{entry.name}")
+            except FileNotFoundError:   # gone between the listing and the look
+                continue
+    return frozenset(found)
 
 
 def unlisted_save(user_data: Path, rel: str, scan: dict[str, os.stat_result] | None = None) -> str | None:
@@ -254,7 +280,7 @@ def _ordered_id(taken: datetime, previous: Sequence[Snapshot]) -> tuple[str, int
 
 
 def _write_manifest(folder: Path, taken: datetime, files: dict[str, Entry], listing: frozenset[str],
-                    save_stats: dict[str, tuple[int, int]]) -> None:
+                    save_stats: dict[str, tuple[int, int]], log_folders: frozenset[str]) -> None:
     manifest = {
         "version": MANIFEST_VERSION,
         "created": taken.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -267,6 +293,8 @@ def _write_manifest(folder: Path, taken: datetime, files: dict[str, Entry], list
         "save_stats": {
             name: {"size": size, "mtime_ns": mtime_ns} for name, (size, mtime_ns) in sorted(save_stats.items())
         },
+        # Another such key (#1758).
+        "log_folders": sorted(log_folders),
     }
     temp = folder / (MANIFEST_NAME + ".tmp")
     with open(temp, "w", encoding="utf-8") as handle:
@@ -331,6 +359,7 @@ def take(
         wanted[rel] = target.stat()
     listing = frozenset(rel for found in scans.values() for rel in found)
     save_stats = {rel: (st.st_size, st.st_mtime_ns) for rel, st in scans[SAVE_FOLDER].items()}
+    log_folders = scan_subfolders(user_data)
 
     store, snapshots = backup_root / "store", backup_root / "snapshots"
     previous = all_snapshots(backup_root)
@@ -363,7 +392,7 @@ def take(
     base_id, first_number = _ordered_id(taken, previous)
     snapshot_id, folder = _new_snapshot_dir(snapshots, base_id, first_number)
     try:
-        _write_manifest(folder, taken, files, listing, save_stats)
+        _write_manifest(folder, taken, files, listing, save_stats, log_folders)
     except BaseException:
         # Clear our own unfinished folder. rmdir cannot remove one that holds a manifest, so
         # a snapshot that was committed before the failure is never deleted by the run that made it.
@@ -372,7 +401,8 @@ def take(
         with contextlib.suppress(OSError):
             folder.rmdir()
         raise
-    return Snapshot(id=snapshot_id, dir=folder, files=files, listing=listing, save_stats=save_stats)
+    return Snapshot(id=snapshot_id, dir=folder, files=files, listing=listing, save_stats=save_stats,
+                    log_folders=log_folders)
 
 
 def _int(value) -> bool:
@@ -397,6 +427,24 @@ def _read_save_stats(raw, listing: frozenset[str]) -> dict[str, tuple[int, int]]
     return stats
 
 
+def _read_log_folders(raw) -> frozenset[str] | None:
+    """The manifest's `log_folders`, or None when there is none (a manifest written before #1758) or it does not
+    read: a list of "logs/<name>" names, one part below logs/. Never a reason to refuse the rest."""
+    if not isinstance(raw, list):
+        return None
+    names = set()
+    for name in raw:
+        if not isinstance(name, str) or not name.startswith(LOG_FOLDER + "/"):
+            return None
+        try:
+            if _clean_relative(name) != name or name.count("/") != 1:
+                return None
+        except ValueError:
+            return None
+        names.add(name)
+    return frozenset(names)
+
+
 def load(snapshot_dir: Path) -> Snapshot:
     """Read a finished snapshot. FileNotFoundError if it has no manifest, ValueError if it is unreadable.
 
@@ -418,7 +466,8 @@ def load(snapshot_dir: Path) -> Snapshot:
     except (KeyError, TypeError, AttributeError, ValueError) as error:
         raise ValueError(f"unreadable manifest in {snapshot_dir}: {error!r}") from error
     save_stats = _read_save_stats(manifest.get("save_stats"), listing)
-    return Snapshot(id=snapshot_dir.name, dir=snapshot_dir, files=files, listing=listing, save_stats=save_stats)
+    return Snapshot(id=snapshot_dir.name, dir=snapshot_dir, files=files, listing=listing, save_stats=save_stats,
+                    log_folders=_read_log_folders(manifest.get("log_folders")))
 
 
 def all_snapshots(backup_root: Path) -> list[Snapshot]:

@@ -259,6 +259,8 @@ def _outcome(out: restore.Outcome) -> dict:
         result["retimed"] = out.retimed
     if out.manual_saves:    # the owner's own saves changed, gone or new (restore._manual_saves)
         result["manual_saves"] = out.manual_saves
+    if out.left_behind:     # folders in logs/ the snapshot did not name, left in place (restore.left_behind, #1758)
+        result["left_behind"] = out.left_behind
     return result
 
 

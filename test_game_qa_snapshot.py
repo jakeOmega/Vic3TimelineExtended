@@ -677,6 +677,41 @@ class SaveStatsTests(SnapshotTestCase):
         self.assertIsNone(snap.save_stats)
 
 
+class LogFoldersTests(SnapshotTestCase):
+    """#1758: the folders directly in logs/, named so that the restore can tell the run's (a `logging.popstats`
+    dump's) from the owner's; none is copied."""
+
+    def test_the_folders_are_named_and_load_reads_them_back(self):
+        (self.user / "logs" / "old-dump").mkdir(parents=True)
+        (self.user / "logs" / "old-dump" / "pop_stats.csv").write_text("id\n", encoding="utf-8")
+        (self.user / "logs" / "linked").symlink_to("old-dump")          # a link to a folder is not one
+        snap = snapshot.take(self.user, self.backups)
+        self.assertEqual(snap.log_folders, frozenset({"logs/old-dump"}))
+        self.assertNotIn("logs/old-dump/pop_stats.csv", snap.files)
+        manifest = json.loads((snap.dir / snapshot.MANIFEST_NAME).read_text("utf-8"))
+        self.assertEqual((manifest["version"], manifest["log_folders"]), (1, ["logs/old-dump"]))
+        self.assertEqual(snapshot.load(snap.dir).log_folders, snap.log_folders)
+
+    def test_no_logs_folder_names_none(self):
+        shutil.rmtree(self.user / "logs", ignore_errors=True)
+        self.assertEqual(snapshot.take(self.user, self.backups).log_folders, frozenset())
+
+    def test_a_manifest_from_before_or_one_that_does_not_read_has_none_and_loads_whole(self):
+        snap = snapshot.take(self.user, self.backups)
+        path = snap.dir / snapshot.MANIFEST_NAME
+        for value in ("gone", None, "logs/x", ["save games/x"], ["logs/a/b"], ["logs/.."], [3]):
+            with self.subTest(value=value):
+                manifest = json.loads(path.read_text("utf-8"))
+                if value == "gone":
+                    manifest.pop("log_folders", None)
+                else:
+                    manifest["log_folders"] = value
+                path.write_text(json.dumps(manifest), "utf-8")
+                loaded = snapshot.load(snap.dir)
+                self.assertIsNone(loaded.log_folders)
+                self.assertEqual((loaded.files, loaded.listing), (snap.files, snap.listing))
+
+
 class UnlistedSaveTests(SnapshotTestCase):
     """#1725: a save for the run is named as `save games/` lists it, in any letter case. The owner's drive also
     answers to short 8.3 names it does not list (`FRENCH~1.V3`); here a hard link plays that name, and the scan is
