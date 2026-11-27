@@ -63,6 +63,11 @@ class ManifestTest(unittest.TestCase):
         for key in gs.TE_WINDOW_KEYS:
             self.assertTrue("GetVariableSystem.Set('%s'" % key in text, key)
 
+    def test_the_popup_keys_are_the_mods_own(self):
+        gui = "".join(p.read_text(encoding="utf-8-sig") for p in (HERE / "gui").rglob("*.gui"))
+        for key in gs.POPUP_KEYS:
+            self.assertIn("GetVariableSystem.Set('%s'" % key, gui, key)
+
     def test_the_capture_key_is_the_harness_one(self):
         from game_qa import capture_gui
         self.assertEqual(gs.CAPTURE_KEY, capture_gui.CAPTURE_KEY)

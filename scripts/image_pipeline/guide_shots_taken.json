@@ -1,0 +1,145 @@
+{
+ "UN_lobbying": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "06af5d867b7fda43c6e4060a5668ae709f9cf604cc508dc4667753ce1ec18cd6"
+ },
+ "banking_rate": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "b7698ba1b682720d4e2f2fc2e2c1d66db4f9c07556684b6b74add826966d4fa9"
+ },
+ "banking_tab": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "8bbb0819fad30a0f2965244d9a0c35d9ef368a6d9d67e5c03b9aee1f897f8eb1"
+ },
+ "construction_market": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "b4d7a5d74c63c03ea7dcab5855569c7f95ce1d29e490d6dadca08a902345a89f"
+ },
+ "grand_monuments_tab": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "271010648e5573c16e493c115e195aa479ec5c2e2ac186a8fb2f24d8a3974e36"
+ },
+ "hegemony_tab": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "ce1fb7e062a087d3f9b08e715abb0c07e35523a5f29fe534ef55db3b19046753"
+ },
+ "nuclear_tab_armed": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "d20fd65b784206b74e60744a8496430c2525dbe04cba128e69ef40434bac3ecc"
+ },
+ "state_panel": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "1b81929f5e625386042dec19bd5c43fabd8e3396f430ba1f73a6514a2d180fb0"
+ },
+ "strategic_reserve_tab": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "5ab1bfd4699824e81c61699c728155750abb79706db2692893c5a53cac1d33ee"
+ },
+ "tech_tree_production_era_6_7_8": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "943a282226824f8486997a5c52b10406a892da00dbda12623b2b1aa75b31102b"
+ },
+ "un_authority_moving": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "a1c8d7e76a765a9e53f2d89d934b406b75e7a1d47e2b83b3c8f1ea003bdf1a9c"
+ },
+ "un_general_assembly": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "94c191b79fefe9320268bcf5c6d2e233f84ee17f3693a8362199b56edbc63ccb"
+ },
+ "un_tab_overview": {
+  "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2050_20261126",
+  "sha256": "5aebf0508dd497327602e91001b6b8c03d96ee053d6366d92dccb63adf6da1b0"
+ }
+}

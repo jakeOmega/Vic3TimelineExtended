@@ -235,3 +235,15 @@ SPECS['13_nuclear_event'] = dict(
     src='Screenshot 2026-11-06 170716.png', u=1.0,
     title='Over 1,000 New Events', subtitle='nuclear crises, elections, the space race',
     callouts=[])
+
+# Candidates for the carousel (owner, 2026-11-26: "Retake 13 + offer candidates"): windows the 2026-11-06 set
+# predates. No callouts on either picture's art.
+SPECS['c1_colonies'] = dict(
+    src='ws_c1_colonies.png', u=1.0,
+    title='Colonize the Solar System', subtitle='terraform Mars, mine the asteroids, defend every site',
+    callouts=[])
+
+SPECS['c2_fleets'] = dict(
+    src='ws_c2_fleets.png', u=1.0,
+    title='Space Fleets', subtitle='warships, carriers and marines between the planets',
+    callouts=[])
