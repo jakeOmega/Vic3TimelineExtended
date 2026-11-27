@@ -139,6 +139,20 @@ measured through the harness; the look of the box, its tooltip and the Ships tab
 | The Construction panel's Ships tab | "used/total" beside the ship icon at the top, live | The total alone: the tab reads vanilla's key; `gui/production_methods.gui` should read `TE_SHIP_CONSTRUCTION_VALUE_PANEL` |
 | Speed, a late game at speed 5 | Days pass faster between weekly ticks than before the change (a sub-tick 0.22 s against 0.37 s on the 2050 save) | No change: the cost is in the other figure after a patch; time each with a one-line `replace/` override as finding 5 did |
 
+## The Ships tab: "used/total" abbreviated, and the cost under it (2026-11-27, #2093)
+
+In a late game the Ships tab's "used/total" ran into the weekly cost beside it at five digits a side
+("35015/5054£-1.37M", the February 2050 copy). Each figure now switches to the `|K` form at 1,000, and the cost sits
+under the figure, both in the body size, as the Construction Site row has done since #2011
+(`ship_construction_sector_actions` in `gui/production_methods.gui`; `test_construction_figures.py`).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The Construction panel's Ships tab, a late game | The ship icon and "35.0K/50.5K" (or the like) in one line, the cost "-1.37M" under it, the pause button to the right; nothing overlaps | The figures overlap the cost: the row is not the mod's (another mod of the playset overrides `ship_construction_sector_actions`) |
+| The same tab, an early game | "12/40" as before, figures under 1,000 printed whole | "0.01K" or the like: the `_N` keys are not picked below 1,000 |
+| Hover the figure, then the cost | Vanilla's two tooltips, unchanged (the ship construction breakdown, then the goods expenses breakdown) | Either hover is gone: say which |
+| Ship construction paused | The base game's paused text in place of the figure, the paused icon, the resume button glowing | A figure: `TE_SHIP_CONSTRUCTION_VALUE_PANEL`'s pause switch is lost |
+
 ## History charts: the 1-year and 5-year ranges build only the bars they show (2026-11-24, `gui/charts-perf`)
 
 Each chart's 1-year and 5-year plots read only the store's newest samples, `DataModelLast( <list>, '(int32)12' )`

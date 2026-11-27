@@ -1096,38 +1096,67 @@ types production_methods
 				layoutpolicy_horizontal = expanding
 				layoutpolicy_vertical = expanding
 
+				### TIMELINE EXTENDED: the week's cost under the ship construction figure, where vanilla has it
+				### beside it (in the second half of the row, left of the pause button), and both in the body
+				### size, as in the Construction Site row (construction_queue_sector_actions). A late game's
+				### "used/total" reached five digits a side and ran under the cost ("35015/5054£-1.37M", seen in
+				### game 2026-11-26, #2093).
 				flowcontainer = {
+					direction = vertical
 					parentanchor = center
-					spacing = 10
-					tooltip = "SHIP_CONSTRUCTION_SPEED_BASE_TOOLTIP"
-					datacontext = "[AccessPlayer]"
+					spacing = 0
 
-					icon = {
-						parentanchor = vcenter
-						size = { 30 30 }
-						texture = "gfx/interface/icons/state_status_icons/ship_construction.dds"
-						visible = "[Not(Country.IsShipConstructionPaused)]"
-					}
+					flowcontainer = {
+						name = "ship_construction_points"
+						parentanchor = hcenter
+						spacing = 10
+						tooltip = "SHIP_CONSTRUCTION_SPEED_BASE_TOOLTIP"
+						datacontext = "[AccessPlayer]"
 
-					icon = {
-						parentanchor = vcenter
-						size = { 30 30 }
-						texture = "gfx/interface/icons/state_status_icons/ship_construction_paused.dds"
-						visible = "[Country.IsShipConstructionPaused]"
+						icon = {
+							parentanchor = vcenter
+							size = { 30 30 }
+							texture = "gfx/interface/icons/state_status_icons/ship_construction.dds"
+							visible = "[Not(Country.IsShipConstructionPaused)]"
+						}
+
+						icon = {
+							parentanchor = vcenter
+							size = { 30 30 }
+							texture = "gfx/interface/icons/state_status_icons/ship_construction_paused.dds"
+							visible = "[Country.IsShipConstructionPaused]"
+						}
+
+						textbox = {
+							parentanchor = vcenter
+							text = "TE_SHIP_CONSTRUCTION_VALUE_PANEL"
+							autoresize = yes
+							align = nobaseline
+							min_width = 56
+
+							background = {
+								using = dark_area
+								margin = { 8 0 }
+							}
+						}
 					}
 
 					textbox = {
-						parentanchor = vcenter
-						using = fontsize_large
-						text = "TE_SHIP_CONSTRUCTION_VALUE_PANEL"
-						autoresize = yes
-						align = nobaseline
-						min_width = 56
+						datacontext = "[GetPlayer]"
+						parentanchor = hcenter
 
 						background = {
 							using = dark_area
-							margin = { 20 0 }
+							margin = { 8 0 }
 						}
+
+						autoresize = yes
+						align = nobaseline
+
+						alpha = "[TransparentIfZero(Country.GetShipConstructionGoodsExpenses)]"
+						raw_text = "@money![Negate(Country.GetShipConstructionGoodsExpenses)|D+]"
+
+						tooltip = "SHIP_CONSTRUCTION_GOODS_EXPENSES_BREAKDOWN"
 					}
 				}
 			}
@@ -1140,26 +1169,6 @@ types production_methods
 					direction = horizontal
 					parentanchor = center
 					spacing = 20 # need extra spacing for the tooltips for the text vs the button not to interfere with each other...
-
-					textbox = {
-						datacontext = "[GetPlayer]"
-						parentanchor = vcenter
-
-						background = {
-							using = dark_area
-							margin_right = 30
-						}
-
-						autoresize = yes
-						minimumsize = { 0 26 }
-						margin_left = 5
-						align = nobaseline
-
-						alpha = "[TransparentIfZero(Country.GetShipConstructionGoodsExpenses)]"
-						raw_text = "@money![Negate(Country.GetShipConstructionGoodsExpenses)|D+]"
-						
-						tooltip = "SHIP_CONSTRUCTION_GOODS_EXPENSES_BREAKDOWN"
-					}
 
 					container = {
 						parentanchor = vcenter
