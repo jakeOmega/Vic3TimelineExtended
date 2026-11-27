@@ -269,6 +269,19 @@ AUDITS: tuple[Audit, ...] = (
         where="trailing on the `min =` / `max =` line or the `change_variable = {` line",
     ),
     Audit(
+        "script_value_reference_audit",
+        "A bare name in a script value position (`value =`, `add =`, `max =`, `count =`, `multiplier =`, "
+        "`days =` and the like, or the right side of a `<`, `>`, `<=`, `>=`, `!=` or `==`) that no script value, "
+        "scripted trigger or effect, engine trigger or event target defines. It compiles to nothing with no log "
+        "line (#2021: space forces personnel's `sr_pers_state_spacers`). Define it, or use its current name.",
+        where=VALUE_LINE,
+        tags=("script_value_reference",),
+        note="Prefixed and chained values (`scope:x`, `var:x`, `owner.x`) and `$PARAM$` names are not judged; "
+             "`=` is read as a comparison only after the keys listed. The engine's names come from "
+             "`docs/engine/triggers_summary.txt` and `event_targets_summary.txt`, vanilla's script values from "
+             "`vanilla_parsed/`.",
+    ),
+    Audit(
         "change_variable_init_audit",
         "A `change_variable` (or the global or local form) on a variable nothing sets first: no `set_variable` "
         "of that exact name in the mod or in vanilla's `common/`, or each one behind a `has_variable` check, an "
