@@ -1119,7 +1119,7 @@ types production_methods
 					textbox = {
 						parentanchor = vcenter
 						using = fontsize_large
-						text = "SHIP_CONSTRUCTION_VALUE"
+						text = "TE_SHIP_CONSTRUCTION_VALUE_PANEL"
 						autoresize = yes
 						align = nobaseline
 						min_width = 56
