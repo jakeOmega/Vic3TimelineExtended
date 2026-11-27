@@ -245,14 +245,13 @@ class RefreshTest(unittest.TestCase):
         self.assertIn("if = { limit = { local_var:sr_ccost_lc_new > 0 } set_variable = { name = sr_ccost_lc "
                       "value = local_var:sr_ccost_lc_new } } else_if = { limit = { has_variable = sr_ccost_lc } "
                       "remove_variable = sr_ccost_lc }", flat)
-        # An older save's share (a share of base until the flat amounts) comes off.
-        self.assertIn("if = { limit = { has_variable = sr_ccost_share } remove_variable = sr_ccost_share }", flat)
+        self.assertNotIn("sr_ccost_share", flat)
 
     def test_it_runs_monthly_from_the_always_on_pulse_alone(self):
         always = _flat(_strip(_raw("common", "on_actions", "space_race_on_actions.txt")))
         self.assertIn("if = { limit = { OR = { sr_has_space_program = yes "
                       "has_journal_entry = je_space_race_solar_colonization has_variable = sr_ccost_lc "
-                      "has_variable = sr_ccost_share has_variable = sr_strike_settlement_months has_variable = sr_dome_breach_months } } "
+                      "has_variable = sr_strike_settlement_months has_variable = sr_dome_breach_months } } "
                       "sr_ccost_refresh = yes }", always)
         callers = [path for path, text in _walk("common", "events") if re.search(r"\bsr_ccost_refresh = yes", text)]
         self.assertEqual(callers, ["common/on_actions/space_race_on_actions.txt"])

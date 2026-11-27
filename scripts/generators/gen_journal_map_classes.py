@@ -161,12 +161,8 @@ def render_effects() -> str:
         body += ["if = {" if i == 0 else "else_if = {", f"\tlimit = {{ is_pop_type = {c['pop']} }}",
                  f"\tchange_local_variable = {{ name = te_jmap_w_{c['pop']} add = total_size }}", "}"]
     out += _sv("te_jmap_class_walk_pop", body)
-    out += ["", "# State scope, after the walk's pop loop. The tenth pass's four share maps read other names until #1975",
-            "# (te_dg_soldiers already meant Soldiers and Officers, so every class took te_dg_cls_<pop>): a save that",
-            "# still holds them loses them here."]
+    out += ["", "# State scope, after the walk's pop loop."]
     body = [f"set_variable = {{ name = {classes.count_var(c)} value = local_var:te_jmap_w_{c['pop']} }}" for c in walk]
-    for var in classes.RETIRED_VARS:
-        body += ["if = {", f"\tlimit = {{ has_variable = {var} }}", f"\tremove_variable = {var}", "}"]
     out += _sv("te_jmap_class_walk_store", body)
     out += ["", "# Map Options' Count/Share switch, just set (te_jmap_set_class_mode, te_journal_map_effects.txt): a class map",
             "# on the page moves to the same class's other map, its people or its share. Country scope, the player's."]

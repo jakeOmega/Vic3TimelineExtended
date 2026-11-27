@@ -724,8 +724,8 @@ of the state's people (the tenth pass).
   outside the census (`test_demographics_registry.py`, `TestWorkWalk`); `test_demographics_golden.py` leaves them out
   of the walk it pins. The tenth pass's `te_dg_capitalists`, `te_dg_aristocrats`, `te_dg_clergy` and
   `te_dg_academics` are renamed with the rest, since `te_dg_soldiers` already meant Soldiers and Officers (Armed
-  Forces keeps it); the walk removes the old four from a save that holds them. So a save from before shows a class
-  map grey ("No census figures yet") in each state until its next yearly walk.
+  Forces keeps it). A save from before holds the old four, which nothing reads, and shows a class map grey ("No
+  census figures yet") in each state until its next yearly walk.
 - **The Count/Share switch.** A global option, as the others are (`te_jmap_opt_class`, read through
   `te_jmap_class_mode`: 0 the count, the default, 1 the share), on a Classes row at the end of Map Options. Each class
   has two pick buttons side by side in its row, one per selector, each shown under one setting (the pick's `is_shown`
