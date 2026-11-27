@@ -249,16 +249,25 @@ types te_system_tab_widgets
 	### The entry's modifier strip (#1383): the modifiers script puts on the
 	### journal entry (`je:je_<x> ?= { add_modifier = { ... } }`), which the
 	### journal draws at the right of its header and no tab section otherwise
-	### shows (Cultural Hegemony's bonus, #1382, was one). Vanilla 1.15's markup
-	### (gui/journal_entry.gui, TIMED AND SCALING MODIFIERS): the scaling
-	### modifiers' row, then the timed ones', each icon with its own tooltip, at
-	### 35 px and 12 to a row of the 480 column. Under te_own_country_only, as it
-	### reads JournalEntry (gotcha #35: another country's panel has none). A tab
-	### body with an entry draws it through the frame's tab_entry_modifiers
-	### block; a Space Race milestone inside its own part, under the entry's
-	### datacontext. test_te_entry_modifier_strip.py holds every tab of an entry
-	### that script adds modifiers to to it. Not yet seen in game outside the
-	### journal window (docs/testing/charts-help-national-info-playtest.md).
+	### shows (Cultural Hegemony's bonus, #1382, was one). The two datamodels of
+	### vanilla 1.15's markup (gui/journal_entry.gui, TIMED AND SCALING
+	### MODIFIERS), each icon with its own tooltip, grouped under a ruled
+	### heading as the Space Race's Program Effects are (te_sr_program_effects,
+	### #2030; here 2026-11-27, from #2041: a new game's Grand Monuments tab drew
+	### eight identical busts above Open Journal Entry, told apart only by
+	### hovering). Ongoing: JournalEntry.GetScalingModifiers, 35 px icons, 12 to
+	### a row (12 x 35 + 11 x 5 = 475), left-aligned so a short last row sits
+	### under the one above. Timed: JournalEntry.GetTimedModifiers, one row each,
+	### icon, name and time left (25 + 269 + 170 + 2 x 8 = 480). The engine gives
+	### the two lists and no finer kind, so there are two groups. The panel and
+	### each group draw only with something in them. Rows 17, the heading 20
+	### (style guide rule 8). Under te_own_country_only, as it reads JournalEntry
+	### (gotcha #35: another country's panel has none). A tab body with an entry
+	### draws it through the frame's tab_entry_modifiers block; a Space Race
+	### milestone draws te_sr_program_effects inside its own part.
+	### test_te_entry_modifier_strip.py holds every tab of an entry that script
+	### adds modifiers to to it. Not yet seen in game outside the journal window
+	### (docs/testing/charts-help-national-info-playtest.md, gui-drift-playtest.md).
 	type te_je_modifier_strip = flowcontainer {
 		using = te_own_country_only
 		parentanchor = hcenter
@@ -266,42 +275,127 @@ types te_system_tab_widgets
 		ignoreinvisible = yes
 
 		flowcontainer = {
-			visible = "[Or(Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers)), Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers)))]"
+			visible = "[Or( Not( IsDataModelEmpty( JournalEntry.GetScalingModifiers ) ), Not( IsDataModelEmpty( JournalEntry.GetTimedModifiers ) ) )]"
 			parentanchor = hcenter
 			direction = vertical
 			ignoreinvisible = yes
-			spacing = 5
+			spacing = 4
+			margin = { 20 8 }
+
+			background = {
+				using = entry_bg_fancy_dark
+				alpha = 0.5
+			}
 
 			flowcontainer = {
-				visible = "[Not(IsDataModelEmpty(JournalEntry.GetScalingModifiers))]"
-				parentanchor = hcenter
-				spacing = 5
-				wrap_count = 12
-				datamodel = "[JournalEntry.GetScalingModifiers]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 1
+				tooltip = "te_je_modifier_strip_header_tt"
 
-				item = {
-					icon = {
-						size = { 35 35 }
-						using = tooltip_se
-						tooltip = "[ScalingModifier.GetTooltip]"
-						texture = "[ScalingModifier.GetIcon]"
+				textbox = {
+					autoresize = yes
+					multiline = yes
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					fontsize = 20
+					default_format = "#title"
+					text = "te_je_modifier_strip_header"
+				}
+				divider_clean = {
+					blockoverride "size" {
+						size = { 480 2 }
 					}
 				}
 			}
 
 			flowcontainer = {
-				visible = "[Not(IsDataModelEmpty(JournalEntry.GetTimedModifiers))]"
-				parentanchor = hcenter
-				spacing = 5
-				wrap_count = 12
-				datamodel = "[JournalEntry.GetTimedModifiers]"
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetScalingModifiers ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				minimumsize = { 480 -1 }
 
-				item = {
-					icon = {
-						size = { 35 35 }
-						using = tooltip_se
-						tooltip = "[TimedModifier.GetTooltip]"
-						texture = "[TimedModifier.GetIcon]"
+				textbox = {
+					autoresize = yes
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					fontsize = 17
+					default_format = "#title"
+					text = "te_je_modifier_strip_ongoing"
+					tooltip = "te_je_modifier_strip_ongoing_tt"
+				}
+				flowcontainer = {
+					spacing = 5
+					wrap_count = 12
+					datamodel = "[JournalEntry.GetScalingModifiers]"
+
+					item = {
+						icon = {
+							size = { 35 35 }
+							using = tooltip_se
+							tooltip = "[ScalingModifier.GetTooltip]"
+							texture = "[ScalingModifier.GetIcon]"
+						}
+					}
+				}
+			}
+
+			flowcontainer = {
+				visible = "[Not( IsDataModelEmpty( JournalEntry.GetTimedModifiers ) )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				minimumsize = { 480 -1 }
+
+				textbox = {
+					autoresize = yes
+					maximumsize = { 480 -1 }
+					align = left|nobaseline
+					fontsize = 17
+					default_format = "#title"
+					text = "te_je_modifier_strip_timed"
+					tooltip = "te_je_modifier_strip_timed_tt"
+				}
+				flowcontainer = {
+					direction = vertical
+					spacing = 4
+					datamodel = "[JournalEntry.GetTimedModifiers]"
+
+					item = {
+						flowcontainer = {
+							direction = horizontal
+							spacing = 8
+							tooltip = "[TimedModifier.GetTooltip]"
+							using = tooltip_se
+
+							icon = {
+								size = { 25 25 }
+								parentanchor = vcenter
+								texture = "[TimedModifier.GetIcon]"
+							}
+							textbox = {
+								autoresize = yes
+								multiline = yes
+								minimumsize = { 269 -1 }
+								maximumsize = { 269 -1 }
+								parentanchor = vcenter
+								align = left|nobaseline
+								fontsize = 17
+								text = "[TimedModifier.GetName]"
+							}
+							textbox = {
+								autoresize = yes
+								multiline = yes
+								minimumsize = { 170 -1 }
+								maximumsize = { 170 -1 }
+								parentanchor = vcenter
+								align = right|nobaseline
+								fontsize = 17
+								default_format = "#v"
+								text = "[TimedModifier.GetRemainingDuration]"
+							}
+						}
 					}
 				}
 			}

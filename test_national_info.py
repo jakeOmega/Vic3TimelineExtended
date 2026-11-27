@@ -568,21 +568,23 @@ class MountTest(unittest.TestCase):
     def test_the_players_mount_is_the_windows(self):
         """The player's own country gets the Timeline Extended window's
         full-screen mount: the body with its layout override, so its gate, its
-        entry and its controls (owner call 3)."""
+        entry and its controls (owner call 3), and since #2041 its title across
+        the frame too (te_tab_header_size, or the Space Race's page title)."""
         window = _read(os.path.join(REPO, "gui", "te_systems_window_generated.gui"))
         for t in gen.ni_tabs():
             with self.subTest(tab=t.key):
                 own = self._mounts(self.column, t)[0]
-                content = "\n".join(gen._content(t, wide=True))
+                content = "\n".join(gen._wide_content(t))
                 self.assertIn(content.replace("\n", "\n\t\t\t\t"), _read(GENERATED))
                 wide = re.search(rf'name = "te_systems_window_{t.key}_tab_wide"', window)
                 self.assertTrue(wide)
-                # the window's adds only its title across the frame (spec § 7.1: te_tab_header_size, or
-                # the Space Race's page title), which National Info leaves at the header's own 554
+                # the window's mount, title and all (spec § 7.1: te_tab_header_size, or the Space Race's
+                # page title); without the title it is the body with its layout override
                 windows = gen._wide_content(t)
                 self.assertIn("\n".join(windows).replace("\n", "\n\t\t\t"), window[wide.start():])
                 self.assertEqual(_without_title(windows), gen._content(t, wide=True))
-                self.assertNotIn(gen.TITLE_HOOK, own)
+                if t.key not in gen._own_titles():
+                    self.assertIn(gen.TITLE_HOOK, own)
                 self.assertIn(content.split("\n")[0], own)
 
     def test_the_players_mount_keeps_the_entry(self):

@@ -956,63 +956,92 @@ types construction_panel
 		default_format = "#lore"
 	}
 
-	### Instanced only by te_construction_market_help_popup.
+	### Instanced only by te_construction_market_help_popup. One page for both
+	### ways construction works, as the Tax Code's is for both codes: How the
+	### Construction Market Works while the Free Market Construction rule runs
+	### the market, How Construction Works (direct construction) otherwise, the
+	### intro the direct-construction section carried until 2026-11-27 (from
+	### #2041; style guide rule 1). The popup's title follows the same gate.
 	type te_construction_market_help_body = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
 		spacing = 4
 
-		te_cm_how_subheader = {
-			blockoverride "subheader_margin" {}
-			blockoverride "subheader_text" {
-				text = "TE_CM_HOW_SUB_MARKET"
+		flowcontainer = {
+			visible = "[GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_cm_how_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "TE_CM_HOW_SUB_MARKET"
+				}
+			}
+			te_cm_how_note = {
+				text = "TE_CM_HOW_MARKET"
+			}
+			te_cm_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "TE_CM_HOW_SUB_SUPPLY"
+				}
+			}
+			te_cm_how_note = {
+				text = "TE_CM_HOW_SUPPLY"
+			}
+			te_cm_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "TE_CM_HOW_SUB_PURCHASE"
+				}
+			}
+			te_cm_how_note = {
+				text = "TE_CM_HOW_PURCHASE"
+			}
+			te_cm_how_note = {
+				text = "TE_CM_HOW_PURCHASE_CAP"
+			}
+			te_cm_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "TE_CM_HOW_SUB_PRIVATE"
+				}
+			}
+			te_cm_how_note = {
+				text = "TE_CM_HOW_PRIVATE"
+			}
+			te_cm_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "TE_CM_HOW_SUB_DELIVERY"
+				}
+			}
+			te_cm_how_note = {
+				text = "TE_CM_HOW_DELIVERY"
+			}
+			te_cm_how_subheader = {
+				blockoverride "subheader_text" {
+					text = "TE_CM_HOW_SUB_SHORTAGES"
+				}
+			}
+			te_cm_how_note = {
+				text = "TE_CM_HOW_SHORTAGES"
 			}
 		}
-		te_cm_how_note = {
-			text = "TE_CM_HOW_MARKET"
-		}
-		te_cm_how_subheader = {
-			blockoverride "subheader_text" {
-				text = "TE_CM_HOW_SUB_SUPPLY"
+
+		flowcontainer = {
+			visible = "[Not( GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 4
+
+			te_cm_how_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "TE_DC_HOW_SUB_SITES"
+				}
 			}
-		}
-		te_cm_how_note = {
-			text = "TE_CM_HOW_SUPPLY"
-		}
-		te_cm_how_subheader = {
-			blockoverride "subheader_text" {
-				text = "TE_CM_HOW_SUB_PURCHASE"
+			te_cm_how_note = {
+				text = "TE_DC_SECTION_INTRO"
 			}
-		}
-		te_cm_how_note = {
-			text = "TE_CM_HOW_PURCHASE"
-		}
-		te_cm_how_note = {
-			text = "TE_CM_HOW_PURCHASE_CAP"
-		}
-		te_cm_how_subheader = {
-			blockoverride "subheader_text" {
-				text = "TE_CM_HOW_SUB_PRIVATE"
-			}
-		}
-		te_cm_how_note = {
-			text = "TE_CM_HOW_PRIVATE"
-		}
-		te_cm_how_subheader = {
-			blockoverride "subheader_text" {
-				text = "TE_CM_HOW_SUB_DELIVERY"
-			}
-		}
-		te_cm_how_note = {
-			text = "TE_CM_HOW_DELIVERY"
-		}
-		te_cm_how_subheader = {
-			blockoverride "subheader_text" {
-				text = "TE_CM_HOW_SUB_SHORTAGES"
-			}
-		}
-		te_cm_how_note = {
-			text = "TE_CM_HOW_SHORTAGES"
 		}
 	}
 
@@ -1022,7 +1051,7 @@ types construction_panel
 			visible = "[GetVariableSystem.HasValue('te_popup', 'help_construction_market')]"
 		}
 		blockoverride "popup_title" {
-			text = "TE_CM_HOW_IT_WORKS"
+			text = "[SelectLocalization( GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'TE_CM_HOW_IT_WORKS', 'TE_DC_HOW_IT_WORKS' )]"
 		}
 		blockoverride "popup_list" {
 			te_construction_market_help_body = {}
@@ -1136,7 +1165,7 @@ types construction_panel
 				# Text: the TE_CM_* keys.
 				# Shown only while the construction market runs; with
 				# free_market_construction_rule disabled the direct-construction
-				# section below replaces it, and the "?" goes with this section.
+				# section below replaces it, with a "?" of its own to the same page.
 				# The GUI cannot test a game rule, so
 				# te_construction_market_rule_on_sgui answers for it.
 				flowcontainer = {
@@ -1485,20 +1514,17 @@ types construction_panel
 					margin_bottom = 10
 					spacing = 5
 
+					### The header's "?" opens the Construction Help page, which
+					### under this rule holds what the section's intro said
+					### (2026-11-27, from #2041).
 					default_header = {
 						blockoverride "text" {
 							text = "TE_DC_SECTION_HEADER"
 						}
-					}
-
-					textbox = {
-						parentanchor = hcenter
-						text = "TE_DC_SECTION_INTRO"
-						autoresize = yes
-						multiline = yes
-						max_width = @panel_width_minus_10
-						margin = { 10 0 }
-						align = left|nobaseline
+						te_help_button = {
+							visible = "[Not( GetMetaPlayer.IsObserver )]"
+							onclick = "[GetVariableSystem.Set('te_popup', 'help_construction_market')]"
+						}
 					}
 
 					flowcontainer = {

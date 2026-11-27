@@ -245,7 +245,7 @@
  te_tax_lt_how_sub_level:0 "Tax Level"
  te_tax_lt_how_sub_native:0 "The Budget Panel and the AI"
  te_tax_lt_how_sub_rates:0 "Rates"
- te_tax_lt_intro:0 "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law. Collections follow a change within days."
+ te_tax_lt_intro:0 "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law."
  te_tax_lt_law_other:0 "Another law"
  te_tax_lt_law_short_law_consumption_based_taxation:0 "Consumption"
  te_tax_lt_law_short_law_graduated_taxation:0 "Graduated"

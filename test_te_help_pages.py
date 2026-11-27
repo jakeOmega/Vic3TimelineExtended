@@ -119,9 +119,14 @@ PAGES = [
     Page("power_grids", "te_grid_how_header", (), ("te_grid_tab_body",)),
     # no journal entry and no tab: the Construction panel's market section, whose
     # header has the "?"; the section shows only while the Free Market
-    # Construction rule runs the market (2026-11-24, from #2016)
+    # Construction rule runs the market (2026-11-24, from #2016). With the rule
+    # off the direct-construction section's header has it, and the page is How
+    # Construction Works (2026-11-27, from #2041)
     Page("construction_market", "TE_CM_HOW_IT_WORKS", ("te_cm_how_it_works_open",), (),
-         headers=(("construction_panel.gui", "te_construction_market_section"),)),
+         headers=(("construction_panel.gui", "te_construction_market_section"),
+                  ("construction_panel.gui", "te_direct_construction_section")),
+         popup_title="text = \"[SelectLocalization( GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( "
+                     "GuiScope.SetRoot( GetPlayer.MakeScope ).End ), 'TE_CM_HOW_IT_WORKS', 'TE_DC_HOW_IT_WORKS' )]\""),
 ]
 
 # The pages of systems with no Timeline Extended window tab: their one host is
@@ -135,6 +140,8 @@ NO_TAB = {"construction_market"}
 HEADER_HOSTS = {
     ("construction_panel.gui", "te_construction_market_section"):
         "[GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]",
+    ("construction_panel.gui", "te_direct_construction_section"):
+        "[Not( GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]",
 }
 
 # The vanilla panels' tabs that show a system, each the type it mounts: a tab body
@@ -233,10 +240,10 @@ TOPICS = {
         "te_demog_how_modifiers", "te_demog_how_sub_sources", "te_demog_how_sources",
     ],
     "tax_code": [
-        "te_tax_lt_how_sub_rates", "te_tax_lt_how_rates", "te_tax_lt_how_law", "te_tax_lt_how_sub_level",
+        "te_tax_lt_how_sub_rates", "te_tax_lt_how_rates", "te_tax_lt_intro", "te_tax_lt_how_law", "te_tax_lt_how_sub_level",
         "te_tax_lt_how_level", "te_tax_lt_how_sub_groups", "te_tax_lt_how_groups", "te_tax_lt_how_relief",
         "te_tax_lt_how_sub_native", "te_tax_lt_how_native", "te_tax_lt_how_ai", "te_tax_how_sub_drafting",
-        "te_tax_how_drafting", "te_tax_how_drafting_baseline", "te_tax_how_sub_passage", "te_tax_how_passage",
+        "te_tax_how_drafting", "te_tax_wb_intro", "te_tax_how_drafting_baseline", "te_tax_how_sub_passage", "te_tax_how_passage",
         "te_tax_how_passage_rule", "te_tax_how_passage_offers", "te_tax_how_passage_force",
         "te_tax_how_sub_commencement", "te_tax_how_commencement", "te_tax_how_commencement_sunset",
         "te_tax_how_commencement_held", "te_tax_how_sub_promises", "te_tax_how_promises",
@@ -269,6 +276,8 @@ TOPICS = {
         "TE_CM_HOW_SUB_PURCHASE", "TE_CM_HOW_PURCHASE", "TE_CM_HOW_PURCHASE_CAP",
         "TE_CM_HOW_SUB_PRIVATE", "TE_CM_HOW_PRIVATE", "TE_CM_HOW_SUB_DELIVERY", "TE_CM_HOW_DELIVERY",
         "TE_CM_HOW_SUB_SHORTAGES", "TE_CM_HOW_SHORTAGES",
+        # with the rule off: the direct-construction section's intro (from #2041)
+        "TE_DC_HOW_SUB_SITES", "TE_DC_SECTION_INTRO",
     ],
     "global_warming": [
         "gw_how_sub_warming", "gw_how_warming_1", "gw_how_warming_2", "gw_how_sub_penalty", "gw_how_penalty",
@@ -681,7 +690,9 @@ class PageTest(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertNotIn(key, panel)
                 self.assertNotIn(key, self.loc)
-        self.assertEqual(panel.count('"TE_CM_HOW_IT_WORKS"'), 1)
+        self.assertEqual(panel.count("'TE_CM_HOW_IT_WORKS'"), 1)   # the popup's title, by the rule
+        # nor does the direct-construction section keep its intro (from #2041): it is the page's
+        self.assertNotIn('text = "TE_DC_SECTION_INTRO"', panel.split("type construction_panel = ", 1)[1])
         self.assertNotIn("How the Construction Market Works#! has", self.loc["concept_te_construction_market_desc"])
         self.assertIn("$TE_CM_HOW_IT_WORKS$", self.loc["concept_te_construction_market_desc"])
 

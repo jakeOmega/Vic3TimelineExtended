@@ -173,12 +173,8 @@ types te_tax_light_widget_types
 				ignoreinvisible = yes
 				spacing = 2
 
-				# How to use the − and +, which only the player's own panel draws
-				# (te_tax_instrument_row's slots): the player's own too.
-				te_tax_text = {
-					using = te_own_country_only
-					text = "te_tax_lt_intro"
-				}
+				# How to use the − and + is on the Help page, under Rates
+				# (te_tax_code_help_body; 2026-11-27, from #2041).
 				te_tax_light_head = {}
 
 				te_tax_instrument_row = {

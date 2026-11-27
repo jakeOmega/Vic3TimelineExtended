@@ -1266,14 +1266,19 @@ class FullScreenTitleTest(unittest.TestCase):
 
     def test_only_the_full_screen_mount_fills_it(self):
         """The window's full-screen mounts fill the hook, each once, at the
-        frame's width; its side-panel mounts and National Info's never do."""
+        frame's width, and so do National Info's for the player's own country,
+        which draw the same wide composers (from #2041: its 554 header floated
+        over the three columns); the side-panel mounts never do."""
         wide = _type_body(self.generated, "te_systems_window_tabs_wide")
         framed = [t for t in gen.TABS if t.key not in gen._own_titles()]
         self.assertEqual(wide.count(f'blockoverride "{gen.TITLE_HOOK}"'), len(framed))
         self.assertEqual(len(re.findall(rf'blockoverride "{gen.TITLE_HOOK}" \{{\s*size = \{{ 1620 44 \}}\s*\}}', wide)),
                          len(framed))
         self.assertNotIn(gen.TITLE_HOOK, _type_body(self.generated, "te_systems_window_tabs_narrow"))
-        self.assertNotIn(gen.TITLE_HOOK, self.ni)
+        ni_framed = [t for t in gen.ni_tabs() if t.key not in gen._own_titles() and t.layout is not None]
+        self.assertEqual(len(re.findall(rf'blockoverride "{gen.TITLE_HOOK}" \{{\s*size = \{{ 1620 44 \}}\s*\}}', self.ni)),
+                         len(ni_framed))
+        self.assertEqual(self.ni.count(f'blockoverride "{gen.TITLE_HOOK}"'), len(ni_framed))
 
     def test_the_space_race_page_title(self):
         """The Space Race's body has no header (each running entry is a frame
