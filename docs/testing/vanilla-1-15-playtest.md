@@ -540,6 +540,24 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   The payer's name printed blank and the engine logged the line twice as a data error: the string read
   `[ROOT.GetCountry…]`, which `debug_log` can't resolve. The five lines of the two checks now read `THIS` (the
   event's country). `treaty_state_transfer` has not fired yet.
+- **`enact_law` on six event options (#1443; C20's `enact_law` part).** `cultural_hegemony.16.a`,
+  `extra_law_events.36.b`, `decolonization_events.75.a` and `.c`, `te_judiciary_events.5.a` and `te_peg.3.b` pass their
+  law with `enact_law` through `te_enact_law_checked` (`common/scripted_effects/te_enact_law_effects.txt`) where they
+  used `activate_law`. What a player should see: the law passes the day the option is picked, as before, and now as a
+  successful enactment, with the interest-group approval and the movement loyalists vanilla gives one (the engine
+  docs' words: "with on_enact, movement loyalists and interest group approval"). A hidden check a day on
+  (`te_enact_law.1`, or `.2` when an enactment was already running; both run `te_enact_law_check`) logs one line per
+  verdict in `debug.log`, once a game: `TE_SELF_CHECK OK|BROKEN enact_law`, with the law, the country,
+  `enacting_before` (1 if the country was enacting a law when the option was picked) and, on OK, `enacting_now`. Judged only for a country that did not already hold the
+  law. **OK:** the law is in force; with `enacting_before=1`, `enacting_now=1` means the enactment already running
+  survived and `enacting_now=0` means `enact_law` ended it. **BROKEN `started=yes`:** `enact_law` started an
+  enactment rather than passing the law; the check cancelled it and activated the law. **BROKEN `started=no`:**
+  `enact_law` did nothing, as it would if it reads the law's `can_enact`; the check activated the law. Either BROKEN
+  leaves play as it was before #1443, a day late. Fallback for either: `activate_law` back at the six call sites (the
+  parent of #1443's commit), and delete `te_enact_law_effects.txt`, `events/te_enact_law_events.txt` and
+  `te_enact_law_values.txt`. Record the answer in `docs/audits/vanilla_1_15_prep.md` § 2, C20, and in
+  `scripting_best_practices.md`. These options are rare (a hegemon's pressure, a backlash, a war of independence, a
+  court-packing, a suspended peg), so the first verdict may take more than one game.
 
 ## 1.15.1 hotfix (2026-11-11)
 

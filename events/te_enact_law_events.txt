@@ -1,0 +1,31 @@
+﻿namespace = te_enact_law
+
+# ============================================================================
+# enact_law: the check a day on (#1443)
+# ============================================================================
+# te_enact_law_checked (common/scripted_effects/te_enact_law_effects.txt)
+# passes a law with enact_law and queues one of these, which run
+# te_enact_law_check: .1 when no enactment was running at the call, .2 when
+# one was. No `trigger`: a delayed event's trigger is also read when it is
+# queued (scripting_best_practices.md), so the conditions sit in the effect.
+# ============================================================================
+
+# ROOT = the country, with scope:te_enact_law; it was enacting no law at the call.
+te_enact_law.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_enact_law_check = { BEFORE = 0 }
+	}
+}
+
+# ROOT = the country, with scope:te_enact_law; it was enacting a law at the call.
+te_enact_law.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_enact_law_check = { BEFORE = 1 }
+	}
+}

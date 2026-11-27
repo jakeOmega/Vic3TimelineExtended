@@ -4032,23 +4032,23 @@ extra_law_events.36 = {
 		# Revert the specific radical law to a moderate alternative
 		if = {
 			limit = { var:radical_law_backlash_type = 1 }
-			activate_law = law_type:law_traditional_family_structure
+			te_enact_law_checked = { LAW = law_type:law_traditional_family_structure }
 		}
 		if = {
 			limit = { var:radical_law_backlash_type = 2 }
-			activate_law = law_type:law_freedom_of_conscience
+			te_enact_law_checked = { LAW = law_type:law_freedom_of_conscience }
 		}
 		if = {
 			limit = { var:radical_law_backlash_type = 3 }
-			activate_law = law_type:law_interventionism
+			te_enact_law_checked = { LAW = law_type:law_interventionism }
 		}
 		if = {
 			limit = { var:radical_law_backlash_type = 4 }
-			activate_law = law_type:law_interventionism
+			te_enact_law_checked = { LAW = law_type:law_interventionism }
 		}
 		if = {
 			limit = { var:radical_law_backlash_type = 5 }
-			activate_law = law_type:law_homesteading
+			te_enact_law_checked = { LAW = law_type:law_homesteading }
 		}
 		add_modifier = {
 			name = radical_law_retreat

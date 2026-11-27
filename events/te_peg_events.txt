@@ -580,9 +580,9 @@ te_peg.3 = {
 			}
 		}
 		# A monetary-policy enactment already under way is cancelled first:
-		# activate_law on top of a running enactment in the same group is
-		# untested, and the question that enactment was answering is the one
-		# this option has just settled. An enactment in any other group (one
+		# enact_law (or the check's activate_law) on top of a running
+		# enactment in the same group is untested, and the question that
+		# enactment was answering is the one this option has just settled. An enactment in any other group (one
 		# runs at a time — law_national_bank, say) is left alone. ADD A LAW
 		# HERE if lawgroup_monetary_policy ever gains a sixth.
 		if = {
@@ -597,7 +597,7 @@ te_peg.3 = {
 			}
 			cancel_enactment = yes
 		}
-		activate_law = law_type:law_fiat_currency
+		te_enact_law_checked = { LAW = law_type:law_fiat_currency }
 		# Step 10 removes this from any country off the gold law too; doing it
 		# here as well takes it off the same day.
 		if = {

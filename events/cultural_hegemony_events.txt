@@ -1900,7 +1900,7 @@ cultural_hegemony.16 = {
 		# Externally imposed reforms should not immediately retrigger the generic
 		# radical-law backlash event chain during the same adoption window.
 		set_variable = { name = ch_hegemonic_law_backlash_immunity days = normal_modifier_time }
-		activate_law = scope:ch_pressure_law_type
+		te_enact_law_checked = { LAW = scope:ch_pressure_law_type }
 		je:je_cultural_hegemony ?= { add_modifier = {
 				name = ch_hegemonic_law_adopted
 				days = normal_modifier_time

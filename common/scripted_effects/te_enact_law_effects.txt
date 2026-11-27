@@ -1,0 +1,81 @@
+﻿# ============================================================================
+# enact_law WITH A ONE-DAY FALLBACK (#1443)
+# ============================================================================
+# Six event options that stand for a political decision pass their law with
+# vanilla 1.15's enact_law ("a successful enactment, with on_enact, movement
+# loyalists and interest group approval") where activate_law only switched
+# it: cultural_hegemony.16.a, extra_law_events.36.b, decolonization_events.75.a
+# and .c, te_judiciary_events.5.a and te_peg.3.b.
+#
+# UNVERIFIED (vanilla_1_15_prep.md C20): whether enact_law respects the law's
+# can_enact, whether it passes the law at once or starts an enactment, and
+# what it does to an enactment already running. So the game never relies on
+# it alone: a hidden check a day on (te_enact_law.1 / .2) reads whether the law is
+# in force and, if not, cancels the law's own enactment if one runs and
+# activates the law as the option did before, logging once a game
+#   TE_SELF_CHECK OK|BROKEN enact_law
+# with whether an enactment was running at the call and is running a day on.
+# Play-test list: docs/testing/vanilla-1-15-playtest.md, "Panels and systems".
+# If BROKEN, the fallback is activate_law at the six call sites (the parent of
+# #1443's commit), and this file, te_enact_law_events.txt and
+# te_enact_law_values.txt go.
+# ============================================================================
+
+# Country scope. LAW: a law type (law_type:law_x, or a saved scope holding
+# one). The check is queued before enact_law runs, so which event it is
+# records whether an enactment was already running: te_enact_law.1 if none,
+# .2 if one was. A law the country already has gets no check: it would read
+# OK whatever enact_law did.
+te_enact_law_checked = {
+	hidden_effect = {
+		if = {
+			limit = { NOT = { has_law = $LAW$ } }
+			$LAW$ = { save_scope_as = te_enact_law }
+			if = {
+				limit = { enacting_any_law = yes }
+				trigger_event = { id = te_enact_law.2 days = 1 }
+			}
+			else = {
+				trigger_event = { id = te_enact_law.1 days = 1 }
+			}
+		}
+	}
+	enact_law = $LAW$
+}
+
+# Country scope, a day on: te_enact_law.1 (BEFORE = 0) and .2 (BEFORE = 1),
+# with scope:te_enact_law the law type. If the law is not in force, does what
+# the option did before enact_law: cancels the law's own enactment if
+# enact_law started one, then activate_law. So a BROKEN verdict leaves play as
+# it was before #1443, a day late. Each verdict logs once a game.
+te_enact_law_check = {
+	if = {
+		limit = { exists = scope:te_enact_law }
+		if = {
+			limit = { has_law = scope:te_enact_law }
+			if = {
+				limit = { NOT = { has_global_variable = te_sc_enact_law_ok } }
+				set_global_variable = te_sc_enact_law_ok
+				debug_log = "TE_SELF_CHECK OK enact_law law=[SCOPE.sLawType('te_enact_law').GetNameNoFormatting] country=[THIS.GetCountry.GetNameNoFormatting] enacting_before=$BEFORE$ enacting_now=[THIS.ScriptValue('te_enact_law_enacting_now')|0] (a day after enact_law the law is in force; with enacting_before=1, enacting_now says whether the enactment already running survived) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		else = {
+			if = {
+				limit = { NOT = { has_global_variable = te_sc_enact_law_broken } }
+				set_global_variable = te_sc_enact_law_broken
+				if = {
+					limit = { is_enacting_law = scope:te_enact_law }
+					debug_log = "TE_SELF_CHECK BROKEN enact_law started=yes law=[SCOPE.sLawType('te_enact_law').GetNameNoFormatting] country=[THIS.GetCountry.GetNameNoFormatting] enacting_before=$BEFORE$ (a day after enact_law the law is not in force and its enactment is running: enact_law starts an enactment rather than passing the law. The check cancelled it and activated the law; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+				else = {
+					debug_log = "TE_SELF_CHECK BROKEN enact_law started=no law=[SCOPE.sLawType('te_enact_law').GetNameNoFormatting] country=[THIS.GetCountry.GetNameNoFormatting] enacting_before=$BEFORE$ (a day after enact_law the law is neither in force nor being enacted: enact_law did nothing, as it would if it reads the law's can_enact. The check activated the law; see docs/testing/vanilla-1-15-playtest.md) date=[TimeKeeper.GetCurrentDate.GetString]"
+				}
+			}
+			if = {
+				limit = { is_enacting_law = scope:te_enact_law }
+				cancel_enactment = yes
+			}
+			activate_law = scope:te_enact_law
+		}
+	}
+}
