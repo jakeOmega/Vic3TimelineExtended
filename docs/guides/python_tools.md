@@ -234,6 +234,7 @@ tail, the fix and the command that reruns that one check. Its `CHECKS` table is 
 | `--quick` | Everything but the test suite: about 80 s |
 | `--changed [--base REF]` | Only checks the diff against `origin/main` (committed, uncommitted and untracked) can reach. The test run narrows only for a Python-only diff, to the changed tests and the test named for each changed module. For the loop while you work, not the gate before a push |
 | `--only NAME…` / `--skip NAME…` | Groups or check ids (`--list` shows both) |
+| `--jobs N` | Run the tests on N pytest workers and the audits N at a time, instead of one per CPU. Cap it when several runs share the machine (#1803) |
 | `--ci` | Stream each check's output under a log group, and run `organize_loc`'s writer as well as its `--check` |
 | `--real-paths` | Use this machine's game paths. By default every check gets CI's dummy `VIC3_*` paths and no `PYTHONPATH`, even on a machine with the game, so the answer is CI's: with a real install some audits read vanilla's files and report differently (#1271, #1349) |
 
