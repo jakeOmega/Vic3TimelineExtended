@@ -1289,7 +1289,9 @@ it. No self-check: the fill, the refresh and the building's throughput type are 
    Colonization". After it, a staffed level raises the colony's resort room by 10 within a month, on its page's
    Resort Room tile and in the overview.
 4. **An old save.** A base still on the Resort Colony method (if a pre-#1948 save is at hand): note which method the
-   engine gives it, and that the log names nothing about the missing method.
+   engine gives it, and that the log names nothing about the missing method. *Answered in part (owner, 2026-11-26):
+   the base swaps to another method of its group on the next weekly tick. Still open: which method it gets, and
+   whether the log names it.*
 
 ## The Resort Colony free of its state (#1953, 2026-11-22)
 
