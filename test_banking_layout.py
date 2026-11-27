@@ -962,6 +962,13 @@ class WidthBudgetTest(unittest.TestCase):
             options = [self.shown(k, number, depth + 1) for k in self.custom[m.group(1)]]
             return max(options, key=len)
         v = re.sub(r"\[[^\[\]]*GetCustom\('(\w+)'\)[^\[\]]*\]", custom, v)
+
+        def select(m):
+            # A SelectLocalization of loc keys at its longest option (the sign-coloured "%" of the
+            # Monetary Policy rows, from #2041); one that names no key reads as a number.
+            options = [self.shown(k, number, depth + 1) for k in re.findall(r"'(\w+)'", m.group(0)) if k in self.loc]
+            return max(options, key=len) if options else number
+        v = re.sub(r"\[SelectLocalization\([^\[\]]*\)\]", select, v)
         v = re.sub(r"\[[^\[\]]*\]", number, v)
         v = re.sub(r"#[A-Za-z_]+(?:;\S*)? ", "", v).replace("#!", "")
         v = re.sub(r"@\w+!", "", v)
@@ -1051,6 +1058,24 @@ class WidthBudgetTest(unittest.TestCase):
         body = _type_body(self.dash, "te_banking_sec_monetary")
         self.fits("banking_dash_mon_target_label", self.box(body, '"banking_dash_mon_target_label"'))
         self.assertEqual(self.shown("banking_dash_mon_anchoring_label"), "Anchoring")
+
+    def test_a_signed_percent_takes_its_figures_colour(self):
+        """#2041: "Wage Pressure −0.4%" drew the figure red and the "%" white, since the |=+ format
+        colours only the number. The four signed Monetary Policy rows add a "%" in the colour the
+        figure takes: #R (negative_value) below -0.05, #G (positive_value) from 0.05, else #v, as a
+        figure that reads 0.0."""
+        loc = _loc()
+        self.assertEqual((loc["banking_dash_pct_negative"], loc["banking_dash_pct_positive"], loc["banking_dash_pct_zero"]),
+                         ("#R %#!", "#G %#!", "#v %#!"))
+        for key in ("banking_dash_mon_wage_value", "banking_dash_mon_pressure_value", "banking_dash_mon_purchases_value",
+                    "banking_dash_mon_premium_value"):
+            with self.subTest(key=key):
+                text = loc[key]
+                read = re.match(r"#v \[(.+?)\|=\+1\]#!\[SelectLocalization\( ", text)
+                self.assertIsNotNone(read, "the figure as before, the % after its span")
+                self.assertNotIn("]%", text, "no % outside the colour")
+                self.assertIn(f"LessThanOrEqualTo_CFixedPoint( {read.group(1)}, '(CFixedPoint)-0.05' ), 'banking_dash_pct_negative'", text)
+                self.assertIn(f"GreaterThanOrEqualTo_CFixedPoint( {read.group(1)}, '(CFixedPoint)0.05' ), 'banking_dash_pct_positive', 'banking_dash_pct_zero'", text)
 
     def test_monetary_values(self):
         for typ, block in (("banking_dash_pair", "pair_value"), ("banking_dash_mon_value", "mon_value_text")):

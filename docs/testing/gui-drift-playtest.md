@@ -104,3 +104,13 @@ moved.
 The frame's Open Journal Entry button (`te_system_tab_frame`, `gui/te_system_tab_widgets.gui`) is still anchored: in
 Full Screen the frame is three columns wide, so a fixed 520 slot would put it at the left. What is left of #2040 is
 that button and the sweep of the other tabs.
+
+## Small text fixes from the second GUI wave (2026-11-27, from #2041)
+
+Loc only; the layout tests and `test_banking_layout.py`'s width budget pass. What the game shows:
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Nation tab, a new game.** The overview's Construction and Global Tech boxes. | "Construction / Base cost" and "Global Tech / Not yet", with no third line; once construction is scaled or tech spreads, the figure comes back ("+12%", "+5 spread"). | A raw key or "0%": `te_nation_ov_construction_fig` / `te_nation_ov_tech_fig` and the `AddLocalizationIf` they hold. |
+| **Banking, Monetary Policy, The Rate.** Wage Pressure, Price Pressure, Asset Purchases and Risk Premium, a negative and a positive reading. | The "%" in the figure's own colour: red beside a red "−0.4", green beside a green "+0.4", white beside a white "0.0". | A "%" another colour than its figure: the `|=+` format colours by another rule than #R / #G; `banking_dash_pct_*`. |
+| **German, the state view's Local Climate tile.** A malarial state, a humid one, and one before its first monthly update. | "Luftfeuchte", "Ständig" and "Folgt" each inside its cell. | A cut word: shorten it further in `i18n/german/tm/te_miscellaneous.json`. |
