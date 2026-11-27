@@ -288,6 +288,9 @@ te_demog_on_top_own_parts = {
 # THIS = a state, in te_demog_rates_refresh beside te_dg_ss_d (its locals; te_dg_tb_d already this refresh's).
 te_demog_on_top_start_store = {
 	te_demog_on_top_own_parts = yes
+	# the class pairs the refresh has just cleared are in the walk's class reads (te_dg_w_odx, accidents and
+	# violence: no pair is a soldier's or officer's) but not in the window that starts here (#1689); 0 but at a takeover
+	change_local_variable = { name = te_dg_oo_ext subtract = local_var:te_dg_w_edl }
 	te_demog_on_top_start_part = { C = inf }
 	te_demog_on_top_start_part = { C = chr }
 	te_demog_on_top_start_part = { C = ext }
@@ -822,7 +825,8 @@ te_demog_rates_refresh = {
 			set_variable = { name = te_dg_rep_d value = { value = local_var:te_dg_w_edr divide = { value = local_var:te_dg_w_ed0 min = 1 } } }
 			# the engine's rate per head at the start of the window that begins here (the trapezoid,
 			# te_demog_window_events): the walk's, with this refresh's M for the last one and without the moved
-			# lines' pairs it clears, on the bare curves those reach; deaths swap the wealth line in force (the walk's read)
+			# lines' pairs it clears, the general pair on the bare curves it reaches and the class pairs at their pops'
+			# bare deaths (te_dg_w_edl, 0 but at a takeover; #1689); deaths swap the wealth line in force (the walk's read)
 			# for this refresh's te_dg_w, on the bare deaths x wealth it reaches. Fast mode, next in this effect, moves it by
 			# its own term's change
 			set_variable = {
@@ -844,6 +848,7 @@ te_demog_rates_refresh = {
 					subtract = local_var:te_dg_rate_lines_d
 					multiply = local_var:te_dg_w_ed0m
 					add = local_var:te_dg_w_ed
+					subtract = local_var:te_dg_w_edl
 					add = { value = var:te_dg_w subtract = modifier:state_mortality_wealth_mult multiply = local_var:te_dg_w_edw }
 					divide = { value = state_population min = 1 }
 				}
@@ -860,6 +865,7 @@ te_demog_rates_refresh = {
 					multiply = { value = local_var:te_dg_w_ed0 subtract = local_var:te_dg_w_ed0m }
 					multiply = -1
 					add = local_var:te_dg_w_ed
+					subtract = local_var:te_dg_w_edl
 					subtract = local_var:te_dg_w_edr
 					subtract = { value = modifier:state_mortality_mult add = 1 multiply = local_var:te_dg_w_ed0 }
 					subtract = { value = modifier:state_mortality_wealth_mult multiply = local_var:te_dg_w_edw }

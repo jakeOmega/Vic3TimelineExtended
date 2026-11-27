@@ -246,7 +246,7 @@ te_judiciary_events.5 = {
 			NOT = { has_law = law_type:law_statutory_courts }
 			NOT = { te_jud_enacting_judiciary_law = yes }
 		}
-		activate_law = law_type:law_statutory_courts
+		te_enact_law_checked = { LAW = law_type:law_statutory_courts }
 		remove_modifier = te_jud_court_packed
 		ai_chance = {
 			base = 1

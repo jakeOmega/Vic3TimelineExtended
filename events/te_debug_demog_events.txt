@@ -94,7 +94,7 @@ te_debug_demog.1 = { # REVIEWED 2026-10-09: console-only test event (`event te_d
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -987,7 +987,7 @@ te_debug_demog.80 = { # REVIEWED 2026-10-12: console-only chooser, fired by te_d
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/medical_breakthrough.dds" }
+	event_image = { texture = "gfx/event_pictures/genetics_laboratory.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 

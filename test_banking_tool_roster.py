@@ -367,5 +367,118 @@ class RosterTests(unittest.TestCase):
                 self.assertIn('"%s"' % _modifier(tool), roster)
 
 
+def _switch_on_tools():
+    """{tool: modifier} for every tool of the three economies that its enable effect switches on with a modifier on
+    the entry (the market's cb_*, the command economy's ce_*, the cooperative's cw_*). The investment pool's two
+    transfers hold no modifier and are left out: they are meant to be pressed again and again."""
+    out = {}
+    for name, body in re.findall(r"(?ms)^banking_effect_(c[bew]_\w+) = \{\n(.*?)^\}", _text(EFFECTS)):
+        if "_disable_" in name:
+            continue
+        m = re.search(r"(?m)^\tje:je_banking_cycle = \{ add_modifier = \{ name = (\w+)", body)
+        if m:
+            out[name] = m.group(1)
+    return out
+
+
+def _disable(tool):
+    return "banking_effect_%s_disable_%s" % (tool[:2], tool[3:])
+
+
+class OneCopyTests(unittest.TestCase):
+    """#1811: a second press before the first one lands must not add a second copy of a tool's modifier.
+
+    Both enable buttons hide while the tool is on, but their gates read the points through a modifier sum that takes
+    in the first copy's cost only after the effect has ended, so a second press passed and the copies stacked (three
+    copies of Moral Suasion in a 1957 save). Every switch-on marks the tool for a week in a variable, which the next
+    press sees at once, and the tool's banking_possible_* (the dashboard's is_valid, the AI button's possible, the
+    events' enact tests) refuses while the mark is there; a copy has_modifier can see comes off before the add."""
+
+    def test_every_tool_of_the_three_economies_is_found(self):
+        tools = _switch_on_tools()
+        self.assertEqual(len(tools), 38)
+        self.assertEqual({t[:2] for t in tools}, {"cb", "ce", "cw"})
+        for tool in _tools():
+            self.assertIn(tool, tools)
+
+    def test_each_switch_on_marks_the_tool_before_its_add(self):
+        effects = _text(EFFECTS)
+        for tool, modifier in _switch_on_tools().items():
+            with self.subTest(tool=tool):
+                body = _top_level_block(effects, "banking_effect_%s = {" % tool)
+                call = "\tbanking_tool_before_switch_on = { MODIFIER = %s }\n" % modifier
+                self.assertEqual(body.count(call), 1)
+                self.assertEqual(body.count("add_modifier = { name = %s" % modifier), 1)
+                self.assertLess(body.index(call), body.index("add_modifier = { name = %s" % modifier))
+
+    def test_each_gate_refuses_a_marked_tool(self):
+        possible = _text(POSSIBLE)
+        for tool, modifier in _switch_on_tools().items():
+            with self.subTest(tool=tool):
+                body = _top_level_block(possible, "banking_possible_%s = {" % tool)
+                lines = [l.strip() for l in body.splitlines()[1:3]]
+                # second, after the dormant cycle's line, which test_banking_always_on wants first
+                self.assertEqual(lines, ["te_banking_cycle_started_tt = yes",
+                                         "banking_tool_not_pending = { MODIFIER = %s }" % modifier])
+
+    def test_each_switch_off_clears_the_mark(self):
+        effects = _text(EFFECTS)
+        for tool, modifier in _switch_on_tools().items():
+            with self.subTest(tool=tool):
+                body = _top_level_block(effects, _disable(tool) + " = {")
+                remove = "je:je_banking_cycle = { remove_modifier = %s }" % modifier
+                clear = "banking_tool_clear_pending = { MODIFIER = %s }" % modifier
+                self.assertIn(remove, body)
+                self.assertIn(clear, body)
+        strip = _top_level_block(_text(CLEANUP), "banking_strip_tool = {")
+        self.assertIn("banking_tool_clear_pending = { MODIFIER = $MODIFIER$ }", strip)
+
+    def test_the_helpers_write_and_read_one_variable(self):
+        effects, possible = _text(EFFECTS), _text(POSSIBLE)
+        on = _top_level_block(effects, "banking_tool_before_switch_on = {")
+        clear = _top_level_block(effects, "banking_tool_clear_pending = {")
+        gate = _top_level_block(possible, "banking_tool_not_pending = {")
+        # a timed mark: a lift the tool's own Disable doesn't make leaves it to run out
+        self.assertRegex(on, r"set_variable = \{ name = banking_pending_\$MODIFIER\$ days = 7 \}")
+        # a guarded removal: remove_modifier on a modifier the entry doesn't hold logs an error
+        self.assertRegex(on, r"je:je_banking_cycle = \{\s*remove_modifier_if_exists_effect = \{ MODIFIER = \$MODIFIER\$ \}")
+        self.assertIn("remove_variable = banking_pending_$MODIFIER$", clear)
+        self.assertIn("has_variable = banking_pending_$MODIFIER$", clear)
+        self.assertEqual(gate.count("has_variable = banking_pending_$MODIFIER$"), 2)
+        self.assertIn("text = banking_tool_pending_tt", gate)
+        self.assertIn("banking_tool_pending_tt", _loc_keys())
+
+    def test_the_rule_off_teardown_clears_every_mark(self):
+        # te_banking_cycle_stop_for_rule (the rule switched off mid-game) clears every tool's mark, so a rule switched
+        # on again within the week opens every tool at once
+        effects = _text(EFFECTS)
+        all_clear = _top_level_block(effects, "banking_tool_clear_all_pending = {")
+        cleared = set(re.findall(r"banking_tool_clear_pending = \{ MODIFIER = (\w+) \}", all_clear))
+        self.assertEqual(cleared, set(_switch_on_tools().values()))
+        stop = _top_level_block(_text(ROOT / "common/scripted_effects/banking_cycle_effects.txt"),
+                                "te_banking_cycle_stop_for_rule = {")
+        self.assertIn("banking_tool_clear_all_pending = yes", stop)
+
+    def test_the_pool_transfers_are_not_held(self):
+        effects, possible = _text(EFFECTS), _text(POSSIBLE)
+        for tool in ("ce_invest_pool_inject", "ce_invest_pool_withdraw"):
+            with self.subTest(tool=tool):
+                self.assertNotIn("banking_tool_before_switch_on", _top_level_block(effects, "banking_effect_%s = {" % tool))
+                self.assertNotIn("banking_tool_not_pending", _top_level_block(possible, "banking_possible_%s = {" % tool))
+
+    def test_every_enable_surface_asks_the_gate(self):
+        # The dashboard's is_valid and the AI button's possible: the gate is only as good as its callers.
+        sguis = _text(DASH_SGUIS)
+        buttons = _text(BUTTONS) + _text(ALT_BUTTONS)
+        for tool in _switch_on_tools():
+            with self.subTest(tool=tool):
+                handler = _top_level_block(sguis, "banking_dash_enable_%s = {" % tool)
+                self.assertIn("is_valid = { banking_possible_%s = yes }" % tool, handler)
+                self.assertIn("effect = { banking_effect_%s = yes }" % tool, handler)
+                button = _top_level_block(buttons, "%s = {" % tool)
+                self.assertIn("possible = { banking_possible_%s = yes }" % tool, button)
+                self.assertIn("effect = { banking_effect_%s = yes }" % tool, button)
+
+
 if __name__ == "__main__":
     unittest.main()

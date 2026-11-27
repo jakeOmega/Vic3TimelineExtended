@@ -479,5 +479,89 @@ class OccasionTests(unittest.TestCase):
         self.assertEqual([len(o) for o in log_triage.occasions(t)], [3, 2])
 
 
+class HarnessSessionTests(unittest.TestCase):
+    """#2091: the QA harness's run folders keep each session's debug.log and its verdicts in summary.md, after the
+    game's own logs have rotated them away; the report reads them by check and save."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = os.path.join(self.tmp.name, "backups")
+        self.docs = os.path.join(self.tmp.name, "repo")
+        os.makedirs(os.path.join(self.docs, "docs", "testing"))
+        with open(os.path.join(self.docs, "docs", "testing", "x-playtest.md"), "w", encoding="utf-8") as fh:
+            fh.write("| Self-check | Expect |\n|---|---|\n"
+                     "| ~~`settled_check`~~ (OK 2026-11-21: read in the 1946 save) | a verdict |\n"
+                     "| `open_check` | not read yet |\n\n"
+                     "The `broken_check` line waits for a game.\n")
+
+    def summary(self, save, rows):
+        from game_qa import report
+        found = {"checks": [dict(zip(("name", "verdict", "source", "line"), r)) for r in rows],
+                 "counts": {}, "session": {"lines": len(rows), "file": "debug.log"}, "fixture": {}}
+        return "\n".join(["Restore: restored (1 files put back, 0 removed).", "",
+                          f"- Save: {save}", "- Country: USA", "", *report._self_checks(found), "",
+                          "| # | Verb | Outcome |", "|---|---|---|", "| 1 | start | ok |"]) + "\n"
+
+    def run_folder(self, run_id, summary=None, debug_log=None):
+        folder = os.path.join(self.root, "runs", run_id)
+        os.makedirs(folder)
+        if summary is not None:
+            with open(os.path.join(folder, "summary.md"), "w", encoding="utf-8") as fh:
+                fh.write(summary)
+        if debug_log is not None:
+            with open(os.path.join(folder, "debug.log"), "w", encoding="utf-8") as fh:
+                fh.write(debug_log)
+
+    def test_the_summary_table_reads_back_as_the_harness_wrote_it(self):
+        rows = [("broken_check", "BROKEN", "session", "effects.txt:9: TE_SELF_CHECK BROKEN broken_check a=1 | b=2"),
+                ("settled_check", "OK", "session (not vouched for)", "effects.txt:3: TE_SELF_CHECK OK settled_check")]
+        text = self.summary("te_qa_copy_a", rows)
+        self.assertEqual([tuple(r.values()) for r in log_triage.summary_self_checks(text)], rows)
+        self.assertIsNone(log_triage.summary_self_checks("Restore: restored.\n\n- Save: x\n"))
+
+    def test_sessions_by_check_and_save(self):
+        broken = ("broken_check", "BROKEN", "session", "effects.txt:9: TE_SELF_CHECK BROKEN broken_check a=1")
+        ok = ("settled_check", "OK", "session", "effects.txt:3: TE_SELF_CHECK OK settled_check")
+        self.run_folder("20261121T100000Z", self.summary("te_qa_copy_a", [broken, ok]))
+        self.run_folder("20261122T100000Z", self.summary("te_qa_copy_a", [ok]))
+        self.run_folder("20261122T100000Z-2", self.summary("te_qa_copy_b", [ok]))
+        # A summary from before the harness reported verdicts: the session's own log is read instead.
+        self.run_folder("20261123T100000Z", "Restore: restored.\n\n- Save: te_qa_copy_c\n",
+                        "[10:00:00][jomini_effect.cpp:1]: effects.txt:5: TE_SELF_CHECK OK open_check n=1\n")
+        self.run_folder("20261101T100000Z", self.summary("te_qa_copy_old", [broken]))     # before --since
+        os.makedirs(os.path.join(self.root, "runs", "20261124T100000Z"))                  # a fixture's run: no session
+        out = log_triage.harness_sessions(self.root, dt.date(2026, 11, 20), self.docs)
+        self.assertEqual(out[0], f"  4 sessions since 2026-11-20 under {os.path.join(self.root, 'runs')}")
+        text = "\n".join(out)
+        # A BROKEN comes first, with its line, and a name the play-test list waits for without a dated verdict says so.
+        self.assertTrue(out[1].startswith("  broken_check: 1 save  <-- BROKEN; listed in docs/testing/x-playtest.md"
+                                          "  <-- no dated verdict there yet"), out[1])
+        self.assertIn("      te_qa_copy_a: BROKEN in 1 run (newest 20261121T100000Z)", text)
+        self.assertIn("TE_SELF_CHECK BROKEN broken_check a=1", text)
+        # One save's repeats fold into one line; a dated verdict in the list is not flagged.
+        self.assertIn("  settled_check: 2 saves; listed in docs/testing/x-playtest.md\n", text + "\n")
+        self.assertIn("      te_qa_copy_a: OK in 2 runs (newest 20261122T100000Z)", text)
+        self.assertIn("  open_check: 1 save; listed in docs/testing/x-playtest.md  <-- no dated verdict there yet", text)
+        self.assertIn("      te_qa_copy_c: OK in 1 run", text)
+        self.assertNotIn("te_qa_copy_old", text)
+
+    def test_the_report_carries_the_block_only_when_asked(self):
+        self.run_folder("20261121T100000Z", self.summary("te_qa_copy_a", [
+            ("settled_check", "OK", "session", "effects.txt:3: TE_SELF_CHECK OK settled_check")]))
+        fx = Fixture(os.path.join(self.tmp.name, "logs_fixture"))
+        fx.standard()
+        self.assertNotIn("== Harness sessions", fx.report())
+        block = section(fx.report(harness_root=self.root, harness_since=dt.date(2026, 11, 20)), "Harness sessions")
+        self.assertIn("settled_check: 1 save", block)
+
+    def test_no_backup_root_or_no_session(self):
+        self.assertEqual(log_triage.harness_sessions(None, dt.date(2026, 11, 20), self.docs),
+                         ["  no run folders under (no game_qa_backup_path)"])
+        self.run_folder("20261101T100000Z", self.summary("te_qa_copy_old", []))
+        self.assertEqual(log_triage.harness_sessions(self.root, dt.date(2026, 11, 20), self.docs),
+                         [f"  no session since 2026-11-20 under {os.path.join(self.root, 'runs')}"])
+
+
 if __name__ == "__main__":
     unittest.main()

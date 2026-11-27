@@ -45,9 +45,10 @@ python3 -m game_qa fixture --until 1930 --permission "<the owner's grant of the 
 The run plays under the game rules the owner last applied in a lobby (the dry run lists them). The run's reply
 names its run folder; the log copy is there whether or not the run reached its date.
 
-**The harness's estimate is low.** The first long run (2026-11-16) took 6 h 46 min from 1836 to 1925, 0.75 s a
-game day on average, where the harness estimated 4.85 h. At that rate a run takes about 4.9 hours to 1900, 7.6 to
-1936 and 8.7 to 1950, and later years are probably slower than the average. Give `--max-hours` room. The day's
+**The harness's estimate was low until 2026-11-27.** The first long run (2026-11-16) took 6 h 46 min from 1836 to
+1925, 0.75 s a game day on average, where the harness estimated 4.85 h. The estimate now takes its rates from that
+run (#1602): about 4.9 hours to 1900, 6.9 to 1925 and 9.6 to 1950, and past 1948 a guess. Builds differ by a fifth
+or so, so still give `--max-hours` room. The day's
 other two runs took 5 h 05 min from 1836 to October 1913, where the game crashed (a failed run's reply carries no
 `timing`), and 52 min from 1836 to 1850, 0.58 s a game day, where the harness estimated 0.69 h.
 
@@ -113,7 +114,7 @@ and a version-1 to -3 log is not asked for them.
 | bureaucracy modifiers non-zero | `bur_inst_mult` in many (37 of the mod's laws move it) | 0 everywhere: the `modifier:` reads return nothing |
 | strata's standard of living: lower <= average <= upper | nearly all | the X8 canary missing (GetTrendValue does not print from a loc string: the line is lost, take it out), or the trends are not what their names say |
 | slack in [0, 1] with peasants <= slack | all, above 0 in most | 0 everywhere: the cost scaling's stored `te_cc_slack` is not there (a direct game, or its walk not run) |
-| army census | `CANARY unit_vars v=1`; battalions counted within 5% of `army_size`; flows from each country's second report | `v=0`: a combat unit holds no variable, the census does not count and recruits cannot be told from upgrades (the report's net change in irregulars still reads); every battalion new at every report: the marks do not last a year. **Read 2026-11-26: `v=0`** (the engine refused the canary's variable, `This scope doesn't support variables`, in error.log at 1836.2.3), so the census counts nothing; #2090 takes it out |
+| army census (versions 4 and 5 only) | none: retired in version 6 | a version 4 or 5 log prints `CANARY unit_vars v=0` and every `u_*` read 0, since a combat unit holds no variables (read 2026-11-26: the engine refused the canary's variable, `This scope doesn't support variables`, at 1836.2.3); version 6 took the census out (#2090), and `check` says so for an older log |
 
 Two lines read every log, whatever its version:
 
@@ -293,15 +294,12 @@ last report.
   the latest values of the Politics panel's standard-of-living trend lines (`GetTrendValue`). No script read or
   data function gives an average wage. The schools institution against its maximum needed no field: `in_schools`
   (I1) and `im_schools` (J1, since version 2); table 2 now shows it.
-- **The army census** (P2, `te_aip_unit_census`): no on_action fires when a battalion is recruited or changes type, so
-  each snapshot marks every army battalion with its type (`te_aip_ut`, an index into the key's `unit_type_index`) and
-  counts against the last snapshot's marks: `u_all` battalions, `u_new` with no mark (recruited since, or come with
-  land or a subject), `u_changed` of another type than their mark (upgraded or changed), `u_irr_new` irregulars among
-  the new, `u_from_irr` irregulars at the last report now of another type, and `u_flows` 1 when the counts are flows
-  (the country's second report on). Whether a combat unit holds a variable is undocumented: the first battalion
-  reached tries one (`CANARY unit_vars`) and the census counts only if it held, else every `u_*` is 0. Table 4b's net
+- **The army census** (P2, `te_aip_unit_census`, versions 4 and 5 only): it marked each army battalion with its
+  type in a variable, to count recruits and upgrades between reports, but a combat unit holds no variables, so its
+  canary (`CANARY unit_vars`) read `v=0` and every `u_*` field read 0. Version 6 took it out (#2090). Table 4b's net
   change in irregular battalions between a country's reports (the army times its irregular share) reads every
-  version, census or not; it nets recruits against upgrades and losses.
+  version; it nets recruits against upgrades and losses. To tell recruits from upgrades, compare two saves'
+  battalion records (each names its building and type; `docs/testing/ai-economy-playtest.md`, The rebuilt mix).
 
 Version 3 adds a few fields to two lines and none of its own; in game, one month-index script value a country a
 pulse and, once a year, one pass over every state for the W line.
@@ -326,6 +324,10 @@ Version 5 adds seven fields to C2, one to the end of B2, and no line of its own:
   the railway entry would act on (te_ai_build_pass_railway_site: incorporated, short by more than 2% of usage).
   `purchase_target` reads `cm_reserve` and `cm_credit`, so the recomputed purchase still matches `cm_target`; a log
   without them is from a build before the rate, whose rule they leave unchanged.
+
+Version 6 (#2090) takes the army census out: its six fields leave the end of P2, with its canary and the battalion
+type index. The key names them (`retired_tail`), and the parser drops them from the end of an older log's P2 line,
+so a version 4 or 5 log still reads with the version 6 key (`test_ai_probe.py` holds every version-5 line to it).
 
 The scorecard starts with a headline (the 20 largest economies' growth against the rest's, and their share of AI
 GDP) and GDP growth by rank band, then a table for each of the five priorities (growth has seven: outcomes, the means

@@ -927,6 +927,19 @@ class NationalTests(unittest.TestCase):
             self.assertIn(oa_name, squash(block(oa, hook)))
             self.assertIn("trigger_event = { id = monument_events.20 }", squash(block(oa, oa_name)))
 
+    def test_a_site_alone_keeps_the_national_pulse(self):
+        """#2041: the refresh lists a construction site with no monument (Awaiting Dedication) and offers
+        the AI the ceremony a finished level's hook missed, but a country holding only a site never ran
+        it: the pulse's gate named finished monuments, gm_active, an opportunity and a naming, and
+        gm_active is neither set for a site nor kept by gm_country_monthly for a country with nothing
+        else. The gate names every building the refresh walks."""
+        gate = squash(block(read(ON_ACTIONS), "gm_country_on_action"))
+        refresh = squash(block(read(EFFECTS), "gm_country_refresh"))
+        for building in ("building_grand_monument", "building_grand_monument_site"):
+            with self.subTest(building=building):
+                self.assertIn(f"has_building = {building}", refresh)
+                self.assertIn(f"any_scope_state = {{ has_building = {building} }}", gate)
+
     def test_cultural_pull(self):
         text = read(CULTURAL)
         body = squash(block(text, "cultural_pull_from_grand_monuments"))

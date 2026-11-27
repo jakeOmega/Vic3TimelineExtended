@@ -35,6 +35,7 @@ From a worktree the script reads that worktree's registries and the main checkou
 | **Hidden by a vanilla entry, with a mod file in the stack** | Lines the registry hides although a mod file is in their stack | `NOT REVIEWED` is how a hidden mod error looks. Read the lines; narrow the entry or add `- reviewed: mod frame, <why>` |
 | **Volume** | The largest classes, hidden or not | A flood is what rotates the logs. A registered class that has grown is a claim to re-check, not a fact |
 | **Self-checks and traces** | Every `TE_SELF_CHECK` by name and verdict, the play-test list that waits for it, `START` with no verdict, `LOST` probe lines | A first `OK` or `BROKEN` goes into the play-test list named. `BROKEN`, a lone `START` and `LOST`: § 4 |
+| **Harness sessions** | The QA harness's run folders of the last week (`--since` to widen it): each check by save, its verdicts and runs, and `<-- no dated verdict there yet` where the play-test list naming it records none | As for the section above: record a first verdict in its list, and take a `BROKEN` to § 4. These are the harness's own games, whose lines the game's logs have usually rotated away |
 | **Crashes** | Crash folders newer than the oldest launch | `python3 scripts/lessons.py crash`, then the crash folder's own frozen `logs/` |
 
 Per finding the report gives the launch, wall-clock and game date, the lines of the file (never folded together), a burst's rate, how much of it came while the game was paused, and for a line that names no file what else was logged in the same second (`near:`). A burst while paused, or at hundreds of lines a second, is a tooltip or panel being drawn, not the simulation running.
@@ -60,7 +61,7 @@ Per finding the report gives the launch, wall-clock and game date, the lines of 
 - Before reporting `BROKEN`, rule out the cases its branch can't tell apart, and check the play-test list's row for what it prescribes.
 - A `START` that never gets its verdict is a dead path until the save says otherwise.
 - `LOST`: the engine dropped the line (a bad accessor). Fix the string and re-arm a once-a-game check by renaming its marker.
-- **The logs are not the game's state.** A system that silently does nothing logs nothing, an assert naming one country can stand for a hundred, and a registry entry that says "harmless" is a claim about the save. Read the save: `scripts/analysis/save_country_probe.py` (`--var`, `--states`, `--laws`, `--diff`). Copy autosaves by mtime; they rotate.
+- **The logs are not the game's state.** A system that silently does nothing logs nothing, an assert naming one country can stand for a hundred, and a registry entry that says "harmless" is a claim about the save. Read the save: `scripts/analysis/save_country_probe.py` (`--var`, `--states`, `--laws`, `--buildings TYPE`, `--diff`). Copy autosaves by mtime; they rotate.
 
 ## 5. Registering a line
 

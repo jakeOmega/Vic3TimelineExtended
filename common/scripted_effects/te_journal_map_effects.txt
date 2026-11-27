@@ -357,12 +357,13 @@ te_jmap_range_selfcheck = {
 # The maps' viewer: the country a map of "your" deterrent or "your" networks is drawn for (te_jmap_viewer_*,
 # common/scripted_triggers/te_journal_map_triggers.txt). A state's map_color can't reach the player (is_player drew
 # nothing under owner, 2026-11-05), so the player's country is a global variable, set by every pick and map button and
-# each month for a player (te_journal_map_on_actions.txt), so a page opened from the journal has it too. One viewer for
-# every player in a multiplayer game, as the pick is.
+# each month for a player while there is no other player viewing (te_journal_map_on_actions.txt), so a page opened from
+# the journal has it too. One viewer for every player in a multiplayer game, as the pick is: the player who last
+# clicked.
 te_jmap_note_viewer = {
 	set_global_variable = { name = te_jmap_viewer value = root }
 	# The Nuclear Reach map (90) is the viewer's reach, so whoever becomes the viewer while it is the pick has it
-	# built now: at the pick, at an option, at the Timeline Extended window's button and at a player's monthly pulse.
+	# built now: at the pick, at an option, at the Timeline Extended window's button and at the viewer's monthly pulse.
 	if = {
 		limit = { global_var:te_jmap_sel ?= 90 } # false when unset: the map buttons' tooltips walk this writing nothing
 		root = { te_jmap_store_reach = yes }

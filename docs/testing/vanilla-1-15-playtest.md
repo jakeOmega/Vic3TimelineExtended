@@ -116,6 +116,62 @@ game, in English.
   (`NOT = { has_variable = <name> }`; the names are in `test_once_only_events.py`).
 - **C21**, contextless entries: `should_be_involved` re-checks, what `je:` and `JournalEntry.GetCountry` return for one,
   `effect_all_involved`. A contextless probe entry could show in a player's journal, so none was built.
+- **C8, `send_interface_message`** (for #1435, which converts one-off notify-only events once this is known). Nothing
+  in the mod sends one yet, so the probe is a `game_qa` setup, run in the played country's scope (a country other than
+  Britain or France, on the harness's fresh save):
+
+  ```
+  c:GBR ?= { save_scope_as = decol_colonial_power }
+  send_interface_message = {
+  	title = gw_te_list_entry
+  	desc = notification_colonial_independence_granted_notice_desc
+  }
+  c:FRA ?= {
+  	send_interface_message = { title = gw_te_list_entry }
+  }
+  ```
+
+  `gw_te_list_entry` prints `[THIS.GetCountry.GetName]` and the desc prints the saved Britain. Read: (1) a toast with
+  our country's name and "Britain has granted us independence.": `title` and `desc` are localized against the current
+  scope, and `desc` reads a saved scope; a blank or raw name means it reads neither; (2) whether a second toast comes
+  from the `c:FRA` block, naming France: if it does, the player sees a notice sent from any country's scope, so a
+  notice meant for one country needs an `is_player = yes` guard on it; if it doesn't, the effect does nothing outside
+  a player's country, and a notice for every player is sent from each one's scope; (3) whether either notice is in
+  the message log as well as the toast. By hand, since the harness never opens the settings: whether the message
+  settings list one row for interface messages (vanilla's type is `interface_message`, group
+  `special_interface_message_notification_group`), and whether muting it silences the next one. Record the answers
+  under C8 in `docs/audits/vanilla_1_15_prep.md` § 2.
+- **C9, regional exile pools** (for #1437, which would add the mod's first pools). Needs State and Revolution, whose
+  `regional_exile_pools` feature every vanilla use gates on (C9 in the prep doc). As Russia on the fresh save (a
+  country with access to vanilla's `siberian_exile_pool`), one setup sends a Swedish character there for a term:
+
+  ```
+  c:SWE ?= {
+  	random_scope_character = {
+  		limit = { is_ruler_of_any_country = no }
+  		exile_character = { exile_pool = siberian_exile_pool months = 3 }
+  	}
+  }
+  ```
+
+  and a second, `annex = c:SWE`, then takes Sweden away before the term ends; advance four months. Read: (1) the
+  character is in the Invite Exile screen's Siberia tab, and only there (`is_in_exile_pool = yes`); (2) whether they
+  come home when the term ends with their country gone (vanilla's note covers a pool nobody can reach, which empties
+  into the global pool and loses its return dates; this is the other case, a home that no longer exists); (3) whether
+  vanilla's exile checks count them (the agitator pool, `is_in_exile_pool`). And, only if the owner can spare a game
+  with the DLC switched off in the launcher: run the same setup and see whether the character goes to the global pool,
+  to Siberia, or nowhere. That says whether the mod's pools need the `has_dlc_feature = regional_exile_pools` gate
+  for correctness or only for vanilla's look. Record under C9 in the prep doc.
+- **`diplomatic_play_acceptance`: which sign means "backs down", and on what scale** (C21; for #1456, which would add
+  the UN's and nuclear pressure to it). Vanilla's value is `value = 0`
+  (`game/common/script_values/ai_script_values.txt:791`), with root and `scope:target_country` the country deciding
+  whether to accept a demand, and a script value can't `debug_log`, so a log shows nothing. It takes a throwaway build:
+  a file that overrides the value, `value = 0 if = { limit = { root = c:<TAG> } add = 1000 }`, for one small AI
+  country that would normally fight. As a great power, open a play against it for a demand it would refuse (by hand,
+  or `create_diplomatic_play` in a `game_qa` setup) and let the play run out. Then the same with `add = -1000`. If it
+  backs down with +1000 and fights with -1000, a positive value means "accept"; then halve the figure until the
+  choice flips, for the scale. The override replaces vanilla's whole value, so delete the file afterwards. Record under
+  C21 in the prep doc.
 - **Power bloc mandates** (#1442). *Answered 2026-11-06* by the test console's Add and Remove options
   (`event te_debug_pb.1`): `add_power_bloc_mandate = -1` removes a mandate, both changes show straight after the
   click, and the `power_bloc.num_mandates` value link matched the trigger's count each time
@@ -484,6 +540,24 @@ From the prep doc's § 7.1 shortlist and § 4.11. Thresholds here are first gues
   The payer's name printed blank and the engine logged the line twice as a data error: the string read
   `[ROOT.GetCountry…]`, which `debug_log` can't resolve. The five lines of the two checks now read `THIS` (the
   event's country). `treaty_state_transfer` has not fired yet.
+- **`enact_law` on six event options (#1443; C20's `enact_law` part).** `cultural_hegemony.16.a`,
+  `extra_law_events.36.b`, `decolonization_events.75.a` and `.c`, `te_judiciary_events.5.a` and `te_peg.3.b` pass their
+  law with `enact_law` through `te_enact_law_checked` (`common/scripted_effects/te_enact_law_effects.txt`) where they
+  used `activate_law`. What a player should see: the law passes the day the option is picked, as before, and now as a
+  successful enactment, with the interest-group approval and the movement loyalists vanilla gives one (the engine
+  docs' words: "with on_enact, movement loyalists and interest group approval"). A hidden check a day on
+  (`te_enact_law.1`, or `.2` when an enactment was already running; both run `te_enact_law_check`) logs one line per
+  verdict in `debug.log`, once a game: `TE_SELF_CHECK OK|BROKEN enact_law`, with the law, the country,
+  `enacting_before` (1 if the country was enacting a law when the option was picked) and, on OK, `enacting_now`. Judged only for a country that did not already hold the
+  law. **OK:** the law is in force; with `enacting_before=1`, `enacting_now=1` means the enactment already running
+  survived and `enacting_now=0` means `enact_law` ended it. **BROKEN `started=yes`:** `enact_law` started an
+  enactment rather than passing the law; the check cancelled it and activated the law. **BROKEN `started=no`:**
+  `enact_law` did nothing, as it would if it reads the law's `can_enact`; the check activated the law. Either BROKEN
+  leaves play as it was before #1443, a day late. Fallback for either: `activate_law` back at the six call sites (the
+  parent of #1443's commit), and delete `te_enact_law_effects.txt`, `events/te_enact_law_events.txt` and
+  `te_enact_law_values.txt`. Record the answer in `docs/audits/vanilla_1_15_prep.md` § 2, C20, and in
+  `scripting_best_practices.md`. These options are rare (a hegemon's pressure, a backlash, a war of independence, a
+  court-packing, a suspended peg), so the first verdict may take more than one game.
 
 ## 1.15.1 hotfix (2026-11-11)
 

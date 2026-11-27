@@ -2664,7 +2664,10 @@ def _module_ai(site: Site) -> list[str]:
     plan = (("admin", f"sr_site_autonomy_value_{k} >= sr_mod_ai_admin_autonomy"
                       f" sr_site_aut_pressure_{k} >= sr_mod_ai_admin_pressure"
                       " authority >= sr_mod_ai_admin_authority"),
-            ("mine", "sr_ebase_levels > sr_ebase_room_total"),
+            # A Mining Complex once the Extraplanetary Base room is full, queued levels
+            # counted, as the resort's below (#1952). Built levels past the room never
+            # happen by building: both of the base's build gates stop at the room.
+            ("mine", "sr_ebase_queued_levels >= sr_ebase_room_total"),
             # An Off-World Resort once the Resort Colony room is full, queued levels
             # counted (#1948 design § 7): the AI and private investors stop at the room.
             ("resort", "sr_resort_queued_levels >= sr_resort_room_total"),

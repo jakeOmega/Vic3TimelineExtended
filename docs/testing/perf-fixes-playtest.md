@@ -139,6 +139,20 @@ measured through the harness; the look of the box, its tooltip and the Ships tab
 | The Construction panel's Ships tab | "used/total" beside the ship icon at the top, live | The total alone: the tab reads vanilla's key; `gui/production_methods.gui` should read `TE_SHIP_CONSTRUCTION_VALUE_PANEL` |
 | Speed, a late game at speed 5 | Days pass faster between weekly ticks than before the change (a sub-tick 0.22 s against 0.37 s on the 2050 save) | No change: the cost is in the other figure after a patch; time each with a one-line `replace/` override as finding 5 did |
 
+## The Ships tab: "used/total" abbreviated, and the cost under it (2026-11-27, #2093)
+
+In a late game the Ships tab's "used/total" ran into the weekly cost beside it at five digits a side
+("35015/5054£-1.37M", the February 2050 copy). Each figure now switches to the `|K` form at 1,000, and the cost sits
+under the figure, both in the body size, as the Construction Site row has done since #2011
+(`ship_construction_sector_actions` in `gui/production_methods.gui`; `test_construction_figures.py`).
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The Construction panel's Ships tab, a late game | The ship icon and "35.0K/50.5K" (or the like) in one line, the cost "-1.37M" under it, the pause button to the right; nothing overlaps | The figures overlap the cost: the row is not the mod's (another mod of the playset overrides `ship_construction_sector_actions`) |
+| The same tab, an early game | "12/40" as before, figures under 1,000 printed whole | "0.01K" or the like: the `_N` keys are not picked below 1,000 |
+| Hover the figure, then the cost | Vanilla's two tooltips, unchanged (the ship construction breakdown, then the goods expenses breakdown) | Either hover is gone: say which |
+| Ship construction paused | The base game's paused text in place of the figure, the paused icon, the resume button glowing | A figure: `TE_SHIP_CONSTRUCTION_VALUE_PANEL`'s pause switch is lost |
+
 ## History charts: the 1-year and 5-year ranges build only the bars they show (2026-11-24, `gui/charts-perf`)
 
 Each chart's 1-year and 5-year plots read only the store's newest samples, `DataModelLast( <list>, '(int32)12' )`
@@ -219,3 +233,18 @@ In `debug.log`, each after a `TE_SELF_CHECK START` line of the same name. The fa
 | The rule, off | Switched to Batched Investment Disabled from the change-country screen: the next weekly pass takes 22 s again, and no `TE_BI` line follows the next month start | Batches go on: `has_game_rule` reads a save's old setting until reload; say which |
 | The rule, on again | `TE_BI on` at the second month start after | No line: the country was not watched again; read its private queue at the pulse |
 | A long AI run | An observer run to 2050 with the rule on against one with it off: the twenty largest economies' GDP growth by year about the same | The giants grow slower with it on: batches overshoot (read which buildings stand under-staffed), or the lost investment abroad mattered; lower `te_bi_share` or raise the reserve |
+
+## Buildings panel: rows off screen are skipped (2026-11-27)
+
+The sidebar's Buildings panel and the Building Registry's grouped view put each row's fixed-size top in a one-item
+`fixedgridbox`, which the engine leaves out of a frame while it is scrolled out of view, and the panel's list updates
+at most ten times a second (`docs/audits/buildings_panel_performance.md`). Seen in the harness on 2026-11-27 (the
+2050 USA copy, paused): 341 → 18 ms a frame with the panel open, the rows, a filter, scrolling, the method menu,
+expanding a type in both views and the Registry's ungrouped list all as before. Not seen: the rows below.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The panel at speed | In a late game of a large country, the Buildings panel scrolls at once with the game running at speed 5 | Still slow: read the frame counter with the panel open and shut, paused and running; the report's method says how |
+| The naval administration item | A fleet's Buildings section in the Military Formation panel (`military_formation_panel_buildings_content_fleet`, the same row type) draws its row: icon, name, method strip, buttons | Blank: the one-item list is empty there, or the item's context hides a value the row reads |
+| A type with no levels yet | A building type just placed (its first level queued) still shows its row in the Buildings panel | Missing: that type's first production method group is not in the list (not expected: every type has groups) |
+| The tutorial highlight | In a new game's tutorial, the step that points at the Buildings panel's rows still highlights them | No highlight: the highlight's widget, inside the wrapper, needs to sit outside it |

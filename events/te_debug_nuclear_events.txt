@@ -22,7 +22,7 @@ te_debug_nuclear.1 = { # REVIEWED 2026-09-18: console-only test event (`event te
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/mushroom_cloud.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -93,7 +93,7 @@ te_debug_nuclear.2 = { # REVIEWED 2026-09-18: console-only test event (`event te
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/mushroom_cloud.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
@@ -163,7 +163,7 @@ te_debug_nuclear.3 = { # REVIEWED 2026-09-26: console-only test event (`event te
 	type = country_event
 	placement = ROOT
 
-	event_image = { texture = "gfx/event_pictures/mushroom_cloud.dds" }
+	event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 

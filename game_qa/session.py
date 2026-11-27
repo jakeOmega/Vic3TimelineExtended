@@ -206,7 +206,23 @@ PROFILER_MAX_SCALE = 4
 # edit reloaded within a second in the test session of 2026-11-23; the wrapper's reload is proved by its token's line.
 CLEAR_WIDGETS = "gui.clearwidgets"
 PREVIEW_CREATE = "gui.createwidget %s %s" % (gui_preview.PREVIEW_FILE, gui_preview.PREVIEW_WIDGET)
-GUI_RELOAD_WAIT_S = 15.0                # from the wrapper's write to its token's line in error.log
+GUI_RELOAD_WAIT_S = 15.0                # from the wrapper's write to its token's line in error.log, little synced
+# And more for each MB the same call synced, up to GUI_RELOAD_WAIT_MAX_S: a first sync holding the 5.8 MB
+# `sr_sites_generated_rows.gui` answered not_reloaded after 15 s three times out of three, and the same show 20 s
+# later went through (2026-11-24, #1989).
+GUI_RELOAD_S_PER_MB = 10.0
+GUI_RELOAD_WAIT_MAX_S = 120.0
+# A sync larger than this, in the bytes or the files it would write, is refused unless forced (#2015 item 1): on
+# 2026-11-24 a sync of about twenty files (a 260 KB one among them) and one of a single 198 KB file each froze the
+# game for good, while files up to about 130 KB, one or two at a time, synced fine all night.
+GUI_SYNC_MAX_BYTES = 150_000
+GUI_SYNC_MAX_FILES = 5
+GUI_SYNC_NEXT = ("show the files a few at a time with --sync-only FILE (repeatable), or start the session again with "
+                 "--gui-from <checkout> so that the game parses the branch's .gui files at launch and gui-show syncs "
+                 "nothing, or pass --force-sync to copy them all at once anyway")
+# `--scale` (#1989): the panel's drawn width at the asked scale against its width at the owner's, shot first. Within
+# this share of what the ratio of the scales gives, the scale took.
+GUI_SCALE_TOLERANCE = 0.1
 GUI_RELOAD_POLL_S = 0.25
 GUI_SETTLE_S = 0.5                      # from the create to the shot: the widget drawn
 GUI_CROP_MARGIN = 8                     # pixels of backdrop kept round the panel (spec § 5.2, step 7)
@@ -269,6 +285,22 @@ DRAIN_S = 0.5                           # before a read: a stop left over from a
 FOUND_LOGS_TRIES = 3                    # a dated run's snapshot manifest, read for the logs its game found at launch
 FOUND_LOGS_RETRY_S = 1.0
 PROOF_PAUSE_S = 2.0                     # after a round: two date reads this far apart must agree, or the game runs
+# The tick settle (#1963): a pause key pressed inside a long tick does not stop the tick, and a console read sent
+# before it ends hung the game (the USA of 2024: "Random is blocked by thread", then no answer). A paused game
+# renders on several cores (3.3 to 4.0 live, 2026-11-22); inside a long tick it stops rendering and runs on about
+# 1.1. So before the first key of a round the game's CPU rate is read while it is paused (TICK_BASELINE_S), and
+# after the pause key nothing is typed until the rate is back to TICK_SETTLE_RATIO of that on TICK_SETTLE_SAMPLES
+# samples of TICK_SAMPLE_S in a row. The figures are the local patch's of 2026-11-22 (0.6, two in a row; the
+# wait took 7 s on an ordinary day and 124 s over the weekly one); this code has not yet been run live.
+TICK_BASELINE_S = 2.0
+TICK_SAMPLE_S = 1.0
+TICK_SETTLE_RATIO = 0.6
+TICK_SETTLE_SAMPLES = 2
+TICK_MIN_BASELINE = 0.5                 # cores: below this (a minimised game, say) a pause and a tick look alike
+TICK_SETTLE_S = 300.0                   # how long the settle may wait (`start --tick-settle-s`; 0 turns it off)
+MIN_TICK_SETTLE_S = 30.0
+MAX_TICK_SETTLE_S = 900.0               # a weekly tick ran 781 s under the script profiler (2026-11-22)
+PAUSE_RETRY_S = 5.0                     # the pause key refused not_foreground (a busy window): tried again this often
 WATCH_RESPAWNS = 3                      # a watch that failed while the game is proved alive is run again, this often
 
 _RETRIED = ("refused", "game_left_up")  # a stop that ended so is run again by the next stop()
@@ -457,6 +489,12 @@ class Session:
         self._dated: dict | None = None     # a dated fixture loaded: its save's own game_date, and whether it matches
         self._game_args: list[str] = []     # `start --game-arg`s, checked against GAME_ARGS
         self._unresponsive_s = UNRESPONSIVE_S   # `start --unresponsive-s` (#1905): the console's game_gone limit
+        self._pops_folders: list[str] = []                # the logs/ folders `profile pops` made the game write (#1758)
+        self._gui_invalid: dict[str, str] = {}             # gui-show: "'X' is not a valid widget/type/property", by X
+        self._gui_from: tuple[str, dict[str, bytes]] | None = None   # `start --gui-from`: the checkout and its files
+        self._gui_from_reply: dict | None = None
+        self._tick_settle_s = TICK_SETTLE_S     # `start --tick-settle-s` (#1963): 0 turns the settle off
+        self._settles: list[dict] = []      # what each round's settle did, since the verb began (advance's reply)
         self._add_mods: list[addmod.AddMod] = []         # `start --add-mod`s, checked (addmod.check)
         self._add_mods_playset = "mod_only"                # the playset they were checked for
         self._add_mods_digest: str | None = None           # fixture.add_mod_digest of them, at that check
@@ -473,8 +511,20 @@ class Session:
               save: str | None = None, playset: str = "mod_only", owner_confirmed_busy: bool = False,
               switch_rules: Mapping[str, str] | None = None, game_args: Sequence[str] | None = None,
               add_mods: Sequence[str] | None = None, fixture_date: str | None = None,
-              unresponsive_s: float | None = None, capture: bool = False) -> dict:
+              unresponsive_s: float | None = None, capture: bool = False, gui_from: str | None = None,
+              tick_settle_s: float | None = None) -> dict:
         """Get a game up on the fixture (made first if missing) or on `save`, played as `as_tag`.
+
+        `gui_from` (#1989) is a checkout whose branch's changed `.gui` files go into the overlay before the launch,
+        as gui-show would sync them, so the game parses them at startup: a type one file defines and another uses
+        then draws (a sync of the two together can leave the user empty), and the first gui-show from that checkout
+        syncs nothing of them, so no large hot reload is needed. Read and checked before anything is done
+        (`not_a_repo`, `gui_parse_error`, `bad_argument` for a file a capture copy also writes). The reply's
+        `gui_from` names the files.
+
+        `tick_settle_s` (#1963) is how long a round's pause may wait for a long tick to end before anything is
+        typed (TICK_SETTLE_S by default, MIN_TICK_SETTLE_S to MAX_TICK_SETTLE_S); 0 turns the wait off, for a
+        machine where its threshold proves wrong. `start`'s reply gives it when it is not the default.
 
         `capture` (#2056) puts two copies of the game's own files into the overlay, made from the installed ones
         (`capture_gui.capture_files`): the console see-through with its edit line drawing nothing, and debug mode's
@@ -548,6 +598,7 @@ class Session:
         switch_rules = self._check_switches(switch_rules, save)
         self._game_args = _check_game_args(game_args)
         self._unresponsive_s = _check_unresponsive(unresponsive_s)
+        self._tick_settle_s = _check_tick_settle(tick_settle_s)
         self._add_mods = self._check_add_mods(add_mods, playset)
         date = self._check_fixture_date(fixture_date, save, playset)
         if capture is not False and capture is not True:
@@ -557,6 +608,7 @@ class Session:
                 self._capture_files = capture_gui.capture_files(self._paths.base_game, self._paths.deploy_dir)
             except capture_gui.CaptureGuiError as e:
                 raise SessionError(e.code, e.detail) from e
+        self._gui_from = self._check_gui_from(gui_from)
         self._add_mods_playset = playset
         self._add_mods_digest = fixture.add_mod_digest([Path(mod.wsl) for mod in self._add_mods]) \
             if self._add_mods else None
@@ -601,6 +653,14 @@ class Session:
             raise SessionError(e.code, str(e)) from e
         if self._overlay.profiler_gui is not None:
             self._profiler_window = dict(self._profiler_window, file=str(self._overlay.profiler_gui))
+        if self._gui_from is not None:
+            repo, files = self._gui_from
+            try:
+                synced = [rel for rel, data in files.items() if overlay.sync_gui(self._overlay, rel, data)]
+            except overlay.OverlayError as e:
+                raise SessionError(e.code, str(e)) from e
+            self._gui_from_reply = {"repo": repo, "synced": synced, "bytes": sum(len(files[rel]) for rel in synced)}
+            self._record("gui_from", outcome="synced", **self._gui_from_reply)
         self._record("overlay", outcome="built", setups=sorted(self._overlay.setup_events),
                      profiler_window=self._profiler_window)
         save, made, pruned = self._the_save(save, permission, playset, busy, switch_rules or {}, date)
@@ -659,8 +719,12 @@ class Session:
             result["game_args"] = list(self._game_args)
         if self._unresponsive_s != UNRESPONSIVE_S:
             result["unresponsive_s"] = self._unresponsive_s
+        if self._tick_settle_s != TICK_SETTLE_S:
+            result["tick_settle_s"] = self._tick_settle_s
         if self._add_mods:
             result["add_mods"] = [asdict(mod) for mod in self._add_mods]
+        if self._gui_from_reply is not None:
+            result["gui_from"] = self._gui_from_reply
         self._record("start", outcome="ok", **result)
         return result
 
@@ -988,9 +1052,7 @@ class Session:
                 "run_until": fixture.dotted(until), "long_run": long_run, "game_end": fixture.dotted(self._game_end()),
                 "estimate_s": round(estimate), "estimate_h": round(estimate / 3600, 2),
                 "limit_s": round(limit), "limit_h": round(limit / 3600, 2), "max_hours": max_hours,
-                "estimate_from": ("archived AI-only observer runs on the owner's machine (game 1.14, October 2026): "
-                                  "0.47 s a game day to 1876, 0.53 to 1904, 0.98 about 1950; past 1953 a guess "
-                                  "(fixture.RATE_ANCHORS)"),
+                "estimate_from": fixture.RATE_FROM,
                 "autosaves": ("about %d quarterly autosaves, each 100 MB or more (the 1836 fixture is 133 MB), "
                               "written into the owner's save games/ (OneDrive syncs it), over their five rotating "
                               "ones: the restore puts theirs back" % int(years * 4)) if long_run else "none",
@@ -2025,9 +2087,23 @@ class Session:
             start = tuple(self.enter_game()["after"])
         else:
             start = None
+        self._settles = []
         with self._step("advance", days=days) as out:
             reached = self._advance(days, start, out)
         return reached
+
+    @property
+    def tick_settle(self) -> dict:
+        """What the tick settle did in the last advance (#1963), for its reply: `settled_after_s`, the longest
+        wait of its rounds, and `rounds`, one record a settle (`settled_after_s` and the paused rate it was read
+        against, or `skipped` and why); `{"off": True}` when `start --tick-settle-s 0` turned it off."""
+        if self._tick_settle_s == 0:
+            return {"off": True}
+        waits = [r["settled_after_s"] for r in self._settles if "settled_after_s" in r]
+        out: dict[str, Any] = {"rounds": list(self._settles)}
+        if waits:
+            out["settled_after_s"] = max(waits)
+        return out
 
     def shot(self) -> Path:
         self._require_game(types=False)
@@ -2395,7 +2471,8 @@ class Session:
 
     def gui_show(self, type_name: str, repo: str, context: str = "player", width: int = gui_preview.DEFAULT_WIDTH,
                  variables: Mapping[str, str] | None = None, outlines: bool = False, scale: float | None = None,
-                 setup: str | None = None, keep: bool = False) -> dict:
+                 setup: str | None = None, keep: bool = False, sync_only: Sequence[str] | None = None,
+                 force_sync: bool = False) -> dict:
         """Show one GUI type from the caller's working tree, alone, in the running game, and answer with a crop of
         it at the window's own resolution and the GUI lines the game logged (spec
         docs/superpowers/specs/2026-11-23-gui-preview-design.md § 5.2).
@@ -2410,7 +2487,23 @@ class Session:
         (a tooltip under it would cover the panel), and a full-size shot is cropped to what is drawn on the
         backdrop: `crop: null` with `crop_error` when nothing is (the type's gate shut, say), never a refusal.
         `stale_script` names the branch's script-side files, which a preview does not sync. The widget is cleared
-        afterwards unless `keep`."""
+        afterwards unless `keep`.
+
+        The sync (#2015 item 1, #1989): `sync_only` limits it to the files named (each one the branch changed or the
+        session synced before; the others are left as the overlay holds them). A sync that would write more than
+        GUI_SYNC_MAX_BYTES or GUI_SYNC_MAX_FILES is refused `sync_too_large`, nothing written, unless `force_sync`:
+        syncs that size froze the game. The reload wait grows with the bytes written (GUI_RELOAD_S_PER_MB, up to
+        GUI_RELOAD_WAIT_MAX_S), and a `not_reloaded` after a sync says to show again without editing (`next`).
+
+        `scale` (#1989): the scale is set and the widget created again (an open widget is not laid out again), and
+        shot; then, with the owner's scale put back, created and shot once more (`reference_crop`). `scale_applied`
+        says whether the panel's width differs between the two by the ratio of the scales (GUI_SCALE_TOLERANCE);
+        False, with `scale_note`, when it did not: the crop is then not at the asked scale.
+
+        `invalid_types` (#1989): every "'X' is not a valid widget/type/property" line the game logged during this
+        session's previews, for each X the checkout's gui/ now defines. The game logs it once, when it parses a
+        file that uses X before the file defining it, often in a call that answered not_reloaded; the container
+        then stays empty with nothing more logged."""
         self._require_game()
         if self._overlay is None or self._overlay.preview_file is None:
             raise SessionError("no_preview", "this session's overlay has no preview wrapper")
@@ -2432,6 +2525,10 @@ class Session:
         if setup is not None and setup not in self._overlay.setup_events:
             raise SessionError("unknown_setup", "no setup %r; the overlay has %s"
                                % (setup, sorted(self._overlay.setup_events) or "none"))
+        if force_sync is not True and force_sync is not False:
+            raise SessionError("bad_argument", "force_sync is true or false, not %r" % (force_sync,))
+        if sync_only is not None and (isinstance(sync_only, str) or not all(isinstance(rel, str) for rel in sync_only)):
+            raise SessionError("bad_argument", "sync_only is a list of paths (gui/...gui), not %r" % (sync_only,))
         with self._step("gui_show", type=type_name, context=context, width=width) as out:
             try:
                 changes = gui_preview.branch_changes(Path(repo))
@@ -2439,7 +2536,17 @@ class Session:
                 # reverted since is synced back, one gone is removed from the overlay (spec § 5.2 step 1).
                 files: dict[str, bytes] = {}
                 gone: list[str] = []
-                for rel in sorted(set(changes.gui) | set(self._overlay.synced)):
+                candidates = sorted(set(changes.gui) | set(self._overlay.synced))
+                if sync_only is not None:
+                    named = list(dict.fromkeys(sync_only))
+                    unknown = [rel for rel in named if rel not in candidates]
+                    if unknown:
+                        raise gui_preview.PreviewError(
+                            "bad_argument", "--sync-only names %s, which the branch did not change and this session "
+                            "never synced; it takes %s" % (", ".join(unknown), ", ".join(candidates) or "nothing"))
+                    candidates = named
+                    out["sync_only"] = named
+                for rel in candidates:
                     if (Path(repo) / rel).is_file():
                         files[rel] = (Path(repo) / rel).read_bytes()
                     else:
@@ -2450,8 +2557,17 @@ class Session:
                         raise gui_preview.PreviewError("gui_parse_error", "%s: %s" % (rel, problem), file=rel)
                 if self._vanilla_gui_types is None:
                     self._vanilla_gui_types = gui_preview.vanilla_types(self._paths.base_game)
-                gui_preview.check_type(type_name, gui_preview.gui_index(Path(repo), self._paths.base_game,
-                                                                         vanilla=self._vanilla_gui_types))
+                idx = gui_preview.gui_index(Path(repo), self._paths.base_game, vanilla=self._vanilla_gui_types)
+                gui_preview.check_type(type_name, idx)
+                pending = {rel: len(data) for rel, data in files.items() if overlay.would_sync(self._overlay, rel, data)}
+                total = sum(pending.values())
+                if not force_sync and (total > GUI_SYNC_MAX_BYTES or len(pending) > GUI_SYNC_MAX_FILES):
+                    raise gui_preview.PreviewError(
+                        "sync_too_large", "the sync would write %d file(s), %d bytes, past the limit of %d files or "
+                        "%d bytes: syncs that size froze the game (2026-11-24, #2015). Nothing was written"
+                        % (len(pending), total, GUI_SYNC_MAX_FILES, GUI_SYNC_MAX_BYTES),
+                        files=[{"file": rel, "bytes": n} for rel, n in sorted(pending.items())], total_bytes=total,
+                        next=GUI_SYNC_NEXT)
             except gui_preview.PreviewError as e:
                 raise SessionError(e.code, e.detail, **e.info) from e
             except OSError as e:
@@ -2467,6 +2583,7 @@ class Session:
             try:
                 try:
                     result["synced"] = [rel for rel, data in files.items() if overlay.sync_gui(self._overlay, rel, data)]
+                    synced_bytes = sum(len(files[rel]) for rel in result["synced"])
                     removed = [rel for rel in gone if overlay.unsync_gui(self._overlay, rel)]
                     if removed:
                         result["removed"] = removed
@@ -2474,7 +2591,7 @@ class Session:
                         type_name, context, width, revision, variables), revision)
                 except overlay.OverlayError as e:
                     raise SessionError(e.code, str(e)) from e
-                self._await_preview(revision)
+                self._await_preview(revision, _reload_wait(synced_bytes), synced=len(result["synced"]))
                 if setup is not None:
                     result["setup_lines"] = self.run_setup(setup)
                 self._console.run(CLEAR_WIDGETS)
@@ -2482,11 +2599,21 @@ class Session:
                 self._preview_kept = dict(variables)
                 self._console.run(PREVIEW_CREATE)
                 with self._preview_options(outlines, scale, owner_scale, result):
+                    if scale is not None:
+                        # The widget open before the scale changed is not laid out again (#1989): create it anew.
+                        self._console.run(CLEAR_WIDGETS)
+                        self._console.run(PREVIEW_CREATE)
                     self._sleep(GUI_SETTLE_S)
                     self.click(console=True)
                     result.update(self._preview_shot(type_name))
+                if scale is not None and owner_scale is not None and not math.isclose(scale, owner_scale):
+                    result.update(self._scale_reference(type_name, scale, owner_scale, result.get("crop_size")))
                 self._new_lines()
                 result["log"] = gui_preview.gui_log(self._errors_seen, list(files) + [gui_preview.PREVIEW_FILE])
+                invalid = self._invalid_types(idx)
+                if invalid:
+                    result["invalid_types"] = invalid
+                    result["invalid_types_hint"] = gui_preview.INVALID_TYPES_HINT
             except Exception as failure:
                 if not created:
                     raise
@@ -2495,6 +2622,7 @@ class Session:
                     raise
                 raise error from failure
             finally:
+                self._remember_invalid(self._errors_seen)
                 self._errors_seen = None
             if not keep:
                 try:
@@ -2541,6 +2669,30 @@ class Session:
             self._console.run(CLEAR_CREATE)
             self._console.run(CLEAR_WIDGETS)
         self._preview_kept = None
+
+    def _check_gui_from(self, gui_from: str | None) -> tuple[str, dict[str, bytes]] | None:
+        """`start --gui-from`'s checkout and the bytes of its branch's changed `.gui` files, each brace-checked as
+        gui-show checks them; None without one. Nothing is written."""
+        if gui_from is None:
+            return None
+        if not isinstance(gui_from, str) or not gui_from.strip():
+            raise SessionError("bad_argument", "gui_from is a checkout's path, not %r" % (gui_from,))
+        try:
+            changes = gui_preview.branch_changes(Path(gui_from))
+            files = {rel: (Path(gui_from) / rel).read_bytes() for rel in changes.gui}
+            for rel, data in files.items():
+                problem = overlay.brace_problem(data.decode("utf-8-sig", errors="replace"))
+                if problem:
+                    raise gui_preview.PreviewError("gui_parse_error", "%s: %s" % (rel, problem), file=rel)
+        except gui_preview.PreviewError as e:
+            raise SessionError(e.code, e.detail, **e.info) from e
+        except OSError as e:
+            raise SessionError("not_a_repo", "the branch's files could not be read from %s: %s" % (gui_from, e)) from e
+        clash = sorted(set(files) & set(self._capture_files or {}))
+        if clash:
+            raise SessionError("bad_argument", "the branch changed %s, which the capture copies write too: start "
+                               "without one of --gui-from and --capture" % ", ".join(clash))
+        return gui_from, files
 
     def _owner_ui_scale(self) -> float:
         """The UI scale the owner's settings hold (`GUI.scale` in the user data's SETTINGS_FILE), which a
@@ -2612,10 +2764,40 @@ class Session:
                 break
         raise SessionError("bad_reply", "%s answered %r, not %s" % (command, said, want))
 
-    def _await_preview(self, revision: int) -> None:
-        """Poll the logs until the wrapper's token names `revision` (the game parsed the new file), up to
-        GUI_RELOAD_WAIT_S: `not_reloaded` otherwise, with the newest revision seen."""
-        deadline = self._clock() + GUI_RELOAD_WAIT_S
+    def _scale_reference(self, type_name: str, scale: float, owner_scale: float,
+                         crop_size: Sequence[int] | None) -> dict:
+        """After a `--scale` shot, with the owner's scale put back: the widget created again and shot at that scale,
+        the width the asked scale's shot is judged by (`_scale_check`, #1989). A failure here leaves the shot as it
+        is and says the scale could not be judged."""
+        try:
+            self._console.run(CLEAR_WIDGETS)
+            self._console.run(PREVIEW_CREATE)
+            self._sleep(GUI_SETTLE_S)
+            self.click(console=True)
+            reference = self._preview_shot(type_name)
+        except SessionError as e:
+            return {"scale_applied": None, "scale_note": "the shot at the owner's scale, which the asked scale is "
+                                                         "judged by, failed (%s: %s)" % (e.code, e.detail)}
+        return {"reference_crop": reference.get("crop"),
+                **_scale_check(reference.get("crop_size"), crop_size, scale, owner_scale)}
+
+    def _remember_invalid(self, lines: Sequence[str] | None) -> None:
+        """Keep the session's "'X' is not a valid widget/type/property" lines (#1989), by X, from `lines`."""
+        for line in lines or ():
+            for name, text in gui_preview.invalid_types([parse(line).text]).items():
+                self._gui_invalid.setdefault(name, text)
+
+    def _invalid_types(self, idx: gui_preview.GuiIndex) -> list[dict]:
+        """The remembered invalid-type lines, this call's included, for each type the checkout's gui/ now defines."""
+        self._remember_invalid(self._errors_seen)
+        return [{"type": name, "text": text} for name, text in sorted(self._gui_invalid.items())
+                if name in idx.mod_types]
+
+    def _await_preview(self, revision: int, wait_s: float = GUI_RELOAD_WAIT_S, synced: int = 0) -> None:
+        """Poll the logs until the wrapper's token names `revision` (the game parsed the new file), up to `wait_s`:
+        `not_reloaded` otherwise, with the newest revision seen, and, when the call synced files (`synced`), a
+        `next` that says to show again without editing: the files are in the overlay by then."""
+        deadline = self._clock() + wait_s
         seen = None
         while True:
             self._new_lines()
@@ -2626,12 +2808,15 @@ class Session:
             if seen is not None and seen >= revision:
                 return
             if self._clock() >= deadline:
+                extra = {"next": "the %d synced file(s) are in the overlay now: run the same gui-show again without "
+                                 "editing, which syncs nothing and waits for the wrapper alone (a large first sync "
+                                 "can take the game longer than the wait)" % synced} if synced else {}
                 raise SessionError("not_reloaded", "the game had not logged revision %d of %s after %.0f s (it last "
                                    "logged %s): nothing was shot. A .gui edit reloaded within a second in the test "
                                    "session; look at the game, then show again"
-                                   % (revision, gui_preview.PREVIEW_FILE, GUI_RELOAD_WAIT_S,
+                                   % (revision, gui_preview.PREVIEW_FILE, wait_s,
                                       "none" if seen is None else "revision %d" % seen),
-                                   revision=revision, seen=seen)
+                                   revision=revision, seen=seen, waited_s=wait_s, **extra)
             self._sleep(GUI_RELOAD_POLL_S)
             self._check_watch()
 
@@ -2914,6 +3099,75 @@ class Session:
                 raise
         return {key: out[key] for key in ("label", "date", "tick_tasks", "script", "server_log_lines")}
 
+    def profile_pops(self, label: str | None = None) -> dict:
+        """`logging.popstats`, every pop of the game in one CSV, copied into the run folder as
+        `pop_stats_<label>.csv` the moment it is written (#1758). The label defaults to the game date, as a dump's
+        does. It needs no `profile start`.
+
+        The game writes the file into a new folder of logs/ each time (`logs/<id>/pop_stats.csv`, the id in its
+        answer). The snapshot copies no folder and the restore removes none, so that folder stays in the owner's
+        logs/ after the session: the stop names it under `left_behind`, and the step records it as this run's.
+        Nothing here deletes it.
+
+        Refused before anything is typed: a bad label (`bad_argument`) or one the run folder holds already
+        (`label_used`). Then `dump_refused` when the answer names no such file, `not_written` when it has not held
+        still within POPS_WAIT_S, `changed` when it moved while copied, `not_pop_stats` when its first line is not
+        the pop table's header, and `watch_ended` when the game cannot be proved alive after the copy, which is
+        then removed, as a dump's copies are."""
+        self._require_game()
+        if label is not None:
+            try:
+                profiling.check_label(label)
+            except profiling.ProfileError as e:
+                raise SessionError("bad_argument", e.detail) from e
+        with self._step("profile_pops", label=label) as out:
+            when = self._date()
+            out["date"] = list(when)
+            label = label or self._pops_label(when)
+            out["label"] = label
+            target = profiling.pops_path(self._report.dir, label)
+            if os.path.lexists(target):
+                raise SessionError("label_used", "the run folder already holds %s" % target.name)
+            reply = self._console.run(profiling.POPS_COMMAND)
+            out["reply"] = reply.lines
+            rel = profiling.pops_written(reply.lines)
+            if reply.ok is False or rel is None:
+                raise SessionError("dump_refused", "%s did not say it wrote a %s under logs/: %s"
+                                   % (profiling.POPS_COMMAND, profiling.POPS_FILE, reply.lines), lines=reply.lines)
+            folder = rel.rsplit("/", 1)[0]
+            out["folder"] = folder          # the run's own: the stop's `left_behind` names it
+            self._pops_folders.append(folder)
+            source = Path(self._paths.user_data) / rel
+            try:
+                written = profiling.await_written(source, None, self._sleep, self._clock, wait_s=profiling.POPS_WAIT_S)
+                size = profiling.copy_written(source, target, written)
+            except profiling.ProfileError as e:
+                raise SessionError(e.code, e.detail) from e
+            try:
+                with open(target, encoding="utf-8-sig", errors="replace", newline="") as handle:
+                    header = handle.readline()
+                    rows = sum(1 for line in handle if line.strip())
+                if not header.startswith(profiling.POPS_HEADER_START):
+                    raise SessionError("not_pop_stats", "%s does not start with the pop table's header (%r): %r"
+                                       % (rel, profiling.POPS_HEADER_START, header[:80]))
+                self._vouch_for_copies()
+            except BaseException:
+                target.unlink(missing_ok=True)
+                raise
+            out.update(file=target.name, bytes=size, rows=rows)
+        return {"label": label, "date": list(when), "file": target.name, "bytes": size, "rows": rows,
+                "folder": folder, "reply": reply.lines,
+                "note": "the game's own copy stays in %s, which the restore does not remove: the stop names it under "
+                        "`left_behind`, for the owner to delete" % folder}
+
+    def _pops_label(self, when: tuple[int, int, int]) -> str:
+        base = "%04d_%02d_%02d" % when
+        label, number = base, 1
+        while os.path.lexists(profiling.pops_path(self._report.dir, label)):
+            number += 1
+            label = "%s_%d" % (base, number)
+        return label
+
     def _dump_one(self, command: str, source: Path, target: Path, copies: list[Path]) -> dict:
         """One dump: its command, its answer checked, its file awaited and copied to `target` (added to `copies`)."""
         before = profiling.signature(source)
@@ -3130,6 +3384,7 @@ class Session:
             elif self._snapshot is not None:
                 restore, outcome = self._restore(notes)
             notes.extend(n for n in _save_notes(restore) if n not in notes)
+            notes.extend(n for n in _left_behind_notes(restore, self._pops_folders) if n not in notes)
         if left_up and (self._watch is None or self._watch_returned()):
             notes.append("no `watch` follows that game: its exit will not be recorded, so a restore of snapshot %s "
                          "will likely be held for the owner" % self._snapshot)
@@ -3891,20 +4146,25 @@ class Session:
         return min(round(width * fraction[0]), width - 1), min(round(height * fraction[1]), height - 1)
 
     def _run_for(self, seconds: float) -> tuple[int, int, int]:
-        """Close the console, unpause, wait, pause, reopen the console, and prove the pause: two date reads
-        PROOF_PAUSE_S apart must agree. If they do not, the pause key goes once more and the pause is proved again.
-        From the first key on, any failure is `left_running`, as is a date still moving after the second pause
-        key; the flag then refuses `enter_game` and `advance` until `stop`. Return the date the game paused at."""
+        """Close the console, read the paused game's CPU rate, unpause, wait, pause, wait for a long tick to end
+        (`_settle`), reopen the console, and prove the pause: two date reads PROOF_PAUSE_S apart must agree. If
+        they do not, the pause key goes once more, the settle waits again and the pause is proved again. From the
+        first key on, any failure is `left_running`, as is a date still moving after the second pause key and a
+        settle that timed out (`tick_unsettled`, which keeps its code); the flag then refuses `enter_game` and
+        `advance` until `stop`. Return the date the game paused at."""
         self._console.close()
+        baseline = self._tick_baseline()
         try:
             self._console.hotkey(SCAN_SPACE)
             self._sleep(seconds)
-            self._console.hotkey(SCAN_SPACE)
+            self._pause_key()
+            self._settle(baseline)
             self._console.ensure_open()
             when = self._paused_date()
             if when is None:                # the pause did not take: once more
                 self._console.close()
-                self._console.hotkey(SCAN_SPACE)
+                self._pause_key()
+                self._settle(baseline)
                 self._console.ensure_open()
                 when = self._paused_date()
             if when is None:
@@ -3913,12 +4173,91 @@ class Session:
             return when
         except BaseException as e:
             self._left_running = True
-            if not isinstance(e, Exception) or (isinstance(e, SessionError) and e.code == "left_running"):
+            if not isinstance(e, Exception) or (isinstance(e, SessionError)
+                                                and e.code in ("left_running", "tick_unsettled")):
                 raise
             extra = {"entered": e.entered} if isinstance(e, ConsoleError) else {}
             raise SessionError("left_running", "a round failed once its first pause key had been tried (%s): the "
                                "game may be running unpaused; enter_game and advance are refused until stop"
                                % _describe(e), cause=_code_of(e), **extra) from e
+
+    def _tick_baseline(self) -> float | None:
+        """The paused game's CPU rate in cores, read over TICK_BASELINE_S with the console closed (as it is after
+        the pause key), for `_settle` to compare with; None, and the round's record says why, when the settle is
+        off, a reading failed or the rate is too low to tell a tick by (TICK_MIN_BASELINE). It sends nothing, and
+        a failure here only skips the settle: it never refuses the round."""
+        if self._tick_settle_s == 0:
+            return None
+        try:
+            first = self._helper.cpu(self._proc.pid)
+            self._sleep(TICK_BASELINE_S)
+            second = self._helper.cpu(self._proc.pid)
+        except HelperError as e:
+            self._settles.append({"skipped": "the paused game's CPU time could not be read (helper: %s)" % e})
+            return None
+        rate = _cpu_rate(first, second)
+        if rate is None or rate < TICK_MIN_BASELINE:
+            self._settles.append({"skipped": "the paused game ran on %s cores, too few to tell a tick from a pause"
+                                  % ("no measurable" if rate is None else "%.2f" % rate)})
+            return None
+        return rate
+
+    def _settle(self, baseline: float | None) -> None:
+        """After the pause key: wait until the game's CPU rate is back to TICK_SETTLE_RATIO of `baseline` on
+        TICK_SETTLE_SAMPLES samples in a row, so that no console key or command goes into a tick still running
+        (#1963). Nothing is sent meanwhile. Past `start --tick-settle-s` it is refused `tick_unsettled`: the game
+        may still be inside a tick, so nothing more is typed (`_run_for` latches `left_running`). With no baseline
+        (`_tick_baseline`'s None) it returns at once."""
+        if baseline is None:
+            return
+        began = self._clock()
+        threshold = TICK_SETTLE_RATIO * baseline
+        rates: list[float | None] = []
+        prev = self._helper.cpu(self._proc.pid)
+        while True:
+            self._sleep(TICK_SAMPLE_S)
+            cur = self._helper.cpu(self._proc.pid)
+            rates.append(_cpu_rate(prev, cur))
+            prev = cur
+            waited = self._clock() - began
+            recent = rates[-TICK_SETTLE_SAMPLES:]
+            if len(recent) == TICK_SETTLE_SAMPLES and all(r is not None and r >= threshold for r in recent):
+                self._settles.append({"settled_after_s": round(waited, 1), "baseline_cores": round(baseline, 2)})
+                return
+            if waited >= self._tick_settle_s:
+                last = rates[-1]
+                self._settles.append({"unsettled_after_s": round(waited, 1), "baseline_cores": round(baseline, 2)})
+                raise SessionError(
+                    "tick_unsettled", "the game's CPU rate stayed under %g of its paused %.2f cores for %g s after "
+                    "the pause key (last %s): a tick may still be running, so nothing more was typed; enter_game "
+                    "and advance are refused until stop" % (TICK_SETTLE_RATIO, baseline, round(waited, 1),
+                                                           "unread" if last is None else "%.2f" % last),
+                    baseline_cores=round(baseline, 2), last_cores=None if last is None else round(last, 2),
+                    waited_s=round(waited, 1),
+                    next="stop. A tick this long: start again with a larger --tick-settle-s (up to %g). A paused "
+                         "game this machine reads below the threshold: start again with --tick-settle-s 0, which "
+                         "turns the wait off" % MAX_TICK_SETTLE_S)
+
+    def _pause_key(self) -> None:
+        """The pause key, pressed again every PAUSE_RETRY_S while the console refuses it `not_foreground` with
+        nothing sent (a window busy in a long tick does not come to the front, 2026-11-22) and `watch` sees the
+        game, for as long as the settle may wait; with the settle off, as before: no retry."""
+        deadline = self._clock() + self._tick_settle_s
+        tries = 0
+        while True:
+            try:
+                self._console.hotkey(SCAN_SPACE)
+                if tries:
+                    self._settles.append({"pause_key_retries": tries})
+                return
+            except ConsoleError as e:
+                cause = e.__cause__
+                nothing_sent = isinstance(cause, HelperError) and cause.reply.get("steps_done") == 0
+                if e.code != "not_foreground" or not nothing_sent or self._clock() >= deadline:
+                    raise
+            self._check_watch()
+            self._sleep(PAUSE_RETRY_S)
+            tries += 1
 
     def _paused_date(self) -> tuple[int, int, int] | None:
         """The date, if two reads PROOF_PAUSE_S apart agree on it (the game is paused); else None."""
@@ -3942,7 +4281,7 @@ class Session:
             current = self._run_for(wait)
             waited += wait
             passed = _game_day(current) - _game_day(start)
-            out.update(start=start, reached=current, passed=passed, rounds=round_no)
+            out.update(start=start, reached=current, passed=passed, rounds=round_no, tick_settle=list(self._settles))
             if passed >= days:
                 return current
             if passed > 0:
@@ -4100,6 +4439,34 @@ def _check_game_args(game_args: Sequence[str] | None) -> list[str]:
     return found
 
 
+def _cpu_rate(first, second) -> float | None:
+    """Cores in use between two helper.CpuReading: the CPU seconds over the helper's own seconds; None when its
+    clock did not move or the CPU time went back (another process's reading)."""
+    span = (second.at_ms - first.at_ms) / 1000.0
+    used = second.cpu_s - first.cpu_s
+    if span <= 0 or used < 0:
+        return None
+    return used / span
+
+
+def _check_tick_settle(value) -> float:
+    """`start`'s tick_settle_s: None for the default, 0 for off, else MIN_TICK_SETTLE_S to MAX_TICK_SETTLE_S."""
+    if value is None:
+        return TICK_SETTLE_S
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise SessionError("bad_argument", "tick_settle_s is a number of seconds, not %r" % (value,))
+    try:
+        seconds = float(value)
+    except OverflowError:
+        seconds = math.inf
+    if seconds == 0:
+        return 0.0
+    if not MIN_TICK_SETTLE_S <= seconds <= MAX_TICK_SETTLE_S:      # NaN fails both comparisons
+        raise SessionError("bad_argument", "--tick-settle-s takes 0 (off) or %g to %g seconds, not %r"
+                           % (MIN_TICK_SETTLE_S, MAX_TICK_SETTLE_S, value))
+    return seconds
+
+
 def _check_unresponsive(value) -> float:
     """`start`'s unresponsive_s: None for the default, else a number of seconds from UNRESPONSIVE_S to
     MAX_UNRESPONSIVE_S. Shorter than the default is refused: nothing has needed it, and a busy game would sooner be
@@ -4197,6 +4564,44 @@ def _save_notes(restore: Mapping | None) -> list[str]:
                      "overwritten during the run cannot be told from one left alone, and a gone one is noted rather "
                      "than held")
     return notes
+
+
+def _reload_wait(synced_bytes: int) -> float:
+    """gui-show's wait for the wrapper's reload after a sync of `synced_bytes` (#1989)."""
+    return min(GUI_RELOAD_WAIT_MAX_S, GUI_RELOAD_WAIT_S + GUI_RELOAD_S_PER_MB * max(0, synced_bytes) / 1e6)
+
+
+def _scale_check(reference: Sequence[int] | None, shot: Sequence[int] | None, scale: float,
+                 owner_scale: float) -> dict:
+    """Whether `--scale` took (#1989): the panel's drawn width (the crop's, less GUI_CROP_MARGIN each side) at
+    `scale` against its width at `owner_scale`, which should differ by their ratio, within GUI_SCALE_TOLERANCE.
+    `scale_applied` None when either crop is missing."""
+    if not reference or not shot:
+        return {"scale_applied": None, "scale_note": "no crop at one of the two scales, so whether the scale took "
+                                                     "cannot be told"}
+    before, after = reference[0] - 2 * GUI_CROP_MARGIN, shot[0] - 2 * GUI_CROP_MARGIN
+    expected = before * scale / owner_scale
+    out: dict[str, Any] = {"scale_widths": {"owner": before, "asked": after, "expected": round(expected)}}
+    if before > 0 and abs(after - expected) <= GUI_SCALE_TOLERANCE * expected:
+        return dict(out, scale_applied=True)
+    note = ("the panel drew %d px wide at %g where %g gives about %d: gui.setscale did not take as asked, so the crop "
+            "is not at the asked scale" % (after, scale, scale, round(expected)))
+    if before > 0 and abs(after - before) <= GUI_SCALE_TOLERANCE * before:
+        note += " (it is the width at the owner's %g)" % owner_scale
+    return dict(out, scale_applied=False, scale_note=note)
+
+
+def _left_behind_notes(restore: Mapping | None, pops_folders: Sequence[str] = ()) -> list[str]:
+    """The stop's note on the folders in logs/ the snapshot did not list, which the restore leaves where they are
+    (`left_behind`, restore.left_behind, #1758): the ones `profile pops` made the game write are named as such."""
+    left = restore.get("left_behind") if isinstance(restore, Mapping) else None
+    if not isinstance(left, list) or not left:
+        return []
+    ours = [name for name in left if name in pops_folders]
+    return ["logs/ holds %d folder(s) the snapshot did not list, which the restore leaves in place (it removes no "
+            "folder): %s%s; tell the owner, who can delete them"
+            % (len(left), ", ".join(map(str, left)),
+               " (%s from this run's `profile pops`, copied into the run folder)" % ", ".join(ours) if ours else "")]
 
 
 def _clears_by_waiting(restore: Mapping | None) -> bool:

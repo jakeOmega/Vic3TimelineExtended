@@ -189,6 +189,13 @@ gm_country_on_action = {
 			limit = {
 				OR = {
 					any_scope_state = { has_building = building_grand_monument }
+					# A construction site with no monument yet (#2041): the
+					# refresh lists it for Awaiting Dedication and, once
+					# nothing more is queued, offers the AI the ceremony a
+					# finished level's hook missed. gm_active is not set for a
+					# site, and gm_country_monthly clears it from a country
+					# that holds nothing else, so the site is named here.
+					any_scope_state = { has_building = building_grand_monument_site }
 					has_variable = gm_active
 					has_variable = gm_com_open
 					# A naming outlives its last monument until the sweep

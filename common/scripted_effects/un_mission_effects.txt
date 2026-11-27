@@ -358,12 +358,23 @@ un_mission_assign_slot = {
 # (un_disp_msn_slot_<S>_more): the live count less the flags, so one the
 # mirror has not caught up with yet is counted there rather than left out.
 # Hidden: it is reached from options and scripted buttons, whose tooltips must
-# not change. Only players are written: nobody else looks.
+# not change. Only players are written: nobody else looks. The players are
+# collected once, into the global list un_msn_mirror_players, which each flag
+# write walks: Vic3 has no player iterator, and a walk of every country for
+# each of up to 64 flags cost about 1,000 is_player tests a frame while an
+# event window whose options run these effects stood open (#1719). The list is
+# rebuilt here and kept until the next rebuild, so the tooltip walk of an open
+# option, which runs no effect, never finds it missing.
 # Scope: any
 un_mission_mirror_flags = {
 	hidden_effect = {
+		if = {
+			limit = { has_global_variable_list = un_msn_mirror_players }
+			clear_global_variable_list = un_msn_mirror_players
+		}
 		every_country = {
 			limit = { is_player = yes }
+			add_to_global_variable_list = { name = un_msn_mirror_players target = this }
 			set_variable = { name = un_msn_cap_count_0 value = 0 }
 			set_variable = { name = un_msn_cap_count_1 value = 0 }
 			set_variable = { name = un_msn_cap_count_2 value = 0 }
@@ -417,14 +428,17 @@ un_mission_mirror_slot_flags = {
 
 # The contributor at $POSITION$ (0-based, largest economy first, as the
 # register's names are ordered), if the list has $COUNT$ ($POSITION$ + 1) that
-# still exist: its capital, to every player, and the slot's count then covers
-# it. The capital is saved and used in one block, so no position reads the one
-# before's (gotcha #25).
+# still exist: its capital, to every player (un_mission_mirror_flags' list of
+# them), and the slot's count then covers it. The capital is saved and used in
+# one block, so no position reads the one before's (gotcha #25).
 # Parameters: $SLOT$, $POSITION$, $COUNT$
-# Scope: mission container
+# Scope: mission container; expects un_msn_mirror_players (no list: no player)
 un_mission_mirror_flag = {
 	if = {
-		limit = { any_in_list = { variable = un_msn_contributors count >= $COUNT$ exists = this } }
+		limit = {
+			has_global_variable_list = un_msn_mirror_players
+			any_in_list = { variable = un_msn_contributors count >= $COUNT$ exists = this }
+		}
 		ordered_in_list = {
 			variable = un_msn_contributors
 			limit = { exists = this }
@@ -433,8 +447,8 @@ un_mission_mirror_flag = {
 			check_range_bounds = no
 			capital ?= {
 				save_temporary_scope_as = un_msn_flag_cap
-				every_country = {
-					limit = { is_player = yes }
+				every_in_global_list = {
+					variable = un_msn_mirror_players
 					set_variable = { name = un_msn_cap_$SLOT$_$POSITION$ value = scope:un_msn_flag_cap }
 					set_variable = { name = un_msn_cap_count_$SLOT$ value = $COUNT$ }
 				}

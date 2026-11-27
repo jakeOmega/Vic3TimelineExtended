@@ -37,7 +37,15 @@ REV_PREFIX = "te_qa_rev_"
 BACKDROP = (255, 0, 255)                   # the icon's `color = { 1 0 1 1 }`
 DEFAULT_WIDTH = 520                        # a journal entry's widgets: te_tax_layout_widget.gui's roots are 520
 PANEL_MARGIN = (43, 37)                    # Window_Background's inset (23, 17), and 20 units of padding
-GUI_FAILURES = ("Unlocalized text", "FetchData failed", "pdx_data_factory", "pdx_gui_factory")
+GUI_FAILURES = ("Unlocalized text", "FetchData failed", "pdx_data_factory", "pdx_gui_factory",
+                "is not a valid widget/type/property")
+# Logged once when the game parses a file that uses a type before the file that defines it (#1989): the container
+# then stays empty, through later reloads of the using file alone, with nothing more logged.
+_INVALID_TYPE = re.compile(r"'([A-Za-z_][A-Za-z0-9_]*)' is not a valid widget/type/property")
+INVALID_TYPES_HINT = ("the game parsed a file that uses these types before the file that defines them, and the "
+                      "container stays empty with nothing more logged: change the defining file and show, then change "
+                      "the using file and show again, or start the session with --gui-from so the game parses the "
+                      "branch's files at launch")
 _KEY = re.compile(r"[A-Za-z0-9_]+")
 _REV = re.compile(r"Unlocalized text '%s([0-9]{1,9})' at %s:" % (REV_PREFIX, re.escape(PREVIEW_FILE)))
 _STAMP = re.compile(r"^\[\d{2}:\d{2}:\d{2}\]")
@@ -255,6 +263,17 @@ def rev_in(line_text: str) -> int | None:
     gui/te_qa_preview.gui:<line>`), or None for any other line."""
     found = _REV.search(line_text)
     return int(found[1]) if found else None
+
+
+def invalid_types(texts: Sequence[str]) -> dict[str, str]:
+    """{type: the message} for each "'X' is not a valid widget/type/property" among log message `texts`, the first
+    of each, its time stamp taken off."""
+    found: dict[str, str] = {}
+    for text in texts:
+        text = _STAMP.sub("", text.rstrip("\r\n"), count=1)
+        for match in _INVALID_TYPE.finditer(text):
+            found.setdefault(match[1], text)
+    return found
 
 
 def gui_log(lines: Sequence[str], files: Sequence[str]) -> list[dict]:

@@ -579,8 +579,13 @@ class MountContextTest(unittest.TestCase):
                 for k, text in wrapped:
                     self.assertTrue(k.startswith("te_"), f"te_je_country holds only the composer: {k}")
                     self.assertEqual(text.strip(), "", f"{k}: the instance as it was, nothing added")
-                    # the wrapper anchors as the composer it holds, so the composer sits where it did
+                    # the wrapper anchors as the composer it holds, so the composer sits where it did; a composer
+                    # with no anchor of its own (the reference composers, #2040) is alone in the content-sized
+                    # wrapper, so it fills it and the wrapper's anchor places it as its own did
                     root = {kk: v for kind, kk, v in _children(types[k].body) if kind == "property"}
+                    if root.get("parentanchor") is None:
+                        self.assertEqual(len(wrapped), 1, f"{k}: an unanchored composer shares its wrapper")
+                        continue
                     self.assertEqual(root.get("parentanchor"), JE_COUNTRY["parentanchor"], k)
 
 

@@ -26,3 +26,17 @@ adds its own section, newest last, and a fixed item is struck through with the c
 | **Medevac completes.** 20% or more of battalions on Medevac, a Medevac general at a front, no Field Hospitals anywhere. | The entry completes, and Modern Nursing names the war and is placed at a state of its front. | The war's name blank or the event unplaced: the scopes the outcome saves didn't reach the event. Save them as the event does instead, in a copy of `nursing_events.4` the entry fires. |
 | **A mixed army.** About 10% on Field Hospitals and 10% on Medevac (12% and 9% is a case off the even split). | The entry completes once the two shares add to 21%; at exactly 20% it may or may not, as the ladder steps in 1%. | It never completes on a mix: the rungs don't add; fall back to each option alone reaching 20% (the first two lines) and say so in `war.md`. |
 | **Field Hospitals as before.** 20% on Field Hospitals, a Field Hospitals general. | Completes as in vanilla. | — |
+
+## The Tsar's Rail Transport button counts Air and Space Transport (#1796, 2026-11-27)
+
+Not War Wounded, but the same kind of fix: vanilla's Heir of Alexander agenda (`je_tp_tsar_heir_of_alexander`, Russia
+with the Tsar-points content) asks for 75% of battalions on Rail Transport in its third button, which the mod restates
+(`common/scripted_buttons/te_vanilla_tsarpoints_buttons.txt`) to count Rail, Air and Space Transport together
+(`te_army_rail_or_better_share`). A quick case: Russia with the agenda, `wargaming` and `commercial_aviation`
+researched, aeroplanes for sale in its market.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Rail as before.** 75% or more of battalions on Rail Transport. | The button's conditions pass that line, as in vanilla. | — |
+| **Air alone.** Every formation moved to Air Transport. | Under "one of": Air Transport used by at least 75% of battalions (currently N%) passes, and the button is possible if its other lines hold. | It fails: the trigger didn't load (look for `te_army_rail_or_better_share` in `error.log`). |
+| **A mix.** About 40% on Rail and 40% on Air. | The custom line, "Together, two of Rail Transport, Air Transport and Space Transport are used by at least 75% of battalions", passes; at 75% exactly it may not, as the ladder steps in 1%. | It never passes on a mix of 76% or more: the shares don't add, so a formation holds more than one option; count by formation instead. |

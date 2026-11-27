@@ -1,0 +1,16 @@
+# Pictures in gfx/event_pictures/ allowed to stand without an entry in
+# event_image_prompts.IMAGES. Read by event_image_prompts.check(): any other
+# picture file with no entry fails test_event_image_registry.py and
+# `event_image_prompts.py --validate`, and so does a stale line here (a stem
+# that has an entry now, or whose file is gone).
+#
+# Every line is a file nothing records a source for, awaiting the owner's call
+# to delete it (#1773). None of them is shown by any event, GUI file or script.
+# Most look like stock or press photographs (some with real flags, logos or a
+# real person's likeness); the moons and planets look like NASA, JPL or ESA
+# imagery, and events show the generated colony_* pictures instead. The list
+# is meant to empty out: delete the file and its line together.
+#
+# One picture stem a line; '#' starts a comment.
+#
+# Empty since #1773 deleted the 58 files listed here (2026-11-27).

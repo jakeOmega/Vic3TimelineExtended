@@ -156,7 +156,10 @@ Vanilla script that the mod's content may enlarge:
 - The GUI capture's largest root entry was a trigger in
   `un_mission_effects.txt`. It ranked above `un_buttons.txt` and the
   on_actions, while the UN event `un_events.4` sat open on screen. An open
-  event window evaluates its options' effect tooltips every frame.
+  event window evaluates its options' effect tooltips every frame. That
+  trigger was the contributor-flag mirror's `is_player` test, one walk of
+  every country per flag (#1719); since 2026-11-27 the mirror collects the
+  players once per rebuild and each flag walks that list. Not remeasured.
 
 ## Remeasure after #1713, 2026-11-12: 1931, 1.15.1
 

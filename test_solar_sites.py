@@ -1547,6 +1547,14 @@ class ModulesTest(unittest.TestCase):
                 self.assertEqual(set(queued), {"hab", "a", "b", "admin", "mine", "resort", "bunker", "yard", "lab"}
                                  | terra | boons)
                 self.assertEqual(body.count(f"sr_mod_hab_used_{k} < sr_site_hab_cap_{k}"), 1)
+                # A Mining Complex once the base room is full, queued levels counted (#1952). Built levels never
+                # pass the room by building, since both of the base's build gates stop at it, so a rule on built
+                # levels never fired.
+                mine = re.search(r"else_if = \{\s*limit = \{([^}]*)\}\s*sr_mod_queue = \{ KEY = \w+ TYPE = mine ",
+                                 body)
+                self.assertIsNotNone(mine)
+                self.assertIn("sr_ebase_queued_levels >= sr_ebase_room_total", mine.group(1))
+                self.assertNotIn("sr_ebase_levels", mine.group(1))
         review = _block(self.modules, "sr_mod_ai_review")
         self.assertIn("is_ai = yes", review)
         self.assertIn("days = 360", review)
