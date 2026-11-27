@@ -143,9 +143,6 @@ class StaleTest(unittest.TestCase):
         self.assertIn("a", found["unknown"])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class InputStepTest(unittest.TestCase):
     def test_each_kind_with_its_arguments(self):
@@ -160,3 +157,7 @@ class InputStepTest(unittest.TestCase):
                      ("event", "save", 0), ("event", "a.1", -1), ("event", "a.1", "0"), (), "click"):
             with self.subTest(step=step):
                 self.assertFalse(gs._input_ok(step))
+
+
+if __name__ == "__main__":
+    unittest.main()

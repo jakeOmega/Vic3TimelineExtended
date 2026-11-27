@@ -59,8 +59,8 @@ Counts in the text were recounted from the mod files on 2026-11-26: 191 technolo
 in eras VI to XIII; 166 laws, 16 of them in base-game groups (the first count, 165,
 missed law_post-scarcity, whose key has a hyphen), and 39 new law groups; 1,058
 visible events outside the debug files; 93 landmarks seeded in 1836 (gm_seed_landmark,
-gm_landmark_effects.txt) and 50 buried sites (gm_arch_seed_site); 89 Map Room maps
-(the te_jmap_pick_* scripted GUIs: 29 on 2026-11-06, the classes by count and by share
+gm_landmark_effects.txt) and 50 buried sites (gm_arch_seed_site); 90 Map Room maps
+(the te_jmap_pick_* scripted GUIs: 29 on 2026-11-06, the classes by count and by share and Nuclear Reach
 since); 34 history charts (te_popup's chart_* values). workshop_composites.mod_counts()
 counts the technologies, laws, law groups and events, and test_workshop_composites.py
 checks the figures here against it; recount the others before reusing one.
@@ -128,7 +128,7 @@ SPECS['01_state_panel'] = dict(
 # player guide's (01-introduction.md): at least half as many deaths as the leading cause.
 SPECS['02_leading_cause_map'] = dict(
     src='ws_02_leading_cause_map.png', scale=0.85, u=0.8,
-    title='Leading Cause of Death', subtitle='one of 89 maps in the Map Room',
+    title='Leading Cause of Death', subtitle='one of 90 maps in the Map Room',
     callouts=[
         dict(pt=(300, 1450), at=(560, 1080), w=760,
              title='Stripes: a close second',
@@ -138,7 +138,7 @@ SPECS['02_leading_cause_map'] = dict(
 
 SPECS['03_map_room'] = dict(
     src='ws_03_map_room.png', scale=0.8, u=1.0,
-    title='The Map Room', subtitle='89 world maps, one click each',
+    title='The Map Room', subtitle='90 world maps, one click each',
     callouts=[])
 
 # Kept at four: the owner called this one "great" (2026-11-06), and each caption gives
