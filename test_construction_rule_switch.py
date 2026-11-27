@@ -335,6 +335,34 @@ class ConversionTest(unittest.TestCase):
         self.assertEqual(site_cap, max(site_cases))
         self.assertEqual(sector_cap, max(sector_cases))
 
+    def test_both_ladders_run_unbroken_to_the_same_cap(self):
+        # #1766: the way back capped a state at 100 sector levels where the way there kept 200 site levels, so a
+        # switch to Disabled and back cut a large capital's levels. A missing case is a level create_building is
+        # never called for.
+        for path in (SITE_BUILDER, SECTOR_BUILDER):
+            with self.subTest(file=path.name):
+                cases = [int(n) for n in re.findall(r"^\t\t(\d+)\s*=\s*\{", code(path), re.M)]
+                self.assertEqual(cases, list(range(1, 201)))
+        ladder = body(code(SECTOR_BUILDER), "extended_timeline_build_specified_building_level")
+        for level in (101, 200):
+            self.assertRegex(ladder, r"\b%d\s*=\s*\{\s*create_building\s*=\s*\{\s*building\s*=\s*\$SPEC_TYPE\$\s+"
+                                     r"add_ownership\s*=\s*\{\s*country\s*=\s*\{\s*country\s*=\s*\$SPEC_OWNER\$\s+"
+                                     r"levels\s*=\s*%d\s*\}\s*\}\s*\}\s*\}" % (level, level))
+
+    def test_the_owner_has_urbanization_before_the_site_is_built(self):
+        # #1765: a direct game's site needs Urbanization (its `possible`), and create_building checks a building's
+        # unlocking technology, `possible` unread. A sector conquered by a country without the technology would
+        # otherwise be removed and its site refused. The grant is the history seeding's own
+        # (extended_timeline_build_specified_building_level).
+        self.assertRegex(body(code(BUILDINGS), SITE),
+                         r"possible\s*=\s*\{[^}]*has_technology_researched\s*=\s*urbanization")
+        grant = re.search(r"owner\s*\?=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*"
+                          r"has_technology_researched\s*=\s*urbanization\s*\}\s*\}\s*"
+                          r"add_technology_researched\s*=\s*urbanization\s*\}\s*\}", self.state)
+        self.assertIsNotNone(grant)
+        self.assertLess(grant.start(), self.state.index("te_construction_market_build_specified_level"))
+        self.assertGreater(grant.start(), self.state.rindex("remove_building"))
+
     def test_a_state_cut_to_the_builders_cap_is_counted(self):
         # The self-check counts buildings, so a capped state read OK with nothing to say what the switch cost.
         for effect, uncapped, capped in (

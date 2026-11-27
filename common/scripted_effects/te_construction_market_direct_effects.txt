@@ -110,6 +110,21 @@ te_direct_construction_convert_state = {
 		limit = {
 			var:te_dc_convert_level >= 1
 		}
+		# A direct game's site needs Urbanization (its `possible`), and
+		# create_building checks some of a building's requirements: its
+		# unlocking technology since 1.13.9, `possible` unread. A sector can sit
+		# in a country without the technology only if it came with a state (a
+		# conquest, say), since building one needs it. Granted first,
+		# as extended_timeline_build_specified_building_level does for the
+		# history's sectors, so the levels are never lost to that check (#1765).
+		owner ?= {
+			if = {
+				limit = {
+					NOT = { has_technology_researched = urbanization }
+				}
+				add_technology_researched = urbanization
+			}
+		}
 		te_construction_market_build_specified_level = {
 			SPEC_TYPE = te_construction_market_site
 			SPEC_LEVEL = var:te_dc_convert_level
@@ -288,7 +303,7 @@ te_direct_construction_count_made = {
 }
 
 # Any scope. One more state whose levels a switch cut to what the builder can
-# make (te_direct_construction_convert_target_level, 200; the way back, 100),
+# make (te_direct_construction_convert_target_level, 200; the way back, also 200),
 # counted like te_direct_construction_count_made for the self-check's line.
 te_direct_construction_count_capped = {
 	if = {

@@ -109,8 +109,9 @@ te_direct_construction_convert_target_level = {
 # Site becomes when the market is switched back on
 # (te_direct_construction_revert_state_site): the site's levels, plus those of a
 # sector that finished after the conversion.
-# te_direct_construction_revert_target_level caps it at 100, the largest
-# extended_timeline_build_specified_building_level can create.
+# te_direct_construction_revert_target_level caps it at 200, the largest
+# extended_timeline_build_specified_building_level can create (100 until #1766
+# gave that ladder the site ladder's 200 cases).
 te_direct_construction_revert_uncapped_level = {
 	value = te_direct_construction_state_site_level
 	if = {
@@ -123,7 +124,7 @@ te_direct_construction_revert_uncapped_level = {
 
 te_direct_construction_revert_target_level = {
 	value = te_direct_construction_revert_uncapped_level
-	max = 100
+	max = 200
 }
 
 # The self-checks' counts (te_direct_construction_base_self_check,
