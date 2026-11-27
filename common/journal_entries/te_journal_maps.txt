@@ -3291,13 +3291,30 @@ je_te_map_room = {
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_grid_none
 		}
-		# 91. Grid Flows: what the station sends or receives, idle and why, on no grid, or none.
+		# 91. Grid Flows: what the station sends or receives (abbreviated from 1,000, a plain figure under it: a branch
+		# each, since a key a SelectLocalization names loses THIS), idle and why, on no grid, or none.
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 1 }
+				te_grid_electricity_moved_disp > 999
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_send_k
+		}
 		else_if = {
 			limit = {
 				te_jmap_selector = 91
 				te_jmap_grid_mode = { MODE = 1 }
 			}
 			custom_tooltip_no_bullet = te_jmap_tt_grid_send
+		}
+		else_if = {
+			limit = {
+				te_jmap_selector = 91
+				te_jmap_grid_mode = { MODE = 2 }
+				te_grid_electricity_moved_disp > 999
+			}
+			custom_tooltip_no_bullet = te_jmap_tt_grid_receive_k
 		}
 		else_if = {
 			limit = {

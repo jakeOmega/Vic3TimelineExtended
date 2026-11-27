@@ -2760,9 +2760,19 @@ class GridFlowsMapTest(_RoomBranches, unittest.TestCase):
         self.assertEqual(colors, [(m, f'value = "{c}"') for m, c in expected] + [("", 'value = "te_jmap_none"')])
         hover = [(" ".join(limit.split()[3:]).replace("te_jmap_", ""), body) for limit, body in
                  self.of(self.hover, self.SEL)]
-        self.assertEqual(hover, [(f"grid_mode = {{ MODE = {n} }}", f"custom_tooltip_no_bullet = {tt}")
-                                 for n, _, tt in self.MODES]
-                         + [("", "custom_tooltip_no_bullet = te_jmap_tt_grid_none")])
+        # a sender's and a receiver's flow abbreviated from 1,000, a plain figure under it: a branch each, since a key
+        # a SelectLocalization names loses THIS (test_loc_add_localization_if_scope.py)
+        big = "te_grid_electricity_moved_disp > 999"
+        want = []
+        for n, _, tt in self.MODES:
+            if n in (1, 2):
+                want.append((f"grid_mode = {{ MODE = {n} }} {big}", f"custom_tooltip_no_bullet = {tt}_k"))
+            want.append((f"grid_mode = {{ MODE = {n} }}", f"custom_tooltip_no_bullet = {tt}"))
+        self.assertEqual(hover, want + [("", "custom_tooltip_no_bullet = te_jmap_tt_grid_none")])
+        loc = loc_values()
+        for tt in ("te_jmap_tt_grid_send", "te_jmap_tt_grid_receive"):
+            self.assertIn("ScriptValue('te_grid_electricity_moved_disp')|0]", loc[tt])
+            self.assertEqual(loc[f"{tt}_k"], loc[tt].replace("|0]", "|K]"))
 
     def test_the_mode_is_the_tab_s_on_a_station(self):
         body = " ".join(block(code(TRIGGERS), "te_jmap_grid_mode").split())
@@ -2775,7 +2785,8 @@ class GridFlowsMapTest(_RoomBranches, unittest.TestCase):
     def test_the_hovers_read_the_state_through_this(self):
         # a map hover has no State datacontext: each reads THIS.GetState, and the idle reason through its own chain
         loc = loc_values()
-        keys = [tt for _, _, tt in self.MODES] + ["te_jmap_tt_grid_flow", "te_jmap_tt_grid_staff", "te_jmap_tt_grid_why"]
+        keys = [tt for _, _, tt in self.MODES] + ["te_jmap_tt_grid_send_k", "te_jmap_tt_grid_receive_k",
+                                                  "te_jmap_tt_grid_staff", "te_jmap_tt_grid_why"]
         for key in keys:
             self.assertNotRegex(loc[key], r"(?<![.\w])State\.", key)
         why = loc["te_jmap_tt_grid_why"]

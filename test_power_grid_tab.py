@@ -1065,8 +1065,11 @@ class NextStepsTest(_Budget, unittest.TestCase):
         cls.triggers = _no_comments(_read(TRIGGERS))
 
     def test_the_local_players_alone(self):
-        # Another country's tab (National Info) and an observer's show no control: the panel's own gate, first.
-        self.assertTrue(self.panel.lstrip("{ \n\t").startswith('visible = "[Country.IsLocalPlayer]"'))
+        # Another country's tab (National Info) and an observer's show no control: the mod's one own-country guard
+        # (te_own_country_only, Country.IsLocalPlayer) on the panel's root, which test_te_system_tab_bodies.py's
+        # GuardTest and BindingTest read; no visible of its own beside it.
+        self.assertTrue(self.panel.lstrip("{ \n\t").startswith("using = te_own_country_only"))
+        self.assertNotRegex(self.panel[:self.panel.index("te_grid_panel = {")], r"\bvisible = ")
         for body in (self.panel, self.suggest, self.reach):
             self.assertNotIn("GetPlayer", body)
 

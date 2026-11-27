@@ -1205,7 +1205,7 @@ types te_grid_widget_types
 
 	### ----------------------------------------------------------------------
 	### Next Steps (2026-11-27): where to grow the grid, for the local player
-	### alone (Country.IsLocalPlayer, false for another country in National
+	### alone (te_own_country_only: Country.IsLocalPlayer, false for another country in National
 	### Info and for every country an observer opens): the tab shows another
 	### country no control. Two lists, both stored, each row read live (rule
 	### 5, a call to action reads live):
@@ -1314,8 +1314,11 @@ types te_grid_widget_types
 		}
 	}
 
+	### The own-country guard (te_own_country_only, gui/te_system_tab_widgets.gui:
+	### visible = Country.IsLocalPlayer), on the root, so every control and every
+	### line in it is the player's own.
 	type te_grid_next_panel = flowcontainer {
-		visible = "[Country.IsLocalPlayer]"
+		using = te_own_country_only
 		direction = vertical
 		parentanchor = hcenter
 		ignoreinvisible = yes
