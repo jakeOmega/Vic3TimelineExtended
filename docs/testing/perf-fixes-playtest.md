@@ -233,3 +233,18 @@ In `debug.log`, each after a `TE_SELF_CHECK START` line of the same name. The fa
 | The rule, off | Switched to Batched Investment Disabled from the change-country screen: the next weekly pass takes 22 s again, and no `TE_BI` line follows the next month start | Batches go on: `has_game_rule` reads a save's old setting until reload; say which |
 | The rule, on again | `TE_BI on` at the second month start after | No line: the country was not watched again; read its private queue at the pulse |
 | A long AI run | An observer run to 2050 with the rule on against one with it off: the twenty largest economies' GDP growth by year about the same | The giants grow slower with it on: batches overshoot (read which buildings stand under-staffed), or the lost investment abroad mattered; lower `te_bi_share` or raise the reserve |
+
+## Buildings panel: rows off screen are skipped (2026-11-27)
+
+The sidebar's Buildings panel and the Building Registry's grouped view put each row's fixed-size top in a one-item
+`fixedgridbox`, which the engine leaves out of a frame while it is scrolled out of view, and the panel's list updates
+at most ten times a second (`docs/audits/buildings_panel_performance.md`). Seen in the harness on 2026-11-27 (the
+2050 USA copy, paused): 341 → 18 ms a frame with the panel open, the rows, a filter, scrolling, the method menu,
+expanding a type in both views and the Registry's ungrouped list all as before. Not seen: the rows below.
+
+| Check | Expect | If it fails |
+|---|---|---|
+| The panel at speed | In a late game of a large country, the Buildings panel scrolls at once with the game running at speed 5 | Still slow: read the frame counter with the panel open and shut, paused and running; the report's method says how |
+| The naval administration item | A fleet's Buildings section in the Military Formation panel (`military_formation_panel_buildings_content_fleet`, the same row type) draws its row: icon, name, method strip, buttons | Blank: the one-item list is empty there, or the item's context hides a value the row reads |
+| A type with no levels yet | A building type just placed (its first level queued) still shows its row in the Buildings panel | Missing: that type's first production method group is not in the list (not expected: every type has groups) |
+| The tutorial highlight | In a new game's tutorial, the step that points at the Buildings panel's rows still highlights them | No highlight: the highlight's widget, inside the wrapper, needs to sit outside it |
