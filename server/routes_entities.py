@@ -316,6 +316,45 @@ def _state_history_tables():
     return states, regions, source
 
 
+# Entity-type name resolution. `get_data()` is exact-key, but /raw and /keys take
+# user-typed type names — resolve them case-insensitively and singular/plural-
+# insensitively so `/raw/law group`, `/raw/Technology`, `/keys/PMs` all work.
+
+
+def _singularize_word(word: str) -> str:
+    """Best-effort singular of a single word: `Groups`->`Group`, `Technologies`
+    ->`Technology`. Only the crude rules the entity-type keyspace needs."""
+    w = word.lower()
+    if w.endswith("ies") and len(w) > 3:
+        return w[:-3] + "y"
+    if w.endswith("s") and len(w) > 1:
+        return w[:-1]
+    return w
+
+
+def _normalize_entity_type(name: str) -> str:
+    """Lowercase a (possibly multi-word) type name and singularize its LAST word,
+    so `Law Groups` and `law group` both normalize to `law group`."""
+    words = name.split()
+    if words:
+        words[-1] = _singularize_word(words[-1])
+    return " ".join(w.lower() for w in words)
+
+
+def _resolve_entity_type(etype: str, known) -> Optional[str]:
+    """Resolve a user-supplied entity-type name to a canonical member of `known`.
+    Exact match wins, then case-insensitive, then singular/plural-insensitive.
+    Returns None on no match."""
+    known = list(known)
+    if etype in known:
+        return etype
+    lower_map = {k.lower(): k for k in known}
+    if etype.lower() in lower_map:
+        return lower_map[etype.lower()]
+    norm_map = {_normalize_entity_type(k): k for k in known}
+    return norm_map.get(_normalize_entity_type(etype))
+
+
 # ---------------------------------------------------------------------------
 # Which buildings make or use a good (#1757): buildings ->
 # production_method_groups -> production_methods -> building_modifiers, over
@@ -407,45 +446,6 @@ def _good_flows(good: str, direction: str, exclude=(), extra=()) -> dict:
                 "methods": methods,
             }
     return out
-
-
-# Entity-type name resolution. `get_data()` is exact-key, but /raw and /keys take
-# user-typed type names — resolve them case-insensitively and singular/plural-
-# insensitively so `/raw/law group`, `/raw/Technology`, `/keys/PMs` all work.
-
-
-def _singularize_word(word: str) -> str:
-    """Best-effort singular of a single word: `Groups`->`Group`, `Technologies`
-    ->`Technology`. Only the crude rules the entity-type keyspace needs."""
-    w = word.lower()
-    if w.endswith("ies") and len(w) > 3:
-        return w[:-3] + "y"
-    if w.endswith("s") and len(w) > 1:
-        return w[:-1]
-    return w
-
-
-def _normalize_entity_type(name: str) -> str:
-    """Lowercase a (possibly multi-word) type name and singularize its LAST word,
-    so `Law Groups` and `law group` both normalize to `law group`."""
-    words = name.split()
-    if words:
-        words[-1] = _singularize_word(words[-1])
-    return " ".join(w.lower() for w in words)
-
-
-def _resolve_entity_type(etype: str, known) -> Optional[str]:
-    """Resolve a user-supplied entity-type name to a canonical member of `known`.
-    Exact match wins, then case-insensitive, then singular/plural-insensitive.
-    Returns None on no match."""
-    known = list(known)
-    if etype in known:
-        return etype
-    lower_map = {k.lower(): k for k in known}
-    if etype.lower() in lower_map:
-        return lower_map[etype.lower()]
-    norm_map = {_normalize_entity_type(k): k for k in known}
-    return norm_map.get(_normalize_entity_type(etype))
 
 
 class EntityRoutes:
