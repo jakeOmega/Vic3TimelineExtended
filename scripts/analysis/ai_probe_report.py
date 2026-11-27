@@ -96,6 +96,9 @@ def parse_lines(lines, key: dict, parsed: Parsed | None = None) -> Parsed:
     parsed = parsed or Parsed()
     positional = set(key.get("positional_groups", []))
     line_fields = key["lines"]
+    # Fields a later version took off the end of a positional line: an older log's line still carries them, and
+    # they are dropped from its end (version 6's army census, gen_ai_probe.RETIRED_TAIL).
+    retired = key.get("retired_tail", {})
     for raw in lines:
         at = raw.find(MARK)
         if at < 0:
@@ -137,6 +140,8 @@ def parse_lines(lines, key: dict, parsed: Parsed | None = None) -> Parsed:
                     if name[0] in positional:
                         values = [number(part) for part in body.split(";")]
                         fields = line_fields.get(name, [])
+                        if fields and len(values) == len(fields) + len(retired.get(name, [])):
+                            values = values[:len(fields)]
                         if len(values) != len(fields):
                             parsed.bad.append(f"{name}: {len(values)} values for {len(fields)} fields: {text[:120]}")
                             continue
@@ -574,22 +579,11 @@ def check_version_4(parsed: Parsed, key: dict, records: list[dict]) -> list[str]
     out.append(f"  slack in [0, 1] with peasants <= slack in "
                f"{count(lambda r: 0 <= num(r, 'slack_peasants') <= num(r, 'slack') <= 1)} of {n}; above 0 in "
                f"{count(lambda r: num(r, 'slack') > 0)}")
-    # The army census.
-    held_var = parsed.canary.get("unit_vars")
-    armies = [r for r in rows if num(r, "army") > 0]
-    if held_var is None:
-        out.append("  army census: no `CANARY unit_vars` line yet (no country with an army formation reported)")
-    elif held_var != 1:
-        out.append("  army census: `CANARY unit_vars v=0`: a combat unit holds no variable, so the census does not count "
-                   "(every u_* is 0); recruits and upgrades cannot be told apart this way")
-    else:
-        near = sum(1 for r in armies if abs(num(r, "u_all") - num(r, "army")) <= max(1, 0.05 * num(r, "army")))
-        flows = [r for r in armies if num(r, "u_flows") == 1]
-        out.append(f"  army census: battalions counted (u_all) within 5% of army_size in {near} of {len(armies)} armies; "
-                   f"counts are flows in {len(flows)}; new <= all in "
-                   f"{sum(1 for r in armies if num(r, 'u_new') <= num(r, 'u_all'))}")
-        if flows and all(num(r, "u_new") == num(r, "u_all") for r in flows):
-            out.append("  army census: every battalion is new at every report: the marks do not survive a year")
+    # The army census of versions 4 and 5, retired in version 6: a combat unit holds no variables, so it counted
+    # nothing, and its fields are dropped from an older log's P2 line as it is read.
+    if "unit_vars" in parsed.canary:
+        out.append(f"  army census (versions 4 and 5): `CANARY unit_vars v={parsed.canary['unit_vars']}`; retired in "
+                   "version 6, since a combat unit holds no variables (#2090): its u_* fields are not read")
     return out
 
 
@@ -1845,7 +1839,8 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
                                if held[name] or unlocked[name]))
 
     # 4b. Where irregulars come from. Every version: the net change in irregular battalions between a country's
-    # reports (army x the irregular share); version 4's census tells recruits from type changes where it counts.
+    # reports (army x the irregular share). Versions 4 and 5's census, meant to tell recruits from type changes,
+    # counted nothing (#2090).
     previous = {}
     for rows_ in by_id.values():
         for a, b in zip(rows_, rows_[1:]):
@@ -1860,35 +1855,18 @@ def report(parsed: Parsed, key: dict, bucket_years: int = 10, cadence_from: int 
             return None
         return (irregulars(r) - irregulars(a)) * 12 / (r["k"] - a["k"])
 
-    def counted(r):
-        return num(r, "u_flows") == 1 and num(r, "u_all") > 0
-
-    def share_of_army(name):
-        return Col("", ratio=(field(name), field("u_all")), digits=1, scale=100, among=counted)
-
     columns = [
         Col("Irregular battalions, net change a year (world: total)", net_irregular, digits=1, total=True),
         Col("Irregular battalions, net change a year, % of the army",
             lambda r: (net_irregular(r) / num(r, "army") if net_irregular(r) is not None else None), digits=1,
             scale=100),
     ]
-    if any(counted(r) for r in ai):
-        columns += [
-            named("New battalions since the last report, % of the army", share_of_army("u_new")),
-            named("Battalions of another type than at the last report, %", share_of_army("u_changed")),
-            Col("Irregulars among the new battalions, %", ratio=(field("u_irr_new"), field("u_new")), digits=0,
-                scale=100, among=counted),
-            Col("Irregulars at the last report now of another type, % of the army",
-                ratio=(field("u_from_irr"), field("u_all")), digits=1, scale=100, among=counted),
-        ]
     if any(num(r, "army") > 0 for r in ai):
         table("4b. Where the irregulars come from", columns,
               note="The net change is the irregular battalions (the army times its irregular share) at a report less "
-                   "at the country's last, a year's worth: it nets recruits against upgrades and losses. Version 4's "
-                   "census, where it counts (`check`: CANARY unit_vars), marks each battalion with its type at each "
-                   "report: a battalion with no mark at the next is new (recruited, or come with land or a subject), "
-                   "one whose type changed was upgraded or changed. Its columns appear once a country has been "
-                   "censused twice.")
+                   "at the country's last, a year's worth: it nets recruits against upgrades and losses. Recruits and "
+                   "upgrades can't be told apart from script, since a combat unit holds no variables (#2090): "
+                   "compare two saves' battalion records for that.")
 
     # --- 5. expansion ----------------------------------------------------------------------------------------------
     plays = [e for e in parsed.events if e["event"] == "play"]

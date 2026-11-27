@@ -37,6 +37,8 @@ V1_SAMPLE = ROOT / "test_fixtures/ai_probe/run1_v1_sample.txt"
 V1_LINES = ROOT / "test_fixtures/ai_probe/key_v1_lines.json"
 # Version 3's (build 2d26c6b5a, run 4 of 2026-11-16): the lines a version-3 log carries.
 V3_LINES = ROOT / "test_fixtures/ai_probe/key_v3_lines.json"
+# Version 5's (build 6a27d2422, 2026-11-27): the last with the army census, whose six fields end its P2 line.
+V5_LINES = ROOT / "test_fixtures/ai_probe/key_v5_lines.json"
 
 _ACCESSOR = re.compile(r"\[[^\]]*\]")
 _SCRIPT_VALUE = re.compile(r"ScriptValue\('([a-z0-9_]+)'\)")
@@ -193,8 +195,7 @@ class ParserTest(unittest.TestCase):
             for field in fields:
                 self.assertEqual(record.get(field), 7, f"{name}: {field}")
         self.assertEqual(set(record["x"]) - {"tag", "id", "k"}, set(self.key["data_functions"]))
-        # unit_vars is the army census's own canary (version 4), printed by the snapshot that first tries it.
-        self.assertEqual(set(parsed.canary), {"start", "date", "end", "unit_vars", *self.key["data_functions"]})
+        self.assertEqual(set(parsed.canary), {"start", "date", "end", *self.key["data_functions"]})
         events = {event["event"] for event in parsed.events}
         self.assertEqual(events, {"law_start", "law_pass", "law_fail", "law_end", "default", "default_end", "play"})
         play = next(event for event in parsed.events if event["event"] == "play")
@@ -670,7 +671,8 @@ class BankingCycleTest(unittest.TestCase):
 
 
 class VersionFourTest(unittest.TestCase):
-    """Version 4's additions (#1877): the H2 and P lines, X7 and X8, the W line's rules, the army census."""
+    """Version 4's additions (#1877): the H2 and P lines, X7 and X8, the W line's rules (and the army census, retired
+    in version 6)."""
 
     def setUp(self):
         self.key = json.loads(KEY.read_text(encoding="utf-8"))
@@ -780,25 +782,39 @@ class VersionFourTest(unittest.TestCase):
         self.assertIn("set_variable = { name = te_cc_slack value = te_country_slack_share }",
                       text(ROOT / "common/scripted_effects/te_construction_cost_effects.txt"))
 
-    def test_the_census_runs_before_the_lines_and_only_where_a_unit_held_a_variable(self):
-        snapshot = block_text("te_aip_snapshot", self.effects)
-        self.assertLess(snapshot.index("te_aip_unit_census = yes"), snapshot.index("TE_AIP S A1"))
-        census = block_text("te_aip_unit_census", self.effects)
-        guard = census.index("limit = { has_global_variable = te_aip_unit_vars }")
-        self.assertLess(guard, census.index("every_military_formation"))
-        self.assertLess(census.index("set_global_variable = te_aip_unit_vars_tested"), guard)
-        self.assertIn("TE_AIP CANARY unit_vars", census)
-        # The mark is set after it is read, and the irregular index is the key's.
-        walk = census[census.index("every_combat_unit"):]
-        self.assertLess(walk.index("has_variable = te_aip_ut"), walk.index("set_variable = { name = te_aip_ut "))
-        irregular = self.key["unit_type_index"].index("combat_unit_type_irregular_infantry") + 1
-        self.assertIn(f"local_var:te_aip_ut_now = {irregular}", walk)
-        self.assertIn(f"var:te_aip_ut = {irregular}", walk)
-        index = block_text("te_aip_unit_type_index", self.values)
-        self.assertEqual(re.findall(r"unit_type:([A-Za-z_]+)", index), self.key["unit_type_index"])
-        # Every count is reset at each snapshot, whether or not the census counts.
-        for name in gen_ai_probe.UNIT_CENSUS:
-            self.assertLess(census.index(f"set_variable = {{ name = te_aip_{name} value = 0 }}"), guard, name)
+    def test_no_variable_is_set_on_a_combat_unit(self):
+        """A combat unit holds no variables (#2090): the census that marked battalions is out, with its canary."""
+        for body in (self.effects, self.values):
+            # No walk reaches a battalion (the R line's types are read on the country, not in a unit's scope).
+            self.assertIsNone(re.search(r"\b(every|random|ordered)_combat_unit\b", body))
+            self.assertNotIn("unit_vars", body)
+        self.assertNotIn("te_aip_unit_census", self.effects)
+        self.assertNotIn("unit_type_index", self.key)
+
+    def test_a_version_5_log_still_reads(self):
+        """Version 5's lines are this version's, but for the army census's six fields, retired from P2's end: an
+        older P2 line carries them, and the parser drops them."""
+        v5 = json.loads(V5_LINES.read_text(encoding="utf-8"))
+        retired = self.key["retired_tail"]
+        self.assertEqual(retired, {"P2": ["u_all", "u_new", "u_changed", "u_irr_new", "u_from_irr", "u_flows"]})
+        for name, fields in v5["lines"].items():
+            with self.subTest(line=name):
+                now = self.key["lines"][name]
+                if name[0] in v5["positional_groups"]:
+                    self.assertEqual(now + retired.get(name, []), fields)
+                else:
+                    self.assertEqual(now[:len(fields)], fields)
+        p2 = v5["lines"]["P2"]
+        log = ["[12:00:00][jomini_effect.cpp:1]: TE_AIP S P2 FRA 3 24 " + ";".join(str(i) for i in range(len(p2))),
+               "[12:00:00][jomini_effect.cpp:1]: TE_AIP CANARY unit_vars v=0"]
+        parsed = ai_probe_report.parse_lines(log, self.key)
+        self.assertEqual(parsed.bad, [])
+        record = parsed.snapshots[(3, 24)]
+        self.assertEqual([record[f] for f in self.key["lines"]["P2"]], list(range(len(self.key["lines"]["P2"]))))
+        self.assertNotIn("u_all", record)
+        # A line of any other length is still refused.
+        short = ai_probe_report.parse_lines(["TE_AIP S P2 FRA 3 24 1;2"], self.key)
+        self.assertEqual(len(short.bad), 1)
 
     def test_the_data_functions_of_a_version(self):
         self.assertEqual(ai_probe_report.data_functions_of(self.key, 3),
@@ -813,17 +829,17 @@ class VersionFourTest(unittest.TestCase):
                "uc_elec_light": 2, "h_electrical_generation": 1, "radio_price": 1.2, "radio_buy": 5, "radio_sell": 4,
                "queue_gov": 6, "queue_levels": 20, "q_uni": 2, "q_admin": 1, "q_mil": 1, "q_infra": 3, "q_power": 1,
                "cc_scale": 2.1, "cc_total": 2.3, "bur_add": 0, "bur_mult": 0.1, "bur_cost_add": 0, "bur_inst_mult": 0.25,
-               "bur_pop_mult": 0, "slack": 0.3, "slack_peasants": 0.2, "army": 20, "u_all": 20, "u_new": 2,
-               "u_changed": 1, "u_irr_new": 1, "u_from_irr": 0, "u_flows": 1, "sol": 12.0, "bur_used": 300,
+               "bur_pop_mult": 0, "slack": 0.3, "slack_peasants": 0.2, "army": 20, "sol": 12.0, "bur_used": 300,
                "in_schools": 2, "bt_company_headquarter": 3, "bg_company_headquarter": 3,
                "x": {"bur_inst": 120, "sol_lower": 9.0, "sol_upper": 25.0}}
         row.update(fields)
         return row
 
-    def parsed(self, fmc=3, unit_vars=1):
+    def parsed(self, fmc=3, unit_vars=None):
         parsed = ai_probe_report.Parsed()
         parsed.world = {1: {"k": 1, "y": 1925, "r_fmc": fmc, "r_small": 1, "r_bank": 1}}
-        parsed.canary["unit_vars"] = unit_vars
+        if unit_vars is not None:               # a version 4 or 5 log's census canary
+            parsed.canary["unit_vars"] = unit_vars
         return parsed
 
     def test_check_reads_the_rules_and_each_field_against_the_others(self):
@@ -833,12 +849,12 @@ class VersionFourTest(unittest.TestCase):
         self.assertIn("rt_* reads 0 by design", text_)
         self.assertIn("none + gas + electric = urban centre levels in 2 of 2", text_)
         self.assertIn("universities + administrations + military <= queue_gov in 2 of 2", text_)
-        self.assertIn("within 5% of army_size in 2 of 2 armies", text_)
+        self.assertNotIn("army census", text_)
         self.assertIn("lower <= average <= upper in 2 of 2", text_)
         lines = ai_probe_report.check_version_4(self.parsed(unit_vars=0), self.key,
                                                 [self.row(uc_elec_light=4, h_electrical_generation=0)])
         text_ = "\n".join(lines)
-        self.assertIn("a combat unit holds no variable", text_)
+        self.assertIn("retired in version 6, since a combat unit holds no variables", text_)
         self.assertIn("in 0 of 1; electric lights without Electrical Generation in 1", text_)
         # Under `enabled`, retooling at 0 with production methods changing is a read that fails.
         lines = ai_probe_report.check_version_4(self.parsed(fmc=1), self.key, [self.row(n_pm=5, rt_all=0)])
