@@ -76,6 +76,17 @@
   "save": "te_qa_copy_usa1964_20261126",
   "sha256": "8616edfb0c499ac2d9a8141fdc803554277515c7d242c4239ee823a774f2d460"
  },
+ "global_warming_tab": {
+  "commit": "eb6f46b901777e19d2c91cf36708f2f34864292b",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2043_20261125",
+  "sha256": "58defc5d8d399cbd3e0a549a9b6277ff7210ae419e677659916ae085497e39ff"
+ },
  "grand_monuments_tab": {
   "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",
   "taken": "2026-11-26",
@@ -108,6 +119,17 @@
   "ui_scale": 1.5,
   "save": "te_qa_copy_iua2050_20261126",
   "sha256": "d20fd65b784206b74e60744a8496430c2525dbe04cba128e69ef40434bac3ecc"
+ },
+ "solar_system_colonization_tab": {
+  "commit": "eb6f46b901777e19d2c91cf36708f2f34864292b",
+  "taken": "2026-11-26",
+  "window": [
+   3840,
+   2160
+  ],
+  "ui_scale": 1.5,
+  "save": "te_qa_copy_iua2043_20261125",
+  "sha256": "c7169cdefbee07fffc979b41511633afd875f64301d2d0672b980fae55d42415"
  },
  "state_panel": {
   "commit": "295e11343e76098498785ce7a99a6b8d9a4c562e",

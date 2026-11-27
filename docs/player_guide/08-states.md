@@ -24,7 +24,7 @@ the tourism card. Each tile is titled with a game concept you can hover for an
 explanation, and its tooltip breaks the numbers down. GDP per Capita, at the head
 of the game's own tiles, gives the state's figure and the country's.
 
-![A state panel with the tourism card above the status grid and the Homeland Dynamics, Arable Land and Migration Crowding tiles at the bottom.](images/state_panel.png)
+![A state panel's Overview scrolled to its end: the game's tiles, then the mod's in two columns with Arable Land and Local Climate at their heads, and the tourism card last.](images/state_panel.png)
 
 From the 1930s technologies on, the picture at the top of the panel shows the
 state as it would look in the decade of its owner's technology: its city, by

@@ -34,7 +34,7 @@ armed, any crisis it is in, World Crises, the nuclear taboo's score and history,
 Powers. Its true count, program, readiness, forces and reputation, and every
 button, are only on your own.
 
-![The Nuclear tab of the Military panel for a country holding 12 warheads: the overview (an Unfunded program, warheads, credibility, doctrine, readiness, launch authority and the taboo bar), The Program at funding step 0 with its progress bar, Nuclear Posture, and the start of Forces.](images/nuclear_tab_armed.png)
+![The Nuclear tab of the Military panel for an armed country: the overview (the program, warheads, doctrine, readiness, launch authority, credibility and the taboo bar), The Program with what its funding builds, Nuclear Posture, and the start of Forces.](images/nuclear_tab_armed.png)
 
 The overview is a grid of boxes, two to a row. Each box has an icon, a caption,
 the reading in a word and one figure beneath it; hover a box for the detail.

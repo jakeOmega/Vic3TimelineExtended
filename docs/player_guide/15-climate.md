@@ -229,7 +229,7 @@ of the journal entry, opens the Help page, How Global Warming Works. While the
 entry is active
 it has no status line: the overview carries the tier and the readings.
 
-![The Climate tab of the Market panel at 1.90 °C, tier Significant: the overview (tier, Market Leader, Penalty ×1.90, the Temperature bar and its threshold line, the emissions table and the two pies) and the start of Mitigation Policies.](images/global_warming_tab.png)
+![The Climate tab of the Market panel with a tier in force: the overview (tier, Market Leader, the warming penalty, the Temperature bar and its threshold line, the emissions table and the two pies) and Mitigation Policies.](images/global_warming_tab.png)
 
 The overview opens with boxes, two to a row: Warming, the tier and where the
 next one begins (hover it for what the tier means); Warming Penalty, today's
