@@ -5,11 +5,16 @@
 # after each: 1,000 decisions and 22 s of every weekly tick for the USA of 2050. Script cannot shorten a decision, but
 # it can make each one count for more. The engine fires on_start_expanding_building as it queues a level; when the
 # level is one the investors of a very large economy have just picked at home, te_bi_hook queues more levels of the
-# same building beside it, until a tenth of the building's size is queued, a hundred levels at most. The engine finds
-# its queue nearer full and makes fewer decisions: the investment AI picks a hundred levels at a time, not one.
+# same building beside it, a hundred levels a pick at most and until a tenth of the building's size is queued. The
+# engine finds its queue nearer full and makes fewer decisions: the investment AI picks a hundred levels at a time,
+# not one.
 #
-# What it rests on, none of it read in game yet (each has a log line; docs/testing/perf-fixes-playtest.md § Batched
-# private investment):
+# What it rests on (each has a log line; docs/testing/perf-fixes-playtest.md § Batched private investment). A first
+# session on the 2050 copy read all four as holding (2026-11-27, batching forced on for the USA, 25 days; the figures
+# are in docs/systems/mod_systems/construction.md): the hook ran inside the pass, the engine stopped at 1,000 with
+# script's levels in the queue, 19 batches queued 1,448 levels from inside the hook with none refused and no crash,
+# and queued levels in other countries' states sat with the country that placed them. One session of one country:
+# the checks stay.
 #   1. on_start_expanding_building runs as the engine queues a level, inside its pass, with the level already counted
 #      in construction_queue_num_queued_private_levels. The mod's construction sites have followed this hook since the
 #      construction market was added, so it does fire; when in the tick it fires is the unread part.
@@ -283,8 +288,12 @@ te_bi_trip_limit = {
 #               call late and a batch lands on the next building to be queued. Fallback: batch the building of the
 #               previous call (keep its state and type in two globals) instead of this one's.
 #   NO_VERDICT  none came back while the batch ran: script's levels reach the hook later or never. The batches still
-#               work if the engine's own levels reach it at once; batch_invest_month reads that.
-# Delete with the log values (te_bi_log_*) once both have read OK in a game.
+#               work if the engine's own levels reach it at once; batch_invest_month reads that. This is what the
+#               first session read (came_back=0 for a batch of 99): the engine does not run the hook for a level
+#               script queues, at least not inside the effect. So this check cannot say more in this engine, and
+#               te_bi_placing guards against a call that does not come.
+# First session, 2026-11-27: batch_invest_queue OK (asked 99, queued 99). Delete it with the log values (te_bi_log_*)
+# once it has read OK in a game that switched on by itself.
 te_bi_selfcheck_queue = {
 	if = {
 		limit = {

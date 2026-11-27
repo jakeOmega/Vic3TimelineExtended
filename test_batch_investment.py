@@ -185,6 +185,7 @@ class Engine:
         self.log = []
         self.waiting = []  # hook calls put off until the pass or the effect is over
         self.depth = 0
+        self.calls = 0  # on-action calls made with no effect running: each is one pick's hook
         self.flushing = False
         self.decisions = {}  # tag -> the engine's decisions in each weekly pass
 
@@ -231,6 +232,8 @@ class Engine:
     def run_on_action(self, name, root):
         body = dict((k, v) for k, _, v in self.script.on_actions[name])
         run = Run(self, root)
+        if self.depth == 0:
+            self.calls += 1
         if run.cond(body.get("trigger", []), root):
             self.depth += 1
             try:
@@ -520,12 +523,23 @@ class Investor:
             for kind in kinds:
                 self.buildings.append(Building(kind, state, self.random.randint(*levels)))
         self.abroad, self.share_abroad = [], 0.0
+        self.favourites, self.share_favourites = [], 0.0
 
     def invests_in(self, other, share):
         self.abroad, self.share_abroad = other.buildings, share
 
+    def favours(self, count, share):
+        """`share` of the picks at home go to the `count` largest buildings: the engine picks its best candidates
+        over and over."""
+        self.favourites = sorted(self.buildings, key=lambda b: -b.level)[:count]
+        self.share_favourites = share
+
     def pick(self):
-        return self.random.choice(self.abroad if self.random.random() < self.share_abroad else self.buildings)
+        if self.random.random() < self.share_abroad:
+            return self.random.choice(self.abroad)
+        if self.favourites and self.random.random() < self.share_favourites:
+            return self.random.choice(self.favourites)
+        return self.random.choice(self.buildings)
 
     def fill(self, levels=Engine.LIMIT):
         """The queue as the engine left it last week."""
@@ -675,51 +689,53 @@ class WhatABatchIs(unittest.TestCase):
     def setUp(self):
         self.engine = Engine(SCRIPT)
         self.giant = Giant(self.engine)
-        self.queued, self.level_then, self.most_pending = [], {}, {}
+        self.queued, self.most_pending = [], {}
         original = self.engine.script_queues
 
         def spy(state, kind):
             building = state.buildings[kind]
-            self.queued.append((self.engine.day, building, len(state.owner.queue)))
-            self.level_then.setdefault((self.engine.day, building), building.level)
+            self.queued.append((self.engine.day, building, len(state.owner.queue), self.engine.calls))
             original(state, kind)
             self.most_pending[building] = max(self.most_pending.get(building, 0), building.pending / building.level)
 
         self.engine.script_queues = spy
 
     def batches(self):
+        """The levels each pick's hook queued."""
         grouped = {}
-        for day, building, _ in self.queued:
-            grouped.setdefault((day, building), []).append(building)
+        for _, building, _, call in self.queued:
+            grouped.setdefault((call, building), []).append(building)
         return grouped
 
     def test_no_batch_is_queued_before_batching_is_on(self):
         self.giant.run(100)
         self.assertTrue(self.queued)
-        self.assertGreaterEqual(min(day for day, _, _ in self.queued), 30)
+        self.assertGreaterEqual(min(day for day, _, _, _ in self.queued), 30)
 
     def test_no_level_is_queued_at_or_past_the_ceiling(self):
         self.giant.run(100)
-        self.assertLess(max(length for _, _, length in self.queued), constant("te_bi_ceiling"))
+        self.assertLess(max(length for _, _, length, _ in self.queued), constant("te_bi_ceiling"))
 
-    def test_a_batch_is_a_tenth_of_the_building_and_a_fiftieth_for_a_local_good(self):
+    def test_a_pick_stands_for_a_hundred_levels_at_most_and_ten_for_a_local_good(self):
         self.giant.run(100)
         sizes = set()
-        for key, levels in self.batches().items():
-            building, level = key[1], self.level_then[key]  # its built levels when the batch was sized
+        for (_, building), levels in self.batches().items():
             total = len(levels) + 1  # the engine's own level
             local = building.kind in LOCAL
             self.assertLessEqual(total, constant("te_bi_local_batch_max" if local else "te_bi_batch_max"))
-            self.assertLessEqual(total, level * constant("te_bi_local_share" if local else "te_bi_share"))
             sizes.add((local, total))
         # Both caps are reached by the largest buildings.
         self.assertIn((False, int(constant("te_bi_batch_max"))), sizes)
         self.assertIn((True, int(constant("te_bi_local_batch_max"))), sizes)
 
-    def test_a_building_is_batched_once_in_a_pass(self):
+    def test_no_building_has_more_than_a_tenth_of_its_size_queued(self):
+        self.giant.usa.favours(10, 0.8)
         self.giant.run(100)
-        self.assertEqual(len(self.batches()), len({(day, building) for day, building, _ in self.queued}))
-        self.assertLessEqual(max(self.most_pending.values()), constant("te_bi_share"))
+        for building, share in self.most_pending.items():
+            local = building.kind in LOCAL
+            self.assertLessEqual(share, constant("te_bi_local_share" if local else "te_bi_share"), building.kind)
+        # A favourite is picked many times in a pass, and takes more than one batch.
+        self.assertGreater(max(self.most_pending.values()), 0.05)
 
     def test_slow_levels_do_not_stack_batch_on_batch(self):
         # Three levels in ten finish a week, so a level waits three weeks and more: a building picked again while
@@ -749,6 +765,12 @@ class TheSizes(unittest.TestCase):
         self.assertEqual([self.size("building_steel_mill", 1000, pending) for pending in (1, 40, 99, 100, 250)],
                          [99, 60, 1, 0, 0])
 
+    def test_a_large_building_takes_a_hundred_a_pick_until_a_tenth_is_queued(self):
+        # The first batch in game was for a building of 6,579 levels (2026-11-27).
+        self.assertEqual([self.size("building_steel_mill", 6579, pending) for pending in (1, 100, 500, 600, 657, 700)],
+                         [99, 99, 99, 57, 0, 0])
+        self.assertEqual([self.size("building_railway", 3000, pending) for pending in (1, 10, 55, 60)], [9, 9, 5, 0])
+
     def test_the_tuning_is_in_order(self):
         self.assertLess(constant("te_bi_off_levels"), constant("te_bi_on_levels"))
         self.assertLess(constant("te_bi_unwatch_queue"), constant("te_bi_watch_queue"))
@@ -770,6 +792,44 @@ class TheSizes(unittest.TestCase):
             self.assertNotIn("CONSTRUCTION_MAX_NUM_PRODUCTION_BUILDING_CONSTRUCTIONS",
                              path.read_text(encoding="utf-8-sig"), path.name)
         self.assertEqual(constant("te_bi_engine_queue"), 1 + 999)
+
+
+class AnEngineWithFavourites(unittest.TestCase):
+    """What the first run in game showed (2026-11-27, the USA of 2050): the engine picks its best few buildings over
+    and over within a pass. With a hundred as the most a building could have queued, 315 of 597 picks were single
+    levels of buildings that already held their hundred."""
+
+    def run_with(self, script):
+        engine = Engine(script)
+        giant = Giant(engine)
+        giant.usa.favours(3, 0.95)
+        giant.run(120)
+        self.assertTrue(giant.on())
+        month = dict(part.split("=") for part in engine.lines("TE_BI month")[-1].split()[2:])
+        return engine.decisions["USA"][9:], int(month["small"]), int(month["batches"])
+
+    def test_the_pass_still_fills_the_queue_in_few_decisions(self):
+        decisions, small, batches = self.run_with(SCRIPT)
+        self.assertLess(max(decisions), constant("te_bi_reserve") + 60)
+        # Few picks are turned away as small: only those of a favourite with its tenth queued.
+        self.assertLess(small, batches)
+
+    def test_the_model_shows_what_the_game_showed_under_the_first_rule(self):
+        # The rule as first run in game: a hundred was also the most a building could have queued. The game's two
+        # passes took about 240 and 365 decisions; this holds the model to the same failure, so the test above means
+        # something.
+        first = Script()
+        first.values["te_bi_batch_extra"], _ = parse_block(tokenize("""
+            value = level
+            if = { limit = { te_bi_local_goods_building = yes } multiply = te_bi_local_share max = te_bi_local_batch_max }
+            else = { multiply = te_bi_share max = te_bi_batch_max }
+            floor = yes
+            add = level
+            subtract = level_after_queued_constructions
+            min = 0"""))
+        decisions, small, batches = self.run_with(first)
+        self.assertGreater(min(decisions), constant("te_bi_reserve") + 60)
+        self.assertGreater(small, 5 * batches)
 
 
 class ASmallReserve(unittest.TestCase):

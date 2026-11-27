@@ -29,8 +29,9 @@ vanilla code.
    owner's call, with options under "Proposals that change gameplay". The
    owner's own idea, investors that place levels in batches by script, has
    its first probe in: script queues past 1,000 and the engine's pass then
-   rests (proposal 4). **Built on 2026-11-27, not yet run in game**
-   (proposal 4, "Built").
+   rests (proposal 4). **Built on 2026-11-27 and run once in game**: the
+   pass fell from 25 s and 20 s to 5.3 s and 8.1 s on the same two ticks
+   (proposal 4, "Built" and "First run").
 
 ## The save and the method
 
@@ -471,6 +472,32 @@ to keep the rate. The fourth is built (2026-11-27); the others are not.
      part at most 999. If so the ceiling is each country's own and reaches
      1,000 at about 20,000 construction a week, which fits this save and is
      not confirmed.
+   - **First run** (2026-11-27, session `20261127T082220Z`, this save,
+     the deployed build of `7d353f90a` with the branch's files as a
+     variant, batching forced on for the USA by a setup, 25 days;
+     `/mnt/d/vic3te-data/batch-invest-2026-11-27/`):
+
+     | | Unchanged (`base2`, `base3`) | Batching |
+     |---|---|---|
+     | Pass, first full weekly tick (20 February) | 24.9–25.2 s | **5.25 s** |
+     | Pass, second (27 February) | 20.1–20.2 s | **8.05 s** |
+     | Those weekly ticks, all tasks | 29.7–29.9 s, 25.0–25.1 s | 10.4 s, 12.7 s |
+     | Wall, 14 February to 1 March | 87–88 s: 39.9–40.4 s a week | 56 s: **25.7 s a week** |
+     | The cheap first tick after the load | 1.84–1.97 s | 1.86 s |
+
+     598 picks in the two passes for about 2,000 levels: 19 took batches
+     that added 1,448 levels, 263 were the reserve's single levels, and
+     315 were single levels of buildings that already held the hundred a
+     building could then have queued. 13.3 s over 598 picks is 22 ms a
+     pick: the pass's cost follows its decisions. The hook ran inside the
+     pass, the engine stopped at 1,000 with script's levels in the queue,
+     and the effect queued every level asked from inside the hook. The
+     batch rule was then changed so that each further pick of a large
+     building adds another hundred until a tenth of it is queued, which by
+     the test's model leaves about 120 decisions a pass (near 2.7 s);
+     that is not yet timed in game. The USA's investors placed almost
+     nothing abroad (1 pick in 598), so for this country the cost below
+     is small.
    - **What it costs in play:** a batching country's investors place far
      fewer levels abroad (about a tenth with the reserve at 100, by the
      arithmetic of 115 picks against 1,000, not by measurement) and buy
@@ -488,9 +515,10 @@ to keep the rate. The fourth is built (2026-11-27); the others are not.
 
 1. **The turnover decision** (finding 4 and the proposals above) is the
    owner's. The 120-day runs give two caps; the unchanged 120-day run is
-   still owed (it stopped after 14 days). Proposal 4 is built and untimed;
-   its ownership and payment reads are play-test rows, and the foreign-state
-   read no longer matters to it (it queues only at home).
+   still owed (it stopped after 14 days). Proposal 4 is built and timed
+   once under its first batch rule; its ownership and payment reads are
+   play-test rows, and the foreign-state read no longer matters to it (it
+   queues only at home).
 2. **Which candidates the pass scores.** The Steel Mill's `possible` is asked
    about 760,000 times on a heavy weekly tick, and the USA owns 180 states,
    so most of what its investors score each placement looks to be foreign

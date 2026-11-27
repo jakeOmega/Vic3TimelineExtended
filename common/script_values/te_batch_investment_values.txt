@@ -32,14 +32,26 @@ te_bi_ceiling = {
 	subtract = te_bi_reserve
 }
 
-# A batch brings the building's queued levels up to a tenth of its built levels, and to a hundred at most.
-te_bi_share = 0.1
+# One pick of the engine's stands for at most a hundred levels, its own included ("pick 100 levels at a time instead
+# of 1", owner, 2026-11-26), and a building never has more than a tenth of its built levels queued.
 te_bi_batch_max = 100
+te_bi_share = 0.1
 
-# A building that makes a good no market carries (te_bi_local_goods_building): a fiftieth, at most ten. Too many levels
-# of these at once cannot be sold anywhere else (owner, 2026-11-26).
-te_bi_local_share = 0.02
+# A building that makes a good no market carries (te_bi_local_goods_building): ten levels a pick, and a fiftieth of
+# its size queued at most. Too many levels of these at once cannot be sold anywhere else (owner, 2026-11-26).
 te_bi_local_batch_max = 10
+te_bi_local_share = 0.02
+
+# What a batch adds beside the engine's own level, at most.
+te_bi_batch_extra_max = {
+	value = te_bi_batch_max
+	subtract = 1
+}
+
+te_bi_local_batch_extra_max = {
+	value = te_bi_local_batch_max
+	subtract = 1
+}
 
 # A country is watched (its investors' picks counted) from this many private levels queued at a monthly pulse, and
 # until it has fewer than te_bi_unwatch_queue while not batching. A country that places 200 levels a week holds at
@@ -54,24 +66,34 @@ te_bi_off_levels = 400
 
 # ---- Sizing ---------------------------------------------------------------------------------------------------------
 
-# Building scope: the levels a batch adds. The target is a share of the building's built levels; what is queued for it
-# already, in any queue, comes off, the level the engine has just queued included. So a building never has more than
-# a tenth of its size queued by batches, however long its levels take, a second pick of it in the same pass adds
-# nothing, and a new building or one under twenty levels (a hundred, for a local good's) gets no batch.
+# Building scope: the levels a batch adds. The room is a share of the building's built levels less what is queued for
+# it already, in any queue, the level the engine has just queued included; a batch takes that room, up to a hundred
+# levels a pick with the engine's own. So a building never has more than a tenth of its size queued, however long its
+# levels take; each further pick of it in the same pass adds another hundred until the tenth is reached; and a new
+# building or one under twenty levels (a hundred, for a local good's) gets no batch.
+#
+# Until the first run in game (2026-11-27) the hundred also capped what a building could have queued, so every
+# further pick of a building that held its hundred was a single level: 315 of the 597 picks of the USA's first two
+# batching passes were such picks, of buildings of several thousand levels, at 22 ms each.
 te_bi_batch_extra = {
 	value = level
 	if = {
 		limit = { te_bi_local_goods_building = yes }
 		multiply = te_bi_local_share
-		max = te_bi_local_batch_max
 	}
 	else = {
 		multiply = te_bi_share
-		max = te_bi_batch_max
 	}
 	floor = yes
 	add = level
 	subtract = level_after_queued_constructions
+	if = {
+		limit = { te_bi_local_goods_building = yes }
+		max = te_bi_local_batch_extra_max
+	}
+	else = {
+		max = te_bi_batch_extra_max
+	}
 	min = 0
 }
 
