@@ -226,7 +226,9 @@ class ChainTest(unittest.TestCase):
         strip = parsed("common/scripted_effects/extra_effects.txt")["banking_strip_tool"]
         (key, _, body), = strip
         self.assertEqual(key, "if")
-        self.assertEqual([k for k, _, _ in body], ["limit", "te_history_record_banking_marker", "je:je_banking_cycle"])
+        # The tool's week-long switch-on mark goes with it (#1811), which costs nothing either.
+        self.assertEqual([k for k, _, _ in body], ["limit", "te_history_record_banking_marker", "je:je_banking_cycle",
+                                                   "banking_tool_clear_pending"])
 
 
 class PulseTest(unittest.TestCase):
@@ -601,6 +603,8 @@ class Pulse(Script):
             self.lift(scope, scope.own, val)
         elif key == "te_history_record_banking_marker":
             scope.markers.append(field(val, "MARK"))
+        elif key == "hidden_effect":
+            self.execute(val, scope, root)
         elif key == "add_treasury":
             scope.paid.append(val)
         elif key == "post_notification":

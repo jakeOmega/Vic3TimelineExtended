@@ -742,3 +742,22 @@ has a Command Economy its origin lacks.
 2. **An origin's own Command Economy is left alone.** An uprising of a country already in Command Economy keeps
    whatever banking law it copied (Kaarta's Central Bank Independence, enacted in 1975, is one): no `TE_BANKING: the
    uprising` line for it.
+
+## One copy of a tool, however fast the clicks (2026-11-27, #1811)
+
+A 1957 save held three copies of Moral Suasion on its banking entry, holding 3 intervention points where one holds 1:
+a second press passed the tool's gate before the first one showed. Every switch-on of the 38 tools now marks the tool
+for a week (`banking_pending_<modifier>`), the tool's `banking_possible_*` refuses while the mark is there, and the
+tool's own Disable or a law's lift clears it. `test_banking_tool_roster.OneCopyTests` and
+`test_banking_external_tools.OneCopyScenarios` hold the script; these are what only the game shows.
+
+1. **Two quick clicks give one copy.** Paused, click Moral Suasion's Enable twice as fast as you can (and, if the row
+   still shows Enable after the first click, a third time). Unpause for a day. The entry's modifiers list Moral
+   Suasion once, and the free points fall by 1. If the Enable row is still drawn after a click, its tooltip shows the
+   red line "Not switched on in the last 7 days, unless switched off since".
+2. **Off and on again is never held up.** Enable Moral Suasion, Disable it, Enable it again, all paused: each click
+   works, and one copy is on.
+3. **Copies already in a save.** On a save that holds a stacked tool (the 1957 Singapore save: Moral Suasion ×3),
+   Disable it once and read the entry's modifiers: if a copy is left, one `remove_modifier` takes one copy, and such
+   a save needs a monthly collapse of duplicates (the repair #1811 describes); if none is left, Disable already
+   repairs it.

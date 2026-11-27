@@ -48,6 +48,23 @@ def definitions(path):
     return {key: value for key, _, value in parse_body((ROOT / path).read_text(encoding='utf-8-sig'))}
 
 
+def substitute(node, params):
+    """Fill a scripted effect's or trigger's $ARG$ slots, as the engine does per call."""
+    if isinstance(node, list):
+        return [(substitute(k, params), op, substitute(v, params)) for k, op, v in node]
+    if isinstance(node, str):
+        for name, value in params.items():
+            node = node.replace(f'${name}$', value)
+    return node
+
+
+def call_body(definition, args):
+    """The body a call runs: the definition, its $ARG$ slots filled when the call passes arguments."""
+    if isinstance(args, list):
+        return substitute(definition, {name: value for name, _, value in args})
+    return definition
+
+
 OVERDRAFT_WAIT = 'banking_overdraft_wait_a_pulse'
 
 
@@ -62,6 +79,11 @@ class Script:
         # The one effect of the banking cycle's file these call: the mark a lift leaves for the
         # overdraft chain (test_banking_overdraft_shed.py holds what the chain does with it).
         self.effects[OVERDRAFT_WAIT] = definitions('common/scripted_effects/banking_cycle_effects.txt')[OVERDRAFT_WAIT]
+        # The guarded removal the tools' switch-on helper calls (banking_tool_before_switch_on, #1811),
+        # and a law's lift of one tool.
+        extra = definitions('common/scripted_effects/extra_effects.txt')
+        for name in ('remove_modifier_if_exists_effect', 'banking_strip_tool'):
+            self.effects[name] = extra[name]
         self.vars = {}
         self.tools = set()
         self.inputs = dict(gdp=1e6, gold_reserves=cash, export_reliance=.2,
@@ -124,7 +146,7 @@ class Script:
                 continue
             if key in ('OR', 'AND', 'NOT'):
                 answer = self.check(val, key)
-            elif key in ('custom_tooltip', 'hidden_trigger', 'market'):
+            elif key in ('custom_tooltip', 'hidden_trigger', 'market', 'je:je_banking_cycle'):
                 answer = self.check(val)
             elif key == 'trigger_if':
                 # The rest is tested only where the limit holds.
@@ -132,6 +154,9 @@ class Script:
                           or self.check([x for x in val if x[0] != 'limit']))
             elif key == 'has_variable':
                 answer = val in self.vars
+            elif key == 'has_modifier':
+                # Read in the journal entry's scope: its tools.
+                answer = val.removeprefix('banking_') in self.tools
             elif key == 'exists':
                 answer = val == 'market'
             elif key == 'has_journal_entry':
@@ -161,6 +186,8 @@ class Script:
                 answer = self.inputs[name] == (val == 'yes')
             elif key == 'modifier:country_banking_intervention_max_add':
                 answer = self.compare(self.inputs['points'], op, self.number(val))
+            elif key in self.triggers and isinstance(val, list):
+                answer = self.check(call_body(self.triggers[key], val))
             elif key in self.triggers:
                 answer = self.check(self.triggers[key]) == (val == 'yes')
             elif key in self.inputs and isinstance(self.inputs[key], bool):
@@ -199,6 +226,8 @@ class Script:
                     matched = False
             elif key == 'set_variable' and isinstance(val, str):
                 self.vars[val] = True       # the bare form: a flag
+            elif key == 'set_variable' and not any(k == 'value' for k, _, _ in val):
+                self.vars[self.field(val, 'name')] = True   # a timed flag: { name = x days = N }
             elif key == 'set_variable':
                 self.vars[self.field(val, 'name')] = self.number(self.field(val, 'value'))
             elif key == 'change_variable':
@@ -216,7 +245,7 @@ class Script:
                     self.cash_delta += delta
                 else:
                     self.inputs['gold_reserves'] += delta
-            elif key == 'je:je_banking_cycle':
+            elif key in ('je:je_banking_cycle', 'hidden_effect'):
                 self.execute(val)
             elif key == 'remove_modifier':
                 tool = val.removeprefix('banking_')
@@ -246,7 +275,7 @@ class Script:
                 else:
                     self.shown.append(val)
             elif key in self.effects:
-                self.execute(self.effects[key])
+                self.execute(call_body(self.effects[key], val))
             else:
                 raise AssertionError(f'Unsupported effect {key}')
 
@@ -586,6 +615,80 @@ class ExternalPolicyScenarios(unittest.TestCase):
             self.assertIn("banking_dash_enable_cb_"+tool, external)
         self.assertNotIn('banking_dash_enable_cb_export_credit_facility',
                          gui.split('### Directed Credit', 1)[1].split('### External & Currency', 1)[0])
+
+
+class Copies(dict):
+    """The entry's tools as copies of each modifier (a same-name add_modifier stacks), behind the set the Script uses."""
+
+    def add(self, tool):
+        self[tool] = self.get(tool, 0) + 1
+
+    def discard(self, tool):
+        self.pop(tool, None)
+
+    def difference_update(self, tools):
+        for tool in tools:
+            self.discard(tool)
+
+    def update(self, tools):
+        for tool in tools:
+            self.add(tool)
+
+
+class OneCopyScenarios(unittest.TestCase):
+    """#1811: three copies of Moral Suasion in a 1957 save. The Script's points are an input the tools' adds never
+    change, which is the lag itself: a second press reads the budget as it stood before the first copy's cost."""
+
+    PRESSED = ('cb_moral_suasion',) + tuple('cb_' + tool for tool in TOOLS)
+
+    def script(self):
+        s = Script(cash=1e6)
+        s.tools = Copies()
+        return s
+
+    def modifier(self, tool):
+        return 'banking_' + tool[len('cb_'):]
+
+    def test_a_second_press_before_the_first_lands_is_refused(self):
+        for tool in self.PRESSED:
+            with self.subTest(tool=tool):
+                s = self.script()
+                gate = s.triggers['banking_possible_' + tool]
+                self.assertTrue(s.check(gate))
+                s.effect('banking_effect_' + tool)
+                self.assertFalse(s.check(gate))     # the points still read 10
+                self.assertEqual(s.tools, {tool[len('cb_'):]: 1})
+
+    def test_switching_off_opens_the_gate_again_at_once(self):
+        for tool in self.PRESSED:
+            with self.subTest(tool=tool):
+                s = self.script()
+                s.effect('banking_effect_' + tool)
+                s.effect('banking_effect_cb_disable_' + tool[len('cb_'):])
+                self.assertTrue(s.check(s.triggers['banking_possible_' + tool]))
+                s.effect('banking_effect_' + tool)
+                self.assertEqual(s.tools, {tool[len('cb_'):]: 1})
+
+    def test_a_law_that_lifts_the_tool_opens_the_gate_again(self):
+        for tool in self.PRESSED:
+            with self.subTest(tool=tool):
+                s = self.script()
+                s.effect('banking_effect_' + tool)
+                s.execute([('banking_strip_tool', '=', [('MODIFIER', '=', self.modifier(tool)),
+                                                         ('MARK', '=', 'off_' + tool)])])
+                self.assertEqual(s.tools, {})
+                self.assertTrue(s.check(s.triggers['banking_possible_' + tool]))
+
+    def test_a_press_past_the_gate_still_leaves_one_copy(self):
+        # Where has_modifier already sees the first copy (the dashboard's is_valid never asked it), the switch-on
+        # takes that copy off before it adds.
+        for tool in self.PRESSED:
+            with self.subTest(tool=tool):
+                s = self.script()
+                s.effect('banking_effect_' + tool)
+                s.vars.pop('banking_pending_' + self.modifier(tool))
+                s.effect('banking_effect_' + tool)
+                self.assertEqual(s.tools, {tool[len('cb_'):]: 1})
 
 
 def english_loc():
