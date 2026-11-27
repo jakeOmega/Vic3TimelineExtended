@@ -425,5 +425,72 @@ class ReplacementNoticeTest(unittest.TestCase):
         self.assertIn("post_notification = te_law_replaced_notice", hook)
 
 
+class UnbuiltCountrySelfCheckTest(unittest.TestCase):
+    """#1852: does a replacement ever land in a revolution's country the engine is still building, judged
+    against a placeholder law (Chiefdom) of a group it hasn't reached? A self-check only; behaviour is unchanged.
+    Each of its three lines logs once a game, names the country from its own scope, and is listed in the
+    play-test doc."""
+
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    LINES = (
+        ("BROKEN law_sweep_unbuilt_country", "te_selfcheck_law_sweep_unbuilt_broken"),
+        ("INFO law_sweep_new_country", "te_selfcheck_law_sweep_new_country"),
+        ("OK law_sweep_unbuilt_country", "te_selfcheck_law_sweep_unbuilt_ok"),
+    )
+
+    def _read(self, rel):
+        with open(os.path.join(self.ROOT_DIR, rel), encoding="utf-8-sig") as fh:
+            text = fh.read()
+        return "\n".join(ln.split("#")[0] if '"' not in ln else ln for ln in text.splitlines())
+
+    def _block(self, text, name):
+        start = text.index("\n" + name + " = {")
+        return text[start:text.index("\n}\n", start) + 3]
+
+    def setUp(self):
+        self.check = " ".join(self._block(self._read("common/scripted_effects/extra_effects.txt"),
+                                          "te_law_sweep_unbuilt_selfcheck").split())
+        self.hook = " ".join(self._block(self._read("common/on_actions/extra_on_actions.txt"),
+                                         "te_law_sweep_notice_from_law_scope").split())
+
+    def test_run_from_the_notice_after_the_opening_months(self):
+        gated = self.hook[self.hook.index("limit = { game_date > 1836.3.1 }"):]
+        gated = gated[:gated.index("owner = { remove_variable = te_law_sweep_replacing }")]
+        self.assertIn("owner = { te_law_sweep_unbuilt_selfcheck = yes }", gated)
+        self.assertLess(gated.index("save_scope_as = te_law_sweep_new_law"),
+                        gated.index("te_law_sweep_unbuilt_selfcheck"))
+        self.assertEqual(self.hook.count("te_law_sweep_unbuilt_selfcheck"), 1)
+
+    def test_the_readings(self):
+        self.assertTrue(self.check.startswith("te_law_sweep_unbuilt_selfcheck = { if = { limit = { NOT = { exists = ruler } }"))
+        broken = self.check[:self.check.index("BROKEN law_sweep_unbuilt_country")]
+        self.assertIn("has_law = law_type:law_chiefdom NOT = { is_country_type = decentralized }", broken)
+        info = self.check[self.check.index("BROKEN law_sweep_unbuilt_country"):self.check.index("INFO law_sweep_new_country")]
+        self.assertIn("NOT = { has_law = law_type:law_chiefdom }", info)
+        ok = self.check[self.check.index("INFO law_sweep_new_country"):]
+        self.assertIn("else_if = { limit = { NOT = { has_global_variable = te_selfcheck_law_sweep_unbuilt_ok } }", ok)
+
+    def test_each_line_once_a_game_naming_the_country_from_its_scope(self):
+        for line, marker in self.LINES:
+            with self.subTest(line=line):
+                at = self.check.index("TE_SELF_CHECK " + line)
+                before = self.check[:at]
+                self.assertIn(f"NOT = {{ has_global_variable = {marker} }}", before)
+                self.assertTrue(before.rstrip().endswith(f"set_global_variable = {marker} debug_log = \""))
+                text = self.check[at:self.check.index('"', at)]
+                for field in ("country=[THIS.GetCountry.GetNameNoFormatting]", "tag=[THIS.GetCountry.GetTagName]",
+                              "law=[SCOPE.sLaw('te_law_sweep_new_law').GetNameNoFormatting]",
+                              "date=[TimeKeeper.GetCurrentDate.GetString]"):
+                    self.assertIn(field, text)
+        self.assertEqual(self.check.count("debug_log"), len(self.LINES))
+        self.assertNotIn("activate_law", self.check)
+
+    def test_the_play_test_list_names_them(self):
+        with open(os.path.join(self.ROOT_DIR, "docs/testing/law-consistency-playtest.md"), encoding="utf-8") as fh:
+            doc = fh.read()
+        self.assertIn("`TE_SELF_CHECK … law_sweep_unbuilt_country`", doc)
+        self.assertIn("`TE_SELF_CHECK INFO law_sweep_new_country`", doc)
+
+
 if __name__ == "__main__":
     unittest.main()
