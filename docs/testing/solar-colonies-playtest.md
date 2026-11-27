@@ -1782,3 +1782,17 @@ Simple or Full Colonies, with Colony Modules.
    module until both read a level. Colonies Held, the overview's Colonies cell and the Colonies window's count do not
    move, and read the number of colonies in the list: `read sr_disp_colonies_held` equals the rows shown, and never
    passes `sr_sites_world_count` (40).
+
+## The AI queues a Mining Complex when its base room is full (#1952, 2026-11-27)
+
+Fix for #1952: the AI's module plan (`sr_mod_ai_plan_<key>`) queued a Mining Complex only while the country's built
+Extraplanetary Base levels exceeded its room, which building never brings about: an AI government's and every
+investor's base stop at the room, queued levels counted (`sr_ebase_has_room`). It now asks for one once the room is
+full, queued levels counted, as the Off-World Resort's line does (#1948). Simple or Full Colonies, with Colony Modules.
+
+1. **AI colony holders grow their room.** In an observer run past In-Situ Resource Utilization, take an AI that
+   holds a colony and whose bases fill its room (as that country, `read sr_ebase_queued_levels` at or above
+   `read sr_ebase_room_total`). At its next yearly review it queues a Mining Complex instead of a Research Station,
+   once the colony's crews can run it. Once the complex is staffed, the room has risen by 50 a level
+   (`sr_mod_mine_room`) and the AI builds bases into it. Count the AI's modules by type against an earlier run:
+   more Mining Complexes and fewer Research Stations where the room was full, and no change where it was not.
