@@ -30,6 +30,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent / 'scripts' / 'analysis'))
 import check_save_history_order as csho  # noqa: E402
 
+# Every synthetic save goes in one folder removed when the module's tests end: a NamedTemporaryFile with
+# delete=False and no unlink left a file in /tmp per save, 273 of them after an hour of parallel runs (#1803).
+_SAVES = tempfile.TemporaryDirectory(prefix='te_test_saves_')
+
+
+def tearDownModule():
+    _SAVES.cleanup()
+
 FIXED_POINT = 100000
 
 # Clausewitz binary tokens this fixture emits, named as the checker's docstring
@@ -101,7 +109,7 @@ def _save(stores, dg_stores=()):
     with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as archive:
         archive.writestr('gamestate', containers + lists)
 
-    handle = tempfile.NamedTemporaryFile(suffix='.v3', delete=False)
+    handle = tempfile.NamedTemporaryFile(suffix='.v3', delete=False, dir=_SAVES.name)
     handle.write(b'SAV01030deadbeef00005ba\n' + buf.getvalue())
     handle.close()
     return handle.name
