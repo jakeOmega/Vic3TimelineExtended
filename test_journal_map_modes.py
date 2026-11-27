@@ -573,6 +573,16 @@ class SystemMapsTest(unittest.TestCase):
         self.assertRegex(block(code(ON_ACTIONS), "te_jmap_monthly_viewer"), r"is_player\s*=\s*yes")
         self.assertIn("te_jmap_note_viewer_sgui", block(self.widgets, "te_jmap_window_button"))
 
+    def test_the_monthly_pulse_keeps_another_players_view(self):
+        # In multiplayer every player's pulse noted itself, so the shared view went to whoever's pulse ran last each
+        # month (#1809). A player's pulse notes it only when there is no viewer, the viewer is no longer a player (it
+        # left, or its player changed country), or it is the viewer already (the Nuclear Reach store's monthly rebuild).
+        monthly = " ".join(block(code(ON_ACTIONS), "te_jmap_monthly_viewer").split())
+        self.assertIn("if = { limit = { is_player = yes OR = { "
+                      "NOT = { global_var:te_jmap_viewer ?= { is_player = yes } } "
+                      "global_var:te_jmap_viewer ?= this } } te_jmap_note_viewer = yes }", monthly)
+        self.assertEqual(monthly.count("te_jmap_note_viewer"), 1)
+
     def test_the_nuclear_map_shows_the_world_s_view_of_others(self):
         # nuclear.md's privacy rule: another country's true count never shows. The owner is read only through
         # nd_believed_armed and the public estimate; nd_is_armed is the viewer's own

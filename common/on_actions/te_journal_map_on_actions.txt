@@ -1,6 +1,8 @@
-﻿# Journal entry map modes (docs/systems/mod_systems/journal_map_modes.md): each month, a player's country becomes the
-# maps' viewer (te_jmap_note_viewer, te_journal_map_effects.txt), so a map of "your" country drawn on a page opened from
-# the journal, with no map button clicked yet, has one. The picks and map buttons set it too, at once.
+﻿# Journal entry map modes (docs/systems/mod_systems/journal_map_modes.md): the picks and map buttons make the player who
+# clicked the maps' viewer, at once (te_jmap_note_viewer, te_journal_map_effects.txt). Each month a player's country
+# becomes the viewer only when there is none, the viewer is no longer a player, or it is the viewer already, so a map of
+# "your" country drawn on a page opened from the journal, with no map button clicked yet, has one, and in multiplayer
+# the shared view stays with the player who last clicked rather than whoever's pulse ran last (#1809).
 
 # Each month, the world's range for the picked map and for the maps the systems' own entries draw (Emissions,
 # Grandeur), so a map fitted to the world follows it as the game runs (te_journal_map_ranges_generated.txt). The
@@ -51,7 +53,16 @@ on_monthly_pulse_country = {
 te_jmap_monthly_viewer = {
 	effect = {
 		if = {
-			limit = { is_player = yes }
+			limit = {
+				is_player = yes
+				OR = {
+					# No viewer yet, or the last one is no longer a player: it left the game, or its player changed
+					# country (false when unset, so the NOT holds).
+					NOT = { global_var:te_jmap_viewer ?= { is_player = yes } }
+					# The viewer already: noted again, so the Nuclear Reach map's store is rebuilt each month.
+					global_var:te_jmap_viewer ?= this
+				}
+			}
 			te_jmap_note_viewer = yes
 		}
 	}
