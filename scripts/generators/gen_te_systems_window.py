@@ -559,7 +559,10 @@ def _content(tab: Tab, wide: bool = False) -> list[str]:
 # mounts (_content) leave it. A body with no header of its own (the Space
 # Race's: each running entry is a frame with its entry's header) gets the page's
 # title from the mount instead, above its composer (OWN_TITLE: the name and
-# the "?" lines).
+# the "?" lines). National Info draws the same wide composers, so its mounts
+# take the same title (2026-11-27, from #2041: its 554 header floated over the
+# three columns): the player's own country's through _wide_content, another
+# country's header at the same width.
 WIDE_WIDTH = 1620
 TITLE_HOOK = "te_tab_header_size"
 TITLE_HEIGHT = 44
@@ -589,8 +592,8 @@ def _page_title(text: str, button: list[str]) -> list[str]:
 
 
 def _wide_content(tab: Tab) -> list[str]:
-    """The window's full-screen mount: the body with its layout block holding
-    the wide composer (as _content(tab, wide=True), National Info's), and its
+    """The window's full-screen mount, and National Info's for the player's own
+    country: the body with its layout block holding the wide composer, and its
     title across the frame: the body's own header widened through TITLE_HOOK,
     or for a body with none, a title drawn above the composer."""
     if tab.layout is None:
@@ -1133,7 +1136,7 @@ def _ni_own(tab: Tab) -> list[str]:
            "\tdirection = vertical",
            "\tignoreinvisible = yes",
            ""]
-    out += [f"\t{ln}" for ln in _content(tab, wide=True)]
+    out += [f"\t{ln}" for ln in _wide_content(tab)]
     if tab.footer:
         out += ["", "\t### What the window draws below the tab, in its frames' fixed_bottom: each gates itself."]
         out += [f"\t{name} = {{}}" for name in tab.footer]
@@ -1160,6 +1163,9 @@ def _ni_other(tab: Tab) -> list[str]:
            "",
            "\tdefault_header = {",
            "\t\tusing = default_list_position",
+           '\t\tblockoverride "size" {',
+           f"\t\t\t{_title_size()}",
+           "\t\t}",
            '\t\tblockoverride "text" {',
            f"\t\t\ttext = {label}",
            "\t\t}"]

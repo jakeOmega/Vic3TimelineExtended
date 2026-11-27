@@ -55,6 +55,12 @@ banking_policy_stance_bar = {
 	max_value = 2
 }
 
+# The bar starts at -2, not 0 (2026-11-27, from #2041): a reading of 0, as in
+# every country's first years, draws a sliver of about 2% rather than an
+# empty dark box, so the bar reads as a bar at its floor (the history charts'
+# floor trick). The value set is the variable itself (set_bar_progress), so the
+# bar's breakdown is unchanged. banking_disp_bar_bubble, another country's copy
+# of the bar, follows (test_banking_layout.py BarsTest).
 banking_bubble_pressure_bar = {
 	name = "banking_bubble_pressure_bar_name"
 	desc = "banking_bubble_pressure_bar_name"
@@ -62,7 +68,7 @@ banking_bubble_pressure_bar = {
 	default_bad = yes
 
 	start_value = 0
-	min_value = 0
+	min_value = -2
 	max_value = 100
 }
 

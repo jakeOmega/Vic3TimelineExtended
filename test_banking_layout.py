@@ -2006,7 +2006,12 @@ class BarsTest(unittest.TestCase):
         body = _block_from(self.values, at.end() - 1)
         span = d["max"] - d["min"]
         lines = [ln.strip() for ln in body.strip("{} \n").split("\n") if ln.strip()]
-        self.assertEqual(lines[0], f"value = {(d['start'] - d['min']) / span:g}", f"{name}: the bar's start")
+        start = (d['start'] - d['min']) / span
+        if round(start, 5) == start:
+            self.assertEqual(lines[0], f"value = {start:g}", f"{name}: the bar's start")
+        else:   # a ratio past five decimals is written as a division (test_engine_literal_forms): Bubble's 2 / 102
+            self.assertEqual(lines[:2], [f"value = {d['start'] - d['min']:g}", f"divide = {span:g}"],
+                             f"{name}: the bar's start")
         self.assertEqual(lines[-2:], ["min = 0", "max = 1"], f"{name}: clamped to the bar")
         branch = _block_from(body, body.index("if = {"))
         var = re.search(r"limit = \{ has_variable = (\w+) \}", branch).group(1)

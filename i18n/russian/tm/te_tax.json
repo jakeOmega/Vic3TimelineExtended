@@ -752,8 +752,8 @@
   "ru": "Ставки"
  },
  "te_tax_lt_intro": {
-  "en": "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law. Collections follow a change within days.",
-  "ru": "Нажмите − или +, чтобы сдвинуть налог на один шаг, или щёлкните с Shift, чтобы установить его на ноль или на наивысшую ставку, которой он может достичь по вашему закону о налогообложении. Сборы меняются в течение нескольких дней."
+  "en": "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law.",
+  "ru": "Нажмите − или +, чтобы сдвинуть налог на один шаг, или щёлкните с Shift, чтобы установить его на ноль или на наивысшую ставку, которой он может достичь по вашему закону о налогообложении."
  },
  "te_tax_lt_law_other": {
   "en": "Another law",

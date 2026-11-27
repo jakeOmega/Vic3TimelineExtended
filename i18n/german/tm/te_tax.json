@@ -756,8 +756,8 @@
   "de": "Sätze"
  },
  "te_tax_lt_intro": {
-  "en": "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law. Collections follow a change within days.",
-  "de": "Mit Klick auf − oder + verschieben Sie eine Steuer um einen Schritt, mit Umschalt-Klick setzen Sie sie auf null oder auf den höchsten Satz, den sie unter Ihrem Steuergesetz erreichen darf. Die Einnahmen folgen einer Änderung binnen weniger Tage."
+  "en": "Click − or + to move a tax one step, shift-click to set it to zero or to the highest rate it may reach under your taxation law.",
+  "de": "Mit Klick auf − oder + verschieben Sie eine Steuer um einen Schritt, mit Umschalt-Klick setzen Sie sie auf null oder auf den höchsten Satz, den sie unter Ihrem Steuergesetz erreichen darf."
  },
  "te_tax_lt_law_other": {
   "en": "Another law",
