@@ -21,6 +21,7 @@ from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
 from paradox_file_parser import ParadoxFileParser
+from vanilla_parsed import vanilla_define
 
 ROOT = Path(__file__).resolve().parent
 LAW_FILES = sorted((ROOT / "common/laws").glob("*.txt"))
@@ -208,20 +209,11 @@ class SpendingDefineTests(unittest.TestCase):
                 self.assertEqual(computed, shown)
                 self.assertTrue("| " + " | ".join(shown) + " |" in doc, f"ai.md's table lacks the row for {per}")
 
-    def test_matches_the_game_files(self):
-        try:
-            from path_constants import base_game_path
-            path = Path(base_game_path) / "game/common/defines/00_ai.txt"
-        except Exception:
-            path = None
-        if path is None or not path.is_file():
-            self.skipTest("no Victoria 3 install")
-        text = path.read_text(encoding="utf-8-sig")
+    def test_matches_vanilla(self):
+        # vanilla_parsed/defines.json (#1879), so it runs in CI too.
         for key, value in VANILLA_SPENDING.items():
             with self.subTest(define=key):
-                m = re.search(r"(?m)^\s*" + key + r"\s*=\s*([\d.]+)", text)
-                self.assertIsNotNone(m)
-                self.assertEqual(float(m.group(1)), value)
+                self.assertEqual(float(vanilla_define("NAI", key)), value)
 
 
 if __name__ == "__main__":

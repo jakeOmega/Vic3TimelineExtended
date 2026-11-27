@@ -580,6 +580,52 @@ class InstitutionTests(unittest.TestCase):
         self.assertEqual(_DIR_MAP["Institutions"], "common/institutions")
 
 
+class AlertTypeTests(unittest.TestCase):
+    """A top-bar alert reads five keys off its name that no script names
+    (#2052): organize_loc.alert_type_keys is the one definition of them."""
+
+    ALL = {"alert_te_alert_name", "alert_te_alert_desc", "alert_te_alert_hint",
+           "alert_te_alert_action", "te_alert_setting_name"}
+
+    def _run(self, loc_keys):
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/alert_types/te_alerts.txt",
+               "te_alert = {\n\ttexture = \"gfx/x.dds\"\n\ttype = alert\n}\n")
+        ms = FakeMS(mod_data={"Alert Types": {"te_alert": {"type": ("=", "alert")}}}, loc_keys=loc_keys)
+        return audit(ms, mod_path=tmp).flags
+
+    def test_fully_localized_not_flagged(self):
+        self.assertEqual(self._run(self.ALL), [])
+
+    def test_missing_keys_flagged_but_desc_optional(self):
+        flags = self._run({"alert_te_alert_name", "alert_te_alert_desc"})
+        self.assertEqual([(f.category, f.missing_keys, f.file, f.line) for f in flags], [(
+            "Alert Types", ["alert_te_alert_hint", "alert_te_alert_action", "te_alert_setting_name"],
+            "common/alert_types/te_alerts.txt", 1)])
+        self.assertEqual(self._run(self.ALL - {"alert_te_alert_desc"}), [])
+
+    def test_the_keys_are_organize_locs(self):
+        from loc_coverage_audit import _alert_type_keys
+        from organize_loc import alert_type_keys
+        self.assertEqual({k for k, _req, _role in _alert_type_keys("te_alert", {})}, self.ALL)
+        self.assertEqual(set(alert_type_keys("te_alert").values()), self.ALL)
+
+    def test_rules_hold_for_every_vanilla_alert(self):
+        import vanilla_parsed
+        from loc_coverage_audit import _alert_type_keys
+        snap = vanilla_parsed.load()
+        alerts = snap.data["Alert Types"]
+        self.assertGreaterEqual(len(alerts), 70)
+        missing = {name: [k for k, req, _ in _alert_type_keys(name, body) if req and k not in snap.localization]
+                   for name, body in alerts.items()}
+        self.assertEqual({n: m for n, m in missing.items() if m}, {})
+
+    def test_registered_in_both_rosters(self):
+        from loc_coverage_audit import _REQUIREMENTS, _DIR_MAP, _alert_type_keys
+        self.assertIs(_REQUIREMENTS["Alert Types"], _alert_type_keys)
+        self.assertEqual(_DIR_MAP["Alert Types"], "common/alert_types")
+
+
 class DiplomaticActionTests(unittest.TestCase):
     """Diplomatic actions resolve a notification autokey family chosen by
     `requires_approval`, `pact` and `should_notify_third_parties`. The

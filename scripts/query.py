@@ -6,6 +6,8 @@
     .venv/bin/python scripts/query.py references law_anarchy
     .venv/bin/python scripts/query.py script-args [te_some_helper]
     .venv/bin/python scripts/query.py modifier-grants country_prestige_mult scope=mod
+    .venv/bin/python scripts/query.py scripted-triggers country_has_monarchy_law source=vanilla
+    .venv/bin/python scripts/query.py war-goal-types make_personal_union
 
 Prints the JSON the endpoint would (`/modifier-search?q=goods_output`,
 `/localize/law_monarchy`, ...), byte for byte: the request goes through the
@@ -53,6 +55,10 @@ LOOKUPS: dict[str, tuple[str, bool, str, bool]] = {
     "references": ("key", True, "path", True),
     "script-args": ("helper", False, "path", False),
     "modifier-grants": ("modifier", True, "path", False),
+    # Vanilla's definitions by name with source=vanilla (#1860).
+    "scripted-triggers": ("name", False, "path", True),
+    "scripted-effects": ("name", False, "path", True),
+    "war-goal-types": ("name", False, "path", True),
 }
 
 # Game paths the server module resolves at import. Where the machine has

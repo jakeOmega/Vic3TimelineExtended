@@ -16,10 +16,12 @@ from pathlib import Path
 from statistics import median
 from typing import Optional
 
+import country_history
+import game_defines
 import state_history
 import strategic_regions
 import vanilla_parsed
-from mod_state import iter_script_files
+from mod_state import VANILLA_LOOKUP_DIRS, iter_script_files
 from paradox_file_parser import ParadoxFileParser
 
 from server import server_state
@@ -314,6 +316,72 @@ def _state_history_tables():
     )
     srv._state_history_cache = (srv.ms, states, regions, source)
     return states, regions, source
+
+
+# ---------------------------------------------------------------------------
+# Vanilla tables the merged entity types don't hold: the lookup types
+# (mod_state.VANILLA_LOOKUP_DIRS, #1860), the country history (#1628) and the
+# defines (#1879). Each follows the load's vanilla source, as /state-history
+# does: the snapshot, or the game files when the load parsed those. Cached in
+# srv._vanilla_tables_cache until the next full load (vanilla can't change in
+# between); the mod's side of each is read from disk on every request, so it
+# follows edits without a /reload.
+# ---------------------------------------------------------------------------
+
+def _vanilla_table(key: str, from_snapshot, from_files):
+    """(table, source) for one vanilla table, `source` being `vanilla_parsed`
+    or `game_files`. 503 when the snapshot predates the table and there are
+    no game files to read it from."""
+    srv = server_state()
+    cache = srv._vanilla_tables_cache
+    if key not in cache:
+        if srv._vanilla_source.get("kind") == "vanilla_parsed" or not srv._vanilla_tree_present():
+            table, source = from_snapshot(srv.VANILLA_PARSED_DIR), "vanilla_parsed"
+        else:
+            table, source = from_files(os.path.join(srv.base_game_path, "game")), "game_files"
+        if table is None:
+            raise srv.DataNotLoaded(
+                f"vanilla {key} (vanilla_parsed/ predates it: `python3 vanilla_parsed.py build` "
+                "on a machine with the game)")
+        cache[key] = (table, source)
+    return cache[key]
+
+
+def _vanilla_lookup(entity_type: str):
+    """({name: {"file", "body"}}, source) for a VANILLA_LOOKUP_DIRS type."""
+    rel = VANILLA_LOOKUP_DIRS[entity_type]
+    return _vanilla_table(
+        entity_type,
+        lambda snap: vanilla_parsed.load_lookup(entity_type, snap),
+        lambda game: vanilla_parsed.lookup_table(
+            os.path.join(game, "common", *rel.split("/")), entity_type)[0],
+    )
+
+
+def _vanilla_country_history():
+    """({file: {tag: record}}, source): vanilla's country history."""
+    return _vanilla_table(
+        "Country History",
+        vanilla_parsed.load_country_history,
+        lambda game: country_history.parse_dir(os.path.join(game, *country_history.REL_DIR.split("/"))),
+    )
+
+
+def _vanilla_defines():
+    """({namespace: {leaf: value}}, source): vanilla's merged defines."""
+    return _vanilla_table(
+        "Defines",
+        vanilla_parsed.load_defines,
+        lambda game: game_defines.parse_dir(os.path.join(game, *game_defines.REL_DIR.split("/"))),
+    )
+
+
+def _lookup_source(params) -> str:
+    srv = server_state()
+    source = ((params or {}).get("source") or ["mod"])[0].lower()
+    if source not in ("mod", "vanilla"):
+        raise srv.BadRequest(f"source={source!r}: use source=mod (the default) or source=vanilla")
+    return source
 
 
 # Entity-type name resolution. `get_data()` is exact-key, but /raw and /keys take
@@ -1593,23 +1661,32 @@ class EntityRoutes:
         }
 
     # ---- structured: scripted effects / triggers --------------------------
-    def _scripted_effects(self, parts):
-        """GET /scripted-effects[/<id>]"""
-        return self._scripted_helper("Scripted Effects", parts)
+    def _scripted_effects(self, parts, params=None):
+        """GET /scripted-effects[/<id>][?source=vanilla]"""
+        return self._scripted_helper("Scripted Effects", parts, params)
 
-    def _scripted_triggers(self, parts):
-        """GET /scripted-triggers[/<id>]"""
-        return self._scripted_helper("Scripted Triggers", parts)
+    def _scripted_triggers(self, parts, params=None):
+        """GET /scripted-triggers[/<id>][?source=vanilla]"""
+        return self._scripted_helper("Scripted Triggers", parts, params)
 
-    def _scripted_helper(self, etype, parts):
+    def _scripted_helper(self, etype, parts, params=None):
         srv = server_state()
+        if _lookup_source(params) == "vanilla":
+            return self._vanilla_scripted_helper(etype, parts)
         data = srv.ms.get_data(etype)
         if not data:
             raise srv.DataNotLoaded(etype)
         if parts:
             hid = parts[0]
             if hid not in data:
-                raise srv.NotFound(hid)
+                extra = {}
+                try:
+                    in_vanilla = etype in VANILLA_LOOKUP_DIRS and hid in _vanilla_lookup(etype)[0]
+                except srv.DataNotLoaded:
+                    in_vanilla = False
+                if in_vanilla:
+                    extra["hint"] = "Vanilla defines it: add ?source=vanilla (this table is the mod's alone)."
+                raise srv.NotFound(hid, **extra)
             return {
                 "type": etype,
                 "id": hid,
@@ -1621,6 +1698,160 @@ class EntityRoutes:
             {"type": etype, "id": hid, "parameters": _extract_parameters(raw)}
             for hid, raw in data.items()
         ]
+
+    def _vanilla_scripted_helper(self, etype, parts):
+        """`?source=vanilla` (#1860): vanilla's definition by name, from the
+        snapshot's lookup table (the merged table stays mod-only). No
+        `callers`: the caller index covers the mod's helpers only."""
+        srv = server_state()
+        table, source = _vanilla_lookup(etype)
+        base = f"game/common/{VANILLA_LOOKUP_DIRS[etype]}"
+        if parts:
+            hid = parts[0]
+            if hid not in table:
+                raise srv.NotFound(hid, did_you_mean=difflib.get_close_matches(hid, list(table), n=5))
+            rec = table[hid]
+            return {
+                "type": etype, "id": hid, "source": "vanilla",
+                "file": f"{base}/{rec['file']}",
+                "parameters": _extract_parameters(rec["body"]),
+                "in_mod": srv.ms is not None and hid in (srv.ms.get_data(etype) or {}),
+                "raw": srv.serialize(rec["body"]),
+                "vanilla_source": source,
+            }
+        return [
+            {"type": etype, "id": hid, "source": "vanilla", "file": f"{base}/{rec['file']}",
+             "parameters": _extract_parameters(rec["body"])}
+            for hid, rec in table.items()
+        ]
+
+    def _war_goal_types(self, parts, params):
+        """GET /war-goal-types[/<id>][?source=mod|vanilla] (#1860): war goal
+        types by name. Vanilla's come from the snapshot's lookup table (no
+        merged entity type holds them), the mod's from its
+        `common/war_goal_types` on each request. With an id and no source, the
+        mod's definition when it has one (a same-name mod key replaces
+        vanilla's), else vanilla's."""
+        srv = server_state()
+        vanilla, vsource = _vanilla_lookup("War Goal Types")
+        mod_dir = os.path.join(srv.mod_path, "common", "war_goal_types")
+        mod, _failures = vanilla_parsed.lookup_table(mod_dir, "War Goal Types")
+        wanted = ((params or {}).get("source") or [None])[0]
+        if wanted not in (None, "mod", "vanilla"):
+            raise srv.BadRequest(f"source={wanted!r}: use source=mod or source=vanilla")
+        if not parts:
+            rows = []
+            for wid in sorted(set(vanilla) | set(mod)):
+                origin = "both" if wid in vanilla and wid in mod else "mod" if wid in mod else "vanilla"
+                if wanted and origin not in (wanted, "both"):
+                    continue
+                body = srv.get_entity_data((mod.get(wid) or vanilla[wid])["body"])
+                rows.append({"id": wid, "source": origin, "kind": srv.get_field(body, "kind"),
+                             "name": srv.ms.localize(f"war_goal_{wid}") if srv.ms is not None else None})
+            return {"count": len(rows), "war_goal_types": rows, "vanilla_source": vsource}
+        wid = parts[0]
+        side = wanted or ("mod" if wid in mod else "vanilla")
+        table = mod if side == "mod" else vanilla
+        if wid not in table:
+            raise srv.NotFound(wid, did_you_mean=difflib.get_close_matches(wid, sorted(set(vanilla) | set(mod)), n=5))
+        rec = table[wid]
+        body = srv.get_entity_data(rec["body"])
+        return {
+            "type": "War Goal Types", "id": wid, "source": side,
+            "file": (f"common/war_goal_types/{rec['file']}" if side == "mod"
+                     else f"game/common/war_goal_types/{rec['file']}"),
+            "kind": srv.get_field(body, "kind"),
+            "name": srv.ms.localize(f"war_goal_{wid}") if srv.ms is not None else None,
+            "in_vanilla": wid in vanilla, "in_mod": wid in mod,
+            "raw": srv.serialize(rec["body"]),
+            "vanilla_source": vsource,
+        }
+
+    def _country_history(self, parts, params):
+        """GET /country-history[/<TAG>] (#1628): what a country starts with,
+        from vanilla `common/history/countries` with any country history file
+        the mod ships layered on (country_history.merge)."""
+        srv = server_state()
+        vanilla, source = _vanilla_country_history()
+        mod = country_history.parse_dir(os.path.join(srv.mod_path, *country_history.REL_DIR.split("/")))
+        countries = country_history.merge(vanilla, mod)
+        history_dir = os.path.join(srv.mod_path, "common", "history")
+        global_files = sorted(
+            f"common/history/{name}" for name in (os.listdir(history_dir) if os.path.isdir(history_dir) else [])
+            if name.endswith(".txt") and not name.startswith("_")
+        )
+        note = ("The mod's own common/history/*.txt GLOBAL blocks run after every country's history and "
+                "are not folded in: extra_history.txt activates the mod's default laws on every country, "
+                "so a law here can be replaced in game.")
+        if parts:
+            tag = parts[0]
+            if tag not in countries:
+                raise srv.NotFound(tag, did_you_mean=difflib.get_close_matches(tag, list(countries), n=5))
+            return {
+                "country": tag,
+                "country_name": srv.ms.localize(tag) if srv.ms is not None else None,
+                "history": [country_history.describe(r) for r in countries[tag]],
+                "mod_global_history": global_files,
+                "note": note,
+                "vanilla_source": source,
+            }
+        return {
+            **country_history.summary(countries),
+            "tags": sorted(countries),
+            "mod_global_history": global_files,
+            "note": note,
+            "vanilla_source": source,
+        }
+
+    def _defines(self, parts):
+        """GET /defines[/<namespace>[/<name>]] (#1879): vanilla's value of a
+        define beside the mod's, from vanilla_parsed/defines.json (or the game
+        files) and the mod's `common/defines`, read on each request. Values
+        are the tokens as written."""
+        srv = server_state()
+        vanilla, source = _vanilla_defines()
+        mod_files = game_defines.parse_files(os.path.join(srv.mod_path, *game_defines.REL_DIR.split("/")))
+        mod = game_defines.merge(*mod_files.values())
+        if not parts:
+            names = sorted(k for k in set(vanilla) | set(mod)
+                           if isinstance(vanilla.get(k, {}), dict) and isinstance(mod.get(k, {}), dict))
+            return {
+                "namespaces": {ns: {"vanilla": len(vanilla.get(ns, {})), "mod": len(mod.get(ns, {}))}
+                               for ns in names},
+                "mod_files": sorted(f"common/defines/{f}" for f in mod_files),
+                "vanilla_source": source,
+            }
+        ns = parts[0]
+        vns, mns = vanilla.get(ns), mod.get(ns)
+        if not isinstance(vns, dict) and not isinstance(mns, dict):
+            raise srv.NotFound(ns, did_you_mean=difflib.get_close_matches(
+                ns, [k for k, v in {**vanilla, **mod}.items() if isinstance(v, dict)], n=5))
+        vns, mns = vns if isinstance(vns, dict) else {}, mns if isinstance(mns, dict) else {}
+
+        def where(name):
+            found = [f for f, table in mod_files.items() if name in (table.get(ns) or {})]
+            return f"common/defines/{found[-1]}" if found else None
+
+        if len(parts) == 1:
+            return {
+                "namespace": ns,
+                "vanilla": vns,
+                "mod": {name: {"value": value, "file": where(name), "vanilla": vns.get(name)}
+                        for name, value in mns.items()},
+                "vanilla_source": source,
+            }
+        name = parts[1]
+        if name not in vns and name not in mns:
+            raise srv.NotFound(f"{ns}.{name}", did_you_mean=difflib.get_close_matches(
+                name, sorted(set(vns) | set(mns)), n=5))
+        return {
+            "namespace": ns, "name": name,
+            "vanilla": vns.get(name),
+            "mod": mns.get(name),
+            "mod_file": where(name) if name in mns else None,
+            "effective": mns.get(name, vns.get(name)),
+            "vanilla_source": source,
+        }
 
     # ---- structured: decrees ----------------------------------------------
     def _decrees(self, parts):
