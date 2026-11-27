@@ -4484,6 +4484,18 @@ types te_demographics_widgets
 					text = "te_demog_ov_um_value"
 				}
 			}
+			### before the first minds (Mind Backups and a Nexus, none counted yet): the same row reads None yet, and its
+			### hover explains the wait on the census (te_demog_um_pending_sgui; never shown beside the row above)
+			te_demog_figure_row = {
+				visible = "[GetScriptedGui('te_demog_um_pending_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End )]"
+				tooltip = "te_demog_ov_um_pending_tt"
+				blockoverride "row_label" {
+					text = "te_demog_um_row"
+				}
+				blockoverride "row_value" {
+					text = "te_demog_ov_um_pending_value"
+				}
+			}
 		}
 	}
 

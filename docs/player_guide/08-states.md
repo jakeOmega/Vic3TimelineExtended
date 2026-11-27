@@ -1115,10 +1115,15 @@ death from illness or old age upload instead and go on as minds, as far as your
 Nexuses have room: a million minds a level, shared across the country. Their
 bodies die and leave your states' people, but Living to 100 counts them as
 living, deaths per 1,000 leave them out, and the Longevity section's Uploaded
-Minds row shows how many you host. Each year a thousandth of the minds choose to
-end. A Nexus makes only what its minds produce: an empty one makes nothing, and
-a full level about five times what a Nexus makes outside Full, most of it
-software, with its research bonus following the same share. The fill is fastest
+Minds row shows how many you host. Minds are not pops, so the population the
+game shows everywhere else leaves them out. Each year a thousandth of the minds
+choose to end. A Nexus makes only what its minds produce: an empty one makes
+nothing, and a full level about five times what a Nexus makes outside Full, most
+of it software, with its research bonus following the same share. That share
+moves only with the yearly census, so a new Nexus makes nothing for a year or
+two: your country's census counts its levels, each state's census over the next
+year uploads into them, and the country's next census counts the minds, which
+the Nexus puts to work within a month. The fill is fastest
 in the decades after Biological Immortality, while bodies that aged before it
 still die of old age; once they have wound back, few in care die of illness and
 a Nexus fills slowly. If you lose Nexus levels, the minds that no longer fit are
