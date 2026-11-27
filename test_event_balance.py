@@ -423,6 +423,74 @@ class OptionNameKeysTests(unittest.TestCase):
         self.assertEqual(self.keys([_eq({"trigger": _eq({})})]), [])
 
 
+class EventOptionsEndpointsTests(unittest.TestCase):
+    """#1754: /events/<id> listed no option for a multi-option event (the parser keeps several options as a list
+    of `(op, dict)` pairs, which the endpoint skipped) and the raw parse for a single option with a triggered name;
+    /unlocalized never checked an option's name. Both now read the options as /event-balance does."""
+
+    SOURCE = (
+        "namespace = e\n"
+        "e.1 = {\n\ttype = country_event\n\toption = {\n\t\tname = e.1.a\n\t}\n"
+        "\toption = {\n\t\tname = e.1.b\n\t}\n}\n"
+        "e.2 = {\n\ttype = country_event\n\toption = {\n"
+        "\t\tname = {\n\t\t\ttrigger = { always = yes }\n\t\t\ttext = e.2.a_target\n\t\t}\n"
+        "\t\tname = {\n\t\t\ttrigger = { always = no }\n\t\t\ttext = e.2.a\n\t\t}\n\t}\n}\n"
+        "e.3 = {\n\ttype = country_event\n\toption = {\n\t\tname = e.3.a\n\t}\n}\n"
+        "e.4 = {\n\ttype = country_event\n\thidden = yes\n}\n"
+    )
+    LOC = {"e.1.t", "e.1.d", "e.1.a", "e.2.t", "e.2.d", "e.2.a_target", "e.3.t", "e.3.d", "e.3.a", "e.4.t", "e.4.d"}
+
+    class FakeMS:
+        def __init__(self, events, loc):
+            self.events, self.loc, self.base_parsers = events, loc, {}
+
+        def get_data(self, entity_type):
+            return self.events if entity_type == "Events" else None
+
+        def has_localization(self, key):
+            return key in self.loc
+
+        def localize(self, key):
+            return key
+
+    def setUp(self):
+        from paradox_file_parser import ParadoxFileParser
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, "e_events.txt")
+            with open(path, "w", encoding="utf-8") as fh:
+                fh.write(self.SOURCE)
+            parser = ParadoxFileParser()
+            parser.parse_file(path, apply_directives=False)
+        self.events = parser.data
+        self.original = srv.ms
+        srv.ms = self.FakeMS(self.events, self.LOC)
+
+    def tearDown(self):
+        srv.ms = self.original
+
+    def detail(self, eid):
+        return srv.ModStateHandler._format_event_detail(srv.ModStateHandler.__new__(srv.ModStateHandler), eid,
+                                                        self.events[eid])
+
+    def test_event_detail_lists_every_option(self):
+        out = self.detail("e.1")
+        self.assertEqual((out["options"], out["option_name_keys"]), (["e.1.a", "e.1.b"], [["e.1.a"], ["e.1.b"]]))
+
+    def test_event_detail_gives_each_case_of_a_triggered_name(self):
+        out = self.detail("e.2")
+        self.assertEqual((out["options"], out["option_name_keys"]), (["e.2.a_target"], [["e.2.a_target", "e.2.a"]]))
+
+    def test_event_detail_of_one_plain_option_and_of_none(self):
+        self.assertEqual(self.detail("e.3")["options"], ["e.3.a"])
+        self.assertEqual(self.detail("e.4")["options"], [])
+
+    def test_unlocalized_checks_every_option_name(self):
+        out = srv.ModStateHandler._unlocalized(srv.ModStateHandler.__new__(srv.ModStateHandler),
+                                               {"type": ["Events"]})
+        self.assertEqual({e["id"]: e["missing_keys"] for e in out["by_type"]["Events"]},
+                         {"e.1": ["e.1.b"], "e.2": ["e.2.a"]})
+
+
 class FormatOptionBalanceNameTests(unittest.TestCase):
     """GET /event-balance answered 500 on an option with triggered names: the
     list reached ModState.localize (22 options in 12 mod events, 2026-11-13)."""

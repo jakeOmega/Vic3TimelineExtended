@@ -1138,6 +1138,23 @@ def _option_name_keys(name) -> list[str]:
     return keys
 
 
+def _event_option_name_keys(ed) -> list[list[str]]:
+    """Each option's name keys (`_option_name_keys`), in source order, from one
+    event's entity data (`get_entity_data`). The parser keeps a single option
+    as an `(op, dict)` pair and several as a list of them; `/events/<id>` and
+    `/unlocalized` read only a bare dict, so a multi-option event listed no
+    option and no option name was ever checked for loc (#1754). An option with
+    no `name` gets an empty list."""
+    srv = server_state()
+    opt_field = ed.get("option") if isinstance(ed, dict) else None
+    options = [opt_field] if isinstance(opt_field, dict) else [opt for _op, opt in _iter_field_values(opt_field)]
+    out = []
+    for opt in options:
+        opt_data = opt if isinstance(opt, dict) else srv._flatten_entity_data(opt)
+        out.append(_option_name_keys(srv.get_field(opt_data, "name")))
+    return out
+
+
 class AnalysisRoutes:
     """The analytical and annotator routes. A mixin of ModStateHandler."""
 
@@ -2096,18 +2113,11 @@ class AnalysisRoutes:
                     for suffix in [".t", ".d"]:
                         if not srv.ms.has_localization(eid + suffix):
                             missing_keys.append(eid + suffix)
-                    # Check options by parsing the event data
-                    ed = srv.get_entity_data(data[eid])
-                    if isinstance(ed, dict):
-                        options = ed.get("option", [])
-                        if isinstance(options, dict):
-                            options = [options]
-                        if isinstance(options, list):
-                            for opt in options:
-                                if isinstance(opt, dict):
-                                    name = srv.get_field(opt, "name")
-                                    if name and not srv.ms.has_localization(name):
-                                        missing_keys.append(name)
+                    # Every option's name, each case of a triggered one too (#1754)
+                    for keys in _event_option_name_keys(srv.get_entity_data(data[eid])):
+                        for key in keys:
+                            if key not in missing_keys and not srv.ms.has_localization(key):
+                                missing_keys.append(key)
                 elif pattern == "self+desc":
                     if not srv.ms.has_localization(eid):
                         missing_keys.append(eid)

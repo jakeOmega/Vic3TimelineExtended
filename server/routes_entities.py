@@ -1218,23 +1218,11 @@ class EntityRoutes:
         info = self._format_event_summary(eid, ed)
         info["title_key"] = eid + ".t"
         info["desc_key"] = eid + ".d"
-        # Collect option keys
-        options = []
-        if isinstance(ed, dict):
-            for key in ed:
-                if key == "option":
-                    opt_data = srv.get_field(ed, "option")
-                    if isinstance(opt_data, dict):
-                        name = srv.get_field(opt_data, "name")
-                        if name:
-                            options.append(name)
-                    elif isinstance(opt_data, list):
-                        for opt in opt_data:
-                            if isinstance(opt, dict):
-                                name = srv.get_field(opt, "name")
-                                if name:
-                                    options.append(name)
-        info["options"] = options
+        # Each option's name key (the first case of a triggered name, None for an option with no name), and
+        # every key a triggered name can show (#1754).
+        names = srv._event_option_name_keys(ed)
+        info["options"] = [keys[0] if keys else None for keys in names]
+        info["option_name_keys"] = names
         info["raw"] = srv.serialize(raw)
         return info
 

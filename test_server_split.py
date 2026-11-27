@@ -322,7 +322,8 @@ MOVED = {
     "server.routes_analysis": [
         "AnalysisRoutes", "_BAG_CONTAINERS", "_classify_option_polarity", "_data_contains_string",
         "_describe_add_modifier", "_describe_change_variable", "_emit_event_effect",
-        "_EVENT_HEADER_RE", "_event_ids_from_mod_file", "_extract_event_ids_from_file",
+        "_EVENT_HEADER_RE", "_event_ids_from_mod_file", "_event_option_name_keys",
+        "_extract_event_ids_from_file",
         "_extract_modifier_fields", "_find_dominance_issues", "_find_modifier_grants",
         "_find_soft_dominance_issues", "_format_value", "_get_loc_accessor_index",
         "_get_script_args_result", "_get_variable_usage_index", "_grant_block_label",
