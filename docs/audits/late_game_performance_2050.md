@@ -246,16 +246,23 @@ Nothing else differs from the baseline.
 | Levels finished in the USA's states, 35 days | 2,886 | 1,372 (−52%) |
 | Private queue at the end | 1,000 | 1,000 |
 
-**A middle setting** (session `20261127T051832Z`): the raise set to 700, so
-a cap of 1,390 against 690 and 3,064. The pass took 1.6, 19.0, 7.7 and
-2.2 s on ticks 2 to 5 (30.5 s; tick tasks 18.5 s a steady week), 1,551
-levels finished in the USA's states, and `private_construction_used` stood
-at 1.38 million. Over five weeks that is no different from the raise at 0:
-both windows are mostly the projects in flight at the switch finishing two
-or three weeks late and in one batch. What the two runs do show is that a
-typical level here costs well over 1,390 points, so the saving starts
-somewhere between a cap of 1,390 and 3,064. A run of several months each
-side would place it; it needs a grant of hours.
+**Past the transient: 120 days at each cap.** The 35-day windows above are
+mostly the projects in flight at the switch finishing late and in one batch,
+so two sessions ran 120 days (17 weekly ticks) with the raise set by a setup
+at the start, `long_700` and `long_0`; the unchanged 120-day session covered
+only 14 days (its first pause met a weekly tick and locked `advance`), so
+the unchanged row is the 35-day runs'.
+
+| Cap a project a week | Pass, mean of weekly ticks 2 on | Levels finished in the USA's states | `private_construction_used` |
+|---|---|---|---|
+| 3,064 (as saved; ticks 2–5) | 22.2 s | 577 a week | 3.05 million |
+| 1,390 (raise 700; ticks 2–17) | **7.8 s** | 344 a week (−40%) | 1.38 million |
+| 690 (raise 0; ticks 2–17) | **5.8 s** | 213 a week (−63%) | 0.69 million |
+
+The pass comes in batches at the lower caps (1.5 s most weeks, 12 to 25 s
+when a cohort finishes). It falls faster than the levels finished in the
+USA do; the count leaves out what its investors build abroad and takes in
+what others build in the USA, so the two columns are not one quantity.
 
 The pass follows the levels placed: with a level taking about three weeks
 the queue turns over a quarter as often. (The two cheap ticks and the 19 s
@@ -356,7 +363,8 @@ modifier (finding 3), a higher update divisor (finding 2).
 
 ## Proposals that change gameplay (owner's call)
 
-Each of these trades investor building rate for speed; none is built.
+The first three trade investor building rate for speed; the fourth is meant
+to keep the rate. None is built.
 
 1. **Stop Excess Private Construction's ramp where it stops adding levels.**
    Hold the raise at the point where a level takes one week (the cap equal
@@ -366,8 +374,8 @@ Each of these trades investor building rate for speed; none is built.
 2. **Hold the cap lower, so a level takes N weeks.** The pass is about 22 s ÷
    N. At the base cap (N of about three) the week's tick work is 17.5 s
    against 33.5, and investors finish about half as many levels in the
-   USA's states. Where
-   between a cap of 1,390 and 3,064 the saving starts needs longer runs
+   USA's states. Over 120 days a cap of 1,390 gave a pass of 7.8 s with
+   40% fewer levels finished there, and 690 gave 5.8 s with 63% fewer
    (finding 4).
 3. **Larger levels in the late eras, with a lower cap.** The owner's
    super-building idea, or a modifier form of it: the engine has
@@ -379,11 +387,48 @@ Each of these trades investor building rate for speed; none is built.
    grow at once, construction cost per level cannot be raised by a modifier,
    and economy of scale and company thresholds count levels.
 
+4. **Investors that place levels in batches, by script** (owner, 2026-11-26:
+   "I wonder how well we could approximate the AI private investment logic,
+   but with, say, 10 or 100 levels at a time. I'd guess that we can add
+   private construction with script effect pass 1000 queued levels and that
+   the engine private construction would not run if the queue was past 1000
+   queued levels."). Not built or probed; what is known:
+   - The effect exists: `start_privately_funded_building_construction =
+     <building>`, state scope. The mod has a bulk pass written on it that
+     nothing calls: `queue_more_private_investment` → `expand_random_building`
+     → `expand_building_private_construction` (`extra_effects.txt`), with
+     `needed_private_levels` capped at 10,000.
+   - The second guess fits the measurements: an update that finds the queue
+     full costs nothing (23,000 a tick in 16–36 ms on the 27 other ticks of
+     a week; 1.8 s on the first weekly tick after a load). A queue that
+     never falls under 1,000 after the week's completions should leave the
+     pass near that.
+   - The cost is per decision, about 22 ms, not per level: batches of 10 are
+     about 100 engine decisions a week, 2 s; batches of 100, 0.2 s.
+   - **Engine picks, script multiplies** keeps the engine's own choice:
+     leave it a few free slots a week, add K − 1 levels to each building
+     found `is_under_construction`, then top the queue past 1,000. The
+     dormant pass picks for itself instead (a random building with profit
+     and `occupancy > 0.9`), which never founds a building, never invests
+     abroad, and gates on occupancy, which flat crews make meaningless.
+   - **To read in game first**, one short session: whether the effect queues
+     past 1,000 elements; the pass's time with the queue held above 1,000
+     across a weekly tick; whether the pool is charged and who owns the
+     levels; whether the effect honors `possible` and level caps
+     (`can_queue_building_levels = K` can ask first); whose pool pays in a
+     foreign state.
+   - Side effects to weigh: K levels are committed on today's prices where
+     the engine scores again after each; a queue past 1,000 lifts the
+     ceiling of 1,000 levels a week, so Excess Private Construction's raise
+     is no longer what sets throughput; thousands of queue entries in the
+     Construction panel.
+
 ## Open
 
 1. **The turnover decision** (finding 4 and the proposals above) is the
-   owner's. A months-long pair of runs would say what a given cap costs in
-   levels and saves in time once the transient is over.
+   owner's. The 120-day runs give two caps; the unchanged 120-day run is
+   still owed (it stopped after 14 days), and so is the in-game probe of
+   proposal 4.
 2. **Which candidates the pass scores.** The Steel Mill's `possible` is asked
    about 760,000 times on a heavy weekly tick, and the USA owns 180 states,
    so most of what its investors score each placement looks to be foreign
