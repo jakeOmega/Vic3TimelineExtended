@@ -45,9 +45,10 @@ python3 -m game_qa fixture --until 1930 --permission "<the owner's grant of the 
 The run plays under the game rules the owner last applied in a lobby (the dry run lists them). The run's reply
 names its run folder; the log copy is there whether or not the run reached its date.
 
-**The harness's estimate is low.** The first long run (2026-11-16) took 6 h 46 min from 1836 to 1925, 0.75 s a
-game day on average, where the harness estimated 4.85 h. At that rate a run takes about 4.9 hours to 1900, 7.6 to
-1936 and 8.7 to 1950, and later years are probably slower than the average. Give `--max-hours` room. The day's
+**The harness's estimate was low until 2026-11-27.** The first long run (2026-11-16) took 6 h 46 min from 1836 to
+1925, 0.75 s a game day on average, where the harness estimated 4.85 h. The estimate now takes its rates from that
+run (#1602): about 4.9 hours to 1900, 6.9 to 1925 and 9.6 to 1950, and past 1948 a guess. Builds differ by a fifth
+or so, so still give `--max-hours` room. The day's
 other two runs took 5 h 05 min from 1836 to October 1913, where the game crashed (a failed run's reply carries no
 `timing`), and 52 min from 1836 to 1850, 0.58 s a game day, where the harness estimated 0.69 h.
 

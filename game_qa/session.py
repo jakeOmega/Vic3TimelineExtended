@@ -988,9 +988,7 @@ class Session:
                 "run_until": fixture.dotted(until), "long_run": long_run, "game_end": fixture.dotted(self._game_end()),
                 "estimate_s": round(estimate), "estimate_h": round(estimate / 3600, 2),
                 "limit_s": round(limit), "limit_h": round(limit / 3600, 2), "max_hours": max_hours,
-                "estimate_from": ("archived AI-only observer runs on the owner's machine (game 1.14, October 2026): "
-                                  "0.47 s a game day to 1876, 0.53 to 1904, 0.98 about 1950; past 1953 a guess "
-                                  "(fixture.RATE_ANCHORS)"),
+                "estimate_from": fixture.RATE_FROM,
                 "autosaves": ("about %d quarterly autosaves, each 100 MB or more (the 1836 fixture is 133 MB), "
                               "written into the owner's save games/ (OneDrive syncs it), over their five rotating "
                               "ones: the restore puts theirs back" % int(years * 4)) if long_run else "none",
