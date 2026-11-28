@@ -182,6 +182,15 @@ base room (108). Half the average world's resort room (24) is 12, rounded down
 to 10. One module level then adds about half a typical world, as it does for
 bases.
 
+*Since 2026-11-28:* the owner doubled the resort room from every source: Earth
+orbit's room is 20, each world's `RESORTS` room is twice its room for people in
+thousands (1,890 levels across the 40 worlds, 20 to 100 a world) and the module
+adds 20 a staffed level. The proportions above hold, each figure twice as large.
+Against the demand check below, one or two worlds now hold roughly 50 to 200
+levels, and all of Mars and the Moon 730, so the market binds sooner. Mars's 100 is three digits, so Solar System's resort cell grew by 9 units to hold
+"100 (+25%)", taken from the slots cell, which had room for two digits though a
+Habitat cap is 1 to 4.
+
 **Scale against demand** (a rough check, not a fit). In the buy packages
 (`00_buy_packages.txt`), a pop at wealth 45 spends £715 a week on tourism per
 10,000 working adults. A rich country of 100 million working adults at that

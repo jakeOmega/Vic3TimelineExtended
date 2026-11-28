@@ -1080,7 +1080,9 @@ class FigureBudgetTest(unittest.TestCase):
                   "fp_role_carrier": "9999 / 9999", "fp_role_tender": "9999 / 9999",
                   "fp_fire_fleets": "99999.9", "fp_fire_defences": "99999.9", "fl_refit": "3", "fp_repair": "100%"}
     FLEET_PAGE_WORDS = ("fl_drive", "fp_dock_none", "fp_dock_earth", "fp_dock_port", "fp_dock_flight")
-    SITE = {"site_inbound_ours": "9·999", "site_slots": "99"}
+    # Solar System's line: the inbound weeks, and a world's Habitat cap (1 to 4,
+    # gen_solar_sites.SITES' slots; test_a_site_s_habitat_cap holds it to the table)
+    SITE = {"site_inbound_ours": "9·999", "site_slots": "4"}
     QUEUE = {"mq_place": "20."}
 
     def _check(self, typ, figures):
@@ -1131,6 +1133,29 @@ class FigureBudgetTest(unittest.TestCase):
         for figure in figures:
             with self.subTest(figure=figure):
                 text = _render(figure)
+                self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
+
+    def test_a_site_s_habitat_cap(self):
+        """The slots cell holds one digit: SITE's figure is the largest Habitat
+        cap a world has, which no technology changes (gen_solar_sites.SITES'
+        slots). The resort cell took the room a second digit had (2026-11-28)."""
+        sys.path.insert(0, os.path.join(REPO, "scripts", "generators"))
+        import gen_solar_sites as gss
+        self.assertEqual(self.SITE["site_slots"], str(max(s.slots for s in gss.SITES)))
+
+    def test_a_site_s_resort_room(self):
+        """The same line ends in the site's Resort Colony room and draw
+        ("100 (+25%)", #1948), as each generated row prints it, the draw with
+        its Cultural Centers' points at two digits and a sign. The room is the
+        RESORTS table's, three digits at Mars since the owner doubled it
+        (2026-11-28)."""
+        box = _textbox_with(_type_body(_read(GUI), "te_sr_site_row"), 'block "site_resorts"')
+        figures = re.findall(r'blockoverride "site_resorts" \{\s*raw_text = "([^"]*)"', _read(ROWS))
+        self.assertEqual(len(figures), 80)   # Solar System's and the colony target popup's
+        for figure in figures:
+            with self.subTest(figure=figure):
+                # The draw's "|+0" (sign first) is a form _render doesn't read: put in its longest.
+                text = _render(re.sub(r"\[[^\[\]]*sr_disp_site_resort_draw_\w+'\)\|\+0\]", "+99", figure))
                 self.assertLessEqual(len(text) * UNITS_PER_CHAR[_font(box)] * MARGIN, _width(box), text)
 
     def test_a_site_s_ground_type(self):
