@@ -1307,5 +1307,254 @@ class TemplateFolderTests(unittest.TestCase):
         self.assertIn("gui/journal_entry_widgets/grand_monuments_widget.gui", spec["gui"])
 
 
+class ProductionBuildingRegistryTests(unittest.TestCase):
+    """The production buildings in vanilla's two-layer look (spec 2026-11-27): their category, goods and ores."""
+
+    def test_categories(self):
+        spec = ip.CATEGORIES["production_building"]
+        self.assertEqual((spec["folder"], spec["size"], spec["mode"], spec["field"]),
+                         ("building_icons", 256, "framed_good", "icon"))
+        self.assertTrue(spec["style"].startswith("high-angle oblique close-up looking down onto {subject}"))
+        self.assertTrue(ip.CATEGORIES["building_foreground"]["part"])
+        self.assertEqual(ip.CATEGORIES["building"]["style"], ip.BUILDING_STYLE)   # untouched
+
+    def test_good_texture_mod_first_then_vanilla(self):
+        self.assertEqual(ip.good_texture("digital_assets"), "gfx/interface/icons/goods_icons/software.dds")  # mod good
+        self.assertEqual(ip.good_texture("radios"), "gfx/interface/icons/goods_icons/radios.dds")            # vanilla
+        self.assertIsNone(ip.good_texture("no_such_good"))
+
+    def test_scope(self):
+        pb = ip.ICONS["production_building"]
+        self.assertEqual(len(pb), 39)
+        self.assertFalse(set(pb) & set(ip.ICONS["building"]))
+        self.assertIn("building_synthetics_plant_silk", pb)
+        self.assertNotIn("building_solar_receiver", pb)
+        for key, e in pb.items():
+            self.assertTrue(e["foreground"], key)
+
+    def test_check_flags_bad_foregrounds_and_duplicates(self):
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {
+                "building": {"building_twice": {"subject": "a hall", "seed": None}},
+                "building_foreground": {"ore_ok": {"subject": "a heap of red ore", "seed": None}},
+                "production_building": {
+                    "building_ok": {"subject": "roofs", "seed": None, "foreground": [{"good": "radios"}]},
+                    "building_part_ok": {"subject": "a pit", "seed": None,
+                                         "foreground": [{"part": "building_foreground/ore_ok"}]},
+                    "building_no_good": {"subject": "roofs", "seed": None, "foreground": [{"good": "no_such_good"}]},
+                    "building_no_part": {"subject": "roofs", "seed": None,
+                                         "foreground": [{"part": "building_foreground/gone"}]},
+                    "building_empty": {"subject": "roofs", "seed": None, "foreground": []},
+                    "building_twice": {"subject": "roofs", "seed": None, "foreground": [{"good": "radios"}]},
+                }}
+            d = tempfile.mkdtemp()
+            bdir = Path(d) / "common" / "buildings"
+            bdir.mkdir(parents=True)
+            keys = set(ip.ICONS["production_building"]) | set(ip.ICONS["building"])
+            (bdir / "b.txt").write_text("".join(f"{k} = {{\n}}\n" for k in keys), encoding="utf-8-sig")
+            r = ip.check(d, on_disk=set())
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(sorted(k for c, k in r["bad_entry"] if c == "production_building"),
+                         ["building_empty", "building_no_good", "building_no_part", "building_twice"])
+
+
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class BackdropRegradeTests(unittest.TestCase):
+    """A production building's backdrop pulled to vanilla's measured grade: CIELAB, the transfer, the falloff."""
+
+    STATS = {"mean": np.array([34.6, 3.6, 10.5]), "std": np.array([20.0, 7.2, 10.3]), "profile": np.ones(14)} \
+        if icon_dds is not None else None
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+
+    def test_lab_round_trip_and_anchors(self):
+        rgb = np.random.default_rng(0).random((8, 8, 3))
+        self.assertLess(np.abs(self.r.lab_to_rgb(self.r.rgb_to_lab(rgb)) - rgb).max(), 1e-4)
+        white = self.r.rgb_to_lab(np.ones((1, 1, 3)))[0, 0]
+        np.testing.assert_allclose(white, (100, 0, 0), atol=0.05)
+        self.assertAlmostEqual(self.r.rgb_to_lab(np.full((1, 1, 3), 119 / 255))[0, 0, 0], 50.0, delta=0.5)
+
+    def test_regrade_matches_the_target_mean(self):
+        interior = np.ones((256, 256), bool)
+        raw = Image.fromarray(np.random.default_rng(1).integers(120, 255, (512, 512, 3), dtype=np.uint8))
+        out = np.asarray(self.r.regrade_backdrop(raw, self.STATS, interior, 256, blur=0)) / 255
+        lab = self.r.rgb_to_lab(out)
+        np.testing.assert_allclose(lab.reshape(-1, 3).mean(0), self.STATS["mean"], atol=2.0)
+
+    def test_falloff_darkens_corners(self):
+        interior = np.ones((256, 256), bool)
+        prof = np.r_[np.ones(7), np.linspace(0.95, 0.7, 7)]
+        stats = {"mean": np.array([40.0, 0, 0]), "std": np.array([10.0, 2, 2]), "profile": prof}
+        raw = Image.fromarray(np.random.default_rng(2).integers(80, 160, (256, 256, 3), dtype=np.uint8))
+        out = np.asarray(self.r.regrade_backdrop(raw, stats, interior, 256, blur=0)).astype(float)
+        self.assertLess(out[:24, :24].mean(), 0.85 * out[116:140, 116:140].mean())
+
+    def test_black_render_stays_finite(self):
+        interior = np.ones((64, 64), bool)
+        with np.errstate(invalid="raise", divide="raise"):              # a NaN or a divide by zero raises
+            out = np.asarray(self.r.regrade_backdrop(Image.new("RGB", (64, 64)), self.STATS, interior, 64))
+        self.assertEqual(out.shape, (64, 64, 3))
+
+    def test_stats_from_ignore_the_good(self):
+        rgb = np.full((64, 64, 3), 0.2)
+        rgb[32:, 32:] = 1.0                                              # a bright "good" in the lower right
+        mask = np.zeros((64, 64), bool)
+        mask[32:, 32:] = True
+        s = self.r.backdrop_stats_from([(rgb, mask)], np.ones((64, 64), bool))
+        self.assertAlmostEqual(s["mean"][0], self.r.rgb_to_lab(np.full((1, 1, 3), 0.2))[0, 0, 0], delta=0.1)
+        self.assertEqual(s["profile"].shape, (14,))
+
+
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class FramedGoodTests(unittest.TestCase):
+    """The framed_good layout: a regraded backdrop, the good or part where vanilla puts its good, vanilla's frame."""
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+        a = np.zeros((256, 256, 4), np.float32)
+        a[8:248, 8:248] = (60, 50, 40, 255)                                  # a stand-in frame
+        self.tmpl = (a, np.zeros_like(a))
+        self.stats = {"mean": np.array([34.6, 3.6, 10.5]), "std": np.array([20.0, 7.2, 10.3]), "profile": np.ones(14)}
+        self.raw = Image.fromarray(np.random.default_rng(3).integers(60, 200, (512, 512, 3), dtype=np.uint8))
+        g = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
+        g.paste((220, 30, 30, 255), (40, 40, 216, 216))
+        self.good = g
+
+    def compose(self, **spec):
+        return np.asarray(self.r.compose_framed_good(self.raw, dict({"size": 256}, **spec), self.tmpl, self.stats,
+                                                     [(self.good, {"kind": "good"})])).astype(int)
+
+    def test_good_sits_at_vanillas_place(self):
+        out = self.compose()
+        cx, cy = int(0.67 * 256), int(0.67 * 256)
+        self.assertGreater(out[cy, cx, 0], out[cy, cx, 2] + 100)                # red good at (0.67, 0.67)
+        self.assertGreater(np.abs(out[40, 40, :3] - (220, 30, 30)).sum(), 100)  # upper left is backdrop, not good
+        self.assertTrue((out[..., 3] == self.tmpl[0][..., 3]).all())            # frame alpha unchanged
+
+    def test_good_canvas_scale(self):
+        canvas = np.asarray(self.r.foreground_layer(self.good, 256, "good"))
+        xs = np.where(canvas[..., 0].max(0) > 200)[0]
+        # the red square is 176/256 of its canvas; the canvas is 0.62 of the icon
+        self.assertAlmostEqual((xs.max() - xs.min() + 1) / 256, 176 / 256 * 0.62, delta=0.02)
+
+    def test_part_scaled_by_its_bbox(self):
+        canvas = np.asarray(self.r.foreground_layer(self.good, 256, "part"))
+        xs = np.where(canvas[..., 0].max(0) > 200)[0]
+        self.assertAlmostEqual((xs.max() - xs.min() + 1) / 256, 0.56, delta=0.02)
+
+    def test_patch_darkens_around_the_good_only(self):
+        plain, patched = self.compose(), self.compose(patch=0.4)
+        ring = (int(0.67 * 256), int(0.67 * 256) - 62)                          # just outside the good's left edge
+        self.assertLess(patched[ring][:3].sum(), plain[ring][:3].sum())
+        self.assertEqual(patched[30, 30][:3].tolist(), plain[30, 30][:3].tolist())
+
+    def test_grit_is_deterministic_and_adds_texture(self):
+        a, b, plain = self.compose(grit=6.0), self.compose(grit=6.0), self.compose()
+        self.assertTrue((a == b).all())
+        self.assertGreater(np.abs(np.diff(a[20:80, 20:80, 1], axis=1)).mean(),
+                           np.abs(np.diff(plain[20:80, 20:80, 1], axis=1)).mean())
+
+    def test_composer_needs_layers(self):
+        c = self.r.Composer()
+        c._tmpl["production_building"], c._stats["production_building"] = self.tmpl, self.stats
+        with self.assertRaises(ValueError):
+            c.compose(self.raw, "production_building", ip.CATEGORIES["production_building"])
+
+
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class ForegroundDriverTests(unittest.TestCase):
+    """A production building's good or part is an input: a change to it recomposes and rewrites the building."""
+
+    def test_fingerprint_follows_the_goods_file(self):
+        d = Path(tempfile.mkdtemp())
+        f = d / "gfx/interface/icons/goods_icons/radios.dds"
+        f.parent.mkdir(parents=True)
+        f.write_bytes(b"one")
+        saved = gi.MOD_ROOT
+        try:
+            gi.MOD_ROOT = d                                                  # the mod's copy wins
+            e = {"subject": "roofs", "seed": 0, "foreground": [{"good": "radios"}]}
+            self.assertEqual(gi.good_icon_file("radios", Path("/nonexistent")), f)
+            before = gi.foreground_fingerprint(e, Path("/nonexistent"))
+            f.write_bytes(b"two")
+            self.assertNotEqual(before, gi.foreground_fingerprint(e, Path("/nonexistent")))
+        finally:
+            gi.MOD_ROOT = saved
+
+    def test_fingerprint_follows_the_parts_pick(self):
+        parts = ip.ICONS["building_foreground"]
+        try:
+            parts["_t"] = {"subject": "a heap of red ore", "seed": 0}
+            e = {"subject": "a pit", "seed": 0, "foreground": [{"part": "building_foreground/_t"}]}
+            a = gi.foreground_fingerprint(e, Path("/nonexistent"))
+            parts["_t"]["seed"] = 1
+            self.assertNotEqual(a, gi.foreground_fingerprint(e, Path("/nonexistent")))
+        finally:
+            parts.pop("_t")
+
+    def test_compose_one_recomposes_when_a_dep_is_newer(self):
+        d = Path(tempfile.mkdtemp())
+        raw, final, dep = d / "r.png", d / "f.png", d / "g.dds"
+        Image.new("RGB", (4, 4)).save(raw)
+        Image.new("RGBA", (4, 4)).save(final)
+        dep.write_bytes(b"x")
+        os.utime(raw, (1, 1))
+        os.utime(final, (2, 2))
+        os.utime(dep, (3, 3))
+        calls = []
+
+        class C:
+            def compose(self, *a, **k):
+                calls.append(k.get("layers"))
+                return Image.new("RGBA", (4, 4))
+        gi._compose_one(C(), "production_building", raw, final, deps=(dep,), layers=[])
+        self.assertEqual(calls, [[]])                                       # recomposed, layers passed through
+        gi._compose_one(C(), "production_building", raw, final, deps=(dep,), layers=[])
+        self.assertEqual(calls, [[]])                                       # now the final is newest: kept
+
+    def test_write_waits_for_the_foreground_parts(self):
+        parts = ip.ICONS["building_foreground"]
+        try:
+            parts["_t"] = {"subject": "a heap of red ore", "seed": None}
+            e = {"subject": "a pit", "seed": 0, "foreground": [{"part": "building_foreground/_t"}]}
+            self.assertEqual(gi.foreground_part_seeds(e), [None])
+            parts["_t"]["seed"] = 2
+            self.assertEqual(gi.foreground_part_seeds(e), [2])
+        finally:
+            parts.pop("_t")
+
+    def test_finals_hand_the_composer_the_goods_icon(self):
+        work, mod = Path(tempfile.mkdtemp()), Path(tempfile.mkdtemp())
+        good = mod / "gfx/interface/icons/goods_icons/radios.dds"
+        good.parent.mkdir(parents=True)
+        Image.new("RGBA", (16, 16), (200, 0, 0, 255)).save(good, format="PNG")  # PIL reads it whatever the suffix
+        (work / "raw").mkdir()
+        Image.new("RGB", (8, 8)).save(work / "raw" / "production_building___t__s0.png")
+        pb, saved_root = ip.ICONS["production_building"], gi.MOD_ROOT
+        seen = []
+
+        class C:
+            def compose(self, raw, cat, spec, backdrop=None, layers=None):
+                seen.append(layers)
+                return Image.new("RGBA", (4, 4))
+        try:
+            pb["_t"] = {"subject": "roofs", "seed": 0, "foreground": [{"good": "radios", "scale": 0.5}]}
+            gi.MOD_ROOT = mod
+            finals = gi.Finals.__new__(gi.Finals)
+            finals.work, finals.composer, finals._backdrops, finals.game = work, C(), {}, Path("/nonexistent")
+            finals.get("production_building", "_t", 0)
+        finally:
+            pb.pop("_t")
+            gi.MOD_ROOT = saved_root
+        (im, opts), = seen[0]
+        self.assertEqual(im.size, (16, 16))
+        self.assertEqual(opts, {"kind": "good", "scale": 0.5, "at": None})
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -28,6 +28,11 @@ else from git, so the old file can be deleted once nothing points at it.
 An entry may carry its own "style" (a template with {subject}) in place of the
 category's: the building style's aerial diorama put orbital stations low over
 a map, small (ORBIT).
+A production building (`production_building`, layout `framed_good`) also names its
+"foreground": a list of layers drawn in order over its backdrop, each {"good": <goods
+key>} (that good's own icon) or {"part": "building_foreground/<key>"} (a mine's ore),
+optionally with "scale" and "at" (default: where vanilla puts its good). Its subject
+is the backdrop alone, what is seen from above.
 In a GUI-hosted category (`gui`: icons a .gui file draws, not an entity's),
 an entry also names the placeholder it replaces, "now": <vanilla path>, and
 may instead be derived: {"from": "<cat>/<key>", "tint": "grey"|"faint",
@@ -151,6 +156,19 @@ defaults (September 2026, ~350 icons):
   "the small disc of" it at an edge (Space Fleets' banners, 2026-11-14).
 - Fire loses its reds to the folder's grade: an explosion came out salmon, weaker
   at 20 px than the drawn red burst it replaced. On a drawn red disc it reads.
+- Ores told apart at 40 px need a colour of their own: five "heap of" dark ores
+  (chromite, wolframite, platinum, graphite, nodules) were one grey gravel on a
+  mine's backdrop. Name a distinct accent ("flecked with bright emerald-green
+  uvarovite", "crusted with orange-red vanadinite") and "a few large" pieces
+  (production buildings, 2026-11-27). Pale or translucent crystals (spodumene,
+  halite, sylvite, amber monazite) cut out with holes where the white ground
+  shows through: pick an opaque seed. Rocks and crystals can carry faint
+  embossed letters; zoom the pick before writing.
+- In the production buildings' backdrop a "large" or "wide" open pit draws the
+  landscape round it, sky and horizon, even under "no sky, no horizon" (six
+  seeds, two rounds). "The bottom of a deep open-pit mine seen close from
+  above", with trucks for scale, fills the frame. A domed hall reads as the
+  nuclear plant's dome at 40 px; the fusion plant is its tokamak ring.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
@@ -162,6 +180,11 @@ Usage:
 """
 
 from __future__ import annotations
+
+import functools
+import json
+import os
+import re
 
 KEEP = "keep"
 RESTYLE_CROP = 0.03
@@ -252,6 +275,14 @@ STATUE_STYLE = ("close three-quarter view from above of {subject}, detailed pain
                 "diorama, warm golden afternoon light, muted earthy palette, the statue large in the foreground "
                 "facing the viewer and filling the center of the image")
 
+# A production building's backdrop (spike 2026-11-27): vanilla's camera, a close
+# high oblique view of the plant's roofs with no sky. CLIP reads only the first
+# 77 tokens (the palette clause is cut; T5 reads it, and the regrade sets the
+# palette anyway), so the camera words come first and subjects stay short.
+BACKDROP_STYLE = ("high-angle oblique close-up looking down onto {subject}, the roofs run diagonally across the "
+                  "frame and fill it edge to edge, no sky, no horizon, detailed 3D rendered miniature model as in a "
+                  "strategy game's city view, dim dusk light, deep soft shadows, muted desaturated grey and brown palette")
+
 CATEGORIES = {
     "technology": dict(
         folder="invention_icons", size=256, mode="cutout", fill=0.92,
@@ -287,6 +318,24 @@ CATEGORIES = {
         neighbours="building_icons",
         gui=("gui/journal_entry_widgets/grand_monuments_widget.gui", "gui/te_state_panel_widgets.gui"),
         style=BUILDING_STYLE),
+    # Production buildings in vanilla's two-layer look (spec
+    # docs/superpowers/specs/2026-11-27-vanilla-style-production-building-icons-design.md):
+    # a FLUX close-up of the plant from above, regraded to vanilla's measured
+    # backdrop, under the good's own icon (or the mine's ore, a
+    # building_foreground part) where vanilla puts its good. Each entry names
+    # its `foreground` layers; a repainted good rewrites the buildings it is on.
+    "production_building": dict(
+        folder="building_icons", size=256, mode="framed_good", entity_dir="common/buildings", field="icon",
+        neighbours="building_icons", style=BACKDROP_STYLE,
+        # Tuned on the pilot (2026-11-27): whole-icon interior L* 33.3 and 10th percentile 8.0 over
+        # 12 candidates, against vanilla's 33.9 and 6.6 (the 17 vanilla production icons, goods included).
+        bias=(-3, 0, 3), patch=0.25, grit=3),
+    # The foregrounds that are not a good's icon: each mine's own ore (owner,
+    # 2026-11-27, after vanilla's grain farms showing their own crop), the air
+    # capture plant's pellets, the drinks plant's bottle. Drawn as goods are.
+    "building_foreground": dict(
+        folder="goods_icons", size=256, mode="cutout", fill=0.90, grade_strength=0.4, part=True,
+        neighbours="goods_icons", gui=(), style="{subject}, one chunky readable object, " + PAINTED),
     # Ideology icons are read only from `icon =` (Ideology.GetTexture). IG
     # ideologies are gold on a crimson disc; leader (character) ideologies
     # silver on teal, in ideology_leader/. Vanilla gives an ideology held by
@@ -1007,6 +1056,7 @@ ICONS: dict[str, dict[str, dict]] = {
         "te_rc_technology_embargo": {"subject": "a brass laboratory microscope wrapped tightly in a heavy dark iron chain fastened by a big closed padlock", "seed": 0},
     },
     "building": {
+        # The production buildings moved to `production_building` (2026-11-27), in vanilla's two-layer look.
         # Mod-added buildings on another building's (or a good's) icon. Company
         # buildings are left out: flagships carry their company's own logo by
         # design (docs/vanilla/vanilla_company_buildings_reference.md).
@@ -1110,32 +1160,6 @@ ICONS: dict[str, dict[str, dict]] = {
         # On vanilla's urban_center.dds until rendered (2026-10-31).
         "building_public_housing": {"subject": "a city block of plain six-storey brick apartment buildings around a shared courtyard with trees and washing lines, a newer tower block of pale concrete rising behind them", "seed": 3},
         "te_construction_market_site": {"subject": "a construction site with cranes, scaffolding and stacked building materials", "seed": KEEP},  # a construction camp fits
-        # Industry variants: vanilla's industrial layout, the plant behind and
-        # its product large in the foreground. They were on goods icons.
-        "building_synthetics_plant_silk": {"subject": "a chemical plant with a large bolt of shiny synthetic fabric in the foreground", "seed": KEEP},  # vanilla's synthetics plant fits
-        "building_synthetics_plant_coal": {"subject": "a direct air capture facility: a long low flat-roofed steel building whose whole front is a wall of big round black fans, beside rows of squat white storage tanks, all low to the ground in green forest, loosely hand-painted with visible brush strokes", "seed": 1},
-        "building_synthetics_plant_wood": {"subject": "a modern resin panel factory: long halls with big resin vats and pipes, a yard of stacked honey-brown panels being loaded onto trucks, green trees around it, loosely hand-painted with visible brush strokes", "seed": 1},
-        "building_synthetics_plant_sugar": {"subject": "a clean white chemical plant with round steel reactor tanks and pipework, beside green sugar cane fields, loosely hand-painted with visible brush strokes", "seed": 1},
-        "building_synthetics_plant_meat": {"subject": "a clean white laboratory factory with rows of round steel bioreactor tanks linked by pipes and glass-roofed lab halls, green lawns around it, loosely hand-painted with visible brush strokes", "seed": 1},
-        "building_synthetics_plant_fruit": {"subject": "a glass vertical farm building with stacked shelves of green plants under pink grow lights, with a wooden crate of red apples and oranges in the foreground", "seed": 0},
-        "building_synthetics_plant_drinks": {"subject": "a beverage plant with tall steel mixing tanks, pipes and a loading dock with delivery trucks, beside green orchards, loosely hand-painted with visible brush strokes", "seed": 1},
-        "building_synthetics_plant_biomass": {"subject": "a biorefinery with tall steel fermentation towers and tanks beside green fields, with a heap of golden grain in the foreground", "seed": 1},
-        "building_electrics_industry_radio": {"subject": "an electronics factory with a tall lattice radio mast and satellite dishes on its roof, a row of tall transmitter towers beside it, green hills around it, loosely hand-painted with visible brush strokes", "seed": 1},
-        # Mines, on the five vanilla mine icons: the ore's colour and form tell
-        # them apart, in the same layout.
-        "building_manganese_mine": {"subject": "a mine with a timber headframe and ore sheds on dark rocky ground, with a heap of lumpy black-brown manganese ore nodules in the foreground", "seed": 0},
-        "building_chromium_mine": {"subject": "a terraced open-pit mine in dark grey rock, a processing plant and a long ore conveyor at its rim, loosely hand-painted with visible brush strokes", "seed": 2},
-        "building_specialty_alloy_metal_mine": {"subject": "a mountainside mine with a steel headframe and ore bins, with a bundle of dull grey tungsten rods and dark metallic ore crystals in the foreground", "seed": 1},
-        "building_bauxite_mine": {"subject": "an open-pit mine cut into deep red earth with trucks on its terraces, with a heap of red-brown bauxite ore pebbles in the foreground", "seed": 1},
-        "building_precious_minor_base_metal_mine": {"subject": "a hillside mine entrance with a timber headframe and ore carts, with a stack of silver bars and dull grey tin ingots in the foreground", "seed": 0},
-        "building_nickel_cobalt_mine": {"subject": "an open-pit mine with rust-orange earthen walls, with a heap of silvery nickel pellets and deep blue cobalt ore crystals in the foreground", "seed": 0},
-        "building_lithium_mine": {"subject": "lithium brine evaporation ponds, rectangles of bright turquoise, green and white on a high desert salt flat with mountains behind, with a heap of fine white lithium powder in the foreground", "seed": 0},
-        "building_rare_earth_metals_mine": {"subject": "a large open-pit mine with pale grey terraces and tailings ponds, with a small pile of shiny silvery rare earth metal chunks and glittering purple crystals in the foreground", "seed": 1},
-        "building_platinum_group_metals_mine": {"subject": "a deep mine on a rocky hillside: a tall steel headframe, shaft buildings and a refinery with pale grey ore heaps, loosely hand-painted with visible brush strokes", "seed": 2},
-        "building_graphite_mine": {"subject": "an open-pit mine with black glittering walls, with a heap of shiny black graphite flakes in the foreground", "seed": 1},
-        "building_phosphate_mine": {"subject": "a wide open-cast mine with pale tan terraces and a long conveyor belt, with a heap of pale grey-tan phosphate rock pellets in the foreground", "seed": 0},
-        "building_potash_mine": {"subject": "a mine with a tall headframe beside huge pink salt heaps, with a pile of pink and red potash salt crystals in the foreground", "seed": 0},
-        "building_industrial_mineral_salt_mine": {"subject": "shallow salt evaporation pans and white salt heaps with conveyor belts, with a pile of large white salt crystals and grey gypsum chunks in the foreground", "seed": 1},
         # Mod buildings that shared another mod building's icon (the 2026-10-02 audit).
         # Each megaproject construction site gets its own: the building's subject,
         # half-built. The orbital ones are in ORBIT: in the building style both
@@ -1162,37 +1186,17 @@ ICONS: dict[str, dict[str, dict]] = {
         # The mod's own icons from before the pipeline (2024-25): kept, refitted to
         # the gold frame (`restyle`). Each subject describes the picture as it is.
         # The owner of each formerly shared picture keeps it.
-        # s0's QUALITY TESTED sign was painted out of the raw (retouched lettering, 2026-10-02).
-        "building_electrics_industry_appliances": {"restyle": f"{_BI}/appliance.dds", "subject": "a bright factory floor where workers in green overalls assemble cream-coloured refrigerators and toasters", "seed": 0},
-        "building_ocean_mine": {"restyle": f"{_BI}/deep_sea_mine.dds", "crop": 0.1, "subject": "a deep-sea mining machine with glowing lamps crawling over the dark ocean floor, cables rising toward the surface", "seed": 2},
-        "building_fusion_plant": {"restyle": f"{_BI}/fusion_plant.dds", "crop": 0.1, "subject": "a futuristic fusion power plant: a tall silver cylindrical reactor with a glowing blue ring at its base, surrounded by white technical buildings and pipes", "seed": 2},
         "building_highway": {"restyle": f"{_BI}/highway.dds", "subject": "a wide multi-lane highway full of cars and trucks running toward the horizon under an overpass, green trees on both sides", "seed": 0},
-        "building_renewable_energy_plant": {"restyle": f"{_BI}/renewable_plant.dds", "crop": 0.1, "subject": "a renewable energy plant: white wind turbines and fields of solar panels around a white power building, green fields", "seed": 0},
-        "building_software_industry": {"restyle": f"{_BI}/software.dds", "crop": 0.06, "subject": "a modern dark glass office building at night with rows of lit windows and a glowing blue sign on its facade", "seed": 0},
-        "building_synthetics_plant_oil": {"restyle": f"{_BI}/synth_oil.dds", "subject": "an old smoky synthetic fuel refinery with tall towers and pipes, workers and a tank train in the foreground, sepia haze", "seed": 0},
-        "building_synthetics_plant_rubber": {"restyle": f"{_BI}/synth_rubber.dds", "subject": "a synthetic rubber works: workers by a conveyor of rubber sheets in front of a chemical plant with domed tanks and chimneys, olive-green haze", "seed": 3},
-        "building_space_mine": {"restyle": f"{_BI}/space_base.dds", "crop": 0.1, "subject": "an extraplanetary base: white domed habitats, solar panels and a small rover on a red rocky planet at dusk, a moon in the sky", "seed": 2},
-        "building_aerospace_industry": {"restyle": f"{_BI}/space.dds", "crop": 0.06, "subject": "a rocket lifting off from its launch tower at night in a burst of orange flame and smoke, a radar dish nearby", "seed": 2},
         "building_space_elevator": {"restyle": f"{_BI}/space_elevator.dds", "subject": "a space elevator: a single thin tether rising from the Earth's curved horizon up into black starry space, a climber pod on it", "seed": 0},
         "building_space_elevator_construction_site": {"restyle": f"{_BI}/space_elevator_construction_site.dds", "crop": 0.15, "subject": "the construction site of a space elevator's base tower: a tall steel lattice tower in scaffolding with cranes, workers and stacked materials", "seed": 2},
-        "building_nuclear_plant": {"restyle": f"{_BI}/nuclear_plant.dds", "crop": 0.1, "subject": "a nuclear power plant with two large concrete cooling towers releasing white steam, reactor buildings and power lines, green fields and a river", "seed": 0},
         # Redrawn in the building style (owner, 2026-10-02: "make new ones for hydro, and any
         # other existing ones you don't think are great"): the flat vectors, the interiors
         # and the still lifes; the comment names the restyle each replaced. The old picture
         # won for appliances (every redraw was a warehouse of crates), the deep-sea mine
         # (the owner likes the ocean floor) and the highway (the interchanges made no sense).
         "building_airport": {"subject": "a modern airport: a long curved glass terminal with a tall control tower, plain white jet airliners parked at its gates and one taking off from a long runway, green fields around", "seed": 3},  # fallback: restyle airport.dds
-        "building_synthetics_plant_opium": {"subject": "a clean modern pharmaceutical plant: white factory buildings with gleaming steel tanks and pipes and a glass-walled laboratory wing, green lawns and trees around, loosely hand-painted with visible brush strokes", "seed": 0},  # fallback: restyle drugs.dds
-        "building_hydro_plant": {"subject": "a hydroelectric power plant: a tall curved concrete arch dam across a river gorge between wooded green hills, white water rushing from its spillways, a power station at its foot and power lines on steel pylons climbing the hillside, a blue reservoir lake behind", "seed": 0},  # fallback: restyle hydro_plant.dds, crop 0.18
         "building_national_park": {"subject": "a national park: a log-cabin ranger station with a wooden lookout tower beside a calm blue lake, a winding trail through pine forests, snowy mountains behind", "seed": 0},  # fallback: restyle national_park.dds
-        "building_robotics_industry": {"subject": "a modern robotics factory: long white halls with sawtooth roofs, through the open end of one hall a line of big yellow robotic arms welding car bodies in showers of sparks, loosely hand-painted with visible brush strokes", "seed": 1},  # fallback: restyle robot.dds, crop 0.08
-        "building_electronic_components_and_semiconductor_industry": {"subject": "a semiconductor plant: a big boxy windowless white cleanroom building with rows of rooftop air handlers and silver exhaust stacks, a glass entrance hall glowing golden, car parks and green lawns around, loosely hand-painted with visible brush strokes", "seed": 1},  # fallback: restyle semiconductor.dds
-        "building_tourism_industry": {"subject": "a seaside resort: a tall white hotel with balconies above a sandy beach lined with rows of colourful parasols, palm trees and a promenade with cafes, a turquoise sea with small sailing boats", "seed": 2},  # fallback: restyle tourism.dds
-        # Resort Colony (#1948), on the Tourism Industry's icon until now: the off-world resort, so the
-        # pool and palms say resort and the dome, moon and Earth say off-world.
-        "building_space_resort": {"subject": "a luxury resort under a huge clear glass dome on a grey cratered moon surface: a curved white hotel with balconies around a bright turquoise swimming pool, palm trees and sun loungers inside the dome, the blue Earth in the black starry sky above, loosely hand-painted with visible brush strokes", "seed": 2},
         "building_network_infrastructure": {"subject": "a telecommunications hub: a tall red-and-white steel radio mast and several big white satellite dishes beside a low grey exchange building, telephone poles and cable trenches running away across green countryside toward a distant city", "seed": 0},  # fallback: restyle network.dds
-        "building_advanced_material_fabricator": {"subject": "a high-tech materials plant: a sleek dark grey factory hall with a glowing orange furnace seen through its open doors, stacks of black carbon-fibre sheets and dark composite panels in its yard, loosely hand-painted with visible brush strokes", "seed": 0},  # fallback: restyle advanced_materials.dds
         # Power grids (#1107), on the power plant's icon until now. A substation, not a plant:
         # FLUX puts chimneys on anything called a plant.
         "building_grid_transfer_station": {"subject": "an electrical substation yard: rows of big grey transformers and steel lattice gantries strung with high-voltage lines behind a wire fence, the lines leaving on tall steel pylons across green fields, loosely hand-painted with visible brush strokes", "seed": 0},
@@ -1212,6 +1216,105 @@ ICONS: dict[str, dict[str, dict]] = {
         # Grand Monuments sites (#1058), on the finished monument's icon until now, as the megaproject
         # sites were before batch 2.
         "building_grand_monument_site": {"subject": "a grand monument under construction: a half-built stone column wrapped in wooden scaffolding with a timber crane beside it, blocks of cut stone stacked on an unfinished paved plaza, loosely hand-painted with visible brush strokes", "seed": 2},
+    },
+    "production_building": {
+        "building_bauxite_mine": {"subject": "an open-pit bauxite mine with red earth terraces, a conveyor belt and a wooden ore shed", "seed": 2,
+                                 "foreground": [{"part": "building_foreground/ore_bauxite"}]},
+        "building_manganese_mine": {"subject": "a mine with a timber headframe, ore sheds and black spoil heaps on dark rocky ground", "seed": 0,
+                                   "foreground": [{"part": "building_foreground/ore_manganese"}]},
+        "building_chromium_mine": {"subject": "a terraced open-pit mine in dark grey rock with a processing plant and an ore conveyor at its rim", "seed": 0,
+                                  "foreground": [{"part": "building_foreground/ore_chromium"}]},
+        "building_specialty_alloy_metal_mine": {"subject": "a mountainside mine with a steel headframe, ore bins and a crushing mill on grey rock", "seed": 1,
+                                               "foreground": [{"part": "building_foreground/ore_specialty_alloy"}]},
+        "building_nickel_cobalt_mine": {"subject": "an open-pit mine with rust-orange earth terraces, haul roads and a smelter shed at its rim", "seed": 0,
+                                       "foreground": [{"part": "building_foreground/ore_nickel_cobalt"}]},
+        "building_precious_minor_base_metal_mine": {"subject": "a hillside mine with a timber headframe, ore cart tracks and a stamp mill shed", "seed": 0,
+                                                   "foreground": [{"part": "building_foreground/ore_precious_base"}]},
+        "building_lithium_mine": {"subject": "a lithium mine: rows of rectangular brine evaporation ponds beside a small corrugated-iron processing shed", "seed": 0,
+                                 "foreground": [{"part": "building_foreground/ore_lithium"}]},
+        "building_rare_earth_metals_mine": {"subject": "the bottom of a deep open-pit mine seen close from above, ore trucks on pale grey benches around a small green tailings pond", "seed": 2,
+                                           "foreground": [{"part": "building_foreground/ore_rare_earth"}]},
+        "building_platinum_group_metals_mine": {"subject": "a deep mine with a tall steel headframe, shaft buildings and a refinery beside pale grey ore heaps", "seed": 0,
+                                               "foreground": [{"part": "building_foreground/ore_platinum"}]},
+        "building_graphite_mine": {"subject": "an open-pit mine with black glittering terraces and a flotation plant with round settling tanks", "seed": 0,
+                                  "foreground": [{"part": "building_foreground/ore_graphite"}]},
+        "building_phosphate_mine": {"subject": "the bottom of a deep open-cast mine seen close from above, dump trucks and a conveyor belt on pale tan benches", "seed": 2,
+                                   "foreground": [{"part": "building_foreground/ore_phosphate"}]},
+        "building_potash_mine": {"subject": "a mine with a tall headframe beside huge pink-white salt heaps and long storage sheds", "seed": 0,
+                                "foreground": [{"part": "building_foreground/ore_potash"}]},
+        "building_industrial_mineral_salt_mine": {"subject": "shallow salt evaporation pans and white salt heaps with conveyor belts and a packing shed", "seed": 1,
+                                                 "foreground": [{"part": "building_foreground/ore_salt"}]},
+        "building_ocean_mine": {"subject": "a deep-sea mining machine with glowing lamps crawling over the dark ocean floor, cables rising from it", "seed": 0,
+                               "foreground": [{"part": "building_foreground/ore_nodules"}]},
+        "building_space_mine": {"subject": "a mining base on a grey cratered asteroid: domed habitats, ore crushers and a landing pad", "seed": 0,
+                               "foreground": [{"part": "building_foreground/ore_asteroid"}]},
+        "building_electrics_industry_radio": {"subject": "an electronics factory with a radio mast and satellite dishes on its long flat roof", "seed": 0,
+                                             "foreground": [{"good": "radios"}]},
+        "building_electrics_industry_appliances": {"subject": "an appliance factory with long sawtooth-roofed assembly halls and a yard of stacked crates", "seed": 0,
+                                                  "foreground": [{"good": "consumer_appliances"}]},
+        "building_electronic_components_and_semiconductor_industry": {"subject": "a semiconductor factory with long flat roofs covered in ventilation units and ducts", "seed": 2,
+                                                                     "foreground": [{"good": "electronic_components"}]},
+        "building_software_industry": {"subject": "a modern office block with a flat roof and long bands of glass windows", "seed": 0,
+                                      "foreground": [{"good": "digital_assets"}]},
+        "building_robotics_industry": {"subject": "a large industrial assembly hall with sawtooth skylight roofs and loading bays", "seed": 0,
+                                      "foreground": [{"good": "robotics"}]},
+        "building_advanced_material_fabricator": {"subject": "a high-tech materials plant: dark grey halls, a furnace glowing through open roof vents and stacks of black carbon sheets", "seed": 0,
+                                                 "foreground": [{"good": "advanced_materials"}]},
+        "building_aerospace_industry": {"subject": "an aircraft factory: huge hangar halls with curved roofs beside an apron with parked airliners", "seed": 2,
+                                       "foreground": [{"good": "aeroplanes"}]},
+        "building_synthetics_plant_oil": {"subject": "a synthetic fuel refinery with distillation columns, storage tanks and pipework", "seed": 0,
+                                         "foreground": [{"good": "oil"}]},
+        "building_synthetics_plant_rubber": {"subject": "a synthetic rubber works with domed reactor tanks, pipe racks and a conveyor of dark rubber sheets", "seed": 2,
+                                            "foreground": [{"good": "rubber"}]},
+        "building_synthetics_plant_wood": {"subject": "a resin panel factory: long halls with resin vats and pipes, and a yard of stacked honey-brown panels", "seed": 2,
+                                          "foreground": [{"good": "wood"}]},
+        "building_synthetics_plant_sugar": {"subject": "a chemical plant with round steel reactor tanks and pipework beside a fermentation hall", "seed": 2,
+                                           "foreground": [{"good": "sugar"}]},
+        "building_synthetics_plant_opium": {"subject": "a pharmaceutical plant: factory buildings with gleaming steel tanks and pipes and a glass-walled laboratory wing", "seed": 2,
+                                           "foreground": [{"good": "opium"}]},
+        "building_synthetics_plant_meat": {"subject": "a laboratory factory with rows of round steel bioreactor tanks linked by pipes and glass-roofed lab halls", "seed": 2,
+                                          "foreground": [{"good": "meat"}]},
+        "building_synthetics_plant_fruit": {"subject": "a vertical farm: a tall glass-roofed building with stacked shelves of green plants under pink grow lights", "seed": 0,
+                                           "foreground": [{"good": "fruit"}]},
+        "building_synthetics_plant_silk": {"subject": "a fibre plant with long spinning halls, round chemical tanks and pipe racks", "seed": 2,
+                                          "foreground": [{"good": "silk"}]},
+        "building_synthetics_plant_biomass": {"subject": "a biorefinery with tall steel fermentation towers and tanks", "seed": 0,
+                                             "foreground": [{"good": "grain"}]},
+        "building_synthetics_plant_drinks": {"subject": "a beverage plant with tall steel mixing tanks, pipes and a loading dock with delivery trucks", "seed": 0,
+                                            "foreground": [{"part": "building_foreground/bottled_drink"}]},
+        "building_synthetics_plant_coal": {"subject": "a low industrial hall whose whole roof is rows of big round black fans, with squat pellet reactor towers beside it", "seed": 2,
+                                          "foreground": [{"part": "building_foreground/dac_pellets"}]},
+        "building_nuclear_plant": {"subject": "a nuclear power station: a domed concrete reactor building beside the rim of a cooling tower", "seed": 2,
+                                  "foreground": [{"good": "electricity"}]},
+        "building_fusion_plant": {"subject": "a fusion power plant: a huge steel doughnut-shaped tokamak ring wrapped in magnet coils, lit from inside, in an open-roofed hall among low service buildings", "seed": 0,
+                                 "foreground": [{"good": "electricity"}]},
+        "building_renewable_energy_plant": {"subject": "a renewable energy plant: rows of solar panels around white wind turbine towers and a small control building", "seed": 0,
+                                           "foreground": [{"good": "electricity"}]},
+        "building_hydro_plant": {"subject": "a hydroelectric dam: a curved concrete dam wall with spillways and a powerhouse below it in a river gorge", "seed": 0,
+                                "foreground": [{"good": "electricity"}]},
+        "building_tourism_industry": {"subject": "a seaside resort: a white hotel with balconies above a beach of colourful parasols, a pool and palm trees", "seed": 0,
+                                     "foreground": [{"good": "tourism"}]},
+        "building_space_resort": {"subject": "a resort under a huge glass dome on a grey cratered moon: a curved white hotel around a turquoise pool", "seed": 0,
+                                 "foreground": [{"good": "tourism"}]},
+    },
+    "building_foreground": {
+        "ore_bauxite": {"subject": "a heap of rough rust-red earthy bauxite lumps", "seed": 1},
+        "ore_manganese": {"subject": "a heap of sooty black manganese ore lumps with a few pink rhodochrosite crystals", "seed": 2},
+        "ore_chromium": {"subject": "a small heap of a few large black chromite ore lumps flecked with bright emerald-green uvarovite crystals", "seed": 1},
+        "ore_specialty_alloy": {"subject": "a small heap of a few large dark wolframite ore blades crusted with bright orange-red hexagonal vanadinite crystals", "seed": 1},
+        "ore_nickel_cobalt": {"subject": "a heap of rough apple-green garnierite nickel ore lumps", "seed": 1},
+        "ore_precious_base": {"subject": "a heap of silvery cubic galena crystals with patches of bright blue azurite", "seed": 1},
+        "ore_lithium": {"subject": "a heap of pale pink and white spodumene crystals", "seed": 1},
+        "ore_rare_earth": {"subject": "a small heap of a few large glossy translucent honey-amber monazite crystals", "seed": 2},
+        "ore_platinum": {"subject": "a few large bright silvery-white platinum nuggets with a mirror shine resting on a chunk of dark rock", "seed": 1},
+        "ore_graphite": {"subject": "a small stack of a few large glossy black graphite flakes with a bright silvery metallic sheen on their faces", "seed": 1},
+        "ore_phosphate": {"subject": "a heap of cream-tan phosphate rock pebbles", "seed": 1},
+        "ore_potash": {"subject": "a heap of orange-pink sylvite potash crystals", "seed": 0},
+        "ore_salt": {"subject": "a heap of translucent pale grey cubic halite rock salt crystals with dark grey shadows", "seed": 1},
+        "ore_nodules": {"subject": "a small heap of a few large round knobbly dark brown-black polymetallic nodules, wet and glistening", "seed": 1},
+        "ore_asteroid": {"subject": "a pitted grey iron-nickel meteorite chunk with a metallic sheen", "seed": 1},
+        "dac_pellets": {"subject": "a heap of pale grey chalky round pellets", "seed": 1},
+        "bottled_drink": {"subject": "a single label-free glass bottle of dark drink with a plain metal cap", "seed": 0},
     },
     "mobilization_option": {
         # Mod-added options on a vanilla icon (14 on machinegunners), by group.
@@ -1900,21 +2003,26 @@ ICONS: dict[str, dict[str, dict]] = {
     "good": {
         "rocket": {"subject": "a tall white multi-stage rocket standing upright on a small steel launch pad", "seed": 1,
                    "now": f"{_GI}/goods_icons/rocket.dds"},
-        "robot": {"subject": "a yellow industrial robot arm with a steel two-fingered gripper on a heavy base", "seed": 0,
+        "robot": {"subject": "a muted ochre-yellow industrial robot arm with a steel two-fingered gripper on a heavy base, seen at an angle from slightly above", "seed": 0,
                   "now": f"{_GI}/goods_icons/robot.dds"},
-        "software": {"subject": "a short stack of colourful floppy disks with blank unmarked labels, a silver compact disc leaning on them", "seed": 0,
+        "software": {"subject": "a short fanned stack of floppy disks in muted grey, slate blue and dull red with blank unmarked labels, seen at an angle from slightly above", "seed": 0,
                      "now": f"{_GI}/goods_icons/software.dds"},
         # s0 is retouched: a brand name painted off the router's front.
         "digital_access": {"subject": "a white wireless router with two antennas beside a black smartphone with a dark blank screen", "seed": 0,
                            "now": f"{_GI}/goods_icons/digital_access.dds"},
-        "consumer_appliances": {"subject": "a cream-coloured retro refrigerator beside a small chrome toaster and a kitchen blender", "seed": 0,
+        "consumer_appliances": {"subject": "a dull cream retro refrigerator beside a small chrome toaster, seen at an angle from slightly above", "seed": 2,
                                 "now": f"{_GI}/goods_icons/consumer_appliances.dds"},
         # s0 lettered its circuit board.
-        "electronic_components": {"subject": "a green circuit board holding a black microchip, round capacitors and striped resistors", "seed": 1,
+        "electronic_components": {"subject": "a dark green circuit board, seen at an angle from slightly above, holding a black microchip, round capacitors and striped resistors", "seed": 2,
                                   "now": f"{_GI}/goods_icons/electronic_components.dds"},
+        # Repainted 2026-11-27 with the production buildings (spec 2026-11-27): vanilla's goods are
+        # angled and muted; these five read as flat, front-on, saturated stickers beside them.
+        # Advanced Materials' icon (buckyball.dds) predates the pipeline; the owner kept it.
+        "buckyball": {"subject": "a dark graphite-grey carbon buckyball molecule model of round atoms on short thick rods, seen at an angle from slightly above", "seed": KEEP,
+                      "now": f"{_GI}/goods_icons/buckyball.dds"},
         "tech_metals": {"subject": "a pile of shiny silvery metal ingots with a few dark glittering mineral crystals", "seed": 1,
                         "now": f"{_GI}/goods_icons/tech_metals.dds"},
-        "tourism": {"subject": "a brown leather suitcase with a camera on a strap and a straw sun hat resting on top", "seed": 2,
+        "tourism": {"subject": "a worn brown leather suitcase with a camera on a strap and a straw sun hat resting on top, seen at an angle from slightly above", "seed": 2,
                     "now": f"{_GI}/goods_icons/tourism.dds"},
         # Batch 5: vanilla goods the mod renamed, written over vanilla's file so the
         # text icon (@fertilizer!, @opium!) follows. Chemicals showed the basic
@@ -4506,6 +4614,9 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                              capture_output=True, text=True, check=True).stdout
         on_disk = set(out.splitlines())
     report: dict = {"unknown": [], "bad_entry": [], "missing_dds": [], "bad_backdrop": [], "states": {}}
+    # An entity's icon line belongs to one category: a building in both
+    # `building` and `production_building` would be written twice.
+    owners: dict[tuple, str] = {}
     for cat, entries in ICONS.items():
         spec = CATEGORIES[cat]
         defined: set[str] = set()
@@ -4524,6 +4635,14 @@ def check(mod_root: str | None = None, on_disk: set[str] | None = None) -> dict:
                 report["bad_entry"].append((cat, key))
                 continue
             if not _marks_ok(entry.get("marks", [])):
+                report["bad_entry"].append((cat, key))
+                continue
+            if "gui" not in spec:
+                slot = (spec["entity_dir"], spec["field"], key)
+                if owners.setdefault(slot, cat) != cat:
+                    report["bad_entry"].append((cat, key))
+                    continue
+            if spec.get("mode") == "framed_good" and not _foreground_ok(entry, mod_root):
                 report["bad_entry"].append((cat, key))
                 continue
             if "use" in entry:
@@ -4654,6 +4773,61 @@ def _marks_ok(marks) -> bool:
         if m.get("tint") not in (None,) + TINTS or not isinstance(m.get("rotate", 0), (int, float)):
             return False
         at, scale = m.get("at", (0.5, 0.5)), m.get("scale", 0.5)
+        if not (len(at) == 2 and all(0 <= v <= 1 for v in at) and 0 < scale <= 1):
+            return False
+    return True
+
+
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_GOODS_BLOCK = re.compile(r"^(?:REPLACE:|REPLACE_OR_CREATE:|INJECT:)?([A-Za-z0-9_]+)\s*=\s*\{", re.M)
+
+
+@functools.lru_cache(maxsize=4)
+def _goods_textures(mod_root: str) -> dict[str, str]:
+    """good -> texture path: vanilla's (vanilla_parsed, as the repo keeps it), then the mod's over it."""
+    out: dict[str, str] = {}
+    vanilla = os.path.join(_REPO_ROOT, "vanilla_parsed", "common", "goods.json")
+    if os.path.exists(vanilla):
+        with open(vanilla, encoding="utf-8") as fh:
+            for good, (_op, body) in json.load(fh).items():
+                if isinstance(body, dict) and "texture" in body:
+                    out[good] = body["texture"][1].strip('"')
+    goods_dir = os.path.join(mod_root, "common", "goods")
+    for fname in sorted(os.listdir(goods_dir)) if os.path.isdir(goods_dir) else ():
+        if not fname.endswith(".txt"):
+            continue
+        with open(os.path.join(goods_dir, fname), encoding="utf-8-sig", errors="replace") as fh:
+            text = re.sub(r"#[^\n]*", "", fh.read())
+        for m in _GOODS_BLOCK.finditer(text):
+            i, depth = m.end(), 1
+            while depth and i < len(text):
+                depth += {"{": 1, "}": -1}.get(text[i], 0)
+                i += 1
+            tex = re.search(r'^\s*texture\s*=\s*"([^"]+)"', text[m.end():i], re.M)
+            if tex:
+                out[m.group(1)] = tex.group(1)
+    return out
+
+
+def good_texture(good: str, mod_root: str | None = None) -> str | None:
+    """A good's icon path (gfx/...dds): the mod's `texture` if it sets one, else vanilla's; None if neither has it."""
+    return _goods_textures(mod_root or _REPO_ROOT).get(good)
+
+
+def _foreground_ok(entry: dict, mod_root: str | None = None) -> bool:
+    """A production building's layers: at least one, each one good with an icon or one registry part, placed sanely."""
+    layers = entry.get("foreground")
+    if not isinstance(layers, list) or not layers:
+        return False
+    for layer in layers:
+        kinds = [k for k in ("good", "part") if k in layer]
+        if len(kinds) != 1:
+            return False
+        if "good" in layer and not good_texture(layer["good"], mod_root):
+            return False
+        if "part" in layer and not (_ref(layer["part"]) and CATEGORIES[_ref(layer["part"])[0]].get("part")):
+            return False
+        at, scale = layer.get("at", (0.5, 0.5)), layer.get("scale", 0.5)
         if not (len(at) == 2 and all(0 <= v <= 1 for v in at) and 0 < scale <= 1):
             return False
     return True
