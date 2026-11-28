@@ -100,7 +100,7 @@ template te_systems_window_private_actors_selected {
 }
 
 template te_systems_window_private_actors_unselected {
-	visible = "[Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'private_actors'), GetScriptedGui('te_window_private_actors_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) )]"
+	visible = "[And( GetScriptedGui('te_window_private_actors_tab_unlock_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ), Not( And( Not( And( GetVariableSystem.HasValue('te_systems_window_tab', 'tax_probes'), GetScriptedGui('te_tp_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ), And( GetVariableSystem.HasValue('te_systems_window_tab', 'private_actors'), GetScriptedGui('te_window_private_actors_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) ) ) )]"
 }
 
 template te_systems_window_demographics_selected {

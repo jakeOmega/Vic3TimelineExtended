@@ -667,7 +667,7 @@ the line.
 ### The Private Actors tab
 
 The tab is the sixth on the Timeline Extended window's second strip, after
-Global Warming. With the game rule off it is grayed, and its tooltip says so.
+Global Warming. With the game rule off the tab is not shown.
 
 The overview counts your firms, how many are prospering and failing, the firm
 with the largest share of its sector and that share, and the goal most of your

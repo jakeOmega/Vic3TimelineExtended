@@ -621,13 +621,8 @@ te_window_private_actors_tab_sgui = {
 
 te_window_private_actors_tab_unlock_sgui = {
 	scope = country
-	is_shown = { always = yes }
+	is_shown = { te_pa_on = yes }
 	ai_is_valid = { always = no }
-	is_valid = {
-		custom_tooltip = {
-			text = te_window_private_actors_rule_tt
-			te_pa_on = yes
-		}
-	}
+	is_valid = { te_pa_on = yes }
 	effect = { }
 }

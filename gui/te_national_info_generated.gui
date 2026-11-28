@@ -110,7 +110,7 @@ template te_ni_private_actors_selected {
 }
 
 template te_ni_private_actors_unselected {
-	visible = "[Not( And( GetVariableSystem.HasValue('te_ni_tab', 'private_actors'), GetScriptedGui('te_window_private_actors_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) )]"
+	visible = "[And( GetScriptedGui('te_window_private_actors_tab_unlock_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ), Not( And( GetVariableSystem.HasValue('te_ni_tab', 'private_actors'), GetScriptedGui('te_window_private_actors_tab_sgui').IsShown( GuiScope.SetRoot( Country.MakeScope ).End ) ) ) )]"
 }
 
 template te_ni_strip_shown {

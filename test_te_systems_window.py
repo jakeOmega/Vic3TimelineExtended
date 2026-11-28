@@ -46,9 +46,6 @@ RULES = {"space_race": "sr_space_race_on = yes",
          "colonial_empire": "has_game_rule = decolonization_enabled",
          "seabed": "te_global_commons_enabled = yes",
          "private_actors": "te_pa_on = yes"}
-# The rule-gated tabs always on their strip, grayed while the rule is off: the
-# rule is their checklist (the unlock's is_valid), not their strip gate.
-RULE_CHECKLIST = {"private_actors"}
 # The system tabs, from the generator's registry: (tab key, the rule its gates
 # read, its slot on its strip). Nation (always open, no rule) is the first
 # slot of the first strip, then these.
@@ -755,14 +752,7 @@ class StripTest(unittest.TestCase):
                 gate = _txt_block(self.sguis, f"te_window_{tab}_tab_sgui")
                 self.assertIn(rule, gate)
                 unlock = _txt_block(self.sguis, f"te_window_{tab}_tab_unlock_sgui")
-                if tab in RULE_CHECKLIST:
-                    # always on its strip, grayed while the rule is off, the
-                    # rule its checklist line
-                    self.assertIsNone(_tab(tab).strip)
-                    self.assertIn("is_shown = { always = yes }", unlock)
-                    self.assertIn(rule, unlock[unlock.index("is_valid"):])
-                else:
-                    self.assertIn(f"is_shown = {{ {rule} }}", unlock)
+                self.assertIn(f"is_shown = {{ {rule} }}", unlock)
                 for body in (gate, unlock):
                     self.assertIn("is_valid", body)
                     self.assertNotIn("scope:", body)    # scope-free (gotcha #22)

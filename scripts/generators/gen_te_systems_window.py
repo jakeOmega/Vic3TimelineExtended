@@ -313,11 +313,9 @@ TABS: list[Tab] = [
             wide="te_gw_wide_sections"),
     # The window's own system on the economy strip, its sixth on te_tab_buttons_six
     # as the first strip's (2026-11-28; the first strip was full). No journal
-    # entry: open while its game rule is on; always on the strip, so grayed with
-    # the rule off (the default), the rule its checklist
-    # (te_window_private_actors_tab_unlock_sgui).
+    # entry: on its strip and open while its game rule is on, gone from the strip
+    # with the rule off (the default), as every rule-gated tab.
     replace(_system("private_actors", "te_pa_tab_body", "te_pa_tab_layout", row=2, wide="te_pa_wide_sections"),
-            strip=None,
             public=True),
 
     # The Population, Society, Diplomacy and Military panels' tabs (strip 3).

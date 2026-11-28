@@ -1,6 +1,6 @@
 """The Private Actors tab of the Timeline Extended window (gui/te_pa_widgets.gui;
 plan Task 3, spec § 14): the tab's place (the economy strip's sixth, public in
-National Info), its gates (the game rule, a grayed tab with the rule off), its
+National Info), its gates (the game rule: off the strip with the rule off), its
 full-screen columns, the roster's rows and the firm detail, the posture
 buttons and their scripted GUIs (te_pa_sguis.txt), the ledger, each fixed cell
 against its longest text, and what a row's hovers may read.
@@ -211,8 +211,8 @@ class StructureTest(unittest.TestCase):
         # public: National Info shows any country's firms (§ 12.2 rule 4)
         self.assertTrue(tab.public)
         self.assertIn("private_actors", window_gen.NI_ORDER)
-        # always on the strip, so grayed with the rule off; the economy strip's sixth
-        self.assertIsNone(tab.strip)
+        # on its strip only while the rule is on, as every rule-gated tab; the economy strip's sixth
+        self.assertEqual(tab.strip, window_gen.shown("te_window_private_actors_tab_unlock_sgui"))
         self.assertEqual(tab.unlock, "te_window_private_actors_tab_unlock_sgui")
         self.assertEqual([t.key for t in window_gen.TABS if t.row == 2][-1], "private_actors")
         self.assertEqual(len([t for t in window_gen.TABS if t.row == 2]), len(window_gen.SLOTS_SIX))
@@ -222,13 +222,11 @@ class StructureTest(unittest.TestCase):
         gate = _no_comments(_txt_block(sguis, "te_window_private_actors_tab_sgui"))
         self.assertRegex(gate, r"is_shown = \{ te_pa_on = yes \}")
         unlock = _no_comments(_txt_block(sguis, "te_window_private_actors_tab_unlock_sgui"))
-        self.assertIn("is_shown = { always = yes }", unlock)
-        valid = unlock[unlock.index("is_valid"):]
-        self.assertRegex(valid, r"custom_tooltip = \{\s*text = te_window_private_actors_rule_tt\s*te_pa_on = yes\s*\}")
+        self.assertIn("is_shown = { te_pa_on = yes }", unlock)
+        self.assertIn("is_valid = { te_pa_on = yes }", unlock)
         for block in (gate, unlock):
             self.assertNotIn("has_game_rule", block)    # the rule is read through te_pa_on alone
             self.assertNotIn("scope:", block)
-        self.assertIn("te_window_private_actors_rule_tt", self.loc)
 
     def test_the_help_popup_is_in_the_root(self):
         popups = _read(POPUPS)

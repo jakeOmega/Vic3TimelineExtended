@@ -11527,7 +11527,6 @@
  te_trade_center_chill:0 "Merchant Quarter Sluggish"
  te_window_colonial_empire_open_journal_tt:0 "Opens $je_colonial_empire$ in the journal, which shows these same panels."
  te_window_grand_monuments_open_journal_tt:0 "Opens $je_grand_monuments$ in the journal, which shows these same panels."
- te_window_private_actors_rule_tt:0 "The $te_pa_system_name$ game rule is on"
  te_window_space_race_idle_header:0 "Milestones"
  te_window_space_race_idle_note:0 "[SelectLocalization( Country.IsLocalPlayer, 'te_window_space_race_idle_note_ours', 'te_window_space_race_idle_note_theirs' )]"
  te_window_space_race_idle_note_ours:0 "No milestone is under way. The next appears in the journal once its technology is researched and the milestones before it are achieved; hover our program's icons under Space Powers for where each stands."

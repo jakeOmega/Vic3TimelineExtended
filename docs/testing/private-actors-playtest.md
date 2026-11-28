@@ -58,11 +58,8 @@ turn-time checks wait for 20 firms, so the first lines come within a few months 
     turn each a year spread over the months).
 11. **The tab and the rule.** With the rule on, the Private Actors tab is the sixth on the window's second strip, after
     Global Warming, and opens; the strip's six names wrap to two lines at most and none ends in "...". With the rule off
-    (a new game on the default, or the rule switched off mid-game, after the month's pulse) the tab is grayed and its
-    tooltip reads "Not open yet. It opens once:" over a crossed "The Private Actors game rule is on". If that line is
-    missing (the checklist empty under "It opens once:"), `IsValidTooltip` skipped the unlock's `is_valid`: give the
-    unlock `te_system_tab_met_tt`'s shape or a tooltip of its own. Full screen, the overview, the roster and the ledger
-    take a column each.
+    (a new game on the default, or the rule switched off mid-game, after the month's pulse) the tab leaves the strip and
+    the other five keep their places. Full screen, the overview, the roster and the ledger take a column each.
 12. **The rows show every firm.** The roster lists one row a firm, as many as the country's companies (the Grand
     Monument naming placeholder aside); the overview's Firms box counts the same. Each row's icon is its company's, its
     hover vanilla's company tooltip, a click opens the company; the name wraps at most to two lines. **Not seen in
