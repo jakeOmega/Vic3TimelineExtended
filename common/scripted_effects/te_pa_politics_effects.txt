@@ -1596,11 +1596,23 @@ te_pa_pledge_law_monthly = {
 # A tariff: the Tax Code's customs option or the loss of the market makes the pledge lapse (57); a level that no
 # longer holds is set again by an AI government, or by anyone in the month after the set (te_pa_pl_tariff_reassert:
 # a set the engine kept back is tried again once before it counts), and otherwise breaks the pledge (55); five
-# years held, it is kept (53) and done.
+# years held (or, for an AI government, kept up by its re-asserts), it is kept (53) and done, checked first so a
+# re-assert the engine keeps refusing can't run past the deadline.
 te_pa_pledge_tariff_monthly = {
 	if = {
 		limit = { scope:te_pa_home = { te_pa_tariffs_settable = no } }
 		te_pa_pledge_line = { VERB = 57 }
+		te_pa_pledge_drop = yes
+	}
+	else_if = {
+		limit = {
+			te_history_month_index >= var:te_pa_pl_until
+			OR = {
+				te_pa_pl_tariff_held = yes
+				te_pa_pl_tariff_reassert = yes
+			}
+		}
+		te_pa_pledge_line = { VERB = 53 }
 		te_pa_pledge_drop = yes
 	}
 	else_if = {
@@ -1612,11 +1624,6 @@ te_pa_pledge_tariff_monthly = {
 		else = {
 			te_pa_pledge_break = { VERB = 55 }
 		}
-	}
-	else_if = {
-		limit = { te_history_month_index >= var:te_pa_pl_until }
-		te_pa_pledge_line = { VERB = 53 }
-		te_pa_pledge_drop = yes
 	}
 }
 
