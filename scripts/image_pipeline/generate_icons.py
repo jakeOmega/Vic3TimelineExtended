@@ -32,9 +32,13 @@ A production building (`production_building`, layout `framed_good`) is a
 backdrop render under its `foreground`: the good's own icon, read as the game
 loads it (the mod's file at the good's texture path, else vanilla's), or a
 `building_foreground` part's candidate. Those are inputs like the raw: a newer
-goods icon or part final recomposes the building, and a repainted good or a
-re-picked part changes its manifest record, so `write` rewrites it. `write`
-skips a building until its parts are picked.
+goods icon or part final recomposes the building, and so does any change to
+what its foreground is made from (a good's bytes, a part's pick or prompt, a
+layer's placement), which each final records beside itself (`<final>.fg.json`;
+file times alone miss a re-pick, as every part candidate is composed for its
+sheet before the buildings). The same record is in the write manifest, so
+`write` rewrites the building. `write` skips a building until its parts are
+picked.
 
 A GUI-hosted category (`gui` in its spec; the UN's icons) has no entity
 files: each entry names the placeholder it replaces (`now`), `write` puts its
@@ -433,7 +437,8 @@ def foreground_fingerprint(e: dict, game: Path) -> list:
             out.append(["good", layer["good"], digest, layer.get("scale"), layer.get("at")])
         else:
             c, k = ref(layer["part"])
-            out.append(["part", layer["part"], ICONS[c][k].get("seed"), entry_prompt(c, ICONS[c][k])])
+            out.append(["part", layer["part"], ICONS[c][k].get("seed"), entry_prompt(c, ICONS[c][k]),
+                        layer.get("scale"), layer.get("at")])
     return out
 
 
@@ -486,11 +491,22 @@ class Finals:
         raw = raw_path(self.work / "raw", name(cat, key), seed)
         if not raw.exists():
             return None
-        e, layers, deps = ICONS[cat][key], None, ()
+        e, layers, deps, stamp = ICONS[cat][key], None, (), None
+        final = final_dir(cat, self.work) / raw.name
         if CATEGORIES[cat]["mode"] == "framed_good":
+            import json
+
             layers, deps = self.layers(e), tuple(self.layer_deps(e))
-        icon = _compose_one(self.composer, cat, raw, final_dir(cat, self.work) / raw.name, *self.backdrop(cat),
+            # File times can't see a re-pick: every candidate of a part is composed for its review sheet before
+            # the buildings are, so a newly picked part is older than the building. Key the final on what its
+            # foreground is made from too (the write manifest's record), kept beside it.
+            stamp, fp = final.with_name(final.stem + ".fg.json"), json.dumps(foreground_fingerprint(e, self.game))
+            if final.exists() and (not stamp.exists() or stamp.read_text() != fp):
+                final.unlink()
+        icon = _compose_one(self.composer, cat, raw, final, *self.backdrop(cat),
                             spec=entry_spec(cat, e), deps=deps, layers=layers)
+        if stamp:
+            stamp.write_text(fp)
         return self.finish(e, icon)
 
     def _part_seed(self, part: str) -> int:

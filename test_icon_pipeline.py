@@ -1555,6 +1555,52 @@ class ForegroundDriverTests(unittest.TestCase):
         self.assertEqual(im.size, (16, 16))
         self.assertEqual(opts, {"kind": "good", "scale": 0.5, "at": None})
 
+    def test_fingerprint_follows_a_parts_placement(self):
+        parts = ip.ICONS["building_foreground"]
+        try:
+            parts["_t"] = {"subject": "a heap of red ore", "seed": 0}
+            e = {"subject": "a pit", "seed": 0, "foreground": [{"part": "building_foreground/_t", "scale": 0.4}]}
+            a = gi.foreground_fingerprint(e, Path("/nonexistent"))
+            e["foreground"][0]["scale"] = 0.5
+            self.assertNotEqual(a, gi.foreground_fingerprint(e, Path("/nonexistent")))
+        finally:
+            parts.pop("_t")
+
+    def test_finals_recompose_a_building_when_its_part_is_repicked(self):
+        # Every candidate of a part is composed for its review sheet before the buildings are, so the newly
+        # picked part's final is older than the building's: file times alone would keep the old ore (#2143 review).
+        work = Path(tempfile.mkdtemp())
+        (work / "raw").mkdir()
+        Image.new("RGB", (8, 8)).save(work / "raw" / "production_building___b__s0.png")
+        for s, colour in ((0, (255, 0, 0)), (1, (0, 0, 255))):
+            Image.new("RGB", (8, 8), colour).save(work / "raw" / f"building_foreground___t__s{s}.png")
+        parts, pb = ip.ICONS["building_foreground"], ip.ICONS["production_building"]
+        seen = []
+
+        class C:
+            def compose(self, raw, cat, spec, backdrop=None, layers=None):
+                if layers is not None:
+                    seen.append(layers[0][0].convert("RGB").getpixel((0, 0)))
+                return raw.convert("RGBA")
+        try:
+            parts["_t"] = {"subject": "a heap of ore", "seed": 0}
+            pb["_b"] = {"subject": "a pit", "seed": 0, "foreground": [{"part": "building_foreground/_t"}]}
+            finals = gi.Finals.__new__(gi.Finals)
+            finals.work, finals.composer, finals._backdrops, finals.game = work, C(), {}, Path("/nonexistent")
+            for s in (0, 1):                                        # the part's review sheet
+                finals.get("building_foreground", "_t", s)
+            finals.get("production_building", "_b", 0)
+            for p in list((work / "raw").glob("*.png")) + list(gi.final_dir("building_foreground", work).glob("*.png")):
+                os.utime(p, (1, 1))
+            for p in gi.final_dir("production_building", work).glob("*.png"):
+                os.utime(p, (5, 5))                                 # the building is newer than every input
+            parts["_t"]["seed"] = 1                                 # the owner re-picks the ore
+            finals.get("production_building", "_b", 0)
+        finally:
+            parts.pop("_t")
+            pb.pop("_b")
+        self.assertEqual(seen, [(255, 0, 0), (0, 0, 255)])
+
 
 if __name__ == "__main__":
     unittest.main()
