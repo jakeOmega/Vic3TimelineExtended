@@ -96,6 +96,12 @@ The first playable milestone shipped behind the experimental, default-off `te_ta
 | [plans/2026-11-10-in-game-qa-harness-part1.md](plans/2026-11-10-in-game-qa-harness-part1.md): part 1 of the build, nine tasks in three PRs: the path constants, snapshot and restore of the owner's files, the launch gate, the Windows helper, log following, the console round trip and the debugger client, all tested without a game, then one permitted live session that settles the spec's six assumptions | Built 2026-11-10 (#1577, #1578, #1579): Tasks 1–8 with their reviews, and Task 9's live session (results in the spec's § 12). The command line gained `launch` and `watch`, which the plan did not have | Nothing |
 | [plans/2026-11-10-in-game-qa-harness-part2.md](plans/2026-11-10-in-game-qa-harness-part2.md): part 2, nine tasks in three PRs: clicks and a presence reading in the helper, `launch` writing the run's playset, the generated overlay mod, the fixture, the session and its server, the verbs (`start`, `read`, `pick`, `advance`, `try-event`, `stop`, …), two live sessions, the skill | Built 2026-11-11 (#1582, #1585 and the PR with the skill and the live results): all nine tasks, with their reviews; three live launches, results in the spec's § 13. The verbs gained `remove-overlay`, which the plan did not have | Nothing |
 
+### Actors
+
+| Doc | Status | What's left |
+|-----|--------|-------------|
+| [specs/2026-11-28-actors-firms-design.md](specs/2026-11-28-actors-firms-design.md): bodies inside and across countries that pursue interests of their own, from the owner's brainstorm: a chassis (a goal derived from the actor's position, three currencies, holdings that are built and attacked, yearly turns, routine, threshold and declared major moves, a posture per actor) and firms as the first actors on the existing companies, with two chains: the trust (a cartel under the antitrust laws, buyers and courts against it, a captured regulator, a monopoly charter) and pulled abroad (concessions, rivalry, a petition answered by Back, Stand aside or Forbid, and a forbidden firm's ladder up to seeking another protector); AI countries under the same rules with every push visible; hooks for labor, movements, religious organizations and industry associations | Not built: design only (2026-11-28) | Everything: § 12's eight in-game probes, then § 13's phases 1 to 5; § 14's six decisions are the owner's |
+
 ## Archived — `archive/`
 
 Everything below has shipped. PR numbers are the main build first, then follow-ups.
