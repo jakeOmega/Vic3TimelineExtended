@@ -603,3 +603,31 @@ te_window_power_grids_tab_unlock_sgui = {
 	is_valid = { te_grid_tab_unlocked = yes }
 	effect = { }
 }
+
+# ---------------------------------------------------------------------------
+# Private Actors (te_pa_*.txt; docs/systems/mod_systems/private_actors.md). No
+# journal entry: open while its game rule is on, which every country's firms
+# then run under. Always on the strip (the Budget strip's sixth), so with the
+# rule off, the default, the tab is grayed and its checklist names the rule.
+# The rule is read only through te_pa_on (test_private_actors.py).
+# ---------------------------------------------------------------------------
+te_window_private_actors_tab_sgui = {
+	scope = country
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+te_window_private_actors_tab_unlock_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_window_private_actors_rule_tt
+			te_pa_on = yes
+		}
+	}
+	effect = { }
+}

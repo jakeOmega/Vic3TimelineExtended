@@ -306,3 +306,93 @@ te_pa_cycle_value = {
 	if = { limit = { te_pa_banking_boom = yes } value = 1 }
 	else_if = { limit = { te_pa_banking_slump = yes } value = -1 }
 }
+
+# ---------------------------------------------------------------------------
+# The tab (Task 3, gui/te_pa_widgets.gui)
+# ---------------------------------------------------------------------------
+
+# Company scope. The Funds bar's fill: the claim over its cap, five years' accrual at today's rate (te_pa_funds_cap),
+# 0 to 1; 0 with no cap (no accrual under Command Economy or Cooperative Ownership). Copied to the row as
+# te_pa_r_funds_fill by te_pa_row_sync.
+te_pa_funds_fill_value = {
+	value = 0
+	if = {
+		limit = { te_pa_funds_cap > 0 }
+		value = te_pa_v_funds
+		divide = te_pa_funds_cap
+	}
+	min = 0
+	max = 1
+}
+
+# Country scope: the overview's counts, from the rows (te_pa_ov_refresh stores them).
+te_pa_ov_count_firms = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_pa_rows }
+		every_in_list = {
+			variable = te_pa_rows
+			limit = { var:te_pa_r_firm ?= { has_variable = te_pa_init } }
+			add = 1
+		}
+	}
+}
+te_pa_ov_count_prospering = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_pa_rows }
+		every_in_list = {
+			variable = te_pa_rows
+			limit = { var:te_pa_r_cond ?= 1 }
+			add = 1
+		}
+	}
+}
+te_pa_ov_count_failing = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_pa_rows }
+		every_in_list = {
+			variable = te_pa_rows
+			limit = { var:te_pa_r_cond ?= -1 }
+			add = 1
+		}
+	}
+}
+
+# Container scope, a row: the order te_pa_ov_refresh finds the largest firm by (ordered_in_list sorts the highest
+# first).
+te_pa_row_share_order = {
+	value = 0
+	if = { limit = { has_variable = te_pa_r_share } value = var:te_pa_r_share }
+}
+
+# Country scope: the overview's stored figures as the tab reads them, 0 until the first monthly pulse with the rule
+# on has stored them (te_pa_ov_refresh).
+te_pa_tab_firms = { value = 0 if = { limit = { has_variable = te_pa_ov_firms } value = var:te_pa_ov_firms } }
+te_pa_tab_prospering = { value = 0 if = { limit = { has_variable = te_pa_ov_prospering } value = var:te_pa_ov_prospering } }
+te_pa_tab_failing = { value = 0 if = { limit = { has_variable = te_pa_ov_failing } value = var:te_pa_ov_failing } }
+te_pa_tab_top_share = { value = 0 if = { limit = { has_variable = te_pa_ov_top_share } value = var:te_pa_ov_top_share } }
+te_pa_tab_goal_n = { value = 0 if = { limit = { has_variable = te_pa_ov_goal_n } value = var:te_pa_ov_goal_n } }
+# 1 while the largest firm is stored, so the overview's box reads its name only then.
+te_pa_tab_has_top = { value = 0 if = { limit = { has_variable = te_pa_ov_top } value = 1 } }
+# The firms neither prospering nor failing.
+te_pa_tab_steady = {
+	value = te_pa_tab_firms
+	subtract = te_pa_tab_prospering
+	subtract = te_pa_tab_failing
+	min = 0
+}
+
+# Container scope, a row: how many holdings its firm has (strength above 0). The firm detail's Holdings section
+# says "None" while this is 0. The six a company holds are here already, each 0 until its task builds it; Task 9's
+# Concession adds its line, beside its chip and its detail line (gui/te_pa_widgets.gui's header).
+te_pa_row_holdings_count = {
+	value = 0
+	if = { limit = { has_variable = te_pa_r_cartel var:te_pa_r_cartel > 0 } add = 1 }
+	if = { limit = { has_variable = te_pa_r_reg var:te_pa_r_reg > 0 } add = 1 }
+	if = { limit = { has_variable = te_pa_r_press var:te_pa_r_press > 0 } add = 1 }
+	if = { limit = { has_variable = te_pa_r_town var:te_pa_r_town > 0 } add = 1 }
+	if = { limit = { has_variable = te_pa_r_lab var:te_pa_r_lab > 0 } add = 1 }
+	if = { limit = { has_variable = te_pa_r_found var:te_pa_r_found > 0 } add = 1 }
+}

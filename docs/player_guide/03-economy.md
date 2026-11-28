@@ -7,9 +7,9 @@ and most industry uses a little of it as upkeep. It runs from the first day of
 the game under the Free Market Construction game rule, which also offers four
 alternative settings. The rest of the chapter covers what construction costs in rich
 countries, how living-standard expectations adapt, what wealthy pops buy, the
-transport goods, power grids, setting tariffs for all goods at once, the Strategic
-Reserve journal entry, wartime demand for ammunition and the mod's new mineral
-deposits.
+transport goods, power grids, the firms of the Private Actors game rule, setting
+tariffs for all goods at once, the Strategic Reserve journal entry, wartime demand
+for ammunition and the mod's new mineral deposits.
 
 ## The construction market
 
@@ -618,6 +618,91 @@ a Grid Interconnection Agreement, or of a member of its bloc when the bloc's
 principle joins their grids, so build yours on the border if you mean to sell
 it power. The AI builds no station that would have nothing to join: a
 one-state country builds one only once it has an agreement with a neighbor.
+
+## Private actors
+
+With the Private Actors game rule on (it is off by default, and experimental),
+every company is a firm: an actor with an aim of its own, chosen each year from
+its position, and three currencies. You set a posture toward each of your
+firms. The Private Actors tab of the Timeline Extended window shows what each
+firm wants and why, for your country or, in National Info, any other.
+
+### Firms and their goals
+
+A firm takes one turn a year, in a month of its own, so your firms' turns are
+spread over the year. At its turn it reads its position, scores eight goals and
+pursues the one that scores highest. Each goal's pressure, from 0 to 100, comes
+from what the firm faces:
+
+| Goal | What raises its pressure |
+|---|---|
+| Cheaper Inputs | One of its two largest inputs costing more than its base price |
+| A Protected Market | Its output selling below its base price while your market imports it |
+| Security of Its Assets Abroad | Trouble at its concessions abroad; firms hold none, so this stays at 0 |
+| A Friendly Law | A law in force or being enacted that hurts its sector, one being enacted that helps it, a law you could enact that would help it, or a tariff it wants on its output while your market imports it |
+| Dominance | Its share of its sector: the levels it owns over your levels of its building types (40% reads 50); nothing under Command Economy or Cooperative Ownership |
+| Labor Peace | Turmoil and radicals in its seat, the state with most of its buildings; a labor law being enacted against it; a strike |
+| A Technical Lead | Technologies its buildings use that you haven't researched |
+| Survival | Low or falling prosperity, months of failing, a banking downturn or panic, or a law that would end private ownership |
+
+The executive's temperament weighs each pressure by 0.5 to 1.5: a bold
+executive leans toward Dominance and a technical lead, and one with strong
+views on workers, kindly or harsh, toward labor peace. So does how the firm is
+doing: a failing firm weighs Survival up,
+a prosperous one Dominance. The score is pressure times weight, and the goal a
+firm already holds gets 15 more, so a goal changes only when another clearly
+outscores it. The firm's row on the tab names its goal and the reading behind
+it ("Why: Coal costs 40% more than its base price").
+
+Each firm keeps three currencies. Funds are its claim on your investment pool,
+a tenth a year of its estimated dividends, capped at five years' worth; none
+accrue under Command Economy or Cooperative Ownership, and the pool keeps the
+money. Connections, from 0 to 100, are its reach into government: they grow
+with its years and while its executive's interest group is in government, and
+fade a little each quarter. Standing, from 0 to 100, is how the public regards
+it, and drifts toward 50. You get a notification when one of your firms
+starts failing or comes to hold 40% of its sector, once each time it crosses
+the line.
+
+### The Private Actors tab
+
+The tab is the sixth on the Timeline Extended window's second strip, after
+Global Warming. With the game rule off it is grayed, and its tooltip says so.
+
+The overview counts your firms, how many are prospering and failing, the firm
+with the largest share of its sector and that share, and the goal most of your
+firms pursue. Under it, Firms lists one row per firm: its company's icon (hover
+for the company, click to open it), its name and an arrow for its condition;
+its executive (hover for the temperament read from them) and its goal; Why, the
+reading behind the goal; Funds, Connections and Standing, each a bar; and its
+posture. Show Details opens the firm's eight goals with their pressure, weight
+and score, the law being enacted and the firm's stance on it, its seat, its
+share of its sector and its Grievance.
+
+The Ledger, collapsed until you open it, lists the last 20 things your firms
+did, newest first: a new goal and why, a new executive, a firm failing or
+coming to hold 40% of its sector, a firm founded or dissolved, a change of
+posture. National Info shows another country's tab, all of it but the posture
+buttons. The "?" in the header opens How Private Actors Work.
+
+<!-- screenshot: the Private Actors tab with a firm's details open -->
+
+### Posture toward a firm
+
+Each firm's row has three buttons, Favor, Tolerate and Restrain, which set your
+posture toward it. The posture in force is grayed, and a change goes in the
+ledger.
+
+| Posture | What it does |
+|---|---|
+| Favored | Its Connections grow half again as fast, and it supports Dirigiste Policy |
+| Tolerated (the default) | Its Connections grow at the usual pace, and it opposes Dirigiste Policy |
+| Restrained | Its Connections grow at half the pace, its Grievance rises by one every five years, and it opposes Dirigiste Policy |
+
+An AI government sets its posture toward each of its firms at the firm's turn:
+Favored while the firm's executive's interest group is in government or the
+country has Dirigiste Policy, Restrained while that group is marginalized,
+Tolerated otherwise.
 
 ## Tariffs for all goods at once
 

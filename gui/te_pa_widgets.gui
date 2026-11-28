@@ -1,0 +1,1317 @@
+﻿### Private Actors: the tab of the Timeline Extended window (te_pa_tab_body,
+### near the foot of this file, composes the panels; the window mounts it from
+### gui/te_systems_window_generated.gui, National Info from
+### gui/te_national_info_generated.gui). An overview of four boxes, two to a
+### row; the roster, a row a firm, each opening onto its detail; the ledger,
+### collapsed. The explanations are on the Help page (gui/te_popups.gui), which
+### the "?" in the tab's header opens. House style:
+### docs/guides/gui_style_guide.md. System:
+### docs/systems/mod_systems/private_actors.md § The Tab.
+###
+### DATA. No journal entry: every read is the shown country's, Country, which
+### the mount supplies (the window's, the player; National Info's, any
+### country: § 12.2 rule 4, the tab is public), under the tab's gate
+### (te_window_private_actors_tab_sgui, the game rule) on a parent in the
+### window. The overview reads the country's figures stored at each monthly
+### pulse (te_pa_ov_refresh, te_pa_core_effects.txt) through the guarded
+### te_pa_tab_* values. The roster is a datamodel of the country's list
+### te_pa_rows: each item a script container (Scope.GetScriptContainer), a
+### copy of its firm's record that te_pa_row_sync writes at each turn and
+### quarter, read as ScriptContainer.GetVariableValue('te_pa_r_*'); the firm
+### itself is ScriptContainer.MakeScope.Var('te_pa_r_firm').GetCompany (GUI
+### access to a company's own variables is unproven, plan § Rows). The ledger
+### is a datamodel of te_pa_ledger_view, the ledger's entries newest first
+### (te_pa_ledger_view_rebuild, te_pa_ledger_effects.txt), at most 20, so no
+### slice.
+###
+### A TOOLTIP INSIDE A ROW renders with the row's datacontext alone
+### (gui_modding_guide.md gotcha #24): it reads the row's ScriptContainer, or
+### the company or state a child reaches from it, never the tab's Country.
+### The posture buttons root their scripted GUIs on GetPlayer, which needs no
+### context, under the own-country guard, where the player's country is the
+### shown one.
+###
+### ANOTHER COUNTRY (National Info). Everything but the posture buttons, which
+### sit under te_own_country_only (Country.IsLocalPlayer): another country's
+### firms, goals, currencies, postures and ledger are public (§ 12.2 rule 4).
+###
+### WIDTHS. A 520 column, panels with 480 inside. Rows 17, headings 20, the
+### overview 16 (te_pa_fontsize_*, below; rule 3); test_private_actors_tab.py
+### holds each fixed cell to its longest text.
+###
+### THE ROSTER'S ROW, top to bottom: the firm (its company's icon, vanilla's
+### company tooltip and a click to its panel; its name, two lines at most), its
+### holdings as chips and its condition as an icon; Executive and Goal; Why
+### (the goal's reason); the three currencies as bars; Task 4's declared move;
+### the posture, with the player's three buttons; Details. Under Details, the
+### firm's detail: the eight goals' scores as a table, the law being enacted
+### and its stance, seat, share and Grievance, and its holdings.
+### The roster is a short list (a country's companies, a dozen or two at most
+### late in a game), so its rows stay in a flowcontainer (gotcha #54 is for
+### lists of hundreds).
+###
+### WHERE LATER TASKS ADD (plan, Tasks 4 to 9):
+###   - a holding: its chip (te_pa_holding_chips, one te_pa_holding_chip
+###     shown while its te_pa_r_ strength is above 0), its line in the detail's
+###     Holdings (te_pa_firm_holdings, one te_pa_detail_line likewise) and its
+###     term in te_pa_row_holdings_count (te_pa_core_values.txt). The six
+###     company holdings are in all three already, at 0 until built; Task 9's
+###     Concession adds its own.
+###   - Task 4's declared move: the marked slot in te_pa_firm_row; the state's
+###     actions: the marked section of te_pa_firm_detail.
+###   - Task 5's Politics section and Task 9's Abroad section: the marked
+###     places in te_pa_tab_layout and te_pa_wide_sections.
+
+template te_pa_fontsize_row {
+	fontsize = 17
+}
+
+template te_pa_fontsize_heading {
+	fontsize = 20
+}
+
+template te_pa_fontsize_overview {
+	fontsize = 16
+	using = tooltip_font
+}
+
+types te_pa_widget_types
+{
+	type te_pa_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+		minimumsize = { 520 -1 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	### A section's heading: its name at the left, a count at the right, a rule
+	### under both.
+	type te_pa_heading = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+
+		widget = {
+			size = { 480 30 }
+
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 300
+				align = left|nobaseline
+				using = te_pa_fontsize_heading
+				default_format = "#title"
+				block "heading_text" {}
+			}
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 180
+				align = right|nobaseline
+				using = te_pa_fontsize_row
+				block "heading_right" {}
+			}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### A heading on the Help page and inside a firm's detail, with a faint
+	### rule under it.
+	type te_pa_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		margin_top = 6
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = te_pa_fontsize_heading
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text on the Help page, and a section's one line when it
+	### has nothing to list.
+	type te_pa_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_pa_fontsize_row
+		default_format = "#lore"
+	}
+
+	### A "Label: value" line across the row.
+	type te_pa_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_pa_fontsize_row
+	}
+
+	### A "Label: value" cell, half a row (236 + 8 + 236 = 480).
+	type te_pa_cell = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 236 -1 }
+		maximumsize = { 236 -1 }
+		align = left|nobaseline
+		using = te_pa_fontsize_row
+	}
+
+	### ----------------------------------------------------------------------
+	### The overview's box (rule 4; te_grid_ov_cell's shape): the icon in an
+	### inset box of its own down the left, and beside it the caption, the
+	### reading's word and a figure, in a 154 column at 16. Two to a row:
+	### 238 + 4 + 238 = 480.
+	### ----------------------------------------------------------------------
+	type te_pa_ov_cell = widget {
+		size = { 238 70 }
+
+		background = {
+			using = entry_bg_simple
+		}
+
+		widget = {
+			size = { 52 52 }
+			position = { 6 0 }
+			parentanchor = left|vcenter
+
+			background = {
+				using = dark_area
+				alpha = 0.3
+			}
+
+			icon = {
+				size = { 44 44 }
+				parentanchor = center
+				block "icon" {}
+			}
+		}
+		textbox = {
+			position = { 78 2 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_pa_fontsize_overview
+			block "caption" {}
+		}
+		textbox = {
+			position = { 78 24 }
+			autoresize = yes
+			max_width = 154
+			elide = right
+			align = left|nobaseline
+			using = te_pa_fontsize_overview
+			block "word" {}
+		}
+		### The figure's line. The Largest Firm box puts the firm's name here,
+		### which can run past 154 at 16: it shrinks toward 12 before it elides,
+		### as vanilla's tab names do (tab_text_properties), with the full name
+		### on the box's hover (style rule 3's "nothing ends in ...": a company's
+		### name has no shorter form).
+		textbox = {
+			position = { 78 46 }
+			size = { 154 22 }
+			fontsize_min = 12
+			elide = right
+			align = left|nobaseline
+			using = te_pa_fontsize_overview
+			block "fig" {}
+		}
+	}
+
+	### The overview: Firms and Condition, the Largest Firm and the Common Goal
+	### (rule 4). Each box's hover says what it counts. With no firm yet (the
+	### rule just switched on, before the month's pulse) one line says so.
+	type te_pa_overview_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_pa_panel = {
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				margin_top = 4
+				margin_bottom = 4
+
+				te_pa_note = {
+					visible = "[Not( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_tab_firms'), '(CFixedPoint)0' ) )]"
+					tooltip = "te_pa_ov_none_tt"
+					text = "te_pa_ov_none"
+				}
+				flowcontainer = {
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_tab_firms'), '(CFixedPoint)0' )]"
+					direction = vertical
+					ignoreinvisible = yes
+					spacing = 4
+
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+
+						te_pa_ov_cell = {
+							tooltip = "te_pa_ov_firms_tt"
+							blockoverride "icon" {
+								texture = "gfx/interface/main_hud/companies_btn.dds"
+							}
+							blockoverride "caption" {
+								text = "te_pa_ov_firms_cap"
+							}
+							blockoverride "word" {
+								text = "te_pa_ov_firms_word"
+							}
+							blockoverride "fig" {
+								text = "te_pa_ov_firms_fig"
+							}
+						}
+						te_pa_ov_cell = {
+							tooltip = "te_pa_ov_cond_tt"
+							blockoverride "icon" {
+								texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+							}
+							blockoverride "caption" {
+								text = "te_pa_ov_cond_cap"
+							}
+							blockoverride "word" {
+								text = "te_pa_ov_cond_word"
+							}
+							blockoverride "fig" {
+								text = "te_pa_ov_cond_fig"
+							}
+						}
+					}
+					flowcontainer = {
+						direction = horizontal
+						spacing = 4
+
+						### The firm's name only while one is stored (the two are
+						### stored together: te_pa_ov_refresh).
+						te_pa_ov_cell = {
+							tooltip = "te_pa_ov_top_tt"
+							blockoverride "icon" {
+								texture = "gfx/interface/icons/generic_icons/privately_owned_building_icon.dds"
+							}
+							blockoverride "caption" {
+								text = "te_pa_ov_top_cap"
+							}
+							blockoverride "word" {
+								text = "te_pa_ov_top_word"
+							}
+							blockoverride "fig" {
+								text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_tab_has_top'), '(CFixedPoint)0' ), 'te_pa_ov_top_fig', 'te_pa_ov_top_fig_none' )]"
+							}
+						}
+						te_pa_ov_cell = {
+							tooltip = "te_pa_ov_goal_tt"
+							blockoverride "icon" {
+								texture = "gfx/interface/icons/generic_icons/mandate.dds"
+							}
+							blockoverride "caption" {
+								text = "te_pa_ov_goal_cap"
+							}
+							blockoverride "word" {
+								text = "[SelectLocalization( GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_tab_goal_n'), '(CFixedPoint)0' ), 'te_pa_ov_goal_word', 'te_pa_ov_goal_word_none' )]"
+							}
+							blockoverride "fig" {
+								text = "te_pa_ov_goal_fig"
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The roster (rule 1: live, open): a row a firm, in the order the firms
+	### were recorded.
+	### ----------------------------------------------------------------------
+
+	### A holding's chip on the row's first line: its icon, its name and
+	### strength on hover. The instance gives its visible (its strength above
+	### 0), its icon and its hover.
+	type te_pa_holding_chip = icon {
+		size = { 20 20 }
+		parentanchor = vcenter
+	}
+
+	### The row's chips, one a holding, each shown while the firm holds it, so
+	### nothing shows while it holds none. Left-aligned in a fixed slot of
+	### seven chips (152), so the condition beside it never moves (rule 8). A
+	### task that builds a holding not listed here adds one chip.
+	type te_pa_holding_chips = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_pa_holding_chip = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_cartel'), '(CFixedPoint)0' )]"
+			texture = "gfx/interface/icons/generic_icons/goods_shortage.dds"
+			tooltip = "te_pa_chip_cartel_tt"
+		}
+		te_pa_holding_chip = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_reg'), '(CFixedPoint)0' )]"
+			texture = "gfx/interface/icons/institution_icons/institution_ministry_of_consumer_protection.dds"
+			tooltip = "te_pa_chip_reg_tt"
+		}
+		te_pa_holding_chip = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_press'), '(CFixedPoint)0' )]"
+			texture = "gfx/interface/icons/institution_icons/institution_ministry_of_propaganda.dds"
+			tooltip = "te_pa_chip_press_tt"
+		}
+		te_pa_holding_chip = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_town'), '(CFixedPoint)0' )]"
+			texture = "gfx/interface/icons/institution_icons/institution_ministry_of_urban_planning.dds"
+			tooltip = "te_pa_chip_town_tt"
+		}
+		te_pa_holding_chip = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_lab'), '(CFixedPoint)0' )]"
+			texture = "gfx/interface/icons/institution_icons/institution_ministry_of_science.dds"
+			tooltip = "te_pa_chip_lab_tt"
+		}
+		te_pa_holding_chip = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_found'), '(CFixedPoint)0' )]"
+			texture = "gfx/interface/icons/diplomatic_treaties_articles_icons/education_aid.dds"
+			tooltip = "te_pa_chip_found_tt"
+		}
+	}
+
+	### A currency: "Label: value" over a bar of 0 to its top (Connections and
+	### Standing 100; Funds its cap, so the bar is te_pa_r_funds_fill, 0 to 1).
+	### 156, three to a row with 6 between: 480. The instance gives the text,
+	### its hover, and the bar's value and max.
+	type te_pa_currency = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+		block "currency_tooltip" {}
+
+		textbox = {
+			autoresize = yes
+			minimumsize = { 156 -1 }
+			maximumsize = { 156 -1 }
+			align = left|nobaseline
+			using = te_pa_fontsize_row
+			block "currency_text" {}
+		}
+		widget = {
+			size = { 156 8 }
+
+			gold_progressbar_horizontal = {
+				size = { 100% 100% }
+				blockoverride "values" {
+					min = 0
+					block "currency_bar" {}
+				}
+			}
+		}
+	}
+
+	### One firm: an item of te_pa_rows, its row container the datacontext.
+	type te_pa_firm_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 3
+		margin = { 0 6 }
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+
+		background = {
+			using = entry_bg_simple
+		}
+
+		### The firm: its company's icon (vanilla's company tooltip, a click to
+		### its panel), its name, its chips and its condition. Icon 40, 4, name
+		### 248, 4, the chips' slot 152 (seven at 20, 2 between), 4, condition
+		### 28: 480.
+		widget = {
+			size = { 480 44 }
+
+			widget = {
+				datacontext = "[ScriptContainer.MakeScope.Var('te_pa_r_firm').GetCompany]"
+				size = { 296 44 }
+				parentanchor = left|vcenter
+
+				button = {
+					size = { 40 40 }
+					parentanchor = left|vcenter
+					texture = "[Company.GetCompanyType.GetIcon]"
+					onclick = "[InformationPanelBar.OpenCompanyPanel( Company.Self )]"
+
+					tooltipwidget = {
+						FancyTooltip_Company = {}
+					}
+				}
+				textbox = {
+					position = { 44 0 }
+					parentanchor = left|vcenter
+					autoresize = yes
+					multiline = yes
+					minimumsize = { 248 -1 }
+					maximumsize = { 248 44 }
+					align = left|nobaseline
+					using = te_pa_fontsize_row
+					default_format = "#title"
+					raw_text = "[Company.GetNameNoFormatting]"
+				}
+			}
+			te_pa_holding_chips = {
+				position = { 296 0 }
+				parentanchor = left|vcenter
+			}
+			widget = {
+				size = { 28 28 }
+				parentanchor = right|vcenter
+
+				icon = {
+					visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_cond'), '(CFixedPoint)0' )]"
+					size = { 28 28 }
+					parentanchor = center
+					texture = "gfx/interface/icons/generic_icons/trend_up.dds"
+					tooltip = "te_pa_row_cond_tt"
+				}
+				icon = {
+					visible = "[LessThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_cond'), '(CFixedPoint)0' )]"
+					size = { 28 28 }
+					parentanchor = center
+					texture = "gfx/interface/icons/generic_icons/trend_down.dds"
+					tooltip = "te_pa_row_cond_tt"
+				}
+				icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_cond'), '(CFixedPoint)0' )]"
+					size = { 28 28 }
+					parentanchor = center
+					texture = "gfx/interface/icons/generic_icons/trend_nochange.dds"
+					tooltip = "te_pa_row_cond_tt"
+				}
+			}
+		}
+
+		### Executive and Goal, half a row each; the executive's temperament on
+		### hover.
+		flowcontainer = {
+			direction = horizontal
+			spacing = 8
+
+			te_pa_cell = {
+				tooltip = "te_pa_row_exec_tt"
+				text = "[SelectLocalization( ScriptContainer.HasVariable('te_pa_r_exec'), 'te_pa_row_exec', 'te_pa_row_exec_none' )]"
+			}
+			te_pa_cell = {
+				tooltip = "te_pa_row_goal_tt"
+				text = "te_pa_row_goal"
+			}
+		}
+
+		### Why it holds that goal: its reason, the readout that set it.
+		te_pa_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_row_why_tt"
+			text = "te_pa_row_why"
+		}
+
+		### The three currencies (rule 5: a bar each). Funds under 1,000 a plain
+		### number, |K above it (|K writes 0 as "0.00K").
+		flowcontainer = {
+			direction = horizontal
+			spacing = 6
+
+			te_pa_currency = {
+				blockoverride "currency_tooltip" {
+					tooltip = "te_pa_row_funds_tt"
+				}
+				blockoverride "currency_text" {
+					text = "[SelectLocalization( GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_funds'), '(CFixedPoint)999' ), 'te_pa_row_funds', 'te_pa_row_funds_small' )]"
+				}
+				blockoverride "currency_bar" {
+					value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_pa_r_funds_fill') )]"
+					max = 1
+				}
+			}
+			te_pa_currency = {
+				blockoverride "currency_tooltip" {
+					tooltip = "te_pa_row_conn_tt"
+				}
+				blockoverride "currency_text" {
+					text = "te_pa_row_conn"
+				}
+				blockoverride "currency_bar" {
+					value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_pa_r_conn') )]"
+					max = 100
+				}
+			}
+			te_pa_currency = {
+				blockoverride "currency_tooltip" {
+					tooltip = "te_pa_row_stand_tt"
+				}
+				blockoverride "currency_text" {
+					text = "te_pa_row_stand"
+				}
+				blockoverride "currency_bar" {
+					value = "[FixedPointToFloat( ScriptContainer.GetVariableValue('te_pa_r_stand') )]"
+					max = 100
+				}
+			}
+		}
+
+		### Task 4: the firm's declared move and its countdown, one line here,
+		### shown while it has one (§ 4.6; te_pa_move_firm is this firm).
+
+		### The posture: its name (what it does on hover), and the player's three
+		### buttons, each graying the posture in force (its is_valid). Posture
+		### 192, 4, three buttons of 92 with 4 between: 480. The buttons' slot
+		### keeps its size (rule 8) and is hidden for another country and an
+		### observer (te_own_country_only; the observer test on the buttons'
+		### own row, since they read GetPlayer).
+		flowcontainer = {
+			direction = horizontal
+			spacing = 4
+
+			textbox = {
+				autoresize = yes
+				minimumsize = { 192 -1 }
+				maximumsize = { 192 -1 }
+				parentanchor = vcenter
+				align = left|nobaseline
+				using = te_pa_fontsize_row
+				tooltip = "te_pa_row_posture_tt"
+				text = "te_pa_row_posture"
+			}
+			widget = {
+				using = te_own_country_only
+				size = { 284 28 }
+				parentanchor = vcenter
+
+				flowcontainer = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					direction = horizontal
+					spacing = 4
+
+					button = {
+						using = default_button_action
+						size = { 92 28 }
+						datacontext = "[GetScriptedGui('te_pa_posture_favored_sgui')]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						tooltip = "te_pa_posture_favored_btn_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 84
+							using = te_pa_fontsize_row
+							text = "te_pa_posture_favored_btn"
+						}
+					}
+					button = {
+						using = default_button_action
+						size = { 92 28 }
+						datacontext = "[GetScriptedGui('te_pa_posture_tolerated_sgui')]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						tooltip = "te_pa_posture_tolerated_btn_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 84
+							using = te_pa_fontsize_row
+							text = "te_pa_posture_tolerated_btn"
+						}
+					}
+					button = {
+						using = default_button_action
+						size = { 92 28 }
+						datacontext = "[GetScriptedGui('te_pa_posture_restrained_sgui')]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						tooltip = "te_pa_posture_restrained_btn_tt"
+
+						textbox = {
+							parentanchor = center
+							align = center|nobaseline
+							autoresize = yes
+							max_width = 84
+							using = te_pa_fontsize_row
+							text = "te_pa_posture_restrained_btn"
+						}
+					}
+				}
+			}
+		}
+
+		### Details, centred under the row (rule 6). Which firms are open is a
+		### GetVariableSystem key per firm, named for its company:
+		### te_pa_firm_open_<its name> (vanilla's Concatenate( 'show_laws_',
+		### Country.GetIDString ) shape; a company's GetNameNoFormatting is the
+		### string the Grand Monuments' naming reads it by). It changes only
+		### what this panel shows, so another country's tab has it too. Starts
+		### collapsed (_open).
+		widget = {
+			size = { 480 30 }
+
+			button = {
+				using = default_button_action
+				size = { 200 28 }
+				parentanchor = center
+				onclick = "[GetVariableSystem.Toggle( Concatenate( 'te_pa_firm_open_', ScriptContainer.MakeScope.Var('te_pa_r_firm').GetCompany.GetNameNoFormatting ) )]"
+				tooltip = "te_pa_row_details_tt"
+
+				textbox = {
+					parentanchor = center
+					align = center|nobaseline
+					autoresize = yes
+					max_width = 190
+					using = te_pa_fontsize_row
+					text = "[SelectLocalization( GetVariableSystem.Exists( Concatenate( 'te_pa_firm_open_', ScriptContainer.MakeScope.Var('te_pa_r_firm').GetCompany.GetNameNoFormatting ) ), 'te_pa_row_details_hide', 'te_pa_row_details_show' )]"
+				}
+			}
+		}
+
+		### The firm's detail: built only while open, so a closed row reads none
+		### of it.
+		flowcontainer = {
+			visible = "[GetVariableSystem.Exists( Concatenate( 'te_pa_firm_open_', ScriptContainer.MakeScope.Var('te_pa_r_firm').GetCompany.GetNameNoFormatting ) )]"
+			direction = vertical
+			ignoreinvisible = yes
+
+			te_pa_firm_detail = {}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### A firm's detail (spec § 14): its eight goals' scores as a table (rule
+	### 5), the law being enacted and its stance, its seat, share and
+	### Grievance, and its holdings. Inside its row, the row's ScriptContainer
+	### its datacontext.
+	### ----------------------------------------------------------------------
+
+	### The goals table's cells: the held mark 20, the goal 184, then Pressure,
+	### Weight and Score at 84, with 6 between: 480. A goal's name wraps.
+	type te_pa_goal_cells = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 6
+
+		widget = {
+			size = { 20 22 }
+			block "goal_held" {}
+		}
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			minimumsize = { 184 -1 }
+			maximumsize = { 184 -1 }
+			align = left|nobaseline
+			using = te_pa_fontsize_row
+			block "goal_name" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 84 -1 }
+			maximumsize = { 84 -1 }
+			align = right|nobaseline
+			using = te_pa_fontsize_row
+			block "goal_pressure" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 84 -1 }
+			maximumsize = { 84 -1 }
+			align = right|nobaseline
+			using = te_pa_fontsize_row
+			block "goal_weight" {}
+		}
+		textbox = {
+			autoresize = yes
+			minimumsize = { 84 -1 }
+			maximumsize = { 84 -1 }
+			align = right|nobaseline
+			using = te_pa_fontsize_row
+			block "goal_score" {}
+		}
+	}
+
+	### The held goal's mark (the instance gives its visible).
+	type te_pa_goal_held_icon = icon {
+		size = { 20 20 }
+		parentanchor = center
+		texture = "gfx/interface/icons/generic_icons/green_checkmark.dds"
+		tooltip = "te_pa_det_goal_held_tt"
+	}
+
+	type te_pa_goals_table = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_pa_goal_cells = {
+			blockoverride "goal_name" {
+				default_format = "#title"
+				text = "te_pa_det_goal_head"
+			}
+			blockoverride "goal_pressure" {
+				default_format = "#title"
+				tooltip = "te_pa_det_pressure_tt"
+				text = "te_pa_det_pressure_head"
+			}
+			blockoverride "goal_weight" {
+				default_format = "#title"
+				tooltip = "te_pa_det_weight_tt"
+				text = "te_pa_det_weight_head"
+			}
+			blockoverride "goal_score" {
+				default_format = "#title"
+				tooltip = "te_pa_det_score_tt"
+				text = "te_pa_det_score_head"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)1' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_1"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_inputs')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_inputs')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_inputs')|0]"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)2' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_2"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_market')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_market')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_market')|0]"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)3' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_3"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_abroad')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_abroad')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_abroad')|0]"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)4' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_4"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_law')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_law')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_law')|0]"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)5' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_5"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_dominance')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_dominance')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_dominance')|0]"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)6' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_6"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_labor')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_labor')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_labor')|0]"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)7' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_7"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_tech')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_tech')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_tech')|0]"
+			}
+		}
+		te_pa_goal_cells = {
+			blockoverride "goal_held" {
+				te_pa_goal_held_icon = {
+					visible = "[EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_goal'), '(CFixedPoint)8' )]"
+				}
+			}
+			blockoverride "goal_name" {
+				text = "te_pa_goal_8"
+			}
+			blockoverride "goal_pressure" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_p_survival')|0]"
+			}
+			blockoverride "goal_weight" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_w_survival')|2]"
+			}
+			blockoverride "goal_score" {
+				text = "[ScriptContainer.GetVariableValue('te_pa_r_s_survival')|0]"
+			}
+		}
+	}
+
+	### A holding's line in the detail, shown while the firm holds it (the
+	### instance gives its visible, text and hover). Later tasks add the
+	### holding's yield and Trouble to its hover.
+	type te_pa_detail_line = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_pa_fontsize_row
+	}
+
+	type te_pa_firm_holdings = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 2
+
+		te_pa_note = {
+			visible = "[Not( GreaterThan_CFixedPoint( ScriptContainer.MakeScope.ScriptValue('te_pa_row_holdings_count'), '(CFixedPoint)0' ) )]"
+			tooltip = "te_pa_det_holdings_none_tt"
+			text = "te_pa_det_holdings_none"
+		}
+		te_pa_detail_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_cartel'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_chip_cartel_tt"
+			text = "te_pa_det_cartel"
+		}
+		te_pa_detail_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_reg'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_chip_reg_tt"
+			text = "te_pa_det_reg"
+		}
+		te_pa_detail_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_press'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_chip_press_tt"
+			text = "te_pa_det_press"
+		}
+		te_pa_detail_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_town'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_chip_town_tt"
+			text = "te_pa_det_town"
+		}
+		te_pa_detail_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_lab'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_chip_lab_tt"
+			text = "te_pa_det_lab"
+		}
+		te_pa_detail_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_found'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_chip_found_tt"
+			text = "te_pa_det_found"
+		}
+	}
+
+	type te_pa_firm_detail = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 3
+		margin_top = 2
+
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_det_goals_sub"
+			}
+		}
+		te_pa_goals_table = {}
+
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_det_position_sub"
+			}
+		}
+		### The law being enacted and its stance on it, or None when nothing
+		### is being enacted that the law table covers (te_pa_r_enacting_law 0).
+		te_pa_line = {
+			tooltip = "te_pa_det_enacting_tt"
+			text = "[SelectLocalization( GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_enacting_law'), '(CFixedPoint)0' ), 'te_pa_det_enacting', 'te_pa_det_enacting_none' )]"
+		}
+		flowcontainer = {
+			direction = horizontal
+			spacing = 8
+
+			te_pa_cell = {
+				tooltip = "te_pa_det_seat_tt"
+				text = "[SelectLocalization( ScriptContainer.HasVariable('te_pa_r_seat'), 'te_pa_det_seat', 'te_pa_det_seat_none' )]"
+			}
+			te_pa_cell = {
+				tooltip = "te_pa_det_share_tt"
+				text = "te_pa_det_share"
+			}
+		}
+		te_pa_line = {
+			tooltip = "te_pa_det_griev_tt"
+			text = "te_pa_det_griev"
+		}
+
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_det_holdings_sub"
+			}
+		}
+		te_pa_firm_holdings = {}
+
+		### Task 4: the state's actions against the firm (§§ 6.6, 8.7, 9.4), each
+		### a button with its cost, go here under a subheading of their own,
+		### under te_own_country_only.
+	}
+
+	type te_pa_roster_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+
+		te_pa_panel = {
+			te_pa_heading = {
+				blockoverride "heading_text" {
+					text = "te_pa_roster_header"
+				}
+				blockoverride "heading_right" {
+					tooltip = "te_pa_ov_firms_tt"
+					text = "te_pa_roster_count"
+				}
+			}
+			te_pa_note = {
+				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_pa_rows') )]"
+				tooltip = "te_pa_ov_none_tt"
+				text = "te_pa_roster_none"
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 6
+				margin_top = 4
+				datamodel = "[Country.MakeScope.GetList('te_pa_rows')]"
+
+				item = {
+					te_pa_firm_row = {
+						datacontext = "[Scope.GetScriptContainer]"
+					}
+				}
+			}
+		}
+	}
+
+	### Task 5: the Politics section (te_pa_politics_panel: the law being
+	### enacted with the firms for and against it and their spending, campaign
+	### money by party, patronage by interest group) goes here, as a type of
+	### its own placed in te_pa_tab_layout and te_pa_wide_sections.
+	### Task 9: the Abroad section (te_pa_abroad_panel: foreign firms'
+	### concessions here, this country's firms' concessions by host) likewise.
+
+	### ----------------------------------------------------------------------
+	### The ledger (rule 1: a list of past items, collapsed; te_pa_ledger_open):
+	### who did what, newest first, at most 20 lines. A line is the firm's
+	### name, then what it did (te_pa_ledger_line, a predicate): "author
+	### unknown" for a secret move not yet exposed (te_pa_l_known 0), "a
+	### dissolved firm" once its company has gone (te_pa_l_gone, set as it is
+	### cleared, or a company that no longer resolves: Company.IsValid, as
+	### vanilla's treaty article tests ArticleDraft.GetCompany). The hover says
+	### how long ago.
+	### ----------------------------------------------------------------------
+	type te_pa_ledger_row = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = te_pa_fontsize_row
+		tooltip = "te_pa_ledger_row_tt"
+		text = "[SelectLocalization( EqualTo_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_l_known'), '(CFixedPoint)0' ), 'te_pa_ledger_row_unknown', SelectLocalization( ScriptContainer.HasVariable('te_pa_l_gone'), 'te_pa_ledger_row_gone', SelectLocalization( ScriptContainer.MakeScope.Var('te_pa_l_actor').GetCompany.IsValid, 'te_pa_ledger_row_named', 'te_pa_ledger_row_gone' ) ) )]"
+	}
+
+	type te_pa_ledger_panel = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 4
+
+		section_header_button = {
+			blockoverride "layout" {
+				parentanchor = hcenter
+				size = { 520 38 }
+			}
+			blockoverride "left_text" {
+				text = "te_pa_ledger_header"
+			}
+			blockoverride "onclick" {
+				onclick = "[GetVariableSystem.Toggle('te_pa_ledger_open')]"
+			}
+			blockoverride "onclick_showmore" {
+				visible = "[Not(GetVariableSystem.Exists('te_pa_ledger_open'))]"
+			}
+			blockoverride "onclick_showless" {
+				visible = "[GetVariableSystem.Exists('te_pa_ledger_open')]"
+			}
+		}
+
+		te_pa_panel = {
+			visible = "[GetVariableSystem.Exists('te_pa_ledger_open')]"
+
+			te_pa_note = {
+				visible = "[IsDataModelEmpty( Country.MakeScope.GetList('te_pa_ledger_view') )]"
+				text = "te_pa_ledger_none"
+			}
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 4
+				margin_top = 4
+				margin_bottom = 4
+				datamodel = "[Country.MakeScope.GetList('te_pa_ledger_view')]"
+
+				item = {
+					te_pa_ledger_row = {
+						datacontext = "[Scope.GetScriptContainer]"
+					}
+				}
+			}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The Help page: every explanation, out of the live sections, one
+	### subheading per topic. It reads nothing, so it opens from any host
+	### (test_te_help_pages.py). Instanced only by te_private_actors_help_popup.
+	### ----------------------------------------------------------------------
+	type te_private_actors_help_body = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 4
+
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_firms"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_firms"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_goals"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_goals"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_currencies"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_currencies"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_holdings"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_holdings"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_turn"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_turn"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_posture"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_posture"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_rule"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_rule"
+		}
+	}
+
+	### The Help page's popup, in te_popups (gui/te_popups.gui).
+	type te_private_actors_help_popup = te_ui_help_popup {
+		blockoverride "popup_visible" {
+			visible = "[GetVariableSystem.HasValue('te_popup', 'help_private_actors')]"
+		}
+		blockoverride "popup_title" {
+			text = "te_pa_how_header"
+		}
+		blockoverride "popup_list" {
+			te_private_actors_help_body = {}
+		}
+	}
+
+	### ----------------------------------------------------------------------
+	### The Private Actors tab of the Timeline Extended window
+	### (te_system_tab_frame, gui/te_system_tab_widgets.gui; the window mounts it
+	### from gui/te_systems_window_generated.gui). No journal entry: the panels
+	### read Country, the player's in the window (the frame's tab_country),
+	### under the tab's gate (te_window_private_actors_tab_sgui) on a parent,
+	### the header outside it, and no Open Journal Entry. te_pa_tab_layout is
+	### the block a wide mount overrides.
+	### ----------------------------------------------------------------------
+	type te_pa_tab_body = te_system_tab_frame {
+		blockoverride "tab_header" {
+			default_header = {
+				using = default_list_position
+				blockoverride "text" {
+					text = "te_pa_tab_header"
+				}
+				### Full screen, the page's title across the frame: the window's full-screen
+				### mount fills te_tab_header_size (gen_te_systems_window.py); everywhere else
+				### it is vanilla's own 554 (@panel_width_plus_14).
+				blockoverride "size" {
+					block "te_tab_header_size" {
+						size = { 554 44 }
+					}
+				}
+				te_help_button = {
+					visible = "[Not( GetMetaPlayer.IsObserver )]"
+					onclick = "[GetVariableSystem.Set('te_popup', 'help_private_actors')]"
+				}
+			}
+		}
+		blockoverride "tab_gate" {
+			visible = "[GetScriptedGui('te_window_private_actors_tab_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+		}
+		blockoverride "tab_content" {
+			block "te_pa_tab_layout" {
+				te_pa_overview_panel = {}
+				te_pa_roster_panel = {}
+				### Task 5: te_pa_politics_panel = {} here; Task 9: te_pa_abroad_panel = {}.
+				te_pa_ledger_panel = {}
+			}
+		}
+		blockoverride "tab_open_journal" {}
+	}
+
+	### The tab full screen (spec docs/superpowers/specs/2026-11-02-te-window-wide-mode-design.md
+	### § 7), te_pa_tab_layout's override in the window's full-screen frame: the
+	### overview, the roster, then the ledger, one to a column of a fixed 520
+	### (te_ui_columns_three), in the tab's order. The roster is the long one
+	### and has its column; Task 5's Politics and Task 9's Abroad go in column 3,
+	### above the ledger. The tab's gate stays on the frame's parent, and none
+	### of the three hides while the tab is open, so the three columns always
+	### draw.
+	type te_pa_wide_sections = te_ui_columns_three {
+		blockoverride "column_1" {
+			te_pa_overview_panel = {}
+		}
+
+		blockoverride "column_2" {
+			te_pa_roster_panel = {}
+		}
+
+		blockoverride "column_3" {
+			te_pa_ledger_panel = {}
+		}
+	}
+}

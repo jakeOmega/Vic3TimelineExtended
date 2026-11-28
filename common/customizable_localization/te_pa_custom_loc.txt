@@ -246,3 +246,144 @@ te_pa_posture_name = {
 		localization_key = te_pa_posture_tolerated
 	}
 }
+
+# The tab (Task 3). A row's stance on the law being enacted (te_pa_r_stance_enacting, -2 to 2; Task 1's
+# te_pa_gen_stance_enacting, which can fall between whole points: the labor laws' middle steps weigh half).
+te_pa_stance_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_stance_enacting ?= 0 }
+		localization_key = te_pa_stance_none
+	}
+	text = {
+		trigger = {
+			has_variable = te_pa_r_stance_enacting
+			var:te_pa_r_stance_enacting <= -1.5
+		}
+		localization_key = te_pa_stance_against_strongly
+	}
+	text = {
+		trigger = {
+			has_variable = te_pa_r_stance_enacting
+			var:te_pa_r_stance_enacting < 0
+		}
+		localization_key = te_pa_stance_against
+	}
+	text = {
+		trigger = {
+			has_variable = te_pa_r_stance_enacting
+			var:te_pa_r_stance_enacting >= 1.5
+		}
+		localization_key = te_pa_stance_for_strongly
+	}
+	text = {
+		trigger = {
+			has_variable = te_pa_r_stance_enacting
+			var:te_pa_r_stance_enacting > 0
+		}
+		localization_key = te_pa_stance_for
+	}
+	text = {
+		localization_key = te_pa_stance_none
+	}
+}
+
+# The overview's goal: the goal most of the country's firms hold (te_pa_ov_goal, te_pa_ov_refresh).
+te_pa_ov_goal_name = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 1 }
+		localization_key = te_pa_goal_1
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 2 }
+		localization_key = te_pa_goal_2
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 3 }
+		localization_key = te_pa_goal_3
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 4 }
+		localization_key = te_pa_goal_4
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 5 }
+		localization_key = te_pa_goal_5
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 6 }
+		localization_key = te_pa_goal_6
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 7 }
+		localization_key = te_pa_goal_7
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 8 }
+		localization_key = te_pa_goal_8
+	}
+	text = {
+		localization_key = te_pa_goal_0
+	}
+}
+
+# The overview's goal by its short name, for the box (a goal's full name runs past its 154): te_pa_ov_goal.
+te_pa_ov_goal_short = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 1 }
+		localization_key = te_pa_goal_short_1
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 2 }
+		localization_key = te_pa_goal_short_2
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 3 }
+		localization_key = te_pa_goal_short_3
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 4 }
+		localization_key = te_pa_goal_short_4
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 5 }
+		localization_key = te_pa_goal_short_5
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 6 }
+		localization_key = te_pa_goal_short_6
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 7 }
+		localization_key = te_pa_goal_short_7
+	}
+	text = {
+		trigger = { var:te_pa_ov_goal ?= 8 }
+		localization_key = te_pa_goal_short_8
+	}
+	text = {
+		localization_key = te_pa_goal_0
+	}
+}
+
+# What a row's posture does (te_pa_r_posture), for the posture's hover: the same lines the posture buttons print.
+te_pa_posture_does = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_posture ?= 1 }
+		localization_key = te_pa_posture_favored_does_tt
+	}
+	text = {
+		trigger = { var:te_pa_r_posture ?= -1 }
+		localization_key = te_pa_posture_restrained_does_tt
+	}
+	text = {
+		localization_key = te_pa_posture_tolerated_does_tt
+	}
+}

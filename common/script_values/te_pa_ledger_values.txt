@@ -10,3 +10,10 @@ te_pa_ledger_age_order = {
 	value = 0
 	subtract = te_pa_ledger_recency_order
 }
+
+# Container scope, a ledger entry: how many months ago it was written, for the line's hover on the tab.
+te_pa_ledger_months_ago = {
+	value = te_history_month_index
+	if = { limit = { has_variable = te_pa_l_month } subtract = var:te_pa_l_month }
+	min = 0
+}

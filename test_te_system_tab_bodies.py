@@ -106,7 +106,7 @@ class FrameTest(unittest.TestCase):
         self.assertLess(button.index("using = default_button"), button.index('block "tab_open_journal_font"'))
 
 
-# The window's journal-entry, seabed and power grids tabs, as the frame's blocks fill them:
+# The window's journal-entry, seabed, power grids and private actors tabs, as the frame's blocks fill them:
 # (body type, file, header text, gate, journal entry or None, layout block,
 # composers in order, Open Journal Entry's tooltip or None).
 WINDOW_BODIES = [
@@ -126,6 +126,10 @@ WINDOW_BODIES = [
      "te_grid_tab_header", "te_window_power_grids_tab_sgui", None,
      "te_grid_tab_layout", ["te_grid_overview_panel", "te_grid_grids_panel", "te_grid_stations_panel",
                             "te_grid_next_panel"],
+     None),
+    ("te_pa_tab_body", os.path.join(REPO, "gui", "te_pa_widgets.gui"),
+     "te_pa_tab_header", "te_window_private_actors_tab_sgui", None,
+     "te_pa_tab_layout", ["te_pa_overview_panel", "te_pa_roster_panel", "te_pa_ledger_panel"],
      None),
 ]
 

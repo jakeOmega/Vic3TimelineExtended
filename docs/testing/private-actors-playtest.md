@@ -7,8 +7,9 @@ and two threshold notices. Spec: `docs/superpowers/specs/2026-11-28-actors-firms
 Nothing in it has been seen in a game. This list starts with the chassis (the plan's Tasks 1 and 2); each later task
 adds its lines.
 
-The chassis has no verbs and no tab of its own yet (Task 3 builds the tab on the rows): a firm only assesses, scores
-and chooses, so what can be judged in phase 1 is whether its goal and reason are believable.
+The chassis has no verbs yet: a firm only assesses, scores and chooses, so what can be judged in phase 1 is whether
+its goal and reason are believable. Task 3 adds the Private Actors tab of the Timeline Extended window (items 11 to
+18), the posture buttons and the ledger's display.
 
 ## Self-checks
 
@@ -55,3 +56,44 @@ turn-time checks wait for 20 firms, so the first lines come within a few months 
    sits at the capital.
 10. **Performance.** With the rule on, a late game's monthly tick should not slow noticeably (a few hundred firms, one
     turn each a year spread over the months).
+11. **The tab and the rule.** With the rule on, the Private Actors tab is the sixth on the window's second strip, after
+    Global Warming, and opens; the strip's six names wrap to two lines at most and none ends in "...". With the rule off
+    (a new game on the default, or the rule switched off mid-game, after the month's pulse) the tab is grayed and its
+    tooltip reads "Not open yet. It opens once:" over a crossed "The Private Actors game rule is on". If that line is
+    missing (the checklist empty under "It opens once:"), `IsValidTooltip` skipped the unlock's `is_valid`: give the
+    unlock `te_system_tab_met_tt`'s shape or a tooltip of its own. Full screen, the overview, the roster and the ledger
+    take a column each.
+12. **The rows show every firm.** The roster lists one row a firm, as many as the country's companies (the Grand
+    Monument naming placeholder aside); the overview's Firms box counts the same. Each row's icon is its company's, its
+    hover vanilla's company tooltip, a click opens the company; the name wraps at most to two lines. **Not seen in
+    game: the GUI's company reads through `ScriptContainer.MakeScope.Var('te_pa_r_firm').GetCompany`** (the icon, the
+    name, `FancyTooltip_Company` inside a datamodel row, gotcha #24) **and the ledger's
+    `Var('te_pa_l_actor').GetCompany.IsValid`.** If the icon or name is blank, or `debug.log` logs "Failed to fetch"
+    or a context error for a row each frame, the fallback is a loc name read through the row
+    (`[ScriptContainer.MakeScope.Var('te_pa_r_firm').GetCompany.GetNameNoFormatting]` in a key, as the Grand
+    Monuments' naming reads a company) and a plain hover key in place of the company tooltip.
+13. **The row's figures.** Executive and Goal match the console's `te_pa_exec` and `te_pa_goal`; Why reads a sentence
+    (a good or a law by name, not "a good"); the three bars move with `te_pa_funds` (against its cap), `te_pa_conn` and
+    `te_pa_stand` at the next quarter; a holding chip shows only once its strength is above 0 (none can be yet); the
+    condition arrow is up, flat or down as the console's `te_pa_cond`.
+14. **The posture buttons change the row.** On your own firm, Favor, Tolerate and Restrain: the one in force is grayed
+    with "It is not … already" crossed in its hover, and the hover names what the posture does; a click changes the
+    row's Posture at once (the row is copied again), adds a ledger line ("… is now Favored by the state"), and
+    `te_pa_posture` on the company reads 1, 0 or -1. A posture set stays: an AI's re-derivation never touches a
+    player's firms. If a click does nothing, the row's container did not arrive as `scope:te_pa_row` (the button's
+    hover then crosses "It is one of our firms"): pass the firm's company type instead, as a number, and find the row
+    by it.
+15. **Show Details.** Show Details opens one firm's detail, and only that firm's (a key named for the company); Hide
+    Details closes it; another firm's stays as it was. The goals table's held goal is ticked and its score the highest
+    (with the +15); Law Being Enacted names the law and a stance while the country enacts a law the table covers, and
+    None otherwise; Seat names a state. A renamed company's detail closes (the key is its name): expected.
+16. **National Info shows another country's firms.** Open an AI country's National Info: its Private Actors tab (the
+    last strip, three tabs) shows its overview, firms and ledger, with no posture buttons; each firm's Posture is the AI's
+    (Favored for a firm whose executive's group governs). An observer sees no posture buttons and no "?".
+17. **The ledger opens collapsed, newest first.** The Ledger section starts collapsed; opened, its lines run newest
+    first, each "<firm> <what it did>" and its hover "Recorded N months ago". After the ledger has passed 20 lines (a
+    few years of a large country) the order still holds (`te_pa_ledger_view`). A dissolved firm's lines read "A
+    dissolved firm …" and log nothing. Secret moves ("Author unknown: a firm …") come with Task 4.
+18. **The overview.** Prospering, Steady and Failing add up to Firms; Largest Firm names the firm with the highest
+    share and its share, its name shrinking rather than ending in "..." when long; Common Goal names the goal most
+    firms hold. They follow the month's pulse, so a turn's change shows on the 1st.

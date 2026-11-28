@@ -1,0 +1,77 @@
+﻿# ============================================================================
+# PRIVATE ACTORS: the tab's scripted GUIs (gui/te_pa_widgets.gui;
+# docs/systems/mod_systems/private_actors.md § The Tab)
+# ============================================================================
+# The posture control (§ 4.7), three buttons on each firm's row of the roster:
+# Favored, Tolerated, Restrained. One handler a posture, each taking the row as
+# its one saved scope, te_pa_row (the row's container,
+# AddScope( 'te_pa_row', ScriptContainer.MakeScope ), the covert rows' shape:
+# covert_priority_up_sgui), rather than one handler with the posture as a
+# second chained AddScope (gui_modding_guide.md, "One scripted GUI, several
+# buttons": prefer one handler per action with the entity as the single saved
+# scope). Each:
+#   is_valid  te_pa_can_set_posture (te_pa_core_triggers.txt): the row's firm is
+#             one of this country's, and does not hold this posture already,
+#             which grays the posture in force (its "you are here")
+#   effect    te_pa_cmd_set_posture (te_pa_core_effects.txt): te_pa_set_posture
+#             (VERB 14, 15 or 16, logged in the ledger) and the row copied again;
+#             a custom_tooltip says what the posture does, since a set_variable
+#             renders nothing
+# The buttons sit under te_own_country_only, so only the player sets a posture
+# toward its own firms; an AI country's is derived each turn (te_pa_ai_posture).
+# None is ever the AI's (ai_is_valid always no).
+#
+# The GUI calls them as
+#   ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )
+# rooted on the player, whose own country the guard makes the shown one: the
+# buttons' tooltip renders with the row's datacontext alone (gotcha #24), and
+# GetPlayer needs none (the Grand Monuments rows' Carry It Off).
+#
+# What each posture does today: Connections half again as fast (Favored) or at
+# half the pace (Restrained), and a Restrained firm's Grievance (te_pa_accrue,
+# te_pa_core_values.txt), and the Dirigiste Policy stance (Task 1's law table).
+# A task that gives a posture more to do (Task 4's petitions' default answers,
+# Task 7's research aim) adds its line to the posture's _does_tt.
+# ============================================================================
+
+te_pa_posture_favored_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_can_set_posture = { POSTURE = 1 NAME = favored } }
+	effect = {
+		custom_tooltip = {
+			text = te_pa_posture_favored_does_tt
+			te_pa_cmd_set_posture = { POSTURE = 1 VERB = 14 }
+		}
+	}
+}
+
+te_pa_posture_tolerated_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_can_set_posture = { POSTURE = 0 NAME = tolerated } }
+	effect = {
+		custom_tooltip = {
+			text = te_pa_posture_tolerated_does_tt
+			te_pa_cmd_set_posture = { POSTURE = 0 VERB = 15 }
+		}
+	}
+}
+
+te_pa_posture_restrained_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_can_set_posture = { POSTURE = -1 NAME = restrained } }
+	effect = {
+		custom_tooltip = {
+			text = te_pa_posture_restrained_does_tt
+			te_pa_cmd_set_posture = { POSTURE = -1 VERB = 16 }
+		}
+	}
+}

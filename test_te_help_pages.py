@@ -117,6 +117,8 @@ PAGES = [
     # no journal entry: the window's tab and National Info; the station's
     # building panel links to the tab
     Page("power_grids", "te_grid_how_header", (), ("te_grid_tab_body",)),
+    # no journal entry: the window's tab and National Info
+    Page("private_actors", "te_pa_how_header", (), ("te_pa_tab_body",)),
     # no journal entry and no tab: the Construction panel's market section, whose
     # header has the "?"; the section shows only while the Free Market
     # Construction rule runs the market (2026-11-24, from #2016). With the rule

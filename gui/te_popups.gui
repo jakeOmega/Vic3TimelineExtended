@@ -71,7 +71,8 @@
 ###                      strategic_reserve, seabed, covert_warfare, nation,
 ###                      budget_breakdown, united_nations, demographics,
 ###                      tax_code, space_race, global_warming,
-###                      power_grids, construction_market (the
+###                      power_grids, private_actors,
+###                      construction_market (the
 ###                      construction panel's market section; its types in
 ###                      gui/construction_panel.gui)
 ###                      (test_te_help_pages.py's PAGES).
@@ -119,6 +120,7 @@ widget = {
 	te_space_race_help_popup = {}
 	te_global_warming_help_popup = {}
 	te_power_grids_help_popup = {}
+	te_private_actors_help_popup = {}
 	te_construction_market_help_popup = {}
 	### --- end Help pages ---------------------------------------------------
 }

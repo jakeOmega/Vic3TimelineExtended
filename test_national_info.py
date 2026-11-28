@@ -371,8 +371,8 @@ class StripTest(unittest.TestCase):
         with mock.patch.object(gen, "TABS", _every_candidate_public()):
             strips = _type_body(_strip_comments(gen.render_ni()), "te_ni_strips")
         widths = [int(w) for w in re.findall(r"minimumsize = \{ (\d+) -1 \}", strips)]
-        self.assertEqual(widths, [540, 540, gen.strip_width(2, gen.NI_PER_STRIP)])
-        self.assertEqual(widths[-1], 226)
+        self.assertEqual(widths, [540, 540, gen.strip_width(3, gen.NI_PER_STRIP)])
+        self.assertEqual(widths[-1], 330)
 
     def test_strips_of_five_in_order(self):
         keys = [gen.NI_FALLBACK] + [t.key for t in gen.ni_tabs()]
@@ -381,7 +381,7 @@ class StripTest(unittest.TestCase):
         with mock.patch.object(gen, "TABS", _every_candidate_public()):
             strips = _type_body(_strip_comments(gen.render_ni()), "te_ni_strips")
         keys = self._strip_keys(strips)
-        self.assertEqual([len(k) for k in keys], [5, 5, 2])
+        self.assertEqual([len(k) for k in keys], [5, 5, 3])
         self.assertEqual(sum(keys, []), gen.NI_ORDER)
         # centered: the strips between two expands, as the full-screen frame's
         top = [name for _, name, _ in _children(strips)]

@@ -68,8 +68,9 @@ STORED = "te_systems_window_tab"
 BOM = b"\xef\xbb\xbf"   # exactly one, as every .gui carries
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
 # A strip of six (the window's own systems, since Power Grids: owner,
-# 2026-11-05) is te_tab_buttons_six (gui/te_system_tab_widgets.gui), vanilla's
-# tab_buttons with a sixth slot, as the Budget, Diplomacy and Market panels use.
+# 2026-11-05; the economy strip, since Private Actors, 2026-11-28) is
+# te_tab_buttons_six (gui/te_system_tab_widgets.gui), vanilla's tab_buttons
+# with a sixth slot, as the Budget, Diplomacy and Market panels use.
 SLOTS_SIX = SLOTS + ["sixth"]
 
 
@@ -284,7 +285,7 @@ TABS: list[Tab] = [
             strip=None,
             public=True),
 
-    # The Budget and Market panels' tabs (strip 2). Banking opens with its
+    # The Budget and Market panels' tabs (strip 2), then Private Actors. Banking opens with its
     # entry or, for a country with a monetary stance and no entry, its #805
     # readout, and keeps the Budget tab's two-branch tooltip, which has no
     # checklist. Budget Breakdown has no entry and no rule: always open.
@@ -310,6 +311,14 @@ TABS: list[Tab] = [
     _mirror("global_warming", 2, "te_window_tab_global_warming_tt", "te_gw_tab_body", "te_gw_tab_layout",
             "te_market_global_warming_tab_sgui", "te_market_global_warming_tab_unlock_sgui",
             wide="te_gw_wide_sections"),
+    # The window's own system on the economy strip, its sixth on te_tab_buttons_six
+    # as the first strip's (2026-11-28; the first strip was full). No journal
+    # entry: open while its game rule is on; always on the strip, so grayed with
+    # the rule off (the default), the rule its checklist
+    # (te_window_private_actors_tab_unlock_sgui).
+    replace(_system("private_actors", "te_pa_tab_body", "te_pa_tab_layout", row=2, wide="te_pa_wide_sections"),
+            strip=None,
+            public=True),
 
     # The Population, Society, Diplomacy and Military panels' tabs (strip 3).
     # Demographics opens with its first census, as on the Population panel;
@@ -499,7 +508,7 @@ def _tax_probes_strip(wide: bool = False) -> list[str]:
 def strips_narrow() -> list[str]:
     out = ["### The strips, in fixed_top: vanilla's five-slot strip (as the Military",
            "### and Diplomacy panels use it) per row of the registry, or for a row of",
-           "### six te_tab_buttons_six (the window's own systems'). tab_buttons",
+           "### six te_tab_buttons_six (the window's own systems', the economy's). tab_buttons",
            "### derives from hbox, and a flowcontainer cannot own box layouts, so this",
            "### is a vbox.",
            "type te_systems_window_strips_narrow = vbox {",
@@ -516,7 +525,7 @@ def strips_narrow() -> list[str]:
 
 def strips_wide() -> list[str]:
     out = ["### The full-screen frame's strips: the narrow strips side by side in one",
-           "### centered row, each at its narrow width, so one strip of up to sixteen",
+           "### centered row, each at its narrow width, so one strip of up to seventeen",
            "### tabs at their narrow slot widths; then the developer strip.",
            "type te_systems_window_strips_wide = vbox {",
            "\tlayoutpolicy_horizontal = expanding",
@@ -950,7 +959,7 @@ NI_PREFIX = "te_ni"
 # a strip. A public tab not listed here fails _validate_ni.
 NI_ORDER = ["pops", "demographics", "nation", "banking", "tax_code",
             "grand_monuments", "colonial_empire", "seabed", "cultural_hegemony", "space_race",
-            "nuclear_weapons", "power_grids"]
+            "nuclear_weapons", "power_grids", "private_actors"]
 NI_PER_STRIP = len(SLOTS)
 # The Pops tab: vanilla's window, always open.
 NI_POPS_LABEL = "te_pop_browser_tab_pops"

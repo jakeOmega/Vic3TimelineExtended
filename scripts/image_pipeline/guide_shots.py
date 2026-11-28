@@ -540,6 +540,9 @@ SHOTS = {
         out=IMG + "monuments_contested.png", used_by=[G + "02-timeline.md"], status="placeholder",
         placeholder="the Monuments panel with Contested lit in the overview and a contested monument's row with its "
                     "three buttons"),
+    "private_actors_tab": dict(
+        out=IMG + "private_actors_tab.png", used_by=[G + "03-economy.md"], status="placeholder",
+        placeholder="the Private Actors tab with a firm's details open"),
     "tax_code_light_rates": dict(
         out=IMG + "tax_code_light_rates.png", used_by=[G + "05-tax-code.md"], status="placeholder",
         placeholder="the Tax Code tab under the Light Tax Code, Tax Rates open"),

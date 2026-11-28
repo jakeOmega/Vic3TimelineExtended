@@ -714,4 +714,6 @@ class NameLoc:
 NAME_LOCS = (
     NameLoc("te_pa_row_reason_good", "good", "te_pa_r_reason_good"),
     NameLoc("te_pa_row_reason_law", "law", "te_pa_r_reason_law"),
+    # the firm detail's law being enacted (Task 3's tab)
+    NameLoc("te_pa_row_enacting_law", "law", "te_pa_r_enacting_law"),
 )

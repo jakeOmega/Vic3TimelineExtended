@@ -118,3 +118,33 @@ te_pa_wants_output_tariff = {
 	var:te_pa_g_out_imported ?= 1
 	NOT = { var:te_pa_g_out_local ?= 1 }
 }
+
+# ---------------------------------------------------------------------------
+# The tab's posture control (Task 3; te_pa_sguis.txt)
+# ---------------------------------------------------------------------------
+
+# Country scope, the scripted GUI's root, with scope:te_pa_row the row the button sits on (its saved scope). The
+# button may set POSTURE (1, 0 or -1; NAME favored, tolerated or restrained, for its line) on the row's firm: the
+# row names one of this country's firms, and the firm does not hold that posture already. Fails closed while the scope is missing, so an unset scope grays the button
+# instead of acting on another firm (gui_modding_guide.md, the covert rows' note).
+te_pa_can_set_posture = {
+	custom_tooltip = {
+		text = te_pa_posture_ours_tt
+		exists = scope:te_pa_row
+		scope:te_pa_row = {
+			var:te_pa_r_firm ?= {
+				has_variable = te_pa_init
+				owner = root
+			}
+		}
+	}
+	custom_tooltip = {
+		text = te_pa_posture_not_held_$NAME$_tt
+		exists = scope:te_pa_row
+		scope:te_pa_row = {
+			var:te_pa_r_firm ?= {
+				NOT = { var:te_pa_posture ?= $POSTURE$ }
+			}
+		}
+	}
+}

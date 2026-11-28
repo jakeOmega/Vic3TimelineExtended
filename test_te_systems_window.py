@@ -1,7 +1,8 @@
 """The Timeline Extended window (gui/te_systems_window.gui): the mod's own
 window. Its own strip of six tabs: Nation (always open), the Space Race, Grand
 Monuments, the Colonial Empire, the Seabed (Global Commons) and Power Grids;
-then the strips that mirror the vanilla panels' system tabs.
+then the strips that mirror the vanilla panels' system tabs, the second with
+the window's own Private Actors as its sixth.
 Opened from a button under the sidebar
 (docs/systems/system_panels_feasibility.md §3.1, §3.5, §3.6; style guide rule 9).
 The strip, the selection templates and the tabs' mounts are generated from the
@@ -43,13 +44,17 @@ ICON_DOC = os.path.join(REPO, "docs", "systems", "te_systems_window_gui_icons.md
 RULES = {"space_race": "sr_space_race_on = yes",
          "grand_monuments": "gm_system_enabled = yes",
          "colonial_empire": "has_game_rule = decolonization_enabled",
-         "seabed": "te_global_commons_enabled = yes"}
+         "seabed": "te_global_commons_enabled = yes",
+         "private_actors": "te_pa_on = yes"}
+# The rule-gated tabs always on their strip, grayed while the rule is off: the
+# rule is their checklist (the unlock's is_valid), not their strip gate.
+RULE_CHECKLIST = {"private_actors"}
 # The system tabs, from the generator's registry: (tab key, the rule its gates
 # read, its slot on its strip). Nation (always open, no rule) is the first
 # slot of the first strip, then these.
 SLOTS = ["first", "second", "third", "fourth", "fifth"]
-# The first strip's six (owner, 2026-11-05: Power Grids the sixth), on
-# te_tab_buttons_six.
+# The first strip's six (owner, 2026-11-05: Power Grids the sixth) and the
+# second's (2026-11-28: Private Actors the sixth), on te_tab_buttons_six.
 SLOTS_SIX = SLOTS + ["sixth"]
 ALL_TABS = [(t.key, RULES[t.key], SLOTS_SIX[[u.key for u in gen.TABS if u.row == t.row].index(t.key)])
             for t in gen.TABS[1:] if t.key in RULES]
@@ -100,17 +105,19 @@ MIRRORED = [
      _shown("te_military_covert_tab_sgui"), "te_military_covert_tab_unlock_sgui", "te_covert_tab_body"),
 ]
 # spec § 5.1: three strips of five, the first of six since Power Grids
-# (owner, 2026-11-05)
+# (owner, 2026-11-05) and the second since Private Actors (2026-11-28)
 STRIP_ORDER = {1: ["nation", "space_race", "grand_monuments", "colonial_empire", "seabed", "power_grids"],
-               2: ["banking", "tax_code", "budget_breakdown", "strategic_reserve", "global_warming"],
+               2: ["banking", "tax_code", "budget_breakdown", "strategic_reserve", "global_warming",
+                   "private_actors"],
                3: ["demographics", "cultural_hegemony", "united_nations", "nuclear_weapons", "covert_warfare"]}
 SR = gen.SR_MILESTONES   # je_space_race.txt order (test_the_gates_read_the_rule_and_the_entries)
 # The systems' full names (owner, 2026-09-30), and the width a tab's name gets:
 # five slots share 540 less vanilla tab_buttons' 3 px margins and two 5 px
 # dividers, 104.8 each, less tab_text_properties' 10 px margin each side (no
-# icon): 84.8; six, on te_tab_buttons_six (the first strip), 67.3.
+# icon): 84.8; six, on te_tab_buttons_six (the first and second strips), 67.3.
 FULL_NAMES = {"nation": "Nation", "space_race": "Space Race", "colonial_empire": "Colonial Empire",
               "grand_monuments": "Grand Monuments", "seabed": "Seabed", "power_grids": "Power Grids",
+              "private_actors": "Private Actors",
               # the mirrored tabs: the entries' names (owner, 2026-11-02), not
               # the Market tabs' Climate and Reserve
               "banking": "Banking", "tax_code": "Tax Code", "budget_breakdown": "Budget Breakdown",
@@ -181,7 +188,8 @@ def _template(text, name):
 def _all_loc():
     keys = {}
     for path in glob.glob(os.path.join(LOC_DIR, "**", "*.yml"), recursive=True):
-        for m in re.finditer(r'^ ([\w.\-]+):\d* "(.*)"\s*$', _read(path), re.M):
+        # a trailing `# REVIEWED ...` comment is not the value (check_gui_lint.LOC_LINE)
+        for m in re.finditer(r'^ ([\w.\-]+):\d* "(.*?)"\s*(?:#[^"\n]*)?$', _read(path), re.M):
             keys[m.group(1)] = m.group(2)
     return keys
 
@@ -601,12 +609,13 @@ class StripTest(unittest.TestCase):
         and Market panels' five, then the Population, Society, Diplomacy and
         Military panels' five, each with no gate of its own (Nation always
         shows). The window's own strip holds six since Power Grids (owner,
-        2026-11-05), on te_tab_buttons_six, vanilla's strip with a sixth slot
-        as the Budget, Diplomacy and Market panels use; the others are
-        vanilla's five-slot tab_buttons. Only the developer tax-probes tab
+        2026-11-05), and the second since Private Actors (2026-11-28), on
+        te_tab_buttons_six, vanilla's strip with a sixth slot as the Budget,
+        Diplomacy and Market panels use; the third is vanilla's five-slot
+        tab_buttons. Only the developer tax-probes tab
         keeps a strip of its own, after them."""
         self.assertEqual({row: [t.key for t in gen.TABS if t.row == row] for row in (1, 2, 3)}, STRIP_ORDER)
-        self.assertEqual(len(gen.TABS), 16)
+        self.assertEqual(len(gen.TABS), 17)
         for row, keys in STRIP_ORDER.items():
             with self.subTest(strip=row):
                 strip = self._strip(row)
@@ -619,8 +628,8 @@ class StripTest(unittest.TestCase):
                     self.assertIn(f'blockoverride "{slot}_button"', strip)
                 if not six:
                     self.assertNotIn("sixth_button", strip)
-        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 3)
-        self.assertEqual(len(re.findall(r"\bte_tab_buttons_six = \{", _strip_comments(self.strips))), 1)
+        self.assertEqual(len(re.findall(r"\btab_buttons = \{", _strip_comments(self.strips))), 2)
+        self.assertEqual(len(re.findall(r"\bte_tab_buttons_six = \{", _strip_comments(self.strips))), 2)
         last = self._strip(3)
         rest = self.strips[self.strips.index(last) + len(last):]
         self.assertNotIn("te_window_tab_", rest)
@@ -746,7 +755,14 @@ class StripTest(unittest.TestCase):
                 gate = _txt_block(self.sguis, f"te_window_{tab}_tab_sgui")
                 self.assertIn(rule, gate)
                 unlock = _txt_block(self.sguis, f"te_window_{tab}_tab_unlock_sgui")
-                self.assertIn(f"is_shown = {{ {rule} }}", unlock)
+                if tab in RULE_CHECKLIST:
+                    # always on its strip, grayed while the rule is off, the
+                    # rule its checklist line
+                    self.assertIsNone(_tab(tab).strip)
+                    self.assertIn("is_shown = { always = yes }", unlock)
+                    self.assertIn(rule, unlock[unlock.index("is_valid"):])
+                else:
+                    self.assertIn(f"is_shown = {{ {rule} }}", unlock)
                 for body in (gate, unlock):
                     self.assertIn("is_valid", body)
                     self.assertNotIn("scope:", body)    # scope-free (gotcha #22)

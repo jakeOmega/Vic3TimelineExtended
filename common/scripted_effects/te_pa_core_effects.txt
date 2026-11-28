@@ -16,6 +16,7 @@
 #   te_pa_bold_t, te_pa_force, te_pa_patern, te_pa_attach (-1 to 1) | te_pa_exec, te_pa_ig_gov, te_pa_ig_marginal
 #   te_pa_seat (a state), te_pa_seat_fallback | te_pa_trade (stance on protection, -2 to 2)
 #   te_pa_row (its row container) | te_pa_n_failing, te_pa_n_big (a notice's crossing, set until back below)
+#   te_pa_funds_fill (the tab's Funds bar, 0-1, written by te_pa_row_sync)
 
 # ---------------------------------------------------------------------------
 # The monthly pulse (te_pa_on_actions.txt)
@@ -69,6 +70,7 @@ te_pa_monthly = {
 			te_pa_quarter = yes
 		}
 		# Task 4: the declared move's countdown (te_pa_move_months) goes here, after the turns.
+		te_pa_ov_refresh = yes
 		te_pa_debug_monthly = yes
 	}
 }
@@ -422,6 +424,8 @@ te_pa_row_sync = {
 		}
 		te_pa_row_make = yes
 	}
+	# The Funds bar's fill on the tab (Task 3): the claim over its cap, 0 to 1.
+	set_variable = { name = te_pa_funds_fill value = te_pa_funds_fill_value }
 	save_scope_as = te_pa_sync_firm
 	var:te_pa_row ?= {
 		set_variable = { name = te_pa_r_firm value = scope:te_pa_sync_firm }
@@ -433,6 +437,7 @@ te_pa_row_sync = {
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cond TO = te_pa_r_cond }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cycle TO = te_pa_r_cycle }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_funds TO = te_pa_r_funds }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_funds_fill TO = te_pa_r_funds_fill }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_conn TO = te_pa_r_conn }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_stand TO = te_pa_r_stand }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_griev TO = te_pa_r_griev }
@@ -535,6 +540,90 @@ te_pa_rows_sweep = {
 }
 
 # ---------------------------------------------------------------------------
+# The tab (Task 3, gui/te_pa_widgets.gui)
+# ---------------------------------------------------------------------------
+
+# Country scope. The tab's overview, stored at the end of each monthly pulse and when a firm is cleared, since it
+# describes and asks nothing of the player (gui_style_guide.md rule 5, a call to action reads live): the firms, how
+# many are prospering and failing (by the rows' condition), the firm with the largest share of its sector and that
+# share, and the goal most firms hold (ties to the lower code) with how many hold it. Read through the guarded
+# te_pa_tab_* values (te_pa_core_values.txt).
+te_pa_ov_refresh = {
+	save_scope_as = te_pa_ov_home
+	set_variable = { name = te_pa_ov_firms value = te_pa_ov_count_firms }
+	set_variable = { name = te_pa_ov_prospering value = te_pa_ov_count_prospering }
+	set_variable = { name = te_pa_ov_failing value = te_pa_ov_count_failing }
+	set_variable = { name = te_pa_ov_top_share value = 0 }
+	set_variable = { name = te_pa_ov_goal value = 0 }
+	set_variable = { name = te_pa_ov_goal_n value = 0 }
+	if = {
+		limit = { has_variable = te_pa_ov_top }
+		remove_variable = te_pa_ov_top
+	}
+	if = {
+		limit = { has_variable_list = te_pa_rows }
+		clear_saved_scope = te_pa_ov_top_row
+		ordered_in_list = {
+			variable = te_pa_rows
+			limit = { var:te_pa_r_firm ?= { has_variable = te_pa_init } }
+			order_by = te_pa_row_share_order
+			position = 0
+			check_range_bounds = no
+			save_scope_as = te_pa_ov_top_row
+		}
+		if = {
+			limit = { exists = scope:te_pa_ov_top_row }
+			set_variable = { name = te_pa_ov_top value = scope:te_pa_ov_top_row.var:te_pa_r_firm }
+			set_variable = { name = te_pa_ov_top_share value = scope:te_pa_ov_top_row.var:te_pa_r_share }
+		}
+		te_pa_ov_goal_try = { CODE = 1 }
+		te_pa_ov_goal_try = { CODE = 2 }
+		te_pa_ov_goal_try = { CODE = 3 }
+		te_pa_ov_goal_try = { CODE = 4 }
+		te_pa_ov_goal_try = { CODE = 5 }
+		te_pa_ov_goal_try = { CODE = 6 }
+		te_pa_ov_goal_try = { CODE = 7 }
+		te_pa_ov_goal_try = { CODE = 8 }
+		if = {
+			limit = { has_variable = te_pa_ov_try }
+			remove_variable = te_pa_ov_try
+		}
+	}
+}
+
+# Country scope, inside te_pa_ov_refresh (scope:te_pa_ov_home the country). How many rows hold goal CODE; it becomes
+# the overview's goal when more do than hold the best so far.
+te_pa_ov_goal_try = {
+	set_variable = { name = te_pa_ov_try value = 0 }
+	every_in_list = {
+		variable = te_pa_rows
+		limit = { var:te_pa_r_goal ?= $CODE$ }
+		scope:te_pa_ov_home = { change_variable = { name = te_pa_ov_try add = 1 } }
+	}
+	if = {
+		limit = { var:te_pa_ov_try > var:te_pa_ov_goal_n }
+		set_variable = { name = te_pa_ov_goal value = $CODE$ }
+		set_variable = { name = te_pa_ov_goal_n value = var:te_pa_ov_try }
+	}
+}
+
+# Country scope, the scripted GUI's root (te_pa_posture_<name>_sgui, te_pa_sguis.txt), with scope:te_pa_row the row
+# the button sits on. The player's posture toward the row's firm (§ 4.7): te_pa_set_posture sets it and logs the
+# change (VERB 14, 15 or 16), and the row is copied again so the tab shows it at once.
+te_pa_cmd_set_posture = {
+	if = {
+		limit = { exists = scope:te_pa_row }
+		scope:te_pa_row = {
+			var:te_pa_r_firm ?= {
+				owner = { save_scope_as = te_pa_home }
+				te_pa_set_posture = { POSTURE = $POSTURE$ VERB = $VERB$ }
+				te_pa_row_sync = yes
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
 # The teardown and the clear
 # ---------------------------------------------------------------------------
 
@@ -606,6 +695,26 @@ te_pa_clear_firm = {
 	if = {
 		limit = { has_variable = te_pa_turn_in }
 		remove_variable = te_pa_turn_in
+	}
+	# Its ledger lines name a company about to go: the tab prints "a dissolved firm" for a line marked so, rather
+	# than reading a company that no longer exists (te_pa_l_gone; gui/te_pa_widgets.gui, the ledger).
+	save_scope_as = te_pa_gone_firm
+	scope:te_pa_home = {
+		if = {
+			limit = { has_variable_list = te_pa_ledger }
+			every_in_list = {
+				variable = te_pa_ledger
+				limit = {
+					has_variable = te_pa_l_actor
+					var:te_pa_l_actor = scope:te_pa_gone_firm
+				}
+				set_variable = { name = te_pa_l_gone value = 1 }
+			}
+		}
+		if = {
+			limit = { te_pa_on = yes }
+			te_pa_ov_refresh = yes
+		}
 	}
 }
 
