@@ -922,7 +922,7 @@ Timings are order-of-magnitude and move with the machine; the ordering is the pa
 |---|---|---|---|---|
 | (none) | ~60–90 s | regenerator output under `common/`, `localization/english/`, `events/` + audit reports under `docs/engine/` | nothing | Normal "I edited mod files, re-run everything" reload. |
 | `?engine_only=true` | <1 s | none | the entire ModState rebuild (only re-reads engine-doc snapshots) | After re-launching the game with no mod-file edits, when you only want freshly-typed `script_docs` output to be picked up. |
-| `?audits_only=true` | ~60–90 s | audit reports under `docs/engine/*_report.md` only | the 23 file-rewriting `POST_LOAD_REGENERATORS` | When you want a clean re-check of audit warnings without regenerators reshuffling your diff. Time-savings are modest — the parse dominates. The real win is the clean diff. |
+| `?audits_only=true` | ~60–90 s | audit reports under `docs/engine/*_report.md` only | the 24 file-rewriting `POST_LOAD_REGENERATORS` | When you want a clean re-check of audit warnings without regenerators reshuffling your diff. Time-savings are modest — the parse dominates. The real win is the clean diff. |
 | `?mod_only=true` | ~25 s | regenerator output (as above) | the vanilla parse + vanilla loc re-read (uses cached snapshot from the previous full load) + the engine-docs / dev-refs reload | When you've only edited mod files and want a quick reload. Vanilla cache is opt-in — if you bump vanilla, run an unflagged `/reload` to refresh it. |
 | `?mod_only=true&audits_only=true` | ~25 s | audit reports under `docs/engine/*_report.md` only | both regenerators *and* the vanilla re-read | **The fast-verify path used by the nightly audit.** Safe to call after every batch of fixes. |
 
