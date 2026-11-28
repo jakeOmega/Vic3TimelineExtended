@@ -1307,5 +1307,58 @@ class TemplateFolderTests(unittest.TestCase):
         self.assertIn("gui/journal_entry_widgets/grand_monuments_widget.gui", spec["gui"])
 
 
+class ProductionBuildingRegistryTests(unittest.TestCase):
+    """The production buildings in vanilla's two-layer look (spec 2026-11-27): their category, goods and ores."""
+
+    def test_categories(self):
+        spec = ip.CATEGORIES["production_building"]
+        self.assertEqual((spec["folder"], spec["size"], spec["mode"], spec["field"]),
+                         ("building_icons", 256, "framed_good", "icon"))
+        self.assertTrue(spec["style"].startswith("high-angle oblique close-up looking down onto {subject}"))
+        self.assertTrue(ip.CATEGORIES["building_foreground"]["part"])
+        self.assertEqual(ip.CATEGORIES["building"]["style"], ip.BUILDING_STYLE)   # untouched
+
+    def test_good_texture_mod_first_then_vanilla(self):
+        self.assertEqual(ip.good_texture("digital_assets"), "gfx/interface/icons/goods_icons/software.dds")  # mod good
+        self.assertEqual(ip.good_texture("radios"), "gfx/interface/icons/goods_icons/radios.dds")            # vanilla
+        self.assertIsNone(ip.good_texture("no_such_good"))
+
+    def test_scope(self):
+        pb = ip.ICONS["production_building"]
+        self.assertEqual(len(pb), 39)
+        self.assertFalse(set(pb) & set(ip.ICONS["building"]))
+        self.assertIn("building_synthetics_plant_silk", pb)
+        self.assertNotIn("building_solar_receiver", pb)
+        for key, e in pb.items():
+            self.assertTrue(e["foreground"], key)
+
+    def test_check_flags_bad_foregrounds_and_duplicates(self):
+        saved = ip.ICONS
+        try:
+            ip.ICONS = {
+                "building": {"building_twice": {"subject": "a hall", "seed": None}},
+                "building_foreground": {"ore_ok": {"subject": "a heap of red ore", "seed": None}},
+                "production_building": {
+                    "building_ok": {"subject": "roofs", "seed": None, "foreground": [{"good": "radios"}]},
+                    "building_part_ok": {"subject": "a pit", "seed": None,
+                                         "foreground": [{"part": "building_foreground/ore_ok"}]},
+                    "building_no_good": {"subject": "roofs", "seed": None, "foreground": [{"good": "no_such_good"}]},
+                    "building_no_part": {"subject": "roofs", "seed": None,
+                                         "foreground": [{"part": "building_foreground/gone"}]},
+                    "building_empty": {"subject": "roofs", "seed": None, "foreground": []},
+                    "building_twice": {"subject": "roofs", "seed": None, "foreground": [{"good": "radios"}]},
+                }}
+            d = tempfile.mkdtemp()
+            bdir = Path(d) / "common" / "buildings"
+            bdir.mkdir(parents=True)
+            keys = set(ip.ICONS["production_building"]) | set(ip.ICONS["building"])
+            (bdir / "b.txt").write_text("".join(f"{k} = {{\n}}\n" for k in keys), encoding="utf-8-sig")
+            r = ip.check(d, on_disk=set())
+        finally:
+            ip.ICONS = saved
+        self.assertEqual(sorted(k for c, k in r["bad_entry"] if c == "production_building"),
+                         ["building_empty", "building_no_good", "building_no_part", "building_twice"])
+
+
 if __name__ == "__main__":
     unittest.main()
