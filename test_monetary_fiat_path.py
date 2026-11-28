@@ -28,6 +28,10 @@ from test_banking_external_tools import ROOT, Script, definitions, parse_body
 EFFECTS = 'common/scripted_effects/te_monetary_effects.txt'
 TRIGGERS = 'common/scripted_triggers/te_monetary_triggers.txt'
 MARKET_TRIGGERS = 'common/scripted_triggers/market_triggers.txt'
+# Every law in the mod's own groups ends its weight with #1877's halving (test_ai_law_weights.py); a World
+# holding none of the three laws it reads weighs as before.
+LAW_WEIGHT_TRIGGERS = 'common/scripted_triggers/te_ai_law_weight_triggers.txt'
+LAW_WEIGHT_VALUES = 'common/script_values/te_ai_law_weight_values.txt'
 EVENTS = 'events/te_peg_events.txt'
 LAWS = 'common/laws/extra_laws.txt'
 
@@ -42,13 +46,15 @@ class World(Script):
         self.laws, self.techs = set(laws), set(techs)
         raw = definitions(TRIGGERS)
         raw.update(definitions(MARKET_TRIGGERS))
+        raw.update(definitions(LAW_WEIGHT_TRIGGERS))
         self.triggers.update({k: self.rw(v) for k, v in raw.items()})
+        self.values.update(definitions(LAW_WEIGHT_VALUES))
 
     def rw(self, body):
         """has_law / has_technology_researched -> boolean inputs the interpreter reads."""
         out = []
         for key, op, val in body:
-            if key == 'has_law':
+            if key in ('has_law', 'has_law_or_variant'):
                 name = val.removeprefix('law_type:')
                 self.inputs[f'__law_{name}'] = name in self.laws
                 out.append((f'__law_{name}', '=', 'yes'))

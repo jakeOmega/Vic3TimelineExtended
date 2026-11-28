@@ -476,6 +476,14 @@ law_intrusive_surveillance = {
 		country_covert_operation_efficiency_mult = 0.10
 		country_legislative_override_capacity_add = 1
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_minimal_privacy_protection = {
@@ -487,6 +495,14 @@ law_minimal_privacy_protection = {
 
 	modifier = {
 		country_intelligence_capacity_add = 2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -509,6 +525,14 @@ law_moderate_data_privacy = {
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
 		goods_output_tourism_mult = 0.05
 		country_legislative_override_capacity_add = -1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -540,6 +564,14 @@ law_strong_privacy_rights = {
 		goods_output_tourism_mult = 0.10
 		country_intelligence_capacity_add = -2
 		country_legislative_override_capacity_add = -2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -599,6 +631,14 @@ law_primogeniture = {
 		state_late_marriage_farms_add = 0.15	# the census's Late Marriage: the heirs who don't inherit marry late (late-marriage spec call 6)
 		country_wealth_concentration_inheritance_add = 30	# Wealth Concentration's inheritance term: the law's target 80
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # Customary Inheritance: local custom decides. The baseline every country
@@ -627,6 +667,14 @@ law_partible = {
 	modifier = {
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
 		state_tax_capacity_mult = -0.05
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -663,6 +711,14 @@ law_equal_inheritance = {
 		state_tax_capacity_mult = 0.1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		country_wealth_concentration_inheritance_add = -25	# Wealth Concentration's inheritance term: the law's target 25
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -712,6 +768,14 @@ law_non_inheritable_usage_rights = {
 		state_clerks_investment_pool_efficiency_mult = -0.1
 		country_wealth_concentration_inheritance_add = -50	# Wealth Concentration's inheritance term: the law's target 0
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # Freedom of Testation: the owner chooses the heirs. Family firms pass
@@ -742,6 +806,14 @@ law_free_testation = {
 		# Wills are contested in court.
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		country_wealth_concentration_inheritance_add = 10	# Wealth Concentration's inheritance term: the law's target 60
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -790,6 +862,14 @@ law_state_universal_heir = {
 		state_bureaucrats_investment_pool_efficiency_mult = -0.1
 		state_clerks_investment_pool_efficiency_mult = -0.1
 		country_wealth_concentration_inheritance_add = -50	# Wealth Concentration's inheritance term: the law's target 0
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -882,6 +962,10 @@ law_total_war = {
 			limit = { is_at_war = no }
 			add = -100
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -914,6 +998,10 @@ law_traditional_rules_of_war = {
 			}
 			add = 150
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -957,6 +1045,10 @@ law_war_crimes_forbidden = {
 			}
 			add = 150
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1003,6 +1095,10 @@ law_humanitarian_regulations = {
 			}
 			add = 150
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1060,6 +1156,10 @@ law_limited_war = {
 			}
 			add = 150
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1073,6 +1173,14 @@ law_no_ip_protection = {
 	modifier = {
 		country_weekly_innovation_mult = 0.05
 		country_covert_defense_economic_add = -10
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1096,6 +1204,10 @@ law_creative_commons = {
 	}
 	ai_enact_weight_modifier = {
 		value = 100
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1132,6 +1244,10 @@ law_traditional_ip_protection = {
 			}
 			add = 200
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1170,6 +1286,10 @@ law_strict_ip_protection = {
 			}
 			add = 100
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1192,6 +1312,10 @@ law_open_source_innovation = {
 	}
 	ai_enact_weight_modifier = {
 		value = 200
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1227,6 +1351,10 @@ law_state_intellectual_property = {
 			limit = { has_law = law_type:law_corporate_state }
 			add = 200
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1250,6 +1378,14 @@ law_commodity_money = {
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1314,6 +1450,10 @@ law_gold_standard = {
 			}
 			value = 0
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1384,6 +1524,10 @@ law_fiat_currency = {
 			limit = { te_mon_reached_era_9 = yes }
 			add = 100
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1453,6 +1597,10 @@ law_digital_currency = {
 			limit = { te_mon_reached_era_9 = yes }
 			add = 100
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1476,6 +1624,10 @@ law_decentralized_cryptocurrency = {
 
 	ai_enact_weight_modifier = {
 		value = 50
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1500,6 +1652,14 @@ law_state_secrets = {
 		country_war_support_battles_increase_mult = -0.05
 		country_war_support_battles_decrease_mult = -0.05
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_informal_government_secrecy = {
@@ -1513,6 +1673,14 @@ law_informal_government_secrecy = {
 		country_intelligence_capacity_add = 2
 		country_covert_operation_efficiency_mult = 0.05
 		country_cultural_pull_mult = -0.02
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1539,6 +1707,14 @@ law_freedom_of_information = {
 		country_war_support_battles_increase_mult = 0.05
 		country_war_support_battles_decrease_mult = 0.05
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_open_government = {
@@ -1563,6 +1739,14 @@ law_open_government = {
 		country_cultural_pull_mult = 0.05
 		country_war_support_battles_increase_mult = 0.1
 		country_war_support_battles_decrease_mult = 0.1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1630,6 +1814,14 @@ law_penal_labor_camps = {
 		building_group_bg_plantations_throughput_add = 0.05
 		building_group_bg_rubber_throughput_add = 0.05
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_punishment_focused_criminal_justice = {
@@ -1638,6 +1830,14 @@ law_punishment_focused_criminal_justice = {
 	icon = "gfx/interface/icons/law_icons/law_punishment_focused_criminal_justice.dds"
 
 	progressiveness = 0
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_restorative_justice = {
@@ -1658,6 +1858,14 @@ law_restorative_justice = {
 		state_demog_replaced_ratio_add = 0.025	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_male_labor_participation_add = 0.014	# the census's participation input (phase 2 step 1; the design §1.7): fewer men in prison, community sentences keep them in work
 		state_external_mortality_mult = -0.04	# the census's deaths from violence: offenders who meet their victims reoffend less, violent ones most of all
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1680,6 +1888,14 @@ law_rehabilitation_focused_criminal_justice = {
 		state_male_labor_participation_add = 0.021	# the census's participation input (phase 2 step 1; the design §1.7): prisons that train and place their inmates
 		state_external_mortality_mult = -0.08	# the census's deaths from violence: treatment, schooling and work in prison cut violent reoffending
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_active_persecution = {
@@ -1692,6 +1908,14 @@ law_active_persecution = {
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = -0.05
 		country_cultural_hegemony_art_mult = -0.05
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1710,6 +1934,14 @@ law_legal_limbo = {
 		state_standard_of_living_add = 0.5	# REVIEWED 2026-11-12: owner call (#338). Standard of living is whole points, so this plays as 0; rounding to 1 would equal Basic Protections, the next law up (1, 2, 3).
 		country_cultural_hegemony_art_mult = -0.02
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_basic_protections = {
@@ -1726,6 +1958,14 @@ law_basic_protections = {
 	modifier = {
 		state_standard_of_living_add = 1
 		country_bureaucracy_investment_cost_factor_mult = 0.05
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1744,6 +1984,14 @@ law_comprehensive_rights = {
 		state_standard_of_living_add = 2
 		country_bureaucracy_investment_cost_factor_mult = 0.1
 		country_cultural_hegemony_art_mult = 0.03
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1764,6 +2012,14 @@ law_full_equality_and_protection = {
 		state_demog_ontop_birth_rate_mult = -0.01 # a token: the research finds little effect (test_lgbtq_rights_laws.py)
 		country_cultural_hegemony_art_mult = 0.05
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_no_augmentation = {
@@ -1779,6 +2035,14 @@ law_no_augmentation = {
 		law_medical_augmentation_only
 		law_regulated_augmentation_market
 		law_mandatory_augmentation
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1804,6 +2068,14 @@ law_unrestricted_augmentation = {
 		country_tech_research_speed_mult = 0.2
 		country_covert_operation_efficiency_mult = 0.05
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_human_purity = {
@@ -1823,6 +2095,14 @@ law_human_purity = {
 		country_sol_expectations_target_add = -1
 		state_pop_support_movement_transhumanist_mult = 0.2
 		country_longevity_care_banned_bool = yes	# the census's longevity care: none (late game §4.2)
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1858,6 +2138,14 @@ law_medical_augmentation_only = {
 	}
 
 	progressiveness = 60
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_regulated_augmentation_market = {
@@ -1891,6 +2179,14 @@ law_regulated_augmentation_market = {
 
 	on_enact = {
 		custom_tooltip = { text = LAW_REGULATED_AUGMENTATION_MARKET_INSTITUTION_MODIFIER_TT }
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -1932,6 +2228,14 @@ law_mandatory_augmentation = {
 
 	on_enact = {
 		custom_tooltip = { text = LAW_MANDATORY_AUGMENTATION_INSTITUTION_MODIFIER_TT }
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2034,6 +2338,14 @@ law_minority_rights_violent_hostility = {
 			}
 			can_impose_law_default = yes
 		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2145,6 +2457,14 @@ law_minority_rights_ghettoization = {
 			}
 			can_impose_law_default = yes
 		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2258,6 +2578,14 @@ law_minority_rights_cultural_assimilation = {
 			can_impose_law_default = yes
 		}
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_minority_rights_discrimination = {
@@ -2362,6 +2690,14 @@ law_minority_rights_discrimination = {
 			can_impose_law_default = yes
 		}
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_minority_rights_indifference = {
@@ -2449,6 +2785,14 @@ law_minority_rights_indifference = {
 			}
 			can_impose_law_default = yes
 		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2543,6 +2887,14 @@ law_minority_rights_protection = {
 			can_impose_law_default = yes
 		}
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_minority_rights_affirmative_action = {
@@ -2634,6 +2986,14 @@ law_minority_rights_affirmative_action = {
 			can_impose_law_default = yes
 		}
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # =================================================================
@@ -2652,6 +3012,14 @@ law_feudal_contracts = {
 		country_authority_cost_add = 100
 		country_legislative_override_capacity_add = -3
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_unitary_state = {
@@ -2664,6 +3032,14 @@ law_unitary_state = {
 		state_incorporation_speed_mult = 0.2
 		country_legislative_override_capacity_add = 1
 		country_colonial_garrison_effectiveness_add = 0.1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2680,6 +3056,14 @@ law_federal_system = {
 		state_decree_cost_mult = -0.25
 		country_legislative_override_capacity_add = -1
 		country_colonial_stability_drift_add = 0.1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2700,6 +3084,14 @@ law_devolution = {
 		country_legislative_override_capacity_add = -2
 		country_colonial_stability_drift_add = 0.25
 		country_colonial_garrison_effectiveness_add = -0.25
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2727,6 +3119,14 @@ law_no_campaign_finance_laws = {
 		law_anarchy
 		law_labour_suffrage
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_unregulated_donations = {
@@ -2747,6 +3147,14 @@ law_unregulated_donations = {
 	modifier = {
 		country_aristocrats_voting_power_add = 10
 		country_capitalists_voting_power_add = 20
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2776,6 +3184,14 @@ law_donation_limits = {
 		country_officers_voting_power_add = 2.5
 		state_political_strength_from_wealth_mult = -0.1
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_publicly_funded_elections = {
@@ -2801,6 +3217,14 @@ law_publicly_funded_elections = {
 		country_legitimacy_base_add = 10
 		country_covert_defense_ideological_add = 10
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # =================================================================
@@ -2814,6 +3238,14 @@ law_traditional_family_structure = {
 	progressiveness = 50
 
 	# This is the default state before any family laws are enacted.
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_pro_natalist_subsidies = {
@@ -2848,6 +3280,10 @@ law_pro_natalist_subsidies = {
 			limit = { has_famine = yes }
 			add = -100
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2863,6 +3299,14 @@ law_state_sponsored_family_planning = {
 		state_demog_absorbed_birth_rate_mult = -0.05
 		state_demog_womens_work_ratio_add = 0.05	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		state_education_access_add = 0.05
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2899,6 +3343,10 @@ law_population_control_measures = {
 			limit = { te_demog_ms_ai_shrinking = yes }
 			add = -100
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2915,6 +3363,14 @@ law_communal_child_rearing = {
 		state_demog_ontop_birth_rate_mult = -0.2
 		state_demog_womens_work_ratio_add = 0.1	# phase 2 step 1: re-applied by te_demog_workforce_lines_refresh
 		country_bureaucracy_investment_cost_factor_mult = 0.1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2940,6 +3396,14 @@ law_unregulated_banking = {
 		country_banking_lock_capital_controls_bool = yes
 		country_banking_lock_asset_relief_bool = yes
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # Free & Mutual Banking (weak toolkit, co-ops; no central bank)
@@ -2958,6 +3422,14 @@ law_free_mutual_banking = {
 		country_banking_lock_capital_controls_bool = yes
 		country_banking_lock_asset_relief_bool = yes
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # Universal Banking, Light Prudence (permissive + some tools)
@@ -2974,6 +3446,14 @@ law_universal_banking_light_prudence = {
 		country_banking_random_momentum_mult = 0.1
 		country_banking_lock_capital_controls_bool = yes
 		country_banking_lock_asset_relief_bool = yes
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -2993,6 +3473,14 @@ law_prudential_narrow_banking = {
 		country_banking_lock_open_market_ops_bool = yes
 		country_banking_lock_directed_credit_bool = yes
 		country_banking_lock_export_credit_bool = yes
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3016,6 +3504,14 @@ law_directed_credit_development_banks = {
 		# Development banks co-finance priority sectors: two directed-credit
 		# sectors at once instead of one (banking_directed_credit_slots_free).
 		country_directed_credit_sectors_add = 1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3055,6 +3551,10 @@ law_state_owned_banking = {
 			limit = { has_law = law_type:law_command_economy }
 			add = 500
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3106,6 +3606,14 @@ law_central_bank_independence = {
 		# WIDTH of the error band, never the error itself (§8).
 		country_bank_forecast_error_add = -0.01
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # =================================================================
@@ -3123,6 +3631,14 @@ law_no_internet_policy = {
 		law_unregulated_internet
 		law_state_controlled_internet
 		law_net_neutrality
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3142,6 +3658,14 @@ law_unregulated_internet = {
 		# 1.14 battle war support: rumour-driven, swings both ways
 		country_war_support_battles_increase_mult = 0.2
 		country_war_support_battles_decrease_mult = 0.2
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3167,6 +3691,14 @@ law_state_controlled_internet = {
 		country_war_support_battles_increase_mult = -0.1
 		country_war_support_battles_decrease_mult = -0.2
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_net_neutrality = {
@@ -3183,6 +3715,14 @@ law_net_neutrality = {
 		country_intelligence_capacity_add = 1
 		country_war_support_battles_increase_mult = 0.15
 		country_war_support_battles_decrease_mult = 0.15
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3207,6 +3747,14 @@ law_traditional_heredity = {
 		law_corporate_genetic_licensing
 		law_open_source_genetics
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ban_on_genetic_modification = {
@@ -3228,6 +3776,14 @@ law_ban_on_genetic_modification = {
 		country_sol_expectations_target_add = -1
 		country_tech_spread_mult  = -0.1
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_corporate_genetic_licensing = {
@@ -3241,6 +3797,14 @@ law_corporate_genetic_licensing = {
 		country_company_throughput_bonus_add = 0.10
 		country_can_use_biotech_companies_bool = yes
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_open_source_genetics = {
@@ -3253,6 +3817,14 @@ law_open_source_genetics = {
 	modifier = {
 		building_group_bg_biotechnology_throughput_add = 0.25
 		country_tech_spread_mult = 0.1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3274,6 +3846,14 @@ law_state_eugenics_program = {
 		state_demog_ontop_birth_rate_mult = -0.05	# sterilisation of the "unfit"
 		country_acceptance_no_shared_heritage_trait_add = -10	# the boards' targets were minorities (Ethnostate's own line)
 		state_bureaucracy_population_base_cost_factor_mult = 0.05	# registries, screening boards, hereditary health courts
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3299,6 +3879,14 @@ law_local_vernacular = {
 		country_primary_culture_fervor_from_laws_add = -20
 		country_education_fervor_add = -5
 		country_authority_cost_add = 50
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3348,6 +3936,10 @@ law_civic_monolingualism = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_schools } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3376,6 +3968,14 @@ law_multilingual_federalism = {
 		state_homeland_creation_threshold_add = 0.05
 		state_homeland_removal_threshold_add = -0.05
 		state_homeland_change_speed_mult = -0.15
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3406,6 +4006,14 @@ law_linguistic_purity = {
 		state_homeland_removal_threshold_add = 0.10
 		state_homeland_change_speed_mult = 0.50
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # State-Led Language Reform (script/orthography/terminology/revival/aux-lang)
@@ -3426,6 +4034,14 @@ law_state_led_language_reform = {
 
 	modifier = {
 		country_acceptance_shared_language_trait_add = 5
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3452,6 +4068,14 @@ law_ubiquitous_translation = {
 		state_homeland_removal_threshold_add = -0.05
 		state_homeland_change_speed_mult = -0.25
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # =================================================================
@@ -3475,6 +4099,14 @@ law_guilds_chartered_monopolies = {
 	modifier = {
 		country_company_throughput_bonus_add = -0.1 # premodern monopolies are inefficient
 		country_wealth_concentration_economy_add = 5	# Wealth Concentration's economic laws term (spec §4.2)
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3502,6 +4134,14 @@ law_freedom_of_contract = {
 		state_bureaucracy_population_base_cost_factor_mult = -0.05      # less labor-regulation paperwork
 		country_wealth_concentration_economy_add = 5                    # Wealth Concentration's economic laws term (spec §4.2)
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # Antitrust / Trust Busting (court-led conduct control)
@@ -3525,6 +4165,14 @@ law_trust_busting = {
 		country_max_companies_add = 1                               # more firms
 		country_wealth_concentration_economy_add = -5               # Wealth Concentration's economic laws term (spec §4.2)
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # Regulated Utilities (sectoral regulators + unbundling)
@@ -3542,6 +4190,14 @@ law_regulated_utilities = {
 		building_company_government_dividends_add = 0.10                    # stable utility revenues
 		building_group_bg_infrastructure_construction_efficiency_add = 0.25 # infrastructure is more efficient with centralized planning
 		country_wealth_concentration_economy_add = -5                       # Wealth Concentration's economic laws term (spec §4.2)
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3564,6 +4220,14 @@ law_dirigisme = {
 		state_export_advantage_mult = 0.1
 		state_trade_advantage_mult = 0.1
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 # Command/Cooperative Economy
@@ -3585,6 +4249,14 @@ law_command_cooperative_economy = {
 		country_banking_crash_chance_mult = -0.25
 		country_company_construction_efficiency_bonus_add = -0.4
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 
@@ -3596,6 +4268,14 @@ law_no_ministry_of_foreign_affairs = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_foreign_affairs = {
@@ -3623,6 +4303,10 @@ law_ministry_of_foreign_affairs = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_foreign_affairs } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3633,6 +4317,14 @@ law_no_ministry_of_war = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_war = {
@@ -3679,6 +4371,10 @@ law_ministry_of_war = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_war } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3689,6 +4385,14 @@ law_no_ministry_of_commerce = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_commerce = {
@@ -3730,6 +4434,10 @@ law_ministry_of_commerce = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_commerce } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3749,6 +4457,14 @@ law_no_national_bank = {
 			text = te_cred_leader_cannot_enact_tt
 			te_cred_leads_consortium = no
 		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3839,6 +4555,10 @@ law_national_bank = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_national_bank } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3849,6 +4569,14 @@ law_no_ministry_of_culture = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_culture = {
@@ -3890,6 +4618,10 @@ law_ministry_of_culture = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_culture } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3900,6 +4632,14 @@ law_no_ministry_of_labor = {
 
 	progressiveness = 25
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_pro_labor_ministry_of_labor = {
@@ -3933,6 +4673,10 @@ law_pro_labor_ministry_of_labor = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_labor } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3968,6 +4712,10 @@ law_pro_capital_ministry_of_labor = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_labor } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -3978,6 +4726,14 @@ law_no_ministry_of_the_environment = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_the_environment = {
@@ -4019,6 +4775,10 @@ law_ministry_of_the_environment = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_the_environment } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4029,6 +4789,14 @@ law_no_ministry_of_intelligence_and_security = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_intelligence_and_security = {
@@ -4057,6 +4825,10 @@ law_ministry_of_intelligence_and_security = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_intelligence_and_security } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4067,6 +4839,14 @@ law_no_ministry_of_refugee_affairs = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_refugee_affairs = {
@@ -4102,6 +4882,10 @@ law_ministry_of_refugee_affairs = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_refugee_affairs } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4112,6 +4896,14 @@ law_no_ministry_of_propaganda = {
 
 	progressiveness = 25
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_propaganda = {
@@ -4165,6 +4957,10 @@ law_ministry_of_propaganda = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_propaganda } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4189,6 +4985,14 @@ law_no_ministry_of_science = {
 				}
 			}
 		}
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4242,6 +5046,10 @@ law_ministry_of_science = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_science } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4252,6 +5060,14 @@ law_no_ministry_of_thought_control = {
 
 	progressiveness = 25
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_thought_control = {
@@ -4292,6 +5108,10 @@ law_ministry_of_thought_control = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_thought_control } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4302,6 +5122,14 @@ law_no_ministry_of_consumer_protection = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_consumer_protection = {
@@ -4345,6 +5173,10 @@ law_ministry_of_consumer_protection = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_consumer_protection } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4355,6 +5187,14 @@ law_no_ministry_of_urban_planning = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_urban_planning = {
@@ -4397,6 +5237,10 @@ law_ministry_of_urban_planning = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_urban_planning } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4407,6 +5251,14 @@ law_no_ministry_of_religion = {
 
 	progressiveness = 10
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_religion = {
@@ -4455,6 +5307,10 @@ law_ministry_of_religion = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_religion } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -4465,6 +5321,14 @@ law_no_ministry_of_international_aid = {
 
 	progressiveness = 0
 
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_ministry_of_international_aid = {
@@ -4492,6 +5356,10 @@ law_ministry_of_international_aid = {
 			limit = { te_ai_law_brings_unstaffed_institution = { INSTITUTION = institution_ministry_of_international_aid } }
 			add = te_ai_unstaffed_institution_law_weight
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 

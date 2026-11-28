@@ -143,7 +143,8 @@ class LawTest(unittest.TestCase):
 
     def test_natural_form_carries_nothing(self):
         natural = braced(code(BODILY), r"^law_natural_form\s*=\s*\{")
-        self.assertNotIn("modifier", natural)
+        # no modifier block (its ai_enact_weight_modifier is the AI's weight, #1877)
+        self.assertNotRegex(natural, r"(?m)^\s*modifier\s*=")
         self.assertNotIn(SHARE, natural)
 
     def test_no_other_law_opens_the_crossing(self):

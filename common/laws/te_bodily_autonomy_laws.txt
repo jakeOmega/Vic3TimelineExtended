@@ -142,6 +142,14 @@ law_natural_form = {
 	icon = "gfx/interface/icons/law_icons/law_natural_form.dds"
 
 	progressiveness = 20
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_licensed_modification = {
@@ -165,6 +173,14 @@ law_licensed_modification = {
 		# A board approves each change: heritage is half a barrier (ASSIMILATION ACROSS HERITAGES, above).
 		country_cross_heritage_assimilation_add = 0.5
 		country_bureaucracy_investment_cost_factor_mult = 0.1	# the licensing boards
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -190,6 +206,14 @@ law_morphological_freedom = {
 		state_assimilation_mult = -1
 		# The backlash (morphological_freedom_events.5): the pulpits fill.
 		interest_group_ig_devout_pop_attraction_mult = 0.25
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -241,6 +265,14 @@ law_clade_citizenship = {
 		# reason: about 9% at era 12).
 		state_bureaucracy_population_base_cost_factor_mult = 1
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_prescribed_form = {
@@ -274,5 +306,13 @@ law_prescribed_form = {
 		# What a body may express is set by decree.
 		country_cultural_hegemony_art_mult = -0.25
 		state_migration_pull_mult = -0.5
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }

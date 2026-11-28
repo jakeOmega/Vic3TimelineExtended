@@ -1,0 +1,145 @@
+﻿# TE_SELF_CHECK ai_literacy_laws (common/on_actions/te_ai_literacy_laws_selfcheck_on_actions.txt): who it counts.
+# Delete with that file.
+
+# Country scope. Public Schools could be started: Empiricism, not held, and neither law vanilla's disallowing_laws
+# names held (that list names laws one by one, so a State Religion variant does not block it).
+te_alw_public_schools_open = {
+	has_technology_researched = empiricism
+	NOT = { has_law_or_variant = law_type:law_public_schools }
+	NOT = { has_law = law_type:law_state_religion }
+	NOT = { has_law = law_type:law_serfdom }
+}
+
+# Country scope. Compulsory Primary School could be started: Human Rights, not held, no No Schools or Terakoya.
+te_alw_compulsory_primary_open = {
+	has_technology_researched = human_rights
+	NOT = { has_law_or_variant = law_type:law_compulsory_primary_school }
+	NOT = { has_law = law_type:law_no_schools }
+	NOT = { has_law = law_type:law_terakoya }
+}
+
+# Country scope. Child labour could be ended with the law the weight is on: Labor Movement, Child Labor Allowed held.
+te_alw_end_child_labor_open = {
+	has_technology_researched = labor_movement
+	has_law_or_variant = law_type:law_child_labor_allowed
+}
+
+# Country scope. Nothing else lifts one of the three laws: vanilla's own +500 for a schools law under No Schools,
+# and its +750 for the law a petition, an imposition, the Social Revolution's list or a law commitment names
+# (ai_has_enact_weight_modifier_journal_entries, which reads scope:law and so can't be asked here).
+te_alw_clean = {
+	NOT = { has_law_or_variant = law_type:law_no_schools }
+	NOT = { has_journal_entry = je_government_petition }
+	NOT = { has_journal_entry = je_law_imposition }
+	NOT = { has_journal_entry = je_british_dictate_law }
+	NOT = { has_journal_entry = je_social_revolution }
+	NOT = { has_law_commitment = law_type:law_public_schools }
+	NOT = { has_law_commitment = law_type:law_compulsory_primary_school }
+	NOT = { has_law_commitment = law_type:law_restricted_child_labor }
+}
+
+# Country scope. At least one of the three could be started.
+te_alw_a_target_open = {
+	OR = {
+		te_alw_public_schools_open = yes
+		te_alw_compulsory_primary_open = yes
+		te_alw_end_child_labor_open = yes
+	}
+}
+
+# Country scope. The cohort: research at its innovation cap (the weight applies), clean, one of the three open.
+te_alw_cohort = {
+	te_ai_research_at_innovation_cap = yes
+	te_alw_clean = yes
+	te_alw_a_target_open = yes
+}
+
+# Country scope. The control: the cap read works and research is under it (the weight does not apply), clean, one
+# of the three open.
+te_alw_control = {
+	te_ai_build_pass_innovation_cap > 0
+	te_ai_research_at_innovation_cap = no
+	te_alw_clean = yes
+	te_alw_a_target_open = yes
+}
+
+# Country scope. A political agenda whose favoured interest groups' ideologies want Public Schools (+100 each in an
+# offline count; under the other agendas -25 to -50): progressive (the Intelligentsia) and egalitarian (the Trade
+# Unions).
+te_alw_progressive_agenda = {
+	OR = {
+		has_strategy = ai_strategy_progressive_agenda
+		has_strategy = ai_strategy_egalitarian_agenda
+	}
+}
+
+# Country scope, at on_law_enactment_started. The law just started is one of the three, under the condition its
+# weight asks for (Restricted Child Labor only from Child Labor Allowed).
+te_alw_started_public_schools = {
+	is_enacting_law = law_type:law_public_schools
+}
+te_alw_started_compulsory_primary = {
+	is_enacting_law = law_type:law_compulsory_primary_school
+}
+te_alw_started_end_child_labor = {
+	is_enacting_law = law_type:law_restricted_child_labor
+	has_law_or_variant = law_type:law_child_labor_allowed
+}
+te_alw_started_a_target = {
+	OR = {
+		te_alw_started_public_schools = yes
+		te_alw_started_compulsory_primary = yes
+		te_alw_started_end_child_labor = yes
+	}
+}
+
+# Country scope, at on_law_enactment_started. The law just started is in one of the mod's own law groups: one law
+# of each group in common/law_groups/extra_law_groups.txt (test_ai_law_weights.py derives the groups and fails on
+# one missing here).
+te_alw_started_mod_group_law = {
+	currently_enacting_law ?= {
+		law_type = {
+			OR = {
+				is_same_law_group_as = law_type:law_intrusive_surveillance	# lawgroup_privacy_rights
+				is_same_law_group_as = law_type:law_primogeniture	# lawgroup_inheritance
+				is_same_law_group_as = law_type:law_total_war	# lawgroup_rules_of_war
+				is_same_law_group_as = law_type:law_no_ip_protection	# lawgroup_intellectual_property
+				is_same_law_group_as = law_type:law_commodity_money	# lawgroup_monetary_policy
+				is_same_law_group_as = law_type:law_state_secrets	# lawgroup_right_to_information
+				is_same_law_group_as = law_type:law_minority_rights_violent_hostility	# lawgroup_minority_rights
+				is_same_law_group_as = law_type:law_penal_labor_camps	# lawgroup_criminal_justice
+				is_same_law_group_as = law_type:law_active_persecution	# lawgroup_LGBTQ_rights
+				is_same_law_group_as = law_type:law_no_augmentation	# lawgroup_human_augmentation
+				is_same_law_group_as = law_type:law_natural_form	# lawgroup_bodily_autonomy
+				is_same_law_group_as = law_type:law_feudal_contracts	# lawgroup_state_power
+				is_same_law_group_as = law_type:law_executive_tribunals	# lawgroup_judiciary
+				is_same_law_group_as = law_type:law_no_campaign_finance_laws	# lawgroup_electoral_finance
+				is_same_law_group_as = law_type:law_unregulated_banking	# lawgroup_financial_regulation
+				is_same_law_group_as = law_type:law_traditional_heredity	# lawgroup_genetic_rights
+				is_same_law_group_as = law_type:law_no_internet_policy	# lawgroup_internet_governance
+				is_same_law_group_as = law_type:law_no_frontier_ai_policy	# lawgroup_frontier_ai_control
+				is_same_law_group_as = law_type:law_traditional_family_structure	# lawgroup_family_reproductive_policy
+				is_same_law_group_as = law_type:law_local_vernacular	# lawgroup_language_policy
+				is_same_law_group_as = law_type:law_guilds_chartered_monopolies	# lawgroup_antitrust
+				is_same_law_group_as = law_type:law_no_ministry_of_foreign_affairs	# lawgroup_ministry_of_foreign_affairs
+				is_same_law_group_as = law_type:law_no_ministry_of_war	# lawgroup_ministry_of_war
+				is_same_law_group_as = law_type:law_no_ministry_of_intelligence_and_security	# lawgroup_ministry_of_intelligence_and_security
+				is_same_law_group_as = law_type:law_no_ministry_of_commerce	# lawgroup_ministry_of_commerce
+				is_same_law_group_as = law_type:law_no_national_bank	# lawgroup_national_bank
+				is_same_law_group_as = law_type:law_no_ministry_of_the_environment	# lawgroup_ministry_of_the_environment
+				is_same_law_group_as = law_type:law_unrestricted_extraction	# lawgroup_resource_transition
+				is_same_law_group_as = law_type:law_unrestricted_automation	# lawgroup_automation_policy
+				is_same_law_group_as = law_type:law_no_ministry_of_culture	# lawgroup_ministry_of_culture
+				is_same_law_group_as = law_type:law_no_ministry_of_labor	# lawgroup_ministry_of_labor
+				is_same_law_group_as = law_type:law_no_ministry_of_refugee_affairs	# lawgroup_ministry_of_refugee_affairs
+				is_same_law_group_as = law_type:law_no_ministry_of_propaganda	# lawgroup_ministry_of_propaganda
+				is_same_law_group_as = law_type:law_no_ministry_of_science	# lawgroup_ministry_of_science
+				is_same_law_group_as = law_type:law_no_ministry_of_thought_control	# lawgroup_ministry_of_thought_control
+				is_same_law_group_as = law_type:law_no_ministry_of_consumer_protection	# lawgroup_ministry_of_consumer_protection
+				is_same_law_group_as = law_type:law_no_ministry_of_urban_planning	# lawgroup_ministry_of_urban_planning
+				is_same_law_group_as = law_type:law_no_ministry_of_religion	# lawgroup_ministry_of_religion
+				is_same_law_group_as = law_type:law_no_ministry_of_international_aid	# lawgroup_ministry_of_international_aid
+			}
+		}
+	}
+}

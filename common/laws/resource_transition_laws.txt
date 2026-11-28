@@ -71,6 +71,10 @@ law_unrestricted_extraction = {
 	# or electricity under it goes back (rt_ai_enact_unrestricted).
 	ai_enact_weight_modifier = {
 		value = rt_ai_enact_unrestricted
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -105,6 +109,10 @@ law_fossil_expansion_moratorium = {
 
 	ai_enact_weight_modifier = {
 		value = rt_ai_enact_moratorium
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -143,5 +151,9 @@ law_managed_fossil_phaseout = {
 
 	ai_enact_weight_modifier = {
 		value = rt_ai_enact_phaseout
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }

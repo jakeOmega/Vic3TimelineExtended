@@ -1,0 +1,63 @@
+﻿# TE_SELF_CHECK ai_literacy_laws (common/on_actions/te_ai_literacy_laws_selfcheck_on_actions.txt): the counts it
+# stores, read back for its verdict and its log lines. Delete with that file.
+
+# The sample: how many law starts the cohort must make before the verdict, and how many the control must make for
+# its share to count.
+te_alw_chk_sample = 40
+te_alw_chk_control_sample = 20
+
+te_alw_chk_starts_g = { value = global_var:te_alw_starts }
+te_alw_chk_hits_g = { value = global_var:te_alw_hits }
+te_alw_chk_ps_g = { value = global_var:te_alw_hits_ps }
+te_alw_chk_cps_g = { value = global_var:te_alw_hits_cps }
+te_alw_chk_rcl_g = { value = global_var:te_alw_hits_rcl }
+te_alw_chk_pro_starts_g = { value = global_var:te_alw_pro_starts }
+te_alw_chk_pro_hits_g = { value = global_var:te_alw_pro_hits }
+te_alw_chk_ctrl_starts_g = { value = global_var:te_alw_ctrl_starts }
+te_alw_chk_ctrl_hits_g = { value = global_var:te_alw_ctrl_hits }
+
+# The share of each group's law starts that went to one of the three laws (0 with none counted).
+te_alw_chk_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_alw_starts > 0 }
+		value = global_var:te_alw_hits
+		divide = global_var:te_alw_starts
+	}
+}
+te_alw_chk_ctrl_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_alw_ctrl_starts > 0 }
+		value = global_var:te_alw_ctrl_hits
+		divide = global_var:te_alw_ctrl_starts
+	}
+}
+# Twice the control's share, which OK must reach when the control has its sample.
+te_alw_chk_ctrl_share_twice = {
+	value = te_alw_chk_ctrl_share
+	multiply = 2
+}
+
+# Trap 4's read: every AI law start, by whether the country held an unreformed social law, and how many of them
+# went to the mod's own law groups.
+te_alw_chk_bk_all_g = { value = global_var:te_alw_bk_all }
+te_alw_chk_bk_mod_g = { value = global_var:te_alw_bk_mod }
+te_alw_chk_rf_all_g = { value = global_var:te_alw_rf_all }
+te_alw_chk_rf_mod_g = { value = global_var:te_alw_rf_mod }
+te_alw_chk_bk_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_alw_bk_all > 0 }
+		value = global_var:te_alw_bk_mod
+		divide = global_var:te_alw_bk_all
+	}
+}
+te_alw_chk_rf_share = {
+	value = 0
+	if = {
+		limit = { global_var:te_alw_rf_all > 0 }
+		value = global_var:te_alw_rf_mod
+		divide = global_var:te_alw_rf_all
+	}
+}
