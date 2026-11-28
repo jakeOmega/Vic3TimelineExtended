@@ -1,6 +1,6 @@
 # Vanilla-style production building icons: design
 
-2026-11-27. Status: draft for the owner's approval. The builder check is done.
+2026-11-27. Status: approved by the owner and built on branch `icons-vanilla-production-buildings`.
 
 ## Why
 

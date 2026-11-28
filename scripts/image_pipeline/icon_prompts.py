@@ -156,6 +156,19 @@ defaults (September 2026, ~350 icons):
   "the small disc of" it at an edge (Space Fleets' banners, 2026-11-14).
 - Fire loses its reds to the folder's grade: an explosion came out salmon, weaker
   at 20 px than the drawn red burst it replaced. On a drawn red disc it reads.
+- Ores told apart at 40 px need a colour of their own: five "heap of" dark ores
+  (chromite, wolframite, platinum, graphite, nodules) were one grey gravel on a
+  mine's backdrop. Name a distinct accent ("flecked with bright emerald-green
+  uvarovite", "crusted with orange-red vanadinite") and "a few large" pieces
+  (production buildings, 2026-11-27). Pale or translucent crystals (spodumene,
+  halite, sylvite, amber monazite) cut out with holes where the white ground
+  shows through: pick an opaque seed. Rocks and crystals can carry faint
+  embossed letters; zoom the pick before writing.
+- In the production buildings' backdrop a "large" or "wide" open pit draws the
+  landscape round it, sky and horizon, even under "no sky, no horizon" (six
+  seeds, two rounds). "The bottom of a deep open-pit mine seen close from
+  above", with trucks for scale, fills the frame. A domed hall reads as the
+  nuclear plant's dome at 40 px; the fusion plant is its tokamak ring.
 When both candidates miss, change the subject. When the idea is right and the
 renders are weak, `generate_icons.py --seeds 4` adds two more candidates and
 keeps the first two.
