@@ -1241,13 +1241,13 @@ ICONS: dict[str, dict[str, dict]] = {
                                                   "foreground": [{"good": "consumer_appliances"}]},
         "building_electronic_components_and_semiconductor_industry": {"subject": "a semiconductor factory with long flat roofs covered in ventilation units and ducts", "seed": None,
                                                                      "foreground": [{"good": "electronic_components"}]},
-        "building_software_industry": {"subject": "a modern office block with a flat roof and long bands of glass windows", "seed": None,
+        "building_software_industry": {"subject": "a modern office block with a flat roof and long bands of glass windows", "seed": 0,
                                       "foreground": [{"good": "digital_assets"}]},
-        "building_robotics_industry": {"subject": "a large industrial assembly hall with sawtooth skylight roofs and loading bays", "seed": None,
+        "building_robotics_industry": {"subject": "a large industrial assembly hall with sawtooth skylight roofs and loading bays", "seed": 0,
                                       "foreground": [{"good": "robotics"}]},
         "building_advanced_material_fabricator": {"subject": "a high-tech materials plant: dark grey halls, a furnace glowing through open roof vents and stacks of black carbon sheets", "seed": None,
                                                  "foreground": [{"good": "advanced_materials"}]},
-        "building_aerospace_industry": {"subject": "an aircraft factory: huge hangar halls with curved roofs beside an apron with parked airliners", "seed": None,
+        "building_aerospace_industry": {"subject": "an aircraft factory: huge hangar halls with curved roofs beside an apron with parked airliners", "seed": 2,
                                        "foreground": [{"good": "aeroplanes"}]},
         "building_synthetics_plant_oil": {"subject": "a synthetic fuel refinery with distillation columns, storage tanks and pipework", "seed": None,
                                          "foreground": [{"good": "oil"}]},
@@ -1271,7 +1271,7 @@ ICONS: dict[str, dict[str, dict]] = {
                                             "foreground": [{"part": "building_foreground/bottled_drink"}]},
         "building_synthetics_plant_coal": {"subject": "a low industrial hall whose whole roof is rows of big round black fans, with squat pellet reactor towers beside it", "seed": None,
                                           "foreground": [{"part": "building_foreground/dac_pellets"}]},
-        "building_nuclear_plant": {"subject": "a nuclear power station: a domed concrete reactor building beside the rim of a cooling tower", "seed": None,
+        "building_nuclear_plant": {"subject": "a nuclear power station: a domed concrete reactor building beside the rim of a cooling tower", "seed": 2,
                                   "foreground": [{"good": "electricity"}]},
         "building_fusion_plant": {"subject": "a fusion power plant: a round domed reactor hall ringed by magnet buildings and cooling units", "seed": None,
                                  "foreground": [{"good": "electricity"}]},
@@ -1990,26 +1990,26 @@ ICONS: dict[str, dict[str, dict]] = {
     "good": {
         "rocket": {"subject": "a tall white multi-stage rocket standing upright on a small steel launch pad", "seed": 1,
                    "now": f"{_GI}/goods_icons/rocket.dds"},
-        "robot": {"subject": "a muted ochre-yellow industrial robot arm with a steel two-fingered gripper on a heavy base, seen at an angle from slightly above", "seed": None,
+        "robot": {"subject": "a muted ochre-yellow industrial robot arm with a steel two-fingered gripper on a heavy base, seen at an angle from slightly above", "seed": 0,
                   "now": f"{_GI}/goods_icons/robot.dds"},
-        "software": {"subject": "a short fanned stack of floppy disks in muted grey, slate blue and dull red with blank unmarked labels, seen at an angle from slightly above", "seed": None,
+        "software": {"subject": "a short fanned stack of floppy disks in muted grey, slate blue and dull red with blank unmarked labels, seen at an angle from slightly above", "seed": 0,
                      "now": f"{_GI}/goods_icons/software.dds"},
         # s0 is retouched: a brand name painted off the router's front.
         "digital_access": {"subject": "a white wireless router with two antennas beside a black smartphone with a dark blank screen", "seed": 0,
                            "now": f"{_GI}/goods_icons/digital_access.dds"},
-        "consumer_appliances": {"subject": "a dull cream retro refrigerator beside a small chrome toaster, seen at an angle from slightly above", "seed": None,
+        "consumer_appliances": {"subject": "a dull cream retro refrigerator beside a small chrome toaster, seen at an angle from slightly above", "seed": 2,
                                 "now": f"{_GI}/goods_icons/consumer_appliances.dds"},
         # s0 lettered its circuit board.
-        "electronic_components": {"subject": "a dark green circuit board, seen at an angle from slightly above, holding a black microchip, round capacitors and striped resistors", "seed": None,
+        "electronic_components": {"subject": "a dark green circuit board, seen at an angle from slightly above, holding a black microchip, round capacitors and striped resistors", "seed": 2,
                                   "now": f"{_GI}/goods_icons/electronic_components.dds"},
         # Repainted 2026-11-27 with the production buildings (spec 2026-11-27): vanilla's goods are
         # angled and muted; these five read as flat, front-on, saturated stickers beside them.
         # High-Performance Materials' icon predates the pipeline.
-        "buckyball": {"subject": "a dark graphite-grey carbon buckyball molecule model of round atoms on short thick rods, seen at an angle from slightly above", "seed": None,
+        "buckyball": {"subject": "a dark graphite-grey carbon buckyball molecule model of round atoms on short thick rods, seen at an angle from slightly above", "seed": KEEP,
                       "now": f"{_GI}/goods_icons/buckyball.dds"},
         "tech_metals": {"subject": "a pile of shiny silvery metal ingots with a few dark glittering mineral crystals", "seed": 1,
                         "now": f"{_GI}/goods_icons/tech_metals.dds"},
-        "tourism": {"subject": "a worn brown leather suitcase with a camera on a strap and a straw sun hat resting on top, seen at an angle from slightly above", "seed": None,
+        "tourism": {"subject": "a worn brown leather suitcase with a camera on a strap and a straw sun hat resting on top, seen at an angle from slightly above", "seed": 2,
                     "now": f"{_GI}/goods_icons/tourism.dds"},
         # Batch 5: vanilla goods the mod renamed, written over vanilla's file so the
         # text icon (@fertilizer!, @opium!) follows. Chemicals showed the basic
