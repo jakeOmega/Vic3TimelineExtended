@@ -1,0 +1,18 @@
+﻿# Private Actors: the hand-written static modifiers (docs/systems/mod_systems/private_actors.md). The generated ones,
+# one a firm type, are te_pa_gen_modifiers.txt. Each is removed by the teardown (te_pa_teardown,
+# test_private_actors.py).
+
+# On an interest group, from te_pa_sa_cost (te_pa_actions_effects.txt): the state has moved against a firm whose
+# executive belongs to the group (an inquiry, a suit, an audit, a levy). Applied at a multiplier of its Standing's
+# share of the full cost, up to 4 (te_pa_sa_backers_full), for five years, decaying. The ledger names the firm.
+te_pa_sa_backers = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -1
+}
+
+# On the Petty Bourgeoisie, from te_pa_charter_cost (te_pa_trust_effects.txt): the state has granted a firm a
+# monopoly charter (§ 6.5), for five years, decaying.
+te_pa_charter_resented = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -2
+}

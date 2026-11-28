@@ -624,7 +624,7 @@ one-state country builds one only once it has an agreement with a neighbor.
 With the Private Actors game rule on (it is off by default, and experimental),
 every company is a firm: an actor with an aim of its own, chosen each year from
 its position, three currencies, and holdings it builds: cartels, captured
-regulators and foundations. You set a posture toward each of your firms. The Private Actors tab of the Timeline Extended window shows what each
+regulators and foundations, and petitions you answer. You set a posture toward each of your firms and can act against them. The Private Actors tab of the Timeline Extended window shows what each
 firm wants and why, for your country or, in National Info, any other.
 
 ### Firms and their goals
@@ -685,7 +685,8 @@ share of its sector and its Grievance.
 The Ledger, collapsed until you open it, lists the last 20 things your firms
 did, newest first: a new goal and why, a new executive, a firm failing or
 coming to hold 40% of its sector, a firm founded or dissolved, a change of
-posture, and the trust's moves below. A secret move's line reads "Author
+posture, the trust's moves, petitions and how they were answered, and your
+actions against a firm. A secret move's line reads "Author
 unknown: a firm …" until it is exposed. National Info shows another country's tab, all of it but the posture
 buttons. The "?" in the header opens How Private Actors Work.
 
@@ -699,9 +700,9 @@ ledger.
 
 | Posture | What it does |
 |---|---|
-| Favored | Its Connections grow half again as fast, it supports Dirigiste Policy, under which it may hold a cartel in the open, and it endows its foundation in your state with the lowest literacy |
-| Tolerated (the default) | Its Connections grow at the usual pace, and it opposes Dirigiste Policy |
-| Restrained | Its Connections grow at half the pace, its Grievance rises by one every five years, and it opposes Dirigiste Policy |
+| Favored | Its Connections grow half again as fast, it supports Dirigiste Policy, under which it may hold a cartel in the open, and it endows its foundation in your state with the lowest literacy. A petition you leave unanswered is granted |
+| Tolerated (the default) | Its Connections grow at the usual pace, and it opposes Dirigiste Policy. You stand aside from a petition you leave unanswered |
+| Restrained | Its Connections grow at half the pace, its Grievance rises by one every five years, and it opposes Dirigiste Policy. A petition you leave unanswered is refused |
 
 An AI government sets its posture toward each of its firms at the firm's turn:
 Favored while the firm's executive's interest group is in government or the
@@ -765,6 +766,51 @@ foundation's strength. The foundation grows 5 a year while its upkeep is paid
 and decays 5 a year when it isn't, as it does once its firm is gone. Each
 holding you know of shows as an icon on the firm's row, and its hover gives its
 strength and what it does.
+
+### Petitions and the state's actions
+
+A firm's largest moves are petitions to you: it asks in the open, your Firms
+row shows "Petition" with the months left, a notification announces it, and a
+yellow alert sits on the top bar until you answer six months later in an event.
+You grant it, stand aside or refuse it. If you let the event lapse, the firm's
+posture answers for you, and the alert turns red two months before the end
+while the firm still has the posture it started with, since that answer is then
+one you never chose; setting any posture with the row's buttons turns it back
+to yellow. Only a refusal raises the firm's Grievance. One petition runs at a
+time, and none comes within a year of the last; a firm you refused or left
+unanswered waits five years before asking for the same thing again.
+
+| Petition | Who asks | Granted |
+|---|---|---|
+| A monopoly charter | A firm with a cartel you know of, at strength 80 under Guilds and Chartered Monopolies, or at any strength while Favored | The company gets the monopoly on its main building type, its cartel is legal and no longer ends when its share falls, and its Connections rise 15; the Petty Bourgeoisie lose 2 approval for five years |
+| A suit against a cartel | A firm seeking Cheaper Inputs with 30 Connections, whose input a cartel your antitrust law forbids makes | Your government sues the cartel's firm at once, at no cost in approval |
+
+Show Details on one of your firms opens State Actions, a row of buttons; a
+grayed one says what it lacks, and each says on hover what it does and costs.
+
+| Action | Needs | Does |
+|---|---|---|
+| Inquiry | Nothing open already | For a year, the chance its secret holdings are exposed rises 30 points |
+| Bring Suit | A cartel you know of that your antitrust law forbids, not covered by National Champion Exemption | A year-long case. The court rules for you at 50%, more with Judicial Independence, less with the firm's Connections and a captured regulator. Won, the cartel is broken and can't re-form for ten years; lost, the firm can't be sued for ten years |
+| Audit the Regulator | A law with a regulator; once a year | Usually finds and breaks a captured regulator; a miss still weakens it, unseen |
+| Levy on Rents | An open, legal cartel | Each quarter the treasury takes half of what the cartel adds to the firm's Funds, out of the investment pool, until you lift it; Grievance +1 |
+| Grant a Charter | Guilds and Chartered Monopolies and a cartel you know of | The charter above, unasked |
+
+Moving against a firm costs approval with its executive's interest group, up to
+4 for five years, and radicals in its seat, both more the higher its Standing;
+an Inquiry or an audit costs half. A firm with Standing under 30 is unpopular
+enough that moving against it costs no approval and wins loyalists in its seat.
+So it pays to act while a firm's Standing is low, or after an exposure has cut
+it.
+
+AI governments answer petitions by the firm's posture, moved by the price of
+the cartel's good, their governing groups' stance on antitrust and the
+Standing of a firm they would sue; the ledger line of each answer gives the
+reason in parentheses. They also sue, levy, audit or inquire into a firm that
+holds 40% of its sector while its good sells well above its base price, never a
+Favored one. With the game rule on, a known cartel can also bring Too Large to
+Break, the petition for National Champion Exemption, in good times as in bad,
+naming the firm with the largest one.
 
 ## Tariffs for all goods at once
 

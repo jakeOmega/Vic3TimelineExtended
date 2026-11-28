@@ -45192,3 +45192,1314 @@ te_pa_gen_expand = {
 		}
 	}
 }
+
+# Scope: a company granted a monopoly charter (te_pa_charter_grant, § 6.5: on its petition, or unasked from the
+# firm's detail). The engine's own monopoly on its main building type (Sector.expand's first), through
+# add_company_monopoly, whose target is a building type (bt:). te_pa_gen_charter_held reads it back for the
+# charter_monopoly self-check (te_pa_debug_effects.txt).
+te_pa_gen_charter_grant = {
+	if = {
+		limit = { is_company_type = company_type:company_a_markwald_and_company }
+		add_company_monopoly = bt:building_rice_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_airbus }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ajinomoto }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_aker_mek }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_alibaba }
+		add_company_monopoly = bt:building_network_infrastructure
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_allatini_mills }
+		add_company_monopoly = bt:building_wheat_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_altos_hornos_de_vizcaya }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_amazon }
+		add_company_monopoly = bt:building_network_infrastructure
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_anglo_persian_oil }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_anglo_sicilian_sulphur_company }
+		add_company_monopoly = bt:building_sulfur_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ansaldo }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ap_moller }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_apple }
+		add_company_monopoly = bt:building_electrics_industry_appliances
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_argentinian_wine }
+		add_company_monopoly = bt:building_vineyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_armstrong_whitworth }
+		add_company_monopoly = bt:building_munition_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_asml }
+		add_company_monopoly = bt:building_tooling_workshop
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_assam_company }
+		add_company_monopoly = bt:building_tea_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_axiom_space }
+		add_company_monopoly = bt:building_space_resort
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_b_grimm }
+		add_company_monopoly = bt:building_rice_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bacardi }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bae_systems }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basf }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_advanced_materials }
+		add_company_monopoly = bt:building_advanced_material_fabricator
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_aerospace }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_agriculture_1 }
+		add_company_monopoly = bt:building_wheat_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_agriculture_2 }
+		add_company_monopoly = bt:building_rice_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_autarky }
+		add_company_monopoly = bt:building_synthetics_plant_oil
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_biotechnology }
+		add_company_monopoly = bt:building_synthetics_plant_biomass
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_chemicals }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_colonial_plantations_1 }
+		add_company_monopoly = bt:building_tea_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_colonial_plantations_2 }
+		add_company_monopoly = bt:building_sugar_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_electrics }
+		add_company_monopoly = bt:building_electrics_industry_radio
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_electronics }
+		add_company_monopoly = bt:building_electronic_components_and_semiconductor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_entertainment }
+		add_company_monopoly = bt:building_art_academy
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_fabrics }
+		add_company_monopoly = bt:building_cotton_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_fishing }
+		add_company_monopoly = bt:building_fishing_wharf
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_food }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_forestry }
+		add_company_monopoly = bt:building_logging_camp
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_gold_mining }
+		add_company_monopoly = bt:building_gold_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_home_goods }
+		add_company_monopoly = bt:building_furniture_manufactory
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_metal_mining }
+		add_company_monopoly = bt:building_nickel_cobalt_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_metalworks }
+		add_company_monopoly = bt:building_tooling_workshop
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_mineral_mining }
+		add_company_monopoly = bt:building_sulfur_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_motors }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_munitions }
+		add_company_monopoly = bt:building_munition_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_oil }
+		add_company_monopoly = bt:building_synthetics_plant_oil
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_paper }
+		add_company_monopoly = bt:building_paper_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_power }
+		add_company_monopoly = bt:building_hydro_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_shipyards }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_silk_and_dye }
+		add_company_monopoly = bt:building_dye_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_software }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_steel }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_synthetics }
+		add_company_monopoly = bt:building_synthetics_plant_silk
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_textiles }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_weapons }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basic_wine_and_fruit }
+		add_company_monopoly = bt:building_banana_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_basileiades }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bayer }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bengal_coal_company }
+		add_company_monopoly = bt:building_coal_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bgi }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bhp_group }
+		add_company_monopoly = bt:building_ocean_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_biocon }
+		add_company_monopoly = bt:building_synthetics_plant_opium
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_biontech }
+		add_company_monopoly = bt:building_synthetics_plant_opium
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_blackberry }
+		add_company_monopoly = bt:building_electrics_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_boeing }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bolckow_vaughan }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bombay_burmah_trading_corporation }
+		add_company_monopoly = bt:building_rubber_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bombay_dyeing_company }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_boston_dynamics }
+		add_company_monopoly = bt:building_robotics_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bp }
+		add_company_monopoly = bt:building_synthetics_plant_oil
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_branobel }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_broken_hill_proprietary_company }
+		add_company_monopoly = bt:building_gold_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bunge_born }
+		add_company_monopoly = bt:building_wheat_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_bytedance }
+		add_company_monopoly = bt:building_art_academy
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_calcutta_electric }
+		add_company_monopoly = bt:building_power_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_caribbean_petroleum }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_catl }
+		add_company_monopoly = bt:building_advanced_material_fabricator
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ccci }
+		add_company_monopoly = bt:building_rubber_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_cfr }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_cgv }
+		add_company_monopoly = bt:building_vineyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_chr_hansens }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_cochlear }
+		add_company_monopoly = bt:building_electrics_industry_appliances
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_colt_firearms }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_compania_sansinena_de_carnes_congeladas }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_construction_power_bloc }
+		add_company_monopoly = bt:building_construction_sector
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_cordoba_railway }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_csfa }
+		add_company_monopoly = bt:building_sulfur_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_da_afghan_nassaji_sherkat }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_dassault_aviation }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_david_sassoon }
+		add_company_monopoly = bt:building_opium_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_de_beers }
+		add_company_monopoly = bt:building_gold_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_disney }
+		add_company_monopoly = bt:building_tourism_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_dmc }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_dobrush_paper }
+		add_company_monopoly = bt:building_paper_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_douro_wine_company }
+		add_company_monopoly = bt:building_vineyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_dupont }
+		add_company_monopoly = bt:building_explosives_factory
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_duro_y_compania }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_east_india_company }
+		add_company_monopoly = bt:building_tea_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_eea }
+		add_company_monopoly = bt:building_power_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_egyptian_rail }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_el_aguila }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_electricidad_de_caracas }
+		add_company_monopoly = bt:building_power_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_elso_budapesti_gozmalom }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_eni }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ericsson }
+		add_company_monopoly = bt:building_electrics_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_erste_brunner }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_espana_industrial }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_estaleiro_maua }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_estanifera_llallagua }
+		add_company_monopoly = bt:building_copper_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_famae }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_fanuc }
+		add_company_monopoly = bt:building_robotics_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_fcm }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ferranti_ltd }
+		add_company_monopoly = bt:building_electrics_industry_radio
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ferrari }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_fiat }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_fiskars }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_foochow_arsenal }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ford_motor }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_franco_belge }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_fundicao_ipanema }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_fundidora_monterrey }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_galician_carpathian_oil }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_gazprom }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_gebruder_thonet }
+		add_company_monopoly = bt:building_furniture_manufactory
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_genentech }
+		add_company_monopoly = bt:building_synthetics_plant_opium
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_general_electric }
+		add_company_monopoly = bt:building_electrics_industry_appliances
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_getzner_mutter }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_google }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_gotaverken }
+		add_company_monopoly = bt:building_tooling_workshop
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_gran_azucarera }
+		add_company_monopoly = bt:building_sugar_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_great_indian_railway }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_grodno_tobacco }
+		add_company_monopoly = bt:building_tobacco_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_guinness }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_guthrie }
+		add_company_monopoly = bt:building_tea_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_gwr }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_hanka_precision }
+		add_company_monopoly = bt:building_nanofabrication_center
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_hanseong_jeongi_hoesa }
+		add_company_monopoly = bt:building_power_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_hanyang_arsenal }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_hbc }
+		add_company_monopoly = bt:building_fishing_wharf
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_hispano_suiza }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_hp }
+		add_company_monopoly = bt:building_electrics_industry_appliances
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_huawei }
+		add_company_monopoly = bt:building_network_infrastructure
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_hyundai }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ig_farben }
+		add_company_monopoly = bt:building_synthetics_plant_rubber
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ikea }
+		add_company_monopoly = bt:building_furniture_manufactory
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ilva }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_imperial_arsenal }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_imperial_ethiopian_railways }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_imperial_tobacco }
+		add_company_monopoly = bt:building_tobacco_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_infosys }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_infrastructure }
+		add_company_monopoly = bt:building_highway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ingen }
+		add_company_monopoly = bt:building_tourism_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ingolstadt_electrical_company }
+		add_company_monopoly = bt:building_power_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_intel }
+		add_company_monopoly = bt:building_electronic_components_and_semiconductor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_iranian_state_railway }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_izhevsk_arms_plant }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_j_p_coats }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_jakub_klein }
+		add_company_monopoly = bt:building_paper_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_jardine_matheson }
+		add_company_monopoly = bt:building_port
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_jiangnan_weaving_bureaus }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_jingdezhen }
+		add_company_monopoly = bt:building_glassworks
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_john_brown }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_john_cockerill }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_john_holt }
+		add_company_monopoly = bt:building_rubber_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_john_hughes }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_jsr }
+		add_company_monopoly = bt:building_synthetics_plant_rubber
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_jsw_steel }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_kablin }
+		add_company_monopoly = bt:building_paper_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_kaiping_mining }
+		add_company_monopoly = bt:building_coal_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_kharitonenko_and_son }
+		add_company_monopoly = bt:building_wheat_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_kinkozan_sobei }
+		add_company_monopoly = bt:building_glassworks
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_kirgizian_mining_company }
+		add_company_monopoly = bt:building_coal_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_klanicko_drustvo }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_konigliche_porzellan_manufaktur_meissen }
+		add_company_monopoly = bt:building_glassworks
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_kouppas }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_kreenholmi_manufaktuur }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_krupp }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_la_rosada }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_lanfang_kongsi }
+		add_company_monopoly = bt:building_gold_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_lee_wilson }
+		add_company_monopoly = bt:building_cotton_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_lilpop }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_lkab }
+		add_company_monopoly = bt:building_iron_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_lockheed_martin }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ludwig_moser_and_sons }
+		add_company_monopoly = bt:building_glassworks
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_madura_mills }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_maison_worth }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_malaxa }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_manfred_weiss }
+		add_company_monopoly = bt:building_munition_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mantero_seta }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mantetsu }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_maple_and_co }
+		add_company_monopoly = bt:building_furniture_manufactory
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_maschinenfabrik_oerlikon }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_maslosoyuz }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_massey_harris }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mate_gavrilovic }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mav }
+		add_company_monopoly = bt:building_tooling_workshop
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_megastructure_consortium }
+		add_company_monopoly = bt:building_advanced_material_fabricator
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_michelin }
+		add_company_monopoly = bt:building_synthetics_plant_rubber
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_microsoft }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mines_anzin }
+		add_company_monopoly = bt:building_coal_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_misr }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mitsubishi }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mitsui }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_monsanto }
+		add_company_monopoly = bt:building_synthetics_plant_sugar
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_moscow_irrigation_company }
+		add_company_monopoly = bt:building_cotton_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_mozambique_company }
+		add_company_monopoly = bt:building_tea_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_nam_dinh }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_national_iranian_oil }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_nederlandse_petroleum }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_netflix }
+		add_company_monopoly = bt:building_art_academy
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_neurovault }
+		add_company_monopoly = bt:building_mind_upload_nexus
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_nhm }
+		add_company_monopoly = bt:building_sugar_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_nicolas_portalis }
+		add_company_monopoly = bt:building_silk_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_nintendo }
+		add_company_monopoly = bt:building_electrics_industry_appliances
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_noda_shoyu }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_nokia }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_norsk_hydro }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_novo_nordisk }
+		add_company_monopoly = bt:building_synthetics_plant_opium
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_nvidia }
+		add_company_monopoly = bt:building_electronic_components_and_semiconductor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_oesterreichisch_alpine_montangesellschaft }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_oevg }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_office_cherifien_des_phosphates }
+		add_company_monopoly = bt:building_sulfur_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ong_lung_sheng_tea_company }
+		add_company_monopoly = bt:building_tea_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_openai }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_opium_export_monopoly }
+		add_company_monopoly = bt:building_opium_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_oracle }
+		add_company_monopoly = bt:building_network_infrastructure
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_orient_express }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_oriental_consolidated_mining }
+		add_company_monopoly = bt:building_gold_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_oriental_development_company }
+		add_company_monopoly = bt:building_rice_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ottoman_tobacco_regie }
+		add_company_monopoly = bt:building_tobacco_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_panama_company }
+		add_company_monopoly = bt:building_trade_center
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_paradox }
+		add_company_monopoly = bt:building_electrics_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_pedro_domecq }
+		add_company_monopoly = bt:building_vineyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_pernambuco_textiles }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_perskhlopok }
+		add_company_monopoly = bt:building_cotton_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_persshelk }
+		add_company_monopoly = bt:building_silk_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_peruvian_amazon }
+		add_company_monopoly = bt:building_rubber_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_petrobras }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_pfizer }
+		add_company_monopoly = bt:building_synthetics_plant_opium
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_philips }
+		add_company_monopoly = bt:building_electrics_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_pirelli }
+		add_company_monopoly = bt:building_synthetics_plant_rubber
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_poznanski_cotton_products }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_prussian_state_railways }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_putilov_company }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ralli_brothers }
+		add_company_monopoly = bt:building_rice_farm
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ramirez }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rejoovenesense }
+		add_company_monopoly = bt:building_synthetics_plant_opium
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rekal }
+		add_company_monopoly = bt:building_mind_upload_nexus
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_reliance }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_renault }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_resita_works }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rheinmetall }
+		add_company_monopoly = bt:building_munition_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ricordi }
+		add_company_monopoly = bt:building_art_academy
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_roche }
+		add_company_monopoly = bt:building_synthetics_plant_opium
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rodriguez_arguelles_y_cia }
+		add_company_monopoly = bt:building_tobacco_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rolls_royce }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_romanian_star }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rosatom }
+		add_company_monopoly = bt:building_nuclear_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_roscosmos }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rosen_association }
+		add_company_monopoly = bt:building_synthetics_plant_meat
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_rossi }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_russian_american_company }
+		add_company_monopoly = bt:building_logging_camp
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_russo-baltic_wagon_factory }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_saint_etienne }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_samsung }
+		add_company_monopoly = bt:building_electrics_industry_appliances
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_san_miguel }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sao_paulo_railway }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sap }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_saudi_aramco }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_savva_morozov }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_schichau }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_schneider_creusot }
+		add_company_monopoly = bt:building_artillery_foundry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_secn }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_shell }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sherkat_shemali }
+		add_company_monopoly = bt:building_cotton_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sherkate_eslamiya }
+		add_company_monopoly = bt:building_textile_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_shopify }
+		add_company_monopoly = bt:building_highway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_siam_electrical_company_limited }
+		add_company_monopoly = bt:building_power_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sibur }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_siemens_and_halske }
+		add_company_monopoly = bt:building_electrics_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_skoda }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_societe_francaise_charbonnages_du_tonkin }
+		add_company_monopoly = bt:building_coal_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_societe_mokta_el_hadid }
+		add_company_monopoly = bt:building_iron_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_softbank }
+		add_company_monopoly = bt:building_network_infrastructure
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sony }
+		add_company_monopoly = bt:building_art_academy
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_spacex }
+		add_company_monopoly = bt:building_aerospace_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_stabilimento_tecnico_di_fiume }
+		add_company_monopoly = bt:building_explosives_factory
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_standard_oil }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_steel_brothers }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_stt }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sudamericana_de_vapores }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_suez_company }
+		add_company_monopoly = bt:building_trade_center
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sumitomo }
+		add_company_monopoly = bt:building_copper_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_sunhwaguk }
+		add_company_monopoly = bt:building_tobacco_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_tashkent_railroad }
+		add_company_monopoly = bt:building_railway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_tata }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_tencent }
+		add_company_monopoly = bt:building_software_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_tessier_ashpool }
+		add_company_monopoly = bt:building_mind_upload_nexus
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_thyssen }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_tokyo_electric_light_company }
+		add_company_monopoly = bt:building_power_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_toyota }
+		add_company_monopoly = bt:building_automotive_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_trubia }
+		add_company_monopoly = bt:building_arms_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_tsmc }
+		add_company_monopoly = bt:building_electronic_components_and_semiconductor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_turkish_petroleum }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_tycho_manufacturing }
+		add_company_monopoly = bt:building_space_elevator
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_uniao_fabril }
+		add_company_monopoly = bt:building_chemical_plant
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_united_fruit }
+		add_company_monopoly = bt:building_sugar_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_united_tobacco_factories }
+		add_company_monopoly = bt:building_tobacco_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_universal }
+		add_company_monopoly = bt:building_art_academy
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ursus }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_us_steel }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_vale }
+		add_company_monopoly = bt:building_ocean_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_van_vlissingen_en_dudok_van_heel }
+		add_company_monopoly = bt:building_motor_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_verizon }
+		add_company_monopoly = bt:building_network_infrastructure
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_vodka_monopoly }
+		add_company_monopoly = bt:building_food_industry
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_volkswagen }
+		add_company_monopoly = bt:building_highway
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_wadia_shipbuilders }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_west_ural_petroleum }
+		add_company_monopoly = bt:building_oil_rig
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_white_star_line }
+		add_company_monopoly = bt:building_port
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_william_cramp }
+		add_company_monopoly = bt:building_shipyard
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_william_sandford }
+		add_company_monopoly = bt:building_steel_mill
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_witkowitzer_bergbau_und_huttengewerkschaft }
+		add_company_monopoly = bt:building_iron_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_yasuda }
+		add_company_monopoly = bt:building_sulfur_mine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_ynchausti_y_compania }
+		add_company_monopoly = bt:building_sugar_plantation
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_yoyodyne_propulsion }
+		add_company_monopoly = bt:building_antimatter_engine
+	}
+	else_if = {
+		limit = { is_company_type = company_type:company_zastava }
+		add_company_monopoly = bt:building_arms_industry
+	}
+}

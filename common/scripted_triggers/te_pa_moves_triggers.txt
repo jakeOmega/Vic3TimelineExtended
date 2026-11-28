@@ -1,0 +1,25 @@
+﻿# Private Actors, declared moves: the triggers (docs/systems/mod_systems/private_actors.md § Declared Moves; spec
+# § 4.6). The frame is te_pa_moves_effects.txt's. A kind of petition adds its te_pa_can_declare_<kind> in its own
+# area's triggers file, and each starts with te_pa_move_open.
+
+# Country scope. A move may be declared against this government: none is under way (one at a time, § 4.6), and the
+# last ended at least te_pa_move_gap months ago.
+te_pa_move_slot_open = {
+	NOT = { has_variable = te_pa_move_firm }
+	te_pa_move_since >= te_pa_move_gap
+}
+
+# Company scope, at the firm's turn. The opening of every te_pa_can_declare_<kind>: the slot is open in its country.
+# Two firms that would declare in one month both pass it; te_pa_move_settle declares the higher goal score's.
+te_pa_move_open = {
+	owner = { te_pa_move_slot_open = yes }
+}
+
+# Any scope. The month index in VAR (a "not before" mark: a firm's wait before it asks again, a ten-year bar) has
+# come, or VAR is unset.
+te_pa_wait_over = {
+	trigger_if = {
+		limit = { has_variable = $VAR$ }
+		te_history_month_index >= var:$VAR$
+	}
+}

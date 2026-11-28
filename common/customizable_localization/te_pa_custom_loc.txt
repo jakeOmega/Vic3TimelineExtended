@@ -118,6 +118,56 @@ te_pa_ledger_line = {
 		trigger = { var:te_pa_l_verb ?= 29 }
 		localization_key = te_pa_ledger_verb_29
 	}
+	# Declared moves (Task 4b: 30-33, te_pa_moves_effects.txt) and the state's actions (34-39,
+	# te_pa_actions_effects.txt). 30-33 read the kind from the entry (te_pa_ledger_move) and the reason
+	# (te_pa_ledger_why).
+	text = {
+		trigger = { var:te_pa_l_verb ?= 30 }
+		localization_key = te_pa_ledger_verb_30
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 31 }
+		localization_key = te_pa_ledger_verb_31
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 32 }
+		localization_key = te_pa_ledger_verb_32
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 33 }
+		localization_key = te_pa_ledger_verb_33
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 34 }
+		localization_key = te_pa_ledger_verb_34
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 35 }
+		localization_key = te_pa_ledger_verb_35
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 36 }
+		localization_key = te_pa_ledger_verb_36
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 37 }
+		localization_key = te_pa_ledger_verb_37
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 38
+			var:te_pa_l_size ?= 1
+		}
+		localization_key = te_pa_ledger_verb_38_found
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 38 }
+		localization_key = te_pa_ledger_verb_38
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 39 }
+		localization_key = te_pa_ledger_verb_39
+	}
 	text = {
 		localization_key = te_pa_ledger_verb_unknown
 	}
@@ -430,15 +480,182 @@ te_pa_posture_does = {
 }
 
 # The trust (Task 4). A row's cartel, as the state knows it (te_pa_r_cartel above 0 only once it is open or exposed):
-# lawful under the antitrust law in force (te_pa_r_cartel_open 1), or known and illegal.
+# chartered (te_pa_r_charter 1, Task 4b), lawful under the antitrust law in force (te_pa_r_cartel_open 1), or known
+# and illegal.
 te_pa_cartel_status = {
 	type = container
 	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_charter ?= 1 }
+		localization_key = te_pa_cartel_status_charter
+	}
 	text = {
 		trigger = { var:te_pa_r_cartel_open ?= 1 }
 		localization_key = te_pa_cartel_status_open
 	}
 	text = {
 		localization_key = te_pa_cartel_status_illegal
+	}
+}
+
+# Declared moves (Task 4b; te_pa_moves_effects.txt). A move's line in the ledger (verbs 30-33), by its verb and its
+# kind (te_pa_l_kind): what follows the firm's name. A new kind of petition adds its four lines here.
+te_pa_ledger_move = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 30
+			var:te_pa_l_kind ?= 1
+		}
+		localization_key = te_pa_ledger_move_30_1
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 31
+			var:te_pa_l_kind ?= 1
+		}
+		localization_key = te_pa_ledger_move_31_1
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 32
+			var:te_pa_l_kind ?= 1
+		}
+		localization_key = te_pa_ledger_move_32_1
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 33
+			var:te_pa_l_kind ?= 1
+		}
+		localization_key = te_pa_ledger_move_33_1
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 30
+			var:te_pa_l_kind ?= 2
+		}
+		localization_key = te_pa_ledger_move_30_2
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 31
+			var:te_pa_l_kind ?= 2
+		}
+		localization_key = te_pa_ledger_move_31_2
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 32
+			var:te_pa_l_kind ?= 2
+		}
+		localization_key = te_pa_ledger_move_32_2
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 33
+			var:te_pa_l_kind ?= 2
+		}
+		localization_key = te_pa_ledger_move_33_2
+	}
+	text = {
+		localization_key = te_pa_ledger_move_unknown
+	}
+}
+
+# Why a move was answered as it was (te_pa_l_why; te_pa_moves_values.txt lists the codes), after the line: nothing
+# for a player's own answer, the reason an AI government's answer or the posture's default rests on otherwise.
+te_pa_ledger_why = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_l_why ?= 1 }
+		localization_key = te_pa_why_1
+	}
+	text = {
+		trigger = { var:te_pa_l_why ?= 2 }
+		localization_key = te_pa_why_2
+	}
+	text = {
+		trigger = { var:te_pa_l_why ?= 3 }
+		localization_key = te_pa_why_3
+	}
+	text = {
+		trigger = { var:te_pa_l_why ?= 4 }
+		localization_key = te_pa_why_4
+	}
+	text = {
+		localization_key = te_pa_why_none
+	}
+}
+
+# A row's declared move (te_pa_r_move_kind, 0 for none), for the row's line. A new kind adds its line.
+te_pa_row_move_kind = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_move_kind ?= 1 }
+		localization_key = te_pa_move_kind_1
+	}
+	text = {
+		trigger = { var:te_pa_r_move_kind ?= 2 }
+		localization_key = te_pa_move_kind_2
+	}
+	text = {
+		localization_key = te_pa_move_kind_unknown
+	}
+}
+
+# The declared move against the shown country (its te_pa_move_kind), for the notice and the top-bar alerts. A new
+# kind adds its line.
+te_pa_move_kind_now = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_move_kind ?= 1 }
+		localization_key = te_pa_move_kind_1
+	}
+	text = {
+		trigger = { var:te_pa_move_kind ?= 2 }
+		localization_key = te_pa_move_kind_2
+	}
+	text = {
+		localization_key = te_pa_move_kind_unknown
+	}
+}
+
+# The answer a row's posture gives a petition left to it (§ 4.7), for the move's hover.
+te_pa_posture_default = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_posture ?= 1 }
+		localization_key = te_pa_default_grant
+	}
+	text = {
+		trigger = { var:te_pa_r_posture ?= -1 }
+		localization_key = te_pa_default_refuse
+	}
+	text = {
+		localization_key = te_pa_default_stand
+	}
+}
+
+# The answer the declared move's firm's posture gives if the petition is left to it (§ 4.7), for the top-bar alerts:
+# the shown country's te_pa_move_firm.
+te_pa_move_default_now = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_move_firm ?= { var:te_pa_posture ?= 1 } }
+		localization_key = te_pa_default_grant
+	}
+	text = {
+		trigger = { var:te_pa_move_firm ?= { var:te_pa_posture ?= -1 } }
+		localization_key = te_pa_default_refuse
+	}
+	text = {
+		localization_key = te_pa_default_stand
 	}
 }

@@ -241,6 +241,8 @@ _GUI_SYSTEMS = {
     "space": "space_race_icons",
     # The Demographics tab and state subtab (docs/systems/demographics_gui_icons.md).
     "demog": "demographics_icons",
+    # Private Actors (docs/systems/mod_systems/private_actors.md § Declared Moves): the two top-bar alerts.
+    "pa": "private_actors_icons",
 }
 _GUI_FILES = {
     "banking": "gui/journal_entry_widgets/banking_dashboard_widget.gui",
@@ -253,6 +255,7 @@ _GUI_FILES = {
     "colonial": "gui/journal_entry_widgets/colonial_empire_widget.gui",
     "space": "gui/journal_entry_widgets/space_race_widget.gui",
     "demog": "gui/te_demographics_widgets.gui",
+    "pa": "gui/te_pa_widgets.gui",
 }
 
 # folder/size/mode/fill/style drive rendering and composing. A category that
@@ -3218,6 +3221,17 @@ ICONS: dict[str, dict[str, dict]] = {
         "carbon_capture_partial": {"now": f"{_GI}/production_method_icons/cat_shield_green_p1.dds", "subject": "a short factory chimney with a small capture hood on top and one thin pipe leading down from it", "seed": 3, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "carbon_capture_storage": {"now": f"{_GI}/production_method_icons/cat_shield_green_p2.dds", "subject": "a factory chimney with a big capture hood on top and a thick pipe running down under the ground line to a round storage tank", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
         "carbon_capture_advanced": {"now": f"{_GI}/production_method_icons/cat_shield_gold_p3.dds", "subject": "a tall capture tower with a row of big round fans on its side and a thick pipe running down under the ground line", "seed": 1, "color": (216, 247, 164), "color_bottom": (147, 209, 99)},
+    },
+    # Private Actors' two top-bar alerts (common/alert_types/te_pa_alerts.txt, wired by hand: alerts are not a
+    # `gui` file; private_actors.md § Declared Moves), still on vanilla's company alert icons. Unpainted: a firm's
+    # petition before the government, and the same petition falling due with no answer chosen.
+    "pa": {
+        "move_pending": {"subject": "a rolled parchment petition tied with a red ribbon and sealed with a red wax seal, "
+                                    "lying on a small closed brass-bound ledger", "seed": None,
+                         "now": f"{_GI}/alert_icons/can_establish_company.dds"},
+        "move_due": {"subject": "a rolled parchment petition tied with a red ribbon and sealed with a red wax seal, "
+                                "standing against a small brass hourglass with its sand almost run out", "seed": None,
+                     "now": f"{_GI}/alert_icons/company_losing_prosperity.dds"},
     },
     # Demographics (demographics_gui_icons.md): the Leading Cause of Death cell, 44 px, shows
     # the leading cause's own icon (te_dg_dc_lead), the headstone until the first count.

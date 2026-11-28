@@ -1,0 +1,251 @@
+﻿# Private Actors, the state's actions against a firm: the numbers (docs/systems/mod_systems/private_actors.md § The
+# State's Actions; spec §§ 3 principle 3, 6.6, 12.1; plan Task 4b). Every number is a first guess. The effects are
+# te_pa_actions_effects.txt's, the triggers te_pa_actions_triggers.txt's, the buttons te_pa_sguis.txt's.
+
+# ---------------------------------------------------------------------------
+# What an action costs (§ 6.6: in proportion to the firm's Standing; principle 3: approval is one channel of several)
+# ---------------------------------------------------------------------------
+# Moving against a firm angers its backers (its executive's interest group: an approval modifier for five years) and
+# radicalizes its seat's pops, both in proportion to its Standing above te_pa_sa_cost_line. Below that line the
+# public hates it: the action costs no approval and wins loyalists at the seat instead. A suit and a levy are full
+# actions; an inquiry and an audit half ones. The action itself (a cartel broken, rents taken) stays the largest
+# consequence: at most -4 approval with one group and 3% radicals in one state.
+te_pa_sa_cost_line = 30
+te_pa_sa_backers_max = 4
+te_pa_sa_radicals_max = 0.03
+te_pa_sa_loyalists_max = 0.02
+te_pa_sa_half = 0.5
+
+# Company scope (the firm). The share of a full action's cost its Standing asks: 0 at te_pa_sa_cost_line and below,
+# 1 at 100.
+te_pa_sa_cost_share = {
+	value = te_pa_v_stand
+	subtract = te_pa_sa_cost_line
+	divide = {
+		value = 100
+		subtract = te_pa_sa_cost_line
+	}
+	min = 0
+	max = 1
+}
+
+# Company scope. How hated it is: 1 at Standing 0, 0 at te_pa_sa_cost_line and above.
+te_pa_sa_hate_share = {
+	value = te_pa_sa_cost_line
+	subtract = te_pa_v_stand
+	divide = te_pa_sa_cost_line
+	min = 0
+	max = 1
+}
+
+# Any scope, with scope:te_pa_act_firm the firm (an add_modifier's multiplier and an add_radicals_in_state's value
+# are read where they are written, so each reads the firm through its saved scope). full and half: the two sizes.
+te_pa_sa_backers_full = {
+	value = 0
+	if = {
+		limit = { exists = scope:te_pa_act_firm }
+		scope:te_pa_act_firm = { add = te_pa_sa_cost_share }
+	}
+	multiply = te_pa_sa_backers_max
+}
+te_pa_sa_backers_half = {
+	value = te_pa_sa_backers_full
+	multiply = te_pa_sa_half
+}
+te_pa_sa_radicals_full = {
+	value = 0
+	if = {
+		limit = { exists = scope:te_pa_act_firm }
+		scope:te_pa_act_firm = { add = te_pa_sa_cost_share }
+	}
+	multiply = te_pa_sa_radicals_max
+}
+te_pa_sa_radicals_half = {
+	value = te_pa_sa_radicals_full
+	multiply = te_pa_sa_half
+}
+te_pa_sa_loyalists_full = {
+	value = 0
+	if = {
+		limit = { exists = scope:te_pa_act_firm }
+		scope:te_pa_act_firm = { add = te_pa_sa_hate_share }
+	}
+	multiply = te_pa_sa_loyalists_max
+}
+te_pa_sa_loyalists_half = {
+	value = te_pa_sa_loyalists_full
+	multiply = te_pa_sa_half
+}
+
+# ---------------------------------------------------------------------------
+# Inquiry (§ 6.6): for a year, +30 to the yearly exposure chance of the firm's secret holdings
+# ---------------------------------------------------------------------------
+
+te_pa_inquiry_months = 12
+te_pa_inquiry_bonus = 30
+
+# Any scope. The month an inquiry opened now ends.
+te_pa_inquiry_until_value = {
+	value = te_history_month_index
+	add = te_pa_inquiry_months
+}
+
+# Company scope. The month its inquiry ends, 0 while it has had none.
+te_pa_v_inquiry_until = { value = 0 if = { limit = { has_variable = te_pa_inquiry_until } value = var:te_pa_inquiry_until } }
+
+# Company scope. The inquiry's term in the exposure chance (te_pa_expose_hook_value): te_pa_inquiry_bonus while one
+# is open, 0 otherwise.
+te_pa_inquiry_term = {
+	value = 0
+	if = {
+		limit = { te_pa_sa_under_inquiry = yes }
+		value = te_pa_inquiry_bonus
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Bring suit (§ 6.6): a twelve-month case
+# ---------------------------------------------------------------------------
+# Success: 50%, plus 0.8 a point of Judicial Independence above 50 (docs/systems/mod_systems/judiciary.md), less 0.3
+# a point of the firm's Connections and of its captured regulator's strength, between 5% and 95%. Read at the
+# verdict, so what the firm builds during the case counts. Won: the cartel goes and may not re-form for ten years.
+# Lost: the firm is immune from suit for ten years.
+te_pa_case_months = 12
+te_pa_case_base = 50
+te_pa_case_ji_per = 0.8
+te_pa_case_conn_per = 0.3
+te_pa_case_reg_per = 0.3
+te_pa_case_min = 5
+te_pa_case_max = 95
+te_pa_case_bar_months = 120
+
+# Any scope. The month a case opened now ends, and a ten-year mark from now.
+te_pa_case_end_value = {
+	value = te_history_month_index
+	add = te_pa_case_months
+}
+te_pa_case_bar_value = {
+	value = te_history_month_index
+	add = te_pa_case_bar_months
+}
+
+# Company scope (the firm sued). The state's chance of winning, in whole percent.
+te_pa_case_chance_value = {
+	value = te_pa_case_base
+	add = {
+		value = 0
+		owner = { add = te_pa_v_judicial_independence }
+		subtract = te_pa_expose_courts_neutral
+		multiply = te_pa_case_ji_per
+	}
+	subtract = {
+		value = te_pa_v_conn
+		multiply = te_pa_case_conn_per
+	}
+	subtract = {
+		value = te_pa_v_reg
+		multiply = te_pa_case_reg_per
+	}
+	min = te_pa_case_min
+	max = te_pa_case_max
+	round = yes
+}
+
+# Company scope. Months left of its case, 0 while none is under way (its row).
+te_pa_case_left_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_case_end }
+		value = var:te_pa_case_end
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Audit the regulator (§ 6.6): an exposure roll on a captured regulator, which removes it, or else cuts it by 20
+# ---------------------------------------------------------------------------
+
+te_pa_audit_months = 12
+te_pa_audit_bonus = 40
+te_pa_audit_cut = 20
+te_pa_audit_max = 90
+
+te_pa_audit_again_value = {
+	value = te_history_month_index
+	add = te_pa_audit_months
+}
+
+# Company scope. The audit's chance of finding a secret captured regulator: the regulator's own exposure chance and
+# te_pa_audit_bonus, at most te_pa_audit_max.
+te_pa_audit_chance_value = {
+	value = te_pa_expose_reg_value
+	add = te_pa_audit_bonus
+	max = te_pa_audit_max
+	round = yes
+}
+
+te_pa_reg_after_audit = {
+	value = te_pa_v_reg
+	subtract = te_pa_audit_cut
+	min = 0
+}
+
+te_pa_v_audit_found = { value = 0 if = { limit = { has_variable = te_pa_audit_found } value = var:te_pa_audit_found } }
+
+# ---------------------------------------------------------------------------
+# Levy on rents (§ 6.6): while it stands, the treasury takes half the cartel's rents each quarter
+# ---------------------------------------------------------------------------
+# The rents are the part of the firm's accrual its cartel adds (te_pa_cartel_funds_factor: up to double at strength
+# 100), a claim on the investment pool. The levy spends that share of the firm's Funds (te_pa_spend_funds, which takes
+# it from the pool) and pays what the pool gave to the treasury, so the money moves once, from the pool to the state.
+te_pa_levy_share = 0.5
+
+# Company scope. A quarter's levy, in pounds: the share of the quarter's accrual the cartel adds.
+te_pa_levy_quarter_value = {
+	value = te_pa_funds_quarter
+	subtract = {
+		value = te_pa_funds_quarter
+		divide = te_pa_cartel_funds_factor
+	}
+	multiply = te_pa_levy_share
+	min = 0
+}
+
+# Country scope (scope:te_pa_levy_firm the firm): what the spend will take from the pool, read before it, which the
+# treasury then receives: the levy, held to what the pool holds and to 0.
+te_pa_levy_take_value = {
+	value = 0
+	if = {
+		limit = { exists = scope:te_pa_levy_firm }
+		scope:te_pa_levy_firm = { add = te_pa_levy_quarter_value }
+	}
+	max = investment_pool
+	min = 0
+}
+
+# Company scope (a row). A quarter's levy as the row's hover shows it (te_pa_r_levy_take).
+te_pa_levy_shown_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_levy }
+		value = te_pa_levy_quarter_value
+	}
+}
+
+# ---------------------------------------------------------------------------
+# An AI government's actions (§ 12.1): taken when a cartel's price effect passes a set level
+# ---------------------------------------------------------------------------
+# Once a quarter an AI government looks at its firms that hold its sector's 40% share (the notice's line, which it
+# sees) and whose good sells this far above its base price: Restrained firms at te_pa_sa_ai_price_restrained,
+# Tolerated ones at te_pa_sa_ai_price_tolerated, Favored ones never. It takes the first action that applies to the
+# first such firm: a suit, a levy, an audit, an inquiry.
+te_pa_sa_ai_price_restrained = 0.15
+te_pa_sa_ai_price_tolerated = 0.3
+
+# Company scope. The price line for this firm's posture (above any price for a Favored firm).
+te_pa_sa_ai_price_line = {
+	value = te_pa_sa_ai_price_tolerated
+	if = { limit = { var:te_pa_posture ?= -1 } value = te_pa_sa_ai_price_restrained }
+	else_if = { limit = { var:te_pa_posture ?= 1 } value = 1000 }
+}

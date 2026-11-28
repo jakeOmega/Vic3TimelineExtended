@@ -89,7 +89,7 @@ you qualify.
 | Minority Script Preservation (*The Old Letters*) | A separatist movement is growing, or a cultural minority movement has 5% support | 5% | Intelligentsia |
 | Language Requirement for Naturalization (*Spoken Like a Citizen*) | A cultural majority movement has 5% support, or under 70% of your population belongs to your primary cultures | 2.5% | Petite Bourgeoisie, or Rural Folk |
 | Official Bilingualism (*A Second Official Tongue*) | Under 80% of your population belongs to your primary cultures, and the minority stirs as for The Old Letters | 5% | Intelligentsia, or Trade Unions |
-| National Champion Exemption (*Too Large to Break*) | You have a company, and a banking-cycle panic or downturn, a fall in power rank or a default | 10% | Industrialists |
+| National Champion Exemption (*Too Large to Break*) | You have a company, and a banking-cycle panic or downturn, a fall in power rank or a default, or, with Private Actors on, a firm's cartel you know of | 10% | Industrialists |
 | Worker Cooperative Preference (*The Workers' Own Firms*) | A labor movement has 5% support, and the Trade Unions are powerful or in government | 5% | Trade Unions |
 | Mandatory Minimum Sentences (*Order in the Courts*) | Country-wide turmoil above 20%, or more than 15% of your population radical | 10% | Petite Bourgeoisie, or Armed Forces |
 | Community Service Alternative (*The Cost of Cells*) | Debt at a quarter of your debt ceiling or more, or a default | 5% | Intelligentsia, or Trade Unions |

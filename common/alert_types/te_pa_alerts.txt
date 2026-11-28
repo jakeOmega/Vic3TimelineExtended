@@ -1,0 +1,63 @@
+﻿# ============================================================================
+# PRIVATE ACTORS: a declared move on the top bar (spec § 14; plan Task 4b)
+# ============================================================================
+# The Space Race's pattern (te_space_race_alerts.txt): `valid` decides whether
+# the alert shows, `open_panel` what a click opens, `type = alert` gives it a
+# round icon of its own, `color` its rim. Text: alert_<key>_name, _desc, _hint
+# and _action, and <key>_setting_name for its switch in the alert settings
+# (te_notifications_l_english.yml).
+#
+# `valid` is read on drawn frames, about 200 times a game day, so each reads
+# the game rule and the player's country variables only, and walks no list:
+# the declared move is te_pa_move_firm, te_pa_move_months and te_pa_move_hand
+# (te_pa_moves_effects.txt), which the frame sets at the declaration, counts
+# down monthly and clears at the end, and the teardown clears with the rule.
+#
+# The two split on what the player has decided (§ 14): yellow while a move
+# concerns our country; red once it ends within te_pa_move_red_months and the
+# answer the posture would give is not one the player chose. "Chose" is
+# te_pa_move_hand: 1 when the player has set the firm's posture with the tab's
+# buttons at any time (te_pa_posture_hand, te_pa_cmd_set_posture), so its
+# default is the player's own standing answer; 0 while the firm still holds
+# the posture every firm starts with. A player still answers in the event;
+# the red alert says that leaving it lets a default nobody chose decide.
+#
+# Icons: placeholders, vanilla's company alert icons, until the two are
+# painted (icon_prompts.py, category `pa`; private_actors.md § Declared Moves).
+# A click opens the companies panel: no panel shows the Timeline Extended
+# window's tabs, and the alert's hint names the tab.
+# ============================================================================
+
+te_pa_move_pending = {
+	script_context = player_country
+	texture = "gfx/interface/icons/alert_icons/can_establish_company.dds"
+
+	valid = {
+		te_pa_on = yes
+		has_variable = te_pa_move_firm
+		OR = {
+			te_pa_v_move_months > te_pa_move_red_months
+			var:te_pa_move_hand ?= 1
+		}
+	}
+
+	open_panel = companies
+	type = alert
+	color = yellow
+}
+
+te_pa_move_due = {
+	script_context = player_country
+	texture = "gfx/interface/icons/alert_icons/company_losing_prosperity.dds"
+
+	valid = {
+		te_pa_on = yes
+		has_variable = te_pa_move_firm
+		te_pa_v_move_months <= te_pa_move_red_months
+		var:te_pa_move_hand ?= 0
+	}
+
+	open_panel = companies
+	type = alert
+	color = red
+}

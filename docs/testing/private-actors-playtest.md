@@ -10,7 +10,8 @@ adds its lines.
 The chassis has no verbs: a firm only assesses, scores and chooses, so what can be judged in phase 1 is whether
 its goal and reason are believable. Task 3 adds the Private Actors tab of the Timeline Extended window (items 11 to
 18), the posture buttons and the ledger's display. Task 4a adds the first verbs, the trust and the foundation (items 19
-to 30, and the `cartel_rents` self-check).
+to 30, and the `cartel_rents` self-check). Task 4b adds declared moves, the trust's two petitions, the state's actions
+and the top-bar alerts (items 31 to 44, and the `charter_monopoly` self-check).
 
 ## Self-checks
 
@@ -27,6 +28,7 @@ turn-time checks wait for 20 firms, so the first lines come within a few months 
 | `law_available` (Task 1) | the first monthly pulse with the rule on, in the first country with a covered law it could move to | `untech=0`: `law_is_available` reads a law's unlocking technology | `untech` above 0: it doesn't | the open-law triggers already carry the technology and `can_enact` lines; drop the `any_law` line and mirror the disallowing laws too |
 | `ledger_size` | the first "holds 40% of its sector" line (verb 11) | the entry's size equals the share it was saved from | the size didn't arrive: a saved scope value reads as nothing in `set_variable` | stage the size in a country variable for `te_pa_ledger_add`, as `un_ledger_log_add` stages its amount |
 | `cartel_rents` (probe 2) | armed when a cartel's modifier is first applied (a quarter after it forms, strength 5 or more), read at the owner's next monthly pulse | `country` falls by `want` (the cut its strength asks, to 0.002): the modifier's multiplier, `var:te_pa_cm_<type>`, resolved against the owner; and where `seat_has=1`, the seat building's own read falls by it too: a country's `building_<type>_throughput_add` reaches the type's buildings | `country` off: the multiplier didn't resolve (the wrong ROOT) or the type isn't registered, or another cartel of a building type the two share moved the sum in the same quarter (read the numbers); `seat` off with `country` right: the country line doesn't reach the buildings | a restricted production method switched in on the firm's buildings (`activate_production_method`, one per building type, in place of the throughput line; the method's switch back when the cartel ends) |
+| `charter_monopoly` | armed at the first monopoly charter granted (on a petition or from Grant a Charter), read at the owner's next monthly pulse | `held=1 any=1`: `add_company_monopoly = bt:<its main building type>` gave the company the engine's monopoly on that type, and both `company_has_building_type_monopoly` and `company_has_monopoly` read it | both 0: the effect gave nothing (or the reads fail); `held=0 any=1`: a monopoly, but not on that type, or the type read fails | the block form, `add_company_monopoly = { building_type = bt:<type> }`, in `gen_private_actors.py`'s `render_charter`; failing that, the charter rests on its lawful, permanent cartel alone (built) |
 
 ## In the game
 
@@ -140,3 +142,61 @@ turn-time checks wait for 20 firms, so the first lines come within a few months 
 30. **Rules off with holdings.** As the rules-off list's Private Actors section says: every Cartel and Restricted Supply
     modifier leaves the country and every Foundation modifier its state within a month; switching back on, the cartels'
     return at the next quarter and the foundations' at the next month.
+31. **A charter petition from a strong cartel.** Under Guilds and Chartered Monopolies, take a firm of yours whose
+    cartel has reached 80 (the console can set `te_pa_cartel` to 85 on one seeking Dominance, with `te_pa_cartel_known`
+    1). At its next turn the ledger reads "<firm> petitions the government for a monopoly charter in <good>", a
+    notification says so, the firm's row reads "Petition: a monopoly charter, 6 months to the answer", and a yellow alert
+    sits on the top bar. Each month the row's months fall by one. A Favored firm with any known cartel petitions under
+    any law. A firm with a secret cartel never does.
+32. **The alerts' colors.** With the firm still on the posture it started with (Tolerated, never touched), the alert
+    turns red at 2 months left ("A Petition Falls Due", naming the posture's answer). Set any posture with the row's
+    buttons and it goes back to yellow at once (`te_pa_move_hand` 1), and stays yellow to the end. Both are gone the
+    month the event fires. Hover each: the name, the months left and the default read right; a click opens the
+    companies panel.
+33. **The end event.** At 0 months `te_pa.1` ("A Monopoly by Charter") opens at once, with the boardroom picture, the
+    firm named, and four options. Hover each: Grant shows the charter and the Petty Bourgeoisie's −2 approval; Stand
+    aside and Refuse the five years' wait; Refuse also Grievance +1; the fourth says the posture answers. Let one event
+    lapse instead (wait out its timer): the posture's answer applies (Tolerated: stand aside).
+34. **A charter granted.** After Grant: the ledger reads "<firm> is granted a monopoly charter in <good>", the cartel
+    chip's hover says it holds a charter, the company's panel shows a monopoly on its main building type (or read the
+    `charter_monopoly` line), its Connections are 15 higher, and the cartel no longer ends when its share falls (set
+    `te_pa_share` to 0.3 and watch a quarter: it stays, at strength 5 or more). Under Antitrust Enforcement a chartered
+    cartel is lawful: Bring Suit is grayed.
+35. **The gap.** No second petition is declared while one runs, nor within 12 months of its end (`te_pa_move_last`);
+    two firms that would petition in one month declare one move, the higher goal score's, and the other petitions at a
+    later turn. A firm refused or left unanswered asks again only after five years.
+36. **The buyers' petition.** Under Antitrust Enforcement, with a known (exposed) cartel and a firm of yours seeking
+    Cheaper Inputs at score 60 or more with 30 Connections that buys the cartel's good: the buyer petitions ("<buyer>
+    petitions the government to sue <firm> over its cartel in <good>"), and `te_pa.2` ends it. Taking it up opens the
+    case at once with no approval cost (no "State Action Against Its Firm" on the cartel firm's executive's group).
+37. **A suit won and a suit lost.** Bring Suit on a known illegal cartel: the row reads "In court: 12 months to the
+    verdict", counting down monthly; the ledger gives the state's chance. Set Judicial Independence high
+    (`te_judicial_independence` 90) for one case and low (10) with the firm's Connections at 80 for another: the first is
+    usually won ("loses its case, and the court breaks its cartel"; the cartel's modifier leaves at once and no new
+    cartel forms for ten years, `te_pa_cartel_barred_until`), the second usually lost ("wins its case", Bring Suit grayed
+    for ten years). `te_pa.3` reports each with the courtroom video. Under National Champion Exemption a Favored firm's
+    cartel can't be sued.
+38. **The other actions.** Inquiry: a year's +30 on the firm's exposure chance (`te_pa_expose_chance_value` reads 30
+    higher), the button grayed while it runs. Audit the Regulator on a firm with a captured regulator: usually "found
+    and broken" (the regulator gone, the firm's Standing −15); a miss cuts it by 20 silently; on a clean firm "nothing is
+    found". Levy on Rents on an open cartel: each quarter the treasury gains what the investment pool loses, half the
+    cartel's share of the firm's accrual (read both before and after a quarter), Grievance +1 once; Lift the Levy ends
+    it. Grant a Charter as item 34, unasked.
+39. **The costs.** On a firm with Standing 80, Bring Suit gives its executive's group about −3 approval for five years
+    and radicals in its seat; on one at Standing 20 no approval is lost and its seat gains loyalists. Inquiry and Audit
+    cost half. Hover each button: grayed ones list the reason, active ones what it does and costs.
+40. **An AI country's answer, with its reason.** In an AI country, find a petition's end in its ledger (National Info,
+    the Private Actors tab): the line reads granted, left unanswered or refused, with its reason in parentheses ("its
+    posture's default", "the price of the cartel's good", "the government's stance on antitrust", "the Standing of the
+    cartel's firm"). Check a few against the country's posture and its governing groups' stances: say whether they read
+    as understandable.
+41. **AI actions.** Over a decade some AI governments sue, levy, audit or open inquiries into firms holding 40% of their
+    sector whose good sells well above its base price, at most one a quarter, never against a Favored firm. Say whether
+    they act too often or never.
+42. **Too Large to Break.** Under Antitrust Enforcement with a known cartel and the rule on, `amendment_petition_events.4`
+    can fire in good times too, and names the firm with the largest known cartel. With the rule off it fires only in
+    hard times, as before.
+43. **A disbanded petitioner.** Disband a firm with a petition under way: the move lapses, the alert goes, and the next
+    petition waits 12 months.
+44. **Rules off with a petition.** As the rules-off list's Private Actors section says: the move and the alerts go,
+    and every "State Action Against Its Firm" and "Resents a Monopoly Charter" leaves its interest group.

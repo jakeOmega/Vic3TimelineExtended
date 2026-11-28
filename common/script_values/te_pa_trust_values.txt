@@ -106,12 +106,17 @@ te_pa_cartel_cap_value = {
 	min = 0
 }
 
-# Company scope. The strength after a quarter's growth, held to the cap (a share that falls takes it down with it).
+# Company scope. The strength after a quarter's growth, held to the cap (a share that falls takes it down with it). A
+# chartered cartel is permanent (§ 6.5): it never falls below its starting strength, so it never ends that way.
 te_pa_cartel_after_quarter = {
 	value = te_pa_v_cartel
 	add = te_pa_cartel_growth_quarter
 	max = te_pa_cartel_cap_value
 	min = 0
+	if = {
+		limit = { has_variable = te_pa_charter }
+		min = te_pa_cartel_start
+	}
 }
 
 # Company scope. The cartel modifier's multiplier: its strength over 100 (the generated modifiers hold strength 100).
@@ -253,11 +258,12 @@ te_pa_expose_state_value = {
 	}
 }
 
-# Company scope. The hook later tasks add their terms to (0 now): Task 4b's Inquiry (§ 6.6, +30% for a year) and
-# Task 5's press (§ 8.5: the firm's own press lowers its chance, a rival's raises it). Each is a term in this one
-# value, so te_pa_expose_chance_value reads them all.
+# Company scope. The hook later tasks add their terms to: Task 4b's Inquiry (§ 6.6: +30 for a year,
+# te_pa_inquiry_term) and Task 5's press (§ 8.5: the firm's own press lowers its chance, a rival's raises it). Each is
+# a term in this one value, so te_pa_expose_chance_value reads them all.
 te_pa_expose_hook_value = {
 	value = 0
+	add = te_pa_inquiry_term
 }
 
 # Company scope. A secret holding's yearly chance of exposure, before a captured regulator's cut: the base, the state,
@@ -488,4 +494,137 @@ te_pa_row_found_mortality = {
 		multiply = te_pa_gen_found_mortality
 		divide = 100
 	}
+}
+
+# ---------------------------------------------------------------------------
+# The trust's petitions (Task 4b; the frame's numbers are te_pa_moves_values.txt's)
+# ---------------------------------------------------------------------------
+
+# A charter granted (§ 6.5): the firm's Connections rise this much (to 100 at most), and its cartel, now permanent,
+# never falls below te_pa_cartel_start while its share does.
+te_pa_charter_conn = 15
+
+# A buyer petitions for a suit (§ 6.3) with Cheaper Inputs scoring this much or more and these Connections.
+te_pa_suit_petition_score = 60
+te_pa_suit_petition_conn = 30
+
+# Company scope. Connections after a charter's grant.
+te_pa_conn_after_charter = {
+	value = te_pa_v_conn
+	add = te_pa_charter_conn
+	max = 100
+}
+
+# An AI government's answer (§ 12.1; te_pa_move_ai_answer reads the lean, positive toward Grant, beside the posture):
+#   charter: the price the cartel holds up weighs against it (a good 25% above its base price takes half a step),
+#     and the government's stance on the antitrust laws for or against it (half a step for each interest group in
+#     government that approves of Guilds and Chartered Monopolies, against for each that approves of Antitrust
+#     Enforcement), each held to a step and a half;
+#   suit (the buyer's petition, the cartel's firm its target): the cartel's price for it, the same stances the other
+#     way, and the cartel firm's Standing against it (from 50, a step at 0 or 100).
+te_pa_ai_price_per = 2
+te_pa_ai_stance_per = 0.5
+te_pa_ai_term_max = 1.5
+te_pa_ai_standing_mid = 50
+
+# Company scope (the petitioner, whose owner is the government asked).
+te_pa_ai_stance_value = {
+	value = 0
+	owner = {
+		every_interest_group = {
+			limit = {
+				is_in_government = yes
+				law_stance = { law = law_type:law_guilds_chartered_monopolies value > neutral }
+			}
+			add = te_pa_ai_stance_per
+		}
+		every_interest_group = {
+			limit = {
+				is_in_government = yes
+				law_stance = { law = law_type:law_trust_busting value > neutral }
+			}
+			subtract = te_pa_ai_stance_per
+		}
+	}
+	min = { value = te_pa_ai_term_max multiply = -1 }
+	max = te_pa_ai_term_max
+}
+
+# Company scope (a cartel's firm): its good's price above base, as a lean against the cartel (0 at or below base).
+te_pa_ai_price_value = {
+	value = te_pa_v_out_pricier
+	multiply = te_pa_ai_price_per
+	min = 0
+	max = te_pa_ai_term_max
+}
+
+# Company scope (the cartel's firm). Its Standing as a lean for it: 0 at 50, 1 at 100, -1 at 0.
+te_pa_ai_standing_value = {
+	value = te_pa_v_stand
+	subtract = te_pa_ai_standing_mid
+	divide = te_pa_ai_standing_mid
+}
+
+# Kind charter (the petitioner holds the cartel).
+te_pa_ai_lean_charter = {
+	value = te_pa_ai_stance_value
+	subtract = te_pa_ai_price_value
+}
+te_pa_ai_why_charter = {
+	value = 3
+	if = {
+		limit = { te_pa_ai_price_value > te_pa_ai_stance_size }
+		value = 2
+	}
+}
+
+# Company scope (the petitioner): the size of the stance term, whichever way it points.
+te_pa_ai_stance_size = {
+	value = te_pa_ai_stance_value
+	if = { limit = { te_pa_ai_stance_value < 0 } multiply = -1 }
+}
+
+# Kind suit (the petitioner is the buyer, scope:te_pa_mv_target the cartel's firm).
+te_pa_ai_lean_suit = {
+	value = te_pa_ai_stance_value
+	multiply = -1
+	if = {
+		limit = { exists = scope:te_pa_mv_target }
+		add = te_pa_ai_suit_price
+		subtract = te_pa_ai_suit_standing
+	}
+}
+te_pa_ai_why_suit = {
+	value = 3
+	if = {
+		limit = {
+			te_pa_ai_suit_price >= te_pa_ai_stance_size
+			te_pa_ai_suit_price >= te_pa_ai_suit_standing_size
+		}
+		value = 2
+	}
+	else_if = {
+		limit = { te_pa_ai_suit_standing_size > te_pa_ai_stance_size }
+		value = 4
+	}
+}
+# Any scope, with scope:te_pa_mv_target the cartel's firm: its price term, its Standing term and that term's size
+# (0 without a target).
+te_pa_ai_suit_price = {
+	value = 0
+	if = {
+		limit = { exists = scope:te_pa_mv_target }
+		scope:te_pa_mv_target = { add = te_pa_ai_price_value }
+	}
+}
+te_pa_ai_suit_standing = {
+	value = 0
+	if = {
+		limit = { exists = scope:te_pa_mv_target }
+		scope:te_pa_mv_target = { add = te_pa_ai_standing_value }
+	}
+}
+te_pa_ai_suit_standing_size = {
+	value = te_pa_ai_suit_standing
+	if = { limit = { te_pa_ai_suit_standing < 0 } multiply = -1 }
 }

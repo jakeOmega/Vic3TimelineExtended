@@ -1,0 +1,122 @@
+﻿# Private Actors, declared moves: the numbers (docs/systems/mod_systems/private_actors.md § Declared Moves; spec
+# §§ 4.6, 4.7, 12.1; plan Task 4b). The frame is te_pa_moves_effects.txt's; every number here is a first guess.
+
+# ---------------------------------------------------------------------------
+# The frame (§ 4.6)
+# ---------------------------------------------------------------------------
+
+# Months from a move's declaration to the event that ends it (owner: one length for every move, so the alert means the
+# same thing each time).
+te_pa_move_countdown = 6
+# Months after a move ends before the next may be declared against the same government.
+te_pa_move_gap = 12
+# The top-bar alert turns red this many months before a move ends (§ 14).
+te_pa_move_red_months = 2
+# A firm asks again for what it was refused or left unanswered only after this many years (per firm and kind, so a
+# well-run country sees few moves: § 4.6, "never from a timer").
+te_pa_move_again_years = 5
+
+# Any scope. The month a firm may ask again (te_pa_wait_over reads it), te_pa_move_again_years from now.
+te_pa_move_again_until = {
+	value = te_pa_move_again_years
+	multiply = te_pa_months_a_year
+	add = te_history_month_index
+}
+
+# Kind codes (te_pa_move_kind, te_pa_l_kind), one a kind of petition, and the token its pieces are named by
+# (te_pa_move_code_<token>). 1 and 2 are Task 4b's; 3 law (Task 5), 4 relief (Task 8), 5 protection (Task 10).
+te_pa_move_code_charter = 1
+te_pa_move_code_suit = 2
+
+# Country scope. Months since the last move against this government ended (a long time while none has).
+te_pa_move_since = {
+	value = 999
+	if = {
+		limit = { has_variable = te_pa_move_last }
+		value = te_history_month_index
+		subtract = var:te_pa_move_last
+	}
+}
+
+# Country scope. The best candidate's score this month, -1 while there is none (te_pa_move_nominate).
+te_pa_v_move_cand_score = {
+	value = -1
+	if = {
+		limit = { has_variable = te_pa_move_cand_score }
+		value = var:te_pa_move_cand_score
+	}
+}
+
+# Company scope. The score of the goal the firm holds: what ranks two firms that would declare in one month (§ 4.6:
+# the higher goal score goes first).
+te_pa_goal_score_value = {
+	value = 0
+	if = { limit = { var:te_pa_goal ?= 1 } value = var:te_pa_s_inputs }
+	else_if = { limit = { var:te_pa_goal ?= 2 } value = var:te_pa_s_market }
+	else_if = { limit = { var:te_pa_goal ?= 3 } value = var:te_pa_s_abroad }
+	else_if = { limit = { var:te_pa_goal ?= 4 } value = var:te_pa_s_law }
+	else_if = { limit = { var:te_pa_goal ?= 5 } value = var:te_pa_s_dominance }
+	else_if = { limit = { var:te_pa_goal ?= 6 } value = var:te_pa_s_labor }
+	else_if = { limit = { var:te_pa_goal ?= 7 } value = var:te_pa_s_tech }
+	else_if = { limit = { var:te_pa_goal ?= 8 } value = var:te_pa_s_survival }
+}
+
+# Country scope. Months left of the declared move, 0 while there is none (the alerts' and the tab's reads).
+te_pa_v_move_months = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_move_months }
+		value = var:te_pa_move_months
+	}
+}
+
+# Company scope (te_pa_row_sync): the declared move as its row shows it, the kind and the months left while this firm
+# is the one that declared it, 0 otherwise. scope:te_pa_sync_firm is the firm.
+te_pa_move_shown_kind_value = {
+	value = 0
+	if = {
+		limit = {
+			owner = {
+				has_variable = te_pa_move_firm
+				var:te_pa_move_firm = scope:te_pa_sync_firm
+			}
+		}
+		owner = { add = var:te_pa_move_kind }
+	}
+}
+te_pa_move_shown_months_value = {
+	value = 0
+	if = {
+		limit = {
+			owner = {
+				has_variable = te_pa_move_firm
+				var:te_pa_move_firm = scope:te_pa_sync_firm
+			}
+		}
+		owner = { add = te_pa_v_move_months }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# An AI government's answer (§ 12.1): the posture's default first, shifted by the kind's own terms
+# ---------------------------------------------------------------------------
+# The answer is read off one axis: the posture's place on it (Favored 1, Tolerated 0, Restrained -1) plus the kind's
+# lean (te_pa_ai_lean_<kind>, positive toward Grant). At te_pa_ai_grant_line or above it grants, at
+# te_pa_ai_refuse_line or below it refuses, and between them it stands aside. So a posture's default holds unless the
+# kind's terms add up to half a step against it, and a Favored firm is refused only when they add up to a step and a
+# half.
+te_pa_ai_grant_line = 0.5
+te_pa_ai_refuse_line = -0.5
+
+# Company scope (the petitioner).
+te_pa_ai_lean_posture = {
+	value = 0
+	if = { limit = { var:te_pa_posture ?= 1 } value = 1 }
+	else_if = { limit = { var:te_pa_posture ?= -1 } value = -1 }
+}
+
+# Why an answer was given (te_pa_move_why, onto the ledger entry as te_pa_l_why; te_pa_move_why_text names it):
+#   0 the player's own answer (nothing more is said)    1 the posture's default
+#   2 the price the cartel holds up                     3 the government's stance on the antitrust laws
+#   4 the Standing of the firm a suit would be brought against
+# Later tasks add theirs from 5.

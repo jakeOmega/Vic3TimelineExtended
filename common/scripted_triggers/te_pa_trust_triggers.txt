@@ -20,12 +20,15 @@ te_pa_cartel_utility = {
 }
 
 # The antitrust law in force lets the firm hold a cartel in the open: Guilds and Chartered Monopolies, Freedom of
-# Contract, Regulated Utilities outside infrastructure and utilities, or Dirigiste Policy for a Favored firm. Under
+# Contract, Regulated Utilities outside infrastructure and utilities, or Dirigiste Policy for a Favored firm; or it
+# holds a monopoly charter (Task 4b, § 6.5). Under
 # any other (Antitrust Enforcement, Regulated Utilities in its own sectors, Dirigiste Policy for a firm not Favored)
 # a cartel is illegal and forms in secret.
 te_pa_cartel_lawful = {
 	te_pa_cartel_banned = no
 	OR = {
+		# A monopoly charter (§ 6.5) makes the cartel the state's own grant, open and lawful under any of these laws.
+		has_variable = te_pa_charter
 		owner = { has_law = law_type:law_guilds_chartered_monopolies }
 		owner = { has_law = law_type:law_freedom_of_contract }
 		AND = {
@@ -117,7 +120,8 @@ te_pa_can_afford = {
 }
 
 # Form a cartel (§ 6.1 stage 3): it holds none, its goal is Dominance or A Protected Market, and its share is at the
-# line; any law but one that bans cartels outright (an illegal one forms in secret).
+# line; any law but one that bans cartels outright (an illegal one forms in secret); and no court has broken one of
+# its cartels in the last ten years.
 te_pa_can_form_cartel = {
 	te_pa_v_cartel <= 0
 	OR = {
@@ -126,6 +130,8 @@ te_pa_can_form_cartel = {
 	}
 	te_pa_cartel_banned = no
 	te_pa_v_share >= te_pa_cartel_threshold_value
+	# A suit that broke its cartel bars a new one for ten years (§ 6.6, te_pa_case_verdict).
+	te_pa_wait_over = { VAR = te_pa_cartel_barred_until }
 }
 
 # Capture the regulator (§ 6.4): it holds a cartel and no regulator, the law has one, and it has a quarter's
@@ -165,9 +171,16 @@ te_pa_can_expand = {
 # The cartel's firm (an entry of the country list te_pa_cartels), with scope:te_pa_firm a buyer at its turn: it is
 # another firm, holds a secret cartel, and makes one of the buyer's two inputs.
 te_pa_cartel_sells_to_buyer = {
+	var:te_pa_cartel_known ?= 0
+	te_pa_cartel_makes_buyer_input = yes
+}
+
+# The cartel's firm (an entry of te_pa_cartels), with scope:te_pa_firm a buyer: it is another firm, holds a cartel,
+# and its output is one of the buyer's two inputs. Secret or known: the routine verb reads a secret one
+# (te_pa_cartel_sells_to_buyer), the petition a known one (te_pa_cartel_suable_by_buyer).
+te_pa_cartel_makes_buyer_input = {
 	NOT = { this = scope:te_pa_firm }
 	te_pa_v_cartel > 0
-	var:te_pa_cartel_known ?= 0
 	has_variable = te_pa_g_out_good
 	var:te_pa_g_out_good > 0
 	OR = {
@@ -180,6 +193,13 @@ te_pa_cartel_sells_to_buyer = {
 			var:te_pa_g_out_good <= te_pa_buyer_in2
 		}
 	}
+}
+
+# The cartel's firm, with scope:te_pa_firm a buyer at its turn: a cartel the state knows of and could sue (te_pa_sa_suable:
+# known, illegal under the law in force, not immune, no case under way) that makes one of the buyer's inputs.
+te_pa_cartel_suable_by_buyer = {
+	te_pa_cartel_makes_buyer_input = yes
+	te_pa_sa_suable = yes
 }
 
 # Pay to expose a cartel (§ 6.3, a buyer's routine verb): its goal is Cheaper Inputs, a secret cartel in its country
@@ -209,6 +229,64 @@ te_pa_can_endow = {
 			is_incorporated = yes
 			NOT = { has_variable = te_pa_st_found_str }
 		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The trust's petitions (Task 4b; the frame: te_pa_moves_effects.txt)
+# ---------------------------------------------------------------------------
+
+# Country scope. The antitrust law lets a firm ask for a monopoly charter (§ 6.2's first row): Guilds and Chartered
+# Monopolies. § 6.2 gives Freedom of Contract a legal cartel but no charter.
+te_pa_charter_law = {
+	has_law = law_type:law_guilds_chartered_monopolies
+}
+
+# Kind charter (§ 6.5), at its turn: a cartel at strength 80 under a law that allows monopolies, or any cartel of a
+# Favored firm, declares. The cartel must be one the state knows of: a major move is never secret (§ 4.6), so a firm
+# with a secret cartel doesn't announce it by asking. It holds no charter yet, and five years have passed since it was
+# last refused or left unanswered.
+te_pa_can_declare_charter = {
+	te_pa_move_open = yes
+	te_pa_holds_known_cartel = yes
+	NOT = { has_variable = te_pa_charter }
+	OR = {
+		AND = {
+			te_pa_v_cartel >= te_pa_cartel_mark_2
+			owner = { te_pa_charter_law = yes }
+		}
+		var:te_pa_posture ?= 1
+	}
+	te_pa_wait_over = { VAR = te_pa_charter_again }
+}
+
+# Kind suit (§ 6.3's major move), at a buyer's turn: it seeks Cheaper Inputs with that goal's score past
+# te_pa_suit_petition_score and Connections past te_pa_suit_petition_conn, a cartel the state could sue makes one of
+# its inputs, and five years have passed since it was last refused or left unanswered. (§ 6.3's other form, a
+# petition to change the antitrust law, waits for Task 5's petition for a law.)
+te_pa_can_declare_suit = {
+	te_pa_move_open = yes
+	var:te_pa_goal ?= 1
+	var:te_pa_s_inputs >= te_pa_suit_petition_score
+	te_pa_v_conn >= te_pa_suit_petition_conn
+	te_pa_wait_over = { VAR = te_pa_suit_again }
+	owner = {
+		has_variable_list = te_pa_cartels
+		any_in_list = {
+			variable = te_pa_cartels
+			te_pa_cartel_suable_by_buyer = yes
+		}
+	}
+}
+
+# Country scope. With the rule on, one of its firms holds a cartel the state knows of: "Too Large to Break"
+# (amendment_petition_events.4, § 6.7) is then the largest such cartel's firm's petition (te_pa_save_largest_cartel).
+te_pa_holds_known_cartels = {
+	te_pa_on = yes
+	has_variable_list = te_pa_cartels
+	any_in_list = {
+		variable = te_pa_cartels
+		te_pa_holds_known_cartel = yes
 	}
 }
 

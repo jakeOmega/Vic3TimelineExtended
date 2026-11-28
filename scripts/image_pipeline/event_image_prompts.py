@@ -184,7 +184,7 @@ IMAGES = {
             "banking_cycle_events.36", "banking_cycle_events.40",
             "banking_cycle_events.48", "banking_cycle_events.68", "te_lolr.1",
             "te_lolr.2", "te_union.1", "un_events.35",
-            "te_union.2",
+            "te_union.2", "te_pa.2",
         ],
     },
     # Rendered again 2026-11-21 (s0): the first render had prominent garbled lettering (a lettered chart board, an
@@ -2562,7 +2562,7 @@ IMAGES = {
     "industrial_monopoly": {
         "prompt": "At the left of the frame, a heavy-set industrialist in a dark three-piece suit, seen from behind, stands at the tall window of a wood-panelled boardroom with his hands clasped behind his back, looking down on a vast steelworks of blast furnaces, chimneys and rail sidings that stretches to the horizon. The right of the frame is the long boardroom table with empty leather chairs under a brass chandelier.",
         "style": "oil painting, academic art, warm lamplight against a smoky dusk",
-        "events": ["amendment_petition_events.4", "extra_law_events.85"],
+        "events": ["amendment_petition_events.4", "extra_law_events.85", "te_pa.1"],
     },
     "industrial_pollution": {
         "prompt": "At the left of the frame, a chemist in a long dark coat crouches on the stony bank below an old stone bridge, filling a glass jar with dark, oily river water. Behind him rise a mining town of soot-blackened brick terraces with grey washing hung between the houses, and colliery headframes and chimneys pouring black smoke. The right of the frame is the black river winding away under a brown sky.",

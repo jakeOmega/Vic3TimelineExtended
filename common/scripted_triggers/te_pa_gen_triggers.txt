@@ -4738,3 +4738,1313 @@ te_pa_gen_can_expand = {
 		}
 	}
 }
+
+# Scope: a company. It holds the engine's monopoly on its main building type (te_pa_gen_charter_grant's).
+te_pa_gen_charter_held = {
+	OR = {
+		AND = {
+			is_company_type = company_type:company_a_markwald_and_company
+			company_has_building_type_monopoly = bt:building_rice_farm
+		}
+		AND = {
+			is_company_type = company_type:company_airbus
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_ajinomoto
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_aker_mek
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_alibaba
+			company_has_building_type_monopoly = bt:building_network_infrastructure
+		}
+		AND = {
+			is_company_type = company_type:company_allatini_mills
+			company_has_building_type_monopoly = bt:building_wheat_farm
+		}
+		AND = {
+			is_company_type = company_type:company_altos_hornos_de_vizcaya
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_amazon
+			company_has_building_type_monopoly = bt:building_network_infrastructure
+		}
+		AND = {
+			is_company_type = company_type:company_anglo_persian_oil
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_anglo_sicilian_sulphur_company
+			company_has_building_type_monopoly = bt:building_sulfur_mine
+		}
+		AND = {
+			is_company_type = company_type:company_ansaldo
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_ap_moller
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_apple
+			company_has_building_type_monopoly = bt:building_electrics_industry_appliances
+		}
+		AND = {
+			is_company_type = company_type:company_argentinian_wine
+			company_has_building_type_monopoly = bt:building_vineyard
+		}
+		AND = {
+			is_company_type = company_type:company_armstrong_whitworth
+			company_has_building_type_monopoly = bt:building_munition_plant
+		}
+		AND = {
+			is_company_type = company_type:company_asml
+			company_has_building_type_monopoly = bt:building_tooling_workshop
+		}
+		AND = {
+			is_company_type = company_type:company_assam_company
+			company_has_building_type_monopoly = bt:building_tea_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_axiom_space
+			company_has_building_type_monopoly = bt:building_space_resort
+		}
+		AND = {
+			is_company_type = company_type:company_b_grimm
+			company_has_building_type_monopoly = bt:building_rice_farm
+		}
+		AND = {
+			is_company_type = company_type:company_bacardi
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_bae_systems
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_basf
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_basic_advanced_materials
+			company_has_building_type_monopoly = bt:building_advanced_material_fabricator
+		}
+		AND = {
+			is_company_type = company_type:company_basic_aerospace
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_basic_agriculture_1
+			company_has_building_type_monopoly = bt:building_wheat_farm
+		}
+		AND = {
+			is_company_type = company_type:company_basic_agriculture_2
+			company_has_building_type_monopoly = bt:building_rice_farm
+		}
+		AND = {
+			is_company_type = company_type:company_basic_autarky
+			company_has_building_type_monopoly = bt:building_synthetics_plant_oil
+		}
+		AND = {
+			is_company_type = company_type:company_basic_biotechnology
+			company_has_building_type_monopoly = bt:building_synthetics_plant_biomass
+		}
+		AND = {
+			is_company_type = company_type:company_basic_chemicals
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_basic_colonial_plantations_1
+			company_has_building_type_monopoly = bt:building_tea_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_basic_colonial_plantations_2
+			company_has_building_type_monopoly = bt:building_sugar_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_basic_electrics
+			company_has_building_type_monopoly = bt:building_electrics_industry_radio
+		}
+		AND = {
+			is_company_type = company_type:company_basic_electronics
+			company_has_building_type_monopoly = bt:building_electronic_components_and_semiconductor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_basic_entertainment
+			company_has_building_type_monopoly = bt:building_art_academy
+		}
+		AND = {
+			is_company_type = company_type:company_basic_fabrics
+			company_has_building_type_monopoly = bt:building_cotton_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_basic_fishing
+			company_has_building_type_monopoly = bt:building_fishing_wharf
+		}
+		AND = {
+			is_company_type = company_type:company_basic_food
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_basic_forestry
+			company_has_building_type_monopoly = bt:building_logging_camp
+		}
+		AND = {
+			is_company_type = company_type:company_basic_gold_mining
+			company_has_building_type_monopoly = bt:building_gold_mine
+		}
+		AND = {
+			is_company_type = company_type:company_basic_home_goods
+			company_has_building_type_monopoly = bt:building_furniture_manufactory
+		}
+		AND = {
+			is_company_type = company_type:company_basic_metal_mining
+			company_has_building_type_monopoly = bt:building_nickel_cobalt_mine
+		}
+		AND = {
+			is_company_type = company_type:company_basic_metalworks
+			company_has_building_type_monopoly = bt:building_tooling_workshop
+		}
+		AND = {
+			is_company_type = company_type:company_basic_mineral_mining
+			company_has_building_type_monopoly = bt:building_sulfur_mine
+		}
+		AND = {
+			is_company_type = company_type:company_basic_motors
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_basic_munitions
+			company_has_building_type_monopoly = bt:building_munition_plant
+		}
+		AND = {
+			is_company_type = company_type:company_basic_oil
+			company_has_building_type_monopoly = bt:building_synthetics_plant_oil
+		}
+		AND = {
+			is_company_type = company_type:company_basic_paper
+			company_has_building_type_monopoly = bt:building_paper_mill
+		}
+		AND = {
+			is_company_type = company_type:company_basic_power
+			company_has_building_type_monopoly = bt:building_hydro_plant
+		}
+		AND = {
+			is_company_type = company_type:company_basic_shipyards
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_basic_silk_and_dye
+			company_has_building_type_monopoly = bt:building_dye_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_basic_software
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_basic_steel
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_basic_synthetics
+			company_has_building_type_monopoly = bt:building_synthetics_plant_silk
+		}
+		AND = {
+			is_company_type = company_type:company_basic_textiles
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_basic_weapons
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_basic_wine_and_fruit
+			company_has_building_type_monopoly = bt:building_banana_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_basileiades
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_bayer
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_bengal_coal_company
+			company_has_building_type_monopoly = bt:building_coal_mine
+		}
+		AND = {
+			is_company_type = company_type:company_bgi
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_bhp_group
+			company_has_building_type_monopoly = bt:building_ocean_mine
+		}
+		AND = {
+			is_company_type = company_type:company_biocon
+			company_has_building_type_monopoly = bt:building_synthetics_plant_opium
+		}
+		AND = {
+			is_company_type = company_type:company_biontech
+			company_has_building_type_monopoly = bt:building_synthetics_plant_opium
+		}
+		AND = {
+			is_company_type = company_type:company_blackberry
+			company_has_building_type_monopoly = bt:building_electrics_industry
+		}
+		AND = {
+			is_company_type = company_type:company_boeing
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_bolckow_vaughan
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_bombay_burmah_trading_corporation
+			company_has_building_type_monopoly = bt:building_rubber_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_bombay_dyeing_company
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_boston_dynamics
+			company_has_building_type_monopoly = bt:building_robotics_industry
+		}
+		AND = {
+			is_company_type = company_type:company_bp
+			company_has_building_type_monopoly = bt:building_synthetics_plant_oil
+		}
+		AND = {
+			is_company_type = company_type:company_branobel
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_broken_hill_proprietary_company
+			company_has_building_type_monopoly = bt:building_gold_mine
+		}
+		AND = {
+			is_company_type = company_type:company_bunge_born
+			company_has_building_type_monopoly = bt:building_wheat_farm
+		}
+		AND = {
+			is_company_type = company_type:company_bytedance
+			company_has_building_type_monopoly = bt:building_art_academy
+		}
+		AND = {
+			is_company_type = company_type:company_calcutta_electric
+			company_has_building_type_monopoly = bt:building_power_plant
+		}
+		AND = {
+			is_company_type = company_type:company_caribbean_petroleum
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_catl
+			company_has_building_type_monopoly = bt:building_advanced_material_fabricator
+		}
+		AND = {
+			is_company_type = company_type:company_ccci
+			company_has_building_type_monopoly = bt:building_rubber_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_cfr
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_cgv
+			company_has_building_type_monopoly = bt:building_vineyard
+		}
+		AND = {
+			is_company_type = company_type:company_chr_hansens
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_cochlear
+			company_has_building_type_monopoly = bt:building_electrics_industry_appliances
+		}
+		AND = {
+			is_company_type = company_type:company_colt_firearms
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_compania_sansinena_de_carnes_congeladas
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_construction_power_bloc
+			company_has_building_type_monopoly = bt:building_construction_sector
+		}
+		AND = {
+			is_company_type = company_type:company_cordoba_railway
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_csfa
+			company_has_building_type_monopoly = bt:building_sulfur_mine
+		}
+		AND = {
+			is_company_type = company_type:company_da_afghan_nassaji_sherkat
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_dassault_aviation
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_david_sassoon
+			company_has_building_type_monopoly = bt:building_opium_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_de_beers
+			company_has_building_type_monopoly = bt:building_gold_mine
+		}
+		AND = {
+			is_company_type = company_type:company_disney
+			company_has_building_type_monopoly = bt:building_tourism_industry
+		}
+		AND = {
+			is_company_type = company_type:company_dmc
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_dobrush_paper
+			company_has_building_type_monopoly = bt:building_paper_mill
+		}
+		AND = {
+			is_company_type = company_type:company_douro_wine_company
+			company_has_building_type_monopoly = bt:building_vineyard
+		}
+		AND = {
+			is_company_type = company_type:company_dupont
+			company_has_building_type_monopoly = bt:building_explosives_factory
+		}
+		AND = {
+			is_company_type = company_type:company_duro_y_compania
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_east_india_company
+			company_has_building_type_monopoly = bt:building_tea_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_eea
+			company_has_building_type_monopoly = bt:building_power_plant
+		}
+		AND = {
+			is_company_type = company_type:company_egyptian_rail
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_el_aguila
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_electricidad_de_caracas
+			company_has_building_type_monopoly = bt:building_power_plant
+		}
+		AND = {
+			is_company_type = company_type:company_elso_budapesti_gozmalom
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_eni
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_ericsson
+			company_has_building_type_monopoly = bt:building_electrics_industry
+		}
+		AND = {
+			is_company_type = company_type:company_erste_brunner
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_espana_industrial
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_estaleiro_maua
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_estanifera_llallagua
+			company_has_building_type_monopoly = bt:building_copper_mine
+		}
+		AND = {
+			is_company_type = company_type:company_famae
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_fanuc
+			company_has_building_type_monopoly = bt:building_robotics_industry
+		}
+		AND = {
+			is_company_type = company_type:company_fcm
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_ferranti_ltd
+			company_has_building_type_monopoly = bt:building_electrics_industry_radio
+		}
+		AND = {
+			is_company_type = company_type:company_ferrari
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_fiat
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_fiskars
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_foochow_arsenal
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_ford_motor
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_franco_belge
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_fundicao_ipanema
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_fundidora_monterrey
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_galician_carpathian_oil
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_gazprom
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_gebruder_thonet
+			company_has_building_type_monopoly = bt:building_furniture_manufactory
+		}
+		AND = {
+			is_company_type = company_type:company_genentech
+			company_has_building_type_monopoly = bt:building_synthetics_plant_opium
+		}
+		AND = {
+			is_company_type = company_type:company_general_electric
+			company_has_building_type_monopoly = bt:building_electrics_industry_appliances
+		}
+		AND = {
+			is_company_type = company_type:company_getzner_mutter
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_google
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_gotaverken
+			company_has_building_type_monopoly = bt:building_tooling_workshop
+		}
+		AND = {
+			is_company_type = company_type:company_gran_azucarera
+			company_has_building_type_monopoly = bt:building_sugar_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_great_indian_railway
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_grodno_tobacco
+			company_has_building_type_monopoly = bt:building_tobacco_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_guinness
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_guthrie
+			company_has_building_type_monopoly = bt:building_tea_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_gwr
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_hanka_precision
+			company_has_building_type_monopoly = bt:building_nanofabrication_center
+		}
+		AND = {
+			is_company_type = company_type:company_hanseong_jeongi_hoesa
+			company_has_building_type_monopoly = bt:building_power_plant
+		}
+		AND = {
+			is_company_type = company_type:company_hanyang_arsenal
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_hbc
+			company_has_building_type_monopoly = bt:building_fishing_wharf
+		}
+		AND = {
+			is_company_type = company_type:company_hispano_suiza
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_hp
+			company_has_building_type_monopoly = bt:building_electrics_industry_appliances
+		}
+		AND = {
+			is_company_type = company_type:company_huawei
+			company_has_building_type_monopoly = bt:building_network_infrastructure
+		}
+		AND = {
+			is_company_type = company_type:company_hyundai
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_ig_farben
+			company_has_building_type_monopoly = bt:building_synthetics_plant_rubber
+		}
+		AND = {
+			is_company_type = company_type:company_ikea
+			company_has_building_type_monopoly = bt:building_furniture_manufactory
+		}
+		AND = {
+			is_company_type = company_type:company_ilva
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_imperial_arsenal
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_imperial_ethiopian_railways
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_imperial_tobacco
+			company_has_building_type_monopoly = bt:building_tobacco_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_infosys
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_infrastructure
+			company_has_building_type_monopoly = bt:building_highway
+		}
+		AND = {
+			is_company_type = company_type:company_ingen
+			company_has_building_type_monopoly = bt:building_tourism_industry
+		}
+		AND = {
+			is_company_type = company_type:company_ingolstadt_electrical_company
+			company_has_building_type_monopoly = bt:building_power_plant
+		}
+		AND = {
+			is_company_type = company_type:company_intel
+			company_has_building_type_monopoly = bt:building_electronic_components_and_semiconductor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_iranian_state_railway
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_izhevsk_arms_plant
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_j_p_coats
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_jakub_klein
+			company_has_building_type_monopoly = bt:building_paper_mill
+		}
+		AND = {
+			is_company_type = company_type:company_jardine_matheson
+			company_has_building_type_monopoly = bt:building_port
+		}
+		AND = {
+			is_company_type = company_type:company_jiangnan_weaving_bureaus
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_jingdezhen
+			company_has_building_type_monopoly = bt:building_glassworks
+		}
+		AND = {
+			is_company_type = company_type:company_john_brown
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_john_cockerill
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_john_holt
+			company_has_building_type_monopoly = bt:building_rubber_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_john_hughes
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_jsr
+			company_has_building_type_monopoly = bt:building_synthetics_plant_rubber
+		}
+		AND = {
+			is_company_type = company_type:company_jsw_steel
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_kablin
+			company_has_building_type_monopoly = bt:building_paper_mill
+		}
+		AND = {
+			is_company_type = company_type:company_kaiping_mining
+			company_has_building_type_monopoly = bt:building_coal_mine
+		}
+		AND = {
+			is_company_type = company_type:company_kharitonenko_and_son
+			company_has_building_type_monopoly = bt:building_wheat_farm
+		}
+		AND = {
+			is_company_type = company_type:company_kinkozan_sobei
+			company_has_building_type_monopoly = bt:building_glassworks
+		}
+		AND = {
+			is_company_type = company_type:company_kirgizian_mining_company
+			company_has_building_type_monopoly = bt:building_coal_mine
+		}
+		AND = {
+			is_company_type = company_type:company_klanicko_drustvo
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_konigliche_porzellan_manufaktur_meissen
+			company_has_building_type_monopoly = bt:building_glassworks
+		}
+		AND = {
+			is_company_type = company_type:company_kouppas
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_kreenholmi_manufaktuur
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_krupp
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_la_rosada
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_lanfang_kongsi
+			company_has_building_type_monopoly = bt:building_gold_mine
+		}
+		AND = {
+			is_company_type = company_type:company_lee_wilson
+			company_has_building_type_monopoly = bt:building_cotton_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_lilpop
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_lkab
+			company_has_building_type_monopoly = bt:building_iron_mine
+		}
+		AND = {
+			is_company_type = company_type:company_lockheed_martin
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_ludwig_moser_and_sons
+			company_has_building_type_monopoly = bt:building_glassworks
+		}
+		AND = {
+			is_company_type = company_type:company_madura_mills
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_maison_worth
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_malaxa
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_manfred_weiss
+			company_has_building_type_monopoly = bt:building_munition_plant
+		}
+		AND = {
+			is_company_type = company_type:company_mantero_seta
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_mantetsu
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_maple_and_co
+			company_has_building_type_monopoly = bt:building_furniture_manufactory
+		}
+		AND = {
+			is_company_type = company_type:company_maschinenfabrik_oerlikon
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_maslosoyuz
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_massey_harris
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_mate_gavrilovic
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_mav
+			company_has_building_type_monopoly = bt:building_tooling_workshop
+		}
+		AND = {
+			is_company_type = company_type:company_megastructure_consortium
+			company_has_building_type_monopoly = bt:building_advanced_material_fabricator
+		}
+		AND = {
+			is_company_type = company_type:company_michelin
+			company_has_building_type_monopoly = bt:building_synthetics_plant_rubber
+		}
+		AND = {
+			is_company_type = company_type:company_microsoft
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_mines_anzin
+			company_has_building_type_monopoly = bt:building_coal_mine
+		}
+		AND = {
+			is_company_type = company_type:company_misr
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_mitsubishi
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_mitsui
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_monsanto
+			company_has_building_type_monopoly = bt:building_synthetics_plant_sugar
+		}
+		AND = {
+			is_company_type = company_type:company_moscow_irrigation_company
+			company_has_building_type_monopoly = bt:building_cotton_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_mozambique_company
+			company_has_building_type_monopoly = bt:building_tea_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_nam_dinh
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_national_iranian_oil
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_nederlandse_petroleum
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_netflix
+			company_has_building_type_monopoly = bt:building_art_academy
+		}
+		AND = {
+			is_company_type = company_type:company_neurovault
+			company_has_building_type_monopoly = bt:building_mind_upload_nexus
+		}
+		AND = {
+			is_company_type = company_type:company_nhm
+			company_has_building_type_monopoly = bt:building_sugar_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_nicolas_portalis
+			company_has_building_type_monopoly = bt:building_silk_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_nintendo
+			company_has_building_type_monopoly = bt:building_electrics_industry_appliances
+		}
+		AND = {
+			is_company_type = company_type:company_noda_shoyu
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_nokia
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_norsk_hydro
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_novo_nordisk
+			company_has_building_type_monopoly = bt:building_synthetics_plant_opium
+		}
+		AND = {
+			is_company_type = company_type:company_nvidia
+			company_has_building_type_monopoly = bt:building_electronic_components_and_semiconductor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_oesterreichisch_alpine_montangesellschaft
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_oevg
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_office_cherifien_des_phosphates
+			company_has_building_type_monopoly = bt:building_sulfur_mine
+		}
+		AND = {
+			is_company_type = company_type:company_ong_lung_sheng_tea_company
+			company_has_building_type_monopoly = bt:building_tea_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_openai
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_opium_export_monopoly
+			company_has_building_type_monopoly = bt:building_opium_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_oracle
+			company_has_building_type_monopoly = bt:building_network_infrastructure
+		}
+		AND = {
+			is_company_type = company_type:company_orient_express
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_oriental_consolidated_mining
+			company_has_building_type_monopoly = bt:building_gold_mine
+		}
+		AND = {
+			is_company_type = company_type:company_oriental_development_company
+			company_has_building_type_monopoly = bt:building_rice_farm
+		}
+		AND = {
+			is_company_type = company_type:company_ottoman_tobacco_regie
+			company_has_building_type_monopoly = bt:building_tobacco_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_panama_company
+			company_has_building_type_monopoly = bt:building_trade_center
+		}
+		AND = {
+			is_company_type = company_type:company_paradox
+			company_has_building_type_monopoly = bt:building_electrics_industry
+		}
+		AND = {
+			is_company_type = company_type:company_pedro_domecq
+			company_has_building_type_monopoly = bt:building_vineyard
+		}
+		AND = {
+			is_company_type = company_type:company_pernambuco_textiles
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_perskhlopok
+			company_has_building_type_monopoly = bt:building_cotton_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_persshelk
+			company_has_building_type_monopoly = bt:building_silk_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_peruvian_amazon
+			company_has_building_type_monopoly = bt:building_rubber_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_petrobras
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_pfizer
+			company_has_building_type_monopoly = bt:building_synthetics_plant_opium
+		}
+		AND = {
+			is_company_type = company_type:company_philips
+			company_has_building_type_monopoly = bt:building_electrics_industry
+		}
+		AND = {
+			is_company_type = company_type:company_pirelli
+			company_has_building_type_monopoly = bt:building_synthetics_plant_rubber
+		}
+		AND = {
+			is_company_type = company_type:company_poznanski_cotton_products
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_prussian_state_railways
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_putilov_company
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_ralli_brothers
+			company_has_building_type_monopoly = bt:building_rice_farm
+		}
+		AND = {
+			is_company_type = company_type:company_ramirez
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_rejoovenesense
+			company_has_building_type_monopoly = bt:building_synthetics_plant_opium
+		}
+		AND = {
+			is_company_type = company_type:company_rekal
+			company_has_building_type_monopoly = bt:building_mind_upload_nexus
+		}
+		AND = {
+			is_company_type = company_type:company_reliance
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_renault
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_resita_works
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_rheinmetall
+			company_has_building_type_monopoly = bt:building_munition_plant
+		}
+		AND = {
+			is_company_type = company_type:company_ricordi
+			company_has_building_type_monopoly = bt:building_art_academy
+		}
+		AND = {
+			is_company_type = company_type:company_roche
+			company_has_building_type_monopoly = bt:building_synthetics_plant_opium
+		}
+		AND = {
+			is_company_type = company_type:company_rodriguez_arguelles_y_cia
+			company_has_building_type_monopoly = bt:building_tobacco_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_rolls_royce
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_romanian_star
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_rosatom
+			company_has_building_type_monopoly = bt:building_nuclear_plant
+		}
+		AND = {
+			is_company_type = company_type:company_roscosmos
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_rosen_association
+			company_has_building_type_monopoly = bt:building_synthetics_plant_meat
+		}
+		AND = {
+			is_company_type = company_type:company_rossi
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_russian_american_company
+			company_has_building_type_monopoly = bt:building_logging_camp
+		}
+		AND = {
+			is_company_type = company_type:company_russo-baltic_wagon_factory
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_saint_etienne
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_samsung
+			company_has_building_type_monopoly = bt:building_electrics_industry_appliances
+		}
+		AND = {
+			is_company_type = company_type:company_san_miguel
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_sao_paulo_railway
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_sap
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_saudi_aramco
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_savva_morozov
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_schichau
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_schneider_creusot
+			company_has_building_type_monopoly = bt:building_artillery_foundry
+		}
+		AND = {
+			is_company_type = company_type:company_secn
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_shell
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_sherkat_shemali
+			company_has_building_type_monopoly = bt:building_cotton_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_sherkate_eslamiya
+			company_has_building_type_monopoly = bt:building_textile_mill
+		}
+		AND = {
+			is_company_type = company_type:company_shopify
+			company_has_building_type_monopoly = bt:building_highway
+		}
+		AND = {
+			is_company_type = company_type:company_siam_electrical_company_limited
+			company_has_building_type_monopoly = bt:building_power_plant
+		}
+		AND = {
+			is_company_type = company_type:company_sibur
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_siemens_and_halske
+			company_has_building_type_monopoly = bt:building_electrics_industry
+		}
+		AND = {
+			is_company_type = company_type:company_skoda
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_societe_francaise_charbonnages_du_tonkin
+			company_has_building_type_monopoly = bt:building_coal_mine
+		}
+		AND = {
+			is_company_type = company_type:company_societe_mokta_el_hadid
+			company_has_building_type_monopoly = bt:building_iron_mine
+		}
+		AND = {
+			is_company_type = company_type:company_softbank
+			company_has_building_type_monopoly = bt:building_network_infrastructure
+		}
+		AND = {
+			is_company_type = company_type:company_sony
+			company_has_building_type_monopoly = bt:building_art_academy
+		}
+		AND = {
+			is_company_type = company_type:company_spacex
+			company_has_building_type_monopoly = bt:building_aerospace_industry
+		}
+		AND = {
+			is_company_type = company_type:company_stabilimento_tecnico_di_fiume
+			company_has_building_type_monopoly = bt:building_explosives_factory
+		}
+		AND = {
+			is_company_type = company_type:company_standard_oil
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_steel_brothers
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_stt
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_sudamericana_de_vapores
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_suez_company
+			company_has_building_type_monopoly = bt:building_trade_center
+		}
+		AND = {
+			is_company_type = company_type:company_sumitomo
+			company_has_building_type_monopoly = bt:building_copper_mine
+		}
+		AND = {
+			is_company_type = company_type:company_sunhwaguk
+			company_has_building_type_monopoly = bt:building_tobacco_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_tashkent_railroad
+			company_has_building_type_monopoly = bt:building_railway
+		}
+		AND = {
+			is_company_type = company_type:company_tata
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_tencent
+			company_has_building_type_monopoly = bt:building_software_industry
+		}
+		AND = {
+			is_company_type = company_type:company_tessier_ashpool
+			company_has_building_type_monopoly = bt:building_mind_upload_nexus
+		}
+		AND = {
+			is_company_type = company_type:company_thyssen
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_tokyo_electric_light_company
+			company_has_building_type_monopoly = bt:building_power_plant
+		}
+		AND = {
+			is_company_type = company_type:company_toyota
+			company_has_building_type_monopoly = bt:building_automotive_industry
+		}
+		AND = {
+			is_company_type = company_type:company_trubia
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+		AND = {
+			is_company_type = company_type:company_tsmc
+			company_has_building_type_monopoly = bt:building_electronic_components_and_semiconductor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_turkish_petroleum
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_tycho_manufacturing
+			company_has_building_type_monopoly = bt:building_space_elevator
+		}
+		AND = {
+			is_company_type = company_type:company_uniao_fabril
+			company_has_building_type_monopoly = bt:building_chemical_plant
+		}
+		AND = {
+			is_company_type = company_type:company_united_fruit
+			company_has_building_type_monopoly = bt:building_sugar_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_united_tobacco_factories
+			company_has_building_type_monopoly = bt:building_tobacco_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_universal
+			company_has_building_type_monopoly = bt:building_art_academy
+		}
+		AND = {
+			is_company_type = company_type:company_ursus
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_us_steel
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_vale
+			company_has_building_type_monopoly = bt:building_ocean_mine
+		}
+		AND = {
+			is_company_type = company_type:company_van_vlissingen_en_dudok_van_heel
+			company_has_building_type_monopoly = bt:building_motor_industry
+		}
+		AND = {
+			is_company_type = company_type:company_verizon
+			company_has_building_type_monopoly = bt:building_network_infrastructure
+		}
+		AND = {
+			is_company_type = company_type:company_vodka_monopoly
+			company_has_building_type_monopoly = bt:building_food_industry
+		}
+		AND = {
+			is_company_type = company_type:company_volkswagen
+			company_has_building_type_monopoly = bt:building_highway
+		}
+		AND = {
+			is_company_type = company_type:company_wadia_shipbuilders
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_west_ural_petroleum
+			company_has_building_type_monopoly = bt:building_oil_rig
+		}
+		AND = {
+			is_company_type = company_type:company_white_star_line
+			company_has_building_type_monopoly = bt:building_port
+		}
+		AND = {
+			is_company_type = company_type:company_william_cramp
+			company_has_building_type_monopoly = bt:building_shipyard
+		}
+		AND = {
+			is_company_type = company_type:company_william_sandford
+			company_has_building_type_monopoly = bt:building_steel_mill
+		}
+		AND = {
+			is_company_type = company_type:company_witkowitzer_bergbau_und_huttengewerkschaft
+			company_has_building_type_monopoly = bt:building_iron_mine
+		}
+		AND = {
+			is_company_type = company_type:company_yasuda
+			company_has_building_type_monopoly = bt:building_sulfur_mine
+		}
+		AND = {
+			is_company_type = company_type:company_ynchausti_y_compania
+			company_has_building_type_monopoly = bt:building_sugar_plantation
+		}
+		AND = {
+			is_company_type = company_type:company_yoyodyne_propulsion
+			company_has_building_type_monopoly = bt:building_antimatter_engine
+		}
+		AND = {
+			is_company_type = company_type:company_zastava
+			company_has_building_type_monopoly = bt:building_arms_industry
+		}
+	}
+}

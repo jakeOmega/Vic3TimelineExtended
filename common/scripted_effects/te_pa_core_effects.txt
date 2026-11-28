@@ -7,7 +7,8 @@
 # (te_pa_gen_assess and the readings below), scores the eight goals and picks one (te_pa_goals_effects.txt), logs a
 # change (te_pa_ledger_effects.txt), posts a threshold notice, and copies what the tab shows onto the firm's row.
 # The quarter runs the holdings (te_pa_trust_quarter), accrues the currencies and copies again. The turn's verb
-# (te_pa_act) and the holdings are te_pa_trust_effects.txt's (Task 4); declared moves are Task 4b's.
+# (te_pa_act) and the holdings are te_pa_trust_effects.txt's (Task 4); declared moves are te_pa_moves_effects.txt's
+# and the state's actions te_pa_actions_effects.txt's (Task 4b).
 #
 # The firm's record (company variables; the plan's Storage table has the full list):
 #   te_pa_init 1 | te_pa_turn_in 1-12 | te_pa_turns (turns taken) | te_pa_age_q (quarters since the record)
@@ -64,6 +65,11 @@ te_pa_monthly = {
 				set_variable = { name = te_pa_turn_in value = te_pa_turn_months }
 				te_pa_turn = yes
 			}
+			# A suit's case runs month by month (te_pa_actions_effects.txt).
+			if = {
+				limit = { has_variable = te_pa_case_end }
+				te_pa_case_monthly = yes
+			}
 		}
 		if = {
 			limit = { NOT = { has_variable = te_pa_q_in } }
@@ -75,7 +81,10 @@ te_pa_monthly = {
 			set_variable = { name = te_pa_q_in value = te_pa_quarter_months }
 			te_pa_quarter = yes
 		}
-		# Task 4: the declared move's countdown (te_pa_move_months) goes here, after the turns.
+		# The declared move (te_pa_moves_effects.txt): a month off the move under way, then the month's best candidate
+		# declares, so a new move starts its six months next month.
+		te_pa_move_monthly = yes
+		te_pa_move_settle = yes
 		te_pa_ov_refresh = yes
 		te_pa_debug_monthly = yes
 	}
@@ -381,6 +390,8 @@ te_pa_quarter = {
 		te_pa_row_sync = yes
 	}
 	te_pa_rows_sweep = yes
+	# An AI government's action against a cartel whose price passes its line (§ 12.1).
+	te_pa_sa_ai_quarter = yes
 }
 
 # Company scope. A quarter of a year's Funds (a claim on the investment pool: nothing moves), Connections and
@@ -444,6 +455,17 @@ te_pa_row_sync = {
 	set_variable = { name = te_pa_reg_shown value = te_pa_reg_shown_value }
 	set_variable = { name = te_pa_cartel_open value = te_pa_cartel_open_value }
 	save_scope_as = te_pa_sync_firm
+	# Task 4b: its declared move as the row shows it (the country holds the move), its case's months left, and whether
+	# an inquiry is open.
+	set_variable = { name = te_pa_move_shown_kind value = te_pa_move_shown_kind_value }
+	set_variable = { name = te_pa_move_shown_months value = te_pa_move_shown_months_value }
+	set_variable = { name = te_pa_case_left value = te_pa_case_left_value }
+	set_variable = { name = te_pa_inquiry_shown value = 0 }
+	if = {
+		limit = { te_pa_sa_under_inquiry = yes }
+		set_variable = { name = te_pa_inquiry_shown value = 1 }
+	}
+	set_variable = { name = te_pa_levy_shown value = te_pa_levy_shown_value }
 	var:te_pa_row ?= {
 		set_variable = { name = te_pa_r_firm value = scope:te_pa_sync_firm }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_goal TO = te_pa_r_goal }
@@ -503,6 +525,14 @@ te_pa_row_sync = {
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_lab TO = te_pa_r_lab }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_found TO = te_pa_r_found }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_found_state TO = te_pa_r_found_state }
+		# Task 4b: the declared move, the charter, and the state's actions under way.
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_move_shown_kind TO = te_pa_r_move_kind }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_move_shown_months TO = te_pa_r_move_months }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_charter TO = te_pa_r_charter }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_case_left TO = te_pa_r_case }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_inquiry_shown TO = te_pa_r_inquiry }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_levy TO = te_pa_r_levy }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_levy_shown TO = te_pa_r_levy_take }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_seat TO = te_pa_r_seat }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_exec TO = te_pa_r_exec }
 	}
@@ -629,7 +659,8 @@ te_pa_ov_goal_try = {
 
 # Country scope, the scripted GUI's root (te_pa_posture_<name>_sgui, te_pa_sguis.txt), with scope:te_pa_row the row
 # the button sits on. The player's posture toward the row's firm (§ 4.7): te_pa_set_posture sets it and logs the
-# change (VERB 14, 15 or 16), and the row is copied again so the tab shows it at once.
+# change (VERB 14, 15 or 16), marks it as set by hand (te_pa_posture_hand, the red alert's read), and the row is
+# copied again so the tab shows it at once.
 te_pa_cmd_set_posture = {
 	if = {
 		limit = { exists = scope:te_pa_row }
@@ -637,6 +668,19 @@ te_pa_cmd_set_posture = {
 			var:te_pa_r_firm ?= {
 				owner = { save_scope_as = te_pa_home }
 				te_pa_set_posture = { POSTURE = $POSTURE$ VERB = $VERB$ }
+				# Set by hand (Task 4b): a declared move this firm ends is answered as the player chose, so the
+				# top-bar alert stays yellow (te_pa_alerts.txt).
+				set_variable = { name = te_pa_posture_hand value = 1 }
+				save_scope_as = te_pa_hand_firm
+				scope:te_pa_home = {
+					if = {
+						limit = {
+							has_variable = te_pa_move_firm
+							var:te_pa_move_firm = scope:te_pa_hand_firm
+						}
+						set_variable = { name = te_pa_move_hand value = 1 }
+					}
+				}
 				te_pa_row_sync = yes
 			}
 		}
@@ -653,11 +697,14 @@ te_pa_cmd_set_posture = {
 #   - the threshold notices' flags, so a firm still past a line when the rule returns is noticed again;
 #   - te_pa_q_in, which marks the country as running the system.
 # The ledger stays (a record of what happened). Modifiers: the trust's cartels (country) and foundations (state),
-# te_pa_trust_teardown. Every task that applies one removes it here, country and state alike;
+# te_pa_trust_teardown; the state's actions' and the charters' approval modifiers (interest groups), and the declared
+# move, whose variables are the alerts' conditions, te_pa_actions_teardown. Every task that applies one removes it here, country and state alike;
 # test_private_actors.py holds every te_pa_ static modifier to a removal here, and test_private_actors_trust.py the
 # generated ones.
 te_pa_teardown = {
 	te_pa_trust_teardown = yes
+	# Task 4b: the declared move and its candidates (the alerts' conditions), and the actions' approval modifiers.
+	te_pa_actions_teardown = yes
 	if = {
 		limit = { has_variable_list = te_pa_rows }
 		every_in_list = {

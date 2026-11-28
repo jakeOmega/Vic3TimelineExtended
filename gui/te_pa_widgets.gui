@@ -42,10 +42,11 @@
 ### THE ROSTER'S ROW, top to bottom: the firm (its company's icon, vanilla's
 ### company tooltip and a click to its panel; its name, two lines at most), its
 ### holdings as chips and its condition as an icon; Executive and Goal; Why
-### (the goal's reason); the three currencies as bars; Task 4's declared move;
+### (the goal's reason); the three currencies as bars; its declared move;
 ### the posture, with the player's three buttons; Details. Under Details, the
 ### firm's detail: the eight goals' scores as a table, the law being enacted
-### and its stance, seat, share and Grievance, and its holdings.
+### and its stance, seat, share and Grievance, its holdings, and the state's
+### actions (Task 4b: what is under way, and the player's buttons).
 ### The roster is a short list (a country's companies, a dozen or two at most
 ### late in a game), so its rows stay in a flowcontainer (gotcha #54 is for
 ### lists of hundreds).
@@ -57,8 +58,10 @@
 ###     term in te_pa_row_holdings_count (te_pa_core_values.txt). The six
 ###     company holdings are in all three already, at 0 until built; Task 9's
 ###     Concession adds its own.
-###   - Task 4's declared move: the marked slot in te_pa_firm_row; the state's
-###     actions: the marked section of te_pa_firm_detail.
+###   - Task 4b's declared move is the line in te_pa_firm_row (a new kind of
+###     petition needs no GUI: te_pa_row_move_kind names it); the state's
+###     actions are te_pa_actions at the foot of te_pa_firm_detail. Tasks 5
+###     and 6 add their actions' buttons there, a te_pa_action_button each.
 ###   - Task 5's Politics section and Task 9's Abroad section: the marked
 ###     places in te_pa_tab_layout and te_pa_wide_sections.
 
@@ -579,8 +582,15 @@ types te_pa_widget_types
 			}
 		}
 
-		### Task 4: the firm's declared move and its countdown, one line here,
-		### shown while it has one (§ 4.6; te_pa_move_firm is this firm).
+		### The firm's declared move and its months left, while it has one (§ 4.6;
+		### te_pa_r_move_kind above 0: the country's te_pa_move_firm is this
+		### firm). The hover says what the end asks of us and what the posture
+		### answers if we leave it. Copied each month while it runs.
+		te_pa_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_move_kind'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_row_move_tt"
+			text = "te_pa_row_move"
+		}
 
 		### The posture: its name (what it does on hover), and the player's three
 		### buttons, each graying the posture in force (its is_valid). Posture
@@ -1050,9 +1060,139 @@ types te_pa_widget_types
 		}
 		te_pa_firm_holdings = {}
 
-		### Task 4: the state's actions against the firm (§§ 6.6, 8.7, 9.4), each
-		### a button with its cost, go here under a subheading of their own,
-		### under te_own_country_only.
+		### The state's actions against the firm (§ 6.6; Tasks 5 and 6 add §§ 8.7
+		### and 9.4's): what is under way, public like the rest of the row, then
+		### the buttons, under te_own_country_only and the observer test (their
+		### scripted GUIs root on GetPlayer, as the posture's do). Each button is
+		### grayed with its reason (IsValidTooltip) and its hover says what it
+		### does and costs (ExecuteTooltip). Two to a row, 236 + 8 + 236 = 480;
+		### Levy on Rents and Lift the Levy share a slot, one shown at a time.
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_det_actions_sub"
+			}
+		}
+		te_pa_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_case'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_det_case_tt"
+			text = "te_pa_det_case"
+		}
+		te_pa_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_inquiry'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_det_inquiry_tt"
+			text = "te_pa_det_inquiry"
+		}
+		te_pa_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_levy'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_det_levy_tt"
+			text = "te_pa_det_levy"
+		}
+		te_pa_actions = {}
+	}
+
+	### One of the state's actions (the instance gives its datacontext, enabled,
+	### onclick, tooltip and text).
+	type te_pa_action_button = button {
+		using = default_button_action
+		size = { 236 28 }
+
+		textbox = {
+			parentanchor = center
+			align = center|nobaseline
+			autoresize = yes
+			max_width = 228
+			using = te_pa_fontsize_row
+			block "action_text" {}
+		}
+	}
+
+	### Three rows of 28 with 6 between, under a margin of 4: 100.
+	type te_pa_actions = widget {
+		using = te_own_country_only
+		size = { 480 100 }
+
+		flowcontainer = {
+			visible = "[Not( GetMetaPlayer.IsObserver )]"
+			direction = vertical
+			spacing = 6
+			margin_top = 4
+
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+
+				te_pa_action_button = {
+					datacontext = "[GetScriptedGui('te_pa_sa_inquiry_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					tooltip = "te_pa_sa_inquiry_btn_tt"
+					blockoverride "action_text" {
+						text = "te_pa_sa_inquiry_btn"
+					}
+				}
+				te_pa_action_button = {
+					datacontext = "[GetScriptedGui('te_pa_sa_suit_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					tooltip = "te_pa_sa_suit_btn_tt"
+					blockoverride "action_text" {
+						text = "te_pa_sa_suit_btn"
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+
+				te_pa_action_button = {
+					datacontext = "[GetScriptedGui('te_pa_sa_audit_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					tooltip = "te_pa_sa_audit_btn_tt"
+					blockoverride "action_text" {
+						text = "te_pa_sa_audit_btn"
+					}
+				}
+				widget = {
+					size = { 236 28 }
+
+					te_pa_action_button = {
+						visible = "[Not( GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_levy'), '(CFixedPoint)0' ) )]"
+						datacontext = "[GetScriptedGui('te_pa_sa_levy_sgui')]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						tooltip = "te_pa_sa_levy_btn_tt"
+						blockoverride "action_text" {
+							text = "te_pa_sa_levy_btn"
+						}
+					}
+					te_pa_action_button = {
+						visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_levy'), '(CFixedPoint)0' )]"
+						datacontext = "[GetScriptedGui('te_pa_sa_lift_sgui')]"
+						enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+						tooltip = "te_pa_sa_lift_btn_tt"
+						blockoverride "action_text" {
+							text = "te_pa_sa_lift_btn"
+						}
+					}
+				}
+			}
+			flowcontainer = {
+				direction = horizontal
+				spacing = 8
+
+				te_pa_action_button = {
+					datacontext = "[GetScriptedGui('te_pa_sa_charter_sgui')]"
+					enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'te_pa_row', ScriptContainer.MakeScope ).End )]"
+					tooltip = "te_pa_sa_charter_btn_tt"
+					blockoverride "action_text" {
+						text = "te_pa_sa_charter_btn"
+					}
+				}
+			}
+		}
 	}
 
 	type te_pa_roster_panel = flowcontainer {
@@ -1225,6 +1365,22 @@ types te_pa_widget_types
 		}
 		te_pa_note = {
 			text = "te_pa_how_posture"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_moves"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_moves"
+		}
+		te_pa_subheader = {
+			blockoverride "subheader_text" {
+				text = "te_pa_how_sub_actions"
+			}
+		}
+		te_pa_note = {
+			text = "te_pa_how_actions"
 		}
 		te_pa_subheader = {
 			blockoverride "subheader_text" {

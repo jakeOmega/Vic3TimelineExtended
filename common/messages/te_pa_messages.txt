@@ -1,5 +1,5 @@
 ﻿# ============================================================================
-# PRIVATE ACTORS: the threshold notices (spec § 4.6), once per crossing
+# PRIVATE ACTORS: the threshold notices (spec § 4.6), once per crossing, and a declared move's notice
 # ============================================================================
 # te_pa_notices (te_pa_core_effects.txt) posts each to a player's country the turn a firm crosses the line, with
 # scope:te_pa_note_firm the firm; a flag on the firm (te_pa_n_failing, te_pa_n_big) holds while it stays past it.
@@ -14,6 +14,15 @@ te_pa_firm_failing = {
 }
 
 te_pa_firm_big = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}
+
+# A declared move (spec § 4.6; te_pa_move_declare, te_pa_moves_effects.txt): one of a player's firms has petitioned
+# the government, scope:te_pa_mv_firm the firm. The top-bar alerts (te_pa_alerts.txt) keep it in view until the end.
+te_pa_move_declared = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/journal.dds"
 	notification_type = feed

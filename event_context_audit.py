@@ -258,6 +258,15 @@ SYSTEMS: tuple[System, ...] = (
         _rx(r"^post_scarcity"),
         _rx(r"\bpost-scarcity\b|\bUBI program(?:me)?s?\b|\bwork no longer necessary\b", _I),
     ),
+    # Private Actors (docs/systems/mod_systems/private_actors.md): firms as actors, behind te_private_actors_rule,
+    # read only through te_pa_on. Its vocabulary is kept narrow: a cartel, a trust or a monopoly is also the
+    # vanilla economy's and the narcotics chain's word.
+    System(
+        "private_actors", "Private Actors",
+        _rx(r"\bte_private_actors_(?:enabled|disabled)\b|\bte_pa_\w+"),
+        _rx(r"^te_pa_"),
+        _rx(r"\bmonopoly charters?\b|\$te_pa_system_name\$", _I),
+    ),
 )
 
 SYSTEM_BY_KEY = {s.key: s for s in SYSTEMS}

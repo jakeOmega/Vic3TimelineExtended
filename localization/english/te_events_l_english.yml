@@ -162,6 +162,7 @@
  amendment_petition_events.4.a:0 "In hard times, the nation needs its champions whole."
  amendment_petition_events.4.b:0 "No company is too large for the law."
  amendment_petition_events.4.d:0 "With the economy faltering and order books thin, the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] have asked for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] exempting the nation's leading companies from antitrust action. Only firms of real size, their spokesmen say, can hold their own against foreign competitors in hard times. Small proprietors point out that hard times are when large firms swallow small ones."
+ amendment_petition_events.4.d_firm:0 "[SCOPE.sCompany('petition_firm').GetName], which holds the largest cartel in the country, has asked through the [SCOPE.gsInterestGroup('petition_sponsor_ig').GetName] for an [concept_amendment] to [SCOPE.sLaw('petition_law').GetName] exempting the nation's leading companies from antitrust action. Its directors say that only firms of real size can hold their own against foreign competitors. Small proprietors reply that the exemption would protect its cartel before any other company."
  amendment_petition_events.4.f:0 "\"You want me to tell the commission to leave the company alone,\" the official said.\n\n\"I want you to tell the commission what the company is. It employs nine thousand people. It buys from half the suppliers in the province. Its bonds sit in the vault of every savings bank in the country.\"\n\n\"All the more reason to watch it.\"\n\n\"Watch it by all means,\" the chairman said, rising and buttoning his coat. \"But if the commission breaks it up this year, the pieces will go cheap to whoever can buy them, and foreign firms have the money and we do not. I have brought the order books for the last three years. I will leave them with your secretary.\""
  amendment_petition_events.4.t:0 "Too Large to Break"
  amendment_petition_events.5.a:0 "A firm owned by its workers is no robber baron."
@@ -6529,6 +6530,30 @@
  te_orbital_debris.2.d:0 "[SCOPE.sCountry('te_asat_striker').GetName] has destroyed our satellites with interceptor missiles. Our forces have lost their reconnaissance and their links, and our tracking network its view of orbit, until replacements are launched. The wreckage stays in orbit, a hazard to every country's spacecraft, theirs and ours included."
  te_orbital_debris.2.f:0 "The officer on watch at the tracking station saw the first satellite drop off the board a little after her shift began. She marked the time and logged it as a fault. The second went four minutes later, on the far side of the world from the first, and she stopped writing and picked up the direct line. By the time it was answered there were six gaps on the board, and she read out each one's name and the minute it had gone."
  te_orbital_debris.2.t:0 "Our Satellites Destroyed"
+
+#
+# TE_PA
+#
+ te_pa.1.a:0 "Grant it. The trade is theirs already in all but law."
+ te_pa.1.b:0 "We will neither grant it nor forbid what they do now."
+ te_pa.1.c:0 "Refuse. No company holds a trade by right."
+ te_pa.1.d:0 "[SCOPE.sCompany('te_pa_mv_firm').GetName] has asked the government for a monopoly charter. Its cartel already holds back supply in its trade and sets the price. A charter would make the cartel lawful and permanent, and give the company alone the right to build in its main line of business. Shopkeepers and small manufacturers, who pay the cartel's prices, have written to oppose it."
+ te_pa.1.e:0 "Answer as our policy toward the firm has it."
+ te_pa.1.f:0 "To the government, from the directors of [SCOPE.sCompany('te_pa_mv_firm').GetName].\n\nWe ask for a charter to do by right what we already do by agreement. Our works have run through good years and lean ones, and our workers have been paid in both. With a charter we could plan our building twenty years ahead instead of one, and borrow on the strength of it. We enclose our accounts for the last five years, and a list of the works we would build under the charter with what each would cost."
+ te_pa.1.t:0 "A Monopoly by Charter"
+ te_pa.2.a:0 "Take it up. The court will hear the case."
+ te_pa.2.b:0 "We will not act on it for now."
+ te_pa.2.c:0 "Refuse. The courts are not for settling quarrels over prices."
+ te_pa.2.d:0 "[SCOPE.sCompany('te_pa_mv_firm').GetName] has asked the government to sue [SCOPE.sCompany('te_pa_mv_target').GetName], whose cartel makes one of the goods [SCOPE.sCompany('te_pa_mv_firm').GetName] uses most and keeps its price high. The petitioners' directors say the cartel breaks the antitrust law, and want a court to break it. If we take the petition up, the suit is brought at once, and it costs us no approval with the cartel's backers."
+ te_pa.2.e:0 "Answer as our policy toward the firm has it."
+ te_pa.2.f:0 "A director of [SCOPE.sCompany('te_pa_mv_firm').GetName], to the official who took the petition:\n\n\"Every month we pay what they ask, because we have tried every other seller and found no better price. We have cut our own orders twice this year to stay within our means. I am not asking the government to favor us over them. I am asking it to put the matter before a court, where they will have to show their books, and the court can decide whether what they do is lawful.\""
+ te_pa.2.t:0 "The Buyers' Petition"
+ te_pa.3.a:0 "The court has ruled, and we will abide by it."
+ te_pa.3.a.tt:0 "The ruling is in force. The firm's row in the $te_pa_system_name$ tab shows what it holds now."
+ te_pa.3.d:0 "The court has found for [SCOPE.sCompany('te_pa_case_firm').GetName] and dismissed the government's case against its cartel. The company cannot be sued over its cartel again for ten years."
+ te_pa.3.d_won:0 "The court has ruled against [SCOPE.sCompany('te_pa_case_firm').GetName] and ordered its cartel dissolved. The company may not form another for ten years, and the goods its cartel held back will come to market again."
+ te_pa.3.f:0 "The clerk read the ruling aloud to a half-empty room. Counsel for both sides had been handed copies at the door, and most of them were already reading ahead to the last page. When the clerk sat down, the company's lawyers loaded their boxes of exhibits onto a cart and wheeled them out first, past the people waiting in the corridor. The government's lawyers packed theirs a few minutes later and went out the same way."
+ te_pa.3.t:0 "The Court Rules"
 
 #
 # TE_PB_SUMMIT

@@ -1,0 +1,182 @@
+﻿namespace = te_pa
+
+# Private Actors, the trust's events (docs/systems/mod_systems/private_actors.md § Declared Moves and § The State's
+# Actions; spec §§ 4.6, 4.7, 6.3, 6.5, 6.6; plan Task 4b). A player's country only: an AI government answers a
+# petition by weight in script (te_pa_move_ai_answer) and hears a verdict through the ledger.
+#
+# te_pa.1, .2  The ends of the trust's two petitions, fired by te_pa_move_close once the move's six months are up and
+#              its variables are cleared, so nothing an option does can end the move again (plan Review Focus 3).
+#              scope:te_pa_mv_firm is the petitioner, scope:te_pa_mv_target the cartel's firm a suit is against. Every
+#              petition has the same four options: the three answers of § 4.7 (Grant, Stand aside, Refuse) and the
+#              posture's default, which is the default option, so a player who lets the event lapse gets the
+#              answer its posture gives (te_pa_move_default). Only a refusal raises Grievance (te_pa_move_refuse).
+# te_pa.3      A case's verdict (te_pa_case_verdict, which has already applied it), scope:te_pa_case_firm the firm.
+#              The verdict's variable te_pa_case_last picks the description.
+#
+# Each fires undelayed from an effect that has already closed what the event reads, and checks te_pa_on.
+
+# The charter petition (§ 6.5): a cartel firm asks for a monopoly charter.
+te_pa.1 = {
+	type = country_event
+	placement = root
+
+	title = te_pa.1.t
+	desc = te_pa.1.d
+	flavor = te_pa.1.f
+
+	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	trigger = {
+		te_pa_on = yes
+		exists = scope:te_pa_mv_firm
+	}
+
+	immediate = {
+		save_scope_as = te_pa_home
+	}
+
+	option = { # Grant it
+		name = te_pa.1.a
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_grant = { KIND = charter }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # Stand aside
+		name = te_pa.1.b
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_stand = { KIND = charter }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # Refuse it
+		name = te_pa.1.c
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_refuse = { KIND = charter }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # As the posture has it
+		name = te_pa.1.e
+		default_option = yes
+		custom_tooltip = te_pa_move_default_tt
+		scope:te_pa_mv_firm = { te_pa_move_default = { KIND = charter } }
+		ai_chance = { base = 3 }
+	}
+}
+
+# The buyers' petition (§ 6.3's major move): a firm that buys a known, illegal cartel's good asks the state to sue it.
+te_pa.2 = {
+	type = country_event
+	placement = root
+
+	title = te_pa.2.t
+	desc = te_pa.2.d
+	flavor = te_pa.2.f
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		te_pa_on = yes
+		exists = scope:te_pa_mv_firm
+		exists = scope:te_pa_mv_target
+	}
+
+	immediate = {
+		save_scope_as = te_pa_home
+	}
+
+	option = { # Take it up
+		name = te_pa.2.a
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_grant = { KIND = suit }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # Stand aside
+		name = te_pa.2.b
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_stand = { KIND = suit }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # Refuse it
+		name = te_pa.2.c
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_refuse = { KIND = suit }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # As the posture has it
+		name = te_pa.2.e
+		default_option = yes
+		custom_tooltip = te_pa_move_default_tt
+		scope:te_pa_mv_firm = { te_pa_move_default = { KIND = suit } }
+		ai_chance = { base = 3 }
+	}
+}
+
+# A case's verdict (§ 6.6's Bring Suit), already applied by te_pa_case_verdict: won, the cartel is broken and barred
+# for ten years; lost, the firm is immune from suit for ten years.
+te_pa.3 = {
+	type = country_event
+	placement = root
+
+	title = te_pa.3.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = te_pa.3.d_won
+				trigger = { scope:te_pa_case_firm = { var:te_pa_case_last ?= 1 } }
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_pa.3.d
+			}
+		}
+	}
+	flavor = te_pa.3.f
+
+	event_image = { video = "middleeast_courtroom_upheaval" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+
+	trigger = {
+		te_pa_on = yes
+		exists = scope:te_pa_case_firm
+	}
+
+	option = {
+		name = te_pa.3.a
+		default_option = yes
+		custom_tooltip = te_pa.3.a.tt
+	}
+}

@@ -49,6 +49,9 @@ hand-set table in ``private_actors_config.py`` (§ 8.1's law table, the sector f
     ``te_pa_gen_found_apply`` / ``_remove_all`` (state, from the state pulse), ``te_pa_gen_found_pick`` and
     ``te_pa_gen_expand`` (company); the trigger ``te_pa_gen_can_expand``; the values ``te_pa_gen_cartel_tp_country``
     and ``_seat`` (the ``cartel_rents`` self-check's reads) and ``te_pa_gen_enacting_law_index``.
+  - Task 4b: the effect ``te_pa_gen_charter_grant`` (a monopoly charter's ``add_company_monopoly`` on the type's
+    main building type, ``Sector.expand``'s first) and the trigger ``te_pa_gen_charter_held`` (the
+    ``charter_monopoly`` self-check's read).
 
 How the sector is read (the config says why for each hand-set part):
 
@@ -1089,6 +1092,37 @@ def render_expand(plan: Plan) -> str:
     return _block(lines)
 
 
+CHARTER_PREAMBLE = """\
+# Scope: a company granted a monopoly charter (te_pa_charter_grant, § 6.5: on its petition, or unasked from the
+# firm's detail). The engine's own monopoly on its main building type (Sector.expand's first), through
+# add_company_monopoly, whose target is a building type (bt:). te_pa_gen_charter_held reads it back for the
+# charter_monopoly self-check (te_pa_debug_effects.txt).
+"""
+
+
+def render_charter(plan: Plan) -> str:
+    lines = ["te_pa_gen_charter_grant = {"]
+    for position, s in enumerate(plan.sectors):
+        keyword = "if" if position == 0 else "else_if"
+        lines += [f"\t{keyword} = {{", f"\t\tlimit = {{ is_company_type = company_type:{s.company} }}",
+                  f"\t\tadd_company_monopoly = bt:{s.expand[0]}", "\t}"]
+    lines.append("}")
+    return _block(lines)
+
+
+def render_charter_trigger(plan: Plan) -> str:
+    lines = [
+        "# Scope: a company. It holds the engine's monopoly on its main building type (te_pa_gen_charter_grant's).",
+        "te_pa_gen_charter_held = {",
+        "\tOR = {",
+    ]
+    for s in plan.sectors:
+        lines += ["\t\tAND = {", f"\t\t\tis_company_type = company_type:{s.company}",
+                  f"\t\t\tcompany_has_building_type_monopoly = bt:{s.expand[0]}", "\t\t}"]
+    lines += ["\t}", "}"]
+    return _block(lines)
+
+
 def render_found_pick(plan: Plan) -> str:
     return (
         "# Scope: a company endowing a foundation (te_pa_do_endow, § 4.5): the incorporated home state with the most\n"
@@ -1282,6 +1316,7 @@ def render_effects(plan: Plan) -> str:
         FOUND_PREAMBLE + render_found_effects(plan),
         render_found_pick(plan),
         EXPAND_PREAMBLE + render_expand(plan),
+        CHARTER_PREAMBLE + render_charter(plan),
     ])
 
 
@@ -1313,6 +1348,7 @@ def render_triggers(plan: Plan) -> str:
         parts.append(_block(lines))
     parts.append(render_enacting_groups(plan))
     parts.append(render_trust_triggers(plan))
+    parts.append(render_charter_trigger(plan))
     return "\n".join(parts)
 
 

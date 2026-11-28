@@ -1,0 +1,341 @@
+﻿# Private Actors, declared moves (docs/systems/mod_systems/private_actors.md § Declared Moves; spec §§ 4.6, 4.7,
+# 12.1; plan Task 4b). The frame every petition uses: a firm declares a major move against its own government, the
+# move counts down six months in the open, and an event ends it, with three answers of § 4.7's shape (Grant, Stand
+# aside, Refuse) and the posture's default for a country that leaves it. Numbers in te_pa_moves_values.txt, triggers
+# in te_pa_moves_triggers.txt. Never secret: every line is KNOWN 1 (§ 4.6).
+#
+# The move (country variables, plan § Storage):
+#   te_pa_move_firm    the firm that declared it (a company)       te_pa_move_kind    its kind code
+#   te_pa_move_months  months left (te_pa_move_countdown at the start)
+#   te_pa_move_last    te_history_month_index of the last end (the twelve-month gap)
+#   te_pa_move_target  what it is against, when anything (the cartel's firm for a suit)
+#   te_pa_move_hand    1 while the firm's posture is one the player set by hand, 0 otherwise (the red alert's read)
+# The month's candidates (country variables, cleared when the month's turns are done): te_pa_move_cand (the firm),
+# te_pa_move_cand_kind, te_pa_move_cand_score (its goal score), te_pa_move_cand_target.
+# On the firm: te_pa_move_why (why it was answered, for the ledger; te_pa_moves_values.txt lists the codes),
+# te_pa_move_nom_score (a nomination's score, staged for the owner's read), te_pa_posture_hand (1 once the player has
+# set its posture with the tab's buttons; te_pa_cmd_set_posture).
+#
+# Ledger verbs 30-33 (Task 4b's block is 30-39; the state's actions take 34-39, te_pa_actions_effects.txt). Each entry
+# carries te_pa_l_kind (the kind code) and te_pa_l_why, and its line names the kind (te_pa_ledger_line):
+#   30 declares a petition of its kind          31 the state grants it
+#   32 the state stands aside                   33 the state refuses it (Grievance +1: the one ruling against it)
+#
+# ADDING A KIND OF PETITION (Tasks 5, 8, 10). Pick its token and code, then:
+#   1. te_pa_move_code_<token> = <code> in te_pa_moves_values.txt, and one line in te_pa_move_end below:
+#        else_if = { limit = { var:te_pa_move_kind ?= <code> } te_pa_move_close = { KIND = <token> EVENT = <id> } }
+#   2. te_pa_can_declare_<token> (a trigger that starts with te_pa_move_open = yes) and te_pa_do_declare_<token>
+#      (an effect that saves scope:te_pa_move_nom_target if the move has a target, then calls
+#      te_pa_move_nominate = { KIND = <token> }), placed in the goal's te_pa_act_<g> list where it fits.
+#   3. Its three answers, company scope (the petitioner; scope:te_pa_home its country, scope:te_pa_mv_target the
+#      target): te_pa_answer_<token>_grant, _stand, _refuse. The frame logs the line and gives the refusal's Grievance.
+#   4. Its end event (the player's): the kind's text, four options calling te_pa_move_grant, _stand and _refuse with
+#      te_pa_move_why 0, and the default, te_pa_move_default (the posture decides). Each checks te_pa_on.
+#   5. Its AI weight block: te_pa_ai_lean_<token> (company scope, signed, positive toward Grant) and
+#      te_pa_ai_why_<token> (the code of its largest term), read by te_pa_move_ai_answer.
+#   6. Its lines: a branch for its code in te_pa_ledger_kind and te_pa_row_move_kind (te_pa_custom_loc.txt), so the
+#      ledger, the row, the notice and the alerts name it.
+# test_private_actors_moves.py fails on a kind with a code and no trigger, effect, answers, event or AI block.
+
+# ---------------------------------------------------------------------------
+# Declaring (the firm's verb, at its turn) and the month's settlement
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn (scope:te_pa_firm the firm, scope:te_pa_home its country), from a te_pa_do_declare_<kind>,
+# which may save scope:te_pa_move_nom_target first. The firm stands as this month's candidate if its goal score beats
+# the candidate's so far (§ 4.6: when two firms would declare in one month, the higher goal score goes first, and the
+# other re-scores at its next turn). te_pa_move_settle declares the winner once the month's turns are done.
+te_pa_move_nominate = {
+	save_scope_as = te_pa_nom_firm
+	set_variable = { name = te_pa_move_nom_score value = te_pa_goal_score_value }
+	scope:te_pa_home = {
+		if = {
+			limit = { te_pa_v_move_cand_score < scope:te_pa_nom_firm.var:te_pa_move_nom_score }
+			set_variable = { name = te_pa_move_cand value = scope:te_pa_nom_firm }
+			set_variable = { name = te_pa_move_cand_kind value = te_pa_move_code_$KIND$ }
+			set_variable = { name = te_pa_move_cand_score value = scope:te_pa_nom_firm.var:te_pa_move_nom_score }
+			te_pa_drop = { VAR = te_pa_move_cand_target }
+			if = {
+				limit = { exists = scope:te_pa_move_nom_target }
+				set_variable = { name = te_pa_move_cand_target value = scope:te_pa_move_nom_target }
+			}
+		}
+	}
+	remove_variable = te_pa_move_nom_score
+	clear_saved_scope = te_pa_move_nom_target
+}
+
+# Country scope, te_pa_monthly after the turns and the countdown (scope:te_pa_home the country). The month's best
+# candidate declares, if the slot is still open and the firm is still the country's; the rest are forgotten.
+te_pa_move_settle = {
+	if = {
+		limit = { has_variable = te_pa_move_cand }
+		if = {
+			limit = {
+				te_pa_move_slot_open = yes
+				var:te_pa_move_cand ?= {
+					has_variable = te_pa_init
+					owner = scope:te_pa_home
+				}
+			}
+			te_pa_move_declare = yes
+		}
+		te_pa_move_cand_clear = yes
+	}
+}
+
+te_pa_move_cand_clear = {
+	te_pa_drop = { VAR = te_pa_move_cand }
+	te_pa_drop = { VAR = te_pa_move_cand_kind }
+	te_pa_drop = { VAR = te_pa_move_cand_score }
+	te_pa_drop = { VAR = te_pa_move_cand_target }
+}
+
+# Country scope. The candidate's move is declared: the move's variables, the ledger line (verb 30: never secret), a
+# notice to a player, and the firm's row. The alerts read the variables (common/alert_types/te_pa_alerts.txt).
+te_pa_move_declare = {
+	set_variable = { name = te_pa_move_firm value = var:te_pa_move_cand }
+	set_variable = { name = te_pa_move_kind value = var:te_pa_move_cand_kind }
+	set_variable = { name = te_pa_move_months value = te_pa_move_countdown }
+	te_pa_drop = { VAR = te_pa_move_target }
+	if = {
+		limit = { has_variable = te_pa_move_cand_target }
+		set_variable = { name = te_pa_move_target value = var:te_pa_move_cand_target }
+	}
+	clear_saved_scope = te_pa_mv_firm
+	clear_saved_scope = te_pa_mv_target
+	var:te_pa_move_firm = { save_scope_as = te_pa_mv_firm }
+	var:te_pa_move_target ?= { save_scope_as = te_pa_mv_target }
+	if = {
+		limit = { scope:te_pa_mv_firm = { var:te_pa_posture_hand ?= 1 } }
+		set_variable = { name = te_pa_move_hand value = 1 }
+	}
+	else = {
+		set_variable = { name = te_pa_move_hand value = 0 }
+	}
+	scope:te_pa_mv_firm = { set_variable = { name = te_pa_move_why value = 0 } }
+	te_pa_move_log_from = { VERB = 30 CODE = scope:te_pa_l_home.var:te_pa_move_kind }
+	if = {
+		limit = { is_ai = no }
+		post_notification = te_pa_move_declared
+	}
+	scope:te_pa_mv_firm = { te_pa_row_sync = yes }
+}
+
+# ---------------------------------------------------------------------------
+# The countdown and the end
+# ---------------------------------------------------------------------------
+
+# Country scope, te_pa_monthly after the turns and the quarter (scope:te_pa_home the country). A month off the move;
+# at 0 its end. A move whose firm has gone (disbanded, or no longer the country's) lapses.
+te_pa_move_monthly = {
+	if = {
+		limit = { has_variable = te_pa_move_firm }
+		if = {
+			limit = {
+				NOT = {
+					var:te_pa_move_firm ?= {
+						has_variable = te_pa_init
+						owner = scope:te_pa_home
+					}
+				}
+			}
+			te_pa_move_clear = yes
+		}
+		else = {
+			change_variable = { name = te_pa_move_months add = -1 }
+			var:te_pa_move_firm = { te_pa_row_sync = yes }
+			if = {
+				limit = { var:te_pa_move_months <= 0 }
+				te_pa_move_end = yes
+			}
+		}
+	}
+}
+
+# Country scope. The move ends: one branch a kind, each closing the move and firing its kind's end event for a player
+# or answering by weight for an AI government (te_pa_move_close). A code no kind owns lapses.
+te_pa_move_end = {
+	if = {
+		limit = { var:te_pa_move_kind ?= 1 }
+		te_pa_move_close = { KIND = charter EVENT = te_pa.1 }
+	}
+	else_if = {
+		limit = { var:te_pa_move_kind ?= 2 }
+		te_pa_move_close = { KIND = suit EVENT = te_pa.2 }
+	}
+	else = {
+		te_pa_move_clear = yes
+	}
+}
+
+# Country scope. KIND the kind's token, EVENT its end event. The firm and the target are saved (scope:te_pa_mv_firm,
+# scope:te_pa_mv_target, which the event and the answers read) and the move's variables are cleared BEFORE the event
+# or the answer runs: the answer's effects re-enter what the firm's turn reads (plan Review Focus 3), and a cleared
+# move can't be ended twice. test_private_actors_moves.py pins the order.
+te_pa_move_close = {
+	clear_saved_scope = te_pa_mv_firm
+	clear_saved_scope = te_pa_mv_target
+	var:te_pa_move_firm ?= { save_scope_as = te_pa_mv_firm }
+	var:te_pa_move_target ?= { save_scope_as = te_pa_mv_target }
+	te_pa_move_clear = yes
+	if = {
+		limit = { exists = scope:te_pa_mv_firm }
+		scope:te_pa_mv_firm = { te_pa_row_sync = yes }
+		if = {
+			limit = { is_ai = no }
+			trigger_event = { id = $EVENT$ popup = yes }
+		}
+		else = {
+			scope:te_pa_mv_firm = { te_pa_move_ai_answer = { KIND = $KIND$ } }
+		}
+	}
+}
+
+# Country scope. The move's variables go, and the gap starts (te_pa_move_last). The teardown, the clear of a
+# disbanded firm and a lapse call it too.
+te_pa_move_clear = {
+	set_variable = { name = te_pa_move_last value = te_history_month_index }
+	te_pa_drop = { VAR = te_pa_move_firm }
+	te_pa_drop = { VAR = te_pa_move_kind }
+	te_pa_drop = { VAR = te_pa_move_months }
+	te_pa_drop = { VAR = te_pa_move_target }
+	te_pa_drop = { VAR = te_pa_move_hand }
+}
+
+# ---------------------------------------------------------------------------
+# The answers (§ 4.7): every petition has the same three shapes
+# ---------------------------------------------------------------------------
+# Company scope, the petitioner (scope:te_pa_home its country, scope:te_pa_mv_target the move's target if it has
+# one). KIND the kind's token. The caller sets te_pa_move_why on the firm first (0 for a player's own answer). Each
+# runs the kind's answer, logs it and copies the row. Only a refusal is a ruling against the firm: Grievance +1.
+
+te_pa_move_grant = {
+	te_pa_answer_$KIND$_grant = yes
+	# The ledger line and the row's copy: bookkeeping, which the tab shows.
+	hidden_effect = { te_pa_move_log = { VERB = 31 KIND = $KIND$ } }
+}
+
+te_pa_move_stand = {
+	te_pa_answer_$KIND$_stand = yes
+	# The ledger line and the row's copy: bookkeeping, which the tab shows.
+	hidden_effect = { te_pa_move_log = { VERB = 32 KIND = $KIND$ } }
+}
+
+te_pa_move_refuse = {
+	te_pa_answer_$KIND$_refuse = yes
+	custom_tooltip = {
+		text = te_pa_move_griev_tt
+		change_variable = { name = te_pa_griev add = 1 }
+	}
+	# The ledger line and the row's copy: bookkeeping, which the tab shows.
+	hidden_effect = { te_pa_move_log = { VERB = 33 KIND = $KIND$ } }
+}
+
+# Company scope. The posture's default (§ 4.7): Favored grants, Tolerated stands aside, Restrained refuses. The end
+# event's default option, so a player who lets the event lapse gets it, and the base of an AI government's answer.
+te_pa_move_default = {
+	set_variable = { name = te_pa_move_why value = 1 }
+	if = {
+		limit = { var:te_pa_posture ?= 1 }
+		te_pa_move_grant = { KIND = $KIND$ }
+	}
+	else_if = {
+		limit = { var:te_pa_posture ?= -1 }
+		te_pa_move_refuse = { KIND = $KIND$ }
+	}
+	else = {
+		te_pa_move_stand = { KIND = $KIND$ }
+	}
+}
+
+# Company scope. An AI government's answer (§ 12.1), read off one axis: the posture's place (Favored 1, Tolerated 0,
+# Restrained -1) plus the kind's lean (te_pa_ai_lean_<kind>, positive toward Grant). The reason on the ledger entry is
+# the posture where the answer is its default, and otherwise the kind's largest term (te_pa_ai_why_<kind>), so the
+# player can read why an AI country answered as it did (§ 12.2 rule 1).
+te_pa_move_ai_answer = {
+	set_variable = { name = te_pa_ai_lean value = te_pa_ai_lean_posture }
+	change_variable = { name = te_pa_ai_lean add = te_pa_ai_lean_$KIND$ }
+	if = {
+		limit = { var:te_pa_ai_lean >= te_pa_ai_grant_line }
+		te_pa_move_ai_why = { KIND = $KIND$ SHAPE = 1 }
+		remove_variable = te_pa_ai_lean
+		te_pa_move_grant = { KIND = $KIND$ }
+	}
+	else_if = {
+		limit = { var:te_pa_ai_lean <= te_pa_ai_refuse_line }
+		te_pa_move_ai_why = { KIND = $KIND$ SHAPE = -1 }
+		remove_variable = te_pa_ai_lean
+		te_pa_move_refuse = { KIND = $KIND$ }
+	}
+	else = {
+		te_pa_move_ai_why = { KIND = $KIND$ SHAPE = 0 }
+		remove_variable = te_pa_ai_lean
+		te_pa_move_stand = { KIND = $KIND$ }
+	}
+}
+
+# Company scope. SHAPE 1 Grant, 0 Stand aside, -1 Refuse: the posture's default when it is the posture's own, the
+# kind's largest term otherwise.
+te_pa_move_ai_why = {
+	if = {
+		limit = { var:te_pa_posture ?= $SHAPE$ }
+		set_variable = { name = te_pa_move_why value = 1 }
+	}
+	else = {
+		set_variable = { name = te_pa_move_why value = te_pa_ai_why_$KIND$ }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The ledger
+# ---------------------------------------------------------------------------
+
+# Company scope, the petitioner (scope:te_pa_home its country). A line about its answered move (VERB 31-33): the
+# kind's code and the reason on the entry (te_pa_move_log_from), and the row copied.
+te_pa_move_log = {
+	clear_saved_scope = te_pa_mv_log_firm
+	save_scope_as = te_pa_mv_log_firm
+	scope:te_pa_home = { te_pa_move_log_from = { VERB = $VERB$ CODE = te_pa_move_code_$KIND$ } }
+	te_pa_row_sync = yes
+}
+
+# Country scope (scope:te_pa_mv_log_firm or else scope:te_pa_mv_firm the firm; scope:te_pa_mv_target the target, if
+# any). The entry: the firm, the target, the kind (te_pa_l_kind: CODE, read in the entry's scope, so a script value
+# or scope:te_pa_l_home.var:te_pa_move_kind), the reason (te_pa_l_why, the firm's te_pa_move_why) and the good it
+# is about (the target's when there is one, the firm's otherwise), for te_pa_ledger_line's kind clause.
+te_pa_move_log_from = {
+	clear_saved_scope = te_pa_mv_entry_firm
+	if = {
+		limit = { exists = scope:te_pa_mv_log_firm }
+		scope:te_pa_mv_log_firm = { save_scope_as = te_pa_mv_entry_firm }
+	}
+	else = {
+		scope:te_pa_mv_firm = { save_scope_as = te_pa_mv_entry_firm }
+	}
+	scope:te_pa_mv_entry_firm = { save_scope_as = te_pa_l_actor }
+	if = {
+		limit = { exists = scope:te_pa_mv_target }
+		scope:te_pa_mv_target = { save_scope_as = te_pa_l_target }
+	}
+	te_pa_ledger_add = { VERB = $VERB$ KNOWN = 1 }
+	if = {
+		limit = { exists = scope:te_pa_l_new }
+		scope:te_pa_l_new = {
+			set_variable = { name = te_pa_l_kind value = $CODE$ }
+			set_variable = { name = te_pa_l_why value = 0 }
+		}
+		if = {
+			limit = { scope:te_pa_mv_entry_firm = { has_variable = te_pa_move_why } }
+			scope:te_pa_l_new = { set_variable = { name = te_pa_l_why value = scope:te_pa_mv_entry_firm.var:te_pa_move_why } }
+		}
+		if = {
+			limit = { exists = scope:te_pa_mv_target }
+			scope:te_pa_mv_target = { te_pa_ledger_note_good = yes }
+		}
+		else = {
+			scope:te_pa_mv_entry_firm = { te_pa_ledger_note_good = yes }
+		}
+	}
+	clear_saved_scope = te_pa_mv_log_firm
+}

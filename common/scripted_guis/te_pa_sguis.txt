@@ -75,3 +75,109 @@ te_pa_posture_restrained_sgui = {
 		}
 	}
 }
+
+# ============================================================================
+# The state's actions against a firm (Task 4b, § 6.6; te_pa_actions_effects.txt), buttons in the firm's detail under
+# te_own_country_only. One handler an action, each with the row as its one saved scope, as the posture's are:
+#   is_valid  te_pa_sa_can_<action>_row (te_pa_actions_triggers.txt): one custom_tooltip a condition, so a grayed
+#             button says which fails, and every condition only what the state knows (§ 4.6)
+#   effect    the row's firm saved as scope:te_pa_act_firm, then what it does in a custom_tooltip (te_pa_sa_<x>_does_tt)
+#             and what it costs: te_pa_sa_cost (its backers' approval and its seat's radicals by its Standing; the
+#             engine prints the modifier and the radicals), or te_pa_charter_cost for a charter
+# Lift the Levy has no cost. None is ever the AI's (an AI government acts from te_pa_sa_ai_quarter).
+# ============================================================================
+
+te_pa_sa_inquiry_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_sa_can_inquire_row = yes }
+	effect = {
+		scope:te_pa_row = { var:te_pa_r_firm ?= { save_scope_as = te_pa_act_firm } }
+		custom_tooltip = {
+			text = te_pa_sa_inquiry_does_tt
+			te_pa_sa_inquiry = yes
+		}
+		te_pa_sa_cost = { SIZE = half }
+	}
+}
+
+te_pa_sa_suit_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_sa_can_sue_row = yes }
+	effect = {
+		scope:te_pa_row = { var:te_pa_r_firm ?= { save_scope_as = te_pa_act_firm } }
+		custom_tooltip = {
+			text = te_pa_sa_suit_does_tt
+			te_pa_sa_suit = yes
+		}
+		te_pa_sa_cost = { SIZE = full }
+	}
+}
+
+te_pa_sa_audit_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_sa_can_audit_row = yes }
+	effect = {
+		scope:te_pa_row = { var:te_pa_r_firm ?= { save_scope_as = te_pa_act_firm } }
+		custom_tooltip = {
+			text = te_pa_sa_audit_does_tt
+			te_pa_sa_audit = yes
+		}
+		te_pa_sa_cost = { SIZE = half }
+	}
+}
+
+te_pa_sa_levy_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_sa_can_levy_row = yes }
+	effect = {
+		scope:te_pa_row = { var:te_pa_r_firm ?= { save_scope_as = te_pa_act_firm } }
+		custom_tooltip = {
+			text = te_pa_sa_levy_does_tt
+			te_pa_sa_levy = yes
+		}
+		te_pa_sa_cost = { SIZE = full }
+	}
+}
+
+te_pa_sa_lift_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_sa_can_lift_row = yes }
+	effect = {
+		scope:te_pa_row = { var:te_pa_r_firm ?= { save_scope_as = te_pa_act_firm } }
+		custom_tooltip = {
+			text = te_pa_sa_lift_does_tt
+			te_pa_sa_lift = yes
+		}
+	}
+}
+
+te_pa_sa_charter_sgui = {
+	scope = country
+	saved_scopes = { te_pa_row }
+	is_shown = { te_pa_on = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_pa_sa_can_charter_row = yes }
+	effect = {
+		scope:te_pa_row = { var:te_pa_r_firm ?= { save_scope_as = te_pa_act_firm } }
+		custom_tooltip = {
+			text = te_pa_sa_charter_does_tt
+			te_pa_sa_charter = yes
+		}
+		scope:te_pa_act_firm ?= { te_pa_charter_cost = yes }
+	}
+}

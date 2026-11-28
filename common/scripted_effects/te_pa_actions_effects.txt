@@ -1,0 +1,380 @@
+﻿# Private Actors, the state's actions against a firm (docs/systems/mod_systems/private_actors.md § The State's
+# Actions; spec §§ 3 principle 3, 6.6, 12.1; plan Task 4b). Buttons on a firm's detail in the tab (te_pa_sguis.txt,
+# own country only) and an AI government's quarterly choice (te_pa_sa_ai_quarter): Inquiry, Bring Suit, Audit the
+# Regulator, Levy on Rents (and Lift the Levy), Grant a Charter. Numbers in te_pa_actions_values.txt, triggers in
+# te_pa_actions_triggers.txt. Change the Law needs no button: it is the law panel's, and the trust contests it there
+# (te_pa_do_stall).
+#
+# Each action effect is country scope (the government acting, ROOT) with scope:te_pa_act_firm the firm, which the
+# scripted GUI saves from its row (scope:te_pa_row.var:te_pa_r_firm) and the AI's quarter from its pick. Its price is
+# te_pa_sa_cost (te_pa_charter_cost for a charter), in proportion to the firm's Standing.
+#
+# On the firm (company variables, unset while unused; te_pa_actions_clear drops them with the firm):
+#   te_pa_inquiry_until   the month an open inquiry ends          te_pa_audit_again   the month it may be audited again
+#   te_pa_case_end        the month its case ends, while one runs  te_pa_case_last     the last verdict, 1 won by the state
+#   te_pa_suit_immune_until  no suit before this month (it won)   te_pa_cartel_barred_until  no cartel before it (it lost)
+#   te_pa_levy            1 while the state levies its rents        te_pa_audit_found   an audit's finding, staged
+# On the country: te_pa_levy_take (a quarter's levy, staged), te_pa_sa_ai_done (an AI government acted this quarter).
+#
+# Ledger verbs 34-39 (Task 4b's block, after the frame's 30-33), each a predicate after the firm's name:
+#   34 is placed under inquiry                   35 is taken to court over its cartel (size: the state's chance)
+#   36 loses its case, and its cartel is broken  37 wins its case, and is immune from suit for ten years
+#   38 is audited (size 1: its hold on the regulator is found and broken; 0: nothing is found)
+#   39 has its rents levied
+# A charter granted unasked is the frame's line 31 of kind charter.
+
+# ---------------------------------------------------------------------------
+# The price (§ 6.6; principle 3)
+# ---------------------------------------------------------------------------
+
+# Country scope (ROOT), scope:te_pa_act_firm the firm. SIZE full or half. Above te_pa_sa_cost_line, its executive's
+# interest group loses approval for five years and its seat's pops radicalize, both in proportion to its Standing;
+# below it the action wins loyalists at the seat. A newer cost replaces an older one on the same group, so a run of
+# actions costs no more than the largest.
+te_pa_sa_cost = {
+	custom_tooltip = te_pa_sa_cost_tt
+	scope:te_pa_act_firm ?= {
+		if = {
+			limit = { te_pa_v_stand > te_pa_sa_cost_line }
+			executive ?= {
+				interest_group ?= {
+					hidden_effect = { remove_modifier = te_pa_sa_backers }
+					add_modifier = {
+						name = te_pa_sa_backers
+						days = normal_modifier_time
+						multiplier = te_pa_sa_backers_$SIZE$
+						is_decaying = yes
+					}
+				}
+			}
+			var:te_pa_seat ?= {
+				if = {
+					limit = { owner ?= root }
+					add_radicals_in_state = { value = te_pa_sa_radicals_$SIZE$ }
+				}
+			}
+		}
+		else = {
+			var:te_pa_seat ?= {
+				if = {
+					limit = { owner ?= root }
+					add_loyalists_in_state = { value = te_pa_sa_loyalists_$SIZE$ }
+				}
+			}
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The actions (country scope, scope:te_pa_act_firm the firm)
+# ---------------------------------------------------------------------------
+
+# Inquiry: for a year, te_pa_inquiry_bonus more on the yearly exposure chance of its secret holdings (the term in
+# te_pa_expose_hook_value). What it finds, if anything, comes at the firm's next turn's roll.
+te_pa_sa_inquiry = {
+	save_scope_as = te_pa_home
+	scope:te_pa_act_firm ?= {
+		set_variable = { name = te_pa_inquiry_until value = te_pa_inquiry_until_value }
+		te_pa_ledger_firm = { VERB = 34 }
+		te_pa_row_sync = yes
+	}
+}
+
+# Bring suit: a twelve-month case (te_pa_case_begin).
+te_pa_sa_suit = {
+	save_scope_as = te_pa_home
+	scope:te_pa_act_firm ?= { te_pa_case_begin = yes }
+}
+
+# Audit the regulator: an exposure roll on a captured regulator. Found (a known one always is): exposed, with its
+# costs, and removed. Not found: cut by te_pa_audit_cut, which the state cannot see. A firm that has captured nothing
+# is found clean.
+te_pa_sa_audit = {
+	save_scope_as = te_pa_home
+	scope:te_pa_act_firm ?= {
+		set_variable = { name = te_pa_audit_again value = te_pa_audit_again_value }
+		set_variable = { name = te_pa_audit_found value = 0 }
+		if = {
+			limit = { te_pa_v_reg > 0 }
+			if = {
+				limit = { var:te_pa_reg_known ?= 1 }
+				set_variable = { name = te_pa_audit_found value = 1 }
+			}
+			else = {
+				random = {
+					chance = te_pa_audit_chance_value
+					set_variable = { name = te_pa_audit_found value = 1 }
+				}
+			}
+			if = {
+				limit = { var:te_pa_audit_found ?= 1 }
+				if = {
+					limit = { var:te_pa_reg_known ?= 0 }
+					te_pa_expose_reg = yes
+				}
+				te_pa_drop = { VAR = te_pa_reg }
+				te_pa_drop = { VAR = te_pa_reg_known }
+			}
+			else = {
+				set_variable = { name = te_pa_reg value = te_pa_reg_after_audit }
+				if = {
+					limit = { te_pa_v_reg <= 0 }
+					te_pa_drop = { VAR = te_pa_reg }
+					te_pa_drop = { VAR = te_pa_reg_known }
+				}
+			}
+		}
+		save_scope_as = te_pa_l_actor
+		save_scope_value_as = { name = te_pa_l_size value = te_pa_v_audit_found }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 38 KNOWN = 1 } }
+		te_pa_drop = { VAR = te_pa_audit_found }
+		te_pa_row_sync = yes
+	}
+}
+
+# Levy on rents: while it stands, each quarter the treasury takes te_pa_levy_share of the rents its cartel adds to its
+# Funds (te_pa_levy_quarter). A ruling against the firm: Grievance +1.
+te_pa_sa_levy = {
+	save_scope_as = te_pa_home
+	scope:te_pa_act_firm ?= {
+		set_variable = { name = te_pa_levy value = 1 }
+		custom_tooltip = {
+			text = te_pa_move_griev_tt
+			change_variable = { name = te_pa_griev add = 1 }
+		}
+		te_pa_ledger_firm = { VERB = 39 }
+		te_pa_row_sync = yes
+	}
+}
+
+# Lift the levy: it ends. No line (the row shows it), and no cost.
+te_pa_sa_lift = {
+	save_scope_as = te_pa_home
+	scope:te_pa_act_firm ?= {
+		te_pa_drop = { VAR = te_pa_levy }
+		te_pa_row_sync = yes
+	}
+}
+
+# Grant a charter unasked (§ 6.5 without the petition): te_pa_charter_grant, logged as the frame's grant of kind
+# charter with no reason given (the state's own choice).
+te_pa_sa_charter = {
+	save_scope_as = te_pa_home
+	clear_saved_scope = te_pa_mv_target
+	scope:te_pa_act_firm ?= {
+		te_pa_charter_grant = yes
+		hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+		te_pa_move_log = { VERB = 31 KIND = charter }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The case (company scope, the firm sued; scope:te_pa_home its country)
+# ---------------------------------------------------------------------------
+
+# A case opens: it ends in te_pa_case_months (checked monthly, te_pa_case_monthly), logged with the state's chance
+# of winning as it stands (verb 35, the cartel's good).
+te_pa_case_begin = {
+	set_variable = { name = te_pa_case_end value = te_pa_case_end_value }
+	save_scope_as = te_pa_l_actor
+	save_scope_value_as = { name = te_pa_l_size value = te_pa_case_chance_value }
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 35 KNOWN = 1 } }
+	te_pa_ledger_note_good = yes
+	te_pa_row_sync = yes
+}
+
+# Monthly, from te_pa_monthly's walk of the firms, while a case runs: the row's months left, and the verdict when due.
+te_pa_case_monthly = {
+	if = {
+		limit = { te_pa_case_left_value <= 0 }
+		te_pa_case_verdict = yes
+	}
+	else = {
+		te_pa_row_sync = yes
+	}
+}
+
+# The verdict. The case's mark goes first: the verdict's effects reach what the firm's turn reads, and its event comes
+# last. A cartel that has ended meanwhile, or that a charter or a new law has made lawful, leaves nothing to rule on; one National Champion Exemption now shields is
+# dismissed, as a loss. Otherwise the court rules at te_pa_case_chance_value: won, the cartel goes and is barred for
+# ten years (verb 36, then the cartel's own end, 22); lost, the firm is immune from suit for ten years (verb 37). A
+# player hears the verdict in an event (te_pa.3).
+te_pa_case_verdict = {
+	remove_variable = te_pa_case_end
+	if = {
+		limit = {
+			te_pa_holds_known_cartel = yes
+			te_pa_cartel_lawful = no
+		}
+		set_variable = { name = te_pa_case_last value = 0 }
+		if = {
+			limit = { te_pa_cartel_immune = no }
+			random = {
+				chance = te_pa_case_chance_value
+				set_variable = { name = te_pa_case_last value = 1 }
+			}
+		}
+		save_scope_as = te_pa_l_actor
+		if = {
+			limit = { var:te_pa_case_last ?= 1 }
+			set_variable = { name = te_pa_cartel_barred_until value = te_pa_case_bar_value }
+			te_pa_drop = { VAR = te_pa_levy }
+			scope:te_pa_home = { te_pa_ledger_add = { VERB = 36 KNOWN = 1 } }
+			te_pa_ledger_note_good = yes
+			te_pa_cartel_end = yes
+		}
+		else = {
+			set_variable = { name = te_pa_suit_immune_until value = te_pa_case_bar_value }
+			scope:te_pa_home = { te_pa_ledger_add = { VERB = 37 KNOWN = 1 } }
+			te_pa_ledger_note_good = yes
+		}
+		te_pa_row_sync = yes
+		save_scope_as = te_pa_case_firm
+		scope:te_pa_home = {
+			if = {
+				limit = { is_ai = no }
+				trigger_event = { id = te_pa.3 popup = yes }
+			}
+		}
+	}
+	else = {
+		te_pa_row_sync = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The quarter's levy (company scope, from te_pa_trust_quarter; scope:te_pa_home its country)
+# ---------------------------------------------------------------------------
+
+# The levy ends when its cartel is no longer open (ended, secret, or illegal under a new law). Otherwise: what the
+# spend will take from the pool is read first (te_pa_levy_take_value), the firm spends its levy through
+# te_pa_spend_funds (out of the pool, capped), and the treasury receives what the pool gave. A firm that can't pay
+# pays nothing this quarter.
+te_pa_levy_quarter = {
+	if = {
+		limit = { has_variable = te_pa_levy }
+		if = {
+			limit = {
+				OR = {
+					te_pa_holds_known_cartel = no
+					te_pa_cartel_lawful = no
+				}
+			}
+			te_pa_drop = { VAR = te_pa_levy }
+		}
+		else = {
+			save_scope_as = te_pa_levy_firm
+			owner = { set_variable = { name = te_pa_levy_take value = te_pa_levy_take_value } }
+			te_pa_spend_funds = { AMOUNT = te_pa_levy_quarter_value }
+			if = {
+				limit = { var:te_pa_spent ?= 1 }
+				owner = { add_treasury = var:te_pa_levy_take }
+			}
+			owner = { remove_variable = te_pa_levy_take }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# An AI government (§ 12.1)
+# ---------------------------------------------------------------------------
+
+# Country scope, the quarter (te_pa_quarter, after the firms; scope:te_pa_home the country). An AI government takes
+# one action a quarter against the first firm whose cartel's price effect passes its posture's line
+# (te_pa_sa_ai_target), the first that applies of: a suit, a levy, an audit (of a firm with a known cartel), an
+# inquiry. Each has the player's costs and lines, so what it did and to whom is in the ledger (§ 12.2 rule 1).
+te_pa_sa_ai_quarter = {
+	if = {
+		limit = { is_ai = yes }
+		every_company = {
+			limit = { te_pa_sa_ai_target = yes }
+			if = {
+				limit = { NOT = { scope:te_pa_home = { has_variable = te_pa_sa_ai_done } } }
+				save_scope_as = te_pa_act_firm
+				scope:te_pa_home = {
+					set_variable = { name = te_pa_sa_ai_done value = 1 }
+					if = {
+						limit = { scope:te_pa_act_firm = { te_pa_sa_suable = yes } }
+						te_pa_sa_suit = yes
+						te_pa_sa_cost = { SIZE = full }
+					}
+					else_if = {
+						limit = { scope:te_pa_act_firm = { te_pa_sa_can_levy = yes } }
+						te_pa_sa_levy = yes
+						te_pa_sa_cost = { SIZE = full }
+					}
+					else_if = {
+						limit = {
+							scope:te_pa_act_firm = {
+								te_pa_holds_known_cartel = yes
+								te_pa_sa_can_audit = yes
+							}
+						}
+						te_pa_sa_audit = yes
+						te_pa_sa_cost = { SIZE = half }
+					}
+					else = {
+						te_pa_sa_inquiry = yes
+						te_pa_sa_cost = { SIZE = half }
+					}
+				}
+			}
+		}
+		te_pa_drop = { VAR = te_pa_sa_ai_done }
+		clear_saved_scope = te_pa_act_firm
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The teardown and the clear
+# ---------------------------------------------------------------------------
+
+# Country scope, te_pa_teardown (the rule switched off): the approval modifiers the actions and the charters applied
+# (on interest groups, timed), the declared move and the month's candidates (so no alert shows), and the staging
+# variables. A firm's own marks (a case, a levy, an inquiry, a charter) stay with its record, so switching the rule
+# back on resumes them.
+te_pa_actions_teardown = {
+	every_interest_group = {
+		remove_modifier = te_pa_sa_backers
+		remove_modifier = te_pa_charter_resented
+	}
+	if = {
+		limit = { has_variable = te_pa_move_firm }
+		te_pa_move_clear = yes
+	}
+	te_pa_move_cand_clear = yes
+	te_pa_drop = { VAR = te_pa_levy_take }
+	te_pa_drop = { VAR = te_pa_sa_ai_done }
+}
+
+# Company scope, the firm being cleared (te_pa_trust_clear; scope:te_pa_home its country): its marks go, and a move it
+# declared, or stands as a candidate for, lapses.
+te_pa_actions_clear = {
+	te_pa_drop = { VAR = te_pa_inquiry_until }
+	te_pa_drop = { VAR = te_pa_case_end }
+	te_pa_drop = { VAR = te_pa_case_last }
+	te_pa_drop = { VAR = te_pa_suit_immune_until }
+	te_pa_drop = { VAR = te_pa_cartel_barred_until }
+	te_pa_drop = { VAR = te_pa_audit_again }
+	te_pa_drop = { VAR = te_pa_audit_found }
+	te_pa_drop = { VAR = te_pa_levy }
+	te_pa_drop = { VAR = te_pa_move_why }
+	te_pa_drop = { VAR = te_pa_posture_hand }
+	save_scope_as = te_pa_cleared_firm
+	scope:te_pa_home = {
+		if = {
+			limit = {
+				has_variable = te_pa_move_firm
+				var:te_pa_move_firm = scope:te_pa_cleared_firm
+			}
+			te_pa_move_clear = yes
+		}
+		if = {
+			limit = {
+				has_variable = te_pa_move_cand
+				var:te_pa_move_cand = scope:te_pa_cleared_firm
+			}
+			te_pa_move_cand_clear = yes
+		}
+	}
+}

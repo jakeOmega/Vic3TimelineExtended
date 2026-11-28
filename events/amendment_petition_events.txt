@@ -328,14 +328,28 @@ amendment_petition_events.3 = {
 # ======================================================================
 #  4 – Too Large to Break  (National Champion Exemption)
 #  Hard times under an antitrust law; the Industrialists ask that the
-#  nation's companies be spared.
+#  nation's companies be spared. With Private Actors on, a known cartel
+#  qualifies the country as hard times do, and the petition is the
+#  largest such cartel's firm's (scope:petition_firm, named in .d_firm;
+#  spec § 6.7, plan Task 4b). Its timing is still the yearly roll.
 # ======================================================================
 amendment_petition_events.4 = {
 	type = country_event
 	placement = root
 
 	title = amendment_petition_events.4.t
-	desc = amendment_petition_events.4.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = amendment_petition_events.4.d_firm
+				trigger = { exists = scope:petition_firm }
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = amendment_petition_events.4.d
+			}
+		}
+	}
 	flavor = amendment_petition_events.4.f
 
 	event_image = { texture = "gfx/event_pictures/industrial_monopoly.dds" }
@@ -352,7 +366,10 @@ amendment_petition_events.4 = {
 		te_ap_window_open = yes
 		te_ap_law_ok_national_champion_exemption = yes
 		num_companies >= 1
-		te_ap_economy_faltering = yes
+		OR = {
+			te_ap_economy_faltering = yes
+			te_pa_holds_known_cartels = yes
+		}
 		ig:ig_industrialists ?= { is_marginal = no }
 	}
 
@@ -360,6 +377,7 @@ amendment_petition_events.4 = {
 		set_variable = { name = te_ap_recent_petition years = 5 }
 		active_law:lawgroup_antitrust ?= { save_scope_as = petition_law }
 		ig:ig_industrialists ?= { save_scope_as = petition_sponsor_ig }
+		te_pa_save_largest_cartel = { NAME = petition_firm }
 	}
 
 	cancellation_trigger = {

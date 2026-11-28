@@ -1,0 +1,163 @@
+﻿# Private Actors, the state's actions against a firm: the triggers (docs/systems/mod_systems/private_actors.md § The
+# State's Actions; spec § 6.6). Company scope (the firm) unless noted. Each action needs only what the state knows of
+# (§ 4.6: secrecy is against the state): a cartel it can act on is one it knows of, and an inquiry or an audit, which
+# look for what it does not know, need nothing a secret holding would give away.
+
+# An inquiry into the firm is open. One comparison through a guarded reader, so "= no" is safe (a has_variable and its
+# read never share a NOT).
+te_pa_sa_under_inquiry = {
+	te_pa_v_inquiry_until > te_history_month_index
+}
+
+# A suit can be brought (§ 6.6's "Needs"): it holds a cartel the state knows of that the antitrust law in force
+# forbids (an exposed one, or an open one a new law made illegal), National Champion Exemption doesn't shield it
+# (te_pa_cartel_immune, § 6.7), no case is under way, and it has not won one in the last ten years.
+te_pa_sa_suable = {
+	te_pa_holds_known_cartel = yes
+	te_pa_cartel_lawful = no
+	te_pa_cartel_immune = no
+	NOT = { has_variable = te_pa_case_end }
+	te_pa_wait_over = { VAR = te_pa_suit_immune_until }
+}
+
+# The regulator can be audited over the firm: the antitrust law has a regulator, and a year has passed since the
+# last audit. Whether the firm has captured it is what the audit is for, so that is not asked.
+te_pa_sa_can_audit = {
+	owner = { te_pa_law_has_regulator = yes }
+	te_pa_wait_over = { VAR = te_pa_audit_again }
+}
+
+# Its rents can be levied: it holds an open cartel (known and lawful under the law in force) and no levy yet.
+te_pa_sa_can_levy = {
+	te_pa_holds_known_cartel = yes
+	te_pa_cartel_lawful = yes
+	NOT = { has_variable = te_pa_levy }
+}
+
+# It can be granted a charter unasked (§ 6.5 without the petition): the law allows monopolies, it holds a cartel the
+# state knows of, and it holds no charter yet.
+te_pa_sa_can_charter = {
+	owner = { te_pa_charter_law = yes }
+	te_pa_holds_known_cartel = yes
+	NOT = { has_variable = te_pa_charter }
+}
+
+# ---------------------------------------------------------------------------
+# The buttons' tests (te_pa_sguis.txt): country scope, the scripted GUI's root, with scope:te_pa_row the row the
+# button sits on. Each condition is its own custom_tooltip, so a grayed button says which fails (IsValidTooltip).
+# ---------------------------------------------------------------------------
+
+# The row names one of this country's firms (the posture buttons' line).
+te_pa_sa_row_ours = {
+	custom_tooltip = {
+		text = te_pa_posture_ours_tt
+		exists = scope:te_pa_row
+		scope:te_pa_row = {
+			var:te_pa_r_firm ?= {
+				has_variable = te_pa_init
+				owner = root
+			}
+		}
+	}
+}
+
+te_pa_sa_can_inquire_row = {
+	te_pa_sa_row_ours = yes
+	custom_tooltip = {
+		text = te_pa_sa_no_inquiry_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_sa_under_inquiry = no } }
+	}
+}
+
+te_pa_sa_can_sue_row = {
+	te_pa_sa_row_ours = yes
+	custom_tooltip = {
+		text = te_pa_sa_known_cartel_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_holds_known_cartel = yes } }
+	}
+	custom_tooltip = {
+		text = te_pa_sa_cartel_illegal_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_cartel_lawful = no } }
+	}
+	custom_tooltip = {
+		text = te_pa_sa_not_exempt_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_cartel_immune = no } }
+	}
+	custom_tooltip = {
+		text = te_pa_sa_no_case_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { NOT = { has_variable = te_pa_case_end } } }
+	}
+	custom_tooltip = {
+		text = te_pa_sa_not_immune_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_wait_over = { VAR = te_pa_suit_immune_until } } }
+	}
+}
+
+te_pa_sa_can_audit_row = {
+	te_pa_sa_row_ours = yes
+	custom_tooltip = {
+		text = te_pa_sa_law_regulator_tt
+		te_pa_law_has_regulator = yes
+	}
+	custom_tooltip = {
+		text = te_pa_sa_audit_wait_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_wait_over = { VAR = te_pa_audit_again } } }
+	}
+}
+
+te_pa_sa_can_levy_row = {
+	te_pa_sa_row_ours = yes
+	custom_tooltip = {
+		text = te_pa_sa_known_cartel_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_holds_known_cartel = yes } }
+	}
+	custom_tooltip = {
+		text = te_pa_sa_cartel_lawful_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_cartel_lawful = yes } }
+	}
+}
+
+te_pa_sa_can_lift_row = {
+	te_pa_sa_row_ours = yes
+	custom_tooltip = {
+		text = te_pa_sa_levied_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { has_variable = te_pa_levy } }
+	}
+}
+
+te_pa_sa_can_charter_row = {
+	te_pa_sa_row_ours = yes
+	custom_tooltip = {
+		text = te_pa_sa_charter_law_tt
+		te_pa_charter_law = yes
+	}
+	custom_tooltip = {
+		text = te_pa_sa_known_cartel_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { te_pa_holds_known_cartel = yes } }
+	}
+	custom_tooltip = {
+		text = te_pa_sa_no_charter_tt
+		scope:te_pa_row ?= { var:te_pa_r_firm ?= { NOT = { has_variable = te_pa_charter } } }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# An AI government's actions (§ 12.1; te_pa_sa_ai_quarter)
+# ---------------------------------------------------------------------------
+
+# The firm draws an AI government's action: it holds its sector's 40% share, its good sells at its posture's price
+# line above base or more (a Favored firm never), and some action applies.
+te_pa_sa_ai_target = {
+	has_variable = te_pa_init
+	te_pa_v_share >= te_pa_gen_big_share
+	te_pa_v_out_pricier >= te_pa_sa_ai_price_line
+	OR = {
+		te_pa_sa_suable = yes
+		te_pa_sa_can_levy = yes
+		AND = {
+			te_pa_holds_known_cartel = yes
+			te_pa_sa_can_audit = yes
+		}
+		te_pa_sa_under_inquiry = no
+	}
+}
