@@ -1409,5 +1409,62 @@ class BackdropRegradeTests(unittest.TestCase):
         self.assertEqual(s["profile"].shape, (14,))
 
 
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class FramedGoodTests(unittest.TestCase):
+    """The framed_good layout: a regraded backdrop, the good or part where vanilla puts its good, vanilla's frame."""
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+        a = np.zeros((256, 256, 4), np.float32)
+        a[8:248, 8:248] = (60, 50, 40, 255)                                  # a stand-in frame
+        self.tmpl = (a, np.zeros_like(a))
+        self.stats = {"mean": np.array([34.6, 3.6, 10.5]), "std": np.array([20.0, 7.2, 10.3]), "profile": np.ones(14)}
+        self.raw = Image.fromarray(np.random.default_rng(3).integers(60, 200, (512, 512, 3), dtype=np.uint8))
+        g = Image.new("RGBA", (256, 256), (0, 0, 0, 0))
+        g.paste((220, 30, 30, 255), (40, 40, 216, 216))
+        self.good = g
+
+    def compose(self, **spec):
+        return np.asarray(self.r.compose_framed_good(self.raw, dict({"size": 256}, **spec), self.tmpl, self.stats,
+                                                     [(self.good, {"kind": "good"})])).astype(int)
+
+    def test_good_sits_at_vanillas_place(self):
+        out = self.compose()
+        cx, cy = int(0.67 * 256), int(0.67 * 256)
+        self.assertGreater(out[cy, cx, 0], out[cy, cx, 2] + 100)                # red good at (0.67, 0.67)
+        self.assertGreater(np.abs(out[40, 40, :3] - (220, 30, 30)).sum(), 100)  # upper left is backdrop, not good
+        self.assertTrue((out[..., 3] == self.tmpl[0][..., 3]).all())            # frame alpha unchanged
+
+    def test_good_canvas_scale(self):
+        canvas = np.asarray(self.r.foreground_layer(self.good, 256, "good"))
+        xs = np.where(canvas[..., 0].max(0) > 200)[0]
+        # the red square is 176/256 of its canvas; the canvas is 0.62 of the icon
+        self.assertAlmostEqual((xs.max() - xs.min() + 1) / 256, 176 / 256 * 0.62, delta=0.02)
+
+    def test_part_scaled_by_its_bbox(self):
+        canvas = np.asarray(self.r.foreground_layer(self.good, 256, "part"))
+        xs = np.where(canvas[..., 0].max(0) > 200)[0]
+        self.assertAlmostEqual((xs.max() - xs.min() + 1) / 256, 0.56, delta=0.02)
+
+    def test_patch_darkens_around_the_good_only(self):
+        plain, patched = self.compose(), self.compose(patch=0.4)
+        ring = (int(0.67 * 256), int(0.67 * 256) - 62)                          # just outside the good's left edge
+        self.assertLess(patched[ring][:3].sum(), plain[ring][:3].sum())
+        self.assertEqual(patched[30, 30][:3].tolist(), plain[30, 30][:3].tolist())
+
+    def test_grit_is_deterministic_and_adds_texture(self):
+        a, b, plain = self.compose(grit=6.0), self.compose(grit=6.0), self.compose()
+        self.assertTrue((a == b).all())
+        self.assertGreater(np.abs(np.diff(a[20:80, 20:80, 1], axis=1)).mean(),
+                           np.abs(np.diff(plain[20:80, 20:80, 1], axis=1)).mean())
+
+    def test_composer_needs_layers(self):
+        c = self.r.Composer()
+        c._tmpl["production_building"], c._stats["production_building"] = self.tmpl, self.stats
+        with self.assertRaises(ValueError):
+            c.compose(self.raw, "production_building", ip.CATEGORIES["production_building"])
+
+
 if __name__ == "__main__":
     unittest.main()

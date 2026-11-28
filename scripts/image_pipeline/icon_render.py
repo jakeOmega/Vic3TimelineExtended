@@ -644,6 +644,68 @@ def compose_framed(raw: Image.Image, spec: dict, tmpl) -> Image.Image:
     return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), "RGBA")
 
 
+# Where vanilla's production building icons put the good (spike 2026-11-27, GOOD_FITS'
+# median): its 256 px goods canvas at 0.62 of the side, centred at (0.67, 0.67), no
+# outline. A part has no canvas of its own, so its alpha box spans 0.56 (0.62 x the
+# 0.90 vanilla goods span of their canvas). Shadow at 256 px: (dx, dy, blur, opacity).
+GOOD_SCALE, GOOD_AT, PART_SPAN = 0.62, (0.67, 0.67), 0.56
+SHADOW = (-3, 4, 5, 0.6)
+
+
+def foreground_layer(im: Image.Image, size: int, kind: str, scale: float | None = None,
+                     at: tuple | None = None) -> Image.Image:
+    """A good's icon ("good": its whole canvas scaled) or a part ("part": its alpha box scaled), with its
+    drop shadow, on a size x size transparent canvas, centred where vanilla puts its good."""
+    im = im.convert("RGBA")
+    if kind == "part":
+        box = im.getchannel("A").point(lambda v: 255 if v > 16 else 0).getbbox()
+        if box is None:
+            raise ValueError("a foreground part with nothing opaque in it")
+        im = im.crop(box)
+        k = (scale or PART_SPAN) * size / max(im.size)
+        im = resize_premultiplied(im, (max(1, round(im.width * k)), max(1, round(im.height * k))))
+    else:
+        n = max(1, round(size * (scale or GOOD_SCALE)))
+        im = resize_premultiplied(im, (n, n))
+    cx, cy = at or GOOD_AT
+    x, y = round(cx * size - im.width / 2), round(cy * size - im.height / 2)
+    dx, dy, blur, opacity = SHADOW
+    s = size / 256
+    shadow = Image.new("RGBA", im.size, (8, 8, 10, 0))
+    shadow.putalpha(im.getchannel("A").point(lambda v: int(v * opacity)))
+    canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    paste(canvas, shadow, x + round(dx * s), y + round(dy * s))
+    canvas = canvas.filter(ImageFilter.GaussianBlur(blur * s))
+    paste(canvas, im, x, y)
+    return canvas
+
+
+def compose_framed_good(raw: Image.Image, spec: dict, tmpl: tuple, stats: dict,
+                        layers: list[tuple[Image.Image, dict]]) -> Image.Image:
+    """A production building icon in vanilla's two layers: the backdrop render regraded to `stats`, darkened
+    under its foreground (`patch`) and roughened (`grit`), then each layer in order, then vanilla's frame.
+
+    spec: size; optional bias (added to the CIELAB target), patch (share of brightness taken under the
+    layers, 0..1) and grit (sd of a fixed luminance noise, 0..255 units).
+    """
+    size = spec["size"]
+    interior = interior_mask(tmpl[0][..., 3])
+    bg = np.asarray(regrade_backdrop(raw, stats, interior, size, bias=spec.get("bias", (0.0, 0.0, 0.0))),
+                    dtype=np.float32)
+    canvases = [foreground_layer(im, size, opts["kind"], opts.get("scale"), opts.get("at")) for im, opts in layers]
+    if spec.get("patch") and canvases:
+        union = np.max([np.asarray(c.getchannel("A")) for c in canvases], axis=0).astype(np.uint8)
+        grow = 2 * (size // 16) + 1                                # dilated by size // 16 each way
+        shade = Image.fromarray(union).filter(ImageFilter.MaxFilter(grow)).filter(ImageFilter.GaussianBlur(size // 12))
+        bg *= 1 - spec["patch"] * (np.asarray(shade, dtype=np.float32)[..., None] / 255)
+    if spec.get("grit"):
+        bg += np.random.default_rng(0).normal(0, spec["grit"], (size, size))[..., None]
+    scene = Image.fromarray(np.clip(bg + 0.5, 0, 255).astype(np.uint8), "RGB").convert("RGBA")
+    for c in canvases:
+        scene.alpha_composite(c)
+    return compose_framed(scene, {"size": size}, tmpl)
+
+
 BACKDROP_RIM = (150, 165, 195)  # thin steel-blue edge so a dark disc reads on the dark panel
 
 
@@ -1963,9 +2025,20 @@ class Composer:
     def __init__(self) -> None:
         self._tmpl: dict[str, tuple] = {}
         self._target: dict[str, tuple] = {}
+        self._stats: dict[str, dict] = {}
 
-    def compose(self, raw: Image.Image, cat: str, spec: dict, backdrop: Image.Image | None = None) -> Image.Image:
+    def compose(self, raw: Image.Image, cat: str, spec: dict, backdrop: Image.Image | None = None,
+                layers: list | None = None) -> Image.Image:
         mode = spec["mode"]
+        if mode == "framed_good":
+            # A production building: `layers` are its foreground, resolved by the driver.
+            if layers is None:
+                raise ValueError(f"{cat}: the framed_good layout needs its foreground layers")
+            if cat not in self._tmpl:
+                self._tmpl[cat] = vanilla_template(spec["folder"], spec["size"])
+            if cat not in self._stats:
+                self._stats[cat] = backdrop_stats(spec["folder"], spec["size"])
+            return compose_framed_good(raw.convert("RGB"), spec, self._tmpl[cat], self._stats[cat], layers)
         if mode in ("framed", "medallion", "emboss_medallion") and cat not in self._tmpl:
             # A category with no vanilla folder of its own (the Grand Monument
             # pictures) borrows another folder's frame.
