@@ -1,0 +1,134 @@
+﻿# The AI electrification pass (#1877 trap 2). docs/systems/mod_systems/ai.md § AI Electrification Pass; numbers in
+# common/script_values/te_ai_power_pass_values.txt, conditions in common/scripted_triggers/te_ai_power_pass_triggers.txt,
+# the monthly hook and the self-checks in common/on_actions/te_ai_power_pass_on_actions.txt.
+#
+# Why: left alone, AI countries make almost no Electricity until about 40 technologies into era 6, in every game
+# (the owner's six games' saves, #1877, 2026-11-22), and their urban centers stay unlit even where power is made, so
+# a first plant has no buyers and loses its workers (#1880's first plants stood 2-26% staffed). In two nights of
+# test runs on the owner's 1964 save, every change that put a plant in the AI's states and switched their urban
+# centers to electric street lights raised the large AI economies' GDP per head, about 5% in three years against
+# chance across fourteen runs; restoring the plant subsidy, the first-plant bonus, the urban-center methods alone or
+# free factories did not.
+#
+# What it does, monthly for each AI country with Electrical Generation:
+#   1. follows each batch of plant levels it queued (te_ai_power_follow);
+#   2. switches to electric street lights the urban centers of each state whose power now covers them
+#      (te_ai_power_light_site), and notes a state where the AI put them back on no lighting or gas;
+#   3. where the country may queue (te_ai_power_pass_may_queue: under a year of government construction queued, not
+#      in default), queues in up to two of its states, those shortest of Electricity first, a batch of vanilla's
+#      coal and oil plant sized to what the state is short of with its lights counted (te_ai_power_levels_wanted, at
+#      most TE_AI_POWER_MAX_BATCH levels). Government construction, the country's own treasury: the owner,
+#      2026-11-28, "Government construction is the natural way to do it."
+
+# Country scope, monthly, AI only (te_ai_power_pass_on_actions.txt).
+te_ai_power_pass_effect = {
+	if = {
+		limit = { has_technology_researched = electrical_generation }
+		every_scope_state = {
+			limit = { has_variable = te_ai_power_pending }
+			te_ai_power_follow = yes
+		}
+		every_scope_state = {
+			limit = { has_variable = te_ai_power_lit }
+			if = {
+				limit = { te_ai_power_lights_unswitched = yes }
+				remove_variable = te_ai_power_lit
+				te_ai_power_count = { NAME = te_ai_power_g_reverts ADD = 1 }
+			}
+		}
+		every_scope_state = {
+			limit = { te_ai_power_light_site = yes }
+			activate_production_method = {
+				building_type = building_urban_center
+				production_method = pm_electric_streetlights
+			}
+			set_variable = te_ai_power_lit
+			te_ai_power_count = { NAME = te_ai_power_g_switches ADD = 1 }
+			te_ai_power_count = { NAME = te_ai_power_g_switched_levels ADD = te_ai_power_uc_levels }
+		}
+		if = {
+			limit = { te_ai_power_pass_may_queue = yes }
+			set_variable = { name = te_ai_power_level_output value = te_ai_power_level_output_value }
+			ordered_scope_state = {
+				limit = { te_ai_power_pass_site = yes }
+				order_by = te_ai_power_short
+				min = 0
+				max = 1
+				check_range_bounds = no
+				te_ai_power_queue_batch = yes
+			}
+		}
+	}
+}
+
+# State scope. Queues te_ai_power_levels_wanted levels of the coal and oil plant as government construction, and
+# starts following them: te_ai_power_base is the plant levels the state held then, te_ai_power_want the levels
+# asked for.
+te_ai_power_queue_batch = {
+	set_variable = { name = te_ai_power_want value = te_ai_power_levels_wanted }
+	set_variable = { name = te_ai_power_base value = te_ai_power_plant_levels }
+	set_variable = { name = te_ai_power_months value = 0 }
+	set_variable = { name = te_ai_power_queued value = 0 }
+	while = {
+		limit = { var:te_ai_power_queued < var:te_ai_power_want }
+		start_building_construction = building_power_plant
+		change_variable = { name = te_ai_power_queued add = 1 }
+	}
+	remove_variable = te_ai_power_queued
+	set_variable = te_ai_power_pending
+	te_ai_power_count = { NAME = te_ai_power_g_batches ADD = 1 }
+	te_ai_power_count = { NAME = te_ai_power_g_levels ADD = var:te_ai_power_want }
+}
+
+# State scope, monthly, for a state with a batch followed. Decided when:
+#   - built: the state holds te_ai_power_want levels more than when it queued (an investor's level there counts too,
+#     the same allowance as the build pass's follow, ai.md § AI Government Construction);
+#   - ended: the government queue is empty with the batch not all built (the rest was dropped, or the state's
+#     levels went to another use), or TE_AI_POWER_FOLLOW_MONTHS have passed.
+# A batch decided with some levels built marks the state for the light switch (te_ai_power_batch_built, 90 days).
+# The self-check counts levels built and levels lost.
+te_ai_power_follow = {
+	change_variable = { name = te_ai_power_months add = 1 }
+	if = {
+		limit = {
+			te_ai_power_plant_levels >= te_ai_power_follow_target
+		}
+		te_ai_power_count = { NAME = te_ai_power_g_built ADD = var:te_ai_power_want }
+		te_ai_power_count = { NAME = te_ai_power_g_decided ADD = 1 }
+		set_variable = { name = te_ai_power_batch_built value = yes days = 90 }
+		te_ai_power_follow_end = yes
+	}
+	else_if = {
+		limit = {
+			OR = {
+				owner = { NOT = { construction_queue_num_queued_government_levels > 0 } }
+				var:te_ai_power_months >= TE_AI_POWER_FOLLOW_MONTHS
+			}
+		}
+		te_ai_power_count = { NAME = te_ai_power_g_built ADD = te_ai_power_follow_got }
+		te_ai_power_count = { NAME = te_ai_power_g_lost ADD = te_ai_power_follow_missing }
+		te_ai_power_count = { NAME = te_ai_power_g_decided ADD = 1 }
+		if = {
+			limit = { te_ai_power_follow_got > 0 }
+			set_variable = { name = te_ai_power_batch_built value = yes days = 90 }
+		}
+		te_ai_power_follow_end = yes
+	}
+}
+
+te_ai_power_follow_end = {
+	remove_variable = te_ai_power_pending
+	remove_variable = te_ai_power_want
+	remove_variable = te_ai_power_base
+	remove_variable = te_ai_power_months
+}
+
+# Adds $ADD$ to the global counter $NAME$, starting it at 0 (change_global_variable does nothing on an unset
+# variable, scripting_best_practices.md § "`change_variable` Does Not Create a Variable").
+te_ai_power_count = {
+	if = {
+		limit = { NOT = { has_global_variable = $NAME$ } }
+		set_global_variable = { name = $NAME$ value = 0 }
+	}
+	change_global_variable = { name = $NAME$ add = $ADD$ }
+}
