@@ -1,0 +1,97 @@
+﻿# The AI electrification pass, monthly for each AI country (common/scripted_effects/te_ai_power_pass_effects.txt;
+# #1877 trap 2), and its two self-checks.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_ai_power_pass_on_action
+	}
+}
+
+on_monthly_pulse = {
+	on_actions = {
+		te_ai_power_pass_selfcheck
+		te_ai_power_lights_selfcheck
+	}
+}
+
+te_ai_power_pass_on_action = {
+	trigger = {
+		is_ai = yes
+	}
+	effect = {
+		te_ai_power_pass_effect = yes
+	}
+}
+
+# TEMPORARY self-check (2026-11-28, #1877): are the plant levels the pass queues as government construction built?
+# The paid arm of the 2026-11-22 test runs (Hpaid) queued plants the same way and France built none of its 24, so
+# whether a queued batch is built, or waits until it is dropped, is the pass's engine unknown. A closed cohort, the
+# first TE_AI_POWER_COHORT batches queued in a game, read once TE_AI_POWER_COHORT_READ of them are decided (te_ai_power_follow: all built,
+# or ended with the government queue empty or after TE_AI_POWER_FOLLOW_MONTHS), on its levels built and lost: the
+# first batches decided are the quick builds, so a verdict on those would read OK whatever the loss rate.
+#   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
+#   OK          a quarter or fewer of the decided levels lost.
+#   BROKEN      half or more lost: queued plants are not built. Fallback: the owner's (2026-11-28) "If that doesn't
+#               work ... you can explore other options": create the batch at once with create_building and charge its
+#               cost to the treasury.
+#   NO_VERDICT  between.
+# No line at all: fewer batches than that were decided in the run. Play-test row: docs/testing/ai-economy-playtest.md
+# § The AI electrification pass. Delete with the counters' _g values once it reads.
+te_ai_power_pass_selfcheck = {
+	trigger = {
+		NOT = { has_global_variable = te_ai_power_pass_checked }
+		te_ai_power_cohort_decided_g >= TE_AI_POWER_COHORT_READ
+	}
+	effect = {
+		set_global_variable = te_ai_power_pass_checked
+		debug_log = "TE_SELF_CHECK START ai_power_pass (the verdict line follows; none after this one means the engine dropped the templated line)"
+		random_country = {
+			if = {
+				limit = { te_ai_power_lost_share <= 0.25 }
+				debug_log = "TE_SELF_CHECK OK ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] cohort=[SCOPE.ScriptValue('te_ai_power_cohort_decided_g')|0] cohort_built=[SCOPE.ScriptValue('te_ai_power_cohort_built_g')|0] cohort_lost=[SCOPE.ScriptValue('te_ai_power_cohort_lost_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the plants the pass queues get built)"
+			}
+			else_if = {
+				limit = { te_ai_power_lost_share >= 0.5 }
+				debug_log = "TE_SELF_CHECK BROKEN ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] cohort=[SCOPE.ScriptValue('te_ai_power_cohort_decided_g')|0] cohort_built=[SCOPE.ScriptValue('te_ai_power_cohort_built_g')|0] cohort_lost=[SCOPE.ScriptValue('te_ai_power_cohort_lost_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (half or more of the queued plant levels were dropped: fallback in te_ai_power_pass_on_actions.txt)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] cohort=[SCOPE.ScriptValue('te_ai_power_cohort_decided_g')|0] cohort_built=[SCOPE.ScriptValue('te_ai_power_cohort_built_g')|0] cohort_lost=[SCOPE.ScriptValue('te_ai_power_cohort_lost_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (between a quarter and half lost)"
+			}
+		}
+	}
+}
+
+# TEMPORARY self-check (2026-11-28, #1877): does the AI keep the electric street lights the pass switches on? The
+# urban centers' lighting group is the engine's to choose for the AI, and it left them unlit where power was made in
+# every save read (88% of AI urban-center levels in 1964). The pass switches a state again whenever it finds it back
+# on no lighting or gas, so a revert costs a month of light, not the pass; but many reverts would mean the engine's
+# choice and the pass fight each month. Each switch is judged once (te_ai_power_pass_effect): undone if the AI puts
+# the lights back within 180 days, kept if they are still on then; read once TE_AI_POWER_CHECK_JUDGED switches are
+# judged (counting switches not yet judged would lean toward OK). A single look a month on read OK in the 1925 test
+# run of the revision (4 of 21 back) while the AI undid 64 of 121 switches by the end.
+#   OK          a quarter or fewer of the switches undone within 180 days.
+#   BROKEN      half or more undone. Fallback: ai_selection = most_productive on the urban centers' lighting group
+#               (run G of 2026-11-21 lit 2,201 levels that way beside seeded plants), or a lock.
+#   NO_VERDICT  between.
+te_ai_power_lights_selfcheck = {
+	trigger = {
+		NOT = { has_global_variable = te_ai_power_lights_checked }
+		te_ai_power_judged_g >= TE_AI_POWER_CHECK_JUDGED
+	}
+	effect = {
+		set_global_variable = te_ai_power_lights_checked
+		debug_log = "TE_SELF_CHECK START ai_power_lights (the verdict line follows; none after this one means the engine dropped the templated line)"
+		random_country = {
+			if = {
+				limit = { te_ai_power_revert_share <= 0.25 }
+				debug_log = "TE_SELF_CHECK OK ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] judged=[SCOPE.ScriptValue('te_ai_power_judged_g')|0] early_reverts=[SCOPE.ScriptValue('te_ai_power_early_reverts_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the AI keeps the lights the pass switches on)"
+			}
+			else_if = {
+				limit = { te_ai_power_revert_share >= 0.5 }
+				debug_log = "TE_SELF_CHECK BROKEN ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] judged=[SCOPE.ScriptValue('te_ai_power_judged_g')|0] early_reverts=[SCOPE.ScriptValue('te_ai_power_early_reverts_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the AI undoes half or more of the switches: fallback in te_ai_power_pass_on_actions.txt)"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] judged=[SCOPE.ScriptValue('te_ai_power_judged_g')|0] early_reverts=[SCOPE.ScriptValue('te_ai_power_early_reverts_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (between a quarter and half undone)"
+			}
+		}
+	}
+}

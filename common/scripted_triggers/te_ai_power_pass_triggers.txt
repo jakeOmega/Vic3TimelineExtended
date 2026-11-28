@@ -1,0 +1,73 @@
+﻿# The AI electrification pass (common/scripted_effects/te_ai_power_pass_effects.txt; #1877 trap 2): when it queues a
+# state's plant and when it switches the state's street lights. docs/systems/mod_systems/ai.md § AI Electrification
+# Pass.
+
+# Country scope. An AI country that can queue government construction of a power plant this month: it has the
+# plant's technology, is not in default or paused, and has under a year of government construction queued (the
+# grid's pass uses the same queue test, te_grid_ai_build_effect). The owner, 2026-11-28: "waiting for up to a year is
+# fine ... Government construction is the natural way to do it."
+te_ai_power_pass_may_queue = {
+	is_country_alive = yes
+	is_ai = yes
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = electrical_generation
+	in_default = no
+	is_construction_paused = no
+	construction_queue_government_duration < 52
+	te_ai_power_pending_count < TE_AI_POWER_MAX_PENDING
+}
+
+# State scope. The state's urban centers are on no street lighting or gas lights.
+te_ai_power_lights_unswitched = {
+	any_scope_building = {
+		is_building_type = building_urban_center
+		OR = {
+			has_active_production_method = pm_no_street_lighting
+			has_active_production_method = pm_gas_streetlights
+		}
+	}
+}
+
+# State scope. A state the pass may queue a batch of plant levels in: it has urban centers, it is short of at least
+# half a level's output (te_ai_power_levels_wanted, which counts what the lights would take), no batch of the pass's
+# is still followed there, no coal or oil plant there is under construction or has levels queued (anyone's: a batch
+# given up on at the follow's limit, an investor's, the construction pass's first plant; its capacity counts only
+# once built, so the state would read as short and get a second batch on top), and vanilla's possible and the mod's
+# Resource Transition rule allow a coal or oil plant (copied from building_power_plant: start_building_construction's
+# respect for them is unverified, scripting_best_practices.md § "AI and Cost-Only Buildings").
+# is_industrial_production_allowed is stricter than vanilla's possible, which asks only for no law banning industry:
+# it is the state-level gate the 2026-11-21/22 test arms' seed passes used, kept as they ran it. The owner's rule for the build pass's first plant
+# (2026-11-17), that a country with other power is not made to build a fossil plant, holds here state by state: a
+# state that already makes or receives what it needs is not short.
+te_ai_power_pass_site = {
+	has_building = building_urban_center
+	NOT = { has_variable = te_ai_power_pending }
+	NOT = {
+		any_scope_building = {
+			is_building_type = building_power_plant
+			OR = {
+				is_under_construction = yes
+				te_construction_market_building_queued_levels > 0
+			}
+		}
+	}
+	is_industrial_production_allowed = yes
+	rt_fossil_construction_allowed_here = yes
+	owner = { NOT = { has_law_or_variant = law_type:law_industry_banned } }
+	te_ai_power_levels_wanted >= 1
+}
+
+# State scope. An AI state whose urban centers should switch to electric street lights now: they are on no lighting
+# or gas lights, the method is open to them, what the state can count on and does not already buy (te_ai_power_spare:
+# its plants' capacity, or what is made there if more) covers TE_AI_POWER_SWITCH_SHARE of what the lights would
+# take, and the AI has not put them back in the last 180 days (te_ai_power_revert_wait: a state switched back is
+# short of power, and switching it again each month only flips its lights).
+te_ai_power_light_site = {
+	te_ai_power_lights_unswitched = yes
+	NOT = { has_variable = te_ai_power_revert_wait }
+	can_activate_production_method = {
+		building_type = building_urban_center
+		production_method = pm_electric_streetlights
+	}
+	te_ai_power_spare >= te_ai_power_switch_threshold
+}

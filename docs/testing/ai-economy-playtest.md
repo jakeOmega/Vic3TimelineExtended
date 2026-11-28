@@ -673,3 +673,23 @@ At most once a year (it looks monthly, and runs the first month its gate holds) 
 | **Goods in a war.** AI countries at war after the pass: shortages of small arms, artillery, tanks and the mod's unit goods; `army_power` against the baseline. | Small arms and the rest bought more (raised modern conscripts buy goods where Irregular Infantry buys none), shortages no worse than the baseline's regulars show, and `army_power` up. | Shortages common and organization low: the cost the design named; the owner's call (fewer types cleared, or the pass for great powers only). |
 | **The rebuilt mix.** The infantry share of the rebuilt pools, by type after a clear: from two saves, a battalion record's building and type, since the probe's `u_new` reads 0 (a combat unit holds no variables, 2026-11-26; #2090). | Mostly infantry, as the formation defaults put first. The measurement's Dutch state rebuilt with no infantry (17 Motorized Artillery, 19 Light Tanks). | Few infantry in many rebuilt pools: the AI fills a center from all its formation's default types; a battalion mix the owner may want shaped. |
 | **Russia's Irregular pool.** Russia's Irregular Infantry count by year (R1). | Falling at its first year at peace after Trench Works, and staying low. | Growing again: Russia's defaults are themselves Irregular (the self-check's `stale`), which this pass cannot change. |
+
+## The AI electrification pass (#1877, 2026-11-28)
+
+Monthly, an AI country with Electrical Generation queues a batch of coal and oil plant levels (at most 10) in the one of its states shortest of Electricity (what it buys plus what its urban centers would take on electric street lights, less its plants' capacity or what is made there if more), while it has under a year of government construction queued and fewer than 3 batches of the pass's waiting; and switches a state's urban centers to electric street lights once what it can count on and does not already buy covers four-fifths of the lights' need, leaving for 180 days a state the AI put back. Details: `docs/systems/mod_systems/ai.md` § AI Electrification Pass, with the first test run's figures.
+
+### Self-checks
+
+| Line in `debug.log` | When | OK means | BROKEN means | Fallback |
+|---|---|---|---|---|
+| `TE_SELF_CHECK … ai_power_pass` | once a game: the first 40 batches queued, read once 36 of them are decided (all built, or ended with the government queue empty or after 36 months) | a quarter or fewer of the cohort's levels lost: the plants the pass queues are built | half or more lost: queued government plants are dropped or never paid for (in the 2026-11-22 paid arm France built none of its 24) | create the batch at once with `create_building` and charge its cost to the treasury (the owner, 2026-11-28: "If that doesn't work ... you can explore other options") |
+| `TE_SELF_CHECK … ai_power_lights` | once a game, when 20 switches are judged (undone within 180 days, or kept that long) | a quarter or fewer undone within 180 days: the AI keeps the lights | half or more undone: the engine's method choice for the AI fights the pass each month | `ai_selection = most_productive` on the urban centers' lighting group (run G of 2026-11-21 lit 2,201 levels that way beside seeded plants), or a lock |
+
+### Checks
+
+| Check | Expect | If it fails |
+|---|---|---|
+| **Power and lights.** The 20 largest AI economies' plant levels, Electricity made per head and urban-center levels on electric lights, a few years after Electrical Generation, against a run without the pass. | Plants in most of their urban states; most urban-center levels lit; plants staffed (the first plants of #1880 were 2–26%). | Plants built but empty: the lights didn't switch (read `ai_power_lights`). Few plants: read `ai_power_pass` and the government queue's length. |
+| **The government queue.** The share of the 20 largest with universities, administrations and railways waiting behind the pass's batches. | Batches take their turn; the other kinds still get built. | Universities starved for years: lower `TE_AI_POWER_MAX_BATCH`, or queue only while the government queue is under half a year. |
+| **Shortages.** Urban-center levels short of Electricity after a switch, and the 20 largest's Electricity bought against made. | Few, and falling as plants hire (the first run's design bought twice what it made). | Many and lasting: raise `TE_AI_POWER_SWITCH_SHARE` toward 1, or grow the batch. |
+| **Budgets.** Debt and default shares of AI countries, against a run without the pass. | About the same. | More defaults: the batches outrun what the purchase can pay; gate the pass on the surplus as #1880's pass does. |
