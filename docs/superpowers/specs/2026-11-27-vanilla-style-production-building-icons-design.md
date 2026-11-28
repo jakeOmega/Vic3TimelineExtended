@@ -1,6 +1,6 @@
 # Vanilla-style production building icons: design
 
-2026-11-27. Status: approved by the owner and built on branch `icons-vanilla-production-buildings`.
+2026-11-27. Status: approved by the owner and built in PR #2143.
 
 ## Why
 
