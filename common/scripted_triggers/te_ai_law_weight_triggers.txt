@@ -1,0 +1,23 @@
+﻿# AI law weights (#1877 traps 3 and 4). docs/systems/mod_systems/ai.md § AI Law Weights: Literacy and the Mod's Groups.
+
+# Country scope. Research sits at its innovation cap: weekly innovation at TE_AI_BUILD_PASS_INNOVATION_SHARE (0.9)
+# of its cap or more, the share under which the AI construction pass queues a university
+# (te_ai_build_pass_wants_university). Under that share a university raises research; at it, the cap does, and the
+# cap is literacy's (50 base and up to 150 more at full literacy, vanilla's code static modifiers). Unlike the
+# pass's share, which reads 1 where the cap reads nothing so that no university is queued on a failed read, this
+# asks for a cap above 0, so a failed read weighs no law.
+te_ai_research_at_innovation_cap = {
+	te_ai_build_pass_innovation_cap > 0
+	te_ai_build_pass_innovation_share >= TE_AI_BUILD_PASS_INNOVATION_SHARE
+}
+
+# Country scope. The country still holds one of vanilla's three starting social laws that the AI seldom leaves:
+# No Workers' Rights, Child Labor Allowed or No Health System. While it does, every law in the mod's own law
+# groups weighs half (te_ai_mod_law_group_factor, te_ai_mod_law_group_offset).
+te_ai_social_laws_unreformed = {
+	OR = {
+		has_law_or_variant = law_type:law_no_workers_rights
+		has_law_or_variant = law_type:law_child_labor_allowed
+		has_law_or_variant = law_type:law_no_health_system
+	}
+}

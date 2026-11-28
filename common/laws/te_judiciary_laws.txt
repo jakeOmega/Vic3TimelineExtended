@@ -32,6 +32,10 @@ law_executive_tribunals = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -66,6 +70,10 @@ law_religious_courts = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -97,6 +105,10 @@ law_statutory_courts = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -130,6 +142,10 @@ law_constitutional_review = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -172,6 +188,10 @@ law_judicial_supremacy = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -199,5 +219,9 @@ law_algorithmic_jurisprudence = {
 			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
 			add = 750
 		}
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }

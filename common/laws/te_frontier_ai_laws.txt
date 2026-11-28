@@ -65,6 +65,14 @@ law_no_frontier_ai_policy = {
 			NOT = { has_technology_researched = ai_agents }
 		}
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_private_ai_labs = {
@@ -85,6 +93,14 @@ law_private_ai_labs = {
 		country_covert_defense_economic_add = -10
 		interest_group_ig_industrialists_pol_str_mult = 0.1
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_national_ai_licensing = {
@@ -100,6 +116,14 @@ law_national_ai_licensing = {
 		# Licensed labs meet the regulator's security standard.
 		country_covert_defense_economic_add = 5
 		country_intelligence_capacity_add = 1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -123,6 +147,14 @@ law_state_ai_monopoly = {
 		# Strict IP Protection's figure.
 		country_covert_defense_economic_add = 10
 		interest_group_ig_armed_forces_pol_str_mult = 0.1
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -160,6 +192,14 @@ law_international_ai_oversight = {
 	on_enact = {
 		custom_tooltip = law_international_ai_oversight_falls_tt
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_open_weights = {
@@ -184,5 +224,13 @@ law_open_weights = {
 	# (te_frontier_ai_open_weights_spread, te_frontier_ai_values.txt).
 	on_enact = {
 		custom_tooltip = law_open_weights_world_spread_tt
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }

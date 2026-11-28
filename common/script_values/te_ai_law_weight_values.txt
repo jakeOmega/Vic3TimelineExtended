@@ -1,0 +1,87 @@
+﻿# AI law weights (#1877 traps 3 and 4): the sizes, named so they can be tuned after an observer run.
+# docs/systems/mod_systems/ai.md § AI Law Weights: Literacy and the Mod's Groups has the reasoning;
+# docs/testing/ai-economy-playtest.md § AI law weights what a game should show.
+#
+# A law's ai_enact_weight_modifier is added to the engine's own weight for it (vanilla's game/common/laws/readme.md):
+# +100 for each ideology of an interest group the AI's political agenda favours that wants the law, -25 for each of
+# one it opposes, and 1000 x support x radicalism for each movement that wants it (NAI CHANGE_LAW_*). The readme
+# puts that base "in the low hundreds, so +100 would be fairly significant and +1000 would be very significant".
+
+# ---- Trap 3: the laws that raise literacy, while research sits at its innovation cap ----
+#
+# In the 1925-1947 observer run 52-66% of the 20 largest AI economies' GDP sat at its innovation cap, which follows
+# literacy, and their literacy barely moved: in 23 years they started 1 education law and 3 children's rights laws.
+# Under the conservative agenda, which most AI countries hold, no favoured interest group's base ideologies want
+# Public Schools, Compulsory Primary School or Restricted Child Labor (-25 to -50 each, an offline count from the
+# groups' ideologies), against a mean of about 210-270 for a mod law any of them wants and 160-190 for a vanilla
+# one. So they were picked only when a movement backed them.
+#
+# 500 is vanilla's own weight for founding schools: each schools law takes +500 while a country has No Schools
+# (+1000 with either of two journal entries), and any law +750 while a petition or a commitment asks for it. Research held by
+# literacy is the same need as No Schools, the cap the owner's second priority. At 500 the law outweighs a
+# typical competitor about twice over, so it comes first whenever it can pass; the agenda's
+# min_law_chance_to_pass, which drops a law before any weight counts, still keeps a government whose interest
+# groups oppose it from starting an enactment it would lose. More would change little: once it is the first pick
+# a larger weight only widens the margin. Each law takes it only while it is not held, so a country spends at most
+# two or three enactments on it.
+TE_AI_LITERACY_LAW_WEIGHT = 500
+
+# Public Schools and Compulsory Primary School (te_ai_literacy_law_injections.txt).
+te_ai_literacy_law_weight = {
+	value = 0
+	if = {
+		limit = { te_ai_research_at_innovation_cap = yes }
+		value = TE_AI_LITERACY_LAW_WEIGHT
+	}
+}
+
+# Restricted Child Labor: only while the country still allows child labour. Vanilla's ai_will_do lets an AI with a
+# market liberal ruler take it from Compulsory Primary School too, and the weight must not pull that way.
+te_ai_end_child_labor_weight = {
+	value = 0
+	if = {
+		limit = {
+			te_ai_research_at_innovation_cap = yes
+			has_law_or_variant = law_type:law_child_labor_allowed
+		}
+		value = TE_AI_LITERACY_LAW_WEIGHT
+	}
+}
+
+# ---- Trap 4: the mod's own law groups weigh half while a country still holds an unreformed social law ----
+#
+# Since the law-cadence change (#1867) the AI starts laws about seven times as often, but 92 of the 193 law starts
+# of the 20 largest AI economies in 1925-1947 went to the mod's groups (inheritance 14, minority rights 13,
+# judiciary 11, language 8, antitrust 8, IP 7), while 82% of their GDP still held No Workers' Rights, 71% No
+# Health System and 93% Child Labor Allowed. Under the conservative agenda 98 of the mod's 150 laws in its own
+# groups have a favoured group's ideology that wants them, against 61 of vanilla's 148.
+#
+# Every law in a mod law group ends its ai_enact_weight_modifier with
+#     multiply = te_ai_mod_law_group_factor
+#     add = te_ai_mod_law_group_offset
+# (test_ai_law_weights.py fails on one without). The field is added to the engine's base, so the multiply halves
+# only the law's own terms (its standing weights, and its -1000 when it would found an institution the bureaucracy
+# can't carry, which halved is still a ban); most of the mod's laws have none, and their whole weight is the
+# base. The offset takes off half of a typical base: 100, half of two favoured ideologies, vanilla's "fairly
+# significant". An offline count from the groups' base ideologies puts the share of the mod laws' summed positive
+# interest-group weight left after it at 0.56-0.65 under the conservative agenda, 0.45-0.59 progressive, 0.40-0.54
+# nationalist, 0.40-0.52 reactionary and 0.14-0.33 egalitarian (by whether a strongly approving ideology counts
+# once or twice); movements' weight comes on top, so the conservative share is nearer two thirds than half. A law
+# one favoured ideology wants and nothing else backs falls to 0.
+TE_AI_MOD_LAW_GROUP_FACTOR = 0.5
+TE_AI_MOD_LAW_GROUP_CUT = -100
+
+te_ai_mod_law_group_factor = {
+	value = 1
+	if = {
+		limit = { te_ai_social_laws_unreformed = yes }
+		value = TE_AI_MOD_LAW_GROUP_FACTOR
+	}
+}
+te_ai_mod_law_group_offset = {
+	value = 0
+	if = {
+		limit = { te_ai_social_laws_unreformed = yes }
+		value = TE_AI_MOD_LAW_GROUP_CUT
+	}
+}

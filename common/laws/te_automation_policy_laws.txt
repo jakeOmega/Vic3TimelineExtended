@@ -60,6 +60,14 @@ law_unrestricted_automation = {
 	on_enact = {
 		custom_tooltip = te_ap_law_displacement_tt
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_robot_tax = {
@@ -77,6 +85,14 @@ law_robot_tax = {
 		custom_tooltip = te_ap_law_robot_tax_tt
 		custom_tooltip = te_ap_law_share_tt
 		custom_tooltip = te_ap_law_displacement_half_tt
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }
 
@@ -102,6 +118,14 @@ law_human_labor_quotas = {
 		custom_tooltip = te_ap_law_quotas_tt
 		custom_tooltip = te_ap_law_displacement_none_tt
 	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
+	}
 }
 
 law_automation_dividend = {
@@ -119,5 +143,13 @@ law_automation_dividend = {
 		custom_tooltip = te_ap_law_dividend_tt
 		custom_tooltip = te_ap_law_share_tt
 		custom_tooltip = te_ap_law_displacement_none_tt
+	}
+
+	ai_enact_weight_modifier = {
+		value = 0
+
+		# Half while the country holds an unreformed social law (#1877 trap 4, te_ai_law_weight_values.txt).
+		multiply = te_ai_mod_law_group_factor
+		add = te_ai_mod_law_group_offset
 	}
 }

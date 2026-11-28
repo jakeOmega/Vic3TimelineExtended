@@ -1,0 +1,80 @@
+﻿# #1877 trap 3: the AI weighs the laws that raise literacy higher while its research sits at its innovation cap
+# (te_ai_research_at_innovation_cap). Public Schools and Compulsory Primary School take te_ai_literacy_law_weight;
+# Restricted Child Labor te_ai_end_child_labor_weight, only while the country allows child labour. The sizes and
+# their reasons: common/script_values/te_ai_law_weight_values.txt; the system: docs/systems/mod_systems/ai.md
+# § AI Law Weights: Literacy and the Mod's Groups.
+#
+# Each INJECT restates vanilla 1.15.2's whole ai_enact_weight_modifier, copied from the game file, and adds the
+# mod's weight on one top-level `add` line, a key vanilla's field lacks at the top level. No read has shown what
+# the engine does with an INJECTed ai_enact_weight_modifier; the reads of the nearest shapes say it replaces the
+# field (an interest group's script-value field and a party's join_weight, both read in game:
+# scripting_best_practices.md § CONFIRMED: an INJECT block sums), and paradox_file_parser does the same. So the
+# field reads vanilla's terms plus the add whether the engine replaces vanilla's field, merges in only the keys
+# vanilla's lacks (an AI strategy's subsidies block, read in game), or appends the INJECT's lines as a script
+# value's steps (the restated `value = 0` resets the total). Summed like a modifier block, vanilla's terms would
+# count twice (each +750, +500 or +1000 doubled, all for laws a country should take anyway); ignored, the field
+# stays vanilla's and nothing changes. TE_SELF_CHECK ai_literacy_laws reads the outcome
+# (te_ai_literacy_laws_selfcheck_on_actions.txt); its fallback, a REPLACE of the three laws, is on the play-test
+# list (docs/testing/ai-economy-playtest.md § AI law weights).
+#
+# test_ai_law_weights.py holds each restated block to vanilla_parsed/ and fails if another mod file sets the
+# field on these laws (a later INJECT would replace this one).
+
+INJECT:law_public_schools = {
+	ai_enact_weight_modifier = { #Petitions
+		value = 0
+
+		if = {
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
+			add = 750
+		}
+
+		if = {
+			limit = {
+				has_law_or_variant = law_type:law_no_schools
+			}
+			add = 500
+
+			if = {
+				limit = {
+					OR = {
+						has_journal_entry = je_sick_man_education
+						has_journal_entry = je_portugal_regeneration_institutions
+					}
+				}
+				add = 500
+			}
+		}
+
+		# The mod's (#1877 trap 3).
+		add = te_ai_literacy_law_weight
+	}
+}
+
+INJECT:law_compulsory_primary_school = {
+	ai_enact_weight_modifier = { #Petitions
+		value = 0
+
+		if = {
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
+			add = 750
+		}
+
+		# The mod's (#1877 trap 3).
+		add = te_ai_literacy_law_weight
+	}
+}
+
+INJECT:law_restricted_child_labor = {
+	ai_enact_weight_modifier = { #Petitions
+		value = 0
+
+		if = {
+			limit = { ai_has_enact_weight_modifier_journal_entries = yes }
+			add = 750
+		}
+
+		# The mod's (#1877 trap 3).
+		add = te_ai_end_child_labor_weight
+	}
+}
