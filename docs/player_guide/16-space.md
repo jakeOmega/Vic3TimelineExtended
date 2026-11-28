@@ -756,7 +756,7 @@ listed in the Colonies section's Modules view in Solar System Colonization:
 |---|---|---|
 | The two specializations | Adds the specialization's bonus once more: level 3 gives three times the founding bonus | Four levels between the two: one at 4, both at 2, or 1 and 3. The founding choice is level 1 |
 | Habitat | Adds half of the colony's starting room for people, more with five technologies (see below) | A cap by the colony's size: four on Valles Marineris and the Hellas and Utopia plains, one on the smallest moons and dwarf planets; past it each costs more |
-| Terraforming | Adds 4% of the colony's starting room for people a year while it works, until the world has +300% (see below) | Up to three at once; only on Mars, Venus, Titan, Ganymede and Callisto, with the Terraforming technology |
+| Terraforming | Works the whole world: worked in full, every colony there gains 12% of its starting room for people a year, until the world has +300% (see below) | Three for each colony site on the world times its difficulty, every holder's counted; only on Mars, the Moon, Mercury, Venus, Europa, Ganymede, Callisto and Titan, with the Terraforming technology |
 | Spaceport | Under Full Colonies, a dock for your fleets: they refill supply, repair 10% of their damage a month a level and refit there, and refuel: fully on a site that makes propellant, a quarter of their tanks a month anywhere else. It takes 1,000 [personnel](#space-forces-personnel) a level besides its crew. Under Simple Colonies, nothing | None on the Moon |
 | Defenses | Under Full Colonies, guns that fire on enemy fleets closing in on the colony and make it harder to wear down, and on the Moon and Mars your other colonies there too (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)). They take 1,000 personnel a level besides their crew. Under Simple Colonies, nothing | None |
 | Facilities | See the table below | None |
@@ -784,19 +784,38 @@ A blockade stops the Mining Complex, Orbital Yard, resort and foundry; an
 occupied colony's facilities give nothing.
 
 Terraforming (an era 13 technology, after Space Colonization and
-Geoengineering) works the world itself, on the five Martian sites, the Venus
-cloud habitat, Titan, Ganymede and Callisto. Each staffed level adds 4% of the
-colony's starting room for people a year. Up to three work at a colony at once,
-so a world takes at least 25 years to finish, at +300%, where a Habitat gives
-+50% at once and stays for good. The room the work has added belongs
-to the world: it stays when the colony changes hands, is released, or takes a
-level down. A finished world's Terraforming levels stand down and free their
-crews. An occupation stops the work, and a colony short of crews works at its
-staffing share. The technology also makes every colony's starting room 50% larger, on
-top of Space Colonization's 50%. Once you have the technology, the Modules view shows a
-Terraforming line under the facilities, with the room added so far and the
-years to go at this month's pace; the colony's page shows the same in its
-Terraformed tile.
+Geoengineering) works the world itself, and the work belongs to the world, not
+to a colony. Mars's five sites are one world and the Moon's six another, and
+every colony on a world gains the room its work adds, whoever holds it and
+whoever built the levels. A world is finished at +300% of each colony's
+starting room for people, where a Habitat gives +50% at once and stays for
+good. The work a world needs depends on its difficulty:
+
+| Difficulty | Worlds | Levels that work at once |
+|---|---|---|
+| 1 | Mars | 3 for each of its five sites, 15 in all |
+| 2 | Callisto, Ganymede | 6 |
+| 3 | Titan, Europa, the Moon | 9; 54 across the Moon's six sites |
+| 4 | Venus | 12 |
+| 5 | Mercury | 15 |
+
+That many levels, every holder's on the world counted with those queued and
+on their way, is the most that can work there at once, and a world worked in
+full gains 12% a year, so every world takes 25 years at the quickest. Fewer
+levels work at their share of that pace. Levels can go at any colony on the
+world, so one holder with the crews can carry a whole world, and a rival
+colony there gains from the work without paying for it. Each level needs a
+crew, so a hard world is mostly a question of people. The room the work has
+added stays when a colony changes hands, is released, or takes a level down.
+A finished world's Terraforming levels stand down and free their crews. An
+occupation stops that colony's work, and a colony short of crews works at its
+staffing share. The AI terraforms once a colony's people fill half its room,
+while it has a crew to spare. The technology also makes every colony's
+starting room 50% larger, on top of Space Colonization's 50%. Once you have
+the technology, the Modules view shows a Terraforming line under the
+facilities, with the room added so far and the years to go at this month's
+pace, every colony's work on the world counted; the colony's page shows the
+same in its Terraformed tile.
 
 Each Habitat holds half of the colony's starting room, and 10 points more each
 with Nuclear Thermal Propulsion, Orbital Manufacturing, Advanced Nanofabrication,

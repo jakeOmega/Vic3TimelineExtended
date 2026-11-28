@@ -778,7 +778,11 @@ Wave 2, after its parents:
     levels at most, +300% when finished (at least 25 years).
   - A finished world's levels stand down and free their slots, since the AI
     never dismantles.
-  - Each Mars site is terraformed on its own.
+  - Each Mars site is terraformed on its own. Superseded 2026-11-28 (the
+    owner): the work is the world's, Mars's five sites one world and the
+    Moon's six another, and a difficulty a world (Mars 1 to Mercury 5)
+    multiplies its job and its cap; Europa, the Moon and Mercury take it too.
+    `docs/systems/mod_systems/space_race.md` (Colony modules, Terraforming) has the rules.
 - **Self-Directed Evolution and Clade Citizenship** (#1303):
   - Clade Citizenship is Bodily Autonomy's fourth law. Instead of the spec's
     flat +20, it carries +10 and a monthly heritage parity, which lifts the

@@ -2278,8 +2278,8 @@ sr_site_monthly_valles_marineris = {
 			sr_site_release_valles_marineris = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -2574,8 +2574,8 @@ sr_site_monthly_olympus_mons = {
 			sr_site_release_olympus_mons = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -2870,8 +2870,8 @@ sr_site_monthly_hellas_planitia = {
 			sr_site_release_hellas_planitia = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -3166,8 +3166,8 @@ sr_site_monthly_utopia_planitia = {
 			sr_site_release_utopia_planitia = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -3462,8 +3462,8 @@ sr_site_monthly_arcadia_planitia = {
 			sr_site_release_arcadia_planitia = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -5333,6 +5333,7 @@ sr_site_release_europa = {
 	if = { limit = { has_global_variable = sr_site_bunker_europa } remove_global_variable = sr_site_bunker_europa }
 	if = { limit = { has_global_variable = sr_site_foundry_europa } remove_global_variable = sr_site_foundry_europa }
 	if = { limit = { has_global_variable = sr_site_admin_europa } remove_global_variable = sr_site_admin_europa }
+	if = { limit = { has_global_variable = sr_site_terra_europa } remove_global_variable = sr_site_terra_europa }
 	if = { limit = { has_global_variable = sr_site_disc_europa_life } remove_global_variable = sr_site_disc_europa_life }
 	if = { limit = { has_global_variable = sr_site_disc_europa_life_pending } remove_global_variable = sr_site_disc_europa_life_pending }
 	if = { limit = { has_global_variable = sr_site_disc_europa_vents } remove_global_variable = sr_site_disc_europa_vents }
@@ -5466,6 +5467,16 @@ sr_site_monthly_europa = {
 		else = {
 			sr_site_release_europa = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_europa > 0
+		}
+		sr_site_terra_step_europa = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_europa = yes
@@ -5753,8 +5764,8 @@ sr_site_monthly_ganymede = {
 			sr_site_release_ganymede = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -6049,8 +6060,8 @@ sr_site_monthly_callisto = {
 			sr_site_release_callisto = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -6873,8 +6884,8 @@ sr_site_monthly_venus = {
 			sr_site_release_venus = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -7036,6 +7047,7 @@ sr_site_release_mercury = {
 	if = { limit = { has_global_variable = sr_site_bunker_mercury } remove_global_variable = sr_site_bunker_mercury }
 	if = { limit = { has_global_variable = sr_site_foundry_mercury } remove_global_variable = sr_site_foundry_mercury }
 	if = { limit = { has_global_variable = sr_site_admin_mercury } remove_global_variable = sr_site_admin_mercury }
+	if = { limit = { has_global_variable = sr_site_terra_mercury } remove_global_variable = sr_site_terra_mercury }
 	if = { limit = { has_global_variable = sr_site_disc_mercury_archive } remove_global_variable = sr_site_disc_mercury_archive }
 	if = { limit = { has_global_variable = sr_site_disc_mercury_archive_pending } remove_global_variable = sr_site_disc_mercury_archive_pending }
 	if = { limit = { has_global_variable = sr_site_free_mercury } remove_global_variable = sr_site_free_mercury }
@@ -7167,6 +7179,16 @@ sr_site_monthly_mercury = {
 		else = {
 			sr_site_release_mercury = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_mercury > 0
+		}
+		sr_site_terra_step_mercury = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_mercury = yes
@@ -7454,8 +7476,8 @@ sr_site_monthly_titan = {
 			sr_site_release_titan = yes
 		}
 	}
-	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works
-	# advance by its staffed levels, up to the whole job, unless it is occupied
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
 	# (sr_site_terra_step_<key>).
 	if = {
 		limit = {
@@ -11641,6 +11663,7 @@ sr_site_release_shackleton = {
 	if = { limit = { has_global_variable = sr_site_bunker_shackleton } remove_global_variable = sr_site_bunker_shackleton }
 	if = { limit = { has_global_variable = sr_site_foundry_shackleton } remove_global_variable = sr_site_foundry_shackleton }
 	if = { limit = { has_global_variable = sr_site_admin_shackleton } remove_global_variable = sr_site_admin_shackleton }
+	if = { limit = { has_global_variable = sr_site_terra_shackleton } remove_global_variable = sr_site_terra_shackleton }
 	if = { limit = { has_global_variable = sr_site_free_shackleton } remove_global_variable = sr_site_free_shackleton }
 	if = { limit = { has_global_variable = sr_site_autonomy_shackleton } remove_global_variable = sr_site_autonomy_shackleton }
 	if = { limit = { has_global_variable = sr_site_charter_shackleton } remove_global_variable = sr_site_charter_shackleton }
@@ -11769,6 +11792,16 @@ sr_site_monthly_shackleton = {
 		else = {
 			sr_site_release_shackleton = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_shackleton > 0
+		}
+		sr_site_terra_step_shackleton = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_shackleton = yes
@@ -11903,6 +11936,7 @@ sr_site_release_peary = {
 	if = { limit = { has_global_variable = sr_site_bunker_peary } remove_global_variable = sr_site_bunker_peary }
 	if = { limit = { has_global_variable = sr_site_foundry_peary } remove_global_variable = sr_site_foundry_peary }
 	if = { limit = { has_global_variable = sr_site_admin_peary } remove_global_variable = sr_site_admin_peary }
+	if = { limit = { has_global_variable = sr_site_terra_peary } remove_global_variable = sr_site_terra_peary }
 	if = { limit = { has_global_variable = sr_site_free_peary } remove_global_variable = sr_site_free_peary }
 	if = { limit = { has_global_variable = sr_site_autonomy_peary } remove_global_variable = sr_site_autonomy_peary }
 	if = { limit = { has_global_variable = sr_site_charter_peary } remove_global_variable = sr_site_charter_peary }
@@ -12031,6 +12065,16 @@ sr_site_monthly_peary = {
 		else = {
 			sr_site_release_peary = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_peary > 0
+		}
+		sr_site_terra_step_peary = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_peary = yes
@@ -12165,6 +12209,7 @@ sr_site_release_tranquility = {
 	if = { limit = { has_global_variable = sr_site_bunker_tranquility } remove_global_variable = sr_site_bunker_tranquility }
 	if = { limit = { has_global_variable = sr_site_foundry_tranquility } remove_global_variable = sr_site_foundry_tranquility }
 	if = { limit = { has_global_variable = sr_site_admin_tranquility } remove_global_variable = sr_site_admin_tranquility }
+	if = { limit = { has_global_variable = sr_site_terra_tranquility } remove_global_variable = sr_site_terra_tranquility }
 	if = { limit = { has_global_variable = sr_site_free_tranquility } remove_global_variable = sr_site_free_tranquility }
 	if = { limit = { has_global_variable = sr_site_autonomy_tranquility } remove_global_variable = sr_site_autonomy_tranquility }
 	if = { limit = { has_global_variable = sr_site_charter_tranquility } remove_global_variable = sr_site_charter_tranquility }
@@ -12293,6 +12338,16 @@ sr_site_monthly_tranquility = {
 		else = {
 			sr_site_release_tranquility = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_tranquility > 0
+		}
+		sr_site_terra_step_tranquility = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_tranquility = yes
@@ -12427,6 +12482,7 @@ sr_site_release_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_bunker_marius_hills } remove_global_variable = sr_site_bunker_marius_hills }
 	if = { limit = { has_global_variable = sr_site_foundry_marius_hills } remove_global_variable = sr_site_foundry_marius_hills }
 	if = { limit = { has_global_variable = sr_site_admin_marius_hills } remove_global_variable = sr_site_admin_marius_hills }
+	if = { limit = { has_global_variable = sr_site_terra_marius_hills } remove_global_variable = sr_site_terra_marius_hills }
 	if = { limit = { has_global_variable = sr_site_free_marius_hills } remove_global_variable = sr_site_free_marius_hills }
 	if = { limit = { has_global_variable = sr_site_autonomy_marius_hills } remove_global_variable = sr_site_autonomy_marius_hills }
 	if = { limit = { has_global_variable = sr_site_charter_marius_hills } remove_global_variable = sr_site_charter_marius_hills }
@@ -12555,6 +12611,16 @@ sr_site_monthly_marius_hills = {
 		else = {
 			sr_site_release_marius_hills = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_marius_hills > 0
+		}
+		sr_site_terra_step_marius_hills = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_marius_hills = yes
@@ -12689,6 +12755,7 @@ sr_site_release_daedalus = {
 	if = { limit = { has_global_variable = sr_site_bunker_daedalus } remove_global_variable = sr_site_bunker_daedalus }
 	if = { limit = { has_global_variable = sr_site_foundry_daedalus } remove_global_variable = sr_site_foundry_daedalus }
 	if = { limit = { has_global_variable = sr_site_admin_daedalus } remove_global_variable = sr_site_admin_daedalus }
+	if = { limit = { has_global_variable = sr_site_terra_daedalus } remove_global_variable = sr_site_terra_daedalus }
 	if = { limit = { has_global_variable = sr_site_free_daedalus } remove_global_variable = sr_site_free_daedalus }
 	if = { limit = { has_global_variable = sr_site_autonomy_daedalus } remove_global_variable = sr_site_autonomy_daedalus }
 	if = { limit = { has_global_variable = sr_site_charter_daedalus } remove_global_variable = sr_site_charter_daedalus }
@@ -12817,6 +12884,16 @@ sr_site_monthly_daedalus = {
 		else = {
 			sr_site_release_daedalus = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_daedalus > 0
+		}
+		sr_site_terra_step_daedalus = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_daedalus = yes
@@ -12951,6 +13028,7 @@ sr_site_release_imbrium = {
 	if = { limit = { has_global_variable = sr_site_bunker_imbrium } remove_global_variable = sr_site_bunker_imbrium }
 	if = { limit = { has_global_variable = sr_site_foundry_imbrium } remove_global_variable = sr_site_foundry_imbrium }
 	if = { limit = { has_global_variable = sr_site_admin_imbrium } remove_global_variable = sr_site_admin_imbrium }
+	if = { limit = { has_global_variable = sr_site_terra_imbrium } remove_global_variable = sr_site_terra_imbrium }
 	if = { limit = { has_global_variable = sr_site_free_imbrium } remove_global_variable = sr_site_free_imbrium }
 	if = { limit = { has_global_variable = sr_site_autonomy_imbrium } remove_global_variable = sr_site_autonomy_imbrium }
 	if = { limit = { has_global_variable = sr_site_charter_imbrium } remove_global_variable = sr_site_charter_imbrium }
@@ -13079,6 +13157,16 @@ sr_site_monthly_imbrium = {
 		else = {
 			sr_site_release_imbrium = yes
 		}
+	}
+	# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed
+	# levels add to its world's works, up to the whole job, unless it is occupied
+	# (sr_site_terra_step_<key>).
+	if = {
+		limit = {
+			sr_colonies_contested_enabled = yes
+			sr_site_terra_value_imbrium > 0
+		}
+		sr_site_terra_step_imbrium = { MONTHS = 1 }
 	}
 	# 4. The projection.
 	sr_site_sync_imbrium = yes
@@ -22394,7 +22482,7 @@ sr_mod_install_valles_marineris = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_valles_marineris < sr_terra_max_levels sr_site_terra_open_valles_marineris = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_mars < sr_world_terra_cap_mars sr_world_terra_open_mars = yes }
 			set_global_variable = { name = sr_site_terra_valles_marineris value = { value = sr_site_terra_value_valles_marineris add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -22520,29 +22608,30 @@ sr_mod_ai_plan_valles_marineris = {
 		}
 	}
 }
-# Valles Marineris's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Valles Marineris's part in Mars's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_valles_marineris = {
 	if = {
 		limit = { sr_site_terra_rate_valles_marineris > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_valles_marineris
+			name = sr_world_terra_done_mars
 			value = {
 				value = sr_site_terra_rate_valles_marineris
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_valles_marineris
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_mars
+				max = sr_world_terra_full_mars
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_valles_marineris
-			NOT = { sr_site_terra_open_valles_marineris = yes }
+			NOT = { sr_world_terra_open_mars = yes }
 		}
 		remove_global_variable = sr_site_terra_valles_marineris
-		debug_log = "TE_SR_MODULES valles_marineris: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES valles_marineris: mars terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -22634,7 +22723,7 @@ sr_mod_install_olympus_mons = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_olympus_mons < sr_terra_max_levels sr_site_terra_open_olympus_mons = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_mars < sr_world_terra_cap_mars sr_world_terra_open_mars = yes }
 			set_global_variable = { name = sr_site_terra_olympus_mons value = { value = sr_site_terra_value_olympus_mons add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -22760,29 +22849,30 @@ sr_mod_ai_plan_olympus_mons = {
 		}
 	}
 }
-# Olympus Mons's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Olympus Mons's part in Mars's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_olympus_mons = {
 	if = {
 		limit = { sr_site_terra_rate_olympus_mons > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_olympus_mons
+			name = sr_world_terra_done_mars
 			value = {
 				value = sr_site_terra_rate_olympus_mons
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_olympus_mons
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_mars
+				max = sr_world_terra_full_mars
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_olympus_mons
-			NOT = { sr_site_terra_open_olympus_mons = yes }
+			NOT = { sr_world_terra_open_mars = yes }
 		}
 		remove_global_variable = sr_site_terra_olympus_mons
-		debug_log = "TE_SR_MODULES olympus_mons: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES olympus_mons: mars terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -22874,7 +22964,7 @@ sr_mod_install_hellas_planitia = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_hellas_planitia < sr_terra_max_levels sr_site_terra_open_hellas_planitia = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_mars < sr_world_terra_cap_mars sr_world_terra_open_mars = yes }
 			set_global_variable = { name = sr_site_terra_hellas_planitia value = { value = sr_site_terra_value_hellas_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -23008,29 +23098,30 @@ sr_mod_ai_plan_hellas_planitia = {
 		}
 	}
 }
-# Hellas Planitia's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Hellas Planitia's part in Mars's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_hellas_planitia = {
 	if = {
 		limit = { sr_site_terra_rate_hellas_planitia > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_hellas_planitia
+			name = sr_world_terra_done_mars
 			value = {
 				value = sr_site_terra_rate_hellas_planitia
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_hellas_planitia
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_mars
+				max = sr_world_terra_full_mars
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_hellas_planitia
-			NOT = { sr_site_terra_open_hellas_planitia = yes }
+			NOT = { sr_world_terra_open_mars = yes }
 		}
 		remove_global_variable = sr_site_terra_hellas_planitia
-		debug_log = "TE_SR_MODULES hellas_planitia: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES hellas_planitia: mars terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -23122,7 +23213,7 @@ sr_mod_install_utopia_planitia = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_utopia_planitia < sr_terra_max_levels sr_site_terra_open_utopia_planitia = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_mars < sr_world_terra_cap_mars sr_world_terra_open_mars = yes }
 			set_global_variable = { name = sr_site_terra_utopia_planitia value = { value = sr_site_terra_value_utopia_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -23248,29 +23339,30 @@ sr_mod_ai_plan_utopia_planitia = {
 		}
 	}
 }
-# Utopia Planitia's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Utopia Planitia's part in Mars's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_utopia_planitia = {
 	if = {
 		limit = { sr_site_terra_rate_utopia_planitia > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_utopia_planitia
+			name = sr_world_terra_done_mars
 			value = {
 				value = sr_site_terra_rate_utopia_planitia
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_utopia_planitia
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_mars
+				max = sr_world_terra_full_mars
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_utopia_planitia
-			NOT = { sr_site_terra_open_utopia_planitia = yes }
+			NOT = { sr_world_terra_open_mars = yes }
 		}
 		remove_global_variable = sr_site_terra_utopia_planitia
-		debug_log = "TE_SR_MODULES utopia_planitia: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES utopia_planitia: mars terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -23362,7 +23454,7 @@ sr_mod_install_arcadia_planitia = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_arcadia_planitia < sr_terra_max_levels sr_site_terra_open_arcadia_planitia = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_mars < sr_world_terra_cap_mars sr_world_terra_open_mars = yes }
 			set_global_variable = { name = sr_site_terra_arcadia_planitia value = { value = sr_site_terra_value_arcadia_planitia add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -23496,29 +23588,30 @@ sr_mod_ai_plan_arcadia_planitia = {
 		}
 	}
 }
-# Arcadia Planitia's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Arcadia Planitia's part in Mars's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_arcadia_planitia = {
 	if = {
 		limit = { sr_site_terra_rate_arcadia_planitia > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_arcadia_planitia
+			name = sr_world_terra_done_mars
 			value = {
 				value = sr_site_terra_rate_arcadia_planitia
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_arcadia_planitia
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_mars
+				max = sr_world_terra_full_mars
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_arcadia_planitia
-			NOT = { sr_site_terra_open_arcadia_planitia = yes }
+			NOT = { sr_world_terra_open_mars = yes }
 		}
 		remove_global_variable = sr_site_terra_arcadia_planitia
-		debug_log = "TE_SR_MODULES arcadia_planitia: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES arcadia_planitia: mars terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -24829,6 +24922,11 @@ sr_mod_install_europa = {
 			set_global_variable = { name = sr_site_admin_europa value = { value = sr_site_admin_value_europa add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_europa < sr_world_terra_cap_europa sr_world_terra_open_europa = yes }
+			set_global_variable = { name = sr_site_terra_europa value = { value = sr_site_terra_value_europa add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -24920,6 +25018,14 @@ sr_mod_ai_plan_europa = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_europa = yes
+				sr_site_crews_europa >= sr_site_levels_europa
+				sr_site_fill_europa >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = europa TYPE = terra INDEX = 12 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_europa = yes
 				sr_site_crews_europa >= sr_site_levels_europa
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -24957,6 +25063,32 @@ sr_mod_ai_plan_europa = {
 			}
 			sr_mod_queue = { KEY = europa TYPE = lab INDEX = 12 CODE = 8 }
 		}
+	}
+}
+# Europa's part in Europa's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_europa = {
+	if = {
+		limit = { sr_site_terra_rate_europa > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_europa
+			value = {
+				value = sr_site_terra_rate_europa
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_europa
+				max = sr_world_terra_full_europa
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_europa
+			NOT = { sr_world_terra_open_europa = yes }
+		}
+		remove_global_variable = sr_site_terra_europa
+		debug_log = "TE_SR_MODULES europa: europa terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -25048,7 +25180,7 @@ sr_mod_install_ganymede = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_ganymede < sr_terra_max_levels sr_site_terra_open_ganymede = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_ganymede < sr_world_terra_cap_ganymede sr_world_terra_open_ganymede = yes }
 			set_global_variable = { name = sr_site_terra_ganymede value = { value = sr_site_terra_value_ganymede add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -25182,29 +25314,30 @@ sr_mod_ai_plan_ganymede = {
 		}
 	}
 }
-# Ganymede's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Ganymede's part in Ganymede's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_ganymede = {
 	if = {
 		limit = { sr_site_terra_rate_ganymede > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_ganymede
+			name = sr_world_terra_done_ganymede
 			value = {
 				value = sr_site_terra_rate_ganymede
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_ganymede
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_ganymede
+				max = sr_world_terra_full_ganymede
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_ganymede
-			NOT = { sr_site_terra_open_ganymede = yes }
+			NOT = { sr_world_terra_open_ganymede = yes }
 		}
 		remove_global_variable = sr_site_terra_ganymede
-		debug_log = "TE_SR_MODULES ganymede: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES ganymede: ganymede terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -25296,7 +25429,7 @@ sr_mod_install_callisto = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_callisto < sr_terra_max_levels sr_site_terra_open_callisto = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_callisto < sr_world_terra_cap_callisto sr_world_terra_open_callisto = yes }
 			set_global_variable = { name = sr_site_terra_callisto value = { value = sr_site_terra_value_callisto add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -25422,29 +25555,30 @@ sr_mod_ai_plan_callisto = {
 		}
 	}
 }
-# Callisto's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Callisto's part in Callisto's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_callisto = {
 	if = {
 		limit = { sr_site_terra_rate_callisto > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_callisto
+			name = sr_world_terra_done_callisto
 			value = {
 				value = sr_site_terra_rate_callisto
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_callisto
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_callisto
+				max = sr_world_terra_full_callisto
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_callisto
-			NOT = { sr_site_terra_open_callisto = yes }
+			NOT = { sr_world_terra_open_callisto = yes }
 		}
 		remove_global_variable = sr_site_terra_callisto
-		debug_log = "TE_SR_MODULES callisto: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES callisto: callisto terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -25940,7 +26074,7 @@ sr_mod_install_venus = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_venus < sr_terra_max_levels sr_site_terra_open_venus = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_venus < sr_world_terra_cap_venus sr_world_terra_open_venus = yes }
 			set_global_variable = { name = sr_site_terra_venus value = { value = sr_site_terra_value_venus add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -26066,29 +26200,30 @@ sr_mod_ai_plan_venus = {
 		}
 	}
 }
-# Venus Cloud Habitat's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Venus Cloud Habitat's part in Venus Cloud Habitat's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_venus = {
 	if = {
 		limit = { sr_site_terra_rate_venus > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_venus
+			name = sr_world_terra_done_venus
 			value = {
 				value = sr_site_terra_rate_venus
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_venus
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_venus
+				max = sr_world_terra_full_venus
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_venus
-			NOT = { sr_site_terra_open_venus = yes }
+			NOT = { sr_world_terra_open_venus = yes }
 		}
 		remove_global_variable = sr_site_terra_venus
-		debug_log = "TE_SR_MODULES venus: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES venus: venus terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -26177,6 +26312,11 @@ sr_mod_install_mercury = {
 		else_if = {
 			limit = { local_var:sr_ms_type_now = 15 }
 			set_global_variable = { name = sr_site_admin_mercury value = { value = sr_site_admin_value_mercury add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_mercury < sr_world_terra_cap_mercury sr_world_terra_open_mercury = yes }
+			set_global_variable = { name = sr_site_terra_mercury value = { value = sr_site_terra_value_mercury add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
@@ -26270,6 +26410,14 @@ sr_mod_ai_plan_mercury = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_mercury = yes
+				sr_site_crews_mercury >= sr_site_levels_mercury
+				sr_site_fill_mercury >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = mercury TYPE = terra INDEX = 18 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_mercury = yes
 				sr_site_crews_mercury >= sr_site_levels_mercury
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -26291,6 +26439,32 @@ sr_mod_ai_plan_mercury = {
 			}
 			sr_mod_queue = { KEY = mercury TYPE = lab INDEX = 18 CODE = 8 }
 		}
+	}
+}
+# Mercury's part in Mercury's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_mercury = {
+	if = {
+		limit = { sr_site_terra_rate_mercury > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_mercury
+			value = {
+				value = sr_site_terra_rate_mercury
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_mercury
+				max = sr_world_terra_full_mercury
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_mercury
+			NOT = { sr_world_terra_open_mercury = yes }
+		}
+		remove_global_variable = sr_site_terra_mercury
+		debug_log = "TE_SR_MODULES mercury: mercury terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -26382,7 +26556,7 @@ sr_mod_install_titan = {
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		else_if = {
-			limit = { local_var:sr_ms_type_now = 16 sr_site_terra_value_titan < sr_terra_max_levels sr_site_terra_open_titan = yes }
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_titan < sr_world_terra_cap_titan sr_world_terra_open_titan = yes }
 			set_global_variable = { name = sr_site_terra_titan value = { value = sr_site_terra_value_titan add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
@@ -26516,29 +26690,30 @@ sr_mod_ai_plan_titan = {
 		}
 	}
 }
-# Titan's works, MONTHS months at this month's pace (its staffed
-# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,
-# the levels stand down and free their slots; the work done stays the world's.
+# Titan's part in Titan's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
 sr_site_terra_step_titan = {
 	if = {
 		limit = { sr_site_terra_rate_titan > 0 }
 		set_global_variable = {
-			name = sr_site_terra_done_titan
+			name = sr_world_terra_done_titan
 			value = {
 				value = sr_site_terra_rate_titan
 				multiply = $MONTHS$
-				add = sr_site_terra_done_value_titan
-				max = sr_terra_full_months
+				add = sr_world_terra_done_value_titan
+				max = sr_world_terra_full_titan
 			}
 		}
 	}
 	if = {
 		limit = {
 			has_global_variable = sr_site_terra_titan
-			NOT = { sr_site_terra_open_titan = yes }
+			NOT = { sr_world_terra_open_titan = yes }
 		}
 		remove_global_variable = sr_site_terra_titan
-		debug_log = "TE_SR_MODULES titan: terraformed; its Terraforming levels stand down"
+		debug_log = "TE_SR_MODULES titan: titan terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -29678,6 +29853,11 @@ sr_mod_install_shackleton = {
 			set_global_variable = { name = sr_site_admin_shackleton value = { value = sr_site_admin_value_shackleton add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_moon < sr_world_terra_cap_moon sr_world_terra_open_moon = yes }
+			set_global_variable = { name = sr_site_terra_shackleton value = { value = sr_site_terra_value_shackleton add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
 		# none of its colonies has contact).
 		if = {
@@ -29769,6 +29949,14 @@ sr_mod_ai_plan_shackleton = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_shackleton = yes
+				sr_site_crews_shackleton >= sr_site_levels_shackleton
+				sr_site_fill_shackleton >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = shackleton TYPE = terra INDEX = 35 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_shackleton = yes
 				sr_site_crews_shackleton >= sr_site_levels_shackleton
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -29790,6 +29978,32 @@ sr_mod_ai_plan_shackleton = {
 			}
 			sr_mod_queue = { KEY = shackleton TYPE = lab INDEX = 35 CODE = 8 }
 		}
+	}
+}
+# Shackleton Crater's part in the Moon's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_shackleton = {
+	if = {
+		limit = { sr_site_terra_rate_shackleton > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_moon
+			value = {
+				value = sr_site_terra_rate_shackleton
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_moon
+				max = sr_world_terra_full_moon
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_shackleton
+			NOT = { sr_world_terra_open_moon = yes }
+		}
+		remove_global_variable = sr_site_terra_shackleton
+		debug_log = "TE_SR_MODULES shackleton: moon terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -29873,6 +30087,11 @@ sr_mod_install_peary = {
 		else_if = {
 			limit = { local_var:sr_ms_type_now = 15 }
 			set_global_variable = { name = sr_site_admin_peary value = { value = sr_site_admin_value_peary add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_moon < sr_world_terra_cap_moon sr_world_terra_open_moon = yes }
+			set_global_variable = { name = sr_site_terra_peary value = { value = sr_site_terra_value_peary add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
@@ -29966,6 +30185,14 @@ sr_mod_ai_plan_peary = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_peary = yes
+				sr_site_crews_peary >= sr_site_levels_peary
+				sr_site_fill_peary >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = peary TYPE = terra INDEX = 36 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_peary = yes
 				sr_site_crews_peary >= sr_site_levels_peary
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -29987,6 +30214,32 @@ sr_mod_ai_plan_peary = {
 			}
 			sr_mod_queue = { KEY = peary TYPE = lab INDEX = 36 CODE = 8 }
 		}
+	}
+}
+# Peary Crater's part in the Moon's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_peary = {
+	if = {
+		limit = { sr_site_terra_rate_peary > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_moon
+			value = {
+				value = sr_site_terra_rate_peary
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_moon
+				max = sr_world_terra_full_moon
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_peary
+			NOT = { sr_world_terra_open_moon = yes }
+		}
+		remove_global_variable = sr_site_terra_peary
+		debug_log = "TE_SR_MODULES peary: moon terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -30070,6 +30323,11 @@ sr_mod_install_tranquility = {
 		else_if = {
 			limit = { local_var:sr_ms_type_now = 15 }
 			set_global_variable = { name = sr_site_admin_tranquility value = { value = sr_site_admin_value_tranquility add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_moon < sr_world_terra_cap_moon sr_world_terra_open_moon = yes }
+			set_global_variable = { name = sr_site_terra_tranquility value = { value = sr_site_terra_value_tranquility add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
@@ -30163,6 +30421,14 @@ sr_mod_ai_plan_tranquility = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_tranquility = yes
+				sr_site_crews_tranquility >= sr_site_levels_tranquility
+				sr_site_fill_tranquility >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = tranquility TYPE = terra INDEX = 37 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_tranquility = yes
 				sr_site_crews_tranquility >= sr_site_levels_tranquility
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -30184,6 +30450,32 @@ sr_mod_ai_plan_tranquility = {
 			}
 			sr_mod_queue = { KEY = tranquility TYPE = lab INDEX = 37 CODE = 8 }
 		}
+	}
+}
+# Tranquility Base's part in the Moon's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_tranquility = {
+	if = {
+		limit = { sr_site_terra_rate_tranquility > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_moon
+			value = {
+				value = sr_site_terra_rate_tranquility
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_moon
+				max = sr_world_terra_full_moon
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_tranquility
+			NOT = { sr_world_terra_open_moon = yes }
+		}
+		remove_global_variable = sr_site_terra_tranquility
+		debug_log = "TE_SR_MODULES tranquility: moon terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -30267,6 +30559,11 @@ sr_mod_install_marius_hills = {
 		else_if = {
 			limit = { local_var:sr_ms_type_now = 15 }
 			set_global_variable = { name = sr_site_admin_marius_hills value = { value = sr_site_admin_value_marius_hills add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_moon < sr_world_terra_cap_moon sr_world_terra_open_moon = yes }
+			set_global_variable = { name = sr_site_terra_marius_hills value = { value = sr_site_terra_value_marius_hills add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
@@ -30360,6 +30657,14 @@ sr_mod_ai_plan_marius_hills = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_marius_hills = yes
+				sr_site_crews_marius_hills >= sr_site_levels_marius_hills
+				sr_site_fill_marius_hills >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = marius_hills TYPE = terra INDEX = 38 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_marius_hills = yes
 				sr_site_crews_marius_hills >= sr_site_levels_marius_hills
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -30381,6 +30686,32 @@ sr_mod_ai_plan_marius_hills = {
 			}
 			sr_mod_queue = { KEY = marius_hills TYPE = lab INDEX = 38 CODE = 8 }
 		}
+	}
+}
+# Marius Hills's part in the Moon's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_marius_hills = {
+	if = {
+		limit = { sr_site_terra_rate_marius_hills > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_moon
+			value = {
+				value = sr_site_terra_rate_marius_hills
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_moon
+				max = sr_world_terra_full_moon
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_marius_hills
+			NOT = { sr_world_terra_open_moon = yes }
+		}
+		remove_global_variable = sr_site_terra_marius_hills
+		debug_log = "TE_SR_MODULES marius_hills: moon terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -30464,6 +30795,11 @@ sr_mod_install_daedalus = {
 		else_if = {
 			limit = { local_var:sr_ms_type_now = 15 }
 			set_global_variable = { name = sr_site_admin_daedalus value = { value = sr_site_admin_value_daedalus add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_moon < sr_world_terra_cap_moon sr_world_terra_open_moon = yes }
+			set_global_variable = { name = sr_site_terra_daedalus value = { value = sr_site_terra_value_daedalus add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
@@ -30557,6 +30893,14 @@ sr_mod_ai_plan_daedalus = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_daedalus = yes
+				sr_site_crews_daedalus >= sr_site_levels_daedalus
+				sr_site_fill_daedalus >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = daedalus TYPE = terra INDEX = 39 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_daedalus = yes
 				sr_site_crews_daedalus >= sr_site_levels_daedalus
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -30578,6 +30922,32 @@ sr_mod_ai_plan_daedalus = {
 			}
 			sr_mod_queue = { KEY = daedalus TYPE = lab INDEX = 39 CODE = 8 }
 		}
+	}
+}
+# Daedalus Crater's part in the Moon's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_daedalus = {
+	if = {
+		limit = { sr_site_terra_rate_daedalus > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_moon
+			value = {
+				value = sr_site_terra_rate_daedalus
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_moon
+				max = sr_world_terra_full_moon
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_daedalus
+			NOT = { sr_world_terra_open_moon = yes }
+		}
+		remove_global_variable = sr_site_terra_daedalus
+		debug_log = "TE_SR_MODULES daedalus: moon terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -30661,6 +31031,11 @@ sr_mod_install_imbrium = {
 		else_if = {
 			limit = { local_var:sr_ms_type_now = 15 }
 			set_global_variable = { name = sr_site_admin_imbrium value = { value = sr_site_admin_value_imbrium add = 1 } }
+			set_local_variable = { name = sr_ms_installed value = 1 }
+		}
+		else_if = {
+			limit = { local_var:sr_ms_type_now = 16 sr_world_terra_levels_moon < sr_world_terra_cap_moon sr_world_terra_open_moon = yes }
+			set_global_variable = { name = sr_site_terra_imbrium value = { value = sr_site_terra_value_imbrium add = 1 } }
 			set_local_variable = { name = sr_ms_installed value = 1 }
 		}
 		# Contact, unless the shipper's Earth is blockaded (slice 6 design § 15: then
@@ -30754,6 +31129,14 @@ sr_mod_ai_plan_imbrium = {
 		}
 		else_if = {
 			limit = {
+				sr_mod_can_queue_terra_imbrium = yes
+				sr_site_crews_imbrium >= sr_site_levels_imbrium
+				sr_site_fill_imbrium >= sr_mod_ai_terra_fill
+			}
+			sr_mod_queue = { KEY = imbrium TYPE = terra INDEX = 40 CODE = 16 }
+		}
+		else_if = {
+			limit = {
 				sr_mod_can_queue_bunker_imbrium = yes
 				sr_site_crews_imbrium >= sr_site_levels_imbrium
 				nd_is_armed = yes sr_mod_units_bunker < sr_mod_ai_bunker_max
@@ -30775,6 +31158,32 @@ sr_mod_ai_plan_imbrium = {
 			}
 			sr_mod_queue = { KEY = imbrium TYPE = lab INDEX = 40 CODE = 8 }
 		}
+	}
+}
+# Mare Imbrium's part in the Moon's works, MONTHS months at this month's pace (its
+# staffed Terraforming levels; none while occupied), up to the world's whole job. The
+# world finished, the colony's levels stand down and free their crews; the work done
+# stays the world's.
+sr_site_terra_step_imbrium = {
+	if = {
+		limit = { sr_site_terra_rate_imbrium > 0 }
+		set_global_variable = {
+			name = sr_world_terra_done_moon
+			value = {
+				value = sr_site_terra_rate_imbrium
+				multiply = $MONTHS$
+				add = sr_world_terra_done_value_moon
+				max = sr_world_terra_full_moon
+			}
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = sr_site_terra_imbrium
+			NOT = { sr_world_terra_open_moon = yes }
+		}
+		remove_global_variable = sr_site_terra_imbrium
+		debug_log = "TE_SR_MODULES imbrium: moon terraformed; the Terraforming levels here stand down"
 	}
 }
 
@@ -33216,6 +33625,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_europa } remove_variable = sr_mq_bunker_europa }
 	if = { limit = { has_variable = sr_mq_foundry_europa } remove_variable = sr_mq_foundry_europa }
 	if = { limit = { has_variable = sr_mq_admin_europa } remove_variable = sr_mq_admin_europa }
+	if = { limit = { has_variable = sr_mq_terra_europa } remove_variable = sr_mq_terra_europa }
 	if = { limit = { has_variable = sr_mq_hab_ganymede } remove_variable = sr_mq_hab_ganymede }
 	if = { limit = { has_variable = sr_mq_a_ganymede } remove_variable = sr_mq_a_ganymede }
 	if = { limit = { has_variable = sr_mq_b_ganymede } remove_variable = sr_mq_b_ganymede }
@@ -33309,6 +33719,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_mercury } remove_variable = sr_mq_bunker_mercury }
 	if = { limit = { has_variable = sr_mq_foundry_mercury } remove_variable = sr_mq_foundry_mercury }
 	if = { limit = { has_variable = sr_mq_admin_mercury } remove_variable = sr_mq_admin_mercury }
+	if = { limit = { has_variable = sr_mq_terra_mercury } remove_variable = sr_mq_terra_mercury }
 	if = { limit = { has_variable = sr_mq_hab_titan } remove_variable = sr_mq_hab_titan }
 	if = { limit = { has_variable = sr_mq_a_titan } remove_variable = sr_mq_a_titan }
 	if = { limit = { has_variable = sr_mq_b_titan } remove_variable = sr_mq_b_titan }
@@ -33564,6 +33975,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_shackleton } remove_variable = sr_mq_bunker_shackleton }
 	if = { limit = { has_variable = sr_mq_foundry_shackleton } remove_variable = sr_mq_foundry_shackleton }
 	if = { limit = { has_variable = sr_mq_admin_shackleton } remove_variable = sr_mq_admin_shackleton }
+	if = { limit = { has_variable = sr_mq_terra_shackleton } remove_variable = sr_mq_terra_shackleton }
 	if = { limit = { has_variable = sr_mq_hab_peary } remove_variable = sr_mq_hab_peary }
 	if = { limit = { has_variable = sr_mq_a_peary } remove_variable = sr_mq_a_peary }
 	if = { limit = { has_variable = sr_mq_b_peary } remove_variable = sr_mq_b_peary }
@@ -33578,6 +33990,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_peary } remove_variable = sr_mq_bunker_peary }
 	if = { limit = { has_variable = sr_mq_foundry_peary } remove_variable = sr_mq_foundry_peary }
 	if = { limit = { has_variable = sr_mq_admin_peary } remove_variable = sr_mq_admin_peary }
+	if = { limit = { has_variable = sr_mq_terra_peary } remove_variable = sr_mq_terra_peary }
 	if = { limit = { has_variable = sr_mq_hab_tranquility } remove_variable = sr_mq_hab_tranquility }
 	if = { limit = { has_variable = sr_mq_a_tranquility } remove_variable = sr_mq_a_tranquility }
 	if = { limit = { has_variable = sr_mq_b_tranquility } remove_variable = sr_mq_b_tranquility }
@@ -33592,6 +34005,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_tranquility } remove_variable = sr_mq_bunker_tranquility }
 	if = { limit = { has_variable = sr_mq_foundry_tranquility } remove_variable = sr_mq_foundry_tranquility }
 	if = { limit = { has_variable = sr_mq_admin_tranquility } remove_variable = sr_mq_admin_tranquility }
+	if = { limit = { has_variable = sr_mq_terra_tranquility } remove_variable = sr_mq_terra_tranquility }
 	if = { limit = { has_variable = sr_mq_hab_marius_hills } remove_variable = sr_mq_hab_marius_hills }
 	if = { limit = { has_variable = sr_mq_a_marius_hills } remove_variable = sr_mq_a_marius_hills }
 	if = { limit = { has_variable = sr_mq_b_marius_hills } remove_variable = sr_mq_b_marius_hills }
@@ -33606,6 +34020,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_marius_hills } remove_variable = sr_mq_bunker_marius_hills }
 	if = { limit = { has_variable = sr_mq_foundry_marius_hills } remove_variable = sr_mq_foundry_marius_hills }
 	if = { limit = { has_variable = sr_mq_admin_marius_hills } remove_variable = sr_mq_admin_marius_hills }
+	if = { limit = { has_variable = sr_mq_terra_marius_hills } remove_variable = sr_mq_terra_marius_hills }
 	if = { limit = { has_variable = sr_mq_hab_daedalus } remove_variable = sr_mq_hab_daedalus }
 	if = { limit = { has_variable = sr_mq_a_daedalus } remove_variable = sr_mq_a_daedalus }
 	if = { limit = { has_variable = sr_mq_b_daedalus } remove_variable = sr_mq_b_daedalus }
@@ -33620,6 +34035,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_daedalus } remove_variable = sr_mq_bunker_daedalus }
 	if = { limit = { has_variable = sr_mq_foundry_daedalus } remove_variable = sr_mq_foundry_daedalus }
 	if = { limit = { has_variable = sr_mq_admin_daedalus } remove_variable = sr_mq_admin_daedalus }
+	if = { limit = { has_variable = sr_mq_terra_daedalus } remove_variable = sr_mq_terra_daedalus }
 	if = { limit = { has_variable = sr_mq_hab_imbrium } remove_variable = sr_mq_hab_imbrium }
 	if = { limit = { has_variable = sr_mq_a_imbrium } remove_variable = sr_mq_a_imbrium }
 	if = { limit = { has_variable = sr_mq_b_imbrium } remove_variable = sr_mq_b_imbrium }
@@ -33634,6 +34050,7 @@ sr_mq_recount = {
 	if = { limit = { has_variable = sr_mq_bunker_imbrium } remove_variable = sr_mq_bunker_imbrium }
 	if = { limit = { has_variable = sr_mq_foundry_imbrium } remove_variable = sr_mq_foundry_imbrium }
 	if = { limit = { has_variable = sr_mq_admin_imbrium } remove_variable = sr_mq_admin_imbrium }
+	if = { limit = { has_variable = sr_mq_terra_imbrium } remove_variable = sr_mq_terra_imbrium }
 	if = {
 		limit = { has_variable = sr_mq_1_site has_variable = sr_mq_1_type }
 		set_local_variable = { name = sr_mq_site_now value = var:sr_mq_1_site }
@@ -33976,6 +34393,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_europa } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_europa } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_europa } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_europa } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 13 }
@@ -34087,6 +34505,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_mercury } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_mercury } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_mercury } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_mercury } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 19 }
@@ -34393,6 +34812,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_shackleton } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_shackleton } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_shackleton } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_shackleton } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 36 }
@@ -34410,6 +34830,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_peary } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_peary } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_peary } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_peary } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 37 }
@@ -34427,6 +34848,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_tranquility } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_tranquility } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_tranquility } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_tranquility } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 38 }
@@ -34444,6 +34866,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_marius_hills } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_marius_hills } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_marius_hills } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_marius_hills } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 39 }
@@ -34461,6 +34884,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_daedalus } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_daedalus } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_daedalus } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_daedalus } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_site_now = 40 }
@@ -34478,6 +34902,7 @@ sr_mq_count_by_index = {
 		else_if = { limit = { local_var:sr_mq_type_now = 13 } sr_mq_count_add = { VAR = sr_mq_bunker_imbrium } }
 		else_if = { limit = { local_var:sr_mq_type_now = 14 } sr_mq_count_add = { VAR = sr_mq_foundry_imbrium } }
 		else_if = { limit = { local_var:sr_mq_type_now = 15 } sr_mq_count_add = { VAR = sr_mq_admin_imbrium } }
+		else_if = { limit = { local_var:sr_mq_type_now = 16 } sr_mq_count_add = { VAR = sr_mq_terra_imbrium } }
 	}
 }
 
@@ -34507,7 +34932,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = valles_marineris TYPE = bunker CODE = 13 INDEX = 1 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = valles_marineris TYPE = foundry CODE = 14 INDEX = 1 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = valles_marineris TYPE = admin CODE = 15 INDEX = 1 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_valles_marineris = yes } sr_mod_fab_build = { KEY = valles_marineris TYPE = terra CODE = 16 INDEX = 1 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_mars = yes } sr_mod_fab_build = { KEY = valles_marineris TYPE = terra CODE = 16 INDEX = 1 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 2 global_var:sr_site_holder_olympus_mons ?= this }
@@ -34526,7 +34951,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = olympus_mons TYPE = bunker CODE = 13 INDEX = 2 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = olympus_mons TYPE = foundry CODE = 14 INDEX = 2 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = olympus_mons TYPE = admin CODE = 15 INDEX = 2 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_olympus_mons = yes } sr_mod_fab_build = { KEY = olympus_mons TYPE = terra CODE = 16 INDEX = 2 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_mars = yes } sr_mod_fab_build = { KEY = olympus_mons TYPE = terra CODE = 16 INDEX = 2 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 3 global_var:sr_site_holder_hellas_planitia ?= this }
@@ -34545,7 +34970,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = hellas_planitia TYPE = bunker CODE = 13 INDEX = 3 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = hellas_planitia TYPE = foundry CODE = 14 INDEX = 3 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = hellas_planitia TYPE = admin CODE = 15 INDEX = 3 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_hellas_planitia = yes } sr_mod_fab_build = { KEY = hellas_planitia TYPE = terra CODE = 16 INDEX = 3 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_mars = yes } sr_mod_fab_build = { KEY = hellas_planitia TYPE = terra CODE = 16 INDEX = 3 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 4 global_var:sr_site_holder_utopia_planitia ?= this }
@@ -34564,7 +34989,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = utopia_planitia TYPE = bunker CODE = 13 INDEX = 4 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = utopia_planitia TYPE = foundry CODE = 14 INDEX = 4 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = utopia_planitia TYPE = admin CODE = 15 INDEX = 4 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_utopia_planitia = yes } sr_mod_fab_build = { KEY = utopia_planitia TYPE = terra CODE = 16 INDEX = 4 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_mars = yes } sr_mod_fab_build = { KEY = utopia_planitia TYPE = terra CODE = 16 INDEX = 4 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 5 global_var:sr_site_holder_arcadia_planitia ?= this }
@@ -34583,7 +35008,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = bunker CODE = 13 INDEX = 5 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = foundry CODE = 14 INDEX = 5 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = admin CODE = 15 INDEX = 5 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_arcadia_planitia = yes } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = terra CODE = 16 INDEX = 5 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_mars = yes } sr_mod_fab_build = { KEY = arcadia_planitia TYPE = terra CODE = 16 INDEX = 5 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 6 global_var:sr_site_holder_ceres ?= this }
@@ -34710,6 +35135,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = europa TYPE = bunker CODE = 13 INDEX = 12 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = europa TYPE = foundry CODE = 14 INDEX = 12 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = europa TYPE = admin CODE = 15 INDEX = 12 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_europa = yes } sr_mod_fab_build = { KEY = europa TYPE = terra CODE = 16 INDEX = 12 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 13 global_var:sr_site_holder_ganymede ?= this }
@@ -34728,7 +35154,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = ganymede TYPE = bunker CODE = 13 INDEX = 13 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = ganymede TYPE = foundry CODE = 14 INDEX = 13 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = ganymede TYPE = admin CODE = 15 INDEX = 13 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_ganymede = yes } sr_mod_fab_build = { KEY = ganymede TYPE = terra CODE = 16 INDEX = 13 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_ganymede = yes } sr_mod_fab_build = { KEY = ganymede TYPE = terra CODE = 16 INDEX = 13 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 14 global_var:sr_site_holder_callisto ?= this }
@@ -34747,7 +35173,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = callisto TYPE = bunker CODE = 13 INDEX = 14 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = callisto TYPE = foundry CODE = 14 INDEX = 14 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = callisto TYPE = admin CODE = 15 INDEX = 14 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_callisto = yes } sr_mod_fab_build = { KEY = callisto TYPE = terra CODE = 16 INDEX = 14 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_callisto = yes } sr_mod_fab_build = { KEY = callisto TYPE = terra CODE = 16 INDEX = 14 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 15 global_var:sr_site_holder_himalia ?= this }
@@ -34802,7 +35228,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = venus TYPE = bunker CODE = 13 INDEX = 17 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = venus TYPE = foundry CODE = 14 INDEX = 17 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = venus TYPE = admin CODE = 15 INDEX = 17 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_venus = yes } sr_mod_fab_build = { KEY = venus TYPE = terra CODE = 16 INDEX = 17 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_venus = yes } sr_mod_fab_build = { KEY = venus TYPE = terra CODE = 16 INDEX = 17 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 18 global_var:sr_site_holder_mercury ?= this }
@@ -34821,6 +35247,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = mercury TYPE = bunker CODE = 13 INDEX = 18 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = mercury TYPE = foundry CODE = 14 INDEX = 18 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = mercury TYPE = admin CODE = 15 INDEX = 18 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_mercury = yes } sr_mod_fab_build = { KEY = mercury TYPE = terra CODE = 16 INDEX = 18 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 19 global_var:sr_site_holder_titan ?= this }
@@ -34839,7 +35266,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build = { KEY = titan TYPE = bunker CODE = 13 INDEX = 19 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build = { KEY = titan TYPE = foundry CODE = 14 INDEX = 19 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build = { KEY = titan TYPE = admin CODE = 15 INDEX = 19 } }
-		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_site_terra_open_titan = yes } sr_mod_fab_build = { KEY = titan TYPE = terra CODE = 16 INDEX = 19 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_titan = yes } sr_mod_fab_build = { KEY = titan TYPE = terra CODE = 16 INDEX = 19 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 20 global_var:sr_site_holder_enceladus ?= this }
@@ -35127,6 +35554,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = bunker CODE = 13 INDEX = 35 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = foundry CODE = 14 INDEX = 35 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = admin CODE = 15 INDEX = 35 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_moon = yes } sr_mod_fab_build_lunar = { KEY = shackleton TYPE = terra CODE = 16 INDEX = 35 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 36 global_var:sr_site_holder_peary ?= this }
@@ -35144,6 +35572,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = peary TYPE = bunker CODE = 13 INDEX = 36 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = peary TYPE = foundry CODE = 14 INDEX = 36 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = peary TYPE = admin CODE = 15 INDEX = 36 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_moon = yes } sr_mod_fab_build_lunar = { KEY = peary TYPE = terra CODE = 16 INDEX = 36 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 37 global_var:sr_site_holder_tranquility ?= this }
@@ -35161,6 +35590,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = bunker CODE = 13 INDEX = 37 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = foundry CODE = 14 INDEX = 37 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = admin CODE = 15 INDEX = 37 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_moon = yes } sr_mod_fab_build_lunar = { KEY = tranquility TYPE = terra CODE = 16 INDEX = 37 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 38 global_var:sr_site_holder_marius_hills ?= this }
@@ -35178,6 +35608,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = bunker CODE = 13 INDEX = 38 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = foundry CODE = 14 INDEX = 38 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = admin CODE = 15 INDEX = 38 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_moon = yes } sr_mod_fab_build_lunar = { KEY = marius_hills TYPE = terra CODE = 16 INDEX = 38 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 39 global_var:sr_site_holder_daedalus ?= this }
@@ -35195,6 +35626,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = bunker CODE = 13 INDEX = 39 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = foundry CODE = 14 INDEX = 39 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = admin CODE = 15 INDEX = 39 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_moon = yes } sr_mod_fab_build_lunar = { KEY = daedalus TYPE = terra CODE = 16 INDEX = 39 } }
 	}
 	else_if = {
 		limit = { local_var:sr_mq_head_site = 40 global_var:sr_site_holder_imbrium ?= this }
@@ -35212,6 +35644,7 @@ sr_mod_fab_head = {
 		else_if = { limit = { local_var:sr_mq_head_type = 13 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = bunker CODE = 13 INDEX = 40 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 14 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = foundry CODE = 14 INDEX = 40 } }
 		else_if = { limit = { local_var:sr_mq_head_type = 15 } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = admin CODE = 15 INDEX = 40 } }
+		else_if = { limit = { local_var:sr_mq_head_type = 16 sr_world_terra_open_moon = yes } sr_mod_fab_build_lunar = { KEY = imbrium TYPE = terra CODE = 16 INDEX = 40 } }
 	}
 	sr_mq_recount = yes
 }
@@ -35955,6 +36388,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_europa } remove_global_variable = sr_site_ship_bunker_europa }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_europa } remove_global_variable = sr_site_ship_foundry_europa }
 	if = { limit = { has_global_variable = sr_site_ship_admin_europa } remove_global_variable = sr_site_ship_admin_europa }
+	if = { limit = { has_global_variable = sr_site_ship_terra_europa } remove_global_variable = sr_site_ship_terra_europa }
 	if = { limit = { has_global_variable = sr_site_ship_hab_ganymede } remove_global_variable = sr_site_ship_hab_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_a_ganymede } remove_global_variable = sr_site_ship_a_ganymede }
 	if = { limit = { has_global_variable = sr_site_ship_b_ganymede } remove_global_variable = sr_site_ship_b_ganymede }
@@ -36048,6 +36482,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_mercury } remove_global_variable = sr_site_ship_bunker_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_mercury } remove_global_variable = sr_site_ship_foundry_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_admin_mercury } remove_global_variable = sr_site_ship_admin_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_terra_mercury } remove_global_variable = sr_site_ship_terra_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_hab_titan } remove_global_variable = sr_site_ship_hab_titan }
 	if = { limit = { has_global_variable = sr_site_ship_a_titan } remove_global_variable = sr_site_ship_a_titan }
 	if = { limit = { has_global_variable = sr_site_ship_b_titan } remove_global_variable = sr_site_ship_b_titan }
@@ -36303,6 +36738,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_shackleton } remove_global_variable = sr_site_ship_bunker_shackleton }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_shackleton } remove_global_variable = sr_site_ship_foundry_shackleton }
 	if = { limit = { has_global_variable = sr_site_ship_admin_shackleton } remove_global_variable = sr_site_ship_admin_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_terra_shackleton } remove_global_variable = sr_site_ship_terra_shackleton }
 	if = { limit = { has_global_variable = sr_site_ship_hab_peary } remove_global_variable = sr_site_ship_hab_peary }
 	if = { limit = { has_global_variable = sr_site_ship_a_peary } remove_global_variable = sr_site_ship_a_peary }
 	if = { limit = { has_global_variable = sr_site_ship_b_peary } remove_global_variable = sr_site_ship_b_peary }
@@ -36317,6 +36753,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_peary } remove_global_variable = sr_site_ship_bunker_peary }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_peary } remove_global_variable = sr_site_ship_foundry_peary }
 	if = { limit = { has_global_variable = sr_site_ship_admin_peary } remove_global_variable = sr_site_ship_admin_peary }
+	if = { limit = { has_global_variable = sr_site_ship_terra_peary } remove_global_variable = sr_site_ship_terra_peary }
 	if = { limit = { has_global_variable = sr_site_ship_hab_tranquility } remove_global_variable = sr_site_ship_hab_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_a_tranquility } remove_global_variable = sr_site_ship_a_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_b_tranquility } remove_global_variable = sr_site_ship_b_tranquility }
@@ -36331,6 +36768,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_tranquility } remove_global_variable = sr_site_ship_bunker_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_tranquility } remove_global_variable = sr_site_ship_foundry_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_admin_tranquility } remove_global_variable = sr_site_ship_admin_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_terra_tranquility } remove_global_variable = sr_site_ship_terra_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_hab_marius_hills } remove_global_variable = sr_site_ship_hab_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_a_marius_hills } remove_global_variable = sr_site_ship_a_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_b_marius_hills } remove_global_variable = sr_site_ship_b_marius_hills }
@@ -36345,6 +36783,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_marius_hills } remove_global_variable = sr_site_ship_bunker_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_marius_hills } remove_global_variable = sr_site_ship_foundry_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_admin_marius_hills } remove_global_variable = sr_site_ship_admin_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_terra_marius_hills } remove_global_variable = sr_site_ship_terra_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_hab_daedalus } remove_global_variable = sr_site_ship_hab_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_a_daedalus } remove_global_variable = sr_site_ship_a_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_b_daedalus } remove_global_variable = sr_site_ship_b_daedalus }
@@ -36359,6 +36798,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_daedalus } remove_global_variable = sr_site_ship_bunker_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_daedalus } remove_global_variable = sr_site_ship_foundry_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_daedalus } remove_global_variable = sr_site_ship_admin_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_daedalus } remove_global_variable = sr_site_ship_terra_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_hab_imbrium } remove_global_variable = sr_site_ship_hab_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_a_imbrium } remove_global_variable = sr_site_ship_a_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_b_imbrium } remove_global_variable = sr_site_ship_b_imbrium }
@@ -36373,6 +36813,7 @@ sr_ms_clear_counters = {
 	if = { limit = { has_global_variable = sr_site_ship_bunker_imbrium } remove_global_variable = sr_site_ship_bunker_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_foundry_imbrium } remove_global_variable = sr_site_ship_foundry_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_admin_imbrium } remove_global_variable = sr_site_ship_admin_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_terra_imbrium } remove_global_variable = sr_site_ship_terra_imbrium }
 }
 sr_ms_count_by_index = {
 	if = {
@@ -36595,6 +37036,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_europa } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_europa } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_europa } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_europa } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 13 }
@@ -36706,6 +37148,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_mercury } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_mercury } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_mercury } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_mercury } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 19 }
@@ -37012,6 +37455,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_shackleton } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_shackleton } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_shackleton } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_shackleton } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 36 }
@@ -37029,6 +37473,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_peary } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_peary } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_peary } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_peary } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 37 }
@@ -37046,6 +37491,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_tranquility } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_tranquility } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_tranquility } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_tranquility } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 38 }
@@ -37063,6 +37509,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_marius_hills } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_marius_hills } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_marius_hills } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_marius_hills } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 39 }
@@ -37080,6 +37527,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_daedalus } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_daedalus } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_daedalus } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_daedalus } }
 	}
 	else_if = {
 		limit = { local_var:sr_ms_site_now = 40 }
@@ -37097,6 +37545,7 @@ sr_ms_count_by_index = {
 		else_if = { limit = { local_var:sr_ms_type_now = 13 } sr_ms_count_add = { VAR = sr_site_ship_bunker_imbrium } }
 		else_if = { limit = { local_var:sr_ms_type_now = 14 } sr_ms_count_add = { VAR = sr_site_ship_foundry_imbrium } }
 		else_if = { limit = { local_var:sr_ms_type_now = 15 } sr_ms_count_add = { VAR = sr_site_ship_admin_imbrium } }
+		else_if = { limit = { local_var:sr_ms_type_now = 16 } sr_ms_count_add = { VAR = sr_site_ship_terra_imbrium } }
 	}
 }
 
@@ -37368,6 +37817,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = europa TYPE = bunker INDEX = 12 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = europa TYPE = foundry INDEX = 12 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = europa TYPE = admin INDEX = 12 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = europa TYPE = terra INDEX = 12 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 13 }
@@ -37479,6 +37929,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = mercury TYPE = bunker INDEX = 18 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = mercury TYPE = foundry INDEX = 18 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = mercury TYPE = admin INDEX = 18 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = mercury TYPE = terra INDEX = 18 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 19 }
@@ -37785,6 +38236,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = shackleton TYPE = bunker INDEX = 35 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = shackleton TYPE = foundry INDEX = 35 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = shackleton TYPE = admin INDEX = 35 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = shackleton TYPE = terra INDEX = 35 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 36 }
@@ -37802,6 +38254,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = peary TYPE = bunker INDEX = 36 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = peary TYPE = foundry INDEX = 36 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = peary TYPE = admin INDEX = 36 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = peary TYPE = terra INDEX = 36 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 37 }
@@ -37819,6 +38272,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = tranquility TYPE = bunker INDEX = 37 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = tranquility TYPE = foundry INDEX = 37 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = tranquility TYPE = admin INDEX = 37 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = tranquility TYPE = terra INDEX = 37 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 38 }
@@ -37836,6 +38290,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = marius_hills TYPE = bunker INDEX = 38 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = marius_hills TYPE = foundry INDEX = 38 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = marius_hills TYPE = admin INDEX = 38 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = marius_hills TYPE = terra INDEX = 38 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 39 }
@@ -37853,6 +38308,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = daedalus TYPE = bunker INDEX = 39 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = daedalus TYPE = foundry INDEX = 39 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = daedalus TYPE = admin INDEX = 39 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = daedalus TYPE = terra INDEX = 39 CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 40 }
@@ -37870,6 +38326,7 @@ sr_mod_queue_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_mod_queue = { KEY = imbrium TYPE = bunker INDEX = 40 CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_mod_queue = { KEY = imbrium TYPE = foundry INDEX = 40 CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_mod_queue = { KEY = imbrium TYPE = admin INDEX = 40 CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_mod_queue = { KEY = imbrium TYPE = terra INDEX = 40 CODE = 16 } }
 	}
 }
 sr_mod_clear_from_scope = {
@@ -39112,23 +39569,23 @@ sr_resort_hook_fire = {
 sr_mod_debug_log = {
 	if = {
 		limit = { has_global_variable = sr_colony_valles_marineris }
-		debug_log = "TE_SR_MODULES valles_marineris: a=[THIS.ScriptValue('sr_site_lvl_a_value_valles_marineris')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_valles_marineris')|0] hab=[THIS.ScriptValue('sr_site_hab_value_valles_marineris')|0] def=[THIS.ScriptValue('sr_site_def_value_valles_marineris')|0] port=[THIS.ScriptValue('sr_site_port_value_valles_marineris')|0] mine=[THIS.ScriptValue('sr_site_mine_value_valles_marineris')|0] yard=[THIS.ScriptValue('sr_site_yard_value_valles_marineris')|0] lab=[THIS.ScriptValue('sr_site_lab_value_valles_marineris')|0] culture=[THIS.ScriptValue('sr_site_culture_value_valles_marineris')|0] resort=[THIS.ScriptValue('sr_site_resort_value_valles_marineris')|0] black=[THIS.ScriptValue('sr_site_black_value_valles_marineris')|0] train=[THIS.ScriptValue('sr_site_train_value_valles_marineris')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_valles_marineris')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_valles_marineris')|0] admin=[THIS.ScriptValue('sr_site_admin_value_valles_marineris')|0] terra=[THIS.ScriptValue('sr_site_terra_value_valles_marineris')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_valles_marineris')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_valles_marineris')|2] room=[THIS.ScriptValue('sr_site_room_valles_marineris')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_valles_marineris')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_valles_marineris')|0] of a cap of 4"
+		debug_log = "TE_SR_MODULES valles_marineris: a=[THIS.ScriptValue('sr_site_lvl_a_value_valles_marineris')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_valles_marineris')|0] hab=[THIS.ScriptValue('sr_site_hab_value_valles_marineris')|0] def=[THIS.ScriptValue('sr_site_def_value_valles_marineris')|0] port=[THIS.ScriptValue('sr_site_port_value_valles_marineris')|0] mine=[THIS.ScriptValue('sr_site_mine_value_valles_marineris')|0] yard=[THIS.ScriptValue('sr_site_yard_value_valles_marineris')|0] lab=[THIS.ScriptValue('sr_site_lab_value_valles_marineris')|0] culture=[THIS.ScriptValue('sr_site_culture_value_valles_marineris')|0] resort=[THIS.ScriptValue('sr_site_resort_value_valles_marineris')|0] black=[THIS.ScriptValue('sr_site_black_value_valles_marineris')|0] train=[THIS.ScriptValue('sr_site_train_value_valles_marineris')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_valles_marineris')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_valles_marineris')|0] admin=[THIS.ScriptValue('sr_site_admin_value_valles_marineris')|0] terra=[THIS.ScriptValue('sr_site_terra_value_valles_marineris')|0] mars_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_mars')|0]/4500 months staffing=[THIS.ScriptValue('sr_site_staffing_valles_marineris')|2] room=[THIS.ScriptValue('sr_site_room_valles_marineris')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_valles_marineris')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_valles_marineris')|0] of a cap of 4"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_olympus_mons }
-		debug_log = "TE_SR_MODULES olympus_mons: a=[THIS.ScriptValue('sr_site_lvl_a_value_olympus_mons')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_olympus_mons')|0] hab=[THIS.ScriptValue('sr_site_hab_value_olympus_mons')|0] def=[THIS.ScriptValue('sr_site_def_value_olympus_mons')|0] port=[THIS.ScriptValue('sr_site_port_value_olympus_mons')|0] mine=[THIS.ScriptValue('sr_site_mine_value_olympus_mons')|0] yard=[THIS.ScriptValue('sr_site_yard_value_olympus_mons')|0] lab=[THIS.ScriptValue('sr_site_lab_value_olympus_mons')|0] culture=[THIS.ScriptValue('sr_site_culture_value_olympus_mons')|0] resort=[THIS.ScriptValue('sr_site_resort_value_olympus_mons')|0] black=[THIS.ScriptValue('sr_site_black_value_olympus_mons')|0] train=[THIS.ScriptValue('sr_site_train_value_olympus_mons')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_olympus_mons')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_olympus_mons')|0] admin=[THIS.ScriptValue('sr_site_admin_value_olympus_mons')|0] terra=[THIS.ScriptValue('sr_site_terra_value_olympus_mons')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_olympus_mons')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_olympus_mons')|2] room=[THIS.ScriptValue('sr_site_room_olympus_mons')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_olympus_mons')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_olympus_mons')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES olympus_mons: a=[THIS.ScriptValue('sr_site_lvl_a_value_olympus_mons')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_olympus_mons')|0] hab=[THIS.ScriptValue('sr_site_hab_value_olympus_mons')|0] def=[THIS.ScriptValue('sr_site_def_value_olympus_mons')|0] port=[THIS.ScriptValue('sr_site_port_value_olympus_mons')|0] mine=[THIS.ScriptValue('sr_site_mine_value_olympus_mons')|0] yard=[THIS.ScriptValue('sr_site_yard_value_olympus_mons')|0] lab=[THIS.ScriptValue('sr_site_lab_value_olympus_mons')|0] culture=[THIS.ScriptValue('sr_site_culture_value_olympus_mons')|0] resort=[THIS.ScriptValue('sr_site_resort_value_olympus_mons')|0] black=[THIS.ScriptValue('sr_site_black_value_olympus_mons')|0] train=[THIS.ScriptValue('sr_site_train_value_olympus_mons')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_olympus_mons')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_olympus_mons')|0] admin=[THIS.ScriptValue('sr_site_admin_value_olympus_mons')|0] terra=[THIS.ScriptValue('sr_site_terra_value_olympus_mons')|0] mars_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_mars')|0]/4500 months staffing=[THIS.ScriptValue('sr_site_staffing_olympus_mons')|2] room=[THIS.ScriptValue('sr_site_room_olympus_mons')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_olympus_mons')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_olympus_mons')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_hellas_planitia }
-		debug_log = "TE_SR_MODULES hellas_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_hellas_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_hellas_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_hellas_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_hellas_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_hellas_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_hellas_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_hellas_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_hellas_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_hellas_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_hellas_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_hellas_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_hellas_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_hellas_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_hellas_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_hellas_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_hellas_planitia')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_hellas_planitia')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_hellas_planitia')|2] room=[THIS.ScriptValue('sr_site_room_hellas_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_hellas_planitia')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_hellas_planitia')|0] of a cap of 4"
+		debug_log = "TE_SR_MODULES hellas_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_hellas_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_hellas_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_hellas_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_hellas_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_hellas_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_hellas_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_hellas_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_hellas_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_hellas_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_hellas_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_hellas_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_hellas_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_hellas_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_hellas_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_hellas_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_hellas_planitia')|0] mars_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_mars')|0]/4500 months staffing=[THIS.ScriptValue('sr_site_staffing_hellas_planitia')|2] room=[THIS.ScriptValue('sr_site_room_hellas_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_hellas_planitia')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_hellas_planitia')|0] of a cap of 4"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_utopia_planitia }
-		debug_log = "TE_SR_MODULES utopia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_utopia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_utopia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_utopia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_utopia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_utopia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_utopia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_utopia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_utopia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_utopia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_utopia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_utopia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_utopia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_utopia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_utopia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_utopia_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_utopia_planitia')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_utopia_planitia')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_utopia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_utopia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_utopia_planitia')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_utopia_planitia')|0] of a cap of 4"
+		debug_log = "TE_SR_MODULES utopia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_utopia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_utopia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_utopia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_utopia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_utopia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_utopia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_utopia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_utopia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_utopia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_utopia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_utopia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_utopia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_utopia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_utopia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_utopia_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_utopia_planitia')|0] mars_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_mars')|0]/4500 months staffing=[THIS.ScriptValue('sr_site_staffing_utopia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_utopia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_utopia_planitia')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_utopia_planitia')|0] of a cap of 4"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_arcadia_planitia }
-		debug_log = "TE_SR_MODULES arcadia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_arcadia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_arcadia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_arcadia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_arcadia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_arcadia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_arcadia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_arcadia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_arcadia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_arcadia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_arcadia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_arcadia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_arcadia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_arcadia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_arcadia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_arcadia_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_arcadia_planitia')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_arcadia_planitia')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_arcadia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_arcadia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_arcadia_planitia')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_arcadia_planitia')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES arcadia_planitia: a=[THIS.ScriptValue('sr_site_lvl_a_value_arcadia_planitia')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_arcadia_planitia')|0] hab=[THIS.ScriptValue('sr_site_hab_value_arcadia_planitia')|0] def=[THIS.ScriptValue('sr_site_def_value_arcadia_planitia')|0] port=[THIS.ScriptValue('sr_site_port_value_arcadia_planitia')|0] mine=[THIS.ScriptValue('sr_site_mine_value_arcadia_planitia')|0] yard=[THIS.ScriptValue('sr_site_yard_value_arcadia_planitia')|0] lab=[THIS.ScriptValue('sr_site_lab_value_arcadia_planitia')|0] culture=[THIS.ScriptValue('sr_site_culture_value_arcadia_planitia')|0] resort=[THIS.ScriptValue('sr_site_resort_value_arcadia_planitia')|0] black=[THIS.ScriptValue('sr_site_black_value_arcadia_planitia')|0] train=[THIS.ScriptValue('sr_site_train_value_arcadia_planitia')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_arcadia_planitia')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_arcadia_planitia')|0] admin=[THIS.ScriptValue('sr_site_admin_value_arcadia_planitia')|0] terra=[THIS.ScriptValue('sr_site_terra_value_arcadia_planitia')|0] mars_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_mars')|0]/4500 months staffing=[THIS.ScriptValue('sr_site_staffing_arcadia_planitia')|2] room=[THIS.ScriptValue('sr_site_room_arcadia_planitia')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_arcadia_planitia')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_arcadia_planitia')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_ceres }
@@ -39156,15 +39613,15 @@ sr_mod_debug_log = {
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_europa }
-		debug_log = "TE_SR_MODULES europa: a=[THIS.ScriptValue('sr_site_lvl_a_value_europa')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_europa')|0] hab=[THIS.ScriptValue('sr_site_hab_value_europa')|0] def=[THIS.ScriptValue('sr_site_def_value_europa')|0] port=[THIS.ScriptValue('sr_site_port_value_europa')|0] mine=[THIS.ScriptValue('sr_site_mine_value_europa')|0] yard=[THIS.ScriptValue('sr_site_yard_value_europa')|0] lab=[THIS.ScriptValue('sr_site_lab_value_europa')|0] culture=[THIS.ScriptValue('sr_site_culture_value_europa')|0] resort=[THIS.ScriptValue('sr_site_resort_value_europa')|0] black=[THIS.ScriptValue('sr_site_black_value_europa')|0] train=[THIS.ScriptValue('sr_site_train_value_europa')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_europa')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_europa')|0] admin=[THIS.ScriptValue('sr_site_admin_value_europa')|0] staffing=[THIS.ScriptValue('sr_site_staffing_europa')|2] room=[THIS.ScriptValue('sr_site_room_europa')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_europa')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_europa')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES europa: a=[THIS.ScriptValue('sr_site_lvl_a_value_europa')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_europa')|0] hab=[THIS.ScriptValue('sr_site_hab_value_europa')|0] def=[THIS.ScriptValue('sr_site_def_value_europa')|0] port=[THIS.ScriptValue('sr_site_port_value_europa')|0] mine=[THIS.ScriptValue('sr_site_mine_value_europa')|0] yard=[THIS.ScriptValue('sr_site_yard_value_europa')|0] lab=[THIS.ScriptValue('sr_site_lab_value_europa')|0] culture=[THIS.ScriptValue('sr_site_culture_value_europa')|0] resort=[THIS.ScriptValue('sr_site_resort_value_europa')|0] black=[THIS.ScriptValue('sr_site_black_value_europa')|0] train=[THIS.ScriptValue('sr_site_train_value_europa')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_europa')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_europa')|0] admin=[THIS.ScriptValue('sr_site_admin_value_europa')|0] terra=[THIS.ScriptValue('sr_site_terra_value_europa')|0] europa_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_europa')|0]/2700 months staffing=[THIS.ScriptValue('sr_site_staffing_europa')|2] room=[THIS.ScriptValue('sr_site_room_europa')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_europa')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_europa')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_ganymede }
-		debug_log = "TE_SR_MODULES ganymede: a=[THIS.ScriptValue('sr_site_lvl_a_value_ganymede')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_ganymede')|0] hab=[THIS.ScriptValue('sr_site_hab_value_ganymede')|0] def=[THIS.ScriptValue('sr_site_def_value_ganymede')|0] port=[THIS.ScriptValue('sr_site_port_value_ganymede')|0] mine=[THIS.ScriptValue('sr_site_mine_value_ganymede')|0] yard=[THIS.ScriptValue('sr_site_yard_value_ganymede')|0] lab=[THIS.ScriptValue('sr_site_lab_value_ganymede')|0] culture=[THIS.ScriptValue('sr_site_culture_value_ganymede')|0] resort=[THIS.ScriptValue('sr_site_resort_value_ganymede')|0] black=[THIS.ScriptValue('sr_site_black_value_ganymede')|0] train=[THIS.ScriptValue('sr_site_train_value_ganymede')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_ganymede')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_ganymede')|0] admin=[THIS.ScriptValue('sr_site_admin_value_ganymede')|0] terra=[THIS.ScriptValue('sr_site_terra_value_ganymede')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_ganymede')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_ganymede')|2] room=[THIS.ScriptValue('sr_site_room_ganymede')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_ganymede')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_ganymede')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES ganymede: a=[THIS.ScriptValue('sr_site_lvl_a_value_ganymede')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_ganymede')|0] hab=[THIS.ScriptValue('sr_site_hab_value_ganymede')|0] def=[THIS.ScriptValue('sr_site_def_value_ganymede')|0] port=[THIS.ScriptValue('sr_site_port_value_ganymede')|0] mine=[THIS.ScriptValue('sr_site_mine_value_ganymede')|0] yard=[THIS.ScriptValue('sr_site_yard_value_ganymede')|0] lab=[THIS.ScriptValue('sr_site_lab_value_ganymede')|0] culture=[THIS.ScriptValue('sr_site_culture_value_ganymede')|0] resort=[THIS.ScriptValue('sr_site_resort_value_ganymede')|0] black=[THIS.ScriptValue('sr_site_black_value_ganymede')|0] train=[THIS.ScriptValue('sr_site_train_value_ganymede')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_ganymede')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_ganymede')|0] admin=[THIS.ScriptValue('sr_site_admin_value_ganymede')|0] terra=[THIS.ScriptValue('sr_site_terra_value_ganymede')|0] ganymede_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_ganymede')|0]/1800 months staffing=[THIS.ScriptValue('sr_site_staffing_ganymede')|2] room=[THIS.ScriptValue('sr_site_room_ganymede')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_ganymede')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_ganymede')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_callisto }
-		debug_log = "TE_SR_MODULES callisto: a=[THIS.ScriptValue('sr_site_lvl_a_value_callisto')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_callisto')|0] hab=[THIS.ScriptValue('sr_site_hab_value_callisto')|0] def=[THIS.ScriptValue('sr_site_def_value_callisto')|0] port=[THIS.ScriptValue('sr_site_port_value_callisto')|0] mine=[THIS.ScriptValue('sr_site_mine_value_callisto')|0] yard=[THIS.ScriptValue('sr_site_yard_value_callisto')|0] lab=[THIS.ScriptValue('sr_site_lab_value_callisto')|0] culture=[THIS.ScriptValue('sr_site_culture_value_callisto')|0] resort=[THIS.ScriptValue('sr_site_resort_value_callisto')|0] black=[THIS.ScriptValue('sr_site_black_value_callisto')|0] train=[THIS.ScriptValue('sr_site_train_value_callisto')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_callisto')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_callisto')|0] admin=[THIS.ScriptValue('sr_site_admin_value_callisto')|0] terra=[THIS.ScriptValue('sr_site_terra_value_callisto')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_callisto')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_callisto')|2] room=[THIS.ScriptValue('sr_site_room_callisto')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_callisto')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_callisto')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES callisto: a=[THIS.ScriptValue('sr_site_lvl_a_value_callisto')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_callisto')|0] hab=[THIS.ScriptValue('sr_site_hab_value_callisto')|0] def=[THIS.ScriptValue('sr_site_def_value_callisto')|0] port=[THIS.ScriptValue('sr_site_port_value_callisto')|0] mine=[THIS.ScriptValue('sr_site_mine_value_callisto')|0] yard=[THIS.ScriptValue('sr_site_yard_value_callisto')|0] lab=[THIS.ScriptValue('sr_site_lab_value_callisto')|0] culture=[THIS.ScriptValue('sr_site_culture_value_callisto')|0] resort=[THIS.ScriptValue('sr_site_resort_value_callisto')|0] black=[THIS.ScriptValue('sr_site_black_value_callisto')|0] train=[THIS.ScriptValue('sr_site_train_value_callisto')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_callisto')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_callisto')|0] admin=[THIS.ScriptValue('sr_site_admin_value_callisto')|0] terra=[THIS.ScriptValue('sr_site_terra_value_callisto')|0] callisto_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_callisto')|0]/1800 months staffing=[THIS.ScriptValue('sr_site_staffing_callisto')|2] room=[THIS.ScriptValue('sr_site_room_callisto')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_callisto')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_callisto')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_himalia }
@@ -39176,15 +39633,15 @@ sr_mod_debug_log = {
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_venus }
-		debug_log = "TE_SR_MODULES venus: a=[THIS.ScriptValue('sr_site_lvl_a_value_venus')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_venus')|0] hab=[THIS.ScriptValue('sr_site_hab_value_venus')|0] def=[THIS.ScriptValue('sr_site_def_value_venus')|0] port=[THIS.ScriptValue('sr_site_port_value_venus')|0] mine=[THIS.ScriptValue('sr_site_mine_value_venus')|0] yard=[THIS.ScriptValue('sr_site_yard_value_venus')|0] lab=[THIS.ScriptValue('sr_site_lab_value_venus')|0] culture=[THIS.ScriptValue('sr_site_culture_value_venus')|0] resort=[THIS.ScriptValue('sr_site_resort_value_venus')|0] black=[THIS.ScriptValue('sr_site_black_value_venus')|0] train=[THIS.ScriptValue('sr_site_train_value_venus')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_venus')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_venus')|0] admin=[THIS.ScriptValue('sr_site_admin_value_venus')|0] terra=[THIS.ScriptValue('sr_site_terra_value_venus')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_venus')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_venus')|2] room=[THIS.ScriptValue('sr_site_room_venus')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_venus')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_venus')|0] of a cap of 2"
+		debug_log = "TE_SR_MODULES venus: a=[THIS.ScriptValue('sr_site_lvl_a_value_venus')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_venus')|0] hab=[THIS.ScriptValue('sr_site_hab_value_venus')|0] def=[THIS.ScriptValue('sr_site_def_value_venus')|0] port=[THIS.ScriptValue('sr_site_port_value_venus')|0] mine=[THIS.ScriptValue('sr_site_mine_value_venus')|0] yard=[THIS.ScriptValue('sr_site_yard_value_venus')|0] lab=[THIS.ScriptValue('sr_site_lab_value_venus')|0] culture=[THIS.ScriptValue('sr_site_culture_value_venus')|0] resort=[THIS.ScriptValue('sr_site_resort_value_venus')|0] black=[THIS.ScriptValue('sr_site_black_value_venus')|0] train=[THIS.ScriptValue('sr_site_train_value_venus')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_venus')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_venus')|0] admin=[THIS.ScriptValue('sr_site_admin_value_venus')|0] terra=[THIS.ScriptValue('sr_site_terra_value_venus')|0] venus_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_venus')|0]/3600 months staffing=[THIS.ScriptValue('sr_site_staffing_venus')|2] room=[THIS.ScriptValue('sr_site_room_venus')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_venus')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_venus')|0] of a cap of 2"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_mercury }
-		debug_log = "TE_SR_MODULES mercury: a=[THIS.ScriptValue('sr_site_lvl_a_value_mercury')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_mercury')|0] hab=[THIS.ScriptValue('sr_site_hab_value_mercury')|0] def=[THIS.ScriptValue('sr_site_def_value_mercury')|0] port=[THIS.ScriptValue('sr_site_port_value_mercury')|0] mine=[THIS.ScriptValue('sr_site_mine_value_mercury')|0] yard=[THIS.ScriptValue('sr_site_yard_value_mercury')|0] lab=[THIS.ScriptValue('sr_site_lab_value_mercury')|0] culture=[THIS.ScriptValue('sr_site_culture_value_mercury')|0] resort=[THIS.ScriptValue('sr_site_resort_value_mercury')|0] black=[THIS.ScriptValue('sr_site_black_value_mercury')|0] train=[THIS.ScriptValue('sr_site_train_value_mercury')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_mercury')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_mercury')|0] admin=[THIS.ScriptValue('sr_site_admin_value_mercury')|0] staffing=[THIS.ScriptValue('sr_site_staffing_mercury')|2] room=[THIS.ScriptValue('sr_site_room_mercury')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_mercury')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_mercury')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES mercury: a=[THIS.ScriptValue('sr_site_lvl_a_value_mercury')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_mercury')|0] hab=[THIS.ScriptValue('sr_site_hab_value_mercury')|0] def=[THIS.ScriptValue('sr_site_def_value_mercury')|0] port=[THIS.ScriptValue('sr_site_port_value_mercury')|0] mine=[THIS.ScriptValue('sr_site_mine_value_mercury')|0] yard=[THIS.ScriptValue('sr_site_yard_value_mercury')|0] lab=[THIS.ScriptValue('sr_site_lab_value_mercury')|0] culture=[THIS.ScriptValue('sr_site_culture_value_mercury')|0] resort=[THIS.ScriptValue('sr_site_resort_value_mercury')|0] black=[THIS.ScriptValue('sr_site_black_value_mercury')|0] train=[THIS.ScriptValue('sr_site_train_value_mercury')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_mercury')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_mercury')|0] admin=[THIS.ScriptValue('sr_site_admin_value_mercury')|0] terra=[THIS.ScriptValue('sr_site_terra_value_mercury')|0] mercury_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_mercury')|0]/4500 months staffing=[THIS.ScriptValue('sr_site_staffing_mercury')|2] room=[THIS.ScriptValue('sr_site_room_mercury')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_mercury')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_mercury')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_titan }
-		debug_log = "TE_SR_MODULES titan: a=[THIS.ScriptValue('sr_site_lvl_a_value_titan')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_titan')|0] hab=[THIS.ScriptValue('sr_site_hab_value_titan')|0] def=[THIS.ScriptValue('sr_site_def_value_titan')|0] port=[THIS.ScriptValue('sr_site_port_value_titan')|0] mine=[THIS.ScriptValue('sr_site_mine_value_titan')|0] yard=[THIS.ScriptValue('sr_site_yard_value_titan')|0] lab=[THIS.ScriptValue('sr_site_lab_value_titan')|0] culture=[THIS.ScriptValue('sr_site_culture_value_titan')|0] resort=[THIS.ScriptValue('sr_site_resort_value_titan')|0] black=[THIS.ScriptValue('sr_site_black_value_titan')|0] train=[THIS.ScriptValue('sr_site_train_value_titan')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_titan')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_titan')|0] admin=[THIS.ScriptValue('sr_site_admin_value_titan')|0] terra=[THIS.ScriptValue('sr_site_terra_value_titan')|0] terraformed=[THIS.ScriptValue('sr_site_terra_done_value_titan')|0]/900 months staffing=[THIS.ScriptValue('sr_site_staffing_titan')|2] room=[THIS.ScriptValue('sr_site_room_titan')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_titan')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_titan')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES titan: a=[THIS.ScriptValue('sr_site_lvl_a_value_titan')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_titan')|0] hab=[THIS.ScriptValue('sr_site_hab_value_titan')|0] def=[THIS.ScriptValue('sr_site_def_value_titan')|0] port=[THIS.ScriptValue('sr_site_port_value_titan')|0] mine=[THIS.ScriptValue('sr_site_mine_value_titan')|0] yard=[THIS.ScriptValue('sr_site_yard_value_titan')|0] lab=[THIS.ScriptValue('sr_site_lab_value_titan')|0] culture=[THIS.ScriptValue('sr_site_culture_value_titan')|0] resort=[THIS.ScriptValue('sr_site_resort_value_titan')|0] black=[THIS.ScriptValue('sr_site_black_value_titan')|0] train=[THIS.ScriptValue('sr_site_train_value_titan')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_titan')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_titan')|0] admin=[THIS.ScriptValue('sr_site_admin_value_titan')|0] terra=[THIS.ScriptValue('sr_site_terra_value_titan')|0] titan_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_titan')|0]/2700 months staffing=[THIS.ScriptValue('sr_site_staffing_titan')|2] room=[THIS.ScriptValue('sr_site_room_titan')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_titan')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_titan')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_enceladus }
@@ -39248,27 +39705,27 @@ sr_mod_debug_log = {
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_shackleton }
-		debug_log = "TE_SR_MODULES shackleton: a=[THIS.ScriptValue('sr_site_lvl_a_value_shackleton')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_shackleton')|0] hab=[THIS.ScriptValue('sr_site_hab_value_shackleton')|0] def=[THIS.ScriptValue('sr_site_def_value_shackleton')|0] mine=[THIS.ScriptValue('sr_site_mine_value_shackleton')|0] yard=[THIS.ScriptValue('sr_site_yard_value_shackleton')|0] lab=[THIS.ScriptValue('sr_site_lab_value_shackleton')|0] culture=[THIS.ScriptValue('sr_site_culture_value_shackleton')|0] resort=[THIS.ScriptValue('sr_site_resort_value_shackleton')|0] black=[THIS.ScriptValue('sr_site_black_value_shackleton')|0] train=[THIS.ScriptValue('sr_site_train_value_shackleton')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_shackleton')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_shackleton')|0] admin=[THIS.ScriptValue('sr_site_admin_value_shackleton')|0] staffing=[THIS.ScriptValue('sr_site_staffing_shackleton')|2] room=[THIS.ScriptValue('sr_site_room_shackleton')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_shackleton')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_shackleton')|0] of a cap of 2"
+		debug_log = "TE_SR_MODULES shackleton: a=[THIS.ScriptValue('sr_site_lvl_a_value_shackleton')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_shackleton')|0] hab=[THIS.ScriptValue('sr_site_hab_value_shackleton')|0] def=[THIS.ScriptValue('sr_site_def_value_shackleton')|0] mine=[THIS.ScriptValue('sr_site_mine_value_shackleton')|0] yard=[THIS.ScriptValue('sr_site_yard_value_shackleton')|0] lab=[THIS.ScriptValue('sr_site_lab_value_shackleton')|0] culture=[THIS.ScriptValue('sr_site_culture_value_shackleton')|0] resort=[THIS.ScriptValue('sr_site_resort_value_shackleton')|0] black=[THIS.ScriptValue('sr_site_black_value_shackleton')|0] train=[THIS.ScriptValue('sr_site_train_value_shackleton')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_shackleton')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_shackleton')|0] admin=[THIS.ScriptValue('sr_site_admin_value_shackleton')|0] terra=[THIS.ScriptValue('sr_site_terra_value_shackleton')|0] moon_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_moon')|0]/16200 months staffing=[THIS.ScriptValue('sr_site_staffing_shackleton')|2] room=[THIS.ScriptValue('sr_site_room_shackleton')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_shackleton')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_shackleton')|0] of a cap of 2"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_peary }
-		debug_log = "TE_SR_MODULES peary: a=[THIS.ScriptValue('sr_site_lvl_a_value_peary')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_peary')|0] hab=[THIS.ScriptValue('sr_site_hab_value_peary')|0] def=[THIS.ScriptValue('sr_site_def_value_peary')|0] mine=[THIS.ScriptValue('sr_site_mine_value_peary')|0] yard=[THIS.ScriptValue('sr_site_yard_value_peary')|0] lab=[THIS.ScriptValue('sr_site_lab_value_peary')|0] culture=[THIS.ScriptValue('sr_site_culture_value_peary')|0] resort=[THIS.ScriptValue('sr_site_resort_value_peary')|0] black=[THIS.ScriptValue('sr_site_black_value_peary')|0] train=[THIS.ScriptValue('sr_site_train_value_peary')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_peary')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_peary')|0] admin=[THIS.ScriptValue('sr_site_admin_value_peary')|0] staffing=[THIS.ScriptValue('sr_site_staffing_peary')|2] room=[THIS.ScriptValue('sr_site_room_peary')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_peary')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_peary')|0] of a cap of 1"
+		debug_log = "TE_SR_MODULES peary: a=[THIS.ScriptValue('sr_site_lvl_a_value_peary')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_peary')|0] hab=[THIS.ScriptValue('sr_site_hab_value_peary')|0] def=[THIS.ScriptValue('sr_site_def_value_peary')|0] mine=[THIS.ScriptValue('sr_site_mine_value_peary')|0] yard=[THIS.ScriptValue('sr_site_yard_value_peary')|0] lab=[THIS.ScriptValue('sr_site_lab_value_peary')|0] culture=[THIS.ScriptValue('sr_site_culture_value_peary')|0] resort=[THIS.ScriptValue('sr_site_resort_value_peary')|0] black=[THIS.ScriptValue('sr_site_black_value_peary')|0] train=[THIS.ScriptValue('sr_site_train_value_peary')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_peary')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_peary')|0] admin=[THIS.ScriptValue('sr_site_admin_value_peary')|0] terra=[THIS.ScriptValue('sr_site_terra_value_peary')|0] moon_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_moon')|0]/16200 months staffing=[THIS.ScriptValue('sr_site_staffing_peary')|2] room=[THIS.ScriptValue('sr_site_room_peary')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_peary')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_peary')|0] of a cap of 1"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_tranquility }
-		debug_log = "TE_SR_MODULES tranquility: a=[THIS.ScriptValue('sr_site_lvl_a_value_tranquility')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_tranquility')|0] hab=[THIS.ScriptValue('sr_site_hab_value_tranquility')|0] def=[THIS.ScriptValue('sr_site_def_value_tranquility')|0] mine=[THIS.ScriptValue('sr_site_mine_value_tranquility')|0] yard=[THIS.ScriptValue('sr_site_yard_value_tranquility')|0] lab=[THIS.ScriptValue('sr_site_lab_value_tranquility')|0] culture=[THIS.ScriptValue('sr_site_culture_value_tranquility')|0] resort=[THIS.ScriptValue('sr_site_resort_value_tranquility')|0] black=[THIS.ScriptValue('sr_site_black_value_tranquility')|0] train=[THIS.ScriptValue('sr_site_train_value_tranquility')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_tranquility')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_tranquility')|0] admin=[THIS.ScriptValue('sr_site_admin_value_tranquility')|0] staffing=[THIS.ScriptValue('sr_site_staffing_tranquility')|2] room=[THIS.ScriptValue('sr_site_room_tranquility')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_tranquility')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_tranquility')|0] of a cap of 2"
+		debug_log = "TE_SR_MODULES tranquility: a=[THIS.ScriptValue('sr_site_lvl_a_value_tranquility')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_tranquility')|0] hab=[THIS.ScriptValue('sr_site_hab_value_tranquility')|0] def=[THIS.ScriptValue('sr_site_def_value_tranquility')|0] mine=[THIS.ScriptValue('sr_site_mine_value_tranquility')|0] yard=[THIS.ScriptValue('sr_site_yard_value_tranquility')|0] lab=[THIS.ScriptValue('sr_site_lab_value_tranquility')|0] culture=[THIS.ScriptValue('sr_site_culture_value_tranquility')|0] resort=[THIS.ScriptValue('sr_site_resort_value_tranquility')|0] black=[THIS.ScriptValue('sr_site_black_value_tranquility')|0] train=[THIS.ScriptValue('sr_site_train_value_tranquility')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_tranquility')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_tranquility')|0] admin=[THIS.ScriptValue('sr_site_admin_value_tranquility')|0] terra=[THIS.ScriptValue('sr_site_terra_value_tranquility')|0] moon_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_moon')|0]/16200 months staffing=[THIS.ScriptValue('sr_site_staffing_tranquility')|2] room=[THIS.ScriptValue('sr_site_room_tranquility')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_tranquility')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_tranquility')|0] of a cap of 2"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_marius_hills }
-		debug_log = "TE_SR_MODULES marius_hills: a=[THIS.ScriptValue('sr_site_lvl_a_value_marius_hills')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_marius_hills')|0] hab=[THIS.ScriptValue('sr_site_hab_value_marius_hills')|0] def=[THIS.ScriptValue('sr_site_def_value_marius_hills')|0] mine=[THIS.ScriptValue('sr_site_mine_value_marius_hills')|0] yard=[THIS.ScriptValue('sr_site_yard_value_marius_hills')|0] lab=[THIS.ScriptValue('sr_site_lab_value_marius_hills')|0] culture=[THIS.ScriptValue('sr_site_culture_value_marius_hills')|0] resort=[THIS.ScriptValue('sr_site_resort_value_marius_hills')|0] black=[THIS.ScriptValue('sr_site_black_value_marius_hills')|0] train=[THIS.ScriptValue('sr_site_train_value_marius_hills')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_marius_hills')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_marius_hills')|0] admin=[THIS.ScriptValue('sr_site_admin_value_marius_hills')|0] staffing=[THIS.ScriptValue('sr_site_staffing_marius_hills')|2] room=[THIS.ScriptValue('sr_site_room_marius_hills')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_marius_hills')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_marius_hills')|0] of a cap of 3"
+		debug_log = "TE_SR_MODULES marius_hills: a=[THIS.ScriptValue('sr_site_lvl_a_value_marius_hills')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_marius_hills')|0] hab=[THIS.ScriptValue('sr_site_hab_value_marius_hills')|0] def=[THIS.ScriptValue('sr_site_def_value_marius_hills')|0] mine=[THIS.ScriptValue('sr_site_mine_value_marius_hills')|0] yard=[THIS.ScriptValue('sr_site_yard_value_marius_hills')|0] lab=[THIS.ScriptValue('sr_site_lab_value_marius_hills')|0] culture=[THIS.ScriptValue('sr_site_culture_value_marius_hills')|0] resort=[THIS.ScriptValue('sr_site_resort_value_marius_hills')|0] black=[THIS.ScriptValue('sr_site_black_value_marius_hills')|0] train=[THIS.ScriptValue('sr_site_train_value_marius_hills')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_marius_hills')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_marius_hills')|0] admin=[THIS.ScriptValue('sr_site_admin_value_marius_hills')|0] terra=[THIS.ScriptValue('sr_site_terra_value_marius_hills')|0] moon_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_moon')|0]/16200 months staffing=[THIS.ScriptValue('sr_site_staffing_marius_hills')|2] room=[THIS.ScriptValue('sr_site_room_marius_hills')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_marius_hills')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_marius_hills')|0] of a cap of 3"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_daedalus }
-		debug_log = "TE_SR_MODULES daedalus: a=[THIS.ScriptValue('sr_site_lvl_a_value_daedalus')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_daedalus')|0] hab=[THIS.ScriptValue('sr_site_hab_value_daedalus')|0] def=[THIS.ScriptValue('sr_site_def_value_daedalus')|0] mine=[THIS.ScriptValue('sr_site_mine_value_daedalus')|0] yard=[THIS.ScriptValue('sr_site_yard_value_daedalus')|0] lab=[THIS.ScriptValue('sr_site_lab_value_daedalus')|0] culture=[THIS.ScriptValue('sr_site_culture_value_daedalus')|0] resort=[THIS.ScriptValue('sr_site_resort_value_daedalus')|0] black=[THIS.ScriptValue('sr_site_black_value_daedalus')|0] train=[THIS.ScriptValue('sr_site_train_value_daedalus')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_daedalus')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_daedalus')|0] admin=[THIS.ScriptValue('sr_site_admin_value_daedalus')|0] staffing=[THIS.ScriptValue('sr_site_staffing_daedalus')|2] room=[THIS.ScriptValue('sr_site_room_daedalus')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_daedalus')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_daedalus')|0] of a cap of 1"
+		debug_log = "TE_SR_MODULES daedalus: a=[THIS.ScriptValue('sr_site_lvl_a_value_daedalus')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_daedalus')|0] hab=[THIS.ScriptValue('sr_site_hab_value_daedalus')|0] def=[THIS.ScriptValue('sr_site_def_value_daedalus')|0] mine=[THIS.ScriptValue('sr_site_mine_value_daedalus')|0] yard=[THIS.ScriptValue('sr_site_yard_value_daedalus')|0] lab=[THIS.ScriptValue('sr_site_lab_value_daedalus')|0] culture=[THIS.ScriptValue('sr_site_culture_value_daedalus')|0] resort=[THIS.ScriptValue('sr_site_resort_value_daedalus')|0] black=[THIS.ScriptValue('sr_site_black_value_daedalus')|0] train=[THIS.ScriptValue('sr_site_train_value_daedalus')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_daedalus')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_daedalus')|0] admin=[THIS.ScriptValue('sr_site_admin_value_daedalus')|0] terra=[THIS.ScriptValue('sr_site_terra_value_daedalus')|0] moon_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_moon')|0]/16200 months staffing=[THIS.ScriptValue('sr_site_staffing_daedalus')|2] room=[THIS.ScriptValue('sr_site_room_daedalus')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_daedalus')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_daedalus')|0] of a cap of 1"
 	}
 	if = {
 		limit = { has_global_variable = sr_colony_imbrium }
-		debug_log = "TE_SR_MODULES imbrium: a=[THIS.ScriptValue('sr_site_lvl_a_value_imbrium')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_imbrium')|0] hab=[THIS.ScriptValue('sr_site_hab_value_imbrium')|0] def=[THIS.ScriptValue('sr_site_def_value_imbrium')|0] mine=[THIS.ScriptValue('sr_site_mine_value_imbrium')|0] yard=[THIS.ScriptValue('sr_site_yard_value_imbrium')|0] lab=[THIS.ScriptValue('sr_site_lab_value_imbrium')|0] culture=[THIS.ScriptValue('sr_site_culture_value_imbrium')|0] resort=[THIS.ScriptValue('sr_site_resort_value_imbrium')|0] black=[THIS.ScriptValue('sr_site_black_value_imbrium')|0] train=[THIS.ScriptValue('sr_site_train_value_imbrium')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_imbrium')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_imbrium')|0] admin=[THIS.ScriptValue('sr_site_admin_value_imbrium')|0] staffing=[THIS.ScriptValue('sr_site_staffing_imbrium')|2] room=[THIS.ScriptValue('sr_site_room_imbrium')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_imbrium')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_imbrium')|0] of a cap of 2"
+		debug_log = "TE_SR_MODULES imbrium: a=[THIS.ScriptValue('sr_site_lvl_a_value_imbrium')|0] b=[THIS.ScriptValue('sr_site_lvl_b_value_imbrium')|0] hab=[THIS.ScriptValue('sr_site_hab_value_imbrium')|0] def=[THIS.ScriptValue('sr_site_def_value_imbrium')|0] mine=[THIS.ScriptValue('sr_site_mine_value_imbrium')|0] yard=[THIS.ScriptValue('sr_site_yard_value_imbrium')|0] lab=[THIS.ScriptValue('sr_site_lab_value_imbrium')|0] culture=[THIS.ScriptValue('sr_site_culture_value_imbrium')|0] resort=[THIS.ScriptValue('sr_site_resort_value_imbrium')|0] black=[THIS.ScriptValue('sr_site_black_value_imbrium')|0] train=[THIS.ScriptValue('sr_site_train_value_imbrium')|0] bunker=[THIS.ScriptValue('sr_site_bunker_value_imbrium')|0] foundry=[THIS.ScriptValue('sr_site_foundry_value_imbrium')|0] admin=[THIS.ScriptValue('sr_site_admin_value_imbrium')|0] terra=[THIS.ScriptValue('sr_site_terra_value_imbrium')|0] moon_terraformed=[THIS.ScriptValue('sr_world_terra_done_value_moon')|0]/16200 months staffing=[THIS.ScriptValue('sr_site_staffing_imbrium')|2] room=[THIS.ScriptValue('sr_site_room_imbrium')|0]; built, our queue and every shipment: specializations [THIS.ScriptValue('sr_mod_spec_used_imbrium')|0] of 4, Habitats [THIS.ScriptValue('sr_mod_hab_used_imbrium')|0] of a cap of 2"
 	}
 }
 
@@ -39494,6 +39951,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_europa = yes } sr_mod_queue = { KEY = europa TYPE = bunker INDEX = 12 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_europa = yes } sr_mod_queue = { KEY = europa TYPE = foundry INDEX = 12 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_europa = yes } sr_mod_queue = { KEY = europa TYPE = admin INDEX = 12 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_europa = yes } sr_mod_queue = { KEY = europa TYPE = terra INDEX = 12 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_ganymede ?= this }
@@ -39605,6 +40063,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_mercury = yes } sr_mod_queue = { KEY = mercury TYPE = bunker INDEX = 18 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_mercury = yes } sr_mod_queue = { KEY = mercury TYPE = foundry INDEX = 18 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_mercury = yes } sr_mod_queue = { KEY = mercury TYPE = admin INDEX = 18 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_mercury = yes } sr_mod_queue = { KEY = mercury TYPE = terra INDEX = 18 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_titan ?= this }
@@ -39911,6 +40370,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_shackleton = yes } sr_mod_queue = { KEY = shackleton TYPE = bunker INDEX = 35 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_shackleton = yes } sr_mod_queue = { KEY = shackleton TYPE = foundry INDEX = 35 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_shackleton = yes } sr_mod_queue = { KEY = shackleton TYPE = admin INDEX = 35 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_shackleton = yes } sr_mod_queue = { KEY = shackleton TYPE = terra INDEX = 35 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_peary ?= this }
@@ -39928,6 +40388,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_peary = yes } sr_mod_queue = { KEY = peary TYPE = bunker INDEX = 36 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_peary = yes } sr_mod_queue = { KEY = peary TYPE = foundry INDEX = 36 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_peary = yes } sr_mod_queue = { KEY = peary TYPE = admin INDEX = 36 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_peary = yes } sr_mod_queue = { KEY = peary TYPE = terra INDEX = 36 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_tranquility ?= this }
@@ -39945,6 +40406,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_tranquility = yes } sr_mod_queue = { KEY = tranquility TYPE = bunker INDEX = 37 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_tranquility = yes } sr_mod_queue = { KEY = tranquility TYPE = foundry INDEX = 37 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_tranquility = yes } sr_mod_queue = { KEY = tranquility TYPE = admin INDEX = 37 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_tranquility = yes } sr_mod_queue = { KEY = tranquility TYPE = terra INDEX = 37 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_marius_hills ?= this }
@@ -39962,6 +40424,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_marius_hills = yes } sr_mod_queue = { KEY = marius_hills TYPE = bunker INDEX = 38 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_marius_hills = yes } sr_mod_queue = { KEY = marius_hills TYPE = foundry INDEX = 38 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_marius_hills = yes } sr_mod_queue = { KEY = marius_hills TYPE = admin INDEX = 38 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_marius_hills = yes } sr_mod_queue = { KEY = marius_hills TYPE = terra INDEX = 38 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_daedalus ?= this }
@@ -39979,6 +40442,7 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_daedalus = yes } sr_mod_queue = { KEY = daedalus TYPE = bunker INDEX = 39 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_daedalus = yes } sr_mod_queue = { KEY = daedalus TYPE = foundry INDEX = 39 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_daedalus = yes } sr_mod_queue = { KEY = daedalus TYPE = admin INDEX = 39 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_daedalus = yes } sr_mod_queue = { KEY = daedalus TYPE = terra INDEX = 39 CODE = 16 } }
 	}
 	else_if = {
 		limit = { global_var:sr_site_holder_imbrium ?= this }
@@ -39996,21 +40460,48 @@ sr_mod_debug_queue_first = {
 		if = { limit = { sr_mod_can_queue_bunker_imbrium = yes } sr_mod_queue = { KEY = imbrium TYPE = bunker INDEX = 40 CODE = 13 } }
 		if = { limit = { sr_mod_can_queue_foundry_imbrium = yes } sr_mod_queue = { KEY = imbrium TYPE = foundry INDEX = 40 CODE = 14 } }
 		if = { limit = { sr_mod_can_queue_admin_imbrium = yes } sr_mod_queue = { KEY = imbrium TYPE = admin INDEX = 40 CODE = 15 } }
+		if = { limit = { sr_mod_can_queue_terra_imbrium = yes } sr_mod_queue = { KEY = imbrium TYPE = terra INDEX = 40 CODE = 16 } }
 	}
 }
 
 # Console: ten years of terraforming at every colony of ours that takes it, at
-# this month's pace (era 13 spec § 7.11), then the world's sync.
+# this month's pace (era 13 spec § 7.11), then every colony's sync on those worlds,
+# after all the steps, so each sees its world's whole ten years.
 sr_terra_debug_advance = {
-	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } sr_site_terra_step_valles_marineris = { MONTHS = 120 } sr_site_sync_valles_marineris = yes }
-	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } sr_site_terra_step_olympus_mons = { MONTHS = 120 } sr_site_sync_olympus_mons = yes }
-	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } sr_site_terra_step_hellas_planitia = { MONTHS = 120 } sr_site_sync_hellas_planitia = yes }
-	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } sr_site_terra_step_utopia_planitia = { MONTHS = 120 } sr_site_sync_utopia_planitia = yes }
-	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } sr_site_terra_step_arcadia_planitia = { MONTHS = 120 } sr_site_sync_arcadia_planitia = yes }
-	if = { limit = { global_var:sr_site_holder_ganymede ?= this } sr_site_terra_step_ganymede = { MONTHS = 120 } sr_site_sync_ganymede = yes }
-	if = { limit = { global_var:sr_site_holder_callisto ?= this } sr_site_terra_step_callisto = { MONTHS = 120 } sr_site_sync_callisto = yes }
-	if = { limit = { global_var:sr_site_holder_venus ?= this } sr_site_terra_step_venus = { MONTHS = 120 } sr_site_sync_venus = yes }
-	if = { limit = { global_var:sr_site_holder_titan ?= this } sr_site_terra_step_titan = { MONTHS = 120 } sr_site_sync_titan = yes }
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this } sr_site_terra_step_valles_marineris = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this } sr_site_terra_step_olympus_mons = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this } sr_site_terra_step_hellas_planitia = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this } sr_site_terra_step_utopia_planitia = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this } sr_site_terra_step_arcadia_planitia = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_europa ?= this } sr_site_terra_step_europa = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_ganymede ?= this } sr_site_terra_step_ganymede = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_callisto ?= this } sr_site_terra_step_callisto = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_venus ?= this } sr_site_terra_step_venus = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this } sr_site_terra_step_mercury = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_titan ?= this } sr_site_terra_step_titan = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this } sr_site_terra_step_shackleton = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_peary ?= this } sr_site_terra_step_peary = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this } sr_site_terra_step_tranquility = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this } sr_site_terra_step_marius_hills = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this } sr_site_terra_step_daedalus = { MONTHS = 120 } }
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this } sr_site_terra_step_imbrium = { MONTHS = 120 } }
+	if = { limit = { has_global_variable = sr_colony_valles_marineris } sr_site_sync_valles_marineris = yes }
+	if = { limit = { has_global_variable = sr_colony_olympus_mons } sr_site_sync_olympus_mons = yes }
+	if = { limit = { has_global_variable = sr_colony_hellas_planitia } sr_site_sync_hellas_planitia = yes }
+	if = { limit = { has_global_variable = sr_colony_utopia_planitia } sr_site_sync_utopia_planitia = yes }
+	if = { limit = { has_global_variable = sr_colony_arcadia_planitia } sr_site_sync_arcadia_planitia = yes }
+	if = { limit = { has_global_variable = sr_colony_europa } sr_site_sync_europa = yes }
+	if = { limit = { has_global_variable = sr_colony_ganymede } sr_site_sync_ganymede = yes }
+	if = { limit = { has_global_variable = sr_colony_callisto } sr_site_sync_callisto = yes }
+	if = { limit = { has_global_variable = sr_colony_venus } sr_site_sync_venus = yes }
+	if = { limit = { has_global_variable = sr_colony_mercury } sr_site_sync_mercury = yes }
+	if = { limit = { has_global_variable = sr_colony_titan } sr_site_sync_titan = yes }
+	if = { limit = { has_global_variable = sr_colony_shackleton } sr_site_sync_shackleton = yes }
+	if = { limit = { has_global_variable = sr_colony_peary } sr_site_sync_peary = yes }
+	if = { limit = { has_global_variable = sr_colony_tranquility } sr_site_sync_tranquility = yes }
+	if = { limit = { has_global_variable = sr_colony_marius_hills } sr_site_sync_marius_hills = yes }
+	if = { limit = { has_global_variable = sr_colony_daedalus } sr_site_sync_daedalus = yes }
+	if = { limit = { has_global_variable = sr_colony_imbrium } sr_site_sync_imbrium = yes }
 }
 
 # ===== Dismantling (owner, 2026-10-31) =====
@@ -41390,6 +41881,11 @@ sr_md_finish_europa = {
 		set_global_variable = { name = sr_site_admin_europa value = { value = sr_site_admin_value_europa subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_europa = 16 sr_site_terra_value_europa > 0 }
+		set_global_variable = { name = sr_site_terra_europa value = { value = sr_site_terra_value_europa subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_europa = yes
 	sr_site_sync_europa = yes
 	debug_log = "TE_SR_MODULES europa: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -42082,6 +42578,11 @@ sr_md_finish_mercury = {
 		limit = { var:sr_md_type_mercury = 15 sr_site_admin_value_mercury > 0 }
 		set_global_variable = { name = sr_site_admin_mercury value = { value = sr_site_admin_value_mercury subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_mercury = 16 sr_site_terra_value_mercury > 0 }
+		set_global_variable = { name = sr_site_terra_mercury value = { value = sr_site_terra_value_mercury subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_mercury = yes
 	sr_site_sync_mercury = yes
@@ -44004,6 +44505,11 @@ sr_md_finish_shackleton = {
 		set_global_variable = { name = sr_site_admin_shackleton value = { value = sr_site_admin_value_shackleton subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_shackleton = 16 sr_site_terra_value_shackleton > 0 }
+		set_global_variable = { name = sr_site_terra_shackleton value = { value = sr_site_terra_value_shackleton subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_shackleton = yes
 	sr_site_sync_shackleton = yes
 	debug_log = "TE_SR_MODULES shackleton: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -44111,6 +44617,11 @@ sr_md_finish_peary = {
 		limit = { var:sr_md_type_peary = 15 sr_site_admin_value_peary > 0 }
 		set_global_variable = { name = sr_site_admin_peary value = { value = sr_site_admin_value_peary subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_peary = 16 sr_site_terra_value_peary > 0 }
+		set_global_variable = { name = sr_site_terra_peary value = { value = sr_site_terra_value_peary subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_peary = yes
 	sr_site_sync_peary = yes
@@ -44220,6 +44731,11 @@ sr_md_finish_tranquility = {
 		set_global_variable = { name = sr_site_admin_tranquility value = { value = sr_site_admin_value_tranquility subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_tranquility = 16 sr_site_terra_value_tranquility > 0 }
+		set_global_variable = { name = sr_site_terra_tranquility value = { value = sr_site_terra_value_tranquility subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_tranquility = yes
 	sr_site_sync_tranquility = yes
 	debug_log = "TE_SR_MODULES tranquility: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -44327,6 +44843,11 @@ sr_md_finish_marius_hills = {
 		limit = { var:sr_md_type_marius_hills = 15 sr_site_admin_value_marius_hills > 0 }
 		set_global_variable = { name = sr_site_admin_marius_hills value = { value = sr_site_admin_value_marius_hills subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_marius_hills = 16 sr_site_terra_value_marius_hills > 0 }
+		set_global_variable = { name = sr_site_terra_marius_hills value = { value = sr_site_terra_value_marius_hills subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_marius_hills = yes
 	sr_site_sync_marius_hills = yes
@@ -44436,6 +44957,11 @@ sr_md_finish_daedalus = {
 		set_global_variable = { name = sr_site_admin_daedalus value = { value = sr_site_admin_value_daedalus subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
 	}
+	else_if = {
+		limit = { var:sr_md_type_daedalus = 16 sr_site_terra_value_daedalus > 0 }
+		set_global_variable = { name = sr_site_terra_daedalus value = { value = sr_site_terra_value_daedalus subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
+	}
 	sr_md_clear_daedalus = yes
 	sr_site_sync_daedalus = yes
 	debug_log = "TE_SR_MODULES daedalus: a module level of type [THIS.Var('sr_md_last_type').GetValue|0] dismantled country=[THIS.GetCountry.GetTagName]"
@@ -44543,6 +45069,11 @@ sr_md_finish_imbrium = {
 		limit = { var:sr_md_type_imbrium = 15 sr_site_admin_value_imbrium > 0 }
 		set_global_variable = { name = sr_site_admin_imbrium value = { value = sr_site_admin_value_imbrium subtract = 1 } }
 		set_variable = { name = sr_md_last_type value = 15 }
+	}
+	else_if = {
+		limit = { var:sr_md_type_imbrium = 16 sr_site_terra_value_imbrium > 0 }
+		set_global_variable = { name = sr_site_terra_imbrium value = { value = sr_site_terra_value_imbrium subtract = 1 } }
+		set_variable = { name = sr_md_last_type value = 16 }
 	}
 	sr_md_clear_imbrium = yes
 	sr_site_sync_imbrium = yes
@@ -44820,6 +45351,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = europa CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = europa CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = europa CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = europa CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 13 }
@@ -44931,6 +45463,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = mercury CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = mercury CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = mercury CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = mercury CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 19 }
@@ -45237,6 +45770,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = shackleton CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = shackleton CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = shackleton CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = shackleton CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 36 }
@@ -45254,6 +45788,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = peary CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = peary CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = peary CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = peary CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 37 }
@@ -45271,6 +45806,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = tranquility CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = tranquility CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = tranquility CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = tranquility CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 38 }
@@ -45288,6 +45824,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = marius_hills CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = marius_hills CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = marius_hills CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = marius_hills CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 39 }
@@ -45305,6 +45842,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = daedalus CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = daedalus CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = daedalus CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = daedalus CODE = 16 } }
 	}
 	else_if = {
 		limit = { scope:site = 40 }
@@ -45322,6 +45860,7 @@ sr_md_start_from_scope = {
 		else_if = { limit = { scope:op = 13 } sr_md_start = { KEY = imbrium CODE = 13 } }
 		else_if = { limit = { scope:op = 14 } sr_md_start = { KEY = imbrium CODE = 14 } }
 		else_if = { limit = { scope:op = 15 } sr_md_start = { KEY = imbrium CODE = 15 } }
+		else_if = { limit = { scope:op = 16 } sr_md_start = { KEY = imbrium CODE = 16 } }
 	}
 }
 sr_md_cancel_from_scope = {
@@ -58120,5 +58659,141 @@ sr_ov_list_restless = {
 			}
 		}
 		custom_tooltip_no_bullet = je_space_race_widget_ovc_colonies_line_none
+	}
+}
+
+# ===== Terraforming becomes the world's (the owner, 2026-11-28) =====
+# Once a save, before the worlds' month (sr_sites_global_monthly): each site's own
+# record from before (sr_site_terra_done_<key>, 1.3.0 to 1.4.0) goes into its world's,
+# sr_world_terra_done_<world>, the world's sites' added together and times its
+# difficulty, so a one-site world keeps the room its work added. Mars's sites pool
+# their work; each keeps the share it had as a floor (sr_site_terra_kept_<key>), so
+# pooling takes no colony's room. A new game finds no records and only sets the marker.
+sr_terra_worlds_migrate_once = {
+	if = {
+		limit = { NOT = { has_global_variable = sr_terra_worlds_migrated } }
+		set_global_variable = { name = sr_terra_worlds_migrated value = yes }
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = sr_site_terra_done_valles_marineris
+					has_global_variable = sr_site_terra_done_olympus_mons
+					has_global_variable = sr_site_terra_done_hellas_planitia
+					has_global_variable = sr_site_terra_done_utopia_planitia
+					has_global_variable = sr_site_terra_done_arcadia_planitia
+				}
+			}
+			set_global_variable = {
+				name = sr_world_terra_done_mars
+				value = {
+					value = 0
+					if = { limit = { has_global_variable = sr_site_terra_done_valles_marineris } add = global_var:sr_site_terra_done_valles_marineris }
+					if = { limit = { has_global_variable = sr_site_terra_done_olympus_mons } add = global_var:sr_site_terra_done_olympus_mons }
+					if = { limit = { has_global_variable = sr_site_terra_done_hellas_planitia } add = global_var:sr_site_terra_done_hellas_planitia }
+					if = { limit = { has_global_variable = sr_site_terra_done_utopia_planitia } add = global_var:sr_site_terra_done_utopia_planitia }
+					if = { limit = { has_global_variable = sr_site_terra_done_arcadia_planitia } add = global_var:sr_site_terra_done_arcadia_planitia }
+					multiply = sr_terra_difficulty_mars
+					max = sr_world_terra_full_mars
+				}
+			}
+			debug_log = "TE_SR_MODULES migrate: mars terraforming moved to the world record, [GetGlobalVariable('sr_world_terra_done_mars').GetValue|0] of 4500 months"
+		}
+		if = {
+			limit = { has_global_variable = sr_site_terra_done_valles_marineris global_var:sr_site_terra_done_valles_marineris > 0 }
+			set_global_variable = { name = sr_site_terra_kept_valles_marineris value = { value = global_var:sr_site_terra_done_valles_marineris divide = sr_terra_level_months } }
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_valles_marineris } remove_global_variable = sr_site_terra_done_valles_marineris }
+		if = {
+			limit = { has_global_variable = sr_site_terra_done_olympus_mons global_var:sr_site_terra_done_olympus_mons > 0 }
+			set_global_variable = { name = sr_site_terra_kept_olympus_mons value = { value = global_var:sr_site_terra_done_olympus_mons divide = sr_terra_level_months } }
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_olympus_mons } remove_global_variable = sr_site_terra_done_olympus_mons }
+		if = {
+			limit = { has_global_variable = sr_site_terra_done_hellas_planitia global_var:sr_site_terra_done_hellas_planitia > 0 }
+			set_global_variable = { name = sr_site_terra_kept_hellas_planitia value = { value = global_var:sr_site_terra_done_hellas_planitia divide = sr_terra_level_months } }
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_hellas_planitia } remove_global_variable = sr_site_terra_done_hellas_planitia }
+		if = {
+			limit = { has_global_variable = sr_site_terra_done_utopia_planitia global_var:sr_site_terra_done_utopia_planitia > 0 }
+			set_global_variable = { name = sr_site_terra_kept_utopia_planitia value = { value = global_var:sr_site_terra_done_utopia_planitia divide = sr_terra_level_months } }
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_utopia_planitia } remove_global_variable = sr_site_terra_done_utopia_planitia }
+		if = {
+			limit = { has_global_variable = sr_site_terra_done_arcadia_planitia global_var:sr_site_terra_done_arcadia_planitia > 0 }
+			set_global_variable = { name = sr_site_terra_kept_arcadia_planitia value = { value = global_var:sr_site_terra_done_arcadia_planitia divide = sr_terra_level_months } }
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_arcadia_planitia } remove_global_variable = sr_site_terra_done_arcadia_planitia }
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = sr_site_terra_done_ganymede
+				}
+			}
+			set_global_variable = {
+				name = sr_world_terra_done_ganymede
+				value = {
+					value = 0
+					if = { limit = { has_global_variable = sr_site_terra_done_ganymede } add = global_var:sr_site_terra_done_ganymede }
+					multiply = sr_terra_difficulty_ganymede
+					max = sr_world_terra_full_ganymede
+				}
+			}
+			debug_log = "TE_SR_MODULES migrate: ganymede terraforming moved to the world record, [GetGlobalVariable('sr_world_terra_done_ganymede').GetValue|0] of 1800 months"
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_ganymede } remove_global_variable = sr_site_terra_done_ganymede }
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = sr_site_terra_done_callisto
+				}
+			}
+			set_global_variable = {
+				name = sr_world_terra_done_callisto
+				value = {
+					value = 0
+					if = { limit = { has_global_variable = sr_site_terra_done_callisto } add = global_var:sr_site_terra_done_callisto }
+					multiply = sr_terra_difficulty_callisto
+					max = sr_world_terra_full_callisto
+				}
+			}
+			debug_log = "TE_SR_MODULES migrate: callisto terraforming moved to the world record, [GetGlobalVariable('sr_world_terra_done_callisto').GetValue|0] of 1800 months"
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_callisto } remove_global_variable = sr_site_terra_done_callisto }
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = sr_site_terra_done_venus
+				}
+			}
+			set_global_variable = {
+				name = sr_world_terra_done_venus
+				value = {
+					value = 0
+					if = { limit = { has_global_variable = sr_site_terra_done_venus } add = global_var:sr_site_terra_done_venus }
+					multiply = sr_terra_difficulty_venus
+					max = sr_world_terra_full_venus
+				}
+			}
+			debug_log = "TE_SR_MODULES migrate: venus terraforming moved to the world record, [GetGlobalVariable('sr_world_terra_done_venus').GetValue|0] of 3600 months"
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_venus } remove_global_variable = sr_site_terra_done_venus }
+		if = {
+			limit = {
+				OR = {
+					has_global_variable = sr_site_terra_done_titan
+				}
+			}
+			set_global_variable = {
+				name = sr_world_terra_done_titan
+				value = {
+					value = 0
+					if = { limit = { has_global_variable = sr_site_terra_done_titan } add = global_var:sr_site_terra_done_titan }
+					multiply = sr_terra_difficulty_titan
+					max = sr_world_terra_full_titan
+				}
+			}
+			debug_log = "TE_SR_MODULES migrate: titan terraforming moved to the world record, [GetGlobalVariable('sr_world_terra_done_titan').GetValue|0] of 2700 months"
+		}
+		if = { limit = { has_global_variable = sr_site_terra_done_titan } remove_global_variable = sr_site_terra_done_titan }
 	}
 }

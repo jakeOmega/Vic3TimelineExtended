@@ -480,24 +480,46 @@ MODULE_AI_VALUE = 8  # Cede Colony's AI value of a module level past the first
 MODULE_LINES = (("a", "b", "hab", "port", "def"), FACILITY_TYPES[:5], FACILITY_TYPES[5:10], ("terra",))
 
 # Terraforming (era 13 spec § 7.11): works on the world itself, so its room for
-# people grows over decades. Only the worlds with the gravity and the volatiles
-# to keep an air made for them: Mars's five sites, Venus (cooled under a
-# sunshade), Titan, and Jupiter's two largest moons, Ganymede (the one moon
-# with a magnetic field of its own) and Callisto (outside Jupiter's radiation
-# belts). Not the Moon or Mercury (no volatiles to make an air from), Io and
-# Europa (the radiation belts), nor the small moons, asteroids and dwarf
-# planets (too little gravity to hold one).
+# people grows over decades. It is a world's (world_of: Mars's five sites are one
+# world, the Moon's six another, every other site a world of its own; the
+# owner, 2026-11-28), with a difficulty (TERRA_WORLDS) that multiplies both its
+# job and how many levels may work at once, so every world takes 25 years at
+# the quickest and the harder ones need that many times the crews. The worlds
+# with the gravity to hold an air (about 0.1 g and up) and a way to get one:
+#   Mars 1: thin air already, ice, a 24.6-hour day.
+#   Callisto and Ganymede 2: ice to make air from; dim, with long days, and
+#     Ganymede under Jupiter's radiation until the air reaches about 0.15 bar.
+#   Titan 3: 1.5 bar of nitrogen already, but about 195 degrees of warming in 1%
+#     of Earth's sunlight (mirrors or fusion: no greenhouse gas stays a gas in
+#     its cold upper air), and its methane must go before there can be oxygen.
+#   Europa 3: lethal radiation until the air reaches about 0.14 bar (an air
+#     shields better on a light world, its mass overhead being pressure over
+#     gravity), and its thin ice over an ocean melts into a sea.
+#   The Moon 3: all its air shipped in, an iceberg some 170 km across for a bar;
+#     two-week nights.
+#   Venus 4: a sunshade, and 90 bar of carbon dioxide to be rid of.
+#   Mercury 5: its air shipped deep into the sun's well, a sunshade, 88-day days.
+# Not Io (no water, and its volcanoes repave it), nor the small moons, asteroids
+# and dwarf planets (too little gravity to hold an air).
 #
-# A staffed level does a month's work a month into the world's record
-# (sr_site_terra_done_<key>, global: the world's, so a cession, a release or a
-# level coming down keeps it); TERRA_LEVEL_MONTHS of work add TERRA_ROOM_SHARE
-# of the base room, so one level adds 4% of the base room a year and reaches
-# +100% in 25 years. Up to TERRA_MAX_LEVELS at a world at once, counting queue
-# and shipments; the whole job is that many shares (+300%), at least 25 years.
-# Finished, the levels stand down and free their slots. Queued with the holder's
-# TERRA_MARKER (the technology's), occupation stops the work.
-TERRAFORMABLE = frozenset({"valles_marineris", "olympus_mons", "hellas_planitia", "utopia_planitia",
-                           "arcadia_planitia", "venus", "titan", "ganymede", "callisto"})
+# A staffed level does a month's work a month into its world's record
+# (sr_world_terra_done_<world>, global: the world's, so a cession, a release or
+# a level coming down keeps it, and every colony there gains by it, rivals'
+# included). The job is TERRA_FULL_MONTHS a site times the difficulty; each
+# TERRA_LEVEL_MONTHS a site times the difficulty adds TERRA_ROOM_SHARE of each
+# colony's base room there, so on Mars, worked in full, a level adds 4% of the
+# base room a year. Up to TERRA_MAX_LEVELS a site times the difficulty work at
+# once anywhere on the world, counting every holder's queue and every shipment;
+# the whole job is TERRA_MAX_LEVELS shares (+300%), at least 25 years. Finished,
+# the world's levels stand down and free their crews. Queued with the holder's
+# TERRA_MARKER (the technology's), occupation stops a colony's work.
+TERRA_WORLDS: dict[str, int] = {"mars": 1, "callisto": 2, "ganymede": 2, "titan": 3, "europa": 3,
+                                "moon": 3, "venus": 4, "mercury": 5}
+# The sites that took it before it became the world's (1.3.0 to 1.4.0), each
+# with its own record, sr_site_terra_done_<key>: the save migration's
+# (render_terra_migration).
+TERRA_V1_SITES = ("valles_marineris", "olympus_mons", "hellas_planitia", "utopia_planitia",
+                  "arcadia_planitia", "venus", "titan", "ganymede", "callisto")
 TERRA_LEVEL_MONTHS = 300
 TERRA_ROOM_SHARE = 1
 TERRA_MAX_LEVELS = 3
@@ -591,6 +613,54 @@ def world_of(site: Site) -> str:
 def world_mates(site: Site) -> list[Site]:
     """The other sites on the same world, in table order (none for most)."""
     return [s for s in SITES if s is not site and world_of(s) == world_of(site)]
+
+
+def world_sites(world: str) -> list[Site]:
+    """The sites on a world (world_of), in table order."""
+    return [s for s in SITES if world_of(s) == world]
+
+
+def world_name(world: str) -> str:
+    """A world's name, for comments: the shared worlds' own, else its one site's."""
+    return SHARED_WORLDS.get(world) or world_sites(world)[0].name
+
+
+TERRAFORMABLE = frozenset(s.key for s in SITES if world_of(s) in TERRA_WORLDS)
+
+
+def terra_worlds() -> list[str]:
+    """The worlds that take Terraforming, in the order of their first site."""
+    out: list[str] = []
+    for s in SITES:
+        if world_of(s) in TERRA_WORLDS and world_of(s) not in out:
+            out.append(world_of(s))
+    return out
+
+
+def terra_difficulty(world: str) -> int:
+    return TERRA_WORLDS[world]
+
+
+def terra_cap(world: str) -> int:
+    """The levels that may work on the world at once, every holder's."""
+    return TERRA_MAX_LEVELS * terra_difficulty(world) * len(world_sites(world))
+
+
+def terra_full(world: str) -> int:
+    """The world's whole job, in months of a staffed level's work."""
+    return TERRA_FULL_MONTHS * terra_difficulty(world) * len(world_sites(world))
+
+
+def terra_per_share(world: str) -> int:
+    """The months of work that add TERRA_ROOM_SHARE of each colony's base room."""
+    return TERRA_LEVEL_MONTHS * terra_difficulty(world) * len(world_sites(world))
+
+
+def terra_kept(site: Site) -> bool:
+    """A site that had its own record before Terraforming became the world's and
+    shares that world with others: it keeps the share it had as a floor
+    (sr_site_terra_kept_<key>), so the migration takes no room from it."""
+    return site.key in TERRA_V1_SITES and len(world_sites(world_of(site))) > 1
 
 
 # The places an Orbital Yard builds for (the owner, 2026-11-25: "all Jupiter's
@@ -1136,8 +1206,8 @@ def _terra_monthly(site: Site) -> list[str]:
         return []
     k = site.key
     return [
-        "\t# 3b. Terraforming (simple and full; era 13 spec § 7.11): the world's works",
-        "\t# advance by its staffed levels, up to the whole job, unless it is occupied",
+        "\t# 3b. Terraforming (simple and full; era 13 spec § 7.11): the colony's staffed",
+        "\t# levels add to its world's works, up to the whole job, unless it is occupied",
         "\t# (sr_site_terra_step_<key>).",
         "\tif = {",
         "\t\tlimit = {",
@@ -1150,33 +1220,35 @@ def _terra_monthly(site: Site) -> list[str]:
 
 
 def _terra_step(site: Site) -> list[str]:
-    """MONTHS months of the world's terraforming at this month's pace; once it
-    is finished, its levels stand down (era 13 spec § 7.11)."""
-    k = site.key
+    """MONTHS months of the colony's share of its world's terraforming at this
+    month's pace; once the world is finished, the colony's levels stand down
+    (era 13 spec § 7.11)."""
+    k, w = site.key, world_of(site)
     return [
-        f"# {site.name}'s works, MONTHS months at this month's pace (its staffed",
-        "# Terraforming levels; none while occupied), up to sr_terra_full_months. Finished,",
-        "# the levels stand down and free their slots; the work done stays the world's.",
+        f"# {site.name}'s part in {world_name(w)}'s works, MONTHS months at this month's pace (its",
+        "# staffed Terraforming levels; none while occupied), up to the world's whole job. The",
+        "# world finished, the colony's levels stand down and free their crews; the work done",
+        "# stays the world's.",
         f"sr_site_terra_step_{k} = {{",
         "\tif = {",
         f"\t\tlimit = {{ sr_site_terra_rate_{k} > 0 }}",
         "\t\tset_global_variable = {",
-        f"\t\t\tname = sr_site_terra_done_{k}",
+        f"\t\t\tname = sr_world_terra_done_{w}",
         "\t\t\tvalue = {",
         f"\t\t\t\tvalue = sr_site_terra_rate_{k}",
         "\t\t\t\tmultiply = $MONTHS$",
-        f"\t\t\t\tadd = sr_site_terra_done_value_{k}",
-        "\t\t\t\tmax = sr_terra_full_months",
+        f"\t\t\t\tadd = sr_world_terra_done_value_{w}",
+        f"\t\t\t\tmax = sr_world_terra_full_{w}",
         "\t\t\t}",
         "\t\t}",
         "\t}",
         "\tif = {",
         "\t\tlimit = {",
         f"\t\t\thas_global_variable = sr_site_terra_{k}",
-        f"\t\t\tNOT = {{ sr_site_terra_open_{k} = yes }}",
+        f"\t\t\tNOT = {{ sr_world_terra_open_{w} = yes }}",
         "\t\t}",
         f"\t\tremove_global_variable = sr_site_terra_{k}",
-        f'\t\tdebug_log = "TE_SR_MODULES {k}: terraformed; its Terraforming levels stand down"',
+        f'\t\tdebug_log = "TE_SR_MODULES {k}: {w} terraformed; the Terraforming levels here stand down"',
         "\t}",
         "}",
     ]
@@ -1849,8 +1921,67 @@ def render_effects() -> str:
     parts += ["", *render_dispatcher(), "", *render_monthly_list(), "",
               *render_repoint(), "", *render_snapshot(), "", *render_cede_apply(), "", *render_debug(),
               "", *render_fleet_effects(), "", *render_population_effects(), "", *render_module_effects(),
-              "", *render_dismantle_effects(), "", *render_autonomy_effects(), "", *render_overview_effects()]
+              "", *render_dismantle_effects(), "", *render_autonomy_effects(), "", *render_overview_effects(),
+              "", *render_terra_migration()]
     return "\n".join(parts) + "\n"
+
+
+def render_terra_migration() -> list[str]:
+    """Once a save (sr_sites_global_monthly, before the worlds' month): the
+    records the sites kept of their own before Terraforming became the world's
+    (TERRA_V1_SITES) become their world's. Added together and times the world's
+    difficulty, every one-site world keeps the room its work had added; a site
+    on a shared world (Mars) keeps the share it had as a floor (terra_kept)."""
+    out = ["# ===== Terraforming becomes the world's (the owner, 2026-11-28) =====",
+           "# Once a save, before the worlds' month (sr_sites_global_monthly): each site's own",
+           "# record from before (sr_site_terra_done_<key>, 1.3.0 to 1.4.0) goes into its world's,",
+           "# sr_world_terra_done_<world>, the world's sites' added together and times its",
+           "# difficulty, so a one-site world keeps the room its work added. Mars's sites pool",
+           "# their work; each keeps the share it had as a floor (sr_site_terra_kept_<key>), so",
+           "# pooling takes no colony's room. A new game finds no records and only sets the marker.",
+           "sr_terra_worlds_migrate_once = {",
+           "\tif = {",
+           "\t\tlimit = { NOT = { has_global_variable = sr_terra_worlds_migrated } }",
+           "\t\tset_global_variable = { name = sr_terra_worlds_migrated value = yes }"]
+    for w in terra_worlds():
+        old = [s for s in world_sites(w) if s.key in TERRA_V1_SITES]
+        if not old:
+            continue
+        # The old sites covered their worlds, so the sum times the difficulty keeps the
+        # average share (render_terra_values' sr_world_terra_share_<world>).
+        assert len(old) == len(world_sites(w)), w
+        out += ["\t\tif = {",
+                "\t\t\tlimit = {",
+                "\t\t\t\tOR = {",
+                *(f"\t\t\t\t\thas_global_variable = sr_site_terra_done_{t.key}" for t in old),
+                "\t\t\t\t}",
+                "\t\t\t}",
+                "\t\t\tset_global_variable = {",
+                f"\t\t\t\tname = sr_world_terra_done_{w}",
+                "\t\t\t\tvalue = {",
+                "\t\t\t\t\tvalue = 0",
+                *(f"\t\t\t\t\tif = {{ limit = {{ has_global_variable = sr_site_terra_done_{t.key} }} "
+                  f"add = global_var:sr_site_terra_done_{t.key} }}" for t in old),
+                f"\t\t\t\t\tmultiply = sr_terra_difficulty_{w}",
+                f"\t\t\t\t\tmax = sr_world_terra_full_{w}",
+                "\t\t\t\t}",
+                "\t\t\t}",
+                f'\t\t\tdebug_log = "TE_SR_MODULES migrate: {w} terraforming moved to the world record, '
+                f"[GetGlobalVariable('sr_world_terra_done_{w}').GetValue|0] of {terra_full(w)} months\"",
+                "\t\t}"]
+        for t in old:
+            k = t.key
+            if terra_kept(t):
+                share = "" if TERRA_ROOM_SHARE == 1 else f" multiply = {TERRA_ROOM_SHARE}"
+                out += ["\t\tif = {",
+                        f"\t\t\tlimit = {{ has_global_variable = sr_site_terra_done_{k} global_var:sr_site_terra_done_{k} > 0 }}",
+                        f"\t\t\tset_global_variable = {{ name = sr_site_terra_kept_{k} value = {{ "
+                        f"value = global_var:sr_site_terra_done_{k} divide = sr_terra_level_months{share} }} }}",
+                        "\t\t}"]
+            out.append(f"\t\tif = {{ limit = {{ has_global_variable = sr_site_terra_done_{k} }} "
+                       f"remove_global_variable = sr_site_terra_done_{k} }}")
+    out += ["\t}", "}"]
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -2478,44 +2609,83 @@ def _boon_values(site: Site) -> list[str]:
 
 def render_terra_values() -> list[str]:
     """Terraforming (era 13 spec § 7.11): the work a world has had done, the
-    room it adds, and the levels the caps count."""
+    room it adds to each colony there, and the levels its cap counts."""
     out = ["# ===== Terraforming (era 13 spec § 7.11) =====",
-           f"# A share ({TERRA_ROOM_SHARE:+.0%} of a world's base room) takes sr_terra_level_months of",
-           "# a staffed level's work; up to sr_terra_max_levels at a world at once, counting",
-           "# queue and shipments; the whole job is sr_terra_full_months.",
+           f"# A share ({TERRA_ROOM_SHARE:+.0%} of each colony's base room on a world) takes",
+           "# sr_terra_level_months of a staffed level's work a site there, times the world's",
+           "# difficulty; up to sr_terra_max_levels a site times the difficulty work there at",
+           "# once, counting every holder's queue and every shipment; the whole job is",
+           "# sr_terra_full_months a site times the difficulty.",
            f"sr_terra_level_months = {{ value = {TERRA_LEVEL_MONTHS} }}",
            f"sr_terra_max_levels = {{ value = {TERRA_MAX_LEVELS} }}",
            f"sr_terra_full_months = {{ value = {TERRA_FULL_MONTHS} }}",
            f"sr_mod_ai_terra_fill = {{ value = {TERRA_AI_FILL} }}",
            "",
-           "# Per world that takes it, any scope:",
-           "#   sr_site_terra_done_value_<key>  the months of work done there (the world's own",
-           "#                                   record, sr_site_terra_done_<key>: it stays through",
-           "#                                   a cession, a release and a level coming down)",
-           "#   sr_site_terra_share_<key>       the share of its base room that work adds",
-           "#   sr_site_terra_rate_<key>        a month's work: its staffed levels, none occupied",
-           "# Country scope: sr_mod_terra_used_<key>, its levels built, in THIS's queue and on",
-           "# their way (every shipper's), against sr_terra_max_levels."]
-    for site in SITES:
-        if not terraformable(site):
-            continue
-        k = site.key
-        share = [] if TERRA_ROOM_SHARE == 1 else [f"	multiply = {TERRA_ROOM_SHARE}"]
-        out += _opt_var(f"sr_site_terra_done_value_{k}", f"sr_site_terra_done_{k}")
-        out += [f"sr_site_terra_share_{k} = {{",
-                f"	value = sr_site_terra_done_value_{k}",
-                "	divide = sr_terra_level_months",
-                *share,
+           "# Per world that takes it (world_of: mars, moon, or its one site's key), any scope:",
+           "#   sr_terra_difficulty_<world>      how many times Mars's work a site it takes",
+           "#   sr_world_terra_full_<world>      its whole job, in months of a staffed level's work",
+           "#   sr_world_terra_cap_<world>       the levels that may work there at once",
+           "#   sr_world_terra_done_value_<world> the work done there (its own record,",
+           "#                                    sr_world_terra_done_<world>: it stays through a",
+           "#                                    cession, a release and a level coming down)",
+           "#   sr_world_terra_share_<world>     the share of each colony's base room that work adds",
+           "#   sr_world_terra_rate_<world>      a month's work: every colony's there",
+           "#   sr_world_terra_levels_<world>    its levels built, every holder's",
+           "#   sr_world_terra_used_<world>      ... and those in a holder's queue or on their way",
+           "# Per colony, any scope: sr_site_terra_share_<key>, its world's share (never below",
+           "# what it had of its own before the work was the world's, sr_site_terra_kept_<key>),",
+           "# and sr_site_terra_rate_<key>, its month's work: its staffed levels, none occupied."]
+    for w in terra_worlds():
+        sites = world_sites(w)
+        n = len(sites)
+        times_n = [] if n == 1 else [f"\tmultiply = {n}"]
+        out += ["", f"# {world_name(w)}: difficulty {terra_difficulty(w)}, {n} site{'s' * (n > 1)}, "
+                f"{terra_cap(w)} levels at once, {terra_full(w)} months of work.",
+                f"sr_terra_difficulty_{w} = {{ value = {terra_difficulty(w)} }}",
+                f"sr_world_terra_full_{w} = {{",
+                "\tvalue = sr_terra_full_months",
+                f"\tmultiply = sr_terra_difficulty_{w}",
+                *times_n,
                 "}",
-                f"sr_site_terra_rate_{k} = {{",
-                f"	value = {eff_value(site, 'terra')}",
-                f"	if = {{ limit = {{ has_global_variable = sr_site_occupier_{k} }} value = 0 }}",
-                "}",
-                f"sr_mod_terra_used_{k} = {{",
-                f"	value = sr_site_terra_value_{k}",
-                f"	if = {{ limit = {{ has_variable = sr_mq_terra_{k} }} add = var:sr_mq_terra_{k} }}",
-                f"	if = {{ limit = {{ has_global_variable = sr_site_ship_terra_{k} }} add = global_var:sr_site_ship_terra_{k} }}",
+                f"sr_world_terra_cap_{w} = {{",
+                "\tvalue = sr_terra_max_levels",
+                f"\tmultiply = sr_terra_difficulty_{w}",
+                *times_n,
                 "}"]
+        out += _opt_var(f"sr_world_terra_done_value_{w}", f"sr_world_terra_done_{w}")
+        out += [f"sr_world_terra_share_{w} = {{",
+                f"\tvalue = sr_world_terra_done_value_{w}",
+                "\tdivide = sr_terra_level_months",
+                f"\tdivide = sr_terra_difficulty_{w}",
+                *([] if n == 1 else [f"\tdivide = {n}"]),
+                *([] if TERRA_ROOM_SHARE == 1 else [f"\tmultiply = {TERRA_ROOM_SHARE}"]),
+                "}",
+                f"sr_world_terra_rate_{w} = {{",
+                f"\tvalue = sr_site_terra_rate_{sites[0].key}",
+                *(f"\tadd = sr_site_terra_rate_{t.key}" for t in sites[1:]),
+                "}",
+                f"sr_world_terra_levels_{w} = {{",
+                f"\tvalue = sr_site_terra_value_{sites[0].key}",
+                *(f"\tadd = sr_site_terra_value_{t.key}" for t in sites[1:]),
+                "}",
+                f"sr_world_terra_used_{w} = {{",
+                f"\tvalue = sr_world_terra_levels_{w}"]
+        for t in sites:
+            k = t.key
+            out += [f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= {{ has_variable = sr_mq_terra_{k} }} }} "
+                    f"global_var:sr_site_holder_{k} = {{ add = var:sr_mq_terra_{k} }} }}",
+                    f"\tif = {{ limit = {{ has_global_variable = sr_site_ship_terra_{k} }} "
+                    f"add = global_var:sr_site_ship_terra_{k} }}"]
+        out += ["}"]
+        for t in sites:
+            k = t.key
+            kept = ([f"\tif = {{ limit = {{ has_global_variable = sr_site_terra_kept_{k} }} "
+                     f"min = global_var:sr_site_terra_kept_{k} }}"] if terra_kept(t) else [])
+            out += [f"sr_site_terra_share_{k} = {{", f"\tvalue = sr_world_terra_share_{w}", *kept, "}",
+                    f"sr_site_terra_rate_{k} = {{",
+                    f"\tvalue = {eff_value(t, 'terra')}",
+                    f"\tif = {{ limit = {{ has_global_variable = sr_site_occupier_{k} }} value = 0 }}",
+                    "}"]
     return out
 
 
@@ -2596,8 +2766,10 @@ def _module_install(site: Site) -> list[str]:
         else:
             cap, var = "", f"sr_site_{t}_{k}"
         if t == "terra":
-            # No more than sr_terra_max_levels, and none on a world already finished.
-            cap += f" sr_site_terra_value_{k} < sr_terra_max_levels sr_site_terra_open_{k} = yes"
+            # No more than the world's cap built there, every holder's, and none on a
+            # world already finished.
+            w = world_of(site)
+            cap += f" sr_world_terra_levels_{w} < sr_world_terra_cap_{w} sr_world_terra_open_{w} = yes"
         out += ["\t\tif = {" if first else "\t\telse_if = {",
                 f"\t\t\tlimit = {{ local_var:sr_ms_type_now = {MODULE_CODES[t]}{cap} }}",
                 f"\t\t\tset_global_variable = {{ name = {var} value = {{ value = {level_value(t, site)} add = 1 }} }}",
@@ -2812,7 +2984,7 @@ def render_module_queue() -> list[str]:
                 f"\t\tlimit = {{ local_var:sr_mq_head_site = {site.index} global_var:sr_site_holder_{k} ?= this }}"]
         for m, t in enumerate(module_types(site)):
             # A Terraforming level for a world finished meanwhile is dropped unbuilt.
-            extra = f" sr_site_terra_open_{k} = yes" if t == "terra" else ""
+            extra = f" sr_world_terra_open_{world_of(site)} = yes" if t == "terra" else ""
             out.append(f"\t\t{'if' if m == 0 else 'else_if'} = {{ limit = {{ local_var:sr_mq_head_type = {MODULE_CODES[t]}{extra} }} "
                        f"{build} = {{ KEY = {k} TYPE = {t} CODE = {MODULE_CODES[t]} INDEX = {site.index} }} }}")
         out.append("\t}")
@@ -2939,7 +3111,9 @@ def render_module_effects() -> list[str]:
         k = site.key
         levels = " ".join(f"{t}=[SCOPE.ScriptValue('{level_value(t, site)}')|0]" for t in ("a", "b", *generic_types(site)))
         if terraformable(site):
-            levels += f" terraformed=[SCOPE.ScriptValue('sr_site_terra_done_value_{k}')|0]/{TERRA_FULL_MONTHS} months"
+            w = world_of(site)
+            levels += (f" {w}_terraformed=[SCOPE.ScriptValue('sr_world_terra_done_value_{w}')|0]"
+                       f"/{terra_full(w)} months")
         queue = (f"specializations [THIS.ScriptValue('sr_mod_spec_used_{k}')|0] of {SPEC_BUDGET}, "
                  f"Habitats [THIS.ScriptValue('sr_mod_hab_used_{k}')|0] of a cap of {site.slots}")
         out += ["\tif = {",
@@ -2960,13 +3134,17 @@ def render_module_effects() -> list[str]:
         out.append("\t}")
     out += ["}", "",
             "# Console: ten years of terraforming at every colony of ours that takes it, at",
-            "# this month's pace (era 13 spec § 7.11), then the world's sync.",
+            "# this month's pace (era 13 spec § 7.11), then every colony's sync on those worlds,",
+            "# after all the steps, so each sees its world's whole ten years.",
             "sr_terra_debug_advance = {"]
-    for site in SITES:
-        if terraformable(site):
-            k = site.key
-            out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} "
-                       f"sr_site_terra_step_{k} = {{ MONTHS = 120 }} sr_site_sync_{k} = yes }}")
+    terra = [s for s in SITES if terraformable(s)]
+    for site in terra:
+        k = site.key
+        out.append(f"\tif = {{ limit = {{ global_var:sr_site_holder_{k} ?= this }} "
+                   f"sr_site_terra_step_{k} = {{ MONTHS = 120 }} }}")
+    for site in terra:
+        k = site.key
+        out.append(f"\tif = {{ limit = {{ has_global_variable = sr_colony_{k} }} sr_site_sync_{k} = yes }}")
     out.append("}")
     return out
 
@@ -3245,15 +3423,18 @@ def render_module_triggers() -> list[str]:
                 # so it waits for the building's technology.
                 out.append(f"\thas_technology_researched = {RESORT_TECH}")
             if t == "terra":
-                # Terraforming (era 13 spec § 7.11): the technology's marker, at most
-                # sr_terra_max_levels at once, and only while the world is unfinished.
+                # Terraforming (era 13 spec § 7.11): the technology's marker, fewer than
+                # the world's cap at once, every holder's there, and only while the world
+                # is unfinished.
+                w = world_of(site)
                 out += [f"\tmodifier:{TERRA_MARKER} = yes",
-                        f"\tsr_mod_terra_used_{k} < sr_terra_max_levels",
-                        f"\tsr_site_terra_open_{k} = yes"]
+                        f"\tsr_world_terra_used_{w} < sr_world_terra_cap_{w}",
+                        f"\tsr_world_terra_open_{w} = yes"]
             out.append("}")
-        if terraformable(site):
-            out += [f"# {site.name} has terraforming still to do (any scope).",
-                    f"sr_site_terra_open_{k} = {{ sr_site_terra_done_value_{k} < sr_terra_full_months }}"]
+        if terraformable(site) and site is world_sites(world_of(site))[0]:
+            w = world_of(site)
+            out += [f"# {world_name(w)} has terraforming still to do (any scope).",
+                    f"sr_world_terra_open_{w} = {{ sr_world_terra_done_value_{w} < sr_world_terra_full_{w} }}"]
         if "yard" in generic_types(site):
             out += [f"# A module for {site.name} is built at an Orbital Yard in its place (yard_builds_test).",
                     f"sr_site_yard_builds_{k} = {{ {yard_builds_test(site)} }}"]
@@ -3337,13 +3518,15 @@ def render_module_triggers() -> list[str]:
     out += ["\t}", "}"]
     terra = [s for s in SITES if terraformable(s)]
     out += ["# Terraforming (era 13 spec § 7.11; only the worlds that take it have its button):",
-            f"# the world has fewer than sr_terra_max_levels ({TERRA_MAX_LEVELS}) of it, counting queue and shipments,",
+            "# the world has fewer than its cap of it (sr_world_terra_cap_<world>), every holder's",
+            "# built, queued and on its way,",
             "sr_mod_scope_terra_room = {", "\tOR = {"]
-    out += [f"\t\tAND = {{ scope:site = {s.index} sr_mod_terra_used_{s.key} < sr_terra_max_levels }}" for s in terra]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_world_terra_used_{world_of(s)} < sr_world_terra_cap_{world_of(s)} }}"
+            for s in terra]
     out += ["\t}", "}",
             "# ... and has terraforming still to do.",
             "sr_mod_scope_terra_open = {", "\tOR = {"]
-    out += [f"\t\tAND = {{ scope:site = {s.index} sr_site_terra_open_{s.key} = yes }}" for s in terra]
+    out += [f"\t\tAND = {{ scope:site = {s.index} sr_world_terra_open_{world_of(s)} = yes }}" for s in terra]
     out += ["\t}", "}"]
     return out
 
@@ -4759,48 +4942,49 @@ def render_display() -> str:
 def render_terra_display() -> list[str]:
     """Terraforming's line in the Modules view and its tile on a colony's page
     (era 13 spec § 7.11). The viewer's scope."""
-    out = ["", "# Terraforming (era 13 spec § 7.11), per world that takes it:",
-           "#   sr_disp_terra_shown_<key>  1 once we have the technology, or the world has",
-           "#                              levels, work done or levels on their way",
-           "#   sr_disp_terra_pct_<key>    the room its work has added, in percent of its base",
-           "#   sr_disp_terra_state_<key>  0 no work going on, 1 under way, 2 finished",
-           "#   sr_disp_terra_years_<key>  the years left at this month's pace (under way), at",
-           "#                              most 999"]
-    for site in SITES:
-        if not terraformable(site):
-            continue
-        k = site.key
-        out += [f"sr_disp_terra_shown_{k} = {{",
+    out = ["", "# Terraforming (era 13 spec § 7.11), per colony on a world that takes it:",
+           "#   sr_disp_terra_shown_<key>  1 once we have the technology, or the colony has",
+           "#                              levels or levels on their way, or its world work done",
+           "#   sr_disp_terra_pct_<key>    the room its world's work has added to it, in percent",
+           "#                              of its base",
+           "# and per world (world_of):",
+           "#   sr_disp_terra_state_<world>  0 no work going on, 1 under way, 2 finished",
+           "#   sr_disp_terra_years_<world>  the years left at this month's pace, every colony's",
+           "#                                there (under way), at most 999"]
+    for w in terra_worlds():
+        for site in world_sites(w):
+            k = site.key
+            out += [f"sr_disp_terra_shown_{k} = {{",
+                    "\tvalue = 0",
+                    "\tif = {",
+                    "\t\tlimit = {",
+                    "\t\t\tOR = {",
+                    f"\t\t\t\tmodifier:{TERRA_MARKER} = yes",
+                    f"\t\t\t\tsr_site_terra_value_{k} > 0",
+                    f"\t\t\t\tsr_world_terra_done_value_{w} > 0",
+                    f"\t\t\t\tsr_disp_mod_pending_terra_{k} > 0",
+                    "\t\t\t}",
+                    "\t\t}",
+                    "\t\tvalue = 1",
+                    "\t}",
+                    "}",
+                    f"sr_disp_terra_pct_{k} = {{",
+                    f"\tvalue = sr_site_terra_share_{k}",
+                    "\tmultiply = 100",
+                    "\tfloor = yes",
+                    "}"]
+        out += [f"sr_disp_terra_state_{w} = {{",
+                "\tvalue = 0",
+                f"\tif = {{ limit = {{ NOT = {{ sr_world_terra_open_{w} = yes }} }} value = 2 }}",
+                f"\telse_if = {{ limit = {{ sr_world_terra_rate_{w} > 0 }} value = 1 }}",
+                "}",
+                f"sr_disp_terra_years_{w} = {{",
                 "\tvalue = 0",
                 "\tif = {",
-                "\t\tlimit = {",
-                "\t\t\tOR = {",
-                f"\t\t\t\tmodifier:{TERRA_MARKER} = yes",
-                f"\t\t\t\tsr_site_terra_value_{k} > 0",
-                f"\t\t\t\tsr_site_terra_done_value_{k} > 0",
-                f"\t\t\t\tsr_disp_mod_pending_terra_{k} > 0",
-                "\t\t\t}",
-                "\t\t}",
-                "\t\tvalue = 1",
-                "\t}",
-                "}",
-                f"sr_disp_terra_pct_{k} = {{",
-                f"\tvalue = sr_site_terra_share_{k}",
-                "\tmultiply = 100",
-                "\tfloor = yes",
-                "}",
-                f"sr_disp_terra_state_{k} = {{",
-                "\tvalue = 0",
-                f"\tif = {{ limit = {{ NOT = {{ sr_site_terra_open_{k} = yes }} }} value = 2 }}",
-                f"\telse_if = {{ limit = {{ sr_site_terra_rate_{k} > 0 }} value = 1 }}",
-                "}",
-                f"sr_disp_terra_years_{k} = {{",
-                "\tvalue = 0",
-                "\tif = {",
-                f"\t\tlimit = {{ sr_site_terra_rate_{k} > 0 sr_site_terra_open_{k} = yes }}",
-                "\t\tvalue = sr_terra_full_months",
-                f"\t\tsubtract = sr_site_terra_done_value_{k}",
-                f"\t\tdivide = sr_site_terra_rate_{k}",
+                f"\t\tlimit = {{ sr_world_terra_rate_{w} > 0 sr_world_terra_open_{w} = yes }}",
+                f"\t\tvalue = sr_world_terra_full_{w}",
+                f"\t\tsubtract = sr_world_terra_done_value_{w}",
+                f"\t\tdivide = sr_world_terra_rate_{w}",
                 "\t\tdivide = 12",
                 "\t\tceiling = yes",
                 "\t\tmax = 999",
@@ -5313,9 +5497,10 @@ def _colony_blocks(site: Site) -> list[str]:
         # years left at this pace or the word that it is finished or idle.
         out += _override("terra_visible", f'visible = "[{_ge(f"sr_disp_terra_shown_{k}", 1)}]"')
         out += _override("terra_pct", f'raw_text = "+[{_sv(f"sr_disp_terra_pct_{k}")}|0]%"')
-        out += _override("terra_years", f'raw_text = "[{_sv(f"sr_disp_terra_years_{k}")}|0]"')
+        w = world_of(site)
+        out += _override("terra_years", f'raw_text = "[{_sv(f"sr_disp_terra_years_{w}")}|0]"')
         for code, name in enumerate(("idle", "under_way", "finished")):
-            out += _override(f"terra_{name}_visible", f'visible = "[{_eq(f"sr_disp_terra_state_{k}", code)}]"')
+            out += _override(f"terra_{name}_visible", f'visible = "[{_eq(f"sr_disp_terra_state_{w}", code)}]"')
     if k in NO_SPACEPORT:
         # No Spaceport on the Moon (lunar colonization design § 3.1): a dash where
         # its level would be, the column kept, no queue button.
