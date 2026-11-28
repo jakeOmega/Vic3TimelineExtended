@@ -683,7 +683,7 @@ Monthly, an AI country with Electrical Generation queues a batch of coal and oil
 | Line in `debug.log` | When | OK means | BROKEN means | Fallback |
 |---|---|---|---|---|
 | `TE_SELF_CHECK … ai_power_pass` | once a game: the first 40 batches queued, read once 36 of them are decided (all built, or ended with the government queue empty or after 36 months) | a quarter or fewer of the cohort's levels lost: the plants the pass queues are built | half or more lost: queued government plants are dropped or never paid for (in the 2026-11-22 paid arm France built none of its 24) | create the batch at once with `create_building` and charge its cost to the treasury (the owner, 2026-11-28: "If that doesn't work ... you can explore other options") |
-| `TE_SELF_CHECK … ai_power_lights` | once a game, when 20 switches have had the pass's first look at their state, a month on | a quarter or fewer found back on no lighting or gas at that look: the AI keeps the lights | half or more undone: the engine's method choice for the AI fights the pass each month | `ai_selection = most_productive` on the urban centers' lighting group (run G of 2026-11-21 lit 2,201 levels that way beside seeded plants), or a lock |
+| `TE_SELF_CHECK … ai_power_lights` | once a game, when 20 switches are judged (undone within 180 days, or kept that long) | a quarter or fewer undone within 180 days: the AI keeps the lights | half or more undone: the engine's method choice for the AI fights the pass each month | `ai_selection = most_productive` on the urban centers' lighting group (run G of 2026-11-21 lit 2,201 levels that way beside seeded plants), or a lock |
 
 ### Checks
 

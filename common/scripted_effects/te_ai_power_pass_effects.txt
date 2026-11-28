@@ -32,22 +32,32 @@ te_ai_power_pass_effect = {
 		}
 		every_scope_state = {
 			limit = { has_variable = te_ai_power_lit }
-			# The lights self-check reads each switch at its first look, a month on (te_ai_power_lit_looked).
-			if = {
-				limit = { NOT = { has_variable = te_ai_power_lit_looked } }
-				set_variable = te_ai_power_lit_looked
-				te_ai_power_count = { NAME = te_ai_power_g_looked ADD = 1 }
-				if = {
-					limit = { te_ai_power_lights_unswitched = yes }
-					te_ai_power_count = { NAME = te_ai_power_g_first_reverts ADD = 1 }
-				}
-			}
+			# The lights self-check judges each switch once: undone if the AI puts the lights back while the switch's
+			# 180-day window (te_ai_power_lit_window) runs, kept if they are still on when it ends
+			# (te_ai_power_lit_judged). A single look a month on missed most reverts: the 1925 test run of the
+			# revision, 4 of the first 21 switches back at that look, 64 of 121 by the end.
 			if = {
 				limit = { te_ai_power_lights_unswitched = yes }
+				if = {
+					limit = { NOT = { has_variable = te_ai_power_lit_judged } }
+					te_ai_power_count = { NAME = te_ai_power_g_judged ADD = 1 }
+					te_ai_power_count = { NAME = te_ai_power_g_early_reverts ADD = 1 }
+				}
 				remove_variable = te_ai_power_lit
-				remove_variable = te_ai_power_lit_looked
+				if = {
+					limit = { has_variable = te_ai_power_lit_judged }
+					remove_variable = te_ai_power_lit_judged
+				}
 				set_variable = { name = te_ai_power_revert_wait value = yes days = 180 }
 				te_ai_power_count = { NAME = te_ai_power_g_reverts ADD = 1 }
+			}
+			else_if = {
+				limit = {
+					NOT = { has_variable = te_ai_power_lit_judged }
+					NOT = { has_variable = te_ai_power_lit_window }
+				}
+				set_variable = te_ai_power_lit_judged
+				te_ai_power_count = { NAME = te_ai_power_g_judged ADD = 1 }
 			}
 		}
 		every_scope_state = {
@@ -57,6 +67,7 @@ te_ai_power_pass_effect = {
 				production_method = pm_electric_streetlights
 			}
 			set_variable = te_ai_power_lit
+			set_variable = { name = te_ai_power_lit_window value = yes days = 180 }
 			te_ai_power_count = { NAME = te_ai_power_g_switches ADD = 1 }
 			te_ai_power_count = { NAME = te_ai_power_g_switched_levels ADD = te_ai_power_uc_levels }
 		}

@@ -208,7 +208,8 @@ class Gates(unittest.TestCase):
 
     def test_a_revert_waits(self):
         effect = _norm(_block(_code(EFFECTS), "te_ai_power_pass_effect"))
-        self.assertIn("remove_variable = te_ai_power_lit remove_variable = te_ai_power_lit_looked set_variable = { name = te_ai_power_revert_wait value = yes "
+        self.assertIn("remove_variable = te_ai_power_lit if = { limit = { has_variable = te_ai_power_lit_judged } "
+                      "remove_variable = te_ai_power_lit_judged } set_variable = { name = te_ai_power_revert_wait value = yes "
                       "days = 180 }", effect)
 
 
@@ -241,16 +242,21 @@ class Hooks(unittest.TestCase):
 
 
 class SelfChecks(unittest.TestCase):
-    def test_lights_check_reads_each_switch_at_its_first_look(self):
+    def test_lights_check_judges_each_switch_over_180_days(self):
         effect = _norm(_block(_code(EFFECTS), "te_ai_power_pass_effect"))
-        self.assertIn("if = { limit = { NOT = { has_variable = te_ai_power_lit_looked } } set_variable = "
-                      "te_ai_power_lit_looked te_ai_power_count = { NAME = te_ai_power_g_looked ADD = 1 } if = { limit = "
-                      "{ te_ai_power_lights_unswitched = yes } te_ai_power_count = { NAME = te_ai_power_g_first_reverts "
-                      "ADD = 1 } } }", effect)
+        # A switch opens its window; a revert inside it is undone, a switch still on when it ends is kept.
+        self.assertIn("set_variable = te_ai_power_lit set_variable = { name = te_ai_power_lit_window value = yes "
+                      "days = 180 }", effect)
+        self.assertIn("if = { limit = { te_ai_power_lights_unswitched = yes } if = { limit = { NOT = { has_variable = "
+                      "te_ai_power_lit_judged } } te_ai_power_count = { NAME = te_ai_power_g_judged ADD = 1 } "
+                      "te_ai_power_count = { NAME = te_ai_power_g_early_reverts ADD = 1 } }", effect)
+        self.assertIn("else_if = { limit = { NOT = { has_variable = te_ai_power_lit_judged } NOT = { has_variable = "
+                      "te_ai_power_lit_window } } set_variable = te_ai_power_lit_judged te_ai_power_count = { NAME = "
+                      "te_ai_power_g_judged ADD = 1 } }", effect)
         check = _norm(_block(_code(ON_ACTIONS), "te_ai_power_lights_selfcheck"))
-        self.assertIn("te_ai_power_looked_g >= TE_AI_POWER_CHECK_LOOKS", check)
+        self.assertIn("te_ai_power_judged_g >= TE_AI_POWER_CHECK_JUDGED", check)
         share = _norm(_block(_code(VALUES), "te_ai_power_revert_share"))
-        self.assertTrue(share.startswith("value = te_ai_power_first_reverts_g divide = { value = te_ai_power_looked_g"),
+        self.assertTrue(share.startswith("value = te_ai_power_early_reverts_g divide = { value = te_ai_power_judged_g"),
                         share)
 
     def test_build_check_reads_a_closed_cohort(self):
