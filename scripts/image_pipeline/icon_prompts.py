@@ -313,7 +313,10 @@ CATEGORIES = {
     # its `foreground` layers; a repainted good rewrites the buildings it is on.
     "production_building": dict(
         folder="building_icons", size=256, mode="framed_good", entity_dir="common/buildings", field="icon",
-        neighbours="building_icons", style=BACKDROP_STYLE),
+        neighbours="building_icons", style=BACKDROP_STYLE,
+        # Tuned on the pilot (2026-11-27): whole-icon interior L* 33.3 and 10th percentile 8.0 over
+        # 12 candidates, against vanilla's 33.9 and 6.6 (the 17 vanilla production icons, goods included).
+        bias=(-3, 0, 3), patch=0.25, grit=3),
     # The foregrounds that are not a good's icon: each mine's own ore (owner,
     # 2026-11-27, after vanilla's grain farms showing their own crop), the air
     # capture plant's pellets, the drinks plant's bottle. Drawn as goods are.
@@ -1987,21 +1990,26 @@ ICONS: dict[str, dict[str, dict]] = {
     "good": {
         "rocket": {"subject": "a tall white multi-stage rocket standing upright on a small steel launch pad", "seed": 1,
                    "now": f"{_GI}/goods_icons/rocket.dds"},
-        "robot": {"subject": "a yellow industrial robot arm with a steel two-fingered gripper on a heavy base", "seed": 0,
+        "robot": {"subject": "a muted ochre-yellow industrial robot arm with a steel two-fingered gripper on a heavy base, seen at an angle from slightly above", "seed": None,
                   "now": f"{_GI}/goods_icons/robot.dds"},
-        "software": {"subject": "a short stack of colourful floppy disks with blank unmarked labels, a silver compact disc leaning on them", "seed": 0,
+        "software": {"subject": "a short fanned stack of floppy disks in muted grey, slate blue and dull red with blank unmarked labels, seen at an angle from slightly above", "seed": None,
                      "now": f"{_GI}/goods_icons/software.dds"},
         # s0 is retouched: a brand name painted off the router's front.
         "digital_access": {"subject": "a white wireless router with two antennas beside a black smartphone with a dark blank screen", "seed": 0,
                            "now": f"{_GI}/goods_icons/digital_access.dds"},
-        "consumer_appliances": {"subject": "a cream-coloured retro refrigerator beside a small chrome toaster and a kitchen blender", "seed": 0,
+        "consumer_appliances": {"subject": "a dull cream retro refrigerator beside a small chrome toaster, seen at an angle from slightly above", "seed": None,
                                 "now": f"{_GI}/goods_icons/consumer_appliances.dds"},
         # s0 lettered its circuit board.
-        "electronic_components": {"subject": "a green circuit board holding a black microchip, round capacitors and striped resistors", "seed": 1,
+        "electronic_components": {"subject": "a dark green circuit board, seen at an angle from slightly above, holding a black microchip, round capacitors and striped resistors", "seed": None,
                                   "now": f"{_GI}/goods_icons/electronic_components.dds"},
+        # Repainted 2026-11-27 with the production buildings (spec 2026-11-27): vanilla's goods are
+        # angled and muted; these five read as flat, front-on, saturated stickers beside them.
+        # High-Performance Materials' icon predates the pipeline.
+        "buckyball": {"subject": "a dark graphite-grey carbon buckyball molecule model of round atoms on short thick rods, seen at an angle from slightly above", "seed": None,
+                      "now": f"{_GI}/goods_icons/buckyball.dds"},
         "tech_metals": {"subject": "a pile of shiny silvery metal ingots with a few dark glittering mineral crystals", "seed": 1,
                         "now": f"{_GI}/goods_icons/tech_metals.dds"},
-        "tourism": {"subject": "a brown leather suitcase with a camera on a strap and a straw sun hat resting on top", "seed": 2,
+        "tourism": {"subject": "a worn brown leather suitcase with a camera on a strap and a straw sun hat resting on top, seen at an angle from slightly above", "seed": None,
                     "now": f"{_GI}/goods_icons/tourism.dds"},
         # Batch 5: vanilla goods the mod renamed, written over vanilla's file so the
         # text icon (@fertilizer!, @opium!) follows. Chemicals showed the basic
