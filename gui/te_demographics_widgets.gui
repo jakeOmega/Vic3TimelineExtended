@@ -2911,6 +2911,21 @@ types te_demographics_widgets
 					}
 				}
 				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_fort_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_fort"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( Country.MakeScope.Var('te_dg_wc_t_fort').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( Country.MakeScope.Var('te_dg_wc_t_fort').GetValue, '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[Country.MakeScope.Var('te_dg_wc_t_fort').GetValue|+0]"
+					}
+				}
+				te_demog_term_row = {
 					tooltip = "te_demog_wc_t_tax_tt"
 					blockoverride "row_label" {
 						text = "te_demog_wc_t_tax"
@@ -6773,7 +6788,7 @@ types te_demographics_widgets
 				### The state's target term by term, in the country tab's pillars
 				### (te_demog_term_row): land tenure, ownership and inequality are
 				### the state's own (te_demog_wc_target's state-scope terms), the law,
-				### tax, economic, public goods, slavery and r > g terms its owner's, so the nine add up to
+				### tax, economic, public goods, slavery and r > g terms its owner's, so the ten add up to
 				### the target above, less 50.
 				te_demog_subheader = {
 					blockoverride "subheader_text" {
@@ -6838,6 +6853,21 @@ types te_demographics_widgets
 					}
 					blockoverride "row_value" {
 						text = "[State.MakeScope.ScriptValue('te_demog_wc_inequality_term')|+0]"
+					}
+				}
+				te_demog_term_row = {
+					tooltip = "te_demog_wc_t_fort_tt"
+					blockoverride "row_label" {
+						text = "te_demog_wc_t_fort"
+					}
+					blockoverride "term_left" {
+						value = "[FixedPointToFloat( Min_CFixedPoint( State.MakeScope.ScriptValue('te_demog_wc_fortunes_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "term_right" {
+						value = "[FixedPointToFloat( Max_CFixedPoint( State.MakeScope.ScriptValue('te_demog_wc_fortunes_term'), '(CFixedPoint)0' ) )]"
+					}
+					blockoverride "row_value" {
+						text = "[State.MakeScope.ScriptValue('te_demog_wc_fortunes_term')|+0]"
 					}
 				}
 				te_demog_term_row = {

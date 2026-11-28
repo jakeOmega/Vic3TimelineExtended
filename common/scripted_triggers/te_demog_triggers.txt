@@ -77,6 +77,33 @@ te_demog_is_ownership_building = {
 	}
 }
 
+# Building scope: a Financial District or company headquarters run for private owners, where Dynastic Wealth's Scale
+# of Fortunes term counts property and owners (te_demog_wc_fortunes_measure). Not a Manor House: landed fortunes are
+# the land term's, and its aristocrats are hired by the level. Not a headquarters on a government-run or cooperative
+# method, or any building on Hobbyist Management: the aristocrats and shopkeepers those hire hold no great fortune, and
+# Hobbyist Management hires no owner at all. test_ownership_partnership.py holds the list to the methods that law_
+# command_economy, law_cooperative_ownership and law_post-scarcity unlock in the two groups.
+te_demog_is_fortune_building = {
+	OR = {
+		is_building_type = building_financial_district
+		is_building_group = bg_company_headquarter
+		is_building_group = bg_company_regional_headquarter
+	}
+	NOR = {
+		has_active_production_method = pm_company_headquarter_government_run
+		has_active_production_method = pm_company_headquarter_government_run_aristocrats
+		has_active_production_method = pm_company_headquarter_government_run_shopkeepers
+		has_active_production_method = pm_company_headquarter_government_run_bureaucrats
+		has_active_production_method = pm_company_headquarter_government_run_academics
+		has_active_production_method = pm_company_headquarter_worker_cooperative
+		has_active_production_method = pm_company_headquarter_worker_cooperative_aristocrats
+		has_active_production_method = pm_company_headquarter_worker_cooperative_shopkeepers
+		has_active_production_method = pm_company_headquarter_worker_cooperative_bureaucrats
+		has_active_production_method = pm_company_headquarter_worker_cooperative_academics
+		has_active_production_method = pm_hobbyist_ownership
+	}
+}
+
 # Building scope: a rural workplace, for urban population (§5.1; plan Decisions).
 te_demog_rural_workplace = {
 	OR = {

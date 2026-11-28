@@ -23,6 +23,7 @@ from paradox_file_parser import ParadoxFileParser
 REPO = os.path.dirname(os.path.abspath(__file__))
 PMS = os.path.join(REPO, "common", "production_methods", "extra_pms.txt")
 MIN_ATTRACTIVENESS = 5  # +500%, as pm_grid_transfer_base
+PARTNERSHIP_OWNERS = {"building_employment_capitalists_add", "building_employment_aristocrats_add"}
 
 
 def _unwrap(value):
@@ -45,8 +46,10 @@ def _flat_crew_methods():
         unscaled = _unwrap(modifiers.get("unscaled")) if isinstance(modifiers, dict) else None
         if not isinstance(unscaled, dict):
             continue
-        if any(
-                key.startswith("building_employment_") for key in unscaled):
+        hires = {key for key in unscaled if key.startswith("building_employment_")}
+        # An ownership building's partnership (owners alone, on top of a per-level staff) is
+        # not a crew: its owners' jobs need no bonus (test_ownership_partnership.py).
+        if hires and not hires <= PARTNERSHIP_OWNERS:
             methods[name] = {key: _unwrap(value) for key, value in unscaled.items()}
     return methods
 

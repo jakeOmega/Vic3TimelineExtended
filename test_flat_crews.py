@@ -87,6 +87,14 @@ TOKEN_CREW_EXEMPT = {
     "building_manila_cathedral_ruins": "a monument's ruins",
     "te_construction_market_site": "the construction market's marker building",
 }
+# The ownership buildings whose owners are a partnership (owner, 2026-11-28): a fixed number in
+# `unscaled` on top of a per-level part, so their methods are not flat crews and never cancel a
+# level. test_ownership_partnership.py holds them.
+PARTNERSHIP_BUILDINGS = {
+    "building_financial_district",
+    "building_company_headquarter",
+    "building_company_regional_headquarter",
+}
 TOKEN_CREW_IGNORED_GROUPS = {
     # The state's clergy (Decentralized Religious Structures keeps 50 a level), not the
     # Urban Center's amenities staff, which Robotic Service Providers hires flat.
@@ -175,9 +183,12 @@ class _Data:
         return [c for c in itertools.product(*methods) if self.valid(c)]
 
     def flat_crews(self):
-        """{method: [buildings it runs in]} for every method with a flat crew."""
+        """{method: [buildings it runs in]} for every method with a flat crew (not the
+        ownership buildings' partnerships)."""
         out = {}
         for building in sorted(self.buildings):
+            if building in PARTNERSHIP_BUILDINGS:
+                continue
             for group in self.groups(building):
                 for name in self.methods(group):
                     if self.crew(name) > 0:

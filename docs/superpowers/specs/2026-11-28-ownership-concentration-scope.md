@@ -4,7 +4,29 @@ Drafted 2026-11-28 from the owner's request. This is a scoping document: what
 to build, the engine facts it rests on, and the calls the owner has to make.
 It is not yet a design, and it has no implementation plan.
 
-**Status (2026-11-28):** scope, with the open calls in § 10 unanswered.
+**Status (2026-11-28):** built the same day, on the owner's answers below. The sizes are
+provisional until the save measurements (§ 9, M1 to M3); the play-test list is
+`docs/testing/ownership-concentration-playtest.md`, and the systems docs are
+`docs/systems/mod_systems/production_methods.md` § Ownership buildings and
+`demographics.md` § Dynastic Wealth per state.
+
+## Decisions (owner, 2026-11-28)
+
+- Call 1: the aristocrats of aristocrat-owned headquarters split too ("yes").
+- Call 2: the sizes are settled on saves ("ok"). Built at the starting shape, 6T once a
+  building and 0.4T a level (break-even at level 10).
+- Call 5: Scale of Fortunes is built ("sure").
+- Call 8: the tier gates are fixed in the same build ("sure").
+- The other calls took the recommendations: Manor Houses unchanged (4), the term measured
+  from owned assets (6), regional headquarters with their own partnership (7), no
+  migration for old saves (9). Call 3 took the proportional tiers for the Financial
+  District; the headquarters' own tier copies keep their category's owners and automate
+  only the back office, since employment figures are whole numbers and 60%, 40% and 20%
+  of a 10-capitalist category's owners are not.
+- Built differently from § 5.2: the owners are the buildings' capitalist and aristocrat
+  positions (their `modifier:` reads), not the walk's employed pops, and the centre r₀ is
+  the world's figure measured in the game once (at its start, or at the first pulse of an
+  old save), since no save was at hand to measure 1836's.
 
 Read first: `docs/systems/mod_systems/demographics.md` § Dynastic Wealth per
 state; `docs/systems/mod_systems/inheritance.md`; and the flat-crew design
