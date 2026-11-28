@@ -427,10 +427,20 @@ on seabed licences and space colonies.
 A firm whose goal is Cheaper inputs or Dominance opens a **concession** in a
 state of another country that makes its input good or buys its output. It does
 not ask its government. Opening costs funds. In keeping with soft caps,
-nothing forbids a site, but the cost doubles for each of: no home-country
-interest in the region, a host of equal or higher rank, a host on bad terms
-with the home country. It halves for an unrecognized host and for a subject
-or bloc partner of the home country.
+nothing forbids a site, but the cost doubles for each of: a home country with
+no interest tier in the region, a host of equal or higher rank, a host on bad
+terms with the home country. It halves for an unrecognized host and for a
+subject or bloc partner of the home country.
+
+**A concession builds its home country's Involvement in the region**
+(**owner**: interests come from Involvement, and script can add it). Each
+quarter a concession adds Involvement in its strategic region in proportion
+to its strength, through `add_involvement`. So a firm's activity raises its
+country's interest tier in a region the government never chose, and with the
+tier come the claims, plays and rivalries the engine hangs on it. This is the
+chain's main lever on the state, and it works with no event at all: the
+player opens the diplomatic map and finds the country Engaged in the Niger
+basin because a company is.
 
 Two kinds of host:
 
@@ -482,9 +492,9 @@ and any Favored status add weight. **Owner**'s three answers:
 
 | Answer | The state | Then |
 |---|---|---|
-| **Back** | Commits. Against a country: a guarantee (Trouble −30, relations with the host −20) and a pledge for ten years. If the concession is lost while pledged, the state either acts within two years (a play for investment rights, an open market or a protectorate, at reduced infamy) or loses prestige and every firm's trust. Against a decentralized nation: it starts or speeds a colony there | The firm's Connections rise; it will ask again |
+| **Back** | Commits. The state adds Involvement of its own in the region, a large step at once. Against a country: a guarantee (Trouble −30, relations with the host −20) and a pledge for ten years. If the concession is lost while pledged, the state either acts within two years (a play for investment rights, an open market or a protectorate, at reduced infamy) or loses prestige and every firm's trust. Against a decentralized nation: it starts or speeds a colony there | The firm's Connections rise; it will ask again |
 | **Stand aside** | Commits nothing and forbids nothing. Letting the countdown run out is this answer | The firm carries on at its own risk: bribes, force or abandonment by its funds and temperament. The state may inherit the result: an incident in its name, or a foothold it never chose |
-| **Forbid** | Orders it out: the concession closes, relations with the host improve | Connections −30, Grievance +1, its backers' approval falls, and the firm picks a response from § 7.5 |
+| **Forbid** | Orders it out: the concession closes, the Involvement it built is taken back, relations with the host improve | Connections −30, Grievance +1, its backers' approval falls, and the firm picks a response from § 7.5 |
 
 Only Forbid is a ruling against the firm, so only Forbid opens the ladder.
 
@@ -501,8 +511,8 @@ The firm's **Boldness** is scored 0–100:
 - up or down with the executive's temperament (§ 5.3);
 - down with Attachment to home (the executive's culture, the share of its
   assets at home);
-- down with the state's reach (naval power and interest in the concession's
-  region; a state that can punish it there is obeyed).
+- down with the state's reach (naval power and its interest tier in the
+  concession's region; a state that can punish it there is obeyed).
 
 | Rung | Boldness | What happens | Tier |
 |---|---|---|---|
@@ -514,8 +524,8 @@ The firm's **Boldness** is scored 0–100:
 A firm takes the highest rung its Boldness allows, with a strong weight
 toward the lower ones. A fifth rung, moving its seat abroad, is deferred.
 
-**Who can be the protector.** A country with an interest in the region that is
-not at war with the home country, not its rival, and not on poor relations
+**Who can be the protector.** A country with an interest tier in the region
+that is not at war with the home country, not its rival, and not on poor relations
 with it. Allies, bloc partners and friendly neutrals weigh highest. If none
 qualifies the rung is closed. The candidate is asked (a player by event, the
 AI by weight) and may decline.
@@ -525,13 +535,18 @@ AI by weight) and may decline.
 - **Reverse**: Back the firm after all, at a cost in prestige and authority;
 - **Compensate**: pay the firm from the treasury, clearing the Grievance;
 - **Let it go**: the concession passes under the protector's flag. The
-  protector takes its yield and its petitions; the firm stays a company of its
-  home country; relations between the two countries fall.
+  protector takes its yield, its petitions and the Involvement it builds from
+  then on; the firm stays a company of its home country; relations between
+  the two countries fall.
 
 ### 7.6 Ties to other systems
 
-- **Interests, plays and colonization**: Back resolves into the engine's own
-  plays and colonies, never a new kind of war.
+- **Interests**: concessions and Back build Involvement, so the engine's own
+  interest tiers carry the consequences
+  (`docs/vanilla/vanilla_diplomacy_reference.md` § 6; the Involvement the
+  mod's treaty articles build is in `docs/systems/mod_systems/treaties.md`).
+- **Plays and colonization**: Back resolves into the engine's own plays and
+  colonies, never a new kind of war.
 - **Decolonization**: the independence nationalization event
   (`decolonization_events.15`) should close or trouble concessions in the new
   country, and their firms should petition.
@@ -566,12 +581,12 @@ player cannot see would be worse than no system.
 ### 8.2 Legibility rules
 
 1. **No hidden switch.** An actor never changes an AI government's behavior
-   directly. It moves quantities the player can see (relations, incidents,
-   law enactment, a declared move), each with the actor named in the tooltip
-   or ledger.
+   directly. It moves quantities the player can see (Involvement and the
+   interest tier it gives, relations, incidents, law enactment, a declared
+   move), each with the actor named in the tooltip or ledger.
 2. **Nothing in this slice ends a pact.** The only diplomatic effects are
-   relations drift from rivalry and guarantees, incidents, and plays that
-   follow a declared petition.
+   Involvement, relations drift from rivalry and guarantees, incidents, and
+   plays that follow a declared petition.
 3. **Declared moves are visible to those they concern**: the home country, the
    host, a candidate protector, and any country with an interest in the
    region that is the rival or ally of one of those.
@@ -698,8 +713,20 @@ Kept in the chassis now so that these need no rework:
   momentum, creating, bolstering and suppressing movements, appointing an
   executive, company monopolies, incidents, plays, relations and the
   investment pool (`docs/engine/effects_summary.txt`).
-- No effect declares a diplomatic interest; `has_interest_marker_in_region`
-  only reads one.
+- **Money can be taken out of the investment pool** (**owner**):
+  `add_investment_pool` takes a negative amount. The mod already does it on
+  leaving a monetary union (`te_mon_union_exit_pool_hit`, 2% of GDP, capped at
+  what the pool holds). Cap every debit the same way.
+- **Script can start a play for any country** (**owner**):
+  `create_diplomatic_play` with a type, a target and war goals. The mod does
+  it for the wars of independence
+  (`common/scripted_effects/decolonization_war_effects.txt`, with a
+  self-check that the play exists).
+- **Script can add Involvement** (**owner**): `add_involvement = {
+  strategic_region = sr:<region> value = N }` in country scope. Vanilla uses
+  it once, for 2,500 in a journal entry; the mod not yet. Interest tiers
+  follow from Involvement, and `has_strategic_region_interest_tier` reads
+  the tier.
 - `building_<type>_throughput_add` exists per building type;
   `country_infamy_generation_mult` exists (`vanilla_parsed/common/modifier_types.json`).
 - A domestic lobby seeded from history crashes a new game
@@ -711,12 +738,12 @@ silent (`CLAUDE.md`, "In-game checks").
 
 | # | Question | Needed for | Fallback |
 |---|---|---|---|
-| 1 | Does `add_investment_pool` take a negative amount? | § 4.3, funds as real money | A timed modifier on capitalists' investment-pool contribution in the firm's headquarters state |
+| 1 | Does Involvement added by script stay, decay or sit under a cap, and does a negative value take it back? | § 7.1, § 7.4 | Add it once when a concession opens and once on Back, and never take it back |
 | 2 | Does a country modifier with `building_<type>_throughput_add` cut every building of the type in the country, and does the price move as expected? | § 6.1, rents | A restricted production method switched in on the firm's buildings |
 | 3 | Can a state variable hold a company scope, and what does it read after the company is disbanded? | § 9, concessions | Store the company type and the home country |
 | 4 | Can `change_appeasement` on vanilla's existing country lobbies be driven from a firm's stake without the crash? | § 11 | Leave lobbies alone |
 | 5 | Can script start or speed a colony in a named state region? | § 7.4, Back on the frontier | A colony-growth modifier that applies once the country starts one itself |
-| 6 | Can `create_diplomatic_play` start the three plays of § 7.4 for an AI country with the right war goal? | § 7.4, § 8 | A weight in `common/ai_strategies/` in place of a scripted play |
+| 6 | Do vanilla's play types for investment rights, an open market and a protectorate start cleanly from script with their war goals, as the mod's own independence-war type does? | § 7.4, § 8 | A play type of the mod's own for each |
 | 7 | Which executive traits and ideologies are readable from `company.executive`, and does every company always have one? | § 5.3 | Neutral temperament when missing |
 | 8 | What happens to a firm's variables and monopoly when its country loses a revolution? | § 9 | Re-seed the firm on the winner's first turn |
 
