@@ -458,7 +458,12 @@ SELF_CHECK_STUBS = {"te_debug_demog_conscription_selfcheck_start": "",
                     "te_debug_demog_province_change": "",
                     # the runaway tripwire (2026-11-06): debug_log and the state's name;
                     # test_demographics_runaway_check runs it
-                    "te_debug_demog_runaway_selfcheck": ""}
+                    "te_debug_demog_runaway_selfcheck": "",
+                    # the Scale of Fortunes term's inputs and self-checks (2026-11-28): they walk the world's and the
+                    # state's buildings and read globals, which the interpreter doesn't; TestWealthFortunes gives a
+                    # state its stored multiple and reads their text
+                    "te_demog_wc_fortunes_centre_ensure": "", "te_demog_wc_fortunes_measure": "",
+                    "te_demog_wc_fortunes_selfchecks": ""}
 # Phase 3: Cultural Hegemony's factor reads the owner (te_demog_tfr_hegemon): 1 unless a test gives it.
 PHASE3_DEFAULTS = {"te_demog_tfr_hegemon": 1.0}
 # 2026-10-20: the walk applies the state's wealth line per pop, and the refresh and the split read it beside te_dg_w_edw:
@@ -5585,6 +5590,86 @@ def _modifier_fields(path, name):
     """{field: value} of a static modifier, its icon left out."""
     body = _raw_blocks([path])[name]
     return {k: float(v) for k, v in re.findall(r"^\s*(\w+) = (-?[\d.]+)\s*$", body, re.M)}
+
+
+class TestWealthFortunes(unittest.TestCase):
+    """The Scale of Fortunes term (2026-11-28; docs/superpowers/specs/2026-11-28-ownership-concentration-scope.md § 5):
+    4 x log2 of the state's property per owner as a multiple of the world's figure (te_dg_wc_fs), at most +10 and at
+    least -5, 0 with no figure. The measurement walks buildings and the world, which the interpreter can't, so it is
+    stubbed (SELF_CHECK_STUBS) and read as text here; the term and its bar run through the interpreter."""
+
+    def term(self, fs=None):
+        state = {} if fs is None else {"te_dg_wc_fs": float(fs)}
+        return _CountryEngine(states=[state], fixtures={}).value_in(state, "te_demog_wc_fortunes_term")
+
+    def test_four_points_a_doubling_capped_at_ten_and_floored_at_five(self):
+        for fs, term in ((1, 0.0), (1.5, 2.0), (2, 4.0), (3, 6.0), (4, 8.0), (5, 9.0), (6, 10.0), (12, 10.0),
+                         (0.75, -2.0), (0.5, -4.0), (0.45, -4.8), (0.4375, -5.0), (0.3, -5.0), (0.1, -5.0), (0, -5.0)):
+            self.assertAlmostEqual(self.term(fs), term, msg=str(fs))
+        self.assertEqual(self.term(), 0.0, "a state with no figure: no term")
+
+    def test_the_table_is_continuous_and_rising(self):
+        xs = [0.25 + 0.01 * k for k in range(600)]
+        terms = [self.term(x) for x in xs]
+        self.assertTrue(all(b >= a - 1e-9 for a, b in zip(terms, terms[1:])), "rises with the multiple")
+        self.assertLess(max(abs(b - a) for a, b in zip(terms, terms[1:])), 0.25, "no step at a power of 2")
+        for x, t in zip(xs, terms):
+            if 0.45 <= x <= 5.5:
+                self.assertLess(abs(t - 4 * math.log2(x)), 4 * 0.087, f"within the table's error of 4 log2 at {x}")
+
+    def test_the_target_adds_it(self):
+        base = {"te_dg_lv_priv": 0.4, "te_dg_lv_self": 0.0, "te_dg_lv_ctry": 0.0, "te_dg_gini": 0.4}
+        self.assertAlmostEqual(TestWealth().target(dict(base), law=50.0, land=0.0, tax=0.0), 50.0)
+        self.assertAlmostEqual(TestWealth().target({**base, "te_dg_wc_fs": 4.0}, law=50.0, land=0.0, tax=0.0), 58.0)
+        self.assertAlmostEqual(TestWealth().target({**base, "te_dg_wc_fs": 0.25}, law=50.0, land=0.0, tax=0.0), 45.0)
+
+    def test_the_national_bar_is_the_weighted_mean_and_the_bars_still_add_up(self):
+        # 65% private, the ownership term's centre, and a Gini of 0.40: neither state reaches a clamp
+        a = TestWealth.scored(80, 70, own=30, coop=35, gini=0.4, priv=65)
+        a["te_dg_wc_fs"] = 4.0
+        b = TestWealth.scored(40, 50, own=10, coop=35, gini=0.4, priv=65)
+        v = TestWealth.national([a, b])
+        # weighed by where property is held: ownership levels plus self-owned ones (30 + 35 and 10 + 35)
+        self.assertAlmostEqual(v["te_dg_wc_t_fort"], (8.0 * 65 + 0.0 * 45) / 110)
+        bars = sum(v[f"te_dg_wc_t_{t}"] for t in ("law", "land", "own", "ineq", "fort", "tax", "econ", "public",
+                                                    "slavery"))
+        self.assertAlmostEqual(v["te_dg_wc_target"], 50 + bars)
+
+    def test_the_inputs_are_measured_before_the_target(self):
+        state_yearly = _block(_text(EFFECTS), "te_demog_state_yearly")
+        ensure, measure = state_yearly.index("te_demog_wc_fortunes_centre_ensure = yes"), \
+            state_yearly.index("te_demog_wc_fortunes_measure = yes")
+        self.assertLess(ensure, measure)
+        self.assertLess(measure, state_yearly.index("te_demog_wc_state_yearly = yes"))
+        start = _block(_text(INH_EFFECTS), "te_inh_game_start")
+        self.assertLess(start.index("te_demog_wc_fortunes_centre_ensure = yes"), start.index("every_scope_state"))
+        self.assertLess(start.index("te_demog_wc_fortunes_measure = yes"), start.index("te_demog_wc_seed_state = yes"))
+        self.assertIn("te_demog_wc_fortunes_selfchecks = yes", _block(_text(EFFECTS), "te_demog_country_yearly"))
+
+    def test_the_measure_counts_private_fortunes_and_divides_by_the_world(self):
+        text = _text(WEALTH_EFFECTS)
+        for name in ("te_demog_wc_fortunes_measure", "te_demog_wc_fortunes_centre_ensure"):
+            body = _block(text, name)
+            self.assertIn("te_demog_is_fortune_building = yes", body, name)
+            self.assertIn("te_demog_building_owned_levels", body, name)
+            self.assertIn("te_demog_building_owner_slots", body, name)
+        measure = _block(text, "te_demog_wc_fortunes_measure")
+        self.assertIn("divide = { value = global_var:te_dg_wc_fs_centre min = 0.00001 }", measure)
+        self.assertIn("has_global_variable = te_dg_wc_fs_centre", measure)
+        self.assertIn("remove_variable = te_dg_wc_fs", measure, "a state that loses its fortunes loses the term")
+        ensure = _block(text, "te_demog_wc_fortunes_centre_ensure")
+        self.assertIn("NOT = { has_global_variable = te_dg_wc_fs_centre }", ensure, "measured once a game")
+        self.assertIn("set_global_variable = { name = te_dg_wc_fs_tried value = 1 days = 30 }", ensure)
+        slots = _block(_text(VALUES), "te_demog_building_owner_slots")
+        for pop in ("capitalists", "aristocrats"):
+            self.assertIn(f"modifier:building_employment_{pop}_add", slots)
+
+    def test_the_self_checks_log_ok_and_broken(self):
+        body = _block(_text(WEALTH_EFFECTS), "te_demog_wc_fortunes_selfchecks")
+        for check in ("ownership_partners", "ownership_assets"):
+            self.assertIn(f"TE_SELF_CHECK OK {check}", body)
+            self.assertIn(f"TE_SELF_CHECK BROKEN {check}", body)
+        self.assertIn("value = { value = level multiply = 20 add = 300 }", body, "the District's partnership")
 
 
 class TestWealthSizes(unittest.TestCase):

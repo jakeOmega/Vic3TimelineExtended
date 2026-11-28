@@ -80,11 +80,14 @@ te_inh_yearly_update = {
 # event (te_demog_events.1) walks the states too, and either may run first:
 # a state it has walked is not walked again.
 te_inh_game_start = {
+	# the world's Scale of Fortunes figure, measured by the first country to start (te_demog_wealth_effects.txt)
+	te_demog_wc_fortunes_centre_ensure = yes
 	every_scope_state = {
 		if = {
 			limit = { NOT = { has_variable = te_dg_walk_pop } }
 			te_demog_walks = yes
 		}
+		te_demog_wc_fortunes_measure = yes
 		te_demog_wc_seed_state = yes
 	}
 	te_demog_wc_national = yes

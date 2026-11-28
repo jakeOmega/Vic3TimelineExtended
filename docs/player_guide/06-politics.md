@@ -500,8 +500,15 @@ way to its own target each year, and your country's figure is the states'
 average, weighted by where property is held. A state's target starts at 50, and
 the law (the table above) and its amendments move it, together at most 50 either
 way. Land tenure, who owns the state's capital, how unequal
-incomes are, taxes on wealth, your economic laws, whether health care,
-schooling and ideas are provided or sold, and your slavery law move it from there.
+incomes are, how large its fortunes are, taxes on wealth, your economic laws,
+whether health care, schooling and ideas are provided or sold, and your slavery
+law move it from there. Financial Districts and company headquarters employ
+their owners as a fixed partnership plus a few more a level, so the larger a
+district or company grows, the fewer people own each level and the richer each
+one is. Scale of Fortunes compares the property each owner in a state's
+districts and private headquarters holds with the world's figure at the start
+of the game: +4 for each doubling, at most +10, and −4 for each halving, at
+most −5.
 Laissez-Faire (+10), Extraction Economy (+5), Freedom of Contract and Guilds and
 Chartered Monopolies (+5) raise it; Interventionism, Antitrust Enforcement and
 Regulated Utilities (−5 each) lower it. Private Health Insurance, Private

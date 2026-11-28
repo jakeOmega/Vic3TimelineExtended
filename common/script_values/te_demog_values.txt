@@ -506,7 +506,7 @@ te_demog_neg_city_rank = {
 
 # State scope: the target. #822's law and amendments (0-100, centred on 50), land tenure
 # by the state's agrarian share, who holds the state's capital, the state's income
-# inequality, the country's taxes on wealth, its economic laws, its public goods laws,
+# inequality, the scale of its fortunes (property per owner), the country's taxes on wealth, its economic laws, its public goods laws,
 # its slavery law and its return on capital against growth (r > g), clamped 0-100. Continuity of title
 # (inheritance_events.6) pins it at the state's score: nobody's estate passes on.
 te_demog_wc_target = {
@@ -514,6 +514,7 @@ te_demog_wc_target = {
 	add = te_demog_wc_land_term
 	add = te_demog_wc_ownership_term
 	add = te_demog_wc_inequality_term
+	add = te_demog_wc_fortunes_term
 	add = owner.te_demog_wc_tax_term
 	add = owner.te_demog_wc_econ_term
 	add = owner.te_demog_wc_public_term
@@ -578,6 +579,114 @@ te_demog_wc_inequality_term = {
 	multiply = 40
 	min = -15
 	max = 15
+}
+
+# State scope: the Scale of Fortunes term (2026-11-28; docs/superpowers/specs/2026-11-28-ownership-concentration-
+# scope.md § 5). How much property each owner of the state's great fortunes holds: the levels its Financial Districts
+# and private headquarters own per 1,000 of the owners they hire (te_dg_wc_fs, te_demog_wc_fortunes_measure, as a
+# multiple of the world's figure when it was first measured, the game's start in a new game). The owners are hired as a
+# fixed partnership and a smaller part a level, so the larger a district or company grows, the fewer own each level.
+# 4 points for each doubling: 4 x log2 of the multiple, at most +10 (about 6 times the world's figure) and at least -5
+# (about 0.44 times). 0 for a state with no such building that owns property and hires owners.
+te_demog_wc_fortunes_term = {
+	value = te_demog_wc_fortunes_log2
+	multiply = 4
+	min = -5
+	max = 10
+}
+
+# State scope: log2 of te_dg_wc_fs, linear between the powers of 2 from 1/4 to 8 (at most 0.086 short: script has no
+# logarithm), -2 below 1/4 and 0 with no figure. The term's clamps fall inside the table.
+te_demog_wc_fortunes_log2 = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dg_wc_fs
+			var:te_dg_wc_fs >= 4
+		}
+		value = var:te_dg_wc_fs
+		divide = 4
+		add = 1
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_wc_fs
+			var:te_dg_wc_fs >= 2
+		}
+		value = var:te_dg_wc_fs
+		divide = 2
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_wc_fs
+			var:te_dg_wc_fs >= 1
+		}
+		value = var:te_dg_wc_fs
+		subtract = 1
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_wc_fs
+			var:te_dg_wc_fs >= 0.5
+		}
+		value = var:te_dg_wc_fs
+		multiply = 2
+		subtract = 2
+	}
+	else_if = {
+		limit = {
+			has_variable = te_dg_wc_fs
+			var:te_dg_wc_fs >= 0.25
+		}
+		value = var:te_dg_wc_fs
+		multiply = 4
+		subtract = 3
+	}
+	else_if = {
+		limit = { has_variable = te_dg_wc_fs }
+		value = -2
+	}
+}
+
+# Building scope: the levels the building owns, in the nine top-level groups private owners hold
+# (test_ownership_partnership.py keeps the list to the building groups). A parent group's count is taken to include its
+# children's (vanilla's own read is of a child, bg_military_industry); TE_SELF_CHECK ownership_assets reads it. Not
+# bg_urban_facilities, which holds the ownership buildings themselves, nor the hidden monuments or the colony sites.
+te_demog_building_owned_levels = {
+	value = "num_building_assets_of_group(bg_agriculture)"
+	add = "num_building_assets_of_group(bg_plantations)"
+	add = "num_building_assets_of_group(bg_ranching)"
+	add = "num_building_assets_of_group(bg_extraction)"
+	add = "num_building_assets_of_group(bg_manufacturing)"
+	add = "num_building_assets_of_group(bg_power)"
+	add = "num_building_assets_of_group(bg_service)"
+	add = "num_building_assets_of_group(bg_infrastructure)"
+	add = "num_building_assets_of_group(bg_megastructure_capped_private)"
+}
+
+# Building scope: two of those counts alone, for TE_SELF_CHECK ownership_assets (te_demog_wc_fortunes_selfchecks):
+# Light Industry is a child of Manufacturing, so the parent's count holds the child's if parents count children.
+te_demog_building_light_assets = { value = "num_building_assets_of_group(bg_light_industry)" }
+te_demog_building_manufacturing_assets = { value = "num_building_assets_of_group(bg_manufacturing)" }
+
+# debug_log prints a value from another scope only through a global variable and a SCOPE.ScriptValue wrapper
+# (te_demog_wealth_effects.txt's Scale of Fortunes section). Each is read only after its line sets it.
+te_demog_wc_fs_centre_g = { value = global_var:te_dg_wc_fs_centre }
+te_demog_wc_fs_wh_g = { value = global_var:te_dg_wc_fs_wh }
+te_demog_wc_fs_wo_g = { value = global_var:te_dg_wc_fs_wo }
+te_demog_fs_chk_slots_g = { value = global_var:te_dg_fs_chk_slots }
+te_demog_fs_chk_level_g = { value = global_var:te_dg_fs_chk_level }
+te_demog_fs_chk_expected_g = { value = global_var:te_dg_fs_chk_expected }
+te_demog_fs_chk_light_g = { value = global_var:te_dg_fs_chk_light }
+te_demog_fs_chk_manuf_g = { value = global_var:te_dg_fs_chk_manuf }
+te_demog_fs_chk_held_g = { value = global_var:te_dg_fs_chk_held }
+
+# Building scope: the owners the building hires, its capitalists' and aristocrats' positions (the partnership and the
+# part a level together, as the building's modifier sums them; TE_SELF_CHECK ownership_partners reads it).
+te_demog_building_owner_slots = {
+	value = modifier:building_employment_capitalists_add
+	add = modifier:building_employment_aristocrats_add
+	min = 0
 }
 
 # State scope: the people its last census counted, the States table's sort key and the

@@ -35,8 +35,8 @@ te_demog_state_gini = {
 #                       te_inh_yearly_update, te_inh_shift_concentration and
 #                       te_demog_wc_shock move
 #   te_dg_wc_target     the states' targets, weighted the same way
-#   te_dg_wc_t_law, te_dg_wc_t_land, te_dg_wc_t_own, te_dg_wc_t_ineq,
-#   te_dg_wc_t_tax, te_dg_wc_t_econ, te_dg_wc_t_public, te_dg_wc_t_slavery, te_dg_wc_t_rg  the target's nine terms,
+#   te_dg_wc_t_law, te_dg_wc_t_land, te_dg_wc_t_own, te_dg_wc_t_ineq, te_dg_wc_t_fort,
+#   te_dg_wc_t_tax, te_dg_wc_t_econ, te_dg_wc_t_public, te_dg_wc_t_slavery, te_dg_wc_t_rg  the target's ten terms,
 #                       signed around 50 and weighted the same way, so they add up
 #                       to the target (the panel's bars)
 #   te_dg_wc_top, te_dg_wc_bottom  the most and least concentrated states
@@ -242,6 +242,7 @@ te_demog_wc_national = {
 		set_local_variable = { name = te_dg_wc_s_land value = 0 }
 		set_local_variable = { name = te_dg_wc_s_own value = 0 }
 		set_local_variable = { name = te_dg_wc_s_ineq value = 0 }
+		set_local_variable = { name = te_dg_wc_s_fort value = 0 }
 		te_demog_gini_band_zero = yes
 		set_local_variable = { name = te_dg_g_states value = 0 }
 		every_scope_state = {
@@ -273,6 +274,7 @@ te_demog_wc_national = {
 			change_local_variable = { name = te_dg_wc_s_land add = { value = te_demog_wc_land_term multiply = local_var:te_dg_wc_w } }
 			change_local_variable = { name = te_dg_wc_s_own add = { value = te_demog_wc_ownership_term multiply = local_var:te_dg_wc_w } }
 			change_local_variable = { name = te_dg_wc_s_ineq add = { value = te_demog_wc_inequality_term multiply = local_var:te_dg_wc_w } }
+			change_local_variable = { name = te_dg_wc_s_fort add = { value = te_demog_wc_fortunes_term multiply = local_var:te_dg_wc_w } }
 			# the state's wealth bands, if they follow the current layout; it counts itself in
 			# te_dg_g_states. A state with none adds nothing until its own pulse stores them
 			# (generated)
@@ -285,6 +287,7 @@ te_demog_wc_national = {
 		set_variable = { name = te_dg_wc_t_land value = { value = local_var:te_dg_wc_s_land divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_own value = { value = local_var:te_dg_wc_s_own divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_ineq value = { value = local_var:te_dg_wc_s_ineq divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
+		set_variable = { name = te_dg_wc_t_fort value = { value = local_var:te_dg_wc_s_fort divide = { value = local_var:te_dg_wc_wsum min = 1 } } }
 		set_variable = { name = te_dg_wc_t_tax value = te_demog_wc_tax_term }
 		set_variable = { name = te_dg_wc_t_econ value = te_demog_wc_econ_term }
 		set_variable = { name = te_dg_wc_t_public value = te_demog_wc_public_term }
@@ -380,6 +383,169 @@ te_demog_wc_owner_change = {
 	if = {
 		limit = { has_variable = te_dg_wc_sown }
 		remove_variable = te_dg_wc_sown
+	}
+}
+
+# ============================================================================
+# The Scale of Fortunes term (2026-11-28; docs/superpowers/specs/2026-11-28-ownership-concentration-scope.md § 5).
+# Financial Districts and company headquarters hire their owners as a fixed partnership plus a smaller part a level
+# (extra_pms.txt), so a larger district or company has fewer owners a level, and each owner holds more. The term
+# reads that: the levels a state's districts and private headquarters own, per 1,000 of the owners they hire, as a
+# multiple of the world's figure when it was first measured (te_demog_wc_fortunes_term, te_demog_values.txt).
+#
+# State variables: te_dg_wc_fh (levels owned), te_dg_wc_fo (owner positions), te_dg_wc_fs (the multiple; absent when
+# the state has no such building that owns property and hires owners, or before the world's figure is measured).
+# Global: te_dg_wc_fs_centre, the world's levels owned per 1,000 owners, measured once a game: at its start in a new
+# game, and at the first state pulse after the update in a save from before it, so on loading one the term averages
+# about 0 over the world (a state with larger fortunes than the world's still reads above it). te_dg_wc_fs_tried holds
+# a failed measurement off for 30 days.
+# ============================================================================
+
+# Any scope: measures the world's figure once, if it isn't held. The first country's game start in a new game; a
+# state's first yearly pulse in an old save. A world whose districts read no owners or no property (the buildings'
+# modifiers not yet summed on the first day, say) is measured again 30 days on, and the term is 0 till then.
+te_demog_wc_fortunes_centre_ensure = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_dg_wc_fs_centre }
+			NOT = { has_global_variable = te_dg_wc_fs_tried }
+		}
+		set_local_variable = { name = te_dg_wfh value = 0 }
+		set_local_variable = { name = te_dg_wfo value = 0 }
+		every_state = {
+			every_scope_building = {
+				limit = {
+					level > 0
+					te_demog_is_fortune_building = yes
+				}
+				change_local_variable = { name = te_dg_wfh add = te_demog_building_owned_levels }
+				change_local_variable = { name = te_dg_wfo add = te_demog_building_owner_slots }
+			}
+		}
+		if = {
+			limit = {
+				local_var:te_dg_wfh >= 1
+				local_var:te_dg_wfo >= 1
+			}
+			set_global_variable = {
+				name = te_dg_wc_fs_centre
+				value = { value = local_var:te_dg_wfh multiply = 1000 divide = { value = local_var:te_dg_wfo min = 1 } }
+			}
+			set_global_variable = { name = te_dg_wc_fs_wh value = local_var:te_dg_wfh }
+			set_global_variable = { name = te_dg_wc_fs_wo value = local_var:te_dg_wfo }
+			debug_log = "TE_INFO demog_fortunes_centre levels=[SCOPE.ScriptValue('te_demog_wc_fs_wh_g')|0] owners=[SCOPE.ScriptValue('te_demog_wc_fs_wo_g')|0] per_1000=[SCOPE.ScriptValue('te_demog_wc_fs_centre_g')|3] date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			set_global_variable = { name = te_dg_wc_fs_tried value = 1 days = 30 }
+		}
+	}
+}
+
+# THIS = a state: its districts' and private headquarters' property and owners, and the multiple of the world's
+# figure. Before its target in the yearly pulse (te_demog_state_yearly) and the game-start seed (te_inh_game_start).
+te_demog_wc_fortunes_measure = {
+	set_local_variable = { name = te_dg_fh value = 0 }
+	set_local_variable = { name = te_dg_fo value = 0 }
+	every_scope_building = {
+		limit = {
+			level > 0
+			te_demog_is_fortune_building = yes
+		}
+		change_local_variable = { name = te_dg_fh add = te_demog_building_owned_levels }
+		change_local_variable = { name = te_dg_fo add = te_demog_building_owner_slots }
+	}
+	set_variable = { name = te_dg_wc_fh value = local_var:te_dg_fh }
+	set_variable = { name = te_dg_wc_fo value = local_var:te_dg_fo }
+	if = {
+		limit = {
+			local_var:te_dg_fh >= 1
+			local_var:te_dg_fo >= 1
+			has_global_variable = te_dg_wc_fs_centre
+		}
+		set_variable = {
+			name = te_dg_wc_fs
+			value = {
+				value = local_var:te_dg_fh
+				multiply = 1000
+				divide = { value = local_var:te_dg_fo min = 1 }
+				divide = { value = global_var:te_dg_wc_fs_centre min = 0.00001 }
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_dg_wc_fs }
+		remove_variable = te_dg_wc_fs
+	}
+}
+
+# THIS = a country at its yearly pulse (te_demog_country_yearly): two once-a-game self-checks of the engine facts the
+# partnership and the term rest on (docs/testing/ownership-concentration-playtest.md).
+#
+# ownership_partners: is the partnership hired once a building? A Privately Owned Financial District of level 5 or more
+# should hire 300 capitalists plus 20 a level. BROKEN at about 320 a level means unscaled employment is read per level
+# (it is not, on production buildings: ai_managed_flat_staff), at about 20 a level that it is not summed here.
+#
+# ownership_assets: does a parent group's count include its children's? Of a district or headquarters owning Light
+# Industry levels, bg_manufacturing's count should be at least bg_light_industry's. BROKEN means the count is of the
+# group's own buildings only, and te_demog_building_owned_levels reads too little.
+te_demog_wc_fortunes_selfchecks = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_dg_fs_partners_checked }
+			any_scope_building = {
+				has_active_production_method = pm_financial_district_privately_owned
+				level >= 5
+			}
+		}
+		set_global_variable = te_dg_fs_partners_checked
+		random_scope_building = {
+			limit = {
+				has_active_production_method = pm_financial_district_privately_owned
+				level >= 5
+			}
+			set_global_variable = { name = te_dg_fs_chk_slots value = modifier:building_employment_capitalists_add }
+			set_global_variable = { name = te_dg_fs_chk_level value = level }
+			set_global_variable = { name = te_dg_fs_chk_expected value = { value = level multiply = 20 add = 300 } }
+			set_global_variable = { name = te_dg_fs_chk_lo value = { value = global_var:te_dg_fs_chk_expected multiply = 0.95 } }
+			set_global_variable = { name = te_dg_fs_chk_hi value = { value = global_var:te_dg_fs_chk_expected multiply = 1.05 } }
+			if = {
+				limit = {
+					global_var:te_dg_fs_chk_slots >= global_var:te_dg_fs_chk_lo
+					global_var:te_dg_fs_chk_slots <= global_var:te_dg_fs_chk_hi
+				}
+				debug_log = "TE_SELF_CHECK OK ownership_partners (a Privately Owned Financial District hires a partnership: capitalists=[SCOPE.ScriptValue('te_demog_fs_chk_slots_g')|0] at level=[SCOPE.ScriptValue('te_demog_fs_chk_level_g')|0], expected [SCOPE.ScriptValue('te_demog_fs_chk_expected_g')|0])"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ownership_partners (a Privately Owned Financial District has capitalists=[SCOPE.ScriptValue('te_demog_fs_chk_slots_g')|0] at level=[SCOPE.ScriptValue('te_demog_fs_chk_level_g')|0], not 300 + 20 a level = [SCOPE.ScriptValue('te_demog_fs_chk_expected_g')|0]: about 320 a level means unscaled employment is read per level here, about 20 a level that it is not summed; see docs/testing/ownership-concentration-playtest.md)"
+			}
+		}
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_dg_fs_assets_checked }
+			any_scope_building = {
+				te_demog_is_fortune_building = yes
+				num_building_assets_of_group = { type = bg_light_industry value >= 1 }
+			}
+		}
+		set_global_variable = te_dg_fs_assets_checked
+		random_scope_building = {
+			limit = {
+				te_demog_is_fortune_building = yes
+				num_building_assets_of_group = { type = bg_light_industry value >= 1 }
+			}
+			set_global_variable = { name = te_dg_fs_chk_light value = te_demog_building_light_assets }
+			set_global_variable = { name = te_dg_fs_chk_manuf value = te_demog_building_manufacturing_assets }
+			set_global_variable = { name = te_dg_fs_chk_held value = te_demog_building_owned_levels }
+			set_global_variable = { name = te_dg_fs_chk_level value = level }
+			if = {
+				limit = { global_var:te_dg_fs_chk_manuf >= global_var:te_dg_fs_chk_light }
+				debug_log = "TE_SELF_CHECK OK ownership_assets (a parent group counts its children's levels: bg_manufacturing=[SCOPE.ScriptValue('te_demog_fs_chk_manuf_g')|0] bg_light_industry=[SCOPE.ScriptValue('te_demog_fs_chk_light_g')|0]; the building owns [SCOPE.ScriptValue('te_demog_fs_chk_held_g')|0] levels at level=[SCOPE.ScriptValue('te_demog_fs_chk_level_g')|0])"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN ownership_assets (bg_manufacturing=[SCOPE.ScriptValue('te_demog_fs_chk_manuf_g')|0] is under bg_light_industry=[SCOPE.ScriptValue('te_demog_fs_chk_light_g')|0]: a group's count leaves out its children's, so te_demog_building_owned_levels reads too little; see docs/testing/ownership-concentration-playtest.md)"
+			}
+		}
 	}
 }
 

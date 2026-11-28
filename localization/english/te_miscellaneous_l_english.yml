@@ -9620,6 +9620,8 @@
  te_demog_wc_pinned_note:0 "While $inh_continuity_of_title$ holds, each state's target is its own score, so the target above stays at the score. The terms show where it would be otherwise."
  te_demog_wc_t_econ:0 "Economic Laws"
  te_demog_wc_t_econ_tt:0 "#b Economic Laws#!\nHow freely capital compounds and combines: $law_laissez_faire$ +10, $law_extraction_economy$ +5 and $law_interventionism$ −5; $law_guilds_chartered_monopolies$ and $law_freedom_of_contract$ +5, $law_trust_busting$ and $law_regulated_utilities$ −5. The other economic laws add nothing."
+ te_demog_wc_t_fort:0 "Scale of Fortunes"
+ te_demog_wc_t_fort_tt:0 "#b Scale of Fortunes#!\nHow much property each owner of a state's great fortunes holds: the levels its Financial Districts and private company headquarters own per owner they employ, against the world's figure. Their owners are a fixed partnership plus a few more a level, so as a district or company grows, fewer people own each level. +4 for each doubling, at most +10; −4 for each halving, at most −5."
  te_demog_wc_t_ineq:0 "Income Inequality"
  te_demog_wc_t_ineq_tt:0 "#b Income Inequality#!\nThe rich save more, so unequal incomes build fortunes: +4 for every 0.1 of the state's Gini above 0.40, at most +15 (a Gini of 0.78). Below 0.40 it takes up to 4 off."
  te_demog_wc_t_land:0 "Land Tenure"

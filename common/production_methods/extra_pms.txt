@@ -19817,12 +19817,14 @@ REPLACE:pm_financial_district_privately_owned = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 50
+			building_employment_capitalists_add = 20
 			building_employment_shopkeepers_add = 20
 			building_employment_clerks_add = 20
 			building_employment_academics_add = 10
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 300
 			building_capitalists_shares_add = 10
 			building_shopkeepers_shares_add = 1
 		}
@@ -19836,11 +19838,13 @@ REPLACE:pm_financial_district_publicly_traded = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 50
+			building_employment_capitalists_add = 20
 			building_employment_academics_add = 25
 			building_employment_clerks_add = 25
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 300
 			building_capitalists_shares_add = 10
 		}
 	}
@@ -19859,11 +19863,13 @@ REPLACE:pm_financial_district_principle_divine_economics_2 = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 50
+			building_employment_capitalists_add = 20
 			building_employment_clergymen_add = 25
 			building_employment_clerks_add = 25
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 300
 			building_capitalists_shares_add = 10
 			building_clergymen_shares_add = 2
 		}
@@ -19872,6 +19878,10 @@ REPLACE:pm_financial_district_principle_divine_economics_2 = {
 
 pm_electronic_brokerage = {
 	texture = "gfx/interface/icons/production_method_icons/pm_electronic_brokerage.dds"
+
+	unlocking_technologies = {
+		transistors
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -19883,26 +19893,28 @@ pm_electronic_brokerage = {
 			# Profit: -14.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 50
-			# Wage breakeven: -0.28
+			# Employment: 32
+			# Wage breakeven: -0.44
 		}
 		level_scaled = {
-			building_employment_capitalists_add = 30
+			building_employment_capitalists_add = 12
 			building_employment_academics_add = 10
 			building_employment_clerks_add = 10
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 180
 			building_capitalists_shares_add = 10
 		}
-	}
-
-	unlocking_technologies = {
-		transistors
 	}
 }
 
 pm_digital_trading = {
 	texture = "gfx/interface/icons/production_method_icons/pm_digital_trading.dds"
+
+	unlocking_technologies = {
+		computer_networks
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -19915,25 +19927,27 @@ pm_digital_trading = {
 			# Profit: -30.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 25
-			# Wage breakeven: -1.20
+			# Employment: 13
+			# Wage breakeven: -2.31
 		}
 		level_scaled = {
-			building_employment_capitalists_add = 20
+			building_employment_capitalists_add = 8
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 120
 			building_capitalists_shares_add = 10
 		}
-	}
-
-	unlocking_technologies = {
-		computer_networks
 	}
 }
 
 pm_automated_trading = {
 	texture = "gfx/interface/icons/production_method_icons/pm_automated_trading.dds"
+
+	unlocking_technologies = {
+		digital_telecommunications
+	}
 
 	building_modifiers = {
 		workforce_scaled = {
@@ -19947,20 +19961,18 @@ pm_automated_trading = {
 			# Profit: -54.0
 			# Profit margin: -100.00%
 			# Zero profit price multiplier: 0.00
-			# Employment: 15
-			# Wage breakeven: -3.60
+			# Employment: 9
+			# Wage breakeven: -6.00
 		}
 		level_scaled = {
-			building_employment_capitalists_add = 10
+			building_employment_capitalists_add = 4
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
 			building_capitalists_shares_add = 10
 		}
-	}
-
-	unlocking_technologies = {
-		digital_telecommunications
 	}
 }
 
@@ -19986,11 +19998,13 @@ REPLACE:pm_company_headquarter_privately_owned = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 25
+			building_employment_capitalists_add = 10
 			building_employment_clerks_add = 20
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 150
 			building_capitalists_shares_add = 10
 		}
 	}
@@ -20012,12 +20026,15 @@ REPLACE:pm_company_headquarter_privately_owned_aristocrats = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 10
-			building_employment_aristocrats_add = 15
+			building_employment_capitalists_add = 4
+			building_employment_aristocrats_add = 6
 			building_employment_clerks_add = 20
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_employment_aristocrats_add = 90
 			building_capitalists_shares_add = 10
 			building_aristocrats_shares_add = 10
 		}
@@ -20043,12 +20060,15 @@ REPLACE:pm_company_headquarter_privately_owned_aristocrats_commercial_agricultur
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 15
-			building_employment_aristocrats_add = 10
+			building_employment_capitalists_add = 6
+			building_employment_aristocrats_add = 4
 			building_employment_clerks_add = 20
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 90
+			building_employment_aristocrats_add = 60
 			building_capitalists_shares_add = 10
 			building_aristocrats_shares_add = 10
 		}
@@ -20071,12 +20091,14 @@ REPLACE:pm_company_headquarter_privately_owned_shopkeepers = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 10
+			building_employment_capitalists_add = 4
 			building_employment_shopkeepers_add = 25
 			building_employment_clerks_add = 10
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
 			building_capitalists_shares_add = 10
 			building_shopkeepers_shares_add = 5
 			building_company_worker_dividends_add = 0.25
@@ -20099,12 +20121,14 @@ REPLACE:pm_company_headquarter_privately_owned_bureaucrats = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 10
+			building_employment_capitalists_add = 4
 			building_employment_bureaucrats_add = 25
 			building_employment_clerks_add = 10
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
 			building_capitalists_shares_add = 10
 			building_bureaucrats_shares_add = 5
 			building_company_government_dividends_add = 0.25
@@ -20115,6 +20139,10 @@ REPLACE:pm_company_headquarter_privately_owned_bureaucrats = {
 REPLACE:pm_company_headquarter_principle_divine_economics_2 = {
 	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
 	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		capitalist_owned
+	}
 
 	disallowing_laws = {
 		law_command_economy
@@ -20130,11 +20158,13 @@ REPLACE:pm_company_headquarter_principle_divine_economics_2 = {
 
 	building_modifiers = {
 		level_scaled = {
-			building_employment_capitalists_add = 20
+			building_employment_capitalists_add = 8
 			building_employment_clergymen_add = 25
 			building_employment_academics_add = 5
 		}
 		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 120
 			building_capitalists_shares_add = 10
 			building_clergymen_shares_add = 2
 		}
@@ -20373,6 +20403,929 @@ pm_company_headquarter_worker_cooperative_academics = {
 		unscaled = {
 			building_shopkeepers_shares_add = 10
 			building_clerks_shares_add = 2
+		}
+	}
+}
+
+# Vanilla's academic-owned headquarters and its five Divine Economics copies, replaced for the
+# partnership (docs/superpowers/specs/2026-11-28-ownership-concentration-scope.md). The
+# Divine Economics copies also take principles IV and V, as the capitalist copy does.
+REPLACE:pm_company_headquarter_privately_owned_academics = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_academics_add = 25
+			building_employment_clerks_add = 15
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_academics_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+REPLACE:pm_company_headquarter_principle_divine_economics_2_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+		law_commercialized_agriculture
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+		principle_divine_economics_4
+		principle_divine_economics_5
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_aristocrats_add = 6
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_employment_aristocrats_add = 90
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+			building_clergymen_shares_add = 2
+		}
+	}
+}
+
+REPLACE:pm_company_headquarter_principle_divine_economics_2_aristocrats_commercial_agriculture = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_laws = {
+		law_commercialized_agriculture
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+		principle_divine_economics_4
+		principle_divine_economics_5
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 6
+			building_employment_aristocrats_add = 4
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 90
+			building_employment_aristocrats_add = 60
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+			building_clergymen_shares_add = 2
+		}
+	}
+}
+
+REPLACE:pm_company_headquarter_principle_divine_economics_2_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+		principle_divine_economics_4
+		principle_divine_economics_5
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_shopkeepers_add = 15
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_shopkeepers_shares_add = 5
+			building_clergymen_shares_add = 2
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+REPLACE:pm_company_headquarter_principle_divine_economics_2_academics = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+		principle_divine_economics_4
+		principle_divine_economics_5
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_academics_add = 15
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_academics_shares_add = 5
+			building_clergymen_shares_add = 2
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+REPLACE:pm_company_headquarter_principle_divine_economics_2_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	unlocking_principles = {
+		principle_divine_economics_2
+		principle_divine_economics_3
+		principle_divine_economics_4
+		principle_divine_economics_5
+	}
+
+	building_modifiers = {
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_bureaucrats_add = 15
+			building_employment_clergymen_add = 25
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_bureaucrats_shares_add = 5
+			building_clergymen_shares_add = 2
+			building_company_government_dividends_add = 0.25
+		}
+	}
+}
+
+# The headquarters' automation tiers, one per company category (2026-11-28). Until then the
+# headquarters group carried the Financial District's three tiers, which have no category or
+# law gate: under Command Economy or Cooperative Ownership a headquarters could take one and
+# hire capitalists with capitalists' shares, and on an aristocrat-, shopkeeper-, academic- or
+# bureaucrat-owned headquarters a tier replaced the category's owners with capitalists.
+# Each copy keeps its category's owners and partnership and automates the back office: the
+# clerks and academics a level fall to 60%, 40% and 20% of the category's base method, the
+# District's tier ratios, for the same goods.
+pm_company_headquarter_electronic_brokerage = {
+	texture = "gfx/interface/icons/production_method_icons/pm_electronic_brokerage.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		capitalist_owned
+	}
+
+	unlocking_technologies = {
+		transistors
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (100.00%)
+			# Output goods
+			# Total input cost: 14.0
+			# Total output cost: 0
+			# Profit: -14.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 25
+			# Wage breakeven: -0.56
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_clerks_add = 12
+			building_employment_academics_add = 3
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 150
+			building_capitalists_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_electronic_brokerage_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/pm_electronic_brokerage.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_technologies = {
+		transistors
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (100.00%)
+			# Output goods
+			# Total input cost: 14.0
+			# Total output cost: 0
+			# Profit: -14.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 25
+			# Wage breakeven: -0.56
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_aristocrats_add = 6
+			building_employment_clerks_add = 12
+			building_employment_academics_add = 3
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_employment_aristocrats_add = 90
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_electronic_brokerage_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/pm_electronic_brokerage.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	unlocking_technologies = {
+		transistors
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (100.00%)
+			# Output goods
+			# Total input cost: 14.0
+			# Total output cost: 0
+			# Profit: -14.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 38
+			# Wage breakeven: -0.37
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_shopkeepers_add = 25
+			building_employment_clerks_add = 6
+			building_employment_academics_add = 3
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_shopkeepers_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_electronic_brokerage_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/pm_electronic_brokerage.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	unlocking_technologies = {
+		transistors
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (100.00%)
+			# Output goods
+			# Total input cost: 14.0
+			# Total output cost: 0
+			# Profit: -14.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 38
+			# Wage breakeven: -0.37
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_bureaucrats_add = 25
+			building_employment_clerks_add = 6
+			building_employment_academics_add = 3
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_bureaucrats_shares_add = 5
+			building_company_government_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_electronic_brokerage_academics = {
+	texture = "gfx/interface/icons/production_method_icons/pm_electronic_brokerage.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	unlocking_technologies = {
+		transistors
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (100.00%)
+			# Output goods
+			# Total input cost: 14.0
+			# Total output cost: 0
+			# Profit: -14.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 38
+			# Wage breakeven: -0.37
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_academics_add = 25
+			building_employment_clerks_add = 9
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_academics_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_digital_trading = {
+	texture = "gfx/interface/icons/production_method_icons/pm_digital_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		capitalist_owned
+	}
+
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (46.67%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (53.33%)
+			# Output goods
+			# Total input cost: 30.0
+			# Total output cost: 0
+			# Profit: -30.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 20
+			# Wage breakeven: -1.50
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_clerks_add = 8
+			building_employment_academics_add = 2
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 150
+			building_capitalists_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_digital_trading_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/pm_digital_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (46.67%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (53.33%)
+			# Output goods
+			# Total input cost: 30.0
+			# Total output cost: 0
+			# Profit: -30.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 20
+			# Wage breakeven: -1.50
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_aristocrats_add = 6
+			building_employment_clerks_add = 8
+			building_employment_academics_add = 2
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_employment_aristocrats_add = 90
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_digital_trading_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/pm_digital_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (46.67%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (53.33%)
+			# Output goods
+			# Total input cost: 30.0
+			# Total output cost: 0
+			# Profit: -30.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 35
+			# Wage breakeven: -0.86
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_shopkeepers_add = 25
+			building_employment_clerks_add = 4
+			building_employment_academics_add = 2
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_shopkeepers_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_digital_trading_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/pm_digital_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (46.67%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (53.33%)
+			# Output goods
+			# Total input cost: 30.0
+			# Total output cost: 0
+			# Profit: -30.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 35
+			# Wage breakeven: -0.86
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_bureaucrats_add = 25
+			building_employment_clerks_add = 4
+			building_employment_academics_add = 2
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_bureaucrats_shares_add = 5
+			building_company_government_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_digital_trading_academics = {
+	texture = "gfx/interface/icons/production_method_icons/pm_digital_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	unlocking_technologies = {
+		computer_networks
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (46.67%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (53.33%)
+			# Output goods
+			# Total input cost: 30.0
+			# Total output cost: 0
+			# Profit: -30.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 35
+			# Wage breakeven: -0.86
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_academics_add = 25
+			building_employment_clerks_add = 6
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_academics_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_automated_trading = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		capitalist_owned
+	}
+
+	unlocking_technologies = {
+		digital_telecommunications
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (25.93%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (29.63%)
+			goods_input_digital_access_add = 0.2                 # Price:  120, Total cost:    24.0 (44.44%)
+			# Output goods
+			# Total input cost: 54.0
+			# Total output cost: 0
+			# Profit: -54.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 15
+			# Wage breakeven: -3.60
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 10
+			building_employment_clerks_add = 4
+			building_employment_academics_add = 1
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 150
+			building_capitalists_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_automated_trading_aristocrats = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		aristocrat_owned
+	}
+
+	unlocking_technologies = {
+		digital_telecommunications
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (25.93%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (29.63%)
+			goods_input_digital_access_add = 0.2                 # Price:  120, Total cost:    24.0 (44.44%)
+			# Output goods
+			# Total input cost: 54.0
+			# Total output cost: 0
+			# Profit: -54.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 15
+			# Wage breakeven: -3.60
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_aristocrats_add = 6
+			building_employment_clerks_add = 4
+			building_employment_academics_add = 1
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_employment_aristocrats_add = 90
+			building_capitalists_shares_add = 10
+			building_aristocrats_shares_add = 10
+		}
+	}
+}
+
+pm_company_headquarter_automated_trading_shopkeepers = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		shopkeeper_owned
+	}
+
+	unlocking_technologies = {
+		digital_telecommunications
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (25.93%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (29.63%)
+			goods_input_digital_access_add = 0.2                 # Price:  120, Total cost:    24.0 (44.44%)
+			# Output goods
+			# Total input cost: 54.0
+			# Total output cost: 0
+			# Profit: -54.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 32
+			# Wage breakeven: -1.69
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_shopkeepers_add = 25
+			building_employment_clerks_add = 2
+			building_employment_academics_add = 1
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_shopkeepers_shares_add = 5
+			building_company_worker_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_automated_trading_bureaucrats = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		bureaucrat_owned
+	}
+
+	unlocking_technologies = {
+		digital_telecommunications
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (25.93%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (29.63%)
+			goods_input_digital_access_add = 0.2                 # Price:  120, Total cost:    24.0 (44.44%)
+			# Output goods
+			# Total input cost: 54.0
+			# Total output cost: 0
+			# Profit: -54.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 32
+			# Wage breakeven: -1.69
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_bureaucrats_add = 25
+			building_employment_clerks_add = 2
+			building_employment_academics_add = 1
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_bureaucrats_shares_add = 5
+			building_company_government_dividends_add = 0.25
+		}
+	}
+}
+
+pm_company_headquarter_automated_trading_academics = {
+	texture = "gfx/interface/icons/production_method_icons/pm_automated_trading.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_company_categories = {
+		academic_owned
+	}
+
+	unlocking_technologies = {
+		digital_telecommunications
+	}
+
+	disallowing_laws = {
+		law_command_economy
+		law_cooperative_ownership
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_telephones_add = 0.2                     # Price:   70, Total cost:    14.0 (25.93%)
+			goods_input_electronic_components_add = 0.2          # Price:   80, Total cost:    16.0 (29.63%)
+			goods_input_digital_access_add = 0.2                 # Price:  120, Total cost:    24.0 (44.44%)
+			# Output goods
+			# Total input cost: 54.0
+			# Total output cost: 0
+			# Profit: -54.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 32
+			# Wage breakeven: -1.69
+		}
+		level_scaled = {
+			building_employment_capitalists_add = 4
+			building_employment_academics_add = 25
+			building_employment_clerks_add = 3
+		}
+		unscaled = {
+			# the partnership: owners hired once a building, so a larger building has fewer a level
+			building_employment_capitalists_add = 60
+			building_capitalists_shares_add = 10
+			building_academics_shares_add = 5
+			building_company_worker_dividends_add = 0.25
 		}
 	}
 }
