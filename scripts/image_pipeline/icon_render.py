@@ -327,6 +327,130 @@ def category_grade_target(folder: str) -> tuple[float, float]:
     return float(np.median(sats)), float(np.median(vals))
 
 
+# ── production building backdrops: vanilla's measured grade ─────────────
+# Spike 2026-11-27 (~/flux_runs/building_icons_vanilla_spike_1127/fit.py): where
+# each vanilla production building icon pastes its good's icon, unchanged.
+# building -> (good, scale of the 256 px goods canvas, x, y). These 13 fit within
+# 0.13 RMS; the rest are other art (the cattle ranch's medallion) and are left out.
+GOOD_FITS = {
+    "coal_mine": ("coal", 0.62, 88, 97), "steel_mills": ("steel", 0.62, 93, 92),
+    "paper_mills": ("paper", 0.64, 85, 92), "tooling_workshops": ("tools", 0.62, 90, 81),
+    "arms_industry": ("small_arms", 0.62, 86, 90), "fishing_wharf": ("fish", 0.54, 111, 115),
+    "textile_industry": ("clothes", 0.58, 104, 97), "motor_industry": ("locomotives", 0.58, 97, 106),
+    "oil_rig": ("oil", 0.56, 113, 104), "lead_mine": ("lead", 0.64, 91, 92),
+    "gold_mine": ("gold", 0.66, 66, 87), "logging_camp": ("wood", 0.58, 104, 103),
+    "chemicals_industry": ("fertilizer", 0.66, 87, 75),
+}
+_RBINS = np.linspace(0, 1.42, 15)  # radius bins, 1 = half the side; the corners reach 1.41
+_SRGB_TO_XYZ = np.array([[0.4124564, 0.3575761, 0.1804375],
+                         [0.2126729, 0.7151522, 0.0721750],
+                         [0.0193339, 0.1191920, 0.9503041]])
+_D65 = np.array([0.95047, 1.0, 1.08883])
+
+
+def rgb_to_lab(rgb: np.ndarray) -> np.ndarray:
+    """sRGB (floats 0..1, any leading shape) to CIELAB under D65, in numpy alone."""
+    c = np.clip(rgb, 0, 1)
+    lin = np.where(c <= 0.04045, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+    t = (lin @ _SRGB_TO_XYZ.T) / _D65
+    d = 6 / 29
+    f = np.where(t > d ** 3, np.cbrt(t), t / (3 * d * d) + 4 / 29)
+    return np.stack([116 * f[..., 1] - 16, 500 * (f[..., 0] - f[..., 1]), 200 * (f[..., 1] - f[..., 2])], -1)
+
+
+def lab_to_rgb(lab: np.ndarray) -> np.ndarray:
+    """CIELAB (D65) back to sRGB floats, clipped to 0..1."""
+    fy = (lab[..., 0] + 16) / 116
+    f = np.stack([fy + lab[..., 1] / 500, fy, fy - lab[..., 2] / 200], -1)
+    d = 6 / 29
+    t = np.where(f > d, f ** 3, 3 * d * d * (f - 4 / 29))
+    lin = np.clip((t * _D65) @ np.linalg.inv(_SRGB_TO_XYZ).T, 0, 1)
+    return np.clip(np.where(lin <= 0.0031308, 12.92 * lin, 1.055 * lin ** (1 / 2.4) - 0.055), 0, 1)
+
+
+def interior_mask(tmpl_alpha: np.ndarray, erode: int = 19) -> np.ndarray:
+    """The part of a framed icon inside its frame: opaque, eroded past the rim."""
+    a = Image.fromarray((tmpl_alpha > 128).astype(np.uint8) * 255)
+    return np.asarray(a.filter(ImageFilter.MinFilter(erode))) > 128
+
+
+def _radius(shape: tuple[int, int]) -> np.ndarray:
+    h, w = shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    return np.hypot((xx - w / 2) / (w / 2), (yy - h / 2) / (h / 2))
+
+
+def _radial(lum: np.ndarray, mask: np.ndarray) -> np.ndarray:
+    """Mean of `lum` over `mask` in each radius bin, normalized by the first four; NaN where a bin is near empty."""
+    r = _radius(lum.shape)
+    prof = np.full(len(_RBINS) - 1, np.nan)
+    for i, (lo, hi) in enumerate(zip(_RBINS[:-1], _RBINS[1:])):
+        sel = mask & (r >= lo) & (r < hi)
+        if sel.sum() > 30:
+            prof[i] = lum[sel].mean()
+    centre = np.nanmean(prof[:4]) if np.isfinite(prof[:4]).any() else np.nan
+    return prof / centre if np.isfinite(centre) and centre > 1e-3 else np.ones_like(prof)
+
+
+def backdrop_stats_from(images: list[tuple[np.ndarray, np.ndarray]], interior: np.ndarray) -> dict:
+    """Vanilla's backdrop grade from (rgb 0..1, good mask) pairs: CIELAB mean and sd, and the radial falloff.
+
+    Means and sds are per image, then averaged (a typical icon, not the pooled
+    spread across icons); the falloff is the median of each image's own profile.
+    """
+    means, stds, profs = [], [], []
+    for rgb, good in images:
+        m = interior & ~good
+        lab = rgb_to_lab(rgb)
+        means.append(lab[m].mean(0))
+        stds.append(lab[m].std(0))
+        profs.append(_radial(lab[..., 0], m))
+    import warnings
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)          # a bin empty in every image: its median is NaN
+        prof = np.nanmedian(np.array(profs), 0)
+    return {"mean": np.mean(means, 0), "std": np.mean(stds, 0), "profile": np.nan_to_num(prof, nan=1.0)}
+
+
+_STATS_CACHE: dict = {}
+
+
+def backdrop_stats(folder: str = "building_icons", size: int = 256) -> dict:
+    """backdrop_stats_from over vanilla's GOOD_FITS icons, each good masked out (dilated by 9 px)."""
+    if (folder, size) in _STATS_CACHE:
+        return _STATS_CACHE[folder, size]
+    interior = interior_mask(vanilla_template(folder, size)[0][..., 3])
+    images = []
+    for building, (good, scale, x, y) in GOOD_FITS.items():
+        rgb = np.asarray(load_rgba(vanilla_icons_dir() / folder / f"{building}.dds").resize((size, size)),
+                         dtype=np.float64)[..., :3] / 255
+        n = round(size * scale)
+        g = load_rgba(vanilla_icons_dir() / "goods_icons" / f"{good}.dds").resize((n, n), Image.LANCZOS)
+        a = np.zeros((size, size), np.uint8)
+        a[y:y + n, x:x + n] = np.asarray(g)[: size - y, : size - x, 3]
+        mask = np.asarray(Image.fromarray(a).filter(ImageFilter.MaxFilter(9))) > 20
+        images.append((rgb, mask))
+    _STATS_CACHE[folder, size] = backdrop_stats_from(images, interior)
+    return _STATS_CACHE[folder, size]
+
+
+def regrade_backdrop(raw: Image.Image, stats: dict, interior: np.ndarray, size: int, strength: float = 1.0,
+                     blur: float = 0.7, bias: tuple = (0.0, 0.0, 0.0)) -> Image.Image:
+    """A backdrop render pulled to vanilla's: a Reinhard transfer in CIELAB to stats' mean (+ bias) and sd,
+    then vanilla's radial falloff (the ratio of profiles, clipped to 0.45-1.25) and a slight softening."""
+    rgb = np.asarray(raw.convert("RGB").resize((size, size), Image.LANCZOS), dtype=np.float64) / 255
+    lab = rgb_to_lab(rgb)
+    mu, sd = lab[interior].mean(0), lab[interior].std(0) + 1e-6
+    target = (lab - mu) / sd * np.asarray(stats["std"]) + np.asarray(stats["mean"]) + np.asarray(bias)
+    lab = lab + strength * (target - lab)
+    own = np.maximum(np.nan_to_num(_radial(lab[..., 0], interior), nan=1.0), 1e-3)
+    ratio = np.clip(np.asarray(stats["profile"]) / own, 0.45, 1.25)
+    centres = (_RBINS[:-1] + _RBINS[1:]) / 2
+    lab[..., 0] *= np.interp(_radius((size, size)), centres, ratio)
+    out = Image.fromarray((lab_to_rgb(lab) * 255 + 0.5).astype(np.uint8), "RGB")
+    return out.filter(ImageFilter.GaussianBlur(blur)) if blur else out
+
+
 def grade(im: Image.Image, target: tuple[float, float], strength: float = 0.7) -> Image.Image:
     """Pull median saturation/value of the opaque part toward the vanilla folder's."""
     a = np.asarray(im)

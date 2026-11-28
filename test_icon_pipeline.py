@@ -1360,5 +1360,54 @@ class ProductionBuildingRegistryTests(unittest.TestCase):
                          ["building_empty", "building_no_good", "building_no_part", "building_twice"])
 
 
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class BackdropRegradeTests(unittest.TestCase):
+    """A production building's backdrop pulled to vanilla's measured grade: CIELAB, the transfer, the falloff."""
+
+    STATS = {"mean": np.array([34.6, 3.6, 10.5]), "std": np.array([20.0, 7.2, 10.3]), "profile": np.ones(14)} \
+        if icon_dds is not None else None
+
+    def setUp(self):
+        import icon_render
+        self.r = icon_render
+
+    def test_lab_round_trip_and_anchors(self):
+        rgb = np.random.default_rng(0).random((8, 8, 3))
+        self.assertLess(np.abs(self.r.lab_to_rgb(self.r.rgb_to_lab(rgb)) - rgb).max(), 1e-4)
+        white = self.r.rgb_to_lab(np.ones((1, 1, 3)))[0, 0]
+        np.testing.assert_allclose(white, (100, 0, 0), atol=0.05)
+        self.assertAlmostEqual(self.r.rgb_to_lab(np.full((1, 1, 3), 119 / 255))[0, 0, 0], 50.0, delta=0.5)
+
+    def test_regrade_matches_the_target_mean(self):
+        interior = np.ones((256, 256), bool)
+        raw = Image.fromarray(np.random.default_rng(1).integers(120, 255, (512, 512, 3), dtype=np.uint8))
+        out = np.asarray(self.r.regrade_backdrop(raw, self.STATS, interior, 256, blur=0)) / 255
+        lab = self.r.rgb_to_lab(out)
+        np.testing.assert_allclose(lab.reshape(-1, 3).mean(0), self.STATS["mean"], atol=2.0)
+
+    def test_falloff_darkens_corners(self):
+        interior = np.ones((256, 256), bool)
+        prof = np.r_[np.ones(7), np.linspace(0.95, 0.7, 7)]
+        stats = {"mean": np.array([40.0, 0, 0]), "std": np.array([10.0, 2, 2]), "profile": prof}
+        raw = Image.fromarray(np.random.default_rng(2).integers(80, 160, (256, 256, 3), dtype=np.uint8))
+        out = np.asarray(self.r.regrade_backdrop(raw, stats, interior, 256, blur=0)).astype(float)
+        self.assertLess(out[:24, :24].mean(), 0.85 * out[116:140, 116:140].mean())
+
+    def test_black_render_stays_finite(self):
+        interior = np.ones((64, 64), bool)
+        with np.errstate(invalid="raise", divide="raise"):              # a NaN or a divide by zero raises
+            out = np.asarray(self.r.regrade_backdrop(Image.new("RGB", (64, 64)), self.STATS, interior, 64))
+        self.assertEqual(out.shape, (64, 64, 3))
+
+    def test_stats_from_ignore_the_good(self):
+        rgb = np.full((64, 64, 3), 0.2)
+        rgb[32:, 32:] = 1.0                                              # a bright "good" in the lower right
+        mask = np.zeros((64, 64), bool)
+        mask[32:, 32:] = True
+        s = self.r.backdrop_stats_from([(rgb, mask)], np.ones((64, 64), bool))
+        self.assertAlmostEqual(s["mean"][0], self.r.rgb_to_lab(np.full((1, 1, 3), 0.2))[0, 0, 0], delta=0.1)
+        self.assertEqual(s["profile"].shape, (14,))
+
+
 if __name__ == "__main__":
     unittest.main()
