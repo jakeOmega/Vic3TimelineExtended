@@ -2415,6 +2415,7 @@ sr_site_room_europa = {
 	value = sr_site_hab_value_europa
 	multiply = sr_site_hab_share_value_europa
 	add = 1
+	add = sr_site_terra_share_europa
 	multiply = sr_site_base_room_europa
 }
 sr_site_pop_value_europa = {
@@ -2772,6 +2773,7 @@ sr_site_room_mercury = {
 	value = sr_site_hab_value_mercury
 	multiply = sr_site_hab_share_value_mercury
 	add = 1
+	add = sr_site_terra_share_mercury
 	multiply = sr_site_base_room_mercury
 }
 sr_site_pop_value_mercury = {
@@ -3776,6 +3778,7 @@ sr_site_room_shackleton = {
 	value = sr_site_hab_value_shackleton
 	multiply = sr_site_hab_share_value_shackleton
 	add = 1
+	add = sr_site_terra_share_shackleton
 	multiply = sr_site_base_room_shackleton
 }
 sr_site_pop_value_shackleton = {
@@ -3835,6 +3838,7 @@ sr_site_room_peary = {
 	value = sr_site_hab_value_peary
 	multiply = sr_site_hab_share_value_peary
 	add = 1
+	add = sr_site_terra_share_peary
 	multiply = sr_site_base_room_peary
 }
 sr_site_pop_value_peary = {
@@ -3894,6 +3898,7 @@ sr_site_room_tranquility = {
 	value = sr_site_hab_value_tranquility
 	multiply = sr_site_hab_share_value_tranquility
 	add = 1
+	add = sr_site_terra_share_tranquility
 	multiply = sr_site_base_room_tranquility
 }
 sr_site_pop_value_tranquility = {
@@ -3953,6 +3958,7 @@ sr_site_room_marius_hills = {
 	value = sr_site_hab_value_marius_hills
 	multiply = sr_site_hab_share_value_marius_hills
 	add = 1
+	add = sr_site_terra_share_marius_hills
 	multiply = sr_site_base_room_marius_hills
 }
 sr_site_pop_value_marius_hills = {
@@ -4012,6 +4018,7 @@ sr_site_room_daedalus = {
 	value = sr_site_hab_value_daedalus
 	multiply = sr_site_hab_share_value_daedalus
 	add = 1
+	add = sr_site_terra_share_daedalus
 	multiply = sr_site_base_room_daedalus
 }
 sr_site_pop_value_daedalus = {
@@ -4071,6 +4078,7 @@ sr_site_room_imbrium = {
 	value = sr_site_hab_value_imbrium
 	multiply = sr_site_hab_share_value_imbrium
 	add = 1
+	add = sr_site_terra_share_imbrium
 	multiply = sr_site_base_room_imbrium
 }
 sr_site_pop_value_imbrium = {
@@ -6985,6 +6993,10 @@ sr_site_admin_value_europa = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_europa } value = global_var:sr_site_admin_europa }
 }
+sr_site_terra_value_europa = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_europa } value = global_var:sr_site_terra_europa }
+}
 sr_site_levels_europa = {
 	value = sr_site_lvl_a_value_europa
 	add = sr_site_lvl_b_value_europa
@@ -7000,6 +7012,7 @@ sr_site_levels_europa = {
 	add = sr_site_bunker_value_europa
 	add = sr_site_foundry_value_europa
 	add = sr_site_admin_value_europa
+	add = sr_site_terra_value_europa
 }
 sr_site_extra_levels_europa = {
 	value = sr_site_levels_europa
@@ -7061,6 +7074,7 @@ sr_site_generic_built_europa = {
 	add = sr_site_bunker_value_europa
 	add = sr_site_foundry_value_europa
 	add = sr_site_admin_value_europa
+	add = sr_site_terra_value_europa
 }
 # Europa's Habitat cap: 3 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -7085,6 +7099,7 @@ sr_site_train_staffed_europa = { value = sr_site_train_value_europa multiply = s
 sr_site_bunker_staffed_europa = { value = sr_site_bunker_value_europa multiply = sr_site_staffing_europa multiply = sr_site_pers_share_europa }
 sr_site_foundry_staffed_europa = { value = sr_site_foundry_value_europa multiply = sr_site_staffing_europa }
 sr_site_admin_staffed_europa = { value = sr_site_admin_value_europa multiply = sr_site_staffing_europa }
+sr_site_terra_staffed_europa = { value = sr_site_terra_value_europa multiply = sr_site_staffing_europa }
 sr_site_boon_lab_europa = {
 	value = 1
 	if = { limit = { has_global_variable = sr_site_disc_europa_life global_var:sr_site_disc_europa_life = 1 } add = sr_site_boon_bonus }
@@ -7159,6 +7174,8 @@ sr_mod_crewed_pending_europa = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_europa } add = global_var:sr_site_ship_foundry_europa }
 	if = { limit = { has_variable = sr_mq_admin_europa } add = var:sr_mq_admin_europa }
 	if = { limit = { has_global_variable = sr_site_ship_admin_europa } add = global_var:sr_site_ship_admin_europa }
+	if = { limit = { has_variable = sr_mq_terra_europa } add = var:sr_mq_terra_europa }
+	if = { limit = { has_global_variable = sr_site_ship_terra_europa } add = global_var:sr_site_ship_terra_europa }
 }
 # The next Habitat THIS queues at Europa costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -8423,6 +8440,10 @@ sr_site_admin_value_mercury = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_mercury } value = global_var:sr_site_admin_mercury }
 }
+sr_site_terra_value_mercury = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_mercury } value = global_var:sr_site_terra_mercury }
+}
 sr_site_levels_mercury = {
 	value = sr_site_lvl_a_value_mercury
 	add = sr_site_lvl_b_value_mercury
@@ -8438,6 +8459,7 @@ sr_site_levels_mercury = {
 	add = sr_site_bunker_value_mercury
 	add = sr_site_foundry_value_mercury
 	add = sr_site_admin_value_mercury
+	add = sr_site_terra_value_mercury
 }
 sr_site_extra_levels_mercury = {
 	value = sr_site_levels_mercury
@@ -8501,6 +8523,7 @@ sr_site_generic_built_mercury = {
 	add = sr_site_bunker_value_mercury
 	add = sr_site_foundry_value_mercury
 	add = sr_site_admin_value_mercury
+	add = sr_site_terra_value_mercury
 }
 # Mercury's Habitat cap: 3 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -8525,6 +8548,7 @@ sr_site_train_staffed_mercury = { value = sr_site_train_value_mercury multiply =
 sr_site_bunker_staffed_mercury = { value = sr_site_bunker_value_mercury multiply = sr_site_staffing_mercury multiply = sr_site_pers_share_mercury }
 sr_site_foundry_staffed_mercury = { value = sr_site_foundry_value_mercury multiply = sr_site_staffing_mercury }
 sr_site_admin_staffed_mercury = { value = sr_site_admin_value_mercury multiply = sr_site_staffing_mercury }
+sr_site_terra_staffed_mercury = { value = sr_site_terra_value_mercury multiply = sr_site_staffing_mercury }
 sr_site_boon_lab_mercury = {
 	value = 1
 	if = { limit = { has_global_variable = sr_site_disc_mercury_archive global_var:sr_site_disc_mercury_archive = 1 } add = sr_site_boon_bonus }
@@ -8593,6 +8617,8 @@ sr_mod_crewed_pending_mercury = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_mercury } add = global_var:sr_site_ship_foundry_mercury }
 	if = { limit = { has_variable = sr_mq_admin_mercury } add = var:sr_mq_admin_mercury }
 	if = { limit = { has_global_variable = sr_site_ship_admin_mercury } add = global_var:sr_site_ship_admin_mercury }
+	if = { limit = { has_variable = sr_mq_terra_mercury } add = var:sr_mq_terra_mercury }
+	if = { limit = { has_global_variable = sr_site_ship_terra_mercury } add = global_var:sr_site_ship_terra_mercury }
 }
 # The next Habitat THIS queues at Mercury costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -12360,6 +12386,10 @@ sr_site_admin_value_shackleton = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_shackleton } value = global_var:sr_site_admin_shackleton }
 }
+sr_site_terra_value_shackleton = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_shackleton } value = global_var:sr_site_terra_shackleton }
+}
 sr_site_port_value_shackleton = { value = 0 }
 sr_site_levels_shackleton = {
 	value = sr_site_lvl_a_value_shackleton
@@ -12375,6 +12405,7 @@ sr_site_levels_shackleton = {
 	add = sr_site_bunker_value_shackleton
 	add = sr_site_foundry_value_shackleton
 	add = sr_site_admin_value_shackleton
+	add = sr_site_terra_value_shackleton
 }
 sr_site_extra_levels_shackleton = {
 	value = sr_site_levels_shackleton
@@ -12435,6 +12466,7 @@ sr_site_generic_built_shackleton = {
 	add = sr_site_bunker_value_shackleton
 	add = sr_site_foundry_value_shackleton
 	add = sr_site_admin_value_shackleton
+	add = sr_site_terra_value_shackleton
 }
 # Shackleton Crater's Habitat cap: 2 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -12459,6 +12491,7 @@ sr_site_train_staffed_shackleton = { value = sr_site_train_value_shackleton mult
 sr_site_bunker_staffed_shackleton = { value = sr_site_bunker_value_shackleton multiply = sr_site_staffing_shackleton multiply = sr_site_pers_share_shackleton }
 sr_site_foundry_staffed_shackleton = { value = sr_site_foundry_value_shackleton multiply = sr_site_staffing_shackleton }
 sr_site_admin_staffed_shackleton = { value = sr_site_admin_value_shackleton multiply = sr_site_staffing_shackleton }
+sr_site_terra_staffed_shackleton = { value = sr_site_terra_value_shackleton multiply = sr_site_staffing_shackleton }
 # Its Extraplanetary Base room: the world's, and sr_mod_mine_room a staffed Mining Complex level.
 sr_site_ebase_room_shackleton = {
 	value = 75
@@ -12515,6 +12548,8 @@ sr_mod_crewed_pending_shackleton = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_shackleton } add = global_var:sr_site_ship_foundry_shackleton }
 	if = { limit = { has_variable = sr_mq_admin_shackleton } add = var:sr_mq_admin_shackleton }
 	if = { limit = { has_global_variable = sr_site_ship_admin_shackleton } add = global_var:sr_site_ship_admin_shackleton }
+	if = { limit = { has_variable = sr_mq_terra_shackleton } add = var:sr_mq_terra_shackleton }
+	if = { limit = { has_global_variable = sr_site_ship_terra_shackleton } add = global_var:sr_site_ship_terra_shackleton }
 }
 # The next Habitat THIS queues at Shackleton Crater costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -12580,6 +12615,10 @@ sr_site_admin_value_peary = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_peary } value = global_var:sr_site_admin_peary }
 }
+sr_site_terra_value_peary = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_peary } value = global_var:sr_site_terra_peary }
+}
 sr_site_port_value_peary = { value = 0 }
 sr_site_levels_peary = {
 	value = sr_site_lvl_a_value_peary
@@ -12595,6 +12634,7 @@ sr_site_levels_peary = {
 	add = sr_site_bunker_value_peary
 	add = sr_site_foundry_value_peary
 	add = sr_site_admin_value_peary
+	add = sr_site_terra_value_peary
 }
 sr_site_extra_levels_peary = {
 	value = sr_site_levels_peary
@@ -12655,6 +12695,7 @@ sr_site_generic_built_peary = {
 	add = sr_site_bunker_value_peary
 	add = sr_site_foundry_value_peary
 	add = sr_site_admin_value_peary
+	add = sr_site_terra_value_peary
 }
 # Peary Crater's Habitat cap: 1 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -12679,6 +12720,7 @@ sr_site_train_staffed_peary = { value = sr_site_train_value_peary multiply = sr_
 sr_site_bunker_staffed_peary = { value = sr_site_bunker_value_peary multiply = sr_site_staffing_peary multiply = sr_site_pers_share_peary }
 sr_site_foundry_staffed_peary = { value = sr_site_foundry_value_peary multiply = sr_site_staffing_peary }
 sr_site_admin_staffed_peary = { value = sr_site_admin_value_peary multiply = sr_site_staffing_peary }
+sr_site_terra_staffed_peary = { value = sr_site_terra_value_peary multiply = sr_site_staffing_peary }
 # Its Extraplanetary Base room: the world's, and sr_mod_mine_room a staffed Mining Complex level.
 sr_site_ebase_room_peary = {
 	value = 50
@@ -12735,6 +12777,8 @@ sr_mod_crewed_pending_peary = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_peary } add = global_var:sr_site_ship_foundry_peary }
 	if = { limit = { has_variable = sr_mq_admin_peary } add = var:sr_mq_admin_peary }
 	if = { limit = { has_global_variable = sr_site_ship_admin_peary } add = global_var:sr_site_ship_admin_peary }
+	if = { limit = { has_variable = sr_mq_terra_peary } add = var:sr_mq_terra_peary }
+	if = { limit = { has_global_variable = sr_site_ship_terra_peary } add = global_var:sr_site_ship_terra_peary }
 }
 # The next Habitat THIS queues at Peary Crater costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -12800,6 +12844,10 @@ sr_site_admin_value_tranquility = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_tranquility } value = global_var:sr_site_admin_tranquility }
 }
+sr_site_terra_value_tranquility = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_tranquility } value = global_var:sr_site_terra_tranquility }
+}
 sr_site_port_value_tranquility = { value = 0 }
 sr_site_levels_tranquility = {
 	value = sr_site_lvl_a_value_tranquility
@@ -12815,6 +12863,7 @@ sr_site_levels_tranquility = {
 	add = sr_site_bunker_value_tranquility
 	add = sr_site_foundry_value_tranquility
 	add = sr_site_admin_value_tranquility
+	add = sr_site_terra_value_tranquility
 }
 sr_site_extra_levels_tranquility = {
 	value = sr_site_levels_tranquility
@@ -12876,6 +12925,7 @@ sr_site_generic_built_tranquility = {
 	add = sr_site_bunker_value_tranquility
 	add = sr_site_foundry_value_tranquility
 	add = sr_site_admin_value_tranquility
+	add = sr_site_terra_value_tranquility
 }
 # Tranquility Base's Habitat cap: 2 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -12900,6 +12950,7 @@ sr_site_train_staffed_tranquility = { value = sr_site_train_value_tranquility mu
 sr_site_bunker_staffed_tranquility = { value = sr_site_bunker_value_tranquility multiply = sr_site_staffing_tranquility multiply = sr_site_pers_share_tranquility }
 sr_site_foundry_staffed_tranquility = { value = sr_site_foundry_value_tranquility multiply = sr_site_staffing_tranquility }
 sr_site_admin_staffed_tranquility = { value = sr_site_admin_value_tranquility multiply = sr_site_staffing_tranquility }
+sr_site_terra_staffed_tranquility = { value = sr_site_terra_value_tranquility multiply = sr_site_staffing_tranquility }
 # Its Extraplanetary Base room: the world's, and sr_mod_mine_room a staffed Mining Complex level.
 sr_site_ebase_room_tranquility = {
 	value = 100
@@ -12956,6 +13007,8 @@ sr_mod_crewed_pending_tranquility = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_tranquility } add = global_var:sr_site_ship_foundry_tranquility }
 	if = { limit = { has_variable = sr_mq_admin_tranquility } add = var:sr_mq_admin_tranquility }
 	if = { limit = { has_global_variable = sr_site_ship_admin_tranquility } add = global_var:sr_site_ship_admin_tranquility }
+	if = { limit = { has_variable = sr_mq_terra_tranquility } add = var:sr_mq_terra_tranquility }
+	if = { limit = { has_global_variable = sr_site_ship_terra_tranquility } add = global_var:sr_site_ship_terra_tranquility }
 }
 # The next Habitat THIS queues at Tranquility Base costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -13021,6 +13074,10 @@ sr_site_admin_value_marius_hills = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_marius_hills } value = global_var:sr_site_admin_marius_hills }
 }
+sr_site_terra_value_marius_hills = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_marius_hills } value = global_var:sr_site_terra_marius_hills }
+}
 sr_site_port_value_marius_hills = { value = 0 }
 sr_site_levels_marius_hills = {
 	value = sr_site_lvl_a_value_marius_hills
@@ -13036,6 +13093,7 @@ sr_site_levels_marius_hills = {
 	add = sr_site_bunker_value_marius_hills
 	add = sr_site_foundry_value_marius_hills
 	add = sr_site_admin_value_marius_hills
+	add = sr_site_terra_value_marius_hills
 }
 sr_site_extra_levels_marius_hills = {
 	value = sr_site_levels_marius_hills
@@ -13095,6 +13153,7 @@ sr_site_generic_built_marius_hills = {
 	add = sr_site_bunker_value_marius_hills
 	add = sr_site_foundry_value_marius_hills
 	add = sr_site_admin_value_marius_hills
+	add = sr_site_terra_value_marius_hills
 }
 # Marius Hills's Habitat cap: 3 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -13119,6 +13178,7 @@ sr_site_train_staffed_marius_hills = { value = sr_site_train_value_marius_hills 
 sr_site_bunker_staffed_marius_hills = { value = sr_site_bunker_value_marius_hills multiply = sr_site_staffing_marius_hills multiply = sr_site_pers_share_marius_hills }
 sr_site_foundry_staffed_marius_hills = { value = sr_site_foundry_value_marius_hills multiply = sr_site_staffing_marius_hills }
 sr_site_admin_staffed_marius_hills = { value = sr_site_admin_value_marius_hills multiply = sr_site_staffing_marius_hills }
+sr_site_terra_staffed_marius_hills = { value = sr_site_terra_value_marius_hills multiply = sr_site_staffing_marius_hills }
 # Its Extraplanetary Base room: the world's, and sr_mod_mine_room a staffed Mining Complex level.
 sr_site_ebase_room_marius_hills = {
 	value = 125
@@ -13175,6 +13235,8 @@ sr_mod_crewed_pending_marius_hills = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_marius_hills } add = global_var:sr_site_ship_foundry_marius_hills }
 	if = { limit = { has_variable = sr_mq_admin_marius_hills } add = var:sr_mq_admin_marius_hills }
 	if = { limit = { has_global_variable = sr_site_ship_admin_marius_hills } add = global_var:sr_site_ship_admin_marius_hills }
+	if = { limit = { has_variable = sr_mq_terra_marius_hills } add = var:sr_mq_terra_marius_hills }
+	if = { limit = { has_global_variable = sr_site_ship_terra_marius_hills } add = global_var:sr_site_ship_terra_marius_hills }
 }
 # The next Habitat THIS queues at Marius Hills costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -13240,6 +13302,10 @@ sr_site_admin_value_daedalus = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_daedalus } value = global_var:sr_site_admin_daedalus }
 }
+sr_site_terra_value_daedalus = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_daedalus } value = global_var:sr_site_terra_daedalus }
+}
 sr_site_port_value_daedalus = { value = 0 }
 sr_site_levels_daedalus = {
 	value = sr_site_lvl_a_value_daedalus
@@ -13255,6 +13321,7 @@ sr_site_levels_daedalus = {
 	add = sr_site_bunker_value_daedalus
 	add = sr_site_foundry_value_daedalus
 	add = sr_site_admin_value_daedalus
+	add = sr_site_terra_value_daedalus
 }
 sr_site_extra_levels_daedalus = {
 	value = sr_site_levels_daedalus
@@ -13314,6 +13381,7 @@ sr_site_generic_built_daedalus = {
 	add = sr_site_bunker_value_daedalus
 	add = sr_site_foundry_value_daedalus
 	add = sr_site_admin_value_daedalus
+	add = sr_site_terra_value_daedalus
 }
 # Daedalus Crater's Habitat cap: 1 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -13338,6 +13406,7 @@ sr_site_train_staffed_daedalus = { value = sr_site_train_value_daedalus multiply
 sr_site_bunker_staffed_daedalus = { value = sr_site_bunker_value_daedalus multiply = sr_site_staffing_daedalus multiply = sr_site_pers_share_daedalus }
 sr_site_foundry_staffed_daedalus = { value = sr_site_foundry_value_daedalus multiply = sr_site_staffing_daedalus }
 sr_site_admin_staffed_daedalus = { value = sr_site_admin_value_daedalus multiply = sr_site_staffing_daedalus }
+sr_site_terra_staffed_daedalus = { value = sr_site_terra_value_daedalus multiply = sr_site_staffing_daedalus }
 # Its Extraplanetary Base room: the world's, and sr_mod_mine_room a staffed Mining Complex level.
 sr_site_ebase_room_daedalus = {
 	value = 50
@@ -13394,6 +13463,8 @@ sr_mod_crewed_pending_daedalus = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_daedalus } add = global_var:sr_site_ship_foundry_daedalus }
 	if = { limit = { has_variable = sr_mq_admin_daedalus } add = var:sr_mq_admin_daedalus }
 	if = { limit = { has_global_variable = sr_site_ship_admin_daedalus } add = global_var:sr_site_ship_admin_daedalus }
+	if = { limit = { has_variable = sr_mq_terra_daedalus } add = var:sr_mq_terra_daedalus }
+	if = { limit = { has_global_variable = sr_site_ship_terra_daedalus } add = global_var:sr_site_ship_terra_daedalus }
 }
 # The next Habitat THIS queues at Daedalus Crater costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -13459,6 +13530,10 @@ sr_site_admin_value_imbrium = {
 	value = 0
 	if = { limit = { has_global_variable = sr_site_admin_imbrium } value = global_var:sr_site_admin_imbrium }
 }
+sr_site_terra_value_imbrium = {
+	value = 0
+	if = { limit = { has_global_variable = sr_site_terra_imbrium } value = global_var:sr_site_terra_imbrium }
+}
 sr_site_port_value_imbrium = { value = 0 }
 sr_site_levels_imbrium = {
 	value = sr_site_lvl_a_value_imbrium
@@ -13474,6 +13549,7 @@ sr_site_levels_imbrium = {
 	add = sr_site_bunker_value_imbrium
 	add = sr_site_foundry_value_imbrium
 	add = sr_site_admin_value_imbrium
+	add = sr_site_terra_value_imbrium
 }
 sr_site_extra_levels_imbrium = {
 	value = sr_site_levels_imbrium
@@ -13535,6 +13611,7 @@ sr_site_generic_built_imbrium = {
 	add = sr_site_bunker_value_imbrium
 	add = sr_site_foundry_value_imbrium
 	add = sr_site_admin_value_imbrium
+	add = sr_site_terra_value_imbrium
 }
 # Mare Imbrium's Habitat cap: 2 by its size; past it the n-th costs
 # sr_module_points x (1 + n), with no top.
@@ -13559,6 +13636,7 @@ sr_site_train_staffed_imbrium = { value = sr_site_train_value_imbrium multiply =
 sr_site_bunker_staffed_imbrium = { value = sr_site_bunker_value_imbrium multiply = sr_site_staffing_imbrium multiply = sr_site_pers_share_imbrium }
 sr_site_foundry_staffed_imbrium = { value = sr_site_foundry_value_imbrium multiply = sr_site_staffing_imbrium }
 sr_site_admin_staffed_imbrium = { value = sr_site_admin_value_imbrium multiply = sr_site_staffing_imbrium }
+sr_site_terra_staffed_imbrium = { value = sr_site_terra_value_imbrium multiply = sr_site_staffing_imbrium }
 # Its Extraplanetary Base room: the world's, and sr_mod_mine_room a staffed Mining Complex level.
 sr_site_ebase_room_imbrium = {
 	value = 125
@@ -13615,6 +13693,8 @@ sr_mod_crewed_pending_imbrium = {
 	if = { limit = { has_global_variable = sr_site_ship_foundry_imbrium } add = global_var:sr_site_ship_foundry_imbrium }
 	if = { limit = { has_variable = sr_mq_admin_imbrium } add = var:sr_mq_admin_imbrium }
 	if = { limit = { has_global_variable = sr_site_ship_admin_imbrium } add = global_var:sr_site_ship_admin_imbrium }
+	if = { limit = { has_variable = sr_mq_terra_imbrium } add = var:sr_mq_terra_imbrium }
+	if = { limit = { has_global_variable = sr_site_ship_terra_imbrium } add = global_var:sr_site_ship_terra_imbrium }
 }
 # The next Habitat THIS queues at Mare Imbrium costs this (colony people design § 4.3):
 # past its cap, a hundred points more than the last. Every other module costs sr_module_points.
@@ -14076,10 +14156,18 @@ sr_mod_units_terra = {
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_terra_staffed_hellas_planitia }
 	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_utopia_planitia } } add = sr_site_terra_eff_utopia_planitia }
 	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } } add = sr_site_terra_staffed_arcadia_planitia }
+	if = { limit = { global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_occupier_europa } } add = sr_site_terra_staffed_europa }
 	if = { limit = { global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_occupier_ganymede } } add = sr_site_terra_staffed_ganymede }
 	if = { limit = { global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_occupier_callisto } } add = sr_site_terra_staffed_callisto }
 	if = { limit = { global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_occupier_venus } } add = sr_site_terra_staffed_venus }
+	if = { limit = { global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_occupier_mercury } } add = sr_site_terra_staffed_mercury }
 	if = { limit = { global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_occupier_titan } } add = sr_site_terra_staffed_titan }
+	if = { limit = { global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_occupier_shackleton } } add = sr_site_terra_staffed_shackleton }
+	if = { limit = { global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_occupier_peary } } add = sr_site_terra_staffed_peary }
+	if = { limit = { global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_occupier_tranquility } } add = sr_site_terra_staffed_tranquility }
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_occupier_marius_hills } } add = sr_site_terra_staffed_marius_hills }
+	if = { limit = { global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_occupier_daedalus } } add = sr_site_terra_staffed_daedalus }
+	if = { limit = { global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_occupier_imbrium } } add = sr_site_terra_staffed_imbrium }
 }
 # Country scope: THIS's module levels that take Space Forces Personnel
 # (gen_solar_sites.PERSONNEL_TYPES), at the colonies it holds unoccupied,
@@ -15284,174 +15372,443 @@ sr_ms_wait_months_8 = {
 }
 
 # ===== Terraforming (era 13 spec § 7.11) =====
-# A share (+100% of a world's base room) takes sr_terra_level_months of
-# a staffed level's work; up to sr_terra_max_levels at a world at once, counting
-# queue and shipments; the whole job is sr_terra_full_months.
+# A share (+100% of each colony's base room on a world) takes
+# sr_terra_level_months of a staffed level's work a site there, times the world's
+# difficulty; up to sr_terra_max_levels a site times the difficulty work there at
+# once, counting every holder's queue and every shipment; the whole job is
+# sr_terra_full_months a site times the difficulty.
 sr_terra_level_months = { value = 300 }
 sr_terra_max_levels = { value = 3 }
 sr_terra_full_months = { value = 900 }
 sr_mod_ai_terra_fill = { value = 0.5 }
 
-# Per world that takes it, any scope:
-#   sr_site_terra_done_value_<key>  the months of work done there (the world's own
-#                                   record, sr_site_terra_done_<key>: it stays through
-#                                   a cession, a release and a level coming down)
-#   sr_site_terra_share_<key>       the share of its base room that work adds
-#   sr_site_terra_rate_<key>        a month's work: its staffed levels, none occupied
-# Country scope: sr_mod_terra_used_<key>, its levels built, in THIS's queue and on
-# their way (every shipper's), against sr_terra_max_levels.
-sr_site_terra_done_value_valles_marineris = {
+# Per world that takes it (world_of: mars, moon, or its one site's key), any scope:
+#   sr_terra_difficulty_<world>      how many times Mars's work a site it takes
+#   sr_world_terra_full_<world>      its whole job, in months of a staffed level's work
+#   sr_world_terra_cap_<world>       the levels that may work there at once
+#   sr_world_terra_done_value_<world> the work done there (its own record,
+#                                    sr_world_terra_done_<world>: it stays through a
+#                                    cession, a release and a level coming down)
+#   sr_world_terra_share_<world>     the share of each colony's base room that work adds
+#   sr_world_terra_rate_<world>      a month's work: every colony's there
+#   sr_world_terra_levels_<world>    its levels built, every holder's
+#   sr_world_terra_used_<world>      ... and those in a holder's queue or on their way
+# Per colony, any scope: sr_site_terra_share_<key>, its world's share (never below
+# what it had of its own before the work was the world's, sr_site_terra_kept_<key>),
+# and sr_site_terra_rate_<key>, its month's work: its staffed levels, none occupied.
+
+# Mars: difficulty 1, 5 sites, 15 levels at once, 4500 months of work.
+sr_terra_difficulty_mars = { value = 1 }
+sr_world_terra_full_mars = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_mars
+	multiply = 5
+}
+sr_world_terra_cap_mars = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_mars
+	multiply = 5
+}
+sr_world_terra_done_value_mars = {
 	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_valles_marineris } value = global_var:sr_site_terra_done_valles_marineris }
+	if = { limit = { has_global_variable = sr_world_terra_done_mars } value = global_var:sr_world_terra_done_mars }
+}
+sr_world_terra_share_mars = {
+	value = sr_world_terra_done_value_mars
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_mars
+	divide = 5
+}
+sr_world_terra_rate_mars = {
+	value = sr_site_terra_rate_valles_marineris
+	add = sr_site_terra_rate_olympus_mons
+	add = sr_site_terra_rate_hellas_planitia
+	add = sr_site_terra_rate_utopia_planitia
+	add = sr_site_terra_rate_arcadia_planitia
+}
+sr_world_terra_levels_mars = {
+	value = sr_site_terra_value_valles_marineris
+	add = sr_site_terra_value_olympus_mons
+	add = sr_site_terra_value_hellas_planitia
+	add = sr_site_terra_value_utopia_planitia
+	add = sr_site_terra_value_arcadia_planitia
+}
+sr_world_terra_used_mars = {
+	value = sr_world_terra_levels_mars
+	if = { limit = { global_var:sr_site_holder_valles_marineris ?= { has_variable = sr_mq_terra_valles_marineris } } global_var:sr_site_holder_valles_marineris = { add = var:sr_mq_terra_valles_marineris } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
+	if = { limit = { global_var:sr_site_holder_olympus_mons ?= { has_variable = sr_mq_terra_olympus_mons } } global_var:sr_site_holder_olympus_mons = { add = var:sr_mq_terra_olympus_mons } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
+	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= { has_variable = sr_mq_terra_hellas_planitia } } global_var:sr_site_holder_hellas_planitia = { add = var:sr_mq_terra_hellas_planitia } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
+	if = { limit = { global_var:sr_site_holder_utopia_planitia ?= { has_variable = sr_mq_terra_utopia_planitia } } global_var:sr_site_holder_utopia_planitia = { add = var:sr_mq_terra_utopia_planitia } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
+	if = { limit = { global_var:sr_site_holder_arcadia_planitia ?= { has_variable = sr_mq_terra_arcadia_planitia } } global_var:sr_site_holder_arcadia_planitia = { add = var:sr_mq_terra_arcadia_planitia } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
 }
 sr_site_terra_share_valles_marineris = {
-	value = sr_site_terra_done_value_valles_marineris
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_mars
+	if = { limit = { has_global_variable = sr_site_terra_kept_valles_marineris } min = global_var:sr_site_terra_kept_valles_marineris }
 }
 sr_site_terra_rate_valles_marineris = {
 	value = sr_site_terra_staffed_valles_marineris
 	if = { limit = { has_global_variable = sr_site_occupier_valles_marineris } value = 0 }
 }
-sr_mod_terra_used_valles_marineris = {
-	value = sr_site_terra_value_valles_marineris
-	if = { limit = { has_variable = sr_mq_terra_valles_marineris } add = var:sr_mq_terra_valles_marineris }
-	if = { limit = { has_global_variable = sr_site_ship_terra_valles_marineris } add = global_var:sr_site_ship_terra_valles_marineris }
-}
-sr_site_terra_done_value_olympus_mons = {
-	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_olympus_mons } value = global_var:sr_site_terra_done_olympus_mons }
-}
 sr_site_terra_share_olympus_mons = {
-	value = sr_site_terra_done_value_olympus_mons
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_mars
+	if = { limit = { has_global_variable = sr_site_terra_kept_olympus_mons } min = global_var:sr_site_terra_kept_olympus_mons }
 }
 sr_site_terra_rate_olympus_mons = {
 	value = sr_site_terra_staffed_olympus_mons
 	if = { limit = { has_global_variable = sr_site_occupier_olympus_mons } value = 0 }
 }
-sr_mod_terra_used_olympus_mons = {
-	value = sr_site_terra_value_olympus_mons
-	if = { limit = { has_variable = sr_mq_terra_olympus_mons } add = var:sr_mq_terra_olympus_mons }
-	if = { limit = { has_global_variable = sr_site_ship_terra_olympus_mons } add = global_var:sr_site_ship_terra_olympus_mons }
-}
-sr_site_terra_done_value_hellas_planitia = {
-	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_hellas_planitia } value = global_var:sr_site_terra_done_hellas_planitia }
-}
 sr_site_terra_share_hellas_planitia = {
-	value = sr_site_terra_done_value_hellas_planitia
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_mars
+	if = { limit = { has_global_variable = sr_site_terra_kept_hellas_planitia } min = global_var:sr_site_terra_kept_hellas_planitia }
 }
 sr_site_terra_rate_hellas_planitia = {
 	value = sr_site_terra_staffed_hellas_planitia
 	if = { limit = { has_global_variable = sr_site_occupier_hellas_planitia } value = 0 }
 }
-sr_mod_terra_used_hellas_planitia = {
-	value = sr_site_terra_value_hellas_planitia
-	if = { limit = { has_variable = sr_mq_terra_hellas_planitia } add = var:sr_mq_terra_hellas_planitia }
-	if = { limit = { has_global_variable = sr_site_ship_terra_hellas_planitia } add = global_var:sr_site_ship_terra_hellas_planitia }
-}
-sr_site_terra_done_value_utopia_planitia = {
-	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_utopia_planitia } value = global_var:sr_site_terra_done_utopia_planitia }
-}
 sr_site_terra_share_utopia_planitia = {
-	value = sr_site_terra_done_value_utopia_planitia
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_mars
+	if = { limit = { has_global_variable = sr_site_terra_kept_utopia_planitia } min = global_var:sr_site_terra_kept_utopia_planitia }
 }
 sr_site_terra_rate_utopia_planitia = {
 	value = sr_site_terra_eff_utopia_planitia
 	if = { limit = { has_global_variable = sr_site_occupier_utopia_planitia } value = 0 }
 }
-sr_mod_terra_used_utopia_planitia = {
-	value = sr_site_terra_value_utopia_planitia
-	if = { limit = { has_variable = sr_mq_terra_utopia_planitia } add = var:sr_mq_terra_utopia_planitia }
-	if = { limit = { has_global_variable = sr_site_ship_terra_utopia_planitia } add = global_var:sr_site_ship_terra_utopia_planitia }
-}
-sr_site_terra_done_value_arcadia_planitia = {
-	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_arcadia_planitia } value = global_var:sr_site_terra_done_arcadia_planitia }
-}
 sr_site_terra_share_arcadia_planitia = {
-	value = sr_site_terra_done_value_arcadia_planitia
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_mars
+	if = { limit = { has_global_variable = sr_site_terra_kept_arcadia_planitia } min = global_var:sr_site_terra_kept_arcadia_planitia }
 }
 sr_site_terra_rate_arcadia_planitia = {
 	value = sr_site_terra_staffed_arcadia_planitia
 	if = { limit = { has_global_variable = sr_site_occupier_arcadia_planitia } value = 0 }
 }
-sr_mod_terra_used_arcadia_planitia = {
-	value = sr_site_terra_value_arcadia_planitia
-	if = { limit = { has_variable = sr_mq_terra_arcadia_planitia } add = var:sr_mq_terra_arcadia_planitia }
-	if = { limit = { has_global_variable = sr_site_ship_terra_arcadia_planitia } add = global_var:sr_site_ship_terra_arcadia_planitia }
+
+# Europa: difficulty 3, 1 site, 9 levels at once, 2700 months of work.
+sr_terra_difficulty_europa = { value = 3 }
+sr_world_terra_full_europa = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_europa
 }
-sr_site_terra_done_value_ganymede = {
+sr_world_terra_cap_europa = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_europa
+}
+sr_world_terra_done_value_europa = {
 	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_ganymede } value = global_var:sr_site_terra_done_ganymede }
+	if = { limit = { has_global_variable = sr_world_terra_done_europa } value = global_var:sr_world_terra_done_europa }
+}
+sr_world_terra_share_europa = {
+	value = sr_world_terra_done_value_europa
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_europa
+}
+sr_world_terra_rate_europa = {
+	value = sr_site_terra_rate_europa
+}
+sr_world_terra_levels_europa = {
+	value = sr_site_terra_value_europa
+}
+sr_world_terra_used_europa = {
+	value = sr_world_terra_levels_europa
+	if = { limit = { global_var:sr_site_holder_europa ?= { has_variable = sr_mq_terra_europa } } global_var:sr_site_holder_europa = { add = var:sr_mq_terra_europa } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_europa } add = global_var:sr_site_ship_terra_europa }
+}
+sr_site_terra_share_europa = {
+	value = sr_world_terra_share_europa
+}
+sr_site_terra_rate_europa = {
+	value = sr_site_terra_staffed_europa
+	if = { limit = { has_global_variable = sr_site_occupier_europa } value = 0 }
+}
+
+# Ganymede: difficulty 2, 1 site, 6 levels at once, 1800 months of work.
+sr_terra_difficulty_ganymede = { value = 2 }
+sr_world_terra_full_ganymede = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_ganymede
+}
+sr_world_terra_cap_ganymede = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_ganymede
+}
+sr_world_terra_done_value_ganymede = {
+	value = 0
+	if = { limit = { has_global_variable = sr_world_terra_done_ganymede } value = global_var:sr_world_terra_done_ganymede }
+}
+sr_world_terra_share_ganymede = {
+	value = sr_world_terra_done_value_ganymede
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_ganymede
+}
+sr_world_terra_rate_ganymede = {
+	value = sr_site_terra_rate_ganymede
+}
+sr_world_terra_levels_ganymede = {
+	value = sr_site_terra_value_ganymede
+}
+sr_world_terra_used_ganymede = {
+	value = sr_world_terra_levels_ganymede
+	if = { limit = { global_var:sr_site_holder_ganymede ?= { has_variable = sr_mq_terra_ganymede } } global_var:sr_site_holder_ganymede = { add = var:sr_mq_terra_ganymede } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
 }
 sr_site_terra_share_ganymede = {
-	value = sr_site_terra_done_value_ganymede
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_ganymede
 }
 sr_site_terra_rate_ganymede = {
 	value = sr_site_terra_staffed_ganymede
 	if = { limit = { has_global_variable = sr_site_occupier_ganymede } value = 0 }
 }
-sr_mod_terra_used_ganymede = {
-	value = sr_site_terra_value_ganymede
-	if = { limit = { has_variable = sr_mq_terra_ganymede } add = var:sr_mq_terra_ganymede }
-	if = { limit = { has_global_variable = sr_site_ship_terra_ganymede } add = global_var:sr_site_ship_terra_ganymede }
+
+# Callisto: difficulty 2, 1 site, 6 levels at once, 1800 months of work.
+sr_terra_difficulty_callisto = { value = 2 }
+sr_world_terra_full_callisto = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_callisto
 }
-sr_site_terra_done_value_callisto = {
+sr_world_terra_cap_callisto = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_callisto
+}
+sr_world_terra_done_value_callisto = {
 	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_callisto } value = global_var:sr_site_terra_done_callisto }
+	if = { limit = { has_global_variable = sr_world_terra_done_callisto } value = global_var:sr_world_terra_done_callisto }
+}
+sr_world_terra_share_callisto = {
+	value = sr_world_terra_done_value_callisto
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_callisto
+}
+sr_world_terra_rate_callisto = {
+	value = sr_site_terra_rate_callisto
+}
+sr_world_terra_levels_callisto = {
+	value = sr_site_terra_value_callisto
+}
+sr_world_terra_used_callisto = {
+	value = sr_world_terra_levels_callisto
+	if = { limit = { global_var:sr_site_holder_callisto ?= { has_variable = sr_mq_terra_callisto } } global_var:sr_site_holder_callisto = { add = var:sr_mq_terra_callisto } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
 }
 sr_site_terra_share_callisto = {
-	value = sr_site_terra_done_value_callisto
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_callisto
 }
 sr_site_terra_rate_callisto = {
 	value = sr_site_terra_staffed_callisto
 	if = { limit = { has_global_variable = sr_site_occupier_callisto } value = 0 }
 }
-sr_mod_terra_used_callisto = {
-	value = sr_site_terra_value_callisto
-	if = { limit = { has_variable = sr_mq_terra_callisto } add = var:sr_mq_terra_callisto }
-	if = { limit = { has_global_variable = sr_site_ship_terra_callisto } add = global_var:sr_site_ship_terra_callisto }
+
+# Venus Cloud Habitat: difficulty 4, 1 site, 12 levels at once, 3600 months of work.
+sr_terra_difficulty_venus = { value = 4 }
+sr_world_terra_full_venus = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_venus
 }
-sr_site_terra_done_value_venus = {
+sr_world_terra_cap_venus = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_venus
+}
+sr_world_terra_done_value_venus = {
 	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_venus } value = global_var:sr_site_terra_done_venus }
+	if = { limit = { has_global_variable = sr_world_terra_done_venus } value = global_var:sr_world_terra_done_venus }
+}
+sr_world_terra_share_venus = {
+	value = sr_world_terra_done_value_venus
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_venus
+}
+sr_world_terra_rate_venus = {
+	value = sr_site_terra_rate_venus
+}
+sr_world_terra_levels_venus = {
+	value = sr_site_terra_value_venus
+}
+sr_world_terra_used_venus = {
+	value = sr_world_terra_levels_venus
+	if = { limit = { global_var:sr_site_holder_venus ?= { has_variable = sr_mq_terra_venus } } global_var:sr_site_holder_venus = { add = var:sr_mq_terra_venus } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
 }
 sr_site_terra_share_venus = {
-	value = sr_site_terra_done_value_venus
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_venus
 }
 sr_site_terra_rate_venus = {
 	value = sr_site_terra_staffed_venus
 	if = { limit = { has_global_variable = sr_site_occupier_venus } value = 0 }
 }
-sr_mod_terra_used_venus = {
-	value = sr_site_terra_value_venus
-	if = { limit = { has_variable = sr_mq_terra_venus } add = var:sr_mq_terra_venus }
-	if = { limit = { has_global_variable = sr_site_ship_terra_venus } add = global_var:sr_site_ship_terra_venus }
+
+# Mercury: difficulty 5, 1 site, 15 levels at once, 4500 months of work.
+sr_terra_difficulty_mercury = { value = 5 }
+sr_world_terra_full_mercury = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_mercury
 }
-sr_site_terra_done_value_titan = {
+sr_world_terra_cap_mercury = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_mercury
+}
+sr_world_terra_done_value_mercury = {
 	value = 0
-	if = { limit = { has_global_variable = sr_site_terra_done_titan } value = global_var:sr_site_terra_done_titan }
+	if = { limit = { has_global_variable = sr_world_terra_done_mercury } value = global_var:sr_world_terra_done_mercury }
+}
+sr_world_terra_share_mercury = {
+	value = sr_world_terra_done_value_mercury
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_mercury
+}
+sr_world_terra_rate_mercury = {
+	value = sr_site_terra_rate_mercury
+}
+sr_world_terra_levels_mercury = {
+	value = sr_site_terra_value_mercury
+}
+sr_world_terra_used_mercury = {
+	value = sr_world_terra_levels_mercury
+	if = { limit = { global_var:sr_site_holder_mercury ?= { has_variable = sr_mq_terra_mercury } } global_var:sr_site_holder_mercury = { add = var:sr_mq_terra_mercury } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_mercury } add = global_var:sr_site_ship_terra_mercury }
+}
+sr_site_terra_share_mercury = {
+	value = sr_world_terra_share_mercury
+}
+sr_site_terra_rate_mercury = {
+	value = sr_site_terra_staffed_mercury
+	if = { limit = { has_global_variable = sr_site_occupier_mercury } value = 0 }
+}
+
+# Titan: difficulty 3, 1 site, 9 levels at once, 2700 months of work.
+sr_terra_difficulty_titan = { value = 3 }
+sr_world_terra_full_titan = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_titan
+}
+sr_world_terra_cap_titan = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_titan
+}
+sr_world_terra_done_value_titan = {
+	value = 0
+	if = { limit = { has_global_variable = sr_world_terra_done_titan } value = global_var:sr_world_terra_done_titan }
+}
+sr_world_terra_share_titan = {
+	value = sr_world_terra_done_value_titan
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_titan
+}
+sr_world_terra_rate_titan = {
+	value = sr_site_terra_rate_titan
+}
+sr_world_terra_levels_titan = {
+	value = sr_site_terra_value_titan
+}
+sr_world_terra_used_titan = {
+	value = sr_world_terra_levels_titan
+	if = { limit = { global_var:sr_site_holder_titan ?= { has_variable = sr_mq_terra_titan } } global_var:sr_site_holder_titan = { add = var:sr_mq_terra_titan } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
 }
 sr_site_terra_share_titan = {
-	value = sr_site_terra_done_value_titan
-	divide = sr_terra_level_months
+	value = sr_world_terra_share_titan
 }
 sr_site_terra_rate_titan = {
 	value = sr_site_terra_staffed_titan
 	if = { limit = { has_global_variable = sr_site_occupier_titan } value = 0 }
 }
-sr_mod_terra_used_titan = {
-	value = sr_site_terra_value_titan
-	if = { limit = { has_variable = sr_mq_terra_titan } add = var:sr_mq_terra_titan }
-	if = { limit = { has_global_variable = sr_site_ship_terra_titan } add = global_var:sr_site_ship_terra_titan }
+
+# the Moon: difficulty 3, 6 sites, 54 levels at once, 16200 months of work.
+sr_terra_difficulty_moon = { value = 3 }
+sr_world_terra_full_moon = {
+	value = sr_terra_full_months
+	multiply = sr_terra_difficulty_moon
+	multiply = 6
+}
+sr_world_terra_cap_moon = {
+	value = sr_terra_max_levels
+	multiply = sr_terra_difficulty_moon
+	multiply = 6
+}
+sr_world_terra_done_value_moon = {
+	value = 0
+	if = { limit = { has_global_variable = sr_world_terra_done_moon } value = global_var:sr_world_terra_done_moon }
+}
+sr_world_terra_share_moon = {
+	value = sr_world_terra_done_value_moon
+	divide = sr_terra_level_months
+	divide = sr_terra_difficulty_moon
+	divide = 6
+}
+sr_world_terra_rate_moon = {
+	value = sr_site_terra_rate_shackleton
+	add = sr_site_terra_rate_peary
+	add = sr_site_terra_rate_tranquility
+	add = sr_site_terra_rate_marius_hills
+	add = sr_site_terra_rate_daedalus
+	add = sr_site_terra_rate_imbrium
+}
+sr_world_terra_levels_moon = {
+	value = sr_site_terra_value_shackleton
+	add = sr_site_terra_value_peary
+	add = sr_site_terra_value_tranquility
+	add = sr_site_terra_value_marius_hills
+	add = sr_site_terra_value_daedalus
+	add = sr_site_terra_value_imbrium
+}
+sr_world_terra_used_moon = {
+	value = sr_world_terra_levels_moon
+	if = { limit = { global_var:sr_site_holder_shackleton ?= { has_variable = sr_mq_terra_shackleton } } global_var:sr_site_holder_shackleton = { add = var:sr_mq_terra_shackleton } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_shackleton } add = global_var:sr_site_ship_terra_shackleton }
+	if = { limit = { global_var:sr_site_holder_peary ?= { has_variable = sr_mq_terra_peary } } global_var:sr_site_holder_peary = { add = var:sr_mq_terra_peary } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_peary } add = global_var:sr_site_ship_terra_peary }
+	if = { limit = { global_var:sr_site_holder_tranquility ?= { has_variable = sr_mq_terra_tranquility } } global_var:sr_site_holder_tranquility = { add = var:sr_mq_terra_tranquility } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_tranquility } add = global_var:sr_site_ship_terra_tranquility }
+	if = { limit = { global_var:sr_site_holder_marius_hills ?= { has_variable = sr_mq_terra_marius_hills } } global_var:sr_site_holder_marius_hills = { add = var:sr_mq_terra_marius_hills } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_marius_hills } add = global_var:sr_site_ship_terra_marius_hills }
+	if = { limit = { global_var:sr_site_holder_daedalus ?= { has_variable = sr_mq_terra_daedalus } } global_var:sr_site_holder_daedalus = { add = var:sr_mq_terra_daedalus } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_daedalus } add = global_var:sr_site_ship_terra_daedalus }
+	if = { limit = { global_var:sr_site_holder_imbrium ?= { has_variable = sr_mq_terra_imbrium } } global_var:sr_site_holder_imbrium = { add = var:sr_mq_terra_imbrium } }
+	if = { limit = { has_global_variable = sr_site_ship_terra_imbrium } add = global_var:sr_site_ship_terra_imbrium }
+}
+sr_site_terra_share_shackleton = {
+	value = sr_world_terra_share_moon
+}
+sr_site_terra_rate_shackleton = {
+	value = sr_site_terra_staffed_shackleton
+	if = { limit = { has_global_variable = sr_site_occupier_shackleton } value = 0 }
+}
+sr_site_terra_share_peary = {
+	value = sr_world_terra_share_moon
+}
+sr_site_terra_rate_peary = {
+	value = sr_site_terra_staffed_peary
+	if = { limit = { has_global_variable = sr_site_occupier_peary } value = 0 }
+}
+sr_site_terra_share_tranquility = {
+	value = sr_world_terra_share_moon
+}
+sr_site_terra_rate_tranquility = {
+	value = sr_site_terra_staffed_tranquility
+	if = { limit = { has_global_variable = sr_site_occupier_tranquility } value = 0 }
+}
+sr_site_terra_share_marius_hills = {
+	value = sr_world_terra_share_moon
+}
+sr_site_terra_rate_marius_hills = {
+	value = sr_site_terra_staffed_marius_hills
+	if = { limit = { has_global_variable = sr_site_occupier_marius_hills } value = 0 }
+}
+sr_site_terra_share_daedalus = {
+	value = sr_world_terra_share_moon
+}
+sr_site_terra_rate_daedalus = {
+	value = sr_site_terra_staffed_daedalus
+	if = { limit = { has_global_variable = sr_site_occupier_daedalus } value = 0 }
+}
+sr_site_terra_share_imbrium = {
+	value = sr_world_terra_share_moon
+}
+sr_site_terra_rate_imbrium = {
+	value = sr_site_terra_staffed_imbrium
+	if = { limit = { has_global_variable = sr_site_occupier_imbrium } value = 0 }
 }
 
 # ===== Dismantling (owner, 2026-10-31) =====
@@ -15628,6 +15985,7 @@ sr_md_room_less_hab_europa = {
 	min = 0
 	multiply = sr_site_hab_share_value_europa
 	add = 1
+	add = sr_site_terra_share_europa
 	multiply = sr_site_base_room_europa
 }
 sr_site_room_held_europa = {
@@ -15715,6 +16073,7 @@ sr_md_room_less_hab_mercury = {
 	min = 0
 	multiply = sr_site_hab_share_value_mercury
 	add = 1
+	add = sr_site_terra_share_mercury
 	multiply = sr_site_base_room_mercury
 }
 sr_site_room_held_mercury = {
@@ -15954,6 +16313,7 @@ sr_md_room_less_hab_shackleton = {
 	min = 0
 	multiply = sr_site_hab_share_value_shackleton
 	add = 1
+	add = sr_site_terra_share_shackleton
 	multiply = sr_site_base_room_shackleton
 }
 sr_site_room_held_shackleton = {
@@ -15968,6 +16328,7 @@ sr_md_room_less_hab_peary = {
 	min = 0
 	multiply = sr_site_hab_share_value_peary
 	add = 1
+	add = sr_site_terra_share_peary
 	multiply = sr_site_base_room_peary
 }
 sr_site_room_held_peary = {
@@ -15982,6 +16343,7 @@ sr_md_room_less_hab_tranquility = {
 	min = 0
 	multiply = sr_site_hab_share_value_tranquility
 	add = 1
+	add = sr_site_terra_share_tranquility
 	multiply = sr_site_base_room_tranquility
 }
 sr_site_room_held_tranquility = {
@@ -15996,6 +16358,7 @@ sr_md_room_less_hab_marius_hills = {
 	min = 0
 	multiply = sr_site_hab_share_value_marius_hills
 	add = 1
+	add = sr_site_terra_share_marius_hills
 	multiply = sr_site_base_room_marius_hills
 }
 sr_site_room_held_marius_hills = {
@@ -16010,6 +16373,7 @@ sr_md_room_less_hab_daedalus = {
 	min = 0
 	multiply = sr_site_hab_share_value_daedalus
 	add = 1
+	add = sr_site_terra_share_daedalus
 	multiply = sr_site_base_room_daedalus
 }
 sr_site_room_held_daedalus = {
@@ -16024,6 +16388,7 @@ sr_md_room_less_hab_imbrium = {
 	min = 0
 	multiply = sr_site_hab_share_value_imbrium
 	add = 1
+	add = sr_site_terra_share_imbrium
 	multiply = sr_site_base_room_imbrium
 }
 sr_site_room_held_imbrium = {
