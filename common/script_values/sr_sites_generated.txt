@@ -4457,7 +4457,7 @@ sr_site_ebase_room_valles_marineris = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_valles_marineris = {
-	value = 50
+	value = 100
 	add = { value = sr_site_resort_staffed_valles_marineris multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -4704,7 +4704,7 @@ sr_site_ebase_room_olympus_mons = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_olympus_mons = {
-	value = 40
+	value = 80
 	add = { value = sr_site_resort_staffed_olympus_mons multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -4950,7 +4950,7 @@ sr_site_ebase_room_hellas_planitia = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_hellas_planitia = {
-	value = 50
+	value = 100
 	add = { value = sr_site_resort_staffed_hellas_planitia multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -5198,7 +5198,7 @@ sr_site_ebase_room_utopia_planitia = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_utopia_planitia = {
-	value = 50
+	value = 100
 	add = { value = sr_site_resort_staffed_utopia_planitia multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -5444,7 +5444,7 @@ sr_site_ebase_room_arcadia_planitia = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_arcadia_planitia = {
-	value = 40
+	value = 80
 	add = { value = sr_site_resort_staffed_arcadia_planitia multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -5684,7 +5684,7 @@ sr_site_ebase_room_ceres = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_ceres = {
-	value = 40
+	value = 80
 	add = { value = sr_site_resort_staffed_ceres multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -5922,7 +5922,7 @@ sr_site_ebase_room_vesta = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_vesta = {
-	value = 25
+	value = 50
 	add = { value = sr_site_resort_staffed_vesta multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -6160,7 +6160,7 @@ sr_site_ebase_room_psyche = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_psyche = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_psyche multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -6398,7 +6398,7 @@ sr_site_ebase_room_pallas = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_pallas = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_pallas multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -6627,7 +6627,7 @@ sr_site_ebase_room_hygiea = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_hygiea = {
-	value = 15
+	value = 30
 	add = { value = sr_site_resort_staffed_hygiea multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -6865,7 +6865,7 @@ sr_site_ebase_room_io = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_io = {
-	value = 15
+	value = 30
 	add = { value = sr_site_resort_staffed_io multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -7108,7 +7108,7 @@ sr_site_ebase_room_europa = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_europa = {
-	value = 30
+	value = 60
 	add = { value = sr_site_resort_staffed_europa multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -7352,7 +7352,7 @@ sr_site_ebase_room_ganymede = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_ganymede = {
-	value = 40
+	value = 80
 	add = { value = sr_site_resort_staffed_ganymede multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -7598,7 +7598,7 @@ sr_site_ebase_room_callisto = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_callisto = {
-	value = 40
+	value = 80
 	add = { value = sr_site_resort_staffed_callisto multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -7828,7 +7828,7 @@ sr_site_ebase_room_himalia = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_himalia = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_himalia multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -8056,7 +8056,7 @@ sr_site_ebase_room_amalthea = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_amalthea = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_amalthea multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -8301,7 +8301,7 @@ sr_site_ebase_room_venus = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_venus = {
-	value = 30
+	value = 60
 	add = { value = sr_site_resort_eff_venus multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -8542,7 +8542,7 @@ sr_site_ebase_room_mercury = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_mercury = {
-	value = 25
+	value = 50
 	add = { value = sr_site_resort_staffed_mercury multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -8787,7 +8787,7 @@ sr_site_ebase_room_titan = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_titan = {
-	value = 40
+	value = 80
 	add = { value = sr_site_resort_staffed_titan multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -9027,7 +9027,7 @@ sr_site_ebase_room_enceladus = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_enceladus = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_enceladus multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -9255,7 +9255,7 @@ sr_site_ebase_room_rhea = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_rhea = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_rhea multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -9482,7 +9482,7 @@ sr_site_ebase_room_mimas = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_mimas = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_mimas multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -9710,7 +9710,7 @@ sr_site_ebase_room_iapetus = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_iapetus = {
-	value = 15
+	value = 30
 	add = { value = sr_site_resort_staffed_iapetus multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -9948,7 +9948,7 @@ sr_site_ebase_room_titania = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_titania = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_titania multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -10175,7 +10175,7 @@ sr_site_ebase_room_oberon = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_oberon = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_oberon multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -10402,7 +10402,7 @@ sr_site_ebase_room_miranda = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_miranda = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_miranda multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -10630,7 +10630,7 @@ sr_site_ebase_room_ariel = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_ariel = {
-	value = 15
+	value = 30
 	add = { value = sr_site_resort_staffed_ariel multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -10868,7 +10868,7 @@ sr_site_ebase_room_triton = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_triton = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_triton multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -11096,7 +11096,7 @@ sr_site_ebase_room_proteus = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_proteus = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_proteus multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -11334,7 +11334,7 @@ sr_site_ebase_room_pluto = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_pluto = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_pluto multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -11562,7 +11562,7 @@ sr_site_ebase_room_eris = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_eris = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_eris multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -11789,7 +11789,7 @@ sr_site_ebase_room_makemake = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_makemake = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_makemake multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -12017,7 +12017,7 @@ sr_site_ebase_room_haumea = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_haumea = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_haumea multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -12244,7 +12244,7 @@ sr_site_ebase_room_sedna = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_sedna = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_sedna multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -12466,7 +12466,7 @@ sr_site_ebase_room_shackleton = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_shackleton = {
-	value = 25
+	value = 50
 	add = { value = sr_site_resort_staffed_shackleton multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -12686,7 +12686,7 @@ sr_site_ebase_room_peary = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_peary = {
-	value = 15
+	value = 30
 	add = { value = sr_site_resort_staffed_peary multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -12907,7 +12907,7 @@ sr_site_ebase_room_tranquility = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_tranquility = {
-	value = 20
+	value = 40
 	add = { value = sr_site_resort_staffed_tranquility multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -13126,7 +13126,7 @@ sr_site_ebase_room_marius_hills = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_marius_hills = {
-	value = 40
+	value = 80
 	add = { value = sr_site_resort_staffed_marius_hills multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -13345,7 +13345,7 @@ sr_site_ebase_room_daedalus = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_daedalus = {
-	value = 10
+	value = 20
 	add = { value = sr_site_resort_staffed_daedalus multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -13566,7 +13566,7 @@ sr_site_ebase_room_imbrium = {
 }
 # Its Resort Colony room: the world's, and sr_mod_resort_room a staffed Off-World Resort level.
 sr_site_resort_room_imbrium = {
-	value = 25
+	value = 50
 	add = { value = sr_site_resort_staffed_imbrium multiply = sr_mod_resort_room floor = yes }
 }
 # Its Resort Draw, in percent: the table's, and a point (sr_mod_culture_draw) a
@@ -14834,10 +14834,10 @@ sr_resort_queued_levels = {
 }
 
 # Country scope: THIS's Resort Colony room, in levels (#1948 design § 6): Earth orbit,
-# 10 with space_colonization, and every colony that serves it.
+# 20 with space_colonization, and every colony that serves it.
 sr_resort_room_total = {
 	value = 0
-	if = { limit = { has_technology_researched = space_colonization } add = 10 }
+	if = { limit = { has_technology_researched = space_colonization } add = 20 }
 	if = { limit = { global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } } add = sr_site_resort_room_valles_marineris }
 	if = { limit = { global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } } add = sr_site_resort_room_olympus_mons }
 	if = { limit = { global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } } add = sr_site_resort_room_hellas_planitia }

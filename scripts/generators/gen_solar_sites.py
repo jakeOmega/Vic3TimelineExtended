@@ -212,53 +212,54 @@ SHIPPING: dict[str, tuple[bool, bool]] = {
 
 # The Resort Colony (#1948, docs/superpowers/specs/2026-11-21-resort-colony-building-design.md
 # § 6): each world's own room for Resort Colony levels and its draw, the throughput
-# a level there gets in percent, (room, draw). The room starts as the world's room
+# a level there gets in percent, (room, draw). The room started as the world's room
 # for people in thousands (`room`), a world that houses more people housing more
-# guests, but is its own figure, to tune on its own; Habitats and Terraforming
-# don't raise it, the Off-World Resort module does. The draw is spectacle against
-# the length of the trip, set by hand (§ 6.2's table). A table beside SITES, read
-# through Site.resort_room and Site.resort_draw, as SHIPPING is.
+# guests, and is twice that since 2026-11-28 (the owner: double the resort room
+# from every source); it is its own figure, to tune on its own. Habitats and
+# Terraforming don't raise it, the Off-World Resort module does. The draw is
+# spectacle against the length of the trip, set by hand (§ 6.2's table). A table
+# beside SITES, read through Site.resort_room and Site.resort_draw, as SHIPPING is.
 RESORTS: dict[str, tuple[int, int]] = {
-    "valles_marineris": (50, 25),  # the longest canyon in the solar system
-    "olympus_mons": (40, 25),  # the tallest volcano
-    "hellas_planitia": (50, 5),  # the deepest basin, the thickest air on Mars
-    "utopia_planitia": (50, 0),
-    "arcadia_planitia": (40, 0),
-    "ceres": (40, 5),  # Occator's bright salt spots
-    "vesta": (25, 10),  # Rheasilvia's central peak, more than twice Everest
-    "psyche": (20, 0),  # bare metal
-    "pallas": (20, -5),
-    "hygiea": (15, -10),
-    "io": (15, -5),  # volcanoes inside the radiation belts
-    "europa": (30, 0),  # Jupiter overhead, hard radiation
-    "ganymede": (40, 0),
-    "callisto": (40, 10),  # Jupiter in the sky, outside the radiation belts
-    "himalia": (10, -15),
-    "amalthea": (10, -5),  # Jupiter close up, inside the belts
-    "venus": (30, 15),  # a city floating in the clouds
-    "mercury": (25, -5),  # the Sun up to three times as large
-    "titan": (40, 10),  # flying in thick air over methane lakes
-    "enceladus": (20, 15),  # ice geysers under Saturn
-    "rhea": (20, 5),  # Saturn filling the sky
-    "mimas": (10, 5),  # Herschel crater
-    "iapetus": (15, 15),  # the only large moon that sees the rings at an angle
-    "titania": (20, -15),
-    "oberon": (20, -15),
-    "miranda": (10, 0),  # Verona Rupes, the tallest cliff known, at the edge of the trip
-    "ariel": (15, -15),
-    "triton": (20, -5),  # nitrogen geysers, Neptune overhead, years out
-    "proteus": (10, -25),
-    "pluto": (20, -10),  # the heart's nitrogen plains, Charon overhead
-    "eris": (10, -30),
-    "makemake": (10, -30),
-    "haumea": (10, -25),  # a ring and a four-hour day
-    "sedna": (10, -35),
-    "shackleton": (25, 15),  # near-endless sunlight on the rim, Earth on the horizon
-    "peary": (15, 10),  # the north pole's sunlit rim
-    "tranquility": (20, 30),  # Apollo 11's landing site, three days from home
-    "marius_hills": (40, 15),  # lava tubes to walk through
-    "daedalus": (10, 0),  # the far side: no Earth in the sky
-    "imbrium": (25, 10),  # Earth over the grey plains
+    "valles_marineris": (100, 25),  # the longest canyon in the solar system
+    "olympus_mons": (80, 25),  # the tallest volcano
+    "hellas_planitia": (100, 5),  # the deepest basin, the thickest air on Mars
+    "utopia_planitia": (100, 0),
+    "arcadia_planitia": (80, 0),
+    "ceres": (80, 5),  # Occator's bright salt spots
+    "vesta": (50, 10),  # Rheasilvia's central peak, more than twice Everest
+    "psyche": (40, 0),  # bare metal
+    "pallas": (40, -5),
+    "hygiea": (30, -10),
+    "io": (30, -5),  # volcanoes inside the radiation belts
+    "europa": (60, 0),  # Jupiter overhead, hard radiation
+    "ganymede": (80, 0),
+    "callisto": (80, 10),  # Jupiter in the sky, outside the radiation belts
+    "himalia": (20, -15),
+    "amalthea": (20, -5),  # Jupiter close up, inside the belts
+    "venus": (60, 15),  # a city floating in the clouds
+    "mercury": (50, -5),  # the Sun up to three times as large
+    "titan": (80, 10),  # flying in thick air over methane lakes
+    "enceladus": (40, 15),  # ice geysers under Saturn
+    "rhea": (40, 5),  # Saturn filling the sky
+    "mimas": (20, 5),  # Herschel crater
+    "iapetus": (30, 15),  # the only large moon that sees the rings at an angle
+    "titania": (40, -15),
+    "oberon": (40, -15),
+    "miranda": (20, 0),  # Verona Rupes, the tallest cliff known, at the edge of the trip
+    "ariel": (30, -15),
+    "triton": (40, -5),  # nitrogen geysers, Neptune overhead, years out
+    "proteus": (20, -25),
+    "pluto": (40, -10),  # the heart's nitrogen plains, Charon overhead
+    "eris": (20, -30),
+    "makemake": (20, -30),
+    "haumea": (20, -25),  # a ring and a four-hour day
+    "sedna": (20, -35),
+    "shackleton": (50, 15),  # near-endless sunlight on the rim, Earth on the horizon
+    "peary": (30, 10),  # the north pole's sunlit rim
+    "tranquility": (40, 30),  # Apollo 11's landing site, three days from home
+    "marius_hills": (80, 15),  # lava tubes to walk through
+    "daedalus": (20, 0),  # the far side: no Earth in the sky
+    "imbrium": (50, 10),  # Earth over the grey plains
 }
 
 # Discoveries' site boons (the owner, 2026-11-25: "module-specific modifiers that
@@ -514,9 +515,10 @@ NEAR_EARTH_TECH = "asteroid_mining"
 OVERFLOW_GRADE = -75
 
 # The Resort Colony (#1948 design § 6.1): Earth orbit's room, for every country
-# with the building's technology, at draw 0; the draw of a level past all of the
+# with the building's technology, at draw 0 (10 until 2026-11-28, when the owner
+# doubled the resort room from every source); the draw of a level past all of the
 # room, the base's figure but its own constant.
-ORBIT_RESORT_ROOM = 10
+ORBIT_RESORT_ROOM = 20
 RESORT_TECH = "space_colonization"
 RESORT_OVERFLOW_DRAW = -75
 

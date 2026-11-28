@@ -1275,23 +1275,27 @@ colonies of different types (16 Psyche and Ceres are the design's example).
 ## The Resort Colony, a building of its own (#1948, 2026-11-21)
 
 The Resort Colony method left the Extraplanetary Base for `building_space_resort`, whose levels work their own room
-(10 in Earth orbit, each colony's `RESORTS` figure, 10 a staffed Off-World Resort level) best draw first, −75% past
-it. No self-check: the fill, the refresh and the building's throughput type are the base's, which work.
+(20 in Earth orbit, each colony's `RESORTS` figure, 20 a staffed Off-World Resort level; each was half that until
+the owner doubled them, 2026-11-28) best draw first, −75% past it. No self-check: the fill, the refresh and the building's throughput type are the base's, which work.
 
 1. **It appears and is held to the room.** With Space Colonization, the Resort Colony is in the build list, and the
    base's production methods no longer list the Resort Colony. Under Simple or Full Colonies an AI government and
    private investors stop at the room (built and queued); your government builds past it.
 2. **The draw.** Holding Tranquility Base with its room filled, the building's throughput breakdown shows Resort
-   Colony Room at the average draw (+30% with 30 levels in Tranquility's 20 and Earth orbit's 10: +20%). One level
+   Colony Room at the average draw (+30% with 60 levels in Tranquility's 40 and Earth orbit's 20: +20%). One level
    past all of the room pulls it toward −75%. The overview's Resort Room cell reads built and queued against room,
    red past it, and "next at" the next level's draw.
 3. **The module.** Before Space Colonization the Off-World Resort's + button is grayed with "We have Space
-   Colonization". After it, a staffed level raises the colony's resort room by 10 within a month, on its page's
+   Colonization". After it, a staffed level raises the colony's resort room by 20 within a month, on its page's
    Resort Room tile and in the overview.
 4. **An old save.** A base still on the Resort Colony method (if a pre-#1948 save is at hand): note which method the
    engine gives it, and that the log names nothing about the missing method. *Answered in part (owner, 2026-11-26):
    the base swaps to another method of its group on the next weekly tick. Still open: which method it gets, and
    whether the log names it.*
+5. **Solar System's line, with the room doubled** (2026-11-28). Under Valles Marineris, Hellas Planitia and Utopia
+   Planitia the resort cell reads "100 (+25%)", "100 (+5%)" and "100 (+0%)" without "...", in Solar System and in the
+   colony target popup; the slots cell before it, narrowed to one digit to make the room, still shows its Habitat cap
+   (1 to 4) whole.
 
 ## The Resort Colony free of its state (#1953, 2026-11-22)
 

@@ -49,13 +49,14 @@ class ResortTableTest(unittest.TestCase):
     def test_every_site_has_a_resort_row(self):
         self.assertEqual(set(gss.RESORTS), {s.key for s in gss.SITES})
 
-    def test_room_is_the_worlds_room_for_now(self):
+    def test_room_is_twice_the_worlds_room_for_now(self):
         # The design's starting value (§ 6.1): a world that houses more people
-        # houses more guests. A later tune of one world changes this test on purpose.
+        # houses more guests; doubled on 2026-11-28 (the owner: double the resort
+        # room from every source). A later tune of one world changes this test on purpose.
         for site in gss.SITES:
             with self.subTest(site=site.key):
-                self.assertEqual(site.resort_room, site.room)
-        self.assertEqual(sum(s.resort_room for s in gss.SITES), 945)
+                self.assertEqual(site.resort_room, 2 * site.room)
+        self.assertEqual(sum(s.resort_room for s in gss.SITES), 1890)
 
     def test_draws_are_the_designs(self):
         self.assertEqual({s.key: s.resort_draw for s in gss.SITES}, DRAWS)
@@ -64,7 +65,7 @@ class ResortTableTest(unittest.TestCase):
             self.assertTrue(-35 <= draw <= 30)
 
     def test_constants(self):
-        self.assertEqual(gss.ORBIT_RESORT_ROOM, 10)
+        self.assertEqual(gss.ORBIT_RESORT_ROOM, 20)
         self.assertEqual(gss.RESORT_TECH, "space_colonization")
         self.assertEqual(gss.RESORT_OVERFLOW_DRAW, -75)
 
@@ -90,7 +91,7 @@ class ResortRoomTest(unittest.TestCase):
     def test_room_total(self):
         room = _block(_values(), "sr_resort_room_total")
         self.assertIn("value = 0", room)
-        self.assertIn("if = { limit = { has_technology_researched = space_colonization } add = 10 }", room)
+        self.assertIn("if = { limit = { has_technology_researched = space_colonization } add = 20 }", room)
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertIn(f"{gss.site_serves(site)} }} add = sr_site_resort_room_{site.key} }}", room)
@@ -112,7 +113,7 @@ class ResortRoomTest(unittest.TestCase):
         for site in gss.SITES:
             with self.subTest(site=site.key):
                 self.assertEqual(fill.count(f"max = sr_site_resort_room_{site.key} "), 1)
-        self.assertEqual(fill.count("max = 10 "), 1)
+        self.assertEqual(fill.count("max = 20 "), 1)
         self.assertIn("multiply = -75 add = local_var:sr_rs_sum", fill)
         # A colony's levels x its draw, with its Cultural Centers' points (the owner,
         # 2026-11-24), join the sum, a table draw of 0 too; Earth orbit's 0 adds nothing.
@@ -145,7 +146,7 @@ class ResortRoomTest(unittest.TestCase):
 
     def test_hand_values(self):
         values = _strip(_raw("common", "script_values", "sr_colony_module_values.txt"))
-        self.assertRegex(values, r"(?m)^sr_mod_resort_room = \{ value = 10 \}")
+        self.assertRegex(values, r"(?m)^sr_mod_resort_room = \{ value = 20 \}")
         # Each state's colony by the engine's b: lookup, never a walk of its buildings: the private
         # investment pass reads the queued count in every state.
         levels = _block(_values(), "sr_resort_levels")  # gss.render_room_levels (#1951)
