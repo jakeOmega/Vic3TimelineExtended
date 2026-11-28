@@ -24,9 +24,10 @@ te_ai_power_pass_on_action = {
 
 # TEMPORARY self-check (2026-11-28, #1877): are the plant levels the pass queues as government construction built?
 # The paid arm of the 2026-11-22 test runs (Hpaid) queued plants the same way and France built none of its 24, so
-# whether a queued batch is built, or waits until it is dropped, is the pass's engine unknown. Read once, when
-# TE_AI_POWER_CHECK_BATCHES batches are decided (te_ai_power_follow: all built, or ended with the government queue
-# empty or after TE_AI_POWER_FOLLOW_MONTHS), on the levels of those batches built and lost:
+# whether a queued batch is built, or waits until it is dropped, is the pass's engine unknown. A closed cohort, the
+# first TE_AI_POWER_COHORT batches queued in a game, read once TE_AI_POWER_COHORT_READ of them are decided (te_ai_power_follow: all built,
+# or ended with the government queue empty or after TE_AI_POWER_FOLLOW_MONTHS), on its levels built and lost: the
+# first batches decided are the quick builds, so a verdict on those would read OK whatever the loss rate.
 #   START       a plain marker, logged first: with no verdict line after it, the templated line was dropped.
 #   OK          a quarter or fewer of the decided levels lost.
 #   BROKEN      half or more lost: queued plants are not built. Fallback: the owner's (2026-11-28) "If that doesn't
@@ -38,7 +39,7 @@ te_ai_power_pass_on_action = {
 te_ai_power_pass_selfcheck = {
 	trigger = {
 		NOT = { has_global_variable = te_ai_power_pass_checked }
-		te_ai_power_decided_g >= TE_AI_POWER_CHECK_BATCHES
+		te_ai_power_cohort_decided_g >= TE_AI_POWER_COHORT_READ
 	}
 	effect = {
 		set_global_variable = te_ai_power_pass_checked
@@ -46,14 +47,14 @@ te_ai_power_pass_selfcheck = {
 		random_country = {
 			if = {
 				limit = { te_ai_power_lost_share <= 0.25 }
-				debug_log = "TE_SELF_CHECK OK ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the plants the pass queues get built)"
+				debug_log = "TE_SELF_CHECK OK ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] cohort=[SCOPE.ScriptValue('te_ai_power_cohort_decided_g')|0] cohort_built=[SCOPE.ScriptValue('te_ai_power_cohort_built_g')|0] cohort_lost=[SCOPE.ScriptValue('te_ai_power_cohort_lost_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the plants the pass queues get built)"
 			}
 			else_if = {
 				limit = { te_ai_power_lost_share >= 0.5 }
-				debug_log = "TE_SELF_CHECK BROKEN ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (half or more of the queued plant levels were dropped: fallback in te_ai_power_pass_on_actions.txt)"
+				debug_log = "TE_SELF_CHECK BROKEN ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] cohort=[SCOPE.ScriptValue('te_ai_power_cohort_decided_g')|0] cohort_built=[SCOPE.ScriptValue('te_ai_power_cohort_built_g')|0] cohort_lost=[SCOPE.ScriptValue('te_ai_power_cohort_lost_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (half or more of the queued plant levels were dropped: fallback in te_ai_power_pass_on_actions.txt)"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK NO_VERDICT ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (between a quarter and half lost)"
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_power_pass batches=[SCOPE.ScriptValue('te_ai_power_batches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_levels_g')|0] cohort=[SCOPE.ScriptValue('te_ai_power_cohort_decided_g')|0] cohort_built=[SCOPE.ScriptValue('te_ai_power_cohort_built_g')|0] cohort_lost=[SCOPE.ScriptValue('te_ai_power_cohort_lost_g')|0] decided=[SCOPE.ScriptValue('te_ai_power_decided_g')|0] built=[SCOPE.ScriptValue('te_ai_power_built_g')|0] lost=[SCOPE.ScriptValue('te_ai_power_lost_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (between a quarter and half lost)"
 			}
 		}
 	}

@@ -175,6 +175,7 @@ class Gates(unittest.TestCase):
         gate = _norm(_block(_code(TRIGGERS), "te_ai_power_pass_may_queue"))
         for line in ("is_ai = yes", "has_technology_researched = electrical_generation", "in_default = no",
                      "is_construction_paused = no", "construction_queue_government_duration < 52",
+                     "te_ai_power_pending_count < TE_AI_POWER_MAX_PENDING",
                      "NOT = { is_country_type = decentralized }"):
             with self.subTest(line=line):
                 self.assertIn(line, gate)
@@ -182,7 +183,11 @@ class Gates(unittest.TestCase):
     def test_short_counts_the_lights(self):
         short = _norm(_block(_code(VALUES), "te_ai_power_short"))
         self.assertEqual(short, "value = te_grid_electricity_consumption add = te_ai_power_light_need "
-                                "subtract = te_grid_electricity_production min = 0")
+                                "subtract = te_ai_power_supply min = 0")
+        # What it can count on is its plants' capacity, or what is made there if more.
+        supply = _norm(_block(_code(VALUES), "te_ai_power_supply"))
+        self.assertEqual(supply, "value = te_grid_electricity_production if = { limit = { te_ai_power_plant_capacity > "
+                                 "te_grid_electricity_production } value = te_ai_power_plant_capacity }")
 
     def test_electric_lights_only(self):
         effects = _code(EFFECTS)
@@ -195,6 +200,13 @@ class Gates(unittest.TestCase):
         site = _norm(_block(_code(TRIGGERS), "te_ai_power_light_site"))
         self.assertIn("can_activate_production_method = { building_type = building_urban_center "
                       "production_method = pm_electric_streetlights }", site)
+        self.assertIn("te_ai_power_spare >= te_ai_power_switch_threshold", site)
+        self.assertIn("NOT = { has_variable = te_ai_power_revert_wait }", site)
+
+    def test_a_revert_waits(self):
+        effect = _norm(_block(_code(EFFECTS), "te_ai_power_pass_effect"))
+        self.assertIn("remove_variable = te_ai_power_lit set_variable = { name = te_ai_power_revert_wait value = yes "
+                      "days = 180 }", effect)
 
 
 class Hooks(unittest.TestCase):
@@ -215,7 +227,7 @@ class Hooks(unittest.TestCase):
                       "min = 0 max = 1 check_range_bounds = no te_ai_power_queue_batch = yes }", effect)
         # The output per level is stored before any state reads it.
         self.assertLess(effect.index("set_variable = { name = te_ai_power_level_output"),
-                        effect.index("ordered_scope_state"))
+                        effect.index("every_scope_state"))
 
     def test_counters_start_at_zero(self):
         body = _norm(_block(_code(EFFECTS), "te_ai_power_count"))
@@ -226,6 +238,16 @@ class Hooks(unittest.TestCase):
 
 
 class SelfChecks(unittest.TestCase):
+    def test_build_check_reads_a_closed_cohort(self):
+        batch = _norm(_block(_code(EFFECTS), "te_ai_power_queue_batch"))
+        self.assertIn("if = { limit = { te_ai_power_cohort_g < TE_AI_POWER_COHORT } set_variable = te_ai_power_in_cohort",
+                      batch)
+        check = _norm(_block(_code(ON_ACTIONS), "te_ai_power_pass_selfcheck"))
+        self.assertIn("te_ai_power_cohort_decided_g >= TE_AI_POWER_COHORT_READ", check)
+        self.assertLessEqual(_constant("TE_AI_POWER_COHORT_READ"), _constant("TE_AI_POWER_COHORT"))
+        share = _norm(_block(_code(VALUES), "te_ai_power_lost_share"))
+        self.assertTrue(share.startswith("value = te_ai_power_cohort_lost_g "), share)
+
     def test_each_reads_once_with_a_start_line(self):
         code = _code(ON_ACTIONS)
         for name, flag in (("ai_power_pass", "te_ai_power_pass_checked"),

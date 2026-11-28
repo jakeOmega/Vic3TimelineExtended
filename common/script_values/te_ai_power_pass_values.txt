@@ -54,22 +54,61 @@ te_ai_power_light_need = {
 	}
 }
 
+# State scope. What the state's coal and oil plants make at full staff at the country's best method. A plant hires
+# only as it finds buyers, so what it makes lags this (the 1925 test run of 2026-11-28: the 20 largest AI
+# economies' plants 12-91% staffed, two years after the pass began); sizing and switching by what is made would
+# queue again for plants that only lack workers, and never switch a state whose new plant waits for its buyers.
+# 0 for a country the pass has not reached (no Electrical Generation yet).
+te_ai_power_plant_capacity = {
+	value = 0
+	if = {
+		limit = { owner = { has_variable = te_ai_power_level_output } }
+		value = te_ai_power_plant_levels
+		multiply = owner.var:te_ai_power_level_output
+	}
+}
+
+# State scope. What the state can count on: its plants' capacity, or what is made in it if more (another kind of
+# plant, a Grid Transfer Station's delivery).
+te_ai_power_supply = {
+	value = te_grid_electricity_production
+	if = {
+		limit = { te_ai_power_plant_capacity > te_grid_electricity_production }
+		value = te_ai_power_plant_capacity
+	}
+}
+
 # State scope. How much Electricity the state is short of: what it buys, plus what its urban centers would buy on
-# electric lights, less what is made in it (its plants, and a Grid Transfer Station's delivery). Not what it buys
-# alone: a state with no power can't run the methods that use it, so it would read as needing none
-# (scripting_best_practices.md § "AI and Cost-Only Buildings"). Last week's figures; never below zero.
+# electric lights, less what it can count on (te_ai_power_supply). Not what it buys alone: a state with no power
+# can't run the methods that use it, so it would read as needing none (scripting_best_practices.md § "AI and
+# Cost-Only Buildings"). Last week's figures; never below zero.
 te_ai_power_short = {
 	value = te_grid_electricity_consumption
 	add = te_ai_power_light_need
-	subtract = te_grid_electricity_production
+	subtract = te_ai_power_supply
 	min = 0
 }
 
 # The most levels the pass queues in a state at once. A level is 400 points (construction_cost_medium), so a batch
-# of 5 is 2,000, about 40 weeks of a large 1920s government's own construction; a state that needs more gets its
-# next batch once this one is decided (te_ai_power_follow). Raising it fills the queue faster and pushes the
-# country's other government building further back.
-TE_AI_POWER_MAX_BATCH = 5
+# of 10 is 4,000. A large city's lights take more than that (a 200-level urban center takes 600 Electricity, 24
+# levels of the early plant); a state that needs more gets its next batch once this one is decided
+# (te_ai_power_follow). The 1925 test run's batches of at most 5 left the 20 largest buying twice what they made.
+TE_AI_POWER_MAX_BATCH = 10
+
+# The most batches of the pass's a country waits on at once. The government queue's length in weeks
+# (construction_queue_government_duration, "very roughly approximated" in the engine's own words) never held the
+# pass back in the 1925 test run: France had 28 batches waiting at the end, the USA 29, and a third of the levels
+# decided were lost to the 30-month limit. Three keeps the queue for the country's other government building.
+TE_AI_POWER_MAX_PENDING = 3
+
+# Country scope. The batches of the pass's the country waits on.
+te_ai_power_pending_count = {
+	value = 0
+	every_scope_state = {
+		limit = { has_variable = te_ai_power_pending }
+		add = 1
+	}
+}
 
 # State scope. Levels of the coal and oil plant that would cover te_ai_power_short at the country's best method,
 # rounded to the nearest, at most TE_AI_POWER_MAX_BATCH: a state short of under half a level's output gets none.
@@ -102,15 +141,15 @@ te_ai_power_follow_missing = {
 	subtract = te_ai_power_follow_got
 }
 
-# The share of the light need the state's spare Electricity must cover before its urban centers switch to electric
-# lights, where no batch of the pass was just finished there: half. The rest shows as a shortage, which raises the
-# price and draws the next batch and investors; waiting for the whole need would leave a part-built plant with no
-# buyers, which loses its workers.
-TE_AI_POWER_SWITCH_SHARE = 0.5
+# The share of the light need the state's spare must cover before its urban centers switch to electric lights:
+# four-fifths. The 1925 test run switched at half (or just after a batch, whatever its size) and the AI put 47% of
+# the switches back on gas or no lighting, short of Electricity; the plants' capacity, not what they make, is read,
+# so a new plant with no buyers yet still counts.
+TE_AI_POWER_SWITCH_SHARE = 0.8
 
-# State scope. Electricity made in the state and not bought there.
+# State scope. What the state can count on and does not already buy.
 te_ai_power_spare = {
-	value = te_grid_electricity_production
+	value = te_ai_power_supply
 	subtract = te_grid_electricity_consumption
 }
 
@@ -120,8 +159,14 @@ te_ai_power_switch_threshold = {
 	multiply = TE_AI_POWER_SWITCH_SHARE
 }
 
-# The self-checks' thresholds (te_ai_power_pass_on_actions.txt).
-TE_AI_POWER_CHECK_BATCHES = 30
+# The self-checks' thresholds (te_ai_power_pass_on_actions.txt). The build check follows a closed cohort, the first
+# TE_AI_POWER_COHORT batches queued in a game, and reads once every one is decided: the first batches decided are the
+# quick builds (losses show only at the 30-month limit), so a verdict on them reads OK whatever the loss rate (the
+# 1925 test run: OK on the first 32 decided, none lost; 35% of levels lost by the end).
+TE_AI_POWER_COHORT = 40
+# Read once this many of the cohort are decided: a batch whose state passes to a country that does not follow it (a
+# player, or one without Electrical Generation) would otherwise hold the verdict for good.
+TE_AI_POWER_COHORT_READ = 36
 TE_AI_POWER_CHECK_SWITCHES = 20
 
 # The pass's global counters (te_ai_power_count), 0 while unset, for the self-checks and their lines.
@@ -181,12 +226,40 @@ te_ai_power_reverts_g = {
 		value = global_var:te_ai_power_g_reverts
 	}
 }
-# Of the levels whose batch is decided, the share lost; and of the light switches, the share the AI undid.
+te_ai_power_cohort_g = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_ai_power_g_cohort }
+		value = global_var:te_ai_power_g_cohort
+	}
+}
+te_ai_power_cohort_decided_g = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_ai_power_g_cohort_decided }
+		value = global_var:te_ai_power_g_cohort_decided
+	}
+}
+te_ai_power_cohort_built_g = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_ai_power_g_cohort_built }
+		value = global_var:te_ai_power_g_cohort_built
+	}
+}
+te_ai_power_cohort_lost_g = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_ai_power_g_cohort_lost }
+		value = global_var:te_ai_power_g_cohort_lost
+	}
+}
+# Of the cohort's levels, the share lost; and of the light switches, the share the AI undid.
 te_ai_power_lost_share = {
-	value = te_ai_power_lost_g
+	value = te_ai_power_cohort_lost_g
 	divide = {
-		value = te_ai_power_built_g
-		add = te_ai_power_lost_g
+		value = te_ai_power_cohort_built_g
+		add = te_ai_power_cohort_lost_g
 		min = 1
 	}
 }

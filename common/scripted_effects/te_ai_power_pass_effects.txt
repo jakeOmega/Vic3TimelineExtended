@@ -13,9 +13,10 @@
 # What it does, monthly for each AI country with Electrical Generation:
 #   1. follows each batch of plant levels it queued (te_ai_power_follow);
 #   2. switches to electric street lights the urban centers of each state whose power now covers them
-#      (te_ai_power_light_site), and notes a state where the AI put them back on no lighting or gas;
-#   3. where the country may queue (te_ai_power_pass_may_queue: under a year of government construction queued, not
-#      in default), queues in one state a month, the one shortest of Electricity, a batch of vanilla's
+#      (te_ai_power_light_site), and notes a state where the AI put them back on no lighting or gas (and leaves it
+#      for 180 days);
+#   3. where the country may queue (te_ai_power_pass_may_queue: under a year of government construction queued,
+#      fewer than TE_AI_POWER_MAX_PENDING batches of the pass's waiting, not in default), queues in one state a month, the one shortest of Electricity, a batch of vanilla's
 #      coal and oil plant sized to what the state is short of with its lights counted (te_ai_power_levels_wanted, at
 #      most TE_AI_POWER_MAX_BATCH levels). Government construction, the country's own treasury: the owner,
 #      2026-11-28, "Government construction is the natural way to do it."
@@ -24,6 +25,7 @@
 te_ai_power_pass_effect = {
 	if = {
 		limit = { has_technology_researched = electrical_generation }
+		set_variable = { name = te_ai_power_level_output value = te_ai_power_level_output_value }
 		every_scope_state = {
 			limit = { has_variable = te_ai_power_pending }
 			te_ai_power_follow = yes
@@ -33,6 +35,7 @@ te_ai_power_pass_effect = {
 			if = {
 				limit = { te_ai_power_lights_unswitched = yes }
 				remove_variable = te_ai_power_lit
+				set_variable = { name = te_ai_power_revert_wait value = yes days = 180 }
 				te_ai_power_count = { NAME = te_ai_power_g_reverts ADD = 1 }
 			}
 		}
@@ -48,7 +51,6 @@ te_ai_power_pass_effect = {
 		}
 		if = {
 			limit = { te_ai_power_pass_may_queue = yes }
-			set_variable = { name = te_ai_power_level_output value = te_ai_power_level_output_value }
 			ordered_scope_state = {
 				limit = { te_ai_power_pass_site = yes }
 				order_by = te_ai_power_short
@@ -78,6 +80,11 @@ te_ai_power_queue_batch = {
 	set_variable = te_ai_power_pending
 	te_ai_power_count = { NAME = te_ai_power_g_batches ADD = 1 }
 	te_ai_power_count = { NAME = te_ai_power_g_levels ADD = var:te_ai_power_want }
+	if = {
+		limit = { te_ai_power_cohort_g < TE_AI_POWER_COHORT }
+		set_variable = te_ai_power_in_cohort
+		te_ai_power_count = { NAME = te_ai_power_g_cohort ADD = 1 }
+	}
 }
 
 # State scope, monthly, for a state with a batch followed. Decided when:
@@ -85,8 +92,7 @@ te_ai_power_queue_batch = {
 #     the same allowance as the build pass's follow, ai.md § AI Government Construction);
 #   - ended: the government queue is empty with the batch not all built (the rest was dropped, or the state's
 #     levels went to another use), or TE_AI_POWER_FOLLOW_MONTHS have passed.
-# A batch decided with some levels built marks the state for the light switch (te_ai_power_batch_built, 90 days).
-# The self-check counts levels built and levels lost.
+# The self-check counts the levels built and lost of the first TE_AI_POWER_COHORT batches queued in a game.
 te_ai_power_follow = {
 	change_variable = { name = te_ai_power_months add = 1 }
 	if = {
@@ -95,7 +101,12 @@ te_ai_power_follow = {
 		}
 		te_ai_power_count = { NAME = te_ai_power_g_built ADD = var:te_ai_power_want }
 		te_ai_power_count = { NAME = te_ai_power_g_decided ADD = 1 }
-		set_variable = { name = te_ai_power_batch_built value = yes days = 90 }
+		if = {
+			limit = { has_variable = te_ai_power_in_cohort }
+			te_ai_power_count = { NAME = te_ai_power_g_cohort_built ADD = var:te_ai_power_want }
+			te_ai_power_count = { NAME = te_ai_power_g_cohort_lost ADD = 0 }
+			te_ai_power_count = { NAME = te_ai_power_g_cohort_decided ADD = 1 }
+		}
 		te_ai_power_follow_end = yes
 	}
 	else_if = {
@@ -109,8 +120,10 @@ te_ai_power_follow = {
 		te_ai_power_count = { NAME = te_ai_power_g_lost ADD = te_ai_power_follow_missing }
 		te_ai_power_count = { NAME = te_ai_power_g_decided ADD = 1 }
 		if = {
-			limit = { te_ai_power_follow_got > 0 }
-			set_variable = { name = te_ai_power_batch_built value = yes days = 90 }
+			limit = { has_variable = te_ai_power_in_cohort }
+			te_ai_power_count = { NAME = te_ai_power_g_cohort_built ADD = te_ai_power_follow_got }
+			te_ai_power_count = { NAME = te_ai_power_g_cohort_lost ADD = te_ai_power_follow_missing }
+			te_ai_power_count = { NAME = te_ai_power_g_cohort_decided ADD = 1 }
 		}
 		te_ai_power_follow_end = yes
 	}
@@ -118,6 +131,10 @@ te_ai_power_follow = {
 
 te_ai_power_follow_end = {
 	remove_variable = te_ai_power_pending
+	if = {
+		limit = { has_variable = te_ai_power_in_cohort }
+		remove_variable = te_ai_power_in_cohort
+	}
 	remove_variable = te_ai_power_want
 	remove_variable = te_ai_power_base
 	remove_variable = te_ai_power_months

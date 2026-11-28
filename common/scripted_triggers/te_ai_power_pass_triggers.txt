@@ -14,6 +14,7 @@ te_ai_power_pass_may_queue = {
 	in_default = no
 	is_construction_paused = no
 	construction_queue_government_duration < 52
+	te_ai_power_pending_count < TE_AI_POWER_MAX_PENDING
 }
 
 # State scope. The state's urban centers are on no street lighting or gas lights.
@@ -44,18 +45,16 @@ te_ai_power_pass_site = {
 }
 
 # State scope. An AI state whose urban centers should switch to electric street lights now: they are on no lighting
-# or gas lights, the method is open to them, and either a batch of the pass's was just finished in the state
-# (te_ai_power_batch_built, set for 90 days: a new plant's output lags its hiring) or the state's spare Electricity
-# covers TE_AI_POWER_SWITCH_SHARE of what the lights would take (another plant, an investor's, a Grid Transfer
-# Station's delivery).
+# or gas lights, the method is open to them, what the state can count on and does not already buy (te_ai_power_spare:
+# its plants' capacity, or what is made there if more) covers TE_AI_POWER_SWITCH_SHARE of what the lights would
+# take, and the AI has not put them back in the last 180 days (te_ai_power_revert_wait: a state switched back is
+# short of power, and switching it again each month only flips its lights).
 te_ai_power_light_site = {
 	te_ai_power_lights_unswitched = yes
+	NOT = { has_variable = te_ai_power_revert_wait }
 	can_activate_production_method = {
 		building_type = building_urban_center
 		production_method = pm_electric_streetlights
 	}
-	OR = {
-		has_variable = te_ai_power_batch_built
-		te_ai_power_spare >= te_ai_power_switch_threshold
-	}
+	te_ai_power_spare >= te_ai_power_switch_threshold
 }
