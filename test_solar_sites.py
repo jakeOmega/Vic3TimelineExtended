@@ -1421,7 +1421,7 @@ class ModulesTest(unittest.TestCase):
                 build = "sr_mod_fab_build_lunar" if site in gss.LUNAR else "sr_mod_fab_build"
                 for t in gss.module_types(site):
                     # A Terraforming level for a world finished meanwhile is dropped unbuilt.
-                    extra = f" sr_site_terra_open_{site.key} = yes" if t == "terra" else ""
+                    extra = f" sr_world_terra_open_{gss.world_of(site)} = yes" if t == "terra" else ""
                     self.assertIn(f"local_var:sr_mq_head_type = {gss.MODULE_CODES[t]}{extra} }} {build} = "
                                   f"{{ KEY = {site.key} TYPE = {t} CODE = {gss.MODULE_CODES[t]} INDEX = {site.index} }}",
                                   head)

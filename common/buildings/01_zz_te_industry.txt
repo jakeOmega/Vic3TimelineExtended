@@ -13,7 +13,7 @@
 
 building_synthetics_plant_silk = {
 	building_group = bg_heavy_industry
-	icon = "gfx/interface/icons/building_icons/synthetics_plants.dds"
+	icon = "gfx/interface/icons/building_icons/building_synthetics_plant_silk.dds"
 	city_type = city
 	levels_per_mesh = -1
 

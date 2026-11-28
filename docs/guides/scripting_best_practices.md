@@ -5661,6 +5661,22 @@ gaining), so don't carry this rule over to them. Every vanilla directed pact nam
 pair exactly, which reads as vanilla's whichever side the engine means (`fund_lobbies` 1,000 for
 interference, `increase_relations` 1,000 for aid). The audit's pact rule holds that (#1380).
 
+## Script raises a country's interest in a region with `add_involvement`; no effect declares an interest
+
+There is no "declare interest" effect, and a search of the effect list for "interest" finds
+only the interest-marker iterators, which is how a design came to say script can't do it
+(2026-11-28). Interest tiers come from Involvement, and script adds that directly, in country
+scope:
+
+```
+add_involvement = { strategic_region = sr:region_pacific_coast value = 2500 }
+```
+
+That is vanilla's only use (a journal entry's option). `has_strategic_region_interest_tier`
+reads the tier that results. Not yet known, and to be checked in game before a design leans
+on them: whether Involvement added this way stays, decays or sits under a cap like the
+treaties' 5,000 a region, and whether a negative `value` takes it back.
+
 ## An "at least tier N" trigger must list every higher tier — extending a ladder breaks the short ones
 
 Script often reads a tiered entity's level with an OR-list, because the engine has no

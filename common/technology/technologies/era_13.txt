@@ -314,7 +314,7 @@ post-scarcity_economy = {
 }
 
 terraforming = {
-	# The Terraforming colony module on Mars, Venus, Titan, Ganymede and Callisto (era 13 spec § 7.11):
+	# The Terraforming colony module on the worlds of gen_solar_sites.TERRA_WORLDS (era 13 spec § 7.11):
 	# its marker below, which the module's queue reads. Geoengineering is the same practice at home
 	era = era_13
 	texture = "gfx/interface/icons/invention_icons/terraforming.dds"

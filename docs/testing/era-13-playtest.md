@@ -547,47 +547,66 @@ shock.
 ## Phase 3: Terraforming
 
 The Terraforming colony module (`docs/systems/mod_systems/space_race.md` §
-Colony modules), under Simple or Full Colonies. `event te_debug_space_race.4`
-logs every colony's modules and work done (**a**, `TE_SR_MODULES … terraformed=N/900
-months`), fills the stock (**b**), queues one of each module the first colony
-allows (**c**), lands shipments now (**e**) and runs ten years of terraforming
-at this month's pace (**i**).
+Colony modules), under Simple or Full Colonies. The work is the world's (the
+owner, 2026-11-28): Mars's five sites are one world, the Moon's six another, and
+each world has a difficulty (Mars 1, Callisto and Ganymede 2, Titan, Europa and
+the Moon 3, Venus 4, Mercury 5) that multiplies its job and its cap.
+`event te_debug_space_race.4` logs every colony's modules and its world's work
+(**a**, `TE_SR_MODULES … mars_terraformed=N/4500 months`), fills the stock
+(**b**), queues one of each module the first colony allows (**c**), lands
+shipments now (**e**) and runs ten years of terraforming at this month's pace
+at every colony of ours (**i**).
 
 1. **The tree.** Terraforming sits in era 13's society column with arrows from
-   Space Colonization and Geoengineering, on Space Colonization's icon until
-   its own is painted. Its tooltip lists Terraforming for Colonies, whose hover
-   names Mars, Venus, Titan, Ganymede and Callisto.
+   Space Colonization and Geoengineering. Its tooltip lists Terraforming for
+   Colonies, whose hover names the Moon, Mercury, Venus, Mars, Europa,
+   Ganymede, Callisto and Titan.
 2. **The line.** Before the technology a Mars colony's Modules view shows the
    usual three lines of cells and no Terraforming line. After it, a fourth
-   line shows on the Martian sites, Venus, Titan, Ganymede and Callisto only:
-   the Terr cell, then "Terraformed +0% no work under way". A colony's page
-   shows a Terraforming row (Mars icon) and a Terraformed tile beside Base
-   Room. Nothing of it shows on Europa, the Moon or any other world.
+   line shows at every Martian and lunar site, Mercury, Venus, Europa,
+   Ganymede, Callisto and Titan only: the Terr cell, then "Terraformed +0% no
+   work under way". A colony's page shows a Terraforming row (Mars icon) and a
+   Terraformed tile beside Base Room. Nothing of it shows on Io or any other
+   world. On a lunar site, a level is built at once, with no launch.
 3. **The queue.** The cell's + queues a level; the hover's lines tick for the
-   technology, fewer than three levels and an unfinished world. A fourth level
-   at the same world is refused with the second line crossed, counting queued
-   and shipped levels. The queue lists it as Terraforming.
-4. **The work.** With a level landed and staffed, the line reads "+N% … years to
-   go" and the figure climbs 4% a year (about 0.33% a month) a level; the
+   technology, the world's cap and an unfinished world. On Ganymede a seventh
+   level is refused with the second line crossed, counting queued and shipped
+   levels; on Mars a sixteenth, counting every holder's levels on the five
+   sites, so one colony can hold more than three. The queue lists it as
+   Terraforming.
+4. **The work.** With a level landed and staffed on Mars, the line reads
+   "+N% … years to go" at every Martian colony, ours and a rival's, and climbs
+   0.8% a year (4% ÷ 5 sites) a level; on Venus 1% a year a level. The
    colony's people / room in the People view climbs with it, and settlers keep
-   landing past the old room. Option **i** adds ten years at once (+40% a
-   staffed level). A colony short of crews climbs at its Modules Crewed share.
-5. **Finished.** At +300% the line reads "finished", the levels stand down
-   (`TE_SR_MODULES <key>: terraformed; its Terraforming levels stand down`), the
-   Slots figure falls by three and Module Upkeep drops. The + button's third line
-   is crossed. The room stays at +300%.
+   landing past the old room. Option **i** adds ten years at once (+8% at every
+   Martian colony a staffed Martian level). The years to go fall when a rival
+   adds levels on the same world. A colony short of crews climbs at its Modules
+   Crewed share.
+5. **Finished.** At +300% the line reads "finished" at every colony on the
+   world, and every colony's levels there stand down within a month
+   (`TE_SR_MODULES <key>: <world> terraformed; the Terraforming levels here stand
+   down`); Module Upkeep drops. The + button's third line is crossed. The room
+   stays at +300%.
 6. **The work is the world's.** Cede a terraforming colony (Cede Colony): the new
    holder's row shows the same +N% and the work goes on, even without the
    technology. Take a Terraforming level down on the colony's page: the room
    stays where it was. Release a world with work done, found it again: its room
    starts at the terraformed figure.
-7. **Occupation.** Under Full Colonies an occupied world's figure stops rising;
-   it resumes when the occupation ends.
+7. **Occupation.** Under Full Colonies an occupied colony's levels stop adding to
+   the work; the other colonies' levels on the same world go on. It resumes
+   when the occupation ends.
 8. **The AI.** In an observer run to the late game, an AI with the technology
-   queues Terraforming at a Martian, Venusian, Titan, Ganymede or Callisto
-   colony whose people fill half its room, within its slots (option **a**, run as
-   its tag, lists the levels).
-9. **Self-check.** The marker is read as the drive markers are, so
+   queues Terraforming at a colony on a world that takes it whose people fill
+   half its room, within its crews (option **a**, run as its tag, lists the
+   levels).
+9. **A save from before.** Load a 1.4.0 save with terraforming under way at
+   Venus and at two Martian sites (one far ahead of the other). The first month
+   logs `TE_SR_MODULES migrate: venus terraforming moved to the world record, …`
+   and the same for mars. Venus's Terraformed figure and room are unchanged.
+   Every Martian colony reads a fifth of the two old figures' sum, except the
+   one that was ahead, which keeps its own figure (and its room) until the
+   world's passes it.
+10. **Self-check.** The marker is read as the drive markers are, so
    `TE_SELF_CHECK OK drive_marker` covers it; no check of its own.
 
 ## Phase 3: Self-Directed Evolution

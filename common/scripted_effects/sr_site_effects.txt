@@ -230,6 +230,9 @@ sr_sites_global_monthly = {
 			sr_pers_modules_migrate_once = yes
 		}
 	}
+	# Once a save: terraforming's records from before it became the world's
+	# (1.3.0 to 1.4.0) go into their worlds' (sr_sites_generated.txt).
+	sr_terra_worlds_migrate_once = yes
 	sr_sites_monthly = yes
 	if = {
 		limit = { sr_colonies_contested_enabled = yes }
