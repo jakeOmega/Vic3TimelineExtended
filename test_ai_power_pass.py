@@ -2,7 +2,7 @@
 
 Monthly, for each AI country with Electrical Generation: follow each batch of plant levels it queued; switch to electric
 street lights the urban centers of each state whose power now covers them; and, with under a year of government
-construction queued and not in default, queue in up to two states, shortest of Electricity first, a batch of vanilla's
+construction queued and not in default, queue in the state shortest of Electricity, one a month, a batch of vanilla's
 coal and oil plant sized to what the state is short of with its lights counted (owner, 2026-11-28: government
 construction, plants sized to the lights, electric lights only). This file holds the pass's figures to the methods they
 come from, its copies of the plant's gates to the building's own, and its hooks and self-checks.
@@ -209,7 +209,7 @@ class Hooks(unittest.TestCase):
         self.assertIn("start_building_construction = building_power_plant", batch)
         self.assertNotIn("create_building", _code(EFFECTS))
 
-    def test_up_to_two_states_shortest_first(self):
+    def test_one_state_a_month_shortest_first(self):
         effect = _norm(_block(_code(EFFECTS), "te_ai_power_pass_effect"))
         self.assertIn("ordered_scope_state = { limit = { te_ai_power_pass_site = yes } order_by = te_ai_power_short "
                       "min = 0 max = 1 check_range_bounds = no te_ai_power_queue_batch = yes }", effect)

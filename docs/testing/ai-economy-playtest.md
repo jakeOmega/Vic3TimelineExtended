@@ -676,7 +676,7 @@ At most once a year (it looks monthly, and runs the first month its gate holds) 
 
 ## The AI electrification pass (#1877, 2026-11-28)
 
-Monthly, an AI country with Electrical Generation queues a batch of coal and oil plant levels in up to two of its states shortest of Electricity (what they buy plus what their urban centers would take on electric street lights, less what is made there), at most 5 levels a batch, while it has under a year of government construction queued; and switches a state's urban centers to electric street lights once a batch is built there or its spare power covers half the lights' need. Details: `docs/systems/mod_systems/ai.md` § AI Electrification Pass.
+Monthly, an AI country with Electrical Generation queues a batch of coal and oil plant levels in the one of its states shortest of Electricity, one state a month (what they buy plus what their urban centers would take on electric street lights, less what is made there), at most 5 levels a batch, while it has under a year of government construction queued; and switches a state's urban centers to electric street lights once a batch is built there or its spare power covers half the lights' need. Details: `docs/systems/mod_systems/ai.md` § AI Electrification Pass.
 
 ### Self-checks
 
@@ -690,6 +690,6 @@ Monthly, an AI country with Electrical Generation queues a batch of coal and oil
 | Check | Expect | If it fails |
 |---|---|---|
 | **Power and lights.** The 20 largest AI economies' plant levels, Electricity made per head and urban-center levels on electric lights, a few years after Electrical Generation, against a run without the pass. | Plants in most of their urban states; most urban-center levels lit; plants staffed (the first plants of #1880 were 2–26%). | Plants built but empty: the lights didn't switch (read `ai_power_lights`). Few plants: read `ai_power_pass` and the government queue's length. |
-| **The government queue.** The share of the 20 largest with universities, administrations and railways waiting behind the pass's batches. | Batches take their turn; the other kinds still get built. | Universities starved for years: lower `TE_AI_POWER_MAX_BATCH` or queue one state a month. |
+| **The government queue.** The share of the 20 largest with universities, administrations and railways waiting behind the pass's batches. | Batches take their turn; the other kinds still get built. | Universities starved for years: lower `TE_AI_POWER_MAX_BATCH`, or queue only while the government queue is under half a year. |
 | **Shortages.** Urban-center levels short of Electricity after a switch. | Few, and falling as the next batches land. | Many and lasting: raise `TE_AI_POWER_SWITCH_SHARE` toward 1, or grow the batch. |
 | **Budgets.** Debt and default shares of AI countries, against a run without the pass. | About the same. | More defaults: the batches outrun what the purchase can pay; gate the pass on the surplus as #1880's pass does. |

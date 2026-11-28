@@ -4040,6 +4040,8 @@ With only 2 eligible states, the `position = 2` call **does not silently skip** 
 
 **In a tooltip, guard the position with a count.** The marker pattern below needs `set_variable`, which a tooltip's preview doesn't run. A trigger does run, so wrap slot K (position K − 1) in `if = { limit = { any_scope_state = { <the same limit> count >= K } } … }`: a slot past the end saves nothing and prints nothing (`te_seabed_build_in_slot`).
 
+**`min = 0 max = N` runs on N elements, not N + 1** (2026-11-28, the AI electrification pass in game: `min = 0 max = 1` queued one state's batch a month for each of 19 countries, never two). So `max` is a count, as the patterns here use it.
+
 **Working pattern**: three `max = 1` passes with marker exclusion. After each pick marks the state, the next pass's limit excludes already-marked states, so it picks the next-distinct candidate (or saves nothing if none left, leaving `scope:top_N` cleanly unset).
 
 ```

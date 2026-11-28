@@ -15,7 +15,7 @@
 #   2. switches to electric street lights the urban centers of each state whose power now covers them
 #      (te_ai_power_light_site), and notes a state where the AI put them back on no lighting or gas;
 #   3. where the country may queue (te_ai_power_pass_may_queue: under a year of government construction queued, not
-#      in default), queues in up to two of its states, those shortest of Electricity first, a batch of vanilla's
+#      in default), queues in one state a month, the one shortest of Electricity, a batch of vanilla's
 #      coal and oil plant sized to what the state is short of with its lights counted (te_ai_power_levels_wanted, at
 #      most TE_AI_POWER_MAX_BATCH levels). Government construction, the country's own treasury: the owner,
 #      2026-11-28, "Government construction is the natural way to do it."
