@@ -147,6 +147,7 @@ te_civil_war_on_won = {
 		te_history_repair_after_civil_war = yes	# #1477: the charts' history stores
 		gw_ai_repair_after_civil_war = yes		# Climate AI: the movement's yearly locks start afresh
 		te_scaling_inherited_selfcheck_mark = yes	# TEMPORARY (#1404): te_scaling_selfcheck_effects.txt
+		te_pa_repair_after_civil_war = yes		# Private Actors: probe 8, the firms' records (te_pa_core_effects.txt)
 		te_civil_war_repoint_uprisings = yes
 		te_civil_war_clear = yes
 	}

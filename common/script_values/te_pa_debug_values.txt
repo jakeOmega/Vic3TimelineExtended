@@ -1,0 +1,21 @@
+﻿# Private Actors, the self-checks' values (te_pa_debug_effects.txt; docs/testing/private-actors-playtest.md).
+
+# Firms a sample holds before its verdict.
+te_pa_sc_sample = 20
+
+# ledger_size: how far the entry's size may sit from the share it was saved from.
+te_pa_sc_size_tolerance = 0.001
+
+# Any scope: the gap between the two globals te_pa_debug_ledger_size sets, whichever is larger.
+te_pa_sc_size_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_size_got
+			has_global_variable = te_pa_sc_size_want
+		}
+		value = global_var:te_pa_sc_size_got
+		subtract = global_var:te_pa_sc_size_want
+		if = { limit = { global_var:te_pa_sc_size_got < global_var:te_pa_sc_size_want } multiply = -1 }
+	}
+}

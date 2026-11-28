@@ -1,0 +1,120 @@
+﻿# Private Actors, the chassis's triggers (docs/systems/mod_systems/private_actors.md). The rule's one reader is
+# te_pa_on (te_pa_rule_triggers.txt).
+
+# Company scope. The firm is failing (§ 5.4): prosperity under te_pa_cond_low_prosperity and falling, or the mod's
+# failing-company count at te_pa_cond_failing_months or more (te_company_months_failing, te_company_effects.txt).
+te_pa_is_failing = {
+	OR = {
+		AND = {
+			company_prosperity < te_pa_cond_low_prosperity
+			te_pa_prosperity_change < 0
+		}
+		te_pa_v_months_failing >= te_pa_cond_failing_months
+	}
+}
+
+# Company scope. Its seat (§ 4.5) still stands: the state is set and still the home country's.
+# scope:te_pa_home is the home country (te_pa_turn).
+te_pa_seat_kept = {
+	has_variable = te_pa_seat
+	var:te_pa_seat ?= {
+		exists = owner
+		owner = scope:te_pa_home
+	}
+}
+
+# Company scope. The firm holds a cartel (Task 4's holding, te_pa_cartel, strength above 0).
+te_pa_holds_cartel = {
+	has_variable = te_pa_cartel
+	var:te_pa_cartel > 0
+}
+
+# Country scope. Command Economy or Cooperative Ownership: private ownership has ended (§ 8.1).
+te_pa_private_ownership_ended = {
+	OR = {
+		has_law = law_type:law_command_economy
+		has_law = law_type:law_cooperative_ownership
+	}
+}
+
+# Country scope. Dominance is a goal no verb serves (§ 5.2a, § 6.2): private ownership has ended, or the antitrust
+# law is Command or Cooperative Economy, under which no firm may hold a cartel.
+te_pa_dominance_illegal = {
+	OR = {
+		te_pa_private_ownership_ended = yes
+		has_law = law_type:law_command_cooperative_economy
+	}
+}
+
+# Company scope. A law threatens the firm's existence (§ 5.2's Survival): one that ends private ownership, in force
+# or being enacted, or one being enacted that removes its buildings (te_pa_gen_assess's rm_ features).
+te_pa_existential_law = {
+	OR = {
+		owner = {
+			OR = {
+				te_pa_private_ownership_ended = yes
+				is_enacting_law = law_type:law_command_economy
+				is_enacting_law = law_type:law_cooperative_ownership
+			}
+		}
+		AND = {
+			var:te_pa_g_f_rm_industry_banned ?= 1
+			owner = { is_enacting_law = law_type:law_industry_banned }
+		}
+		AND = {
+			var:te_pa_g_f_rm_extraction_economy ?= 1
+			owner = { is_enacting_law = law_type:law_extraction_economy }
+		}
+	}
+}
+
+# Country scope. The Banking Cycle in downturn or panic (a slump), or in expansion, boom or frenzy (a boom), read only
+# while the cycle runs (te_banking_cycle_running asks the rule, the entry and the variable first).
+te_pa_banking_slump = {
+	te_banking_cycle_running = yes
+	banking_cycle_is_recession = yes
+}
+
+te_pa_banking_boom = {
+	te_banking_cycle_running = yes
+	banking_cycle_is_expansion_or_boom = yes
+}
+
+# Country scope. A trade policy that protects the home market: everything but Free Trade (vanilla's six; § 8.1's
+# first bullet reads trade policy from the market, not from the law table).
+te_pa_trade_protective = {
+	OR = {
+		has_law = law_type:law_protectionism
+		has_law = law_type:law_mercantilism
+		has_law = law_type:law_isolationism
+		has_law = law_type:law_canton_system
+		has_law = law_type:law_sakoku
+	}
+}
+
+te_pa_trade_enacting_protective = {
+	OR = {
+		is_enacting_law = law_type:law_protectionism
+		is_enacting_law = law_type:law_mercantilism
+		is_enacting_law = law_type:law_isolationism
+		is_enacting_law = law_type:law_canton_system
+		is_enacting_law = law_type:law_sakoku
+	}
+}
+
+# Country scope. It is enacting a labor law (the four labor groups of the law table).
+te_pa_enacting_labor_law = {
+	OR = {
+		te_pa_gen_enacting_lawgroup_labor_rights = yes
+		te_pa_gen_enacting_lawgroup_childrens_rights = yes
+		te_pa_gen_enacting_lawgroup_labour_associations = yes
+		te_pa_gen_enacting_lawgroup_ministry_of_labor = yes
+	}
+}
+
+# Company scope. It wants a tariff on its output (§ 8.1): the home market imports what it makes, and the output is
+# not a local good.
+te_pa_wants_output_tariff = {
+	var:te_pa_g_out_imported ?= 1
+	NOT = { var:te_pa_g_out_local ?= 1 }
+}

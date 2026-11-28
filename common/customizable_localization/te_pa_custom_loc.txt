@@ -1,0 +1,248 @@
+﻿# Private Actors: names and lines read from a firm's row or a ledger entry (docs/systems/mod_systems/private_actors.md).
+# Each is type = container: [ScriptContainer.GetCustom('<key>')] in the tab (Task 3). Task 1's generated
+# te_pa_row_reason_good and te_pa_row_reason_law (te_pa_gen_custom_loc.txt) name the good and the law a reason
+# carries. A later task that adds a ledger verb adds its text here, with its loc key te_pa_ledger_verb_<code>
+# (test_private_actors.py fails on a verb te_pa_ledger_add is called with and that has no line).
+
+# A ledger entry's line (te_pa_l_verb; te_pa_ledger_effects.txt lists the codes). It reads as what follows the firm's
+# name, which the tab prints first from te_pa_l_actor.
+te_pa_ledger_line = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_l_verb ?= 1 }
+		localization_key = te_pa_ledger_verb_1
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 2 }
+		localization_key = te_pa_ledger_verb_2
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 3 }
+		localization_key = te_pa_ledger_verb_3
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 4 }
+		localization_key = te_pa_ledger_verb_4
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 5 }
+		localization_key = te_pa_ledger_verb_5
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 6 }
+		localization_key = te_pa_ledger_verb_6
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 7 }
+		localization_key = te_pa_ledger_verb_7
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 8 }
+		localization_key = te_pa_ledger_verb_8
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 9 }
+		localization_key = te_pa_ledger_verb_9
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 10 }
+		localization_key = te_pa_ledger_verb_10
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 11 }
+		localization_key = te_pa_ledger_verb_11
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 12 }
+		localization_key = te_pa_ledger_verb_12
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 13 }
+		localization_key = te_pa_ledger_verb_13
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 14 }
+		localization_key = te_pa_ledger_verb_14
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 15 }
+		localization_key = te_pa_ledger_verb_15
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 16 }
+		localization_key = te_pa_ledger_verb_16
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 17 }
+		localization_key = te_pa_ledger_verb_17
+	}
+	text = {
+		localization_key = te_pa_ledger_verb_unknown
+	}
+}
+
+# The reason for a goal, on a row or on a change-of-goal ledger entry (te_pa_r_reason; te_pa_goals_effects.txt lists
+# the codes), with its figure te_pa_r_reason_val and the good or law it names.
+te_pa_reason_text = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_reason ?= 11 }
+		localization_key = te_pa_reason_11
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 21 }
+		localization_key = te_pa_reason_21
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 31 }
+		localization_key = te_pa_reason_31
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 41 }
+		localization_key = te_pa_reason_41
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 42 }
+		localization_key = te_pa_reason_42
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 43 }
+		localization_key = te_pa_reason_43
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 44 }
+		localization_key = te_pa_reason_44
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 45 }
+		localization_key = te_pa_reason_45
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 46 }
+		localization_key = te_pa_reason_46
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 47 }
+		localization_key = te_pa_reason_47
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 51 }
+		localization_key = te_pa_reason_51
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 61 }
+		localization_key = te_pa_reason_61
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 62 }
+		localization_key = te_pa_reason_62
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 63 }
+		localization_key = te_pa_reason_63
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 71 }
+		localization_key = te_pa_reason_71
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 81 }
+		localization_key = te_pa_reason_81
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 82 }
+		localization_key = te_pa_reason_82
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 83 }
+		localization_key = te_pa_reason_83
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 84 }
+		localization_key = te_pa_reason_84
+	}
+	text = {
+		trigger = { var:te_pa_r_reason ?= 85 }
+		localization_key = te_pa_reason_85
+	}
+	text = {
+		localization_key = te_pa_reason_none
+	}
+}
+
+# A row's goal (te_pa_r_goal), by name.
+te_pa_goal_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_goal ?= 1 }
+		localization_key = te_pa_goal_1
+	}
+	text = {
+		trigger = { var:te_pa_r_goal ?= 2 }
+		localization_key = te_pa_goal_2
+	}
+	text = {
+		trigger = { var:te_pa_r_goal ?= 3 }
+		localization_key = te_pa_goal_3
+	}
+	text = {
+		trigger = { var:te_pa_r_goal ?= 4 }
+		localization_key = te_pa_goal_4
+	}
+	text = {
+		trigger = { var:te_pa_r_goal ?= 5 }
+		localization_key = te_pa_goal_5
+	}
+	text = {
+		trigger = { var:te_pa_r_goal ?= 6 }
+		localization_key = te_pa_goal_6
+	}
+	text = {
+		trigger = { var:te_pa_r_goal ?= 7 }
+		localization_key = te_pa_goal_7
+	}
+	text = {
+		trigger = { var:te_pa_r_goal ?= 8 }
+		localization_key = te_pa_goal_8
+	}
+	text = {
+		localization_key = te_pa_goal_0
+	}
+}
+
+# A row's condition (te_pa_r_cond: 1 prospering, 0 steady, -1 failing).
+te_pa_cond_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_cond ?= 1 }
+		localization_key = te_pa_cond_prospering
+	}
+	text = {
+		trigger = { var:te_pa_r_cond ?= -1 }
+		localization_key = te_pa_cond_failing
+	}
+	text = {
+		localization_key = te_pa_cond_steady
+	}
+}
+
+# A row's posture (te_pa_r_posture: 1 Favored, 0 Tolerated, -1 Restrained).
+te_pa_posture_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_posture ?= 1 }
+		localization_key = te_pa_posture_favored
+	}
+	text = {
+		trigger = { var:te_pa_r_posture ?= -1 }
+		localization_key = te_pa_posture_restrained
+	}
+	text = {
+		localization_key = te_pa_posture_tolerated
+	}
+}

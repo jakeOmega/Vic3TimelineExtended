@@ -1,0 +1,9 @@
+﻿# Private Actors (docs/systems/mod_systems/private_actors.md): the one reader of
+# te_private_actors_rule (common/game_rules/extra_game_rules.txt). Every other
+# file asks te_pa_on; test_private_actors.py fails on a has_game_rule naming the
+# rule anywhere else. Positive, so a game begun before the rule existed, which
+# holds no setting for it, plays with the system off (the default).
+# Any scope: it reads only the game rule.
+te_pa_on = {
+	has_game_rule = te_private_actors_enabled
+}

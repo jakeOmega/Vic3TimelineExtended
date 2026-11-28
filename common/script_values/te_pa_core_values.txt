@@ -1,0 +1,308 @@
+﻿# Private Actors, the chassis: the numbers and the firm's position (docs/systems/mod_systems/private_actors.md;
+# spec docs/superpowers/specs/2026-11-28-actors-firms-design.md §§ 4.2, 4.3, 5.1, 5.4). Every number is a first
+# guess, named here so a later task or a play-test can move it. Readers named te_pa_v_<variable> read a record
+# variable as 0 while it is unset, so no value reads one unguarded.
+
+# ---------------------------------------------------------------------------
+# The clock (§ 4.2)
+# ---------------------------------------------------------------------------
+
+# A firm's turn comes every this many monthly pulses (te_pa_turn_in counts it down; a new record draws its first
+# from 1 to 12, so the world's firms are spread over the year).
+te_pa_turn_months = 12
+# The quarterly step comes every this many monthly pulses (te_pa_q_in, a country variable).
+te_pa_quarter_months = 3
+te_pa_quarters_a_year = 4
+# The goal already held gets this on a 0-100 score when re-scored (§ 4.2, § 5.2a), so goals don't flap.
+te_pa_goal_held_bonus = 15
+
+# ---------------------------------------------------------------------------
+# A new record's starting values (first guesses)
+# ---------------------------------------------------------------------------
+
+# Funds start at this many years' accrual, so a firm has something to act on at its first turns.
+te_pa_funds_start_years = 1
+te_pa_conn_start = 20
+te_pa_stand_start = 50
+
+# ---------------------------------------------------------------------------
+# Funds (§ 4.3): a claim on the home country's investment pool, accrued each quarter. Nothing leaves the pool
+# here; spending is Task 4's (te_pa_spend_funds).
+# ---------------------------------------------------------------------------
+
+# A tenth a year of the firm's estimated dividends: its share of the country's building levels times the pool's
+# gross income (weekly, so x52), scaled by prosperity.
+te_pa_funds_rate = 0.1
+te_pa_weeks_a_year = 52
+# The claim is capped at this many years' accrual at the current rate.
+te_pa_funds_cap_years = 5
+# Prosperity's scale on the accrual: 0.5 at prosperity 0, 1 at 50, 1.5 at 100.
+te_pa_funds_pros_base = 0.5
+te_pa_funds_pros_per = 0.01
+te_pa_funds_pros_max = 1.5
+# The Banking Cycle in downturn or panic (§ 5.4: every firm's funds accrue slower), and a failing firm (low and
+# falling prosperity), each halve it.
+te_pa_funds_slump_mult = 0.5
+te_pa_funds_failing_mult = 0.5
+
+# ---------------------------------------------------------------------------
+# Connections (§ 4.3), 0-100: accrue from years established and the executive's interest group in government,
+# faster when Favored and slower when Restrained (§ 4.7), and decay a little each quarter, so each firm settles at
+# a level its sources hold it at (about 27 for an old firm with neither, 54 with its group in government, 81
+# with that and Favored). Later tasks add their sources (the state having backed it, campaign money on the
+# winner) and uses.
+# ---------------------------------------------------------------------------
+
+te_pa_conn_age_per_year = 0.25
+te_pa_conn_age_cap_years = 20
+te_pa_conn_ig_gov_per_year = 5
+te_pa_conn_favored_mult = 1.5
+te_pa_conn_restrained_mult = 0.5
+te_pa_conn_decay_quarter = 0.05
+
+# ---------------------------------------------------------------------------
+# Standing (§ 4.3), 0-100: drifts toward a neutral value until Tasks 4 and 6 give it its sources (a foundation,
+# welfare, exposures, blood).
+# ---------------------------------------------------------------------------
+
+te_pa_stand_neutral = 50
+te_pa_stand_drift_quarter = 0.1
+
+# ---------------------------------------------------------------------------
+# Grievance (§ 4.7): a Restrained firm's rises by one every five years (20 quarters).
+# ---------------------------------------------------------------------------
+
+te_pa_griev_restrained_quarters = 20
+
+# ---------------------------------------------------------------------------
+# Condition (§ 5.4): 1 prospering (company_is_prosperous), -1 failing, 0 steady
+# ---------------------------------------------------------------------------
+
+# Failing: prosperity under this and falling, or this many months the mod's failing-company count holds
+# against it (te_company_months_failing, docs/systems/mod_systems/ai.md § Company AI).
+te_pa_cond_low_prosperity = 25
+te_pa_cond_failing_months = 12
+
+# ---------------------------------------------------------------------------
+# Attachment to home (§ 5.3): the executive's culture's part, added to its ideology's (te_pa_gen_temper_attach)
+# ---------------------------------------------------------------------------
+
+te_pa_attach_primary = 0.5
+te_pa_attach_foreign = -0.5
+
+# ---------------------------------------------------------------------------
+# Readers: a record variable, 0 while unset (company scope)
+# ---------------------------------------------------------------------------
+
+te_pa_v_levels = { value = 0 if = { limit = { has_variable = te_pa_levels } value = var:te_pa_levels } }
+te_pa_v_share = { value = 0 if = { limit = { has_variable = te_pa_share } value = var:te_pa_share } }
+te_pa_v_funds = { value = 0 if = { limit = { has_variable = te_pa_funds } value = var:te_pa_funds } }
+te_pa_v_conn = { value = 0 if = { limit = { has_variable = te_pa_conn } value = var:te_pa_conn } }
+te_pa_v_stand = { value = 0 if = { limit = { has_variable = te_pa_stand } value = var:te_pa_stand } }
+te_pa_v_age_q = { value = 0 if = { limit = { has_variable = te_pa_age_q } value = var:te_pa_age_q } }
+te_pa_v_goal = { value = 0 if = { limit = { has_variable = te_pa_goal } value = var:te_pa_goal } }
+te_pa_v_months_failing = {
+	value = 0
+	if = { limit = { has_variable = te_company_months_failing } value = var:te_company_months_failing }
+}
+te_pa_v_sector_levels = {
+	value = 0
+	if = { limit = { has_variable = te_pa_g_sector_levels } value = var:te_pa_g_sector_levels }
+}
+
+# Company scope: the company's prosperity and its weekly change, as values (link reads), for comparisons.
+te_pa_prosperity = { value = prosperity }
+te_pa_prosperity_change = { value = weekly_prosperity_change }
+
+# ---------------------------------------------------------------------------
+# The firm's position (§ 5.1)
+# ---------------------------------------------------------------------------
+
+# Company scope. Its owned levels, worldwide: company_owned_levels is a comparison trigger only, so this is the
+# highest rung of a geometric ladder (each a quarter above the last) it reaches, an estimate at most a fifth low.
+# 0 for a company with no levels.
+te_pa_owned_levels_ladder = {
+	value = 0
+	if = { limit = { company_owned_levels >= 16019 } value = 16019 }
+	else_if = { limit = { company_owned_levels >= 12815 } value = 12815 }
+	else_if = { limit = { company_owned_levels >= 10252 } value = 10252 }
+	else_if = { limit = { company_owned_levels >= 8202 } value = 8202 }
+	else_if = { limit = { company_owned_levels >= 6562 } value = 6562 }
+	else_if = { limit = { company_owned_levels >= 5250 } value = 5250 }
+	else_if = { limit = { company_owned_levels >= 4200 } value = 4200 }
+	else_if = { limit = { company_owned_levels >= 3360 } value = 3360 }
+	else_if = { limit = { company_owned_levels >= 2688 } value = 2688 }
+	else_if = { limit = { company_owned_levels >= 2150 } value = 2150 }
+	else_if = { limit = { company_owned_levels >= 1720 } value = 1720 }
+	else_if = { limit = { company_owned_levels >= 1376 } value = 1376 }
+	else_if = { limit = { company_owned_levels >= 1101 } value = 1101 }
+	else_if = { limit = { company_owned_levels >= 881 } value = 881 }
+	else_if = { limit = { company_owned_levels >= 705 } value = 705 }
+	else_if = { limit = { company_owned_levels >= 564 } value = 564 }
+	else_if = { limit = { company_owned_levels >= 451 } value = 451 }
+	else_if = { limit = { company_owned_levels >= 361 } value = 361 }
+	else_if = { limit = { company_owned_levels >= 289 } value = 289 }
+	else_if = { limit = { company_owned_levels >= 231 } value = 231 }
+	else_if = { limit = { company_owned_levels >= 185 } value = 185 }
+	else_if = { limit = { company_owned_levels >= 148 } value = 148 }
+	else_if = { limit = { company_owned_levels >= 118 } value = 118 }
+	else_if = { limit = { company_owned_levels >= 94 } value = 94 }
+	else_if = { limit = { company_owned_levels >= 75 } value = 75 }
+	else_if = { limit = { company_owned_levels >= 60 } value = 60 }
+	else_if = { limit = { company_owned_levels >= 48 } value = 48 }
+	else_if = { limit = { company_owned_levels >= 38 } value = 38 }
+	else_if = { limit = { company_owned_levels >= 30 } value = 30 }
+	else_if = { limit = { company_owned_levels >= 24 } value = 24 }
+	else_if = { limit = { company_owned_levels >= 19 } value = 19 }
+	else_if = { limit = { company_owned_levels >= 15 } value = 15 }
+	else_if = { limit = { company_owned_levels >= 12 } value = 12 }
+	else_if = { limit = { company_owned_levels >= 10 } value = 10 }
+	else_if = { limit = { company_owned_levels >= 8 } value = 8 }
+	else_if = { limit = { company_owned_levels >= 6 } value = 6 }
+	else_if = { limit = { company_owned_levels >= 5 } value = 5 }
+	else_if = { limit = { company_owned_levels >= 4 } value = 4 }
+	else_if = { limit = { company_owned_levels >= 3 } value = 3 }
+	else_if = { limit = { company_owned_levels >= 2 } value = 2 }
+	else_if = { limit = { company_owned_levels >= 1 } value = 1 }
+}
+
+# Company scope. The home country's levels of its building types, at least 1 (te_pa_gen_assess's reading).
+te_pa_sector_levels_floor = {
+	value = te_pa_v_sector_levels
+	min = 1
+}
+
+# Company scope. Its share of its sector (§ 5.1): owned levels over the home country's levels of its building types,
+# 0 to 1. Owned levels are worldwide, so a firm with much abroad reads high; one with an industry charter's
+# extension buildings, which the sector leaves out, can reach past 1, so the share is capped there.
+te_pa_share_value = {
+	value = te_pa_v_levels
+	divide = te_pa_sector_levels_floor
+	min = 0
+	max = 1
+}
+
+# ---------------------------------------------------------------------------
+# Funds (company scope)
+# ---------------------------------------------------------------------------
+
+# The firm's share of the country's building levels (non-subsistence), 0 to 1.
+te_pa_home_levels_floor = {
+	value = 0
+	owner = { add = building_levels }
+	min = 1
+}
+te_pa_funds_level_share = {
+	value = te_pa_v_levels
+	divide = te_pa_home_levels_floor
+	min = 0
+	max = 1
+}
+
+# The home investment pool's gross income over a year (the engine's figure is weekly).
+te_pa_pool_income_year = {
+	value = 0
+	owner = { add = investment_pool_gross_income }
+	multiply = te_pa_weeks_a_year
+	min = 0
+}
+
+# 0.5 at prosperity 0, 1.5 at 100.
+te_pa_funds_prosperity_factor = {
+	value = te_pa_prosperity
+	multiply = te_pa_funds_pros_per
+	add = te_pa_funds_pros_base
+	min = te_pa_funds_pros_base
+	max = te_pa_funds_pros_max
+}
+
+# A year's accrual at today's rate: none under Command Economy or Cooperative Ownership, which take the private
+# investment it draws on (§ 8.1).
+te_pa_funds_year = {
+	value = te_pa_funds_level_share
+	multiply = te_pa_pool_income_year
+	multiply = te_pa_funds_prosperity_factor
+	multiply = te_pa_funds_rate
+	if = { limit = { owner = { te_pa_banking_slump = yes } } multiply = te_pa_funds_slump_mult }
+	if = { limit = { var:te_pa_cond ?= -1 } multiply = te_pa_funds_failing_mult }
+	if = { limit = { owner = { te_pa_private_ownership_ended = yes } } value = 0 }
+	min = 0
+}
+
+te_pa_funds_quarter = {
+	value = te_pa_funds_year
+	divide = te_pa_quarters_a_year
+}
+
+te_pa_funds_cap = {
+	value = te_pa_funds_year
+	multiply = te_pa_funds_cap_years
+}
+
+# The record's funds after a quarter's accrual, held to the cap (a claim above five years at today's rate shrinks
+# to it, as the pool it is a claim on has).
+te_pa_funds_after_quarter = {
+	value = te_pa_v_funds
+	add = te_pa_funds_quarter
+	max = te_pa_funds_cap
+	min = 0
+}
+
+te_pa_funds_starting = {
+	value = te_pa_funds_year
+	multiply = te_pa_funds_start_years
+}
+
+# ---------------------------------------------------------------------------
+# Connections and Standing (company scope)
+# ---------------------------------------------------------------------------
+
+# Years since the record was made (the engine has no company founding date to read).
+te_pa_age_years = {
+	value = te_pa_v_age_q
+	divide = te_pa_quarters_a_year
+}
+
+# A year's inflow: age, the executive's interest group in government (te_pa_ig_gov), the posture.
+te_pa_conn_inflow_year = {
+	value = te_pa_age_years
+	max = te_pa_conn_age_cap_years
+	multiply = te_pa_conn_age_per_year
+	if = { limit = { var:te_pa_ig_gov ?= 1 } add = te_pa_conn_ig_gov_per_year }
+	if = { limit = { var:te_pa_posture ?= 1 } multiply = te_pa_conn_favored_mult }
+	else_if = { limit = { var:te_pa_posture ?= -1 } multiply = te_pa_conn_restrained_mult }
+}
+
+te_pa_conn_after_quarter = {
+	value = te_pa_v_conn
+	multiply = { value = 1 subtract = te_pa_conn_decay_quarter }
+	add = { value = te_pa_conn_inflow_year divide = te_pa_quarters_a_year }
+	min = 0
+	max = 100
+}
+
+te_pa_stand_after_quarter = {
+	value = te_pa_v_stand
+	add = { value = te_pa_stand_neutral subtract = te_pa_v_stand multiply = te_pa_stand_drift_quarter }
+	min = 0
+	max = 100
+}
+
+# ---------------------------------------------------------------------------
+# Condition and the cycle
+# ---------------------------------------------------------------------------
+
+# Company scope. 1 prospering, -1 failing, 0 steady (§ 5.4).
+te_pa_cond_value = {
+	value = 0
+	if = { limit = { company_is_prosperous = yes } value = 1 }
+	else_if = { limit = { te_pa_is_failing = yes } value = -1 }
+}
+
+# Country scope. The Banking Cycle's phase as the firms read it: 1 expansion or boom, -1 downturn or panic, 0
+# otherwise and whenever the cycle isn't running (§ 5.4: neutral with the rule off).
+te_pa_cycle_value = {
+	value = 0
+	if = { limit = { te_pa_banking_boom = yes } value = 1 }
+	else_if = { limit = { te_pa_banking_slump = yes } value = -1 }
+}

@@ -1,0 +1,12 @@
+﻿# Private Actors, the ledger (docs/systems/mod_systems/private_actors.md § The ledger; te_pa_ledger_effects.txt).
+
+# Container scope, a ledger entry: newest first for a display, and oldest first (position 0) for eviction, since
+# ordered_* sorts descending (scripting_best_practices.md, "Containers as a bounded time series").
+te_pa_ledger_recency_order = {
+	value = 0
+	if = { limit = { has_variable = te_pa_l_seq } value = var:te_pa_l_seq }
+}
+te_pa_ledger_age_order = {
+	value = 0
+	subtract = te_pa_ledger_recency_order
+}

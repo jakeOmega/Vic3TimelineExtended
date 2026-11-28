@@ -1,0 +1,161 @@
+﻿# Private Actors, the ledger (docs/systems/mod_systems/private_actors.md § The ledger; plan § Storage): who did
+# what, the last 20 lines a country, newest last in the list. A country list te_pa_ledger of script containers
+# (tag te_pa_ledger, parent the country), each holding:
+#   te_pa_l_seq     its number in the country's sequence (te_pa_ledger_seq)
+#   te_pa_l_verb    what happened, by verb code (below)
+#   te_pa_l_actor   the firm (a company)
+#   te_pa_l_target  what it acted on, when anything (a scope)
+#   te_pa_l_size    how much, when anything (0 otherwise)
+#   te_pa_l_known   1, or 0 for a secret move not yet exposed (§ 4.6: "author unknown")
+#   te_pa_l_month   te_history_month_index when it was written
+# A change of goal (verbs 1-8, the verb being the new goal) also carries its reason, under the row's own names
+# (te_pa_r_reason, te_pa_r_reason_val, te_pa_r_reason_good, te_pa_r_reason_law), so one set of reason lines
+# renders a row and a ledger entry alike (te_pa_reason_text, te_pa_custom_loc.txt).
+#
+# Lost to a revolution's winner by design (a list; spec § 13), and kept when the rule is switched off.
+#
+# Verb codes, in blocks (plan § Storage): 1-19 the chassis (this file), 20-39 Task 4, 40-59 Task 5, 60-79 Task 6,
+# 80-99 Task 7, 100-119 Task 8, 120-139 Task 9, 140-159 Task 10. Each has a line in te_pa_ledger_line
+# (te_pa_custom_loc.txt), loc te_pa_ledger_verb_<code>, which reads as what follows the firm's name:
+#   1-8  it now seeks goal <code> (te_pa_goal's codes), for the reason on the entry
+#   9    a new executive (target: the character)
+#   10   it is failing (§ 4.6's threshold)
+#   11   it controls 40% of its sector (§ 4.6; size: its share)
+#   12   a record is made for a new firm (a company established after the country's first pulse)
+#   13   it is dissolved (on_company_disbanded)
+#   14   the state now Favors it        15 Tolerates it        16 Restrains it (§ 4.7; any source)
+#   17   it no longer presses for anything
+#   18, 19 free
+
+# Country scope, the firm's home. One writer for the ledger: appends an entry and evicts the oldest past 20.
+# VERB: the verb code. KNOWN: 1, or 0 for a secret move. The caller saves scope:te_pa_l_actor (the firm),
+# scope:te_pa_l_target (optional) and scope:te_pa_l_size (optional, save_scope_value_as); this clears all three
+# when done, so a later call never inherits them. The new entry is left as scope:te_pa_l_new for a caller to add
+# fields of its own.
+te_pa_ledger_add = {
+	save_scope_as = te_pa_l_home
+	if = {
+		limit = { NOT = { has_variable = te_pa_ledger_seq } }
+		set_variable = { name = te_pa_ledger_seq value = 0 }
+	}
+	change_variable = { name = te_pa_ledger_seq add = 1 }
+	clear_saved_scope = te_pa_l_new
+	create_container = {
+		tags = { te_pa_ledger }
+		parent = scope:te_pa_l_home
+		save_scope_as = te_pa_l_new
+	}
+	if = {
+		limit = { exists = scope:te_pa_l_new }
+		scope:te_pa_l_new = {
+			set_variable = { name = te_pa_l_seq value = scope:te_pa_l_home.var:te_pa_ledger_seq }
+			set_variable = { name = te_pa_l_verb value = $VERB$ }
+			set_variable = { name = te_pa_l_known value = $KNOWN$ }
+			set_variable = { name = te_pa_l_month value = te_history_month_index }
+			if = {
+				limit = { exists = scope:te_pa_l_actor }
+				set_variable = { name = te_pa_l_actor value = scope:te_pa_l_actor }
+			}
+			if = {
+				limit = { exists = scope:te_pa_l_target }
+				set_variable = { name = te_pa_l_target value = scope:te_pa_l_target }
+			}
+			if = {
+				limit = { exists = scope:te_pa_l_size }
+				set_variable = { name = te_pa_l_size value = scope:te_pa_l_size }
+			}
+			else = {
+				set_variable = { name = te_pa_l_size value = 0 }
+			}
+		}
+		add_to_variable_list = { name = te_pa_ledger target = scope:te_pa_l_new }
+		if = {
+			# 21 is the cap (20) plus the entry just added; any_in_list's count rather than variable_list_size,
+			# as un_ledger_log_add explains.
+			limit = { any_in_list = { variable = te_pa_ledger count >= 21 has_tag = te_pa_ledger } }
+			ordered_in_list = {
+				variable = te_pa_ledger
+				position = 0
+				order_by = te_pa_ledger_age_order
+				save_scope_as = te_pa_l_evicted
+			}
+			remove_list_variable = { name = te_pa_ledger target = scope:te_pa_l_evicted }
+			scope:te_pa_l_evicted = { destroy_container = yes }
+		}
+	}
+	clear_saved_scope = te_pa_l_actor
+	clear_saved_scope = te_pa_l_target
+	clear_saved_scope = te_pa_l_size
+}
+
+# Company scope, the firm (scope:te_pa_home its country). A line with no target or size: VERB as te_pa_ledger_add's.
+te_pa_ledger_firm = {
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = $VERB$ KNOWN = 1 } }
+}
+
+# Company scope (te_pa_choose_goal): the goal changed; the verb is the new goal's code (17 for none), and the entry
+# carries the reason te_pa_reason_write has just written.
+te_pa_ledger_goal_changed = {
+	save_scope_as = te_pa_l_actor
+	if = {
+		limit = { var:te_pa_goal ?= 1 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 1 KNOWN = 1 } }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 2 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 2 KNOWN = 1 } }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 3 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 3 KNOWN = 1 } }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 4 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 4 KNOWN = 1 } }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 5 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 5 KNOWN = 1 } }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 6 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 6 KNOWN = 1 } }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 7 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 7 KNOWN = 1 } }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 8 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 8 KNOWN = 1 } }
+	}
+	else = {
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 17 KNOWN = 1 } }
+	}
+	if = {
+		limit = { exists = scope:te_pa_l_new }
+		save_scope_as = te_pa_l_reason_firm
+		scope:te_pa_l_new = { te_pa_copy_reason = yes }
+	}
+}
+
+# Container scope (a row, or a ledger entry), from scope:te_pa_l_reason_firm's record: the goal's reason, under the
+# names te_pa_reason_text and Task 1's te_pa_row_reason_good / _law read.
+te_pa_copy_reason = {
+	te_pa_copy_from = { FIRM = te_pa_l_reason_firm FROM = te_pa_reason TO = te_pa_r_reason }
+	te_pa_copy_from = { FIRM = te_pa_l_reason_firm FROM = te_pa_reason_val TO = te_pa_r_reason_val }
+	te_pa_copy_from = { FIRM = te_pa_l_reason_firm FROM = te_pa_reason_good TO = te_pa_r_reason_good }
+	te_pa_copy_from = { FIRM = te_pa_l_reason_firm FROM = te_pa_reason_law TO = te_pa_r_reason_law }
+}
+
+# Container scope. One figure from a firm's record (scope:<FIRM>) onto the container, 0 while the firm has none.
+te_pa_copy_from = {
+	if = {
+		limit = { scope:$FIRM$ = { has_variable = $FROM$ } }
+		set_variable = { name = $TO$ value = scope:$FIRM$.var:$FROM$ }
+	}
+	else = {
+		set_variable = { name = $TO$ value = 0 }
+	}
+}

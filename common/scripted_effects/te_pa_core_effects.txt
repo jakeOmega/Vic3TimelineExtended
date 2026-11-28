@@ -1,0 +1,619 @@
+﻿# Private Actors, the chassis (docs/systems/mod_systems/private_actors.md; spec
+# docs/superpowers/specs/2026-11-28-actors-firms-design.md §§ 4.1-4.3, 4.5, 4.7, 5.1-5.4, 13; plan Task 2).
+#
+# A firm is a company; its record is company variables (plan § Storage). Each country's monthly pulse
+# (te_pa_monthly) makes records for new firms, counts each firm's te_pa_turn_in down to its yearly turn
+# (te_pa_turn) and the country's te_pa_q_in down to the quarterly step (te_pa_quarter). The turn assesses the firm
+# (te_pa_gen_assess and the readings below), scores the eight goals and picks one (te_pa_goals_effects.txt), logs a
+# change (te_pa_ledger_effects.txt), posts a threshold notice, and copies what the tab shows onto the firm's row.
+# The quarter accrues the currencies and copies again. Holdings, verbs and declared moves are later tasks'.
+#
+# The firm's record (company variables; the plan's Storage table has the full list):
+#   te_pa_init 1 | te_pa_turn_in 1-12 | te_pa_turns (turns taken) | te_pa_age_q (quarters since the record)
+#   te_pa_goal 0-8, te_pa_reason, te_pa_reason_val, _good, _law | te_pa_p_<g>, te_pa_w_<g>, te_pa_s_<g>
+#   te_pa_funds (pounds), te_pa_conn, te_pa_stand (0-100) | te_pa_griev, te_pa_restrained_q
+#   te_pa_posture -1/0/1 | te_pa_levels, te_pa_share | te_pa_cond 1/0/-1, te_pa_cycle 1/0/-1
+#   te_pa_bold_t, te_pa_force, te_pa_patern, te_pa_attach (-1 to 1) | te_pa_exec, te_pa_ig_gov, te_pa_ig_marginal
+#   te_pa_seat (a state), te_pa_seat_fallback | te_pa_trade (stance on protection, -2 to 2)
+#   te_pa_row (its row container) | te_pa_n_failing, te_pa_n_big (a notice's crossing, set until back below)
+
+# ---------------------------------------------------------------------------
+# The monthly pulse (te_pa_on_actions.txt)
+# ---------------------------------------------------------------------------
+
+# Country scope. Rule off: the teardown, once (te_pa_q_in marks a country the system has run in, and the teardown
+# removes it). Rule on: records, turns, the quarter.
+te_pa_monthly = {
+	if = {
+		limit = { te_pa_on = no }
+		if = {
+			limit = { has_variable = te_pa_q_in }
+			te_pa_teardown = yes
+		}
+	}
+	else = {
+		save_scope_as = te_pa_home
+		# The world's technology cache (te_pa_gen_tech_cache), here once until the global yearly pulse keeps it.
+		if = {
+			limit = { NOT = { has_global_variable = te_pa_tech_cached } }
+			te_pa_gen_tech_cache = yes
+			set_global_variable = { name = te_pa_tech_cached value = 1 }
+		}
+		# Probe 8's verdict reads the firms before any record is made for them (te_pa_debug_effects.txt).
+		te_pa_debug_revolution_read = yes
+		te_pa_rows_check = yes
+		every_company = {
+			limit = {
+				NOT = { has_variable = te_pa_init }
+				te_pa_gen_excluded_type = no
+			}
+			te_pa_make_record = yes
+		}
+		every_company = {
+			limit = { has_variable = te_pa_turn_in }
+			change_variable = { name = te_pa_turn_in add = -1 }
+			if = {
+				limit = { var:te_pa_turn_in <= 0 }
+				set_variable = { name = te_pa_turn_in value = te_pa_turn_months }
+				te_pa_turn = yes
+			}
+		}
+		if = {
+			limit = { NOT = { has_variable = te_pa_q_in } }
+			set_variable = { name = te_pa_q_in value = te_pa_quarter_months }
+		}
+		change_variable = { name = te_pa_q_in add = -1 }
+		if = {
+			limit = { var:te_pa_q_in <= 0 }
+			set_variable = { name = te_pa_q_in value = te_pa_quarter_months }
+			te_pa_quarter = yes
+		}
+		# Task 4: the declared move's countdown (te_pa_move_months) goes here, after the turns.
+		te_pa_debug_monthly = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The record
+# ---------------------------------------------------------------------------
+
+# Company scope, inside te_pa_monthly (scope:te_pa_home its country). A new firm's record: its first turn 1 to 12
+# months away, so turns spread over the year; starting currencies; its row. Logged (verb 12) only in a country the
+# system has already run in, so a game's or a rule's first month doesn't fill the ledger with them.
+te_pa_make_record = {
+	set_variable = { name = te_pa_init value = 1 }
+	random_list = {
+		1 = { set_variable = { name = te_pa_turn_in value = 1 } }
+		2 = { set_variable = { name = te_pa_turn_in value = 2 } }
+		3 = { set_variable = { name = te_pa_turn_in value = 3 } }
+		4 = { set_variable = { name = te_pa_turn_in value = 4 } }
+		5 = { set_variable = { name = te_pa_turn_in value = 5 } }
+		6 = { set_variable = { name = te_pa_turn_in value = 6 } }
+		7 = { set_variable = { name = te_pa_turn_in value = 7 } }
+		8 = { set_variable = { name = te_pa_turn_in value = 8 } }
+		9 = { set_variable = { name = te_pa_turn_in value = 9 } }
+		10 = { set_variable = { name = te_pa_turn_in value = 10 } }
+		11 = { set_variable = { name = te_pa_turn_in value = 11 } }
+		12 = { set_variable = { name = te_pa_turn_in value = 12 } }
+	}
+	set_variable = { name = te_pa_turns value = 0 }
+	set_variable = { name = te_pa_age_q value = 0 }
+	set_variable = { name = te_pa_goal value = 0 }
+	set_variable = { name = te_pa_reason value = 0 }
+	set_variable = { name = te_pa_reason_val value = 0 }
+	set_variable = { name = te_pa_reason_good value = 0 }
+	set_variable = { name = te_pa_reason_law value = 0 }
+	te_pa_score_zero_one = { G = inputs }
+	te_pa_score_zero_one = { G = market }
+	te_pa_score_zero_one = { G = abroad }
+	te_pa_score_zero_one = { G = law }
+	te_pa_score_zero_one = { G = dominance }
+	te_pa_score_zero_one = { G = labor }
+	te_pa_score_zero_one = { G = tech }
+	te_pa_score_zero_one = { G = survival }
+	set_variable = { name = te_pa_posture value = 0 }
+	set_variable = { name = te_pa_griev value = 0 }
+	set_variable = { name = te_pa_restrained_q value = 0 }
+	set_variable = { name = te_pa_cond value = 0 }
+	set_variable = { name = te_pa_cycle value = 0 }
+	set_variable = { name = te_pa_trade value = 0 }
+	set_variable = { name = te_pa_ig_gov value = 0 }
+	set_variable = { name = te_pa_ig_marginal value = 0 }
+	set_variable = { name = te_pa_bold_t value = 0 }
+	set_variable = { name = te_pa_force value = 0 }
+	set_variable = { name = te_pa_patern value = 0 }
+	set_variable = { name = te_pa_attach value = 0 }
+	set_variable = { name = te_pa_levels value = te_pa_owned_levels_ladder }
+	set_variable = { name = te_pa_share value = 0 }
+	set_variable = { name = te_pa_funds value = te_pa_funds_starting }
+	set_variable = { name = te_pa_conn value = te_pa_conn_start }
+	set_variable = { name = te_pa_stand value = te_pa_stand_start }
+	te_pa_row_sync = yes
+	if = {
+		limit = { scope:te_pa_home = { has_variable = te_pa_q_in } }
+		te_pa_ledger_firm = { VERB = 12 }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The turn (§ 4.2): assess, score, choose. No verbs yet (Task 4's te_pa_act goes after the choice).
+# ---------------------------------------------------------------------------
+
+# Company scope, inside te_pa_monthly (scope:te_pa_home saved there).
+te_pa_turn = {
+	save_scope_as = te_pa_firm
+	te_pa_gen_assess = yes
+	te_pa_read_position = yes
+	te_pa_read_temperament = yes
+	te_pa_read_seat = yes
+	te_pa_ai_posture = yes
+	te_pa_gen_law_pick = yes
+	set_variable = { name = te_pa_trade value = te_pa_trade_stance_value }
+	te_pa_score_goals = yes
+	te_pa_choose_goal = yes
+	te_pa_notices = yes
+	te_pa_debug_turn = yes
+	change_variable = { name = te_pa_turns add = 1 }
+	te_pa_row_sync = yes
+}
+
+# Its size, share and condition (§ 5.1, § 5.4), and the home country's Banking Cycle phase.
+te_pa_read_position = {
+	set_variable = { name = te_pa_levels value = te_pa_owned_levels_ladder }
+	set_variable = { name = te_pa_share value = te_pa_share_value }
+	set_variable = { name = te_pa_cond value = te_pa_cond_value }
+	set_variable = { name = te_pa_cycle value = { value = 0 owner = { add = te_pa_cycle_value } } }
+}
+
+# Temperament (§ 5.3) from the executive, neutral when it has none (probe 7's fallback); whether the executive's
+# interest group is in government or marginalized; a change of executive goes in the ledger (verb 9).
+te_pa_read_temperament = {
+	clear_saved_scope = te_pa_exec_now
+	executive ?= { save_scope_as = te_pa_exec_now }
+	if = {
+		limit = { exists = scope:te_pa_exec_now }
+		set_variable = { name = te_pa_bold_t value = te_pa_gen_temper_bold }
+		set_variable = { name = te_pa_force value = te_pa_gen_temper_force }
+		set_variable = { name = te_pa_patern value = te_pa_gen_temper_patern }
+		set_variable = { name = te_pa_attach value = te_pa_gen_temper_attach }
+		if = {
+			limit = { scope:te_pa_exec_now = { culture ?= { is_primary_culture_of = scope:te_pa_home } } }
+			change_variable = { name = te_pa_attach add = te_pa_attach_primary }
+		}
+		else = {
+			change_variable = { name = te_pa_attach add = te_pa_attach_foreign }
+		}
+		clamp_variable = { name = te_pa_attach max = 1 min = -1 }
+		if = {
+			limit = { scope:te_pa_exec_now = { interest_group ?= { is_in_government = yes } } }
+			set_variable = { name = te_pa_ig_gov value = 1 }
+		}
+		else = {
+			set_variable = { name = te_pa_ig_gov value = 0 }
+		}
+		if = {
+			limit = { scope:te_pa_exec_now = { interest_group ?= { is_marginal = yes } } }
+			set_variable = { name = te_pa_ig_marginal value = 1 }
+		}
+		else = {
+			set_variable = { name = te_pa_ig_marginal value = 0 }
+		}
+		if = {
+			limit = {
+				has_variable = te_pa_exec
+				NOT = { scope:te_pa_exec_now = var:te_pa_exec }
+			}
+			save_scope_as = te_pa_l_actor
+			scope:te_pa_exec_now = { save_scope_as = te_pa_l_target }
+			scope:te_pa_home = { te_pa_ledger_add = { VERB = 9 KNOWN = 1 } }
+		}
+		set_variable = { name = te_pa_exec value = scope:te_pa_exec_now }
+	}
+	else = {
+		set_variable = { name = te_pa_bold_t value = 0 }
+		set_variable = { name = te_pa_force value = 0 }
+		set_variable = { name = te_pa_patern value = 0 }
+		set_variable = { name = te_pa_attach value = 0 }
+		set_variable = { name = te_pa_ig_gov value = 0 }
+		set_variable = { name = te_pa_ig_marginal value = 0 }
+	}
+}
+
+# The seat (§ 4.5): the incorporated home state with the most levels of its building types
+# (te_pa_gen_seat_pick; probe 11 found no link to a company's headquarters), kept while the state stays in the
+# country. A firm with no such state is seated at the capital (te_pa_seat_fallback), and looks again each turn.
+te_pa_read_seat = {
+	if = {
+		limit = {
+			OR = {
+				te_pa_seat_kept = no
+				has_variable = te_pa_seat_fallback
+			}
+		}
+		clear_saved_scope = te_pa_seat_pick
+		te_pa_gen_seat_pick = yes
+		if = {
+			limit = { exists = scope:te_pa_seat_pick }
+			set_variable = { name = te_pa_seat value = scope:te_pa_seat_pick }
+			if = {
+				limit = { has_variable = te_pa_seat_fallback }
+				remove_variable = te_pa_seat_fallback
+			}
+		}
+		else = {
+			scope:te_pa_home = {
+				capital ?= { save_scope_as = te_pa_seat_pick }
+			}
+			if = {
+				limit = { exists = scope:te_pa_seat_pick }
+				set_variable = { name = te_pa_seat value = scope:te_pa_seat_pick }
+				set_variable = { name = te_pa_seat_fallback value = 1 }
+			}
+		}
+		te_pa_debug_seat = yes
+	}
+}
+
+# An AI country's posture toward the firm, derived each turn (§ 12.1): Favored when the executive's interest group
+# is in government or the antitrust law is Dirigiste Policy; Restrained when that group is marginalized, or under
+# Antitrust Enforcement while the firm holds a cartel; Tolerated otherwise. A player's posture is the player's
+# (Task 3's control). A change goes in the ledger (verbs 14-16).
+te_pa_ai_posture = {
+	if = {
+		limit = { scope:te_pa_home = { is_ai = yes } }
+		if = {
+			limit = {
+				OR = {
+					var:te_pa_ig_gov ?= 1
+					scope:te_pa_home = { has_law = law_type:law_dirigisme }
+				}
+			}
+			te_pa_set_posture = { POSTURE = 1 VERB = 14 }
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:te_pa_ig_marginal ?= 1
+					AND = {
+						scope:te_pa_home = { has_law = law_type:law_trust_busting }
+						te_pa_holds_cartel = yes
+					}
+				}
+			}
+			te_pa_set_posture = { POSTURE = -1 VERB = 16 }
+		}
+		else = {
+			te_pa_set_posture = { POSTURE = 0 VERB = 15 }
+		}
+	}
+}
+
+# Company scope (scope:te_pa_home its country). Sets the posture; a change is logged. Task 3's control calls it
+# too, with the same pairs: 1 and 14 (Favored), 0 and 15 (Tolerated), -1 and 16 (Restrained).
+te_pa_set_posture = {
+	if = {
+		limit = { NOT = { var:te_pa_posture ?= $POSTURE$ } }
+		set_variable = { name = te_pa_posture value = $POSTURE$ }
+		te_pa_ledger_firm = { VERB = $VERB$ }
+	}
+}
+
+# The threshold notices (§ 4.6), once per crossing: a flag holds while the firm stays past the line and is cleared
+# when it falls back. Only a player is told; the ledger takes the line either way. A firm's first turn sets the
+# flags quietly, so a game's start reads no crossing.
+te_pa_notices = {
+	if = {
+		limit = { var:te_pa_cond ?= -1 }
+		if = {
+			limit = { NOT = { has_variable = te_pa_n_failing } }
+			set_variable = { name = te_pa_n_failing value = 1 }
+			if = {
+				limit = { var:te_pa_turns > 0 }
+				te_pa_ledger_firm = { VERB = 10 }
+				save_scope_as = te_pa_note_firm
+				scope:te_pa_home = {
+					if = {
+						limit = { is_ai = no }
+						post_notification = te_pa_firm_failing
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_pa_n_failing }
+		remove_variable = te_pa_n_failing
+	}
+	if = {
+		limit = {
+			has_variable = te_pa_share
+			var:te_pa_share >= te_pa_gen_big_share
+		}
+		if = {
+			limit = { NOT = { has_variable = te_pa_n_big } }
+			set_variable = { name = te_pa_n_big value = 1 }
+			if = {
+				limit = { var:te_pa_turns > 0 }
+				save_scope_as = te_pa_l_actor
+				save_scope_value_as = { name = te_pa_l_size value = var:te_pa_share }
+				scope:te_pa_home = { te_pa_ledger_add = { VERB = 11 KNOWN = 1 } }
+				te_pa_debug_ledger_size = yes
+				save_scope_as = te_pa_note_firm
+				scope:te_pa_home = {
+					if = {
+						limit = { is_ai = no }
+						post_notification = te_pa_firm_big
+					}
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = te_pa_n_big }
+		remove_variable = te_pa_n_big
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The quarterly step (§ 4.2): currencies accrue; holdings' growth and decay are later tasks'. Walks the
+# country's companies only, never its states.
+# ---------------------------------------------------------------------------
+
+# Country scope (scope:te_pa_home saved by te_pa_monthly).
+te_pa_quarter = {
+	every_company = {
+		limit = { has_variable = te_pa_init }
+		te_pa_accrue = yes
+		te_pa_row_sync = yes
+	}
+	te_pa_rows_sweep = yes
+}
+
+# Company scope. A quarter of a year's Funds (a claim on the investment pool: nothing moves), Connections and
+# Standing (§ 4.3), and a Restrained firm's Grievance (§ 4.7).
+te_pa_accrue = {
+	set_variable = { name = te_pa_funds value = te_pa_funds_after_quarter }
+	set_variable = { name = te_pa_conn value = te_pa_conn_after_quarter }
+	set_variable = { name = te_pa_stand value = te_pa_stand_after_quarter }
+	change_variable = { name = te_pa_age_q add = 1 }
+	if = {
+		limit = { var:te_pa_posture ?= -1 }
+		change_variable = { name = te_pa_restrained_q add = 1 }
+		if = {
+			limit = { var:te_pa_restrained_q >= te_pa_griev_restrained_quarters }
+			set_variable = { name = te_pa_restrained_q value = 0 }
+			change_variable = { name = te_pa_griev add = 1 }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Rows (plan § Rows): one script container a firm in the country list te_pa_rows, holding te_pa_r_firm and a copy
+# of every figure the tab shows, because GUI access to a company's variables is unproven and a container's is
+# proven. te_pa_row_sync writes the copy at the end of each turn and quarter; a task that shows another figure
+# adds its line there (test_private_actors.py holds every te_pa_r_ read to a write here).
+# ---------------------------------------------------------------------------
+
+# Company scope. Makes the firm's row.
+te_pa_row_make = {
+	save_scope_as = te_pa_row_firm
+	owner = { save_scope_as = te_pa_row_home }
+	clear_saved_scope = te_pa_row_new
+	create_container = {
+		tags = { te_pa_row }
+		parent = scope:te_pa_row_home
+		save_scope_as = te_pa_row_new
+	}
+	if = {
+		limit = { exists = scope:te_pa_row_new }
+		scope:te_pa_row_new = { set_variable = { name = te_pa_r_firm value = scope:te_pa_row_firm } }
+		set_variable = { name = te_pa_row value = scope:te_pa_row_new }
+		scope:te_pa_row_home = { add_to_variable_list = { name = te_pa_rows target = scope:te_pa_row_new } }
+	}
+}
+
+# Company scope. Copies the record onto the row, making the row first if the firm has none (or a dead one).
+te_pa_row_sync = {
+	if = {
+		limit = { NOT = { var:te_pa_row ?= { has_tag = te_pa_row } } }
+		if = {
+			limit = { has_variable = te_pa_row }
+			remove_variable = te_pa_row
+		}
+		te_pa_row_make = yes
+	}
+	save_scope_as = te_pa_sync_firm
+	var:te_pa_row ?= {
+		set_variable = { name = te_pa_r_firm value = scope:te_pa_sync_firm }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_goal TO = te_pa_r_goal }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_reason TO = te_pa_r_reason }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_reason_val TO = te_pa_r_reason_val }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_reason_good TO = te_pa_r_reason_good }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_reason_law TO = te_pa_r_reason_law }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cond TO = te_pa_r_cond }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cycle TO = te_pa_r_cycle }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_funds TO = te_pa_r_funds }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_conn TO = te_pa_r_conn }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_stand TO = te_pa_r_stand }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_griev TO = te_pa_r_griev }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_posture TO = te_pa_r_posture }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_levels TO = te_pa_r_levels }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_share TO = te_pa_r_share }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_turns TO = te_pa_r_turns }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_turn_in TO = te_pa_r_turn_in }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_bold_t TO = te_pa_r_bold_t }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_force TO = te_pa_r_force }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_patern TO = te_pa_r_patern }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_attach TO = te_pa_r_attach }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_inputs TO = te_pa_r_p_inputs }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_inputs TO = te_pa_r_w_inputs }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_inputs TO = te_pa_r_s_inputs }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_market TO = te_pa_r_p_market }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_market TO = te_pa_r_w_market }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_market TO = te_pa_r_s_market }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_abroad TO = te_pa_r_p_abroad }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_abroad TO = te_pa_r_w_abroad }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_abroad TO = te_pa_r_s_abroad }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_law TO = te_pa_r_p_law }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_law TO = te_pa_r_w_law }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_law TO = te_pa_r_s_law }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_dominance TO = te_pa_r_p_dominance }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_dominance TO = te_pa_r_w_dominance }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_dominance TO = te_pa_r_s_dominance }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_labor TO = te_pa_r_p_labor }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_labor TO = te_pa_r_w_labor }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_labor TO = te_pa_r_s_labor }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_tech TO = te_pa_r_p_tech }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_tech TO = te_pa_r_w_tech }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_tech TO = te_pa_r_s_tech }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_p_survival TO = te_pa_r_p_survival }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_w_survival TO = te_pa_r_w_survival }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_survival TO = te_pa_r_s_survival }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_g_law_enacting TO = te_pa_r_stance_enacting }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_g_law_enacting_law TO = te_pa_r_enacting_law }
+		# Holdings' strengths, 0 until the tasks that build them (Tasks 4 to 9) set their variables.
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cartel TO = te_pa_r_cartel }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_reg TO = te_pa_r_reg }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_press TO = te_pa_r_press }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_town TO = te_pa_r_town }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_lab TO = te_pa_r_lab }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_found TO = te_pa_r_found }
+		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_seat TO = te_pa_r_seat }
+		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_exec TO = te_pa_r_exec }
+	}
+}
+
+# Container scope. A scope from a firm's record (scope:<FIRM>) onto the container, or none while the firm has none.
+te_pa_copy_scope = {
+	if = {
+		limit = { scope:$FIRM$ = { has_variable = $FROM$ } }
+		set_variable = { name = $TO$ value = scope:$FIRM$.var:$FROM$ }
+	}
+	else_if = {
+		limit = { has_variable = $TO$ }
+		remove_variable = $TO$
+	}
+}
+
+# Country scope. The rows list is rebuilt from the companies when it is missing: a revolution's winner inherits no
+# lists (spec § 13), and the teardown destroys the rows.
+te_pa_rows_check = {
+	if = {
+		limit = {
+			NOT = { has_variable_list = te_pa_rows }
+			any_company = { has_variable = te_pa_init }
+		}
+		every_company = {
+			limit = { has_variable = te_pa_init }
+			if = {
+				limit = { has_variable = te_pa_row }
+				remove_variable = te_pa_row
+			}
+			te_pa_row_sync = yes
+		}
+	}
+}
+
+# Country scope. A row whose firm no longer resolves, or holds no record, goes: a company removed without
+# on_company_disbanded (whether remove_company fires it is unread), or a record cleared.
+te_pa_rows_sweep = {
+	if = {
+		limit = { has_variable_list = te_pa_rows }
+		save_scope_as = te_pa_sweep_home
+		every_in_list = {
+			variable = te_pa_rows
+			limit = { NOT = { var:te_pa_r_firm ?= { has_variable = te_pa_init } } }
+			add_to_temporary_list = te_pa_rows_dead
+		}
+		every_in_list = {
+			list = te_pa_rows_dead
+			save_scope_as = te_pa_row_dead
+			scope:te_pa_sweep_home = { remove_list_variable = { name = te_pa_rows target = scope:te_pa_row_dead } }
+			destroy_container = yes
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The teardown and the clear
+# ---------------------------------------------------------------------------
+
+# Country scope: the rule switched off (te_pa_monthly, once). Removes what the system keeps outside the firms'
+# records, which stay, so switching the rule back on resumes from them:
+#   - the rows, a copy for the tab, which hides with the rule; rebuilt when it comes back (te_pa_rows_check);
+#   - the threshold notices' flags, so a firm still past a line when the rule returns is noticed again;
+#   - te_pa_q_in, which marks the country as running the system.
+# The ledger stays (a record of what happened). Modifiers: none yet. Every task that applies one removes it here,
+# country and state alike; test_rule_off_teardown.py holds every te_pa_ static modifier to a removal here.
+te_pa_teardown = {
+	if = {
+		limit = { has_variable_list = te_pa_rows }
+		every_in_list = {
+			variable = te_pa_rows
+			add_to_temporary_list = te_pa_rows_gone
+		}
+		every_in_list = {
+			list = te_pa_rows_gone
+			destroy_container = yes
+		}
+		clear_variable_list = te_pa_rows
+	}
+	every_company = {
+		limit = { has_variable = te_pa_init }
+		if = {
+			limit = { has_variable = te_pa_row }
+			remove_variable = te_pa_row
+		}
+		if = {
+			limit = { has_variable = te_pa_n_failing }
+			remove_variable = te_pa_n_failing
+		}
+		if = {
+			limit = { has_variable = te_pa_n_big }
+			remove_variable = te_pa_n_big
+		}
+	}
+	remove_variable = te_pa_q_in
+}
+
+# Company scope, the company being disbanded (te_pa_company_disbanded, on_company_disbanded), with scope:te_pa_home
+# its country (the on-action's ROOT). The ledger records the end (verb 13, while the rule is on); the row goes; the
+# record's marker goes, so the same object can never carry a stale one. Each holding a later task builds is cleared
+# here too.
+te_pa_clear_firm = {
+	if = {
+		limit = { te_pa_on = yes }
+		te_pa_ledger_firm = { VERB = 13 }
+	}
+	if = {
+		limit = { has_variable = te_pa_row }
+		var:te_pa_row ?= {
+			save_scope_as = te_pa_row_dead
+			scope:te_pa_home = {
+				if = {
+					limit = { has_variable_list = te_pa_rows }
+					remove_list_variable = { name = te_pa_rows target = scope:te_pa_row_dead }
+				}
+			}
+			destroy_container = yes
+		}
+		remove_variable = te_pa_row
+	}
+	if = {
+		limit = { has_variable = te_pa_init }
+		remove_variable = te_pa_init
+	}
+	if = {
+		limit = { has_variable = te_pa_turn_in }
+		remove_variable = te_pa_turn_in
+	}
+}
+
+# Country scope, a civil war's winner (te_civil_war_on_won, te_civil_war_on_actions.txt). The winner continues the
+# nation (owner, 2026-09-26): the firms' records are company variables, which move with the companies if the
+# companies move, and the rows list, which a winner never inherits, is rebuilt at its next monthly pulse
+# (te_pa_rows_check); the ledger is lost by design. What this cannot know is whether the companies and their
+# variables do move: probe 8, the firm_revolution self-check, armed here (te_pa_debug_effects.txt).
+te_pa_repair_after_civil_war = {
+	te_pa_debug_revolution_arm = yes
+}

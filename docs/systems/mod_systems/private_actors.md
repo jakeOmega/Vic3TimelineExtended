@@ -1,0 +1,93 @@
+# Private Actors
+
+Part of the [mod systems reference](../mod_systems.md), which indexes every system.
+
+Every company in every country is a **firm**: an actor with a goal derived from its position, three currencies, a yearly turn of its own and, in later phases, holdings and verbs. Spec: `docs/superpowers/specs/2026-11-28-actors-firms-design.md` (#2140); plan: `docs/superpowers/plans/2026-11-28-private-actors.md`. This file covers the chassis (the plan's Tasks 1 and 2): the firm's record, the turn, the goals, the currencies, the ledger and the rule. Each later chain (the trust, politics at home, the workforce, technology, relief, the chain abroad) adds its own `##` section.
+
+**Files.** Generated, from `scripts/generators/gen_private_actors.py` and its config `private_actors_config.py`: `common/scripted_effects/te_pa_gen_effects.txt`, `common/scripted_triggers/te_pa_gen_triggers.txt`, `common/script_values/te_pa_gen_values.txt`, `common/customizable_localization/te_pa_gen_custom_loc.txt`. Hand-written: `common/scripted_triggers/te_pa_rule_triggers.txt` (the rule's one reader), `te_pa_core_triggers.txt`; `common/scripted_effects/te_pa_core_effects.txt` (the pulse, the record, the turn, the quarter, rows, the teardown), `te_pa_goals_effects.txt`, `te_pa_ledger_effects.txt`, `te_pa_debug_effects.txt` (self-checks); `common/script_values/te_pa_core_values.txt`, `te_pa_goals_values.txt`, `te_pa_ledger_values.txt`, `te_pa_debug_values.txt`; `common/on_actions/te_pa_on_actions.txt`; `common/customizable_localization/te_pa_custom_loc.txt`; `common/messages/te_pa_messages.txt`. Tests: `test_gen_private_actors.py`, `test_private_actors.py`, `PrivateActorsTeardownTest` in `test_rule_off_teardown.py`. Play-test list: `docs/testing/private-actors-playtest.md`.
+
+## The Firm Record
+
+A firm's record is company variables on the company itself (companies hold variables; `te_company_months_failing` and the prestige goods already use them). `te_pa_make_record` writes it the first monthly pulse a company is seen with the rule on, skipping `te_pa_gen_excluded_type` (the Grand Monument naming placeholder). The plan's Storage table is the full list; the chassis writes:
+
+| Variable | Meaning |
+|---|---|
+| `te_pa_init` | the record exists |
+| `te_pa_turn_in` | months to the next turn; a new record draws 1 to 12 (`random_list`), so the world's turns spread over the year |
+| `te_pa_turns`, `te_pa_age_q` | turns taken; quarters since the record was made (the engine has no company founding date to read) |
+| `te_pa_goal`, `te_pa_reason`, `te_pa_reason_val`, `_good`, `_law` | the goal (codes below), its reason code, the reason's figure and the good or law it names, by index (Task 1's indices) |
+| `te_pa_p_<g>`, `te_pa_w_<g>`, `te_pa_s_<g>` | each goal's pressure (0-100), weight (0.5-1.5) and score |
+| `te_pa_funds`, `te_pa_conn`, `te_pa_stand` | the three currencies (§ Currencies) |
+| `te_pa_griev`, `te_pa_restrained_q` | Grievance, and the quarters a Restrained firm has counted toward its next point |
+| `te_pa_posture` | 1 Favored, 0 Tolerated, -1 Restrained (§ 4.7); a player's is the player's, an AI's derived each turn |
+| `te_pa_levels`, `te_pa_share` | owned levels (a ladder of `company_owned_levels >= N`, each rung a quarter above the last, worldwide), and the share of the sector, `te_pa_levels / max(1, te_pa_g_sector_levels)`, capped at 1 |
+| `te_pa_cond`, `te_pa_cycle` | condition: 1 prospering (`company_is_prosperous`), -1 failing (prosperity under 25 and falling, or 12 months of `te_company_months_failing`), 0 steady; the home Banking Cycle: 1 expansion or boom, -1 downturn or panic, 0 otherwise or with the cycle not running |
+| `te_pa_bold_t`, `te_pa_force`, `te_pa_patern`, `te_pa_attach` | temperament from the executive, -1 to 1 each, 0 with none |
+| `te_pa_exec`, `te_pa_ig_gov`, `te_pa_ig_marginal` | the executive at the last turn (a character), and whether its interest group is in government or marginalized |
+| `te_pa_seat`, `te_pa_seat_fallback` | the seat (a state, § 4.5), and 1 while it is the capital for want of a state with the firm's buildings |
+| `te_pa_trade` | its stance on protection, -2 to 2, from the home market's trade in its output and inputs (§ 5.4) |
+| `te_pa_row`, `te_pa_n_failing`, `te_pa_n_big` | its row container; the two threshold notices' crossings |
+
+Holdings (`te_pa_cartel`, `te_pa_reg`, `te_pa_press`, `te_pa_town`, `te_pa_lab`, `te_pa_found`) are unset until the task that builds each; a reader treats unset as 0. The record is cleared from `on_company_disbanded` (`te_pa_clear_firm`: a ledger line, the row, the marker).
+
+**Temperament** (§ 5.3) is generated: `TRAIT_TEMPERAMENT` and `IDEOLOGY_TEMPERAMENT` in the config give each personality trait and character ideology its weights on four axes (Boldness, Taste for force, Paternalism, Attachment), with a reason for every one that has none; `test_gen_private_actors.py` fails on a trait or ideology in neither table. `te_pa_gen_temper_<axis>` sums the executive's (through `executive ?=`, clamped to -1..1). Attachment adds 0.5 when the executive's culture is a primary culture of the home country and takes 0.5 when it is not.
+
+**The seat** (§ 4.5). Script has no link from a company to its headquarters state (probe 11: the 1.15 event targets give a company only `executive`, `owner`, `type`, `prosperity` and `weekly_prosperity_change`; `any_scope_regional_hqs` reaches its regional headquarters, not its main one). So the seat is the spec's fallback: the incorporated home state with the most levels of the firm's building types (`te_pa_gen_seat_pick`, one branch a type, ordered by `te_pa_gen_seat_levels_<type>`), picked when the firm has none or its seat has left the country, and kept otherwise. With no such state it is the capital, and the pick is tried again each turn. Self-check `firm_hq`.
+
+## The Turn
+
+`on_monthly_pulse_country` runs `te_pa_monthly` (`te_pa_on_actions.txt`). With the rule on: records for new firms, then each firm's `te_pa_turn_in` counts down and at 0 the firm takes its turn and the count starts at 12 again, then the country's `te_pa_q_in` counts down and at 0 the quarter runs (every third month). Task 4's declared-move countdown goes after the turns. The global `on_yearly_pulse` refreshes Task 1's technology cache (`te_pa_gen_tech_cache`); the first monthly pulse with the rule on fills it once.
+
+**The turn** (`te_pa_turn`, company scope, `scope:te_pa_firm` and `scope:te_pa_home` saved): `te_pa_gen_assess` (Task 1's readings `te_pa_g_*`); position (levels, share, condition, cycle); temperament and the executive; the seat; an AI country's posture (§ 12.1: Favored when the executive's group is in government or under Dirigiste Policy, Restrained when it is marginalized or under Antitrust Enforcement with a cartel, Tolerated otherwise; `te_pa_set_posture` logs a change); `te_pa_gen_law_pick` (after the share and posture it reads); the trade stance; the eight scores; the choice; the threshold notices; the self-checks' tallies; `te_pa_row_sync`. No verbs: Task 4's `te_pa_act` goes after the choice. A type the generator doesn't know (`te_pa_g_known` 0) scores nothing and holds no goal.
+
+**The quarter** (`te_pa_quarter`, country scope) walks the country's firms only, never its states: currencies accrue (`te_pa_accrue`), the rows are copied, and rows whose firm no longer resolves are swept (a company removed without `on_company_disbanded`, which `remove_company` may not fire).
+
+## Goals
+
+Eight goals (§ 5.2), codes 1 Cheaper Inputs, 2 A Protected Market, 3 Security of Its Assets Abroad, 4 A Friendly Law, 5 Dominance, 6 Labor Peace, 7 A Technical Lead, 8 Survival (0: none). Each has a pressure `te_pa_p_<g>_value`, 0-100, and a weight `te_pa_w_<g>_value`, 0.5-1.5 (`te_pa_goals_values.txt`); the score is the product, plus `te_pa_goal_held_bonus` (15) for the goal held while its pressure is above 0 (`te_pa_score_one`). The held goal is weighed first and the others must beat it, so a tie keeps it; nothing above 0 means no goal (`te_pa_choose_goal`). `test_private_actors.py` pins the bounds, the formula and the choice.
+
+| Goal | Pressure (first guesses) |
+|---|---|
+| Cheaper Inputs | an input's price above base, ×120 (the second input at three-quarters): 40% above reads 48 |
+| A Protected Market | the output's price below base while the market imports it, ×120 |
+| Security abroad | 0 until Task 9 replaces `te_pa_p_abroad_value` |
+| A Friendly Law | the largest of: the worst law in force (Task 1's `te_pa_g_law_worst`) or the trade policy's burden, ×25 a point; the law being enacted against it (stance or trade burden), ×35; the law being enacted for it, ×20; the best law it could move to, ×15; and +10 where it wants a tariff on its output (the market imports it) |
+| Dominance | share ×125 (40% reads 50); 0 under Command Economy, Cooperative Ownership or the Command or Cooperative Economy antitrust law |
+| Labor Peace | the seat's turmoil and radical fraction, their mean ×150 (at most 60), a labor law being enacted against it ×15 a point, `je_strike` +30; ×0.75, 1 or 1.25 by staffing band |
+| A Technical Lead | `te_pa_g_tech_gap` ×10 |
+| Survival | 0 when prosperous; prosperity below 50 (up to 35), falling while below it (25), the failing months (up to 15 at five years), a slump (10), a law ending private ownership or removing its buildings (20). The parts reach 80 without the fall, so it passes 80 only when prosperity is low and falling |
+
+**Trade** (§ 5.4, § 8.1). `te_pa_trade` is +1 when the market imports the firm's output, -1 when it exports it, -0.5 for each input it imports. A protective trade policy (everything but Free Trade) burdens a firm by its stance against protection, Free Trade by its stance for it (`te_pa_trade_burden_value`, 0-2). Tariff levels are not read yet (they need per-good reads; Task 5's petition reads the level it sets).
+
+**Weights** move from 1 by temperament and condition (§ 5.2a, § 5.4): a slump weighs A Protected Market and Survival up and Dominance down; a boom weighs Dominance, A Technical Lead and Security abroad up; a prosperous firm weighs Dominance and A Technical Lead up, a failing one Survival, A Friendly Law and Cheaper Inputs; Boldness weighs Security abroad, Dominance and A Technical Lead up and Survival down; Attachment weighs A Protected Market up and Security abroad down; Paternalism either way weighs Labor Peace up; an executive whose group is in government weighs A Friendly Law up. Each coefficient is a named value in `te_pa_goals_values.txt`.
+
+**Reasons.** The choice writes the readout that caused the goal (`te_pa_reason_write`; codes in `te_pa_goals_effects.txt`'s header, text `te_pa_reason_text` in `te_pa_custom_loc.txt`): an input's price, a law by name, the share, the seat's unrest, the gap, prosperity. A change of goal is a ledger line carrying the reason.
+
+## Currencies
+
+Accrued each quarter at a quarter of the yearly rate (`te_pa_accrue`; values in `te_pa_core_values.txt`, all first guesses).
+
+- **Funds** (pounds): a tenth a year of the firm's estimated dividends, its share of the country's building levels (`te_pa_levels / building_levels`) times the investment pool's gross income (weekly, ×52), times 0.5 at prosperity 0 to 1.5 at 100; halved in a downturn or panic and halved again for a failing firm; none under Command Economy or Cooperative Ownership. Capped at five years' accrual at today's rate, so a claim shrinks with the pool. A claim, not a transfer: nothing leaves the pool until Task 4's `te_pa_spend_funds`. A new record starts with one year's accrual.
+- **Connections** (0-100): a year's inflow of 0.25 a year of record age (up to 20 years) and 5 while the executive's interest group is in government, ×1.5 Favored and ×0.5 Restrained, less 5% a quarter, so a firm settles at about 27 old and alone, 54 with its group in government, 81 with that and Favored. Starts at 20.
+- **Standing** (0-100): drifts a tenth of the way to 50 each quarter until Tasks 4 and 6 give it its sources. Starts at 50.
+- **Grievance**: a Restrained firm gains one every 20 quarters (§ 4.7).
+
+## The Ledger
+
+The country list `te_pa_ledger`: script containers (tag `te_pa_ledger`, parent the country), at most 20, the oldest evicted as `un_ledger_log_add` does (`any_in_list` count 21, `ordered_in_list` by `te_pa_ledger_age_order`, the negated sequence). One writer, `te_pa_ledger_add` (country scope, `VERB` and `KNOWN`; the caller saves `scope:te_pa_l_actor`, optionally `scope:te_pa_l_target` and `scope:te_pa_l_size`, which it clears when done, and it leaves the entry as `scope:te_pa_l_new`). An entry holds `te_pa_l_seq`, `_verb`, `_actor`, `_target`, `_size`, `_known`, `_month`; a change of goal also the reason under the row's names (`te_pa_r_reason`, `_val`, `_good`, `_law`), so one set of reason lines renders both. Lost to a revolution's winner by design; kept when the rule is switched off.
+
+Verb codes come in blocks: 1-19 the chassis, 20-39 Task 4, 40-59 Task 5, 60-79 Task 6, 80-99 Task 7, 100-119 Task 8, 120-139 Task 9, 140-159 Task 10. The chassis's: 1-8 now seeks goal N, 9 a new executive, 10 is failing, 11 controls 40% of its sector (size: the share), 12 established (a record made after the country's first month), 13 dissolved, 14/15/16 Favored/Tolerated/Restrained (any source, Task 3's control included, through `te_pa_set_posture`), 17 no longer presses for anything. Each has a line in `te_pa_ledger_line` (`te_pa_custom_loc.txt`), loc `te_pa_ledger_verb_<code>`, written as what follows the firm's name: the tab prints the name first, from `te_pa_l_actor` in the `.gui`, because a `.yml` line's reach into a container's scope variable is unverified. `test_private_actors.py` fails on a verb called with no line.
+
+**Rows.** The country list `te_pa_rows` holds a container a firm (tag `te_pa_row`, parent the country) with `te_pa_r_firm` and a copy of every figure the tab shows, written by `te_pa_row_sync` at the end of a turn and of each quarter: goal and reason, condition and cycle, the currencies, Grievance, posture, levels and share, temperament, the eight pressures, weights and scores (`te_pa_r_p_<g>`, `_w_`, `_s_`), the stance on the law being enacted and its index (`te_pa_r_stance_enacting`, `te_pa_r_enacting_law`), the holdings' strengths (0 until built), the seat and the executive (`te_pa_r_seat`, `te_pa_r_exec`), the turns taken and the months to the next. A later task that shows a figure adds its line there; `test_private_actors.py` fails on a `te_pa_r_` variable read anywhere that the sync doesn't write. The list is rebuilt when missing (`te_pa_rows_check`: a revolution's winner inherits no lists, and the teardown destroys the rows), and a row is destroyed with its firm.
+
+**Threshold notices** (§ 4.6, `te_pa_messages.txt`): "is failing" (`te_pa_firm_failing`, condition -1) and "holds 40% of its sector" (`te_pa_firm_big`, share at Task 1's `te_pa_gen_big_share`), once per crossing: a flag on the firm (`te_pa_n_failing`, `te_pa_n_big`) holds while it stays past the line and goes when it falls back. A player's country gets the notice, any country the ledger line. A firm's first turn sets the flags without either, so a game's start reads no crossings.
+
+## The Rule
+
+`te_private_actors_rule` (`common/game_rules/extra_game_rules.txt`), default `te_private_actors_disabled`, read only through `te_pa_on` (`te_pa_rule_triggers.txt`), positively, so a save from before the rule plays with it off; `test_private_actors.py` fails on a `has_game_rule` for it anywhere else. Every event the system fires checks `te_pa_on`.
+
+**Switched off mid-game**, each country's next monthly pulse runs `te_pa_teardown` once (`te_pa_q_in` marks a country the system has run in, and the teardown removes it): the rows go, the notices' flags go, and every modifier the system applies goes (none in the chassis; each later task adds its removal there, and `test_private_actors.py` holds every `add_modifier` in a `te_pa_` file to it). The firms' records stay, and the ledger. **Switched back on**, the next pulse rebuilds the rows and the turns go on from the records. Play-test: `docs/testing/rules-off-midgame-playtest.md` § Private Actors.
+
+**A revolution's winner** continues the nation: the records are company variables, which go with the companies if the companies go (probe 8, the self-check `firm_revolution`, armed from `te_civil_war_on_won` through `te_pa_repair_after_civil_war`); the rows list is rebuilt; the ledger is lost by design; a company that arrives without a record gets one at the winner's next pulse.
+
+**Self-checks**, once a game each (`te_pa_debug_effects.txt`; table in the play-test list): `firm_share`, `firm_executive` (probe 7), `firm_hq` (probe 11), `firm_revolution` (probe 8), `firm_price_read` and `law_available` (Task 1's readings), `ledger_size`.

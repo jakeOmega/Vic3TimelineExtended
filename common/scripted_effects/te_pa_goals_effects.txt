@@ -1,0 +1,317 @@
+﻿# Private Actors, the eight goals: scoring, the choice and its reason (docs/systems/mod_systems/private_actors.md
+# § Goals; spec §§ 5.2, 5.2a). Company scope, inside the turn (te_pa_turn, te_pa_core_effects.txt), which has saved
+# scope:te_pa_firm (the company) and scope:te_pa_home (its country). The pressures and weights are
+# te_pa_goals_values.txt's.
+#
+# Goal codes (te_pa_goal): 1 Cheaper inputs, 2 A protected market, 3 Security of its assets abroad, 4 A friendly
+# law, 5 Dominance, 6 Labor peace, 7 A technical lead, 8 Survival; 0 none. <g> in variable names: inputs, market,
+# abroad, law, dominance, labor, tech, survival.
+#
+# Reason codes (te_pa_reason, with te_pa_reason_val its figure and te_pa_reason_good / _law the good or law it
+# names, by index; te_pa_reason_text names it, te_pa_custom_loc.txt):
+#   11 an input's price above base (val: the share above, good: the input)
+#   21 its output's price below base while the market imports it (val: the share below, good: the output)
+#   31 trouble at its concessions (Task 9)
+#   41 a law in force burdens it (val: the stance, law)        42 a law being enacted burdens it (val, law)
+#   43 a law being enacted favors it (val, law)                44 a law it could move to favors it (val, law)
+#   45 the trade policy in force burdens it (val: the burden)  46 the trade policy being enacted burdens it (val)
+#   47 it wants a tariff on its output (good)
+#   51 its share of the sector (val: the share)
+#   61 turmoil and radicals at its seat (val: their mean)      62 a labor law being enacted (val: the stance, law)
+#   63 vanilla's Strike entry
+#   71 the technology gap (val: te_pa_g_tech_gap)
+#   81 prosperity low and falling (val: prosperity)            82 the failing-company count (val: the months)
+#   83 the Banking Cycle in downturn or panic                  84 a law ending private ownership or removing its
+#                                                                 buildings (law, when the table covers it)
+#   85 prosperity low (val: prosperity)
+
+# The eight pressures, weights and scores: te_pa_p_<g>, te_pa_w_<g>, te_pa_s_<g>. A firm whose type the sector
+# generator doesn't know (te_pa_g_known 0) scores nothing and holds no goal; its record stays.
+te_pa_score_goals = {
+	if = {
+		limit = { var:te_pa_g_known ?= 1 }
+		te_pa_score_one = { G = inputs CODE = 1 }
+		te_pa_score_one = { G = market CODE = 2 }
+		te_pa_score_one = { G = abroad CODE = 3 }
+		te_pa_score_one = { G = law CODE = 4 }
+		te_pa_score_one = { G = dominance CODE = 5 }
+		te_pa_score_one = { G = labor CODE = 6 }
+		te_pa_score_one = { G = tech CODE = 7 }
+		te_pa_score_one = { G = survival CODE = 8 }
+	}
+	else = {
+		te_pa_score_zero_one = { G = inputs }
+		te_pa_score_zero_one = { G = market }
+		te_pa_score_zero_one = { G = abroad }
+		te_pa_score_zero_one = { G = law }
+		te_pa_score_zero_one = { G = dominance }
+		te_pa_score_zero_one = { G = labor }
+		te_pa_score_zero_one = { G = tech }
+		te_pa_score_zero_one = { G = survival }
+	}
+}
+
+# One goal's score: pressure times weight, and te_pa_goal_held_bonus when it is the goal held and has a pressure at
+# all (a goal no verb serves reads 0 and gets no bonus, § 5.2a).
+te_pa_score_one = {
+	set_variable = { name = te_pa_p_$G$ value = te_pa_p_$G$_value }
+	set_variable = { name = te_pa_w_$G$ value = te_pa_w_$G$_value }
+	set_variable = { name = te_pa_s_$G$ value = var:te_pa_p_$G$ }
+	change_variable = { name = te_pa_s_$G$ multiply = var:te_pa_w_$G$ }
+	if = {
+		limit = {
+			var:te_pa_goal ?= $CODE$
+			var:te_pa_p_$G$ > 0
+		}
+		change_variable = { name = te_pa_s_$G$ add = te_pa_goal_held_bonus }
+	}
+}
+
+te_pa_score_zero_one = {
+	set_variable = { name = te_pa_p_$G$ value = 0 }
+	set_variable = { name = te_pa_w_$G$ value = 1 }
+	set_variable = { name = te_pa_s_$G$ value = 0 }
+}
+
+# The highest score is the goal (§ 5.2). The goal held is considered first, while it scores at all, and the others
+# must beat it, so a tie keeps it; among the rest a tie goes to the lower code. No score above 0: no goal. A change is logged with its
+# reason (ledger verb = the new goal's code, or 17 for none); a goal kept has its reason refreshed silently.
+te_pa_choose_goal = {
+	set_local_variable = { name = te_pa_best_s value = 0 }
+	set_local_variable = { name = te_pa_best_g value = 0 }
+	te_pa_choose_held = { G = inputs CODE = 1 }
+	te_pa_choose_held = { G = market CODE = 2 }
+	te_pa_choose_held = { G = abroad CODE = 3 }
+	te_pa_choose_held = { G = law CODE = 4 }
+	te_pa_choose_held = { G = dominance CODE = 5 }
+	te_pa_choose_held = { G = labor CODE = 6 }
+	te_pa_choose_held = { G = tech CODE = 7 }
+	te_pa_choose_held = { G = survival CODE = 8 }
+	te_pa_choose_one = { G = inputs CODE = 1 }
+	te_pa_choose_one = { G = market CODE = 2 }
+	te_pa_choose_one = { G = abroad CODE = 3 }
+	te_pa_choose_one = { G = law CODE = 4 }
+	te_pa_choose_one = { G = dominance CODE = 5 }
+	te_pa_choose_one = { G = labor CODE = 6 }
+	te_pa_choose_one = { G = tech CODE = 7 }
+	te_pa_choose_one = { G = survival CODE = 8 }
+	if = {
+		limit = {
+			OR = {
+				te_pa_v_goal > local_var:te_pa_best_g
+				te_pa_v_goal < local_var:te_pa_best_g
+			}
+		}
+		set_variable = { name = te_pa_goal value = local_var:te_pa_best_g }
+		te_pa_reason_write = yes
+		te_pa_ledger_goal_changed = yes
+	}
+	else = {
+		te_pa_reason_write = yes
+	}
+}
+
+te_pa_choose_held = {
+	if = {
+		limit = {
+			var:te_pa_goal ?= $CODE$
+			has_variable = te_pa_s_$G$
+			var:te_pa_s_$G$ > 0
+		}
+		set_local_variable = { name = te_pa_best_s value = var:te_pa_s_$G$ }
+		set_local_variable = { name = te_pa_best_g value = $CODE$ }
+	}
+}
+
+te_pa_choose_one = {
+	if = {
+		limit = {
+			has_variable = te_pa_s_$G$
+			var:te_pa_s_$G$ > local_var:te_pa_best_s
+		}
+		set_local_variable = { name = te_pa_best_s value = var:te_pa_s_$G$ }
+		set_local_variable = { name = te_pa_best_g value = $CODE$ }
+	}
+}
+
+# The goal's reason (§ 5.2a: "the readout that caused it"): te_pa_reason, te_pa_reason_val, te_pa_reason_good,
+# te_pa_reason_law, by the codes in this file's header.
+te_pa_reason_write = {
+	set_variable = { name = te_pa_reason value = 0 }
+	set_variable = { name = te_pa_reason_val value = 0 }
+	set_variable = { name = te_pa_reason_good value = 0 }
+	set_variable = { name = te_pa_reason_law value = 0 }
+	if = {
+		limit = { var:te_pa_goal ?= 1 }
+		set_variable = { name = te_pa_reason value = 11 }
+		if = {
+			limit = { te_pa_p_inputs_in1 >= te_pa_p_inputs_in2 }
+			set_variable = { name = te_pa_reason_val value = te_pa_v_in1_pricier }
+			te_pa_reason_good_from = { SLOT = in1 }
+		}
+		else = {
+			set_variable = { name = te_pa_reason_val value = te_pa_v_in2_pricier }
+			te_pa_reason_good_from = { SLOT = in2 }
+		}
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 2 }
+		set_variable = { name = te_pa_reason value = 21 }
+		set_variable = { name = te_pa_reason_val value = { value = 0 subtract = te_pa_v_out_pricier } }
+		te_pa_reason_good_from = { SLOT = out }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 3 }
+		set_variable = { name = te_pa_reason value = 31 }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 4 }
+		te_pa_reason_law_write = yes
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 5 }
+		set_variable = { name = te_pa_reason value = 51 }
+		set_variable = { name = te_pa_reason_val value = te_pa_v_share }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 6 }
+		if = {
+			limit = { owner = { has_journal_entry = je_strike } }
+			set_variable = { name = te_pa_reason value = 63 }
+		}
+		else_if = {
+			limit = { te_pa_p_labor_law > te_pa_p_labor_unrest }
+			set_variable = { name = te_pa_reason value = 62 }
+			set_variable = { name = te_pa_reason_val value = te_pa_v_law_enacting }
+			te_pa_reason_law_from = { WHICH = enacting }
+		}
+		else = {
+			set_variable = { name = te_pa_reason value = 61 }
+			set_variable = { name = te_pa_reason_val value = te_pa_seat_unrest }
+		}
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 7 }
+		set_variable = { name = te_pa_reason value = 71 }
+		set_variable = { name = te_pa_reason_val value = te_pa_v_tech_gap }
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 8 }
+		te_pa_reason_survival_write = yes
+	}
+}
+
+# The good a reason names: the slot's good index, from te_pa_gen_assess.
+te_pa_reason_good_from = {
+	if = {
+		limit = { has_variable = te_pa_g_$SLOT$_good }
+		set_variable = { name = te_pa_reason_good value = var:te_pa_g_$SLOT$_good }
+	}
+}
+
+# The law a reason names: the index te_pa_gen_law_pick found (worst, best or enacting).
+te_pa_reason_law_from = {
+	if = {
+		limit = { has_variable = te_pa_g_law_$WHICH$_law }
+		set_variable = { name = te_pa_reason_law value = var:te_pa_g_law_$WHICH$_law }
+	}
+}
+
+# A friendly law's reason: the largest of te_pa_p_law_value's parts, in its order (in force, trade, enacting
+# against, enacting for, open), else the tariff it wants.
+te_pa_reason_law_write = {
+	if = {
+		limit = {
+			te_pa_p_law_in_force > 0
+			te_pa_p_law_in_force >= te_pa_p_law_trade
+			te_pa_p_law_in_force >= te_pa_p_law_enacting_against
+			te_pa_p_law_in_force >= te_pa_p_law_enacting_for
+			te_pa_p_law_in_force >= te_pa_p_law_open
+		}
+		set_variable = { name = te_pa_reason value = 41 }
+		set_variable = { name = te_pa_reason_val value = te_pa_v_law_worst }
+		te_pa_reason_law_from = { WHICH = worst }
+	}
+	else_if = {
+		limit = {
+			te_pa_p_law_trade > 0
+			te_pa_p_law_trade >= te_pa_p_law_enacting_against
+			te_pa_p_law_trade >= te_pa_p_law_enacting_for
+			te_pa_p_law_trade >= te_pa_p_law_open
+		}
+		set_variable = { name = te_pa_reason value = 45 }
+		set_variable = { name = te_pa_reason_val value = te_pa_trade_burden_value }
+	}
+	else_if = {
+		limit = {
+			te_pa_p_law_enacting_against > 0
+			te_pa_p_law_enacting_against >= te_pa_p_law_enacting_for
+			te_pa_p_law_enacting_against >= te_pa_p_law_open
+		}
+		if = {
+			limit = { te_pa_v_law_enacting < 0 }
+			set_variable = { name = te_pa_reason value = 42 }
+			set_variable = { name = te_pa_reason_val value = te_pa_v_law_enacting }
+			te_pa_reason_law_from = { WHICH = enacting }
+		}
+		else = {
+			set_variable = { name = te_pa_reason value = 46 }
+			set_variable = { name = te_pa_reason_val value = te_pa_trade_enacting_burden_value }
+		}
+	}
+	else_if = {
+		limit = {
+			te_pa_p_law_enacting_for > 0
+			te_pa_p_law_enacting_for >= te_pa_p_law_open
+		}
+		set_variable = { name = te_pa_reason value = 43 }
+		set_variable = { name = te_pa_reason_val value = te_pa_v_law_enacting }
+		te_pa_reason_law_from = { WHICH = enacting }
+	}
+	else_if = {
+		limit = { te_pa_p_law_open > 0 }
+		set_variable = { name = te_pa_reason value = 44 }
+		set_variable = { name = te_pa_reason_val value = te_pa_v_law_best }
+		te_pa_reason_law_from = { WHICH = best }
+	}
+	else = {
+		set_variable = { name = te_pa_reason value = 47 }
+		te_pa_reason_good_from = { SLOT = out }
+	}
+}
+
+# Survival's reason: a law that ends it first, then a fall, then the count, then the slump, else low prosperity.
+te_pa_reason_survival_write = {
+	if = {
+		limit = { te_pa_existential_law = yes }
+		set_variable = { name = te_pa_reason value = 84 }
+		if = {
+			limit = { var:te_pa_g_law_enacting_law ?= 0 }
+			te_pa_reason_law_from = { WHICH = worst }
+		}
+		else = {
+			te_pa_reason_law_from = { WHICH = enacting }
+		}
+	}
+	else_if = {
+		limit = {
+			company_prosperity < te_pa_p_surv_low_line
+			te_pa_prosperity_change < 0
+		}
+		set_variable = { name = te_pa_reason value = 81 }
+		set_variable = { name = te_pa_reason_val value = te_pa_prosperity }
+	}
+	else_if = {
+		limit = { te_pa_p_surv_months > 0 }
+		set_variable = { name = te_pa_reason value = 82 }
+		set_variable = { name = te_pa_reason_val value = te_pa_v_months_failing }
+	}
+	else_if = {
+		limit = { owner = { te_pa_banking_slump = yes } }
+		set_variable = { name = te_pa_reason value = 83 }
+	}
+	else = {
+		set_variable = { name = te_pa_reason value = 85 }
+		set_variable = { name = te_pa_reason_val value = te_pa_prosperity }
+	}
+}

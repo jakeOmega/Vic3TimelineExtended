@@ -689,3 +689,24 @@ te_batch_investment_rule = {
 		flag = te_batch_investment_disabled
 	}
 }
+
+# Private Actors (docs/systems/mod_systems/private_actors.md; spec
+# docs/superpowers/specs/2026-11-28-actors-firms-design.md): every company is a
+# firm with a goal derived from its position, three currencies and a yearly
+# turn of its own. Off by default while the system is built and play-tested
+# (owner, § 13 and § 18.2). Read only through te_pa_on
+# (te_pa_rule_triggers.txt), positively, so a save from before the rule stays
+# off. Switched off mid-game, each country's next monthly pulse runs the
+# teardown (te_pa_teardown) and the firms' records stay on their companies;
+# switched back on, the next pulse resumes from them.
+te_private_actors_rule = {
+	default = te_private_actors_disabled
+
+	te_private_actors_disabled = {
+		flag = te_private_actors_disabled
+	}
+
+	te_private_actors_enabled = {
+		flag = te_private_actors_enabled
+	}
+}

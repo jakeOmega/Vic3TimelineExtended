@@ -1,0 +1,345 @@
+﻿# Private Actors, the chassis's self-checks (CLAUDE.md "In-game checks"; docs/testing/private-actors-playtest.md,
+# "Self-checks"). Each logs one TE_SELF_CHECK OK|BROKEN line once a game, with its counts, where the build rests on an
+# engine fact nobody has read in a game. The tallies are global variables (te_pa_sc_*), removed with the verdict.
+# Each reads a sample of firms, so one odd firm can't settle it; degenerate inputs are left out of the sample.
+#   firm_share       (te_pa_turn)    a firm with levels reads a share above 0 and below 1 (the levels ladder,
+#                                    company_owned_levels, and the sector's levels, te_pa_g_sector_levels)
+#   firm_executive   (te_pa_turn)    probe 7: every company has an executive, and its traits and ideology read
+#   firm_price_read  (te_pa_turn)    Task 1's price reading: some firm's output reads a price off base
+#   firm_hq          (te_pa_read_seat) probe 11: no link reaches a company's headquarters, so the seat is the
+#                                    incorporated home state with most levels of its types; the pick finds one
+#   firm_revolution  (armed at on_civil_war_won, read at the winner's next monthly pulse) probe 8: the winner's
+#                                    companies keep their records
+#   law_available    (te_pa_monthly) Task 1's open-law reading: law_is_available reads a law's technology
+#   ledger_size      (te_pa_notices) a size saved as a scope value reaches the ledger entry
+
+# Company scope, inside the turn (scope:te_pa_exec_now its executive, when it has one).
+te_pa_debug_turn = {
+	te_pa_debug_share = yes
+	te_pa_debug_executive = yes
+	te_pa_debug_price = yes
+}
+
+# firm_share: among firms whose type is known and whose sector has two levels or more at home (so a share between
+# 0 and 1 is possible). OK: some read one. BROKEN, zero=all: the ladder matched nothing (company_owned_levels reads
+# nothing from a pulse); full=all: the sector's levels read too low.
+te_pa_debug_share = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_share_done }
+			var:te_pa_g_known ?= 1
+			te_pa_v_sector_levels >= 2
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_pa_sc_share_n } }
+			set_global_variable = { name = te_pa_sc_share_n value = 0 }
+			set_global_variable = { name = te_pa_sc_share_ok value = 0 }
+			set_global_variable = { name = te_pa_sc_share_zero value = 0 }
+			set_global_variable = { name = te_pa_sc_share_full value = 0 }
+		}
+		change_global_variable = { name = te_pa_sc_share_n add = 1 }
+		if = {
+			limit = {
+				te_pa_v_share > 0
+				te_pa_v_share < 1
+			}
+			change_global_variable = { name = te_pa_sc_share_ok add = 1 }
+		}
+		else_if = {
+			limit = { te_pa_v_levels <= 0 }
+			change_global_variable = { name = te_pa_sc_share_zero add = 1 }
+		}
+		else = {
+			change_global_variable = { name = te_pa_sc_share_full add = 1 }
+		}
+		if = {
+			limit = { global_var:te_pa_sc_share_n >= te_pa_sc_sample }
+			set_global_variable = { name = te_pa_sc_share_done value = 1 }
+			if = {
+				limit = { global_var:te_pa_sc_share_ok >= 1 }
+				debug_log = "TE_SELF_CHECK OK firm_share firms=[GetGlobalVariable('te_pa_sc_share_n').GetValue|0] between=[GetGlobalVariable('te_pa_sc_share_ok').GetValue|0] zero=[GetGlobalVariable('te_pa_sc_share_zero').GetValue|0] full=[GetGlobalVariable('te_pa_sc_share_full').GetValue|0] (a firm with levels reads a share above 0 and below 1) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN firm_share firms=[GetGlobalVariable('te_pa_sc_share_n').GetValue|0] between=0 zero=[GetGlobalVariable('te_pa_sc_share_zero').GetValue|0] full=[GetGlobalVariable('te_pa_sc_share_full').GetValue|0] (zero: the company_owned_levels ladder matched nothing, fall back on a company_employed_levels ladder; full: te_pa_g_sector_levels reads too low, sum b:<type>.level over the owner's states) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_global_variable = te_pa_sc_share_n
+			remove_global_variable = te_pa_sc_share_ok
+			remove_global_variable = te_pa_sc_share_zero
+			remove_global_variable = te_pa_sc_share_full
+		}
+	}
+}
+
+# firm_executive (probe 7): the first firms' turns. OK: every one had an executive, each executive held exactly one
+# character ideology, and some held a personality trait the tables read. BROKEN: the counts say which failed. No
+# executive: the turn's neutral temperament is the fallback (built). No trait or no ideology read: has_trait /
+# has_ideology don't reach through company.executive, so temperament reads the other alone, or neither.
+te_pa_debug_executive = {
+	if = {
+		limit = { NOT = { has_global_variable = te_pa_sc_exec_done } }
+		if = {
+			limit = { NOT = { has_global_variable = te_pa_sc_exec_n } }
+			set_global_variable = { name = te_pa_sc_exec_n value = 0 }
+			set_global_variable = { name = te_pa_sc_exec_has value = 0 }
+			set_global_variable = { name = te_pa_sc_exec_traits value = 0 }
+			set_global_variable = { name = te_pa_sc_exec_ideology value = 0 }
+		}
+		change_global_variable = { name = te_pa_sc_exec_n add = 1 }
+		if = {
+			limit = { exists = scope:te_pa_exec_now }
+			change_global_variable = { name = te_pa_sc_exec_has add = 1 }
+			if = {
+				limit = { te_pa_gen_exec_traits_held >= 1 }
+				change_global_variable = { name = te_pa_sc_exec_traits add = 1 }
+			}
+			if = {
+				limit = {
+					te_pa_gen_exec_ideologies_held >= 1
+					te_pa_gen_exec_ideologies_held <= 1
+				}
+				change_global_variable = { name = te_pa_sc_exec_ideology add = 1 }
+			}
+		}
+		if = {
+			limit = { global_var:te_pa_sc_exec_n >= te_pa_sc_sample }
+			set_global_variable = { name = te_pa_sc_exec_done value = 1 }
+			if = {
+				limit = {
+					global_var:te_pa_sc_exec_has >= global_var:te_pa_sc_exec_n
+					global_var:te_pa_sc_exec_traits >= 1
+					global_var:te_pa_sc_exec_ideology >= global_var:te_pa_sc_exec_has
+				}
+				debug_log = "TE_SELF_CHECK OK firm_executive firms=[GetGlobalVariable('te_pa_sc_exec_n').GetValue|0] executive=[GetGlobalVariable('te_pa_sc_exec_has').GetValue|0] with_trait=[GetGlobalVariable('te_pa_sc_exec_traits').GetValue|0] one_ideology=[GetGlobalVariable('te_pa_sc_exec_ideology').GetValue|0] (every company has an executive whose traits and ideology read) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN firm_executive firms=[GetGlobalVariable('te_pa_sc_exec_n').GetValue|0] executive=[GetGlobalVariable('te_pa_sc_exec_has').GetValue|0] with_trait=[GetGlobalVariable('te_pa_sc_exec_traits').GetValue|0] one_ideology=[GetGlobalVariable('te_pa_sc_exec_ideology').GetValue|0] (executive below firms: some company has none, and its temperament is neutral; with_trait 0: drop TRAIT_TEMPERAMENT and read ideology alone; one_ideology below executive: drop IDEOLOGY_TEMPERAMENT and read traits alone) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_global_variable = te_pa_sc_exec_n
+			remove_global_variable = te_pa_sc_exec_has
+			remove_global_variable = te_pa_sc_exec_traits
+			remove_global_variable = te_pa_sc_exec_ideology
+		}
+	}
+}
+
+# firm_price_read (Task 1's): among firms whose output is a traded good with a price read. OK: some reads off base.
+# BROKEN: all read exactly 0, so the signed reading (te_pa_gen_firm_price_<good>, through the owner) fails; read the
+# country-scope te_pa_gen_price_<good> from the owner directly.
+te_pa_debug_price = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_price_done }
+			var:te_pa_g_known ?= 1
+			NOT = { var:te_pa_g_out_local ?= 1 }
+			has_variable = te_pa_g_out_good
+			var:te_pa_g_out_good > 0
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_pa_sc_price_n } }
+			set_global_variable = { name = te_pa_sc_price_n value = 0 }
+			set_global_variable = { name = te_pa_sc_price_off value = 0 }
+		}
+		change_global_variable = { name = te_pa_sc_price_n add = 1 }
+		if = {
+			limit = {
+				OR = {
+					te_pa_v_out_pricier > 0
+					te_pa_v_out_pricier < 0
+				}
+			}
+			change_global_variable = { name = te_pa_sc_price_off add = 1 }
+		}
+		if = {
+			limit = { global_var:te_pa_sc_price_n >= te_pa_sc_sample }
+			set_global_variable = { name = te_pa_sc_price_done value = 1 }
+			if = {
+				limit = { global_var:te_pa_sc_price_off >= 1 }
+				debug_log = "TE_SELF_CHECK OK firm_price_read firms=[GetGlobalVariable('te_pa_sc_price_n').GetValue|0] off_base=[GetGlobalVariable('te_pa_sc_price_off').GetValue|0] (a firm's output price reads through its owner's market) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN firm_price_read firms=[GetGlobalVariable('te_pa_sc_price_n').GetValue|0] off_base=0 (every output reads exactly base: te_pa_gen_firm_price_<good> fails through the owner; read te_pa_gen_price_<good> in the owner's scope) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_global_variable = te_pa_sc_price_n
+			remove_global_variable = te_pa_sc_price_off
+		}
+	}
+}
+
+# firm_hq (probe 11), at each seat pick of a firm with levels of its types at home. What the build found: no script
+# link reaches a company's headquarters state (the 1.15 event targets give a company executive, owner, type,
+# prosperity and weekly_prosperity_change; any_scope_regional_hqs reaches its regional headquarters, not its main
+# one). So the seat is the incorporated home state with the most levels of its types. OK: the pick found such a state
+# for some firm. BROKEN: it found none in the sample and every seat is the capital (te_pa_seat_fallback): the
+# pick's limit or order reads nothing; the capital stays the seat. seat_hq counts seats that hold some company's
+# headquarters building, for the record.
+te_pa_debug_seat = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_hq_done }
+			te_pa_v_sector_levels >= 1
+		}
+		if = {
+			limit = { NOT = { has_global_variable = te_pa_sc_hq_n } }
+			set_global_variable = { name = te_pa_sc_hq_n value = 0 }
+			set_global_variable = { name = te_pa_sc_hq_picked value = 0 }
+			set_global_variable = { name = te_pa_sc_hq_seat_hq value = 0 }
+		}
+		change_global_variable = { name = te_pa_sc_hq_n add = 1 }
+		if = {
+			limit = { NOT = { has_variable = te_pa_seat_fallback } }
+			change_global_variable = { name = te_pa_sc_hq_picked add = 1 }
+		}
+		if = {
+			limit = { var:te_pa_seat ?= { any_scope_building = { is_building_group = bg_company_headquarter } } }
+			change_global_variable = { name = te_pa_sc_hq_seat_hq add = 1 }
+		}
+		if = {
+			limit = { global_var:te_pa_sc_hq_n >= te_pa_sc_sample }
+			set_global_variable = { name = te_pa_sc_hq_done value = 1 }
+			if = {
+				limit = { global_var:te_pa_sc_hq_picked >= 1 }
+				debug_log = "TE_SELF_CHECK OK firm_hq hq_link=none firms=[GetGlobalVariable('te_pa_sc_hq_n').GetValue|0] by_levels=[GetGlobalVariable('te_pa_sc_hq_picked').GetValue|0] seat_hq=[GetGlobalVariable('te_pa_sc_hq_seat_hq').GetValue|0] (the seat is the incorporated home state with most levels of the firm's types) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN firm_hq hq_link=none firms=[GetGlobalVariable('te_pa_sc_hq_n').GetValue|0] by_levels=0 seat_hq=[GetGlobalVariable('te_pa_sc_hq_seat_hq').GetValue|0] (te_pa_gen_seat_pick found no state: every seat is the capital) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			remove_global_variable = te_pa_sc_hq_n
+			remove_global_variable = te_pa_sc_hq_picked
+			remove_global_variable = te_pa_sc_hq_seat_hq
+		}
+	}
+}
+
+# firm_revolution (probe 8), armed in te_civil_war_on_won (ROOT the winner) when revolutionaries won with the rule
+# on and there were firms on either side; read at the winner's next monthly pulse, before any record is made.
+te_pa_debug_revolution_arm = {
+	if = {
+		limit = {
+			te_pa_on = yes
+			NOT = { has_global_variable = te_pa_sc_cw_done }
+			var:te_cw_rebels_won ?= 1
+			OR = {
+				any_company = { always = yes }
+				scope:te_cw_loser ?= { any_company = { has_variable = te_pa_init } }
+			}
+		}
+		set_variable = { name = te_pa_sc_cw_armed value = 1 }
+		set_global_variable = { name = te_pa_sc_cw_loser value = 0 }
+		scope:te_cw_loser ?= {
+			every_company = {
+				limit = { has_variable = te_pa_init }
+				change_global_variable = { name = te_pa_sc_cw_loser add = 1 }
+			}
+		}
+		debug_log = "TE_SELF_CHECK START firm_revolution loser_firms=[GetGlobalVariable('te_pa_sc_cw_loser').GetValue|0] (the verdict follows at the winner's next monthly pulse) date=[TimeKeeper.GetCurrentDate.GetString]"
+		debug_log_scopes = yes
+	}
+}
+
+# Country scope, a winner te_pa_debug_revolution_arm marked. OK: it holds companies and every one kept its record
+# (te_pa_init; kept_turns counts those that had taken a turn, so came from before the war). BROKEN, init below
+# companies: some lost their record, and the monthly pulse makes new ones now (the fallback, built); companies=0:
+# the loser's companies did not pass to the winner.
+te_pa_debug_revolution_read = {
+	if = {
+		limit = { has_variable = te_pa_sc_cw_armed }
+		remove_variable = te_pa_sc_cw_armed
+		if = {
+			limit = { NOT = { has_global_variable = te_pa_sc_cw_done } }
+			set_global_variable = { name = te_pa_sc_cw_done value = 1 }
+			set_global_variable = { name = te_pa_sc_cw_total value = 0 }
+			set_global_variable = { name = te_pa_sc_cw_init value = 0 }
+			set_global_variable = { name = te_pa_sc_cw_turned value = 0 }
+			every_company = {
+				limit = { te_pa_gen_excluded_type = no }
+				change_global_variable = { name = te_pa_sc_cw_total add = 1 }
+				if = {
+					limit = { has_variable = te_pa_init }
+					change_global_variable = { name = te_pa_sc_cw_init add = 1 }
+				}
+				if = {
+					limit = {
+						has_variable = te_pa_turns
+						var:te_pa_turns > 0
+					}
+					change_global_variable = { name = te_pa_sc_cw_turned add = 1 }
+				}
+			}
+			if = {
+				limit = {
+					global_var:te_pa_sc_cw_total >= 1
+					global_var:te_pa_sc_cw_init >= global_var:te_pa_sc_cw_total
+				}
+				debug_log = "TE_SELF_CHECK OK firm_revolution companies=[GetGlobalVariable('te_pa_sc_cw_total').GetValue|0] with_record=[GetGlobalVariable('te_pa_sc_cw_init').GetValue|0] kept_turns=[GetGlobalVariable('te_pa_sc_cw_turned').GetValue|0] loser_firms=[GetGlobalVariable('te_pa_sc_cw_loser').GetValue|0] (the winner's firms keep their records) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN firm_revolution companies=[GetGlobalVariable('te_pa_sc_cw_total').GetValue|0] with_record=[GetGlobalVariable('te_pa_sc_cw_init').GetValue|0] kept_turns=[GetGlobalVariable('te_pa_sc_cw_turned').GetValue|0] loser_firms=[GetGlobalVariable('te_pa_sc_cw_loser').GetValue|0] (with_record below companies: records lost, made again from this pulse; companies 0: the loser's companies did not pass to the winner) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			debug_log_scopes = yes
+			remove_global_variable = te_pa_sc_cw_total
+			remove_global_variable = te_pa_sc_cw_init
+			remove_global_variable = te_pa_sc_cw_turned
+			remove_global_variable = te_pa_sc_cw_loser
+		}
+	}
+}
+
+# Country scope, each monthly pulse with the rule on.
+te_pa_debug_monthly = {
+	te_pa_debug_law_available = yes
+}
+
+# law_available (Task 1's te_pa_gen_law_selfcheck), in the first country with a covered law it could move to.
+# OK: open >= 1 and untech = 0 (law_is_available reads a law's technology). BROKEN: untech > 0, so it doesn't;
+# the open-law triggers already carry the technology and can_enact lines, so drop the any_law line and add the
+# disallowing laws' lines (private_actors_config.CAN_ENACT_MIRROR's pattern).
+te_pa_debug_law_available = {
+	if = {
+		limit = { NOT = { has_global_variable = te_pa_sc_law_done } }
+		te_pa_gen_law_selfcheck = yes
+		if = {
+			limit = { var:te_pa_sc_law_open >= 1 }
+			set_global_variable = { name = te_pa_sc_law_done value = 1 }
+			if = {
+				limit = { var:te_pa_sc_law_open_untech <= 0 }
+				debug_log = "TE_SELF_CHECK OK law_available open=[THIS.Var('te_pa_sc_law_open').GetValue|0] untech=[THIS.Var('te_pa_sc_law_open_untech').GetValue|0] country=[THIS.GetCountry.GetTagName] (law_is_available reads a law's unlocking technology) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN law_available open=[THIS.Var('te_pa_sc_law_open').GetValue|0] untech=[THIS.Var('te_pa_sc_law_open_untech').GetValue|0] country=[THIS.GetCountry.GetTagName] (law_is_available ignores the technology: keep te_pa_gen_law_open_<law>'s technology lines, and mirror the disallowing laws too) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+		}
+		remove_variable = te_pa_sc_law_open
+		remove_variable = te_pa_sc_law_open_untech
+	}
+}
+
+# ledger_size, at the first 40% notice (verb 11): the entry's te_pa_l_size, from the scope value
+# te_pa_notices saved, against the firm's share it was saved from. OK: they agree. BROKEN: the size didn't arrive
+# (a saved scope value reads as nothing in set_variable); stage the size in a country variable for
+# te_pa_ledger_add instead, as un_ledger_log_add stages its amount.
+te_pa_debug_ledger_size = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_size_done }
+			exists = scope:te_pa_l_new
+		}
+		set_global_variable = { name = te_pa_sc_size_done value = 1 }
+		set_global_variable = { name = te_pa_sc_size_want value = te_pa_v_share }
+		set_global_variable = { name = te_pa_sc_size_got value = -1 }
+		scope:te_pa_l_new = {
+			if = {
+				limit = { has_variable = te_pa_l_size }
+				set_global_variable = { name = te_pa_sc_size_got value = var:te_pa_l_size }
+			}
+		}
+		if = {
+			limit = { te_pa_sc_size_gap < te_pa_sc_size_tolerance }
+			debug_log = "TE_SELF_CHECK OK ledger_size share=[GetGlobalVariable('te_pa_sc_size_want').GetValue|3] size=[GetGlobalVariable('te_pa_sc_size_got').GetValue|3] (a saved scope value reaches the ledger entry) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN ledger_size share=[GetGlobalVariable('te_pa_sc_size_want').GetValue|3] size=[GetGlobalVariable('te_pa_sc_size_got').GetValue|3] (te_pa_l_size didn't arrive: stage it in a country variable for te_pa_ledger_add) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_pa_sc_size_want
+		remove_global_variable = te_pa_sc_size_got
+	}
+}

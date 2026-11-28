@@ -1,0 +1,435 @@
+﻿# Private Actors, the eight goals: pressures and weights (docs/systems/mod_systems/private_actors.md § Goals; spec
+# docs/superpowers/specs/2026-11-28-actors-firms-design.md §§ 5.2, 5.2a, 5.4). Company scope throughout. A goal's
+# pressure is its readout on one 0-100 scale; its weight, from temperament (§ 5.3) and condition (§ 5.4), stays
+# within 0.5-1.5; the score is the product, with te_pa_goal_held_bonus for the goal held (te_pa_score_one,
+# te_pa_goals_effects.txt). Every number is a first guess. The readings te_pa_g_* are te_pa_gen_assess's
+# (common/scripted_effects/te_pa_gen_effects.txt), written at the top of the turn.
+
+te_pa_pressure_max = 100
+te_pa_weight_min = 0.5
+te_pa_weight_max = 1.5
+
+# ---------------------------------------------------------------------------
+# Readers: a reading or a record variable, 0 while unset
+# ---------------------------------------------------------------------------
+
+te_pa_v_in1_pricier = { value = 0 if = { limit = { has_variable = te_pa_g_in1_pricier } value = var:te_pa_g_in1_pricier } }
+te_pa_v_in2_pricier = { value = 0 if = { limit = { has_variable = te_pa_g_in2_pricier } value = var:te_pa_g_in2_pricier } }
+te_pa_v_out_pricier = { value = 0 if = { limit = { has_variable = te_pa_g_out_pricier } value = var:te_pa_g_out_pricier } }
+te_pa_v_tech_gap = { value = 0 if = { limit = { has_variable = te_pa_g_tech_gap } value = var:te_pa_g_tech_gap } }
+te_pa_v_law_worst = { value = 0 if = { limit = { has_variable = te_pa_g_law_worst } value = var:te_pa_g_law_worst } }
+te_pa_v_law_enacting = { value = 0 if = { limit = { has_variable = te_pa_g_law_enacting } value = var:te_pa_g_law_enacting } }
+te_pa_v_law_best = { value = 0 if = { limit = { has_variable = te_pa_g_law_best } value = var:te_pa_g_law_best } }
+te_pa_v_trade = { value = 0 if = { limit = { has_variable = te_pa_trade } value = var:te_pa_trade } }
+te_pa_v_bold = { value = 0 if = { limit = { has_variable = te_pa_bold_t } value = var:te_pa_bold_t } }
+te_pa_v_force = { value = 0 if = { limit = { has_variable = te_pa_force } value = var:te_pa_force } }
+te_pa_v_patern = { value = 0 if = { limit = { has_variable = te_pa_patern } value = var:te_pa_patern } }
+te_pa_v_attach = { value = 0 if = { limit = { has_variable = te_pa_attach } value = var:te_pa_attach } }
+
+# ---------------------------------------------------------------------------
+# Exposure to trade (§ 5.4, § 8.1): the firm's stance on protection, -2 to 2, from whether the home market imports
+# or exports its output and its inputs. Protection burdens a firm that exports its output or imports its inputs,
+# and favors one whose output the market imports.
+# ---------------------------------------------------------------------------
+
+te_pa_trade_out_imported = 1
+te_pa_trade_out_exported = -1
+te_pa_trade_in_imported = -0.5
+
+te_pa_trade_stance_value = {
+	value = 0
+	if = { limit = { var:te_pa_g_out_imported ?= 1 } add = te_pa_trade_out_imported }
+	if = { limit = { var:te_pa_g_out_exported ?= 1 } add = te_pa_trade_out_exported }
+	if = { limit = { var:te_pa_g_in1_imported ?= 1 } add = te_pa_trade_in_imported }
+	if = { limit = { var:te_pa_g_in2_imported ?= 1 } add = te_pa_trade_in_imported }
+	min = -2
+	max = 2
+}
+
+# How much the trade policy in force burdens the firm, 0 to 2: a protective one, by its stance against protection;
+# Free Trade, by its stance for it.
+te_pa_trade_burden_value = {
+	value = 0
+	if = { limit = { owner = { te_pa_trade_protective = yes } } subtract = te_pa_v_trade }
+	else_if = { limit = { owner = { has_law = law_type:law_free_trade } } add = te_pa_v_trade }
+	min = 0
+	max = 2
+}
+
+# The same for a trade policy being enacted.
+te_pa_trade_enacting_burden_value = {
+	value = 0
+	if = { limit = { owner = { te_pa_trade_enacting_protective = yes } } subtract = te_pa_v_trade }
+	else_if = { limit = { owner = { is_enacting_law = law_type:law_free_trade } } add = te_pa_v_trade }
+	min = 0
+	max = 2
+}
+
+# ---------------------------------------------------------------------------
+# 1. Cheaper inputs: the home market's price of its inputs above base (te_pa_g_in1_pricier, _in2_). The second
+# input counts three-quarters. 40% above base reads 48.
+# ---------------------------------------------------------------------------
+
+te_pa_p_inputs_scale = 120
+te_pa_p_inputs_second = 0.75
+
+te_pa_p_inputs_in1 = {
+	value = te_pa_v_in1_pricier
+	min = 0
+	multiply = te_pa_p_inputs_scale
+}
+
+te_pa_p_inputs_in2 = {
+	value = te_pa_v_in2_pricier
+	min = 0
+	multiply = te_pa_p_inputs_second
+	multiply = te_pa_p_inputs_scale
+}
+
+te_pa_p_inputs_value = {
+	value = te_pa_p_inputs_in1
+	min = te_pa_p_inputs_in2
+	min = 0
+	max = te_pa_pressure_max
+}
+
+# ---------------------------------------------------------------------------
+# 2. A protected market: the home market's price of its output below base while the market imports it (a local
+# output has no market price, te_pa_g_out_local). 30% below base reads 36.
+# ---------------------------------------------------------------------------
+
+te_pa_p_market_scale = 120
+
+te_pa_p_market_value = {
+	value = 0
+	if = {
+		limit = {
+			var:te_pa_g_out_imported ?= 1
+			NOT = { var:te_pa_g_out_local ?= 1 }
+			te_pa_v_out_pricier < 0
+		}
+		subtract = te_pa_v_out_pricier
+		multiply = te_pa_p_market_scale
+	}
+	min = 0
+	max = te_pa_pressure_max
+}
+
+# ---------------------------------------------------------------------------
+# 3. Security of its assets abroad: Trouble at its concessions (§ 7.3). No firm holds a concession until Task 9,
+# which replaces this value with the reading.
+# ---------------------------------------------------------------------------
+
+te_pa_p_abroad_value = {
+	value = 0
+}
+
+# ---------------------------------------------------------------------------
+# 4. A friendly law (§ 8.1): the worst of the law table's laws in force (te_pa_gen_law_pick's te_pa_g_law_worst,
+# -2 to 0) or the trade policy's burden; the law being enacted, against the firm or for it; and the best law it
+# could move to. The largest of those, and a little more where it wants a tariff on its output.
+# ---------------------------------------------------------------------------
+
+te_pa_p_law_in_force_per = 25
+te_pa_p_law_trade_per = 25
+te_pa_p_law_enacting_per = 35
+te_pa_p_law_enacting_favor_per = 20
+te_pa_p_law_open_per = 15
+te_pa_p_law_tariff = 10
+
+# A law in force that burdens it, 0-50.
+te_pa_p_law_in_force = {
+	value = 0
+	subtract = te_pa_v_law_worst
+	min = 0
+	multiply = te_pa_p_law_in_force_per
+}
+
+# The trade policy in force, 0-50.
+te_pa_p_law_trade = {
+	value = te_pa_trade_burden_value
+	multiply = te_pa_p_law_trade_per
+}
+
+# A law being enacted that burdens it (the law table's stance, or the trade policy's), 0-70.
+te_pa_p_law_enacting_against = {
+	value = 0
+	subtract = te_pa_v_law_enacting
+	min = te_pa_trade_enacting_burden_value
+	min = 0
+	multiply = te_pa_p_law_enacting_per
+}
+
+# A law being enacted that favors it, 0-40.
+te_pa_p_law_enacting_for = {
+	value = te_pa_v_law_enacting
+	min = 0
+	multiply = te_pa_p_law_enacting_favor_per
+}
+
+# A law it could move to that favors it, 0-30.
+te_pa_p_law_open = {
+	value = te_pa_v_law_best
+	min = 0
+	multiply = te_pa_p_law_open_per
+}
+
+te_pa_p_law_tariff_want = {
+	value = 0
+	if = { limit = { te_pa_wants_output_tariff = yes } value = te_pa_p_law_tariff }
+}
+
+te_pa_p_law_value = {
+	value = te_pa_p_law_in_force
+	min = te_pa_p_law_trade
+	min = te_pa_p_law_enacting_against
+	min = te_pa_p_law_enacting_for
+	min = te_pa_p_law_open
+	add = te_pa_p_law_tariff_want
+	min = 0
+	max = te_pa_pressure_max
+}
+
+# ---------------------------------------------------------------------------
+# 5. Dominance: its share of the sector (te_pa_share; the rival abroad is Task 9's). 40% reads 50, 80% the full 100.
+# 0 where no verb can serve it (§ 5.2a): Command Economy, Cooperative Ownership, or the Command or Cooperative
+# Economy antitrust law.
+# ---------------------------------------------------------------------------
+
+te_pa_p_dom_scale = 125
+
+te_pa_p_dominance_value = {
+	value = te_pa_v_share
+	multiply = te_pa_p_dom_scale
+	if = { limit = { owner = { te_pa_dominance_illegal = yes } } value = 0 }
+	min = 0
+	max = te_pa_pressure_max
+}
+
+# ---------------------------------------------------------------------------
+# 6. Labor peace: turmoil and radicals at its seat (both 0 to 1, their mean scaled, at most 60), a labor law being
+# enacted that burdens it, and vanilla's Strike entry; times 0.75, 1 or 1.25 by how many people a level of its
+# buildings employs (te_pa_gen_labor_band, from te_pa_g_jobs).
+# ---------------------------------------------------------------------------
+
+te_pa_p_labor_unrest_scale = 150
+te_pa_p_labor_unrest_max = 60
+te_pa_p_labor_law_per = 15
+te_pa_p_labor_strike = 30
+te_pa_p_labor_band_base = 0.75
+te_pa_p_labor_band_per = 0.25
+
+# The seat's turmoil and radical fraction, their mean, 0 to 1 (te_pa_seat, a state).
+te_pa_seat_unrest = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_seat }
+		var:te_pa_seat ?= {
+			add = turmoil
+			add = radical_fraction
+		}
+	}
+	divide = 2
+}
+
+te_pa_p_labor_unrest = {
+	value = te_pa_seat_unrest
+	multiply = te_pa_p_labor_unrest_scale
+	max = te_pa_p_labor_unrest_max
+}
+
+# A labor law being enacted against it: the law table's stance on it, 0-30.
+te_pa_p_labor_law = {
+	value = 0
+	if = {
+		limit = { owner = { te_pa_enacting_labor_law = yes } }
+		subtract = te_pa_v_law_enacting
+		min = 0
+		multiply = te_pa_p_labor_law_per
+	}
+}
+
+te_pa_p_labor_staff_factor = {
+	value = te_pa_gen_labor_band
+	multiply = te_pa_p_labor_band_per
+	add = te_pa_p_labor_band_base
+}
+
+te_pa_p_labor_value = {
+	value = te_pa_p_labor_unrest
+	add = te_pa_p_labor_law
+	if = { limit = { owner = { has_journal_entry = je_strike } } add = te_pa_p_labor_strike }
+	multiply = te_pa_p_labor_staff_factor
+	min = 0
+	max = te_pa_pressure_max
+}
+
+# ---------------------------------------------------------------------------
+# 7. A technical lead: technologies its sector uses that the home country lacks and can research, each counted half
+# again while some country holds it (te_pa_g_tech_gap). A gap of 4 reads 40.
+# ---------------------------------------------------------------------------
+
+te_pa_p_tech_per = 10
+
+te_pa_p_tech_value = {
+	value = te_pa_v_tech_gap
+	multiply = te_pa_p_tech_per
+	min = 0
+	max = te_pa_pressure_max
+}
+
+# ---------------------------------------------------------------------------
+# 8. Survival (§ 5.2a): 0 for a prosperous firm. Otherwise prosperity below 50 (up to 35 at 0), falling while below
+# it (25), the mod's failing-company months (up to 15 at five years), the Banking Cycle in downturn or panic (10)
+# and a law ending private ownership or removing its buildings (20). Without the fall the parts reach 80 at most,
+# so the pressure passes 80 only when prosperity is low and falling (test_private_actors.py holds it to that).
+# ---------------------------------------------------------------------------
+
+te_pa_p_surv_low_line = 50
+te_pa_p_surv_low_per = 0.7
+te_pa_p_surv_falling = 25
+te_pa_p_surv_months_max = 15
+te_pa_p_surv_months_full = 60
+te_pa_p_surv_slump = 10
+te_pa_p_surv_law = 20
+
+te_pa_p_surv_low = {
+	value = te_pa_p_surv_low_line
+	subtract = te_pa_prosperity
+	min = 0
+	multiply = te_pa_p_surv_low_per
+}
+
+te_pa_p_surv_months = {
+	value = te_pa_v_months_failing
+	divide = te_pa_p_surv_months_full
+	max = 1
+	multiply = te_pa_p_surv_months_max
+}
+
+te_pa_p_survival_value = {
+	value = 0
+	if = {
+		limit = { company_is_prosperous = no }
+		add = te_pa_p_surv_low
+		if = {
+			limit = {
+				company_prosperity < te_pa_p_surv_low_line
+				te_pa_prosperity_change < 0
+			}
+			add = te_pa_p_surv_falling
+		}
+		add = te_pa_p_surv_months
+		if = { limit = { owner = { te_pa_banking_slump = yes } } add = te_pa_p_surv_slump }
+		if = { limit = { te_pa_existential_law = yes } add = te_pa_p_surv_law }
+	}
+	min = 0
+	max = te_pa_pressure_max
+}
+
+# ---------------------------------------------------------------------------
+# Weights (§ 5.2a, § 5.4): 1 and the shifts below, held to 0.5-1.5. Temperament runs -1 to 1 (te_pa_bold_t,
+# te_pa_force, te_pa_patern, te_pa_attach); condition te_pa_cond is 1 prospering, -1 failing; te_pa_cycle 1 in a
+# boom, -1 in a slump.
+# ---------------------------------------------------------------------------
+
+te_pa_w_inputs_failing = 0.15
+te_pa_w_inputs_boom = -0.1
+te_pa_w_market_slump = 0.3
+te_pa_w_market_attach = 0.2
+te_pa_w_abroad_bold = 0.3
+te_pa_w_abroad_force = 0.2
+te_pa_w_abroad_attach = -0.2
+te_pa_w_abroad_boom = 0.2
+te_pa_w_law_ig_gov = 0.2
+te_pa_w_law_failing = 0.1
+te_pa_w_dom_prosperous = 0.3
+te_pa_w_dom_bold = 0.3
+te_pa_w_dom_boom = 0.2
+te_pa_w_dom_slump = -0.2
+te_pa_w_labor_patern = 0.25
+te_pa_w_tech_prosperous = 0.3
+te_pa_w_tech_bold = 0.2
+te_pa_w_tech_boom = 0.1
+te_pa_w_surv_slump = 0.3
+te_pa_w_surv_failing = 0.2
+te_pa_w_surv_bold = -0.2
+
+# Cheaper inputs: a failing firm minds its costs more; in a boom, less.
+te_pa_w_inputs_value = {
+	value = 1
+	if = { limit = { var:te_pa_cond ?= -1 } add = te_pa_w_inputs_failing }
+	if = { limit = { var:te_pa_cycle ?= 1 } add = te_pa_w_inputs_boom }
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}
+
+# A protected market: in a slump (§ 5.4), and the more attached to home.
+te_pa_w_market_value = {
+	value = 1
+	if = { limit = { var:te_pa_cycle ?= -1 } add = te_pa_w_market_slump }
+	add = { value = te_pa_v_attach multiply = te_pa_w_market_attach }
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}
+
+# Security abroad: the bold, the forceful and the less attached to home; in a boom.
+te_pa_w_abroad_value = {
+	value = 1
+	add = { value = te_pa_v_bold multiply = te_pa_w_abroad_bold }
+	add = { value = te_pa_v_force multiply = te_pa_w_abroad_force }
+	add = { value = te_pa_v_attach multiply = te_pa_w_abroad_attach }
+	if = { limit = { var:te_pa_cycle ?= 1 } add = te_pa_w_abroad_boom }
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}
+
+# A friendly law: an executive whose interest group is in government; a failing firm.
+te_pa_w_law_value = {
+	value = 1
+	if = { limit = { var:te_pa_ig_gov ?= 1 } add = te_pa_w_law_ig_gov }
+	if = { limit = { var:te_pa_cond ?= -1 } add = te_pa_w_law_failing }
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}
+
+# Dominance: prosperous (§ 5.4), bold, in a boom; less in a slump.
+te_pa_w_dominance_value = {
+	value = 1
+	if = { limit = { var:te_pa_cond ?= 1 } add = te_pa_w_dom_prosperous }
+	add = { value = te_pa_v_bold multiply = te_pa_w_dom_bold }
+	if = { limit = { var:te_pa_cycle ?= 1 } add = te_pa_w_dom_boom }
+	if = { limit = { var:te_pa_cycle ?= -1 } add = te_pa_w_dom_slump }
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}
+
+# Labor peace: an executive with a strong view of labor, either way (welfare or strikebreaking, § 9.2).
+te_pa_w_labor_value = {
+	value = te_pa_v_patern
+	if = { limit = { te_pa_v_patern < 0 } multiply = -1 }
+	multiply = te_pa_w_labor_patern
+	add = 1
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}
+
+# A technical lead: prosperous (§ 5.4), bold, in a boom.
+te_pa_w_tech_value = {
+	value = 1
+	if = { limit = { var:te_pa_cond ?= 1 } add = te_pa_w_tech_prosperous }
+	add = { value = te_pa_v_bold multiply = te_pa_w_tech_bold }
+	if = { limit = { var:te_pa_cycle ?= 1 } add = te_pa_w_tech_boom }
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}
+
+# Survival: in a slump (§ 5.4), failing; a cautious executive sooner, a bold one later.
+te_pa_w_survival_value = {
+	value = 1
+	if = { limit = { var:te_pa_cycle ?= -1 } add = te_pa_w_surv_slump }
+	if = { limit = { var:te_pa_cond ?= -1 } add = te_pa_w_surv_failing }
+	add = { value = te_pa_v_bold multiply = te_pa_w_surv_bold }
+	min = te_pa_weight_min
+	max = te_pa_weight_max
+}

@@ -12,7 +12,10 @@ undo them:
 - Grand Monuments' rule-off pass keeps the upkeep exemption on the building;
 - the monetary layer, when the banking rule goes from Full to Simplified (the entry stays), strips its managed modifiers,
   forgets the skipped steps' state so step 0 seeds it neutral again, and switches off the full-system tools (#1507);
-  its treaty articles end on the rule (owner, 2026-11-12), and the teardown clears the backstop roles they leave.
+  its treaty articles end on the rule (owner, 2026-11-12), and the teardown clears the backstop roles they leave;
+- Private Actors' rule-off pass runs its teardown once (the quarter counter is its latch), which takes the rows and the
+  notices' flags and leaves the firms' records, so the rule switched back on resumes from them (the modifiers it will
+  apply are held to the teardown in test_private_actors.py).
 """
 from __future__ import annotations
 
@@ -335,6 +338,41 @@ class MonetaryRuleSwitchTest(unittest.TestCase):
         text = (ROOT / "common/scripted_effects/te_monetary_rule_switch_effects.txt").read_text(encoding="utf-8-sig")
         for verdict in ("OK", "BROKEN"):
             self.assertIn(f'debug_log = "TE_SELF_CHECK {verdict} mon_rule_switch_treaties', text)
+
+
+class PrivateActorsTeardownTest(unittest.TestCase):
+    """te_pa_monthly with the rule off: te_pa_teardown once, nothing else (te_pa_core_effects.txt)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.effects = top("common/scripted_effects/te_pa_core_effects.txt")
+
+    def test_the_rule_off_branch_runs_the_teardown_once(self):
+        monthly = self.effects["te_pa_monthly"]
+        first = monthly.children[0]
+        self.assertEqual(first.key, "if")
+        self.assertEqual(pairs(next(c for c in first.children if c.key == "limit").children), [("te_pa_on", "no")])
+        latch = next(c for c in first.children if c.key == "if")
+        self.assertEqual(pairs(next(c for c in latch.children if c.key == "limit").children),
+                         [("has_variable", "te_pa_q_in")])
+        self.assertEqual(pairs(c for c in latch.children if c.key != "limit"), [("te_pa_teardown", "yes")])
+        self.assertEqual([c.key for c in first.children], ["limit", "if"])
+        text = (ROOT / "common/on_actions/te_pa_on_actions.txt").read_text(encoding="utf-8-sig")
+        hook = text[text.index("on_monthly_pulse_country = {"):]
+        self.assertIn("te_pa_monthly_on_action", hook[:hook.index("}")])
+
+    def test_the_teardown_takes_the_rows_and_flags_and_leaves_the_records(self):
+        teardown = self.effects["te_pa_teardown"]
+        removed = {n.value for n in walk(teardown.children) if n.key == "remove_variable"}
+        self.assertIn("te_pa_q_in", removed)  # the latch
+        self.assertLessEqual({"te_pa_row", "te_pa_n_failing", "te_pa_n_big"}, removed)
+        self.assertFalse(removed & {"te_pa_init", "te_pa_goal", "te_pa_funds", "te_pa_conn", "te_pa_stand",
+                                    "te_pa_posture", "te_pa_turn_in", "te_pa_seat"})
+        self.assertIn(("clear_variable_list", "te_pa_rows"), pairs(walk(teardown.children)))
+        self.assertIn("destroy_container", keys(teardown))
+        # the rows come back when the list is missing
+        check = self.effects["te_pa_rows_check"]
+        self.assertIn(("has_variable_list", "te_pa_rows"), pairs(walk(check.children)))
 
 
 if __name__ == "__main__":
