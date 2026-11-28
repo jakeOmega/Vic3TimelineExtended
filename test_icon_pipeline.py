@@ -1466,5 +1466,95 @@ class FramedGoodTests(unittest.TestCase):
             c.compose(self.raw, "production_building", ip.CATEGORIES["production_building"])
 
 
+@unittest.skipIf(icon_dds is None, "Pillow is not installed")
+class ForegroundDriverTests(unittest.TestCase):
+    """A production building's good or part is an input: a change to it recomposes and rewrites the building."""
+
+    def test_fingerprint_follows_the_goods_file(self):
+        d = Path(tempfile.mkdtemp())
+        f = d / "gfx/interface/icons/goods_icons/radios.dds"
+        f.parent.mkdir(parents=True)
+        f.write_bytes(b"one")
+        saved = gi.MOD_ROOT
+        try:
+            gi.MOD_ROOT = d                                                  # the mod's copy wins
+            e = {"subject": "roofs", "seed": 0, "foreground": [{"good": "radios"}]}
+            self.assertEqual(gi.good_icon_file("radios", Path("/nonexistent")), f)
+            before = gi.foreground_fingerprint(e, Path("/nonexistent"))
+            f.write_bytes(b"two")
+            self.assertNotEqual(before, gi.foreground_fingerprint(e, Path("/nonexistent")))
+        finally:
+            gi.MOD_ROOT = saved
+
+    def test_fingerprint_follows_the_parts_pick(self):
+        parts = ip.ICONS["building_foreground"]
+        try:
+            parts["_t"] = {"subject": "a heap of red ore", "seed": 0}
+            e = {"subject": "a pit", "seed": 0, "foreground": [{"part": "building_foreground/_t"}]}
+            a = gi.foreground_fingerprint(e, Path("/nonexistent"))
+            parts["_t"]["seed"] = 1
+            self.assertNotEqual(a, gi.foreground_fingerprint(e, Path("/nonexistent")))
+        finally:
+            parts.pop("_t")
+
+    def test_compose_one_recomposes_when_a_dep_is_newer(self):
+        d = Path(tempfile.mkdtemp())
+        raw, final, dep = d / "r.png", d / "f.png", d / "g.dds"
+        Image.new("RGB", (4, 4)).save(raw)
+        Image.new("RGBA", (4, 4)).save(final)
+        dep.write_bytes(b"x")
+        os.utime(raw, (1, 1))
+        os.utime(final, (2, 2))
+        os.utime(dep, (3, 3))
+        calls = []
+
+        class C:
+            def compose(self, *a, **k):
+                calls.append(k.get("layers"))
+                return Image.new("RGBA", (4, 4))
+        gi._compose_one(C(), "production_building", raw, final, deps=(dep,), layers=[])
+        self.assertEqual(calls, [[]])                                       # recomposed, layers passed through
+        gi._compose_one(C(), "production_building", raw, final, deps=(dep,), layers=[])
+        self.assertEqual(calls, [[]])                                       # now the final is newest: kept
+
+    def test_write_waits_for_the_foreground_parts(self):
+        parts = ip.ICONS["building_foreground"]
+        try:
+            parts["_t"] = {"subject": "a heap of red ore", "seed": None}
+            e = {"subject": "a pit", "seed": 0, "foreground": [{"part": "building_foreground/_t"}]}
+            self.assertEqual(gi.foreground_part_seeds(e), [None])
+            parts["_t"]["seed"] = 2
+            self.assertEqual(gi.foreground_part_seeds(e), [2])
+        finally:
+            parts.pop("_t")
+
+    def test_finals_hand_the_composer_the_goods_icon(self):
+        work, mod = Path(tempfile.mkdtemp()), Path(tempfile.mkdtemp())
+        good = mod / "gfx/interface/icons/goods_icons/radios.dds"
+        good.parent.mkdir(parents=True)
+        Image.new("RGBA", (16, 16), (200, 0, 0, 255)).save(good, format="PNG")  # PIL reads it whatever the suffix
+        (work / "raw").mkdir()
+        Image.new("RGB", (8, 8)).save(work / "raw" / "production_building___t__s0.png")
+        pb, saved_root = ip.ICONS["production_building"], gi.MOD_ROOT
+        seen = []
+
+        class C:
+            def compose(self, raw, cat, spec, backdrop=None, layers=None):
+                seen.append(layers)
+                return Image.new("RGBA", (4, 4))
+        try:
+            pb["_t"] = {"subject": "roofs", "seed": 0, "foreground": [{"good": "radios", "scale": 0.5}]}
+            gi.MOD_ROOT = mod
+            finals = gi.Finals.__new__(gi.Finals)
+            finals.work, finals.composer, finals._backdrops, finals.game = work, C(), {}, Path("/nonexistent")
+            finals.get("production_building", "_t", 0)
+        finally:
+            pb.pop("_t")
+            gi.MOD_ROOT = saved_root
+        (im, opts), = seen[0]
+        self.assertEqual(im.size, (16, 16))
+        self.assertEqual(opts, {"kind": "good", "scale": 0.5, "at": None})
+
+
 if __name__ == "__main__":
     unittest.main()

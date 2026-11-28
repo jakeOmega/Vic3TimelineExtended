@@ -28,6 +28,11 @@ else from git, so the old file can be deleted once nothing points at it.
 An entry may carry its own "style" (a template with {subject}) in place of the
 category's: the building style's aerial diorama put orbital stations low over
 a map, small (ORBIT).
+A production building (`production_building`, layout `framed_good`) also names its
+"foreground": a list of layers drawn in order over its backdrop, each {"good": <goods
+key>} (that good's own icon) or {"part": "building_foreground/<key>"} (a mine's ore),
+optionally with "scale" and "at" (default: where vanilla puts its good). Its subject
+is the backdrop alone, what is seen from above.
 In a GUI-hosted category (`gui`: icons a .gui file draws, not an entity's),
 an entry also names the placeholder it replaces, "now": <vanilla path>, and
 may instead be derived: {"from": "<cat>/<key>", "tint": "grey"|"faint",

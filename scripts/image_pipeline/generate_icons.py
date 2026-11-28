@@ -28,6 +28,14 @@ Reads the registry (icon_prompts.py) and takes each category through:
           DDS exists are touched, and an entity already pointing there is left
           byte-for-byte alone.
 
+A production building (`production_building`, layout `framed_good`) is a
+backdrop render under its `foreground`: the good's own icon, read as the game
+loads it (the mod's file at the good's texture path, else vanilla's), or a
+`building_foreground` part's candidate. Those are inputs like the raw: a newer
+goods icon or part final recomposes the building, and a repainted good or a
+re-picked part changes its manifest record, so `write` rewrites it. `write`
+skips a building until its parts are picked.
+
 A GUI-hosted category (`gui` in its spec; the UN's icons) has no entity
 files: each entry names the placeholder it replaces (`now`), `write` puts its
 DDS where the .gui file will point, and `wire` is left to whoever edits the
@@ -64,8 +72,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 MOD_ROOT = SCRIPT_DIR.parents[1]
 sys.path.insert(0, str(SCRIPT_DIR))
 sys.path.insert(0, str(MOD_ROOT))
-from icon_prompts import (CATEGORIES, ICONS, KEEP, RESTYLE_CROP, entry_prompt, icon_path,  # noqa: E402
-                          restyle_strengths, small_path)
+from icon_prompts import (CATEGORIES, ICONS, KEEP, RESTYLE_CROP, entry_prompt, good_texture,  # noqa: E402
+                          icon_path, restyle_strengths, small_path)
 
 SHEET_ROWS = 20
 
@@ -394,14 +402,51 @@ def entry_spec(cat: str, e: dict) -> dict:
     return dict(CATEGORIES[cat], **own) if own else CATEGORIES[cat]
 
 
+def foreground_refs(e: dict) -> list[tuple[str, dict]]:
+    """A production building's layers, in drawing order: ("good", layer) or ("part", layer)."""
+    return [("good" if "good" in layer else "part", layer) for layer in e.get("foreground", [])]
+
+
+def good_icon_file(good: str, game: Path) -> Path:
+    """The good's icon as the game would load it: the mod's file at the good's texture path, else the game's."""
+    rel = good_texture(good)
+    if rel is None:
+        raise SystemExit(f"the good {good} has no icon in the mod's or vanilla's goods")
+    return MOD_ROOT / rel if (MOD_ROOT / rel).exists() else game / rel
+
+
+def foreground_part_seeds(e: dict) -> list:
+    """The picks of the parts a production building's foreground draws; it is written once all are picked."""
+    return [ICONS[c][k].get("seed") for c, k in (ref(layer["part"]) for kind, layer in foreground_refs(e)
+                                                 if kind == "part")]
+
+
+def foreground_fingerprint(e: dict, game: Path) -> list:
+    """What a production building's foreground is made from, for the write manifest: a good's icon by its
+    bytes (a repaint rewrites the building), a part by its pick and prompt."""
+    import hashlib
+
+    out = []
+    for kind, layer in foreground_refs(e):
+        if kind == "good":
+            digest = hashlib.sha1(good_icon_file(layer["good"], game).read_bytes()).hexdigest()[:12]
+            out.append(["good", layer["good"], digest, layer.get("scale"), layer.get("at")])
+        else:
+            c, k = ref(layer["part"])
+            out.append(["part", layer["part"], ICONS[c][k].get("seed"), entry_prompt(c, ICONS[c][k])])
+    return out
+
+
 def _compose_one(composer, cat: str, raw: Path, final: Path, backdrop=None, backdrop_raw: Path | None = None,
-                 spec: dict | None = None):
+                 spec: dict | None = None, deps: tuple = (), layers: list | None = None):
     from PIL import Image
 
-    newest = max(raw.stat().st_mtime, backdrop_raw.stat().st_mtime if backdrop_raw else 0)
+    newest = max([raw.stat().st_mtime, backdrop_raw.stat().st_mtime if backdrop_raw else 0]
+                 + [Path(p).stat().st_mtime for p in deps])
     if final.exists() and final.stat().st_mtime >= newest:
         return Image.open(final)
-    icon = composer.compose(Image.open(raw), cat, spec or CATEGORIES[cat], backdrop=backdrop)
+    extra = {"layers": layers} if layers is not None else {}
+    icon = composer.compose(Image.open(raw), cat, spec or CATEGORIES[cat], backdrop=backdrop, **extra)
     final.parent.mkdir(parents=True, exist_ok=True)
     icon.save(final)
     return icon
@@ -441,9 +486,45 @@ class Finals:
         raw = raw_path(self.work / "raw", name(cat, key), seed)
         if not raw.exists():
             return None
+        e, layers, deps = ICONS[cat][key], None, ()
+        if CATEGORIES[cat]["mode"] == "framed_good":
+            layers, deps = self.layers(e), tuple(self.layer_deps(e))
         icon = _compose_one(self.composer, cat, raw, final_dir(cat, self.work) / raw.name, *self.backdrop(cat),
-                            spec=entry_spec(cat, ICONS[cat][key]))
-        return self.finish(ICONS[cat][key], icon)
+                            spec=entry_spec(cat, e), deps=deps, layers=layers)
+        return self.finish(e, icon)
+
+    def _part_seed(self, part: str) -> int:
+        """A foreground part's pick, or its first candidate while it is under review."""
+        c, k = ref(part)
+        seeds = self.seeds(c, k)
+        if not seeds or not (self.work / "raw" / f"{name(c, k)}__s{seeds[0]}.png").exists():
+            raise SystemExit(f"no render for the part {part}: run --stage render --category {c}")
+        return seeds[0]
+
+    def layers(self, e: dict) -> list:
+        """A production building's foreground as (image, placement) pairs: the good's icon as the game loads
+        it, or the part's composed candidate."""
+        from icon_render import load_rgba
+
+        out = []
+        for kind, layer in foreground_refs(e):
+            if kind == "good":
+                im = load_rgba(good_icon_file(layer["good"], self.game))
+            else:
+                im = self.get(*ref(layer["part"]), self._part_seed(layer["part"]))
+            out.append((im, {"kind": kind, "scale": layer.get("scale"), "at": layer.get("at")}))
+        return out
+
+    def layer_deps(self, e: dict) -> list[Path]:
+        """The files a production building's final is composed from besides its raw: good icons, part finals."""
+        out = []
+        for kind, layer in foreground_refs(e):
+            if kind == "good":
+                out.append(good_icon_file(layer["good"], self.game))
+            else:
+                c, k = ref(layer["part"])
+                out.append(final_dir(c, self.work) / f"{name(c, k)}__s{self._part_seed(layer['part'])}.png")
+        return out
 
     def finish(self, e: dict, icon):
         from icon_render import apply_marks
@@ -512,9 +593,13 @@ def stage_compose(cat: str, only: set[str], work: Path) -> None:
     composer, n = Composer(), 0
     backdrop, backdrop_raw = load_backdrop(cat, work) if "backdrop" in CATEGORIES[cat] else (None, None)
     final = final_dir(cat, work)
+    finals = Finals(work) if CATEGORIES[cat]["mode"] == "framed_good" else None
     for key, e in generated(cat, only).items():
         for raw in sorted((work / "raw").glob(f"{name(cat, key)}__s*.png")):
-            _compose_one(composer, cat, raw, final / raw.name, backdrop, backdrop_raw, spec=entry_spec(cat, e))
+            if finals:  # a production building: Finals resolves its foreground layers
+                finals.get(cat, key, int(raw.stem.rsplit("__s", 1)[1]))
+            else:
+                _compose_one(composer, cat, raw, final / raw.name, backdrop, backdrop_raw, spec=entry_spec(cat, e))
             n += 1
     print(f"compose: {n} candidates in {final}")
 
@@ -617,7 +702,8 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
     finals, wrote = Finals(work), 0
 
     def part_seeds(e: dict) -> list:
-        return [ICONS[c][k].get("seed") for c, k in (ref(m["part"]) for m in e.get("marks", []) if "part" in m)]
+        return ([ICONS[c][k].get("seed") for c, k in (ref(m["part"]) for m in e.get("marks", []) if "part" in m)]
+                + foreground_part_seeds(e))
 
     def want_for(c: str, e: dict) -> list:
         """What an icon is made from, as the manifest stores it; a change rewrites the icon."""
@@ -642,6 +728,9 @@ def stage_write(cat: str, only: set[str], work: Path) -> None:
                 want += [{k: e[k] for k in ENTRY_SPEC_KEYS if k in e}]
             if "restyle" in e:
                 want += [restyle_settings(c, e, e["seed"])]
+            if CATEGORIES[c]["mode"] == "framed_good":
+                # A repainted good or a re-picked ore rewrites every building it is on.
+                want += [foreground_fingerprint(e, finals.game)]
         return json.loads(json.dumps(want))  # tuples as lists, as read back
 
     def _src(e: dict) -> tuple[str, dict]:
