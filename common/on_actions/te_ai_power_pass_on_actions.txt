@@ -64,15 +64,17 @@ te_ai_power_pass_selfcheck = {
 # urban centers' lighting group is the engine's to choose for the AI, and it left them unlit where power was made in
 # every save read (88% of AI urban-center levels in 1964). The pass switches a state again whenever it finds it back
 # on no lighting or gas, so a revert costs a month of light, not the pass; but many reverts would mean the engine's
-# choice and the pass fight each month. Read once, at TE_AI_POWER_CHECK_SWITCHES switches:
-#   OK          a quarter or fewer of the switches undone by the next month the pass looked.
+# choice and the pass fight each month. Each switch is read at the pass's first look at the state after it, a month
+# on (te_ai_power_lit_looked); read once TE_AI_POWER_CHECK_LOOKS switches have had that look (counting switches not
+# yet looked at would lean toward OK):
+#   OK          a quarter or fewer of the switches undone at that look.
 #   BROKEN      half or more undone. Fallback: ai_selection = most_productive on the urban centers' lighting group
 #               (run G of 2026-11-21 lit 2,201 levels that way beside seeded plants), or a lock.
 #   NO_VERDICT  between.
 te_ai_power_lights_selfcheck = {
 	trigger = {
 		NOT = { has_global_variable = te_ai_power_lights_checked }
-		te_ai_power_switches_g >= TE_AI_POWER_CHECK_SWITCHES
+		te_ai_power_looked_g >= TE_AI_POWER_CHECK_LOOKS
 	}
 	effect = {
 		set_global_variable = te_ai_power_lights_checked
@@ -80,14 +82,14 @@ te_ai_power_lights_selfcheck = {
 		random_country = {
 			if = {
 				limit = { te_ai_power_revert_share <= 0.25 }
-				debug_log = "TE_SELF_CHECK OK ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the AI keeps the lights the pass switches on)"
+				debug_log = "TE_SELF_CHECK OK ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] looked=[SCOPE.ScriptValue('te_ai_power_looked_g')|0] first_reverts=[SCOPE.ScriptValue('te_ai_power_first_reverts_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the AI keeps the lights the pass switches on)"
 			}
 			else_if = {
 				limit = { te_ai_power_revert_share >= 0.5 }
-				debug_log = "TE_SELF_CHECK BROKEN ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the AI undoes half or more of the switches: fallback in te_ai_power_pass_on_actions.txt)"
+				debug_log = "TE_SELF_CHECK BROKEN ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] looked=[SCOPE.ScriptValue('te_ai_power_looked_g')|0] first_reverts=[SCOPE.ScriptValue('te_ai_power_first_reverts_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (the AI undoes half or more of the switches: fallback in te_ai_power_pass_on_actions.txt)"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK NO_VERDICT ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (between a quarter and half undone)"
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_power_lights switches=[SCOPE.ScriptValue('te_ai_power_switches_g')|0] levels=[SCOPE.ScriptValue('te_ai_power_switched_levels_g')|0] looked=[SCOPE.ScriptValue('te_ai_power_looked_g')|0] first_reverts=[SCOPE.ScriptValue('te_ai_power_first_reverts_g')|0] reverts=[SCOPE.ScriptValue('te_ai_power_reverts_g')|0] date=[TimeKeeper.GetCurrentDate.GetString] (between a quarter and half undone)"
 			}
 		}
 	}

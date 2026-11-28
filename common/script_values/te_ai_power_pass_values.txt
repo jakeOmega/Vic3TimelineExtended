@@ -119,9 +119,11 @@ te_ai_power_levels_wanted = {
 	max = TE_AI_POWER_MAX_BATCH
 }
 
-# A state's batch is given up on after this many monthly follows with some of it unbuilt: 30 months, a year beyond
-# what a 5-level batch takes at 40 weeks. Its unbuilt levels count as lost for the self-check.
-TE_AI_POWER_FOLLOW_MONTHS = 30
+# A state's batch is given up on after this many monthly follows with some of it unbuilt: 36 months. A 10-level batch
+# is 4,000 points, about 80 weeks of a large 1920s government's own construction, and it may wait behind two more of
+# the pass's and up to a year of other building. Its unbuilt levels count as lost for the self-check, so a BROKEN can
+# mean slow as well as dropped: the self-check's line prints the cohort's built and lost.
+TE_AI_POWER_FOLLOW_MONTHS = 36
 
 # State scope, for a state with a batch followed (te_ai_power_follow): the plant levels that would mean the batch is
 # built, the levels of it built so far (never below 0 or above the batch: a level taken down there, or an investor's,
@@ -161,13 +163,13 @@ te_ai_power_switch_threshold = {
 
 # The self-checks' thresholds (te_ai_power_pass_on_actions.txt). The build check follows a closed cohort, the first
 # TE_AI_POWER_COHORT batches queued in a game, and reads once every one is decided: the first batches decided are the
-# quick builds (losses show only at the 30-month limit), so a verdict on them reads OK whatever the loss rate (the
+# quick builds (losses show only at the follow's limit), so a verdict on them reads OK whatever the loss rate (the
 # 1925 test run: OK on the first 32 decided, none lost; 35% of levels lost by the end).
 TE_AI_POWER_COHORT = 40
 # Read once this many of the cohort are decided: a batch whose state passes to a country that does not follow it (a
 # player, or one without Electrical Generation) would otherwise hold the verdict for good.
 TE_AI_POWER_COHORT_READ = 36
-TE_AI_POWER_CHECK_SWITCHES = 20
+TE_AI_POWER_CHECK_LOOKS = 20
 
 # The pass's global counters (te_ai_power_count), 0 while unset, for the self-checks and their lines.
 te_ai_power_batches_g = {
@@ -254,7 +256,22 @@ te_ai_power_cohort_lost_g = {
 		value = global_var:te_ai_power_g_cohort_lost
 	}
 }
-# Of the cohort's levels, the share lost; and of the light switches, the share the AI undid.
+te_ai_power_looked_g = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_ai_power_g_looked }
+		value = global_var:te_ai_power_g_looked
+	}
+}
+te_ai_power_first_reverts_g = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_ai_power_g_first_reverts }
+		value = global_var:te_ai_power_g_first_reverts
+	}
+}
+# Of the cohort's levels, the share lost; and of the switched states looked at a month on, the share the AI had put
+# back.
 te_ai_power_lost_share = {
 	value = te_ai_power_cohort_lost_g
 	divide = {
@@ -264,9 +281,9 @@ te_ai_power_lost_share = {
 	}
 }
 te_ai_power_revert_share = {
-	value = te_ai_power_reverts_g
+	value = te_ai_power_first_reverts_g
 	divide = {
-		value = te_ai_power_switches_g
+		value = te_ai_power_looked_g
 		min = 1
 	}
 }

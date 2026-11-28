@@ -30,14 +30,27 @@ te_ai_power_lights_unswitched = {
 
 # State scope. A state the pass may queue a batch of plant levels in: it has urban centers, it is short of at least
 # half a level's output (te_ai_power_levels_wanted, which counts what the lights would take), no batch of the pass's
-# is still followed there, and vanilla's possible and the mod's Resource Transition rule allow a coal or oil plant
-# (copied from building_power_plant: start_building_construction's respect for them is unverified,
-# scripting_best_practices.md § "AI and Cost-Only Buildings"). The owner's rule for the build pass's first plant
+# is still followed there, no coal or oil plant there is under construction or has levels queued (anyone's: a batch
+# given up on at the follow's limit, an investor's, the construction pass's first plant; its capacity counts only
+# once built, so the state would read as short and get a second batch on top), and vanilla's possible and the mod's
+# Resource Transition rule allow a coal or oil plant (copied from building_power_plant: start_building_construction's
+# respect for them is unverified, scripting_best_practices.md § "AI and Cost-Only Buildings").
+# is_industrial_production_allowed is stricter than vanilla's possible, which asks only for no law banning industry:
+# it is the state-level gate the 2026-11-21/22 test arms' seed passes used, kept as they ran it. The owner's rule for the build pass's first plant
 # (2026-11-17), that a country with other power is not made to build a fossil plant, holds here state by state: a
 # state that already makes or receives what it needs is not short.
 te_ai_power_pass_site = {
 	has_building = building_urban_center
 	NOT = { has_variable = te_ai_power_pending }
+	NOT = {
+		any_scope_building = {
+			is_building_type = building_power_plant
+			OR = {
+				is_under_construction = yes
+				te_construction_market_building_queued_levels > 0
+			}
+		}
+	}
 	is_industrial_production_allowed = yes
 	rt_fossil_construction_allowed_here = yes
 	owner = { NOT = { has_law_or_variant = law_type:law_industry_banned } }

@@ -32,9 +32,20 @@ te_ai_power_pass_effect = {
 		}
 		every_scope_state = {
 			limit = { has_variable = te_ai_power_lit }
+			# The lights self-check reads each switch at its first look, a month on (te_ai_power_lit_looked).
+			if = {
+				limit = { NOT = { has_variable = te_ai_power_lit_looked } }
+				set_variable = te_ai_power_lit_looked
+				te_ai_power_count = { NAME = te_ai_power_g_looked ADD = 1 }
+				if = {
+					limit = { te_ai_power_lights_unswitched = yes }
+					te_ai_power_count = { NAME = te_ai_power_g_first_reverts ADD = 1 }
+				}
+			}
 			if = {
 				limit = { te_ai_power_lights_unswitched = yes }
 				remove_variable = te_ai_power_lit
+				remove_variable = te_ai_power_lit_looked
 				set_variable = { name = te_ai_power_revert_wait value = yes days = 180 }
 				te_ai_power_count = { NAME = te_ai_power_g_reverts ADD = 1 }
 			}
@@ -91,7 +102,8 @@ te_ai_power_queue_batch = {
 #   - built: the state holds te_ai_power_want levels more than when it queued (an investor's level there counts too,
 #     the same allowance as the build pass's follow, ai.md § AI Government Construction);
 #   - ended: the government queue is empty with the batch not all built (the rest was dropped, or the state's
-#     levels went to another use), or TE_AI_POWER_FOLLOW_MONTHS have passed.
+#     levels went to another use), or TE_AI_POWER_FOLLOW_MONTHS have passed. Levels still queued then stay queued,
+#     and no new batch goes to the state until they are built or dropped (te_ai_power_pass_site).
 # The self-check counts the levels built and lost of the first TE_AI_POWER_COHORT batches queued in a game.
 te_ai_power_follow = {
 	change_variable = { name = te_ai_power_months add = 1 }

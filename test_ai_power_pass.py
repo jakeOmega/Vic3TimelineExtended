@@ -170,6 +170,9 @@ class Gates(unittest.TestCase):
         self.assertIn("rt_fossil_construction_allowed_here = yes", site)
         self.assertIn("te_ai_power_levels_wanted >= 1", site)
         self.assertIn("NOT = { has_variable = te_ai_power_pending }", site)
+        # No second batch on top of plant levels still queued there (a batch given up on, an investor's).
+        self.assertIn("NOT = { any_scope_building = { is_building_type = building_power_plant OR = { "
+                      "is_under_construction = yes te_construction_market_building_queued_levels > 0 } } }", site)
 
     def test_country_gate(self):
         gate = _norm(_block(_code(TRIGGERS), "te_ai_power_pass_may_queue"))
@@ -205,7 +208,7 @@ class Gates(unittest.TestCase):
 
     def test_a_revert_waits(self):
         effect = _norm(_block(_code(EFFECTS), "te_ai_power_pass_effect"))
-        self.assertIn("remove_variable = te_ai_power_lit set_variable = { name = te_ai_power_revert_wait value = yes "
+        self.assertIn("remove_variable = te_ai_power_lit remove_variable = te_ai_power_lit_looked set_variable = { name = te_ai_power_revert_wait value = yes "
                       "days = 180 }", effect)
 
 
@@ -238,6 +241,18 @@ class Hooks(unittest.TestCase):
 
 
 class SelfChecks(unittest.TestCase):
+    def test_lights_check_reads_each_switch_at_its_first_look(self):
+        effect = _norm(_block(_code(EFFECTS), "te_ai_power_pass_effect"))
+        self.assertIn("if = { limit = { NOT = { has_variable = te_ai_power_lit_looked } } set_variable = "
+                      "te_ai_power_lit_looked te_ai_power_count = { NAME = te_ai_power_g_looked ADD = 1 } if = { limit = "
+                      "{ te_ai_power_lights_unswitched = yes } te_ai_power_count = { NAME = te_ai_power_g_first_reverts "
+                      "ADD = 1 } } }", effect)
+        check = _norm(_block(_code(ON_ACTIONS), "te_ai_power_lights_selfcheck"))
+        self.assertIn("te_ai_power_looked_g >= TE_AI_POWER_CHECK_LOOKS", check)
+        share = _norm(_block(_code(VALUES), "te_ai_power_revert_share"))
+        self.assertTrue(share.startswith("value = te_ai_power_first_reverts_g divide = { value = te_ai_power_looked_g"),
+                        share)
+
     def test_build_check_reads_a_closed_cohort(self):
         batch = _norm(_block(_code(EFFECTS), "te_ai_power_queue_batch"))
         self.assertIn("if = { limit = { te_ai_power_cohort_g < TE_AI_POWER_COHORT } set_variable = te_ai_power_in_cohort",
