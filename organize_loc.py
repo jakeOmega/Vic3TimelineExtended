@@ -713,6 +713,13 @@ def categorize_key(key, technology_keys, treaty_article_of=None):
     # with the notifications, ahead of the substring rules (`_desc`, `module`).
     if key.startswith("alert_") or key.endswith("_setting_name"):
         return "NOTIFICATIONS"
+    # Private Actors (docs/superpowers/specs/2026-11-28-actors-firms-design.md). Every key the
+    # system adds starts te_pa_, so its tab, ledger lines, tooltips and modifiers file together
+    # even when a key ends in _add or _desc. After the alert rule, so a te_pa_ alert's
+    # <key>_setting_name stays with its alert_ keys; its te_pa.N event keys and rule_/setting_
+    # keys keep their own routing.
+    if key.startswith("te_pa_"):
+        return "MISCELLANEOUS"
     # Tax-code engine probes (docs/testing/tax-code-probes.md), a temporary
     # harness kept in te_debug_tax_l_english.yml until it is removed. Tested
     # before the `law_` and `_add` rules, which would take the carrier law and

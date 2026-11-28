@@ -10800,6 +10800,8 @@
  te_orbit_strikes_tt:0 "#header Anti-Satellite Strikes#!\n[GetScriptedGui('te_asat_record_sgui').ExecuteTooltip( GuiScope.SetRoot( Country.MakeScope ).End )]\nEach strike adds #R +[Country.MakeScope.ScriptValue('te_asat_debris_low')|0]#! [concept_orbital_debris] in low orbits and #R +[Country.MakeScope.ScriptValue('te_asat_debris_high')|0]#! in high orbits."
  te_orbit_strikes_value:0 "[Country.MakeScope.ScriptValue('te_asat_disp_strikes_total')|0]"
  te_orbital_network_disrupted:0 "Orbital Network Disrupted"
+ te_pa_good_unknown:0 "a good"
+ te_pa_law_unknown:0 "a law"
  te_pb_locked_slot_3_tt:0 "This [concept_power_bloc_principle] slot opens when the [concept_power_bloc] has #v 3#! slots. $te_pb_locked_slot_sources_tt$"
  te_pb_locked_slot_4_tt:0 "This [concept_power_bloc_principle] slot opens when the [concept_power_bloc] has #v 4#! slots. $te_pb_locked_slot_sources_tt$"
  te_pb_locked_slot_5_tt:0 "This [concept_power_bloc_principle] slot opens when the [concept_power_bloc] has #v 5#! slots. $te_pb_locked_slot_sources_tt$"

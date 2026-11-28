@@ -60,6 +60,16 @@ class CategorizeKeyTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
+    def test_private_actors_family_stays_together(self):
+        # te_pa_ keys file in MISCELLANEOUS even when they end in _add or _desc or have few tokens; the
+        # system's events and an alert's setting name keep their own files.
+        for key in ("te_pa_good_unknown", "te_pa_row_reason_tt", "te_pa_cartel_add", "te_pa_ledger_desc",
+                    "te_pa_system_name"):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
+        self.assertEqual(categorize_key("te_pa.1", set()), "EVENTS")
+        self.assertEqual(categorize_key("te_pa_cartel_alert_setting_name", set()), "NOTIFICATIONS")
+
     def test_collective_governance_families_stay_together(self):
         # A government type or amendment name and its _desc must land in the
         # same file. Four-token bases would otherwise split: the name to
