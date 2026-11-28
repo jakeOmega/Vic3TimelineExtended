@@ -6303,3 +6303,19 @@ State scope; it queues one private level of the named building for the state's o
 - **Unread:** who owns the levels and whether the investment pool pays for them as for the engine's (assumed so), and whether the building's `possible` is honored. Batched private investment's self-checks and play-test rows cover these (`batch_invest_queue`; `docs/testing/perf-fixes-playtest.md`). Three of the mod's buildings gate private levels on a count of queued ones (`can_build_private` on the Extraplanetary Base, the Resort Colony and the Trade Center), which `can_queue_building_levels` does not read, so they get no batches.
 - **`on_start_expanding_building` (ROOT = the building) is the only notice script gets that a level was queued**, and it carries nothing about who queued it. A country's own private picks can be told from the rest by keeping the private queue's length from one call to the next (`te_bi_note_pick`): a government level leaves it unchanged. It runs inside the engine's investment pass, once for each level the engine queues, with the level already counted (read 2026-11-27: 597 calls found the USA's queue one longer, and the first batch found 16 queued in a pass that fills 1,000). **A level queued in another country's state sits in the queue of the country that placed it:** of 85 countries, 4 held 805 more queued levels in their states (`level_after_queued_constructions` less `level`, summed) than in their own queues (`construction_queue_num_queued_levels`), and 7 held 999 more in their queues than in their states.
 - **A building's queued levels are `level_after_queued_constructions` less `level`** (an event target, building scope; vanilla's canton and Sakoku caps read it), in every queue together. Size a script-queued batch against it and batches cannot stack while earlier ones wait (`te_bi_batch_extra`).
+
+## A Party's Side on a Law Is Its Members' `law_stance` Weighed by Clout; There Is No Party Name to Store
+
+A party has no stance of its own on a law. To find the party that stands best on one, sum its members' stances
+weighed by their clout in party scope (`every_member = { add = { value = <the group's ladder> multiply = ig_clout } }`)
+and pick with `ordered_active_party` (descending), as `me_py_<issue>_support` (`me_election_issue_values.txt`) and
+Private Actors' `te_pa_party_side_value` do. A group's stance is a `law_stance` ladder (`value > approve` 2,
+`> neutral` 1, `< disapprove` −2, `< neutral` −1: the four forms vanilla and the mod use); `law = scope:x` takes a saved
+`law_type` scope (`cultural_hegemony_events.txt`, saved through a law's `law_type = { save_scope_as = x }`), otherwise a
+law has to be named, so a stance on a law chosen by number is a generated ladder a law (`te_pa_gen_ig_stake_stance`).
+`ordered_member = { order_by = ig_clout position = 0 }` is a party's largest group, and `interest_group.party` the
+party a group backs. `add_momentum` (party scope) takes a script value; `momentum` reads a party's momentum as a
+value. A party's name renders in event loc (`SCOPE.sParty('x').GetName`), but a party type's key has no loc of its own
+(the name is the country's), so a record kept across months is better keyed by the party's largest member's interest
+group type, whose key is its loc (`ig_landowners`), as Private Actors' campaign money is (2026-11-28; whether
+`add_momentum` moves momentum from a pulse is that system's `momentum_from_pulse` self-check).

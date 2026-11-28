@@ -253,7 +253,8 @@ turn-time checks wait for 20 firms, so the first lines come within a few months 
 56. **A press discredited.** When a firm with a press is exposed (a cartel, a regulator, secret money), its press
     loses 30 strength ("<firm> sees its press discredited …") and the exposure costs it half the Standing.
 57. **Resource Transition.** In a country enacting the Fossil Expansion Moratorium or the Managed Fossil Phaseout, the
-    coal and oil firms stand against it in the Politics section, stall it and put money against it.
+    coal and oil firms stand against it in the Politics section; those that take A Friendly Law as their goal (the law
+    raises its pressure) stall it and put money against it, and against the phaseout the others put in half.
 58. **Rules off with politics.** As the rules-off list's Private Actors section says: every "Patronage from Firms"
     modifier leaves the country within a month, and the Politics section's rows go; switched back on, the modifiers
     return at the next quarter from the totals kept.

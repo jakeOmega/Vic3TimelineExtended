@@ -444,7 +444,7 @@ te_pa_debug_momentum_read = {
 			te_history_month_index > global_var:te_pa_sc_mom_month
 		}
 		if = {
-			limit = { NOT = { global_var:te_pa_sc_mom_party ?= { te_pa_party_momentum >= 0 } } }
+			limit = { NOT = { global_var:te_pa_sc_mom_party ?= { any_member = { ig_clout >= 0 } } } }
 			te_pa_debug_momentum_disarm = yes
 		}
 		else = {
