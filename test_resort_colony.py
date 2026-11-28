@@ -3,8 +3,8 @@
 Design: docs/superpowers/specs/2026-11-21-resort-colony-building-design.md.
 The Resort Colony method left the Extraplanetary Base for building_space_resort,
 whose levels work their own room at each world (the RESORTS table in
-gen_solar_sites.py, plus 10 a staffed Off-World Resort level, plus 10 in Earth
-orbit) best draw first, -75% past it: the twin of base room.
+gen_solar_sites.py, plus 20 a staffed Off-World Resort level, plus 20 in Earth
+orbit; 10 each until #2141) best draw first, -75% past it: the twin of base room.
 
 Run: python3 -m pytest test_resort_colony.py -q
 """
