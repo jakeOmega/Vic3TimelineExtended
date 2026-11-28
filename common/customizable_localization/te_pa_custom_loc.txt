@@ -77,6 +77,47 @@ te_pa_ledger_line = {
 		trigger = { var:te_pa_l_verb ?= 17 }
 		localization_key = te_pa_ledger_verb_17
 	}
+	# The trust and the foundation (Task 4a: 20-29; te_pa_trust_effects.txt lists them)
+	text = {
+		trigger = { var:te_pa_l_verb ?= 20 }
+		localization_key = te_pa_ledger_verb_20
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 21 }
+		localization_key = te_pa_ledger_verb_21
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 22 }
+		localization_key = te_pa_ledger_verb_22
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 23 }
+		localization_key = te_pa_ledger_verb_23
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 24 }
+		localization_key = te_pa_ledger_verb_24
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 25 }
+		localization_key = te_pa_ledger_verb_25
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 26 }
+		localization_key = te_pa_ledger_verb_26
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 27 }
+		localization_key = te_pa_ledger_verb_27
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 28 }
+		localization_key = te_pa_ledger_verb_28
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 29 }
+		localization_key = te_pa_ledger_verb_29
+	}
 	text = {
 		localization_key = te_pa_ledger_verb_unknown
 	}
@@ -385,5 +426,19 @@ te_pa_posture_does = {
 	}
 	text = {
 		localization_key = te_pa_posture_tolerated_does_tt
+	}
+}
+
+# The trust (Task 4). A row's cartel, as the state knows it (te_pa_r_cartel above 0 only once it is open or exposed):
+# lawful under the antitrust law in force (te_pa_r_cartel_open 1), or known and illegal.
+te_pa_cartel_status = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_cartel_open ?= 1 }
+		localization_key = te_pa_cartel_status_open
+	}
+	text = {
+		localization_key = te_pa_cartel_status_illegal
 	}
 }

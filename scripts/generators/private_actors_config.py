@@ -47,6 +47,17 @@ NUMBERS = {
     # The campaign spending at which a firm's stance on the Electoral Finance laws is full (te_pa_campaign_total,
     # pounds, written by Task 5). First guess, for Task 5 to set against what firms actually spend.
     "campaign_full": 50000,
+    # The trust (Task 4, § 6.1 stage 4): a cartel at strength 100 cuts the throughput of each of its type's
+    # building types in the country by this much (in proportion below that; the generated te_pa_cartel_<type>
+    # modifiers carry it at full strength, applied with the strength over 100), and adds this much to Wealth
+    # Concentration's economic laws term (§ 6.7: cartel rents feed it; country_wealth_concentration_economy_add,
+    # the sum te_demog_wc_econ_term reads, which the antitrust laws already move by 5).
+    "cartel_cut": 0.2,
+    "cartel_wealth": 5,
+    # The foundation (§ 5.5) at strength 100, in its state: education access and lower mortality (first
+    # guesses: a decree that promotes schooling gives 0.25 to 0.3, a company's prosperity bonus 0.05).
+    "found_education": 0.1,
+    "found_mortality": 0.05,
 }
 
 # ---------------------------------------------------------------------------
@@ -716,4 +727,7 @@ NAME_LOCS = (
     NameLoc("te_pa_row_reason_law", "law", "te_pa_r_reason_law"),
     # the firm detail's law being enacted (Task 3's tab)
     NameLoc("te_pa_row_enacting_law", "law", "te_pa_r_enacting_law"),
+    # the trust's ledger lines (Task 4): the good a cartel restricts, the law a firm stalls
+    NameLoc("te_pa_ledger_good", "good", "te_pa_l_good"),
+    NameLoc("te_pa_ledger_law", "law", "te_pa_l_law"),
 )

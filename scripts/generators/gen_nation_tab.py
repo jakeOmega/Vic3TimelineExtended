@@ -215,6 +215,10 @@ KEEP_IN_LIST = {
     "te_debug_*": "debug",
     "te_tp_*": "debug (the developer-only tax probes)",
     "te_demog_fast_*": "debug (the fast demographic clock)",
+    "te_pa_cartel_*": "Private Actors' cartels: a firm's, one modifier a firm type (two each, open and secret: 652, past "
+                      "a section's MAX_GROUP), named for the firm once it is open or exposed and Restricted Supply "
+                      "while it is secret, and each carrying its type's building throughput types, which no section's "
+                      "rows place; the Private Actors tab shows each firm's cartel, and All Modifiers the modifier",
     "sr_orbital_superiority": "a wartime edge from holding Earth orbit, refreshed monthly with the fleets there: it "
                               "belongs beside the anti-satellite strike's timed te_orbital_network_disrupted in "
                               "All Modifiers",
@@ -299,6 +303,7 @@ NOT_ON_COUNTRY = {
     "te_demog_census_*": "states", "te_demog_line_*": "states", "te_demog_lx_gap_labor": "states",
     "te_demog_primate_city": "states", "te_demog_provincial_neglect": "states",
     "te_demog_mt_*": "states",
+    "te_pa_found_*": "states",
     "te_reserve_cadre_*": "states",
     "resettlement_*_destination": "states", "resettlement_arrivals": "the destination's buildings",
     "resettlement_transit_deaths": "the destination's buildings", "resettlement_recruits": "states",

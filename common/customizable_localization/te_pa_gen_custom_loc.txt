@@ -724,3 +724,501 @@ te_pa_row_enacting_law = {
 		localization_key = te_pa_law_unknown
 	}
 }
+
+# good from var:te_pa_l_good
+te_pa_ledger_good = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_l_good ?= 1 }
+		localization_key = advanced_materials
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 2 }
+		localization_key = aeroplanes
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 3 }
+		localization_key = ammunition
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 4 }
+		localization_key = artillery
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 5 }
+		localization_key = automobiles
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 6 }
+		localization_key = clippers
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 7 }
+		localization_key = clothes
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 8 }
+		localization_key = coal
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 9 }
+		localization_key = coffee
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 10 }
+		localization_key = construction
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 11 }
+		localization_key = consumer_appliances
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 12 }
+		localization_key = copper
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 13 }
+		localization_key = digital_access
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 14 }
+		localization_key = digital_assets
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 15 }
+		localization_key = dye
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 16 }
+		localization_key = electricity
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 17 }
+		localization_key = electronic_components
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 18 }
+		localization_key = engines
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 19 }
+		localization_key = explosives
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 20 }
+		localization_key = fabric
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 21 }
+		localization_key = fertilizer
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 22 }
+		localization_key = fine_art
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 23 }
+		localization_key = fish
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 24 }
+		localization_key = fruit
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 25 }
+		localization_key = furniture
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 26 }
+		localization_key = glass
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 27 }
+		localization_key = gold
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 28 }
+		localization_key = grain
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 29 }
+		localization_key = grid_power
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 30 }
+		localization_key = groceries
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 31 }
+		localization_key = hardwood
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 32 }
+		localization_key = iron
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 33 }
+		localization_key = ironclads
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 34 }
+		localization_key = launch_capacity
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 35 }
+		localization_key = lead
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 36 }
+		localization_key = liquor
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 37 }
+		localization_key = luxury_clothes
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 38 }
+		localization_key = luxury_furniture
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 39 }
+		localization_key = magnetic_drive_ships
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 40 }
+		localization_key = manowars
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 41 }
+		localization_key = meat
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 42 }
+		localization_key = merchant_marine
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 43 }
+		localization_key = motor_ships
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 44 }
+		localization_key = oil
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 45 }
+		localization_key = opium
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 46 }
+		localization_key = paper
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 47 }
+		localization_key = porcelain
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 48 }
+		localization_key = radios
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 49 }
+		localization_key = robotics
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 50 }
+		localization_key = rubber
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 51 }
+		localization_key = services
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 52 }
+		localization_key = silk
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 53 }
+		localization_key = small_arms
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 54 }
+		localization_key = steamers
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 55 }
+		localization_key = steel
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 56 }
+		localization_key = sugar
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 57 }
+		localization_key = sulfur
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 58 }
+		localization_key = tanks
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 59 }
+		localization_key = tea
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 60 }
+		localization_key = tech_metals
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 61 }
+		localization_key = telephones
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 62 }
+		localization_key = tobacco
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 63 }
+		localization_key = tools
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 64 }
+		localization_key = tourism
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 65 }
+		localization_key = transportation
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 66 }
+		localization_key = wine
+	}
+	text = {
+		trigger = { var:te_pa_l_good ?= 67 }
+		localization_key = wood
+	}
+	text = {
+		localization_key = te_pa_good_unknown
+	}
+}
+
+# law from var:te_pa_l_law
+te_pa_ledger_law = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_l_law ?= 1 }
+		localization_key = law_traditionalism
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 2 }
+		localization_key = law_interventionism
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 3 }
+		localization_key = law_agrarianism
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 4 }
+		localization_key = law_industry_banned
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 5 }
+		localization_key = law_extraction_economy
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 6 }
+		localization_key = law_laissez_faire
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 7 }
+		localization_key = law_cooperative_ownership
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 8 }
+		localization_key = law_command_economy
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 9 }
+		localization_key = law_no_workers_rights
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 10 }
+		localization_key = law_regulatory_bodies
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 11 }
+		localization_key = law_worker_protections
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 12 }
+		localization_key = law_child_labor_allowed
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 13 }
+		localization_key = law_restricted_child_labor
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 14 }
+		localization_key = law_compulsory_primary_school
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 15 }
+		localization_key = law_guild_system
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 16 }
+		localization_key = law_combination_acts
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 17 }
+		localization_key = law_anti_strike_laws
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 18 }
+		localization_key = law_right_to_associate
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 19 }
+		localization_key = law_corporatized_unions
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 20 }
+		localization_key = law_factory_councils
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 21 }
+		localization_key = law_no_ministry_of_labor
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 22 }
+		localization_key = law_pro_labor_ministry_of_labor
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 23 }
+		localization_key = law_pro_capital_ministry_of_labor
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 24 }
+		localization_key = law_guilds_chartered_monopolies
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 25 }
+		localization_key = law_freedom_of_contract
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 26 }
+		localization_key = law_trust_busting
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 27 }
+		localization_key = law_regulated_utilities
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 28 }
+		localization_key = law_dirigisme
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 29 }
+		localization_key = law_command_cooperative_economy
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 30 }
+		localization_key = law_unrestricted_extraction
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 31 }
+		localization_key = law_fossil_expansion_moratorium
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 32 }
+		localization_key = law_managed_fossil_phaseout
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 33 }
+		localization_key = law_unrestricted_automation
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 34 }
+		localization_key = law_robot_tax
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 35 }
+		localization_key = law_human_labor_quotas
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 36 }
+		localization_key = law_automation_dividend
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 37 }
+		localization_key = law_no_ip_protection
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 38 }
+		localization_key = law_creative_commons
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 39 }
+		localization_key = law_traditional_ip_protection
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 40 }
+		localization_key = law_strict_ip_protection
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 41 }
+		localization_key = law_open_source_innovation
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 42 }
+		localization_key = law_state_intellectual_property
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 43 }
+		localization_key = law_unregulated_banking
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 44 }
+		localization_key = law_free_mutual_banking
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 45 }
+		localization_key = law_universal_banking_light_prudence
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 46 }
+		localization_key = law_prudential_narrow_banking
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 47 }
+		localization_key = law_directed_credit_development_banks
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 48 }
+		localization_key = law_state_owned_banking
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 49 }
+		localization_key = law_central_bank_independence
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 50 }
+		localization_key = law_no_campaign_finance_laws
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 51 }
+		localization_key = law_unregulated_donations
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 52 }
+		localization_key = law_donation_limits
+	}
+	text = {
+		trigger = { var:te_pa_l_law ?= 53 }
+		localization_key = law_publicly_funded_elections
+	}
+	text = {
+		localization_key = te_pa_law_unknown
+	}
+}

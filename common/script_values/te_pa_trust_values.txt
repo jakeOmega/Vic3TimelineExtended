@@ -1,0 +1,491 @@
+﻿# Private Actors, the trust and the foundation: the numbers and the readings (docs/systems/mod_systems/private_actors.md
+# § The Trust; spec §§ 4.6, 5.5, 6.1-6.4; plan Task 4). Every number is a first guess, named here so a later task or
+# a play-test can move it. The effects are te_pa_trust_effects.txt's, the triggers te_pa_trust_triggers.txt's.
+
+# ---------------------------------------------------------------------------
+# Readers: a holding's record variable, 0 while unset (company scope)
+# ---------------------------------------------------------------------------
+
+te_pa_v_cartel = { value = 0 if = { limit = { has_variable = te_pa_cartel } value = var:te_pa_cartel } }
+te_pa_v_cartel_mark = { value = 0 if = { limit = { has_variable = te_pa_cartel_mark } value = var:te_pa_cartel_mark } }
+te_pa_v_reg = { value = 0 if = { limit = { has_variable = te_pa_reg } value = var:te_pa_reg } }
+te_pa_v_found = { value = 0 if = { limit = { has_variable = te_pa_found } value = var:te_pa_found } }
+# Task 7's laboratory, unset until it builds one
+te_pa_v_lab = { value = 0 if = { limit = { has_variable = te_pa_lab } value = var:te_pa_lab } }
+te_pa_v_patern = { value = 0 if = { limit = { has_variable = te_pa_patern } value = var:te_pa_patern } }
+te_pa_v_expose_push = { value = 0 if = { limit = { has_variable = te_pa_expose_push } value = var:te_pa_expose_push } }
+
+# ---------------------------------------------------------------------------
+# Spending (te_pa_spend_funds): the one place a firm's funds go down for a spend
+# ---------------------------------------------------------------------------
+
+# Company scope: the funds after the spend staged in te_pa_spend_amt.
+te_pa_funds_after_spend = {
+	value = te_pa_v_funds
+	subtract = var:te_pa_spend_amt
+	min = 0
+}
+
+# Country scope: what leaves the investment pool for the spend staged in te_pa_spend_amt, the same sum capped at what
+# the pool holds (te_mon_union_exit_pool_hit's pattern), and nothing from an empty or negative pool.
+te_pa_spend_pool_hit = {
+	value = var:te_pa_spend_amt
+	multiply = -1
+	min = { value = investment_pool multiply = -1 }
+	max = 0
+}
+
+# ---------------------------------------------------------------------------
+# The cartel (§§ 6.1, 6.2)
+# ---------------------------------------------------------------------------
+
+# A firm whose goal is Dominance or A Protected Market forms one at this share of its sector...
+te_pa_cartel_share = 0.5
+# ...or at this one under Strict IP Protection with a laboratory at te_pa_gen_patent_pool_lab (§ 10.3's patent pool;
+# the laboratory is Task 7's, so the branch waits for it).
+te_pa_cartel_share_ip = 0.4
+# It ends when the share falls this far below the share it forms at, so a firm on the line doesn't form and end a
+# cartel at every turn (the share is read at each turn).
+te_pa_cartel_end_margin = 0.05
+# Strength at formation, and its growth a year: 15 under Freedom of Contract, 10 otherwise, up to the share x 100.
+te_pa_cartel_start = 5
+te_pa_cartel_growth_year = 10
+te_pa_cartel_growth_free_year = 15
+# Under Regulated Utilities, outside infrastructure and utilities, it is capped here; a captured regulator raises the
+# cap toward te_pa_cartel_ru_cap_max with its strength.
+te_pa_cartel_ru_cap = 40
+te_pa_cartel_ru_cap_max = 80
+# Rents: at strength 100 the firm's funds accrue this much faster (§ 6.1 stage 4: up to double).
+te_pa_cartel_funds_extra = 1
+# The strengths the ledger marks (§ 6.5's charter needs 80).
+te_pa_cartel_mark_1 = 50
+te_pa_cartel_mark_2 = 80
+te_pa_cartel_mark_3 = 100
+
+# Company scope. The share it forms a cartel at.
+te_pa_cartel_threshold_value = {
+	value = te_pa_cartel_share
+	if = {
+		limit = {
+			owner = { has_law = law_type:law_strict_ip_protection }
+			te_pa_v_lab >= te_pa_gen_patent_pool_lab
+		}
+		value = te_pa_cartel_share_ip
+	}
+}
+
+# Company scope. The share below which its cartel ends.
+te_pa_cartel_end_value = {
+	value = te_pa_cartel_threshold_value
+	subtract = te_pa_cartel_end_margin
+}
+
+# Company scope. A quarter's growth.
+te_pa_cartel_growth_quarter = {
+	value = te_pa_cartel_growth_year
+	if = { limit = { owner = { has_law = law_type:law_freedom_of_contract } } value = te_pa_cartel_growth_free_year }
+	divide = te_pa_quarters_a_year
+}
+
+# Company scope. Regulated Utilities' cap, raised by the captured regulator: 40 at none, 80 at strength 100.
+te_pa_cartel_ru_cap_now = {
+	value = te_pa_cartel_ru_cap_max
+	subtract = te_pa_cartel_ru_cap
+	multiply = te_pa_v_reg
+	divide = 100
+	add = te_pa_cartel_ru_cap
+}
+
+# Company scope. How strong its cartel can be: its share x 100, under Regulated Utilities outside infrastructure and
+# utilities no more than the cap, never past 100.
+te_pa_cartel_cap_value = {
+	value = te_pa_v_share
+	multiply = 100
+	if = { limit = { te_pa_cartel_ru_capped = yes } max = te_pa_cartel_ru_cap_now }
+	max = 100
+	min = 0
+}
+
+# Company scope. The strength after a quarter's growth, held to the cap (a share that falls takes it down with it).
+te_pa_cartel_after_quarter = {
+	value = te_pa_v_cartel
+	add = te_pa_cartel_growth_quarter
+	max = te_pa_cartel_cap_value
+	min = 0
+}
+
+# Company scope. The cartel modifier's multiplier: its strength over 100 (the generated modifiers hold strength 100).
+te_pa_cartel_mult_value = {
+	value = te_pa_v_cartel
+	divide = 100
+	min = 0
+	max = 1
+}
+
+# Company scope. Rents: the funds' accrual is this many times its usual rate, 1 with no cartel, 2 at strength 100
+# (te_pa_funds_year, te_pa_core_values.txt).
+te_pa_cartel_funds_factor = {
+	value = te_pa_v_cartel
+	divide = 100
+	multiply = te_pa_cartel_funds_extra
+	add = 1
+}
+
+# Company scope. Its cartel's strength as the state knows it, for the tab (te_pa_row_sync): 0 while it is secret
+# and unexposed, so its row shows no chip and its detail no line (§ 4.6: secrecy is against the state).
+te_pa_cartel_shown_value = {
+	value = 0
+	if = { limit = { var:te_pa_cartel_known ?= 1 } value = te_pa_v_cartel }
+}
+
+# Company scope. 1 while it holds a cartel the antitrust law in force allows (the chip's hover: open, or known and
+# illegal).
+te_pa_cartel_open_value = {
+	value = 0
+	if = {
+		limit = {
+			te_pa_v_cartel > 0
+			te_pa_cartel_lawful = yes
+		}
+		value = 1
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The captured regulator (§ 6.4)
+# ---------------------------------------------------------------------------
+
+# Connections a year it costs, strength a year it grows (half again as fast under Contracted Administration or the
+# Spoils System), and decay a year unpaid.
+te_pa_reg_conn_year = 10
+te_pa_reg_growth_year = 8
+te_pa_reg_fast_mult = 1.5
+te_pa_reg_decay_year = 5
+
+te_pa_reg_conn_quarter = { value = te_pa_reg_conn_year divide = te_pa_quarters_a_year }
+
+# Company scope.
+te_pa_reg_growth_quarter = {
+	value = te_pa_reg_growth_year
+	if = { limit = { owner = { te_pa_reg_fast = yes } } multiply = te_pa_reg_fast_mult }
+	divide = te_pa_quarters_a_year
+}
+te_pa_reg_after_growth = {
+	value = te_pa_v_reg
+	add = te_pa_reg_growth_quarter
+	max = 100
+}
+te_pa_reg_after_decay = {
+	value = te_pa_v_reg
+	subtract = { value = te_pa_reg_decay_year divide = te_pa_quarters_a_year }
+	min = 0
+}
+te_pa_conn_after_reg = {
+	value = te_pa_v_conn
+	subtract = te_pa_reg_conn_quarter
+	min = 0
+}
+te_pa_reg_shown_value = {
+	value = 0
+	if = { limit = { var:te_pa_reg_known ?= 1 } value = te_pa_v_reg }
+}
+
+# ---------------------------------------------------------------------------
+# Stalling the law (§ 6.4): Connections for one enactment setback, at most once a year
+# ---------------------------------------------------------------------------
+
+te_pa_stall_conn = 20
+te_pa_stall_months = 12
+
+# Company scope. Months since its last stall, 0 while it has none.
+te_pa_stall_since = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_stall_month }
+		value = te_history_month_index
+		subtract = var:te_pa_stall_month
+	}
+}
+te_pa_conn_after_stall = {
+	value = te_pa_v_conn
+	subtract = te_pa_stall_conn
+	min = 0
+}
+
+# ---------------------------------------------------------------------------
+# Exposure (§ 4.6): a yearly roll, at the firm's turn, for each secret holding, in percent
+# ---------------------------------------------------------------------------
+
+te_pa_expose_base = 10
+# The speech laws: the freer the press, the likelier.
+te_pa_expose_outlawed_dissent = -6
+te_pa_expose_censorship = -3
+te_pa_expose_protected_speech = 5
+# The policing and Home Affairs institutions, a level of investment each.
+te_pa_expose_police_per_level = 1
+te_pa_expose_home_affairs_per_level = 2
+# The courts: Judicial Independence (docs/systems/mod_systems/judiciary.md, 0-100) above or below the middle, a
+# tenth of a point each; the middle while the country has none.
+te_pa_expose_courts_neutral = 50
+te_pa_expose_courts_per_point = 0.1
+te_pa_expose_max = 50
+# Exposed: the firm's Standing falls this much (and its foundation is tainted, te_pa_found_taint).
+te_pa_expose_stand_loss = 15
+
+# Country scope. Judicial Independence, the middle while unset.
+te_pa_v_judicial_independence = {
+	value = te_pa_expose_courts_neutral
+	if = { limit = { has_variable = te_judicial_independence } value = var:te_judicial_independence }
+}
+
+# Country scope. What the state brings to a roll: its speech law, its policing and Home Affairs, its courts.
+te_pa_expose_state_value = {
+	value = 0
+	if = { limit = { has_law = law_type:law_outlawed_dissent } add = te_pa_expose_outlawed_dissent }
+	else_if = { limit = { has_law = law_type:law_censorship } add = te_pa_expose_censorship }
+	else_if = { limit = { has_law = law_type:law_protected_speech } add = te_pa_expose_protected_speech }
+	add = { value = "institution_investment_level(institution_police)" multiply = te_pa_expose_police_per_level }
+	add = { value = "institution_investment_level(institution_home_affairs)" multiply = te_pa_expose_home_affairs_per_level }
+	add = {
+		value = te_pa_v_judicial_independence
+		subtract = te_pa_expose_courts_neutral
+		multiply = te_pa_expose_courts_per_point
+	}
+}
+
+# Company scope. The hook later tasks add their terms to (0 now): Task 4b's Inquiry (§ 6.6, +30% for a year) and
+# Task 5's press (§ 8.5: the firm's own press lowers its chance, a rival's raises it). Each is a term in this one
+# value, so te_pa_expose_chance_value reads them all.
+te_pa_expose_hook_value = {
+	value = 0
+}
+
+# Company scope. A secret holding's yearly chance of exposure, before a captured regulator's cut: the base, the state,
+# what buyers have paid for (te_pa_expose_push, § 6.3) and the hook, 0 to te_pa_expose_max.
+te_pa_expose_chance_value = {
+	value = te_pa_expose_base
+	add = { value = 0 owner = { add = te_pa_expose_state_value } }
+	add = te_pa_v_expose_push
+	add = te_pa_expose_hook_value
+	min = 0
+	max = te_pa_expose_max
+}
+
+# Company scope. The cartel's roll: cut by the captured regulator's strength (§ 6.4: at 100, never exposed), rounded,
+# as random's chance takes a whole percentage (scripting_best_practices.md, "A Per-Mille Chance").
+te_pa_expose_cartel_value = {
+	value = 100
+	subtract = te_pa_v_reg
+	multiply = te_pa_expose_chance_value
+	divide = 100
+	round = yes
+	min = 0
+}
+
+# Company scope. The captured regulator's own roll.
+te_pa_expose_reg_value = {
+	value = te_pa_expose_chance_value
+	round = yes
+	min = 0
+}
+
+te_pa_stand_after_exposure = {
+	value = te_pa_v_stand
+	subtract = te_pa_expose_stand_loss
+	min = 0
+}
+
+# ---------------------------------------------------------------------------
+# Buyers (§ 6.3): a firm whose input a secret cartel restricts pays to expose it
+# ---------------------------------------------------------------------------
+
+# The payment: a quarter of a year's accrual, at least te_pa_buyer_cost_floor pounds. Each raises that cartel's
+# chance by te_pa_buyer_push points, up to te_pa_buyer_push_max, which keeps three-quarters of itself each quarter.
+te_pa_buyer_cost_years = 0.25
+te_pa_buyer_cost_floor = 500
+te_pa_buyer_push = 5
+te_pa_buyer_push_max = 20
+te_pa_buyer_push_keep = 0.75
+te_pa_buyer_push_gone = 0.5
+
+# Company scope (the buyer).
+te_pa_buyer_cost_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_buyer_cost_years
+	min = te_pa_buyer_cost_floor
+}
+
+# Company scope (the cartel's firm).
+te_pa_expose_push_after_buyer = {
+	value = te_pa_v_expose_push
+	add = te_pa_buyer_push
+	max = te_pa_buyer_push_max
+}
+te_pa_expose_push_after_quarter = {
+	value = te_pa_v_expose_push
+	multiply = te_pa_buyer_push_keep
+}
+
+# Any scope, with scope:te_pa_firm the buyer (its turn): the goods it buys, 0 for a slot it lacks.
+te_pa_buyer_in1 = {
+	value = 0
+	if = {
+		limit = { scope:te_pa_firm ?= { has_variable = te_pa_g_in1_good } }
+		value = scope:te_pa_firm.var:te_pa_g_in1_good
+	}
+}
+te_pa_buyer_in2 = {
+	value = 0
+	if = {
+		limit = { scope:te_pa_firm ?= { has_variable = te_pa_g_in2_good } }
+		value = scope:te_pa_firm.var:te_pa_g_in2_good
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The foundation (§ 5.5)
+# ---------------------------------------------------------------------------
+
+# A firm with Standing under this endows one (§ 5.5), the line moved by its executive's Paternalism (§ 5.3: a
+# paternal executive endows a foundation early), when it holds the founding cost and a year's accrual besides.
+te_pa_found_stand_below = 60
+te_pa_found_patern_shift = 20
+te_pa_found_cost_years = 1
+te_pa_found_cost_floor = 1000
+te_pa_found_spare_years = 1
+# Upkeep: a fifth of a year's accrual a year, at least te_pa_found_upkeep_floor pounds a quarter.
+te_pa_found_upkeep_years = 0.2
+te_pa_found_upkeep_floor = 50
+# Strength at founding, growth a year paid, decay a year unpaid; Standing a year it gives, up to its strength; the
+# taint on an exposure of its founder.
+te_pa_found_start = 5
+te_pa_found_growth_year = 5
+te_pa_found_decay_year = 5
+te_pa_found_stand_year = 2
+te_pa_found_taint = 20
+# A foundation no firm has written for this many months has lost its firm, and decays by itself (§ 5.5: it outlasts
+# its cause).
+te_pa_found_stale_months = 6
+te_pa_months_a_year = 12
+
+# Company scope.
+te_pa_found_stand_line = {
+	value = te_pa_v_patern
+	multiply = te_pa_found_patern_shift
+	add = te_pa_found_stand_below
+}
+te_pa_found_cost_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_found_cost_years
+	min = te_pa_found_cost_floor
+}
+te_pa_found_spare_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_found_spare_years
+	add = te_pa_found_cost_value
+}
+te_pa_found_upkeep_value = {
+	value = te_pa_funds_year
+	multiply = te_pa_found_upkeep_years
+	divide = te_pa_quarters_a_year
+	min = te_pa_found_upkeep_floor
+}
+te_pa_found_after_growth = {
+	value = te_pa_v_found
+	add = { value = te_pa_found_growth_year divide = te_pa_quarters_a_year }
+	max = 100
+}
+te_pa_found_after_decay = {
+	value = te_pa_v_found
+	subtract = { value = te_pa_found_decay_year divide = te_pa_quarters_a_year }
+	min = 0
+}
+te_pa_found_after_taint = {
+	value = te_pa_v_found
+	subtract = te_pa_found_taint
+	min = 0
+}
+# The Standing a quarter the foundation gives while Standing is below its strength (te_pa_stand_after_quarter).
+te_pa_found_stand_quarter = { value = te_pa_found_stand_year divide = te_pa_quarters_a_year }
+
+# State scope, the foundation's state.
+te_pa_st_found_mult_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_st_found_str }
+		value = var:te_pa_st_found_str
+		divide = 100
+	}
+	min = 0
+	max = 1
+}
+# Months since a firm last wrote the state's foundation.
+te_pa_st_found_age = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_st_found_q }
+		value = te_history_month_index
+		subtract = var:te_pa_st_found_q
+	}
+}
+# A month's decay of a foundation whose firm has gone.
+te_pa_st_found_after_month = {
+	value = 0
+	if = { limit = { has_variable = te_pa_st_found_str } value = var:te_pa_st_found_str }
+	subtract = { value = te_pa_found_decay_year divide = te_pa_months_a_year }
+	min = 0
+}
+# State scope: a Favored firm's foundation goes where literacy is lowest (§ 4.7); ordered_* takes the highest first.
+te_pa_found_low_literacy_order = {
+	value = literacy_rate
+	multiply = -1
+}
+
+# ---------------------------------------------------------------------------
+# The tab (container scope, a row): the holdings' yields as the hover shows them
+# ---------------------------------------------------------------------------
+
+te_pa_row_cartel_cut = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_cartel }
+		value = var:te_pa_r_cartel
+		multiply = te_pa_gen_cartel_cut
+		divide = 100
+	}
+}
+te_pa_row_cartel_funds = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_cartel }
+		value = var:te_pa_r_cartel
+		multiply = te_pa_cartel_funds_extra
+		divide = 100
+	}
+}
+te_pa_row_reg_cut = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_reg }
+		value = var:te_pa_r_reg
+		divide = 100
+	}
+}
+te_pa_row_found_education = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_found }
+		value = var:te_pa_r_found
+		multiply = te_pa_gen_found_education
+		divide = 100
+	}
+}
+te_pa_row_found_mortality = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_r_found }
+		value = var:te_pa_r_found
+		multiply = te_pa_gen_found_mortality
+		divide = 100
+	}
+}

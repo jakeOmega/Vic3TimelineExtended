@@ -1,0 +1,730 @@
+﻿# Private Actors, the trust and the foundation (docs/systems/mod_systems/private_actors.md § The Trust; spec §§ 4.6,
+# 5.5, 6.1-6.4, 6.7; plan Task 4). The verbs a firm takes at its turn (te_pa_act), the one place funds are spent
+# (te_pa_spend_funds), and the holdings' quarter: the cartel, the captured regulator and the foundation. Numbers in
+# te_pa_trust_values.txt, triggers in te_pa_trust_triggers.txt; the modifiers, one a firm type, and their apply and
+# remove effects are generated (te_pa_gen_modifiers.txt, te_pa_gen_effects.txt; gen_private_actors.py).
+#
+# A holding's record (company variables, unset while the firm has none; readers te_pa_v_<h> read unset as 0):
+#   te_pa_cartel 0-100, te_pa_cartel_known 1 (open, or exposed) / 0 (secret), te_pa_cartel_mark (the strongest
+#     mark the ledger has logged), te_pa_cartel_mult (the modifier's multiplier, strength over 100),
+#     te_pa_cartel_applied (its modifier has been applied once: the cartel_rents self-check arms on the first)
+#   te_pa_reg 0-100, te_pa_reg_known 1 / 0
+#   te_pa_found 0-100, te_pa_found_state (a state); on the state, for the state pulse: te_pa_st_found_str,
+#     te_pa_st_found_type (te_pa_g_type, for its modifier), te_pa_st_found_mult, te_pa_st_found_q (the month a firm
+#     last wrote it); the global list te_pa_found_states indexes those states
+#   te_pa_stall_month (te_history_month_index of its last stall), te_pa_expose_push (buyers' pressure, points),
+#   te_pa_expands (levels it has queued), te_pa_spent / te_pa_spend_amt (te_pa_spend_funds' result and stage)
+# The country list te_pa_cartels holds the firms with a cartel (rebuilt each quarter; a revolution's winner inherits
+# no lists).
+#
+# Ledger verbs (Task 4a's 20-29; 4b's are 30-39), each a predicate after the firm's name (te_pa_custom_loc.txt):
+#   20 forms a cartel in <good> (KNOWN 1 open, 0 secret)     21 its cartel reaches strength <size>
+#   22 no longer holds a cartel                               23 is exposed as the author of a cartel
+#   24 is exposed as having captured the regulator            25 captures the regulator (KNOWN 0)
+#   26 stalls <law> with a setback                            27 endows a foundation in <state>
+#   28 no longer keeps a foundation                           29 pays to expose a cartel in <good>
+# 20-22 carry the cartel's knownness, so a secret cartel's lines read "author unknown" until it is exposed or the
+# law allows it, when its lines get their author (te_pa_ledger_reveal).
+
+# ---------------------------------------------------------------------------
+# The verbs (plan § Rules: one a turn, from the goal's ordered list)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn (te_pa_turn: scope:te_pa_firm the firm, scope:te_pa_home its country), after the goal is
+# chosen. One verb from the goal's list, each an if on its te_pa_can_ trigger, first passing first; then the
+# foundation, which a firm endows when it can whatever its goal (§ 5.5), not in place of the goal's verb.
+#
+# A later task adds a verb with one line in a list here (else_if = { limit = { te_pa_can_<verb> = yes }
+# te_pa_do_<verb> = yes }), one trigger and one effect; a goal with no list yet gets a te_pa_act_<g> and a line
+# below. test_private_actors_trust.py fails on a listed verb with no trigger or no effect.
+te_pa_act = {
+	if = {
+		limit = { var:te_pa_goal ?= 1 }
+		te_pa_act_inputs = yes
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 2 }
+		te_pa_act_market = yes
+	}
+	else_if = {
+		limit = { var:te_pa_goal ?= 5 }
+		te_pa_act_dominance = yes
+	}
+	if = {
+		limit = { te_pa_can_endow = yes }
+		te_pa_do_endow = yes
+	}
+}
+
+# Cheaper Inputs (§ 6.3): a buyer of a cartel's good pays to expose it. (Task 5 adds the side on a tariff, Task 9 a
+# concession where the good is made.)
+te_pa_act_inputs = {
+	if = {
+		limit = { te_pa_can_press_cartel = yes }
+		te_pa_do_press_cartel = yes
+	}
+}
+
+# A Protected Market (§ 6.1): the cartel's defence first, then the cartel. (Task 5 adds the tariff.)
+te_pa_act_market = {
+	if = {
+		limit = { te_pa_can_stall = yes }
+		te_pa_do_stall = yes
+	}
+	else_if = {
+		limit = { te_pa_can_form_cartel = yes }
+		te_pa_do_form_cartel = yes
+	}
+	else_if = {
+		limit = { te_pa_can_capture_reg = yes }
+		te_pa_do_capture_reg = yes
+	}
+}
+
+# Dominance (§ 6.1): defend the cartel, form it, entrench it behind a regulator; below the cartel's share, build in
+# the sector. The spec orders no trust verb by temperament (Paternalism's "endows a foundation early" moves the
+# foundation's Standing line, te_pa_found_stand_line), and each of these four needs its own position (a cartel or
+# none, the share or below it), so the order tells only for a cartel firm: defend it, then entrench it.
+te_pa_act_dominance = {
+	if = {
+		limit = { te_pa_can_stall = yes }
+		te_pa_do_stall = yes
+	}
+	else_if = {
+		limit = { te_pa_can_form_cartel = yes }
+		te_pa_do_form_cartel = yes
+	}
+	else_if = {
+		limit = { te_pa_can_capture_reg = yes }
+		te_pa_do_capture_reg = yes
+	}
+	else_if = {
+		limit = { te_pa_can_expand = yes }
+		te_pa_do_expand = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Spending
+# ---------------------------------------------------------------------------
+
+# Company scope. The one place a firm's funds are spent (plan Review Focus 4): AMOUNT, a script value in the firm's
+# scope (pounds; a scripted effect's argument is one token), comes off te_pa_funds and the same sum leaves the home
+# country's investment pool, capped at what the pool holds (te_mon_union_exit_pool_hit's pattern), since the funds
+# are a claim on it (§ 4.3). A firm that can't afford it spends nothing. Sets te_pa_spent 1 or 0 for the caller.
+# Construction the firm starts is ordinary private construction, which the pool pays for itself: not a spend.
+te_pa_spend_funds = {
+	save_scope_as = te_pa_spend_firm
+	set_variable = { name = te_pa_spend_amt value = $AMOUNT$ }
+	if = {
+		limit = {
+			var:te_pa_spend_amt > 0
+			te_pa_v_funds >= var:te_pa_spend_amt
+		}
+		set_variable = { name = te_pa_funds value = te_pa_funds_after_spend }
+		owner = {
+			set_variable = { name = te_pa_spend_amt value = scope:te_pa_spend_firm.var:te_pa_spend_amt }
+			add_investment_pool = te_pa_spend_pool_hit
+		}
+		set_variable = { name = te_pa_spent value = 1 }
+	}
+	else = {
+		set_variable = { name = te_pa_spent value = 0 }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The cartel (§§ 6.1, 6.2)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn. Forms the cartel: open where the law allows it, secret otherwise. Its modifier comes with
+# the next quarter, the one refresh site.
+te_pa_do_form_cartel = {
+	set_variable = { name = te_pa_cartel value = te_pa_cartel_start }
+	set_variable = { name = te_pa_cartel_mark value = 0 }
+	if = {
+		limit = { te_pa_cartel_lawful = yes }
+		set_variable = { name = te_pa_cartel_known value = 1 }
+	}
+	else = {
+		set_variable = { name = te_pa_cartel_known value = 0 }
+	}
+	save_scope_as = te_pa_cartel_new
+	scope:te_pa_home = {
+		if = {
+			limit = {
+				NOT = { is_target_in_variable_list = { name = te_pa_cartels target = scope:te_pa_cartel_new } }
+			}
+			add_to_variable_list = { name = te_pa_cartels target = scope:te_pa_cartel_new }
+		}
+	}
+	save_scope_value_as = { name = te_pa_l_size value = var:te_pa_share }
+	te_pa_ledger_cartel = { VERB = 20 }
+}
+
+# Company scope. A ledger line about the firm's cartel (VERB), its author known only while the cartel is, with the
+# cartel's good on it. The caller may save scope:te_pa_l_size.
+te_pa_ledger_cartel = {
+	save_scope_as = te_pa_l_actor
+	if = {
+		limit = { var:te_pa_cartel_known ?= 1 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = $VERB$ KNOWN = 1 } }
+	}
+	else = {
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = $VERB$ KNOWN = 0 } }
+	}
+	te_pa_ledger_note_good = yes
+}
+
+# Company scope, straight after a te_pa_ledger_add: the good this firm makes (the good its cartel restricts) on the
+# new entry, for te_pa_ledger_good.
+te_pa_ledger_note_good = {
+	save_scope_as = te_pa_l_good_firm
+	if = {
+		limit = {
+			exists = scope:te_pa_l_new
+			has_variable = te_pa_g_out_good
+		}
+		scope:te_pa_l_new = {
+			set_variable = { name = te_pa_l_good value = scope:te_pa_l_good_firm.var:te_pa_g_out_good }
+		}
+	}
+}
+
+# Country scope, the quarter (scope:te_pa_home): te_pa_cartels again from the firms, as a list a revolution's winner
+# doesn't inherit and nothing else repairs.
+te_pa_cartels_rebuild = {
+	if = {
+		limit = { has_variable_list = te_pa_cartels }
+		clear_variable_list = te_pa_cartels
+	}
+	every_company = {
+		limit = {
+			has_variable = te_pa_init
+			te_pa_v_cartel > 0
+		}
+		save_scope_as = te_pa_cartel_entry
+		scope:te_pa_home = { add_to_variable_list = { name = te_pa_cartels target = scope:te_pa_cartel_entry } }
+	}
+}
+
+# Company scope, the quarter. The cartel re-reads the law (legislated away when a law bans cartels; a secret one the
+# law now allows comes into the open) and its share (it ends below te_pa_cartel_end_value), grows toward its cap,
+# logs a mark it passes, and re-applies its modifier (the dynamic-modifier pattern: one refresh site, removed first).
+te_pa_cartel_quarter = {
+	if = {
+		limit = { te_pa_v_cartel > 0 }
+		if = {
+			limit = {
+				OR = {
+					te_pa_cartel_banned = yes
+					te_pa_v_share < te_pa_cartel_end_value
+				}
+			}
+			te_pa_cartel_end = yes
+		}
+		else = {
+			if = {
+				limit = {
+					var:te_pa_cartel_known ?= 0
+					te_pa_cartel_lawful = yes
+				}
+				set_variable = { name = te_pa_cartel_known value = 1 }
+				te_pa_ledger_reveal = { WHICH = cartel }
+			}
+			set_variable = { name = te_pa_cartel value = te_pa_cartel_after_quarter }
+			if = {
+				limit = { te_pa_v_cartel <= 0 }
+				te_pa_cartel_end = yes
+			}
+			else = {
+				te_pa_cartel_marks = yes
+				set_variable = { name = te_pa_cartel_mult value = te_pa_cartel_mult_value }
+				te_pa_debug_rents_arm = yes
+				te_pa_gen_cartel_apply = yes
+				set_variable = { name = te_pa_cartel_applied value = 1 }
+			}
+		}
+	}
+}
+
+# Company scope. The strongest mark the cartel has passed and not yet logged (verb 21, size the mark).
+te_pa_cartel_marks = {
+	if = {
+		limit = {
+			te_pa_v_cartel >= te_pa_cartel_mark_3
+			te_pa_v_cartel_mark < te_pa_cartel_mark_3
+		}
+		te_pa_cartel_mark_log = { MARK = te_pa_cartel_mark_3 }
+	}
+	else_if = {
+		limit = {
+			te_pa_v_cartel >= te_pa_cartel_mark_2
+			te_pa_v_cartel_mark < te_pa_cartel_mark_2
+		}
+		te_pa_cartel_mark_log = { MARK = te_pa_cartel_mark_2 }
+	}
+	else_if = {
+		limit = {
+			te_pa_v_cartel >= te_pa_cartel_mark_1
+			te_pa_v_cartel_mark < te_pa_cartel_mark_1
+		}
+		te_pa_cartel_mark_log = { MARK = te_pa_cartel_mark_1 }
+	}
+}
+
+te_pa_cartel_mark_log = {
+	set_variable = { name = te_pa_cartel_mark value = $MARK$ }
+	save_scope_value_as = { name = te_pa_l_size value = $MARK$ }
+	te_pa_ledger_cartel = { VERB = 21 }
+}
+
+# Company scope. The cartel ends (its share fell, or a law banned it; Task 4b's suit too): its modifier goes, the
+# ledger says so (verb 22, its author as known as the cartel was), and the record goes. A captured regulator it
+# leaves decays unpaid.
+te_pa_cartel_end = {
+	te_pa_gen_cartel_remove = yes
+	te_pa_ledger_cartel = { VERB = 22 }
+	save_scope_as = te_pa_cartel_gone
+	scope:te_pa_home = {
+		if = {
+			limit = { has_variable_list = te_pa_cartels }
+			remove_list_variable = { name = te_pa_cartels target = scope:te_pa_cartel_gone }
+		}
+	}
+	te_pa_drop = { VAR = te_pa_cartel }
+	te_pa_drop = { VAR = te_pa_cartel_known }
+	te_pa_drop = { VAR = te_pa_cartel_mark }
+	te_pa_drop = { VAR = te_pa_cartel_applied }
+}
+
+# Any scope. Removes VAR when it is set.
+te_pa_drop = {
+	if = {
+		limit = { has_variable = $VAR$ }
+		remove_variable = $VAR$
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The captured regulator (§ 6.4)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn. Begins paying the regulator: a quarter's Connections now, then each quarter
+# (te_pa_reg_quarter). Secret.
+te_pa_do_capture_reg = {
+	set_variable = { name = te_pa_conn value = te_pa_conn_after_reg }
+	set_variable = { name = te_pa_reg value = te_pa_reg_growth_quarter }
+	set_variable = { name = te_pa_reg_known value = 0 }
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 25 KNOWN = 0 } }
+}
+
+# Company scope, the quarter. Paid while it holds a cartel under a law with a regulator and has the Connections, it
+# grows; otherwise it decays, and at 0 it is gone.
+te_pa_reg_quarter = {
+	if = {
+		limit = { te_pa_v_reg > 0 }
+		if = {
+			limit = {
+				te_pa_v_cartel > 0
+				owner = { te_pa_law_has_regulator = yes }
+				te_pa_v_conn >= te_pa_reg_conn_quarter
+			}
+			set_variable = { name = te_pa_conn value = te_pa_conn_after_reg }
+			set_variable = { name = te_pa_reg value = te_pa_reg_after_growth }
+		}
+		else = {
+			set_variable = { name = te_pa_reg value = te_pa_reg_after_decay }
+		}
+		if = {
+			limit = { te_pa_v_reg <= 0 }
+			te_pa_drop = { VAR = te_pa_reg }
+			te_pa_drop = { VAR = te_pa_reg_known }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Stalling the law (§ 6.4; Task 5 widens it to its politics)
+# ---------------------------------------------------------------------------
+
+# Company scope (scope:te_pa_home its country). Twenty Connections for one setback to the law that would outlaw its
+# cartel, logged with the law named (te_pa_l_law, the law table's number).
+te_pa_do_stall = {
+	set_variable = { name = te_pa_conn value = te_pa_conn_after_stall }
+	set_variable = { name = te_pa_stall_month value = te_history_month_index }
+	scope:te_pa_home = {
+		set_variable = { name = te_pa_stall_law value = te_pa_gen_enacting_law_index }
+		add_enactment_setback = 1
+	}
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 26 KNOWN = 1 } }
+	if = {
+		limit = { exists = scope:te_pa_l_new }
+		scope:te_pa_l_new = {
+			set_variable = { name = te_pa_l_law value = scope:te_pa_home.var:te_pa_stall_law }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Expansion (§ 6.1 stage 1)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn. A level of its main building type at its seat, or of the next type the seat can take
+# (te_pa_gen_expand): ordinary private construction, which the investment pool pays for, so no funds are spent
+# (§ 4.3). No ledger line: the construction queue shows it, and a line a year from every Dominance firm would push
+# the rest out of a ledger of 20.
+te_pa_do_expand = {
+	te_pa_gen_expand = yes
+	if = {
+		limit = { NOT = { has_variable = te_pa_expands } }
+		set_variable = { name = te_pa_expands value = 0 }
+	}
+	change_variable = { name = te_pa_expands add = 1 }
+}
+
+# ---------------------------------------------------------------------------
+# Buyers (§ 6.3)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn (scope:te_pa_firm the buyer). Pays to expose a secret cartel that makes one of its inputs:
+# its funds raise that cartel's yearly chance of exposure (te_pa_expose_push). The line is the buyer's own
+# (KNOWN 1), naming the good; the cartel's firm stays unknown. Task 4b adds the petition to bring suit.
+te_pa_do_press_cartel = {
+	clear_saved_scope = te_pa_buyer_target
+	scope:te_pa_home = {
+		random_in_list = {
+			variable = te_pa_cartels
+			limit = { te_pa_cartel_sells_to_buyer = yes }
+			save_scope_as = te_pa_buyer_target
+		}
+	}
+	if = {
+		limit = { exists = scope:te_pa_buyer_target }
+		te_pa_spend_funds = { AMOUNT = te_pa_buyer_cost_value }
+		if = {
+			limit = { var:te_pa_spent ?= 1 }
+			scope:te_pa_buyer_target = {
+				set_variable = { name = te_pa_expose_push value = te_pa_expose_push_after_buyer }
+			}
+			save_scope_as = te_pa_l_actor
+			scope:te_pa_home = { te_pa_ledger_add = { VERB = 29 KNOWN = 1 } }
+			scope:te_pa_buyer_target = { te_pa_ledger_note_good = yes }
+		}
+	}
+}
+
+# Company scope, the quarter. Buyers' pressure fades.
+te_pa_expose_push_quarter = {
+	if = {
+		limit = { has_variable = te_pa_expose_push }
+		set_variable = { name = te_pa_expose_push value = te_pa_expose_push_after_quarter }
+		if = {
+			limit = { var:te_pa_expose_push < te_pa_buyer_push_gone }
+			remove_variable = te_pa_expose_push
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# Exposure (§ 4.6)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn, after the verb. A yearly roll for each secret holding: the cartel's chance cut by the
+# captured regulator's strength, the regulator's its own (te_pa_trust_values.txt).
+te_pa_expose_rolls = {
+	if = {
+		limit = {
+			te_pa_v_cartel > 0
+			var:te_pa_cartel_known ?= 0
+		}
+		random = {
+			chance = te_pa_expose_cartel_value
+			te_pa_expose_cartel = yes
+		}
+	}
+	if = {
+		limit = {
+			te_pa_v_reg > 0
+			var:te_pa_reg_known ?= 0
+		}
+		random = {
+			chance = te_pa_expose_reg_value
+			te_pa_expose_reg = yes
+		}
+	}
+}
+
+# Company scope. The cartel is exposed: known, its lines get their author, a line says so (verb 23), and the firm
+# pays for it. Its modifier takes the firm's name at the next quarter, the modifier's one refresh site.
+te_pa_expose_cartel = {
+	set_variable = { name = te_pa_cartel_known value = 1 }
+	te_pa_ledger_reveal = { WHICH = cartel }
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 23 KNOWN = 1 } }
+	te_pa_ledger_note_good = yes
+	te_pa_exposure_costs = yes
+}
+
+# Company scope. The captured regulator is exposed (verb 24).
+te_pa_expose_reg = {
+	set_variable = { name = te_pa_reg_known value = 1 }
+	te_pa_ledger_reveal = { WHICH = reg }
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 24 KNOWN = 1 } }
+	te_pa_exposure_costs = yes
+}
+
+# Company scope. What an exposure costs (§ 4.3: attacks aim at a currency; § 5.5: the gift now looks like cover):
+# Standing, and the foundation's taint.
+te_pa_exposure_costs = {
+	set_variable = { name = te_pa_stand value = te_pa_stand_after_exposure }
+	if = {
+		limit = { te_pa_v_found > 0 }
+		set_variable = { name = te_pa_found value = te_pa_found_after_taint }
+		if = {
+			limit = { te_pa_v_found <= 0 }
+			te_pa_found_end = yes
+		}
+		else = {
+			te_pa_found_write_state = yes
+		}
+	}
+}
+
+# Company scope (scope:te_pa_home its country). A secret holding's lines (WHICH: cartel or reg) get their author: each
+# of the firm's entries with te_pa_l_known 0 and the holding's verbs (te_pa_ledger_verb_of_<WHICH>).
+te_pa_ledger_reveal = {
+	save_scope_as = te_pa_reveal_firm
+	scope:te_pa_home = {
+		if = {
+			limit = { has_variable_list = te_pa_ledger }
+			save_scope_as = te_pa_l_home
+			every_in_list = {
+				variable = te_pa_ledger
+				limit = {
+					var:te_pa_l_known ?= 0
+					has_variable = te_pa_l_actor
+					var:te_pa_l_actor = scope:te_pa_reveal_firm
+					te_pa_ledger_verb_of_$WHICH$ = yes
+				}
+				set_variable = { name = te_pa_l_known value = 1 }
+			}
+			te_pa_ledger_view_rebuild = yes
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The foundation (§ 5.5)
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn. Endows a foundation: a Favored firm's where literacy is lowest (§ 4.7), another's at its
+# seat, or, when another firm's foundation is there, the next state by the seat's measure (§ 4.5). It pays the
+# founding cost; the state pulse gives the state its yield from te_pa_st_found_str.
+te_pa_do_endow = {
+	clear_saved_scope = te_pa_found_pick
+	if = {
+		limit = { var:te_pa_posture ?= 1 }
+		owner = {
+			ordered_scope_state = {
+				limit = {
+					is_incorporated = yes
+					NOT = { has_variable = te_pa_st_found_str }
+				}
+				order_by = te_pa_found_low_literacy_order
+				position = 0
+				check_range_bounds = no
+				save_scope_as = te_pa_found_pick
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_pa_seat ?= {
+				exists = owner
+				owner = scope:te_pa_home
+				is_incorporated = yes
+				NOT = { has_variable = te_pa_st_found_str }
+			}
+		}
+		var:te_pa_seat = { save_scope_as = te_pa_found_pick }
+	}
+	else = {
+		te_pa_gen_found_pick = yes
+	}
+	if = {
+		limit = { exists = scope:te_pa_found_pick }
+		te_pa_spend_funds = { AMOUNT = te_pa_found_cost_value }
+		if = {
+			limit = { var:te_pa_spent ?= 1 }
+			set_variable = { name = te_pa_found value = te_pa_found_start }
+			set_variable = { name = te_pa_found_state value = scope:te_pa_found_pick }
+			add_to_global_variable_list = { name = te_pa_found_states target = scope:te_pa_found_pick }
+			te_pa_found_write_state = yes
+			save_scope_as = te_pa_l_actor
+			scope:te_pa_found_pick = { save_scope_as = te_pa_l_target }
+			scope:te_pa_home = { te_pa_ledger_add = { VERB = 27 KNOWN = 1 } }
+		}
+	}
+}
+
+# Company scope, the quarter. Upkeep through te_pa_spend_funds: paid, it grows; unpaid, it decays. It ends at 0, or
+# when its state leaves the country. Its Standing comes through te_pa_stand_after_quarter.
+te_pa_found_quarter = {
+	if = {
+		limit = { te_pa_v_found > 0 }
+		if = {
+			limit = { te_pa_found_state_kept = no }
+			te_pa_found_end = yes
+		}
+		else = {
+			te_pa_spend_funds = { AMOUNT = te_pa_found_upkeep_value }
+			if = {
+				limit = { var:te_pa_spent ?= 1 }
+				set_variable = { name = te_pa_found value = te_pa_found_after_growth }
+			}
+			else = {
+				set_variable = { name = te_pa_found value = te_pa_found_after_decay }
+			}
+			if = {
+				limit = { te_pa_v_found <= 0 }
+				te_pa_found_end = yes
+			}
+			else = {
+				te_pa_found_write_state = yes
+			}
+		}
+	}
+}
+
+# Company scope. The foundation's strength and the firm's type onto its state, for the state pulse, and the month it
+# was written. A changed type number (the generator renumbered the types) takes the old type's modifier off first.
+te_pa_found_write_state = {
+	save_scope_as = te_pa_found_firm
+	var:te_pa_found_state ?= {
+		if = {
+			limit = {
+				has_variable = te_pa_st_found_type
+				OR = {
+					var:te_pa_st_found_type > scope:te_pa_found_firm.var:te_pa_g_type
+					var:te_pa_st_found_type < scope:te_pa_found_firm.var:te_pa_g_type
+				}
+			}
+			te_pa_gen_found_remove_all = yes
+		}
+		set_variable = { name = te_pa_st_found_type value = scope:te_pa_found_firm.var:te_pa_g_type }
+		set_variable = { name = te_pa_st_found_str value = scope:te_pa_found_firm.var:te_pa_found }
+		set_variable = { name = te_pa_st_found_q value = te_history_month_index }
+	}
+}
+
+# Company scope. The foundation ends (verb 28): its state reads strength 0, so the state pulse takes its modifier
+# off and clears it; the record goes.
+te_pa_found_end = {
+	var:te_pa_found_state ?= {
+		set_variable = { name = te_pa_st_found_str value = 0 }
+	}
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = 28 KNOWN = 1 } }
+	te_pa_drop = { VAR = te_pa_found }
+	te_pa_drop = { VAR = te_pa_found_state }
+}
+
+# State scope, the monthly state pulse (te_pa_state_monthly_on_action; ROOT the state, which the modifier's
+# multiplier resolves against). The state modifiers' one refresh site: the foundation's yield from what the firm's
+# quarter wrote. One no firm has written for te_pa_found_stale_months has lost its firm and decays by itself; at 0
+# its modifier goes and the state is cleared.
+te_pa_state_monthly = {
+	if = {
+		limit = {
+			has_variable = te_pa_st_found_str
+			te_pa_on = yes
+		}
+		if = {
+			limit = { te_pa_st_found_age > te_pa_found_stale_months }
+			set_variable = { name = te_pa_st_found_str value = te_pa_st_found_after_month }
+		}
+		set_variable = { name = te_pa_st_found_mult value = te_pa_st_found_mult_value }
+		te_pa_gen_found_apply = yes
+		if = {
+			limit = { var:te_pa_st_found_str <= 0 }
+			remove_variable = te_pa_st_found_str
+			te_pa_drop = { VAR = te_pa_st_found_type }
+			te_pa_drop = { VAR = te_pa_st_found_q }
+			remove_list_global_variable = { name = te_pa_found_states target = this }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The quarter, the teardown and the clear
+# ---------------------------------------------------------------------------
+
+# Company scope, the quarter (te_pa_quarter, before the currencies accrue). The holdings' growth and decay, and the
+# cartel's defence: a cartel firm stalls a law that would outlaw it whatever its goal, at most once a year.
+te_pa_trust_quarter = {
+	te_pa_cartel_quarter = yes
+	te_pa_reg_quarter = yes
+	te_pa_found_quarter = yes
+	te_pa_expose_push_quarter = yes
+	if = {
+		limit = { te_pa_can_stall = yes }
+		te_pa_do_stall = yes
+	}
+}
+
+# Country scope, te_pa_teardown (the rule switched off). Every firm type's cartel modifiers off this country (a
+# generated effect, so it reaches a modifier whose firm has gone), and, once for the world, every foundation's off
+# its state (the state pulse stops applying them with the rule off). The holdings' records stay, so switching the
+# rule back on re-applies them at the next quarter and state pulse.
+te_pa_trust_teardown = {
+	te_pa_gen_cartel_remove_all = yes
+	if = {
+		limit = { has_variable_list = te_pa_cartels }
+		clear_variable_list = te_pa_cartels
+	}
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_found_torn }
+			has_global_variable_list = te_pa_found_states
+		}
+		set_global_variable = { name = te_pa_found_torn value = 1 }
+		every_in_global_list = {
+			variable = te_pa_found_states
+			te_pa_gen_found_remove_all = yes
+		}
+	}
+}
+
+# Company scope, te_pa_clear_firm (the company disbanded; scope:te_pa_home its country). Its cartel's modifier goes
+# with it; its foundation outlasts it (§ 5.5), decaying by itself once no firm writes it (te_pa_state_monthly).
+te_pa_trust_clear = {
+	if = {
+		limit = { te_pa_v_cartel > 0 }
+		te_pa_gen_cartel_remove = yes
+		save_scope_as = te_pa_cartel_gone
+		scope:te_pa_home = {
+			if = {
+				limit = { has_variable_list = te_pa_cartels }
+				remove_list_variable = { name = te_pa_cartels target = scope:te_pa_cartel_gone }
+			}
+		}
+	}
+	te_pa_drop = { VAR = te_pa_cartel }
+	te_pa_drop = { VAR = te_pa_cartel_known }
+	te_pa_drop = { VAR = te_pa_cartel_mark }
+	te_pa_drop = { VAR = te_pa_cartel_mult }
+	te_pa_drop = { VAR = te_pa_cartel_applied }
+	te_pa_drop = { VAR = te_pa_cartel_shown }
+	te_pa_drop = { VAR = te_pa_cartel_open }
+	te_pa_drop = { VAR = te_pa_reg }
+	te_pa_drop = { VAR = te_pa_reg_known }
+	te_pa_drop = { VAR = te_pa_reg_shown }
+	te_pa_drop = { VAR = te_pa_found }
+	te_pa_drop = { VAR = te_pa_found_state }
+	te_pa_drop = { VAR = te_pa_stall_month }
+	te_pa_drop = { VAR = te_pa_expose_push }
+}

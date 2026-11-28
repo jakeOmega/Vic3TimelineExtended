@@ -7,9 +7,10 @@ and two threshold notices. Spec: `docs/superpowers/specs/2026-11-28-actors-firms
 Nothing in it has been seen in a game. This list starts with the chassis (the plan's Tasks 1 and 2); each later task
 adds its lines.
 
-The chassis has no verbs yet: a firm only assesses, scores and chooses, so what can be judged in phase 1 is whether
+The chassis has no verbs: a firm only assesses, scores and chooses, so what can be judged in phase 1 is whether
 its goal and reason are believable. Task 3 adds the Private Actors tab of the Timeline Extended window (items 11 to
-18), the posture buttons and the ledger's display.
+18), the posture buttons and the ledger's display. Task 4a adds the first verbs, the trust and the foundation (items 19
+to 30, and the `cartel_rents` self-check).
 
 ## Self-checks
 
@@ -25,6 +26,7 @@ turn-time checks wait for 20 firms, so the first lines come within a few months 
 | `firm_price_read` (Task 1) | after 20 firms' turns whose output is a traded good | some output reads a price off base (`off_base` above 0) | every output reads exactly its base price: `te_pa_gen_firm_price_<good>` fails through the owner | read the country-scope `te_pa_gen_price_<good>` in the owner's scope |
 | `law_available` (Task 1) | the first monthly pulse with the rule on, in the first country with a covered law it could move to | `untech=0`: `law_is_available` reads a law's unlocking technology | `untech` above 0: it doesn't | the open-law triggers already carry the technology and `can_enact` lines; drop the `any_law` line and mirror the disallowing laws too |
 | `ledger_size` | the first "holds 40% of its sector" line (verb 11) | the entry's size equals the share it was saved from | the size didn't arrive: a saved scope value reads as nothing in `set_variable` | stage the size in a country variable for `te_pa_ledger_add`, as `un_ledger_log_add` stages its amount |
+| `cartel_rents` (probe 2) | armed when a cartel's modifier is first applied (a quarter after it forms, strength 5 or more), read at the owner's next monthly pulse | `country` falls by `want` (the cut its strength asks, to 0.002): the modifier's multiplier, `var:te_pa_cm_<type>`, resolved against the owner; and where `seat_has=1`, the seat building's own read falls by it too: a country's `building_<type>_throughput_add` reaches the type's buildings | `country` off: the multiplier didn't resolve (the wrong ROOT) or the type isn't registered, or another cartel of a building type the two share moved the sum in the same quarter (read the numbers); `seat` off with `country` right: the country line doesn't reach the buildings | a restricted production method switched in on the firm's buildings (`activate_production_method`, one per building type, in place of the throughput line; the method's switch back when the cartel ends) |
 
 ## In the game
 
@@ -94,3 +96,47 @@ turn-time checks wait for 20 firms, so the first lines come within a few months 
 18. **The overview.** Prospering, Steady and Failing add up to Firms; Largest Firm names the firm with the highest
     share and its share, its name shrinking rather than ending in "..." when long; Common Goal names the goal most
     firms hold. They follow the month's pulse, so a turn's change shows on the 1st.
+19. **Verbs.** With the rule on for five years in a large 1900 country (Britain, Germany, the United States), the ledger
+    shows trust lines (verbs 20 to 29). A firm seeking Dominance below half its sector queues a level of its main
+    building type at its seat once a year (`te_pa_expands` counts them; the construction queue shows the private level):
+    check the level is queued in the seat and paid by the investment pool, and whose company owns it once built (the
+    engine's; unread).
+20. **Spending.** A firm's foundation founding and upkeep, and a buyer's payment, take the same sum from the country's
+    investment pool as from `te_pa_funds` (read `investment_pool` before and after a quarter with one foundation), and
+    never more than the pool holds. Nothing else lowers `te_pa_funds` but the cap.
+21. **A cartel forms.** Under Freedom of Contract, a firm at 50% of its sector seeking Dominance or A Protected Market
+    forms an open cartel at its turn: a ledger line "<firm> forms a cartel in <good>", a Cartel chip on its row after
+    the next quarter, and "<company> Cartel" in the country's modifiers with each of its building types' throughput at
+    minus 1% at strength 5. Its strength grows 15 a year (10 under other laws), never past its share × 100. Its output's
+    price in the market rises over the following months: say whether it moves enough to notice.
+22. **A secret cartel.** Under Antitrust Enforcement, the same firm forms its cartel in secret: the ledger reads
+    "Author unknown: a firm forms a cartel in <good>", the firm's row shows no chip and its detail no line, and the
+    country's modifiers show "Restricted Supply (author unknown)" with the same throughput lines. Nothing anywhere on the
+    tab names the firm until it is exposed.
+23. **Regulated Utilities.** A cartel outside infrastructure and power stops at 40 (rising toward 80 with a captured
+    regulator); a power or railway firm's cartel is secret.
+24. **Exposure.** Over a decade some secret cartels are exposed (more under Protected Speech with police and Home
+    Affairs funded, fewer under Outlawed Dissent): the ledger line "<firm> is exposed as the author of a cartel in
+    <good>", its earlier secret lines now name it, its Standing falls 15 and its foundation 20, and at the next quarter
+    its modifier takes its name. A captured regulator makes exposure rarer in proportion to its strength.
+25. **The regulator.** Under a law with one, a cartel firm captures the regulator ("Author unknown: a firm captures the
+    regulator"), paying 10 Connections a year; its Connections fall accordingly. Under Contracted Administration or the
+    Spoils System it grows half again as fast. With the cartel gone it decays.
+26. **Stalling.** While the country enacts Antitrust Enforcement with an open cartel in force, the cartel's firm spends
+    20 Connections for one setback ("<firm> stalls Antitrust Enforcement with a setback"), at most once a year; the
+    enactment's setbacks rise by one and the law never fails from the stall alone (the guard stops one short).
+27. **Buyers.** A firm seeking Cheaper Inputs whose input a secret cartel makes pays to expose it ("<firm> pays to
+    expose a cartel in <good>"), and that cartel's exposure comes sooner.
+28. **The foundation.** A firm with Standing under 60 (more for a paternal executive) and funds to spare endows a
+    foundation at its seat ("<firm> endows a foundation in <state>"); a Favored firm's goes to the home state with the
+    lowest literacy. The state shows "<company> Foundation" with education access and lower mortality growing with its
+    strength (+10% and −5% at 100), and the firm's Standing climbs toward the foundation's strength. A firm that runs out
+    of funds sees it decay; a dissolved firm's foundation decays by itself over the following years. **Not seen in
+    game: `literacy_rate` as a state's `order_by` value** (vanilla uses it in script values); if a Favored firm's
+    foundation lands in a highly literate state, read it.
+29. **The holdings' hovers.** The Cartel chip's hover gives its strength, whether it is legal under the law in force,
+    the throughput cut and the faster Funds; the Foundation's names its state and its yield; the Captured Regulator's
+    shows only after an exposure.
+30. **Rules off with holdings.** As the rules-off list's Private Actors section says: every Cartel and Restricted Supply
+    modifier leaves the country and every Foundation modifier its state within a month; switching back on, the cartels'
+    return at the next quarter and the foundations' at the next month.

@@ -623,8 +623,8 @@ one-state country builds one only once it has an agreement with a neighbor.
 
 With the Private Actors game rule on (it is off by default, and experimental),
 every company is a firm: an actor with an aim of its own, chosen each year from
-its position, and three currencies. You set a posture toward each of your
-firms. The Private Actors tab of the Timeline Extended window shows what each
+its position, three currencies, and holdings it builds: cartels, captured
+regulators and foundations. You set a posture toward each of your firms. The Private Actors tab of the Timeline Extended window shows what each
 firm wants and why, for your country or, in National Info, any other.
 
 ### Firms and their goals
@@ -656,11 +656,14 @@ it ("Why: Coal costs 40% more than its base price").
 
 Each firm keeps three currencies. Funds are its claim on your investment pool,
 a tenth a year of its estimated dividends, capped at five years' worth; none
-accrue under Command Economy or Cooperative Ownership, and the pool keeps the
-money. Connections, from 0 to 100, are its reach into government: they grow
-with its years and while its executive's interest group is in government, and
-fade a little each quarter. Standing, from 0 to 100, is how the public regards
-it, and drifts toward 50. You get a notification when one of your firms
+accrue under Command Economy or Cooperative Ownership. The pool keeps the money
+until the firm spends it: what a firm spends on a foundation or on exposing a
+cartel leaves your investment pool, never more than the pool holds.
+Connections, from 0 to 100, are its reach into government: they grow with its
+years and while its executive's interest group is in government, fade a little
+each quarter, and pay for stalling a law and for a captured regulator.
+Standing, from 0 to 100, is how the public regards it: it drifts toward 50, a
+foundation raises it, and an exposure costs it 15. You get a notification when one of your firms
 starts failing or comes to hold 40% of its sector, once each time it crosses
 the line.
 
@@ -682,7 +685,8 @@ share of its sector and its Grievance.
 The Ledger, collapsed until you open it, lists the last 20 things your firms
 did, newest first: a new goal and why, a new executive, a firm failing or
 coming to hold 40% of its sector, a firm founded or dissolved, a change of
-posture. National Info shows another country's tab, all of it but the posture
+posture, and the trust's moves below. A secret move's line reads "Author
+unknown: a firm …" until it is exposed. National Info shows another country's tab, all of it but the posture
 buttons. The "?" in the header opens How Private Actors Work.
 
 <!-- screenshot: the Private Actors tab with a firm's details open -->
@@ -695,14 +699,72 @@ ledger.
 
 | Posture | What it does |
 |---|---|
-| Favored | Its Connections grow half again as fast, and it supports Dirigiste Policy |
+| Favored | Its Connections grow half again as fast, it supports Dirigiste Policy, under which it may hold a cartel in the open, and it endows its foundation in your state with the lowest literacy |
 | Tolerated (the default) | Its Connections grow at the usual pace, and it opposes Dirigiste Policy |
 | Restrained | Its Connections grow at half the pace, its Grievance rises by one every five years, and it opposes Dirigiste Policy |
 
 An AI government sets its posture toward each of its firms at the firm's turn:
 Favored while the firm's executive's interest group is in government or the
-country has Dirigiste Policy, Restrained while that group is marginalized,
-Tolerated otherwise.
+country has Dirigiste Policy, Restrained while that group is marginalized or
+while the firm holds a cartel the government knows of under Antitrust
+Enforcement, Tolerated otherwise.
+
+### The trust and the foundation
+
+At its turn a firm takes one action toward its goal, the first of its list
+that it can afford and that applies, and then endows a foundation if it can:
+
+| Goal | What the firm does |
+|---|---|
+| Dominance | Below half of its sector, it queues a level of its main building type in its seat, as private construction your investment pool pays for. At half of its sector it forms a cartel, then defends it: it stalls a law that would outlaw it and pays off the regulator |
+| A Protected Market | At half of its sector it forms a cartel and defends it the same way |
+| Cheaper Inputs | It pays to expose a secret cartel that makes one of its inputs |
+
+A cartel cuts the throughput of the firm's building types across your country,
+by 20% at strength 100 and in proportion below that, so their goods grow scarce
+and more expensive in your market. The firm's Funds accrue up to twice as fast,
+and the cartel adds to your wealth concentration. It forms at strength 5 and grows 10 a
+year, up to the firm's share of its sector × 100; it ends when that share falls
+below 45%. The antitrust law decides whether it is open:
+
+| Antitrust law | A cartel |
+|---|---|
+| Guilds and Chartered Monopolies | Legal and open |
+| Freedom of Contract | Legal and open, and it grows 15 a year |
+| Antitrust Enforcement | Illegal, so formed in secret |
+| Regulated Utilities | Secret for an infrastructure or power firm; open for the rest, but held to strength 40, which a captured regulator lifts toward 80 |
+| Dirigiste Policy | Open for a Favored firm, secret for the rest |
+| Command/Cooperative Economy | None; Command Economy and Cooperative Ownership end them too |
+
+The country's modifiers show an open cartel under its company's name, such as
+Friedrich Krupp Cartel. A secret one shows as Restricted Supply (author
+unknown): you see its effect but not who is behind it, the firm's row shows no
+chip for it, and its ledger lines read "author unknown". Each year a secret cartel may be exposed, at a chance of about
+10% that Protected Speech, Law Enforcement and Home Affairs funding and
+independent courts raise, Outlawed Dissent and Censorship lower, and firms that
+buy its good raise by paying for it. An exposed cartel takes its firm's name,
+its earlier lines name the firm, and the firm loses 15 Standing and its
+foundation 20 strength. An open cartel that a new law makes illegal stays known.
+
+A cartel firm under a law with a regulator to capture (Antitrust Enforcement,
+Regulated Utilities, Dirigiste Policy) pays the regulator 10 Connections a
+year. The captured regulator grows 8 a year, half again as fast under
+Contracted Administration or the Spoils System, and cuts the cartel's chance of
+exposure by its strength in percent; it is secret too, and is exposed the same
+way. While you enact a law that would outlaw its cartel, the firm spends 20
+Connections a year to give the enactment a setback, never the setback that
+would make it fail.
+
+A firm with Standing under 60 (as high as 80 for an executive with a
+reforming, humanitarian or religious bent, as low as 40 for a market-liberal or
+authoritarian one) and Funds to spare endows a foundation in its seat, or in
+the next state if another firm's foundation is there; a Favored firm's goes where literacy is
+lowest. The state gets education access and lower mortality, up to +10% and
+−5% at strength 100, and the firm gains 2 Standing a year up to the
+foundation's strength. The foundation grows 5 a year while its upkeep is paid
+and decays 5 a year when it isn't, as it does once its firm is gone. Each
+holding you know of shows as an icon on the firm's row, and its hover gives its
+strength and what it does.
 
 ## Tariffs for all goods at once
 

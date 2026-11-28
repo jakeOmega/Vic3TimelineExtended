@@ -161,6 +161,8 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/scripted_triggers/te_pa_gen_triggers.txt",
     "common/script_values/te_pa_gen_values.txt",
     "common/customizable_localization/te_pa_gen_custom_loc.txt",
+    "common/static_modifiers/te_pa_gen_modifiers.txt",
+    "common/modifier_type_definitions/te_pa_gen_modifier_types.txt",
     "scripts/generators/culture_merge_primary_reads.json",
     "common/amendments/te_tax_amendments_generated.txt",
     "common/script_values/te_tax_generated_values.txt",

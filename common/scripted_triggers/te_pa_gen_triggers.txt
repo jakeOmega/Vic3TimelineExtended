@@ -486,3 +486,4255 @@ te_pa_gen_enacting_lawgroup_electoral_finance = {
 		is_enacting_law = law_type:law_publicly_funded_elections
 	}
 }
+
+# Scope: a company. Its seat can take a private level of one of its building types (te_pa_gen_expand's).
+te_pa_gen_can_expand = {
+	OR = {
+		AND = {
+			is_company_type = company_type:company_a_markwald_and_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rice_farm
+						is_building_type = building_port
+						is_building_type = building_markwald_bangkok_rice_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_airbus
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_airbus_lagardere_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ajinomoto
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_synthetics_plant_sugar
+						is_building_type = building_synthetics_plant_drinks
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_ajinomoto_kawasaki_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_aker_mek
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_motor_industry
+						is_building_type = building_aker_oslo_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_alibaba
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_network_infrastructure
+						is_building_type = building_software_industry
+						is_building_type = building_alibaba_cainiao_park
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_allatini_mills
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_wheat_farm
+						is_building_type = building_rye_farm
+						is_building_type = building_allatini_thessaloniki_flour_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_altos_hornos_de_vizcaya
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_altos_hornos_baracaldo_furnaces
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_amazon
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_network_infrastructure
+						is_building_type = building_port
+						is_building_type = building_amazon_fulfillment_center
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_anglo_persian_oil
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_anglo_persian_abadan_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_anglo_sicilian_sulphur_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sulfur_mine
+						is_building_type = building_anglo_sicilian_licata_wharf
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ansaldo
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_artillery_foundry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_ansaldo_sestri_ponente_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ap_moller
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_ap_moller_copenhagen_wharf
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_apple
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_software_industry
+						is_building_type = building_electrics_industry_radio
+						is_building_type = building_apple_park
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_argentinian_wine
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_vineyard
+						is_building_type = building_argentinian_wine_mendoza_bodega
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_armstrong_whitworth
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_munition_plant
+						is_building_type = building_shipyard
+						is_building_type = building_motor_industry
+						is_building_type = building_armstrong_elswick_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_asml
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tooling_workshop
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_asml_veldhoven_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_assam_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tea_plantation
+						is_building_type = building_assam_company_nazira_tea_estate
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_axiom_space
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_space_resort
+						is_building_type = building_tourism_industry
+						is_building_type = building_aerospace_industry
+						is_building_type = building_space_mine
+						is_building_type = building_axiom_space_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_b_grimm
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rice_farm
+						is_building_type = building_b_grimm_bangkok_warehouse
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bacardi
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_glassworks
+						is_building_type = building_bacardi_santiago_distillery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bae_systems
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_shipyard
+						is_building_type = building_bae_samlesbury_aerodrome
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basf
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant
+						is_building_type = building_basf_ludwigshafen_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_advanced_materials
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_advanced_material_fabricator
+						is_building_type = building_generic_materials_lab
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_aerospace
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_generic_proving_grounds
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_agriculture_1
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_wheat_farm
+						is_building_type = building_rye_farm
+						is_building_type = building_generic_granary_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_agriculture_2
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rice_farm
+						is_building_type = building_millet_farm
+						is_building_type = building_maize_farm
+						is_building_type = building_generic_granary_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_autarky
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_oil
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_generic_resource_depository
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_biotechnology
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_synthetics_plant_sugar
+						is_building_type = building_synthetics_plant_meat
+						is_building_type = building_synthetics_plant_fruit
+						is_building_type = building_synthetics_plant_drinks
+						is_building_type = building_generic_rd_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_chemicals
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_generic_chem_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_colonial_plantations_1
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tea_plantation
+						is_building_type = building_opium_plantation
+						is_building_type = building_generic_colonial_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_colonial_plantations_2
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sugar_plantation
+						is_building_type = building_coffee_plantation
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_generic_export_warehouse
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_electrics
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_radio
+						is_building_type = building_electrics_industry
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_generic_electronics_lab
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_electronics
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_generic_robotics_institute
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_entertainment
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_art_academy
+						is_building_type = building_tourism_industry
+						is_building_type = building_generic_media_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_fabrics
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_cotton_plantation
+						is_building_type = building_livestock_ranch
+						is_building_type = building_generic_textile_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_fishing
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_fishing_wharf
+						is_building_type = building_whaling_station
+						is_building_type = building_generic_fish_market
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_food
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_generic_cold_storage
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_forestry
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_logging_camp
+						is_building_type = building_rubber_plantation
+						is_building_type = building_generic_lumber_yard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_gold_mining
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_gold_mine
+						is_building_type = building_generic_assay_office
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_home_goods
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_furniture_manufactory
+						is_building_type = building_glassworks
+						is_building_type = building_generic_furniture_showroom
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_metal_mining
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_nickel_cobalt_mine
+						is_building_type = building_iron_mine
+						is_building_type = building_chromium_mine
+						is_building_type = building_manganese_mine
+						is_building_type = building_bauxite_mine
+						is_building_type = building_specialty_alloy_metal_mine
+						is_building_type = building_precious_minor_base_metal_mine
+						is_building_type = building_lead_mine
+						is_building_type = building_copper_mine
+						is_building_type = building_lithium_mine
+						is_building_type = building_generic_ore_processing
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_metalworks
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tooling_workshop
+						is_building_type = building_generic_machine_shop
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_mineral_mining
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sulfur_mine
+						is_building_type = building_phosphate_mine
+						is_building_type = building_potash_mine
+						is_building_type = building_industrial_mineral_salt_mine
+						is_building_type = building_coal_mine
+						is_building_type = building_rare_earth_metals_mine
+						is_building_type = building_platinum_group_metals_mine
+						is_building_type = building_graphite_mine
+						is_building_type = building_generic_mineral_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_motors
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_automotive_industry
+						is_building_type = building_generic_motor_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_munitions
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_munition_plant
+						is_building_type = building_explosives_factory
+						is_building_type = building_generic_ordnance_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_oil
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_oil
+						is_building_type = building_oil_rig
+						is_building_type = building_generic_tank_farm
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_paper
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_paper_mill
+						is_building_type = building_generic_paper_mill_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_power
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_hydro_plant
+						is_building_type = building_renewable_energy_plant
+						is_building_type = building_power_plant
+						is_building_type = building_generic_power_hub
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_shipyards
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_generic_dry_dock
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_silk_and_dye
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_dye_plantation
+						is_building_type = building_silk_plantation
+						is_building_type = building_generic_silk_exchange
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_software
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_generic_data_fortress
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_steel
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_generic_foundry_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_synthetics
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_silk
+						is_building_type = building_synthetics_plant
+						is_building_type = building_generic_dye_fiber_park
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_textiles
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_generic_textile_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_weapons
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_generic_arsenal
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basic_wine_and_fruit
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_banana_plantation
+						is_building_type = building_vineyard
+						is_building_type = building_generic_vintner_hall
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_basileiades
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_shipyard
+						is_building_type = building_basileiades_piraeus_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bayer
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant
+						is_building_type = building_synthetics_plant_silk
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_bayer_leverkusen_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bengal_coal_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_coal_mine
+						is_building_type = building_bengal_coal_raniganj_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bgi
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_synthetics_plant_fruit
+						is_building_type = building_bgi_national_genebank
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bhp_group
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_ocean_mine
+						is_building_type = building_nickel_cobalt_mine
+						is_building_type = building_iron_mine
+						is_building_type = building_coal_mine
+						is_building_type = building_copper_mine
+						is_building_type = building_potash_mine
+						is_building_type = building_bhp_mount_whaleback_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_biocon
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_chemical_plant
+						is_building_type = building_biocon_park
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_biontech
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_chemical_plant
+						is_building_type = building_biontech_mainz_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_blackberry
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry
+						is_building_type = building_network_infrastructure
+						is_building_type = building_software_industry
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_blackberry_rim_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_boeing
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_boeing_everett_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bolckow_vaughan
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_coal_mine
+						is_building_type = building_iron_mine
+						is_building_type = building_bolckow_eston_ironworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bombay_burmah_trading_corporation
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rubber_plantation
+						is_building_type = building_logging_camp
+						is_building_type = building_bombay_burmah_rangoon_timber_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bombay_dyeing_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_bombay_dyeing_spring_mills
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_boston_dynamics
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_robotics_industry
+						is_building_type = building_boston_dynamics_ai_institute
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bp
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_oil
+						is_building_type = building_oil_rig
+						is_building_type = building_bp_refinery_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_branobel
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_nobel_baku_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_broken_hill_proprietary_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_gold_mine
+						is_building_type = building_copper_mine
+						is_building_type = building_bhp_broken_hill_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bunge_born
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_wheat_farm
+						is_building_type = building_maize_farm
+						is_building_type = building_food_industry
+						is_building_type = building_bunge_born_buenos_aires_grain_silo
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_bytedance
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_art_academy
+						is_building_type = building_software_industry
+						is_building_type = building_bytedance_data_fortress
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_calcutta_electric
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_power_plant
+						is_building_type = building_calcutta_electric_victoria_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_caribbean_petroleum
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_caribbean_petroleum_maracaibo_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_catl
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_advanced_material_fabricator
+						is_building_type = building_chemical_plant
+						is_building_type = building_catl_gigafactory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ccci
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rubber_plantation
+						is_building_type = building_logging_camp
+						is_building_type = building_iron_mine
+						is_building_type = building_ccci_leopoldville_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_cfr
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_cfr_bucharest_railway_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_cgv
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_vineyard
+						is_building_type = building_cgv_haut_brion_estate
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_chr_hansens
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_food_industry
+						is_building_type = building_chr_hansen_copenhagen_laboratory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_cochlear
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_chemical_plant
+						is_building_type = building_cochlear_global_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_colt_firearms
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_colt_hartford_armory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_compania_sansinena_de_carnes_congeladas
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_livestock_ranch
+						is_building_type = building_sansinena_avellaneda_frigorifico
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_construction_power_bloc
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_construction_sector
+						is_building_type = building_generic_industrial_zone
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_cordoba_railway
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_cordoba_railway_alta_gracia_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_csfa
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sulfur_mine
+						is_building_type = building_railway
+						is_building_type = building_csfa_sicilian_sulfur_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_da_afghan_nassaji_sherkat
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_afghan_nassaji_kabul_mills
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_dassault_aviation
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_dassault_merignac_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_david_sassoon
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_opium_plantation
+						is_building_type = building_cotton_plantation
+						is_building_type = building_sassoon_bombay_docks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_de_beers
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_gold_mine
+						is_building_type = building_de_beers_sorting_office
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_disney
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tourism_industry
+						is_building_type = building_art_academy
+						is_building_type = building_disney_world
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_dmc
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_coal_mine
+						is_building_type = building_dmc_mulhouse_mills
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_dobrush_paper
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_paper_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_douro_wine_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_vineyard
+						is_building_type = building_food_industry
+						is_building_type = building_douro_wine_lodge
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_dupont
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_explosives_factory
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_dupont_experimental_station
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_duro_y_compania
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_coal_mine
+						is_building_type = building_iron_mine
+						is_building_type = building_duro_la_felguera_steelworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_east_india_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tea_plantation
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_opium_plantation
+						is_building_type = building_eic_trading_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_eea
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_power_plant
+						is_building_type = building_eea_dock_sud_power_station
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_egyptian_rail
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_egyptian_rail_cairo_central
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_el_aguila
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_el_aguila_tampico_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_electricidad_de_caracas
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_power_plant
+						is_building_type = building_electricidad_caracas_power_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_elso_budapesti_gozmalom
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_wheat_farm
+						is_building_type = building_elso_budapesti_steam_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_eni
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_chemical_plant
+						is_building_type = building_power_plant
+						is_building_type = building_eni_palazzo
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ericsson
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry
+						is_building_type = building_ericsson_telefonplan
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_erste_brunner
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_erste_brunner_maschinenwerk
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_espana_industrial
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_cotton_plantation
+						is_building_type = building_espana_industrial_sants_mills
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_estaleiro_maua
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_artillery_foundry
+						is_building_type = building_estaleiro_maua_niteroi_dockyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_estanifera_llallagua
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_copper_mine
+						is_building_type = building_lead_mine
+						is_building_type = building_estanifera_llallagua_tin_concentrator
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_famae
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_munition_plant
+						is_building_type = building_famae_santiago_arsenal
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_fanuc
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_robotics_industry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_fanuc_forest
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_fcm
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_shipyard
+						is_building_type = building_fcm_la_seyne_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ferranti_ltd
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_radio
+						is_building_type = building_power_plant
+						is_building_type = building_electrics_industry
+						is_building_type = building_ferranti_hollinwood_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ferrari
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_ferrari_maranello_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_fiat
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_fiat_lingotto_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_fiskars
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_iron_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_foochow_arsenal
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_artillery_foundry
+						is_building_type = building_foochow_mawei_dockyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ford_motor
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_ford_rouge_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_franco_belge
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_railway
+						is_building_type = building_franco_belge_raismes_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_fundicao_ipanema
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_fundicao_ipanema_sorocaba_foundry
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_fundidora_monterrey
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_coal_mine
+						is_building_type = building_fundidora_monterrey_blast_furnace
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_galician_carpathian_oil
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_galician_boryslaw_oil_field
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_gazprom
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_power_plant
+						is_building_type = building_gazprom_lakhta_center
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_gebruder_thonet
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_furniture_manufactory
+						is_building_type = building_thonet_bystrice_bentwood_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_genentech
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_genentech_dna_way_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_general_electric
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_electrics_industry
+						is_building_type = building_power_plant
+						is_building_type = building_electrics_industry_radio
+						is_building_type = building_ge_schenectady_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_getzner_mutter
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_power_plant
+						is_building_type = building_getzner_bludenz_textile_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_google
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_network_infrastructure
+						is_building_type = building_googleplex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_gotaverken
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tooling_workshop
+						is_building_type = building_shipyard
+						is_building_type = building_motor_industry
+						is_building_type = building_gotaverken_gothenburg_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_gran_azucarera
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sugar_plantation
+						is_building_type = building_logging_camp
+						is_building_type = building_livestock_ranch
+						is_building_type = building_gran_azucarera_aranjuez_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_great_indian_railway
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_great_indian_railway_jamalpur_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_grodno_tobacco
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tobacco_plantation
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_guinness
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_guinness_st_james_gate_brewery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_guthrie
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tea_plantation
+						is_building_type = building_coffee_plantation
+						is_building_type = building_guthrie_singapore_agency
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_gwr
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_gwr_swindon_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_hanka_precision
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_nanofabrication_center
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_software_industry
+						is_building_type = building_hanka_precision_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_hanseong_jeongi_hoesa
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_power_plant
+						is_building_type = building_hanseong_jeongi_gwanghwamun_station
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_hanyang_arsenal
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_munition_plant
+						is_building_type = building_hanyang_arsenal_iron_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_hbc
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_fishing_wharf
+						is_building_type = building_logging_camp
+						is_building_type = building_hbc_york_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_hispano_suiza
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_automotive_industry
+						is_building_type = building_hispano_suiza_barcelona_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_hp
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_hp_labs
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_huawei
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_network_infrastructure
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_electrics_industry
+						is_building_type = building_huawei_ox_horn_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_hyundai
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_shipyard
+						is_building_type = building_hyundai_ulsan_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ig_farben
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant
+						is_building_type = building_ig_farben_buna_werke
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ikea
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_furniture_manufactory
+						is_building_type = building_ikea_almhult_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ilva
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_ilva_bagnoli_steelworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_imperial_arsenal
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_artillery_foundry
+						is_building_type = building_imperial_arsenal_golden_horn
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_imperial_ethiopian_railways
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_ethiopian_railway_dire_dawa_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_imperial_tobacco
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_imperial_tobacco_wills_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_infosys
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_infosys_mysore_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_infrastructure
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_highway
+						is_building_type = building_airport
+						is_building_type = building_railway
+						is_building_type = building_port
+						is_building_type = building_generic_logistics_hub
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ingen
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tourism_industry
+						is_building_type = building_livestock_ranch
+						is_building_type = building_ingen_biological_preserve
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ingolstadt_electrical_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_power_plant
+						is_building_type = building_ingolstadt_power_station
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_intel
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_intel_ronler_acres
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_iranian_state_railway
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_iranian_state_railway_veresk_station
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_izhevsk_arms_plant
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_munition_plant
+						is_building_type = building_izhevsk_arms_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_j_p_coats
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_coats_ferguslie_mills
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_jakub_klein
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_paper_mill
+						is_building_type = building_logging_camp
+						is_building_type = building_klein_galician_paper_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_jardine_matheson
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_port
+						is_building_type = building_trade_center
+						is_building_type = building_jardine_princeps_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_jiangnan_weaving_bureaus
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_silk_plantation
+						is_building_type = building_jiangnan_nanjing_brocade_hall
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_jingdezhen
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_glassworks
+						is_building_type = building_jingdezhen_imperial_kiln
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_john_brown
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_shipyard
+						is_building_type = building_john_brown_clydebank_yard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_john_cockerill
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_tooling_workshop
+						is_building_type = building_motor_industry
+						is_building_type = building_cockerill_seraing_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_john_holt
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rubber_plantation
+						is_building_type = building_logging_camp
+						is_building_type = building_port
+						is_building_type = building_john_holt_lagos_trading_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_john_hughes
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_coal_mine
+						is_building_type = building_iron_mine
+						is_building_type = building_hughes_yuzovka_steelworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_jsr
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_chemical_plant
+						is_building_type = building_jsr_yokkaichi_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_jsw_steel
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_jsw_vijayanagar_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_kablin
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_paper_mill
+						is_building_type = building_logging_camp
+						is_building_type = building_kablin_zarate_paper_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_kaiping_mining
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_coal_mine
+						is_building_type = building_railway
+						is_building_type = building_kaiping_tangshan_colliery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_kharitonenko_and_son
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_wheat_farm
+						is_building_type = building_rye_farm
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_kinkozan_sobei
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_glassworks
+						is_building_type = building_kinkozan_kiyomizu_kiln
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_kirgizian_mining_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_coal_mine
+						is_building_type = building_kirgizian_copper_smelter
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_klanicko_drustvo
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_livestock_ranch
+						is_building_type = building_klanicko_belgrade_slaughterhouse
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_konigliche_porzellan_manufaktur_meissen
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_glassworks
+						is_building_type = building_meissen_porcelain_manufactory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_kouppas
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_kouppas_piraeus_foundry
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_kreenholmi_manufaktuur
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_livestock_ranch
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_krupp
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_steel_mill
+						is_building_type = building_krupp_essen_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_la_rosada
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_steel_mill
+						is_building_type = building_artillery_foundry
+						is_building_type = building_la_rosada_buenos_aires_arsenal
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_lanfang_kongsi
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_gold_mine
+						is_building_type = building_port
+						is_building_type = building_lanfang_pontianak_kongsi_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_lee_wilson
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_cotton_plantation
+						is_building_type = building_logging_camp
+						is_building_type = building_wheat_farm
+						is_building_type = building_lee_wilson_plantation_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_lilpop
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_tooling_workshop
+						is_building_type = building_lilpop_warsaw_metalworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_lkab
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_iron_mine
+						is_building_type = building_lkab_kiruna_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_lockheed_martin
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_lockheed_skunk_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ludwig_moser_and_sons
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_glassworks
+						is_building_type = building_moser_karlsbad_glass_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_madura_mills
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_madura_mills_madurai_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_maison_worth
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_worth_rue_de_la_paix_atelier
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_malaxa
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_motor_industry
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_manfred_weiss
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_munition_plant
+						is_building_type = building_steel_mill
+						is_building_type = building_automotive_industry
+						is_building_type = building_manfred_weiss_csepel_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mantero_seta
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_silk_plantation
+						is_building_type = building_mantero_como_silk_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mantetsu
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_coal_mine
+						is_building_type = building_glassworks
+						is_building_type = building_mantetsu_dalian_railway_hub
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_maple_and_co
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_furniture_manufactory
+						is_building_type = building_maple_tottenham_court_showroom
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_maschinenfabrik_oerlikon
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_mfo_oerlikon_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_maslosoyuz
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_livestock_ranch
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_massey_harris
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_massey_harris_toronto_implement_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mate_gavrilovic
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_gavrilovic_petrinja_meatworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mav
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tooling_workshop
+						is_building_type = building_motor_industry
+						is_building_type = building_mav_budapest_locomotive_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_megastructure_consortium
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_advanced_material_fabricator
+						is_building_type = building_aerospace_industry
+						is_building_type = building_megastructure_consortium_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_michelin
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_rubber_plantation
+						is_building_type = building_michelin_clermont_ferrand
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_microsoft
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_microsoft_redmond_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mines_anzin
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_coal_mine
+						is_building_type = building_anzin_colliery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_misr
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_cotton_plantation
+						is_building_type = building_misr_mahalla_textile_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mitsubishi
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_iron_mine
+						is_building_type = building_paper_mill
+						is_building_type = building_mitsubishi_nagasaki_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mitsui
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_silk_plantation
+						is_building_type = building_dye_plantation
+						is_building_type = building_mitsui_trading_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_monsanto
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_sugar
+						is_building_type = building_sugar_plantation
+						is_building_type = building_chemical_plant
+						is_building_type = building_maize_farm
+						is_building_type = building_cotton_plantation
+						is_building_type = building_monsanto_chesterfield_center
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_moscow_irrigation_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_cotton_plantation
+						is_building_type = building_rice_farm
+						is_building_type = building_moscow_irrigation_cotton_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_mozambique_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tea_plantation
+						is_building_type = building_cotton_plantation
+						is_building_type = building_millet_farm
+						is_building_type = building_mozambique_company_beira_concession
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_nam_dinh
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_nam_dinh_textile_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_national_iranian_oil
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_nioc_masjed_soleyman_field
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_nederlandse_petroleum
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_nederlandse_petroleum_pangkalan_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_netflix
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_art_academy
+						is_building_type = building_network_infrastructure
+						is_building_type = building_netflix_animation_studios
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_neurovault
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_mind_upload_nexus
+						is_building_type = building_software_industry
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_neurovault_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_nhm
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sugar_plantation
+						is_building_type = building_coffee_plantation
+						is_building_type = building_dye_plantation
+						is_building_type = building_nhm_factorij_batavia
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_nicolas_portalis
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_silk_plantation
+						is_building_type = building_portalis_lyon_silk_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_nintendo
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_art_academy
+						is_building_type = building_software_industry
+						is_building_type = building_nintendo_development_center
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_noda_shoyu
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_noda_shoyu_goyogura
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_nokia
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_paper_mill
+						is_building_type = building_logging_camp
+						is_building_type = building_power_plant
+						is_building_type = building_nokia_cable_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_norsk_hydro
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_power_plant
+						is_building_type = building_norsk_hydro_rjukan_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_novo_nordisk
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_synthetics_plant_sugar
+						is_building_type = building_novo_nordisk_kalundborg_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_nvidia
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_software_industry
+						is_building_type = building_nvidia_endeavor_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_oesterreichisch_alpine_montangesellschaft
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_alpine_donawitz_steelworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_oevg
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_oevg_steyr_arms_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_office_cherifien_des_phosphates
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sulfur_mine
+						is_building_type = building_chemical_plant
+						is_building_type = building_ocp_khouribga_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ong_lung_sheng_tea_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tea_plantation
+						is_building_type = building_ong_lung_sheng_tea_warehouse
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_openai
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_openai_research_lab
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_opium_export_monopoly
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_opium_plantation
+						is_building_type = building_opium_ghazipur_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_oracle
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_network_infrastructure
+						is_building_type = building_software_industry
+						is_building_type = building_oracle_cloud_data_center
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_orient_express
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_orient_express_sirkeci_terminal
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_oriental_consolidated_mining
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_gold_mine
+						is_building_type = building_logging_camp
+						is_building_type = building_ocmc_unsan_gold_mines
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_oriental_development_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rice_farm
+						is_building_type = building_millet_farm
+						is_building_type = building_wheat_farm
+						is_building_type = building_oriental_dev_kunsan_granary
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ottoman_tobacco_regie
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_tobacco_regie_cibali_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_panama_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_trade_center
+						is_building_type = building_port
+						is_building_type = building_panama_company_culebra_cut
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_paradox
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry
+						is_building_type = building_art_academy
+						is_building_type = building_paradox_kvarnholmen_studio
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_pedro_domecq
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_vineyard
+						is_building_type = building_food_industry
+						is_building_type = building_pedro_domecq_jerez_bodega
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_pernambuco_textiles
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_pernambuco_recife_cotton_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_perskhlopok
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_cotton_plantation
+						is_building_type = building_perskhlopok_cotton_combines
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_persshelk
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_silk_plantation
+						is_building_type = building_persshelk_silk_reeling_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_peruvian_amazon
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rubber_plantation
+						is_building_type = building_peruvian_amazon_iquitos_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_petrobras
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_petrobras_cenpes_center
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_pfizer
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_chemical_plant
+						is_building_type = building_pfizer_rd_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_philips
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry
+						is_building_type = building_electrics_industry_radio
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_philips_eindhoven_natlab
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_pirelli
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_rubber_plantation
+						is_building_type = building_pirelli_bicocca_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_poznanski_cotton_products
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_prussian_state_railways
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_prussian_railway_directorate
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_putilov_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_shipyard
+						is_building_type = building_putilov_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ralli_brothers
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_rice_farm
+						is_building_type = building_wheat_farm
+						is_building_type = building_ralli_odessa_grain_elevator
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ramirez
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_fishing_wharf
+						is_building_type = building_ramirez_vila_real_cannery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rejoovenesense
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_rejoovenesense_compound
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rekal
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_mind_upload_nexus
+						is_building_type = building_software_industry
+						is_building_type = building_network_infrastructure
+						is_building_type = building_rekal_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_reliance
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_oil_rig
+						is_building_type = building_network_infrastructure
+						is_building_type = building_reliance_jamnagar_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_renault
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_renault_billancourt_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_resita_works
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_tooling_workshop
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rheinmetall
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_munition_plant
+						is_building_type = building_artillery_foundry
+						is_building_type = building_explosives_factory
+						is_building_type = building_rheinmetall_unterluss_proving_ground
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ricordi
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_art_academy
+						is_building_type = building_ricordi_galleria_vittorio_emanuele
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_roche
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_opium
+						is_building_type = building_chemical_plant
+						is_building_type = building_roche_tower
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rodriguez_arguelles_y_cia
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_rodriguez_arguelles_havana_tobacco_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rolls_royce
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_aerospace_industry
+						is_building_type = building_rolls_royce_derby_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_romanian_star
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_romanian_star_ploiesti_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rosatom
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_nuclear_plant
+						is_building_type = building_power_plant
+						is_building_type = building_advanced_material_fabricator
+						is_building_type = building_rosatom_mayak_association
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_roscosmos
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_roscosmos_vostochny_cosmodrome
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rosen_association
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_synthetics_plant_meat
+						is_building_type = building_livestock_ranch
+						is_building_type = building_synthetics_plant_biomass
+						is_building_type = building_robotics_industry
+						is_building_type = building_rosen_association_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_rossi
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_munition_plant
+						is_building_type = building_rossi_sao_leopoldo_arms_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_russian_american_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_logging_camp
+						is_building_type = building_whaling_station
+						is_building_type = building_port
+						is_building_type = building_rac_sitka_trading_post
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_russo-baltic_wagon_factory
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_saint_etienne
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_munition_plant
+						is_building_type = building_saint_etienne_arms_manufactory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_samsung
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_electrics_industry_radio
+						is_building_type = building_shipyard
+						is_building_type = building_samsung_digital_city
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_san_miguel
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_san_miguel_manila_brewery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sao_paulo_railway
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_sao_paulo_railway_paranapiacaba_workshop
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sap
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_railway
+						is_building_type = building_sap_headquarters
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_saudi_aramco
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_saudi_aramco_abqaiq_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_savva_morozov
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_morozov_orekhovo_zuevo_mills
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_schichau
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_motor_industry
+						is_building_type = building_schichau_elbing_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_schneider_creusot
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_artillery_foundry
+						is_building_type = building_steel_mill
+						is_building_type = building_motor_industry
+						is_building_type = building_schneider_le_creusot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_secn
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_shipyard
+						is_building_type = building_secn_ferrol_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_shell
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_shell_pernis_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sherkat_shemali
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_cotton_plantation
+						is_building_type = building_sherkat_shemali_cotton_gin
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sherkate_eslamiya
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_textile_mill
+						is_building_type = building_sherkate_eslamiya_isfahan_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_shopify
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_highway
+						is_building_type = building_software_industry
+						is_building_type = building_network_infrastructure
+						is_building_type = building_shopify_fulfillment_hub
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_siam_electrical_company_limited
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_power_plant
+						is_building_type = building_siam_electric_wat_liab_station
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sibur
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_synthetics_plant_rubber
+						is_building_type = building_oil_rig
+						is_building_type = building_sibur_tobolsk_complex
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_siemens_and_halske
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electrics_industry
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_siemens_erlangen_campus
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_skoda
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_motor_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_skoda_pilsen_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_societe_francaise_charbonnages_du_tonkin
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_coal_mine
+						is_building_type = building_logging_camp
+						is_building_type = building_sfct_hon_gai_collieries
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_societe_mokta_el_hadid
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_iron_mine
+						is_building_type = building_sulfur_mine
+						is_building_type = building_mokta_el_hadid_beni_saf_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_softbank
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_network_infrastructure
+						is_building_type = building_softbank_vision_fund_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sony
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_art_academy
+						is_building_type = building_electrics_industry_appliances
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_sony_pictures_studios
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_spacex
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_aerospace_industry
+						is_building_type = building_space_mine
+						is_building_type = building_spacex_starbase
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_stabilimento_tecnico_di_fiume
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_explosives_factory
+						is_building_type = building_shipyard
+						is_building_type = building_stf_fiume_torpedo_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_standard_oil
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_railway
+						is_building_type = building_standard_oil_refinery
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_steel_brothers
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_rice_farm
+						is_building_type = building_steel_brothers_syriam_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_stt
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_artillery_foundry
+						is_building_type = building_stt_haskoy_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sudamericana_de_vapores
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_sudamericana_valparaiso_pier
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_suez_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_trade_center
+						is_building_type = building_port
+						is_building_type = building_suez_company_ismailia_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sumitomo
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_copper_mine
+						is_building_type = building_steel_mill
+						is_building_type = building_chemical_plant
+						is_building_type = building_sumitomo_besshi_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_sunhwaguk
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_rice_farm
+						is_building_type = building_sunhwaguk_seoul_tobacco_factory
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_tashkent_railroad
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_railway
+						is_building_type = building_tashkent_railroad_workshops
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_tata
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_textile_mill
+						is_building_type = building_tata_jamshedpur_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_tencent
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_software_industry
+						is_building_type = building_art_academy
+						is_building_type = building_network_infrastructure
+						is_building_type = building_tencent_seafront_towers
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_tessier_ashpool
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_mind_upload_nexus
+						is_building_type = building_software_industry
+						is_building_type = building_network_infrastructure
+						is_building_type = building_tessier_ashpool_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_thyssen
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_thyssen_steelworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_tokyo_electric_light_company
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_power_plant
+						is_building_type = building_tokyo_electric_asakusa_station
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_toyota
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_automotive_industry
+						is_building_type = building_robotics_industry
+						is_building_type = building_toyota_kaikan_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_trubia
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_artillery_foundry
+						is_building_type = building_trubia_cannon_foundry
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_tsmc
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_electronic_components_and_semiconductor_industry
+						is_building_type = building_advanced_material_fabricator
+						is_building_type = building_tsmc_fab_18
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_turkish_petroleum
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_turkish_petroleum_kirkuk_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_tycho_manufacturing
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_space_elevator
+						is_building_type = building_aerospace_industry
+						is_building_type = building_advanced_material_fabricator
+						is_building_type = building_tycho_manufacturing_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_uniao_fabril
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_chemical_plant
+						is_building_type = building_wheat_farm
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_uniao_fabril_barreiro_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_united_fruit
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sugar_plantation
+						is_building_type = building_banana_plantation
+						is_building_type = building_united_fruit_great_white_fleet_terminal
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_united_tobacco_factories
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_tobacco_plantation
+						is_building_type = building_united_tobacco_moscow_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_universal
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_art_academy
+						is_building_type = building_universal_studios_hollywood
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ursus
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_ursus_warsaw_tractor_plant
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_us_steel
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_iron_mine
+						is_building_type = building_coal_mine
+						is_building_type = building_carnegie_homestead_mill
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_vale
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_ocean_mine
+						is_building_type = building_nickel_cobalt_mine
+						is_building_type = building_iron_mine
+						is_building_type = building_manganese_mine
+						is_building_type = building_bauxite_mine
+						is_building_type = building_copper_mine
+						is_building_type = building_potash_mine
+						is_building_type = building_steel_mill
+						is_building_type = building_vale_carajas_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_van_vlissingen_en_dudok_van_heel
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_motor_industry
+						is_building_type = building_tooling_workshop
+						is_building_type = building_shipyard
+						is_building_type = building_van_vlissingen_oostenburg_works
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_verizon
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_network_infrastructure
+						is_building_type = building_electrics_industry
+						is_building_type = building_verizon_building
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_vodka_monopoly
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_food_industry
+						is_building_type = building_vineyard
+						is_building_type = building_vodka_monopoly_warehouse
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_volkswagen
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_highway
+						is_building_type = building_automotive_industry
+						is_building_type = building_motor_industry
+						is_building_type = building_volkswagen_autostadt
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_wadia_shipbuilders
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_artillery_foundry
+						is_building_type = building_wadia_bombay_dockyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_west_ural_petroleum
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_oil_rig
+						is_building_type = building_west_ural_oil_depot
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_white_star_line
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_port
+						is_building_type = building_white_star_albion_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_william_cramp
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_shipyard
+						is_building_type = building_motor_industry
+						is_building_type = building_cramp_philadelphia_shipyard
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_william_sandford
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_steel_mill
+						is_building_type = building_sandford_newcastle_natal_ironworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_witkowitzer_bergbau_und_huttengewerkschaft
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_iron_mine
+						is_building_type = building_coal_mine
+						is_building_type = building_witkowitzer_ostrava_ironworks
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_yasuda
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sulfur_mine
+						is_building_type = building_railway
+						is_building_type = building_port
+						is_building_type = building_yasuda_atosanupuri_mine
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_ynchausti_y_compania
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_sugar_plantation
+						is_building_type = building_food_industry
+						is_building_type = building_port
+						is_building_type = building_ynchausti_manila_trading_house
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_yoyodyne_propulsion
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_antimatter_engine
+						is_building_type = building_aerospace_industry
+						is_building_type = building_yoyodyne_propulsion_hq
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+		AND = {
+			is_company_type = company_type:company_zastava
+			var:te_pa_seat ?= {
+				any_scope_building = {
+					OR = {
+						is_building_type = building_arms_industry
+						is_building_type = building_munition_plant
+						is_building_type = building_zastava_kragujevac_arsenal
+					}
+					can_queue_building_levels = 1
+				}
+			}
+		}
+	}
+}

@@ -1,6 +1,5 @@
 ﻿# Private Actors (docs/systems/mod_systems/private_actors.md): the firms' pulses. One named on-action a hook, as
-# te_company_on_actions.txt. The state pulse (te_pa_state_monthly, the state modifiers' one refresh site) comes with
-# the first state modifier the system applies (Task 4's foundation); nothing is state-scoped yet.
+# te_company_on_actions.txt.
 
 # Each country's firms: records, turns, the quarterly step; the teardown once when the rule is off
 # (te_pa_monthly, te_pa_core_effects.txt).
@@ -13,6 +12,21 @@ on_monthly_pulse_country = {
 te_pa_monthly_on_action = {
 	effect = {
 		te_pa_monthly = yes
+	}
+}
+
+# Each state: the state modifiers' one refresh site (te_pa_state_monthly, te_pa_trust_effects.txt), a foundation's
+# yield from what its firm's quarter wrote on the state. ROOT is the state, which a state modifier's multiplier
+# resolves against (scripting_best_practices.md, "add_modifier { multiplier = var:X } Resolves Against ROOT").
+on_monthly_pulse_state = {
+	on_actions = {
+		te_pa_state_monthly_on_action
+	}
+}
+
+te_pa_state_monthly_on_action = {
+	effect = {
+		te_pa_state_monthly = yes
 	}
 }
 

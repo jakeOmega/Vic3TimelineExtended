@@ -1,0 +1,237 @@
+﻿# Private Actors, the trust and the foundation: the triggers (docs/systems/mod_systems/private_actors.md § The Trust;
+# spec §§ 4.6, 5.5, 6.1-6.4). Company scope unless noted. Each verb is a te_pa_can_<verb> trigger here (legal,
+# affordable, applicable) and a te_pa_do_<verb> effect in te_pa_trust_effects.txt; te_pa_act's lists name them.
+
+# ---------------------------------------------------------------------------
+# The antitrust law and the cartel (§ 6.2)
+# ---------------------------------------------------------------------------
+
+# No cartel at all: private ownership has ended, or the antitrust law is Command or Cooperative Economy.
+te_pa_cartel_banned = {
+	owner = { te_pa_dominance_illegal = yes }
+}
+
+# Its sector is infrastructure or a utility (§ 6.2's Regulated Utilities row: Task 1's features).
+te_pa_cartel_utility = {
+	OR = {
+		var:te_pa_g_f_infrastructure ?= 1
+		var:te_pa_g_f_power ?= 1
+	}
+}
+
+# The antitrust law in force lets the firm hold a cartel in the open: Guilds and Chartered Monopolies, Freedom of
+# Contract, Regulated Utilities outside infrastructure and utilities, or Dirigiste Policy for a Favored firm. Under
+# any other (Antitrust Enforcement, Regulated Utilities in its own sectors, Dirigiste Policy for a firm not Favored)
+# a cartel is illegal and forms in secret.
+te_pa_cartel_lawful = {
+	te_pa_cartel_banned = no
+	OR = {
+		owner = { has_law = law_type:law_guilds_chartered_monopolies }
+		owner = { has_law = law_type:law_freedom_of_contract }
+		AND = {
+			owner = { has_law = law_type:law_regulated_utilities }
+			te_pa_cartel_utility = no
+		}
+		AND = {
+			owner = { has_law = law_type:law_dirigisme }
+			var:te_pa_posture ?= 1
+		}
+	}
+}
+
+# Regulated Utilities caps the cartel at te_pa_cartel_ru_cap outside infrastructure and utilities.
+te_pa_cartel_ru_capped = {
+	owner = { has_law = law_type:law_regulated_utilities }
+	te_pa_cartel_utility = no
+}
+
+# Country scope. The antitrust law has a regulator to capture (§ 6.2's column).
+te_pa_law_has_regulator = {
+	OR = {
+		has_law = law_type:law_trust_busting
+		has_law = law_type:law_regulated_utilities
+		has_law = law_type:law_dirigisme
+	}
+}
+
+# Country scope. A regulator is bought half again as fast (§ 6.4): Contracted Administration, or the Spoils System.
+te_pa_reg_fast = {
+	OR = {
+		has_law = law_type:law_contracted_administration
+		active_law:lawgroup_bureaucracy ?= { has_amendment = amendment_type:amendment_spoils_system }
+	}
+}
+
+# The firm holds a cartel the state knows of: open, or exposed.
+te_pa_holds_known_cartel = {
+	te_pa_v_cartel > 0
+	var:te_pa_cartel_known ?= 1
+}
+
+# A law being enacted would outlaw its cartel (§ 6.4's stall): one that bans any cartel (Command or Cooperative
+# Economy, Command Economy, Cooperative Ownership), or, while the cartel is lawful, one under which it would not be.
+te_pa_law_threatens_cartel = {
+	owner = { enacting_any_law = yes }
+	OR = {
+		owner = {
+			OR = {
+				is_enacting_law = law_type:law_command_cooperative_economy
+				is_enacting_law = law_type:law_command_economy
+				is_enacting_law = law_type:law_cooperative_ownership
+			}
+		}
+		AND = {
+			te_pa_cartel_lawful = yes
+			OR = {
+				owner = { is_enacting_law = law_type:law_trust_busting }
+				AND = {
+					owner = { is_enacting_law = law_type:law_regulated_utilities }
+					te_pa_cartel_utility = yes
+				}
+				AND = {
+					owner = { is_enacting_law = law_type:law_dirigisme }
+					NOT = { var:te_pa_posture ?= 1 }
+				}
+			}
+		}
+	}
+}
+
+# A Favored firm's cartel is immune from suit while the antitrust law carries National Champion Exemption (§ 6.7).
+# Task 4b's suit reads it.
+te_pa_cartel_immune = {
+	var:te_pa_posture ?= 1
+	owner = {
+		active_law:lawgroup_antitrust ?= { has_amendment = amendment_type:amendment_national_champion_exemption }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The verbs (te_pa_act's lists, te_pa_trust_effects.txt)
+# ---------------------------------------------------------------------------
+
+# The firm holds AMOUNT (a script value, pounds) in funds, and AMOUNT is above 0.
+te_pa_can_afford = {
+	$AMOUNT$ > 0
+	te_pa_v_funds >= $AMOUNT$
+}
+
+# Form a cartel (§ 6.1 stage 3): it holds none, its goal is Dominance or A Protected Market, and its share is at the
+# line; any law but one that bans cartels outright (an illegal one forms in secret).
+te_pa_can_form_cartel = {
+	te_pa_v_cartel <= 0
+	OR = {
+		var:te_pa_goal ?= 5
+		var:te_pa_goal ?= 2
+	}
+	te_pa_cartel_banned = no
+	te_pa_v_share >= te_pa_cartel_threshold_value
+}
+
+# Capture the regulator (§ 6.4): it holds a cartel and no regulator, the law has one, and it has a quarter's
+# Connections to begin.
+te_pa_can_capture_reg = {
+	te_pa_v_cartel > 0
+	te_pa_v_reg <= 0
+	owner = { te_pa_law_has_regulator = yes }
+	te_pa_v_conn >= te_pa_reg_conn_quarter
+}
+
+# Stall the law (§ 6.4): it holds a cartel, a law being enacted would outlaw it, it has the Connections, a year has
+# passed since its last stall, and the enactment can take another setback without failing outright (vanilla's
+# guard, events/ministry_law_events.txt).
+te_pa_can_stall = {
+	te_pa_v_cartel > 0
+	te_pa_v_conn >= te_pa_stall_conn
+	trigger_if = {
+		limit = { has_variable = te_pa_stall_month }
+		te_pa_stall_since >= te_pa_stall_months
+	}
+	te_pa_law_threatens_cartel = yes
+	owner = { enactment_setback_count < max_setbacks_minus_one }
+}
+
+# Expand (§ 6.1 stage 1: it builds in its sector): below the cartel's share, private ownership stands, the
+# investment pool holds money, and its seat can take a level of one of its building types.
+te_pa_can_expand = {
+	te_pa_v_share < te_pa_cartel_threshold_value
+	owner = {
+		te_pa_private_ownership_ended = no
+		investment_pool > 0
+	}
+	te_pa_gen_can_expand = yes
+}
+
+# The cartel's firm (an entry of the country list te_pa_cartels), with scope:te_pa_firm a buyer at its turn: it is
+# another firm, holds a secret cartel, and makes one of the buyer's two inputs.
+te_pa_cartel_sells_to_buyer = {
+	NOT = { this = scope:te_pa_firm }
+	te_pa_v_cartel > 0
+	var:te_pa_cartel_known ?= 0
+	has_variable = te_pa_g_out_good
+	var:te_pa_g_out_good > 0
+	OR = {
+		AND = {
+			var:te_pa_g_out_good >= te_pa_buyer_in1
+			var:te_pa_g_out_good <= te_pa_buyer_in1
+		}
+		AND = {
+			var:te_pa_g_out_good >= te_pa_buyer_in2
+			var:te_pa_g_out_good <= te_pa_buyer_in2
+		}
+	}
+}
+
+# Pay to expose a cartel (§ 6.3, a buyer's routine verb): its goal is Cheaper Inputs, a secret cartel in its country
+# makes one of its inputs, and it can pay.
+te_pa_can_press_cartel = {
+	var:te_pa_goal ?= 1
+	te_pa_can_afford = { AMOUNT = te_pa_buyer_cost_value }
+	owner = {
+		has_variable_list = te_pa_cartels
+		any_in_list = {
+			variable = te_pa_cartels
+			te_pa_cartel_sells_to_buyer = yes
+		}
+	}
+}
+
+# Endow a foundation (§ 5.5; checked each turn after the goal's verb): it has none, its Standing is under the line
+# its Paternalism sets, it has the founding cost and a year's accrual besides, private ownership stands, and some
+# incorporated home state holds no foundation yet.
+te_pa_can_endow = {
+	te_pa_v_found <= 0
+	te_pa_v_stand < te_pa_found_stand_line
+	te_pa_v_funds >= te_pa_found_spare_value
+	owner = {
+		te_pa_private_ownership_ended = no
+		any_scope_state = {
+			is_incorporated = yes
+			NOT = { has_variable = te_pa_st_found_str }
+		}
+	}
+}
+
+# The firm's foundation's state is still its home country's.
+te_pa_found_state_kept = {
+	var:te_pa_found_state ?= {
+		exists = owner
+		owner = scope:te_pa_home
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The ledger (container scope, an entry): which lines a holding's exposure gives their author
+# ---------------------------------------------------------------------------
+
+te_pa_ledger_verb_of_cartel = {
+	OR = {
+		var:te_pa_l_verb ?= 20
+		var:te_pa_l_verb ?= 21
+		var:te_pa_l_verb ?= 22
+	}
+}
+
+te_pa_ledger_verb_of_reg = {
+	var:te_pa_l_verb ?= 25
+}

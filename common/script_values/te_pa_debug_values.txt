@@ -19,3 +19,66 @@ te_pa_sc_size_gap = {
 		if = { limit = { global_var:te_pa_sc_size_got < global_var:te_pa_sc_size_want } multiply = -1 }
 	}
 }
+
+# cartel_rents (probe 2): the smallest cut worth reading (a cartel at strength 5 cuts 1%), how far a reading may sit
+# from the cut, and the reads (te_pa_debug_rents_arm / _read).
+te_pa_sc_rents_min = -0.01
+te_pa_sc_rents_tolerance = 0.002
+
+# Company scope. The cut the firm's cartel asks of each of its building types: minus te_pa_gen_cartel_cut times its
+# multiplier.
+te_pa_sc_rents_want_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_cartel_mult }
+		value = var:te_pa_cartel_mult
+		multiply = te_pa_gen_cartel_cut
+		multiply = -1
+	}
+}
+
+# Any scope. Months since cartel_rents was armed.
+te_pa_sc_rents_age = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_pa_sc_rents_month }
+		value = te_history_month_index
+		subtract = global_var:te_pa_sc_rents_month
+	}
+}
+
+# Any scope. How far the country's and the seat's readings moved from the cut, either way (the gaps).
+te_pa_sc_rents_country_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_rents_c1
+			has_global_variable = te_pa_sc_rents_c0
+			has_global_variable = te_pa_sc_rents_want
+		}
+		value = global_var:te_pa_sc_rents_c1
+		subtract = global_var:te_pa_sc_rents_c0
+		subtract = global_var:te_pa_sc_rents_want
+	}
+}
+te_pa_sc_rents_seat_delta = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_rents_s1
+			has_global_variable = te_pa_sc_rents_s0
+			has_global_variable = te_pa_sc_rents_want
+		}
+		value = global_var:te_pa_sc_rents_s1
+		subtract = global_var:te_pa_sc_rents_s0
+		subtract = global_var:te_pa_sc_rents_want
+	}
+}
+te_pa_sc_rents_country_gap = {
+	value = te_pa_sc_rents_country_delta
+	if = { limit = { te_pa_sc_rents_country_delta < 0 } multiply = -1 }
+}
+te_pa_sc_rents_seat_gap = {
+	value = te_pa_sc_rents_seat_delta
+	if = { limit = { te_pa_sc_rents_seat_delta < 0 } multiply = -1 }
+}

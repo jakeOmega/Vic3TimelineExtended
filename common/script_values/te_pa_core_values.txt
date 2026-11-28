@@ -61,8 +61,10 @@ te_pa_conn_restrained_mult = 0.5
 te_pa_conn_decay_quarter = 0.05
 
 # ---------------------------------------------------------------------------
-# Standing (§ 4.3), 0-100: drifts toward a neutral value until Tasks 4 and 6 give it its sources (a foundation,
-# welfare, exposures, blood).
+# Standing (§ 4.3), 0-100: drifts toward a neutral value, but not down past what a foundation holds it at: a
+# foundation (Task 4, § 5.5) adds te_pa_found_stand_quarter while Standing is below its strength, and Standing
+# between the neutral value and the foundation's strength stays put. An exposure (Task 4) costs Standing, which
+# drifts back; Task 6 adds welfare and blood.
 # ---------------------------------------------------------------------------
 
 te_pa_stand_neutral = 50
@@ -225,6 +227,8 @@ te_pa_funds_year = {
 	multiply = te_pa_funds_rate
 	if = { limit = { owner = { te_pa_banking_slump = yes } } multiply = te_pa_funds_slump_mult }
 	if = { limit = { var:te_pa_cond ?= -1 } multiply = te_pa_funds_failing_mult }
+	# A cartel's rents (§ 6.1 stage 4): up to double at strength 100 (te_pa_trust_values.txt).
+	multiply = te_pa_cartel_funds_factor
 	if = { limit = { owner = { te_pa_private_ownership_ended = yes } } value = 0 }
 	min = 0
 }
@@ -281,9 +285,24 @@ te_pa_conn_after_quarter = {
 	max = 100
 }
 
+# The highest Standing it drifts down to: the neutral value, or its foundation's strength above that.
+te_pa_stand_ceiling = {
+	value = te_pa_v_found
+	min = te_pa_stand_neutral
+}
+# Where it drifts: its Standing held between the neutral value and that ceiling.
+te_pa_stand_anchor = {
+	value = te_pa_v_stand
+	min = te_pa_stand_neutral
+	max = te_pa_stand_ceiling
+}
 te_pa_stand_after_quarter = {
 	value = te_pa_v_stand
-	add = { value = te_pa_stand_neutral subtract = te_pa_v_stand multiply = te_pa_stand_drift_quarter }
+	add = { value = te_pa_stand_anchor subtract = te_pa_v_stand multiply = te_pa_stand_drift_quarter }
+	if = {
+		limit = { te_pa_v_stand < te_pa_v_found }
+		add = te_pa_found_stand_quarter
+	}
 	min = 0
 	max = 100
 }

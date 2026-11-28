@@ -6,7 +6,8 @@
 # (te_pa_turn) and the country's te_pa_q_in down to the quarterly step (te_pa_quarter). The turn assesses the firm
 # (te_pa_gen_assess and the readings below), scores the eight goals and picks one (te_pa_goals_effects.txt), logs a
 # change (te_pa_ledger_effects.txt), posts a threshold notice, and copies what the tab shows onto the firm's row.
-# The quarter accrues the currencies and copies again. Holdings, verbs and declared moves are later tasks'.
+# The quarter runs the holdings (te_pa_trust_quarter), accrues the currencies and copies again. The turn's verb
+# (te_pa_act) and the holdings are te_pa_trust_effects.txt's (Task 4); declared moves are Task 4b's.
 #
 # The firm's record (company variables; the plan's Storage table has the full list):
 #   te_pa_init 1 | te_pa_turn_in 1-12 | te_pa_turns (turns taken) | te_pa_age_q (quarters since the record)
@@ -34,6 +35,11 @@ te_pa_monthly = {
 	}
 	else = {
 		save_scope_as = te_pa_home
+		# The rule is on again: the next teardown walks the foundations' states afresh (te_pa_trust_teardown).
+		if = {
+			limit = { has_global_variable = te_pa_found_torn }
+			remove_global_variable = te_pa_found_torn
+		}
 		# The world's technology cache (te_pa_gen_tech_cache), here once until the global yearly pulse keeps it.
 		if = {
 			limit = { NOT = { has_global_variable = te_pa_tech_cached } }
@@ -138,7 +144,7 @@ te_pa_make_record = {
 }
 
 # ---------------------------------------------------------------------------
-# The turn (§ 4.2): assess, score, choose. No verbs yet (Task 4's te_pa_act goes after the choice).
+# The turn (§ 4.2): assess, score, choose, act (one verb, te_pa_act), and the yearly exposure rolls.
 # ---------------------------------------------------------------------------
 
 # Company scope, inside te_pa_monthly (scope:te_pa_home saved there).
@@ -153,6 +159,8 @@ te_pa_turn = {
 	set_variable = { name = te_pa_trade value = te_pa_trade_stance_value }
 	te_pa_score_goals = yes
 	te_pa_choose_goal = yes
+	te_pa_act = yes
+	te_pa_expose_rolls = yes
 	te_pa_notices = yes
 	te_pa_debug_turn = yes
 	change_variable = { name = te_pa_turns add = 1 }
@@ -258,7 +266,8 @@ te_pa_read_seat = {
 
 # An AI country's posture toward the firm, derived each turn (§ 12.1): Favored when the executive's interest group
 # is in government or the antitrust law is Dirigiste Policy; Restrained when that group is marginalized, or under
-# Antitrust Enforcement while the firm holds a cartel; Tolerated otherwise. A player's posture is the player's
+# Antitrust Enforcement while the firm holds a cartel the state knows of (a secret one it can't see); Tolerated
+# otherwise. A player's posture is the player's
 # (Task 3's control). A change goes in the ledger (verbs 14-16).
 te_pa_ai_posture = {
 	if = {
@@ -278,7 +287,7 @@ te_pa_ai_posture = {
 					var:te_pa_ig_marginal ?= 1
 					AND = {
 						scope:te_pa_home = { has_law = law_type:law_trust_busting }
-						te_pa_holds_cartel = yes
+						te_pa_holds_known_cartel = yes
 					}
 				}
 			}
@@ -357,14 +366,17 @@ te_pa_notices = {
 }
 
 # ---------------------------------------------------------------------------
-# The quarterly step (§ 4.2): currencies accrue; holdings' growth and decay are later tasks'. Walks the
-# country's companies only, never its states.
+# The quarterly step (§ 4.2): the holdings grow or decay and the cartels' modifiers are refreshed
+# (te_pa_trust_quarter, te_pa_trust_effects.txt), then the currencies accrue. Walks the country's companies only,
+# never its states (a foundation's state modifier is the state pulse's, te_pa_state_monthly).
 # ---------------------------------------------------------------------------
 
 # Country scope (scope:te_pa_home saved by te_pa_monthly).
 te_pa_quarter = {
+	te_pa_cartels_rebuild = yes
 	every_company = {
 		limit = { has_variable = te_pa_init }
+		te_pa_trust_quarter = yes
 		te_pa_accrue = yes
 		te_pa_row_sync = yes
 	}
@@ -426,6 +438,11 @@ te_pa_row_sync = {
 	}
 	# The Funds bar's fill on the tab (Task 3): the claim over its cap, 0 to 1.
 	set_variable = { name = te_pa_funds_fill value = te_pa_funds_fill_value }
+	# The holdings as the state knows them (Task 4, § 4.6: a secret holding shows nowhere under its firm's name, so
+	# its strength reads 0 on the row until it is exposed), and whether the cartel is lawful.
+	set_variable = { name = te_pa_cartel_shown value = te_pa_cartel_shown_value }
+	set_variable = { name = te_pa_reg_shown value = te_pa_reg_shown_value }
+	set_variable = { name = te_pa_cartel_open value = te_pa_cartel_open_value }
 	save_scope_as = te_pa_sync_firm
 	var:te_pa_row ?= {
 		set_variable = { name = te_pa_r_firm value = scope:te_pa_sync_firm }
@@ -476,13 +493,16 @@ te_pa_row_sync = {
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_s_survival TO = te_pa_r_s_survival }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_g_law_enacting TO = te_pa_r_stance_enacting }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_g_law_enacting_law TO = te_pa_r_enacting_law }
-		# Holdings' strengths, 0 until the tasks that build them (Tasks 4 to 9) set their variables.
-		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cartel TO = te_pa_r_cartel }
-		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_reg TO = te_pa_r_reg }
+		# Holdings' strengths, 0 until the tasks that build them (Tasks 4 to 9) set their variables. The cartel's and
+		# the regulator's as the state knows them (0 while secret).
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cartel_shown TO = te_pa_r_cartel }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_cartel_open TO = te_pa_r_cartel_open }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_reg_shown TO = te_pa_r_reg }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_press TO = te_pa_r_press }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_town TO = te_pa_r_town }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_lab TO = te_pa_r_lab }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_found TO = te_pa_r_found }
+		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_found_state TO = te_pa_r_found_state }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_seat TO = te_pa_r_seat }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_exec TO = te_pa_r_exec }
 	}
@@ -632,9 +652,12 @@ te_pa_cmd_set_posture = {
 #   - the rows, a copy for the tab, which hides with the rule; rebuilt when it comes back (te_pa_rows_check);
 #   - the threshold notices' flags, so a firm still past a line when the rule returns is noticed again;
 #   - te_pa_q_in, which marks the country as running the system.
-# The ledger stays (a record of what happened). Modifiers: none yet. Every task that applies one removes it here,
-# country and state alike; test_rule_off_teardown.py holds every te_pa_ static modifier to a removal here.
+# The ledger stays (a record of what happened). Modifiers: the trust's cartels (country) and foundations (state),
+# te_pa_trust_teardown. Every task that applies one removes it here, country and state alike;
+# test_private_actors.py holds every te_pa_ static modifier to a removal here, and test_private_actors_trust.py the
+# generated ones.
 te_pa_teardown = {
+	te_pa_trust_teardown = yes
 	if = {
 		limit = { has_variable_list = te_pa_rows }
 		every_in_list = {
@@ -688,6 +711,8 @@ te_pa_clear_firm = {
 		}
 		remove_variable = te_pa_row
 	}
+	# The trust's holdings (te_pa_trust_effects.txt): the cartel's modifier goes, the foundation outlasts the firm.
+	te_pa_trust_clear = yes
 	if = {
 		limit = { has_variable = te_pa_init }
 		remove_variable = te_pa_init

@@ -245,17 +245,21 @@ infamy, relations and legitimacy. Switch the rule to Simplified.
 ## Private Actors
 
 Setup: a game with Private Actors Enabled, played a year so every firm has taken a turn, with a firm of the player's
-past 40% of its sector or failing (its notice posted). Note a few firms' `te_pa_goal`, `te_pa_funds` and
-`te_pa_turn_in` and the player's `te_pa_ledger`.
+past 40% of its sector or failing (its notice posted), and, played on, a cartel (open or secret) and a foundation
+somewhere (the console can set `te_pa_share` to 0.6 on a Dominance firm before its turn). Note a few firms' `te_pa_goal`,
+`te_pa_funds`, `te_pa_cartel`, `te_pa_found` and `te_pa_turn_in` and the player's `te_pa_ledger`.
 
 1. **Within a month** the country's `te_pa_rows` list and its containers are gone, `te_pa_q_in` is gone, and no firm
-   holds `te_pa_row`, `te_pa_n_failing` or `te_pa_n_big`. No modifier of the system's is on the country or its states
-   (it applies none yet).
-2. **The records stay**: each firm keeps `te_pa_init`, its goal, its currencies and its `te_pa_turn_in`, which no
-   longer counts down. The ledger stays as it was.
+   holds `te_pa_row`, `te_pa_n_failing` or `te_pa_n_big`. No modifier of the system's is on the country or its states:
+   no "<company> Cartel" or "Restricted Supply (author unknown)" on any country, no "<company> Foundation" on any state,
+   and `te_pa_cartels` is gone.
+2. **The records stay**: each firm keeps `te_pa_init`, its goal, its currencies, its holdings (`te_pa_cartel`,
+   `te_pa_reg`, `te_pa_found`) and its `te_pa_turn_in`, which no longer counts down; a foundation's state keeps
+   `te_pa_st_found_str`. The ledger stays as it was.
 3. **Nothing runs**: over the next year no `te_pa_turns` rises and no ledger line is written.
 4. **Switched back on**, within a month the rows are back (one a firm), the turns count down from where they stopped,
-   and a firm still past a threshold posts its notice once more.
+   and a firm still past a threshold posts its notice once more. The foundations' modifiers are back at the next month,
+   the cartels' at the next quarter, at the strengths the records held.
 
 ## Self-checks
 

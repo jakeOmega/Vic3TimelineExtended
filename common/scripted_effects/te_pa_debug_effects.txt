@@ -12,6 +12,9 @@
 #                                    companies keep their records
 #   law_available    (te_pa_monthly) Task 1's open-law reading: law_is_available reads a law's technology
 #   ledger_size      (te_pa_notices) a size saved as a scope value reaches the ledger entry
+#   cartel_rents     (armed at a cartel modifier's first application, te_pa_cartel_quarter; read at the owner's next
+#                    monthly pulse) probe 2: the country's sum of the firm's main building type's throughput, and a
+#                    building of the type at its seat, fall by the cut the cartel's strength asks
 
 # Company scope, inside the turn (scope:te_pa_exec_now its executive, when it has one).
 te_pa_debug_turn = {
@@ -287,6 +290,92 @@ te_pa_debug_revolution_read = {
 # Country scope, each monthly pulse with the rule on.
 te_pa_debug_monthly = {
 	te_pa_debug_law_available = yes
+	te_pa_debug_rents_read = yes
+}
+
+# cartel_rents (probe 2), armed in company scope inside te_pa_cartel_quarter, just before a firm's cartel modifier is
+# applied for the first time (an add isn't seen in the block that makes it, so these reads are the sums without it):
+# the firm, the cut its strength asks (te_pa_sc_rents_want, negative), its owner's sum of its main building type's
+# throughput modifier and a seat building's (te_pa_gen_cartel_tp_country / _seat). Degenerate inputs left out: a
+# cut under te_pa_sc_rents_min (strength under 5).
+te_pa_debug_rents_arm = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_rents_done }
+			NOT = { has_global_variable = te_pa_sc_rents_armed }
+			NOT = { has_variable = te_pa_cartel_applied }
+			te_pa_sc_rents_want_value <= te_pa_sc_rents_min
+		}
+		set_global_variable = { name = te_pa_sc_rents_armed value = 1 }
+		set_global_variable = { name = te_pa_sc_rents_firm value = this }
+		set_global_variable = { name = te_pa_sc_rents_want value = te_pa_sc_rents_want_value }
+		set_global_variable = { name = te_pa_sc_rents_c0 value = te_pa_gen_cartel_tp_country }
+		set_global_variable = { name = te_pa_sc_rents_s0 value = te_pa_gen_cartel_tp_seat }
+		set_global_variable = { name = te_pa_sc_rents_has value = te_pa_gen_cartel_seat_has }
+		set_global_variable = { name = te_pa_sc_rents_month value = te_history_month_index }
+	}
+}
+
+# Country scope, the armed firm's owner, at a monthly pulse a month or two after arming (before its next quarter
+# re-applies the modifier). OK: the country's sum fell by the cut (to te_pa_sc_rents_tolerance), and so did the seat
+# building's where the seat has one (seat_has=1). BROKEN, country off: the multiplier didn't resolve
+# (var:te_pa_cm_<type> read against the wrong ROOT) or the type isn't registered; country right and seat off: a
+# country modifier's building_<type>_throughput_add doesn't reach the buildings. Fallback (the spec's): a
+# restricted production method switched in on the firm's buildings by activate_production_method, one per building
+# type, in place of the throughput line. A firm gone before the read disarms the check for the next one.
+te_pa_debug_rents_read = {
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_rents_armed
+			NOT = { has_global_variable = te_pa_sc_rents_done }
+		}
+		if = {
+			limit = {
+				NOT = { global_var:te_pa_sc_rents_firm ?= { has_variable = te_pa_cartel_applied } }
+			}
+			te_pa_debug_rents_disarm = yes
+		}
+		else_if = {
+			limit = {
+				global_var:te_pa_sc_rents_firm = { owner = root }
+				te_pa_sc_rents_age >= 1
+			}
+			global_var:te_pa_sc_rents_firm = {
+				set_global_variable = { name = te_pa_sc_rents_c1 value = te_pa_gen_cartel_tp_country }
+				set_global_variable = { name = te_pa_sc_rents_s1 value = te_pa_gen_cartel_tp_seat }
+			}
+			set_global_variable = { name = te_pa_sc_rents_done value = 1 }
+			if = {
+				limit = {
+					te_pa_sc_rents_country_gap < te_pa_sc_rents_tolerance
+					trigger_if = {
+						limit = { global_var:te_pa_sc_rents_has >= 1 }
+						te_pa_sc_rents_seat_gap < te_pa_sc_rents_tolerance
+					}
+				}
+				debug_log = "TE_SELF_CHECK OK cartel_rents want=[GetGlobalVariable('te_pa_sc_rents_want').GetValue|3] country=[GetGlobalVariable('te_pa_sc_rents_c0').GetValue|3]>[GetGlobalVariable('te_pa_sc_rents_c1').GetValue|3] seat_has=[GetGlobalVariable('te_pa_sc_rents_has').GetValue|0] seat=[GetGlobalVariable('te_pa_sc_rents_s0').GetValue|3]>[GetGlobalVariable('te_pa_sc_rents_s1').GetValue|3] country=[THIS.GetCountry.GetTagName] (a cartel's country modifier cuts its building types' throughput by its strength's share) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			else = {
+				debug_log = "TE_SELF_CHECK BROKEN cartel_rents want=[GetGlobalVariable('te_pa_sc_rents_want').GetValue|3] country=[GetGlobalVariable('te_pa_sc_rents_c0').GetValue|3]>[GetGlobalVariable('te_pa_sc_rents_c1').GetValue|3] seat_has=[GetGlobalVariable('te_pa_sc_rents_has').GetValue|0] seat=[GetGlobalVariable('te_pa_sc_rents_s0').GetValue|3]>[GetGlobalVariable('te_pa_sc_rents_s1').GetValue|3] country=[THIS.GetCountry.GetTagName] (country off by the want: the multiplier var:te_pa_cm_<type> did not resolve, or another cartel of the type moved the sum; seat off only: the country line does not reach the buildings. Fallback: a restricted production method switched in on the firm's buildings) date=[TimeKeeper.GetCurrentDate.GetString]"
+			}
+			te_pa_debug_rents_disarm = yes
+		}
+	}
+}
+
+te_pa_debug_rents_disarm = {
+	remove_global_variable = te_pa_sc_rents_armed
+	remove_global_variable = te_pa_sc_rents_firm
+	remove_global_variable = te_pa_sc_rents_want
+	remove_global_variable = te_pa_sc_rents_c0
+	remove_global_variable = te_pa_sc_rents_s0
+	remove_global_variable = te_pa_sc_rents_has
+	remove_global_variable = te_pa_sc_rents_month
+	if = {
+		limit = { has_global_variable = te_pa_sc_rents_c1 }
+		remove_global_variable = te_pa_sc_rents_c1
+		remove_global_variable = te_pa_sc_rents_s1
+	}
 }
 
 # law_available (Task 1's te_pa_gen_law_selfcheck), in the first country with a covered law it could move to.
