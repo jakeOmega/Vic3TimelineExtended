@@ -26,7 +26,7 @@
 # two or three enactments on it.
 TE_AI_LITERACY_LAW_WEIGHT = 500
 
-# Public Schools and Compulsory Primary School (te_ai_literacy_law_injections.txt).
+# Public Schools and Compulsory Primary School (ai_literacy_law_injections.txt).
 te_ai_literacy_law_weight = {
 	value = 0
 	if = {

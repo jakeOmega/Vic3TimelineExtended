@@ -11,6 +11,8 @@ te_alw_chk_hits_g = { value = global_var:te_alw_hits }
 te_alw_chk_ps_g = { value = global_var:te_alw_hits_ps }
 te_alw_chk_cps_g = { value = global_var:te_alw_hits_cps }
 te_alw_chk_rcl_g = { value = global_var:te_alw_hits_rcl }
+te_alw_chk_pro_starts_g = { value = global_var:te_alw_pro_starts }
+te_alw_chk_pro_hits_g = { value = global_var:te_alw_pro_hits }
 te_alw_chk_ctrl_starts_g = { value = global_var:te_alw_ctrl_starts }
 te_alw_chk_ctrl_hits_g = { value = global_var:te_alw_ctrl_hits }
 

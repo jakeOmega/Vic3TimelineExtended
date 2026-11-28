@@ -1,6 +1,6 @@
 """AI law weights (#1877 traps 3 and 4): the laws that raise literacy at the innovation cap, the mod's groups halved.
 
-- Trap 3. common/laws/te_ai_literacy_law_injections.txt restates vanilla's whole ai_enact_weight_modifier on Public
+- Trap 3. common/laws/ai_literacy_law_injections.txt restates vanilla's whole ai_enact_weight_modifier on Public
   Schools, Compulsory Primary School and Restricted Child Labor and adds the mod's weight on one top-level `add`, a
   key vanilla's field lacks there, so the field reads vanilla's terms plus the add whether the engine replaces it,
   merges in new keys or appends steps. The weight is vanilla's own No Schools figure, 500, while research sits at
@@ -25,7 +25,7 @@ from paradox_file_parser import ParadoxFileParser
 ROOT = Path(__file__).resolve().parent
 LAW_FILES = sorted((ROOT / "common/laws").glob("*.txt"))
 LAW_GROUP_FILES = sorted((ROOT / "common/law_groups").glob("*.txt"))
-INJECTIONS = ROOT / "common/laws/te_ai_literacy_law_injections.txt"
+INJECTIONS = ROOT / "common/laws/ai_literacy_law_injections.txt"
 TRIGGERS = ROOT / "common/scripted_triggers/te_ai_law_weight_triggers.txt"
 VALUES = ROOT / "common/script_values/te_ai_law_weight_values.txt"
 BUILD_PASS_VALUES = ROOT / "common/script_values/te_ai_build_pass_values.txt"
@@ -96,7 +96,7 @@ def vanilla_decoded():
 
 
 def injected():
-    """{law: the INJECT's normalized block} of te_ai_literacy_law_injections.txt."""
+    """{law: the INJECT's normalized block} of ai_literacy_law_injections.txt."""
     parser = ParadoxFileParser()
     parser.parse_file(str(INJECTIONS), apply_directives=False)
     return {name.split(":", 1)[1]: value[1] for name, value in parser.data.items()}
@@ -251,6 +251,11 @@ class LiteracyLawWeights(unittest.TestCase):
                     self.assertIsNone(field(block, "ai_enact_weight_modifier"))
                     self.assertFalse(name.startswith("REPLACE"), "a REPLACE would drop the INJECT")
 
+    def test_sorts_before_the_other_ai_mods_file(self):
+        # Kuromi's AI (Workshop) INJECTs Public Schools' field from kai_education_system.txt; the later INJECT
+        # replaces the field, so its weight stands with both mods loaded (ai.md).
+        self.assertLess(INJECTIONS.name, "kai_education_system.txt")
+
     def test_the_weight_is_vanillas_no_schools_figure(self):
         branches = vanilla_decoded()["law_public_schools"][1]["ai_enact_weight_modifier"][1]["if"]
         no_schools = [b[1] for b in branches if "law_type:law_no_schools" in repr(b[1]["limit"])]
@@ -380,7 +385,13 @@ class LiteracyLawSelfCheck(unittest.TestCase):
                 # log_triage.py shows a line's first 400 characters: the figures and the reading fit
                 shown = re.sub(r"\[[^\]]*\]", "0000", line)[:400]
                 self.assertIn("date=0000 (", shown)
+                # the agendas that want Public Schools, apart: BROKEN's two causes read from them
+                self.assertIn("pro=[SCOPE.ScriptValue('te_alw_chk_pro_hits_g')|0]/"
+                              "[SCOPE.ScriptValue('te_alw_chk_pro_starts_g')|0]", line)
         self.assertIn("not grounds for the REPLACE alone", lines[2][0])
+        self.assertEqual(norm(block_text(self.triggers, "te_alw_progressive_agenda")),
+                         "OR = { has_strategy = ai_strategy_progressive_agenda "
+                         "has_strategy = ai_strategy_egalitarian_agenda }")
 
     def test_every_value_the_lines_read_is_defined(self):
         used = set(re.findall(r"te_alw_chk_\w+", self.effect))

@@ -19,6 +19,12 @@
 #
 # test_ai_law_weights.py holds each restated block to vanilla_parsed/ and fails if another mod file sets the
 # field on these laws (a later INJECT would replace this one).
+#
+# The file name sorts before kai_education_system.txt, the Workshop AI mod that a player runs alongside: it INJECTs
+# its own Public Schools ai_enact_weight_modifier (vanilla's, plus -1000 while the country has no schools
+# institution and can't afford one). INJECTs apply in file order and the later one replaces the field, so with
+# both mods loaded that mod's Public Schools weight stands as it sized it, and this file's weight is on the other
+# two laws only, as the AI law cadence leaves that mod's agendas (ai.md § Law-Change Cadence).
 
 INJECT:law_public_schools = {
 	ai_enact_weight_modifier = { #Petitions

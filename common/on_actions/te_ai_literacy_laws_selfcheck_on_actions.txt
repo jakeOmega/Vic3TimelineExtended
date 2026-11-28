@@ -1,7 +1,7 @@
 ﻿# TEMPORARY self-check (2026-11-28, #1877 trap 3): does the INJECTed ai_enact_weight_modifier on three vanilla laws
 # take?
 #
-# te_ai_literacy_law_injections.txt restates vanilla's ai_enact_weight_modifier on Public Schools, Compulsory Primary
+# ai_literacy_law_injections.txt restates vanilla's ai_enact_weight_modifier on Public Schools, Compulsory Primary
 # School and Restricted Child Labor and adds 500 (te_ai_literacy_law_weight, te_ai_end_child_labor_weight) while an
 # AI country's research sits at its innovation cap. No read has shown what the engine does with an INJECTed
 # ai_enact_weight_modifier, and no script reads an enact weight, so this reads the outcome: of the law starts AI
@@ -30,14 +30,14 @@
 #   OK          a fifth or more of the cohort's starts went to the three laws, and (with 20 control starts) twice the
 #               control's share or more: the INJECT reaches the vanilla laws' ai_enact_weight_modifier.
 #   BROKEN      under a tenth. Two causes fit: (a) the INJECT is ignored; (b) the governments at the cap can't pass
-#               the three (each agenda's min_law_chance_to_pass drops a law before any weight counts). A hit share
-#               near the control's says (a) more than (b), which would leave the progressive and egalitarian
-#               agendas, whose favoured groups want Public Schools, still taking it: the play-test list says how to
-#               tell them apart before the REPLACE.
+#               the three (each agenda's min_law_chance_to_pass drops a law before any weight counts). `pro` tells
+#               them apart: the cohort's starts under the progressive and egalitarian agendas, whose favoured groups
+#               want Public Schools, so the floor seldom stops it there. Few hits there too says (a); many says (b).
+#               The play-test list says what each leads to; not the REPLACE on BROKEN alone.
 #   NO_VERDICT  a tenth to a fifth, or a fifth or more short of twice the control.
 # No line: the cohort has not made 40 starts. It needs AI countries with universities enough to reach the cap and
-# one of the three open to them, so not before the middle of the 19th century; none at all by 1900 says the cap
-# read fails (te_ai_build_pass_innovation_cap reads 0), which the AI construction pass relies on too.
+# one of the three open to them; none at all by 1930 says the cap read fails (te_ai_build_pass_innovation_cap reads
+# 0, which the AI construction pass relies on too) or too few AI countries reach the cap.
 # TE_INFO ai_mod_law_groups (no verdict): every AI law start since this build first ran, by whether the country held
 # No Workers' Rights, Child Labor Allowed or No Health System (unreformed), and the share of each that went to the
 # mod's own law groups, which weigh half for the unreformed (te_ai_mod_law_group_factor and _offset).
@@ -62,6 +62,8 @@ te_alw_selfcheck_law_started = {
 			set_global_variable = { name = te_alw_hits_ps value = 0 }
 			set_global_variable = { name = te_alw_hits_cps value = 0 }
 			set_global_variable = { name = te_alw_hits_rcl value = 0 }
+			set_global_variable = { name = te_alw_pro_starts value = 0 }
+			set_global_variable = { name = te_alw_pro_hits value = 0 }
 			set_global_variable = { name = te_alw_ctrl_starts value = 0 }
 			set_global_variable = { name = te_alw_ctrl_hits value = 0 }
 			set_global_variable = { name = te_alw_bk_all value = 0 }
@@ -107,6 +109,16 @@ te_alw_selfcheck_law_started = {
 				limit = { te_alw_started_end_child_labor = yes }
 				change_global_variable = { name = te_alw_hits_rcl add = 1 }
 			}
+			# The agendas whose favoured groups want Public Schools: their governments seldom fail the pass-chance
+			# floor on it, so a low share here says the INJECT is ignored rather than the floor.
+			if = {
+				limit = { te_alw_progressive_agenda = yes }
+				change_global_variable = { name = te_alw_pro_starts add = 1 }
+				if = {
+					limit = { te_alw_started_a_target = yes }
+					change_global_variable = { name = te_alw_pro_hits add = 1 }
+				}
+			}
 		}
 		else_if = {
 			limit = { te_alw_control = yes }
@@ -130,14 +142,14 @@ te_alw_selfcheck_law_started = {
 						te_alw_chk_share >= te_alw_chk_ctrl_share_twice
 					}
 				}
-				debug_log = "TE_SELF_CHECK OK ai_literacy_laws hits=[SCOPE.ScriptValue('te_alw_chk_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_share')|2] ps=[SCOPE.ScriptValue('te_alw_chk_ps_g')|0] cps=[SCOPE.ScriptValue('te_alw_chk_cps_g')|0] rcl=[SCOPE.ScriptValue('te_alw_chk_rcl_g')|0] ctrl=[SCOPE.ScriptValue('te_alw_chk_ctrl_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_ctrl_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_ctrl_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (AI countries at the innovation cap start Public Schools, Compulsory Primary School or Restricted Child Labor far above the 2% of 1925-1947: the INJECTed ai_enact_weight_modifier is in force)"
+				debug_log = "TE_SELF_CHECK OK ai_literacy_laws hits=[SCOPE.ScriptValue('te_alw_chk_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_share')|2] ps=[SCOPE.ScriptValue('te_alw_chk_ps_g')|0] cps=[SCOPE.ScriptValue('te_alw_chk_cps_g')|0] rcl=[SCOPE.ScriptValue('te_alw_chk_rcl_g')|0] pro=[SCOPE.ScriptValue('te_alw_chk_pro_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_pro_starts_g')|0] ctrl=[SCOPE.ScriptValue('te_alw_chk_ctrl_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_ctrl_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_ctrl_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (AI countries at the innovation cap start Public Schools, Compulsory Primary School or Restricted Child Labor far above the 2% of 1925-1947: the INJECTed ai_enact_weight_modifier is in force)"
 			}
 			else_if = {
 				limit = { te_alw_chk_share < 0.10 }
-				debug_log = "TE_SELF_CHECK BROKEN ai_literacy_laws hits=[SCOPE.ScriptValue('te_alw_chk_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_share')|2] ps=[SCOPE.ScriptValue('te_alw_chk_ps_g')|0] cps=[SCOPE.ScriptValue('te_alw_chk_cps_g')|0] rcl=[SCOPE.ScriptValue('te_alw_chk_rcl_g')|0] ctrl=[SCOPE.ScriptValue('te_alw_chk_ctrl_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_ctrl_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_ctrl_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (under a tenth: the INJECT is ignored, or the governments at the cap can't pass the three laws; not grounds for the REPLACE alone: docs/testing/ai-economy-playtest.md)"
+				debug_log = "TE_SELF_CHECK BROKEN ai_literacy_laws hits=[SCOPE.ScriptValue('te_alw_chk_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_share')|2] ps=[SCOPE.ScriptValue('te_alw_chk_ps_g')|0] cps=[SCOPE.ScriptValue('te_alw_chk_cps_g')|0] rcl=[SCOPE.ScriptValue('te_alw_chk_rcl_g')|0] pro=[SCOPE.ScriptValue('te_alw_chk_pro_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_pro_starts_g')|0] ctrl=[SCOPE.ScriptValue('te_alw_chk_ctrl_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_ctrl_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_ctrl_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (under a tenth: the INJECT is ignored, or the governments at the cap can't pass the three laws; not grounds for the REPLACE alone: docs/testing/ai-economy-playtest.md)"
 			}
 			else = {
-				debug_log = "TE_SELF_CHECK NO_VERDICT ai_literacy_laws hits=[SCOPE.ScriptValue('te_alw_chk_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_share')|2] ps=[SCOPE.ScriptValue('te_alw_chk_ps_g')|0] cps=[SCOPE.ScriptValue('te_alw_chk_cps_g')|0] rcl=[SCOPE.ScriptValue('te_alw_chk_rcl_g')|0] ctrl=[SCOPE.ScriptValue('te_alw_chk_ctrl_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_ctrl_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_ctrl_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (a tenth to a fifth, or short of twice the control: read the probe's law starts as docs/testing/ai-economy-playtest.md says)"
+				debug_log = "TE_SELF_CHECK NO_VERDICT ai_literacy_laws hits=[SCOPE.ScriptValue('te_alw_chk_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_share')|2] ps=[SCOPE.ScriptValue('te_alw_chk_ps_g')|0] cps=[SCOPE.ScriptValue('te_alw_chk_cps_g')|0] rcl=[SCOPE.ScriptValue('te_alw_chk_rcl_g')|0] pro=[SCOPE.ScriptValue('te_alw_chk_pro_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_pro_starts_g')|0] ctrl=[SCOPE.ScriptValue('te_alw_chk_ctrl_hits_g')|0]/[SCOPE.ScriptValue('te_alw_chk_ctrl_starts_g')|0]=[SCOPE.ScriptValue('te_alw_chk_ctrl_share')|2] date=[TimeKeeper.GetCurrentDate.GetString] (a tenth to a fifth, or short of twice the control: read the probe's law starts as docs/testing/ai-economy-playtest.md says)"
 			}
 			debug_log = "TE_INFO ai_mod_law_groups unreformed=[SCOPE.ScriptValue('te_alw_chk_bk_mod_g')|0]/[SCOPE.ScriptValue('te_alw_chk_bk_all_g')|0]=[SCOPE.ScriptValue('te_alw_chk_bk_share')|2] reformed=[SCOPE.ScriptValue('te_alw_chk_rf_mod_g')|0]/[SCOPE.ScriptValue('te_alw_chk_rf_all_g')|0]=[SCOPE.ScriptValue('te_alw_chk_rf_share')|2] (AI law starts in the mod's own law groups, by whether the country held No Workers' Rights, Child Labor Allowed or No Health System, under which those groups weigh half; 92 of 193 of the 20 largest economies' starts in 1925-1947)"
 		}

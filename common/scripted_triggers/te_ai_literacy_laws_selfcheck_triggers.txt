@@ -63,6 +63,16 @@ te_alw_control = {
 	te_alw_a_target_open = yes
 }
 
+# Country scope. A political agenda whose favoured interest groups' ideologies want Public Schools (+100 each in an
+# offline count; under the other agendas -25 to -50): progressive (the Intelligentsia) and egalitarian (the Trade
+# Unions).
+te_alw_progressive_agenda = {
+	OR = {
+		has_strategy = ai_strategy_progressive_agenda
+		has_strategy = ai_strategy_egalitarian_agenda
+	}
+}
+
 # Country scope, at on_law_enactment_started. The law just started is one of the three, under the condition its
 # weight asks for (Restricted Child Labor only from Child Labor Allowed).
 te_alw_started_public_schools = {
