@@ -2369,7 +2369,15 @@ algorithmic_mandate_value = {
 
 # Clamped shift value. Applied after convergence calculation.
 # Floor (min) defaults to 0, raised by country_sol_expectations_shift_min_add.
-# Ceiling (max) defaults to 50, lowered by country_sol_expectations_shift_max_add.
+# Ceiling (max) defaults to 200, lowered by country_sol_expectations_shift_max_add.
+# 200 is the mod's top wealth level (NPops NUM_WEALTH_LEVELS, extra_defines.txt),
+# so expectations follow SoL across the wealth range. At 50 they stopped
+# following it above about 55-60 SoL, which an era 12-13 country passes (#2147):
+# the gap then stayed positive for good. A rich, literate country can need a
+# shift above its own SoL, because the global awareness term below is negative
+# for it: at full literacy the shift it needs is about 1.2 x its SoL - 0.2 x
+# the world's - 5, so a ceiling of 200 binds only from about SoL 180.
+# test_sol_expectations_ceiling.py pins the ceiling to the define.
 sol_expectations_shift_clamped_value = {
 	value = var:sol_expectations_shift
 	min = {
@@ -2377,7 +2385,7 @@ sol_expectations_shift_clamped_value = {
 		add = modifier:country_sol_expectations_shift_min_add
 	}
 	max = {
-		value = 50
+		value = 200
 		add = modifier:country_sol_expectations_shift_max_add
 	}
 }

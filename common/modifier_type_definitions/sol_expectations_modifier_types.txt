@@ -44,7 +44,8 @@ country_sol_expectations_shift_min_add = {
 }
 
 # Ceiling on the adaptive shift. Negative values lower the ceiling (expectations can't rise as far).
-# Default ceiling: 50. E.g. command_economy adds -5 → ceiling becomes 45.
+# Default ceiling: 200 (sol_expectations_shift_clamped_value). Event modifiers
+# lower it by 0.25 to 1 each (event_modifiers.txt, extra_modifiers.txt).
 country_sol_expectations_shift_max_add = {
 	color = bad
 	decimals = 1
