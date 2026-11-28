@@ -14,7 +14,8 @@ built out: eight goals where there were five, seven kinds of holding where
 there were three, and four chains at home beside the one abroad. The owner
 approved the five additions: politics at home (§ 8), the workforce (§ 9),
 technology (§ 10), relief (§ 11) and the foundation (§ 5.5). § 2 has what
-that changes in the scope.
+that changes in the scope. The owner then ruled on the ten open decisions;
+§ 18 records each ruling and where it is written into the design.
 
 Background: `docs/vanilla/vanilla_politics_reference.md`
 §§ 3 to 6, 8 and 9, `docs/vanilla/vanilla_diplomacy_reference.md` § 9,
@@ -93,7 +94,9 @@ of the first kind of actor, the **firm**.
   organizations and industry associations are designed only as far as the
   chassis must allow for them (§ 15).
 - Replacing vanilla's company slots, or founding and dissolving companies from
-  script.
+  script. The mod's existing rule that has an AI country drop a company
+  after five failing years (`docs/systems/mod_systems/ai.md`, "Failing
+  companies") stays as it is, and § 11 reads its counter.
 - Banks' lending verbs, capital flight, takeovers of one firm by another, and
   a firm moving its seat to another country.
 - A firm switching production methods in its buildings. The player sets
@@ -286,7 +289,7 @@ and act before any conflict, but is never required to.
 |---|---|---|---|
 | **Routine** | Open or grow a concession, undercut a rival's concession, endow a foundation, fund a campaign, stall or speed a law, pay a regulator, fund research, raise or break its workers | Ledger lines, yearly roll-ups, the map | None |
 | **Threshold** | "Controls 40% of its sector", "its stake in Persia has passed £X", "is now strong enough to defy the state", "has put more into this election than any party's own backers", "is failing" | A notification, once per crossing | None; the cue to act early |
-| **Major** | A petition to the state (for protection abroad, for a law, for relief), a bid for a monopoly charter, defiance of an order, turning to another protector | A declared move with a six-month countdown, a top-bar alert, an event at the end | An answer, or the posture's default |
+| **Major** | A petition to the state (for protection abroad, for a law, for relief), a bid for a monopoly charter, defiance of an order, turning to another protector | A declared move with a six-month countdown (**owner**: one length for every move, so the alert means the same thing each time), a top-bar alert, an event at the end | An answer, or the posture's default |
 
 - Major moves come from grievance or opportunity, never from a timer, so a
   well-run country sees few. A cap sits underneath as a safety net: one
@@ -362,7 +365,7 @@ with its reason.
 | **Dominance** | Its share of the sector; a rival country's firm in the same region | A cartel, a monopoly charter, out-building the rival's concession |
 | **Labor peace** | Radicals and turmoil at its seat; a labor law being enacted; vanilla's Strike entry (`je_strike`) active | Welfare, strikebreaking, a company town (§ 9) |
 | **A technical lead** | A technology its sector uses that the home country lacks and can research, more if a rival firm's country has it | Research, a laboratory, espionage (§ 10) |
-| **Survival** | Low and falling prosperity; the Banking Cycle in downturn or panic; a law removing its buildings | Retrenchment, a petition for relief (§ 11) |
+| **Survival** | Low and falling prosperity, and the months the mod's failing-company rule has counted against it; the Banking Cycle in downturn or panic; a law removing its buildings or ending private ownership | Retrenchment, a petition for relief (§ 11) |
 
 A friendly law covers seeking a law as well as blocking one.
 
@@ -643,11 +646,21 @@ and any Favored status add weight. **Owner**'s three answers:
 
 | Answer | The state | Then |
 |---|---|---|
-| **Back** | Commits. The state adds Involvement of its own in the region, a large step at once. Against a country: a guarantee (Trouble −30, relations with the host −20) and a pledge for ten years. If the concession is lost while pledged, the state either acts within two years (a play for investment rights, an open market or a protectorate, at reduced infamy) or loses prestige and every firm's trust. Against a decentralized nation: it starts or speeds a colony there | The firm's Connections rise; it will ask again |
+| **Back** | Commits. The state adds Involvement of its own in the region, a large step at once. Against a country: a guarantee (Trouble −30, relations with the host −20) and a pledge for ten years. If the concession is lost while pledged, the state either acts within two years (a play for investment rights, an open market or a protectorate, at reduced infamy) or loses prestige and every firm's trust. Against a decentralized nation: it starts a colony there outright (**owner**), or speeds one the country is already growing | The firm's Connections rise; it will ask again |
 | **Stand aside** | Commits nothing and forbids nothing. Letting the countdown run out is this answer | The firm carries on at its own risk: bribes, force or abandonment by its funds and temperament. The state may inherit the result: an incident in its name, or a foothold it never chose |
 | **Forbid** | Orders it out: the concession closes, the Involvement it built is taken back, relations with the host improve | Connections −30, Grievance +1, its backers' approval falls, and the firm picks a response from § 7.5 |
 
 Only Forbid is a ruling against the firm, so only Forbid opens the ladder.
+
+**Back on the frontier starts the colony** (**owner**). The state does not
+have to open the colonization lens and pick the state itself: backing the
+firm is the decision to colonize. Two things follow. A Favored firm's
+default answer is Back, so a countdown left to run out plants a colony; the
+alert and the event say so in those words. And an AI state that answers
+Back colonizes where its firm is, which is the scramble this chain is meant
+to produce. Whether script can start a colony in a named state region, and
+whether one started that way grows in a country whose law has no colonial
+affairs, is probe 5; the fallback is the growth modifier.
 
 ### 7.5 After Forbid: the ladder
 
@@ -669,7 +682,7 @@ The firm's **Boldness** is scored 0–100:
 |---|---|---|---|
 | 1. Comply | any | The concession closes | Routine |
 | 2. Stay quietly | 30 | The concession stays at half strength, in secret. Exposed, it embarrasses the home country with the host | Routine, secret |
-| 3. Defy openly | 55 | The concession stays. The state must enforce (a suit to dissolve the firm's holdings) or carry a lasting loss of authority, and every other firm's Boldness rises | Major |
+| 3. Defy openly | 55 | The concession stays. The state must enforce (a suit to dissolve the firm's holdings) or carry a loss of authority, as a modifier that lasts exactly as long as the defiant concession stands (**owner**), and every other firm's Boldness rises | Major |
 | 4. Seek a protector | 75 | The firm asks another power to take the concession under its flag | Major |
 
 A firm takes the highest rung its Boldness allows, with a strong weight
@@ -741,6 +754,7 @@ which firms the law **burdens** and which it **favors**, and how much (1 or
 | Automation Policy | Firms whose building types have automated methods, under the Robot Tax and Human Labor Quotas | The same firms under Unrestricted Automation |
 | Intellectual Property | § 10.3 | § 10.3 |
 | Financial Regulation | Financial firms under the stricter laws | Financial firms under the looser |
+| Economic System (**owner**) | Every private firm at weight 2 under Command Economy and Cooperative Ownership, which end private ownership; manufacturers under Industry Banned, Extraction Economy, Agrarianism and Traditionalism | Every private firm under Laissez-Faire; farms and plantations under Agrarianism; mines and wells under Extraction Economy; firms in the sectors it subsidizes under Interventionism |
 | Electoral Finance | Every firm, in proportion to what it has spent on campaigns, under Donation Limits and Publicly Funded Elections | Every such firm under Unregulated Donations |
 
 - Tariffs are derived from the market, never hand-written: a firm wants a
@@ -748,9 +762,16 @@ which firms the law **burdens** and which it **favors**, and how much (1 or
   buys.
 - A test holds the table: every law in a covered group has a row or a
   written reason to have none, so a new law can't slip past it.
-- Groups left out here (taxation, the economic system, welfare) are added
-  when a build shows firms have nothing to say about a law they obviously
-  would.
+- **The economic system is the one law every firm has a stake in**, so its
+  enactment is where firms line up most plainly: nearly all of them against
+  Command Economy or Cooperative Ownership, industry against agriculture
+  over Agrarianism. Once one of those two is in force a firm scores only A
+  friendly law (its repeal) and Survival, holds no cartel (§ 6.2), and its
+  funds stop accruing, since the private investment it draws on is gone.
+  That last point is a first reading; check what the investment pool does
+  under each law before building.
+- Groups left out here (taxation, welfare) are added when a build shows
+  firms have nothing to say about a law they obviously would.
 
 ### 8.2 Sides
 
@@ -862,8 +883,8 @@ and Venezuela.
 A firm with a concession whose Trouble comes from the host's government (a
 law or a ruling group hostile to foreign property) gives campaign money or
 patronage to the side in the host least hostile to it. It is § 8.3's verb
-aimed at another country's parties and interest groups, with these
-differences:
+aimed at another country's parties and interest groups (**owner**: kept in
+the first version), with these differences:
 
 - It is always secret.
 - The host's counterintelligence exposes it, as it does bribes (§ 7.3).
@@ -1017,8 +1038,10 @@ so the per-technology rules are generated, as covert tech theft's are
 - **Research** (routine). Funds into progress on one of its technologies
   (`add_technology_progress`): the earliest it can research, or the
   country's current research when that is on its list or the firm is
-  Favored. One firm adds at most 5% of the technology's cost a year, so one
-  firm is a nudge and a country full of them is a second research budget.
+  Favored. So a firm may push a technology the country did not choose
+  (**owner**: allowed; it is the plainest sign of a firm with a will). One
+  firm adds at most 5% of the technology's cost a year, so one firm is a
+  nudge and a country full of them is a second research budget.
 - **A laboratory** (holding, at the seat). A founding cost and upkeep;
   strength grows 5 a year, 8 with a Ministry of Science. At strength 100 the
   firm's research counts double, and its building types' throughput in the
@@ -1092,21 +1115,50 @@ Favored), declares a major move. It asks for the form that fits:
 
 - a **tariff** on its output, where the market imports it and the home
   country owns the market;
-- a **subsidy** otherwise (`set_subsidized`, which the mod's company AI
-  already sets building by building). Script can't tell which buildings a
-  company owns, so the subsidy covers the firm's building types in the
-  country, every owner's: an industry is rescued, and the firm with it;
-- a **grant** from the treasury, in a Banking Cycle panic.
+- a **relief line** otherwise: money from the treasury, paid to the firm at
+  its seat for five years.
+
+**The relief line** (**owner**: not vanilla's subsidies; the money goes from
+the treasury to the company. The shape below is the designer's proposal for
+that, and the owner has not ruled on it).
+
+- **The cost** is a weekly expense in the budget for five years, sized to
+  the firm: a share of GDP equal to a fifth of the firm's share of the
+  country's building levels, at most 0.5% of GDP a year. It is the mod's
+  usual treasury cost (a `country_expenses_add = 1` modifier with a
+  GDP-scaled multiplier, joined to the Budget breakdown), with the firm
+  named on the line.
+- **The money reaches the firm**, in three ways:
+  1. Its funds are credited with what the treasury pays, and the investment
+     pool with the same sum so that the claim is real (§ 4.3). Retrenchment
+     stops at once, because the firm can pay its upkeep again.
+  2. At its seat (its headquarters state, § 4.5), the throughput of its
+     building types rises 10% while the line runs: the works stay open and
+     staffed. Script can't raise a company's prosperity directly, so this is
+     how the money shows in the company's own figures. It reaches other
+     owners' buildings of those types in that one state, which is far
+     narrower than a subsidy across the country (§ 16, probe 12).
+  3. The mod's failing-company count for the firm is reset, and an AI
+     country does not drop the company while the line runs.
+- **In a Banking Cycle panic** the first two years are paid at once.
+- **No toggle worth flipping.** The line runs its five years. The state may
+  end it early, and that is Let it fail at half strength. If the firm's
+  goal stops being Survival before the term is out, the cost stops and the
+  rest is never owed.
 
 | Answer | The state | Then |
 |---|---|---|
-| **Rescue** | Grants it: the tariff or the subsidy kept for five years, or a grant of two years of the firm's accrual | Connections +10 and one Grievance cleared. **Every firm's Boldness rises by 5 for ten years**: the state has shown it pays. A second rescue of the same firm adds again. The state may name one term, that the firm give up its cartel or its captured regulator; a firm with Boldness 55 turns the terms down, and that is Stand aside |
+| **Rescue** | Grants it: the tariff kept for five years, or the relief line | Connections +10 and one Grievance cleared. **Every firm's Boldness rises by 5 for ten years**: the state has shown it pays. A second rescue of the same firm adds again. The state may name one term, that the firm give up its cartel or its captured regulator; a firm with Boldness 55 turns the terms down, and that is Stand aside |
 | **Stand aside** | Nothing | Retrenchment goes on |
 | **Let it fail** | Refuses in public | The firm's holdings halve at once, radicals rise at its seat as it lays off, Grievance +1, and it may not ask again for ten years. **Every firm's Boldness falls by 5 for ten years** |
 
-The company itself is never removed: founding and dissolving companies from
-script is a non-goal (§ 2). A failed firm is a firm with nothing left but
-its buildings.
+**What failing means in the end.** This system never removes a company
+(§ 2). The mod already has an AI country drop a company that has failed its
+monthly test for five years, and a player may dissolve one in the companies
+panel. Relief sits in front of that: the petition comes at about the second
+year of failing, a Rescue resets the count, and after Stand aside or Let it
+fail the count runs on. When a company goes, by either route, its holdings
+go with it and the ledger records the end of the firm.
 
 ### 11.3 In a slump
 
@@ -1120,13 +1172,17 @@ phase and writes nothing to it.
 
 ### 11.4 Ties to other systems
 
-- **Banking Cycle**: the phase weights Survival (§ 5.4) and opens the grant.
+- **Banking Cycle**: the phase weights Survival (§ 5.4), and a panic brings
+  the first two years of a relief line forward.
 - **Resource Transition**: Managed Fossil Phaseout removes coal and oil
   buildings whoever owns them, and its compensation reaches no owner. The
   firms that lose them score Survival and petition, so a Rescue is how the
   owners get paid, if the state chooses.
-- **Subsidies and the Tax Code**: a rescue uses the engine's own subsidy and
-  tariff.
+- **The budget and the Tax Code**: a rescue is a line in the Budget
+  breakdown or a tariff set the way the customs sync sets one. The mod's
+  own subsidies for AI companies' flagship buildings are untouched.
+- **Failing companies** (`ai.md`): the same prosperity test and the same
+  counter, so the two never disagree about which firm is failing.
 - **Amendments**: "Too Large to Break" (`amendment_petition_events.4`) is
   raised by the largest cartel's firm (§ 6.7); a second rescue of one firm is
   a second cause for it.
@@ -1167,7 +1223,7 @@ player cannot see would be worse than no system.
    directly. It moves quantities the player can see (Involvement and the
    interest tier it gives, relations, incidents, law enactment, party
    momentum and a group's political strength, research progress, a tariff or
-   a subsidy, a declared move), each with the actor named in the tooltip or
+   a relief line in the budget, a declared move), each with the actor named in the tooltip or
    ledger.
 2. **Nothing in this slice ends a pact.** The only diplomatic effects are
    Involvement, relations drift from rivalry, guarantees and exposed money
@@ -1213,7 +1269,9 @@ Other points:
 
 - **Game rule**: one rule for the whole system, in
   `common/game_rules/extra_game_rules.txt`, following
-  `docs/systems/mod_systems/game_rules.md`.
+  `docs/systems/mod_systems/game_rules.md`. **Owner**: default off while
+  phases 1 to 6 are being built, as the Tax Code was, and on once the
+  play-test list is worked through.
 - **Prefix**: the builder's choice, checked with `git grep`; `te_actor_` and
   `te_firm_` already match in the United Nations files.
 - **Events**: the petitions and the ends of declared moves, through the
@@ -1230,8 +1288,9 @@ Other points:
 **Owner**: a journal entry is optional; a tab of the Timeline Extended window
 with country variables behind it is enough.
 
-- **A tab** in the Timeline Extended window, bound to a `Country` like the
-  others, so National Info shows it for any country
+- **A tab** in the Timeline Extended window, named **Private Actors** for
+  now (§ 18), bound to a `Country` like the others, so National Info shows
+  it for any country
   (`state_and_nation_panels.md` § "Timeline Extended Window Tabs";
   `docs/guides/gui_style_guide.md` before building).
   - **Roster**: one row a firm. Executive, goal and its reason, condition
@@ -1296,8 +1355,10 @@ Kept in the chassis now so that these need no rework:
 - **More holdings**: a controlling stake in a rival, a party machine, a
   mission, a union local, a private force.
 - **More verbs for firms**: lending and calling loans, capital flight, moving
-  the seat abroad, conquest as a chartered company subject, funding a covert
-  operation, licensing a technology to a firm abroad.
+  the seat abroad, funding a covert operation, licensing a technology to a
+  firm abroad.
+- **Conquest by a chartered company**: a firm that Stands-aside its way to
+  a vanilla company subject. **Owner**: its own spec, after phase 6.
 - **The state as customer.** The next goal to add: firms whose output the
   government's own buildings buy (arms, ships, rails, construction) want
   the orders to go on. Their verbs press for rearmament and against
@@ -1355,8 +1416,16 @@ Kept in the chassis now so that these need no rework:
   country holds, takes a literal amount only, and there is no technology
   iterator, so rules are generated per technology
   (`scripting_best_practices.md`, "Adding Technology Progress From Script").
-- `set_subsidized` is per building, a subsidized building never downsizes
-  by itself, and the forcing modifiers are country-wide only
+- A treasury cost is a `country_expenses_add = 1` modifier applied with a
+  GDP-scaled multiplier. The amount is weekly, a re-apply removes the old
+  copy first, and a new one joins `gen_budget_breakdown.py`'s sources
+  (`scripting_best_practices.md`, "Expense Scaling with GDP").
+- The mod counts a company's failing months (prosperity under 10, or too
+  small to matter) in the company variable `te_company_months_failing`, and
+  an AI country drops the company at 60. Players are exempt
+  (`docs/systems/mod_systems/ai.md`, "Failing companies").
+- `set_subsidized` is per building, and script can't tell which buildings a
+  company owns, which is why relief does not use it
   (`scripting_best_practices.md`, "Subsidy and level levers").
 - `set_import_tariff_level` sets one good's level; whether it skips the
   buttons' checks is unverified (`scripting_best_practices.md`, "Dynamic
@@ -1385,16 +1454,16 @@ silent (`CLAUDE.md`, "In-game checks").
 | 2 | Does a country modifier with `building_<type>_throughput_add` cut every building of the type in the country, and does the price move as expected? | § 6.1, rents | A restricted production method switched in on the firm's buildings |
 | 3 | Can a state variable hold a company scope, and what does it read after the company is disbanded? | § 13, concessions | Store the company type and the home country |
 | 4 | Can `change_appeasement` on vanilla's existing country lobbies be driven from a firm's stake without the crash? | § 15 | Leave lobbies alone |
-| 5 | Can script start or speed a colony in a named state region? | § 7.4, Back on the frontier | A colony-growth modifier that applies once the country starts one itself |
+| 5 | Can script start a colony in a named state region, and does one started that way grow in a country whose law has no colonial affairs? | § 7.4, Back on the frontier | A colony-growth modifier that applies once the country starts one itself |
 | 6 | Do vanilla's play types for investment rights, an open market and a protectorate start cleanly from script with their war goals, as the mod's own independence-war type does? | § 7.4, § 12 | A play type of the mod's own for each |
 | 7 | Which executive traits and ideologies are readable from `company.executive`, and does every company always have one? | § 5.3 | Neutral temperament when missing |
 | 8 | What happens to a firm's variables and monopoly when its country loses a revolution? | § 13 | Re-seed the firm on the winner's first turn |
 | 9 | Does `add_momentum` take effect from a pulse during a campaign, for any party, and for a party of another country? | §§ 8.3, 8.6 | Patronage, the political-strength form, everywhere |
 | 10 | Does `add_law_progress` move the current checkpoint from a pulse, and do a setback and progress in one year leave the enactment sound? | § 8.3 | A timed `country_law_enactment_success_add` modifier, as vanilla's strike events use |
 | 11 | Can script reach a company's headquarters state? | § 4.5 | The home state with the most levels of its building types |
-| 12 | Does a state modifier with `building_<type>_throughput_add` reach that state's buildings of the type and no others? | § 9.3 | The harsh town yields funds to the firm and no throughput |
+| 12 | Does a state modifier with `building_<type>_throughput_add` reach that state's buildings of the type and no others? | §§ 9.3, 11.2 | The harsh town and the relief line pay funds to the firm and give no throughput |
 | 13 | Does an AI country keep an enactment that script started, or cancel it at its next review? | §§ 8.4, 12.1 | The AI's pledge is only the head start, given when it enacts the law by itself |
-| 14 | Does `set_subsidized` from script hold on a player's buildings, and does `set_import_tariff_level` skip the cooldown and the trade-policy check? | §§ 8.4, 11.2 | The pledge is the player's to keep by hand; the turn reads the subsidy or the level and counts a lapse as a refusal |
+| 14 | Does `set_import_tariff_level` from script skip the cooldown and the trade-policy check, and does the level hold against a player's or the AI's own changes? | §§ 8.4, 11.2 | The pledge is the player's to keep by hand; the turn reads the level and counts a lapse as a refusal |
 | 15 | What can another system read of vanilla's Strike entry: only that it is active, or its progress and the states involved? | § 9 | Read `has_journal_entry` alone |
 
 ## 17. Build order
@@ -1423,37 +1492,33 @@ while the chain abroad waits on most of the probes. Phase 1 computes all
 eight goals from the start, so the owner can judge the goals before any verb
 exists. Phase 4's three chains are separate PRs and can land in any order.
 
-## 18. Open decisions
+## 18. Decisions
 
-For the owner; the designer's lean is given.
+The owner ruled on all ten on 2026-11-28. Each ruling is written into the
+section named, and marked **owner** there.
 
-1. **The player-facing name.** "Interests" collides with vanilla's diplomatic
-   interests and with interest groups. Lean: the tab is **Private Powers**;
-   an actor of this slice is a **firm**.
-2. **The game rule's default.** Lean: off while phases 1 to 6 are being built,
-   as the Tax Code was; on once the play-test list is worked through.
-3. **The countdown.** Six months for every declared move. Lean: keep one
-   length, so the alert means the same thing each time.
-4. **Back on the frontier.** Should Back start a colony outright, where script
-   can (probe 5), or only speed one the player starts? Lean: speed only, so
-   the state never colonizes by event.
-5. **Conquest by a chartered company** (a firm that Stands-aside its way to a
-   vanilla company subject). It is the strongest expression of the theme and
-   a large piece of work. Lean: after phase 6, as its own spec.
-6. **Open defiance.** Rung 3 leaves the state with a lasting loss of authority
-   until it enforces. Lean: a modifier that lasts while the defiant
-   concession stands, so it has a visible cause and a clear remedy.
-7. **Research the player did not choose.** A firm's research goes to a
-   technology on its own list, which may not be what the country is
-   researching. Lean: allow it, since it is the plainest sign of a firm
-   with a will, and let Favored turn it to the state's research.
-8. **Campaign money abroad in the first version.** It is the cheapest strong
-   verb in the foreign chain and the one most likely to surprise a player
-   whose ally's election it moves. Lean: keep it, in phase 6, always shown
-   in the host's ledger.
-9. **The subsidy's reach.** A rescue by subsidy covers the firm's building
-   types whoever owns them, because script can't single out the firm's own.
-   Lean: accept it and say so in the petition.
-10. **Law groups in the first law table.** § 8.1 leaves out taxation, the
-    economic system and welfare. Lean: start with the eight listed and add
-    by what play shows missing.
+| # | Question | Ruling | Written in |
+|---|---|---|---|
+| 1 | The player-facing name. "Interests" collides with vanilla's diplomatic interests and with interest groups | Not "Private Powers". **Private Actors** as the working name, which the owner may yet change; an actor of this slice is a **firm** | § 14 |
+| 2 | The game rule's default | Off while phases 1 to 6 are being built, on once the play-test list is worked through | § 13 |
+| 3 | The countdown | Six months for every declared move | § 4.6 |
+| 4 | Back on the frontier: start a colony, or only speed one? | Start it outright, where script can | § 7.4; § 16, probe 5 |
+| 5 | Conquest by a chartered company | Its own spec, after phase 6 | § 15 |
+| 6 | Open defiance | A modifier that lasts while the defiant concession stands | § 7.5 |
+| 7 | Research the player did not choose | Allowed | § 10.2 |
+| 8 | Campaign money abroad in the first version | Kept | § 8.6 |
+| 9 | Relief by vanilla's subsidy, which covers every owner's buildings | No. A treasury cost that goes to the company at its headquarters | § 11.2 |
+| 10 | Law groups in the first law table | The economic system is included | § 8.1 |
+
+**Still open**
+
+1. **The name.** Private Actors is a working name. It needs settling before
+   phase 1's localization, since the tab, the Help page, the alerts and the
+   game rule all carry it.
+2. **The relief line's shape.** The owner set the direction and left the
+   mechanism open. § 11.2 proposes it: a budget line sized to the firm,
+   credited to the firm's funds, with a throughput lift at its seat and the
+   failing count reset. The part to rule on is the lift at the seat, which
+   is the only piece that reaches buildings the firm doesn't own. Without
+   it a rescue buys the firm time and keeps its holdings, and does nothing
+   for the company's own prosperity.
