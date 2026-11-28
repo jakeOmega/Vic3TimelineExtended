@@ -24,9 +24,11 @@ te_pa_move_again_until = {
 }
 
 # Kind codes (te_pa_move_kind, te_pa_l_kind), one a kind of petition, and the token its pieces are named by
-# (te_pa_move_code_<token>). 1 and 2 are Task 4b's; 3 law (Task 5), 4 relief (Task 8), 5 protection (Task 10).
+# (te_pa_move_code_<token>). 1 and 2 are Task 4b's; 3 law (Task 5b: a law or a tariff, te_pa_politics_effects.txt),
+# 4 relief (Task 8), 5 protection (Task 10).
 te_pa_move_code_charter = 1
 te_pa_move_code_suit = 2
+te_pa_move_code_law = 3
 
 # Country scope. Months since the last move against this government ended (a long time while none has).
 te_pa_move_since = {
@@ -119,4 +121,6 @@ te_pa_ai_lean_posture = {
 #   0 the player's own answer (nothing more is said)    1 the posture's default
 #   2 the price the cartel holds up                     3 the government's stance on the antitrust laws
 #   4 the Standing of the firm a suit would be brought against
-# Later tasks add theirs from 5.
+#   5 the governing groups' stance on the law or tariff a petition asks for (Task 5b)
+#   6 the Connections the firms spent for and against a petition for a law or a tariff (Task 5b)
+# Later tasks add theirs from 7.

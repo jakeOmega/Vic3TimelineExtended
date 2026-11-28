@@ -740,4 +740,12 @@ NAME_LOCS = (
     NameLoc("te_pa_ledger_ig", "ig", "te_pa_l_ig"),
     NameLoc("te_pa_pv_ig_name", "ig", "te_pa_pv_ig"),
     NameLoc("te_pa_pol_side_law", "law", "te_pa_side_law", "country"),
+    # the petition for a law or a tariff (Task 5b): the law or the good a declared move asks for, on the firm's
+    # row and on the country (the Politics section), and a pledge the government made it (the firm's detail)
+    NameLoc("te_pa_row_move_law", "law", "te_pa_r_move_law"),
+    NameLoc("te_pa_row_move_good", "good", "te_pa_r_move_good"),
+    NameLoc("te_pa_pt_law_name", "law", "te_pa_pt_law", "country"),
+    NameLoc("te_pa_pt_good_name", "good", "te_pa_pt_good", "country"),
+    NameLoc("te_pa_row_pl_law", "law", "te_pa_r_pl_law"),
+    NameLoc("te_pa_row_pl_good", "good", "te_pa_r_pl_good"),
 )

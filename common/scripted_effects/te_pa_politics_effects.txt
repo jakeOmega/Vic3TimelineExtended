@@ -27,6 +27,20 @@
 #   te_pa_pol_secret (secret money at risk, all firms, pounds) | te_pa_pol_campaign (1 in a campaign, for the tab)
 #   the lists te_pa_presses (the firms with a press) and te_pa_pol_view (the Politics section's rows), rebuilt
 #
+#   Task 5b, the petition for a law or a tariff (kind law, 3, on te_pa_moves_effects.txt's frame):
+#   on the firm: te_pa_move_ask (1 a law, 2 a tariff on its output, 3 a lower tariff on its input, 4 Antitrust
+#     Enforcement for a buyer, 5 Task 6's labor law), te_pa_move_law, te_pa_move_good, te_pa_move_level (what it
+#     asks for, written by te_pa_pt_pick at its nomination; the frame copies them onto the move's ledger entries)
+#   | te_pa_law_again (no new petition before this month) | te_pa_pt_spent_amt, te_pa_pt_spent_sign (what it put
+#     for or against the country's petition) | the pledge: te_pa_pl_kind (1 a law, 2 a tariff), te_pa_pl_law,
+#     te_pa_pl_good, te_pa_pl_level, te_pa_pl_dir (1 raise, -1 lower), te_pa_pl_until, te_pa_pl_begun,
+#     te_pa_pl_started, te_pa_pl_speed_month, te_pa_pl_reminded, te_pa_pl_set_month | te_pa_pl_back, te_pa_pl_back_until (it backs the
+#     government at the next election) | te_pa_cm_gov (staged: this spend backs the government)
+#   on the country: the petition's record, te_pa_pt_firm, te_pa_pt_ask, te_pa_pt_law, te_pa_pt_good, te_pa_pt_level,
+#     te_pa_pt_end (its answer's month), te_pa_pt_for / _against (Connections), te_pa_pt_n_for / _against,
+#     te_pa_pt_top_<for|against>_<1-3> and te_pa_pt_amt_<side>_<n> | te_pa_tf_law, te_pa_tf_good, te_pa_tf_level
+#     (a pledge's, staged for the generated readers)
+#
 # Ledger verbs (Task 5a's 40-49; 5b's are 50-59), each a predicate after the firm's name:
 #   40 speeds <law>                                      41 was on the winning side of <law> (size: its side's money)
 #   42 was on the losing side of <law> (size: likewise)  43 gives <size> to the campaign of the party of <group>
@@ -34,6 +48,15 @@
 #   46 founds a press                                    47 its press is discredited
 #   48 no longer keeps a press                           49 has its press closed by the government
 # 43 and 44 carry KNOWN 0 for the secret part, whose lines get their author when it is exposed.
+#   50 spends <size> Connections against <target>'s petition   51 spends <size> Connections for <target>'s petition
+#   52 the government begins enacting <law>, as it pledged     53 the government has held the tariff on <good> for
+#      (or the law is in force)                                   the five years it pledged
+#   54 the government breaks its pledge to enact <law>         55 the government breaks its pledge on the tariff
+#      (counted as a refusal: Grievance +1, Connections -10)      on <good> (likewise)
+#   56 speeds <law> at no cost, on the government's pledge     57 the pledge on the tariff on <good> lapses: the Tax
+#                                                                 Code legislates tariffs, or the market is not ours
+# The petition's own lines are the frame's (30-33, kind 3), with its ask on the entry (te_pa_l_ask, _law, _good,
+# _level).
 
 # ---------------------------------------------------------------------------
 # The turn (te_pa_turn, after the goal is chosen and before te_pa_act)
@@ -44,14 +67,25 @@
 te_pa_politics_turn = {
 	scope:te_pa_home = { te_pa_sides_check = yes }
 	te_pa_stake_pick = yes
+	# Task 5b: an ask left from a nomination that lost goes, unless its move is the one under way, so no later move's
+	# ledger entry carries it (te_pa_move_note_ask).
+	if = {
+		limit = {
+			has_variable = te_pa_move_ask
+			te_pa_is_move_firm = no
+		}
+		te_pa_move_ask_clear = yes
+	}
 }
 
 # Company scope, after te_pa_gen_law_pick and the trade stance. The law it has most at stake, the side campaign money
 # goes to: the law being enacted where it has a stance; else the law in force that burdens it most (against it); else
 # the law it could move to that favors it most (for it); else the trade policy where it burdens it. A firm seeking
-# Cheaper Inputs looks first at the trade policy taxing its imported inputs (§ 8.3: "a tariff on its input"), one
-# seeking A Protected Market at protection where its output is imported. None: its executive's interest group is the
-# side (§ 5.3, te_pa_cm_pick).
+# Cheaper Inputs looks first at a tariff on an input the market imports (§ 8.3: "a tariff on its input", Task 5b's
+# readings: te_pa_tariff_on_inputs), one seeking A Protected Market at the missing tariff on its imported output
+# (te_pa_p_market_tariff's case). A tariff's stake is written as the trade's (te_pa_stake_trade 1, sign 1 toward
+# Free Trade, -1 toward protection), since an interest group's stance on a tariff is its stance on Free Trade
+# (te_pa_ig_side_value). None: its executive's interest group is the side (§ 5.3, te_pa_cm_pick).
 te_pa_stake_pick = {
 	set_variable = { name = te_pa_stake_law value = 0 }
 	set_variable = { name = te_pa_stake_sign value = 0 }
@@ -59,11 +93,7 @@ te_pa_stake_pick = {
 	if = {
 		limit = {
 			var:te_pa_goal ?= 1
-			te_pa_v_trade < 0
-			OR = {
-				owner = { te_pa_trade_protective = yes }
-				owner = { te_pa_trade_enacting_protective = yes }
-			}
+			te_pa_tariff_on_inputs > 0
 		}
 		set_variable = { name = te_pa_stake_trade value = 1 }
 		set_variable = { name = te_pa_stake_sign value = 1 }
@@ -72,7 +102,7 @@ te_pa_stake_pick = {
 		limit = {
 			var:te_pa_goal ?= 2
 			te_pa_wants_output_tariff = yes
-			owner = { te_pa_trade_protective = no }
+			te_pa_v_out_tariff <= 0
 		}
 		set_variable = { name = te_pa_stake_trade value = 1 }
 		set_variable = { name = te_pa_stake_sign value = -1 }
@@ -122,7 +152,8 @@ te_pa_stake_pick = {
 	}
 }
 
-# A Friendly Law (§ 8.3): set back the law being enacted that it is against, push the one it is for, or put money on
+# A Friendly Law (§ 8.3): set back the law being enacted that it is against, push the one it is for, petition the
+# government for the law it could move to that favors it most (§ 8.4, a declared move: Task 5b), or put money on
 # its law at stake.
 te_pa_act_law = {
 	if = {
@@ -132,6 +163,10 @@ te_pa_act_law = {
 	else_if = {
 		limit = { te_pa_can_speed = yes }
 		te_pa_do_speed = yes
+	}
+	else_if = {
+		limit = { te_pa_can_declare_law = yes }
+		te_pa_do_declare_law = yes
 	}
 	else_if = {
 		limit = { te_pa_can_campaign = yes }
@@ -280,8 +315,18 @@ te_pa_cm_pick = {
 	clear_saved_scope = te_pa_cm_party
 	clear_saved_scope = te_pa_cm_ig
 	clear_saved_scope = te_pa_cm_bet_ig
+	# Task 5b: a firm whose petition the government took up backs the government's side at the next election
+	# (te_pa_cm_gov staged by te_pa_pledge_back_monthly).
 	if = {
-		limit = { owner = { te_pa_cm_momentum_form = yes } }
+		limit = { var:te_pa_cm_gov ?= 1 }
+		te_pa_cm_pick_gov = yes
+	}
+	if = {
+		limit = {
+			owner = { te_pa_cm_momentum_form = yes }
+			NOT = { exists = scope:te_pa_cm_party }
+			NOT = { exists = scope:te_pa_cm_ig }
+		}
 		scope:te_pa_home = {
 			if = {
 				limit = { any_active_party = { te_pa_party_side_value > 0 } }
@@ -312,7 +357,10 @@ te_pa_cm_pick = {
 		}
 	}
 	if = {
-		limit = { NOT = { exists = scope:te_pa_cm_party } }
+		limit = {
+			NOT = { exists = scope:te_pa_cm_party }
+			NOT = { exists = scope:te_pa_cm_ig }
+		}
 		scope:te_pa_home = {
 			if = {
 				limit = { any_interest_group = { te_pa_ig_side_value > 0 } }
@@ -913,12 +961,24 @@ te_pa_politics_ai_quarter = {
 # Country scope, each monthly pulse with the rule on (te_pa_monthly). An election a month past its end is settled; the
 # tab's campaign flag; the self-checks.
 te_pa_politics_monthly = {
+	# Task 5b: probe 14's read comes first, before a pledge's re-assert could hide a level that did not hold.
+	te_pa_debug_tariff_read = yes
 	if = {
 		limit = {
 			has_variable = te_pa_elect_end
 			te_history_month_index > var:te_pa_elect_end
 		}
 		te_pa_election_settle = yes
+	}
+	# Task 5b: the petition for a law or a tariff (its record and its sides), the pledges and the backing.
+	te_pa_pt_monthly = yes
+	every_company = {
+		limit = { has_variable = te_pa_pl_kind }
+		te_pa_pledge_monthly = yes
+	}
+	every_company = {
+		limit = { has_variable = te_pa_pl_back }
+		te_pa_pledge_back_monthly = yes
 	}
 	set_variable = { name = te_pa_pol_campaign value = 0 }
 	if = {
@@ -978,6 +1038,23 @@ te_pa_politics_teardown = {
 	}
 	te_pa_drop = { VAR = te_pa_elect_end }
 	te_pa_drop = { VAR = te_pa_pol_campaign }
+	# Task 5b: the petition's record (the move itself is te_pa_actions_teardown's) and the government's pledges, which
+	# lapse with the rule rather than fall due unwatched while it is off; a tariff a pledge set stays at its level.
+	te_pa_pt_close = yes
+	every_company = {
+		limit = {
+			OR = {
+				has_variable = te_pa_pl_kind
+				has_variable = te_pa_pl_back
+				has_variable = te_pa_move_ask
+			}
+		}
+		te_pa_pledge_drop = yes
+		te_pa_drop = { VAR = te_pa_pl_back }
+		te_pa_drop = { VAR = te_pa_pl_back_until }
+		te_pa_move_ask_clear = yes
+	}
+	te_pa_tf_clear = yes
 }
 
 # Company scope, te_pa_clear_firm (the company disbanded; scope:te_pa_home its country): its press, its sides, its
@@ -1010,4 +1087,739 @@ te_pa_politics_clear = {
 	te_pa_drop = { VAR = te_pa_bet_form }
 	te_pa_drop = { VAR = te_pa_bet_out }
 	te_pa_drop = { VAR = te_pa_bet_until }
+	# Task 5b: its petition's record, if it is the petitioner (its move lapses, te_pa_actions_clear), its ask, its
+	# spend on another's petition, its pledge and its backing.
+	save_scope_as = te_pa_pt_gone
+	scope:te_pa_home = {
+		if = {
+			limit = {
+				has_variable = te_pa_pt_firm
+				var:te_pa_pt_firm = scope:te_pa_pt_gone
+			}
+			te_pa_pt_close = yes
+		}
+	}
+	te_pa_move_ask_clear = yes
+	te_pa_drop = { VAR = te_pa_law_again }
+	te_pa_drop = { VAR = te_pa_pt_spent_amt }
+	te_pa_drop = { VAR = te_pa_pt_spent_sign }
+	te_pa_pledge_drop = yes
+	te_pa_drop = { VAR = te_pa_pl_back }
+	te_pa_drop = { VAR = te_pa_pl_back_until }
+}
+
+# ---------------------------------------------------------------------------
+# The petition for a law or a tariff (Task 5b; § 8.4, § 12.1): kind law (code 3) on the declared-move frame
+# (te_pa_moves_effects.txt's six steps). A firm whose goal scores 70 or more, with 40 Connections, asks the state for
+# what would serve its goal: Cheaper Inputs a lower tariff on its input (ask 3) or, a buyer of a lawful cartel's
+# good, Antitrust Enforcement (ask 4, § 6.3); A Protected Market a tariff on its output (ask 2); A Friendly Law the
+# law from the table it could move to that favors it most (ask 1). Labor Peace's labor law is Task 6's (ask 5: a
+# branch in te_pa_pt_can_ask and te_pa_pt_pick). During the countdown the firms for and against it spend Connections
+# on it (the record, te_pa_pt_monthly), which the event shows and an AI government weighs (te_pa_ai_lean_law). Take
+# it up is a pledge (the tariff set now and kept five years, the law begun within two), kept or broken
+# (te_pa_pledge_monthly); a pledge broken counts as a refusal.
+# ---------------------------------------------------------------------------
+
+# Company scope, the turn. Kind law: what it asks for (te_pa_pt_pick), then the frame's nomination.
+te_pa_do_declare_law = {
+	te_pa_pt_pick = yes
+	te_pa_move_nominate = { KIND = law }
+}
+
+# Company scope, the turn (scope:te_pa_firm the firm). What it asks for, onto the firm (the frame copies it onto the
+# move's ledger entries, te_pa_move_note_ask; the record copies it at the declaration, te_pa_pt_open): the ask's code,
+# and its law (the law table's number) or its good (by index) and the import tariff level it asks for.
+te_pa_pt_pick = {
+	te_pa_move_ask_clear = yes
+	if = {
+		limit = {
+			var:te_pa_goal ?= 1
+			te_pa_pt_ask_input_tariff = yes
+		}
+		set_variable = { name = te_pa_move_ask value = 3 }
+		if = {
+			limit = {
+				var:te_pa_g_in1_imported ?= 1
+				te_pa_v_in1_tariff > 0
+			}
+			set_variable = { name = te_pa_move_good value = var:te_pa_g_in1_good }
+			set_variable = { name = te_pa_move_level value = te_pa_pt_ask_in1_level }
+		}
+		else = {
+			set_variable = { name = te_pa_move_good value = var:te_pa_g_in2_good }
+			set_variable = { name = te_pa_move_level value = te_pa_pt_ask_in2_level }
+		}
+	}
+	else_if = {
+		limit = {
+			var:te_pa_goal ?= 1
+			te_pa_pt_ask_antitrust = yes
+		}
+		set_variable = { name = te_pa_move_ask value = 4 }
+		set_variable = { name = te_pa_move_law value = te_pa_gen_law_index_law_trust_busting }
+	}
+	else_if = {
+		limit = {
+			var:te_pa_goal ?= 2
+			te_pa_pt_ask_output_tariff = yes
+		}
+		set_variable = { name = te_pa_move_ask value = 2 }
+		set_variable = { name = te_pa_move_good value = var:te_pa_g_out_good }
+		set_variable = { name = te_pa_move_level value = te_pa_pt_ask_out_level }
+	}
+	else_if = {
+		limit = {
+			var:te_pa_goal ?= 4
+			te_pa_pt_ask_law = yes
+		}
+		set_variable = { name = te_pa_move_ask value = 1 }
+		set_variable = { name = te_pa_move_law value = var:te_pa_g_law_best_law }
+	}
+	# Task 6: Labor Peace's labor law, ask 5, goes here (with its te_pa_pt_can_ask branch).
+}
+
+# Company scope. The firm's ask goes.
+te_pa_move_ask_clear = {
+	te_pa_drop = { VAR = te_pa_move_ask }
+	te_pa_drop = { VAR = te_pa_move_law }
+	te_pa_drop = { VAR = te_pa_move_good }
+	te_pa_drop = { VAR = te_pa_move_level }
+}
+
+# ---------------------------------------------------------------------------
+# The record and the other side (country scope, te_pa_politics_monthly, scope:te_pa_home the country)
+# ---------------------------------------------------------------------------
+
+# A record whose move has gone (its firm disbanded) and whose answer is past due goes; a petition for a law or a
+# tariff declared this month opens its record; while it runs, the firms that stand for or against it and hold the
+# Connections spend them on it, once each.
+te_pa_pt_monthly = {
+	if = {
+		limit = {
+			te_pa_pt_is_open = yes
+			te_pa_pt_running = no
+			te_history_month_index > te_pa_pt_stale_value
+		}
+		te_pa_pt_close = yes
+	}
+	if = {
+		limit = {
+			has_variable = te_pa_move_firm
+			var:te_pa_move_kind ?= 3
+			te_pa_pt_is_open = no
+		}
+		te_pa_pt_open = yes
+	}
+	if = {
+		limit = { te_pa_pt_running = yes }
+		clear_saved_scope = te_pa_pt_petitioner
+		var:te_pa_pt_firm = { save_scope_as = te_pa_pt_petitioner }
+		every_company = {
+			limit = { te_pa_pt_may_side = yes }
+			te_pa_pt_side_spend = yes
+		}
+	}
+}
+
+# The record opens, from the declared move's firm: who asks, what for (its ask, law, good and level), when it is
+# answered, and the sides at nothing.
+te_pa_pt_open = {
+	clear_saved_scope = te_pa_pt_new
+	var:te_pa_move_firm = { save_scope_as = te_pa_pt_new }
+	set_variable = { name = te_pa_pt_firm value = scope:te_pa_pt_new }
+	set_variable = { name = te_pa_pt_ask value = 0 }
+	if = {
+		limit = { scope:te_pa_pt_new = { has_variable = te_pa_move_ask } }
+		set_variable = { name = te_pa_pt_ask value = scope:te_pa_pt_new.var:te_pa_move_ask }
+	}
+	if = {
+		limit = { scope:te_pa_pt_new = { has_variable = te_pa_move_law } }
+		set_variable = { name = te_pa_pt_law value = scope:te_pa_pt_new.var:te_pa_move_law }
+	}
+	if = {
+		limit = { scope:te_pa_pt_new = { has_variable = te_pa_move_good } }
+		set_variable = { name = te_pa_pt_good value = scope:te_pa_pt_new.var:te_pa_move_good }
+	}
+	if = {
+		limit = { scope:te_pa_pt_new = { has_variable = te_pa_move_level } }
+		set_variable = { name = te_pa_pt_level value = scope:te_pa_pt_new.var:te_pa_move_level }
+	}
+	set_variable = { name = te_pa_pt_end value = te_pa_pt_end_value }
+	set_variable = { name = te_pa_pt_for value = 0 }
+	set_variable = { name = te_pa_pt_against value = 0 }
+	set_variable = { name = te_pa_pt_n_for value = 0 }
+	set_variable = { name = te_pa_pt_n_against value = 0 }
+}
+
+# Company scope (scope:te_pa_home its country, scope:te_pa_pt_petitioner the petitioner). A firm for or against the
+# petition spends Connections on it (5 a point of its stance): its side's sum and count, the three largest each side
+# ranked again, a ledger line (50 against, 51 for: the petitioner its target, the Connections its size), and its row.
+te_pa_pt_side_spend = {
+	set_variable = { name = te_pa_pt_spent_amt value = te_pa_pt_spend_value }
+	set_variable = { name = te_pa_pt_spent_sign value = 1 }
+	if = {
+		limit = { te_pa_pt_stance_value < 0 }
+		set_variable = { name = te_pa_pt_spent_sign value = -1 }
+	}
+	set_variable = { name = te_pa_conn value = te_pa_conn_after_pt_spend }
+	save_scope_as = te_pa_pt_spender
+	scope:te_pa_home = {
+		if = {
+			limit = { scope:te_pa_pt_spender = { var:te_pa_pt_spent_sign ?= 1 } }
+			change_variable = { name = te_pa_pt_for add = scope:te_pa_pt_spender.var:te_pa_pt_spent_amt }
+			change_variable = { name = te_pa_pt_n_for add = 1 }
+		}
+		else = {
+			change_variable = { name = te_pa_pt_against add = scope:te_pa_pt_spender.var:te_pa_pt_spent_amt }
+			change_variable = { name = te_pa_pt_n_against add = 1 }
+		}
+		te_pa_pt_top = yes
+	}
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_pt_petitioner = { save_scope_as = te_pa_l_target }
+	save_scope_value_as = { name = te_pa_l_size value = var:te_pa_pt_spent_amt }
+	if = {
+		limit = { var:te_pa_pt_spent_sign ?= 1 }
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 51 KNOWN = 1 } }
+	}
+	else = {
+		scope:te_pa_home = { te_pa_ledger_add = { VERB = 50 KNOWN = 1 } }
+	}
+	te_pa_row_sync = yes
+}
+
+# Country scope. The three firms that have put most behind each side of its petition.
+te_pa_pt_top = {
+	te_pa_pt_top_one = { SIDE = for SIGN = 1 POS = 0 N = 1 }
+	te_pa_pt_top_one = { SIDE = for SIGN = 1 POS = 1 N = 2 }
+	te_pa_pt_top_one = { SIDE = for SIGN = 1 POS = 2 N = 3 }
+	te_pa_pt_top_one = { SIDE = against SIGN = -1 POS = 0 N = 1 }
+	te_pa_pt_top_one = { SIDE = against SIGN = -1 POS = 1 N = 2 }
+	te_pa_pt_top_one = { SIDE = against SIGN = -1 POS = 2 N = 3 }
+}
+
+te_pa_pt_top_one = {
+	te_pa_drop = { VAR = te_pa_pt_top_$SIDE$_$N$ }
+	te_pa_drop = { VAR = te_pa_pt_amt_$SIDE$_$N$ }
+	clear_saved_scope = te_pa_pt_pick
+	ordered_company = {
+		limit = {
+			has_variable = te_pa_pt_spent_amt
+			var:te_pa_pt_spent_sign ?= $SIGN$
+		}
+		order_by = te_pa_pt_rank_order
+		position = $POS$
+		check_range_bounds = no
+		save_scope_as = te_pa_pt_pick
+	}
+	if = {
+		limit = { exists = scope:te_pa_pt_pick }
+		set_variable = { name = te_pa_pt_top_$SIDE$_$N$ value = scope:te_pa_pt_pick }
+		set_variable = { name = te_pa_pt_amt_$SIDE$_$N$ value = scope:te_pa_pt_pick.var:te_pa_pt_spent_amt }
+	}
+}
+
+# Country scope. The record goes (its answer given, its move lapsed, the teardown), and with it every firm's mark of
+# what it spent on it.
+te_pa_pt_close = {
+	te_pa_drop = { VAR = te_pa_pt_firm }
+	te_pa_drop = { VAR = te_pa_pt_ask }
+	te_pa_drop = { VAR = te_pa_pt_law }
+	te_pa_drop = { VAR = te_pa_pt_good }
+	te_pa_drop = { VAR = te_pa_pt_level }
+	te_pa_drop = { VAR = te_pa_pt_end }
+	te_pa_drop = { VAR = te_pa_pt_for }
+	te_pa_drop = { VAR = te_pa_pt_against }
+	te_pa_drop = { VAR = te_pa_pt_n_for }
+	te_pa_drop = { VAR = te_pa_pt_n_against }
+	te_pa_drop = { VAR = te_pa_pt_top_for_1 }
+	te_pa_drop = { VAR = te_pa_pt_top_for_2 }
+	te_pa_drop = { VAR = te_pa_pt_top_for_3 }
+	te_pa_drop = { VAR = te_pa_pt_top_against_1 }
+	te_pa_drop = { VAR = te_pa_pt_top_against_2 }
+	te_pa_drop = { VAR = te_pa_pt_top_against_3 }
+	te_pa_drop = { VAR = te_pa_pt_amt_for_1 }
+	te_pa_drop = { VAR = te_pa_pt_amt_for_2 }
+	te_pa_drop = { VAR = te_pa_pt_amt_for_3 }
+	te_pa_drop = { VAR = te_pa_pt_amt_against_1 }
+	te_pa_drop = { VAR = te_pa_pt_amt_against_2 }
+	te_pa_drop = { VAR = te_pa_pt_amt_against_3 }
+	every_company = {
+		limit = { has_variable = te_pa_pt_spent_amt }
+		remove_variable = te_pa_pt_spent_amt
+		te_pa_drop = { VAR = te_pa_pt_spent_sign }
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The answers (company scope, the petitioner; scope:te_pa_home its country, its record open). The frame logs each
+# (30-33, kind 3) and gives the refusal's Grievance. Each closes the record last, in a hidden effect.
+# ---------------------------------------------------------------------------
+
+# Taken up (§ 8.4): a pledge. For a law, to begin enacting it within two years (an AI government enacting nothing
+# starts it now, § 12.1); for a tariff, set now and kept five years. Either way the firm backs the government's side
+# at the next election, and speeds a pledged law for nothing while it is enacted.
+te_pa_answer_law_grant = {
+	if = {
+		limit = { scope:te_pa_home = { te_pa_pt_asks_law = yes } }
+		te_pa_pt_take_law = yes
+	}
+	else = {
+		te_pa_pt_take_tariff = yes
+	}
+	hidden_effect = { scope:te_pa_home = { te_pa_pt_close = yes } }
+}
+
+# Stood aside: nothing changes, and the firm waits five years before it asks again.
+te_pa_answer_law_stand = {
+	custom_tooltip = {
+		text = te_pa_answer_wait_tt
+		set_variable = { name = te_pa_law_again value = te_pa_move_again_until }
+	}
+	hidden_effect = { scope:te_pa_home = { te_pa_pt_close = yes } }
+}
+
+# Refused (§ 8.4): Connections -10 (the frame adds Grievance +1), and each firm on the other side gains 5: the state
+# took its part. The firm waits five years before it asks again.
+te_pa_answer_law_refuse = {
+	custom_tooltip = {
+		text = te_pa_pt_refuse_conn_tt
+		set_variable = { name = te_pa_conn value = te_pa_conn_after_pt_refuse }
+	}
+	if = {
+		limit = { scope:te_pa_home = { te_pa_pt_count_against > 0 } }
+		custom_tooltip = {
+			text = te_pa_pt_refuse_others_tt
+			scope:te_pa_home = {
+				every_company = {
+					limit = { te_pa_pt_other_side = yes }
+					set_variable = { name = te_pa_conn value = te_pa_conn_after_pt_other }
+				}
+			}
+		}
+	}
+	custom_tooltip = {
+		text = te_pa_answer_wait_tt
+		set_variable = { name = te_pa_law_again value = te_pa_move_again_until }
+	}
+	hidden_effect = { scope:te_pa_home = { te_pa_pt_close = yes } }
+}
+
+# Taken up, a law (ask 1 or 4): already in force, or no longer one the country could move to, nothing is pledged;
+# otherwise the pledge, and an AI government enacting nothing starts it at once.
+te_pa_pt_take_law = {
+	if = {
+		limit = { scope:te_pa_home = { te_pa_gen_law_n_in_force = { VAR = te_pa_pt_law } } }
+		custom_tooltip = te_pa_pt_law_moot_in_force_tt
+	}
+	else_if = {
+		limit = {
+			scope:te_pa_home = {
+				NOT = { te_pa_gen_law_n_open = { VAR = te_pa_pt_law } }
+				te_pa_pt_enacting_its_law = no
+			}
+		}
+		custom_tooltip = te_pa_pt_law_moot_closed_tt
+	}
+	else = {
+		custom_tooltip = {
+			text = te_pa_pt_pledge_law_tt
+			set_variable = { name = te_pa_pl_kind value = 1 }
+			set_variable = { name = te_pa_pl_law value = scope:te_pa_home.var:te_pa_pt_law }
+			set_variable = { name = te_pa_pl_until value = te_pa_pl_until_law_value }
+			te_pa_pledge_back_mark = yes
+		}
+		te_pa_pledge_back_tt = yes
+		if = {
+			limit = {
+				scope:te_pa_home = {
+					is_ai = yes
+					NOT = { enacting_any_law = yes }
+				}
+			}
+			custom_tooltip = {
+				text = te_pa_pt_ai_starts_tt
+				te_pa_pledge_start = { VAR = te_pa_pt_law }
+			}
+		}
+	}
+}
+
+# Taken up, a tariff (ask 2 or 3): where the government can still set it (its market, no treaty barring a tariff
+# on the good, a raise under a trade policy that lets it collect), it is set now, the way the Tax Code's customs sync
+# sets one, and pledged for five years; otherwise nothing is pledged.
+te_pa_pt_take_tariff = {
+	if = {
+		limit = { scope:te_pa_home = { te_pa_pt_tariff_takeable = yes } }
+		custom_tooltip = {
+			text = te_pa_pt_pledge_tariff_tt
+			scope:te_pa_home = {
+				te_pa_gen_tariff_set = { VAR = te_pa_pt_good LEVEL = te_pa_pt_level }
+			}
+			set_variable = { name = te_pa_pl_kind value = 2 }
+			set_variable = { name = te_pa_pl_good value = scope:te_pa_home.var:te_pa_pt_good }
+			set_variable = { name = te_pa_pl_level value = scope:te_pa_home.var:te_pa_pt_level }
+			set_variable = { name = te_pa_pl_dir value = 1 }
+			if = {
+				limit = { scope:te_pa_home = { var:te_pa_pt_ask ?= 3 } }
+				set_variable = { name = te_pa_pl_dir value = -1 }
+			}
+			set_variable = { name = te_pa_pl_until value = te_pa_pl_until_tariff_value }
+			set_variable = { name = te_pa_pl_set_month value = te_history_month_index }
+			te_pa_pledge_back_mark = yes
+			scope:te_pa_home = { te_pa_debug_tariff_arm = yes }
+		}
+		te_pa_pledge_back_tt = yes
+	}
+	else = {
+		custom_tooltip = te_pa_pt_tariff_moot_tt
+	}
+}
+
+# Company scope (scope:te_pa_home its country), an answer's tooltip: in a country with elections to buy (an
+# Electoral Finance law other than none), the line saying the firm backs the governing parties at the next campaign.
+te_pa_pledge_back_tt = {
+	if = {
+		limit = { scope:te_pa_home = { te_pa_ef_none = no } }
+		custom_tooltip = te_pa_pt_back_tt
+	}
+}
+
+# Company scope. The firm will back the government's side at the next election (§ 8.4), within te_pa_pl_back_months.
+te_pa_pledge_back_mark = {
+	set_variable = { name = te_pa_pl_back value = 1 }
+	set_variable = { name = te_pa_pl_back_until value = te_pa_pl_back_until_value }
+}
+
+# Company scope (scope:te_pa_home its country, which holds the pledged law's number in its variable VAR: the record's
+# te_pa_pt_law at the answer, the staged te_pa_tf_law later). An AI government starts enacting the pledged law from
+# script (§ 12.1, probe 13), once a pledge, while it enacts nothing; the ai_keeps_enactment self-check is armed.
+te_pa_pledge_start = {
+	set_variable = { name = te_pa_pl_started value = 1 }
+	scope:te_pa_home = {
+		te_pa_debug_enact_arm = { VAR = $VAR$ }
+		te_pa_gen_law_start = { VAR = $VAR$ }
+		te_pa_debug_enact_after = yes
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The pledge (company scope, te_pa_politics_monthly; scope:te_pa_home its country). Its law or good is staged on the
+# country (te_pa_tf_law, te_pa_tf_good, te_pa_tf_level) for the generated readers, and cleared after.
+# ---------------------------------------------------------------------------
+
+te_pa_pledge_monthly = {
+	save_scope_as = te_pa_pl_firm
+	scope:te_pa_home = {
+		te_pa_tf_clear = yes
+		if = {
+			limit = { scope:te_pa_pl_firm = { has_variable = te_pa_pl_law } }
+			set_variable = { name = te_pa_tf_law value = scope:te_pa_pl_firm.var:te_pa_pl_law }
+		}
+		if = {
+			limit = { scope:te_pa_pl_firm = { has_variable = te_pa_pl_good } }
+			set_variable = { name = te_pa_tf_good value = scope:te_pa_pl_firm.var:te_pa_pl_good }
+		}
+		if = {
+			limit = { scope:te_pa_pl_firm = { has_variable = te_pa_pl_level } }
+			set_variable = { name = te_pa_tf_level value = scope:te_pa_pl_firm.var:te_pa_pl_level }
+		}
+	}
+	if = {
+		limit = { var:te_pa_pl_kind ?= 1 }
+		te_pa_pledge_law_monthly = yes
+	}
+	else_if = {
+		limit = { var:te_pa_pl_kind ?= 2 }
+		te_pa_pledge_tariff_monthly = yes
+	}
+	scope:te_pa_home = { te_pa_tf_clear = yes }
+	te_pa_row_sync = yes
+}
+
+# A law: begun (enacted now, or in force: a line, 52, and the free speed), started by an AI government enacting
+# nothing, broken at the deadline, or a player reminded six months before it. Once begun, the firm speeds it for
+# nothing once a year (its own count) while it is enacted; when the enactment ends, passed or not, the pledge is
+# kept and done.
+te_pa_pledge_law_monthly = {
+	if = {
+		limit = { NOT = { has_variable = te_pa_pl_begun } }
+		if = {
+			limit = { scope:te_pa_home = { te_pa_pl_law_enacting = yes } }
+			set_variable = { name = te_pa_pl_begun value = 1 }
+			te_pa_pledge_line = { VERB = 52 }
+			te_pa_pledge_speed = yes
+		}
+		else_if = {
+			limit = { scope:te_pa_home = { te_pa_gen_law_n_in_force = { VAR = te_pa_tf_law } } }
+			te_pa_pledge_line = { VERB = 52 }
+			te_pa_pledge_drop = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { has_variable = te_pa_pl_started }
+				scope:te_pa_home = {
+					is_ai = yes
+					NOT = { enacting_any_law = yes }
+					te_pa_gen_law_n_open = { VAR = te_pa_tf_law }
+				}
+			}
+			te_pa_pledge_start = { VAR = te_pa_tf_law }
+		}
+		else_if = {
+			limit = { te_history_month_index >= var:te_pa_pl_until }
+			te_pa_pledge_break = { VERB = 54 }
+		}
+		else_if = {
+			limit = {
+				NOT = { has_variable = te_pa_pl_reminded }
+				te_pa_pl_left_value <= te_pa_pl_due_months
+				scope:te_pa_home = { is_ai = no }
+			}
+			set_variable = { name = te_pa_pl_reminded value = 1 }
+			save_scope_as = te_pa_note_firm
+			scope:te_pa_home = { post_notification = te_pa_pledge_due }
+		}
+	}
+	else_if = {
+		limit = { scope:te_pa_home = { te_pa_pl_law_enacting = yes } }
+		if = {
+			limit = { te_pa_pl_speed_due = yes }
+			te_pa_pledge_speed = yes
+		}
+	}
+	else = {
+		te_pa_pledge_drop = yes
+	}
+}
+
+# A tariff: the Tax Code's customs option or the loss of the market makes the pledge lapse (57); a level that no
+# longer holds is set again by an AI government, or by anyone in the month after the set (te_pa_pl_tariff_reassert:
+# a set the engine kept back is tried again once before it counts), and otherwise breaks the pledge (55); five
+# years held, it is kept (53) and done.
+te_pa_pledge_tariff_monthly = {
+	if = {
+		limit = { scope:te_pa_home = { te_pa_tariffs_settable = no } }
+		te_pa_pledge_line = { VERB = 57 }
+		te_pa_pledge_drop = yes
+	}
+	else_if = {
+		limit = { te_pa_pl_tariff_held = no }
+		if = {
+			limit = { te_pa_pl_tariff_reassert = yes }
+			scope:te_pa_home = { te_pa_gen_tariff_set = { VAR = te_pa_tf_good LEVEL = te_pa_tf_level } }
+		}
+		else = {
+			te_pa_pledge_break = { VERB = 55 }
+		}
+	}
+	else_if = {
+		limit = { te_history_month_index >= var:te_pa_pl_until }
+		te_pa_pledge_line = { VERB = 53 }
+		te_pa_pledge_drop = yes
+	}
+}
+
+# A pledge broken counts as a refusal (§ 8.4): the pledge goes first, so the check runs once a pledge; then
+# Grievance +1, Connections -10, the line (VERB 54 a law, 55 a tariff) and a player's notice.
+te_pa_pledge_break = {
+	te_pa_pledge_drop = yes
+	change_variable = { name = te_pa_griev add = 1 }
+	set_variable = { name = te_pa_conn value = te_pa_conn_after_pt_refuse }
+	te_pa_pledge_line = { VERB = $VERB$ }
+	if = {
+		limit = { scope:te_pa_home = { is_ai = no } }
+		save_scope_as = te_pa_note_firm
+		scope:te_pa_home = { post_notification = te_pa_pledge_broken }
+	}
+}
+
+# A pledge's line (52-57), with its law or good from the staging (te_pa_tf_law, te_pa_tf_good).
+te_pa_pledge_line = {
+	save_scope_as = te_pa_l_actor
+	scope:te_pa_home = { te_pa_ledger_add = { VERB = $VERB$ KNOWN = 1 } }
+	if = {
+		limit = { exists = scope:te_pa_l_new }
+		scope:te_pa_l_new = {
+			if = {
+				limit = { scope:te_pa_home = { has_variable = te_pa_tf_law } }
+				set_variable = { name = te_pa_l_law value = scope:te_pa_home.var:te_pa_tf_law }
+			}
+			if = {
+				limit = { scope:te_pa_home = { has_variable = te_pa_tf_good } }
+				set_variable = { name = te_pa_l_good value = scope:te_pa_home.var:te_pa_tf_good }
+			}
+		}
+	}
+}
+
+# The free speed on a pledged law (§ 8.4: Task 5a's speed without its cost): progress on the law being enacted,
+# once a year a pledge on its own count, which neither the firm's yearly speed nor the law's (te_pa_can_speed)
+# counts.
+te_pa_pledge_speed = {
+	set_variable = { name = te_pa_pl_speed_month value = te_history_month_index }
+	scope:te_pa_home = { add_law_progress = te_pa_speed_progress }
+	te_pa_pledge_line = { VERB = 56 }
+}
+
+# The pledge's variables go (kept, broken, lapsed, the firm disbanded, the teardown). The backing at the next
+# election (te_pa_pl_back) is apart from it and stays.
+te_pa_pledge_drop = {
+	te_pa_drop = { VAR = te_pa_pl_kind }
+	te_pa_drop = { VAR = te_pa_pl_law }
+	te_pa_drop = { VAR = te_pa_pl_good }
+	te_pa_drop = { VAR = te_pa_pl_level }
+	te_pa_drop = { VAR = te_pa_pl_dir }
+	te_pa_drop = { VAR = te_pa_pl_until }
+	te_pa_drop = { VAR = te_pa_pl_begun }
+	te_pa_drop = { VAR = te_pa_pl_started }
+	te_pa_drop = { VAR = te_pa_pl_speed_month }
+	te_pa_drop = { VAR = te_pa_pl_reminded }
+	te_pa_drop = { VAR = te_pa_pl_set_month }
+}
+
+# Country scope. The pledge's staging goes.
+te_pa_tf_clear = {
+	te_pa_drop = { VAR = te_pa_tf_law }
+	te_pa_drop = { VAR = te_pa_tf_good }
+	te_pa_drop = { VAR = te_pa_tf_level }
+}
+
+# Company scope (scope:te_pa_home its country). At the next election campaign after a petition was taken up, the
+# firm puts campaign money behind the government's side, in full, once (te_pa_campaign_spend, the one spend site,
+# with te_pa_cm_gov staged for te_pa_cm_pick); with no campaign in te_pa_pl_back_months, the mark goes.
+te_pa_pledge_back_monthly = {
+	if = {
+		limit = { te_pa_wait_over = { VAR = te_pa_pl_back_until } }
+		te_pa_drop = { VAR = te_pa_pl_back }
+		te_pa_drop = { VAR = te_pa_pl_back_until }
+	}
+	else_if = {
+		limit = {
+			owner = { te_pa_cm_momentum_form = yes }
+			te_pa_cm_allowed = yes
+			te_pa_can_afford = { AMOUNT = te_pa_cm_cost_full_value }
+		}
+		set_variable = { name = te_pa_cm_gov value = 1 }
+		te_pa_campaign_spend = { SIZE = full }
+		remove_variable = te_pa_cm_gov
+		if = {
+			limit = { var:te_pa_spent ?= 1 }
+			te_pa_drop = { VAR = te_pa_pl_back }
+			te_pa_drop = { VAR = te_pa_pl_back_until }
+			te_pa_row_sync = yes
+		}
+	}
+}
+
+# Company scope, inside te_pa_cm_pick. The government's side: in a campaign, the active party whose members in
+# government hold the most clout, the wager on its largest member; otherwise the governing group with most clout.
+te_pa_cm_pick_gov = {
+	if = {
+		limit = { owner = { te_pa_cm_momentum_form = yes } }
+		scope:te_pa_home = {
+			if = {
+				limit = { any_active_party = { any_member = { is_in_government = yes } } }
+				ordered_active_party = {
+					limit = { any_member = { is_in_government = yes } }
+					order_by = te_pa_party_gov_clout
+					position = 0
+					check_range_bounds = no
+					save_scope_as = te_pa_cm_party
+				}
+			}
+		}
+		scope:te_pa_cm_party ?= {
+			ordered_member = {
+				order_by = ig_clout
+				position = 0
+				check_range_bounds = no
+				save_scope_as = te_pa_cm_bet_ig
+			}
+		}
+		if = {
+			limit = { NOT = { exists = scope:te_pa_cm_bet_ig } }
+			clear_saved_scope = te_pa_cm_party
+		}
+	}
+	if = {
+		limit = { NOT = { exists = scope:te_pa_cm_party } }
+		scope:te_pa_home = {
+			if = {
+				limit = { any_interest_group = { is_in_government = yes } }
+				ordered_interest_group = {
+					limit = { is_in_government = yes }
+					order_by = ig_clout
+					position = 0
+					check_range_bounds = no
+					save_scope_as = te_pa_cm_ig
+				}
+			}
+		}
+		scope:te_pa_cm_ig ?= { save_scope_as = te_pa_cm_bet_ig }
+	}
+}
+
+# Country scope, the event (scope:te_pa_mv_firm the petitioner). The record's three largest on each side, saved for
+# the event's tooltips (te_pa_pt_sides_tt).
+te_pa_pt_save_sides = {
+	var:te_pa_pt_top_for_1 ?= { save_scope_as = te_pa_pt_f1 }
+	var:te_pa_pt_top_for_2 ?= { save_scope_as = te_pa_pt_f2 }
+	var:te_pa_pt_top_for_3 ?= { save_scope_as = te_pa_pt_f3 }
+	var:te_pa_pt_top_against_1 ?= { save_scope_as = te_pa_pt_a1 }
+	var:te_pa_pt_top_against_2 ?= { save_scope_as = te_pa_pt_a2 }
+	var:te_pa_pt_top_against_3 ?= { save_scope_as = te_pa_pt_a3 }
+}
+
+# Country scope, an option of the end event (te_pa_pt_save_sides run in its immediate). Who stood for and against
+# the petition and what each spent, a line a firm: § 8.4's "a player sees who is for and who is against before
+# answering", in the tooltip.
+te_pa_pt_sides_tt = {
+	if = {
+		limit = { te_pa_v_pt_for > 0 }
+		custom_tooltip = te_pa_pt_for_tt
+		if = { limit = { exists = scope:te_pa_pt_f1 } custom_tooltip = te_pa_pt_f1_tt }
+		if = { limit = { exists = scope:te_pa_pt_f2 } custom_tooltip = te_pa_pt_f2_tt }
+		if = { limit = { exists = scope:te_pa_pt_f3 } custom_tooltip = te_pa_pt_f3_tt }
+	}
+	if = {
+		limit = { te_pa_v_pt_against > 0 }
+		custom_tooltip = te_pa_pt_against_tt
+		if = { limit = { exists = scope:te_pa_pt_a1 } custom_tooltip = te_pa_pt_a1_tt }
+		if = { limit = { exists = scope:te_pa_pt_a2 } custom_tooltip = te_pa_pt_a2_tt }
+		if = { limit = { exists = scope:te_pa_pt_a3 } custom_tooltip = te_pa_pt_a3_tt }
+	}
+	if = {
+		limit = {
+			te_pa_v_pt_for <= 0
+			te_pa_v_pt_against <= 0
+		}
+		custom_tooltip = te_pa_pt_no_sides_tt
+	}
+}
+
+# Country scope. The hand-written half of the generated te_pa_gen_tariff_set: the good GOOD gets the import tariff
+# level LEVEL (a country variable, 0 to 3), the way the Tax Code's customs sync sets one (set_import_tariff_level),
+# unless a treaty bars a tariff on the good (a level of 0, none, every treaty allows). Reached only behind
+# te_pa_tariffs_settable, which defers to the Tax Code's customs option.
+te_pa_tariff_set_good = {
+	if = {
+		limit = { var:$LEVEL$ ?= 0 }
+		set_import_tariff_level = { goods = g:$GOOD$ level = no_tariffs_or_subventions }
+	}
+	else_if = {
+		limit = { NOT = { te_bulk_tariff_barred = { GOOD = $GOOD$ ARTICLE = no_tariffs } } }
+		if = {
+			limit = { var:$LEVEL$ ?= 1 }
+			set_import_tariff_level = { goods = g:$GOOD$ level = low_tariffs }
+		}
+		else_if = {
+			limit = { var:$LEVEL$ ?= 2 }
+			set_import_tariff_level = { goods = g:$GOOD$ level = high_tariffs }
+		}
+		else_if = {
+			limit = { var:$LEVEL$ ?= 3 }
+			set_import_tariff_level = { goods = g:$GOOD$ level = max_tariffs }
+		}
+	}
 }

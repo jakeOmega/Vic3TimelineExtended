@@ -209,6 +209,40 @@ te_pa_ledger_line = {
 		trigger = { var:te_pa_l_verb ?= 49 }
 		localization_key = te_pa_ledger_verb_49
 	}
+	# Task 5b: the petition for a law or a tariff, its sides and the government's pledge (te_pa_politics_effects.txt
+	# lists 50-57)
+	text = {
+		trigger = { var:te_pa_l_verb ?= 50 }
+		localization_key = te_pa_ledger_verb_50
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 51 }
+		localization_key = te_pa_ledger_verb_51
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 52 }
+		localization_key = te_pa_ledger_verb_52
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 53 }
+		localization_key = te_pa_ledger_verb_53
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 54 }
+		localization_key = te_pa_ledger_verb_54
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 55 }
+		localization_key = te_pa_ledger_verb_55
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 56 }
+		localization_key = te_pa_ledger_verb_56
+	}
+	text = {
+		trigger = { var:te_pa_l_verb ?= 57 }
+		localization_key = te_pa_ledger_verb_57
+	}
 	text = {
 		localization_key = te_pa_ledger_verb_unknown
 	}
@@ -600,6 +634,164 @@ te_pa_ledger_move = {
 		}
 		localization_key = te_pa_ledger_move_33_2
 	}
+	# Task 5b: the petition for a law or a tariff (kind 3), by what it asks for (te_pa_l_ask: 1 a law, 2 a tariff on
+	# its output, 3 a lower tariff on its input, 4 Antitrust Enforcement), then the kind's own line.
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 30
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 1
+		}
+		localization_key = te_pa_ledger_move_30_3_law
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 30
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 4
+		}
+		localization_key = te_pa_ledger_move_30_3_antitrust
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 30
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 2
+		}
+		localization_key = te_pa_ledger_move_30_3_raise
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 30
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 3
+		}
+		localization_key = te_pa_ledger_move_30_3_lower
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 30
+			var:te_pa_l_kind ?= 3
+		}
+		localization_key = te_pa_ledger_move_30_3
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 31
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 1
+		}
+		localization_key = te_pa_ledger_move_31_3_law
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 31
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 4
+		}
+		localization_key = te_pa_ledger_move_31_3_antitrust
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 31
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 2
+		}
+		localization_key = te_pa_ledger_move_31_3_raise
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 31
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 3
+		}
+		localization_key = te_pa_ledger_move_31_3_lower
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 31
+			var:te_pa_l_kind ?= 3
+		}
+		localization_key = te_pa_ledger_move_31_3
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 32
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 1
+		}
+		localization_key = te_pa_ledger_move_32_3_law
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 32
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 4
+		}
+		localization_key = te_pa_ledger_move_32_3_antitrust
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 32
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 2
+		}
+		localization_key = te_pa_ledger_move_32_3_raise
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 32
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 3
+		}
+		localization_key = te_pa_ledger_move_32_3_lower
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 32
+			var:te_pa_l_kind ?= 3
+		}
+		localization_key = te_pa_ledger_move_32_3
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 33
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 1
+		}
+		localization_key = te_pa_ledger_move_33_3_law
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 33
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 4
+		}
+		localization_key = te_pa_ledger_move_33_3_antitrust
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 33
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 2
+		}
+		localization_key = te_pa_ledger_move_33_3_raise
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 33
+			var:te_pa_l_kind ?= 3
+			var:te_pa_l_ask ?= 3
+		}
+		localization_key = te_pa_ledger_move_33_3_lower
+	}
+	text = {
+		trigger = {
+			var:te_pa_l_verb ?= 33
+			var:te_pa_l_kind ?= 3
+		}
+		localization_key = te_pa_ledger_move_33_3
+	}
 	text = {
 		localization_key = te_pa_ledger_move_unknown
 	}
@@ -627,6 +819,14 @@ te_pa_ledger_why = {
 		localization_key = te_pa_why_4
 	}
 	text = {
+		trigger = { var:te_pa_l_why ?= 5 }
+		localization_key = te_pa_why_5
+	}
+	text = {
+		trigger = { var:te_pa_l_why ?= 6 }
+		localization_key = te_pa_why_6
+	}
+	text = {
 		localization_key = te_pa_why_none
 	}
 }
@@ -642,6 +842,38 @@ te_pa_row_move_kind = {
 	text = {
 		trigger = { var:te_pa_r_move_kind ?= 2 }
 		localization_key = te_pa_move_kind_2
+	}
+	text = {
+		trigger = {
+			var:te_pa_r_move_kind ?= 3
+			var:te_pa_r_move_ask ?= 1
+		}
+		localization_key = te_pa_row_move_kind_3_law
+	}
+	text = {
+		trigger = {
+			var:te_pa_r_move_kind ?= 3
+			var:te_pa_r_move_ask ?= 4
+		}
+		localization_key = te_pa_row_move_kind_3_antitrust
+	}
+	text = {
+		trigger = {
+			var:te_pa_r_move_kind ?= 3
+			var:te_pa_r_move_ask ?= 2
+		}
+		localization_key = te_pa_row_move_kind_3_raise
+	}
+	text = {
+		trigger = {
+			var:te_pa_r_move_kind ?= 3
+			var:te_pa_r_move_ask ?= 3
+		}
+		localization_key = te_pa_row_move_kind_3_lower
+	}
+	text = {
+		trigger = { var:te_pa_r_move_kind ?= 3 }
+		localization_key = te_pa_move_kind_3
 	}
 	text = {
 		localization_key = te_pa_move_kind_unknown
@@ -660,6 +892,38 @@ te_pa_move_kind_now = {
 	text = {
 		trigger = { var:te_pa_move_kind ?= 2 }
 		localization_key = te_pa_move_kind_2
+	}
+	text = {
+		trigger = {
+			var:te_pa_move_kind ?= 3
+			var:te_pa_move_firm ?= { var:te_pa_move_ask ?= 1 }
+		}
+		localization_key = te_pa_move_kind_3_law
+	}
+	text = {
+		trigger = {
+			var:te_pa_move_kind ?= 3
+			var:te_pa_move_firm ?= { var:te_pa_move_ask ?= 4 }
+		}
+		localization_key = te_pa_move_kind_3_antitrust
+	}
+	text = {
+		trigger = {
+			var:te_pa_move_kind ?= 3
+			var:te_pa_move_firm ?= { var:te_pa_move_ask ?= 2 }
+		}
+		localization_key = te_pa_move_kind_3_raise
+	}
+	text = {
+		trigger = {
+			var:te_pa_move_kind ?= 3
+			var:te_pa_move_firm ?= { var:te_pa_move_ask ?= 3 }
+		}
+		localization_key = te_pa_move_kind_3_lower
+	}
+	text = {
+		trigger = { var:te_pa_move_kind ?= 3 }
+		localization_key = te_pa_move_kind_3
 	}
 	text = {
 		localization_key = te_pa_move_kind_unknown
@@ -712,5 +976,148 @@ te_pa_pol_row_gov_text = {
 	}
 	text = {
 		localization_key = te_pa_pol_row_out
+	}
+}
+
+# Task 5b: an import tariff level by its number (0 none to 3 max), vanilla's names: a petition's on its row, its ledger
+# entries and the country's record, and a pledge's in the firm's detail.
+# The row's declared move (te_pa_r_move_level).
+te_pa_row_move_level_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_move_level ?= 3 }
+		localization_key = max_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_r_move_level ?= 2 }
+		localization_key = high_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_r_move_level ?= 1 }
+		localization_key = low_tariffs
+	}
+	text = {
+		localization_key = no_tariffs
+	}
+}
+
+# A ledger entry (te_pa_l_level).
+te_pa_ledger_level_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_l_level ?= 3 }
+		localization_key = max_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_l_level ?= 2 }
+		localization_key = high_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_l_level ?= 1 }
+		localization_key = low_tariffs
+	}
+	text = {
+		localization_key = no_tariffs
+	}
+}
+
+# The country's petition (te_pa_pt_level).
+te_pa_pt_level_name = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_pt_level ?= 3 }
+		localization_key = max_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_pt_level ?= 2 }
+		localization_key = high_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_pt_level ?= 1 }
+		localization_key = low_tariffs
+	}
+	text = {
+		localization_key = no_tariffs
+	}
+}
+
+# The row's pledge (te_pa_r_pl_level).
+te_pa_row_pl_level_name = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_r_pl_level ?= 3 }
+		localization_key = max_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_r_pl_level ?= 2 }
+		localization_key = high_tariffs
+	}
+	text = {
+		trigger = { var:te_pa_r_pl_level ?= 1 }
+		localization_key = low_tariffs
+	}
+	text = {
+		localization_key = no_tariffs
+	}
+}
+
+# Task 5b: the government's pledge to a row's firm (te_pa_r_pl_kind 1 a law, 2 a tariff; te_pa_r_pl_dir, _begun), for
+# the firm's detail.
+te_pa_row_pledge = {
+	type = container
+	random_valid = no
+	text = {
+		trigger = {
+			var:te_pa_r_pl_kind ?= 1
+			var:te_pa_r_pl_begun ?= 1
+		}
+		localization_key = te_pa_row_pledge_law_begun
+	}
+	text = {
+		trigger = { var:te_pa_r_pl_kind ?= 1 }
+		localization_key = te_pa_row_pledge_law
+	}
+	text = {
+		trigger = {
+			var:te_pa_r_pl_kind ?= 2
+			var:te_pa_r_pl_dir ?= -1
+		}
+		localization_key = te_pa_row_pledge_lower
+	}
+	text = {
+		trigger = { var:te_pa_r_pl_kind ?= 2 }
+		localization_key = te_pa_row_pledge_raise
+	}
+	text = {
+		localization_key = te_pa_row_pledge_none
+	}
+}
+
+# Task 5b: the country's petition for a law or a tariff (te_pa_pt_ask), for the Politics section.
+te_pa_pol_pt_ask_text = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { var:te_pa_pt_ask ?= 1 }
+		localization_key = te_pa_pol_pt_ask_law
+	}
+	text = {
+		trigger = { var:te_pa_pt_ask ?= 4 }
+		localization_key = te_pa_pol_pt_ask_antitrust
+	}
+	text = {
+		trigger = { var:te_pa_pt_ask ?= 2 }
+		localization_key = te_pa_pol_pt_ask_raise
+	}
+	text = {
+		trigger = { var:te_pa_pt_ask ?= 3 }
+		localization_key = te_pa_pol_pt_ask_lower
+	}
+	text = {
+		localization_key = te_pa_pol_pt_ask_unknown
 	}
 }

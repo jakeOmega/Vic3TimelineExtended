@@ -66,12 +66,82 @@ te_pa_trade_enacting_burden_value = {
 }
 
 # ---------------------------------------------------------------------------
+# Tariffs (Task 5b, § 8.1): the import tariff level on each of the firm's goods in the home market, 0 to 3, from
+# the generated readings (te_pa_g_<slot>_tariff, -3 to 3 as set), counted only while the trade policy lets a tariff
+# collect (te_pa_tariffs_bite: Free Trade has none). A subvention reads 0 here. te_pa_v_out_tariff_level is the
+# output's level as set, -3 to 3, for the level a petition asks for.
+# ---------------------------------------------------------------------------
+
+te_pa_v_in1_tariff = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_pa_g_in1_tariff
+			var:te_pa_g_in1_tariff > 0
+			owner = { te_pa_tariffs_bite = yes }
+		}
+		value = var:te_pa_g_in1_tariff
+	}
+}
+te_pa_v_in2_tariff = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_pa_g_in2_tariff
+			var:te_pa_g_in2_tariff > 0
+			owner = { te_pa_tariffs_bite = yes }
+		}
+		value = var:te_pa_g_in2_tariff
+	}
+}
+te_pa_v_out_tariff = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_pa_g_out_tariff
+			var:te_pa_g_out_tariff > 0
+			owner = { te_pa_tariffs_bite = yes }
+		}
+		value = var:te_pa_g_out_tariff
+	}
+}
+te_pa_v_out_tariff_level = { value = 0 if = { limit = { has_variable = te_pa_g_out_tariff } value = var:te_pa_g_out_tariff } }
+
+# ---------------------------------------------------------------------------
 # 1. Cheaper inputs: the home market's price of its inputs above base (te_pa_g_in1_pricier, _in2_). The second
-# input counts three-quarters. 40% above base reads 48.
+# input counts three-quarters. 40% above base reads 48. A tariff on an input the market imports adds 10 a level
+# (the second input three-quarters; the larger of the two): High Tariffs on its main input add 20.
 # ---------------------------------------------------------------------------
 
 te_pa_p_inputs_scale = 120
 te_pa_p_inputs_second = 0.75
+te_pa_p_inputs_tariff_per = 10
+
+te_pa_p_inputs_tariff_in1 = {
+	value = 0
+	if = {
+		limit = { var:te_pa_g_in1_imported ?= 1 }
+		value = te_pa_v_in1_tariff
+		multiply = te_pa_p_inputs_tariff_per
+	}
+}
+
+te_pa_p_inputs_tariff_in2 = {
+	value = 0
+	if = {
+		limit = { var:te_pa_g_in2_imported ?= 1 }
+		value = te_pa_v_in2_tariff
+		multiply = te_pa_p_inputs_tariff_per
+		multiply = te_pa_p_inputs_second
+	}
+}
+
+# The larger of the two, 0-30.
+te_pa_p_inputs_tariff = {
+	value = te_pa_p_inputs_tariff_in1
+	min = te_pa_p_inputs_tariff_in2
+	min = 0
+}
 
 te_pa_p_inputs_in1 = {
 	value = te_pa_v_in1_pricier
@@ -90,15 +160,30 @@ te_pa_p_inputs_value = {
 	value = te_pa_p_inputs_in1
 	min = te_pa_p_inputs_in2
 	min = 0
+	add = te_pa_p_inputs_tariff
+	min = 0
 	max = te_pa_pressure_max
 }
 
 # ---------------------------------------------------------------------------
 # 2. A protected market: the home market's price of its output below base while the market imports it (a local
-# output has no market price, te_pa_g_out_local). 30% below base reads 36.
+# output has no market price, te_pa_g_out_local). 30% below base reads 36. No tariff on that import (none set, a
+# subvention, or a trade policy under which none collects) adds 15 whatever the price (Task 5b).
 # ---------------------------------------------------------------------------
 
 te_pa_p_market_scale = 120
+te_pa_p_market_no_tariff = 15
+
+te_pa_p_market_tariff = {
+	value = 0
+	if = {
+		limit = {
+			te_pa_wants_output_tariff = yes
+			te_pa_v_out_tariff <= 0
+		}
+		value = te_pa_p_market_no_tariff
+	}
+}
 
 te_pa_p_market_value = {
 	value = 0
@@ -111,6 +196,7 @@ te_pa_p_market_value = {
 		subtract = te_pa_v_out_pricier
 		multiply = te_pa_p_market_scale
 	}
+	add = te_pa_p_market_tariff
 	min = 0
 	max = te_pa_pressure_max
 }
@@ -127,7 +213,9 @@ te_pa_p_abroad_value = {
 # ---------------------------------------------------------------------------
 # 4. A friendly law (§ 8.1): the worst of the law table's laws in force (te_pa_gen_law_pick's te_pa_g_law_worst,
 # -2 to 0) or the trade policy's burden; the law being enacted, against the firm or for it; and the best law it
-# could move to. The largest of those, and a little more where it wants a tariff on its output.
+# could move to. The largest of those, and its stance on the tariffs (Task 5b, § 8.1's first bullet: a firm wants
+# a tariff on a good it makes and the market imports, and none on a good it buys): 10 for no tariff on its
+# imported output, and 10 for each level on an input the market imports, the larger input's, at most 20.
 # ---------------------------------------------------------------------------
 
 te_pa_p_law_in_force_per = 25
@@ -136,6 +224,7 @@ te_pa_p_law_enacting_per = 35
 te_pa_p_law_enacting_favor_per = 20
 te_pa_p_law_open_per = 15
 te_pa_p_law_tariff = 10
+te_pa_p_law_tariff_max = 20
 
 # A law in force that burdens it, 0-50.
 te_pa_p_law_in_force = {
@@ -174,9 +263,28 @@ te_pa_p_law_open = {
 	multiply = te_pa_p_law_open_per
 }
 
+# How far the tariffs in force are from what the firm wants, 0-20.
 te_pa_p_law_tariff_want = {
 	value = 0
-	if = { limit = { te_pa_wants_output_tariff = yes } value = te_pa_p_law_tariff }
+	if = {
+		limit = {
+			te_pa_wants_output_tariff = yes
+			te_pa_v_out_tariff <= 0
+		}
+		add = te_pa_p_law_tariff
+	}
+	add = {
+		value = te_pa_tariff_on_inputs
+		multiply = te_pa_p_law_tariff
+	}
+	max = te_pa_p_law_tariff_max
+}
+
+# The larger tariff level, 0-3, on an input the market imports.
+te_pa_tariff_on_inputs = {
+	value = 0
+	if = { limit = { var:te_pa_g_in1_imported ?= 1 } value = te_pa_v_in1_tariff }
+	if = { limit = { var:te_pa_g_in2_imported ?= 1 } min = te_pa_v_in2_tariff }
 }
 
 te_pa_p_law_value = {

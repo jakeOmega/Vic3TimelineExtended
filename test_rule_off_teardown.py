@@ -390,6 +390,18 @@ class PrivateActorsTeardownTest(unittest.TestCase):
         view = politics["te_pa_pol_view_clear"]
         self.assertIn("destroy_container", keys(view))
 
+    def test_the_teardown_takes_the_petition_and_the_pledges(self):
+        # Task 5b: the petition's record (the move itself is the actions' teardown's), and every firm's pledge, its
+        # backing at the next election and its ask, so no pledge falls due unwatched while the rule is off
+        politics = top("common/scripted_effects/te_pa_politics_effects.txt")
+        teardown = politics["te_pa_politics_teardown"]
+        self.assertLessEqual({"te_pa_pt_close", "te_pa_pledge_drop", "te_pa_move_ask_clear", "te_pa_tf_clear"},
+                             keys(teardown))
+        dropped = {n.value for n in walk(politics["te_pa_pledge_drop"].children) if n.key == "VAR"}
+        self.assertIn("te_pa_pl_kind", dropped)
+        closed = {n.value for n in walk(politics["te_pa_pt_close"].children) if n.key == "VAR"}
+        self.assertLessEqual({"te_pa_pt_firm", "te_pa_pt_for", "te_pa_pt_against"}, closed)
+
 
 if __name__ == "__main__":
     unittest.main()

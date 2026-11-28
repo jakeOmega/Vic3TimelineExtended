@@ -374,6 +374,62 @@ class OutputsTest(unittest.TestCase):
         self.assertIn(f"var:te_pa_r_reason_good ?= {plan.good_index('coal')} }}\n\t\tlocalization_key = coal\n", good)
 
 
+class TariffTest(unittest.TestCase):
+    """Task 5b: every good a sector reads has its import tariff reading, the slot readings carry it, and the
+    petition's dispatch names every good a market can set a tariff on and every law."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.plan = gen.build_plan(state())
+        cls.values = read(gen.VALUES_OUT)
+        cls.effects = read(gen.EFFECTS_OUT)
+        cls.triggers = read(gen.TRIGGERS_OUT)
+
+    def test_every_read_good_has_its_tariff_reading(self):
+        goods = self.plan.read_goods()
+        self.assertGreater(len(goods), 30)
+        for good in goods:
+            with self.subTest(good=good):
+                self.assertIn(f"\nte_pa_gen_firm_tariff_{good} = {{ value = 0 owner = {{ add = te_pa_gen_tariff_{good} }} }}",
+                              self.values)
+                body = block(self.values, f"te_pa_gen_tariff_{good}") if good not in self.plan.untradeable else ""
+                if good in self.plan.untradeable:
+                    self.assertIn(f"\nte_pa_gen_tariff_{good} = {{ value = 0 }}", self.values)
+                    continue
+                for level, key in gen.TARIFF_LEVELS.items():
+                    if level:
+                        self.assertIn(f"capital ?= {{ sg:{good} ?= {{ import_tariff_level = {key} }} }} }} value = {level} }}",
+                                      body)
+
+    def test_the_slots_carry_the_tariff(self):
+        self.assertIn("set_variable = { name = te_pa_g_$SLOT$_tariff value = 0 }", block(self.effects, "te_pa_gen_clear_good"))
+        self.assertIn("set_variable = { name = te_pa_g_$SLOT$_tariff value = te_pa_gen_firm_tariff_$GOOD$ }",
+                      block(self.effects, "te_pa_gen_read_good"))
+
+    def test_gold_is_read_but_never_set(self):
+        self.assertIn("gold", self.plan.untradeable)
+        self.assertNotIn("gold", self.plan.tariff_goods())
+
+    def test_the_dispatch_names_every_tariff_good_and_every_law(self):
+        tariff_set = block(self.effects, "te_pa_gen_tariff_set")
+        by_index = block(self.values, "te_pa_gen_tariff_n")
+        barred = block(self.triggers, "te_pa_gen_tariff_barred_n")
+        for good in self.plan.tariff_goods():
+            n = self.plan.good_index(good)
+            with self.subTest(good=good):
+                self.assertIn(f"var:$VAR$ ?= {n} }} te_pa_tariff_set_good = {{ GOOD = {good} LEVEL = $LEVEL$ }}", tariff_set)
+                self.assertIn(f"var:te_pa_tf_good ?= {n} }} value = te_pa_gen_tariff_{good} }}", by_index)
+                self.assertIn(f"var:$VAR$ ?= {n} te_bulk_tariff_barred = {{ GOOD = {good} ARTICLE = no_tariffs }}", barred)
+        start = block(self.effects, "te_pa_gen_law_start")
+        opened = block(self.triggers, "te_pa_gen_law_n_open")
+        for law in self.plan.laws:
+            with self.subTest(law=law.key):
+                self.assertIn(f"var:$VAR$ ?= {law.index} }} start_enactment = law_type:{law.key} }}", start)
+                self.assertIn(f"var:$VAR$ ?= {law.index} te_pa_gen_law_open_{law.key} = yes }}", opened)
+                self.assertIn(f"\nte_pa_gen_law_index_{law.key} = {law.index}\n", self.values)
+        self.assertIn("te_pa_gen_law_index_law_trust_busting", self.values)
+
+
 SYNTHETIC = {
     "common/company_types/zz_te_pa_test.txt": """
 company_te_pa_test = {
@@ -508,13 +564,15 @@ class SyntheticTypeTest(unittest.TestCase):
 
 class AuditsTest(unittest.TestCase):
     """The script audits that apply, over a tree holding the generated files and the hand-written files they call:
-    two trigger files, and Task 5a's politics effects, whose per-interest-group helpers (te_pa_<x>_one) the
+    three trigger files, and Task 5a's politics effects, whose per-interest-group helpers (te_pa_<x>_one) the
     generated dispatch calls (the audits' catalogs and vanilla's names come from the repo's docs/ and
     vanilla_parsed/)."""
 
     CALLED = ("common/scripted_triggers/te_creditors_consortium_triggers.txt",
               "common/scripted_triggers/resource_transition_triggers.txt",
-              "common/scripted_effects/te_pa_politics_effects.txt")
+              "common/scripted_effects/te_pa_politics_effects.txt",
+              # Task 5b: the treaty test the tariff petition's generated trigger calls
+              "common/scripted_triggers/te_bulk_tariff_triggers.txt")
 
     @classmethod
     def setUpClass(cls):

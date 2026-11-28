@@ -38,3 +38,21 @@ te_pa_campaign_money_big = {
 	notification_type = feed
 	color = neutral
 }
+
+# A pledge (Task 5b, spec § 8.4; te_pa_pledge_break, te_pa_politics_effects.txt): we took up a firm's petition for a
+# law or a tariff and did not keep the pledge, which counts as a refusal; scope:te_pa_note_firm the firm.
+te_pa_pledge_broken = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = bad
+}
+
+# A law pledge's reminder (te_pa_pledge_law_monthly): te_pa_pl_due_months before its deadline, the law not yet begun;
+# scope:te_pa_note_firm the firm.
+te_pa_pledge_due = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/journal.dds"
+	notification_type = feed
+	color = neutral
+}

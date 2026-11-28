@@ -306,6 +306,8 @@ te_pa_debug_monthly = {
 te_pa_debug_politics_monthly = {
 	te_pa_debug_progress_read = yes
 	te_pa_debug_momentum_read = yes
+	# Task 5b: probe 13's read (probe 14's runs first in te_pa_politics_monthly, before the pledges).
+	te_pa_debug_enact_read = yes
 }
 
 # law_progress (probe 10), armed in country scope inside te_pa_do_speed just before the first add_law_progress: the
@@ -479,6 +481,159 @@ te_pa_debug_momentum_disarm = {
 	if = {
 		limit = { has_global_variable = te_pa_sc_mom_later }
 		remove_global_variable = te_pa_sc_mom_later
+	}
+}
+
+# ai_keeps_enactment (Task 5b, probe 13), armed in country scope inside te_pa_pledge_start, just before an AI
+# government starts enacting a pledged law from script (start_enactment); VAR holds the law's number. Whether the
+# enactment started at once is read just after (te_pa_debug_enact_after).
+te_pa_debug_enact_arm = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_enact_done }
+			NOT = { has_global_variable = te_pa_sc_enact_armed }
+			is_ai = yes
+			NOT = { enacting_any_law = yes }
+		}
+		set_global_variable = { name = te_pa_sc_enact_armed value = 1 }
+		set_global_variable = { name = te_pa_sc_enact_country value = this }
+		set_global_variable = { name = te_pa_sc_enact_month value = te_history_month_index }
+		set_variable = { name = te_pa_sc_enact_law value = var:$VAR$ }
+	}
+}
+
+# Country scope, straight after the armed start_enactment: is the law being enacted at once.
+te_pa_debug_enact_after = {
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_enact_armed
+			this = global_var:te_pa_sc_enact_country
+			NOT = { has_global_variable = te_pa_sc_enact_now }
+		}
+		set_global_variable = { name = te_pa_sc_enact_now value = 0 }
+		if = {
+			limit = {
+				has_variable = te_pa_sc_enact_law
+				te_pa_gen_enacting_law_index >= var:te_pa_sc_enact_law
+				te_pa_gen_enacting_law_index <= var:te_pa_sc_enact_law
+			}
+			set_global_variable = { name = te_pa_sc_enact_now value = 1 }
+		}
+	}
+}
+
+# Country scope, the armed country, te_pa_sc_enact_months or more after arming (past the AI's next review). OK: it is
+# still enacting the law, or the law has passed. BROKEN: neither (the AI cancelled it, or its enactment failed on its
+# own: read the law panel's history); now=0 says start_enactment did not start it at all. Fallback: the AI's pledge is
+# only the head start, the free speed given when it enacts the law by itself (te_pa_pledge_start's start_enactment
+# taken out).
+te_pa_debug_enact_read = {
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_enact_armed
+			NOT = { has_global_variable = te_pa_sc_enact_done }
+			this = global_var:te_pa_sc_enact_country
+			te_pa_sc_enact_age >= te_pa_sc_enact_months
+		}
+		set_global_variable = { name = te_pa_sc_enact_done value = 1 }
+		set_global_variable = { name = te_pa_sc_enact_same value = 0 }
+		set_global_variable = { name = te_pa_sc_enact_passed value = 0 }
+		if = {
+			limit = {
+				has_variable = te_pa_sc_enact_law
+				te_pa_gen_enacting_law_index >= var:te_pa_sc_enact_law
+				te_pa_gen_enacting_law_index <= var:te_pa_sc_enact_law
+			}
+			set_global_variable = { name = te_pa_sc_enact_same value = 1 }
+		}
+		if = {
+			limit = { te_pa_gen_law_n_in_force = { VAR = te_pa_sc_enact_law } }
+			set_global_variable = { name = te_pa_sc_enact_passed value = 1 }
+		}
+		if = {
+			limit = {
+				OR = {
+					global_var:te_pa_sc_enact_same ?= 1
+					global_var:te_pa_sc_enact_passed ?= 1
+				}
+			}
+			debug_log = "TE_SELF_CHECK OK ai_keeps_enactment now=[GetGlobalVariable('te_pa_sc_enact_now').GetValue|0] same=[GetGlobalVariable('te_pa_sc_enact_same').GetValue|0] passed=[GetGlobalVariable('te_pa_sc_enact_passed').GetValue|0] country=[THIS.GetCountry.GetTagName] (an AI country keeps an enactment script started) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN ai_keeps_enactment now=[GetGlobalVariable('te_pa_sc_enact_now').GetValue|0] same=[GetGlobalVariable('te_pa_sc_enact_same').GetValue|0] passed=[GetGlobalVariable('te_pa_sc_enact_passed').GetValue|0] country=[THIS.GetCountry.GetTagName] (now=0: start_enactment started nothing; now=1: the AI dropped it, or it failed on its own: read the law panel. Fallback: the AI's pledge is only the head start, given when it enacts the law by itself) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_pa_sc_enact_armed
+		remove_global_variable = te_pa_sc_enact_country
+		remove_global_variable = te_pa_sc_enact_month
+		remove_global_variable = te_pa_sc_enact_same
+		remove_global_variable = te_pa_sc_enact_passed
+		if = {
+			limit = { has_global_variable = te_pa_sc_enact_now }
+			remove_global_variable = te_pa_sc_enact_now
+		}
+		te_pa_drop = { VAR = te_pa_sc_enact_law }
+	}
+}
+
+# tariff_from_script (Task 5b, probe 14), armed in country scope inside te_pa_pt_take_tariff, just after the first
+# pledged tariff is set (te_pa_gen_tariff_set from the record's te_pa_pt_good and te_pa_pt_level): the good, the
+# level wanted, and the level read at once (the effect's result may lag the block, so the month's read decides).
+te_pa_debug_tariff_arm = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = te_pa_sc_tariff_done }
+			NOT = { has_global_variable = te_pa_sc_tariff_armed }
+			has_variable = te_pa_pt_good
+			has_variable = te_pa_pt_level
+		}
+		set_global_variable = { name = te_pa_sc_tariff_armed value = 1 }
+		set_global_variable = { name = te_pa_sc_tariff_country value = this }
+		set_global_variable = { name = te_pa_sc_tariff_month value = te_history_month_index }
+		set_global_variable = { name = te_pa_sc_tariff_want value = var:te_pa_pt_level }
+		set_global_variable = { name = te_pa_sc_tariff_ai value = 0 }
+		if = {
+			limit = { is_ai = yes }
+			set_global_variable = { name = te_pa_sc_tariff_ai value = 1 }
+		}
+		set_variable = { name = te_pa_sc_tariff_good value = var:te_pa_pt_good }
+		set_variable = { name = te_pa_tf_good value = var:te_pa_pt_good }
+		set_global_variable = { name = te_pa_sc_tariff_now value = te_pa_gen_tariff_n }
+		te_pa_drop = { VAR = te_pa_tf_good }
+	}
+}
+
+# Country scope, the armed country, a month or more after arming, before any pledge's re-assert
+# (te_pa_politics_monthly calls it first). OK: the good's import tariff reads the level set. BROKEN: it doesn't (the
+# set did not take, or did not hold: by the tariff cooldown, the trade policy, or the government's own change since;
+# now= says whether it took at once). Fallback: the pledge is the player's to keep by hand (the event says so in
+# place of setting it), and the monthly check reads the level and counts a lapse as a refusal (built).
+te_pa_debug_tariff_read = {
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_tariff_armed
+			NOT = { has_global_variable = te_pa_sc_tariff_done }
+			this = global_var:te_pa_sc_tariff_country
+			te_history_month_index > global_var:te_pa_sc_tariff_month
+		}
+		set_global_variable = { name = te_pa_sc_tariff_done value = 1 }
+		set_variable = { name = te_pa_tf_good value = var:te_pa_sc_tariff_good }
+		set_global_variable = { name = te_pa_sc_tariff_later value = te_pa_gen_tariff_n }
+		te_pa_drop = { VAR = te_pa_tf_good }
+		if = {
+			limit = { te_pa_sc_tariff_gap < te_pa_sc_size_tolerance }
+			debug_log = "TE_SELF_CHECK OK tariff_from_script want=[GetGlobalVariable('te_pa_sc_tariff_want').GetValue|0] now=[GetGlobalVariable('te_pa_sc_tariff_now').GetValue|0] month=[GetGlobalVariable('te_pa_sc_tariff_later').GetValue|0] ai=[GetGlobalVariable('te_pa_sc_tariff_ai').GetValue|0] country=[THIS.GetCountry.GetTagName] (the tariff set from script took and held a month) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		else = {
+			debug_log = "TE_SELF_CHECK BROKEN tariff_from_script want=[GetGlobalVariable('te_pa_sc_tariff_want').GetValue|0] now=[GetGlobalVariable('te_pa_sc_tariff_now').GetValue|0] month=[GetGlobalVariable('te_pa_sc_tariff_later').GetValue|0] ai=[GetGlobalVariable('te_pa_sc_tariff_ai').GetValue|0] country=[THIS.GetCountry.GetTagName] (the level did not take or did not hold: now off the want, the set was refused, by the cooldown or the trade policy; now on it and month off, the government changed it back. Fallback: the pledge is the player's to keep by hand, and the monthly check counts a lapse as a refusal) date=[TimeKeeper.GetCurrentDate.GetString]"
+		}
+		remove_global_variable = te_pa_sc_tariff_armed
+		remove_global_variable = te_pa_sc_tariff_country
+		remove_global_variable = te_pa_sc_tariff_month
+		remove_global_variable = te_pa_sc_tariff_want
+		remove_global_variable = te_pa_sc_tariff_ai
+		remove_global_variable = te_pa_sc_tariff_now
+		remove_global_variable = te_pa_sc_tariff_later
+		te_pa_drop = { VAR = te_pa_sc_tariff_good }
 	}
 }
 

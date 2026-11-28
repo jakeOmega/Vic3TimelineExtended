@@ -637,10 +637,10 @@ from what the firm faces:
 
 | Goal | What raises its pressure |
 |---|---|
-| Cheaper Inputs | One of its two largest inputs costing more than its base price |
-| A Protected Market | Its output selling below its base price while your market imports it |
+| Cheaper Inputs | One of its two largest inputs costing more than its base price, or a tariff on one your market imports |
+| A Protected Market | Its output selling below its base price while your market imports it, or no tariff on that import |
 | Security of Its Assets Abroad | Trouble at its concessions abroad; firms hold none, so this stays at 0 |
-| A Friendly Law | A law in force or being enacted that hurts its sector, one being enacted that helps it, a law you could enact that would help it, or a tariff it wants on its output while your market imports it |
+| A Friendly Law | A law in force or being enacted that hurts its sector, one being enacted that helps it, a law you could enact that would help it, or your tariffs: none on its output while your market imports it, or one on an input it buys |
 | Dominance | Its share of its sector: the levels it owns over your levels of its building types (40% reads 50); nothing under Command Economy or Cooperative Ownership |
 | Labor Peace | Turmoil and radicals in its seat, the state with most of its buildings; a labor law being enacted against it; a strike |
 | A Technical Lead | Technologies its buildings use that you haven't researched |
@@ -787,6 +787,7 @@ unanswered waits five years before asking for the same thing again.
 |---|---|---|
 | A monopoly charter | A firm with a cartel you know of, at strength 80 under Guilds and Chartered Monopolies, or at any strength while Favored | The company gets the monopoly on its main building type, its cartel is legal and no longer ends when its share falls, and its Connections rise 15; the Petty Bourgeoisie lose 2 approval for five years |
 | A suit against a cartel | A firm seeking Cheaper Inputs with 30 Connections, whose input a cartel your antitrust law forbids makes | Your government sues the cartel's firm at once, at no cost in approval |
+| A law or a tariff | A firm whose goal scores 70 or more, with 40 Connections (see [Petitions for a law or a tariff](#petitions-for-a-law-or-a-tariff)) | A pledge: the tariff set at once and kept five years, or the law begun within two years |
 
 Show Details on one of your firms opens State Actions, a row of buttons; a
 grayed one says what it lacks, and each says on hover what it does and costs.
@@ -866,6 +867,40 @@ secrets is exposed anyway, the press loses 30 strength. Your speech law decides
 what you can do about it: Outlawed Dissent closes every press, Censorship lets
 you close one with Close the Press, and under Right of Assembly or Protected
 Speech you can close one only after winning a suit against the firm.
+
+### Petitions for a law or a tariff
+
+A firm whose goal scores 70 or more and that holds 40 Connections may petition
+you for what would serve that goal:
+
+| Goal | It asks for |
+|---|---|
+| Cheaper Inputs | An import tariff one level lower on an input your market imports, or Antitrust Enforcement when a cartel your antitrust law allows sells it an input |
+| A Protected Market | An import tariff one level higher on its output while your market imports it, under a trade policy that collects tariffs |
+| A Friendly Law | The law you could enact that would favor it most |
+
+Under the Tax Code's customs option your tariffs are legislated, so no firm
+asks for one. While the petition runs, the other firms that stand to gain or
+lose spend Connections on it, once each: 5 or 10, by how much it weighs on
+them. Makers of a good stand against a lower tariff on it and buyers against a
+higher one; for a law, the firms its sector favors or burdens. The Politics
+section shows the petition, each side's total and the three firms that put in
+most, and the event names them.
+
+Taking it up is a pledge. A tariff is set at once and must stay there for five
+years; a law must be in force or being enacted within two years, and while you
+enact it the firm speeds it once a year at no cost. At the next election
+campaign the firm puts money behind your governing party. The firm's details
+show the pledge and the time left, and a notification reminds you six months
+before a law's deadline. A pledge broken (the law not begun in time, the tariff
+moved back, or a trade policy under which a raised tariff no longer collects)
+counts as a refusal. Refusing costs the firm 10 Connections and a point of
+Grievance, and every firm on the other side gains 5. Standing aside changes
+nothing. Either way, the firm waits five years before asking again.
+
+AI governments answer by the firm's posture, moved by their governing groups'
+stance on the law or on free trade and by the Connections each side spent. An
+AI government that takes up a law while enacting nothing starts it at once.
 
 ## Tariffs for all goods at once
 

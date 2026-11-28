@@ -31,6 +31,8 @@ ALERTS = "common/alert_types/te_pa_alerts.txt"
 SGUIS = "common/scripted_guis/te_pa_sguis.txt"
 CUSTOM_LOC = "common/customizable_localization/te_pa_custom_loc.txt"
 EVENTS = "events/te_pa_trust_events.txt"
+# Every file of the namespace: a kind's end event sits in its chain's file (Task 5b's te_pa.4 in the politics events).
+EVENT_FILES = ("events/te_pa_trust_events.txt", "events/te_pa_politics_events.txt")
 WIDGETS = "gui/te_pa_widgets.gui"
 
 
@@ -151,8 +153,8 @@ class FrameTest(unittest.TestCase):
             self.assertEqual(raises, name == "te_pa_move_refuse", name)
         for token in kinds():
             for shape in ("grant", "stand", "refuse"):
-                self.assertNotIn("te_pa_griev", block("common/scripted_effects/te_pa_trust_effects.txt",
-                                                      f"te_pa_answer_{token}_{shape}"))
+                name = f"te_pa_answer_{token}_{shape}"
+                self.assertNotIn("te_pa_griev", block(KindTest._file_of(None, name), name))
 
     def test_a_major_move_is_never_secret(self):
         for rel in (MOVES_EFFECTS, ACTIONS_EFFECTS):
@@ -172,12 +174,15 @@ class KindTest(unittest.TestCase):
         cls.triggers = te_pa("common/scripted_triggers")
         cls.effects = te_pa("common/scripted_effects")
         cls.values = te_pa("common/script_values")
-        cls.events = parse(EVENTS)
+        cls.events = {}
+        for rel in EVENT_FILES:
+            cls.events.update(parse(rel))
         cls.custom = parse(CUSTOM_LOC)
         cls.end = block(MOVES_EFFECTS, "te_pa_move_end")
 
-    def test_there_are_task_4bs_two(self):
-        self.assertEqual(kinds(), {"charter": 1, "suit": 2})
+    def test_the_kinds_built_so_far(self):
+        # Task 4b's two and Task 5b's petition for a law or a tariff (3); 4 relief and 5 protection are reserved
+        self.assertEqual(kinds(), {"charter": 1, "suit": 2, "law": 3})
 
     def test_each_kind_has_its_pieces(self):
         for token, code in kinds().items():

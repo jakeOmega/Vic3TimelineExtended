@@ -12,6 +12,8 @@
 #                          inputs by value) and out (its main output). te_pa_row_reason_good and its kin name it
 #   te_pa_g_<slot>_pricier the home market's price of it over base, less 1, signed (0.4 = 40% above base)
 #   te_pa_g_<slot>_imported, _exported  1 while the home market imports (exports) any of it
+#   te_pa_g_<slot>_tariff  its import tariff level in the home market, -3 (max subventions) to 3 (max tariffs),
+#                          as set: whether the trade policy lets it collect is the hand-written readers' (Task 5b)
 #   te_pa_g_out_local      1 when the main output is a local good, whose price and trade are not read
 #   te_pa_g_f_<feature>    the sector features (private_actors_config.FEATURES), 0 or 1
 #   te_pa_g_tech_count     how many technologies unlock a method of its building types
@@ -14329,13 +14331,17 @@ te_pa_gen_clear_good = {
 	set_variable = { name = te_pa_g_$SLOT$_pricier value = 0 }
 	set_variable = { name = te_pa_g_$SLOT$_imported value = 0 }
 	set_variable = { name = te_pa_g_$SLOT$_exported value = 0 }
+	set_variable = { name = te_pa_g_$SLOT$_tariff value = 0 }
 }
 
 # Scope: a company. Reads one good of its sector in its owner's market: the index, the signed price over
-# base (te_pa_gen_firm_price_<good>) and whether the market imports and exports it.
+# base (te_pa_gen_firm_price_<good>), whether the market imports and exports it, and its import tariff level
+# (te_pa_gen_firm_tariff_<good>, Task 5b: -3 max subventions to 3 max tariffs, as set, whatever the trade
+# policy lets it collect).
 te_pa_gen_read_good = {
 	set_variable = { name = te_pa_g_$SLOT$_good value = $IDX$ }
 	set_variable = { name = te_pa_g_$SLOT$_pricier value = te_pa_gen_firm_price_$GOOD$ }
+	set_variable = { name = te_pa_g_$SLOT$_tariff value = te_pa_gen_firm_tariff_$GOOD$ }
 	if = {
 		limit = { owner = { market = { mg:$GOOD$ = { market_goods_imports > 0 } } } }
 		set_variable = { name = te_pa_g_$SLOT$_imported value = 1 }
@@ -46708,4 +46714,121 @@ te_pa_gen_pol_view_rebuild = {
 	te_pa_pol_view_one = { IG = ig_petty_bourgeoisie N = 6 }
 	te_pa_pol_view_one = { IG = ig_rural_folk N = 7 }
 	te_pa_pol_view_one = { IG = ig_trade_unions N = 8 }
+}
+
+# The petition for a law or a tariff (Task 5b; te_pa_politics_effects.txt calls these). A tariff is one good's
+# import level in the market, read through the capital's state goods as the Tax Code's customs reads it, and set
+# as its customs sync sets one (set_import_tariff_level, in the hand-written te_pa_tariff_set_good, behind
+# te_pa_tariffs_settable, which defers to the Tax Code's customs option). Goods are numbered by key from 1 (the
+# index te_pa_g_<slot>_good carries), laws in the law table's order from 1.
+# Scope: a country (its market's owner, te_pa_tariffs_settable checked by the caller). The good numbered by
+# its variable VAR gets the import tariff level its variable LEVEL holds (0 to 3), through the
+# hand-written te_pa_tariff_set_good, which names the level and checks a treaty's ban.
+te_pa_gen_tariff_set = {
+	if = { limit = { var:$VAR$ ?= 1 } te_pa_tariff_set_good = { GOOD = advanced_materials LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 2 } te_pa_tariff_set_good = { GOOD = aeroplanes LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 3 } te_pa_tariff_set_good = { GOOD = ammunition LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 4 } te_pa_tariff_set_good = { GOOD = artillery LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 5 } te_pa_tariff_set_good = { GOOD = automobiles LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 6 } te_pa_tariff_set_good = { GOOD = clippers LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 7 } te_pa_tariff_set_good = { GOOD = clothes LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 8 } te_pa_tariff_set_good = { GOOD = coal LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 11 } te_pa_tariff_set_good = { GOOD = consumer_appliances LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 12 } te_pa_tariff_set_good = { GOOD = copper LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 14 } te_pa_tariff_set_good = { GOOD = digital_assets LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 15 } te_pa_tariff_set_good = { GOOD = dye LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 17 } te_pa_tariff_set_good = { GOOD = electronic_components LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 18 } te_pa_tariff_set_good = { GOOD = engines LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 19 } te_pa_tariff_set_good = { GOOD = explosives LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 20 } te_pa_tariff_set_good = { GOOD = fabric LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 21 } te_pa_tariff_set_good = { GOOD = fertilizer LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 22 } te_pa_tariff_set_good = { GOOD = fine_art LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 24 } te_pa_tariff_set_good = { GOOD = fruit LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 25 } te_pa_tariff_set_good = { GOOD = furniture LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 26 } te_pa_tariff_set_good = { GOOD = glass LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 28 } te_pa_tariff_set_good = { GOOD = grain LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 30 } te_pa_tariff_set_good = { GOOD = groceries LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 31 } te_pa_tariff_set_good = { GOOD = hardwood LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 32 } te_pa_tariff_set_good = { GOOD = iron LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 34 } te_pa_tariff_set_good = { GOOD = launch_capacity LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 41 } te_pa_tariff_set_good = { GOOD = meat LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 42 } te_pa_tariff_set_good = { GOOD = merchant_marine LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 43 } te_pa_tariff_set_good = { GOOD = motor_ships LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 44 } te_pa_tariff_set_good = { GOOD = oil LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 45 } te_pa_tariff_set_good = { GOOD = opium LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 46 } te_pa_tariff_set_good = { GOOD = paper LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 48 } te_pa_tariff_set_good = { GOOD = radios LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 49 } te_pa_tariff_set_good = { GOOD = robotics LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 50 } te_pa_tariff_set_good = { GOOD = rubber LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 52 } te_pa_tariff_set_good = { GOOD = silk LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 53 } te_pa_tariff_set_good = { GOOD = small_arms LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 55 } te_pa_tariff_set_good = { GOOD = steel LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 56 } te_pa_tariff_set_good = { GOOD = sugar LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 57 } te_pa_tariff_set_good = { GOOD = sulfur LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 59 } te_pa_tariff_set_good = { GOOD = tea LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 60 } te_pa_tariff_set_good = { GOOD = tech_metals LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 61 } te_pa_tariff_set_good = { GOOD = telephones LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 62 } te_pa_tariff_set_good = { GOOD = tobacco LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 63 } te_pa_tariff_set_good = { GOOD = tools LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 64 } te_pa_tariff_set_good = { GOOD = tourism LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 66 } te_pa_tariff_set_good = { GOOD = wine LEVEL = $LEVEL$ } }
+	else_if = { limit = { var:$VAR$ ?= 67 } te_pa_tariff_set_good = { GOOD = wood LEVEL = $LEVEL$ } }
+}
+
+# Scope: a country enacting nothing (the caller checks). Starts enacting the law numbered by its variable VAR
+# (the law table's number): an AI government keeping its pledge to a firm (§ 12.1, probe 13).
+te_pa_gen_law_start = {
+	if = { limit = { var:$VAR$ ?= 1 } start_enactment = law_type:law_traditionalism }
+	else_if = { limit = { var:$VAR$ ?= 2 } start_enactment = law_type:law_interventionism }
+	else_if = { limit = { var:$VAR$ ?= 3 } start_enactment = law_type:law_agrarianism }
+	else_if = { limit = { var:$VAR$ ?= 4 } start_enactment = law_type:law_industry_banned }
+	else_if = { limit = { var:$VAR$ ?= 5 } start_enactment = law_type:law_extraction_economy }
+	else_if = { limit = { var:$VAR$ ?= 6 } start_enactment = law_type:law_laissez_faire }
+	else_if = { limit = { var:$VAR$ ?= 7 } start_enactment = law_type:law_cooperative_ownership }
+	else_if = { limit = { var:$VAR$ ?= 8 } start_enactment = law_type:law_command_economy }
+	else_if = { limit = { var:$VAR$ ?= 9 } start_enactment = law_type:law_no_workers_rights }
+	else_if = { limit = { var:$VAR$ ?= 10 } start_enactment = law_type:law_regulatory_bodies }
+	else_if = { limit = { var:$VAR$ ?= 11 } start_enactment = law_type:law_worker_protections }
+	else_if = { limit = { var:$VAR$ ?= 12 } start_enactment = law_type:law_child_labor_allowed }
+	else_if = { limit = { var:$VAR$ ?= 13 } start_enactment = law_type:law_restricted_child_labor }
+	else_if = { limit = { var:$VAR$ ?= 14 } start_enactment = law_type:law_compulsory_primary_school }
+	else_if = { limit = { var:$VAR$ ?= 15 } start_enactment = law_type:law_guild_system }
+	else_if = { limit = { var:$VAR$ ?= 16 } start_enactment = law_type:law_combination_acts }
+	else_if = { limit = { var:$VAR$ ?= 17 } start_enactment = law_type:law_anti_strike_laws }
+	else_if = { limit = { var:$VAR$ ?= 18 } start_enactment = law_type:law_right_to_associate }
+	else_if = { limit = { var:$VAR$ ?= 19 } start_enactment = law_type:law_corporatized_unions }
+	else_if = { limit = { var:$VAR$ ?= 20 } start_enactment = law_type:law_factory_councils }
+	else_if = { limit = { var:$VAR$ ?= 21 } start_enactment = law_type:law_no_ministry_of_labor }
+	else_if = { limit = { var:$VAR$ ?= 22 } start_enactment = law_type:law_pro_labor_ministry_of_labor }
+	else_if = { limit = { var:$VAR$ ?= 23 } start_enactment = law_type:law_pro_capital_ministry_of_labor }
+	else_if = { limit = { var:$VAR$ ?= 24 } start_enactment = law_type:law_guilds_chartered_monopolies }
+	else_if = { limit = { var:$VAR$ ?= 25 } start_enactment = law_type:law_freedom_of_contract }
+	else_if = { limit = { var:$VAR$ ?= 26 } start_enactment = law_type:law_trust_busting }
+	else_if = { limit = { var:$VAR$ ?= 27 } start_enactment = law_type:law_regulated_utilities }
+	else_if = { limit = { var:$VAR$ ?= 28 } start_enactment = law_type:law_dirigisme }
+	else_if = { limit = { var:$VAR$ ?= 29 } start_enactment = law_type:law_command_cooperative_economy }
+	else_if = { limit = { var:$VAR$ ?= 30 } start_enactment = law_type:law_unrestricted_extraction }
+	else_if = { limit = { var:$VAR$ ?= 31 } start_enactment = law_type:law_fossil_expansion_moratorium }
+	else_if = { limit = { var:$VAR$ ?= 32 } start_enactment = law_type:law_managed_fossil_phaseout }
+	else_if = { limit = { var:$VAR$ ?= 33 } start_enactment = law_type:law_unrestricted_automation }
+	else_if = { limit = { var:$VAR$ ?= 34 } start_enactment = law_type:law_robot_tax }
+	else_if = { limit = { var:$VAR$ ?= 35 } start_enactment = law_type:law_human_labor_quotas }
+	else_if = { limit = { var:$VAR$ ?= 36 } start_enactment = law_type:law_automation_dividend }
+	else_if = { limit = { var:$VAR$ ?= 37 } start_enactment = law_type:law_no_ip_protection }
+	else_if = { limit = { var:$VAR$ ?= 38 } start_enactment = law_type:law_creative_commons }
+	else_if = { limit = { var:$VAR$ ?= 39 } start_enactment = law_type:law_traditional_ip_protection }
+	else_if = { limit = { var:$VAR$ ?= 40 } start_enactment = law_type:law_strict_ip_protection }
+	else_if = { limit = { var:$VAR$ ?= 41 } start_enactment = law_type:law_open_source_innovation }
+	else_if = { limit = { var:$VAR$ ?= 42 } start_enactment = law_type:law_state_intellectual_property }
+	else_if = { limit = { var:$VAR$ ?= 43 } start_enactment = law_type:law_unregulated_banking }
+	else_if = { limit = { var:$VAR$ ?= 44 } start_enactment = law_type:law_free_mutual_banking }
+	else_if = { limit = { var:$VAR$ ?= 45 } start_enactment = law_type:law_universal_banking_light_prudence }
+	else_if = { limit = { var:$VAR$ ?= 46 } start_enactment = law_type:law_prudential_narrow_banking }
+	else_if = { limit = { var:$VAR$ ?= 47 } start_enactment = law_type:law_directed_credit_development_banks }
+	else_if = { limit = { var:$VAR$ ?= 48 } start_enactment = law_type:law_state_owned_banking }
+	else_if = { limit = { var:$VAR$ ?= 49 } start_enactment = law_type:law_central_bank_independence }
+	else_if = { limit = { var:$VAR$ ?= 50 } start_enactment = law_type:law_no_campaign_finance_laws }
+	else_if = { limit = { var:$VAR$ ?= 51 } start_enactment = law_type:law_unregulated_donations }
+	else_if = { limit = { var:$VAR$ ?= 52 } start_enactment = law_type:law_donation_limits }
+	else_if = { limit = { var:$VAR$ ?= 53 } start_enactment = law_type:law_publicly_funded_elections }
 }

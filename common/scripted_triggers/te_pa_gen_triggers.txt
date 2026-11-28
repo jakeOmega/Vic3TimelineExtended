@@ -6109,3 +6109,123 @@ te_pa_gen_law_n_in_force = {
 		AND = { var:$VAR$ ?= 53 has_law = law_type:law_publicly_funded_elections }
 	}
 }
+
+# The petition for a law or a tariff (Task 5b; te_pa_politics_effects.txt calls these). A tariff is one good's
+# import level in the market, read through the capital's state goods as the Tax Code's customs reads it, and set
+# as its customs sync sets one (set_import_tariff_level, in the hand-written te_pa_tariff_set_good, behind
+# te_pa_tariffs_settable, which defers to the Tax Code's customs option). Goods are numbered by key from 1 (the
+# index te_pa_g_<slot>_good carries), laws in the law table's order from 1.
+# Scope: a country. A treaty in force bars it from a tariff on the good numbered by its variable VAR
+# (vanilla's no_tariffs article: te_bulk_tariff_barred, the All Goods rows' test).
+te_pa_gen_tariff_barred_n = {
+	OR = {
+		AND = { var:$VAR$ ?= 1 te_bulk_tariff_barred = { GOOD = advanced_materials ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 2 te_bulk_tariff_barred = { GOOD = aeroplanes ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 3 te_bulk_tariff_barred = { GOOD = ammunition ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 4 te_bulk_tariff_barred = { GOOD = artillery ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 5 te_bulk_tariff_barred = { GOOD = automobiles ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 6 te_bulk_tariff_barred = { GOOD = clippers ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 7 te_bulk_tariff_barred = { GOOD = clothes ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 8 te_bulk_tariff_barred = { GOOD = coal ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 11 te_bulk_tariff_barred = { GOOD = consumer_appliances ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 12 te_bulk_tariff_barred = { GOOD = copper ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 14 te_bulk_tariff_barred = { GOOD = digital_assets ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 15 te_bulk_tariff_barred = { GOOD = dye ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 17 te_bulk_tariff_barred = { GOOD = electronic_components ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 18 te_bulk_tariff_barred = { GOOD = engines ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 19 te_bulk_tariff_barred = { GOOD = explosives ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 20 te_bulk_tariff_barred = { GOOD = fabric ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 21 te_bulk_tariff_barred = { GOOD = fertilizer ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 22 te_bulk_tariff_barred = { GOOD = fine_art ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 24 te_bulk_tariff_barred = { GOOD = fruit ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 25 te_bulk_tariff_barred = { GOOD = furniture ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 26 te_bulk_tariff_barred = { GOOD = glass ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 28 te_bulk_tariff_barred = { GOOD = grain ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 30 te_bulk_tariff_barred = { GOOD = groceries ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 31 te_bulk_tariff_barred = { GOOD = hardwood ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 32 te_bulk_tariff_barred = { GOOD = iron ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 34 te_bulk_tariff_barred = { GOOD = launch_capacity ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 41 te_bulk_tariff_barred = { GOOD = meat ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 42 te_bulk_tariff_barred = { GOOD = merchant_marine ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 43 te_bulk_tariff_barred = { GOOD = motor_ships ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 44 te_bulk_tariff_barred = { GOOD = oil ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 45 te_bulk_tariff_barred = { GOOD = opium ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 46 te_bulk_tariff_barred = { GOOD = paper ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 48 te_bulk_tariff_barred = { GOOD = radios ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 49 te_bulk_tariff_barred = { GOOD = robotics ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 50 te_bulk_tariff_barred = { GOOD = rubber ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 52 te_bulk_tariff_barred = { GOOD = silk ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 53 te_bulk_tariff_barred = { GOOD = small_arms ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 55 te_bulk_tariff_barred = { GOOD = steel ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 56 te_bulk_tariff_barred = { GOOD = sugar ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 57 te_bulk_tariff_barred = { GOOD = sulfur ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 59 te_bulk_tariff_barred = { GOOD = tea ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 60 te_bulk_tariff_barred = { GOOD = tech_metals ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 61 te_bulk_tariff_barred = { GOOD = telephones ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 62 te_bulk_tariff_barred = { GOOD = tobacco ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 63 te_bulk_tariff_barred = { GOOD = tools ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 64 te_bulk_tariff_barred = { GOOD = tourism ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 66 te_bulk_tariff_barred = { GOOD = wine ARTICLE = no_tariffs } }
+		AND = { var:$VAR$ ?= 67 te_bulk_tariff_barred = { GOOD = wood ARTICLE = no_tariffs } }
+	}
+}
+
+# Scope: a country. It could move to the law numbered by its variable VAR (te_pa_gen_law_open_<law>): a
+# petition's law is still one it can take up.
+te_pa_gen_law_n_open = {
+	OR = {
+		AND = { var:$VAR$ ?= 1 te_pa_gen_law_open_law_traditionalism = yes }
+		AND = { var:$VAR$ ?= 2 te_pa_gen_law_open_law_interventionism = yes }
+		AND = { var:$VAR$ ?= 3 te_pa_gen_law_open_law_agrarianism = yes }
+		AND = { var:$VAR$ ?= 4 te_pa_gen_law_open_law_industry_banned = yes }
+		AND = { var:$VAR$ ?= 5 te_pa_gen_law_open_law_extraction_economy = yes }
+		AND = { var:$VAR$ ?= 6 te_pa_gen_law_open_law_laissez_faire = yes }
+		AND = { var:$VAR$ ?= 7 te_pa_gen_law_open_law_cooperative_ownership = yes }
+		AND = { var:$VAR$ ?= 8 te_pa_gen_law_open_law_command_economy = yes }
+		AND = { var:$VAR$ ?= 9 te_pa_gen_law_open_law_no_workers_rights = yes }
+		AND = { var:$VAR$ ?= 10 te_pa_gen_law_open_law_regulatory_bodies = yes }
+		AND = { var:$VAR$ ?= 11 te_pa_gen_law_open_law_worker_protections = yes }
+		AND = { var:$VAR$ ?= 12 te_pa_gen_law_open_law_child_labor_allowed = yes }
+		AND = { var:$VAR$ ?= 13 te_pa_gen_law_open_law_restricted_child_labor = yes }
+		AND = { var:$VAR$ ?= 14 te_pa_gen_law_open_law_compulsory_primary_school = yes }
+		AND = { var:$VAR$ ?= 15 te_pa_gen_law_open_law_guild_system = yes }
+		AND = { var:$VAR$ ?= 16 te_pa_gen_law_open_law_combination_acts = yes }
+		AND = { var:$VAR$ ?= 17 te_pa_gen_law_open_law_anti_strike_laws = yes }
+		AND = { var:$VAR$ ?= 18 te_pa_gen_law_open_law_right_to_associate = yes }
+		AND = { var:$VAR$ ?= 19 te_pa_gen_law_open_law_corporatized_unions = yes }
+		AND = { var:$VAR$ ?= 20 te_pa_gen_law_open_law_factory_councils = yes }
+		AND = { var:$VAR$ ?= 21 te_pa_gen_law_open_law_no_ministry_of_labor = yes }
+		AND = { var:$VAR$ ?= 22 te_pa_gen_law_open_law_pro_labor_ministry_of_labor = yes }
+		AND = { var:$VAR$ ?= 23 te_pa_gen_law_open_law_pro_capital_ministry_of_labor = yes }
+		AND = { var:$VAR$ ?= 24 te_pa_gen_law_open_law_guilds_chartered_monopolies = yes }
+		AND = { var:$VAR$ ?= 25 te_pa_gen_law_open_law_freedom_of_contract = yes }
+		AND = { var:$VAR$ ?= 26 te_pa_gen_law_open_law_trust_busting = yes }
+		AND = { var:$VAR$ ?= 27 te_pa_gen_law_open_law_regulated_utilities = yes }
+		AND = { var:$VAR$ ?= 28 te_pa_gen_law_open_law_dirigisme = yes }
+		AND = { var:$VAR$ ?= 29 te_pa_gen_law_open_law_command_cooperative_economy = yes }
+		AND = { var:$VAR$ ?= 30 te_pa_gen_law_open_law_unrestricted_extraction = yes }
+		AND = { var:$VAR$ ?= 31 te_pa_gen_law_open_law_fossil_expansion_moratorium = yes }
+		AND = { var:$VAR$ ?= 32 te_pa_gen_law_open_law_managed_fossil_phaseout = yes }
+		AND = { var:$VAR$ ?= 33 te_pa_gen_law_open_law_unrestricted_automation = yes }
+		AND = { var:$VAR$ ?= 34 te_pa_gen_law_open_law_robot_tax = yes }
+		AND = { var:$VAR$ ?= 35 te_pa_gen_law_open_law_human_labor_quotas = yes }
+		AND = { var:$VAR$ ?= 36 te_pa_gen_law_open_law_automation_dividend = yes }
+		AND = { var:$VAR$ ?= 37 te_pa_gen_law_open_law_no_ip_protection = yes }
+		AND = { var:$VAR$ ?= 38 te_pa_gen_law_open_law_creative_commons = yes }
+		AND = { var:$VAR$ ?= 39 te_pa_gen_law_open_law_traditional_ip_protection = yes }
+		AND = { var:$VAR$ ?= 40 te_pa_gen_law_open_law_strict_ip_protection = yes }
+		AND = { var:$VAR$ ?= 41 te_pa_gen_law_open_law_open_source_innovation = yes }
+		AND = { var:$VAR$ ?= 42 te_pa_gen_law_open_law_state_intellectual_property = yes }
+		AND = { var:$VAR$ ?= 43 te_pa_gen_law_open_law_unregulated_banking = yes }
+		AND = { var:$VAR$ ?= 44 te_pa_gen_law_open_law_free_mutual_banking = yes }
+		AND = { var:$VAR$ ?= 45 te_pa_gen_law_open_law_universal_banking_light_prudence = yes }
+		AND = { var:$VAR$ ?= 46 te_pa_gen_law_open_law_prudential_narrow_banking = yes }
+		AND = { var:$VAR$ ?= 47 te_pa_gen_law_open_law_directed_credit_development_banks = yes }
+		AND = { var:$VAR$ ?= 48 te_pa_gen_law_open_law_state_owned_banking = yes }
+		AND = { var:$VAR$ ?= 49 te_pa_gen_law_open_law_central_bank_independence = yes }
+		AND = { var:$VAR$ ?= 50 te_pa_gen_law_open_law_no_campaign_finance_laws = yes }
+		AND = { var:$VAR$ ?= 51 te_pa_gen_law_open_law_unregulated_donations = yes }
+		AND = { var:$VAR$ ?= 52 te_pa_gen_law_open_law_donation_limits = yes }
+		AND = { var:$VAR$ ?= 53 te_pa_gen_law_open_law_publicly_funded_elections = yes }
+	}
+}

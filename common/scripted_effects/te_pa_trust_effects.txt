@@ -71,13 +71,18 @@ te_pa_act = {
 }
 
 # Cheaper Inputs (§ 6.3): a buyer of a known cartel's good petitions the state to sue it (a declared move, Task 4b);
-# a buyer of a secret one's pays to expose it; where the trade policy taxes its imported inputs, campaign money for
-# the side that would lift it (Task 5a, § 8.3; the tariffs themselves are Task 5b's). (Task 9 adds a concession where
-# the good is made.)
+# failing that, it petitions for a lower tariff on its input or, a buyer of a lawful cartel's good, for Antitrust
+# Enforcement (§ 8.4, § 6.3's other form, Task 5b); a buyer of a secret cartel's good pays to expose it; where a
+# tariff taxes its imported inputs, campaign money for the side that would lift it (Task 5a, § 8.3). (Task 9 adds a
+# concession where the good is made.)
 te_pa_act_inputs = {
 	if = {
 		limit = { te_pa_can_declare_suit = yes }
 		te_pa_do_declare_suit = yes
+	}
+	else_if = {
+		limit = { te_pa_can_declare_law = yes }
+		te_pa_do_declare_law = yes
 	}
 	else_if = {
 		limit = { te_pa_can_press_cartel = yes }
@@ -89,8 +94,9 @@ te_pa_act_inputs = {
 	}
 }
 
-# A Protected Market (§ 6.1): the cartel's defence first, then a charter for it (§ 6.5, a declared move), then the
-# cartel; then the defence's press and campaign money (§ 6.4, Task 5a). (Task 5b adds the tariff.)
+# A Protected Market (§ 6.1): the cartel's defence first, then a charter for it (§ 6.5, a declared move), then a
+# petition for a tariff on its output (§ 8.4, a declared move, Task 5b), then the cartel; then the defence's press
+# and campaign money (§ 6.4, Task 5a).
 te_pa_act_market = {
 	if = {
 		limit = { te_pa_can_stall = yes }
@@ -99,6 +105,10 @@ te_pa_act_market = {
 	else_if = {
 		limit = { te_pa_can_declare_charter = yes }
 		te_pa_do_declare_charter = yes
+	}
+	else_if = {
+		limit = { te_pa_can_declare_law = yes }
+		te_pa_do_declare_law = yes
 	}
 	else_if = {
 		limit = { te_pa_can_form_cartel = yes }

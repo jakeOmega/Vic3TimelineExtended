@@ -7195,3 +7195,1092 @@ te_pa_gen_ig_n = {
 	else_if = { limit = { is_interest_group_type = ig_rural_folk } value = 7 }
 	else_if = { limit = { is_interest_group_type = ig_trade_unions } value = 8 }
 }
+
+# The petition for a law or a tariff (Task 5b; te_pa_politics_effects.txt calls these). A tariff is one good's
+# import level in the market, read through the capital's state goods as the Tax Code's customs reads it, and set
+# as its customs sync sets one (set_import_tariff_level, in the hand-written te_pa_tariff_set_good, behind
+# te_pa_tariffs_settable, which defers to the Tax Code's customs option). Goods are numbered by key from 1 (the
+# index te_pa_g_<slot>_good carries), laws in the law table's order from 1.
+# Each good a sector reads (Task 5b): its import tariff level in a country's market, -3 (max subventions) to
+# 3 (max tariffs), read through the capital's state goods, null-safe (sg:<good> ?=), as the Tax Code's
+# customs reads it; 0 when no level can be read (no capital, or no state goods for the good there). Whether
+# the trade policy lets the level collect is the hand-written readers' (te_pa_tariffs_bite).
+# te_pa_gen_tariff_<good> is country scope, te_pa_gen_firm_tariff_<good> the same from a company. A good no
+# market sets a tariff on (tradeable = no) reads 0.
+
+te_pa_gen_tariff_advanced_materials = {
+	value = 0
+	if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:advanced_materials ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_advanced_materials = { value = 0 owner = { add = te_pa_gen_tariff_advanced_materials } }
+
+te_pa_gen_tariff_aeroplanes = {
+	value = 0
+	if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:aeroplanes ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_aeroplanes = { value = 0 owner = { add = te_pa_gen_tariff_aeroplanes } }
+
+te_pa_gen_tariff_ammunition = {
+	value = 0
+	if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:ammunition ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_ammunition = { value = 0 owner = { add = te_pa_gen_tariff_ammunition } }
+
+te_pa_gen_tariff_artillery = {
+	value = 0
+	if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:artillery ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_artillery = { value = 0 owner = { add = te_pa_gen_tariff_artillery } }
+
+te_pa_gen_tariff_automobiles = {
+	value = 0
+	if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:automobiles ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_automobiles = { value = 0 owner = { add = te_pa_gen_tariff_automobiles } }
+
+te_pa_gen_tariff_clippers = {
+	value = 0
+	if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:clippers ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_clippers = { value = 0 owner = { add = te_pa_gen_tariff_clippers } }
+
+te_pa_gen_tariff_clothes = {
+	value = 0
+	if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:clothes ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_clothes = { value = 0 owner = { add = te_pa_gen_tariff_clothes } }
+
+te_pa_gen_tariff_coal = {
+	value = 0
+	if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:coal ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_coal = { value = 0 owner = { add = te_pa_gen_tariff_coal } }
+
+te_pa_gen_tariff_consumer_appliances = {
+	value = 0
+	if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:consumer_appliances ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_consumer_appliances = { value = 0 owner = { add = te_pa_gen_tariff_consumer_appliances } }
+
+te_pa_gen_tariff_copper = {
+	value = 0
+	if = { limit = { capital ?= { sg:copper ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:copper ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:copper ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:copper ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:copper ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:copper ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_copper = { value = 0 owner = { add = te_pa_gen_tariff_copper } }
+
+te_pa_gen_tariff_digital_assets = {
+	value = 0
+	if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:digital_assets ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_digital_assets = { value = 0 owner = { add = te_pa_gen_tariff_digital_assets } }
+
+te_pa_gen_tariff_dye = {
+	value = 0
+	if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:dye ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_dye = { value = 0 owner = { add = te_pa_gen_tariff_dye } }
+
+te_pa_gen_tariff_electronic_components = {
+	value = 0
+	if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:electronic_components ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_electronic_components = { value = 0 owner = { add = te_pa_gen_tariff_electronic_components } }
+
+te_pa_gen_tariff_engines = {
+	value = 0
+	if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:engines ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_engines = { value = 0 owner = { add = te_pa_gen_tariff_engines } }
+
+te_pa_gen_tariff_explosives = {
+	value = 0
+	if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:explosives ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_explosives = { value = 0 owner = { add = te_pa_gen_tariff_explosives } }
+
+te_pa_gen_tariff_fabric = {
+	value = 0
+	if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fabric ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_fabric = { value = 0 owner = { add = te_pa_gen_tariff_fabric } }
+
+te_pa_gen_tariff_fertilizer = {
+	value = 0
+	if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fertilizer ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_fertilizer = { value = 0 owner = { add = te_pa_gen_tariff_fertilizer } }
+
+te_pa_gen_tariff_fine_art = {
+	value = 0
+	if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fine_art ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_fine_art = { value = 0 owner = { add = te_pa_gen_tariff_fine_art } }
+
+te_pa_gen_tariff_fruit = {
+	value = 0
+	if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:fruit ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_fruit = { value = 0 owner = { add = te_pa_gen_tariff_fruit } }
+
+te_pa_gen_tariff_furniture = {
+	value = 0
+	if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:furniture ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_furniture = { value = 0 owner = { add = te_pa_gen_tariff_furniture } }
+
+te_pa_gen_tariff_glass = {
+	value = 0
+	if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:glass ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_glass = { value = 0 owner = { add = te_pa_gen_tariff_glass } }
+
+te_pa_gen_tariff_gold = { value = 0 }
+te_pa_gen_firm_tariff_gold = { value = 0 owner = { add = te_pa_gen_tariff_gold } }
+
+te_pa_gen_tariff_grain = {
+	value = 0
+	if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:grain ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_grain = { value = 0 owner = { add = te_pa_gen_tariff_grain } }
+
+te_pa_gen_tariff_groceries = {
+	value = 0
+	if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:groceries ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_groceries = { value = 0 owner = { add = te_pa_gen_tariff_groceries } }
+
+te_pa_gen_tariff_hardwood = {
+	value = 0
+	if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:hardwood ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_hardwood = { value = 0 owner = { add = te_pa_gen_tariff_hardwood } }
+
+te_pa_gen_tariff_iron = {
+	value = 0
+	if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:iron ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_iron = { value = 0 owner = { add = te_pa_gen_tariff_iron } }
+
+te_pa_gen_tariff_launch_capacity = {
+	value = 0
+	if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:launch_capacity ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_launch_capacity = { value = 0 owner = { add = te_pa_gen_tariff_launch_capacity } }
+
+te_pa_gen_tariff_meat = {
+	value = 0
+	if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:meat ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_meat = { value = 0 owner = { add = te_pa_gen_tariff_meat } }
+
+te_pa_gen_tariff_merchant_marine = {
+	value = 0
+	if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:merchant_marine ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_merchant_marine = { value = 0 owner = { add = te_pa_gen_tariff_merchant_marine } }
+
+te_pa_gen_tariff_motor_ships = {
+	value = 0
+	if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:motor_ships ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_motor_ships = { value = 0 owner = { add = te_pa_gen_tariff_motor_ships } }
+
+te_pa_gen_tariff_oil = {
+	value = 0
+	if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:oil ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_oil = { value = 0 owner = { add = te_pa_gen_tariff_oil } }
+
+te_pa_gen_tariff_opium = {
+	value = 0
+	if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:opium ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_opium = { value = 0 owner = { add = te_pa_gen_tariff_opium } }
+
+te_pa_gen_tariff_paper = {
+	value = 0
+	if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:paper ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_paper = { value = 0 owner = { add = te_pa_gen_tariff_paper } }
+
+te_pa_gen_tariff_radios = {
+	value = 0
+	if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:radios ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_radios = { value = 0 owner = { add = te_pa_gen_tariff_radios } }
+
+te_pa_gen_tariff_robotics = {
+	value = 0
+	if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:robotics ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_robotics = { value = 0 owner = { add = te_pa_gen_tariff_robotics } }
+
+te_pa_gen_tariff_rubber = {
+	value = 0
+	if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:rubber ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_rubber = { value = 0 owner = { add = te_pa_gen_tariff_rubber } }
+
+te_pa_gen_tariff_silk = {
+	value = 0
+	if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:silk ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_silk = { value = 0 owner = { add = te_pa_gen_tariff_silk } }
+
+te_pa_gen_tariff_small_arms = {
+	value = 0
+	if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:small_arms ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_small_arms = { value = 0 owner = { add = te_pa_gen_tariff_small_arms } }
+
+te_pa_gen_tariff_steel = {
+	value = 0
+	if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:steel ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_steel = { value = 0 owner = { add = te_pa_gen_tariff_steel } }
+
+te_pa_gen_tariff_sugar = {
+	value = 0
+	if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:sugar ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_sugar = { value = 0 owner = { add = te_pa_gen_tariff_sugar } }
+
+te_pa_gen_tariff_sulfur = {
+	value = 0
+	if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:sulfur ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_sulfur = { value = 0 owner = { add = te_pa_gen_tariff_sulfur } }
+
+te_pa_gen_tariff_tea = {
+	value = 0
+	if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tea ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_tea = { value = 0 owner = { add = te_pa_gen_tariff_tea } }
+
+te_pa_gen_tariff_tech_metals = {
+	value = 0
+	if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tech_metals ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_tech_metals = { value = 0 owner = { add = te_pa_gen_tariff_tech_metals } }
+
+te_pa_gen_tariff_telephones = {
+	value = 0
+	if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:telephones ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_telephones = { value = 0 owner = { add = te_pa_gen_tariff_telephones } }
+
+te_pa_gen_tariff_tobacco = {
+	value = 0
+	if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tobacco ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_tobacco = { value = 0 owner = { add = te_pa_gen_tariff_tobacco } }
+
+te_pa_gen_tariff_tools = {
+	value = 0
+	if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tools ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_tools = { value = 0 owner = { add = te_pa_gen_tariff_tools } }
+
+te_pa_gen_tariff_tourism = {
+	value = 0
+	if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:tourism ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_tourism = { value = 0 owner = { add = te_pa_gen_tariff_tourism } }
+
+te_pa_gen_tariff_wine = {
+	value = 0
+	if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:wine ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_wine = { value = 0 owner = { add = te_pa_gen_tariff_wine } }
+
+te_pa_gen_tariff_wood = {
+	value = 0
+	if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = max_tariffs } } } value = 3 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = high_tariffs } } } value = 2 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = low_tariffs } } } value = 1 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = low_subventions } } } value = -1 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = high_subventions } } } value = -2 }
+	else_if = { limit = { capital ?= { sg:wood ?= { import_tariff_level = max_subventions } } } value = -3 }
+}
+te_pa_gen_firm_tariff_wood = { value = 0 owner = { add = te_pa_gen_tariff_wood } }
+
+# Scope: a country. The import tariff level of the good numbered by its te_pa_tf_good (staged by the
+# caller), 0 for none or a good no sector reads.
+te_pa_gen_tariff_n = {
+	value = 0
+	if = { limit = { var:te_pa_tf_good ?= 1 } value = te_pa_gen_tariff_advanced_materials }
+	else_if = { limit = { var:te_pa_tf_good ?= 2 } value = te_pa_gen_tariff_aeroplanes }
+	else_if = { limit = { var:te_pa_tf_good ?= 3 } value = te_pa_gen_tariff_ammunition }
+	else_if = { limit = { var:te_pa_tf_good ?= 4 } value = te_pa_gen_tariff_artillery }
+	else_if = { limit = { var:te_pa_tf_good ?= 5 } value = te_pa_gen_tariff_automobiles }
+	else_if = { limit = { var:te_pa_tf_good ?= 6 } value = te_pa_gen_tariff_clippers }
+	else_if = { limit = { var:te_pa_tf_good ?= 7 } value = te_pa_gen_tariff_clothes }
+	else_if = { limit = { var:te_pa_tf_good ?= 8 } value = te_pa_gen_tariff_coal }
+	else_if = { limit = { var:te_pa_tf_good ?= 11 } value = te_pa_gen_tariff_consumer_appliances }
+	else_if = { limit = { var:te_pa_tf_good ?= 12 } value = te_pa_gen_tariff_copper }
+	else_if = { limit = { var:te_pa_tf_good ?= 14 } value = te_pa_gen_tariff_digital_assets }
+	else_if = { limit = { var:te_pa_tf_good ?= 15 } value = te_pa_gen_tariff_dye }
+	else_if = { limit = { var:te_pa_tf_good ?= 17 } value = te_pa_gen_tariff_electronic_components }
+	else_if = { limit = { var:te_pa_tf_good ?= 18 } value = te_pa_gen_tariff_engines }
+	else_if = { limit = { var:te_pa_tf_good ?= 19 } value = te_pa_gen_tariff_explosives }
+	else_if = { limit = { var:te_pa_tf_good ?= 20 } value = te_pa_gen_tariff_fabric }
+	else_if = { limit = { var:te_pa_tf_good ?= 21 } value = te_pa_gen_tariff_fertilizer }
+	else_if = { limit = { var:te_pa_tf_good ?= 22 } value = te_pa_gen_tariff_fine_art }
+	else_if = { limit = { var:te_pa_tf_good ?= 24 } value = te_pa_gen_tariff_fruit }
+	else_if = { limit = { var:te_pa_tf_good ?= 25 } value = te_pa_gen_tariff_furniture }
+	else_if = { limit = { var:te_pa_tf_good ?= 26 } value = te_pa_gen_tariff_glass }
+	else_if = { limit = { var:te_pa_tf_good ?= 28 } value = te_pa_gen_tariff_grain }
+	else_if = { limit = { var:te_pa_tf_good ?= 30 } value = te_pa_gen_tariff_groceries }
+	else_if = { limit = { var:te_pa_tf_good ?= 31 } value = te_pa_gen_tariff_hardwood }
+	else_if = { limit = { var:te_pa_tf_good ?= 32 } value = te_pa_gen_tariff_iron }
+	else_if = { limit = { var:te_pa_tf_good ?= 34 } value = te_pa_gen_tariff_launch_capacity }
+	else_if = { limit = { var:te_pa_tf_good ?= 41 } value = te_pa_gen_tariff_meat }
+	else_if = { limit = { var:te_pa_tf_good ?= 42 } value = te_pa_gen_tariff_merchant_marine }
+	else_if = { limit = { var:te_pa_tf_good ?= 43 } value = te_pa_gen_tariff_motor_ships }
+	else_if = { limit = { var:te_pa_tf_good ?= 44 } value = te_pa_gen_tariff_oil }
+	else_if = { limit = { var:te_pa_tf_good ?= 45 } value = te_pa_gen_tariff_opium }
+	else_if = { limit = { var:te_pa_tf_good ?= 46 } value = te_pa_gen_tariff_paper }
+	else_if = { limit = { var:te_pa_tf_good ?= 48 } value = te_pa_gen_tariff_radios }
+	else_if = { limit = { var:te_pa_tf_good ?= 49 } value = te_pa_gen_tariff_robotics }
+	else_if = { limit = { var:te_pa_tf_good ?= 50 } value = te_pa_gen_tariff_rubber }
+	else_if = { limit = { var:te_pa_tf_good ?= 52 } value = te_pa_gen_tariff_silk }
+	else_if = { limit = { var:te_pa_tf_good ?= 53 } value = te_pa_gen_tariff_small_arms }
+	else_if = { limit = { var:te_pa_tf_good ?= 55 } value = te_pa_gen_tariff_steel }
+	else_if = { limit = { var:te_pa_tf_good ?= 56 } value = te_pa_gen_tariff_sugar }
+	else_if = { limit = { var:te_pa_tf_good ?= 57 } value = te_pa_gen_tariff_sulfur }
+	else_if = { limit = { var:te_pa_tf_good ?= 59 } value = te_pa_gen_tariff_tea }
+	else_if = { limit = { var:te_pa_tf_good ?= 60 } value = te_pa_gen_tariff_tech_metals }
+	else_if = { limit = { var:te_pa_tf_good ?= 61 } value = te_pa_gen_tariff_telephones }
+	else_if = { limit = { var:te_pa_tf_good ?= 62 } value = te_pa_gen_tariff_tobacco }
+	else_if = { limit = { var:te_pa_tf_good ?= 63 } value = te_pa_gen_tariff_tools }
+	else_if = { limit = { var:te_pa_tf_good ?= 64 } value = te_pa_gen_tariff_tourism }
+	else_if = { limit = { var:te_pa_tf_good ?= 66 } value = te_pa_gen_tariff_wine }
+	else_if = { limit = { var:te_pa_tf_good ?= 67 } value = te_pa_gen_tariff_wood }
+}
+
+# Each covered law's number in the law table (te_pa_stake_law, te_pa_pt_law and their kin), for the
+# hand-written script that names one law (the buyers' petition for Antitrust Enforcement).
+te_pa_gen_law_index_law_traditionalism = 1
+te_pa_gen_law_index_law_interventionism = 2
+te_pa_gen_law_index_law_agrarianism = 3
+te_pa_gen_law_index_law_industry_banned = 4
+te_pa_gen_law_index_law_extraction_economy = 5
+te_pa_gen_law_index_law_laissez_faire = 6
+te_pa_gen_law_index_law_cooperative_ownership = 7
+te_pa_gen_law_index_law_command_economy = 8
+te_pa_gen_law_index_law_no_workers_rights = 9
+te_pa_gen_law_index_law_regulatory_bodies = 10
+te_pa_gen_law_index_law_worker_protections = 11
+te_pa_gen_law_index_law_child_labor_allowed = 12
+te_pa_gen_law_index_law_restricted_child_labor = 13
+te_pa_gen_law_index_law_compulsory_primary_school = 14
+te_pa_gen_law_index_law_guild_system = 15
+te_pa_gen_law_index_law_combination_acts = 16
+te_pa_gen_law_index_law_anti_strike_laws = 17
+te_pa_gen_law_index_law_right_to_associate = 18
+te_pa_gen_law_index_law_corporatized_unions = 19
+te_pa_gen_law_index_law_factory_councils = 20
+te_pa_gen_law_index_law_no_ministry_of_labor = 21
+te_pa_gen_law_index_law_pro_labor_ministry_of_labor = 22
+te_pa_gen_law_index_law_pro_capital_ministry_of_labor = 23
+te_pa_gen_law_index_law_guilds_chartered_monopolies = 24
+te_pa_gen_law_index_law_freedom_of_contract = 25
+te_pa_gen_law_index_law_trust_busting = 26
+te_pa_gen_law_index_law_regulated_utilities = 27
+te_pa_gen_law_index_law_dirigisme = 28
+te_pa_gen_law_index_law_command_cooperative_economy = 29
+te_pa_gen_law_index_law_unrestricted_extraction = 30
+te_pa_gen_law_index_law_fossil_expansion_moratorium = 31
+te_pa_gen_law_index_law_managed_fossil_phaseout = 32
+te_pa_gen_law_index_law_unrestricted_automation = 33
+te_pa_gen_law_index_law_robot_tax = 34
+te_pa_gen_law_index_law_human_labor_quotas = 35
+te_pa_gen_law_index_law_automation_dividend = 36
+te_pa_gen_law_index_law_no_ip_protection = 37
+te_pa_gen_law_index_law_creative_commons = 38
+te_pa_gen_law_index_law_traditional_ip_protection = 39
+te_pa_gen_law_index_law_strict_ip_protection = 40
+te_pa_gen_law_index_law_open_source_innovation = 41
+te_pa_gen_law_index_law_state_intellectual_property = 42
+te_pa_gen_law_index_law_unregulated_banking = 43
+te_pa_gen_law_index_law_free_mutual_banking = 44
+te_pa_gen_law_index_law_universal_banking_light_prudence = 45
+te_pa_gen_law_index_law_prudential_narrow_banking = 46
+te_pa_gen_law_index_law_directed_credit_development_banks = 47
+te_pa_gen_law_index_law_state_owned_banking = 48
+te_pa_gen_law_index_law_central_bank_independence = 49
+te_pa_gen_law_index_law_no_campaign_finance_laws = 50
+te_pa_gen_law_index_law_unregulated_donations = 51
+te_pa_gen_law_index_law_donation_limits = 52
+te_pa_gen_law_index_law_publicly_funded_elections = 53
+
+# Scope: a company. Its stance (-2 to 2) on the law its country's petition is about (the owner's
+# te_pa_pt_law, the law table's number): who stands for and against a petition for a law; 0 with none.
+te_pa_gen_stance_petition = {
+	value = 0
+	if = { limit = { owner = { var:te_pa_pt_law ?= 1 } } value = te_pa_gen_stance_law_traditionalism }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 2 } } value = te_pa_gen_stance_law_interventionism }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 3 } } value = te_pa_gen_stance_law_agrarianism }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 4 } } value = te_pa_gen_stance_law_industry_banned }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 5 } } value = te_pa_gen_stance_law_extraction_economy }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 6 } } value = te_pa_gen_stance_law_laissez_faire }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 7 } } value = te_pa_gen_stance_law_cooperative_ownership }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 8 } } value = te_pa_gen_stance_law_command_economy }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 9 } } value = te_pa_gen_stance_law_no_workers_rights }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 10 } } value = te_pa_gen_stance_law_regulatory_bodies }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 11 } } value = te_pa_gen_stance_law_worker_protections }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 12 } } value = te_pa_gen_stance_law_child_labor_allowed }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 13 } } value = te_pa_gen_stance_law_restricted_child_labor }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 14 } } value = te_pa_gen_stance_law_compulsory_primary_school }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 15 } } value = te_pa_gen_stance_law_guild_system }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 16 } } value = te_pa_gen_stance_law_combination_acts }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 17 } } value = te_pa_gen_stance_law_anti_strike_laws }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 18 } } value = te_pa_gen_stance_law_right_to_associate }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 19 } } value = te_pa_gen_stance_law_corporatized_unions }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 20 } } value = te_pa_gen_stance_law_factory_councils }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 21 } } value = te_pa_gen_stance_law_no_ministry_of_labor }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 22 } } value = te_pa_gen_stance_law_pro_labor_ministry_of_labor }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 23 } } value = te_pa_gen_stance_law_pro_capital_ministry_of_labor }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 24 } } value = te_pa_gen_stance_law_guilds_chartered_monopolies }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 25 } } value = te_pa_gen_stance_law_freedom_of_contract }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 26 } } value = te_pa_gen_stance_law_trust_busting }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 27 } } value = te_pa_gen_stance_law_regulated_utilities }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 28 } } value = te_pa_gen_stance_law_dirigisme }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 29 } } value = te_pa_gen_stance_law_command_cooperative_economy }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 30 } } value = te_pa_gen_stance_law_unrestricted_extraction }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 31 } } value = te_pa_gen_stance_law_fossil_expansion_moratorium }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 32 } } value = te_pa_gen_stance_law_managed_fossil_phaseout }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 33 } } value = te_pa_gen_stance_law_unrestricted_automation }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 34 } } value = te_pa_gen_stance_law_robot_tax }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 35 } } value = te_pa_gen_stance_law_human_labor_quotas }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 36 } } value = te_pa_gen_stance_law_automation_dividend }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 37 } } value = te_pa_gen_stance_law_no_ip_protection }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 38 } } value = te_pa_gen_stance_law_creative_commons }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 39 } } value = te_pa_gen_stance_law_traditional_ip_protection }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 40 } } value = te_pa_gen_stance_law_strict_ip_protection }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 41 } } value = te_pa_gen_stance_law_open_source_innovation }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 42 } } value = te_pa_gen_stance_law_state_intellectual_property }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 43 } } value = te_pa_gen_stance_law_unregulated_banking }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 44 } } value = te_pa_gen_stance_law_free_mutual_banking }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 45 } } value = te_pa_gen_stance_law_universal_banking_light_prudence }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 46 } } value = te_pa_gen_stance_law_prudential_narrow_banking }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 47 } } value = te_pa_gen_stance_law_directed_credit_development_banks }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 48 } } value = te_pa_gen_stance_law_state_owned_banking }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 49 } } value = te_pa_gen_stance_law_central_bank_independence }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 50 } } value = te_pa_gen_stance_law_no_campaign_finance_laws }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 51 } } value = te_pa_gen_stance_law_unregulated_donations }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 52 } } value = te_pa_gen_stance_law_donation_limits }
+	else_if = { limit = { owner = { var:te_pa_pt_law ?= 53 } } value = te_pa_gen_stance_law_publicly_funded_elections }
+}
+
+# Scope: an interest group. Its stance on the law its country's petition is about (the owner's te_pa_pt_law),
+# +2 strongly approves to -2 strongly disapproves (law_stance), for an AI government's answer; 0 with none.
+te_pa_gen_ig_petition_stance = {
+	value = 0
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 1 } }
+		if = { limit = { law_stance = { law = law_type:law_traditionalism value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditionalism value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditionalism value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditionalism value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 2 } }
+		if = { limit = { law_stance = { law = law_type:law_interventionism value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_interventionism value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_interventionism value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_interventionism value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 3 } }
+		if = { limit = { law_stance = { law = law_type:law_agrarianism value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_agrarianism value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_agrarianism value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_agrarianism value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 4 } }
+		if = { limit = { law_stance = { law = law_type:law_industry_banned value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_industry_banned value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_industry_banned value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_industry_banned value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 5 } }
+		if = { limit = { law_stance = { law = law_type:law_extraction_economy value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_extraction_economy value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_extraction_economy value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_extraction_economy value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 6 } }
+		if = { limit = { law_stance = { law = law_type:law_laissez_faire value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_laissez_faire value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 7 } }
+		if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_cooperative_ownership value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 8 } }
+		if = { limit = { law_stance = { law = law_type:law_command_economy value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_economy value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_economy value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_economy value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 9 } }
+		if = { limit = { law_stance = { law = law_type:law_no_workers_rights value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_workers_rights value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_workers_rights value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_workers_rights value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 10 } }
+		if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulatory_bodies value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 11 } }
+		if = { limit = { law_stance = { law = law_type:law_worker_protections value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_worker_protections value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_worker_protections value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_worker_protections value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 12 } }
+		if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_child_labor_allowed value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 13 } }
+		if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_restricted_child_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 14 } }
+		if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_compulsory_primary_school value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 15 } }
+		if = { limit = { law_stance = { law = law_type:law_guild_system value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guild_system value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_guild_system value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guild_system value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 16 } }
+		if = { limit = { law_stance = { law = law_type:law_combination_acts value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_combination_acts value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_combination_acts value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_combination_acts value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 17 } }
+		if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_anti_strike_laws value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 18 } }
+		if = { limit = { law_stance = { law = law_type:law_right_to_associate value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_right_to_associate value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_right_to_associate value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_right_to_associate value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 19 } }
+		if = { limit = { law_stance = { law = law_type:law_corporatized_unions value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_corporatized_unions value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_corporatized_unions value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_corporatized_unions value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 20 } }
+		if = { limit = { law_stance = { law = law_type:law_factory_councils value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_factory_councils value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_factory_councils value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_factory_councils value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 21 } }
+		if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ministry_of_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 22 } }
+		if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_labor_ministry_of_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 23 } }
+		if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_pro_capital_ministry_of_labor value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 24 } }
+		if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_guilds_chartered_monopolies value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 25 } }
+		if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_freedom_of_contract value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 26 } }
+		if = { limit = { law_stance = { law = law_type:law_trust_busting value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_trust_busting value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_trust_busting value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_trust_busting value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 27 } }
+		if = { limit = { law_stance = { law = law_type:law_regulated_utilities value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulated_utilities value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulated_utilities value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_regulated_utilities value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 28 } }
+		if = { limit = { law_stance = { law = law_type:law_dirigisme value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_dirigisme value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_dirigisme value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_dirigisme value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 29 } }
+		if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_command_cooperative_economy value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 30 } }
+		if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_extraction value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 31 } }
+		if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_fossil_expansion_moratorium value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 32 } }
+		if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_managed_fossil_phaseout value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 33 } }
+		if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unrestricted_automation value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 34 } }
+		if = { limit = { law_stance = { law = law_type:law_robot_tax value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_robot_tax value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_robot_tax value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_robot_tax value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 35 } }
+		if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_human_labor_quotas value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 36 } }
+		if = { limit = { law_stance = { law = law_type:law_automation_dividend value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_automation_dividend value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_automation_dividend value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_automation_dividend value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 37 } }
+		if = { limit = { law_stance = { law = law_type:law_no_ip_protection value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ip_protection value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ip_protection value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_ip_protection value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 38 } }
+		if = { limit = { law_stance = { law = law_type:law_creative_commons value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_creative_commons value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_creative_commons value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_creative_commons value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 39 } }
+		if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_traditional_ip_protection value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 40 } }
+		if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_strict_ip_protection value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 41 } }
+		if = { limit = { law_stance = { law = law_type:law_open_source_innovation value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_open_source_innovation value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_open_source_innovation value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_open_source_innovation value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 42 } }
+		if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_intellectual_property value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 43 } }
+		if = { limit = { law_stance = { law = law_type:law_unregulated_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 44 } }
+		if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_free_mutual_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 45 } }
+		if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_universal_banking_light_prudence value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 46 } }
+		if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_prudential_narrow_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 47 } }
+		if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_directed_credit_development_banks value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 48 } }
+		if = { limit = { law_stance = { law = law_type:law_state_owned_banking value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_owned_banking value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_owned_banking value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_state_owned_banking value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 49 } }
+		if = { limit = { law_stance = { law = law_type:law_central_bank_independence value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_central_bank_independence value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_central_bank_independence value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_central_bank_independence value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 50 } }
+		if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_no_campaign_finance_laws value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 51 } }
+		if = { limit = { law_stance = { law = law_type:law_unregulated_donations value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_donations value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_donations value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_unregulated_donations value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 52 } }
+		if = { limit = { law_stance = { law = law_type:law_donation_limits value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_donation_limits value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_donation_limits value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_donation_limits value < neutral } } value = -1 }
+	}
+	if = {
+		limit = { owner ?= { var:te_pa_pt_law ?= 53 } }
+		if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value > approve } } value = 2 }
+		else_if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value > neutral } } value = 1 }
+		else_if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value < disapprove } } value = -2 }
+		else_if = { limit = { law_stance = { law = law_type:law_publicly_funded_elections value < neutral } } value = -1 }
+	}
+}

@@ -324,3 +324,265 @@ te_pa_ledger_verb_of_cm = {
 		var:te_pa_l_verb ?= 44
 	}
 }
+
+# ---------------------------------------------------------------------------
+# Tariffs (Task 5b; § 8.1, § 8.8's Tax Code tie), country scope
+# ---------------------------------------------------------------------------
+
+# The trade policy lets an import tariff collect (vanilla's buttons' SET_TARIFF_LEVEL_NOT_ALLOWED): its maximum rate,
+# read in the capital as te_bulk_tariff_policy_allows reads it. Free Trade has none, so a level set there is idle.
+te_pa_tariffs_bite = {
+	capital ?= { modifier:state_tariff_import_add > 0 }
+}
+
+# The government can set a tariff on a firm's petition: it owns its market (a junior partner of a customs union
+# trades in its senior's), and the Tax Code's customs option does not legislate its tariffs. Under that option the
+# code's monthly sync re-asserts its own levels, so a pledge defers to it (§ 8.8): no firm asks for a tariff, none is
+# set, and a pledge already running lapses (te_pa_pledge_tariff_monthly).
+te_pa_tariffs_settable = {
+	NOT = { te_tax_customs_on = yes }
+	te_tax_owns_market = yes
+}
+
+# ---------------------------------------------------------------------------
+# The petition for a law or a tariff (Task 5b; § 8.4): kind law on the declared-move frame
+# ---------------------------------------------------------------------------
+
+# Kind law, at its turn (scope:te_pa_firm the firm): its goal's score is 70 or more and it holds 40 Connections, it
+# holds no pledge from the government already, five years have passed since it was last refused or left unanswered,
+# and a law or a tariff would serve its goal (te_pa_pt_can_ask).
+te_pa_can_declare_law = {
+	te_pa_move_open = yes
+	te_pa_goal_score_value >= te_pa_pt_score
+	te_pa_v_conn >= te_pa_pt_conn
+	NOT = { has_variable = te_pa_pl_kind }
+	te_pa_wait_over = { VAR = te_pa_law_again }
+	te_pa_pt_can_ask = yes
+}
+
+# A law or a tariff that would serve the goal it holds (§ 8.4): Cheaper Inputs asks for a lower tariff on an input
+# or, a buyer of a lawful cartel's good, for Antitrust Enforcement (§ 6.3); A Protected Market for a tariff on its
+# output; A Friendly Law for the law from the table it could move to that favors it most. Labor Peace's labor law is
+# Task 6's: its branch goes here (and in te_pa_pt_pick), ask 5.
+te_pa_pt_can_ask = {
+	OR = {
+		AND = {
+			var:te_pa_goal ?= 1
+			OR = {
+				te_pa_pt_ask_input_tariff = yes
+				te_pa_pt_ask_antitrust = yes
+			}
+		}
+		AND = {
+			var:te_pa_goal ?= 2
+			te_pa_pt_ask_output_tariff = yes
+		}
+		AND = {
+			var:te_pa_goal ?= 4
+			te_pa_pt_ask_law = yes
+		}
+		# Task 6: Labor Peace (goal 6) asks for a labor law here, ask 5 (te_pa_pt_pick's branch beside it).
+	}
+}
+
+# A tariff collects on an input the market imports, and the government can lower it.
+te_pa_pt_ask_input_tariff = {
+	owner = { te_pa_tariffs_settable = yes }
+	OR = {
+		AND = {
+			var:te_pa_g_in1_imported ?= 1
+			te_pa_v_in1_tariff > 0
+		}
+		AND = {
+			var:te_pa_g_in2_imported ?= 1
+			te_pa_v_in2_tariff > 0
+		}
+	}
+}
+
+# The market imports what it makes, its import tariff is below the highest, and the government can raise it under a
+# trade policy that lets it collect.
+te_pa_pt_ask_output_tariff = {
+	owner = {
+		te_pa_tariffs_settable = yes
+		te_pa_tariffs_bite = yes
+	}
+	te_pa_wants_output_tariff = yes
+	te_pa_v_out_tariff_level < te_pa_tariff_top
+}
+
+# A law it could move to that favors it (te_pa_gen_law_pick's best), not the one being enacted (that one it speeds
+# and backs its side on, § 8.2).
+te_pa_pt_ask_law = {
+	te_pa_v_law_best > 0
+	has_variable = te_pa_g_law_best_law
+	var:te_pa_g_law_best_law > 0
+	NOR = {
+		AND = {
+			te_pa_enacting_law_firm >= var:te_pa_g_law_best_law
+			te_pa_enacting_law_firm <= var:te_pa_g_law_best_law
+		}
+	}
+}
+
+# The buyers' other petition (§ 6.3): a cartel the state knows of, lawful under the antitrust law in force and
+# holding no charter, makes one of its inputs, so it can't be sued; the country could move to Antitrust Enforcement,
+# under which it would not be lawful, and is not enacting it already. scope:te_pa_firm is the buyer.
+te_pa_pt_ask_antitrust = {
+	owner = {
+		te_pa_gen_law_open_law_trust_busting = yes
+		NOT = { is_enacting_law = law_type:law_trust_busting }
+		has_variable_list = te_pa_cartels
+		any_in_list = {
+			variable = te_pa_cartels
+			te_pa_cartel_makes_buyer_input = yes
+			te_pa_holds_known_cartel = yes
+			te_pa_cartel_lawful = yes
+			NOT = { has_variable = te_pa_charter }
+		}
+	}
+}
+
+# Country scope. Its petition asks for a law (ask 1, or the buyers' Antitrust Enforcement, 4), not a tariff.
+te_pa_pt_asks_law = {
+	OR = {
+		var:te_pa_pt_ask ?= 1
+		var:te_pa_pt_ask ?= 4
+	}
+}
+
+# Country scope. It is enacting its petition's law.
+te_pa_pt_enacting_its_law = {
+	te_pa_v_pt_law > 0
+	te_pa_gen_enacting_law_index >= te_pa_v_pt_law
+	te_pa_gen_enacting_law_index <= te_pa_v_pt_law
+}
+
+# Country scope. Its petition's tariff can still be set at the answer: it owns its market and the Tax Code's customs
+# option is off (te_pa_tariffs_settable); a raise needs a trade policy that lets it collect and no treaty barring a
+# tariff on the good.
+te_pa_pt_tariff_takeable = {
+	te_pa_tariffs_settable = yes
+	has_variable = te_pa_pt_good
+	has_variable = te_pa_pt_level
+	trigger_if = {
+		limit = { var:te_pa_pt_ask ?= 2 }
+		te_pa_tariffs_bite = yes
+		NOT = { te_pa_gen_tariff_barred_n = { VAR = te_pa_pt_good } }
+	}
+}
+
+# Company scope (scope:te_pa_firm the firm at its turn): it is the firm whose declared move is under way. Read in a
+# trigger_if behind its guard, so its negation never reads an unset move.
+te_pa_is_move_firm = {
+	owner = {
+		trigger_if = {
+			limit = { has_variable = te_pa_move_firm }
+			var:te_pa_move_firm = scope:te_pa_firm
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+}
+
+# Country scope. A petition's record is open (te_pa_pt_open): its sides are being counted, or its answer is due.
+te_pa_pt_is_open = {
+	has_variable = te_pa_pt_firm
+}
+
+# Country scope. A petition for a law or a tariff is under way: its move counts down, and its record is open (a new
+# one can't open while an old record stands: the twelve-month gap outlasts the record's grace).
+te_pa_pt_running = {
+	has_variable = te_pa_move_firm
+	var:te_pa_move_kind ?= 3
+	has_variable = te_pa_pt_firm
+}
+
+# Company scope, with scope:te_pa_pt_petitioner the petitioner: the firm may spend on its country's petition this
+# month, for or against (§ 8.4: the other side, and § 12.1's "for"): another of the country's firms with a stance on
+# it, the Connections to spend, and nothing spent on this petition yet.
+te_pa_pt_may_side = {
+	has_variable = te_pa_init
+	NOT = { this = scope:te_pa_pt_petitioner }
+	NOT = { has_variable = te_pa_pt_spent_amt }
+	te_pa_v_conn >= te_pa_pt_side_conn
+	te_pa_pt_stance_size >= 1
+}
+
+# Company scope, with scope:te_pa_mv_firm the petitioner (an answer): a firm on the other side of the petition,
+# against what it asks.
+te_pa_pt_other_side = {
+	has_variable = te_pa_init
+	exists = scope:te_pa_mv_firm
+	NOT = { this = scope:te_pa_mv_firm }
+	te_pa_pt_stance_value < 0
+}
+
+# ---------------------------------------------------------------------------
+# The pledge (Take it up), company scope, scope:te_pa_home its country with the pledge's law or good staged on it
+# (te_pa_tf_law, te_pa_tf_good, te_pa_tf_level: te_pa_pledge_monthly)
+# ---------------------------------------------------------------------------
+
+# Country scope. It is enacting the pledged law.
+te_pa_pl_law_enacting = {
+	te_pa_v_tf_law > 0
+	te_pa_gen_enacting_law_index >= te_pa_v_tf_law
+	te_pa_gen_enacting_law_index <= te_pa_v_tf_law
+}
+
+# The pledged tariff holds: for a raise (te_pa_pl_dir 1) the good's level is at least the pledged one and the trade
+# policy still lets it collect; for a lower tariff, the level is at most the pledged one.
+te_pa_pl_tariff_held = {
+	trigger_if = {
+		limit = { var:te_pa_pl_dir ?= 1 }
+		owner = {
+			te_pa_tariffs_bite = yes
+			te_pa_gen_tariff_n >= te_pa_v_tf_level
+		}
+	}
+	trigger_else = {
+		owner = { te_pa_gen_tariff_n <= te_pa_v_tf_level }
+	}
+}
+
+# The pledged tariff is set again rather than counted broken (as the Tax Code's sync re-asserts its levels): an AI
+# government keeps its pledge so, and in the month after the set anyone's is tried again once (probe 14: a set the
+# engine kept back, by its cooldown, is not the player's doing). Only the level has changed: a raise's trade policy
+# still lets it collect.
+te_pa_pl_tariff_reassert = {
+	owner = { te_pa_tariffs_settable = yes }
+	OR = {
+		owner = { is_ai = yes }
+		te_pa_pl_set_since < 2
+	}
+	trigger_if = {
+		limit = { var:te_pa_pl_dir ?= 1 }
+		owner = { te_pa_tariffs_bite = yes }
+	}
+}
+
+# Its free speed on the pledged law is due: a year since the last, or none yet (its own count, not the firm's or the
+# law's yearly limit, te_pa_can_speed).
+te_pa_pl_speed_due = {
+	te_pa_pl_speed_since >= te_pa_pl_speed_months
+}
+
+# ---------------------------------------------------------------------------
+# The ledger (container scope, an entry): the petition's ask (te_pa_l_ask), for its lines
+# ---------------------------------------------------------------------------
+
+te_pa_ledger_ask_is_law = {
+	OR = {
+		var:te_pa_l_ask ?= 1
+		var:te_pa_l_ask ?= 4
+	}
+}
+
+# Country scope. Some firm has spent Connections for or against its petition (the end event's description).
+te_pa_pt_has_sides = {
+	OR = {
+		te_pa_v_pt_for > 0
+		te_pa_v_pt_against > 0
+	}
+}

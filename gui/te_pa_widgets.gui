@@ -1059,6 +1059,13 @@ types te_pa_widget_types
 			tooltip = "te_pa_det_money_tt"
 			text = "te_pa_det_money"
 		}
+		### Task 5b: a pledge the government made the firm on its petition (a
+		### law to begin enacting, a tariff to keep), while it has one.
+		te_pa_line = {
+			visible = "[GreaterThan_CFixedPoint( ScriptContainer.GetVariableValue('te_pa_r_pl_kind'), '(CFixedPoint)0' )]"
+			tooltip = "te_pa_row_pledge_tt"
+			text = "te_pa_det_pledge"
+		}
 
 		te_pa_subheader = {
 			blockoverride "subheader_text" {
@@ -1344,6 +1351,78 @@ types te_pa_widget_types
 						te_pa_cell = {
 							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_amt_against_3'), '(CFixedPoint)0' )]"
 							text = "te_pa_pol_against_3"
+						}
+					}
+				}
+			}
+			### Task 5b: the petition for a law or a tariff under way (the
+			### country's record, te_pa_pt_*, from the month it is declared to
+			### its answer): who asks for what, when it is answered, and what
+			### the firms for and against it have spent, the three largest on
+			### each side, as the law's sides above.
+			flowcontainer = {
+				visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_has_pt'), '(CFixedPoint)0' )]"
+				direction = vertical
+				ignoreinvisible = yes
+				spacing = 2
+
+				te_pa_subheader = {
+					blockoverride "subheader_text" {
+						text = "te_pa_pol_pt_sub"
+					}
+				}
+				te_pa_line = {
+					tooltip = "te_pa_pol_pt_tt"
+					text = "te_pa_pol_pt"
+				}
+				te_pa_line = {
+					visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_pt_months_value'), '(CFixedPoint)0' )]"
+					text = "te_pa_pol_pt_months"
+				}
+				flowcontainer = {
+					direction = horizontal
+					spacing = 8
+
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+
+						te_pa_cell = {
+							text = "te_pa_pol_pt_for"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_pt_amt_for_1'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_pt_for_1"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_pt_amt_for_2'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_pt_for_2"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_pt_amt_for_3'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_pt_for_3"
+						}
+					}
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+						spacing = 2
+
+						te_pa_cell = {
+							text = "te_pa_pol_pt_against"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_pt_amt_against_1'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_pt_against_1"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_pt_amt_against_2'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_pt_against_2"
+						}
+						te_pa_cell = {
+							visible = "[GreaterThan_CFixedPoint( Country.MakeScope.ScriptValue('te_pa_pol_pt_amt_against_3'), '(CFixedPoint)0' )]"
+							text = "te_pa_pol_pt_against_3"
 						}
 					}
 				}

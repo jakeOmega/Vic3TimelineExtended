@@ -87,6 +87,32 @@ te_pa_sc_rents_seat_gap = {
 te_pa_sc_phase_value = { value = enactment_phase }
 te_pa_sc_setbacks_value = { value = enactment_setback_count }
 
+# ai_keeps_enactment (Task 5b, probe 13): the months after arming it is read (past an AI's review of its enactment),
+# and the months since it was armed (country scope).
+te_pa_sc_enact_months = 3
+te_pa_sc_enact_age = {
+	value = 0
+	if = {
+		limit = { has_global_variable = te_pa_sc_enact_month }
+		value = te_history_month_index
+		subtract = global_var:te_pa_sc_enact_month
+	}
+}
+
+# tariff_from_script (Task 5b, probe 14): how far the month's reading is from the level wanted, either way.
+te_pa_sc_tariff_gap = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = te_pa_sc_tariff_later
+			has_global_variable = te_pa_sc_tariff_want
+		}
+		value = global_var:te_pa_sc_tariff_later
+		subtract = global_var:te_pa_sc_tariff_want
+		if = { limit = { global_var:te_pa_sc_tariff_later < global_var:te_pa_sc_tariff_want } multiply = -1 }
+	}
+}
+
 # momentum_from_pulse (Task 5a, probe 9): the least momentum the check reads, half the amount, and the rise read at once.
 te_pa_sc_mom_min = 0.005
 te_pa_sc_mom_half = {

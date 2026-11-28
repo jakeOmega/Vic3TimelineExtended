@@ -481,6 +481,13 @@ te_pa_row_sync = {
 		limit = { te_pa_side_on_current = yes }
 		set_variable = { name = te_pa_side_shown value = te_pa_v_side_spent }
 	}
+	# Task 5b: what its declared move asks for (a law, or a good and a tariff level: 0 unless it is the move under
+	# way), and the months left on a pledge the government made it.
+	set_variable = { name = te_pa_move_shown_ask value = te_pa_move_shown_ask_value }
+	set_variable = { name = te_pa_move_shown_law value = te_pa_move_shown_law_value }
+	set_variable = { name = te_pa_move_shown_good value = te_pa_move_shown_good_value }
+	set_variable = { name = te_pa_move_shown_level value = te_pa_move_shown_level_value }
+	set_variable = { name = te_pa_pl_left value = te_pa_pl_left_value }
 	var:te_pa_row ?= {
 		set_variable = { name = te_pa_r_firm value = scope:te_pa_sync_firm }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_goal TO = te_pa_r_goal }
@@ -553,6 +560,18 @@ te_pa_row_sync = {
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_side_shown TO = te_pa_r_side_spent }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_side_sign TO = te_pa_r_side_sign }
 		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_campaign_total TO = te_pa_r_cm_total }
+		# Task 5b: the petition's ask on the move's line, and the government's pledge in the detail.
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_move_shown_ask TO = te_pa_r_move_ask }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_move_shown_law TO = te_pa_r_move_law }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_move_shown_good TO = te_pa_r_move_good }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_move_shown_level TO = te_pa_r_move_level }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_pl_kind TO = te_pa_r_pl_kind }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_pl_law TO = te_pa_r_pl_law }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_pl_good TO = te_pa_r_pl_good }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_pl_level TO = te_pa_r_pl_level }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_pl_dir TO = te_pa_r_pl_dir }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_pl_begun TO = te_pa_r_pl_begun }
+		te_pa_copy_from = { FIRM = te_pa_sync_firm FROM = te_pa_pl_left TO = te_pa_r_pl_left }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_seat TO = te_pa_r_seat }
 		te_pa_copy_scope = { FIRM = te_pa_sync_firm FROM = te_pa_exec TO = te_pa_r_exec }
 	}

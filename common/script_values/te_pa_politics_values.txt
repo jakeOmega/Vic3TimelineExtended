@@ -627,3 +627,376 @@ te_pa_pol_amt_against_3 = { value = 0 if = { limit = { has_variable = te_pa_side
 te_pa_pol_secret_value = { value = 0 if = { limit = { has_variable = te_pa_pol_secret } value = var:te_pa_pol_secret } }
 te_pa_pol_campaign_value = { value = 0 if = { limit = { has_variable = te_pa_pol_campaign } value = var:te_pa_pol_campaign } }
 
+
+# ---------------------------------------------------------------------------
+# The petition for a law or a tariff (Task 5b; § 8.4): kind 3 on the declared-move frame. Every number is a first
+# guess. The ask's codes (te_pa_move_ask on the firm, te_pa_pt_ask on the country, te_pa_l_ask on an entry):
+#   1 a law from the table (A Friendly Law)          2 a tariff on its output (A Protected Market)
+#   3 a lower tariff on its input (Cheaper Inputs)   4 Antitrust Enforcement (Cheaper Inputs: the buyers, § 6.3)
+#   5 reserved for Task 6's labor law (Labor Peace)
+# ---------------------------------------------------------------------------
+
+# Who may ask: the goal's score and the Connections (§ 8.4).
+te_pa_pt_score = 70
+te_pa_pt_conn = 40
+# A refusal (§ 8.4): the petitioner's Connections lost, and each firm on the other side's gain.
+te_pa_pt_refuse_conn = 10
+te_pa_pt_other_conn = 5
+# The other side, during the countdown: a firm for or against the petition spends once, Connections a point of its
+# stance (5 or 10), if it holds at least te_pa_pt_side_conn.
+te_pa_pt_side_conn = 20
+te_pa_pt_side_per = 5
+# A record whose answer is this many months past due and whose move has gone (a lapse) is cleared.
+te_pa_pt_grace = 2
+# The pledge (Take it up): a law begun within two years, a tariff kept five years; the firm's free speed at most
+# once this often; its backing at the next election waited for at most this long; a player's reminder this long
+# before a law's deadline.
+te_pa_pl_law_months = 24
+te_pa_pl_tariff_months = 60
+te_pa_pl_speed_months = 12
+te_pa_pl_back_months = 60
+te_pa_pl_due_months = 6
+# The highest import tariff level (max tariffs).
+te_pa_tariff_top = 3
+
+# Readers, 0 while unset.
+te_pa_v_out_good = { value = 0 if = { limit = { has_variable = te_pa_g_out_good } value = var:te_pa_g_out_good } }
+te_pa_v_pt_for = { value = 0 if = { limit = { has_variable = te_pa_pt_for } value = var:te_pa_pt_for } }
+te_pa_v_pt_against = { value = 0 if = { limit = { has_variable = te_pa_pt_against } value = var:te_pa_pt_against } }
+te_pa_v_pt_spent = { value = 0 if = { limit = { has_variable = te_pa_pt_spent_amt } value = var:te_pa_pt_spent_amt } }
+te_pa_v_tf_level = { value = 0 if = { limit = { has_variable = te_pa_tf_level } value = var:te_pa_tf_level } }
+te_pa_v_tf_law = { value = 0 if = { limit = { has_variable = te_pa_tf_law } value = var:te_pa_tf_law } }
+te_pa_v_pt_law = { value = 0 if = { limit = { has_variable = te_pa_pt_law } value = var:te_pa_pt_law } }
+
+# Company scope. The good its country's petition is about (the owner's te_pa_pt_good), 0 for none.
+te_pa_pt_good_firm = {
+	value = 0
+	owner = {
+		if = {
+			limit = { has_variable = te_pa_pt_good }
+			add = var:te_pa_pt_good
+		}
+	}
+}
+
+# Company scope. How far a tariff on the petition's good serves it, for a raise (ask 2): its maker wants it (2 where
+# the market imports it, 1 otherwise), a buyer doesn't (-2 where the market imports it as its input, -1 otherwise).
+te_pa_pt_tariff_stance = {
+	value = 0
+	if = {
+		limit = {
+			te_pa_pt_good_firm > 0
+			te_pa_v_out_good >= te_pa_pt_good_firm
+			te_pa_v_out_good <= te_pa_pt_good_firm
+		}
+		add = 1
+		if = { limit = { var:te_pa_g_out_imported ?= 1 } add = 1 }
+	}
+	if = {
+		limit = {
+			te_pa_pt_good_firm > 0
+			te_pa_press_in1 >= te_pa_pt_good_firm
+			te_pa_press_in1 <= te_pa_pt_good_firm
+		}
+		subtract = 1
+		if = { limit = { var:te_pa_g_in1_imported ?= 1 } subtract = 1 }
+	}
+	else_if = {
+		limit = {
+			te_pa_pt_good_firm > 0
+			te_pa_press_in2 >= te_pa_pt_good_firm
+			te_pa_press_in2 <= te_pa_pt_good_firm
+		}
+		subtract = 1
+		if = { limit = { var:te_pa_g_in2_imported ?= 1 } subtract = 1 }
+	}
+}
+
+# Company scope. Its stance on its country's petition, -2 (against) to 2 (for): the law table's for a law (the
+# generated te_pa_gen_stance_petition, by the owner's te_pa_pt_law), the tariff's for a raise, the other way for a
+# lower tariff. The petitioner's own and a firm of another country's don't count (te_pa_pt_may_side).
+te_pa_pt_stance_value = {
+	value = 0
+	if = {
+		limit = {
+			owner = {
+				OR = {
+					var:te_pa_pt_ask ?= 1
+					var:te_pa_pt_ask ?= 4
+				}
+			}
+		}
+		add = te_pa_gen_stance_petition
+	}
+	else_if = {
+		limit = { owner = { var:te_pa_pt_ask ?= 2 } }
+		add = te_pa_pt_tariff_stance
+	}
+	else_if = {
+		limit = { owner = { var:te_pa_pt_ask ?= 3 } }
+		subtract = te_pa_pt_tariff_stance
+	}
+	min = -2
+	max = 2
+}
+
+# Company scope. That stance, whichever way it points, and what the firm spends on its side: Connections a point.
+te_pa_pt_stance_size = {
+	value = te_pa_pt_stance_value
+	if = { limit = { te_pa_pt_stance_value < 0 } multiply = -1 }
+}
+te_pa_pt_spend_value = {
+	value = te_pa_pt_stance_size
+	multiply = te_pa_pt_side_per
+}
+te_pa_conn_after_pt_spend = {
+	value = te_pa_v_conn
+	subtract = te_pa_v_pt_spent
+	min = 0
+}
+# The order its side's firms are ranked by (ordered_company sorts the highest first).
+te_pa_pt_rank_order = { value = te_pa_v_pt_spent }
+
+# Country scope, with scope:te_pa_mv_firm the petitioner (the end event, an answer). How many of its firms stand
+# against its petition (stance below 0), the petitioner aside: the firms a refusal pays.
+te_pa_pt_count_against = {
+	value = 0
+	every_company = {
+		limit = { te_pa_pt_other_side = yes }
+		add = 1
+	}
+}
+
+# Company scope. A refusal: the petitioner's Connections, and each firm's on the other side.
+te_pa_conn_after_pt_refuse = {
+	value = te_pa_v_conn
+	subtract = te_pa_pt_refuse_conn
+	min = 0
+}
+te_pa_conn_after_pt_other = {
+	value = te_pa_v_conn
+	add = te_pa_pt_other_conn
+	max = 100
+}
+
+# Company scope. The import tariff level it asks for: one step up on its output (from none or a subvention, Low
+# Tariffs), at most Max Tariffs; one step down on its input, at least none.
+te_pa_pt_ask_out_level = {
+	value = te_pa_v_out_tariff_level
+	add = 1
+	min = 1
+	max = te_pa_tariff_top
+}
+te_pa_pt_ask_in1_level = {
+	value = te_pa_v_in1_tariff
+	subtract = 1
+	min = 0
+}
+te_pa_pt_ask_in2_level = {
+	value = te_pa_v_in2_tariff
+	subtract = 1
+	min = 0
+}
+
+# Country scope. The month the record's answer falls due (te_pa_pt_open, from the move's months left).
+te_pa_pt_end_value = {
+	value = te_history_month_index
+	add = te_pa_v_move_months
+}
+te_pa_pt_stale_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_pt_end }
+		value = var:te_pa_pt_end
+		add = te_pa_pt_grace
+	}
+}
+
+# Any scope. The months a pledge runs to (Take it up): a law's two years, a tariff's five; the backing's wait.
+te_pa_pl_until_law_value = {
+	value = te_history_month_index
+	add = te_pa_pl_law_months
+}
+te_pa_pl_until_tariff_value = {
+	value = te_history_month_index
+	add = te_pa_pl_tariff_months
+}
+te_pa_pl_back_until_value = {
+	value = te_history_month_index
+	add = te_pa_pl_back_months
+}
+
+# Company scope. Months left to its pledge's deadline, 0 for none (the row's copy); months since its last free speed
+# (a long time while none).
+te_pa_pl_left_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_pa_pl_until }
+		value = var:te_pa_pl_until
+		subtract = te_history_month_index
+		min = 0
+	}
+}
+te_pa_pl_set_since = {
+	value = 999
+	if = {
+		limit = { has_variable = te_pa_pl_set_month }
+		value = te_history_month_index
+		subtract = var:te_pa_pl_set_month
+	}
+}
+te_pa_pl_speed_since = {
+	value = 999
+	if = {
+		limit = { has_variable = te_pa_pl_speed_month }
+		value = te_history_month_index
+		subtract = var:te_pa_pl_speed_month
+	}
+}
+
+# Company scope, the firm's row (te_pa_row_sync, scope:te_pa_sync_firm the firm): the declared move's ask, its law,
+# its good and its level as the row shows them, while this firm is the one that declared it; 0 otherwise (a firm
+# whose nomination lost keeps its ask until its next turn clears it).
+te_pa_move_shown_ask_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_pa_move_ask
+			owner = {
+				has_variable = te_pa_move_firm
+				var:te_pa_move_firm = scope:te_pa_sync_firm
+			}
+		}
+		value = var:te_pa_move_ask
+	}
+}
+te_pa_move_shown_law_value = {
+	value = 0
+	if = {
+		limit = {
+			te_pa_move_shown_ask_value > 0
+			has_variable = te_pa_move_law
+		}
+		value = var:te_pa_move_law
+	}
+}
+te_pa_move_shown_good_value = {
+	value = 0
+	if = {
+		limit = {
+			te_pa_move_shown_ask_value > 0
+			has_variable = te_pa_move_good
+		}
+		value = var:te_pa_move_good
+	}
+}
+te_pa_move_shown_level_value = {
+	value = 0
+	if = {
+		limit = {
+			te_pa_move_shown_ask_value > 0
+			has_variable = te_pa_move_level
+		}
+		value = var:te_pa_move_level
+	}
+}
+
+# ---------------------------------------------------------------------------
+# An AI government's answer to a petition for a law or a tariff (§ 12.1), read by te_pa_move_ai_answer beside the
+# posture: the groups in government's stance on the ask (a quarter step a point of each group's law_stance, -2 to
+# 2: on the law for a law, on protection for a tariff, on Free Trade for a lower tariff), held to a step and a half;
+# and the Connections the firms spent for it less those spent against it, a step every te_pa_ai_pt_conn_step, held
+# to a step.
+# ---------------------------------------------------------------------------
+
+te_pa_ai_pt_stance_per = 0.25
+te_pa_ai_pt_term_max = 1.5
+te_pa_ai_pt_conn_step = 40
+te_pa_ai_pt_conn_max = 1
+
+# Interest group scope. Its stance on its country's petition, -2 to 2.
+te_pa_ig_pt_stance = {
+	value = 0
+	if = {
+		limit = {
+			owner ?= {
+				OR = {
+					var:te_pa_pt_ask ?= 1
+					var:te_pa_pt_ask ?= 4
+				}
+			}
+		}
+		add = te_pa_gen_ig_petition_stance
+	}
+	else_if = {
+		limit = { owner ?= { var:te_pa_pt_ask ?= 2 } }
+		subtract = te_pa_ig_free_trade_stance
+	}
+	else_if = {
+		limit = { owner ?= { var:te_pa_pt_ask ?= 3 } }
+		add = te_pa_ig_free_trade_stance
+	}
+}
+
+# Company scope (the petitioner, whose owner is the government asked).
+te_pa_ai_pt_stance_value = {
+	value = 0
+	owner = {
+		every_interest_group = {
+			limit = { is_in_government = yes }
+			add = {
+				value = te_pa_ig_pt_stance
+				multiply = te_pa_ai_pt_stance_per
+			}
+		}
+	}
+	min = { value = te_pa_ai_pt_term_max multiply = -1 }
+	max = te_pa_ai_pt_term_max
+}
+te_pa_ai_pt_conn_value = {
+	value = 0
+	owner = {
+		add = te_pa_v_pt_for
+		subtract = te_pa_v_pt_against
+	}
+	divide = te_pa_ai_pt_conn_step
+	min = { value = te_pa_ai_pt_conn_max multiply = -1 }
+	max = te_pa_ai_pt_conn_max
+}
+te_pa_ai_pt_stance_size = {
+	value = te_pa_ai_pt_stance_value
+	if = { limit = { te_pa_ai_pt_stance_value < 0 } multiply = -1 }
+}
+te_pa_ai_pt_conn_size = {
+	value = te_pa_ai_pt_conn_value
+	if = { limit = { te_pa_ai_pt_conn_value < 0 } multiply = -1 }
+}
+
+# Kind law (the petitioner). The reason on the ledger (te_pa_move_why): 5 the governing groups' stance on what it
+# asks for, 6 the Connections the firms spent for and against it.
+te_pa_ai_lean_law = {
+	value = te_pa_ai_pt_stance_value
+	add = te_pa_ai_pt_conn_value
+}
+te_pa_ai_why_law = {
+	value = 5
+	if = {
+		limit = { te_pa_ai_pt_conn_size > te_pa_ai_pt_stance_size }
+		value = 6
+	}
+}
+
+# ---------------------------------------------------------------------------
+# The tab (country scope: the Politics section's petition; container scope: a row's pledge)
+# ---------------------------------------------------------------------------
+
+te_pa_pol_has_pt = { value = 0 if = { limit = { has_variable = te_pa_pt_firm } value = 1 } }
+te_pa_pol_pt_n_for = { value = 0 if = { limit = { has_variable = te_pa_pt_n_for } value = var:te_pa_pt_n_for } }
+te_pa_pol_pt_n_against = { value = 0 if = { limit = { has_variable = te_pa_pt_n_against } value = var:te_pa_pt_n_against } }
+te_pa_pol_pt_amt_for_1 = { value = 0 if = { limit = { has_variable = te_pa_pt_amt_for_1 } value = var:te_pa_pt_amt_for_1 } }
+te_pa_pol_pt_amt_for_2 = { value = 0 if = { limit = { has_variable = te_pa_pt_amt_for_2 } value = var:te_pa_pt_amt_for_2 } }
+te_pa_pol_pt_amt_for_3 = { value = 0 if = { limit = { has_variable = te_pa_pt_amt_for_3 } value = var:te_pa_pt_amt_for_3 } }
+te_pa_pol_pt_amt_against_1 = { value = 0 if = { limit = { has_variable = te_pa_pt_amt_against_1 } value = var:te_pa_pt_amt_against_1 } }
+te_pa_pol_pt_amt_against_2 = { value = 0 if = { limit = { has_variable = te_pa_pt_amt_against_2 } value = var:te_pa_pt_amt_against_2 } }
+te_pa_pol_pt_amt_against_3 = { value = 0 if = { limit = { has_variable = te_pa_pt_amt_against_3 } value = var:te_pa_pt_amt_against_3 } }
+te_pa_pol_pt_months_value = { value = te_pa_v_move_months }

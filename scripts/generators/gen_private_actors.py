@@ -515,6 +515,8 @@ class Plan:
     loc: object = None
     # Every interest group type (vanilla's and the mod's), by key; index = position + 1 (Task 5a's patronage)
     igs: tuple = ()
+    # The goods no market sets a tariff on (tradeable = no: gold), by key (Task 5b's tariffs)
+    untradeable: frozenset = frozenset()
 
     def good_index(self, good: str) -> int:
         return self.goods.index(good) + 1
@@ -538,6 +540,11 @@ class Plan:
         """``interest_group_<ig>_pol_str_mult`` for each interest group type no definition registers (vanilla
         registers its eight; one the mod adds would need it)."""
         return sorted({f"interest_group_{ig}_pol_str_mult" for ig in self.igs} - self.registered)
+
+    def tariff_goods(self) -> list[str]:
+        """The goods some sector reads whose import tariff a market can set (Task 5b): the read goods but the
+        untradeable ones (gold), whose tariff reading is a flat 0."""
+        return [g for g in self.read_goods() if g not in self.untradeable]
 
     def read_goods(self) -> list[str]:
         """The goods some sector reads a price of: its inputs and its main output when not local."""
@@ -611,7 +618,8 @@ def build_plan(mod_state, root: Path = ROOT) -> Plan:
     techs = sorted({t for s in sectors for t in s.techs})
     return Plan(sectors, sorted(data.goods), techs, law_catalog(data),
                 tuple(data.personality_traits()), tuple(data.character_ideologies()), registered_types(root),
-                entity_loc(root), igs)
+                entity_loc(root), igs,
+                untradeable=frozenset(g for g in data.goods if _unwrap(_body(data.goods, g).get("tradeable")) == "no"))
 
 
 # ---------------------------------------------------------------------------
@@ -639,6 +647,8 @@ EFFECTS_PREAMBLE = """\
 #                          inputs by value) and out (its main output). te_pa_row_reason_good and its kin name it
 #   te_pa_g_<slot>_pricier the home market's price of it over base, less 1, signed (0.4 = 40% above base)
 #   te_pa_g_<slot>_imported, _exported  1 while the home market imports (exports) any of it
+#   te_pa_g_<slot>_tariff  its import tariff level in the home market, -3 (max subventions) to 3 (max tariffs),
+#                          as set: whether the trade policy lets it collect is the hand-written readers' (Task 5b)
 #   te_pa_g_out_local      1 when the main output is a local good, whose price and trade are not read
 #   te_pa_g_f_<feature>    the sector features (private_actors_config.FEATURES), 0 or 1
 #   te_pa_g_tech_count     how many technologies unlock a method of its building types
@@ -707,13 +717,17 @@ te_pa_gen_clear_good = {
 	set_variable = { name = te_pa_g_$SLOT$_pricier value = 0 }
 	set_variable = { name = te_pa_g_$SLOT$_imported value = 0 }
 	set_variable = { name = te_pa_g_$SLOT$_exported value = 0 }
+	set_variable = { name = te_pa_g_$SLOT$_tariff value = 0 }
 }
 
 # Scope: a company. Reads one good of its sector in its owner's market: the index, the signed price over
-# base (te_pa_gen_firm_price_<good>) and whether the market imports and exports it.
+# base (te_pa_gen_firm_price_<good>), whether the market imports and exports it, and its import tariff level
+# (te_pa_gen_firm_tariff_<good>, Task 5b: -3 max subventions to 3 max tariffs, as set, whatever the trade
+# policy lets it collect).
 te_pa_gen_read_good = {
 	set_variable = { name = te_pa_g_$SLOT$_good value = $IDX$ }
 	set_variable = { name = te_pa_g_$SLOT$_pricier value = te_pa_gen_firm_price_$GOOD$ }
+	set_variable = { name = te_pa_g_$SLOT$_tariff value = te_pa_gen_firm_tariff_$GOOD$ }
 	if = {
 		limit = { owner = { market = { mg:$GOOD$ = { market_goods_imports > 0 } } } }
 		set_variable = { name = te_pa_g_$SLOT$_imported value = 1 }
@@ -1456,6 +1470,116 @@ def render_politics_triggers(plan: Plan) -> str:
     return _block(lines + ["\t}", "}"])
 
 
+# ---------------------------------------------------------------------------
+# Tariffs and the petition for a law or a tariff (Task 5b, spec §§ 8.1, 8.4)
+# ---------------------------------------------------------------------------
+
+# An import tariff level by its signed number (vanilla's keys; the Tax Code's CUSTOMS_LEVELS order).
+TARIFF_LEVELS = {3: "max_tariffs", 2: "high_tariffs", 1: "low_tariffs", 0: "no_tariffs_or_subventions",
+                 -1: "low_subventions", -2: "high_subventions", -3: "max_subventions"}
+
+PETITION_PREAMBLE = """\
+# The petition for a law or a tariff (Task 5b; te_pa_politics_effects.txt calls these). A tariff is one good's
+# import level in the market, read through the capital's state goods as the Tax Code's customs reads it, and set
+# as its customs sync sets one (set_import_tariff_level, in the hand-written te_pa_tariff_set_good, behind
+# te_pa_tariffs_settable, which defers to the Tax Code's customs option). Goods are numbered by key from 1 (the
+# index te_pa_g_<slot>_good carries), laws in the law table's order from 1.
+"""
+
+
+def render_tariff_values(plan: Plan) -> str:
+    parts = [
+        "# Each good a sector reads (Task 5b): its import tariff level in a country's market, -3 (max subventions) to",
+        "# 3 (max tariffs), read through the capital's state goods, null-safe (sg:<good> ?=), as the Tax Code's",
+        "# customs reads it; 0 when no level can be read (no capital, or no state goods for the good there). Whether",
+        "# the trade policy lets the level collect is the hand-written readers' (te_pa_tariffs_bite).",
+        "# te_pa_gen_tariff_<good> is country scope, te_pa_gen_firm_tariff_<good> the same from a company. A good no",
+        "# market sets a tariff on (tradeable = no) reads 0.",
+    ]
+    out = [_block(parts)]
+    for good in plan.read_goods():
+        if good in plan.untradeable:
+            lines = [f"te_pa_gen_tariff_{good} = {{ value = 0 }}"]
+        else:
+            lines = [f"te_pa_gen_tariff_{good} = {{", "\tvalue = 0"]
+            for n, (level, key) in enumerate((lv, k) for lv, k in TARIFF_LEVELS.items() if lv != 0):
+                keyword = "if" if n == 0 else "else_if"
+                lines.append(f"\t{keyword} = {{ limit = {{ capital ?= {{ sg:{good} ?= {{ import_tariff_level = {key} }} }} }}"
+                             f" value = {level} }}")
+            lines.append("}")
+        lines.append(f"te_pa_gen_firm_tariff_{good} = {{ value = 0 owner = {{ add = te_pa_gen_tariff_{good} }} }}")
+        out.append(_block(lines))
+    by_index = ["# Scope: a country. The import tariff level of the good numbered by its te_pa_tf_good (staged by the",
+                "# caller), 0 for none or a good no sector reads.",
+                "te_pa_gen_tariff_n = {", "\tvalue = 0"]
+    for n, good in enumerate(plan.tariff_goods()):
+        keyword = "if" if n == 0 else "else_if"
+        by_index.append(f"\t{keyword} = {{ limit = {{ var:te_pa_tf_good ?= {plan.good_index(good)} }}"
+                        f" value = te_pa_gen_tariff_{good} }}")
+    out.append(_block(by_index + ["}"]))
+    return "\n".join(out)
+
+
+def render_petition_values(plan: Plan) -> str:
+    index = ["# Each covered law's number in the law table (te_pa_stake_law, te_pa_pt_law and their kin), for the",
+             "# hand-written script that names one law (the buyers' petition for Antitrust Enforcement)."]
+    index += [f"te_pa_gen_law_index_{law.key} = {law.index}" for law in plan.laws]
+    stance = ["# Scope: a company. Its stance (-2 to 2) on the law its country's petition is about (the owner's",
+              "# te_pa_pt_law, the law table's number): who stands for and against a petition for a law; 0 with none.",
+              "te_pa_gen_stance_petition = {", "\tvalue = 0"]
+    for n, law in enumerate(plan.laws):
+        keyword = "if" if n == 0 else "else_if"
+        stance.append(f"\t{keyword} = {{ limit = {{ owner = {{ var:te_pa_pt_law ?= {law.index} }} }}"
+                      f" value = te_pa_gen_stance_{law.key} }}")
+    ig = ["# Scope: an interest group. Its stance on the law its country's petition is about (the owner's te_pa_pt_law),",
+          "# +2 strongly approves to -2 strongly disapproves (law_stance), for an AI government's answer; 0 with none.",
+          "te_pa_gen_ig_petition_stance = {", "\tvalue = 0"]
+    for law in plan.laws:
+        ig += [
+            "\tif = {",
+            f"\t\tlimit = {{ owner ?= {{ var:te_pa_pt_law ?= {law.index} }} }}",
+            f"\t\tif = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value > approve }} }} value = 2 }}",
+            f"\t\telse_if = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value > neutral }} }} value = 1 }}",
+            f"\t\telse_if = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value < disapprove }} }} value = -2 }}",
+            f"\t\telse_if = {{ limit = {{ law_stance = {{ law = law_type:{law.key} value < neutral }} }} value = -1 }}",
+            "\t}",
+        ]
+    return "\n".join([_block(index), _block(stance + ["}"]), _block(ig + ["}"])])
+
+
+def render_petition_effects(plan: Plan) -> str:
+    tariff = ["# Scope: a country (its market's owner, te_pa_tariffs_settable checked by the caller). The good numbered by",
+              "# its variable VAR gets the import tariff level its variable LEVEL holds (0 to 3), through the",
+              "# hand-written te_pa_tariff_set_good, which names the level and checks a treaty's ban.",
+              "te_pa_gen_tariff_set = {"]
+    for n, good in enumerate(plan.tariff_goods()):
+        keyword = "if" if n == 0 else "else_if"
+        tariff.append(f"\t{keyword} = {{ limit = {{ var:$VAR$ ?= {plan.good_index(good)} }}"
+                      f" te_pa_tariff_set_good = {{ GOOD = {good} LEVEL = $LEVEL$ }} }}")
+    start = ["# Scope: a country enacting nothing (the caller checks). Starts enacting the law numbered by its variable VAR",
+             "# (the law table's number): an AI government keeping its pledge to a firm (§ 12.1, probe 13).",
+             "te_pa_gen_law_start = {"]
+    for n, law in enumerate(plan.laws):
+        keyword = "if" if n == 0 else "else_if"
+        start.append(f"\t{keyword} = {{ limit = {{ var:$VAR$ ?= {law.index} }} start_enactment = law_type:{law.key} }}")
+    return _block(tariff + ["}"]) + "\n" + _block(start + ["}"])
+
+
+def render_petition_triggers(plan: Plan) -> str:
+    barred = ["# Scope: a country. A treaty in force bars it from a tariff on the good numbered by its variable VAR",
+              "# (vanilla's no_tariffs article: te_bulk_tariff_barred, the All Goods rows' test).",
+              "te_pa_gen_tariff_barred_n = {", "\tOR = {"]
+    for good in plan.tariff_goods():
+        barred.append(f"\t\tAND = {{ var:$VAR$ ?= {plan.good_index(good)}"
+                      f" te_bulk_tariff_barred = {{ GOOD = {good} ARTICLE = no_tariffs }} }}")
+    opened = ["# Scope: a country. It could move to the law numbered by its variable VAR (te_pa_gen_law_open_<law>): a",
+              "# petition's law is still one it can take up.",
+              "te_pa_gen_law_n_open = {", "\tOR = {"]
+    for law in plan.laws:
+        opened.append(f"\t\tAND = {{ var:$VAR$ ?= {law.index} te_pa_gen_law_open_{law.key} = yes }}")
+    return _block(barred + ["\t}", "}"]) + "\n" + _block(opened + ["\t}", "}"])
+
+
 def render_effects(plan: Plan) -> str:
     return "\n".join([
         HEADER + EFFECTS_PREAMBLE,
@@ -1473,6 +1597,7 @@ def render_effects(plan: Plan) -> str:
         EXPAND_PREAMBLE + render_expand(plan),
         CHARTER_PREAMBLE + render_charter(plan),
         POLITICS_PREAMBLE + render_politics_effects(plan),
+        PETITION_PREAMBLE + render_petition_effects(plan),
     ])
 
 
@@ -1506,6 +1631,7 @@ def render_triggers(plan: Plan) -> str:
     parts.append(render_trust_triggers(plan))
     parts.append(render_charter_trigger(plan))
     parts.append(render_politics_triggers(plan))
+    parts.append(PETITION_PREAMBLE + render_petition_triggers(plan))
     return "\n".join(parts)
 
 
@@ -1615,6 +1741,8 @@ def render_values(plan: Plan) -> str:
     parts.append(render_seat_values(plan))
     parts.append(render_trust_values(plan))
     parts.append(render_politics_values(plan))
+    parts.append(PETITION_PREAMBLE + render_tariff_values(plan))
+    parts.append(render_petition_values(plan))
     return "\n".join(parts)
 
 

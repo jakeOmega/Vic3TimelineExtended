@@ -540,11 +540,16 @@ class BothModesTest(unittest.TestCase):
         self.assertEqual(triggers["te_tax_customs_eligible"].get("te_tax_customs_on"), "yes")
         self.assertEqual(triggers["te_tax_customs_authority"].get("te_tax_customs_eligible"), "yes")
 
+    # Private Actors' tariff pledge (Task 5b) sets a firm's petitioned level as the customs sync does, only behind
+    # te_pa_tariffs_settable, which needs the customs option off (test_private_actors_petition.py pins it), so the
+    # code's records are never written and its sync never fights a pledge.
+    DEFERS_TO_CUSTOMS = ("common/scripted_effects/te_pa_politics_effects.txt",)
+
     def test_only_the_generated_helpers_write_native_tariffs(self):
         for directory in ("common", "events"):
             for path in sorted((ROOT / directory).rglob("*.txt")):
                 rel = path.relative_to(ROOT).as_posix()
-                if rel == GEN_EFFECTS or "te_debug_tax" in rel:
+                if rel == GEN_EFFECTS or "te_debug_tax" in rel or rel in self.DEFERS_TO_CUSTOMS:
                     continue
                 text = re.sub(r"#[^\n]*", "", path.read_text(encoding="utf-8-sig", errors="replace"))
                 with self.subTest(path=rel):

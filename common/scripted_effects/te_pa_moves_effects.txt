@@ -35,6 +35,11 @@
 #      te_pa_ai_why_<token> (the code of its largest term), read by te_pa_move_ai_answer.
 #   6. Its lines: a branch for its code in te_pa_ledger_kind and te_pa_row_move_kind (te_pa_custom_loc.txt), so the
 #      ledger, the row, the notice and the alerts name it.
+#   7. (A kind that asks for a named thing: Task 5b's law or tariff.) Its declaring effect writes the ask onto the
+#      firm before the nomination: te_pa_move_ask (the kind's own sub-code), and as it needs te_pa_move_law (a law
+#      table number), te_pa_move_good (a good's index), te_pa_move_level. te_pa_move_note_ask copies them onto each of
+#      the move's ledger entries (te_pa_l_ask, _law, _good, _level), so its lines can name the thing; the kind clears
+#      them from a firm whose nomination lost (Task 5b: te_pa_politics_turn).
 # test_private_actors_moves.py fails on a kind with a code and no trigger, effect, answers, event or AI block.
 
 # ---------------------------------------------------------------------------
@@ -163,6 +168,10 @@ te_pa_move_end = {
 	else_if = {
 		limit = { var:te_pa_move_kind ?= 2 }
 		te_pa_move_close = { KIND = suit EVENT = te_pa.2 }
+	}
+	else_if = {
+		limit = { var:te_pa_move_kind ?= 3 }
+		te_pa_move_close = { KIND = law EVENT = te_pa.4 }
 	}
 	else = {
 		te_pa_move_clear = yes
@@ -336,6 +345,31 @@ te_pa_move_log_from = {
 		else = {
 			scope:te_pa_mv_entry_firm = { te_pa_ledger_note_good = yes }
 		}
+		scope:te_pa_mv_entry_firm = { te_pa_move_note_ask = yes }
 	}
 	clear_saved_scope = te_pa_mv_log_firm
+}
+
+# Company scope, the move's firm (scope:te_pa_l_new the entry). Step 7 of the header: what a kind's move asks for, when
+# its declaring effect wrote it on the firm, onto the entry (the good it names replaces the firm's own).
+te_pa_move_note_ask = {
+	if = {
+		limit = { has_variable = te_pa_move_ask }
+		save_scope_as = te_pa_mv_ask_firm
+		scope:te_pa_l_new = {
+			set_variable = { name = te_pa_l_ask value = scope:te_pa_mv_ask_firm.var:te_pa_move_ask }
+			if = {
+				limit = { scope:te_pa_mv_ask_firm = { has_variable = te_pa_move_law } }
+				set_variable = { name = te_pa_l_law value = scope:te_pa_mv_ask_firm.var:te_pa_move_law }
+			}
+			if = {
+				limit = { scope:te_pa_mv_ask_firm = { has_variable = te_pa_move_good } }
+				set_variable = { name = te_pa_l_good value = scope:te_pa_mv_ask_firm.var:te_pa_move_good }
+			}
+			if = {
+				limit = { scope:te_pa_mv_ask_firm = { has_variable = te_pa_move_level } }
+				set_variable = { name = te_pa_l_level value = scope:te_pa_mv_ask_firm.var:te_pa_move_level }
+			}
+		}
+	}
 }

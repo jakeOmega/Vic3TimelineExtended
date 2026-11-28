@@ -259,7 +259,9 @@ class MoneyTest(unittest.TestCase):
         # the money's effects only once it is spent
         self.assertLess(spend.index("te_pa_spend_funds"), spend.index("var:te_pa_spent ?= 1"))
         self.assertLess(spend.index("var:te_pa_spent ?= 1"), spend.index("add_momentum"))
-        self.assertEqual(callers("te_pa_campaign_spend"), {"te_pa_do_campaign", "te_pa_do_back_side"})
+        # Task 5b: a firm whose petition the government took up backs its side at the next election
+        self.assertEqual(callers("te_pa_campaign_spend"),
+                         {"te_pa_do_campaign", "te_pa_do_back_side", "te_pa_pledge_back_monthly"})
         # nothing else in the area touches the funds or the pool
         for rel in (POLITICS_EFFECTS,):
             body = text(rel)
@@ -288,7 +290,8 @@ class VerbsTest(unittest.TestCase):
         return [k.removeprefix("te_pa_do_") for k, _ in walk(self.effects[name][1]) if k.startswith("te_pa_do_")]
 
     def test_a_friendly_law_list(self):
-        self.assertEqual(self.verbs("te_pa_act_law"), ["stall", "speed", "campaign"])
+        # Task 5b's petition for the law (a declared move) before campaign money
+        self.assertEqual(self.verbs("te_pa_act_law"), ["stall", "speed", "declare_law", "campaign"])
 
     def test_campaign_money_and_the_press_in_the_lists(self):
         self.assertEqual(self.verbs("te_pa_act_inputs")[-1], "campaign")
@@ -350,10 +353,11 @@ class PressTest(unittest.TestCase):
 
 
 class LedgerAndChecksTest(unittest.TestCase):
-    def test_task_5as_codes_sit_in_its_block(self):
+    def test_task_5s_codes_sit_in_its_block(self):
+        # Task 5a's 40-49 and Task 5b's 50-59
         verbs = {int(v) for v in re.findall(r"\bVERB = (\d+)", text(POLITICS_EFFECTS))}
         self.assertTrue(verbs)
-        self.assertLessEqual(verbs, set(range(40, 50)))
+        self.assertLessEqual(verbs, set(range(40, 60)))
         # the OPEN argument carries 43 and 44 to te_pa_cm_line's VERB
         self.assertIn("OPEN = 43", text(POLITICS_EFFECTS))
         self.assertIn("OPEN = 44", text(POLITICS_EFFECTS))

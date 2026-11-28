@@ -252,7 +252,7 @@ te_pa_can_declare_charter = {
 # Kind suit (§ 6.3's major move), at a buyer's turn: it seeks Cheaper Inputs with that goal's score past
 # te_pa_suit_petition_score and Connections past te_pa_suit_petition_conn, a cartel the state could sue makes one of
 # its inputs, and five years have passed since it was last refused or left unanswered. (§ 6.3's other form, a
-# petition to change the antitrust law, waits for Task 5's petition for a law.)
+# petition to change the antitrust law, is Task 5b's petition for a law, ask 4: te_pa_pt_ask_antitrust.)
 te_pa_can_declare_suit = {
 	te_pa_move_open = yes
 	var:te_pa_goal ?= 1

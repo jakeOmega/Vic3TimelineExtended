@@ -1,0 +1,124 @@
+﻿namespace = te_pa
+
+# Private Actors, politics at home: the events (docs/systems/mod_systems/private_actors.md § Politics at Home; spec
+# §§ 8.4, 12.1; plan Task 5b). A player's country only: an AI government answers a petition by weight in script
+# (te_pa_move_ai_answer, te_pa_ai_lean_law) and its pledges are kept or broken in the ledger.
+#
+# te_pa.4  The end of a petition for a law or a tariff (kind law, code 3), fired by te_pa_move_close once the move's
+#          six months are up and its variables are cleared, so nothing an option does can end the move again (plan
+#          Review Focus 3). scope:te_pa_mv_firm is the petitioner; the country's record (te_pa_pt_*, open until an
+#          answer closes it) holds what it asks for and the firms that spent Connections for and against it, whose
+#          three largest each side the immediate saves for the tooltips (te_pa_pt_save_sides). The four options are
+#          the frame's: Take it up, Stand aside, Refuse, and the posture's default as the default option, so a player
+#          who lets the event lapse gets the answer its posture gives (te_pa_move_default). Only a refusal raises
+#          Grievance (te_pa_move_refuse); the kind's answers are te_pa_answer_law_* (te_pa_politics_effects.txt).
+#
+# Fired undelayed from an effect that has already closed the move, and checks te_pa_on.
+
+te_pa.4 = {
+	type = country_event
+	placement = root
+
+	title = te_pa.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = te_pa.4.d_antitrust_sides
+				trigger = {
+					var:te_pa_pt_ask ?= 4
+					te_pa_pt_has_sides = yes
+				}
+			}
+			triggered_desc = {
+				desc = te_pa.4.d_antitrust
+				trigger = { var:te_pa_pt_ask ?= 4 }
+			}
+			triggered_desc = {
+				desc = te_pa.4.d_raise_sides
+				trigger = {
+					var:te_pa_pt_ask ?= 2
+					te_pa_pt_has_sides = yes
+				}
+			}
+			triggered_desc = {
+				desc = te_pa.4.d_raise
+				trigger = { var:te_pa_pt_ask ?= 2 }
+			}
+			triggered_desc = {
+				desc = te_pa.4.d_lower_sides
+				trigger = {
+					var:te_pa_pt_ask ?= 3
+					te_pa_pt_has_sides = yes
+				}
+			}
+			triggered_desc = {
+				desc = te_pa.4.d_lower
+				trigger = { var:te_pa_pt_ask ?= 3 }
+			}
+			triggered_desc = {
+				desc = te_pa.4.d_law_sides
+				trigger = { te_pa_pt_has_sides = yes }
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_pa.4.d_law
+			}
+		}
+	}
+	flavor = te_pa.4.f
+
+	event_image = { video = "europenorthamerica_capitalists_meeting" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_industry.dds"
+
+	duration = 3
+
+	trigger = {
+		te_pa_on = yes
+		exists = scope:te_pa_mv_firm
+	}
+
+	immediate = {
+		save_scope_as = te_pa_home
+		te_pa_pt_save_sides = yes
+	}
+
+	option = { # Take it up
+		name = te_pa.4.a
+		te_pa_pt_sides_tt = yes
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_grant = { KIND = law }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # Stand aside
+		name = te_pa.4.b
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_stand = { KIND = law }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # Refuse it
+		name = te_pa.4.c
+		te_pa_pt_sides_tt = yes
+		scope:te_pa_mv_firm = {
+			hidden_effect = { set_variable = { name = te_pa_move_why value = 0 } }
+			te_pa_move_refuse = { KIND = law }
+		}
+		ai_chance = { base = 1 }
+	}
+
+	option = { # As the posture has it
+		name = te_pa.4.e
+		default_option = yes
+		custom_tooltip = te_pa_move_default_tt
+		scope:te_pa_mv_firm = { te_pa_move_default = { KIND = law } }
+		ai_chance = { base = 3 }
+	}
+}

@@ -248,7 +248,8 @@ Setup: a game with Private Actors Enabled, played a year so every firm has taken
 past 40% of its sector or failing (its notice posted), and, played on, a cartel (open or secret) and a foundation
 somewhere (the console can set `te_pa_share` to 0.6 on a Dominance firm before its turn), a petition under way with its
 alert showing, one of the state's actions taken (a suit or an inquiry), and some firm's patronage on an interest
-group (a "Patronage from Firms" modifier on the country). Note a few firms' `te_pa_goal`,
+group (a "Patronage from Firms" modifier on the country), and a petition for a law or a tariff taken up, so some firm
+holds the government's pledge (`te_pa_pl_kind`; its tariff, if one, set). Note a few firms' `te_pa_goal`,
 `te_pa_funds`, `te_pa_cartel`, `te_pa_found` and `te_pa_turn_in` and the player's `te_pa_ledger`.
 
 1. **Within a month** the country's `te_pa_rows` list and its containers are gone, `te_pa_q_in` is gone, and no firm
@@ -257,7 +258,10 @@ group (a "Patronage from Firms" modifier on the country). Note a few firms' `te_
    and `te_pa_cartels` is gone. The declared move's variables (`te_pa_move_firm`, `te_pa_move_months`,
    `te_pa_move_hand`) and the month's candidates are gone, so neither top-bar alert shows, and no interest group holds
    "State Action Against Its Firm" or "Resents a Monopoly Charter". No "Patronage from Firms: <group>" is on any
-   country, the Politics section's rows (`te_pa_pol_view`), `te_pa_presses` and `te_pa_elect_end` are gone.
+   country, the Politics section's rows (`te_pa_pol_view`), `te_pa_presses` and `te_pa_elect_end` are gone. The
+   petition's record (`te_pa_pt_firm` and the rest of `te_pa_pt_*`) is gone, and no firm holds a pledge
+   (`te_pa_pl_kind`, `te_pa_pl_back`) or an ask (`te_pa_move_ask`): the pledges lapse with the rule, unbroken. A
+   tariff a pledge set stays at its level (it is the market's own setting now).
 2. **The records stay**: each firm keeps `te_pa_init`, its goal, its currencies, its holdings (`te_pa_cartel`,
    `te_pa_reg`, `te_pa_found`) and its `te_pa_turn_in`, which no longer counts down; a foundation's state keeps
    `te_pa_st_found_str`. The ledger stays as it was.
@@ -268,6 +272,7 @@ group (a "Patronage from Firms" modifier on the country). Note a few firms' `te_
    A petition that was under way counts as ended at the switch, so the next waits 12 months from it. The foundations' modifiers are back at the next month,
    the cartels' and the patronage modifiers at the next quarter, at the strengths and totals the records held; a
    press, the sides on a law and a wager resume from the records (`te_pa_press`, `te_pa_side_law`, `te_pa_bet_ig`).
+   No pledge comes back, and none is counted broken: a firm may petition again once the twelve months have passed.
 
 ## Self-checks
 
