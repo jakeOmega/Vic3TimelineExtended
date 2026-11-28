@@ -38281,286 +38281,286 @@ sr_mq_move_up_from_scope = {
 # is the table's draws (resort_tiers()); a colony's Cultural Centers add to its draw
 # (sr_site_resort_draw_<key>; the owner, 2026-11-24) but don't move it up the order.
 sr_resort_fill = {
-	# Tranquility Base: room for 20 and its Off-World Resorts' at +30% and its Cultural Centers'
+	# Tranquility Base: room for 40 and its Off-World Resorts' at +30% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_tranquility ?= this NOT = { has_global_variable = sr_site_blockaded_tranquility } NOT = { has_global_variable = sr_site_occupier_tranquility } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_tranquility } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_tranquility add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Valles Marineris: room for 50 and its Off-World Resorts' at +25% and its Cultural Centers'
+	# Valles Marineris: room for 100 and its Off-World Resorts' at +25% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_valles_marineris ?= this NOT = { has_global_variable = sr_site_blockaded_valles_marineris } NOT = { has_global_variable = sr_site_occupier_valles_marineris } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_valles_marineris } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_valles_marineris add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Olympus Mons: room for 40 and its Off-World Resorts' at +25% and its Cultural Centers'
+	# Olympus Mons: room for 80 and its Off-World Resorts' at +25% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_olympus_mons ?= this NOT = { has_global_variable = sr_site_blockaded_olympus_mons } NOT = { has_global_variable = sr_site_occupier_olympus_mons } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_olympus_mons } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_olympus_mons add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Venus Cloud Habitat: room for 30 and its Off-World Resorts' at +15% and its Cultural Centers'
+	# Venus Cloud Habitat: room for 60 and its Off-World Resorts' at +15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_venus ?= this NOT = { has_global_variable = sr_site_blockaded_venus } NOT = { has_global_variable = sr_site_occupier_venus } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_venus } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_venus add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Enceladus: room for 20 and its Off-World Resorts' at +15% and its Cultural Centers'
+	# Enceladus: room for 40 and its Off-World Resorts' at +15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_enceladus ?= this NOT = { has_global_variable = sr_site_blockaded_enceladus } NOT = { has_global_variable = sr_site_occupier_enceladus } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_enceladus } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_enceladus add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Iapetus: room for 15 and its Off-World Resorts' at +15% and its Cultural Centers'
+	# Iapetus: room for 30 and its Off-World Resorts' at +15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_iapetus ?= this NOT = { has_global_variable = sr_site_blockaded_iapetus } NOT = { has_global_variable = sr_site_occupier_iapetus } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_iapetus } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_iapetus add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Shackleton Crater: room for 25 and its Off-World Resorts' at +15% and its Cultural Centers'
+	# Shackleton Crater: room for 50 and its Off-World Resorts' at +15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_shackleton ?= this NOT = { has_global_variable = sr_site_blockaded_shackleton } NOT = { has_global_variable = sr_site_occupier_shackleton } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_shackleton } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_shackleton add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Marius Hills: room for 40 and its Off-World Resorts' at +15% and its Cultural Centers'
+	# Marius Hills: room for 80 and its Off-World Resorts' at +15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_marius_hills ?= this NOT = { has_global_variable = sr_site_blockaded_marius_hills } NOT = { has_global_variable = sr_site_occupier_marius_hills } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_marius_hills } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_marius_hills add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# 4 Vesta: room for 25 and its Off-World Resorts' at +10% and its Cultural Centers'
+	# 4 Vesta: room for 50 and its Off-World Resorts' at +10% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_vesta ?= this NOT = { has_global_variable = sr_site_blockaded_vesta } NOT = { has_global_variable = sr_site_occupier_vesta } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_vesta } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_vesta add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Callisto: room for 40 and its Off-World Resorts' at +10% and its Cultural Centers'
+	# Callisto: room for 80 and its Off-World Resorts' at +10% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_callisto ?= this NOT = { has_global_variable = sr_site_blockaded_callisto } NOT = { has_global_variable = sr_site_occupier_callisto } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_callisto } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_callisto add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Titan: room for 40 and its Off-World Resorts' at +10% and its Cultural Centers'
+	# Titan: room for 80 and its Off-World Resorts' at +10% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_titan ?= this NOT = { has_global_variable = sr_site_blockaded_titan } NOT = { has_global_variable = sr_site_occupier_titan } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_titan } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_titan add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Peary Crater: room for 15 and its Off-World Resorts' at +10% and its Cultural Centers'
+	# Peary Crater: room for 30 and its Off-World Resorts' at +10% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_peary ?= this NOT = { has_global_variable = sr_site_blockaded_peary } NOT = { has_global_variable = sr_site_occupier_peary } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_peary } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_peary add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Mare Imbrium: room for 25 and its Off-World Resorts' at +10% and its Cultural Centers'
+	# Mare Imbrium: room for 50 and its Off-World Resorts' at +10% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_imbrium ?= this NOT = { has_global_variable = sr_site_blockaded_imbrium } NOT = { has_global_variable = sr_site_occupier_imbrium } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_imbrium } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_imbrium add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Hellas Planitia: room for 50 and its Off-World Resorts' at +5% and its Cultural Centers'
+	# Hellas Planitia: room for 100 and its Off-World Resorts' at +5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_hellas_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_hellas_planitia } NOT = { has_global_variable = sr_site_occupier_hellas_planitia } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_hellas_planitia } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_hellas_planitia add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Ceres: room for 40 and its Off-World Resorts' at +5% and its Cultural Centers'
+	# Ceres: room for 80 and its Off-World Resorts' at +5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_ceres ?= this NOT = { has_global_variable = sr_site_blockaded_ceres } NOT = { has_global_variable = sr_site_occupier_ceres } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_ceres } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_ceres add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Rhea: room for 20 and its Off-World Resorts' at +5% and its Cultural Centers'
+	# Rhea: room for 40 and its Off-World Resorts' at +5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_rhea ?= this NOT = { has_global_variable = sr_site_blockaded_rhea } NOT = { has_global_variable = sr_site_occupier_rhea } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_rhea } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_rhea add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Mimas: room for 10 and its Off-World Resorts' at +5% and its Cultural Centers'
+	# Mimas: room for 20 and its Off-World Resorts' at +5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_mimas ?= this NOT = { has_global_variable = sr_site_blockaded_mimas } NOT = { has_global_variable = sr_site_occupier_mimas } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_mimas } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_mimas add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Earth orbit: room for 10 at +0%
+	# Earth orbit: room for 20 at +0%
 	if = {
 		limit = { local_var:sr_rs_left > 0 has_technology_researched = space_colonization }
-		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = 10 } }
+		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = 20 } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Utopia Planitia: room for 50 and its Off-World Resorts' at +0% and its Cultural Centers'
+	# Utopia Planitia: room for 100 and its Off-World Resorts' at +0% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_utopia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_utopia_planitia } NOT = { has_global_variable = sr_site_occupier_utopia_planitia } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_utopia_planitia } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_utopia_planitia add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Arcadia Planitia: room for 40 and its Off-World Resorts' at +0% and its Cultural Centers'
+	# Arcadia Planitia: room for 80 and its Off-World Resorts' at +0% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_arcadia_planitia ?= this NOT = { has_global_variable = sr_site_blockaded_arcadia_planitia } NOT = { has_global_variable = sr_site_occupier_arcadia_planitia } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_arcadia_planitia } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_arcadia_planitia add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# 16 Psyche: room for 20 and its Off-World Resorts' at +0% and its Cultural Centers'
+	# 16 Psyche: room for 40 and its Off-World Resorts' at +0% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_psyche ?= this NOT = { has_global_variable = sr_site_blockaded_psyche } NOT = { has_global_variable = sr_site_occupier_psyche } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_psyche } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_psyche add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Europa: room for 30 and its Off-World Resorts' at +0% and its Cultural Centers'
+	# Europa: room for 60 and its Off-World Resorts' at +0% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_europa ?= this NOT = { has_global_variable = sr_site_blockaded_europa } NOT = { has_global_variable = sr_site_occupier_europa } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_europa } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_europa add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Ganymede: room for 40 and its Off-World Resorts' at +0% and its Cultural Centers'
+	# Ganymede: room for 80 and its Off-World Resorts' at +0% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_ganymede ?= this NOT = { has_global_variable = sr_site_blockaded_ganymede } NOT = { has_global_variable = sr_site_occupier_ganymede } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_ganymede } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_ganymede add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Miranda: room for 10 and its Off-World Resorts' at +0% and its Cultural Centers'
+	# Miranda: room for 20 and its Off-World Resorts' at +0% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_miranda ?= this NOT = { has_global_variable = sr_site_blockaded_miranda } NOT = { has_global_variable = sr_site_occupier_miranda } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_miranda } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_miranda add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Daedalus Crater: room for 10 and its Off-World Resorts' at +0% and its Cultural Centers'
+	# Daedalus Crater: room for 20 and its Off-World Resorts' at +0% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_daedalus ?= this NOT = { has_global_variable = sr_site_blockaded_daedalus } NOT = { has_global_variable = sr_site_occupier_daedalus } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_daedalus } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_daedalus add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# 2 Pallas: room for 20 and its Off-World Resorts' at -5% and its Cultural Centers'
+	# 2 Pallas: room for 40 and its Off-World Resorts' at -5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_pallas ?= this NOT = { has_global_variable = sr_site_blockaded_pallas } NOT = { has_global_variable = sr_site_occupier_pallas } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_pallas } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_pallas add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Io: room for 15 and its Off-World Resorts' at -5% and its Cultural Centers'
+	# Io: room for 30 and its Off-World Resorts' at -5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_io ?= this NOT = { has_global_variable = sr_site_blockaded_io } NOT = { has_global_variable = sr_site_occupier_io } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_io } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_io add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Amalthea: room for 10 and its Off-World Resorts' at -5% and its Cultural Centers'
+	# Amalthea: room for 20 and its Off-World Resorts' at -5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_amalthea ?= this NOT = { has_global_variable = sr_site_blockaded_amalthea } NOT = { has_global_variable = sr_site_occupier_amalthea } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_amalthea } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_amalthea add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Mercury: room for 25 and its Off-World Resorts' at -5% and its Cultural Centers'
+	# Mercury: room for 50 and its Off-World Resorts' at -5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_mercury ?= this NOT = { has_global_variable = sr_site_blockaded_mercury } NOT = { has_global_variable = sr_site_occupier_mercury } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_mercury } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_mercury add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Triton: room for 20 and its Off-World Resorts' at -5% and its Cultural Centers'
+	# Triton: room for 40 and its Off-World Resorts' at -5% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_triton ?= this NOT = { has_global_variable = sr_site_blockaded_triton } NOT = { has_global_variable = sr_site_occupier_triton } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_triton } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_triton add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# 10 Hygiea: room for 15 and its Off-World Resorts' at -10% and its Cultural Centers'
+	# 10 Hygiea: room for 30 and its Off-World Resorts' at -10% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_hygiea ?= this NOT = { has_global_variable = sr_site_blockaded_hygiea } NOT = { has_global_variable = sr_site_occupier_hygiea } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_hygiea } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_hygiea add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Pluto-Charon: room for 20 and its Off-World Resorts' at -10% and its Cultural Centers'
+	# Pluto-Charon: room for 40 and its Off-World Resorts' at -10% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_pluto ?= this NOT = { has_global_variable = sr_site_blockaded_pluto } NOT = { has_global_variable = sr_site_occupier_pluto } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_pluto } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_pluto add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Himalia: room for 10 and its Off-World Resorts' at -15% and its Cultural Centers'
+	# Himalia: room for 20 and its Off-World Resorts' at -15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_himalia ?= this NOT = { has_global_variable = sr_site_blockaded_himalia } NOT = { has_global_variable = sr_site_occupier_himalia } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_himalia } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_himalia add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Titania: room for 20 and its Off-World Resorts' at -15% and its Cultural Centers'
+	# Titania: room for 40 and its Off-World Resorts' at -15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_titania ?= this NOT = { has_global_variable = sr_site_blockaded_titania } NOT = { has_global_variable = sr_site_occupier_titania } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_titania } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_titania add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Oberon: room for 20 and its Off-World Resorts' at -15% and its Cultural Centers'
+	# Oberon: room for 40 and its Off-World Resorts' at -15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_oberon ?= this NOT = { has_global_variable = sr_site_blockaded_oberon } NOT = { has_global_variable = sr_site_occupier_oberon } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_oberon } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_oberon add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Ariel: room for 15 and its Off-World Resorts' at -15% and its Cultural Centers'
+	# Ariel: room for 30 and its Off-World Resorts' at -15% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_ariel ?= this NOT = { has_global_variable = sr_site_blockaded_ariel } NOT = { has_global_variable = sr_site_occupier_ariel } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_ariel } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_ariel add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Proteus: room for 10 and its Off-World Resorts' at -25% and its Cultural Centers'
+	# Proteus: room for 20 and its Off-World Resorts' at -25% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_proteus ?= this NOT = { has_global_variable = sr_site_blockaded_proteus } NOT = { has_global_variable = sr_site_occupier_proteus } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_proteus } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_proteus add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Haumea: room for 10 and its Off-World Resorts' at -25% and its Cultural Centers'
+	# Haumea: room for 20 and its Off-World Resorts' at -25% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_haumea ?= this NOT = { has_global_variable = sr_site_blockaded_haumea } NOT = { has_global_variable = sr_site_occupier_haumea } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_haumea } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_haumea add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Eris: room for 10 and its Off-World Resorts' at -30% and its Cultural Centers'
+	# Eris: room for 20 and its Off-World Resorts' at -30% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_eris ?= this NOT = { has_global_variable = sr_site_blockaded_eris } NOT = { has_global_variable = sr_site_occupier_eris } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_eris } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_eris add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Makemake: room for 10 and its Off-World Resorts' at -30% and its Cultural Centers'
+	# Makemake: room for 20 and its Off-World Resorts' at -30% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_makemake ?= this NOT = { has_global_variable = sr_site_blockaded_makemake } NOT = { has_global_variable = sr_site_occupier_makemake } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_makemake } }
 		set_local_variable = { name = sr_rs_sum value = { value = local_var:sr_rs_take multiply = sr_site_resort_draw_makemake add = local_var:sr_rs_sum } }
 		change_local_variable = { name = sr_rs_left subtract = local_var:sr_rs_take }
 	}
-	# Sedna: room for 10 and its Off-World Resorts' at -35% and its Cultural Centers'
+	# Sedna: room for 20 and its Off-World Resorts' at -35% and its Cultural Centers'
 	if = {
 		limit = { local_var:sr_rs_left > 0 global_var:sr_site_holder_sedna ?= this NOT = { has_global_variable = sr_site_blockaded_sedna } NOT = { has_global_variable = sr_site_occupier_sedna } }
 		set_local_variable = { name = sr_rs_take value = { value = local_var:sr_rs_left max = sr_site_resort_room_sedna } }
@@ -38790,8 +38790,8 @@ sr_resort_next_fill = {
 	if = {
 		limit = { local_var:sr_rs_next_found = 0 has_technology_researched = space_colonization }
 		if = {
-			limit = { local_var:sr_rs_next_left >= 10 }
-			change_local_variable = { name = sr_rs_next_left subtract = 10 }
+			limit = { local_var:sr_rs_next_left >= 20 }
+			change_local_variable = { name = sr_rs_next_left subtract = 20 }
 		}
 		else = {
 			set_variable = { name = sr_resort_next_draw value = 0 }

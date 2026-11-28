@@ -5831,10 +5831,11 @@ types space_race_widget_types
 		### (je_space_race_widget_ss_bases_tt_<type>, block site_bases_tooltip).
 		### Then its Resort Colony room and draw (#1948). Each cell holds its longest
 		### figure at test_space_race_labels.py's measure and no more, so the line
-		### fits the row's 400 inside its margins: 3 margin + 41 slots (18 icon +
-		### 4 + 19 for "99") + 8 + 233 bases (18 icon + 4 + 94 for "300 (+30%)" +
-		### 4 + 113 for "Carbonaceous") + 8 + 107 resorts (18 icon + 4 + 85 for
-		### "10 (+30%)") = 400. It starts under the icon, not the name, to make
+		### fits the row's 400 inside its margins: 3 margin + 32 slots (18 icon +
+		### 4 + 10 for "4", a world's Habitat cap) + 8 + 233 bases (18 icon + 4 +
+		### 94 for "300 (+30%)" + 4 + 113 for "Carbonaceous") + 8 + 116 resorts
+		### (18 icon + 4 + 94 for "100 (+25%)", Mars's room since 2026-11-28)
+		### = 400. It starts under the icon, not the name, to make
 		### that room. Simple and Full Colonies only. The colony target popup
 		### puts the world's people room first (te_sr_site_people_cell, block
 		### site_people): 88 + 8 more, 496 in its row's 624.
@@ -5847,7 +5848,7 @@ types space_race_widget_types
 
 			block "site_people" {}
 			widget = {
-				size = { 41 22 }
+				size = { 32 22 }
 				parentanchor = vcenter
 				block "site_slots_tooltip" {
 					tooltip = "je_space_race_widget_ss_slots_tt"
@@ -5866,7 +5867,7 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
-						max_width = 19
+						max_width = 10
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right
@@ -5911,7 +5912,7 @@ types space_race_widget_types
 			}
 			### Its Resort Colony room and draw (#1948 design § 9).
 			widget = {
-				size = { 107 22 }
+				size = { 116 22 }
 				parentanchor = vcenter
 				tooltip = "je_space_race_widget_ss_resorts_tt"
 
@@ -5928,7 +5929,7 @@ types space_race_widget_types
 					textbox = {
 						parentanchor = vcenter
 						autoresize = yes
-						max_width = 85
+						max_width = 94
 						align = left|nobaseline
 						using = te_sr_fontsize_row
 						elide = right

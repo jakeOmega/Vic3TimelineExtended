@@ -773,7 +773,7 @@ colonies:
 | Orbital Yard | +4 module fabrication points a month; under Full Colonies, +0.5 Space Command strength a month while you have a Space Command in a state you control. Modules for your colonies on its world, or on any moon of the same planet, are built at the yard (see below) |
 | Research Station | +25 innovation cap, which pays only while your universities make more innovation than you can invest |
 | Cultural Center | +3% cultural pull, +1% prestige, and +1 to the colony's Resort Draw |
-| Off-World Resort | +10 Resort Colony room at the colony; it needs Space Colonization |
+| Off-World Resort | +20 Resort Colony room at the colony; it needs Space Colonization |
 | Black Site | +1 intelligence capacity, +3% covert operation efficiency; under Full Colonies it takes 1,000 [personnel](#space-forces-personnel) |
 | Training Ground | +4% army experience gain; under Full Colonies, your marines count 5% more, at most +25% (see [Blockade, seizure and destruction](#blockade-seizure-and-destruction)), and it takes 1,000 personnel |
 | Nuclear Command Center | +4 nuclear command reliability, at most +12; +2 Command Redundancy against a salvo on the capital, at most +6; under Full Colonies it takes 1,000 personnel |
@@ -1071,8 +1071,8 @@ Resorts method makes Art and Entertainment and Tourism from Launch Capacity, a l
 electronics and Advanced Materials, and wine, furniture and fruit for the
 guests: about £132,000 a level a week at base prices. Under Simple Colonies and
 Full Colonies its levels need room, as bases do, but room of their own. Earth
-orbit gives every country room for 10 levels, and each colony you hold adds its
-own, from 10 levels on the small moons to 50 on Mars, and 10 more
+orbit gives every country room for 20 levels, and each colony you hold adds its
+own, from 20 levels on the small moons to 100 on Mars, and 20 more
 for each staffed level of its Off-World Resorts. Each colony's room has a draw
 (Resort Draw, a term you can hover in game): how many guests it brings in, the
 spectacle against the length of the trip. It raises or lowers the output of the
