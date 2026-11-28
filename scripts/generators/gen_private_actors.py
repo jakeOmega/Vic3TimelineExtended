@@ -15,15 +15,22 @@ hand-set table in ``private_actors_config.py`` (§ 8.1's law table, the sector f
   - ``te_pa_gen_law_pick`` (company scope): the stances on the covered laws in force, open and being enacted,
     with each one's index, into ``te_pa_g_law_*`` (for the reason line).
   - ``te_pa_gen_law_selfcheck`` (country scope): the tally behind a self-check of the open-law reading.
+  - ``te_pa_gen_seat_pick`` (company scope): the firm's seat (§ 4.5), the incorporated home state with the most
+    levels of its building types, saved as ``scope:te_pa_seat_pick`` (§ 16, probe 11: no script link reaches a
+    company's headquarters state).
   - helpers ``te_pa_gen_clear_good``, ``te_pa_gen_read_good``, ``te_pa_gen_tech_check``,
     ``te_pa_gen_tech_cache_one``, ``te_pa_gen_law_pick_in_force``, ``_open``, ``_enacting``.
 * ``common/scripted_triggers/te_pa_gen_triggers.txt``: ``te_pa_gen_is_<feature>`` (company scope, reads the
   flag ``te_pa_gen_assess`` wrote), ``te_pa_gen_excluded_type`` (a type that is not a firm) and
-  ``te_pa_gen_law_open_<law>`` (country scope: the country could move to the law).
+  ``te_pa_gen_law_open_<law>`` (country scope: the country could move to the law), and
+  ``te_pa_gen_enacting_<lawgroup>`` (country scope: it is enacting a law of a covered group).
 * ``common/script_values/te_pa_gen_values.txt``: the config's numbers (``te_pa_gen_<name>``); each good's
   signed price reading (``te_pa_gen_price_<good>``, country scope, and ``te_pa_gen_firm_price_<good>``, company
   scope through its owner); the staffing band and campaign share; ``te_pa_gen_stance_<law>`` for every covered
-  law; ``te_pa_gen_stance_enacting``, ``te_pa_gen_stance_in_force_worst`` and ``te_pa_gen_stance_best_available``.
+  law; ``te_pa_gen_stance_enacting``, ``te_pa_gen_stance_in_force_worst`` and ``te_pa_gen_stance_best_available``;
+  the executive's temperament (§ 5.3), ``te_pa_gen_temper_<axis>`` (company scope, -1 to 1, from the config's trait
+  and ideology tables) and the self-check counts ``te_pa_gen_exec_traits_held`` and ``_ideologies_held``; and
+  ``te_pa_gen_seat_levels_<company type>`` (state scope), the order the seat is picked by.
 * ``common/customizable_localization/te_pa_gen_custom_loc.txt``: a good's or a law's name from its index, read
   from a script container (``NAME_LOCS``).
 
@@ -64,7 +71,7 @@ import private_actors_config as cfg  # noqa: E402
 
 KINDS = (
     "Company Types", "Buildings", "PM Groups", "PMs", "Goods", "Technologies", "Laws", "Law Groups",
-    "Building Groups", "Pop Needs",
+    "Building Groups", "Pop Needs", "Character Traits", "Ideologies",
 )
 COVERED_GROUPS = tuple(cfg.LAW_TABLE)
 
@@ -198,13 +205,26 @@ class Data:
     laws: dict
     building_groups: dict
     pop_needs: dict
+    character_traits: dict = None
+    ideologies: dict = None
 
     @classmethod
     def from_state(cls, mod_state) -> "Data":
         def get(kind):
             return mod_state.get_data(kind) or {}
         return cls(get("Company Types"), get("Buildings"), get("PM Groups"), get("PMs"), get("Goods"),
-                   get("Technologies"), get("Laws"), get("Building Groups"), get("Pop Needs"))
+                   get("Technologies"), get("Laws"), get("Building Groups"), get("Pop Needs"),
+                   get("Character Traits"), get("Ideologies"))
+
+    def personality_traits(self) -> list[str]:
+        """Every trait of type personality, by key (§ 5.3 reads only these)."""
+        return sorted(t for t in (self.character_traits or {})
+                      if _unwrap(_body(self.character_traits, t).get("type")) == "personality")
+
+    def character_ideologies(self) -> list[str]:
+        """Every ideology a character can hold (character_ideology = yes), by key."""
+        return sorted(i for i in (self.ideologies or {})
+                      if _unwrap(_body(self.ideologies, i).get("character_ideology")) == "yes")
 
     def cost(self, good: str) -> float:
         return _number(_body(self.goods, good).get("cost"))
@@ -441,6 +461,8 @@ class Plan:
     goods: list          # every good, by key; index = position + 1
     techs: list          # the union of the sectors' technologies, by key; index = position + 1
     laws: list
+    traits: tuple = ()       # the personality traits that exist, by key
+    ideologies: tuple = ()   # the character ideologies that exist, by key
 
     def good_index(self, good: str) -> int:
         return self.goods.index(good) + 1
@@ -462,7 +484,8 @@ def build_plan(mod_state) -> Plan:
     data = Data.from_state(mod_state)
     sectors = build_sectors(data)
     techs = sorted({t for s in sectors for t in s.techs})
-    return Plan(sectors, sorted(data.goods), techs, law_catalog(data))
+    return Plan(sectors, sorted(data.goods), techs, law_catalog(data),
+                tuple(data.personality_traits()), tuple(data.character_ideologies()))
 
 
 # ---------------------------------------------------------------------------
@@ -720,6 +743,117 @@ def render_law_selfcheck(plan: Plan) -> str:
     return _block(lines)
 
 
+SEAT_PREAMBLE = """\
+# Scope: a company, from the turn when the firm has no seat or its seat has left the country (te_pa_core_effects.txt).
+# The firm's seat (§ 4.5): the incorporated home state with the most levels of its type's building types, saved as
+# scope:te_pa_seat_pick (unset when no incorporated home state holds one; the turn falls back on the capital).
+# Script has no link from a company to its headquarters' state (§ 16, probe 11: the 1.15 event targets give a
+# company only executive, owner, type, prosperity and weekly_prosperity_change; its regional headquarters are
+# iterable, its main one is not), so the seat is the spec's fallback. te_pa_gen_seat_levels_<type> is the order.
+"""
+
+
+def render_seat_pick(plan: Plan) -> str:
+    lines = ["te_pa_gen_seat_pick = {"]
+    for position, s in enumerate(plan.sectors):
+        keyword = "if" if position == 0 else "else_if"
+        lines += [
+            f"\t{keyword} = {{",
+            f"\t\tlimit = {{ is_company_type = company_type:{s.company} }}",
+            "\t\towner = {",
+            "\t\t\tordered_scope_state = {",
+            "\t\t\t\tlimit = {",
+            "\t\t\t\t\tis_incorporated = yes",
+            "\t\t\t\t\tOR = {",
+            *(f"\t\t\t\t\t\thas_building = {b}" for b in s.buildings),
+            "\t\t\t\t\t}",
+            "\t\t\t\t}",
+            f"\t\t\t\torder_by = te_pa_gen_seat_levels_{s.company}",
+            "\t\t\t\tposition = 0",
+            "\t\t\t\tcheck_range_bounds = no",
+            "\t\t\t\tsave_scope_as = te_pa_seat_pick",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+        ]
+    lines.append("}")
+    return _block(lines)
+
+
+def render_seat_values(plan: Plan) -> str:
+    parts = ["# Scope: a state. Its levels of a company type's building types: the order te_pa_gen_seat_pick picks "
+             "a seat by.\n"]
+    for s in plan.sectors:
+        lines = [f"te_pa_gen_seat_levels_{s.company} = {{", "\tvalue = 0"]
+        lines += [f"\tif = {{ limit = {{ has_building = {b} }} add = b:{b}.level }}" for b in s.buildings]
+        lines.append("}")
+        parts.append(_block(lines))
+    return "\n".join(parts)
+
+
+def temperament_weights(plan: Plan) -> dict[str, list[tuple[str, str, float]]]:
+    """Each axis's (kind, key, weight) lines, for the traits and ideologies that exist, in key order."""
+    out: dict[str, list[tuple[str, str, float]]] = {axis: [] for axis in cfg.TEMPERAMENT_AXES}
+    for trait in plan.traits:
+        for axis, weight in sorted(cfg.TRAIT_TEMPERAMENT.get(trait, {}).items()):
+            out[axis].append(("trait", trait, weight))
+    for ideology in plan.ideologies:
+        for axis, weight in sorted(cfg.IDEOLOGY_TEMPERAMENT.get(ideology, {}).items()):
+            out[axis].append(("ideology", ideology, weight))
+    return out
+
+
+def _temper_test(kind: str, key: str) -> str:
+    return f"has_trait = {key}" if kind == "trait" else f"has_ideology = ideology:{key}"
+
+
+def render_temperament(plan: Plan) -> str:
+    parts = [
+        "# Scope: a company. Its executive's temperament on each axis (§ 5.3; private_actors_config.TRAIT_TEMPERAMENT\n"
+        "# and IDEOLOGY_TEMPERAMENT): the weights of the personality traits and the ideology it holds, summed and\n"
+        "# clamped to -1..1; 0 with no executive (§ 16, probe 7's fallback).\n"
+    ]
+    for axis, lines_of in temperament_weights(plan).items():
+        lines = _comment(f"{axis}: {cfg.TEMPERAMENT_AXES[axis]}")
+        lines += [f"te_pa_gen_temper_{axis} = {{", "\tvalue = 0", "\texecutive ?= {"]
+        lines += [f"\t\tif = {{ limit = {{ {_temper_test(kind, key)} }} add = {_fmt(weight)} }}"
+                  for kind, key, weight in lines_of]
+        lines += ["\t}", "\tmin = -1", "\tmax = 1", "}"]
+        parts.append(_block(lines))
+    parts.append(_block([
+        "# Scope: a company. How many personality traits, and how many character ideologies, its executive holds,",
+        "# for the firm_executive self-check (probe 7: are an executive's traits and ideology readable from the",
+        "# company?). 0 with no executive.",
+        "te_pa_gen_exec_traits_held = {",
+        "\tvalue = 0",
+        "\texecutive ?= {",
+        *(f"\t\tif = {{ limit = {{ has_trait = {t} }} add = 1 }}" for t in plan.traits),
+        "\t}",
+        "}",
+        "",
+        "te_pa_gen_exec_ideologies_held = {",
+        "\tvalue = 0",
+        "\texecutive ?= {",
+        *(f"\t\tif = {{ limit = {{ has_ideology = ideology:{i} }} add = 1 }}" for i in plan.ideologies),
+        "\t}",
+        "}",
+    ]))
+    return "\n".join(parts)
+
+
+def render_enacting_groups(plan: Plan) -> str:
+    parts = ["# Scope: a country. It is enacting a law of a covered group (any of the group's laws in the law table).\n"]
+    for group in COVERED_GROUPS:
+        members = [law for law in plan.laws if law.group == group]
+        if not members:
+            continue
+        lines = [f"te_pa_gen_enacting_{group} = {{", "\tOR = {"]
+        lines += [f"\t\tis_enacting_law = law_type:{law.key}" for law in members]
+        lines += ["\t}", "}"]
+        parts.append(_block(lines))
+    return "\n".join(parts)
+
+
 def render_effects(plan: Plan) -> str:
     return "\n".join([
         HEADER + EFFECTS_PREAMBLE,
@@ -730,6 +864,7 @@ def render_effects(plan: Plan) -> str:
         LAW_PICK_PREAMBLE + render_law_pick(plan),
         LAW_HELPERS,
         render_law_selfcheck(plan),
+        SEAT_PREAMBLE + render_seat_pick(plan),
     ])
 
 
@@ -759,6 +894,7 @@ def render_triggers(plan: Plan) -> str:
             lines.append(f"\t{cfg.CAN_ENACT_MIRROR[law.key]}")
         lines.append("}")
         parts.append(_block(lines))
+    parts.append(render_enacting_groups(plan))
     return "\n".join(parts)
 
 
@@ -864,6 +1000,8 @@ def render_values(plan: Plan) -> str:
                     f" min = te_pa_gen_stance_{law.key} }}")
     best.append("}")
     parts.append(_block(best))
+    parts.append(render_temperament(plan))
+    parts.append(render_seat_values(plan))
     return "\n".join(parts)
 
 

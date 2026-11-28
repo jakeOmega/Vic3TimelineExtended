@@ -945,3 +945,2520 @@ te_pa_gen_stance_best_available = {
 	if = { limit = { te_pa_gen_stance_law_donation_limits > 0 owner = { te_pa_gen_law_open_law_donation_limits = yes } } min = te_pa_gen_stance_law_donation_limits }
 	if = { limit = { te_pa_gen_stance_law_publicly_funded_elections > 0 owner = { te_pa_gen_law_open_law_publicly_funded_elections = yes } } min = te_pa_gen_stance_law_publicly_funded_elections }
 }
+
+# Scope: a company. Its executive's temperament on each axis (§ 5.3; private_actors_config.TRAIT_TEMPERAMENT
+# and IDEOLOGY_TEMPERAMENT): the weights of the personality traits and the ideology it holds, summed and
+# clamped to -1..1; 0 with no executive (§ 16, probe 7's fallback).
+
+# bold: Boldness (§ 7.5): raised by ambitious and reckless traits, lowered by cautious ones.
+te_pa_gen_temper_bold = {
+	value = 0
+	executive ?= {
+		if = { limit = { has_trait = ambitious } add = 1 }
+		if = { limit = { has_trait = arrogant } add = 0.5 }
+		if = { limit = { has_trait = brave } add = 0.5 }
+		if = { limit = { has_trait = cautious } add = -1 }
+		if = { limit = { has_trait = compliant } add = -0.5 }
+		if = { limit = { has_trait = imperious } add = 0.5 }
+		if = { limit = { has_trait = innovative } add = 0.5 }
+		if = { limit = { has_trait = meticulous } add = -0.5 }
+		if = { limit = { has_trait = reckless } add = 1 }
+		if = { limit = { has_trait = reserved } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_corporate } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_modernizer_leader } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_optimist_transhumanist } add = 0.5 }
+	}
+	min = -1
+	max = 1
+}
+
+# force: Taste for force: a jingoist petitions for armed protection; a pacifist or humanitarian bribes or
+# leaves.
+te_pa_gen_temper_force = {
+	value = 0
+	executive ?= {
+		if = { limit = { has_trait = compliant } add = -0.5 }
+		if = { limit = { has_trait = cruel } add = 0.5 }
+		if = { limit = { has_trait = imperious } add = 0.5 }
+		if = { limit = { has_trait = ruthless } add = 0.5 }
+		if = { limit = { has_trait = tactful } add = -0.5 }
+		if = { limit = { has_trait = wrathful } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_authoritarian } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_bonapartist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_ethno_nationalist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_fascist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_humanitarian } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_humanitarian_royalist } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_jingoist_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_pacifist } add = -1 }
+		if = { limit = { has_ideology = ideology:ideology_shojoi } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_slaver } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_vanguardist } add = 0.5 }
+	}
+	min = -1
+	max = 1
+}
+
+# patern: Paternalism: a reforming, humanitarian or religious executive answers labor trouble with welfare; a
+# market-liberal or authoritarian one breaks strikes (§ 9.2).
+te_pa_gen_temper_patern = {
+	value = 0
+	executive ?= {
+		if = { limit = { has_trait = cruel } add = -0.5 }
+		if = { limit = { has_trait = honorable } add = 0.5 }
+		if = { limit = { has_trait = pious } add = 0.5 }
+		if = { limit = { has_trait = ruthless } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_abolitionist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_authoritarian } add = -1 }
+		if = { limit = { has_ideology = ideology:ideology_corporate } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_corporatist_leader } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_environmentalists } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_fascist } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_feminist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_humanitarian } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_humanitarian_royalist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_integralist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_land_reformer } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_market_liberal } add = -1 }
+		if = { limit = { has_ideology = ideology:ideology_reformer } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_slaver } add = -1 }
+		if = { limit = { has_ideology = ideology:ideology_state_socialist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_theocrat } add = 1 }
+	}
+	min = -1
+	max = 1
+}
+
+# attach: Attachment to home, the ideology's part: lowered by a cosmopolitan or radical ideology.
+te_pa_gen_temper_attach = {
+	value = 0
+	executive ?= {
+		if = { limit = { has_trait = bigoted } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_anarchist } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_anti_colonialist_leader } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_bonapartist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_communist_leader } add = -0.5 }
+		if = { limit = { has_ideology = ideology:ideology_ethno_nationalist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_fascist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_integralist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_jingoist_leader } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_mitogaku } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_multicultural } add = -1 }
+		if = { limit = { has_ideology = ideology:ideology_multicultural_inclusive } add = -1 }
+		if = { limit = { has_ideology = ideology:ideology_protectionist } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_radical } add = -1 }
+		if = { limit = { has_ideology = ideology:ideology_shojoi } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_sovereignist_leader } add = 0.5 }
+		if = { limit = { has_ideology = ideology:ideology_vanguardist } add = -0.5 }
+	}
+	min = -1
+	max = 1
+}
+
+# Scope: a company. How many personality traits, and how many character ideologies, its executive holds,
+# for the firm_executive self-check (probe 7: are an executive's traits and ideology readable from the
+# company?). 0 with no executive.
+te_pa_gen_exec_traits_held = {
+	value = 0
+	executive ?= {
+		if = { limit = { has_trait = aesthete } add = 1 }
+		if = { limit = { has_trait = ambitious } add = 1 }
+		if = { limit = { has_trait = arrogant } add = 1 }
+		if = { limit = { has_trait = bigoted } add = 1 }
+		if = { limit = { has_trait = brave } add = 1 }
+		if = { limit = { has_trait = cautious } add = 1 }
+		if = { limit = { has_trait = charismatic } add = 1 }
+		if = { limit = { has_trait = compliant } add = 1 }
+		if = { limit = { has_trait = cruel } add = 1 }
+		if = { limit = { has_trait = direct } add = 1 }
+		if = { limit = { has_trait = hedonist } add = 1 }
+		if = { limit = { has_trait = honorable } add = 1 }
+		if = { limit = { has_trait = imperious } add = 1 }
+		if = { limit = { has_trait = imposing } add = 1 }
+		if = { limit = { has_trait = innovative } add = 1 }
+		if = { limit = { has_trait = meticulous } add = 1 }
+		if = { limit = { has_trait = persistent } add = 1 }
+		if = { limit = { has_trait = pious } add = 1 }
+		if = { limit = { has_trait = reckless } add = 1 }
+		if = { limit = { has_trait = reserved } add = 1 }
+		if = { limit = { has_trait = romantic } add = 1 }
+		if = { limit = { has_trait = ruthless } add = 1 }
+		if = { limit = { has_trait = scandalous } add = 1 }
+		if = { limit = { has_trait = special_character_agent_of_the_sovereign } add = 1 }
+		if = { limit = { has_trait = special_character_blanqui_is_free } add = 1 }
+		if = { limit = { has_trait = special_character_curly_haired_orpheus } add = 1 }
+		if = { limit = { has_trait = special_character_el_excelentisimo } add = 1 }
+		if = { limit = { has_trait = special_character_emperor_norton_popularity } add = 1 }
+		if = { limit = { has_trait = special_character_general_revanche } add = 1 }
+		if = { limit = { has_trait = special_character_german_unifier_ruler } add = 1 }
+		if = { limit = { has_trait = special_character_great_reformer } add = 1 }
+		if = { limit = { has_trait = special_character_japanese_emperor } add = 1 }
+		if = { limit = { has_trait = special_character_john_brown_popularity } add = 1 }
+		if = { limit = { has_trait = special_character_lenin_popularity } add = 1 }
+		if = { limit = { has_trait = special_character_luxemburg_in_exile } add = 1 }
+		if = { limit = { has_trait = special_character_maurras_popularity } add = 1 }
+		if = { limit = { has_trait = special_character_mazzini_popularity } add = 1 }
+		if = { limit = { has_trait = special_character_napoleon_of_the_americas } add = 1 }
+		if = { limit = { has_trait = special_character_napoleonic_return } add = 1 }
+		if = { limit = { has_trait = special_character_nightingale_popularity } add = 1 }
+		if = { limit = { has_trait = special_character_passionate_academic } add = 1 }
+		if = { limit = { has_trait = special_character_pedro_legitimacy } add = 1 }
+		if = { limit = { has_trait = special_character_restitutor_orbis } add = 1 }
+		if = { limit = { has_trait = tactful } add = 1 }
+		if = { limit = { has_trait = tolerant } add = 1 }
+		if = { limit = { has_trait = trait_child } add = 1 }
+		if = { limit = { has_trait = wrathful } add = 1 }
+	}
+}
+
+te_pa_gen_exec_ideologies_held = {
+	value = 0
+	executive ?= {
+		if = { limit = { has_ideology = ideology:ideology_abolitionist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_anarchist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_anti_colonialist_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_authoritarian } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_bonapartist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_carlist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_carlist_2 } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_child } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_communist_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_corporate } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_corporatist_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_despotic_utopian } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_environmentalists } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_ethno_nationalist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_fascist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_feminist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_humanitarian } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_humanitarian_royalist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_ilustrado_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_integralist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_jacksonian_democrat } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_jingoist_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_land_reformer } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_legitimist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_liberal_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_luddite } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_market_liberal } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_miguelist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_miguelist_2 } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_mitogaku } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_moderate } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_modernizer_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_multicultural } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_multicultural_inclusive } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_nihilist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_optimist_transhumanist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_orleanist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_pacifist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_positivist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_protectionist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_radical } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_reformer } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_republican_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_royalist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_shojoi } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_slaver } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_sovereignist_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_state_socialist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_theocrat } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_traditionalist } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_traditionalist_minoritarian } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_utilitarian_leader } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_utopian } add = 1 }
+		if = { limit = { has_ideology = ideology:ideology_vanguardist } add = 1 }
+	}
+}
+
+# Scope: a state. Its levels of a company type's building types: the order te_pa_gen_seat_pick picks a seat by.
+
+te_pa_gen_seat_levels_company_a_markwald_and_company = {
+	value = 0
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_markwald_bangkok_rice_mill } add = b:building_markwald_bangkok_rice_mill.level }
+}
+
+te_pa_gen_seat_levels_company_airbus = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_airbus_lagardere_plant } add = b:building_airbus_lagardere_plant.level }
+}
+
+te_pa_gen_seat_levels_company_ajinomoto = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_synthetics_plant_sugar } add = b:building_synthetics_plant_sugar.level }
+	if = { limit = { has_building = building_synthetics_plant_drinks } add = b:building_synthetics_plant_drinks.level }
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_ajinomoto_kawasaki_plant } add = b:building_ajinomoto_kawasaki_plant.level }
+}
+
+te_pa_gen_seat_levels_company_aker_mek = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_aker_oslo_shipyard } add = b:building_aker_oslo_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_alibaba = {
+	value = 0
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_alibaba_cainiao_park } add = b:building_alibaba_cainiao_park.level }
+}
+
+te_pa_gen_seat_levels_company_allatini_mills = {
+	value = 0
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_rye_farm } add = b:building_rye_farm.level }
+	if = { limit = { has_building = building_allatini_thessaloniki_flour_mill } add = b:building_allatini_thessaloniki_flour_mill.level }
+}
+
+te_pa_gen_seat_levels_company_altos_hornos_de_vizcaya = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_altos_hornos_baracaldo_furnaces } add = b:building_altos_hornos_baracaldo_furnaces.level }
+}
+
+te_pa_gen_seat_levels_company_amazon = {
+	value = 0
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_amazon_fulfillment_center } add = b:building_amazon_fulfillment_center.level }
+}
+
+te_pa_gen_seat_levels_company_anglo_persian_oil = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_anglo_persian_abadan_refinery } add = b:building_anglo_persian_abadan_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_anglo_sicilian_sulphur_company = {
+	value = 0
+	if = { limit = { has_building = building_sulfur_mine } add = b:building_sulfur_mine.level }
+	if = { limit = { has_building = building_anglo_sicilian_licata_wharf } add = b:building_anglo_sicilian_licata_wharf.level }
+}
+
+te_pa_gen_seat_levels_company_ansaldo = {
+	value = 0
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_ansaldo_sestri_ponente_works } add = b:building_ansaldo_sestri_ponente_works.level }
+}
+
+te_pa_gen_seat_levels_company_ap_moller = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_ap_moller_copenhagen_wharf } add = b:building_ap_moller_copenhagen_wharf.level }
+}
+
+te_pa_gen_seat_levels_company_apple = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_electrics_industry_radio } add = b:building_electrics_industry_radio.level }
+	if = { limit = { has_building = building_apple_park } add = b:building_apple_park.level }
+}
+
+te_pa_gen_seat_levels_company_argentinian_wine = {
+	value = 0
+	if = { limit = { has_building = building_vineyard } add = b:building_vineyard.level }
+	if = { limit = { has_building = building_argentinian_wine_mendoza_bodega } add = b:building_argentinian_wine_mendoza_bodega.level }
+}
+
+te_pa_gen_seat_levels_company_armstrong_whitworth = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_armstrong_elswick_works } add = b:building_armstrong_elswick_works.level }
+}
+
+te_pa_gen_seat_levels_company_asml = {
+	value = 0
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_asml_veldhoven_campus } add = b:building_asml_veldhoven_campus.level }
+}
+
+te_pa_gen_seat_levels_company_assam_company = {
+	value = 0
+	if = { limit = { has_building = building_tea_plantation } add = b:building_tea_plantation.level }
+	if = { limit = { has_building = building_assam_company_nazira_tea_estate } add = b:building_assam_company_nazira_tea_estate.level }
+}
+
+te_pa_gen_seat_levels_company_axiom_space = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_tourism_industry } add = b:building_tourism_industry.level }
+	if = { limit = { has_building = building_space_mine } add = b:building_space_mine.level }
+	if = { limit = { has_building = building_space_resort } add = b:building_space_resort.level }
+	if = { limit = { has_building = building_axiom_space_hq } add = b:building_axiom_space_hq.level }
+}
+
+te_pa_gen_seat_levels_company_b_grimm = {
+	value = 0
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_b_grimm_bangkok_warehouse } add = b:building_b_grimm_bangkok_warehouse.level }
+}
+
+te_pa_gen_seat_levels_company_bacardi = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_glassworks } add = b:building_glassworks.level }
+	if = { limit = { has_building = building_bacardi_santiago_distillery } add = b:building_bacardi_santiago_distillery.level }
+}
+
+te_pa_gen_seat_levels_company_bae_systems = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_bae_samlesbury_aerodrome } add = b:building_bae_samlesbury_aerodrome.level }
+}
+
+te_pa_gen_seat_levels_company_basf = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant } add = b:building_synthetics_plant.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_basf_ludwigshafen_plant } add = b:building_basf_ludwigshafen_plant.level }
+}
+
+te_pa_gen_seat_levels_company_basic_advanced_materials = {
+	value = 0
+	if = { limit = { has_building = building_advanced_material_fabricator } add = b:building_advanced_material_fabricator.level }
+	if = { limit = { has_building = building_generic_materials_lab } add = b:building_generic_materials_lab.level }
+}
+
+te_pa_gen_seat_levels_company_basic_aerospace = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_generic_proving_grounds } add = b:building_generic_proving_grounds.level }
+}
+
+te_pa_gen_seat_levels_company_basic_agriculture_1 = {
+	value = 0
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_rye_farm } add = b:building_rye_farm.level }
+	if = { limit = { has_building = building_generic_granary_complex } add = b:building_generic_granary_complex.level }
+}
+
+te_pa_gen_seat_levels_company_basic_agriculture_2 = {
+	value = 0
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_millet_farm } add = b:building_millet_farm.level }
+	if = { limit = { has_building = building_maize_farm } add = b:building_maize_farm.level }
+	if = { limit = { has_building = building_generic_granary_complex } add = b:building_generic_granary_complex.level }
+}
+
+te_pa_gen_seat_levels_company_basic_autarky = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_oil } add = b:building_synthetics_plant_oil.level }
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_generic_resource_depository } add = b:building_generic_resource_depository.level }
+}
+
+te_pa_gen_seat_levels_company_basic_biotechnology = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_sugar } add = b:building_synthetics_plant_sugar.level }
+	if = { limit = { has_building = building_synthetics_plant_meat } add = b:building_synthetics_plant_meat.level }
+	if = { limit = { has_building = building_synthetics_plant_fruit } add = b:building_synthetics_plant_fruit.level }
+	if = { limit = { has_building = building_synthetics_plant_drinks } add = b:building_synthetics_plant_drinks.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_generic_rd_complex } add = b:building_generic_rd_complex.level }
+}
+
+te_pa_gen_seat_levels_company_basic_chemicals = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant } add = b:building_synthetics_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_generic_chem_works } add = b:building_generic_chem_works.level }
+}
+
+te_pa_gen_seat_levels_company_basic_colonial_plantations_1 = {
+	value = 0
+	if = { limit = { has_building = building_opium_plantation } add = b:building_opium_plantation.level }
+	if = { limit = { has_building = building_tea_plantation } add = b:building_tea_plantation.level }
+	if = { limit = { has_building = building_generic_colonial_depot } add = b:building_generic_colonial_depot.level }
+}
+
+te_pa_gen_seat_levels_company_basic_colonial_plantations_2 = {
+	value = 0
+	if = { limit = { has_building = building_coffee_plantation } add = b:building_coffee_plantation.level }
+	if = { limit = { has_building = building_sugar_plantation } add = b:building_sugar_plantation.level }
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_generic_export_warehouse } add = b:building_generic_export_warehouse.level }
+}
+
+te_pa_gen_seat_levels_company_basic_electrics = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_electrics_industry_radio } add = b:building_electrics_industry_radio.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_generic_electronics_lab } add = b:building_generic_electronics_lab.level }
+}
+
+te_pa_gen_seat_levels_company_basic_electronics = {
+	value = 0
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_generic_robotics_institute } add = b:building_generic_robotics_institute.level }
+}
+
+te_pa_gen_seat_levels_company_basic_entertainment = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_tourism_industry } add = b:building_tourism_industry.level }
+	if = { limit = { has_building = building_generic_media_hq } add = b:building_generic_media_hq.level }
+}
+
+te_pa_gen_seat_levels_company_basic_fabrics = {
+	value = 0
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+	if = { limit = { has_building = building_generic_textile_depot } add = b:building_generic_textile_depot.level }
+}
+
+te_pa_gen_seat_levels_company_basic_fishing = {
+	value = 0
+	if = { limit = { has_building = building_fishing_wharf } add = b:building_fishing_wharf.level }
+	if = { limit = { has_building = building_whaling_station } add = b:building_whaling_station.level }
+	if = { limit = { has_building = building_generic_fish_market } add = b:building_generic_fish_market.level }
+}
+
+te_pa_gen_seat_levels_company_basic_food = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_generic_cold_storage } add = b:building_generic_cold_storage.level }
+}
+
+te_pa_gen_seat_levels_company_basic_forestry = {
+	value = 0
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_rubber_plantation } add = b:building_rubber_plantation.level }
+	if = { limit = { has_building = building_generic_lumber_yard } add = b:building_generic_lumber_yard.level }
+}
+
+te_pa_gen_seat_levels_company_basic_gold_mining = {
+	value = 0
+	if = { limit = { has_building = building_gold_mine } add = b:building_gold_mine.level }
+	if = { limit = { has_building = building_generic_assay_office } add = b:building_generic_assay_office.level }
+}
+
+te_pa_gen_seat_levels_company_basic_home_goods = {
+	value = 0
+	if = { limit = { has_building = building_glassworks } add = b:building_glassworks.level }
+	if = { limit = { has_building = building_furniture_manufactory } add = b:building_furniture_manufactory.level }
+	if = { limit = { has_building = building_generic_furniture_showroom } add = b:building_generic_furniture_showroom.level }
+}
+
+te_pa_gen_seat_levels_company_basic_metal_mining = {
+	value = 0
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_lead_mine } add = b:building_lead_mine.level }
+	if = { limit = { has_building = building_copper_mine } add = b:building_copper_mine.level }
+	if = { limit = { has_building = building_bauxite_mine } add = b:building_bauxite_mine.level }
+	if = { limit = { has_building = building_chromium_mine } add = b:building_chromium_mine.level }
+	if = { limit = { has_building = building_manganese_mine } add = b:building_manganese_mine.level }
+	if = { limit = { has_building = building_specialty_alloy_metal_mine } add = b:building_specialty_alloy_metal_mine.level }
+	if = { limit = { has_building = building_precious_minor_base_metal_mine } add = b:building_precious_minor_base_metal_mine.level }
+	if = { limit = { has_building = building_nickel_cobalt_mine } add = b:building_nickel_cobalt_mine.level }
+	if = { limit = { has_building = building_lithium_mine } add = b:building_lithium_mine.level }
+	if = { limit = { has_building = building_generic_ore_processing } add = b:building_generic_ore_processing.level }
+}
+
+te_pa_gen_seat_levels_company_basic_metalworks = {
+	value = 0
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_generic_machine_shop } add = b:building_generic_machine_shop.level }
+}
+
+te_pa_gen_seat_levels_company_basic_mineral_mining = {
+	value = 0
+	if = { limit = { has_building = building_sulfur_mine } add = b:building_sulfur_mine.level }
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_rare_earth_metals_mine } add = b:building_rare_earth_metals_mine.level }
+	if = { limit = { has_building = building_platinum_group_metals_mine } add = b:building_platinum_group_metals_mine.level }
+	if = { limit = { has_building = building_graphite_mine } add = b:building_graphite_mine.level }
+	if = { limit = { has_building = building_phosphate_mine } add = b:building_phosphate_mine.level }
+	if = { limit = { has_building = building_potash_mine } add = b:building_potash_mine.level }
+	if = { limit = { has_building = building_industrial_mineral_salt_mine } add = b:building_industrial_mineral_salt_mine.level }
+	if = { limit = { has_building = building_generic_mineral_refinery } add = b:building_generic_mineral_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_basic_motors = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_generic_motor_works } add = b:building_generic_motor_works.level }
+}
+
+te_pa_gen_seat_levels_company_basic_munitions = {
+	value = 0
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_explosives_factory } add = b:building_explosives_factory.level }
+	if = { limit = { has_building = building_generic_ordnance_depot } add = b:building_generic_ordnance_depot.level }
+}
+
+te_pa_gen_seat_levels_company_basic_oil = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_synthetics_plant_oil } add = b:building_synthetics_plant_oil.level }
+	if = { limit = { has_building = building_generic_tank_farm } add = b:building_generic_tank_farm.level }
+}
+
+te_pa_gen_seat_levels_company_basic_paper = {
+	value = 0
+	if = { limit = { has_building = building_paper_mill } add = b:building_paper_mill.level }
+	if = { limit = { has_building = building_generic_paper_mill_complex } add = b:building_generic_paper_mill_complex.level }
+}
+
+te_pa_gen_seat_levels_company_basic_power = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_hydro_plant } add = b:building_hydro_plant.level }
+	if = { limit = { has_building = building_renewable_energy_plant } add = b:building_renewable_energy_plant.level }
+	if = { limit = { has_building = building_generic_power_hub } add = b:building_generic_power_hub.level }
+}
+
+te_pa_gen_seat_levels_company_basic_shipyards = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_generic_dry_dock } add = b:building_generic_dry_dock.level }
+}
+
+te_pa_gen_seat_levels_company_basic_silk_and_dye = {
+	value = 0
+	if = { limit = { has_building = building_silk_plantation } add = b:building_silk_plantation.level }
+	if = { limit = { has_building = building_dye_plantation } add = b:building_dye_plantation.level }
+	if = { limit = { has_building = building_generic_silk_exchange } add = b:building_generic_silk_exchange.level }
+}
+
+te_pa_gen_seat_levels_company_basic_software = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_generic_data_fortress } add = b:building_generic_data_fortress.level }
+}
+
+te_pa_gen_seat_levels_company_basic_steel = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_generic_foundry_complex } add = b:building_generic_foundry_complex.level }
+}
+
+te_pa_gen_seat_levels_company_basic_synthetics = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant } add = b:building_synthetics_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_silk } add = b:building_synthetics_plant_silk.level }
+	if = { limit = { has_building = building_generic_dye_fiber_park } add = b:building_generic_dye_fiber_park.level }
+}
+
+te_pa_gen_seat_levels_company_basic_textiles = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_generic_textile_depot } add = b:building_generic_textile_depot.level }
+}
+
+te_pa_gen_seat_levels_company_basic_weapons = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_generic_arsenal } add = b:building_generic_arsenal.level }
+}
+
+te_pa_gen_seat_levels_company_basic_wine_and_fruit = {
+	value = 0
+	if = { limit = { has_building = building_vineyard } add = b:building_vineyard.level }
+	if = { limit = { has_building = building_banana_plantation } add = b:building_banana_plantation.level }
+	if = { limit = { has_building = building_generic_vintner_hall } add = b:building_generic_vintner_hall.level }
+}
+
+te_pa_gen_seat_levels_company_basileiades = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_basileiades_piraeus_works } add = b:building_basileiades_piraeus_works.level }
+}
+
+te_pa_gen_seat_levels_company_bayer = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant } add = b:building_synthetics_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_silk } add = b:building_synthetics_plant_silk.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_bayer_leverkusen_plant } add = b:building_bayer_leverkusen_plant.level }
+}
+
+te_pa_gen_seat_levels_company_bengal_coal_company = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_bengal_coal_raniganj_mine } add = b:building_bengal_coal_raniganj_mine.level }
+}
+
+te_pa_gen_seat_levels_company_bgi = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_synthetics_plant_fruit } add = b:building_synthetics_plant_fruit.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_bgi_national_genebank } add = b:building_bgi_national_genebank.level }
+}
+
+te_pa_gen_seat_levels_company_bhp_group = {
+	value = 0
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_copper_mine } add = b:building_copper_mine.level }
+	if = { limit = { has_building = building_potash_mine } add = b:building_potash_mine.level }
+	if = { limit = { has_building = building_nickel_cobalt_mine } add = b:building_nickel_cobalt_mine.level }
+	if = { limit = { has_building = building_ocean_mine } add = b:building_ocean_mine.level }
+	if = { limit = { has_building = building_bhp_mount_whaleback_mine } add = b:building_bhp_mount_whaleback_mine.level }
+}
+
+te_pa_gen_seat_levels_company_biocon = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_biocon_park } add = b:building_biocon_park.level }
+}
+
+te_pa_gen_seat_levels_company_biontech = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_biontech_mainz_campus } add = b:building_biontech_mainz_campus.level }
+}
+
+te_pa_gen_seat_levels_company_blackberry = {
+	value = 0
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_blackberry_rim_campus } add = b:building_blackberry_rim_campus.level }
+}
+
+te_pa_gen_seat_levels_company_boeing = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_boeing_everett_factory } add = b:building_boeing_everett_factory.level }
+}
+
+te_pa_gen_seat_levels_company_bolckow_vaughan = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_bolckow_eston_ironworks } add = b:building_bolckow_eston_ironworks.level }
+}
+
+te_pa_gen_seat_levels_company_bombay_burmah_trading_corporation = {
+	value = 0
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_rubber_plantation } add = b:building_rubber_plantation.level }
+	if = { limit = { has_building = building_bombay_burmah_rangoon_timber_depot } add = b:building_bombay_burmah_rangoon_timber_depot.level }
+}
+
+te_pa_gen_seat_levels_company_bombay_dyeing_company = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_bombay_dyeing_spring_mills } add = b:building_bombay_dyeing_spring_mills.level }
+}
+
+te_pa_gen_seat_levels_company_boston_dynamics = {
+	value = 0
+	if = { limit = { has_building = building_robotics_industry } add = b:building_robotics_industry.level }
+	if = { limit = { has_building = building_boston_dynamics_ai_institute } add = b:building_boston_dynamics_ai_institute.level }
+}
+
+te_pa_gen_seat_levels_company_bp = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_synthetics_plant_oil } add = b:building_synthetics_plant_oil.level }
+	if = { limit = { has_building = building_bp_refinery_complex } add = b:building_bp_refinery_complex.level }
+}
+
+te_pa_gen_seat_levels_company_branobel = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_nobel_baku_refinery } add = b:building_nobel_baku_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_broken_hill_proprietary_company = {
+	value = 0
+	if = { limit = { has_building = building_gold_mine } add = b:building_gold_mine.level }
+	if = { limit = { has_building = building_copper_mine } add = b:building_copper_mine.level }
+	if = { limit = { has_building = building_bhp_broken_hill_mine } add = b:building_bhp_broken_hill_mine.level }
+}
+
+te_pa_gen_seat_levels_company_bunge_born = {
+	value = 0
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_maize_farm } add = b:building_maize_farm.level }
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_bunge_born_buenos_aires_grain_silo } add = b:building_bunge_born_buenos_aires_grain_silo.level }
+}
+
+te_pa_gen_seat_levels_company_bytedance = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_bytedance_data_fortress } add = b:building_bytedance_data_fortress.level }
+}
+
+te_pa_gen_seat_levels_company_calcutta_electric = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_calcutta_electric_victoria_house } add = b:building_calcutta_electric_victoria_house.level }
+}
+
+te_pa_gen_seat_levels_company_caribbean_petroleum = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_caribbean_petroleum_maracaibo_depot } add = b:building_caribbean_petroleum_maracaibo_depot.level }
+}
+
+te_pa_gen_seat_levels_company_catl = {
+	value = 0
+	if = { limit = { has_building = building_advanced_material_fabricator } add = b:building_advanced_material_fabricator.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_catl_gigafactory } add = b:building_catl_gigafactory.level }
+}
+
+te_pa_gen_seat_levels_company_ccci = {
+	value = 0
+	if = { limit = { has_building = building_rubber_plantation } add = b:building_rubber_plantation.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_ccci_leopoldville_depot } add = b:building_ccci_leopoldville_depot.level }
+}
+
+te_pa_gen_seat_levels_company_cfr = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_cfr_bucharest_railway_works } add = b:building_cfr_bucharest_railway_works.level }
+}
+
+te_pa_gen_seat_levels_company_cgv = {
+	value = 0
+	if = { limit = { has_building = building_vineyard } add = b:building_vineyard.level }
+	if = { limit = { has_building = building_cgv_haut_brion_estate } add = b:building_cgv_haut_brion_estate.level }
+}
+
+te_pa_gen_seat_levels_company_chr_hansens = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_chr_hansen_copenhagen_laboratory } add = b:building_chr_hansen_copenhagen_laboratory.level }
+}
+
+te_pa_gen_seat_levels_company_cochlear = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_cochlear_global_hq } add = b:building_cochlear_global_hq.level }
+}
+
+te_pa_gen_seat_levels_company_colt_firearms = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_colt_hartford_armory } add = b:building_colt_hartford_armory.level }
+}
+
+te_pa_gen_seat_levels_company_compania_sansinena_de_carnes_congeladas = {
+	value = 0
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_sansinena_avellaneda_frigorifico } add = b:building_sansinena_avellaneda_frigorifico.level }
+}
+
+te_pa_gen_seat_levels_company_construction_power_bloc = {
+	value = 0
+	if = { limit = { has_building = building_construction_sector } add = b:building_construction_sector.level }
+	if = { limit = { has_building = building_generic_industrial_zone } add = b:building_generic_industrial_zone.level }
+}
+
+te_pa_gen_seat_levels_company_cordoba_railway = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_cordoba_railway_alta_gracia_works } add = b:building_cordoba_railway_alta_gracia_works.level }
+}
+
+te_pa_gen_seat_levels_company_csfa = {
+	value = 0
+	if = { limit = { has_building = building_sulfur_mine } add = b:building_sulfur_mine.level }
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_csfa_sicilian_sulfur_depot } add = b:building_csfa_sicilian_sulfur_depot.level }
+}
+
+te_pa_gen_seat_levels_company_da_afghan_nassaji_sherkat = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_afghan_nassaji_kabul_mills } add = b:building_afghan_nassaji_kabul_mills.level }
+}
+
+te_pa_gen_seat_levels_company_dassault_aviation = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_dassault_merignac_plant } add = b:building_dassault_merignac_plant.level }
+}
+
+te_pa_gen_seat_levels_company_david_sassoon = {
+	value = 0
+	if = { limit = { has_building = building_opium_plantation } add = b:building_opium_plantation.level }
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_sassoon_bombay_docks } add = b:building_sassoon_bombay_docks.level }
+}
+
+te_pa_gen_seat_levels_company_de_beers = {
+	value = 0
+	if = { limit = { has_building = building_gold_mine } add = b:building_gold_mine.level }
+	if = { limit = { has_building = building_de_beers_sorting_office } add = b:building_de_beers_sorting_office.level }
+}
+
+te_pa_gen_seat_levels_company_disney = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_tourism_industry } add = b:building_tourism_industry.level }
+	if = { limit = { has_building = building_disney_world } add = b:building_disney_world.level }
+}
+
+te_pa_gen_seat_levels_company_dmc = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_dmc_mulhouse_mills } add = b:building_dmc_mulhouse_mills.level }
+}
+
+te_pa_gen_seat_levels_company_dobrush_paper = {
+	value = 0
+	if = { limit = { has_building = building_paper_mill } add = b:building_paper_mill.level }
+}
+
+te_pa_gen_seat_levels_company_douro_wine_company = {
+	value = 0
+	if = { limit = { has_building = building_vineyard } add = b:building_vineyard.level }
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_douro_wine_lodge } add = b:building_douro_wine_lodge.level }
+}
+
+te_pa_gen_seat_levels_company_dupont = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_explosives_factory } add = b:building_explosives_factory.level }
+	if = { limit = { has_building = building_dupont_experimental_station } add = b:building_dupont_experimental_station.level }
+}
+
+te_pa_gen_seat_levels_company_duro_y_compania = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_duro_la_felguera_steelworks } add = b:building_duro_la_felguera_steelworks.level }
+}
+
+te_pa_gen_seat_levels_company_east_india_company = {
+	value = 0
+	if = { limit = { has_building = building_tea_plantation } add = b:building_tea_plantation.level }
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_opium_plantation } add = b:building_opium_plantation.level }
+	if = { limit = { has_building = building_eic_trading_house } add = b:building_eic_trading_house.level }
+}
+
+te_pa_gen_seat_levels_company_eea = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_eea_dock_sud_power_station } add = b:building_eea_dock_sud_power_station.level }
+}
+
+te_pa_gen_seat_levels_company_egyptian_rail = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_egyptian_rail_cairo_central } add = b:building_egyptian_rail_cairo_central.level }
+}
+
+te_pa_gen_seat_levels_company_el_aguila = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_el_aguila_tampico_refinery } add = b:building_el_aguila_tampico_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_electricidad_de_caracas = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_electricidad_caracas_power_house } add = b:building_electricidad_caracas_power_house.level }
+}
+
+te_pa_gen_seat_levels_company_elso_budapesti_gozmalom = {
+	value = 0
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_elso_budapesti_steam_mill } add = b:building_elso_budapesti_steam_mill.level }
+}
+
+te_pa_gen_seat_levels_company_eni = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_eni_palazzo } add = b:building_eni_palazzo.level }
+}
+
+te_pa_gen_seat_levels_company_ericsson = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_ericsson_telefonplan } add = b:building_ericsson_telefonplan.level }
+}
+
+te_pa_gen_seat_levels_company_erste_brunner = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_erste_brunner_maschinenwerk } add = b:building_erste_brunner_maschinenwerk.level }
+}
+
+te_pa_gen_seat_levels_company_espana_industrial = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_espana_industrial_sants_mills } add = b:building_espana_industrial_sants_mills.level }
+}
+
+te_pa_gen_seat_levels_company_estaleiro_maua = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_estaleiro_maua_niteroi_dockyard } add = b:building_estaleiro_maua_niteroi_dockyard.level }
+}
+
+te_pa_gen_seat_levels_company_estanifera_llallagua = {
+	value = 0
+	if = { limit = { has_building = building_lead_mine } add = b:building_lead_mine.level }
+	if = { limit = { has_building = building_copper_mine } add = b:building_copper_mine.level }
+	if = { limit = { has_building = building_estanifera_llallagua_tin_concentrator } add = b:building_estanifera_llallagua_tin_concentrator.level }
+}
+
+te_pa_gen_seat_levels_company_famae = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_famae_santiago_arsenal } add = b:building_famae_santiago_arsenal.level }
+}
+
+te_pa_gen_seat_levels_company_fanuc = {
+	value = 0
+	if = { limit = { has_building = building_robotics_industry } add = b:building_robotics_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_fanuc_forest } add = b:building_fanuc_forest.level }
+}
+
+te_pa_gen_seat_levels_company_fcm = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_fcm_la_seyne_shipyard } add = b:building_fcm_la_seyne_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_ferranti_ltd = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_electrics_industry_radio } add = b:building_electrics_industry_radio.level }
+	if = { limit = { has_building = building_ferranti_hollinwood_works } add = b:building_ferranti_hollinwood_works.level }
+}
+
+te_pa_gen_seat_levels_company_ferrari = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_ferrari_maranello_factory } add = b:building_ferrari_maranello_factory.level }
+}
+
+te_pa_gen_seat_levels_company_fiat = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_fiat_lingotto_factory } add = b:building_fiat_lingotto_factory.level }
+}
+
+te_pa_gen_seat_levels_company_fiskars = {
+	value = 0
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+}
+
+te_pa_gen_seat_levels_company_foochow_arsenal = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_foochow_mawei_dockyard } add = b:building_foochow_mawei_dockyard.level }
+}
+
+te_pa_gen_seat_levels_company_ford_motor = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_ford_rouge_plant } add = b:building_ford_rouge_plant.level }
+}
+
+te_pa_gen_seat_levels_company_franco_belge = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_franco_belge_raismes_works } add = b:building_franco_belge_raismes_works.level }
+}
+
+te_pa_gen_seat_levels_company_fundicao_ipanema = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_fundicao_ipanema_sorocaba_foundry } add = b:building_fundicao_ipanema_sorocaba_foundry.level }
+}
+
+te_pa_gen_seat_levels_company_fundidora_monterrey = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_fundidora_monterrey_blast_furnace } add = b:building_fundidora_monterrey_blast_furnace.level }
+}
+
+te_pa_gen_seat_levels_company_galician_carpathian_oil = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_galician_boryslaw_oil_field } add = b:building_galician_boryslaw_oil_field.level }
+}
+
+te_pa_gen_seat_levels_company_gazprom = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_gazprom_lakhta_center } add = b:building_gazprom_lakhta_center.level }
+}
+
+te_pa_gen_seat_levels_company_gebruder_thonet = {
+	value = 0
+	if = { limit = { has_building = building_furniture_manufactory } add = b:building_furniture_manufactory.level }
+	if = { limit = { has_building = building_thonet_bystrice_bentwood_factory } add = b:building_thonet_bystrice_bentwood_factory.level }
+}
+
+te_pa_gen_seat_levels_company_genentech = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_genentech_dna_way_campus } add = b:building_genentech_dna_way_campus.level }
+}
+
+te_pa_gen_seat_levels_company_general_electric = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_electrics_industry_radio } add = b:building_electrics_industry_radio.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_ge_schenectady_works } add = b:building_ge_schenectady_works.level }
+}
+
+te_pa_gen_seat_levels_company_getzner_mutter = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_getzner_bludenz_textile_works } add = b:building_getzner_bludenz_textile_works.level }
+}
+
+te_pa_gen_seat_levels_company_google = {
+	value = 0
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_googleplex } add = b:building_googleplex.level }
+}
+
+te_pa_gen_seat_levels_company_gotaverken = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_gotaverken_gothenburg_shipyard } add = b:building_gotaverken_gothenburg_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_gran_azucarera = {
+	value = 0
+	if = { limit = { has_building = building_sugar_plantation } add = b:building_sugar_plantation.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+	if = { limit = { has_building = building_gran_azucarera_aranjuez_refinery } add = b:building_gran_azucarera_aranjuez_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_great_indian_railway = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_great_indian_railway_jamalpur_works } add = b:building_great_indian_railway_jamalpur_works.level }
+}
+
+te_pa_gen_seat_levels_company_grodno_tobacco = {
+	value = 0
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+}
+
+te_pa_gen_seat_levels_company_guinness = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_guinness_st_james_gate_brewery } add = b:building_guinness_st_james_gate_brewery.level }
+}
+
+te_pa_gen_seat_levels_company_guthrie = {
+	value = 0
+	if = { limit = { has_building = building_coffee_plantation } add = b:building_coffee_plantation.level }
+	if = { limit = { has_building = building_tea_plantation } add = b:building_tea_plantation.level }
+	if = { limit = { has_building = building_guthrie_singapore_agency } add = b:building_guthrie_singapore_agency.level }
+}
+
+te_pa_gen_seat_levels_company_gwr = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_gwr_swindon_works } add = b:building_gwr_swindon_works.level }
+}
+
+te_pa_gen_seat_levels_company_hanka_precision = {
+	value = 0
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_nanofabrication_center } add = b:building_nanofabrication_center.level }
+	if = { limit = { has_building = building_hanka_precision_hq } add = b:building_hanka_precision_hq.level }
+}
+
+te_pa_gen_seat_levels_company_hanseong_jeongi_hoesa = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_hanseong_jeongi_gwanghwamun_station } add = b:building_hanseong_jeongi_gwanghwamun_station.level }
+}
+
+te_pa_gen_seat_levels_company_hanyang_arsenal = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_hanyang_arsenal_iron_works } add = b:building_hanyang_arsenal_iron_works.level }
+}
+
+te_pa_gen_seat_levels_company_hbc = {
+	value = 0
+	if = { limit = { has_building = building_fishing_wharf } add = b:building_fishing_wharf.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_hbc_york_factory } add = b:building_hbc_york_factory.level }
+}
+
+te_pa_gen_seat_levels_company_hispano_suiza = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_hispano_suiza_barcelona_factory } add = b:building_hispano_suiza_barcelona_factory.level }
+}
+
+te_pa_gen_seat_levels_company_hp = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_hp_labs } add = b:building_hp_labs.level }
+}
+
+te_pa_gen_seat_levels_company_huawei = {
+	value = 0
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_huawei_ox_horn_campus } add = b:building_huawei_ox_horn_campus.level }
+}
+
+te_pa_gen_seat_levels_company_hyundai = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_hyundai_ulsan_factory } add = b:building_hyundai_ulsan_factory.level }
+}
+
+te_pa_gen_seat_levels_company_ig_farben = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant } add = b:building_synthetics_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_ig_farben_buna_werke } add = b:building_ig_farben_buna_werke.level }
+}
+
+te_pa_gen_seat_levels_company_ikea = {
+	value = 0
+	if = { limit = { has_building = building_furniture_manufactory } add = b:building_furniture_manufactory.level }
+	if = { limit = { has_building = building_ikea_almhult_campus } add = b:building_ikea_almhult_campus.level }
+}
+
+te_pa_gen_seat_levels_company_ilva = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_ilva_bagnoli_steelworks } add = b:building_ilva_bagnoli_steelworks.level }
+}
+
+te_pa_gen_seat_levels_company_imperial_arsenal = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_imperial_arsenal_golden_horn } add = b:building_imperial_arsenal_golden_horn.level }
+}
+
+te_pa_gen_seat_levels_company_imperial_ethiopian_railways = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_ethiopian_railway_dire_dawa_depot } add = b:building_ethiopian_railway_dire_dawa_depot.level }
+}
+
+te_pa_gen_seat_levels_company_imperial_tobacco = {
+	value = 0
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_imperial_tobacco_wills_factory } add = b:building_imperial_tobacco_wills_factory.level }
+}
+
+te_pa_gen_seat_levels_company_infosys = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_infosys_mysore_campus } add = b:building_infosys_mysore_campus.level }
+}
+
+te_pa_gen_seat_levels_company_infrastructure = {
+	value = 0
+	if = { limit = { has_building = building_highway } add = b:building_highway.level }
+	if = { limit = { has_building = building_airport } add = b:building_airport.level }
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_generic_logistics_hub } add = b:building_generic_logistics_hub.level }
+}
+
+te_pa_gen_seat_levels_company_ingen = {
+	value = 0
+	if = { limit = { has_building = building_tourism_industry } add = b:building_tourism_industry.level }
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+	if = { limit = { has_building = building_ingen_biological_preserve } add = b:building_ingen_biological_preserve.level }
+}
+
+te_pa_gen_seat_levels_company_ingolstadt_electrical_company = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_ingolstadt_power_station } add = b:building_ingolstadt_power_station.level }
+}
+
+te_pa_gen_seat_levels_company_intel = {
+	value = 0
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_intel_ronler_acres } add = b:building_intel_ronler_acres.level }
+}
+
+te_pa_gen_seat_levels_company_iranian_state_railway = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_iranian_state_railway_veresk_station } add = b:building_iranian_state_railway_veresk_station.level }
+}
+
+te_pa_gen_seat_levels_company_izhevsk_arms_plant = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_izhevsk_arms_factory } add = b:building_izhevsk_arms_factory.level }
+}
+
+te_pa_gen_seat_levels_company_j_p_coats = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_coats_ferguslie_mills } add = b:building_coats_ferguslie_mills.level }
+}
+
+te_pa_gen_seat_levels_company_jakub_klein = {
+	value = 0
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_paper_mill } add = b:building_paper_mill.level }
+	if = { limit = { has_building = building_klein_galician_paper_mill } add = b:building_klein_galician_paper_mill.level }
+}
+
+te_pa_gen_seat_levels_company_jardine_matheson = {
+	value = 0
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_trade_center } add = b:building_trade_center.level }
+	if = { limit = { has_building = building_jardine_princeps_house } add = b:building_jardine_princeps_house.level }
+}
+
+te_pa_gen_seat_levels_company_jiangnan_weaving_bureaus = {
+	value = 0
+	if = { limit = { has_building = building_silk_plantation } add = b:building_silk_plantation.level }
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_jiangnan_nanjing_brocade_hall } add = b:building_jiangnan_nanjing_brocade_hall.level }
+}
+
+te_pa_gen_seat_levels_company_jingdezhen = {
+	value = 0
+	if = { limit = { has_building = building_glassworks } add = b:building_glassworks.level }
+	if = { limit = { has_building = building_jingdezhen_imperial_kiln } add = b:building_jingdezhen_imperial_kiln.level }
+}
+
+te_pa_gen_seat_levels_company_john_brown = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_john_brown_clydebank_yard } add = b:building_john_brown_clydebank_yard.level }
+}
+
+te_pa_gen_seat_levels_company_john_cockerill = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_cockerill_seraing_works } add = b:building_cockerill_seraing_works.level }
+}
+
+te_pa_gen_seat_levels_company_john_holt = {
+	value = 0
+	if = { limit = { has_building = building_rubber_plantation } add = b:building_rubber_plantation.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_john_holt_lagos_trading_house } add = b:building_john_holt_lagos_trading_house.level }
+}
+
+te_pa_gen_seat_levels_company_john_hughes = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_hughes_yuzovka_steelworks } add = b:building_hughes_yuzovka_steelworks.level }
+}
+
+te_pa_gen_seat_levels_company_jsr = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_jsr_yokkaichi_complex } add = b:building_jsr_yokkaichi_complex.level }
+}
+
+te_pa_gen_seat_levels_company_jsw_steel = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_jsw_vijayanagar_works } add = b:building_jsw_vijayanagar_works.level }
+}
+
+te_pa_gen_seat_levels_company_kablin = {
+	value = 0
+	if = { limit = { has_building = building_paper_mill } add = b:building_paper_mill.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_kablin_zarate_paper_mill } add = b:building_kablin_zarate_paper_mill.level }
+}
+
+te_pa_gen_seat_levels_company_kaiping_mining = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_kaiping_tangshan_colliery } add = b:building_kaiping_tangshan_colliery.level }
+}
+
+te_pa_gen_seat_levels_company_kharitonenko_and_son = {
+	value = 0
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_rye_farm } add = b:building_rye_farm.level }
+}
+
+te_pa_gen_seat_levels_company_kinkozan_sobei = {
+	value = 0
+	if = { limit = { has_building = building_glassworks } add = b:building_glassworks.level }
+	if = { limit = { has_building = building_kinkozan_kiyomizu_kiln } add = b:building_kinkozan_kiyomizu_kiln.level }
+}
+
+te_pa_gen_seat_levels_company_kirgizian_mining_company = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_kirgizian_copper_smelter } add = b:building_kirgizian_copper_smelter.level }
+}
+
+te_pa_gen_seat_levels_company_klanicko_drustvo = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+	if = { limit = { has_building = building_klanicko_belgrade_slaughterhouse } add = b:building_klanicko_belgrade_slaughterhouse.level }
+}
+
+te_pa_gen_seat_levels_company_konigliche_porzellan_manufaktur_meissen = {
+	value = 0
+	if = { limit = { has_building = building_glassworks } add = b:building_glassworks.level }
+	if = { limit = { has_building = building_meissen_porcelain_manufactory } add = b:building_meissen_porcelain_manufactory.level }
+}
+
+te_pa_gen_seat_levels_company_kouppas = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_kouppas_piraeus_foundry } add = b:building_kouppas_piraeus_foundry.level }
+}
+
+te_pa_gen_seat_levels_company_kreenholmi_manufaktuur = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+}
+
+te_pa_gen_seat_levels_company_krupp = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_krupp_essen_works } add = b:building_krupp_essen_works.level }
+}
+
+te_pa_gen_seat_levels_company_la_rosada = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_la_rosada_buenos_aires_arsenal } add = b:building_la_rosada_buenos_aires_arsenal.level }
+}
+
+te_pa_gen_seat_levels_company_lanfang_kongsi = {
+	value = 0
+	if = { limit = { has_building = building_gold_mine } add = b:building_gold_mine.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_lanfang_pontianak_kongsi_house } add = b:building_lanfang_pontianak_kongsi_house.level }
+}
+
+te_pa_gen_seat_levels_company_lee_wilson = {
+	value = 0
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_lee_wilson_plantation_depot } add = b:building_lee_wilson_plantation_depot.level }
+}
+
+te_pa_gen_seat_levels_company_lilpop = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_lilpop_warsaw_metalworks } add = b:building_lilpop_warsaw_metalworks.level }
+}
+
+te_pa_gen_seat_levels_company_lkab = {
+	value = 0
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_lkab_kiruna_mine } add = b:building_lkab_kiruna_mine.level }
+}
+
+te_pa_gen_seat_levels_company_lockheed_martin = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_lockheed_skunk_works } add = b:building_lockheed_skunk_works.level }
+}
+
+te_pa_gen_seat_levels_company_ludwig_moser_and_sons = {
+	value = 0
+	if = { limit = { has_building = building_glassworks } add = b:building_glassworks.level }
+	if = { limit = { has_building = building_moser_karlsbad_glass_works } add = b:building_moser_karlsbad_glass_works.level }
+}
+
+te_pa_gen_seat_levels_company_madura_mills = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_madura_mills_madurai_complex } add = b:building_madura_mills_madurai_complex.level }
+}
+
+te_pa_gen_seat_levels_company_maison_worth = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_worth_rue_de_la_paix_atelier } add = b:building_worth_rue_de_la_paix_atelier.level }
+}
+
+te_pa_gen_seat_levels_company_malaxa = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+}
+
+te_pa_gen_seat_levels_company_manfred_weiss = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_manfred_weiss_csepel_works } add = b:building_manfred_weiss_csepel_works.level }
+}
+
+te_pa_gen_seat_levels_company_mantero_seta = {
+	value = 0
+	if = { limit = { has_building = building_silk_plantation } add = b:building_silk_plantation.level }
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_mantero_como_silk_mill } add = b:building_mantero_como_silk_mill.level }
+}
+
+te_pa_gen_seat_levels_company_mantetsu = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_glassworks } add = b:building_glassworks.level }
+	if = { limit = { has_building = building_mantetsu_dalian_railway_hub } add = b:building_mantetsu_dalian_railway_hub.level }
+}
+
+te_pa_gen_seat_levels_company_maple_and_co = {
+	value = 0
+	if = { limit = { has_building = building_furniture_manufactory } add = b:building_furniture_manufactory.level }
+	if = { limit = { has_building = building_maple_tottenham_court_showroom } add = b:building_maple_tottenham_court_showroom.level }
+}
+
+te_pa_gen_seat_levels_company_maschinenfabrik_oerlikon = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_mfo_oerlikon_works } add = b:building_mfo_oerlikon_works.level }
+}
+
+te_pa_gen_seat_levels_company_maslosoyuz = {
+	value = 0
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+}
+
+te_pa_gen_seat_levels_company_massey_harris = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_massey_harris_toronto_implement_works } add = b:building_massey_harris_toronto_implement_works.level }
+}
+
+te_pa_gen_seat_levels_company_mate_gavrilovic = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_gavrilovic_petrinja_meatworks } add = b:building_gavrilovic_petrinja_meatworks.level }
+}
+
+te_pa_gen_seat_levels_company_mav = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_mav_budapest_locomotive_works } add = b:building_mav_budapest_locomotive_works.level }
+}
+
+te_pa_gen_seat_levels_company_megastructure_consortium = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_advanced_material_fabricator } add = b:building_advanced_material_fabricator.level }
+	if = { limit = { has_building = building_megastructure_consortium_hq } add = b:building_megastructure_consortium_hq.level }
+}
+
+te_pa_gen_seat_levels_company_michelin = {
+	value = 0
+	if = { limit = { has_building = building_rubber_plantation } add = b:building_rubber_plantation.level }
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_michelin_clermont_ferrand } add = b:building_michelin_clermont_ferrand.level }
+}
+
+te_pa_gen_seat_levels_company_microsoft = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_microsoft_redmond_campus } add = b:building_microsoft_redmond_campus.level }
+}
+
+te_pa_gen_seat_levels_company_mines_anzin = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_anzin_colliery } add = b:building_anzin_colliery.level }
+}
+
+te_pa_gen_seat_levels_company_misr = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_misr_mahalla_textile_complex } add = b:building_misr_mahalla_textile_complex.level }
+}
+
+te_pa_gen_seat_levels_company_mitsubishi = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_paper_mill } add = b:building_paper_mill.level }
+	if = { limit = { has_building = building_mitsubishi_nagasaki_shipyard } add = b:building_mitsubishi_nagasaki_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_mitsui = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_silk_plantation } add = b:building_silk_plantation.level }
+	if = { limit = { has_building = building_dye_plantation } add = b:building_dye_plantation.level }
+	if = { limit = { has_building = building_mitsui_trading_house } add = b:building_mitsui_trading_house.level }
+}
+
+te_pa_gen_seat_levels_company_monsanto = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_maize_farm } add = b:building_maize_farm.level }
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_sugar_plantation } add = b:building_sugar_plantation.level }
+	if = { limit = { has_building = building_synthetics_plant_sugar } add = b:building_synthetics_plant_sugar.level }
+	if = { limit = { has_building = building_monsanto_chesterfield_center } add = b:building_monsanto_chesterfield_center.level }
+}
+
+te_pa_gen_seat_levels_company_moscow_irrigation_company = {
+	value = 0
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_moscow_irrigation_cotton_depot } add = b:building_moscow_irrigation_cotton_depot.level }
+}
+
+te_pa_gen_seat_levels_company_mozambique_company = {
+	value = 0
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_tea_plantation } add = b:building_tea_plantation.level }
+	if = { limit = { has_building = building_millet_farm } add = b:building_millet_farm.level }
+	if = { limit = { has_building = building_mozambique_company_beira_concession } add = b:building_mozambique_company_beira_concession.level }
+}
+
+te_pa_gen_seat_levels_company_nam_dinh = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_nam_dinh_textile_plant } add = b:building_nam_dinh_textile_plant.level }
+}
+
+te_pa_gen_seat_levels_company_national_iranian_oil = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_nioc_masjed_soleyman_field } add = b:building_nioc_masjed_soleyman_field.level }
+}
+
+te_pa_gen_seat_levels_company_nederlandse_petroleum = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_nederlandse_petroleum_pangkalan_depot } add = b:building_nederlandse_petroleum_pangkalan_depot.level }
+}
+
+te_pa_gen_seat_levels_company_netflix = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_netflix_animation_studios } add = b:building_netflix_animation_studios.level }
+}
+
+te_pa_gen_seat_levels_company_neurovault = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_mind_upload_nexus } add = b:building_mind_upload_nexus.level }
+	if = { limit = { has_building = building_neurovault_hq } add = b:building_neurovault_hq.level }
+}
+
+te_pa_gen_seat_levels_company_nhm = {
+	value = 0
+	if = { limit = { has_building = building_coffee_plantation } add = b:building_coffee_plantation.level }
+	if = { limit = { has_building = building_sugar_plantation } add = b:building_sugar_plantation.level }
+	if = { limit = { has_building = building_dye_plantation } add = b:building_dye_plantation.level }
+	if = { limit = { has_building = building_nhm_factorij_batavia } add = b:building_nhm_factorij_batavia.level }
+}
+
+te_pa_gen_seat_levels_company_nicolas_portalis = {
+	value = 0
+	if = { limit = { has_building = building_silk_plantation } add = b:building_silk_plantation.level }
+	if = { limit = { has_building = building_portalis_lyon_silk_house } add = b:building_portalis_lyon_silk_house.level }
+}
+
+te_pa_gen_seat_levels_company_nintendo = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_nintendo_development_center } add = b:building_nintendo_development_center.level }
+}
+
+te_pa_gen_seat_levels_company_noda_shoyu = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_noda_shoyu_goyogura } add = b:building_noda_shoyu_goyogura.level }
+}
+
+te_pa_gen_seat_levels_company_nokia = {
+	value = 0
+	if = { limit = { has_building = building_paper_mill } add = b:building_paper_mill.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_nokia_cable_works } add = b:building_nokia_cable_works.level }
+}
+
+te_pa_gen_seat_levels_company_norsk_hydro = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_norsk_hydro_rjukan_plant } add = b:building_norsk_hydro_rjukan_plant.level }
+}
+
+te_pa_gen_seat_levels_company_novo_nordisk = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_synthetics_plant_sugar } add = b:building_synthetics_plant_sugar.level }
+	if = { limit = { has_building = building_novo_nordisk_kalundborg_plant } add = b:building_novo_nordisk_kalundborg_plant.level }
+}
+
+te_pa_gen_seat_levels_company_nvidia = {
+	value = 0
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_nvidia_endeavor_campus } add = b:building_nvidia_endeavor_campus.level }
+}
+
+te_pa_gen_seat_levels_company_oesterreichisch_alpine_montangesellschaft = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_alpine_donawitz_steelworks } add = b:building_alpine_donawitz_steelworks.level }
+}
+
+te_pa_gen_seat_levels_company_oevg = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_oevg_steyr_arms_works } add = b:building_oevg_steyr_arms_works.level }
+}
+
+te_pa_gen_seat_levels_company_office_cherifien_des_phosphates = {
+	value = 0
+	if = { limit = { has_building = building_sulfur_mine } add = b:building_sulfur_mine.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_ocp_khouribga_mine } add = b:building_ocp_khouribga_mine.level }
+}
+
+te_pa_gen_seat_levels_company_ong_lung_sheng_tea_company = {
+	value = 0
+	if = { limit = { has_building = building_tea_plantation } add = b:building_tea_plantation.level }
+	if = { limit = { has_building = building_ong_lung_sheng_tea_warehouse } add = b:building_ong_lung_sheng_tea_warehouse.level }
+}
+
+te_pa_gen_seat_levels_company_openai = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_openai_research_lab } add = b:building_openai_research_lab.level }
+}
+
+te_pa_gen_seat_levels_company_opium_export_monopoly = {
+	value = 0
+	if = { limit = { has_building = building_opium_plantation } add = b:building_opium_plantation.level }
+	if = { limit = { has_building = building_opium_ghazipur_factory } add = b:building_opium_ghazipur_factory.level }
+}
+
+te_pa_gen_seat_levels_company_oracle = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_oracle_cloud_data_center } add = b:building_oracle_cloud_data_center.level }
+}
+
+te_pa_gen_seat_levels_company_orient_express = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_orient_express_sirkeci_terminal } add = b:building_orient_express_sirkeci_terminal.level }
+}
+
+te_pa_gen_seat_levels_company_oriental_consolidated_mining = {
+	value = 0
+	if = { limit = { has_building = building_gold_mine } add = b:building_gold_mine.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_ocmc_unsan_gold_mines } add = b:building_ocmc_unsan_gold_mines.level }
+}
+
+te_pa_gen_seat_levels_company_oriental_development_company = {
+	value = 0
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_millet_farm } add = b:building_millet_farm.level }
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_oriental_dev_kunsan_granary } add = b:building_oriental_dev_kunsan_granary.level }
+}
+
+te_pa_gen_seat_levels_company_ottoman_tobacco_regie = {
+	value = 0
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_tobacco_regie_cibali_factory } add = b:building_tobacco_regie_cibali_factory.level }
+}
+
+te_pa_gen_seat_levels_company_panama_company = {
+	value = 0
+	if = { limit = { has_building = building_trade_center } add = b:building_trade_center.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_panama_company_culebra_cut } add = b:building_panama_company_culebra_cut.level }
+}
+
+te_pa_gen_seat_levels_company_paradox = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_paradox_kvarnholmen_studio } add = b:building_paradox_kvarnholmen_studio.level }
+}
+
+te_pa_gen_seat_levels_company_pedro_domecq = {
+	value = 0
+	if = { limit = { has_building = building_vineyard } add = b:building_vineyard.level }
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_pedro_domecq_jerez_bodega } add = b:building_pedro_domecq_jerez_bodega.level }
+}
+
+te_pa_gen_seat_levels_company_pernambuco_textiles = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_pernambuco_recife_cotton_mill } add = b:building_pernambuco_recife_cotton_mill.level }
+}
+
+te_pa_gen_seat_levels_company_perskhlopok = {
+	value = 0
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_perskhlopok_cotton_combines } add = b:building_perskhlopok_cotton_combines.level }
+}
+
+te_pa_gen_seat_levels_company_persshelk = {
+	value = 0
+	if = { limit = { has_building = building_silk_plantation } add = b:building_silk_plantation.level }
+	if = { limit = { has_building = building_persshelk_silk_reeling_house } add = b:building_persshelk_silk_reeling_house.level }
+}
+
+te_pa_gen_seat_levels_company_peruvian_amazon = {
+	value = 0
+	if = { limit = { has_building = building_rubber_plantation } add = b:building_rubber_plantation.level }
+	if = { limit = { has_building = building_peruvian_amazon_iquitos_depot } add = b:building_peruvian_amazon_iquitos_depot.level }
+}
+
+te_pa_gen_seat_levels_company_petrobras = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_petrobras_cenpes_center } add = b:building_petrobras_cenpes_center.level }
+}
+
+te_pa_gen_seat_levels_company_pfizer = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_pfizer_rd_campus } add = b:building_pfizer_rd_campus.level }
+}
+
+te_pa_gen_seat_levels_company_philips = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_electrics_industry_radio } add = b:building_electrics_industry_radio.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_philips_eindhoven_natlab } add = b:building_philips_eindhoven_natlab.level }
+}
+
+te_pa_gen_seat_levels_company_pirelli = {
+	value = 0
+	if = { limit = { has_building = building_rubber_plantation } add = b:building_rubber_plantation.level }
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_pirelli_bicocca_plant } add = b:building_pirelli_bicocca_plant.level }
+}
+
+te_pa_gen_seat_levels_company_poznanski_cotton_products = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+}
+
+te_pa_gen_seat_levels_company_prussian_state_railways = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_prussian_railway_directorate } add = b:building_prussian_railway_directorate.level }
+}
+
+te_pa_gen_seat_levels_company_putilov_company = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_putilov_works } add = b:building_putilov_works.level }
+}
+
+te_pa_gen_seat_levels_company_ralli_brothers = {
+	value = 0
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_ralli_odessa_grain_elevator } add = b:building_ralli_odessa_grain_elevator.level }
+}
+
+te_pa_gen_seat_levels_company_ramirez = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_fishing_wharf } add = b:building_fishing_wharf.level }
+	if = { limit = { has_building = building_ramirez_vila_real_cannery } add = b:building_ramirez_vila_real_cannery.level }
+}
+
+te_pa_gen_seat_levels_company_rejoovenesense = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_rejoovenesense_compound } add = b:building_rejoovenesense_compound.level }
+}
+
+te_pa_gen_seat_levels_company_rekal = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_mind_upload_nexus } add = b:building_mind_upload_nexus.level }
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_rekal_hq } add = b:building_rekal_hq.level }
+}
+
+te_pa_gen_seat_levels_company_reliance = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_reliance_jamnagar_refinery } add = b:building_reliance_jamnagar_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_renault = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_renault_billancourt_plant } add = b:building_renault_billancourt_plant.level }
+}
+
+te_pa_gen_seat_levels_company_resita_works = {
+	value = 0
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+}
+
+te_pa_gen_seat_levels_company_rheinmetall = {
+	value = 0
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_explosives_factory } add = b:building_explosives_factory.level }
+	if = { limit = { has_building = building_rheinmetall_unterluss_proving_ground } add = b:building_rheinmetall_unterluss_proving_ground.level }
+}
+
+te_pa_gen_seat_levels_company_ricordi = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_ricordi_galleria_vittorio_emanuele } add = b:building_ricordi_galleria_vittorio_emanuele.level }
+}
+
+te_pa_gen_seat_levels_company_roche = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_opium } add = b:building_synthetics_plant_opium.level }
+	if = { limit = { has_building = building_roche_tower } add = b:building_roche_tower.level }
+}
+
+te_pa_gen_seat_levels_company_rodriguez_arguelles_y_cia = {
+	value = 0
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_rodriguez_arguelles_havana_tobacco_house } add = b:building_rodriguez_arguelles_havana_tobacco_house.level }
+}
+
+te_pa_gen_seat_levels_company_rolls_royce = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_rolls_royce_derby_works } add = b:building_rolls_royce_derby_works.level }
+}
+
+te_pa_gen_seat_levels_company_romanian_star = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_romanian_star_ploiesti_refinery } add = b:building_romanian_star_ploiesti_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_rosatom = {
+	value = 0
+	if = { limit = { has_building = building_nuclear_plant } add = b:building_nuclear_plant.level }
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_advanced_material_fabricator } add = b:building_advanced_material_fabricator.level }
+	if = { limit = { has_building = building_rosatom_mayak_association } add = b:building_rosatom_mayak_association.level }
+}
+
+te_pa_gen_seat_levels_company_roscosmos = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_roscosmos_vostochny_cosmodrome } add = b:building_roscosmos_vostochny_cosmodrome.level }
+}
+
+te_pa_gen_seat_levels_company_rosen_association = {
+	value = 0
+	if = { limit = { has_building = building_synthetics_plant_meat } add = b:building_synthetics_plant_meat.level }
+	if = { limit = { has_building = building_synthetics_plant_biomass } add = b:building_synthetics_plant_biomass.level }
+	if = { limit = { has_building = building_robotics_industry } add = b:building_robotics_industry.level }
+	if = { limit = { has_building = building_livestock_ranch } add = b:building_livestock_ranch.level }
+	if = { limit = { has_building = building_rosen_association_hq } add = b:building_rosen_association_hq.level }
+}
+
+te_pa_gen_seat_levels_company_rossi = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_rossi_sao_leopoldo_arms_factory } add = b:building_rossi_sao_leopoldo_arms_factory.level }
+}
+
+te_pa_gen_seat_levels_company_russian_american_company = {
+	value = 0
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_whaling_station } add = b:building_whaling_station.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_rac_sitka_trading_post } add = b:building_rac_sitka_trading_post.level }
+}
+
+te_pa_gen_seat_levels_company_russo-baltic_wagon_factory = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+}
+
+te_pa_gen_seat_levels_company_saint_etienne = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_saint_etienne_arms_manufactory } add = b:building_saint_etienne_arms_manufactory.level }
+}
+
+te_pa_gen_seat_levels_company_samsung = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_electrics_industry_radio } add = b:building_electrics_industry_radio.level }
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_samsung_digital_city } add = b:building_samsung_digital_city.level }
+}
+
+te_pa_gen_seat_levels_company_san_miguel = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_san_miguel_manila_brewery } add = b:building_san_miguel_manila_brewery.level }
+}
+
+te_pa_gen_seat_levels_company_sao_paulo_railway = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_sao_paulo_railway_paranapiacaba_workshop } add = b:building_sao_paulo_railway_paranapiacaba_workshop.level }
+}
+
+te_pa_gen_seat_levels_company_sap = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_sap_headquarters } add = b:building_sap_headquarters.level }
+}
+
+te_pa_gen_seat_levels_company_saudi_aramco = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_saudi_aramco_abqaiq_plant } add = b:building_saudi_aramco_abqaiq_plant.level }
+}
+
+te_pa_gen_seat_levels_company_savva_morozov = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_morozov_orekhovo_zuevo_mills } add = b:building_morozov_orekhovo_zuevo_mills.level }
+}
+
+te_pa_gen_seat_levels_company_schichau = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_schichau_elbing_shipyard } add = b:building_schichau_elbing_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_schneider_creusot = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_schneider_le_creusot } add = b:building_schneider_le_creusot.level }
+}
+
+te_pa_gen_seat_levels_company_secn = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_secn_ferrol_shipyard } add = b:building_secn_ferrol_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_shell = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_shell_pernis_refinery } add = b:building_shell_pernis_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_sherkat_shemali = {
+	value = 0
+	if = { limit = { has_building = building_cotton_plantation } add = b:building_cotton_plantation.level }
+	if = { limit = { has_building = building_sherkat_shemali_cotton_gin } add = b:building_sherkat_shemali_cotton_gin.level }
+}
+
+te_pa_gen_seat_levels_company_sherkate_eslamiya = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_sherkate_eslamiya_isfahan_mill } add = b:building_sherkate_eslamiya_isfahan_mill.level }
+}
+
+te_pa_gen_seat_levels_company_shopify = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_highway } add = b:building_highway.level }
+	if = { limit = { has_building = building_shopify_fulfillment_hub } add = b:building_shopify_fulfillment_hub.level }
+}
+
+te_pa_gen_seat_levels_company_siam_electrical_company_limited = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_siam_electric_wat_liab_station } add = b:building_siam_electric_wat_liab_station.level }
+}
+
+te_pa_gen_seat_levels_company_sibur = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_synthetics_plant_rubber } add = b:building_synthetics_plant_rubber.level }
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_sibur_tobolsk_complex } add = b:building_sibur_tobolsk_complex.level }
+}
+
+te_pa_gen_seat_levels_company_siemens_and_halske = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_siemens_erlangen_campus } add = b:building_siemens_erlangen_campus.level }
+}
+
+te_pa_gen_seat_levels_company_skoda = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_skoda_pilsen_works } add = b:building_skoda_pilsen_works.level }
+}
+
+te_pa_gen_seat_levels_company_societe_francaise_charbonnages_du_tonkin = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_logging_camp } add = b:building_logging_camp.level }
+	if = { limit = { has_building = building_sfct_hon_gai_collieries } add = b:building_sfct_hon_gai_collieries.level }
+}
+
+te_pa_gen_seat_levels_company_societe_mokta_el_hadid = {
+	value = 0
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_sulfur_mine } add = b:building_sulfur_mine.level }
+	if = { limit = { has_building = building_mokta_el_hadid_beni_saf_mine } add = b:building_mokta_el_hadid_beni_saf_mine.level }
+}
+
+te_pa_gen_seat_levels_company_softbank = {
+	value = 0
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_softbank_vision_fund_hq } add = b:building_softbank_vision_fund_hq.level }
+}
+
+te_pa_gen_seat_levels_company_sony = {
+	value = 0
+	if = { limit = { has_building = building_electrics_industry_appliances } add = b:building_electrics_industry_appliances.level }
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_sony_pictures_studios } add = b:building_sony_pictures_studios.level }
+}
+
+te_pa_gen_seat_levels_company_spacex = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_space_mine } add = b:building_space_mine.level }
+	if = { limit = { has_building = building_spacex_starbase } add = b:building_spacex_starbase.level }
+}
+
+te_pa_gen_seat_levels_company_stabilimento_tecnico_di_fiume = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_explosives_factory } add = b:building_explosives_factory.level }
+	if = { limit = { has_building = building_stf_fiume_torpedo_works } add = b:building_stf_fiume_torpedo_works.level }
+}
+
+te_pa_gen_seat_levels_company_standard_oil = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_standard_oil_refinery } add = b:building_standard_oil_refinery.level }
+}
+
+te_pa_gen_seat_levels_company_steel_brothers = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_steel_brothers_syriam_depot } add = b:building_steel_brothers_syriam_depot.level }
+}
+
+te_pa_gen_seat_levels_company_stt = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_stt_haskoy_shipyard } add = b:building_stt_haskoy_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_sudamericana_de_vapores = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_sudamericana_valparaiso_pier } add = b:building_sudamericana_valparaiso_pier.level }
+}
+
+te_pa_gen_seat_levels_company_suez_company = {
+	value = 0
+	if = { limit = { has_building = building_trade_center } add = b:building_trade_center.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_suez_company_ismailia_hq } add = b:building_suez_company_ismailia_hq.level }
+}
+
+te_pa_gen_seat_levels_company_sumitomo = {
+	value = 0
+	if = { limit = { has_building = building_copper_mine } add = b:building_copper_mine.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_sumitomo_besshi_mine } add = b:building_sumitomo_besshi_mine.level }
+}
+
+te_pa_gen_seat_levels_company_sunhwaguk = {
+	value = 0
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_rice_farm } add = b:building_rice_farm.level }
+	if = { limit = { has_building = building_sunhwaguk_seoul_tobacco_factory } add = b:building_sunhwaguk_seoul_tobacco_factory.level }
+}
+
+te_pa_gen_seat_levels_company_tashkent_railroad = {
+	value = 0
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_tashkent_railroad_workshops } add = b:building_tashkent_railroad_workshops.level }
+}
+
+te_pa_gen_seat_levels_company_tata = {
+	value = 0
+	if = { limit = { has_building = building_textile_mill } add = b:building_textile_mill.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_tata_jamshedpur_works } add = b:building_tata_jamshedpur_works.level }
+}
+
+te_pa_gen_seat_levels_company_tencent = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_tencent_seafront_towers } add = b:building_tencent_seafront_towers.level }
+}
+
+te_pa_gen_seat_levels_company_tessier_ashpool = {
+	value = 0
+	if = { limit = { has_building = building_software_industry } add = b:building_software_industry.level }
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_mind_upload_nexus } add = b:building_mind_upload_nexus.level }
+	if = { limit = { has_building = building_tessier_ashpool_hq } add = b:building_tessier_ashpool_hq.level }
+}
+
+te_pa_gen_seat_levels_company_thyssen = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_thyssen_steelworks } add = b:building_thyssen_steelworks.level }
+}
+
+te_pa_gen_seat_levels_company_tokyo_electric_light_company = {
+	value = 0
+	if = { limit = { has_building = building_power_plant } add = b:building_power_plant.level }
+	if = { limit = { has_building = building_tokyo_electric_asakusa_station } add = b:building_tokyo_electric_asakusa_station.level }
+}
+
+te_pa_gen_seat_levels_company_toyota = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_robotics_industry } add = b:building_robotics_industry.level }
+	if = { limit = { has_building = building_toyota_kaikan_plant } add = b:building_toyota_kaikan_plant.level }
+}
+
+te_pa_gen_seat_levels_company_trubia = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_trubia_cannon_foundry } add = b:building_trubia_cannon_foundry.level }
+}
+
+te_pa_gen_seat_levels_company_tsmc = {
+	value = 0
+	if = { limit = { has_building = building_electronic_components_and_semiconductor_industry } add = b:building_electronic_components_and_semiconductor_industry.level }
+	if = { limit = { has_building = building_advanced_material_fabricator } add = b:building_advanced_material_fabricator.level }
+	if = { limit = { has_building = building_tsmc_fab_18 } add = b:building_tsmc_fab_18.level }
+}
+
+te_pa_gen_seat_levels_company_turkish_petroleum = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_turkish_petroleum_kirkuk_depot } add = b:building_turkish_petroleum_kirkuk_depot.level }
+}
+
+te_pa_gen_seat_levels_company_tycho_manufacturing = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_space_elevator } add = b:building_space_elevator.level }
+	if = { limit = { has_building = building_advanced_material_fabricator } add = b:building_advanced_material_fabricator.level }
+	if = { limit = { has_building = building_tycho_manufacturing_hq } add = b:building_tycho_manufacturing_hq.level }
+}
+
+te_pa_gen_seat_levels_company_uniao_fabril = {
+	value = 0
+	if = { limit = { has_building = building_chemical_plant } add = b:building_chemical_plant.level }
+	if = { limit = { has_building = building_wheat_farm } add = b:building_wheat_farm.level }
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_uniao_fabril_barreiro_plant } add = b:building_uniao_fabril_barreiro_plant.level }
+}
+
+te_pa_gen_seat_levels_company_united_fruit = {
+	value = 0
+	if = { limit = { has_building = building_sugar_plantation } add = b:building_sugar_plantation.level }
+	if = { limit = { has_building = building_banana_plantation } add = b:building_banana_plantation.level }
+	if = { limit = { has_building = building_united_fruit_great_white_fleet_terminal } add = b:building_united_fruit_great_white_fleet_terminal.level }
+}
+
+te_pa_gen_seat_levels_company_united_tobacco_factories = {
+	value = 0
+	if = { limit = { has_building = building_tobacco_plantation } add = b:building_tobacco_plantation.level }
+	if = { limit = { has_building = building_united_tobacco_moscow_plant } add = b:building_united_tobacco_moscow_plant.level }
+}
+
+te_pa_gen_seat_levels_company_universal = {
+	value = 0
+	if = { limit = { has_building = building_art_academy } add = b:building_art_academy.level }
+	if = { limit = { has_building = building_universal_studios_hollywood } add = b:building_universal_studios_hollywood.level }
+}
+
+te_pa_gen_seat_levels_company_ursus = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_ursus_warsaw_tractor_plant } add = b:building_ursus_warsaw_tractor_plant.level }
+}
+
+te_pa_gen_seat_levels_company_us_steel = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_carnegie_homestead_mill } add = b:building_carnegie_homestead_mill.level }
+}
+
+te_pa_gen_seat_levels_company_vale = {
+	value = 0
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_nickel_cobalt_mine } add = b:building_nickel_cobalt_mine.level }
+	if = { limit = { has_building = building_manganese_mine } add = b:building_manganese_mine.level }
+	if = { limit = { has_building = building_bauxite_mine } add = b:building_bauxite_mine.level }
+	if = { limit = { has_building = building_copper_mine } add = b:building_copper_mine.level }
+	if = { limit = { has_building = building_potash_mine } add = b:building_potash_mine.level }
+	if = { limit = { has_building = building_ocean_mine } add = b:building_ocean_mine.level }
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_vale_carajas_mine } add = b:building_vale_carajas_mine.level }
+}
+
+te_pa_gen_seat_levels_company_van_vlissingen_en_dudok_van_heel = {
+	value = 0
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_tooling_workshop } add = b:building_tooling_workshop.level }
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_van_vlissingen_oostenburg_works } add = b:building_van_vlissingen_oostenburg_works.level }
+}
+
+te_pa_gen_seat_levels_company_verizon = {
+	value = 0
+	if = { limit = { has_building = building_network_infrastructure } add = b:building_network_infrastructure.level }
+	if = { limit = { has_building = building_electrics_industry } add = b:building_electrics_industry.level }
+	if = { limit = { has_building = building_verizon_building } add = b:building_verizon_building.level }
+}
+
+te_pa_gen_seat_levels_company_vodka_monopoly = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_vineyard } add = b:building_vineyard.level }
+	if = { limit = { has_building = building_vodka_monopoly_warehouse } add = b:building_vodka_monopoly_warehouse.level }
+}
+
+te_pa_gen_seat_levels_company_volkswagen = {
+	value = 0
+	if = { limit = { has_building = building_automotive_industry } add = b:building_automotive_industry.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_highway } add = b:building_highway.level }
+	if = { limit = { has_building = building_volkswagen_autostadt } add = b:building_volkswagen_autostadt.level }
+}
+
+te_pa_gen_seat_levels_company_wadia_shipbuilders = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_artillery_foundry } add = b:building_artillery_foundry.level }
+	if = { limit = { has_building = building_wadia_bombay_dockyard } add = b:building_wadia_bombay_dockyard.level }
+}
+
+te_pa_gen_seat_levels_company_west_ural_petroleum = {
+	value = 0
+	if = { limit = { has_building = building_oil_rig } add = b:building_oil_rig.level }
+	if = { limit = { has_building = building_west_ural_oil_depot } add = b:building_west_ural_oil_depot.level }
+}
+
+te_pa_gen_seat_levels_company_white_star_line = {
+	value = 0
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_white_star_albion_house } add = b:building_white_star_albion_house.level }
+}
+
+te_pa_gen_seat_levels_company_william_cramp = {
+	value = 0
+	if = { limit = { has_building = building_shipyard } add = b:building_shipyard.level }
+	if = { limit = { has_building = building_motor_industry } add = b:building_motor_industry.level }
+	if = { limit = { has_building = building_cramp_philadelphia_shipyard } add = b:building_cramp_philadelphia_shipyard.level }
+}
+
+te_pa_gen_seat_levels_company_william_sandford = {
+	value = 0
+	if = { limit = { has_building = building_steel_mill } add = b:building_steel_mill.level }
+	if = { limit = { has_building = building_sandford_newcastle_natal_ironworks } add = b:building_sandford_newcastle_natal_ironworks.level }
+}
+
+te_pa_gen_seat_levels_company_witkowitzer_bergbau_und_huttengewerkschaft = {
+	value = 0
+	if = { limit = { has_building = building_coal_mine } add = b:building_coal_mine.level }
+	if = { limit = { has_building = building_iron_mine } add = b:building_iron_mine.level }
+	if = { limit = { has_building = building_witkowitzer_ostrava_ironworks } add = b:building_witkowitzer_ostrava_ironworks.level }
+}
+
+te_pa_gen_seat_levels_company_yasuda = {
+	value = 0
+	if = { limit = { has_building = building_sulfur_mine } add = b:building_sulfur_mine.level }
+	if = { limit = { has_building = building_railway } add = b:building_railway.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_yasuda_atosanupuri_mine } add = b:building_yasuda_atosanupuri_mine.level }
+}
+
+te_pa_gen_seat_levels_company_ynchausti_y_compania = {
+	value = 0
+	if = { limit = { has_building = building_food_industry } add = b:building_food_industry.level }
+	if = { limit = { has_building = building_port } add = b:building_port.level }
+	if = { limit = { has_building = building_sugar_plantation } add = b:building_sugar_plantation.level }
+	if = { limit = { has_building = building_ynchausti_manila_trading_house } add = b:building_ynchausti_manila_trading_house.level }
+}
+
+te_pa_gen_seat_levels_company_yoyodyne_propulsion = {
+	value = 0
+	if = { limit = { has_building = building_aerospace_industry } add = b:building_aerospace_industry.level }
+	if = { limit = { has_building = building_antimatter_engine } add = b:building_antimatter_engine.level }
+	if = { limit = { has_building = building_yoyodyne_propulsion_hq } add = b:building_yoyodyne_propulsion_hq.level }
+}
+
+te_pa_gen_seat_levels_company_zastava = {
+	value = 0
+	if = { limit = { has_building = building_arms_industry } add = b:building_arms_industry.level }
+	if = { limit = { has_building = building_munition_plant } add = b:building_munition_plant.level }
+	if = { limit = { has_building = building_zastava_kragujevac_arsenal } add = b:building_zastava_kragujevac_arsenal.level }
+}

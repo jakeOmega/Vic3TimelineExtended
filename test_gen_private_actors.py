@@ -239,6 +239,97 @@ class LawTableTest(unittest.TestCase):
         self.assertIn(cfg.CONDITIONS["big"], block(values, "te_pa_gen_stance_law_trust_busting"))
 
 
+class TemperamentTest(unittest.TestCase):
+    """§ 5.3's tables against the real lists: every personality trait and character ideology has weights or a
+    reason to have none, so one added later can't slip past (the law table's rule, for temperament)."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = gen.Data.from_state(state())
+        cls.plan = gen.build_plan(state())
+        cls.values = read(gen.VALUES_OUT)
+
+    def test_every_personality_trait_has_a_row(self):
+        traits = self.data.personality_traits()
+        self.assertGreater(len(traits), 40)
+        for trait in traits:
+            with self.subTest(trait=trait):
+                neutral = trait in cfg.NEUTRAL_TRAITS or trait.startswith(cfg.NEUTRAL_TRAIT_PREFIXES)
+                self.assertNotEqual(trait in cfg.TRAIT_TEMPERAMENT, neutral, "weights or a reason, not both")
+        for trait, reason in cfg.NEUTRAL_TRAITS.items():
+            self.assertIn(trait, traits)
+            self.assertTrue(reason.strip())
+        for trait in cfg.TRAIT_TEMPERAMENT:
+            self.assertIn(trait, traits)
+
+    def test_every_character_ideology_has_a_row(self):
+        ideologies = self.data.character_ideologies()
+        self.assertGreater(len(ideologies), 50)  # vanilla's 48 and the mod's 6
+        for ideology in ideologies:
+            with self.subTest(ideology=ideology):
+                self.assertNotEqual(ideology in cfg.IDEOLOGY_TEMPERAMENT, ideology in cfg.NEUTRAL_IDEOLOGIES)
+        for ideology in (*cfg.IDEOLOGY_TEMPERAMENT, *cfg.NEUTRAL_IDEOLOGIES):
+            self.assertIn(ideology, ideologies)
+
+    def test_weights_name_known_axes(self):
+        for table in (cfg.TRAIT_TEMPERAMENT, cfg.IDEOLOGY_TEMPERAMENT):
+            for key, weights in table.items():
+                with self.subTest(key=key):
+                    self.assertTrue(weights)
+                    self.assertLessEqual(set(weights), set(cfg.TEMPERAMENT_AXES))
+                    for weight in weights.values():
+                        self.assertTrue(-1 <= weight <= 1 and weight != 0)
+
+    def test_each_axis_renders_clamped_through_the_executive(self):
+        for axis, lines in gen.temperament_weights(self.plan).items():
+            with self.subTest(axis=axis):
+                body = block(self.values, f"te_pa_gen_temper_{axis}")
+                self.assertIn("executive ?= {", body)
+                self.assertTrue(body.rstrip().endswith("min = -1\n\tmax = 1"))
+                for kind, key, weight in lines:
+                    self.assertIn(f"{gen._temper_test(kind, key)} }} add = {gen._fmt(weight)} }}", body)
+        held = block(self.values, "te_pa_gen_exec_traits_held")
+        for trait in self.plan.traits:
+            self.assertIn(f"has_trait = {trait} }}", held)
+        ideologies = block(self.values, "te_pa_gen_exec_ideologies_held")
+        for ideology in self.plan.ideologies:
+            self.assertIn(f"has_ideology = ideology:{ideology} }}", ideologies)
+
+
+class SeatAndGroupsTest(unittest.TestCase):
+    """The seat (§ 4.5) is picked by each type's own building types; the enacting triggers name each group's laws."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.plan = gen.build_plan(state())
+        cls.effects = read(gen.EFFECTS_OUT)
+        cls.values = read(gen.VALUES_OUT)
+        cls.triggers = read(gen.TRIGGERS_OUT)
+        cls.pick = block(cls.effects, "te_pa_gen_seat_pick")
+
+    def test_every_sector_picks_its_seat_by_its_buildings(self):
+        for s in self.plan.sectors:
+            with self.subTest(company=s.company):
+                m = re.search(rf"limit = \{{ is_company_type = company_type:{s.company} \}}\n(.*?)\n\t\}}\n",
+                              self.pick, re.S)
+                self.assertIsNotNone(m)
+                body = m.group(1)
+                self.assertIn("is_incorporated = yes", body)
+                self.assertIn(f"order_by = te_pa_gen_seat_levels_{s.company}", body)
+                self.assertIn("save_scope_as = te_pa_seat_pick", body)
+                levels = block(self.values, f"te_pa_gen_seat_levels_{s.company}")
+                for b in s.buildings:
+                    self.assertIn(f"has_building = {b}", body)
+                    self.assertIn(f"if = {{ limit = {{ has_building = {b} }} add = b:{b}.level }}", levels)
+
+    def test_enacting_triggers_name_every_law_of_the_group(self):
+        for group in COVERED:
+            with self.subTest(group=group):
+                body = block(self.triggers, f"te_pa_gen_enacting_{group}")
+                named = set(re.findall(r"is_enacting_law = law_type:(\w+)", body))
+                self.assertEqual(named, {law.key for law in self.plan.laws if law.group == group})
+
+
 class OutputsTest(unittest.TestCase):
     def test_committed_outputs_are_current(self):
         result = gen.regenerate(state(), dry_run=True)

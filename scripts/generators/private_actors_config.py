@@ -13,9 +13,12 @@ plan's Task 1). Everything the data can say is derived there. This file holds on
   rests on. These are first readings, checked against the laws' modifiers on 2026-11-28 (vanilla 1.15.2 and
   the mod as merged).
 * The numbers: each becomes a named script value in ``common/script_values/te_pa_gen_values.txt``.
+* ``TRAIT_TEMPERAMENT`` and ``IDEOLOGY_TEMPERAMENT`` (with their neutral lists): § 5.3's temperament, what each
+  personality trait and character ideology an executive can hold says about the firm, on four axes.
 
 ``test_gen_private_actors.py`` holds the table to the laws: every law of a covered group has a row (terms or a
-reason), so a law added later fails the test until it is signed here.
+reason), so a law added later fails the test until it is signed here; and the temperament tables to the traits and
+ideologies, the same way.
 """
 
 from __future__ import annotations
@@ -570,6 +573,126 @@ CAN_ENACT_MIRROR = {
     "law_command_economy": "te_cred_leads_consortium = no",
     "law_factory_councils": "is_revolutionary = yes",
     "law_managed_fossil_phaseout": "rt_ministry_funded_for_phaseout = yes",
+}
+
+# ---------------------------------------------------------------------------
+# Temperament (§ 5.3): what the executive's personality traits and ideology say about the firm
+# ---------------------------------------------------------------------------
+
+# Four axes, each -1 to +1 and 0 with no executive; the generator writes te_pa_gen_temper_<axis> (company scope,
+# read through `executive ?=`), and Task 2's turn stores them as te_pa_bold_t, te_pa_force, te_pa_patern and
+# te_pa_attach. Attachment's other half, the executive's culture (a primary culture of the home country or
+# not), is read by the turn, which knows the home country. First readings (2026-11-28) of the traits' and
+# ideologies' names and descriptions, owner § 5.3's words where it gives them.
+TEMPERAMENT_AXES = {
+    "bold": "Boldness (§ 7.5): raised by ambitious and reckless traits, lowered by cautious ones.",
+    "force": "Taste for force: a jingoist petitions for armed protection; a pacifist or humanitarian bribes or leaves.",
+    "patern": (
+        "Paternalism: a reforming, humanitarian or religious executive answers labor trouble with welfare; a "
+        "market-liberal or authoritarian one breaks strikes (§ 9.2)."
+    ),
+    "attach": "Attachment to home, the ideology's part: lowered by a cosmopolitan or radical ideology.",
+}
+
+# Personality traits (vanilla's `type = personality`; the mod adds none, and INJECTs only reckless and cautious
+# for the banking cycle). Skill and condition traits say what a character can do or suffers, not how it runs a
+# firm, and are not read. test_gen_private_actors.py fails on a personality trait in neither table.
+TRAIT_TEMPERAMENT = {
+    "ambitious": {"bold": 1},
+    "reckless": {"bold": 1},
+    "brave": {"bold": 0.5},
+    "arrogant": {"bold": 0.5},
+    "imperious": {"bold": 0.5, "force": 0.5},
+    "innovative": {"bold": 0.5},
+    "cautious": {"bold": -1},
+    "reserved": {"bold": -0.5},
+    "meticulous": {"bold": -0.5},
+    "compliant": {"bold": -0.5, "force": -0.5},
+    "wrathful": {"force": 0.5},
+    "cruel": {"force": 0.5, "patern": -0.5},
+    "ruthless": {"force": 0.5, "patern": -0.5},
+    "tactful": {"force": -0.5},
+    "honorable": {"patern": 0.5},
+    "pious": {"patern": 0.5},
+    "bigoted": {"attach": 0.5},
+}
+
+NEUTRAL_TRAITS = {
+    "aesthete": "Taste in art: nothing about risk, force, workers or home.",
+    "charismatic": "Charm wins people over; it says nothing about which way.",
+    "direct": "Plain speaking, not a taste for force.",
+    "hedonist": "Pleasure-seeking: neither bold nor careful in business.",
+    "imposing": "Presence, not policy.",
+    "persistent": "Holds a course; which course is the rest of the temperament's.",
+    "romantic": "Sentiment, with no lean toward risk or force.",
+    "scandalous": "A reputation, read by nothing here.",
+    "tolerant": "Tolerance of others is not care for one's workers, and not a cosmopolitan creed.",
+    "trait_child": "A child holds no executive post.",
+}
+
+# Personality traits named for one historical character: a story, not a temperament.
+NEUTRAL_TRAIT_PREFIXES = ("special_character_",)
+
+# Character ideologies (`character_ideology = yes`, vanilla's and the mod's). test_gen_private_actors.py fails on
+# one in neither table.
+IDEOLOGY_TEMPERAMENT = {
+    "ideology_jingoist_leader": {"force": 1, "attach": 0.5},
+    "ideology_pacifist": {"force": -1},
+    "ideology_humanitarian": {"force": -0.5, "patern": 1},
+    "ideology_humanitarian_royalist": {"force": -0.5, "patern": 1},
+    "ideology_reformer": {"patern": 1},
+    "ideology_theocrat": {"patern": 1},
+    "ideology_integralist": {"patern": 0.5, "attach": 0.5},
+    "ideology_feminist": {"patern": 0.5},
+    "ideology_abolitionist": {"patern": 0.5},
+    "ideology_land_reformer": {"patern": 0.5},
+    "ideology_state_socialist": {"patern": 0.5},
+    "ideology_corporatist_leader": {"patern": 0.5},
+    "ideology_environmentalists": {"patern": 0.5},
+    "ideology_market_liberal": {"patern": -1},
+    "ideology_authoritarian": {"patern": -1, "force": 0.5},
+    "ideology_slaver": {"patern": -1, "force": 0.5},
+    "ideology_corporate": {"patern": -0.5, "bold": 0.5},
+    "ideology_fascist": {"force": 1, "attach": 1, "patern": -0.5},
+    "ideology_ethno_nationalist": {"attach": 1, "force": 0.5},
+    "ideology_shojoi": {"attach": 1, "force": 0.5},
+    "ideology_bonapartist": {"force": 0.5, "attach": 0.5},
+    "ideology_vanguardist": {"force": 0.5, "attach": -0.5},
+    "ideology_protectionist": {"attach": 0.5},
+    "ideology_sovereignist_leader": {"attach": 0.5},
+    "ideology_anti_colonialist_leader": {"attach": 0.5},
+    "ideology_mitogaku": {"attach": 0.5},
+    "ideology_radical": {"attach": -1},
+    "ideology_multicultural": {"attach": -1},
+    "ideology_multicultural_inclusive": {"attach": -1},
+    "ideology_communist_leader": {"attach": -0.5},
+    "ideology_anarchist": {"attach": -0.5},
+    "ideology_modernizer_leader": {"bold": 0.5},
+    "ideology_optimist_transhumanist": {"bold": 0.5},
+}
+
+NEUTRAL_IDEOLOGIES = {
+    "ideology_royalist": "Loyalty to a crown: a view of the state, not of the firm's risks, workers or home.",
+    "ideology_legitimist": "A dynastic claim, as the royalist's.",
+    "ideology_orleanist": "A dynastic claim, as the royalist's.",
+    "ideology_carlist": "A dynastic claim, as the royalist's.",
+    "ideology_carlist_2": "A dynastic claim, as the royalist's.",
+    "ideology_miguelist": "A dynastic claim, as the royalist's.",
+    "ideology_miguelist_2": "A dynastic claim, as the royalist's.",
+    "ideology_traditionalist": "Custom in law and religion; no lean the four axes read.",
+    "ideology_traditionalist_minoritarian": "As the traditionalist, for a minority's ways.",
+    "ideology_republican_leader": "A form of government, not a way of running a business.",
+    "ideology_jacksonian_democrat": "A form of government and its patronage, read by Task 5's politics, not here.",
+    "ideology_liberal_leader": "Constitutional liberalism: a view of the state, not of the workforce.",
+    "ideology_moderate": "The middle of the road on every axis.",
+    "ideology_positivist": "Order and progress through science: neither bold nor careful in itself.",
+    "ideology_utilitarian_leader": "The greatest good: no fixed lean on these axes.",
+    "ideology_ilustrado_leader": "An educated reformist elite's nationalism, without a lean these axes read.",
+    "ideology_despotic_utopian": "A dream of a perfect order, not a business temperament.",
+    "ideology_utopian": "A dream of a perfect order, not a business temperament.",
+    "ideology_nihilist": "Rejects every creed, so it gives none of these leans.",
+    "ideology_luddite": "Against machines; the law table's automation terms carry that, not temperament.",
+    "ideology_child": "A child holds no executive post.",
 }
 
 # ---------------------------------------------------------------------------

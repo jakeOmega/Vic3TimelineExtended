@@ -376,3 +376,113 @@ te_pa_gen_law_open_law_publicly_funded_elections = {
 	any_law = { type = law_type:law_publicly_funded_elections law_is_available = yes }
 	has_technology_researched = keynesian_economics
 }
+
+# Scope: a country. It is enacting a law of a covered group (any of the group's laws in the law table).
+
+te_pa_gen_enacting_lawgroup_economic_system = {
+	OR = {
+		is_enacting_law = law_type:law_traditionalism
+		is_enacting_law = law_type:law_interventionism
+		is_enacting_law = law_type:law_agrarianism
+		is_enacting_law = law_type:law_industry_banned
+		is_enacting_law = law_type:law_extraction_economy
+		is_enacting_law = law_type:law_laissez_faire
+		is_enacting_law = law_type:law_cooperative_ownership
+		is_enacting_law = law_type:law_command_economy
+	}
+}
+
+te_pa_gen_enacting_lawgroup_labor_rights = {
+	OR = {
+		is_enacting_law = law_type:law_no_workers_rights
+		is_enacting_law = law_type:law_regulatory_bodies
+		is_enacting_law = law_type:law_worker_protections
+	}
+}
+
+te_pa_gen_enacting_lawgroup_childrens_rights = {
+	OR = {
+		is_enacting_law = law_type:law_child_labor_allowed
+		is_enacting_law = law_type:law_restricted_child_labor
+		is_enacting_law = law_type:law_compulsory_primary_school
+	}
+}
+
+te_pa_gen_enacting_lawgroup_labour_associations = {
+	OR = {
+		is_enacting_law = law_type:law_guild_system
+		is_enacting_law = law_type:law_combination_acts
+		is_enacting_law = law_type:law_anti_strike_laws
+		is_enacting_law = law_type:law_right_to_associate
+		is_enacting_law = law_type:law_corporatized_unions
+		is_enacting_law = law_type:law_factory_councils
+	}
+}
+
+te_pa_gen_enacting_lawgroup_ministry_of_labor = {
+	OR = {
+		is_enacting_law = law_type:law_no_ministry_of_labor
+		is_enacting_law = law_type:law_pro_labor_ministry_of_labor
+		is_enacting_law = law_type:law_pro_capital_ministry_of_labor
+	}
+}
+
+te_pa_gen_enacting_lawgroup_antitrust = {
+	OR = {
+		is_enacting_law = law_type:law_guilds_chartered_monopolies
+		is_enacting_law = law_type:law_freedom_of_contract
+		is_enacting_law = law_type:law_trust_busting
+		is_enacting_law = law_type:law_regulated_utilities
+		is_enacting_law = law_type:law_dirigisme
+		is_enacting_law = law_type:law_command_cooperative_economy
+	}
+}
+
+te_pa_gen_enacting_lawgroup_resource_transition = {
+	OR = {
+		is_enacting_law = law_type:law_unrestricted_extraction
+		is_enacting_law = law_type:law_fossil_expansion_moratorium
+		is_enacting_law = law_type:law_managed_fossil_phaseout
+	}
+}
+
+te_pa_gen_enacting_lawgroup_automation_policy = {
+	OR = {
+		is_enacting_law = law_type:law_unrestricted_automation
+		is_enacting_law = law_type:law_robot_tax
+		is_enacting_law = law_type:law_human_labor_quotas
+		is_enacting_law = law_type:law_automation_dividend
+	}
+}
+
+te_pa_gen_enacting_lawgroup_intellectual_property = {
+	OR = {
+		is_enacting_law = law_type:law_no_ip_protection
+		is_enacting_law = law_type:law_creative_commons
+		is_enacting_law = law_type:law_traditional_ip_protection
+		is_enacting_law = law_type:law_strict_ip_protection
+		is_enacting_law = law_type:law_open_source_innovation
+		is_enacting_law = law_type:law_state_intellectual_property
+	}
+}
+
+te_pa_gen_enacting_lawgroup_financial_regulation = {
+	OR = {
+		is_enacting_law = law_type:law_unregulated_banking
+		is_enacting_law = law_type:law_free_mutual_banking
+		is_enacting_law = law_type:law_universal_banking_light_prudence
+		is_enacting_law = law_type:law_prudential_narrow_banking
+		is_enacting_law = law_type:law_directed_credit_development_banks
+		is_enacting_law = law_type:law_state_owned_banking
+		is_enacting_law = law_type:law_central_bank_independence
+	}
+}
+
+te_pa_gen_enacting_lawgroup_electoral_finance = {
+	OR = {
+		is_enacting_law = law_type:law_no_campaign_finance_laws
+		is_enacting_law = law_type:law_unregulated_donations
+		is_enacting_law = law_type:law_donation_limits
+		is_enacting_law = law_type:law_publicly_funded_elections
+	}
+}
